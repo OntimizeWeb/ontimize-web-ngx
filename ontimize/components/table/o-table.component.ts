@@ -552,7 +552,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   set filterColumnActiveByDefault(value: boolean) {
     const result = BooleanConverter(value);
-    this.originalFilterColumnActiveByDefault = value;
+    this.originalFilterColumnActiveByDefault = result;
     this.showFilterByColumnIcon = result;
   }
 
@@ -946,6 +946,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (clonedOpts.hasOwnProperty('filterColumns')) {
         if (!this.oTableColumnsFilterComponent) {
           this.oTableColumnsFilterComponent = new OTableColumnsFilterComponent(this.injector, this);
+          this.oTableMenu.onVisibleFilterOptionChange.next(this.filterColumnActiveByDefault);
         }
         this.oTableColumnsFilterComponent.columns = clonedOpts.filterColumns;
       }
@@ -2008,13 +2009,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   get originalFilterColumns(): Array<OFilterColumn> {
     let sortColumnsFilter = [];
     if (this.oTableColumnsFilterComponent) {
-      sortColumnsFilter = this.oTableColumnsFilterComponent.filterColumns
-        .map(x => {
-          let obj: OFilterColumn = { attr: '', sort: '' };
-          obj.attr = x.attr;
-          obj.sort = x.sort;
-          return obj;
-        });
+      sortColumnsFilter = this.oTableColumnsFilterComponent.columnsArray;
     }
     return sortColumnsFilter;
   }
@@ -2128,7 +2123,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getSortFilterColumn(column: OColumn): string {
     let sortColumn;
-
+    // at first, get state in localstorage
     if (this.state.hasOwnProperty('filter-columns')) {
       this.state['filter-columns'].forEach((element: OFilterColumn) => {
         if (element.attr === column.attr) {
@@ -2137,15 +2132,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       });
     }
 
+    //if not value in localstorage, get sort value in o-table-column-filter-column component
+    if (!Util.isDefined(sortColumn) && this.oTableColumnsFilterComponent) {
+      sortColumn = this.oTableColumnsFilterComponent.getSortValueOfFilterColumn(column.attr);
+    }
+
+    //if either value in o-table-column-filter-column or localstorage, get sort value in sortColArray
     if (!Util.isDefined(sortColumn)) {
       if (this.sortColArray.find(x => x.columnName === column.attr)) {
         sortColumn = this.isColumnSortActive(column) ? 'asc' : 'desc'
       }
     }
 
-    if (!Util.isDefined(sortColumn) && this.oTableColumnsFilterComponent) {
-      sortColumn = this.oTableColumnsFilterComponent.getSortValueOfFilterColumn(column.attr);
-    }
+
 
     return sortColumn;
   }

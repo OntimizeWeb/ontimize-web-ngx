@@ -10,10 +10,11 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  EventEmitter
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators';
 import { DialogService, OPermissions, OTableMenuPermissions, OTranslateService, SnackBarService } from '../../../../../services';
@@ -81,6 +82,8 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   showFilterOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
+
+  public onVisibleFilterOptionChange: EventEmitter<any> = new EventEmitter();
   /* End of inputs */
 
   protected dialogService: DialogService;
@@ -106,8 +109,13 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('columnFilterOption')
   columnFilterOption: OTableOptionComponent;
 
+  private showColumnsFilterOptionSubject = new BehaviorSubject<boolean>(false);
+  public showColumnsFilterOption: Observable<boolean> = this.showColumnsFilterOptionSubject.asObservable();
+
   protected permissions: OTableMenuPermissions;
   protected mutationObservers: MutationObserver[] = [];
+
+  private subscription: Subscription;
 
   constructor(
     protected injector: Injector,
@@ -118,17 +126,23 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dialogService = this.injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
     this.snackBarService = this.injector.get(SnackBarService);
+    const self = this;
+
+    this.subscription = this.onVisibleFilterOptionChange.subscribe((x: boolean) => self.showColumnsFilterOptionSubject.next(x));
   }
 
   ngOnInit() {
     this.permissions = this.table.getMenuPermissions();
   }
 
+  get isColumnFilterOptionActive() {
+    return this.table && this.table.showFilterByColumnIcon;
+  }
+
   ngAfterViewInit() {
-    if (this.columnFilterOption) {
-      this.columnFilterOption.setActive(this.table.showFilterByColumnIcon);
-      this.cd.detectChanges();
-    }
+
+    this.showColumnsFilterOptionSubject.next(this.table.oTableColumnsFilterComponent !== undefined);
+
 
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
@@ -148,6 +162,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.configurationMenuButton && !this.enabledConfigurationMenu) {
       this.disableButton(this.configurationMenuButton);
     }
+
     this.cd.detectChanges();
   }
 
@@ -170,6 +185,7 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         m.disconnect();
       });
     }
+    this.subscription.unsubscribe();
   }
 
   registerOptions(oTableOptions: OTableOptionComponent[]) {
@@ -201,14 +217,6 @@ export class OTableMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get isSelectAllOptionActive(): boolean {
     return this.table.oTableOptions.selectColumn.visible;
-  }
-
-  get showColumnsFilterOption(): boolean {
-    return this.table.oTableColumnsFilterComponent !== undefined;
-  }
-
-  get enabledColumnsFilterOption(): boolean {
-    return this.table.oTableColumnsFilterComponent !== undefined;
   }
 
   get showSelectAllCheckbox(): boolean {
