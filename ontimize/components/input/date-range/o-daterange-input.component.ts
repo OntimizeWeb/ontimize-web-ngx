@@ -227,6 +227,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       }
     } else {
       chosenLabel = null;
+      this.pickerDirective.value = undefined;
     }
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
