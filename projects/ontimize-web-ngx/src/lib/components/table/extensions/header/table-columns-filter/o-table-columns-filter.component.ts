@@ -5,7 +5,7 @@ import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
-import { OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-column.component';
+import { OTableColumnsFilterColumnComponent, OFilterColumn } from './columns/o-table-columns-filter-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -52,7 +52,7 @@ export class OTableColumnsFilterComponent implements OnInit {
     }
   }
 
-  protected _columnsArray: Array<string> = [];
+  protected _columnsArray: Array<OFilterColumn> = [];
   protected columnsComparisonProperty: object = {};
 
   @ContentChildren(OTableColumnsFilterColumnComponent, { descendants: true }) filterColumns: QueryList<OTableColumnsFilterColumnComponent>;
@@ -67,7 +67,9 @@ export class OTableColumnsFilterComponent implements OnInit {
       this.columnsArray = this.table.oTableOptions.visibleColumns;
     }
     const self = this;
-    this.columnsArray.forEach((colData, i, arr) => {
+    let columns = Util.parseArray(this._columns, true);
+
+    columns.forEach((colData, i, arr) => {
       const colDef = colData.split(Codes.TYPE_SEPARATOR);
       const colName = colDef[0];
       let compType = (colDef[1] || '').toUpperCase();
@@ -77,18 +79,24 @@ export class OTableColumnsFilterComponent implements OnInit {
       arr[i] = colName;
       self.columnsComparisonProperty[colName] = compType;
     });
+
     this.table.setOTableColumnsFilter(this);
   }
 
+  ngAfterContentInit() {
+    if (Util.isDefined(this.filterColumns)) {
+      this.columnsArray = this.columnsArray.concat(this.parseFilterColumns(this.filterColumns));
+    }
+  }
 
   isColumnFilterable(attr: string): boolean {
-    return (this.columnsArray.indexOf(attr) !== -1) || Util.isDefined(this.filterColumns.find(x => x.attr === attr));
+    return Util.isDefined(this.columnsArray.find(x => x.attr === attr));
   }
 
   getSortValueOfFilterColumn(attr: string): string {
     let sortValue = '';
-    if (this.filterColumns.find(x => x.attr === attr)) {
-      sortValue = this.filterColumns.find(x => x.attr === attr).sort;
+    if (Util.isDefined(this.columnsArray) && this.columnsArray.find(x => x.attr === attr)) {
+      sortValue = this.columnsArray.find(x => x.attr === attr).sort;
     }
     return sortValue;
   }
@@ -103,15 +111,35 @@ export class OTableColumnsFilterComponent implements OnInit {
 
   set columns(arg: string) {
     this._columns = arg;
-    this._columnsArray = Util.parseArray(this._columns, true);
+    this._columnsArray = this.parseColumns(this._columns);
   }
 
-  set columnsArray(arg: string[]) {
+  set columnsArray(arg: OFilterColumn[]) {
     this._columnsArray = arg;
   }
 
-  get columnsArray(): string[] {
+  get columnsArray(): OFilterColumn[] {
     return this._columnsArray;
+  }
+
+  parseColumns(columns: string) {
+    return columns.split(';')
+      .map(x => {
+        let obj: OFilterColumn = { attr: '', sort: '' };
+        obj.attr = x;
+        obj.sort = '';
+        return obj;
+      });
+  }
+
+  parseFilterColumns(columns: QueryList<OTableColumnsFilterColumnComponent>) {
+    return columns
+      .map(x => {
+        let obj: OFilterColumn = { attr: '', sort: '' };
+        obj.attr = x.attr;
+        obj.sort = x.sort;
+        return obj;
+      });
   }
 
 }
