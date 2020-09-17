@@ -103,7 +103,7 @@ export class OCheckboxComponent extends OFormDataComponent {
   }
 
   getValue(): any {
-    if (this.value.value !== undefined) {
+    if (Util.isDefined(this.value) && this.value.value !== undefined) {
       return this.value.value ? this.trueValue : this.falseValue;
     } else {
       return this.defaultValue;

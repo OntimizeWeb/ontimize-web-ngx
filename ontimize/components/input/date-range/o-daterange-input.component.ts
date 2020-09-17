@@ -218,7 +218,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   updateElement() {
     let chosenLabel:any;
-    if( Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value) ) {
+    if( Util.isDefined(this.value) && Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value) ) {
       if (this.value.value[this.pickerDirective.startKey]) {
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
         this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
@@ -227,6 +227,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       }
     } else {
       chosenLabel = null;
+      this.pickerDirective.value = undefined;
     }
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }
