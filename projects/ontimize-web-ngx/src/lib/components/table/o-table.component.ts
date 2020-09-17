@@ -73,6 +73,7 @@ import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -165,7 +166,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'visibleExportDialogButtons: visible-export-dialog-buttons',
 
   // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
-  'rowClass: row-class'
+  'rowClass: row-class',
+
+  //filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
+  'filterColumnActiveByDefault:filter-column-active-by-default'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -214,6 +218,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('spinnerContainer', { read: ElementRef, static: false })
   spinnerContainer: ElementRef;
+
+  _filterColumns: Array<OFilterColumn>;
+
   get diameterSpinner() {
     const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
     let height = 0;
@@ -241,6 +248,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showFilterOption: boolean = true;
   @InputConverter()
   showButtonsText: boolean = true;
+
+  originalFilterColumnActiveByDefault: boolean = false;
+  @InputConverter()
+  set filterColumnActiveByDefault(value: boolean) {
+    const result = BooleanConverter(value);
+    this.originalFilterColumnActiveByDefault = result;
+    this.showFilterByColumnIcon = result;
+  }
+
+  get filterColumnActiveByDefault(): boolean {
+    return this.showFilterByColumnIcon;
+  }
+
 
   protected _oTableOptions: OTableOptions;
 
@@ -638,7 +658,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
       if (clonedOpts.hasOwnProperty('filterColumns')) {
         if (!this.oTableColumnsFilterComponent) {
-          this.oTableColumnsFilterComponent = new OTableColumnsFilterComponent(this.injector,this);
+          this.oTableColumnsFilterComponent = new OTableColumnsFilterComponent(this.injector, this);
+          this.oTableMenu.onVisibleFilterOptionChange.next(this.filterColumnActiveByDefault);
         }
         this.oTableColumnsFilterComponent.columns = clonedOpts.filterColumns;
       }
@@ -990,6 +1011,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this._oTableOptions.selectColumn.visible = this.selectAllCheckboxVisible;
       }
     }
+
+    //Initialize show filter by column icon
+    this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
 
     this.initializeCheckboxColumn();
   }
@@ -1677,6 +1701,28 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.oTableColumnsFilterComponent = tableColumnsFilter;
   }
 
+  get filterColumns() {
+
+    if (this.state.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-columns') &&
+      this.state.hasOwnProperty('filter-columns') &&
+      this.state['initial-configuration']['filter-columns'] === this.originalFilterColumns) {
+      if (this.state.hasOwnProperty('filter-columns')) {
+        return this.state['filter-columns'];
+      }
+    }
+
+    return this.originalFilterColumns;
+  }
+
+  get originalFilterColumns(): Array<OFilterColumn> {
+    let sortColumnsFilter = [];
+    if (this.oTableColumnsFilterComponent) {
+      sortColumnsFilter = this.oTableColumnsFilterComponent.columnsArray;
+    }
+    return sortColumnsFilter;
+  }
+
   getStoredColumnsFilters() {
     return this.oTableStorage.getStoredColumnsFilters();
   }
@@ -1715,6 +1761,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
+    this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
+    this.reloadPaginatedDataFromStart();
+  }
+
   isColumnFilterable(column: OColumn): boolean {
     return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
   }
@@ -1736,6 +1787,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       data: {
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         column: column,
+        activeSortDirection: this.getSortFilterColumn(column),
         tableData: this.dataSource.getTableData(),
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
         mode: this.oTableColumnsFilterComponent.mode
@@ -1746,10 +1798,62 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
+        //guardar en localstorage el cambio
+        const sortedFilterableColumn = dialogRef.componentInstance.getFilterColumn();
+        this.storeFilterColumns(sortedFilterableColumn);
         this.dataSource.addColumnFilter(columnValueFilter);
         this.reloadPaginatedDataFromStart();
       }
     });
+  }
+
+  storeFilterColumns(sortColumnFilter: OFilterColumn) {
+    if (this.state.hasOwnProperty('filter-columns') && this.state['filter-columns']) {
+      let storeSortColumnsFilterState = this.oTableStorage.getFilterColumnsState();
+      //if exists in state then updated sort value
+      if (storeSortColumnsFilterState['filter-columns'].filter(x => x.attr === sortColumnFilter.attr).length > 0) {
+        storeSortColumnsFilterState['filter-columns'].forEach(element => {
+          if (element.attr === sortColumnFilter.attr) {
+            element.sort = sortColumnFilter.sort;
+          }
+        });
+      } else {
+        //else exists in state then added filter column
+        storeSortColumnsFilterState['filter-columns'].push(sortColumnFilter);
+      }
+      this.state['filter-columns'] = storeSortColumnsFilterState['filter-columns'];
+    } else {
+      this.state['filter-columns'] = this.filterColumns;
+    }
+
+  }
+
+  getSortFilterColumn(column: OColumn): string {
+    let sortColumn;
+    // at first, get state in localstorage
+    if (this.state.hasOwnProperty('filter-columns')) {
+      this.state['filter-columns'].forEach((element: OFilterColumn) => {
+        if (element.attr === column.attr) {
+          sortColumn = element.sort;
+        }
+      });
+    }
+
+    //if not value in localstorage, get sort value in o-table-column-filter-column component
+    if (!Util.isDefined(sortColumn) && this.oTableColumnsFilterComponent) {
+      sortColumn = this.oTableColumnsFilterComponent.getSortValueOfFilterColumn(column.attr);
+    }
+
+    //if either value in o-table-column-filter-column or localstorage, get sort value in sortColArray
+    if (!Util.isDefined(sortColumn)) {
+      if (this.sortColArray.find(x => x.columnName === column.attr)) {
+        sortColumn = this.isColumnSortActive(column) ? 'asc' : 'desc'
+      }
+    }
+
+
+
+    return sortColumn;
   }
 
   get disableTableMenuButton(): boolean {
@@ -1974,7 +2078,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
-    this.showFilterByColumnIcon = storedColumnFilters.length > 0;
+
+
+    if (Util.isDefined(this.filterColumnActiveByDefault) && this.state.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-column-active-by-default') &&
+      this.originalFilterColumnActiveByDefault !== conf['initial-configuration']['filter-column-active-by-default']) {
+      this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
+    } else {
+      const filterColumnActiveByDefaultState = conf.hasOwnProperty('filter-column-active-by-default') ? conf['filter-column-active-by-default'] : this.filterColumnActiveByDefault;
+      this.showFilterByColumnIcon = filterColumnActiveByDefaultState || storedColumnFilters.length > 0;
+    }
+
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.showFilterByColumnIcon);
     }

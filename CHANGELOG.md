@@ -1,3 +1,17 @@
+## 8.0.1
+### Features
+* **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([edd8927](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd8927))
+* **table**:
+  * o-table-filter-by-column: added clear button in customized filters  ([6fe1e33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fe1e33))
+  * reinitialize method: added new option 'filterColumns' ([361b8c1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/361b8c1))
+  * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
+  * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
+  * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
+* **o-form**:
+  * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo` and `delete` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d)).
+  * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction` and `_deleteAction` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d)).
+* **o-table**: new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793)).
+
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
 * **o-checkbox** : fixing bug in sql-type value was always overwritted by VARCHAR ([b9f6cbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9f6cbb))

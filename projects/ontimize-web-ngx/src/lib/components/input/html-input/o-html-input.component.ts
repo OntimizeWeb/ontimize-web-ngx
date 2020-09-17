@@ -78,12 +78,8 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, A
     super.ngOnInit();
     const self = this;
     if (this.form) {
-      this.form.beforeCloseDetail.subscribe((evt: any) => {
-        self.destroyCKEditor();
-      });
-      this.form.beforeGoEditMode.subscribe((evt: any) => {
-        self.destroyCKEditor();
-      });
+      this.form.beforeCloseDetail.subscribe(() => this.destroyCKEditor());
+      this.form.beforeUpdateMode.subscribe(() => this.destroyCKEditor());
     }
 
     if (this.tabGroupContainer) {

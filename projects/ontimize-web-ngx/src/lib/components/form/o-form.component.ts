@@ -149,7 +149,13 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'onFormModeChange',
   'onInsert',
   'onUpdate',
-  'onDelete'
+  'onDelete',
+  'beforeInsertMode',
+  'beforeUpdateMode',
+  'beforeInitialMode',
+  'onInsertMode',
+  'onUpdateMode',
+  'onInitialMode'
 ];
 @Component({
   selector: 'o-form',
@@ -229,7 +235,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   formGroup: FormGroup;
   onDataLoaded: EventEmitter<object> = new EventEmitter<object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
+  /**
+   * @deprecated Use `beforeUpdateMode` instead
+   */
   beforeGoEditMode: EventEmitter<any> = new EventEmitter<any>();
+  beforeInsertMode = new EventEmitter<null>();
+  beforeUpdateMode = new EventEmitter<null>();
+  beforeInitialMode = new EventEmitter<null>();
+  onInsertMode = new EventEmitter<null>();
+  onUpdateMode = new EventEmitter<null>();
+  onInitialMode = new EventEmitter<null>();
   onFormModeChange: EventEmitter<number> = new EventEmitter<number>();
   public onInsert: EventEmitter<any> = new EventEmitter();
   public onUpdate: EventEmitter<any> = new EventEmitter();
@@ -312,7 +327,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (Util.isArray(valArr) && valArr.length === 2 && !self.isInInsertMode()) {
         const valArrValues = valArr[0] === true && valArr[1] === true;
         if (self.queryOnInit && valArrValues) {
-          self._reloadAction(true);
+          self.reload(true);
         } else {
           self.initializeFields();
         }
@@ -522,15 +537,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   executeToolbarAction(action: string, options?: any) {
     switch (action) {
-      case Codes.BACK_ACTION: this._backAction(); break;
-      case Codes.CLOSE_DETAIL_ACTION: this._closeDetailAction(options); break;
-      case Codes.RELOAD_ACTION: this._reloadAction(true); break;
-      case Codes.GO_INSERT_ACTION: this._goInsertMode(options); break;
-      case Codes.INSERT_ACTION: this._insertAction(); break;
-      case Codes.GO_EDIT_ACTION: this._goEditMode(options); break;
-      case Codes.EDIT_ACTION: this._editAction(); break;
-      case Codes.UNDO_LAST_CHANGE_ACTION: this._undoLastChangeAction(); break;
-      case Codes.DELETE_ACTION: return this._deleteAction();
+      case Codes.BACK_ACTION: this.back(); break;
+      case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break;
+      case Codes.RELOAD_ACTION: this.reload(true); break;
+      case Codes.GO_INSERT_ACTION: this.goInsertMode(options); break;
+      case Codes.INSERT_ACTION: this.insert(); break;
+      case Codes.GO_EDIT_ACTION: this.goEditMode(options); break;
+      case Codes.EDIT_ACTION: this.update(); break;
+      case Codes.UNDO_LAST_CHANGE_ACTION: this.undo(); break;
+      case Codes.DELETE_ACTION: return this.delete();
       default: break;
     }
     return undefined;
@@ -716,14 +731,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   setFormMode(mode: number) {
     switch (mode) {
       case OFormComponent.Mode().INITIAL:
+        this.beforeInitialMode.emit();
         this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setInitialMode();
         }
         this._setComponentsEditable(this.isEditableDetail());
         this.onFormModeChange.emit(this.mode);
+        this.onInitialMode.emit();
         break;
       case OFormComponent.Mode().INSERT:
+        this.beforeInsertMode.emit();
         this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setInsertMode();
@@ -731,14 +749,20 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         this.clearData();
         this._setComponentsEditable(true);
         this.onFormModeChange.emit(this.mode);
+        this.onInsertMode.emit();
         break;
       case OFormComponent.Mode().UPDATE:
+        this.beforeUpdateMode.emit();
         this.mode = mode;
         if (this._formToolbar) {
           this._formToolbar.setEditMode();
         }
         this._setComponentsEditable(true);
         this.onFormModeChange.emit(this.mode);
+        this.onUpdateMode.emit();
+        break;
+      case OFormComponent.Mode().QUERY:
+        console.error('Form QUERY mode is not implemented');
         break;
       default:
         break;
@@ -766,11 +790,33 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.onDataLoaded.emit(data);
   }
 
+  /**
+   * @deprecated Use `back()` instead
+   */
   _backAction() {
+    console.warn('Method `OFormComponent._backAction` is deprecated and will be removed in the furute. Use `back` instead');
     this.formNavigation.navigateBack();
   }
 
+  /**
+   * Navigate back
+   */
+  back() {
+    this.formNavigation.navigateBack();
+  }
+
+  /**
+   * @deprecated Use `closeDetail(options?: any)` instead
+   */
   _closeDetailAction(options?: any) {
+    console.warn('Method `OFormComponent._closeDetailAction` is deprecated and will be removed in the furute. Use `closeDetail` instead');
+    this.formNavigation.closeDetailAction(options);
+  }
+
+  /**
+   * Close current detail form
+   */
+  closeDetail(options?: any) {
     this.formNavigation.closeDetailAction(options);
   }
 
@@ -778,7 +824,22 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formNavigation.stayInRecordAfterInsert(insertedKeys);
   }
 
+  /**
+   * @deprecated Use `reload(useFilter: boolean = false)` instead
+   */
   _reloadAction(useFilter: boolean = false) {
+    console.warn('Method `OFormComponent._reloadAction` is deprecated and will be removed in the furute. Use `reload` instead');
+    let filter = {};
+    if (useFilter) {
+      filter = this.getCurrentKeysValues();
+    }
+    this.queryData(filter);
+  }
+
+  /**
+   * Reload the form data
+   */
+  reload(useFilter: boolean = false) {
     let filter = {};
     if (useFilter) {
       filter = this.getCurrentKeysValues();
@@ -788,8 +849,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Navigates to 'insert' mode
+   * @deprecated Use `goInsertMode(options?: any)` instead
    */
   _goInsertMode(options?: any) {
+    console.warn('Method `OFormComponent._goInsertMode` is deprecated and will be removed in the furute. Use `goInsertMode` instead');
+    this.formNavigation.goInsertMode(options);
+  }
+
+  /**
+   * Navigates to 'insert' mode
+   */
+  goInsertMode(options?: any) {
     this.formNavigation.goInsertMode(options);
   }
 
@@ -800,8 +870,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Performs insert action.
+   * @deprecated Use `insert()` instead
    */
   _insertAction() {
+    console.warn('Method `OFormComponent._insertAction` is deprecated and will be removed in the furute. Use `insert` instead');
     Object.keys(this.formGroup.controls).forEach((control) => {
       this.formGroup.controls[control].markAsTouched();
     });
@@ -823,7 +895,39 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       } else if (self.afterInsertMode === 'new') {
         this._clearFormAfterInsert();
       } else {
-        self._closeDetailAction();
+        self.closeDetail();
+      }
+    }, error => {
+      self.postIncorrectInsert(error);
+    });
+  }
+
+  /**
+   * Performs insert action.
+   */
+  insert() {
+    Object.keys(this.formGroup.controls).forEach((control) => {
+      this.formGroup.controls[control].markAsTouched();
+    });
+
+    if (!this.formGroup.valid) {
+      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      return;
+    }
+
+    const self = this;
+    const values = this.getAttributesValuesToInsert();
+    const sqlTypes = this.getAttributesSQLTypes();
+    this.insertData(values, sqlTypes).subscribe(resp => {
+      self.postCorrectInsert(resp);
+      self.formCache.setCacheSnapshot();
+      self.markFormLayoutManagerToUpdate();
+      if (self.afterInsertMode === 'detail') {
+        self._stayInRecordAfterInsert(resp);
+      } else if (self.afterInsertMode === 'new') {
+        this._clearFormAfterInsert();
+      } else {
+        self.closeDetail();
       }
     }, error => {
       self.postIncorrectInsert(error);
@@ -832,15 +936,26 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Navigates to 'edit' mode
+   * @deprecated Use `goEditMode(options?: any)` instead
    */
   _goEditMode(options?: any) {
+    console.warn('Method `OFormComponent._goEditMode` is deprecated and will be removed in the furute. Use `goEditMode` instead');
+    this.formNavigation.goEditMode();
+  }
+
+  /**
+   * Navigates to 'edit' mode
+   */
+  goEditMode(options?: any) {
     this.formNavigation.goEditMode();
   }
 
   /**
    * Performs 'edit' action
+   * @deprecated Use `update()` instead
    */
   _editAction() {
+    console.warn('Method `OFormComponent._editAction` is deprecated and will be removed in the furute. Use `update` instead');
     Object.keys(this.formGroup.controls).forEach(
       (control) => {
         this.formGroup.controls[control].markAsTouched();
@@ -872,9 +987,53 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       self.formCache.setCacheSnapshot();
       self.markFormLayoutManagerToUpdate();
       if (self.stayInRecordAfterEdit) {
-        self._reloadAction(true);
+        self.reload(true);
       } else {
-        self._closeDetailAction();
+        self.closeDetail();
+      }
+    }, error => {
+      self.postIncorrectUpdate(error);
+    });
+  }
+
+  /**
+   * Performs 'edit' action
+   */
+  update() {
+    Object.keys(this.formGroup.controls).forEach(
+      (control) => {
+        this.formGroup.controls[control].markAsTouched();
+      }
+    );
+
+    if (!this.formGroup.valid) {
+      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      return;
+    }
+
+    // retrieving keys...
+    const self = this;
+    const filter = this.getKeysValues();
+
+    // retrieving values to update...
+    const values = this.getAttributesValuesToUpdate();
+    const sqlTypes = this.getAttributesSQLTypes();
+
+    if (Object.keys(values).length === 0) {
+      // Nothing to update
+      this.dialogService.alert('INFO', 'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO');
+      return;
+    }
+
+    // invoke update method...
+    this.updateData(filter, values, sqlTypes).subscribe(resp => {
+      self.postCorrectUpdate(resp);
+      self.formCache.setCacheSnapshot();
+      self.markFormLayoutManagerToUpdate();
+      if (self.stayInRecordAfterEdit) {
+        self.reload(true);
+      } else {
+        self.closeDetail();
       }
     }, error => {
       self.postIncorrectUpdate(error);
@@ -883,8 +1042,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Performs 'delete' action
+   * @deprecated Use `delete()` instead
    */
   _deleteAction() {
+    console.warn('Method `OFormComponent._deleteAction` is deprecated and will be removed in the furute. Use `delete` instead');
+    const filter = this.getKeysValues();
+    return this.deleteData(filter);
+  }
+
+  /**
+   * Performs 'delete' action
+   */
+  delete() {
     const filter = this.getKeysValues();
     return this.deleteData(filter);
   }
@@ -1173,7 +1342,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (res) {
         self.refreshComponentsEditableState();
         if (!self.isInInsertMode() && self.queryOnInit) {
-          self._reloadAction(true);
+          self.reload(true);
         }
         if (self.formParentKeysValues) {
           Object.keys(self.formParentKeysValues).forEach(parentKey => {
@@ -1245,7 +1414,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.formCache.isInitialStateChanged();
   }
 
+  /**
+   * @deprecated Use `undo()` instead
+   */
   _undoLastChangeAction() {
+    console.warn('Method `OFormComponent._undoLastChangeAction` is deprecated and will be removed in the furute. Use `undo` instead');
+    this.formCache.undoLastChange();
+  }
+
+  /**
+   * Undo last change
+   */
+  undo() {
     this.formCache.undoLastChange();
   }
 
@@ -1285,7 +1465,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   setUrlParamsAndReload(val: object) {
     this.formNavigation.setUrlParams(val);
-    this._reloadAction(true);
+    this.reload(true);
   }
 
   getRegisteredFieldsValues() {
@@ -1302,7 +1482,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Return the current value of the control in the form
-   * @param attr
+   * @param attr the attr of the form field
    */
   getFieldValue(attr: string): any {
     let value = null;
@@ -1315,14 +1495,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Return an object with the values of each attribute
-   * @param attrs
+   * @param attrs the attr's of the form fields
    */
   getFieldValues(attrs: string[]): any {
-    const self = this;
     const arr = {};
-    attrs.forEach((key) => {
-      arr[key] = self.getFieldValue(key);
-    });
+    attrs.forEach(key => arr[key] = this.getFieldValue(key));
     return arr;
 
   }
@@ -1341,7 +1518,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Sets the value of each control in the form.
-   * @param values
+   * @param values the values
    */
   setFieldValues(values: any, options?: FormValueOptions) {
     for (const key in values) {
@@ -1353,7 +1530,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Clear the value of each control in the form
-   * @param attr
+   * @param attr the attr of the form field
    */
   clearFieldValue(attr: string, options?: FormValueOptions) {
     const comp = this.getFieldReference(attr);
@@ -1364,7 +1541,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Reset the value of each control in the form
-   * @param attrs
+   * @param attrs the attr's of the form fields
    */
   clearFieldValues(attrs: string[], options?: FormValueOptions) {
     const self = this;
@@ -1375,14 +1552,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Retrieves the reference of the control in the form.
-   * @param attr
+   * @param attr the attr of the form field
    */
   getFieldReference(attr: string): IFormDataComponent {
     return this._components[attr];
   }
+
   /**
    * Retrieves the reference of each control in the form
-   * @param attrs
+   * @param attrs the attr's of the form fileds
    */
   getFieldReferences(attrs: string[]): IFormDataComponentHash {
     const arr: IFormDataComponentHash = {};
