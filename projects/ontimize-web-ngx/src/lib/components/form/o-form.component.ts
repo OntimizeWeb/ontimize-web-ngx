@@ -514,12 +514,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.formData;
   }
 
+  /**
+   * Clears the form data. The data related to url params and parent keys remain unchanged.
+   */
   clearData() {
     const filter = this.formNavigation.getFilterFromUrlParams();
     this.formGroup.reset({}, {
       emitEvent: false
     });
-    this._setData(filter);
+    this.setData(filter);
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -769,7 +772,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  _setData(data) {
+  setData(data): void {
     if (Util.isArray(data)) {
       if (data.length > 1) {
         console.warn('[OFormComponent] Form data has more than a single record. Storing empty data');
@@ -784,6 +787,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       console.warn('Form has received not supported service data. Supported data are Array or Object');
       this._updateFormData({});
     }
+  }
+
+  /**
+   * @deprecated Use `setData(data)` instead
+   */
+  _setData(data) {
+    console.warn('Method `OFormComponent._setData` is deprecated and will be removed in the furute. Use `setData` instead');
+    this.setData(data);
   }
 
   _emitData(data) {
@@ -1085,7 +1096,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
-          this._setData(resp.data);
+          this.setData(resp.data);
         } else {
           this._updateFormData({});
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
