@@ -839,6 +839,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * @deprecated Use `reload(useFilter: boolean = false)` instead
    */
   _reloadAction(useFilter: boolean = false) {
+    console.warn('Method `OFormComponent._reloadAction` is deprecated and will be removed in the furute. Use `reload` instead');
     this.reload(useFilter);
   }
 
