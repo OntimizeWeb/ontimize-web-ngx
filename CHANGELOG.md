@@ -8,8 +8,8 @@
   * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
   * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
 * **o-form**:
-  * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo` and `delete` ([c5be92c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c5be92c)).
-  * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction` and `_deleteAction` ([5a15c4f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a15c4f)).
+  * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo`, `delete` and `setData` ([4e38704](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e38704)).
+  * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction`, `_deleteAction` and `_setData` ([4e38704](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e38704)).
 
 ## 4.1.3 (2020-08-18)
 ### Features
