@@ -1,4 +1,4 @@
-import { SelectionChange } from '@angular/cdk/collections';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -74,6 +74,9 @@ import { OTableDao } from './extensions/o-table.dao';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
+import { trigger, state, transition, style, animate } from '@angular/animations';
+import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/table-row-expandable.component';
+import { OServiceBaseComponent } from '../o-service-base-component.class';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -190,6 +193,13 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
     OntimizeServiceProvider,
     OTableDataSourceService
   ],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0', display:'none' })),
+      state('expanded', style({ height: '*', display:'inline' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ])
+  ],
   inputs: DEFAULT_INPUTS_O_TABLE,
   outputs: DEFAULT_OUTPUTS_O_TABLE,
   encapsulation: ViewEncapsulation.None,
@@ -218,6 +228,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('spinnerContainer', { read: ElementRef, static: false })
   spinnerContainer: ElementRef;
+
+  @ContentChild(OTableRowExpandableComponent, { static: false })
+  tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
 
@@ -248,6 +261,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showFilterOption: boolean = true;
   @InputConverter()
   showButtonsText: boolean = true;
+
 
   originalFilterColumnActiveByDefault: boolean = false;
   @InputConverter()
@@ -330,7 +344,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     val = Util.parseBoolean(String(val));
     this._enabled = val;
   }
-
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
     this._selectAllCheckboxVisible = BooleanConverter(this.state['select-column-visible']) || BooleanConverter(value);
@@ -367,8 +380,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
       const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(Codes.NAME_COLUMN_SELECT) !== -1;
+      const containsExpandableCol = this._oTableOptions.visibleColumns.indexOf(Codes.NAME_COLUMN_EXPANDABLE) !== -1;
       if (containsSelectionCol) {
         this._visibleColArray.unshift(Codes.NAME_COLUMN_SELECT);
+      }
+      if (containsSelectionCol && containsExpandableCol) {
+        this._visibleColArray = [this._visibleColArray[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._visibleColArray.splice(1));
+
+      } else {
+        if (containsExpandableCol) {
+          this._visibleColArray.unshift(Codes.NAME_COLUMN_EXPANDABLE);
+        }
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
     }
@@ -421,6 +443,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
   public showLastInsertableRow: boolean = false;
+  public expandableItem = new SelectionModel<Element>(false, []);
 
   protected clickTimer;
   protected clickDelay = 200;
@@ -542,6 +565,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.oTableButtons) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
+    }
+    if (this.tableRowExpandable) {
+      this._oTableOptions.expandableColumn = new OColumn();
+      this._oTableOptions.expandableColumn.visible = true;
+      this._oTableOptions.expandableColumn.width = '48px';
+      this.updateStateExpandedColumn();
     }
   }
 
@@ -1016,6 +1045,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
 
     this.initializeCheckboxColumn();
+
+  }
+  updateStateExpandedColumn() {
+    if (!this.tableRowExpandable) { return; }
+    if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
+      this._oTableOptions.visibleColumns = [this._oTableOptions.visibleColumns[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._oTableOptions.visibleColumns.splice(1));
+    } else if (this._oTableOptions.visibleColumns[0] !== Codes.NAME_COLUMN_EXPANDABLE) {
+      this._oTableOptions.visibleColumns.unshift(Codes.NAME_COLUMN_EXPANDABLE);
+    }
   }
 
   registerTabListener() {
@@ -1095,6 +1133,40 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       .pipe(map((res: any[]) => (res[0] || res[1] || res[2])));
   }
 
+  public getExpandableItems(): any[] {
+    return this.expandableItem.selected;
+  }
+
+  public setExpandabled(item: any, event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.expandableItem.toggle(item);
+    if (this.getStateExpand(item) === 'collapsed') {
+      this.tableRowExpandable.onCollapsed.emit(item);
+    } else {
+      this.tableRowExpandable.targetArray.forEach((element: OServiceBaseComponent) => {
+        if (element) {
+          element.queryData();
+        }
+      });
+      setTimeout(() => {
+        this.tableRowExpandable.onExpanded.emit({ row: item, template: this.tableRowExpandable.templateRef , target:this.tableRowExpandable.targetCmp });
+      }, 250);
+
+    }
+  }
+
+  public isExpanded(data: any): boolean {
+    return this.expandableItem.isSelected(data);
+  }
+
+  public getStateExpand(row) {
+    return this.isExpanded(row) ? 'expanded' : 'collapsed';
+  }
+
+  public showExpandedColumn(): boolean {
+    return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
+  }
 
   /**
    * This method manages the call to the service
@@ -1585,6 +1657,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       && this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
+    this.updateStateExpandedColumn();
   }
 
   public isAllSelected(): boolean {

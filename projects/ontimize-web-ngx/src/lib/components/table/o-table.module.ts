@@ -25,6 +25,7 @@ import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
+import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/table-row-expandable.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { OTableComponent } from './o-table.component';
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
     ...O_TABLE_HEADER_COMPONENTS,
-    ...O_TABLE_FOOTER_COMPONENTS
+    ...O_TABLE_FOOTER_COMPONENTS,
+    OTableRowExpandableComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +67,8 @@ import { OTableComponent } from './o-table.component';
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
-    ...O_TABLE_FOOTER_COMPONENTS
+    ...O_TABLE_FOOTER_COMPONENTS,
+    OTableRowExpandableComponent
   ],
   entryComponents: [
     OTableColumnAggregateComponent,

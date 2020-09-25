@@ -10,6 +10,7 @@ export class DefaultOTableOptions implements OTableOptions {
 
   protected _visibleColumns: Array<any> = [];
   protected _selectColumn: OColumn;
+  protected _expandableColumn: OColumn;
 
   constructor() {
     this.selectColumn = new OColumn();
@@ -45,4 +46,16 @@ export class DefaultOTableOptions implements OTableOptions {
     this.selectColumn.title = '';
     this.selectColumn.visible = false;
   }
+
+  get expandableColumn(): OColumn {
+    return this._expandableColumn;
+  }
+
+  set expandableColumn(val: OColumn) {
+    this._expandableColumn = val;
+    this._expandableColumn.name = Codes.NAME_COLUMN_EXPANDABLE;
+    this._expandableColumn.title = '';
+    this._expandableColumn.visible = false;
+  }
+
 }
