@@ -40,7 +40,7 @@
     <div class="o-table-overflow o-scroll">
       <table mat-table #table [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
         [ngClass]="rowHeightObservable | async" (scroll)="onTableScroll($event)"
-        (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter>
+        (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter multiTemplateDataRows="showExpandedColumn()">
 
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -51,6 +51,19 @@
           <td mat-cell *matCellDef="let row">
             <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)"
               [checked]="selection.isSelected(row)"> </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!--Expandable Column -->
+        <ng-container [matColumnDef]="oTableOptions.expandableColumn.name" *ngIf="showExpandedColumn()">
+          <th mat-header-cell *matHeaderCellDef>
+            {{oTableOptions.expandableColumn.title}}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button (click)="setExpandabled(row, $event)">
+              <mat-icon *ngIf="isExpanded(row)">remove</mat-icon>
+              <mat-icon *ngIf="!isExpanded(row)">add</mat-icon>
+            </button>
           </td>
         </ng-container>
 
@@ -119,6 +132,19 @@
             </td>
           </ng-container>
 
+        </ng-container>
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container *ngIf="showExpandedColumn()">
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let row" [attr.colspan]="oTableOptions.visibleColumns.length">
+              <div class="row-container-expanded" [@detailExpand]="getStateExpand(row)">
+                <ng-container *ngTemplateOutlet="tableRowExpandable.templateRef;context:{$implicit:row}">
+                </ng-container>
+                <!-- <ng-template [ngTemplateOutletContext]="{row: row}" [ngTemplateOutlet]="tableRowExpandable.templateRef"></ng-template> -->
+              </div>
+            </td>
+          </ng-container>
         </ng-container>
 
         <!--FOOTER-INSERTABLE-->
@@ -194,6 +220,11 @@
           (click)="handleClick(row, $event)" (dblclick)="handleDoubleClick(row, $event)"
           [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: i: rowClass">
         </tr>
+
+        <ng-container *ngIf="showExpandedColumn()">
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="o-table-row-expanded"></tr>
+        </ng-container>
+
         <ng-container *ngIf="showLastInsertableRow">
           <tr mat-footer-row *matFooterRowDef="oTableOptions.columnsInsertables; sticky: true"
             (keyup)="oTableInsertableRowComponent.handleKeyboardEvent($event)" class="o-table-insertable"></tr>

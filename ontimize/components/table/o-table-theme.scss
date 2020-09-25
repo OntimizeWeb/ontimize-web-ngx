@@ -24,13 +24,13 @@
 
     .mat-table {
       .mat-header-row {
-
         .mat-header-cell {
           color: mat-color($foreground, text);
 
           .column-filter-icon {
             color: mat-color($background, disabled-button);
           }
+
           .column-filter-icon-active,
           .column-filter-icon.active {
             color: mix($table-background, rgba($text-color, 1), (1 - $text-opacity) * 100%);
@@ -40,7 +40,7 @@
       }
 
       .mat-row {
-        &:hover {
+        &:not(.o-table-row-expanded):hover {
           cursor: pointer;
           background-color: mat-color($foreground, base, 0.18);
         }
