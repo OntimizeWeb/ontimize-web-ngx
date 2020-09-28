@@ -95,6 +95,14 @@ export class OCheckboxComponent extends OFormDataComponent {
     }
   }
 
+  getValue(): any {
+    if (Util.isDefined(this.value) && this.value.value !== undefined) {
+      return this.value.value ? this.trueValue : this.falseValue;
+    } else {
+      return this.defaultValue;
+    }
+  }
+
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
   }
