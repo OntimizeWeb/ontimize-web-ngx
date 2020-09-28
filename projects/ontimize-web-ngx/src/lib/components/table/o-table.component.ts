@@ -19,7 +19,10 @@ import {
   ViewChild,
   ViewChildren,
   ViewEncapsulation,
-  ViewRef
+  ViewRef,
+  ViewContainerRef,
+  ApplicationRef,
+  ComponentFactoryResolver
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -77,6 +80,7 @@ import { OFilterColumn } from './extensions/header/table-columns-filter/columns/
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/table-row-expandable.component';
 import { OServiceBaseComponent } from '../o-service-base-component.class';
+import { TemplatePortal, DomPortalHost, DomPortalOutlet } from '@angular/cdk/portal';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -195,8 +199,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   ],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0', display:'none' })),
-      state('expanded', style({ height: '*', display:'inline' })),
+      state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+      state('expanded', style({ height: '*', display: 'inline' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ])
   ],
@@ -233,6 +237,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
+  portalHost: DomPortalHost;
 
   get diameterSpinner() {
     const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
@@ -535,7 +540,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     injector: Injector,
     elRef: ElementRef,
     protected dialog: MatDialog,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    private _viewContainerRef: ViewContainerRef,
+    private appRef: ApplicationRef,
+    private _componentFactoryResolver: ComponentFactoryResolver,
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
   ) {
     super(injector, elRef, form);
 
@@ -571,6 +579,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this._oTableOptions.expandableColumn.visible = true;
       this._oTableOptions.expandableColumn.width = '48px';
       this.updateStateExpandedColumn();
+
     }
   }
 
@@ -1137,21 +1146,25 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.expandableItem.selected;
   }
 
-  public setExpandabled(item: any, event: Event): void {
+  public setExpandabled(item: any, rowIndex: number, event: Event): void {
     event.stopPropagation();
     event.preventDefault();
     this.expandableItem.toggle(item);
+
     if (this.getStateExpand(item) === 'collapsed') {
+      this.portalHost.detach();
+      this.cd.detectChanges();
       this.tableRowExpandable.onCollapsed.emit(item);
     } else {
-      this.tableRowExpandable.targetArray.forEach((element: OServiceBaseComponent) => {
-        if (element) {
-          element.queryData();
-        }
-      });
-      setTimeout(() => {
-        this.tableRowExpandable.onExpanded.emit({ row: item, template: this.tableRowExpandable.templateRef , target:this.tableRowExpandable.targetCmp });
-      }, 250);
+      this.portalHost = new DomPortalOutlet(
+        document.querySelector('.row-container-expanded-' + rowIndex),
+        this._componentFactoryResolver,
+        this.appRef,
+        this.injector
+      );
+      const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
+      this.portalHost.attach(templatePortal);
+      this.tableRowExpandable.onExpanded.emit({ row: item, template: this.tableRowExpandable.templateRef, target: this.tableRowExpandable.targetCmp });
 
     }
   }
