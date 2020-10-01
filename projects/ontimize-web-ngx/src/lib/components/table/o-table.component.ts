@@ -78,9 +78,8 @@ import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/table-row-expandable.component';
-import { OServiceBaseComponent } from '../o-service-base-component.class';
-import { TemplatePortal, DomPortalHost, DomPortalOutlet } from '@angular/cdk/portal';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/table-row-expandable.component';
+import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -175,7 +174,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
   'rowClass: row-class',
 
-  //filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
+  // filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
   'filterColumnActiveByDefault:filter-column-active-by-default'
 ];
 
@@ -199,8 +198,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   ],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
-      state('expanded', style({ height: '*', display: 'inline' })),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ])
   ],
@@ -220,6 +219,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
+  public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
 
   protected snackBarService: SnackBarService;
 
@@ -237,7 +237,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
-  portalHost: DomPortalHost;
+  portalHost: DomPortalOutlet;
 
   get diameterSpinner() {
     const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
@@ -279,7 +279,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   get filterColumnActiveByDefault(): boolean {
     return this.showFilterByColumnIcon;
   }
-
 
   protected _oTableOptions: OTableOptions;
 
@@ -543,7 +542,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     private _viewContainerRef: ViewContainerRef,
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
 
@@ -1142,31 +1141,48 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       .pipe(map((res: any[]) => (res[0] || res[1] || res[2])));
   }
 
+  public getExpandedRowContainerClass(rowIndex: number): string {
+    return OTableComponent.EXPANDED_ROW_CONTAINER_CLASS + rowIndex;
+  }
+
   public getExpandableItems(): any[] {
     return this.expandableItem.selected;
   }
 
-  public setExpandabled(item: any, rowIndex: number, event: Event): void {
+  public toogleRowExpandable(item: any, rowIndex: number, event: Event): void {
     event.stopPropagation();
     event.preventDefault();
+
     this.expandableItem.toggle(item);
+
+    const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item);
 
     if (this.getStateExpand(item) === 'collapsed') {
       this.portalHost.detach();
       this.cd.detectChanges();
-      this.tableRowExpandable.onCollapsed.emit(item);
+      this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
       this.portalHost = new DomPortalOutlet(
-        document.querySelector('.row-container-expanded-' + rowIndex),
+        document.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
         this._componentFactoryResolver,
         this.appRef,
         this.injector
       );
+
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
       this.portalHost.attach(templatePortal);
-      this.tableRowExpandable.onExpanded.emit({ row: item, template: this.tableRowExpandable.templateRef, target: this.tableRowExpandable.targetCmp });
+
+      this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
 
     }
+  }
+
+  private emitTableRowExpandableChangeEvent(data) {
+    const event = new OTableRowExpandedChange();
+    event.targets = this.expandableContainer ? this.expandableContainer.targets : undefined;
+    event.data = data;
+
+    return event;
   }
 
   public isExpanded(data: any): boolean {
@@ -1177,8 +1193,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.isExpanded(row) ? 'expanded' : 'collapsed';
   }
 
-  public showExpandedColumn(): boolean {
+  public isExpandedColumn(): boolean {
     return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
+  }
+  public getNumVisibleColumns(): number {
+    let numColumns = this.oTableOptions.visibleColumns.length;
+    if (this.tableRowExpandable) {
+      numColumns++;
+    }
+    return numColumns;
   }
 
   /**

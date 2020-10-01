@@ -1,52 +1,39 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, TemplateRef, AfterContentInit, AfterViewInit, ContentChild, EventEmitter, Output } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, TemplateRef, ContentChild, EventEmitter, Output } from '@angular/core';
 
-import { OServiceComponent } from '../../../../o-service-component.class';
 export const DEFAULT_OUTPUTS_O_TABLE_ROW_EXPANDABLE = [
   'onExpanded',
   'onCollapsed'
 ];
 
-export const DEFAULT_INPUT_O_TABLE_ROW_EXPANDABLE = [
-  // target [`OServiceComponent` instance]: Component whose data will be filtered.
-  'target'
+export const DEFAULT_INPUTS_O_TABLE_ROW_EXPANDABLE = [
+  'iconExpanded:icon-expanded',
+  'iconCollapsed:icon-collapsed'
 ];
+
+/** Change event object emitted by OTableRowExpanded. */
+export class OTableRowExpandedChange {
+  /** Array of targets */
+  targets: any;
+  /** The data for row expandable. */
+  data: any;
+}
+
 
 @Component({
   selector: 'o-table-row-expandable',
   template: ' ',
-  // template: `
-  //   <ng-template #templateRef let-row="row">
-  //     table-row-expandable works! {{row}}
-  //   </ng-template>
-  // `,
-  inputs: DEFAULT_INPUT_O_TABLE_ROW_EXPANDABLE,
   outputs: DEFAULT_OUTPUTS_O_TABLE_ROW_EXPANDABLE,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OTableRowExpandableComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class OTableRowExpandableComponent {
 
   constructor() { }
 
   @ContentChild(TemplateRef, { static: false }) templateRef: TemplateRef<any>;
-  @Output() onExpanded = new EventEmitter<any>();
-  @Output() onCollapsed = new EventEmitter<any>();
+  @Output() onExpanded = new EventEmitter<OTableRowExpandedChange>();
+  @Output() onCollapsed = new EventEmitter<OTableRowExpandedChange>();
 
-  // @ViewChild('templateRef', { read: TemplateRef, static: true }) templateRef: TemplateRef<any>;
-  public targetCmp: OServiceComponent;
-  public target: string;
-  public targetArray = [];
-  ngOnInit() {
-    //this.targetArray = Util.parseArray(this.targetCmp, true);
-    console.log('oninit ', this.templateRef);
-  }
 
-  ngAfterViewInit(): void {
-    console.log('o-table-row-expandable->viewInnit ', this.templateRef);
-
-  }
-  ngAfterContentInit(): void {
-    console.log('o-table-row-expandable ngAfterContentInit ', this.templateRef);
-  }
 
 }
