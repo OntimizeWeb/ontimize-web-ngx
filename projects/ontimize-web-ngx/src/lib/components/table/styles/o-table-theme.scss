@@ -40,9 +40,9 @@
       }
 
       .mat-row {
-        &:not(.o-table-row-expanded):hover {
-          cursor: pointer;
-          background-color: mat-color($foreground, base, 0.18);
+          &:hover {
+            cursor: pointer;
+            background-color: mat-color($foreground, base, 0.18);
         }
 
         &.selected {
