@@ -155,7 +155,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
 
   protected form: OFormComponent;
-  protected expandableContainer: OExpandableContainerComponent;
+  public expandableContainer: OExpandableContainerComponent;
   protected alreadyStored: boolean = false;
 
   protected queryOnEventSubscription: Subscription;
