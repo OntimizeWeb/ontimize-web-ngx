@@ -6,8 +6,40 @@ import { SQLOrder } from '../types/sql-order.type';
 import { Codes } from './codes';
 import { SQLTypes } from './sqltypes';
 import { Util } from './util';
+import { OExpandableContainerComponent } from '../components/expandable-container/expandable-container.component';
 
 export class ServiceUtils {
+  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent): {} {
+    const result = {};
+    const ownKeys = Object.keys(parentKeysObject || {});
+    const dataComponent = expandableContainer ? expandableContainer.data : {};
+    const existsData = Object.keys(dataComponent).length > 0;
+
+
+    if (existsData) {
+      ownKeys.forEach(ownKey => {
+        const keyValue = parentKeysObject[ownKey];
+        if (dataComponent.hasOwnProperty(keyValue)) {
+          const value = dataComponent[keyValue];
+          if (Util.isDefined(value)) {
+            switch (typeof (value)) {
+              case 'string':
+                if (value.trim().length > 0) {
+                  result[ownKey] = value.trim();
+                }
+                break;
+              case 'number':
+                if (!isNaN(value)) {
+                  result[ownKey] = value;
+                }
+                break;
+            }
+          }
+        }
+      });
+    }
+    return result;
+  }
 
   static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent) {
     const result = {};
