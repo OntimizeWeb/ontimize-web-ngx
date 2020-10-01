@@ -12,10 +12,10 @@ export const DEFAULT_INPUTS_O_TABLE_ROW_EXPANDABLE = [
 
 /** Change event object emitted by OTableRowExpanded. */
 export class OTableRowExpandedChange {
-  /** Array of targets */
-  targets: any;
   /** The data for row expandable. */
   data: any;
+  /** row index for row expandable */
+  rowIndex: number;
 }
 
 
@@ -33,7 +33,5 @@ export class OTableRowExpandableComponent {
   @ContentChild(TemplateRef, { static: false }) templateRef: TemplateRef<any>;
   @Output() onExpanded = new EventEmitter<OTableRowExpandedChange>();
   @Output() onCollapsed = new EventEmitter<OTableRowExpandedChange>();
-
-
 
 }

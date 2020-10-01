@@ -81,6 +81,13 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
 import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/table-row-expandable.component';
 import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
 
+export interface OnClickTableEvent {
+  /** row data */
+  row: any;
+  /** row index */
+  rowIndex: any;
+}
+
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
 
@@ -419,8 +426,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected contextMenuSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
-  public onClick: EventEmitter<any> = new EventEmitter();
-  public onDoubleClick: EventEmitter<any> = new EventEmitter();
+  public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
+  public onDoubleClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDeselected: EventEmitter<any> = new EventEmitter();
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
@@ -555,6 +562,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } catch (error) {
       // Do nothing due to not always is contained on tab.
     }
+
     this.snackBarService = this.injector.get(SnackBarService);
     this.oTableStorage = new OTableStorage(this);
   }
@@ -1155,11 +1163,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.expandableItem.toggle(item);
 
-    const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item);
+
 
     if (this.getStateExpand(item) === 'collapsed') {
       this.portalHost.detach();
       this.cd.detectChanges();
+      const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
       this.portalHost = new DomPortalOutlet(
@@ -1170,16 +1179,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       );
 
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
-      this.portalHost.attach(templatePortal);
+      setTimeout(() => {
+        const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+        this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
+      }, 250);
 
-      this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
 
     }
   }
 
-  private emitTableRowExpandableChangeEvent(data) {
+  private emitTableRowExpandableChangeEvent(data, rowIndex) {
     const event = new OTableRowExpandedChange();
-    event.targets = this.expandableContainer ? this.expandableContainer.targets : undefined;
+    event.rowIndex = rowIndex;
     event.data = data;
 
     return event;
@@ -1197,11 +1208,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
   }
   public getNumVisibleColumns(): number {
-    let numColumns = this.oTableOptions.visibleColumns.length;
-    if (this.tableRowExpandable) {
-      numColumns++;
-    }
-    return numColumns;
+    return this.oTableOptions.visibleColumns.length;
   }
 
   /**
@@ -1486,21 +1493,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(item: any, $event?) {
+  handleClick(item: any, rowIndex: number, $event?) {
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
-        this.doHandleClick(item, $event);
+        this.doHandleClick(item, rowIndex, $event);
       }
       this.clickPrevent = false;
     }, this.clickDelay);
   }
 
-  doHandleClick(item: any, $event?) {
+  doHandleClick(item: any, rowIndex: number, $event?) {
     if (!this.oenabled) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      ObservableWrapper.callEmit(this.onClick, item);
+      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
       this.selectedRow(item);
@@ -1510,7 +1517,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, item);
+      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(item);
     } else if (!this.isSelectionModeNone()) {
