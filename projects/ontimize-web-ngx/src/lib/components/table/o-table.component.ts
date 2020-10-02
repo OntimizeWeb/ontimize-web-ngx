@@ -78,14 +78,15 @@ import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/table-row-expandable.component';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
 
 export interface OnClickTableEvent {
   /** row data */
   row: any;
   /** row index */
-  rowIndex: any;
+  rowIndex: number;
+  mouseEvent: MouseEvent;
 }
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -582,12 +583,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
     if (this.tableRowExpandable) {
-      this._oTableOptions.expandableColumn = new OColumn();
-      this._oTableOptions.expandableColumn.visible = true;
-      this._oTableOptions.expandableColumn.width = '48px';
-      this.updateStateExpandedColumn();
-
+      this.createExpandableColumn();
     }
+  }
+
+  protected createExpandableColumn() {
+    this._oTableOptions.expandableColumn = new OColumn();
+    this._oTableOptions.expandableColumn.visible = this.tableRowExpandable && this.tableRowExpandable.expandibleColumnVisible;
+    this.updateStateExpandedColumn();
   }
 
   ngOnDestroy() {
@@ -1064,7 +1067,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
   updateStateExpandedColumn() {
-    if (!this.tableRowExpandable) { return; }
+    if (!this.tableRowExpandable || !this.tableRowExpandable.expandibleColumnVisible) { return; }
     if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
       this._oTableOptions.visibleColumns = [this._oTableOptions.visibleColumns[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._oTableOptions.visibleColumns.splice(1));
     } else if (this._oTableOptions.visibleColumns[0] !== Codes.NAME_COLUMN_EXPANDABLE) {
@@ -1172,13 +1175,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
       this.portalHost = new DomPortalOutlet(
-        document.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
+        this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
         this._componentFactoryResolver,
         this.appRef,
         this.injector
       );
 
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
+      this.portalHost.attachTemplatePortal(templatePortal);
       setTimeout(() => {
         const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
         this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
@@ -1204,9 +1208,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.isExpanded(row) ? 'expanded' : 'collapsed';
   }
 
-  public isExpandedColumn(): boolean {
+  public isColumnExpandable(): boolean {
     return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
   }
+
+  public hasExpandedRow(): boolean {
+    return Util.isDefined(this.tableRowExpandable);
+  }
+
   public getNumVisibleColumns(): number {
     return this.oTableOptions.visibleColumns.length;
   }
@@ -1502,12 +1511,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }, this.clickDelay);
   }
 
-  doHandleClick(item: any, rowIndex: number, $event?) {
+  doHandleClick(item: any, rowIndex: number, $event: MouseEvent) {
     if (!this.oenabled) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex });
+      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
       this.selectedRow(item);
@@ -1528,7 +1537,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.clearSelectionAndEditing();
       }
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, item);
+      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
     }
   }
 

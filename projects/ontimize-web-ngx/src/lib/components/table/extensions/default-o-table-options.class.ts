@@ -55,7 +55,9 @@ export class DefaultOTableOptions implements OTableOptions {
     this._expandableColumn = val;
     this._expandableColumn.name = Codes.NAME_COLUMN_EXPANDABLE;
     this._expandableColumn.title = '';
-    this._expandableColumn.visible = false;
+    this._expandableColumn.visible = true;
+    this._expandableColumn.resizable = false;
+    this._expandableColumn.searchable = false;
   }
 
 }
