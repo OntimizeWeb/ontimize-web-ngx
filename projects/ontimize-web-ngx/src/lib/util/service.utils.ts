@@ -6,7 +6,7 @@ import { SQLOrder } from '../types/sql-order.type';
 import { Codes } from './codes';
 import { SQLTypes } from './sqltypes';
 import { Util } from './util';
-import { OExpandableContainerComponent } from '../components/expandable-container/expandable-container.component';
+import { OExpandableContainerComponent } from '../components/expandable-container/o-expandable-container.component';
 
 export class ServiceUtils {
   static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent): {} {

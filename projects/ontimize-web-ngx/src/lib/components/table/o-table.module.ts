@@ -25,7 +25,7 @@ import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
-import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/table-row-expandable.component';
+import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { PortalModule } from '@angular/cdk/portal';
 
 @NgModule({

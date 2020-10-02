@@ -57,7 +57,7 @@ import { OTranslateService } from '../services/translate/o-translate.service';
 import { OSharedModule } from '../shared/shared.module';
 import { Util } from '../util/util';
 import { appInitializerFactory } from './o-providers';
-import { OExpandableContainerModule } from '../components/expandable-container/expandable-container.module';
+import { OExpandableContainerModule } from '../components/expandable-container/o-expandable-container.module';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules

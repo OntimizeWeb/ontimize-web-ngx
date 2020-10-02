@@ -8,7 +8,7 @@ export const DEFAULT_INPUT_O_EXPANDABLE_CONTAINER = [
 ];
 @Component({
   selector: 'o-expandable-container',
-  templateUrl: './expandable-container.component.html',
+  templateUrl: './o-expandable-container.component.html',
   inputs: DEFAULT_INPUT_O_EXPANDABLE_CONTAINER
 })
 export class OExpandableContainerComponent implements AfterViewInit {

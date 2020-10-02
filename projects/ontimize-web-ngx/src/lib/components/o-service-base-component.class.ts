@@ -13,7 +13,7 @@ import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
-import { OExpandableContainerComponent } from './expandable-container/expandable-container.component';
+import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
