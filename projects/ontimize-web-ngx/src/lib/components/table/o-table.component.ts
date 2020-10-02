@@ -1502,7 +1502,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(item: any, rowIndex: number, $event?) {
+  handleClick(item: any, rowIndex: number, $event: MouseEvent) {
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
         this.doHandleClick(item, rowIndex, $event);
