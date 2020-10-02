@@ -7,6 +7,10 @@
   * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
   * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
   * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
+  * new component `o-table-row-expandable` ([4452ca2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4452ca2))
+  * new component `o-expandable-container` ([3036381](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3036381))
+  * new event `onClickTableEvent` ([1da21eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1da21eb))
+
 * **o-form**:
   * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo`, `delete` and `setData` ([4e38704](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e38704)).
   * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction`, `_deleteAction` and `_setData` ([4e38704](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e38704)).
