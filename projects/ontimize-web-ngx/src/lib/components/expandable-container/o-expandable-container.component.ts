@@ -2,7 +2,7 @@ import { Component, Input, AfterViewInit } from '@angular/core';
 import { OServiceComponent } from '../o-service-component.class';
 
 export const DEFAULT_INPUT_O_EXPANDABLE_CONTAINER = [
-  // targets [`OServiceComponent` instance]: Component whose query will be launched when expanding the row.
+  // targets [`OServiceComponent` instance]: Components whose query will be launched when expanding the row.
   'targets',
   'data'
 ];
