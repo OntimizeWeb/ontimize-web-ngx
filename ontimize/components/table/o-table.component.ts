@@ -885,7 +885,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   protected createExpandableColumn() {
     this._oTableOptions.expandableColumn = new OColumn();
-    this._oTableOptions.expandableColumn.visible = this.tableRowExpandable && this.tableRowExpandable.expandibleColumnVisible;
+    this._oTableOptions.expandableColumn.visible = this.tableRowExpandable && this.tableRowExpandable.expandableColumnVisible;
     this.updateStateExpandedColumn();
   }
 
@@ -1367,7 +1367,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   }
   updateStateExpandedColumn() {
-    if (!this.tableRowExpandable || !this.tableRowExpandable.expandibleColumnVisible) { return; }
+    if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
     if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
       this._oTableOptions.visibleColumns = [this._oTableOptions.visibleColumns[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._oTableOptions.visibleColumns.splice(1));
     } else if (this._oTableOptions.visibleColumns[0] !== Codes.NAME_COLUMN_EXPANDABLE) {
