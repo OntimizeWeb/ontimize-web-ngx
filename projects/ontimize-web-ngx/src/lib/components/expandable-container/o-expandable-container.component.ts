@@ -18,11 +18,9 @@ export class OExpandableContainerComponent implements AfterViewInit {
   constructor() { }
 
   ngAfterViewInit(): void {
-    const self = this;
     this.targets.forEach(x => {
       x.queryData();
     });
-
   }
 
 }
