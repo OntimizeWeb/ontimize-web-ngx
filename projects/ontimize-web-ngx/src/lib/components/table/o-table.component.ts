@@ -66,6 +66,8 @@ import {
 } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
+import { OTableButtonComponent } from './extensions/header/table-button/o-table-button.component';
+import { OTableButtonsComponent } from './extensions/header/table-buttons/o-table-buttons.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
@@ -408,6 +410,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public oTableFilterByColumnDataDialogComponent: OTableFilterByColumnDataDialogComponent;
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
+
   public showFilterByColumnIcon: boolean = false;
 
 
@@ -478,10 +481,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   tableOptions: QueryList<OTableOptionComponent>;
 
   @ViewChild('tableButtons', { static: false })
-  oTableButtons: OTableButtons;
+  oTableButtons: OTableButtonsComponent;
 
   @ContentChildren('o-table-button')
-  tableButtons: QueryList<OTableButton>;
+  tableButtons: QueryList<OTableButtonComponent>;
 
   @ContentChild('o-table-quickfilter', { static: true })
   quickfilterContentChild: OTableQuickfilter;
