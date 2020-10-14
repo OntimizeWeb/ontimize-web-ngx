@@ -88,8 +88,8 @@ import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/table-row-expandable.component';
 import { OServiceBaseComponent } from '../o-service-base-component.class';
+import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 
 export const NAME_COLUMN_SELECT = 'select';
 
@@ -536,7 +536,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild('spinnerContainer', { read: ElementRef })
   spinnerContainer: ElementRef;
 
-  @ContentChild(OTableRowExpandableComponent, { static: false })
+  @ContentChild(OTableRowExpandableComponent)
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;

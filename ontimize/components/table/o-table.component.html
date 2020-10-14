@@ -59,8 +59,8 @@
           <th mat-header-cell *matHeaderCellDef>
             {{oTableOptions.expandableColumn.title}}
           </th>
-          <td mat-cell *matCellDef="let row">
-            <button mat-icon-button (click)="setExpandabled(row, $event)">
+          <td at-cell *matCellDef="let row;let rowIndex = dataIndex">
+            <button mat-icon-button (click)="setExpandabled(row, rowIndex,$event)">
               <mat-icon *ngIf="isExpanded(row)">remove</mat-icon>
               <mat-icon *ngIf="!isExpanded(row)">add</mat-icon>
             </button>
@@ -137,10 +137,9 @@
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
         <ng-container *ngIf="showExpandedColumn()">
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let row" [attr.colspan]="oTableOptions.visibleColumns.length">
-              <div class="row-container-expanded" [@detailExpand]="getStateExpand(row)">
-                <ng-container *ngTemplateOutlet="tableRowExpandable.templateRef;context:{$implicit:row}">
-                </ng-container>
+            <td mat-cell *matCellDef="let row;let rowIndex= dataIndex" [attr.colspan]="oTableOptions.visibleColumns.length">
+              <div [ngClass]="'row-container-expanded-'+rowIndex" [@detailExpand]="getStateExpand(row)">
+                <!-- <ng-template [cdkPortalOutlet]="templatePortal(row)"></ng-template> -->
                 <!-- <ng-template [ngTemplateOutletContext]="{row: row}" [ngTemplateOutlet]="tableRowExpandable.templateRef"></ng-template> -->
               </div>
             </td>
