@@ -126,10 +126,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // columns-visibility-button [no|yes]: show columns visibility button. Default: yes.
   'columnsVisibilityButton: columns-visibility-button',
 
-  // // columns-resize-button [no|yes]: show columns resize button. Default: yes.
+  // columns-resize-button [no|yes]: show columns resize button. Default: yes.
   // 'columnsResizeButton: columns-resize-button',
 
-  // // columns-group-button [no|yes]: show columns group button. Default: yes.
+  // columns-group-button [no|yes]: show columns group button. Default: yes.
   // 'columnsGroupButton: columns-group-button',
 
   // export-button [no|yes]: show export button. Default: yes.
@@ -817,9 +817,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }, 0);
     }
     this.refreshColumnsWidth();
-    // if (this.resizable) {
 
-    // }
   }
 
   protected permissions: OTablePermissions;
@@ -880,7 +878,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.tableRowExpandable) {
       this.createExpandableColumn();
-      this.updateStateExpandedColumn();
     }
   }
 
@@ -2276,7 +2273,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     //if either value in o-table-column-filter-column or localstorage, get sort value in sortColArray
     if (!Util.isDefined(sortColumn)) {
       if (this.sortColArray.find(x => x.columnName === column.attr)) {
-        sortColumn = this.isColumnSortActive(column) ? 'asc' : 'desc'
+        sortColumn = this.isColumnSortActive(column) ? 'asc' : 'desc';
       }
     }
 
