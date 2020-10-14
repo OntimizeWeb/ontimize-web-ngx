@@ -516,7 +516,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   }
 
   getContextComponent() {
-    return this.form || this.expandableContainer;
+    return this.expandableContainer || this.form;
   }
 
   getComponentFilter(existingFilter: any = {}): any {
