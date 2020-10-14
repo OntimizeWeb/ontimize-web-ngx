@@ -80,14 +80,7 @@ import { OFilterColumn } from './extensions/header/table-columns-filter/columns/
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
-
-export interface OnClickTableEvent {
-  /** row data */
-  row: any;
-  /** row index */
-  rowIndex: number;
-  mouseEvent: MouseEvent;
-}
+import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -1516,7 +1509,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
       this.selectedRow(item);
@@ -1526,7 +1519,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(item);
     } else if (!this.isSelectionModeNone()) {
@@ -1537,7 +1530,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.clearSelectionAndEditing();
       }
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
     }
   }
 

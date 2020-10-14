@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { OServiceComponent } from '../o-service-component.class';
 
 export const DEFAULT_INPUT_O_EXPANDABLE_CONTAINER = [
@@ -13,8 +13,8 @@ export const DEFAULT_INPUT_O_EXPANDABLE_CONTAINER = [
 })
 export class OExpandableContainerComponent implements AfterViewInit {
 
-  @Input() targets: Array<OServiceComponent>;
-  @Input() data: any;
+  public targets: Array<OServiceComponent>;
+  public data: any;
   constructor() { }
 
   ngAfterViewInit(): void {
