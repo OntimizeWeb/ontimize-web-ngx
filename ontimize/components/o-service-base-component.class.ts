@@ -358,15 +358,12 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
 
   public getParentKeysFromContext(parentKeys: object, context: any) {
     let result = {};
-    switch (true) {
-      case context instanceof OExpandableContainerComponent:
-        result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context);
-        break;
-      default:
-        result = ServiceUtils.getParentKeysFromForm(parentKeys, context);
+    if (context instanceof OExpandableContainerComponent) {
+      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context);
+    } else {
+      result = ServiceUtils.getParentKeysFromForm(parentKeys, context);
     }
     return result;
-
   }
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {

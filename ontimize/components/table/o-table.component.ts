@@ -880,6 +880,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     if (this.tableRowExpandable) {
       this.createExpandableColumn();
+      this.updateStateExpandedColumn();
     }
   }
 
@@ -1820,7 +1821,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
       this.selectedRow(item);
@@ -1830,7 +1831,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(item);
     } else if (!this.isSelectionModeNone()) {
@@ -1841,7 +1842,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.clearSelectionAndEditing();
       }
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, { row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
     }
   }
 
@@ -2012,7 +2013,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
-    this.updateStateExpandedColumn();
+
   }
 
   public isAllSelected(): boolean {
