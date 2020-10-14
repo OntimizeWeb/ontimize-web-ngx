@@ -34,8 +34,6 @@ export class OTableRowExpandedChange {
 })
 export class OTableRowExpandableComponent {
 
-  constructor() { }
-
   @ContentChild(TemplateRef) templateRef: TemplateRef<any>;
   @Output() onExpanded = new EventEmitter<OTableRowExpandedChange>();
   @Output() onCollapsed = new EventEmitter<OTableRowExpandedChange>();

@@ -15,7 +15,6 @@ export class OExpandableContainerComponent implements AfterViewInit {
 
   public targets: Array<OServiceComponent>;
   public data: any;
-  constructor() { }
 
   ngAfterViewInit(): void {
     this.targets.forEach(x => {

@@ -83,23 +83,9 @@ export class Codes {
     TWENTY_FOUR: 'HH:mm a',
   };
 
-  // OFormComponent
-  public static CLOSE_DETAIL_ACTION: string = 'CLOSE';
-  public static BACK_ACTION: string = 'BACK';
-  public static RELOAD_ACTION: string = 'RELOAD';
-  public static GO_EDIT_ACTION: string = 'GO_EDIT';
-  public static EDIT_ACTION: string = 'EDIT';
-  public static INSERT_ACTION: string = 'INSERT';
-  public static GO_INSERT_ACTION: string = 'GO_INSERT';
-  public static DELETE_ACTION: string = 'DELETE';
-  public static UNDO_LAST_CHANGE_ACTION: string = 'UNDO_LAST_CHANGE';
-
   // OTableComponent
-  public static DEFAULT_COLUMN_MIN_WIDTH = 80;
   public static NAME_COLUMN_SELECT = 'select';
   public static NAME_COLUMN_EXPANDABLE = 'expandable';
-  public static SUFFIX_COLUMN_INSERTABLE = '_insertable';
-  public static LIMIT_SCROLLVIRTUAL = 50;
 
   public static TWENTY_FOUR_HOUR_FORMAT = 24;
   public static TWELVE_FOUR_HOUR_FORMAT = 12;
