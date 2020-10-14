@@ -1797,6 +1797,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   handleClick(item: any, rowIndex: number, $event?) {
+    const self = this;
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
         this.doHandleClick(item, rowIndex, $event);
