@@ -17,7 +17,7 @@
 
 ### BREAKING CHANGES
 * **table**:
-  * `onClick` event return new event `onClickTableEvent` ([1da21eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1da21eb))
+  * `onClick` event return `onClickTableEvent` type ([1da21eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1da21eb))
 
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
