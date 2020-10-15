@@ -12,3 +12,4 @@ export * from './row/o-table-row.directive';
 export * from './sort/o-mat-sort';
 export * from './sort/o-mat-sort-header';
 export * from './sort/o-mat-sort-module';
+export * from './row/table-row-expandable/o-table-row-expandable.component';
