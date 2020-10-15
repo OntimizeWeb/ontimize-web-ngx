@@ -66,8 +66,6 @@ import {
 } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
-import { OTableButtonComponent } from './extensions/header/table-button/o-table-button.component';
-import { OTableButtonsComponent } from './extensions/header/table-buttons/o-table-buttons.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
@@ -410,7 +408,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public oTableFilterByColumnDataDialogComponent: OTableFilterByColumnDataDialogComponent;
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
-
   public showFilterByColumnIcon: boolean = false;
 
 
@@ -480,11 +477,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ContentChildren(OTableOptionComponent)
   tableOptions: QueryList<OTableOptionComponent>;
 
-  @ViewChild('tableButtons', { static: false })
-  oTableButtons: OTableButtonsComponent;
+  // @ViewChild('tableButtons', { static: false })
+  oTableButtons: OTableButtons;
 
   @ContentChildren('o-table-button')
-  tableButtons: QueryList<OTableButtonComponent>;
+  tableButtons: QueryList<OTableButton>;
 
   @ContentChild('o-table-quickfilter', { static: true })
   quickfilterContentChild: OTableQuickfilter;
@@ -534,6 +531,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   ngOnInit() {
     this.initialize();
+    if (this.oTableButtons) {
+      this.oTableButtons.registerButtons(this.tableButtons.toArray());
+    }
   }
 
   ngAfterViewInit() {
@@ -542,9 +542,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableMenu) {
       this.matMenu = this.oTableMenu.matMenu;
       this.oTableMenu.registerOptions(this.tableOptions.toArray());
-    }
-    if (this.oTableButtons) {
-      this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
   }
 
@@ -2361,5 +2358,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       instance.setColumnProperties(column);
     }
     return instance;
+  }
+
+  public registerOTableButtons(arg: OTableButtons) {
+    this.oTableButtons = arg;
+    if (this.oTableButtons) {
+      this.oTableButtons.registerButtons(this.tableButtons.toArray());
+    }
   }
 }

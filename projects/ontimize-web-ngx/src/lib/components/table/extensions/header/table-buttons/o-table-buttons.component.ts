@@ -80,6 +80,7 @@ export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy 
     this.subscription = this.table.selection.changed.subscribe(() =>
       deletePerm ? this.enabledDeleteButton.next(deletePerm.enabled && !this.table.selection.isEmpty()) : this.enabledDeleteButton.next(!this.table.selection.isEmpty())
     );
+    this.table.registerOTableButtons(this);
   }
 
   public ngOnDestroy(): void {
