@@ -477,7 +477,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ContentChildren(OTableOptionComponent)
   tableOptions: QueryList<OTableOptionComponent>;
 
-  // @ViewChild('tableButtons', { static: false })
   oTableButtons: OTableButtons;
 
   @ContentChildren('o-table-button')
