@@ -124,7 +124,7 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     if (!Util.isDefined(this.headerEl)) {
       return;
     }
-    this.DOMWidth = this.table.getWidthThFromOColumn(this.column);
+    this.DOMWidth = this.table.getThWidthFromOColumn(this.column);
     this.startX = startEvent.screenX;
     this.startWidth = this.DOMWidth;
     this.minWidth = this.column.getMinWidthValue();
