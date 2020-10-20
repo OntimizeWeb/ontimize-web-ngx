@@ -33,7 +33,15 @@ $o_table_row_padding: 24px;
       .o-table-overflow {
         overflow-y: auto;
         min-width: 100%;
+        overflow-x: hidden;
       }
+
+      &.horizontal-scroll {
+        .o-table-overflow {
+          overflow-x: auto;
+        }
+      }
+
 
       thead .mat-header-row th:last-child .o-table-column-resizer {
         display: none;
@@ -468,8 +476,9 @@ $o_table_row_padding: 24px;
 
       .o-table-overflow {
         flex: 1;
-        overflow: auto;
+        overflow-y: auto;
       }
+
     }
   }
 }
