@@ -83,6 +83,10 @@ export class Codes {
     TWENTY_FOUR: 'HH:mm a',
   };
 
+  // OTableComponent
+  public static NAME_COLUMN_SELECT = 'select';
+  public static NAME_COLUMN_EXPANDABLE = 'expandable';
+
   public static TWENTY_FOUR_HOUR_FORMAT = 24;
   public static TWELVE_FOUR_HOUR_FORMAT = 12;
 

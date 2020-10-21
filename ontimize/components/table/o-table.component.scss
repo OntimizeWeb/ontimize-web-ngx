@@ -40,8 +40,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -188,6 +188,10 @@ $o_table_row_padding: 24px;
         .mat-sort-header-arrow {
           margin-top: 8px;
         }
+      }
+
+      tr.mat-row.o-table-row-expanded {
+        height: 0;
       }
 
       .mat-row {
@@ -396,6 +400,13 @@ $o_table_row_padding: 24px;
           overflow: initial;
         }
 
+      }
+
+      .mat-cell {
+        .row-container-expanded {
+          overflow: hidden;
+          display: flex;
+        }
       }
     }
 

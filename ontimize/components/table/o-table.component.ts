@@ -1,10 +1,12 @@
-import { SelectionChange } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import {
+  ApplicationRef,
   ChangeDetectionStrategy,
   Component,
+  ComponentFactoryResolver,
   ContentChild,
   ContentChildren,
   ElementRef,
@@ -21,6 +23,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
+  ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
 import {
@@ -87,8 +90,18 @@ import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
 import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
+import { trigger, state, transition, style, animate } from '@angular/animations';
+import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 
 export const NAME_COLUMN_SELECT = 'select';
+export interface OnClickTableEvent {
+  /** row data */
+  row: any;
+  /** row index */
+  rowIndex: number;
+  mouseEvent: MouseEvent;
+}
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...OServiceComponent.DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -113,10 +126,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // columns-visibility-button [no|yes]: show columns visibility button. Default: yes.
   'columnsVisibilityButton: columns-visibility-button',
 
-  // // columns-resize-button [no|yes]: show columns resize button. Default: yes.
+  // columns-resize-button [no|yes]: show columns resize button. Default: yes.
   // 'columnsResizeButton: columns-resize-button',
 
-  // // columns-group-button [no|yes]: show columns group button. Default: yes.
+  // columns-group-button [no|yes]: show columns group button. Default: yes.
   // 'columnsGroupButton: columns-group-button',
 
   // export-button [no|yes]: show export button. Default: yes.
@@ -180,7 +193,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
   'rowClass: row-class',
 
-  //filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
+  // filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
   'filterColumnActiveByDefault:filter-column-active-by-default'
 ];
 
@@ -434,6 +447,7 @@ export class OTableOptions {
   _visibleColumns: Array<any> = [];
   filter: boolean = true;
   filterCaseSensitive: boolean = false;
+  protected _expandableColumn: OColumn;
 
   constructor() {
     this.selectColumn = new OColumn();
@@ -458,6 +472,16 @@ export class OTableOptions {
       return col + SUFFIX_COLUMN_INSERTABLE;
     });
   }
+  get expandableColumn(): OColumn {
+    return this._expandableColumn;
+  }
+
+  set expandableColumn(val: OColumn) {
+    this._expandableColumn = val;
+    this._expandableColumn.name = Codes.NAME_COLUMN_EXPANDABLE;
+    this._expandableColumn.title = '';
+    this._expandableColumn.visible = false;
+  }
 }
 
 export type QuickFilterFunction = (filter: string) => IExpression | Object;
@@ -481,6 +505,13 @@ export interface OTableInitializationOptions {
   providers: [
     { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] }
   ],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ])
+  ],
   inputs: DEFAULT_INPUTS_O_TABLE,
   outputs: DEFAULT_OUTPUTS_O_TABLE,
   encapsulation: ViewEncapsulation.None,
@@ -502,6 +533,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public static DEFAULT_COLUMN_MIN_WIDTH = 80;
 
   public static NAME_COLUMN_SELECT = NAME_COLUMN_SELECT;
+  public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
 
   protected snackBarService: SnackBarService;
 
@@ -515,7 +547,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ViewChild('spinnerContainer', { read: ElementRef })
   spinnerContainer: ElementRef;
 
+  @ContentChild(OTableRowExpandableComponent)
+  tableRowExpandable: OTableRowExpandableComponent;
+
   _filterColumns: Array<OFilterColumn>;
+  portalHost: DomPortalOutlet;
 
   get diameterSpinner() {
     const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
@@ -623,7 +659,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     val = Util.parseBoolean(String(val));
     this._enabled = val;
   }
-
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
     this._selectAllCheckboxVisible = BooleanConverter(this.state['select-column-visible']) || BooleanConverter(value);
@@ -659,9 +694,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
-      const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(OTableComponent.NAME_COLUMN_SELECT) !== -1;
+      const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(Codes.NAME_COLUMN_SELECT) !== -1;
+      const containsExpandableCol = this._oTableOptions.visibleColumns.indexOf(Codes.NAME_COLUMN_EXPANDABLE) !== -1;
       if (containsSelectionCol) {
         this._visibleColArray.unshift(OTableComponent.NAME_COLUMN_SELECT);
+      }
+      if (containsSelectionCol && containsExpandableCol) {
+        this._visibleColArray = [this._visibleColArray[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._visibleColArray.splice(1));
+
+      } else {
+        if (containsExpandableCol) {
+          this._visibleColArray.unshift(Codes.NAME_COLUMN_EXPANDABLE);
+        }
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
     }
@@ -686,8 +730,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected contextMenuSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
-  public onClick: EventEmitter<any> = new EventEmitter();
-  public onDoubleClick: EventEmitter<any> = new EventEmitter();
+  public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
+  public onDoubleClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDeselected: EventEmitter<any> = new EventEmitter();
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
@@ -713,6 +757,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
   public showLastInsertableRow: boolean = false;
+  public expandableItem = new SelectionModel<Element>(false, []);
 
   protected clickTimer;
   protected clickDelay = 200;
@@ -772,9 +817,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }, 0);
     }
     this.refreshColumnsWidth();
-    // if (this.resizable) {
 
-    // }
   }
 
   protected permissions: OTablePermissions;
@@ -802,6 +845,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     injector: Injector,
     elRef: ElementRef,
     protected dialog: MatDialog,
+    private _viewContainerRef: ViewContainerRef,
+    private appRef: ApplicationRef,
+    private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
@@ -811,6 +857,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } catch (error) {
       // Do nothing due to not always is contained on tab.
     }
+
     this.snackBarService = this.injector.get(SnackBarService);
     this.oTableStorage = new OTableStorage(this);
   }
@@ -829,6 +876,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableButtons) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
+    if (this.tableRowExpandable) {
+      this.createExpandableColumn();
+    }
+  }
+
+  protected createExpandableColumn() {
+    this._oTableOptions.expandableColumn = new OColumn();
+    this._oTableOptions.expandableColumn.visible = this.tableRowExpandable && this.tableRowExpandable.expandableColumnVisible;
+    this.updateStateExpandedColumn();
   }
 
   ngOnDestroy() {
@@ -1306,6 +1362,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
 
     this.initializeCheckboxColumn();
+
+  }
+  updateStateExpandedColumn() {
+    if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
+    if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
+      this._oTableOptions.visibleColumns = [this._oTableOptions.visibleColumns[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._oTableOptions.visibleColumns.splice(1));
+    } else if (this._oTableOptions.visibleColumns[0] !== Codes.NAME_COLUMN_EXPANDABLE) {
+      this._oTableOptions.visibleColumns.unshift(Codes.NAME_COLUMN_EXPANDABLE);
+    }
   }
 
   registerTabListener() {
@@ -1388,6 +1453,73 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       (x, y, z) => (x || y || z));
   }
 
+  public getExpandedRowContainerClass(rowIndex: number): string {
+    return OTableComponent.EXPANDED_ROW_CONTAINER_CLASS + rowIndex;
+  }
+
+  public getExpandableItems(): any[] {
+    return this.expandableItem.selected;
+  }
+
+  public toogleRowExpandable(item: any, rowIndex: number, event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.expandableItem.toggle(item);
+
+
+
+    if (this.getStateExpand(item) === 'collapsed') {
+      this.portalHost.detach();
+      this.cd.detectChanges();
+      const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+      this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
+    } else {
+      this.portalHost = new DomPortalOutlet(
+        this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
+        this._componentFactoryResolver,
+        this.appRef,
+        this.injector
+      );
+
+      const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
+      this.portalHost.attachTemplatePortal(templatePortal);
+      setTimeout(() => {
+        const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+        this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
+      }, 250);
+
+
+    }
+  }
+
+  private emitTableRowExpandableChangeEvent(data, rowIndex) {
+    const event = new OTableRowExpandedChange();
+    event.rowIndex = rowIndex;
+    event.data = data;
+
+    return event;
+  }
+
+  public isExpanded(data: any): boolean {
+    return this.expandableItem.isSelected(data);
+  }
+
+  public getStateExpand(row) {
+    return this.isExpanded(row) ? 'expanded' : 'collapsed';
+  }
+
+  public isColumnExpandable(): boolean {
+    return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
+  }
+
+  public hasExpandedRow(): boolean {
+    return Util.isDefined(this.tableRowExpandable);
+  }
+
+  public getNumVisibleColumns(): number {
+    return this.oTableOptions.visibleColumns.length;
+  }
 
   /**
    * This method manages the call to the service
@@ -1671,22 +1803,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(item: any, $event?) {
+  handleClick(item: any, rowIndex: number, $event?) {
     const self = this;
     this.clickTimer = setTimeout(() => {
-      if (!self.clickPrevent) {
-        self.doHandleClick(item, $event);
+      if (!this.clickPrevent) {
+        this.doHandleClick(item, rowIndex, $event);
       }
       self.clickPrevent = false;
     }, this.clickDelay);
   }
 
-  doHandleClick(item: any, $event?) {
+  doHandleClick(item: any, rowIndex: number, $event: MouseEvent) {
     if (!this.oenabled) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      ObservableWrapper.callEmit(this.onClick, item);
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
       this.selectedRow(item);
@@ -1696,7 +1828,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, item);
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(item);
     } else if (!this.isSelectionModeNone()) {
@@ -1707,7 +1839,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.clearSelectionAndEditing();
       }
       this.selectedRow(item);
-      ObservableWrapper.callEmit(this.onClick, item);
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
     }
   }
 
@@ -1878,6 +2010,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     } else if (this._oTableOptions.visibleColumns && !this._oTableOptions.selectColumn.visible && this._oTableOptions.visibleColumns[0] === OTableComponent.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
+
   }
 
   public isAllSelected(): boolean {
@@ -2140,7 +2273,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     //if either value in o-table-column-filter-column or localstorage, get sort value in sortColArray
     if (!Util.isDefined(sortColumn)) {
       if (this.sortColArray.find(x => x.columnName === column.attr)) {
-        sortColumn = this.isColumnSortActive(column) ? 'asc' : 'desc'
+        sortColumn = this.isColumnSortActive(column) ? 'asc' : 'desc';
       }
     }
 
@@ -2149,7 +2282,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return sortColumn;
   }
 
-   get disableTableMenuButton(): boolean {
+  get disableTableMenuButton(): boolean {
     return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
   }
 
@@ -2647,6 +2780,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableExpandedFooter,
     OTableExportButton,
     OTableRowClassPipe,
+    OTableRowExpandableComponent,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
@@ -2673,6 +2807,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     OTableExpandedFooter,
     OMatSortModule,
     OTableExportButton,
+    OTableRowExpandableComponent,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,

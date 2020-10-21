@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { OFormComponent } from '../components/form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
 import { Codes, Util, SQLTypes } from '../utils';
+import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 
 export type OQueryDataArgs = {
   replace?: boolean; // Used in the list component for replacing data in setValue method when reloadData method is called
@@ -17,6 +18,37 @@ export interface ISQLOrder {
 }
 
 export class ServiceUtils {
+  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent): {} {
+    const result = {};
+    const ownKeys = Object.keys(parentKeysObject || {});
+    const dataComponent = expandableContainer ? expandableContainer.data : {};
+    const existsData = Object.keys(dataComponent).length > 0;
+
+
+    if (existsData) {
+      ownKeys.forEach(ownKey => {
+        const keyValue = parentKeysObject[ownKey];
+        if (dataComponent.hasOwnProperty(keyValue)) {
+          const value = dataComponent[keyValue];
+          if (Util.isDefined(value)) {
+            switch (typeof (value)) {
+              case 'string':
+                if (value.trim().length > 0) {
+                  result[ownKey] = value.trim();
+                }
+                break;
+              case 'number':
+                if (!isNaN(value)) {
+                  result[ownKey] = value;
+                }
+                break;
+            }
+          }
+        }
+      });
+    }
+    return result;
+  }
 
   static getParentKeysFromForm(parentKeysObject: Object, form: OFormComponent) {
     const result = {};
