@@ -33,7 +33,6 @@ $o_table_row_padding: 24px;
       .o-table-overflow {
         overflow-y: auto;
         min-width: 100%;
-        overflow-x: hidden;
       }
 
       &.horizontal-scroll {
@@ -41,7 +40,6 @@ $o_table_row_padding: 24px;
           overflow-x: auto;
         }
       }
-
 
       thead .mat-header-row th:last-child .o-table-column-resizer {
         display: none;
@@ -79,10 +77,6 @@ $o_table_row_padding: 24px;
     }
 
     .o-table-body {
-      &:not(.horizontal-scroll) {
-        overflow-x: hidden;
-      }
-
       .table-title {
         font-size: 18px;
         font-weight: 400;
@@ -131,17 +125,12 @@ $o_table_row_padding: 24px;
       table-layout: fixed;
       width: 100%;
 
-      &.autoadjusted {
-        overflow: auto;
-        height: auto;
-
-        td .content,
-        th .content {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          display: block;
-        }
+      td .content,
+      th .content {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
       }
 
       &.small {

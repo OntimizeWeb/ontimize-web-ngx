@@ -541,10 +541,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       }, 0);
     }
-    //this.refreshColumnsWidth();
-    // if (this.resizable) {
-
-    // }
+    this.refreshColumnsWidth();
   }
 
   constructor(
@@ -1352,8 +1349,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
-
-    //this.getColumnsWidthFromDOM();
 
     if (this.state.hasOwnProperty('selection') && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
       this.state.selection.forEach(selectedItem => {
@@ -2435,16 +2430,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     return result;
   }
+
   getThWidthFromOColumn(oColumn: OColumn): any {
-    let widthColumn: OColumn;
-    [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(element => {
-      const classList: any[] = [].slice.call((element as Element).classList);
+    let widthColumn: number;
+    const thArray = [].slice.call(this.tableHeaderEl.nativeElement.children);
+    for (const th of thArray) {
+      const classList: any[] = [].slice.call((th as Element).classList);
       const columnClass = classList.find((className: string) => (className === 'mat-column-' + oColumn.attr));
       if (columnClass && columnClass.length > 1) {
-        widthColumn = element.clientWidth;
+        widthColumn = th.clientWidth;
+        break;
       }
-    });
-
+    }
     return widthColumn;
   }
 
@@ -2475,7 +2472,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
         const oCol: OColumn = this.getOColumnFromTh(thEl);
         if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
-          console.log('getColumnsWidthFromDOM ', oCol.attr, oCol.DOMWidth, thEl.clientWidth);
           oCol.DOMWidth = thEl.clientWidth;
         }
       });
@@ -2483,17 +2479,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   refreshColumnsWidth() {
-    this._oTableOptions.columns.filter(c => c.visible).forEach((c) => {
-      c.DOMWidth = undefined;
-    });
-    this.cd.detectChanges();
+    // this._oTableOptions.columns.filter(c => c.visible).forEach((c) => {
+    //   c.DOMWidth = undefined;
+    // });
+    // this.cd.detectChanges();
     setTimeout(() => {
-      // this.getColumnsWidthFromDOM();
+      //this.getColumnsWidthFromDOM();
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
-        c.getRenderWidth(this.horizontalScroll, this.getThFromOColumn(c));
+        c.getRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
       });
       this.cd.detectChanges();
     }, 0);
@@ -2514,5 +2510,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       instance.setColumnProperties(column);
     }
     return instance;
+  }
+
+  public getClientWidthColumn(col: OColumn): number {
+    return col.DOMWidth || this.getThWidthFromOColumn(col);
   }
 }
