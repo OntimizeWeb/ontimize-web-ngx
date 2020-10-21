@@ -280,7 +280,4 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     this.maxWidth = maxWidth;
   }
 
-  // private getWidthColumn(col: OColumn): number {
-  //   return col.DOMWidth || this.table.getThWidthFromOColumn(col);
-  // }
 }

@@ -2445,20 +2445,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return widthColumn;
   }
 
-  getThFromOColumn(oColumn: OColumn): any {
-    let th: any;
-    [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(element => {
-      //   element.classLit
-      const classList: any[] = [].slice.call((element as Element).classList);
-      const columnClass = classList.find((className: string) => (className === 'mat-column-' + oColumn.attr));
-      if (columnClass && columnClass.length > 1) {
-        th = element;
-      }
-    });
-
-    return th;
-  }
-
   getColumnInsertable(name): string {
     return name + this.getSuffixColumnInsertable();
   }
@@ -2479,12 +2465,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   refreshColumnsWidth() {
-    // this._oTableOptions.columns.filter(c => c.visible).forEach((c) => {
-    //   c.DOMWidth = undefined;
-    // });
-    // this.cd.detectChanges();
     setTimeout(() => {
-      //this.getColumnsWidthFromDOM();
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
