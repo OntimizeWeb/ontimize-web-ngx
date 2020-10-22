@@ -326,8 +326,19 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   showTitle: boolean = false;
   editionMode: string = Codes.DETAIL_MODE_NONE;
   selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
+
+  protected _horizontalScroll = false;
   @InputConverter()
-  horizontalScroll: boolean = false;
+  set horizontalScroll(value: boolean) {
+    this._horizontalScroll = BooleanConverter(value);
+    this.refreshColumnsWidth();
+
+  }
+
+  get horizontalScroll(): boolean {
+    return this._horizontalScroll;
+  }
+
   @InputConverter()
   showPaginatorFirstLastButtons: boolean = true;
   @InputConverter()
@@ -531,9 +542,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }, 0);
     }
     this.refreshColumnsWidth();
-    // if (this.resizable) {
-
-    // }
   }
 
   constructor(
@@ -1341,8 +1349,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
-
-    this.getColumnsWidthFromDOM();
 
     if (this.state.hasOwnProperty('selection') && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
       this.state.selection.forEach(selectedItem => {
@@ -2425,6 +2431,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return result;
   }
 
+  getThWidthFromOColumn(oColumn: OColumn): any {
+    let widthColumn: number;
+    const thArray = [].slice.call(this.tableHeaderEl.nativeElement.children);
+    for (const th of thArray) {
+      const classList: any[] = [].slice.call((th as Element).classList);
+      const columnClass = classList.find((className: string) => (className === 'mat-column-' + oColumn.attr));
+      if (columnClass && columnClass.length > 1) {
+        widthColumn = th.clientWidth;
+        break;
+      }
+    }
+    return widthColumn;
+  }
+
   getColumnInsertable(name): string {
     return name + this.getSuffixColumnInsertable();
   }
@@ -2445,17 +2465,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   refreshColumnsWidth() {
-    this._oTableOptions.columns.filter(c => c.visible).forEach((c) => {
-      c.DOMWidth = undefined;
-    });
-    this.cd.detectChanges();
     setTimeout(() => {
-      this.getColumnsWidthFromDOM();
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
-        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width) && this.horizontalScroll) {
+        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
-        c.getRenderWidth(this.horizontalScroll);
+        c.getRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
       });
       this.cd.detectChanges();
     }, 0);
@@ -2476,5 +2491,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       instance.setColumnProperties(column);
     }
     return instance;
+  }
+
+  public getClientWidthColumn(col: OColumn): number {
+    return col.DOMWidth || this.getThWidthFromOColumn(col);
   }
 }
