@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { InputConverter } from '../../decorators/input-converter';
+
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -9,7 +11,9 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   'icon',
   'svgIcon : svg-icon',
   'iconPosition: icon-position',
-  'image'
+  'image',
+  // enabled [yes|no|true|false]: Whether the button is enabled. Default: yes
+  'enabled'
 ];
 
 @Component({
@@ -33,6 +37,8 @@ export class OButtonComponent implements OnInit {
   svgIcon: string;
   iconPosition: string; // left (default), top, TODO: right, bottom?
   image: string;
+
+  @InputConverter() enabled: boolean = true;
 
   constructor() {
     this.otype = OButtonComponent.DEFAULT_TYPE;

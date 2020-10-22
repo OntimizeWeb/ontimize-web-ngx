@@ -99,6 +99,7 @@ export class Codes {
   // OTableComponent
   public static DEFAULT_COLUMN_MIN_WIDTH = 80;
   public static NAME_COLUMN_SELECT = 'select';
+  public static NAME_COLUMN_EXPANDABLE = 'expandable';
   public static SUFFIX_COLUMN_INSERTABLE = '_insertable';
   public static LIMIT_SCROLLVIRTUAL = 50;
 

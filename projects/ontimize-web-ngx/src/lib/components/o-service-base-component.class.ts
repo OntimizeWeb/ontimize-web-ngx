@@ -13,6 +13,7 @@ import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
+import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -159,6 +160,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
 
   protected form: OFormComponent;
+  public expandableContainer: OExpandableContainerComponent;
   protected alreadyStored: boolean = false;
 
   protected queryOnEventSubscription: Subscription;
@@ -182,6 +184,11 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
       this.form = this.injector.get(OFormComponent);
     } catch (e) {
       // no parent form
+    }
+    try {
+      this.expandableContainer = this.injector.get(OExpandableContainerComponent);
+    } catch (e) {
+      // No parent OExpandableContainerComponent
     }
   }
 
@@ -354,12 +361,23 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     }
   }
 
+  public getParentKeysFromContext(parentKeys: object, context: any) {
+    let result = {};
+    if (context instanceof OExpandableContainerComponent) {
+      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context);
+    } else {
+      result = ServiceUtils.getParentKeysFromForm(parentKeys, context);
+    }
+    return result;
+
+  }
+
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
     const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return;
     }
-    const filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+    const filterParentKeys = this.getParentKeysValues();
     if (!ServiceUtils.filterContainsAllParentKeys(filterParentKeys, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
@@ -495,8 +513,12 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     return (this.state && this.state.totalQueryRecordsNumber !== undefined) ? this.state.totalQueryRecordsNumber : undefined;
   }
 
+  getContextComponent() {
+    return this.expandableContainer || this.form;
+  }
+
   getComponentFilter(existingFilter: any = {}): any {
-    const filterParentKeys = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+    const filterParentKeys = this.getParentKeysFromContext(this._pKeysEquiv, this.getContextComponent());
     existingFilter = Object.assign(existingFilter || {}, filterParentKeys);
     return existingFilter;
   }
@@ -514,7 +536,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   }
 
   getParentKeysValues() {
-    return ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
+    const context = this.getContextComponent();
+    return this.getParentKeysFromContext(this._pKeysEquiv, context);
   }
 
   protected updateStateStorage(): void {

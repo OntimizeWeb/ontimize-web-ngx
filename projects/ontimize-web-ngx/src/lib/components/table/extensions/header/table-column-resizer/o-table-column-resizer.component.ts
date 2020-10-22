@@ -123,8 +123,9 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     if (!Util.isDefined(this.headerEl)) {
       return;
     }
+    const DOMWidth = this.table.getClientWidthColumn(this.column);
     this.startX = startEvent.screenX;
-    this.startWidth = this.column.DOMWidth;
+    this.startWidth = DOMWidth;
     this.minWidth = this.column.getMinWidthValue();
     this.initializeWidthData();
     this.ngZone.runOutsideAngular(() => {
@@ -197,11 +198,12 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     this.blockedMaxCols = [];
     const columns = [this.column, ...this.nextOColumns];
     columns.forEach(oCol => {
-      if (oCol.DOMWidth <= oCol.getMinWidthValue()) {
+      const DOMWidth = this.table.getClientWidthColumn(oCol);
+      if (DOMWidth <= oCol.getMinWidthValue()) {
         self.blockedMinCols.push(oCol.attr);
       }
       const maxW = oCol.getMaxWidthValue();
-      if (Util.isDefined(maxW) && oCol.DOMWidth >= maxW) {
+      if (Util.isDefined(maxW) && DOMWidth >= maxW) {
         self.blockedMaxCols.push(oCol.attr);
       }
     });
@@ -250,7 +252,8 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
           const notBlocked = this.nextOColumns.length - this.blockedMaxCols.length;
           widthRatio += notBlocked > 0 ? Math.floor(diff / notBlocked) : 0;
         }
-        widthDifference += newWidthValue - oCol.DOMWidth;
+        const DOMWidth = this.table.getClientWidthColumn(oCol);
+        widthDifference += newWidthValue - DOMWidth;
         oCol.setWidth(newWidthValue);
       });
     }
@@ -264,8 +267,9 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     let nextColWidthAcum = 0;
     this.nextOColumns.forEach((col: OColumn) => {
       nextColMinWidthAcum += col.getMinWidthValue();
-      nextColWidthAcum += col.DOMWidth;
-      this.columnsStartWidth[col.attr] = col.DOMWidth;
+      const DOMWidth = this.table.getClientWidthColumn(col);
+      nextColWidthAcum += DOMWidth;
+      this.columnsStartWidth[col.attr] = DOMWidth;
     });
     const calcMaxWidth = this.headerEl.clientWidth + (nextColWidthAcum - nextColMinWidthAcum);
     if (Util.isDefined(maxWidth)) {
@@ -275,4 +279,5 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     }
     this.maxWidth = maxWidth;
   }
+
 }

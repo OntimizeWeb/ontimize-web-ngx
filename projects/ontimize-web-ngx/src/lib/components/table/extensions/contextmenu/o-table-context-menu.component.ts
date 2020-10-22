@@ -183,8 +183,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   public edit(event): void {
-    const data = event.data.rowValue;
-    this.table.doHandleClick(data);
+    this.table.doHandleClick(event.data.rowValue, event.data.rowIndex, event);
   }
 
   public add(): void {

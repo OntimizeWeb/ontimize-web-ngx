@@ -35,6 +35,12 @@ $o_table_row_padding: 24px;
         min-width: 100%;
       }
 
+      &.horizontal-scroll {
+        .o-table-overflow {
+          overflow-x: auto;
+        }
+      }
+
       thead .mat-header-row th:last-child .o-table-column-resizer {
         display: none;
       }
@@ -43,8 +49,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -71,10 +77,6 @@ $o_table_row_padding: 24px;
     }
 
     .o-table-body {
-      &:not(.horizontal-scroll) {
-        overflow-x: hidden;
-      }
-
       .table-title {
         font-size: 18px;
         font-weight: 400;
@@ -123,17 +125,12 @@ $o_table_row_padding: 24px;
       table-layout: fixed;
       width: 100%;
 
-      &.autoadjusted {
-        overflow: auto;
-        height: auto;
-
-        td .content,
-        th .content {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          display: block;
-        }
+      td .content,
+      th .content {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
       }
 
       &.small {
@@ -206,6 +203,10 @@ $o_table_row_padding: 24px;
         .mat-sort-header-arrow {
           margin-top: 8px;
         }
+      }
+
+      tr.mat-row.o-table-row-expanded {
+        height: 0;
       }
 
       .mat-row {
@@ -413,6 +414,13 @@ $o_table_row_padding: 24px;
           overflow: initial;
         }
       }
+
+      .mat-cell {
+        .row-container-expanded {
+          overflow: hidden;
+          display: flex;
+        }
+      }
     }
 
     .o-table-disabled-blocker {
@@ -457,8 +465,9 @@ $o_table_row_padding: 24px;
 
       .o-table-overflow {
         flex: 1;
-        overflow: auto;
+        overflow-y: auto;
       }
+
     }
   }
 }
