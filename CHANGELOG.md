@@ -14,8 +14,9 @@
 * **o-form**:
   * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo`, `delete` and `setData` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d), [f256e4a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f256e4a)).
   * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction`, `_deleteAction` and `_setData` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d), [f256e4a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f256e4a)).
-* **button**: new attribute `enabled` ([534c2a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/534c2a6))
-
+* **button**:
+  * new attribute `enabled` ([534c2a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/534c2a6))
+  * new attribute `color` ([1326002](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1326002))
 
 ### BREAKING CHANGES
 * **table**:
