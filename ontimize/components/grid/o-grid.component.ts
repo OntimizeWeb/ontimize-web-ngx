@@ -43,7 +43,9 @@ export const DEFAULT_INPUTS_O_GRID = [
   // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
   'fixedHeader:fixed-header',
   // show-footer:Indicates whether or not to show the footer:Default:true
-  'showFooter:show-footer'
+  'showFooter:show-footer',
+  // query-rows: Number of records by page
+  'queryRows:query-rows'
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
