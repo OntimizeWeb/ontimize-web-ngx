@@ -516,7 +516,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @ContentChildren(OTableOptionComponent)
   tableOptions: QueryList<OTableOptionComponent>;
 
-  @ViewChild('tableButtons', { static: false })
   oTableButtons: OTableButtons;
 
   @ContentChildren('o-table-button')
@@ -571,6 +570,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   ngOnInit() {
     this.initialize();
+    if (this.oTableButtons) {
+      this.oTableButtons.registerButtons(this.tableButtons.toArray());
+    }
   }
 
   ngAfterViewInit() {
@@ -579,9 +581,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableMenu) {
       this.matMenu = this.oTableMenu.matMenu;
       this.oTableMenu.registerOptions(this.tableOptions.toArray());
-    }
-    if (this.oTableButtons) {
-      this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
     if (this.tableRowExpandable) {
       this.createExpandableColumn();
@@ -2493,7 +2492,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return instance;
   }
 
+<<<<<<< HEAD
+  public registerOTableButtons(arg: OTableButtons) {
+    this.oTableButtons = arg;
+    if (this.oTableButtons) {
+      this.oTableButtons.registerButtons(this.tableButtons.toArray());
+    }
+=======
   public getClientWidthColumn(col: OColumn): number {
     return col.DOMWidth || this.getThWidthFromOColumn(col);
+>>>>>>> 9686591d70fe1a5077461c7ea2fe90641fc922ac
   }
 }
