@@ -89,7 +89,6 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 export class OGridComponent extends OServiceComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
 
   /* Inputs */
-  @InputConverter()
   public queryRows: number = 32;
 
   @InputConverter()

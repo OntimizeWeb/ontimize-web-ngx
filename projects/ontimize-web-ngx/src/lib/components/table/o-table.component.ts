@@ -2492,15 +2492,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return instance;
   }
 
-<<<<<<< HEAD
   public registerOTableButtons(arg: OTableButtons) {
     this.oTableButtons = arg;
     if (this.oTableButtons) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
-=======
+  }
+
   public getClientWidthColumn(col: OColumn): number {
     return col.DOMWidth || this.getThWidthFromOColumn(col);
->>>>>>> 9686591d70fe1a5077461c7ea2fe90641fc922ac
   }
 }
