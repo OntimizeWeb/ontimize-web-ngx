@@ -68,7 +68,7 @@
         <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
           <!--Define header-cell-->
 
-          <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [style.width]="column.getRenderWidth(horizontalScroll)"
+          <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [style.width]="column.getRenderWidth(horizontalScroll,this.getClientWidthColumn(column))"
             [class.resizable]="resizable">
 
             <mat-icon *ngIf="isModeColumnFilterable(column)" class="column-filter-icon"
@@ -93,7 +93,7 @@
             [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
             matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
             [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
-            [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.getRenderWidth(horizontalScroll)">
+            [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.getRenderWidth(horizontalScroll,this.getClientWidthColumn(column))">
             <ng-container *ngIf="usePlainRender(column, row); else cellRender">
               {{ row[column.name] }}
             </ng-container>

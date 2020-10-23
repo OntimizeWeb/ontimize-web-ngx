@@ -40,8 +40,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -96,7 +96,9 @@ $o_table_row_padding: 24px;
       }
 
       &.horizontal-scroll {
-        overflow-x: auto;
+        .o-table-overflow {
+          overflow-x: auto;
+        }
         padding-bottom: 16px;
 
         .mat-header-cell {
@@ -107,8 +109,9 @@ $o_table_row_padding: 24px;
       .o-table-no-results {
         cursor: default;
         text-align: center;
-        td{
-          text-align: center
+
+        td {
+          text-align: center;
         }
       }
     }
@@ -453,7 +456,6 @@ $o_table_row_padding: 24px;
 
       .o-table-overflow {
         flex: 1;
-        overflow: auto;
       }
     }
   }
