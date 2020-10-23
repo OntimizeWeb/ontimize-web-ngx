@@ -644,9 +644,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   set horizontalScroll(value: boolean) {
     this._horizontalScroll = BooleanConverter(value);
-    // this._oTableOptions.columns.filter(c => c.visible).forEach((c) => {
-    //   c.DOMWidth = undefined;
-    // });
     this.refreshColumnsWidth();
   }
 
