@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
+import { ThemePalette } from '@angular/material';
 import { InputConverter } from '../../decorators/input-converter';
 import { OSharedModule } from '../../shared';
 
@@ -15,7 +16,9 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   'iconPosition: icon-position',
   'image',
   // enabled [yes|no|true|false]: Whether the button is enabled. Default: yes
-  'enabled'
+  'enabled',
+  // color: Theme color palette for the component.
+  'color'
 ];
 
 @Component({
@@ -36,14 +39,15 @@ export class OButtonComponent implements OnInit {
   protected static DEFAULT_TYPE = 'STROKED';
 
   protected oattr: string;
-  olabel: string;
+  public olabel: string;
   protected otype: string;
-  icon: string;
-  svgIcon: string;
-  iconPosition: string; // left (default), top, TODO: right, bottom?
-  image: string;
-
+  public icon: string;
+  public svgIcon: string;
+  public iconPosition: string; // left (default), top, TODO: right, bottom?
+  public image: string;
   @InputConverter() enabled: boolean = true;
+  public color: ThemePalette;
+
   constructor() {
     this.otype = OButtonComponent.DEFAULT_TYPE;
   }
