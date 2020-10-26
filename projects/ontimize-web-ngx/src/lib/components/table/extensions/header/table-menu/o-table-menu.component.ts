@@ -353,6 +353,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
         const columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+        this.table.cd.detectChanges();
         this.table.refreshColumnsWidth();
         this.table.onVisibleColumnsChange.emit(this.table.visibleColArray);
       }
