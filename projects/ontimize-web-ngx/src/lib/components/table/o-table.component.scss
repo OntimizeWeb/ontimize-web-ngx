@@ -49,8 +49,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -125,9 +125,10 @@ $o_table_row_padding: 24px;
       table-layout: fixed;
       width: 100%;
 
-      &.autoadjusted{
-        table-layout:auto;
+      &.autoadjusted {
+        table-layout: auto;
       }
+
       td .content,
       th .content {
         overflow: hidden;
