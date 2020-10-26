@@ -40,8 +40,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -398,6 +398,13 @@ $o_table_row_padding: 24px;
       .mat-header-cell {
         &.mat-column-select {
           width: 18px;
+          box-sizing: content-box;
+          padding: 0 0 0 $o_table_row_padding;
+          overflow: initial;
+        }
+
+        &.mat-column-expandable {
+          width: 40px;
           box-sizing: content-box;
           padding: 0 0 0 $o_table_row_padding;
           overflow: initial;
