@@ -1,9 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  SimpleChange,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+
 import { OSearchInputModule } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
@@ -76,7 +96,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   public static DEFAULT_OUTPUTS_O_GRID = DEFAULT_OUTPUTS_O_GRID;
 
   /* Inputs */
-  @InputConverter()
   public queryRows: number = 32;
 
   @InputConverter()
