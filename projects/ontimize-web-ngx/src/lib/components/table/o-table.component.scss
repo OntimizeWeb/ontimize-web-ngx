@@ -49,8 +49,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -273,9 +273,12 @@ $o_table_row_padding: 24px;
             &:not(.mat-header-cell) {
               padding: 6px 12px;
             }
-            overflow: initial;
-            white-space: normal;
-            text-overflow: unset;
+
+            .content {
+              overflow: initial;
+              white-space: normal;
+              text-overflow: unset;
+            }
           }
 
           .image-avatar {
@@ -330,15 +333,6 @@ $o_table_row_padding: 24px;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-        }
-
-        &.o-mat-cell-multiline {
-          &:not(.mat-header-cell) {
-            padding: 6px 12px;
-          }
-          overflow: initial;
-          white-space: normal;
-          text-overflow: unset;
         }
 
         .column-filter-icon {
