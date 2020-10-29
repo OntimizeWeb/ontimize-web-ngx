@@ -2501,6 +2501,5 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public getClientWidthColumn(col: OColumn): number {
     return col.DOMWidth || this.getThWidthFromOColumn(col);
-
   }
 }
