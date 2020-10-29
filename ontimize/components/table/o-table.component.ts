@@ -378,7 +378,7 @@ export class OColumn {
       return this.width;
     }
     const minValue = Util.extractPixelsValue(this.minWidth, OTableComponent.DEFAULT_COLUMN_MIN_WIDTH);
-    if (Util.isDefined(minValue) && clientWidth < minValue) {
+    if (Util.isDefined(minValue) && clientWidth > 0 && clientWidth < minValue) {
       this.DOMWidth = minValue;
     }
 
