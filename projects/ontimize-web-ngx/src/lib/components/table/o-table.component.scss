@@ -413,6 +413,13 @@ $o_table_row_padding: 24px;
           padding: 0 0 0 $o_table_row_padding;
           overflow: initial;
         }
+
+        &.mat-column-expandable {
+          width: 40px;
+          box-sizing: content-box;
+          padding: 0 0 0 $o_table_row_padding;
+          overflow: initial;
+        }
       }
 
       .mat-cell {
