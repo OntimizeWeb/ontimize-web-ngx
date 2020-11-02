@@ -163,7 +163,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // exportServiceType [ string ]: The service used by the table for exporting it's data, it must implement 'IExportService' interface. Default: 'OntimizeExportService'
   'exportServiceType: export-service-type',
 
-  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: true
+  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: false
   'autoAdjust: auto-adjust',
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
@@ -350,7 +350,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   resizable: boolean = true;
   @InputConverter()
-  autoAdjust: boolean = true;
+  autoAdjust: boolean = false;
 
   protected _enabled: boolean = true;
   get enabled(): boolean {

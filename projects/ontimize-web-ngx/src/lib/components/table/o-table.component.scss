@@ -32,6 +32,7 @@ $o_table_row_padding: 24px;
 
       .o-table-overflow {
         overflow-y: auto;
+        overflow-x: hidden;
         min-width: 100%;
       }
 
@@ -124,6 +125,10 @@ $o_table_row_padding: 24px;
     .mat-table {
       table-layout: fixed;
       width: 100%;
+
+      &.autoadjusted {
+        table-layout: auto;
+      }
 
       td .content,
       th .content {
