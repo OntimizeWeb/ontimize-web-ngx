@@ -61,10 +61,10 @@
             {{ oTableOptions.expandableColumn.title }}
           </th>
           <td mat-cell *matCellDef="let row;let rowIndex = dataIndex">
-            <button mat-icon-button (click)="toogleRowExpandable(row, rowIndex, $event)">
-              <mat-icon *ngIf="isExpanded(row)">{{ tableRowExpandable.iconCollapse }}</mat-icon>
-              <mat-icon *ngIf="!isExpanded(row)">{{ tableRowExpandable.iconExpand }}</mat-icon>
-            </button>
+            <mat-icon (click)="toogleRowExpandable(row, rowIndex, $event)">
+              <ng-container *ngIf="isExpanded(row)">{{ tableRowExpandable.iconCollapse }}</ng-container>
+              <ng-container *ngIf="!isExpanded(row)">{{ tableRowExpandable.iconExpand }}</ng-container>
+            </mat-icon>
           </td>
         </ng-container>
 
