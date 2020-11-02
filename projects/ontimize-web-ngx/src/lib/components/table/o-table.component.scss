@@ -130,7 +130,6 @@ $o_table_row_padding: 24px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        display: block;
       }
 
       &.small {
@@ -333,6 +332,21 @@ $o_table_row_padding: 24px;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
+        }
+
+        .o-table-header-indicator-numbered {
+          font-size: 9px;
+          position: absolute;
+          right: -8px;
+          text-align: center;
+          display: inline-block;
+          width: 18px;
+          height: 18px;
+          line-height: 18px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          pointer-events: none;
         }
 
         .column-filter-icon {

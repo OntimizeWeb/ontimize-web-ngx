@@ -36,13 +36,18 @@
             color: mix($table-background, rgba($text-color, 1), (1 - $text-opacity) * 100%);
           }
 
+          .o-table-header-indicator-numbered {
+            bottom: -12px;
+            right: -6px;
+            color: mat-color($foreground, secondary-text);
+          }
         }
       }
 
       .mat-row {
-          &:hover {
-            cursor: pointer;
-            background-color: mat-color($foreground, base, 0.18);
+        &:hover {
+          cursor: pointer;
+          background-color: mat-color($foreground, base, 0.18);
         }
 
         &.selected {
