@@ -50,8 +50,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -340,15 +340,6 @@ $o_table_row_padding: 24px;
           text-overflow: ellipsis;
         }
 
-        &.o-mat-cell-multiline {
-          &:not(.mat-header-cell) {
-            padding: 6px 12px;
-          }
-          overflow: initial;
-          white-space: normal;
-          text-overflow: unset;
-        }
-
         .column-filter-icon {
           cursor: pointer;
           float: left;
@@ -417,6 +408,13 @@ $o_table_row_padding: 24px;
       .mat-header-cell {
         &.mat-column-select {
           width: 18px;
+          box-sizing: content-box;
+          padding: 0 0 0 $o_table_row_padding;
+          overflow: initial;
+        }
+
+        &.mat-column-expandable {
+          width: 40px;
           box-sizing: content-box;
           padding: 0 0 0 $o_table_row_padding;
           overflow: initial;
