@@ -73,7 +73,8 @@
           <!--Define header-cell-->
 
           <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [class.resizable]="resizable"
-            [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))">
+            [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))" [style.min-width]="column.minWidth"
+            [style.max-width]="column.maxWidth">
             <div class="content">
               <o-table-header-column-filter-icon *ngIf="isModeColumnFilterable(column)" [column]="column"></o-table-header-column-filter-icon>
 
@@ -95,7 +96,8 @@
             matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
             [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
             [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}"
-            [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))">
+            [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))" [style.min-width]="column.minWidth"
+            [style.max-width]="column.maxWidth">
             <div class="content">
 
               <ng-container [ngSwitch]="true">

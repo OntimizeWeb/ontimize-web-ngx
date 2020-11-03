@@ -11,6 +11,7 @@
   * new component `o-expandable-container` ([3036381](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3036381))
   * new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793)).
   * added sort flags in column sorting and filtering ([7b54634](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b54634)) ([1ad49e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ad49e0))
+  * new attributte `auto-adjust` ([d5adedb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5adedb))
 
 * **o-form**:
   * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo`, `delete` and `setData` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d), [f256e4a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f256e4a)).
