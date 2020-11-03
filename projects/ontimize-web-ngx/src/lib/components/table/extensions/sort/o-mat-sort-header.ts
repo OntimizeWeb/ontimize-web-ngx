@@ -95,6 +95,6 @@ export class OMatSortHeader extends MatSortHeader {
   }
 
   getSortIndicatorNumberedClass() {
-    return 'o-mat-sort-indicator-numbered-' + this._arrowDirection;
+    return 'o-table-header-indicator-numbered o-mat-sort-indicator-numbered-' + this._arrowDirection;
   }
 }

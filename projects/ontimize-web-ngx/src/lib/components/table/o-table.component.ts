@@ -441,6 +441,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
   public onVisibleColumnsChange: EventEmitter<any> = new EventEmitter();
+  public onFilterByColumnChange: EventEmitter<any> = new EventEmitter();
 
   protected selectionChangeSubscription: Subscription;
 
@@ -1925,6 +1926,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         const sortedFilterableColumn = dialogRef.componentInstance.getFilterColumn();
         this.storeFilterColumns(sortedFilterableColumn);
         this.dataSource.addColumnFilter(columnValueFilter);
+        this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
         this.reloadPaginatedDataFromStart();
       }
     });
@@ -2502,4 +2504,5 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public getClientWidthColumn(col: OColumn): number {
     return col.DOMWidth || this.getThWidthFromOColumn(col);
   }
+
 }

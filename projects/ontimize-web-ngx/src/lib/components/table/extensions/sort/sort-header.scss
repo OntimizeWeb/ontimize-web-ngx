@@ -42,27 +42,9 @@ $mat-sort-header-arrow-hint-opacity: .38;
     margin: 0 $mat-sort-header-arrow-margin 0 0;
   }
 
-  .o-mat-sort-indicator-numbered-asc,
-  .o-mat-sort-indicator-numbered-desc {
-    font-size: 9px;
-    position: absolute;
-    right: -8px;
-    text-align: center;
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    pointer-events: none;
-  }
-
   .o-mat-sort-indicator-numbered-desc {
     top: -12px;
-
   }
-
   .o-mat-sort-indicator-numbered-asc {
     bottom: -12px;
   }
