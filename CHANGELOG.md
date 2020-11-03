@@ -1,4 +1,4 @@
-## 4.2.0
+## 4.2.0 (2020-11-03)
 ### Features
 * **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
 * **table**:
@@ -7,7 +7,7 @@
   * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
   * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
   * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
-  * new component `o-table-row-expandable` ([4452ca2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4452ca2))
+  * new component `o-table-row-expandable` Closes [#443](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/443)([4452ca2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4452ca2))
   * new component `o-expandable-container` ([3036381](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3036381))
 * **o-form**:
   * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo`, `delete` and `setData` ([4e38704](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e38704)).
