@@ -66,6 +66,7 @@ import { PortalModule } from '@angular/cdk/portal';
     OTableExpandedFooterDirective,
     OMatSortModule,
     OTableExportButtonComponent,
+    OTableRowClassPipe,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
