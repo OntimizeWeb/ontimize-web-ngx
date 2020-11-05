@@ -169,10 +169,7 @@ $o_table_row_padding: 24px;
       }
 
       &.medium {
-        .column-filter-icon {
-          margin-top: 4px;
-        }
-
+        .column-filter-icon,
         .mat-sort-header-arrow {
           margin-top: 6px;
         }
@@ -340,7 +337,7 @@ $o_table_row_padding: 24px;
         }
 
         .o-table-header-indicator-numbered {
-          font-size: 9px;
+          font-size: 8px;
           position: absolute;
           right: -8px;
           text-align: center;
@@ -352,14 +349,16 @@ $o_table_row_padding: 24px;
           white-space: nowrap;
           text-overflow: ellipsis;
           pointer-events: none;
+          bottom: -10px;
+          right: -9px;
         }
 
         .column-filter-icon {
           cursor: pointer;
           float: left;
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
           margin-right: 2px;
           line-height: 1;
         }
