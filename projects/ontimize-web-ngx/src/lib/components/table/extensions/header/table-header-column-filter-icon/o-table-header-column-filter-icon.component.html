@@ -1,0 +1,7 @@
+<mat-icon class="column-filter-icon" [ngClass]="{'active column-filter-icon-active':isColumnFilterActive | async}"
+  (click)="openColumnFilterDialog($event)">
+  filter_alt
+</mat-icon>
+<span class="o-table-header-indicator-numbered">
+  {{ indicatorNumber | async }}
+</span>

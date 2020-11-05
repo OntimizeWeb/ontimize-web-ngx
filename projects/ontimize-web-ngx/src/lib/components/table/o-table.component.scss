@@ -32,7 +32,14 @@ $o_table_row_padding: 24px;
 
       .o-table-overflow {
         overflow-y: auto;
+        overflow-x: hidden;
         min-width: 100%;
+      }
+
+      &.horizontal-scroll {
+        .o-table-overflow {
+          overflow-x: auto;
+        }
       }
 
       thead .mat-header-row th:last-child .o-table-column-resizer {
@@ -71,10 +78,6 @@ $o_table_row_padding: 24px;
     }
 
     .o-table-body {
-      &:not(.horizontal-scroll) {
-        overflow-x: hidden;
-      }
-
       .table-title {
         font-size: 18px;
         font-weight: 400;
@@ -124,16 +127,14 @@ $o_table_row_padding: 24px;
       width: 100%;
 
       &.autoadjusted {
-        overflow: auto;
-        height: auto;
+        table-layout: auto;
+      }
 
-        td .content,
-        th .content {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          display: block;
-        }
+      td .content,
+      th .content {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
 
       &.small {
@@ -208,6 +209,10 @@ $o_table_row_padding: 24px;
         }
       }
 
+      tr.mat-row.o-table-row-expanded {
+        height: 0;
+      }
+
       .mat-row {
         box-sizing: border-box;
         transition: background-color .2s;
@@ -272,9 +277,12 @@ $o_table_row_padding: 24px;
             &:not(.mat-header-cell) {
               padding: 6px 12px;
             }
-            overflow: initial;
-            white-space: normal;
-            text-overflow: unset;
+
+            .content {
+              overflow: initial;
+              white-space: normal;
+              text-overflow: unset;
+            }
           }
 
           .image-avatar {
@@ -331,13 +339,19 @@ $o_table_row_padding: 24px;
           text-overflow: ellipsis;
         }
 
-        &.o-mat-cell-multiline {
-          &:not(.mat-header-cell) {
-            padding: 6px 12px;
-          }
-          overflow: initial;
-          white-space: normal;
-          text-overflow: unset;
+        .o-table-header-indicator-numbered {
+          font-size: 9px;
+          position: absolute;
+          right: -8px;
+          text-align: center;
+          display: inline-block;
+          width: 18px;
+          height: 18px;
+          line-height: 18px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          pointer-events: none;
         }
 
         .column-filter-icon {
@@ -412,6 +426,20 @@ $o_table_row_padding: 24px;
           padding: 0 0 0 $o_table_row_padding;
           overflow: initial;
         }
+
+        &.mat-column-expandable {
+          width: 40px;
+          box-sizing: content-box;
+          padding: 0 0 0 $o_table_row_padding;
+          overflow: initial;
+        }
+      }
+
+      .mat-cell {
+        .row-container-expanded {
+          overflow: hidden;
+          display: flex;
+        }
       }
     }
 
@@ -457,8 +485,9 @@ $o_table_row_padding: 24px;
 
       .o-table-overflow {
         flex: 1;
-        overflow: auto;
+        overflow-y: auto;
       }
+
     }
   }
 }

@@ -514,12 +514,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.formData;
   }
 
+  /**
+   * Clears the form data. The data related to url params and parent keys remain unchanged.
+   */
   clearData() {
     const filter = this.formNavigation.getFilterFromUrlParams();
     this.formGroup.reset({}, {
       emitEvent: false
     });
-    this._setData(filter);
+    this.setData(filter);
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
@@ -769,7 +772,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  _setData(data) {
+  setData(data): void {
     if (Util.isArray(data)) {
       if (data.length > 1) {
         console.warn('[OFormComponent] Form data has more than a single record. Storing empty data');
@@ -786,6 +789,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
+  /**
+   * @deprecated Use `setData(data)` instead
+   */
+  _setData(data) {
+    console.warn('Method `OFormComponent._setData` is deprecated and will be removed in the furute. Use `setData` instead');
+    this.setData(data);
+  }
+
   _emitData(data) {
     this.onDataLoaded.emit(data);
   }
@@ -795,7 +806,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _backAction() {
     console.warn('Method `OFormComponent._backAction` is deprecated and will be removed in the furute. Use `back` instead');
-    this.formNavigation.navigateBack();
+    this.back();
   }
 
   /**
@@ -810,7 +821,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _closeDetailAction(options?: any) {
     console.warn('Method `OFormComponent._closeDetailAction` is deprecated and will be removed in the furute. Use `closeDetail` instead');
-    this.formNavigation.closeDetailAction(options);
+    this.closeDetail(options);
   }
 
   /**
@@ -829,11 +840,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _reloadAction(useFilter: boolean = false) {
     console.warn('Method `OFormComponent._reloadAction` is deprecated and will be removed in the furute. Use `reload` instead');
-    let filter = {};
-    if (useFilter) {
-      filter = this.getCurrentKeysValues();
-    }
-    this.queryData(filter);
+    this.reload(useFilter);
   }
 
   /**
@@ -853,7 +860,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _goInsertMode(options?: any) {
     console.warn('Method `OFormComponent._goInsertMode` is deprecated and will be removed in the furute. Use `goInsertMode` instead');
-    this.formNavigation.goInsertMode(options);
+    this.goInsertMode(options);
   }
 
   /**
@@ -874,32 +881,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _insertAction() {
     console.warn('Method `OFormComponent._insertAction` is deprecated and will be removed in the furute. Use `insert` instead');
-    Object.keys(this.formGroup.controls).forEach((control) => {
-      this.formGroup.controls[control].markAsTouched();
-    });
-
-    if (!this.formGroup.valid) {
-      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
-      return;
-    }
-
-    const self = this;
-    const values = this.getAttributesValuesToInsert();
-    const sqlTypes = this.getAttributesSQLTypes();
-    this.insertData(values, sqlTypes).subscribe(resp => {
-      self.postCorrectInsert(resp);
-      self.formCache.setCacheSnapshot();
-      self.markFormLayoutManagerToUpdate();
-      if (self.afterInsertMode === 'detail') {
-        self._stayInRecordAfterInsert(resp);
-      } else if (self.afterInsertMode === 'new') {
-        this._clearFormAfterInsert();
-      } else {
-        self.closeDetail();
-      }
-    }, error => {
-      self.postIncorrectInsert(error);
-    });
+    this.insert();
   }
 
   /**
@@ -940,7 +922,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _goEditMode(options?: any) {
     console.warn('Method `OFormComponent._goEditMode` is deprecated and will be removed in the furute. Use `goEditMode` instead');
-    this.formNavigation.goEditMode();
+    this.goEditMode(options);
   }
 
   /**
@@ -956,44 +938,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _editAction() {
     console.warn('Method `OFormComponent._editAction` is deprecated and will be removed in the furute. Use `update` instead');
-    Object.keys(this.formGroup.controls).forEach(
-      (control) => {
-        this.formGroup.controls[control].markAsTouched();
-      }
-    );
-
-    if (!this.formGroup.valid) {
-      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
-      return;
-    }
-
-    // retrieving keys...
-    const self = this;
-    const filter = this.getKeysValues();
-
-    // retrieving values to update...
-    const values = this.getAttributesValuesToUpdate();
-    const sqlTypes = this.getAttributesSQLTypes();
-
-    if (Object.keys(values).length === 0) {
-      // Nothing to update
-      this.dialogService.alert('INFO', 'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO');
-      return;
-    }
-
-    // invoke update method...
-    this.updateData(filter, values, sqlTypes).subscribe(resp => {
-      self.postCorrectUpdate(resp);
-      self.formCache.setCacheSnapshot();
-      self.markFormLayoutManagerToUpdate();
-      if (self.stayInRecordAfterEdit) {
-        self.reload(true);
-      } else {
-        self.closeDetail();
-      }
-    }, error => {
-      self.postIncorrectUpdate(error);
-    });
+    this.update();
   }
 
   /**
@@ -1046,8 +991,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _deleteAction() {
     console.warn('Method `OFormComponent._deleteAction` is deprecated and will be removed in the furute. Use `delete` instead');
-    const filter = this.getKeysValues();
-    return this.deleteData(filter);
+    return this.delete();
   }
 
   /**
@@ -1085,7 +1029,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
-          this._setData(resp.data);
+          this.setData(resp.data);
         } else {
           this._updateFormData({});
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
@@ -1419,7 +1363,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   _undoLastChangeAction() {
     console.warn('Method `OFormComponent._undoLastChangeAction` is deprecated and will be removed in the furute. Use `undo` instead');
-    this.formCache.undoLastChange();
+    this.undo();
   }
 
   /**

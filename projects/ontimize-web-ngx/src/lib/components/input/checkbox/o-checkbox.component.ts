@@ -4,11 +4,7 @@ import { ThemePalette } from '@angular/material';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
-} from '../../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 
 export const DEFAULT_INPUTS_O_CHECKBOX = [
@@ -74,10 +70,11 @@ export class OCheckboxComponent extends OFormDataComponent {
     }
 
     super.initialize();
-    const context = this;
-    (this.getFormControl() as OFormControl).getValue.bind(context);
-    (this.getFormControl() as OFormControl).getValue = () => {
-      return this.value ? context.trueValue : context.falseValue;
+
+    // Override FormControl getValue in order to return the appropriate value instead of the checkbox internal boolean value
+    const checkboxCtx = this;
+    (this.getFormControl() as OFormControl).getValue = function() {
+      return this.value ? checkboxCtx.trueValue : checkboxCtx.falseValue;
     };
   }
 
@@ -92,6 +89,14 @@ export class OCheckboxComponent extends OFormDataComponent {
       this.value = new OFormValue(value);
     } else {
       this.value = new OFormValue(this.parseValueByType(value) === this.trueValue);
+    }
+  }
+
+  getValue(): any {
+    if (Util.isDefined(this.value) && this.value.value !== undefined) {
+      return this.value.value ? this.trueValue : this.falseValue;
+    } else {
+      return this.defaultValue;
     }
   }
 

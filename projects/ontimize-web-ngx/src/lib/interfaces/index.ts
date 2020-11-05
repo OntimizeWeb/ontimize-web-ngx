@@ -20,6 +20,7 @@ export * from './o-table-button.interface';
 export * from './o-table-buttons.interface';
 export * from './o-table-column-calculated.interface';
 export * from './o-table-column.interface';
+export * from './o-table-onclick.interface';
 export * from './o-table-datasource.interface';
 export * from './o-table-menu.interface';
 export * from './o-table-options.interface';
