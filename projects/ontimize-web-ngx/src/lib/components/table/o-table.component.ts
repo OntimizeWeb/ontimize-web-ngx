@@ -2505,4 +2505,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return col.DOMWidth || this.getThWidthFromOColumn(col);
   }
 
+  public getMinWidthColumn(col: OColumn): string {
+    return Util.extractPixelsValue(col.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH) + 'px';
+  }
+
 }
