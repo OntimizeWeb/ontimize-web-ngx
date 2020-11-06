@@ -8,6 +8,7 @@
   $table-background: mat-color($background, 'card');
   $text-color: mat-color($foreground, secondary-text);
   $text-opacity: opacity($text-color);
+  $is-dark-theme: map-get($theme, is-dark);
 
   .o-table {
     .o-table-column-resizer span {
@@ -51,7 +52,7 @@
         }
 
         &.selected {
-          background: mat-color($primary, 50);
+          background: mat-color($primary, 50,if($is-dark-theme, 0.5, 1));
         }
 
         .mat-cell {
