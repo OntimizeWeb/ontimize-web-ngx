@@ -1886,6 +1886,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  clearColumnFilter(attr: string, triggerDatasourceUpdate: boolean = true): void {
+    this.dataSource.clearColumnFilter(attr, triggerDatasourceUpdate);
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
+    this.reloadPaginatedDataFromStart();
+  }
+
   clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
@@ -1918,11 +1924,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
         mode: this.oTableColumnsFilterComponent.mode
       },
+      minWidth: '380px',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (typeof result === 'boolean') {
         const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
         //guardar en localstorage el cambio
         const sortedFilterableColumn = dialogRef.componentInstance.getFilterColumn();
@@ -1930,6 +1937,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.dataSource.addColumnFilter(columnValueFilter);
         this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
         this.reloadPaginatedDataFromStart();
+      } else {
+        const col = dialogRef.componentInstance.column;
+        this.clearColumnFilter(col.attr);
       }
     });
   }
