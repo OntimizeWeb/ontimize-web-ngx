@@ -1880,6 +1880,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.showFilterByColumnIcon);
     }
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
     }
@@ -1887,6 +1888,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
     this.reloadPaginatedDataFromStart();
   }
 
