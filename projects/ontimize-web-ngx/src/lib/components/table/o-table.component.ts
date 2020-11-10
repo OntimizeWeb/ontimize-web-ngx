@@ -1892,6 +1892,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.reloadPaginatedDataFromStart();
   }
 
+  filterByColumn(columnValueFilter: OColumnValueFilter) {
+    this.dataSource.addColumnFilter(columnValueFilter);
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
+    this.reloadPaginatedDataFromStart();
+  }
+
   clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
@@ -1928,19 +1934,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
+
     dialogRef.afterClosed().subscribe(result => {
-      if (typeof result === 'boolean') {
-        const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
-        //guardar en localstorage el cambio
-        const sortedFilterableColumn = dialogRef.componentInstance.getFilterColumn();
-        this.storeFilterColumns(sortedFilterableColumn);
-        this.dataSource.addColumnFilter(columnValueFilter);
-        this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
-        this.reloadPaginatedDataFromStart();
-      } else {
-        const col = dialogRef.componentInstance.column;
-        this.clearColumnFilter(col.attr);
+      if (Codes.TABLE_FILTER_BY_COLUMN_DATA_DIALOG_RESULTS.indexOf(result) > -1) {
+        if (result === Codes.TABLE_FILTER_BY_COLUMN_DATA_DIALOG_FILTER_ACTION) {
+          const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
+          this.filterByColumn(columnValueFilter);
+        } else if (result === Codes.TABLE_FILTER_BY_COLUMN_DATA_DIALOG_CLEAR_FILTER_ACTION) {
+          const col = dialogRef.componentInstance.column;
+          this.clearColumnFilter(col.attr);
+        }
       }
+    });
+    dialogRef.componentInstance.onSortFilterValuesChange.subscribe(sortedFilterableColumn => {
+      // guardar en localstorage el cambio
+      this.storeFilterColumns(sortedFilterableColumn);
     });
   }
 
