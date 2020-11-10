@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Inject,
   ViewChild,
   ViewEncapsulation,
@@ -34,6 +35,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   column: OColumn;
   preloadValues: boolean = true;
   mode: string;
+  public onSortFilterValuesChange: EventEmitter<OFilterColumn> = new EventEmitter();
   private isCustomFilterSubject = new BehaviorSubject<boolean>(false);
   isCustomFilter: Observable<boolean> = this.isCustomFilterSubject.asObservable();
 
@@ -267,11 +269,12 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         this.activeSortDirection = 'asc';
         break;
     }
+    this.onSortFilterValuesChange.emit(this.getFilterColumn());
     this.sortData();
   }
 
   sortData() {
-    let sortedData = Object.assign([], this.columnData);
+    const sortedData = Object.assign([], this.columnData);
     if (this.activeSortDirection !== '') {
       this.listDataSubject.next(sortedData.sort(this.sortFunction.bind(this)));
     } else {
