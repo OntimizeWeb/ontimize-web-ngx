@@ -40,14 +40,15 @@
   </div>
 </div>
 
+
 <mat-dialog-actions fxLayoutAlign="space-between center">
   <button type="button" mat-stroked-button [mat-dialog-close]="clearAction">
     {{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate | uppercase }} </button>
   <span align="end">
-    <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="cancelAction">
-      {{ 'CANCEL' | oTranslate | uppercase }} </button>
-    <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="acceptAction">
-      {{ 'ACCEPT' | oTranslate | uppercase }} </button>
+   <button type="button" mat-stroked-button [mat-dialog-close]="false">
+    {{ 'CANCEL' | oTranslate | uppercase }} </button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="true">
+    {{ 'ACCEPT' | oTranslate | uppercase }} </button>
   </span>
 </mat-dialog-actions>
 
