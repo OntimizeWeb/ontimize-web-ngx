@@ -1,22 +1,14 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Inject,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, MatSlideToggleChange } from '@angular/material';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
-import { TableFilterByColumnData } from '../../../../../types/o-table-filter-by-column-data.type';
+import { TableFilterByColumnData, TableFilterByColumnDialogResult } from '../../../../../types/o-table-filter-by-column-data.type';
+import { Codes } from '../../../../../util';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
-import { Codes } from '../../../../../util';
 import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 @Component({
@@ -31,9 +23,14 @@ import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table
 })
 export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
+  public acceptAction = TableFilterByColumnDialogResult.ACCEPT;
+  public cancelAction = TableFilterByColumnDialogResult.CANCEL;
+  public clearAction = TableFilterByColumnDialogResult.CLEAR;
+
   column: OColumn;
   preloadValues: boolean = true;
   mode: string;
+  public onSortFilterValuesChange: EventEmitter<OFilterColumn> = new EventEmitter();
   private isCustomFilterSubject = new BehaviorSubject<boolean>(false);
   isCustomFilter: Observable<boolean> = this.isCustomFilterSubject.asObservable();
 
@@ -267,11 +264,12 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         this.activeSortDirection = 'asc';
         break;
     }
+    this.onSortFilterValuesChange.emit(this.getFilterColumn());
     this.sortData();
   }
 
   sortData() {
-    let sortedData = Object.assign([], this.columnData);
+    const sortedData = Object.assign([], this.columnData);
     if (this.activeSortDirection !== '') {
       this.listDataSubject.next(sortedData.sort(this.sortFunction.bind(this)));
     } else {

@@ -1,8 +1,12 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import {
   AfterViewInit,
+  ApplicationRef,
   ChangeDetectionStrategy,
   Component,
+  ComponentFactoryResolver,
   ContentChild,
   ContentChildren,
   ElementRef,
@@ -18,11 +22,9 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
-  ViewEncapsulation,
-  ViewRef,
   ViewContainerRef,
-  ApplicationRef,
-  ComponentFactoryResolver
+  ViewEncapsulation,
+  ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -35,11 +37,13 @@ import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 import { OTableMenu } from '../../interfaces/o-table-menu.interface';
+import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import { OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
+import { TableFilterByColumnDialogResult } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OColumnAggregate } from '../../types/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/o-column-value-filter.type';
@@ -64,23 +68,18 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import {
-  OTableFilterByColumnDataDialogComponent
-} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
-import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
-import { trigger, state, transition, style, animate } from '@angular/animations';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
-import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
-import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -1880,13 +1879,27 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.showFilterByColumnIcon);
     }
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
     }
   }
 
+  clearColumnFilter(attr: string, triggerDatasourceUpdate: boolean = true): void {
+    this.dataSource.clearColumnFilter(attr, triggerDatasourceUpdate);
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
+    this.reloadPaginatedDataFromStart();
+  }
+
+  filterByColumn(columnValueFilter: OColumnValueFilter) {
+    this.dataSource.addColumnFilter(columnValueFilter);
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
+    this.reloadPaginatedDataFromStart();
+  }
+
   clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
+    this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
     this.reloadPaginatedDataFromStart();
   }
 
@@ -1916,19 +1929,26 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
         mode: this.oTableColumnsFilterComponent.mode
       },
+      minWidth: '380px',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
+
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
-        //guardar en localstorage el cambio
-        const sortedFilterableColumn = dialogRef.componentInstance.getFilterColumn();
-        this.storeFilterColumns(sortedFilterableColumn);
-        this.dataSource.addColumnFilter(columnValueFilter);
-        this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
-        this.reloadPaginatedDataFromStart();
+      switch (result) {
+        case TableFilterByColumnDialogResult.ACCEPT:
+          const columnValueFilter = dialogRef.componentInstance.getColumnValuesFilter();
+          this.filterByColumn(columnValueFilter);
+          break;
+        case TableFilterByColumnDialogResult.CLEAR:
+          const col = dialogRef.componentInstance.column;
+          this.clearColumnFilter(col.attr);
+          break;
       }
+    });
+    dialogRef.componentInstance.onSortFilterValuesChange.subscribe(sortedFilterableColumn => {
+      // guardar en localstorage el cambio
+      this.storeFilterColumns(sortedFilterableColumn);
     });
   }
 
