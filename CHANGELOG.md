@@ -1,4 +1,4 @@
-## 8.1.0
+## 8.1.0 (2020-11-23)
 ### Features
 * **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([edd8927](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd8927))
 * **table**:
@@ -11,7 +11,7 @@
   * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
   * new component `o-table-row-expandable` ([4452ca2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4452ca2))
   * new component `o-expandable-container` ([3036381](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3036381))
-  * new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793)).
+  * new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793))
   * added sort flags in column sorting and filtering ([7b54634](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b54634)) ([1ad49e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ad49e0))
   * new attributte `auto-adjust` ([d5adedb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5adedb))
 
