@@ -1,21 +1,15 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Inject,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, MatSlideToggleChange } from '@angular/material';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
-import { TableFilterByColumnData } from '../../../../../types/o-table-filter-by-column-data.type';
+import { TableFilterByColumnData, TableFilterByColumnDialogResult } from '../../../../../types/o-table-filter-by-column-data.type';
+import { Codes } from '../../../../../util';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
+import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',
@@ -29,9 +23,14 @@ import { OColumn } from '../../../column/o-column.class';
 })
 export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
+  public acceptAction = TableFilterByColumnDialogResult.ACCEPT;
+  public cancelAction = TableFilterByColumnDialogResult.CANCEL;
+  public clearAction = TableFilterByColumnDialogResult.CLEAR;
+
   column: OColumn;
   preloadValues: boolean = true;
   mode: string;
+  public onSortFilterValuesChange: EventEmitter<OFilterColumn> = new EventEmitter();
   private isCustomFilterSubject = new BehaviorSubject<boolean>(false);
   isCustomFilter: Observable<boolean> = this.isCustomFilterSubject.asObservable();
 
@@ -51,6 +50,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   @ViewChild('filter', { static: false }) filter: ElementRef;
   @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
+  public activeSortDirection: 'asc' | 'desc' | '' = '';
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
@@ -74,9 +74,14 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       previousFilter = data.previousFilter;
       this.isCustomFilterSubject.next([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL].indexOf(previousFilter.operator) !== -1);
     }
+
     if (data.hasOwnProperty('preloadValues')) {
       this.preloadValues = data.preloadValues;
     }
+    if (data.activeSortDirection) {
+      this.activeSortDirection = data.activeSortDirection;
+    }
+
     if (data.tableData && Array.isArray(data.tableData)) {
       this.tableData = data.tableData;
       this.getDistinctValues(data.tableData, previousFilter);
@@ -102,7 +107,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   initializeDataList(filter?: OColumnValueFilter): void {
     if (this.preloadValues || (filter && filter.operator === ColumnValueFilterOperator.IN)) {
-      this.listDataSubject.next(this.columnData.slice());
+      if (this.activeSortDirection === Codes.ASC_SORT || this.activeSortDirection === Codes.DESC_SORT) {
+        this.sortData();
+      } else {
+        this.listDataSubject.next(this.columnData.slice());
+      }
     }
   }
 
@@ -187,7 +196,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         this.columnData.push({
           renderedValue: renderedValue,
           value: colValues[i],
-          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(renderedValue) !== -1,
+          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(colValues[i]) !== -1,
           // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
           // row value of this index
           tableIndex: i
@@ -232,6 +241,53 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return filter;
   }
 
+  clearValues() {
+    if (this.isTextType()) {
+      this.fcText.setValue(undefined);
+    } else {
+      if (this.isDateType() || this.isNumericType) {
+        this.fcFrom.setValue(undefined);
+        this.fcTo.setValue(undefined);
+      }
+    }
+  }
+
+  onClickSortValues() {
+    switch (this.activeSortDirection) {
+      case 'asc':
+        this.activeSortDirection = 'desc';
+        break;
+      case 'desc':
+        this.activeSortDirection = '';
+        break;
+      default:
+        this.activeSortDirection = 'asc';
+        break;
+    }
+    this.onSortFilterValuesChange.emit(this.getFilterColumn());
+    this.sortData();
+  }
+
+  sortData() {
+    const sortedData = Object.assign([], this.columnData);
+    if (this.activeSortDirection !== '') {
+      this.listDataSubject.next(sortedData.sort(this.sortFunction.bind(this)));
+    } else {
+      this.listDataSubject.next(sortedData);
+    }
+
+  }
+
+  sortFunction(a: any, b: any): number {
+    let propertyA: number | string = '';
+    let propertyB: number | string = '';
+    [propertyA, propertyB] = [a['value'], b['value']];
+
+    const valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
+    const valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
+    return (valueA <= valueB ? -1 : 1) * (this.activeSortDirection === 'asc' ? 1 : -1);
+  }
+
   onSlideChange(e: MatSlideToggleChange): void {
     this.isCustomFilterSubject.next(e.checked);
 
@@ -263,6 +319,21 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   getFixedDimensionClass() {
     return this.mode === 'selection' || this.mode === 'default';
+  }
+
+  getSortByAlphaIcon() {
+    let icon = 'ontimize:sort_by_alpha';
+    if (this.activeSortDirection !== '') {
+      icon += '_' + this.activeSortDirection;
+    }
+    return icon;
+  }
+
+  getFilterColumn(): OFilterColumn {
+    let obj: OFilterColumn = { attr: '', sort: '' };
+    obj.attr = this.column.attr;
+    obj.sort = this.activeSortDirection;
+    return obj;
   }
 
   protected getTypedValue(control: FormControl): any {

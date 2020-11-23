@@ -3,7 +3,7 @@ $mat-sort-header-arrow-container-size: 12px;
 $mat-sort-header-arrow-stem-size: 10px;
 $mat-sort-header-arrow-pointer-length: 6px;
 $mat-sort-header-arrow-thickness: 2px;
-$mat-sort-header-arrow-hint-opacity: 0.38;
+$mat-sort-header-arrow-hint-opacity: .38;
 
 .mat-sort-header-container {
   display: flex;
@@ -40,6 +40,10 @@ $mat-sort-header-arrow-hint-opacity: 0.38;
 
   .mat-sort-header-position-before & {
     margin: 0 $mat-sort-header-arrow-margin 0 0;
+  }
+
+  .o-mat-sort-indicator-numbered-desc {
+    top: -8px;
   }
 }
 

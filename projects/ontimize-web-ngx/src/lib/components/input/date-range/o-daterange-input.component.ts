@@ -130,6 +130,10 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     super(form, elRef, injector);
     this.oTranslate = this.injector.get(OTranslateService);
     this.momentSrv = this.injector.get(MomentService);
+    if (!this.olocale) {
+      this.olocale = this.momentSrv.getLocale();
+      moment.locale(this.olocale);
+    }
     this._localeOptions = {
       direction: 'ltr',
       separator: ' - ',
@@ -137,8 +141,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       applyLabel: this.oTranslate.get('DATERANGE.APPLYLABEL'),
       cancelLabel: this.oTranslate.get('CANCEL'),
       customRangeLabel: 'Custom range',
-      daysOfWeek: moment.weekdaysMin(),
-      monthNames: moment.monthsShort(),
+      daysOfWeek: moment.localeData().weekdaysMin(),
+      monthNames: moment.localeData().monthsShort(),
       firstDay: moment.localeData().firstDayOfWeek(),
       format: 'L'
     };
@@ -147,11 +151,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   ngOnInit() {
     super.ngOnInit();
 
-    if (!this.olocale) {
-      this.olocale = this.momentSrv.getLocale();
-      moment.locale(this.olocale);
-
-    }
     if (this.oformat) {
       this._localeOptions.format = this.oformat;
     }
@@ -209,7 +208,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   updateElement() {
     let chosenLabel: any;
-    if (Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
+    if (Util.isDefined(this.value) && Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
       if (this.value.value[this.pickerDirective.startKey] && this.value.value[this.pickerDirective.endKey]) {
         this.value.value[this.pickerDirective.startKey] = this.ensureDateRangeValue(this.value.value[this.pickerDirective.startKey], this._valueType);
         this.value.value[this.pickerDirective.endKey]  = this.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
@@ -220,6 +219,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       }
     } else {
       chosenLabel = null;
+      this.pickerDirective.value = undefined;
     }
     this.pickerDirective._el.nativeElement.value = chosenLabel;
   }

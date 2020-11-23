@@ -413,7 +413,7 @@ export class OFormNavigationClass {
         route = ['../', ...params, Codes.DEFAULT_EDIT_ROUTE];
       }
       this.storeNavigationFormRoutes('editFormRoute');
-      this.form.beforeGoEditMode.emit();
+      this.form.beforeUpdateMode.emit();
       this.router.navigate(route, extras).then((val) => {
         if (val && options && options.changeToolbarMode) {
           this.form.getFormToolbar().setEditMode();

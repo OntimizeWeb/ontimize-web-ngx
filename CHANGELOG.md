@@ -1,3 +1,31 @@
+## 8.1.0 (2020-11-23)
+### Features
+* **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([edd8927](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd8927))
+* **table**:
+  * `o-table-filter-by-column`:
+    * added clear button in the inputs of the customized filters  ([6fe1e33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fe1e33))
+    * added clear button in filter column dialog ([a67cdb4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a67cdb4))
+  * reinitialize method: added new option 'filterColumns' ([361b8c1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/361b8c1))
+  * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
+  * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
+  * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
+  * new component `o-table-row-expandable` ([4452ca2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4452ca2))
+  * new component `o-expandable-container` ([3036381](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3036381))
+  * new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793))
+  * added sort flags in column sorting and filtering ([7b54634](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b54634)) ([1ad49e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ad49e0))
+  * new attributte `auto-adjust` ([d5adedb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5adedb))
+
+* **o-form**:
+  * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo`, `delete` and `setData` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d), [f256e4a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f256e4a)).
+  * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction`, `_deleteAction` and `_setData` ([e5c899d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e5c899d), [f256e4a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f256e4a)).
+* **button**:
+  * new attribute `enabled` ([534c2a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/534c2a6))
+  * new attribute `color` ([1326002](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1326002))
+
+### BREAKING CHANGES
+* **table**:
+  * `onClick` event return `onClickTableEvent` type ([1da21eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1da21eb))
+
 ## 8.0.0 (2020-08-20)
 ### Bug Fixes
 * **o-checkbox** : fixing bug in sql-type value was always overwritted by VARCHAR ([b9f6cbb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9f6cbb))

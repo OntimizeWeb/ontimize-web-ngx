@@ -172,18 +172,18 @@ export class OColumn {
     return value ? value : undefined;
   }
 
-  getRenderWidth(horizontalScrolled?: boolean) {
+  getRenderWidth(horizontalScrolled: boolean, clientWidth: number) {
     if (Util.isDefined(this.width)) {
       return this.width;
     }
     const minValue = Util.extractPixelsValue(this.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH);
-    if (Util.isDefined(minValue) && this.DOMWidth < minValue) {
+    if (Util.isDefined(minValue) && clientWidth > 0 && clientWidth < minValue) {
       this.DOMWidth = minValue;
     }
 
     if (Util.isDefined(this.maxWidth)) {
       const maxValue = Util.extractPixelsValue(this.maxWidth);
-      if (Util.isDefined(maxValue) && this.DOMWidth > maxValue) {
+      if (Util.isDefined(maxValue) && clientWidth > maxValue) {
         this.DOMWidth = maxValue;
       }
     }
@@ -204,6 +204,7 @@ export class OColumn {
   get width(): string {
     return this._width;
   }
+
 
   getWidthToStore(): any {
     return this._width || this.DOMWidth;

@@ -397,6 +397,13 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     }
   }
 
+  clearColumnFilter(attr: string, trigger: boolean = true) {
+    this.columnValueFilters = this.columnValueFilters.filter(x => x.attr !== attr);
+    if (trigger) {
+      this._columnValueFilterChange.next();
+    }
+  }
+
   addColumnFilter(filter: OColumnValueFilter) {
     const existingFilter = this.getColumnValueFilterByAttr(filter.attr);
     if (existingFilter) {

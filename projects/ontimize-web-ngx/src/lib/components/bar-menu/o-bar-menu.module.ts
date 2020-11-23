@@ -24,7 +24,14 @@ import { OBarMenuComponent } from './o-bar-menu.component';
     OSharedModule,
     RouterModule
   ],
-  exports: [OBarMenuComponent]
+  exports: [
+    OBarMenuComponent,
+    OBarMenuItemComponent,
+    OBarMenuGroupComponent,
+    OLocaleBarMenuItemComponent,
+    OBarMenuSeparatorComponent,
+    OBarMenuNestedComponent
+  ]
 })
 export class OBarMenuModule {
 }

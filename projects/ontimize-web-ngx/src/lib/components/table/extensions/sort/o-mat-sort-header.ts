@@ -82,4 +82,19 @@ export class OMatSortHeader extends MatSortHeader {
       this._intl.changes.next();
     }
   }
+
+  getSortIndicatorNumbered(): string {
+    let result = '';
+    // if there is only one sorted column the number is not displayed
+    if (this._sort.activeArray.length < 2) { return result; }
+    const index = this._sort.activeArray.findIndex(x => x.id === this.id);
+    if (index > -1) {
+      result += index + 1;
+    }
+    return result;
+  }
+
+  getSortIndicatorNumberedClass() {
+    return 'o-table-header-indicator-numbered o-mat-sort-indicator-numbered-' + this._arrowDirection;
+  }
 }

@@ -4,3 +4,9 @@ export type TableFilterByColumnData = {
   renderedValue?: any;
   tableIndex?: number;
 };
+
+export enum TableFilterByColumnDialogResult {
+  ACCEPT,
+  CANCEL,
+  CLEAR
+}

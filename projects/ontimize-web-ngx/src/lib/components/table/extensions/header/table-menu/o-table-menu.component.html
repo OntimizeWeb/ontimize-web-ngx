@@ -15,7 +15,7 @@
 </mat-menu>
 
 <mat-menu #filterMenu="matMenu" [class]="(rowHeightObservable| async) +' o-table-menu'">
-  <o-table-option #columnFilterOption *ngIf="showColumnsFilterOption" show-active-icon="true"
+  <o-table-option #columnFilterOption *ngIf="showColumnsFilterOption | async" show-active-icon="true" [active]="isColumnFilterOptionActive"
     (onClick)="onFilterByColumnClicked()" label="TABLE.BUTTONS.FILTER_BY_COLUMN">
   </o-table-option>
   <button type="button" mat-menu-item
