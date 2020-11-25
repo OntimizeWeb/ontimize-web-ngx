@@ -1,3 +1,7 @@
+## 8.1.1
+### Bug Fixes
+* **table**: fixing bug in filtering by column ([88ac4bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88ac4bf))
+
 ## 8.1.0 (2020-11-23)
 ### Features
 * **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([edd8927](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd8927))
