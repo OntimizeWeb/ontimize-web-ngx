@@ -1,4 +1,4 @@
-## 8.1.1
+## 8.1.1(2020-11-25)
 ### Bug Fixes
 * **table**: fixing bug in filtering by column ([88ac4bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88ac4bf))
 
