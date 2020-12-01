@@ -48,6 +48,9 @@ export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
     return this.tableColumn.attr;
   }
 
+  /**
+   * Registers renderer
+   */
   public registerRenderer(): void {
     this.tableColumn.registerRenderer(this);
     if (!Util.isDefined(this.type) && Util.isDefined(this.tableColumn.type)) {
@@ -83,6 +86,12 @@ export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
     return this._filterSource;
   }
 
+  /**
+   * Return the values to filter
+   * @param cellValue
+   * @param [rowValue]
+   * @returns filter
+   */
   getFilter(cellValue: any, rowValue?: any): any[] {
     let result;
     switch (this.filterSource) {
