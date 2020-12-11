@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel"  [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth" class="icon-field"
-    (click)="!enabled || isReadOnly ? null : inputFile.click()" fxFill>
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
+    class="icon-field" (click)="!enabled || isReadOnly ? null : inputFile.click()" fxFill>
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input #inputShowValue matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [required]="isRequired" readonly (change)="onChangeEvent($event)">
@@ -20,8 +20,9 @@
     </mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
-  <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}" [attr.accept]="acceptFileType ? acceptFileType.replace(';',',') : null"
-    (change)="fileSelected($event)" hidden="true" [attr.multiple]="multiple ? '' : null">
+  <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}"
+    [attr.accept]="acceptFileType ? acceptFileType.replace(arraySeparatorRegExp, ',') : null" (change)="fileSelected($event)" hidden="true"
+    [attr.multiple]="multiple ? '' : null">
   <div *ngIf="showInfo && files">
     <mat-progress-bar *ngIf="!splitUpload && uploader.isUploading" color="accent" mode="determinate" [value]="uploader.progress"></mat-progress-bar>
     <mat-list>
