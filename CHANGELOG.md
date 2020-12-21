@@ -1,3 +1,8 @@
+## 4.2.1
+### Bug Fixes
+* **OFormDataComponent**: Show input value when internal value is zero ([7d48606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d48606))
+* **OFormDataComponent**: Show clear button on inputs when internal value is zero ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
+
 ## 4.2.0 (2020-11-03)
 ### Features
 * **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
