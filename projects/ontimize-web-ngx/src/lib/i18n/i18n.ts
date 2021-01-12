@@ -246,7 +246,12 @@ export const MAP = {
     'DATERANGE.last_month': 'Last month',
     'DATERANGE.this_year': 'This year',
     'DATERANGE.APPLYLABEL': 'Select dates',
-    'DATERANGE.W': 'W'
+    'DATERANGE.W': 'W',
+    'TABLE_CONTEXT_MENU.GROUP_BY': 'Group by',
+    'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Group by {0}',
+    'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'UnGroup by {0}',
+    'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'UnGroup all',
+    'TABLE.BUTTONS.GROUPBY': 'Group / ungroup by'
   },
 
   // Spanish
@@ -487,7 +492,13 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.DELETE': 'Borrar',
     'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
-    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor'
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor',
+    'TABLE_CONTEXT_MENU.GROUP_BY': 'Agrupar por',
+    'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
+    'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
+    'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
+    'TABLE.BUTTONS.GROUPBY': 'Agrupar por',
+    'TABLE.DIALOG.TITLE_GROUPBY': 'Agrupar / desagrupar por columnas'
 
   },
   // Portuguese - BRAZIL
@@ -726,7 +737,10 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.DELETE': 'Apagar',
     'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filtrar por:',
-    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por esse valor'
-
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por esse valor',
+    'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
+    'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
+    'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
+    'TABLE.BUTTONS.GROUPBY': 'Agrupar / desagrupar por'
   }
 };

@@ -51,6 +51,7 @@ import { OPermissions } from '../../types/o-permissions.type';
 import { OTableInitializationOptions } from '../../types/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/o-table-permissions.type';
+import { OTableGroupedRow } from '../../types/o-table-row-group.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { QuickFilterFunction } from '../../types/quick-filter-function.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -175,7 +176,16 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'rowClass: row-class',
 
   // filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
-  'filterColumnActiveByDefault:filter-column-active-by-default'
+  'filterColumnActiveByDefault:filter-column-active-by-default',
+
+  //grouped-columns [string]: grouped columns separated by ';'. Default: no value.
+  'groupedColumns: grouped-columns',
+
+  //groupable[boolean]: Indicates whether or not the column can be groupable
+  'groupable',
+
+  //collapse-grouped-columns [yes|no|true|false]: Whether collapse the grouped columns by default
+  'collapseGroupedColumns: collapse-grouped-columns'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -350,6 +360,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   resizable: boolean = true;
   @InputConverter()
   autoAdjust: boolean = false;
+  @InputConverter()
+  groupable: boolean = true;
+  @InputConverter()
+  collapseGroupedColumns: boolean = false;
 
   protected _enabled: boolean = true;
   get enabled(): boolean {
@@ -379,6 +393,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
+  public groupedColumns: string;
   public sortColumns: string;
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
@@ -526,6 +541,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   @ViewChild('exportOptsTemplate', { static: false })
   exportOptsTemplate: TemplateRef<any>;
+
+  public groupedColumnsArray: string[] = [];
 
   @HostListener('window:resize', [])
   updateScrolledState(): void {
@@ -724,6 +741,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.parseVisibleColumns();
     this.setDatasource();
     this.registerDataSourceListeners();
+    this.parseGroupedColumns();
     this.parseSortColumns();
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
@@ -1749,11 +1767,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
 
       let itemId: string = '';
-      const keysLenght = self.keysArray.length;
-      self.keysArray.forEach((key: string, idx: number) => {
-        const suffix = idx < (keysLenght - 1) ? ';' : '';
-        itemId += item[key] + suffix;
-      });
+
+      if (this.isGroup(index, item)) {
+        itemId += item.column;
+      } else {
+        const keysLenght = self.keysArray.length;
+        self.keysArray.forEach((key: string, idx: number) => {
+          const suffix = idx < (keysLenght - 1) ? ';' : '';
+          itemId += item[key] + suffix;
+        });
+      }
 
 
       const asyncAndVisible = self.asyncLoadColumns.filter(c => self._oTableOptions.visibleColumns.indexOf(c) !== -1);
@@ -2398,6 +2421,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     colDef.searchable = false;
     colDef.orderable = false;
     colDef.resizable = false;
+    colDef.groupable = false;
     colDef.title = undefined;
     colDef.width = '48px';
     this.pushOColumnDefinition(colDef);
@@ -2505,7 +2529,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (table) {
       instance.setDefaultProperties({
         orderable: this.orderable,
-        resizable: this.resizable
+        resizable: this.resizable,
+        groupable: this.groupable
       });
     }
     if (column) {
@@ -2529,4 +2554,115 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return Util.extractPixelsValue(col.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH) + 'px';
   }
 
+  showExpandedColumn(): boolean {
+    return Util.isDefined(this.tableRowExpandable);
+  }
+
+  /**
+   * Parses grouped columns
+   */
+  parseGroupedColumns() {
+    this.groupedColumnsArray = Util.parseArray(this.groupedColumns, true);
+    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+  }
+
+  /**
+   * Groups by column
+   * @param column
+   */
+  public groupByColumn(column: OColumn) {
+    this.checkGroupByColumn(column.attr, true);
+    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+  }
+
+  /**
+   * Ungroup by column
+   * @param column
+   */
+  unGroupByColumn(column: OColumn) {
+    this.checkGroupByColumn(column.attr, false);
+    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+  }
+
+  /**
+   * Ungroup by all columns
+   */
+  unGroupByAllColumns() {
+    this.groupedColumnsArray = [];
+    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+  }
+
+  checkGroupByColumn(field: string, add: boolean) {
+    let found = null;
+    for (const column of this.groupedColumnsArray) {
+      if (column === field) {
+        found = this.groupedColumnsArray.indexOf(column, 0);
+      }
+    }
+    if (found != null && found >= 0) {
+      if (!add) {
+        this.groupedColumnsArray.splice(found, 1);
+      }
+    } else {
+      if (add) {
+        this.groupedColumnsArray.push(field);
+      }
+    }
+  }
+
+  /**
+   * Determines whether item is group
+   * @param index
+   * @param item
+   * @returns true if group
+   */
+  isGroup(index, item): boolean {
+    return Util.isDefined(item.level);
+  }
+
+  /**
+   * Determines whether item is not group
+   * @param index
+   * @param item
+   * @returns true if not group
+   */
+  isNotGroup(index, item): boolean {
+    return !Util.isDefined(item.level);
+  }
+
+  groupHeaderClick(row: OTableGroupedRow) {
+    this.dataSource.toggleGroupByColumn(row);
+  }
+
+  getTextGroupRow(group: OTableGroupedRow) {
+    const field = this.groupedColumnsArray[group.level - 1];
+    const value = group.column[this.groupedColumnsArray[group.level - 1]];
+    const totalCounts = group.totalCounts;
+    const oCol = this.getOColumn(field);
+    //const valueRendered = this.getColumnDataByOColumn(oCol, value);
+    // const useRenderer = oCol.renderer && oCol.renderer.getCellData;
+    // const valueRendered = useRenderer ? oCol.renderer.getCellData(value) : value;
+    return this.translateService.get(oCol.title) + ': ' + value + ' (' + totalCounts + ')';
+
+  }
+
+/**
+ * Gets column data by attr
+ * @param attr
+ * @param row
+ * @returns column data by attr
+ */
+getColumnDataByAttr(attr, row: any): any {
+    const oCol = this.getOColumn(attr);
+    const useRenderer = oCol.renderer && oCol.renderer.getCellData;
+    return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+  }
+
+  getClassNameGroupHeader(row: OTableGroupedRow): string {
+    let className = '';
+    if (row.level <= 10) {
+      className = 'o-table-group-row o-table-group-row-level-' + row.level;
+    }
+    return className;
+  }
 }
