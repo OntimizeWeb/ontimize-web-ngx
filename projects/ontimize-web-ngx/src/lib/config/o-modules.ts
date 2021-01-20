@@ -58,6 +58,7 @@ import { OSharedModule } from '../shared/shared.module';
 import { Util } from '../util/util';
 import { appInitializerFactory } from './o-providers';
 import { OExpandableContainerModule } from '../components/expandable-container/o-expandable-container.module';
+import { ODualListSelectorModule } from '../components/dual-list-selector/o-dual-list-selector.module';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
@@ -109,7 +110,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OSlideToggleModule,
   OSliderModule,
   ODateRangeInputModule,
-  OExpandableContainerModule
+  OExpandableContainerModule,
+  ODualListSelectorModule
 ];
 
 // AoT requires an exported function for factories
@@ -198,7 +200,8 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OAppLayoutModule,
   OCardMenuLayoutModule,
   OFormLayoutManagerModule,
-  OExpandableContainerModule
+  OExpandableContainerModule,
+  ODualListSelectorModule
 ];
 
 @NgModule({

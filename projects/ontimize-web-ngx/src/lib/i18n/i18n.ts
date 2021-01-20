@@ -251,7 +251,11 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Group by {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'UnGroup by {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'UnGroup all',
-    'TABLE.BUTTONS.GROUPBY': 'Group / ungroup by'
+    'TABLE.BUTTONS.GROUPBY': 'Group / ungroup by',
+    'O_DUAL_LIST_SELECTOR.DESCRIPTION': 'Drag and drop from or to the list of available columns to select the columns to group by.',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.TITLE_LIST_ALL_COLUMNS': 'Available columns',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.TITLE_LIST_GROUPED_COLUMNS': 'Grouped columns',
+    'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE':'Drag here to set row groups'
   },
 
   // Spanish
