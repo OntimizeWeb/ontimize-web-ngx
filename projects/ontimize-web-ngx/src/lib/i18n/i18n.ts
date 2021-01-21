@@ -252,10 +252,13 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'UnGroup by {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'UnGroup all',
     'TABLE.BUTTONS.GROUPBY': 'Group / ungroup by',
-    'O_DUAL_LIST_SELECTOR.DESCRIPTION': 'Drag and drop from or to the list of available columns to select the columns to group by.',
-    'TABLE_GROUP_BY_COLUMNS_DIALOG.TITLE_LIST_ALL_COLUMNS': 'Available columns',
-    'TABLE_GROUP_BY_COLUMNS_DIALOG.TITLE_LIST_GROUPED_COLUMNS': 'Grouped columns',
-    'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE':'Drag here to set row groups'
+    'DUAL_LIST_SELECTOR.DESCRIPTION': 'Drag and drop item from the left (Available columns) to the right (Grouped columns). Reorder the items in Grouped columns as needed.',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.ALL_COLUMNS': 'Available columns',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.GROUPED_COLUMNS': 'Grouped columns',
+    'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE': 'Drag here to set the grouped columns',
+    'TABLE.VISIBLE_COLUMNS_DIALOG.ALL_COLUMNS': 'Available columns',
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Click on ',
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'to hide/display the column. Use drag and drop to modify the column order.'
   },
 
   // Spanish
@@ -502,7 +505,15 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
     'TABLE.BUTTONS.GROUPBY': 'Agrupar por',
-    'TABLE.DIALOG.TITLE_GROUPBY': 'Agrupar / desagrupar por columnas'
+    'TABLE.DIALOG.TITLE_GROUPBY': 'Agrupar / desagrupar por columnas',
+    'DUAL_LIST_SELECTOR.DESCRIPTION': 'Arrastre y suelte de la izquierda (Columnas disponibles) a la derecha (Columnas agrupadas). Reordena las columnas agrupadas si fuera necesario',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.ALL_COLUMNS': 'Columnas disponibles',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.GROUPED_COLUMNS': 'Columnas agrupadas',
+    'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE': 'Arrastre aquí para establecer las columnas agrupadas',
+    'TABLE.VISIBLE_COLUMNS_DIALOG.ALL_COLUMNS': 'Columnas disponibles',
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Haz click sobre ',
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.'
+
 
   },
   // Portuguese - BRAZIL
@@ -745,6 +756,14 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
-    'TABLE.BUTTONS.GROUPBY': 'Agrupar / desagrupar por'
+    'TABLE.BUTTONS.GROUPBY': 'Agrupar / desagrupar por',
+    'TABLE.DIALOG.TITLE_GROUPBY': 'Agrupar / desagrupar por columnas',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION': 'Arrastre y suelte de la izquierda (Columnas disponibles) a la derecha (Columnas agrupadas). Reordena las columnas agrupadas si fuera necesario',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.AVAILABLE_COLUMNS': 'Columnas disponibles',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.GROUPED_COLUMNS': 'Columnas agrupadas',
+    'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE': 'Arrastre aquí para establecer las columnas agrupadas',
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Haz click sobre ',
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
+    'TABLE.VISIBLE_COLUMNS_DIALOG.ALL_COLUMNS': 'Columnas disponibles'
   }
 };
