@@ -4,14 +4,34 @@
     padding-top: 0;
     margin-top: 24px;
 
-    .mat-list {
+    .description {
+      padding: 12px 0;
+    }
 
-      .mat-list-item, .cdk-drag-preview {
+    .title_list {
+      font-weight: 600;
+      margin-bottom: 6px;
+      margin-top: 12px;
+    }
+
+    .cdk-drop-list {
+      border: solid 1px #929292;
+      padding: 0 6px;
+    }
+
+    .mat-list {
+     //
+      .mat-list-item {
         cursor: pointer;
         height: auto;
 
+        &.column-hidden {
+          opacity: .4;
+        }
+
         .mat-list-item-content {
           padding: 0;
+          cursor: move;
 
           div.mat-list-text {
             padding: 0 8px;
@@ -20,7 +40,8 @@
       }
     }
 
-    .mat-icon[svgicon="ontimize:drag_handle"] {
+    .mat-icon[svgicon="ontimize:drag_handle"],
+    .mat-list-text {
       cursor: move;
     }
 
@@ -28,5 +49,6 @@
     .mat-icon[svgicon="ontimize:visibility_off"] {
       width: 32px;
     }
-  }  
+
+  }
 }
