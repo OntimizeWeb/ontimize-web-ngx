@@ -121,12 +121,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     }
 
-    if (this.table.groupable) {
-      displayDataChanges.push(this.groupByColumnChange);
-    }
-
     if (this.table.oTableColumnsFilterComponent) {
       displayDataChanges.push(this._columnValueFilterChange);
+    }
+
+    if (this.table.groupable) {
+      displayDataChanges.push(this.groupByColumnChange);
     }
 
     return merge(...displayDataChanges).pipe(map((x: any) => {
@@ -170,8 +170,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           this.renderedData = this.getSubGroupsOfGroupedRow(data);
           data = this.filterCollapsedRowGroup(this.renderedData);
         }
-
-
 
         this.renderedData = data;
         this.aggregateData = this.getAggregatesData(data);

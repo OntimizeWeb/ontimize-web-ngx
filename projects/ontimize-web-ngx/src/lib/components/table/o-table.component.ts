@@ -181,7 +181,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   //grouped-columns [string]: grouped columns separated by ';'. Default: no value.
   'groupedColumns: grouped-columns',
 
-  //groupable[boolean]: Indicates whether or not the column can be groupable
+  //groupable[boolean]: Indicates whether or not the column can be groupable. By default: false
   'groupable',
 
   //collapse-grouped-columns [yes|no|true|false]: Whether collapse the grouped columns by default
@@ -361,7 +361,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   autoAdjust: boolean = false;
   @InputConverter()
-  groupable: boolean = true;
+  groupable: boolean = false;
   @InputConverter()
   collapseGroupedColumns: boolean = false;
 
