@@ -10,9 +10,8 @@
   }
 
   .o-dual-list-selector-wrapper-selector-list {
-    //overflow: auto;
     flex: 1;
-    //height: 100%;
+
     .o-dual-list-selector-destination-wrapper,
     .o-dual-list-selector-source-wrapper {
       overflow: auto;
@@ -20,21 +19,20 @@
   }
 
   .o-dual-list-selector-list {
-    .title_selection_list {
+    .title-list {
       font-weight: 600;
       margin-bottom: 6px;
       margin-top: 12px;
     }
 
     .mat-selection-list.mat-list-base {
-      border: solid 1px #ccc;
+      border: solid 1px #929292;
       overflow-y: scroll;
-      //height: 100%;
       width: 100%;
       position: relative;
 
       .mat-list-item.mat-list-item:not(.mat-list-option) {
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid #929292;
       }
 
     }
@@ -55,27 +53,8 @@
       position: absolute;
       width: 100%;
       text-align: center;
-      color: #ccc;
+      opacity: .5;
       top: 50%;
     }
   }
-}
-
-.cdk-drag-preview.o-dual-list-selector-box .mat-list-item-content {
-  display: flex;
-  flex-direction: row;
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-  padding: 6px;
-  background-color: #ffffff;
-
-  .mat-list-text {
-    padding-left: 16px;
-
-  }
-}
-
-.cdk-drop-list-dragging .o-dual-list-selector-box:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

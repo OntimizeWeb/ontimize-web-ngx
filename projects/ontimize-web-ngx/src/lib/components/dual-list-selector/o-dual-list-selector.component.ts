@@ -12,7 +12,8 @@ export const DEFAULT_DUAL_LIST_SELECTOR = [
   //data-destination : The destination array of objects or strings selected from the source
   'dataDestination: data-destination',
   'titleListDataSource: title-list-data-source',
-  'titleListDataDestination: title-list-data-destination'
+  'titleListDataDestination: title-list-data-destination',
+  'description'
 ];
 
 @Component({
@@ -32,6 +33,7 @@ export class ODualListSelectorComponent {
   public dataDestination: Array<any> = [];
   public titleListDataSource: string = '';
   public titleListDataDestination: string = '';
+  public description = '';
   public key = '';
   public display = '';
   constructor() { }
@@ -89,6 +91,9 @@ export class ODualListSelectorComponent {
 
   }
 
+  hasValue(list: MatSelectionList) {
+    return list.selectedOptions.selected.length > 0
+  }
   isDisabledSortAsc(list: MatSelectionList) {
     let sortAsc = true;
     if (list.selectedOptions.selected.length !== 0) {
@@ -115,7 +120,7 @@ export class ODualListSelectorComponent {
     return sortDesc;
   }
 
-  sortItemsSelectedAsc(list: MatSelectionList) {
+  sortAscSelectedItems(list: MatSelectionList) {
     const self = this;
     const itemsSelected = list.selectedOptions.selected;
     itemsSelected.forEach(item => {
@@ -124,24 +129,37 @@ export class ODualListSelectorComponent {
     });
   }
 
-  sortItemsSelectedDesc(list: MatSelectionList) {
+  /**
+   * Sorts desc selected items
+   * @param list
+   */
+  sortDescSelectedItems(list: MatSelectionList) {
     const self = this;
     const itemsSelected = list.selectedOptions.selected;
     itemsSelected.forEach(item => {
       const index = list.options.toArray().findIndex(x => x.value[this.key] === item.value[this.key]);
-
       moveItemInArray(self.dataDestination, index, index + 1);
     });
-
-
   }
 
-  getValue(): Array<any> {
+  getCheckboxLabel(list: MatSelectionList) {
+    return '(' + list.selectedOptions.selected.length + '/' + list.options.length + ')';
+  }
+
+  /**
+   * Gets selected items
+   * @returns selected items
+   */
+  getSelectedItems(): Array<any> {
     return this.dataDestination;
   }
 
+  /**
+   * Sets selected items
+   * @param items
+   */
   setSelectedItems(items: Array<any>) {
-
+    this.dataDestination = items;
   }
 
 }
