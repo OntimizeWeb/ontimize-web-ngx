@@ -27,11 +27,14 @@
     icon="select_all" (execute)="table.isAllSelected() ? unSelectAll() : selectAll()" [visible]="isVisibleSelectAll | async"></o-context-menu-item>
 
   <!-- GROUP BY -->
-  <o-context-menu-separator></o-context-menu-separator>
+  <o-context-menu-separator [visible]="isVisibleGroupByRow | async"></o-context-menu-separator>
   <o-context-menu-group label="TABLE_CONTEXT_MENU.GROUP_BY" icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async">
-    <o-context-menu-item icon="format_indent_increase" [label]="labelGroupByColumn" (execute)="groupByColumn()" [enabled]="isEnabledGroupByColumn | async"></o-context-menu-item>
-    <o-context-menu-item icon="format_indent_decrease" [label]="labelUnGroupByColumn" (execute)="unGroupByColumn()" [enabled]="isEnabledUnGroupByColumn | async"></o-context-menu-item>
-    <o-context-menu-item icon="format_line_spacing" label="TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS" (execute)="unGroupAll()" [enabled]="isEnabledUnGroupAllColumn | async">
+    <o-context-menu-item icon="format_indent_increase" [label]="labelGroupByColumn" (execute)="groupByColumn()"
+      [enabled]="isEnabledGroupByColumn | async"></o-context-menu-item>
+    <o-context-menu-item icon="format_indent_decrease" [label]="labelUnGroupByColumn" (execute)="unGroupByColumn()"
+      [enabled]="isEnabledUnGroupByColumn | async"></o-context-menu-item>
+    <o-context-menu-item icon="format_line_spacing" label="TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS" (execute)="unGroupAll()"
+      [enabled]="isEnabledUnGroupAllColumn | async">
     </o-context-menu-item>
   </o-context-menu-group>
 </o-context-menu>

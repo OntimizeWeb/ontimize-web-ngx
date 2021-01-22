@@ -139,7 +139,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
-          console.log(self.responseMap[cellvalue])
           self.onDataLoaded.emit(self.responseMap[cellvalue]);
         }
       }, err => {
