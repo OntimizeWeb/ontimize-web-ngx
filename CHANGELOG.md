@@ -1,3 +1,13 @@
+## 8.2.0
+* **table**:
+  * Added row grouping ([078931b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/078931b))
+  * new class `OTableGroupedRow`([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
+  * `o-table-context-menu`:
+    * added new sub-menu *Group by*.([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
+    * new interface **OnExecuteTableContextEvent**
+  * `o-table-visible-columns-dialog`:  added the description in the dialog ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
+* new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
+
 ## 8.1.1(2020-11-25)
 ### Bug Fixes
 * **table**: fixing bug in filtering by column ([88ac4bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88ac4bf))
