@@ -1,8 +1,8 @@
 import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
-import { OFormComponent } from '../form/form-components';
 import { Util } from '../../utils';
+import { OFormComponent } from '../form/form-components';
 
 export const DEFAULT_INPUTS_O_CONTAINER = [
   'oattr: attr',
