@@ -10,6 +10,7 @@ import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/o-
 import { OTableGroupedRow } from '../../../types/o-table-row-group.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { OTableCellRendererServiceComponent } from '../column';
 import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
@@ -602,7 +603,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           const result = new OTableGroupedRow();
           result.level = level + 1;
           result.parent = parent;
-          result.expanded = !this.table.collapseGroupedColumns;
+          result.expanded = !self.table.collapseGroupedColumns;
           for (let i = 0; i <= level; i++) {
             const key = {};
             key[groupByColumns[i]] = this.table.getColumnDataByAttr(groupByColumns[i], row);
@@ -645,44 +646,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return data.filter((row: any) => (row instanceof OTableGroupedRow) ? row.visible : this.getDataRowVisible(row));
   }
 
-  /*getDataRowVisible(data: any): boolean {
-    const self = this;
-
-    //Get group row of the data
-    const groupRows = this.renderedData.filter(
-      row => {
-        if (!(row instanceof OTableGroupedRow)) {
-          return false;
-        }
-        let match = this.groupByColumns.length === 0 ? true : false;
-        this.groupByColumns.forEach(column => {
-
-          const oColumn = self.table.getOColumn(column);
-          const columnGroupValue = row.column[column];
-          const valueDataRenderer = self.table.getColumnDataByOColumn(oColumn, data);
-          if (Util.isDefined(row.column[column]) && Util.isDefined(data[column]) && columnGroupValue === valueDataRenderer) {
-            match = match || true;
-          }
-        });
-        return match;
-      }
-    );
-
-    //If data not belong of the group
-    if (groupRows.length === 0) {
-      return true;
-    }
-    const parent = groupRows[groupRows.length - 1] as OTableGroupedRow;
-    //console.log('getDataRowVisible', data, this.renderedData, parent);
-    return parent.visible && parent.expanded;
-  }*/
-
   /**
-   * Gets data row visible
-   *
-   * @param data
-   * @returns true if data row visible
-   */
+ * Gets data row visible
+ *
+ * @param data
+ * @returns true if data row visible
+ */
   getDataRowVisible(data: any): boolean {
     let parent: OTableGroupedRow;
 

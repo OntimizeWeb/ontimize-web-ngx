@@ -27,7 +27,7 @@ import {
   ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
-import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, forkJoin, Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
@@ -65,6 +65,7 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
+import { OBaseTableCellRenderer, OTableCellRendererServiceComponent } from './column';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -248,6 +249,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   _filterColumns: Array<OFilterColumn>;
   portalHost: DomPortalOutlet;
+  onDataLoadedCellRendererSubscription: Subscription;
 
   get diameterSpinner() {
     const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
@@ -543,7 +545,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   exportOptsTemplate: TemplateRef<any>;
 
   public groupedColumnsArray: string[] = [];
-
   @HostListener('window:resize', [])
   updateScrolledState(): void {
     if (this.horizontalScroll) {
@@ -590,6 +591,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.oTableButtons) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
+
   }
 
   ngAfterViewInit() {
@@ -776,6 +778,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.asyncLoadSubscriptions[idx].unsubscribe();
       }
     });
+
   }
 
   /**
@@ -1869,8 +1872,38 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return sortColumnsFilter;
   }
 
+
+  // get groupedColumnsArray() {
+
+  //   if (this.state.hasOwnProperty('initial-configuration') &&
+  //     this.state['initial-configuration'].hasOwnProperty('grouped-columns') &&
+  //     this.state.hasOwnProperty('grouped-columns') &&
+  //     this.state['initial-configuration']['grouped-columns'] === this._groupedColumnsArray) {
+  //     if (this.state.hasOwnProperty('grouped-columns')) {
+  //       return this.state['grouped-columns'];
+  //     }
+  //     else {
+  //       return this._groupedColumnsArray
+  //     }
+  //   }
+
+
+  // }
+
+  // set groupedColumnsArray(value: Array<string>) {
+  //   this._groupedColumnsArray = value;
+  // }
+
+  get originalGroupedColumnsArray(): Array<string> {
+    return Util.parseArray(this.groupedColumns, true);
+  }
+
   getStoredColumnsFilters() {
     return this.oTableStorage.getStoredColumnsFilters();
+  }
+
+  getStoredGroupedColumns() {
+    return this.oTableStorage.getStoredGroupedColumns();
   }
 
   onFilterByColumnClicked() {
@@ -2231,6 +2264,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !Util.isDefined(value) || ((typeof value === 'string') && !value);
   }
 
+  setGroupedColumnsConfiguration(conf: any) {
+    if (this.state.hasOwnProperty('grouped-columns') &&
+      this.state['initial-configuration'].hasOwnProperty('grouped-columns')) {
+      //this.groupedColumnsArray = conf.
+    }
+  }
+
   setFiltersConfiguration(conf: any) {
     // initialize filterCaseSensitive
 
@@ -2322,6 +2362,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           case 'quick-filter':
           case 'columns-filter':
             this.setFiltersConfiguration(conf);
+            break;
+          case 'grouped-columns':
+            this.setGroupedColumnsConfiguration(conf);
             break;
           case 'page':
             this.state.currentPage = conf.currentPage;
@@ -2562,7 +2605,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Parses grouped columns
    */
   parseGroupedColumns() {
-    this.groupedColumnsArray = Util.parseArray(this.groupedColumns, true);
+
+    const groupedColumnsArray = this.state['grouped-columns'] || this.originalGroupedColumnsArray
+    if (this.state['grouped-columns'] && this.state['initial-configuration']['grouped-columns']) {
+
+      const initialGroupedColumnsArray = this.state['initial-configuration']['grouped-columns'];
+
+      const difference = initialGroupedColumnsArray.filter(x => !this.originalGroupedColumnsArray.includes(x));
+      if (difference) {
+        this.groupedColumnsArray = groupedColumnsArray;
+      }
+    }
+
     this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
   }
 
@@ -2636,23 +2690,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   getTextGroupRow(group: OTableGroupedRow) {
     const field = this.groupedColumnsArray[group.level - 1];
-    const value = group.column[this.groupedColumnsArray[group.level - 1]];
+    let value = group.column[this.groupedColumnsArray[group.level - 1]];
     const totalCounts = group.totalCounts;
     const oCol = this.getOColumn(field);
-    //const valueRendered = this.getColumnDataByOColumn(oCol, value);
-    // const useRenderer = oCol.renderer && oCol.renderer.getCellData;
-    // const valueRendered = useRenderer ? oCol.renderer.getCellData(value) : value;
+
+    if (!value && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)) {
+      value = ' - ';
+      if (!this.onDataLoadedCellRendererSubscription) {
+        this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
+          this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+        });
+      }
+    }
     return this.translateService.get(oCol.title) + ': ' + value + ' (' + totalCounts + ')';
 
   }
 
-/**
- * Gets column data by attr
- * @param attr
- * @param row
- * @returns column data by attr
- */
-getColumnDataByAttr(attr, row: any): any {
+  private isInstanceOfOTableCellRendererServiceComponent(renderer: OBaseTableCellRenderer) {
+    return (renderer as any).onDataLoaded;
+  }
+
+  /**
+   * Gets column data by attr
+   * @param attr
+   * @param row
+   * @returns column data by attr
+   */
+  getColumnDataByAttr(attr, row: any): any {
     const oCol = this.getOColumn(attr);
     const useRenderer = oCol.renderer && oCol.renderer.getCellData;
     return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
