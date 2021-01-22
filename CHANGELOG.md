@@ -1,4 +1,5 @@
 ## 8.2.0
+### Features
 * **table**:
   * Added row grouping ([078931b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/078931b))
   * new class `OTableGroupedRow`([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
