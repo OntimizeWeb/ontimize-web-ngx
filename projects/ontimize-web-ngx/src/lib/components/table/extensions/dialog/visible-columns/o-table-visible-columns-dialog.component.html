@@ -12,7 +12,8 @@
   </div>
   <div [ngClass]="rowHeight">
     <mat-list cdkDropList (cdkDropListDropped)="drop($event)">
-      <mat-list-item *ngFor="let column of columns" cdkDrag (click)="onClickColumn(column)" [ngClass]="{'column-hidden':!column.visible}">
+      <mat-list-item *ngFor="let column of columns" cdkDrag (click)="onClickColumn(column)" [ngClass]="{'column-hidden':!column.visible}"
+        class="o-drag-list-item-box">
         <ng-container *ngIf="column.showInList">
           <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
           <span mat-line fxFlex>{{ (column.title || column.attr) | oTranslate }}</span>
