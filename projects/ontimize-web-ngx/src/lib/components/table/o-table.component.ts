@@ -1872,28 +1872,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return sortColumnsFilter;
   }
 
-
-  // get groupedColumnsArray() {
-
-  //   if (this.state.hasOwnProperty('initial-configuration') &&
-  //     this.state['initial-configuration'].hasOwnProperty('grouped-columns') &&
-  //     this.state.hasOwnProperty('grouped-columns') &&
-  //     this.state['initial-configuration']['grouped-columns'] === this._groupedColumnsArray) {
-  //     if (this.state.hasOwnProperty('grouped-columns')) {
-  //       return this.state['grouped-columns'];
-  //     }
-  //     else {
-  //       return this._groupedColumnsArray
-  //     }
-  //   }
-
-
-  // }
-
-  // set groupedColumnsArray(value: Array<string>) {
-  //   this._groupedColumnsArray = value;
-  // }
-
   get originalGroupedColumnsArray(): Array<string> {
     return Util.parseArray(this.groupedColumns, true);
   }
