@@ -1,13 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Injector,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
-import { Subscription } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { merge, Subscription } from 'rxjs';
 
 import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
@@ -16,8 +8,7 @@ export const DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = [
   'closedSrc: closed-src'
 ];
 
-export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [
-];
+export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [];
 
 @Component({
   selector: 'o-app-sidenav-image',
@@ -31,15 +22,14 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OAppSidenavImageComponent implements OnInit, OnDestroy {
+export class OAppSidenavImageComponent implements OnInit, OnDestroy, OnChanges {
 
   protected sidenav: OAppSidenavComponent;
   protected openedSrc: string;
   protected closedSrc: string;
   private _src: string;
 
-  protected sidenavOpenSubs: Subscription;
-  protected sidenavCloseSubs: Subscription;
+  protected subscription = new Subscription();
 
   constructor(
     protected injector: Injector,
@@ -50,23 +40,18 @@ export class OAppSidenavImageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.sidenav) {
-      const self = this;
-      this.sidenavOpenSubs = this.sidenav.onSidenavClosedStart.subscribe(() => {
-        self.updateImage();
-      });
-      this.sidenavCloseSubs = this.sidenav.onSidenavOpenedStart.subscribe(() => {
-        self.updateImage();
-      });
+      this.subscription.add(merge(this.sidenav.onSidenavClosedStart, this.sidenav.onSidenavOpenedStart).subscribe(() => this.updateImage()));
     }
     this.updateImage();
   }
 
   ngOnDestroy() {
-    if (this.sidenavOpenSubs) {
-      this.sidenavOpenSubs.unsubscribe();
-    }
-    if (this.sidenavCloseSubs) {
-      this.sidenavCloseSubs.unsubscribe();
+    this.subscription.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.openedSrc || changes.closedSrc) {
+      this.updateImage();
     }
   }
 
@@ -98,4 +83,5 @@ export class OAppSidenavImageComponent implements OnInit, OnDestroy {
   get showImage(): boolean {
     return (this._src !== undefined && this._src.length > 0);
   }
+
 }
