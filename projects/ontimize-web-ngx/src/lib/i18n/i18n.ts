@@ -752,7 +752,7 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.DELETE': 'Apagar',
     'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filtrar por:',
-    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por esse valor',
+    'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por ese valor',
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
