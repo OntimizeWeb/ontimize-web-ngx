@@ -1,8 +1,8 @@
 ## 4.2.1
 ### Features
 * **o-grid**:
-  * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
-  * new `insert-button-position` and `insert-button-floatable` input ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
+  * added new button ([85c0a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85c0a45))
+  * new `insert-button-position` and `insert-button-floatable` input ([85c0a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85c0a45))
 
 ### Buf Fixes
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
