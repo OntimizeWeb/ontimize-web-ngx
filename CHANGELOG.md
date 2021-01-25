@@ -1,4 +1,6 @@
 ## 8.1.2
+### Features
+* **o-grid**: added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
 ### Buf Fixes
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
 * **OFormDataComponent**: Show input value when internal value is zero ([a7b2392](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a7b2392))
