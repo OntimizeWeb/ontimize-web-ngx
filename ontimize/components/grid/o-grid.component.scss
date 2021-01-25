@@ -10,9 +10,10 @@
       flex: 0 0 auto;
     }
 
-    .o-grid-no-results{
+    .o-grid-no-results {
       padding: 16px;
     }
+
     .o-grid-paginator,
     .o-grid-sort {
       font-size: .8em;
@@ -85,6 +86,19 @@
     .o-grid-footer,
     .o-mat-paginator {
       flex: 0 0 auto;
+    }
+  }
+
+  .add-button {
+    right: 12px;
+    position: absolute;
+
+    &.add-button-bottom {
+      bottom: 36px;
+    }
+
+    &.add-button-top {
+      top: 88px;
     }
   }
 }
