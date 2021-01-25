@@ -396,6 +396,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
   public groupedColumns: string;
+
   public sortColumns: string;
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
@@ -2242,13 +2243,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !Util.isDefined(value) || ((typeof value === 'string') && !value);
   }
 
-  setGroupedColumnsConfiguration(conf: any) {
-    if (this.state.hasOwnProperty('grouped-columns') &&
-      this.state['initial-configuration'].hasOwnProperty('grouped-columns')) {
-      //this.groupedColumnsArray = conf.
-    }
-  }
-
   setFiltersConfiguration(conf: any) {
     // initialize filterCaseSensitive
 
@@ -2342,7 +2336,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             this.setFiltersConfiguration(conf);
             break;
           case 'grouped-columns':
-            this.setGroupedColumnsConfiguration(conf);
+            this.state['grouped-columns'] = conf['grouped-columns']
+            this.parseGroupedColumns();
             break;
           case 'page':
             this.state.currentPage = conf.currentPage;
@@ -2584,14 +2579,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   parseGroupedColumns() {
 
-    const groupedColumnsArray = this.state['grouped-columns'] || this.originalGroupedColumnsArray
+    this.groupedColumnsArray = this.state['grouped-columns'] || this.originalGroupedColumnsArray;
     if (this.state['grouped-columns'] && this.state['initial-configuration']['grouped-columns']) {
 
       const initialGroupedColumnsArray = this.state['initial-configuration']['grouped-columns'];
 
       const difference = initialGroupedColumnsArray.filter(x => !this.originalGroupedColumnsArray.includes(x));
-      if (difference) {
-        this.groupedColumnsArray = groupedColumnsArray;
+      if (difference.length > 0) {
+        this.groupedColumnsArray = this.originalGroupedColumnsArray;
       }
     }
 
@@ -2696,7 +2691,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    */
   getColumnDataByAttr(attr, row: any): any {
     const oCol = this.getOColumn(attr);
-    const useRenderer = oCol.renderer && oCol.renderer.getCellData;
+    const useRenderer = oCol && oCol.renderer && oCol.renderer.getCellData;
     return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
   }
 
