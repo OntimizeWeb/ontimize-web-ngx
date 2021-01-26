@@ -89,16 +89,16 @@
     }
   }
 
-  .add-button {
+  .o-grid-add-floatable-button {
     right: 12px;
     position: absolute;
 
-    &.add-button-bottom {
+    &.o-grid-add-bottom-floatable-button {
       bottom: 36px;
     }
 
-    &.add-button-top {
-      top: 88px;
+    &.o-grid-add-top-floatable-button {
+      top: 66px;
     }
   }
 }

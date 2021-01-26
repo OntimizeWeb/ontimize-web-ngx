@@ -3,7 +3,8 @@
   <mat-toolbar *ngIf="hasControls()" class="o-grid-toolbar">
     <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" fxFill>
       <!-- button new-->
-      <button *ngIf="insertButton && !insertButtonFloatable" type="button" mat-icon-button aria-label="Insert" (click)="add()">
+      <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-icon-button aria-label="Insert"
+        (click)="add()">
         <mat-icon svgIcon="ontimize:add"></mat-icon>
       </button>
 
@@ -59,8 +60,9 @@
     </mat-grid-tile>
   </mat-grid-list>
 
-  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()" class="add-button add-button-bottom"
-    [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
+  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()"
+    class="o-grid-add-floatable-button" [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
+    [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
     <mat-icon svgIcon="ontimize:add"></mat-icon>
   </button>
 
