@@ -2,7 +2,6 @@
 ### Bug Fixes
 * **OFormDataComponent**: Show input value when internal value is zero ([7d48606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d48606))
 * **OFormDataComponent**: Show clear button on inputs when internal value is zero ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
-* **OFormDataComponent**: Show clear button on inputs when internal value is zero ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
 * **o-column**: Fix appearence outline when no title is displayed. ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
 * **o-row**: Fix appearence outline when no title is displayed. ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
 * **o-app-layout-sidenav**: Update sidenav image when component attributes change. ([323ad94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/323ad94))
