@@ -23,8 +23,8 @@ export class OTableStorage {
       filter: this.table.oTableQuickFilterComponent ? this.table.oTableQuickFilterComponent.value : ''
     };
 
-    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration', 'filter-columns', 'filter-column-active-by-default'];
-    
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration', 'filter-columns', 'filter-column-active-by-default', 'grouped-columns'];
+
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
     const storedFiltersArr = this.getStoredFilters();
@@ -77,7 +77,16 @@ export class OTableStorage {
       case 'filter-columns':
         result = this.getFilterColumnsState();
         break;
+      case 'grouped-columns':
+        result = this.getGroupedColumnsState();
+        break;
     }
+    return result;
+  }
+
+  getGroupedColumnsState() {
+    const result = {};
+    result['grouped-columns'] = this.table.groupedColumnsArray;
     return result;
   }
 
@@ -226,6 +235,7 @@ export class OTableStorage {
     initialConfiguration['query-rows'] = this.table.originalQueryRows;
     initialConfiguration['filter-column-active-by-default'] = this.table.originalFilterColumnActiveByDefault;
     initialConfiguration['filter-columns'] = this.table.originalFilterColumns;
+    initialConfiguration['grouped-columns'] = this.table.originalGroupedColumnsArray;
 
     result['initial-configuration'] = initialConfiguration;
 
@@ -278,6 +288,11 @@ export class OTableStorage {
   getStoredFiltersColumns(arg?: any) {
     const stateObj = arg || this.table.state;
     return stateObj['filter-columns'] || [];
+  }
+
+  getStoredGroupedColumns(arg?: any) {
+    const stateObj = arg || this.table.state;
+    return stateObj['grouped-columns'] || [];
   }
 
   getStoredConfigurations() {

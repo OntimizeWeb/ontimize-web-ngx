@@ -37,6 +37,7 @@ export class OTableCellRendererImageComponent extends OBaseTableCellRenderer imp
     this.tableColumn.type = 'image';
     this.tableColumn.orderable = false;
     this.tableColumn.searchable = false;
+    this.tableColumn.groupable = false;
   }
 
   initialize() {

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, forwardRef, OnInit } from '@angular/core';
+import { OnExecuteTableContextEvent } from '../../../interfaces/o-table-context-onexecute.interface';
 
 import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS, OComponentMenuItems } from '../o-content-menu.class';
 
@@ -21,20 +22,15 @@ export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM = [
   outputs: DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS,
   providers: [{ provide: OComponentMenuItems, useExisting: forwardRef(() => OContextMenuItemComponent) }]
 })
-export class OContextMenuItemComponent extends OComponentMenuItems implements OnInit {
+export class OContextMenuItemComponent extends OComponentMenuItems{
 
-  public execute: EventEmitter<{ event: Event, data: any }> = new EventEmitter();
+  public execute: EventEmitter<OnExecuteTableContextEvent> = new EventEmitter();
   public type = OComponentMenuItems.TYPE_ITEM_MENU;
   public icon: string;
   public data: any;
   public label: string;
   public enabled: boolean | ((item: any) => boolean) = true;
   public svgIcon: string;
-  protected oenabled;
-
-  public ngOnInit(): void {
-    this.enabled = this.parseInput(this.oenabled, true);
-  }
 
   public onClick(event: MouseEvent): void {
     event.preventDefault();
@@ -61,6 +57,14 @@ export class OContextMenuItemComponent extends OComponentMenuItems implements On
       return this.ovisible(this.data);
     }
     return this.ovisible;
+  }
+
+  public set oenabled(value: (boolean | ((item: any) => boolean))) {
+    if (value instanceof Function) {
+      this.enabled = value;
+    } else {
+      this.enabled = this.parseInput(value, true);
+    }
   }
 
 }

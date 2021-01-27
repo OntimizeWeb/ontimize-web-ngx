@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Injector, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Injector, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
@@ -27,11 +27,15 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'serviceType : service-type',
   'translateArgsFn: translate-params'
 ];
+export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
+  'onDataLoaded'
+]
 
 @Component({
   selector: 'o-table-cell-renderer-service',
   templateUrl: './o-table-cell-renderer-service.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     // Service renderer must have its own service instance in order to avoid overriding table service configuration
@@ -59,6 +63,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
 
+  /* Outputs */
+  public onDataLoaded: EventEmitter<any> = new EventEmitter();
   /* Internal variables */
   protected colArray: string[] = [];
   protected dataService: any;
@@ -133,6 +139,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
+          self.onDataLoaded.emit(self.responseMap[cellvalue]);
         }
       }, err => {
         console.error(err);

@@ -41,6 +41,7 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
     this.tableColumn.type = 'action';
     this.tableColumn.orderable = false;
     this.tableColumn.searchable = false;
+    this.tableColumn.groupable = false;
   }
 
   initialize() {
