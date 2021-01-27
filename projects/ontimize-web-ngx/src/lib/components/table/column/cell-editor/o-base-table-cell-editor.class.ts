@@ -85,6 +85,9 @@ export class OBaseTableCellEditor implements OnInit {
     this.initialize();
   }
 
+  /**
+   * Initializes the cell editor
+   */
   public initialize(): void {
     this.createFormControl();
     this.registerEditor();
@@ -105,6 +108,9 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
+  /**
+   * Creates form control
+   */
   createFormControl() {
     if (!this.formControl) {
       const validators: ValidatorFn[] = this.resolveValidators();
@@ -117,6 +123,9 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
+  /**
+   * Registers editor
+   */
   registerEditor() {
     if (this.registerInColumn && !Util.isDefined(this.tableColumn.editor)) {
       this.tableColumn.registerEditor(this);
@@ -126,10 +135,18 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
+  /**
+   * Gets the value of the cell data
+   * @returns cell data
+   */
   getCellData(): any {
     return this._rowData[this.tableColumnAttr];
   }
 
+  /**
+   * Start edition with given the data
+   * @param data
+   */
   startEdition(data: any) {
     this.formGroup.reset();
     this.rowData = data;
@@ -138,7 +155,13 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
-  endEdition(saveChanges) {
+
+
+  /**
+   * Ends edition with the ability to skip or save changes
+   * @param saveChanges
+   */
+  endEdition(saveChanges: boolean) {
     const oColumn: OColumn = this.table.getOColumn(this.tableColumnAttr);
     if (oColumn) {
       const self = this;
@@ -159,6 +182,10 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
+
+  /**
+   * Commits edition
+   */
   commitEdition() {
     if (!this.formControl.invalid) {
       this.oldValue = this._rowData[this.tableColumnAttr];
@@ -211,6 +238,11 @@ export class OBaseTableCellEditor implements OnInit {
     }
   }
 
+
+  /**
+   * Resolves validators
+   * @returns validators
+   */
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
     if (this.orequired) {
@@ -219,6 +251,12 @@ export class OBaseTableCellEditor implements OnInit {
     return validators;
   }
 
+
+  /**
+   * Determines whether error has
+   * @param error
+   * @returns true if error
+   */
   hasError(error: string): boolean {
     return this.formControl && this.formControl.touched && this.hasErrorExclusive(error);
   }

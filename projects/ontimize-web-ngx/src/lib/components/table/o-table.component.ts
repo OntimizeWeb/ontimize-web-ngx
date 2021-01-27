@@ -699,6 +699,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  /**
+   * Allow reinitialize table adding options
+   * @param options
+   */
   reinitialize(options: OTableInitializationOptions): void {
     if (options) {
       const clonedOpts = Object.assign({}, options);
@@ -1182,6 +1186,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.expandableItem.selected;
   }
 
+  /**
+   * Allow to expand or collapse the expandable row.
+   * @param item
+   * @param rowIndex
+   * @param event
+   */
   public toogleRowExpandable(item: any, rowIndex: number, event: Event): void {
     event.stopPropagation();
     event.preventDefault();
@@ -1446,6 +1456,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     //
   }
 
+  /**
+   * Triggers navigation to new item insertion
+   */
   add() {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
       return;
@@ -1453,6 +1466,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     super.insertDetail();
   }
 
+  /**
+   * Removes selected rows
+   * @param [clearSelectedItems]
+   */
   remove(clearSelectedItems: boolean = false) {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_DELETE)) {
       return;
@@ -1480,10 +1497,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  /**
+   * Refreshs table component
+   */
   refresh() {
     this.reloadData();
   }
 
+  /**
+   * Shows and select all checkbox
+   */
   showAndSelectAllCheckbox() {
     if (this.isSelectionModeMultiple()) {
       if (this.selectAllCheckbox) {
@@ -1502,6 +1525,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  /**
+   * Reloads data
+   * @returns
+   */
   reloadData() {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
@@ -1827,22 +1854,47 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+
+  /**
+   * Returns the current page table data.
+   * @returns
+   */
   getValue() {
     return this.dataSource.getCurrentData();
   }
 
+
+  /**
+   * Gets all values
+   * @returns
+   */
   getAllValues() {
     return this.dataSource.getCurrentAllData();
   }
 
+
+  /**
+   * Gets all rendered values
+   * @returns
+   */
   getAllRenderedValues() {
     return this.dataSource.getAllRendererData();
   }
 
+
+  /**
+   * Returns the current page table renderer data.
+   * @returns
+   */
   getRenderedValue() {
     return this.dataSource.getCurrentRendererData();
   }
 
+
+  /**
+   * Gets sql types from data source
+   * @returns
+   */
   getSqlTypes() {
     return Util.isDefined(this.dataSource.sqlTypes) ? this.dataSource.sqlTypes : {};
   }
@@ -1909,6 +1961,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
+  /**
+   * Clear all filters(column filter and quickfilter) and reload data
+   * @param [triggerDatasourceUpdate]
+   */
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
@@ -2196,10 +2252,20 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.daoTable.updateQuery(filter, updateData, sqlTypesArg);
   }
 
+
+  /**
+   * Gets data table
+   * @returns
+   */
   getDataArray() {
     return this.daoTable.data;
   }
 
+
+  /**
+   * Sets data table
+   * @param data
+   */
   setDataArray(data: Array<any>) {
     if (this.daoTable) {
       // remote pagination has no sense when using static-data
@@ -2468,6 +2534,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     Util.copyToClipboard(JSON.stringify(selectedItems));
   }
 
+
+  /**
+   * Triggers navigation to item detail, receiving item data
+   * @param item
+   * @returns detail
+   */
   viewDetail(item: any): void {
     if (!this.checkEnabledActionPermission('detail')) {
       return;
@@ -2475,6 +2547,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     super.viewDetail(item);
   }
 
+
+  /**
+   * Triggers navigation to item edition, receiving item data
+   * @param item
+   * @returns detail
+   */
   editDetail(item: any): void {
     if (!this.checkEnabledActionPermission('edit')) {
       return;
