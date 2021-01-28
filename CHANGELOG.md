@@ -9,6 +9,7 @@
     * new interface **OnExecuteTableContextEvent**
   * `o-table-visible-columns-dialog`:  added the description in the dialog ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
 * new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
+* **o-app-layout**: new `toolbar-color`([52187ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52187ef))
 
 ### Bug Fixes
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
