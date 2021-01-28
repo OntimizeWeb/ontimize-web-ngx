@@ -1,4 +1,5 @@
 import { Component, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ThemePalette } from '@angular/material';
 
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
 import { InputConverter } from '../../decorators/input-converter';
@@ -14,7 +15,8 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons',
   'openedSidenavImg: opened-sidenav-image',
-  'closedSidenavImg: closed-sidenav-image'
+  'closedSidenavImg: closed-sidenav-image',
+  'toolbarColor: toolbar-color'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -45,6 +47,8 @@ export class OAppLayoutComponent {
   useFlagIcons: boolean = false;
   @InputConverter()
   protected _showHeader: boolean;
+
+  public toolbarColor: ThemePalette;
 
   @ViewChild('appSidenav', { static: false })
   public appSidenav: OAppSidenavComponent;
