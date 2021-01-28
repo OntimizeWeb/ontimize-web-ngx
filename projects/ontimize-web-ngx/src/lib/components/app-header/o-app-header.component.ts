@@ -89,8 +89,17 @@ export class OAppHeaderComponent implements OnDestroy {
   set color(newValue: ThemePalette) {
     this._color = newValue;
   }
+
   get color(): ThemePalette {
     return this._color;
+  }
+
+  getColorClass(): string {
+    let className='';
+    if (this._color) {
+      className = 'o-app-header-' + this.color;
+    }
+    return className;
   }
 
 }

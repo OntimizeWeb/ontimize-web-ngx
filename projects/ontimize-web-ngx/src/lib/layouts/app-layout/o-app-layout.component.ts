@@ -16,7 +16,7 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'useFlagIcons: use-flag-icons',
   'openedSidenavImg: opened-sidenav-image',
   'closedSidenavImg: closed-sidenav-image',
-  'toolbarColor: toolbar-color'
+  'headerColor: header-color'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -48,7 +48,7 @@ export class OAppLayoutComponent {
   @InputConverter()
   protected _showHeader: boolean;
 
-  public toolbarColor: ThemePalette;
+  public headerColor: ThemePalette;
 
   @ViewChild('appSidenav', { static: false })
   public appSidenav: OAppSidenavComponent;
