@@ -1,15 +1,39 @@
-## 8.0.1
+
+## 8.2.0
+### Features
+* **table**:
+  * Added row grouping ([078931b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/078931b))
+  * new class `OTableGroupedRow`([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
+  * `o-table-context-menu`:
+    * added new sub-menu *Group by*.([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
+    * new interface **OnExecuteTableContextEvent**
+  * `o-table-visible-columns-dialog`:  added the description in the dialog ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
+* new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
+
+### Bug Fixes
+* **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
+* **OFormDataComponent**: Show input value when internal value is zero ([a7b2392](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a7b2392))
+* **OFormDataComponent**: Show clear button on inputs when internal value is zero ([512a8c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/512a8c3))
+
+## 8.1.1 (2020-11-25)
+
+### Bug Fixes
+* **table**: fixing bug in filtering by column ([88ac4bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88ac4bf))
+
+## 8.1.0 (2020-11-23)
 ### Features
 * **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([edd8927](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd8927))
 * **table**:
-  * o-table-filter-by-column: added clear button in customized filters  ([6fe1e33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fe1e33))
+  * `o-table-filter-by-column`:
+    * added clear button in the inputs of the customized filters  ([6fe1e33](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fe1e33))
+    * added clear button in filter column dialog ([a67cdb4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a67cdb4))
   * reinitialize method: added new option 'filterColumns' ([361b8c1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/361b8c1))
   * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
   * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
   * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
   * new component `o-table-row-expandable` ([4452ca2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4452ca2))
   * new component `o-expandable-container` ([3036381](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3036381))
-  * new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793)).
+  * new directive `o-table-custom-toolbar` for adding custom content to the table toolbar ([0fb3793](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0fb3793))
   * added sort flags in column sorting and filtering ([7b54634](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b54634)) ([1ad49e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ad49e0))
   * new attributte `auto-adjust` ([d5adedb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5adedb))
 

@@ -657,6 +657,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     // }
   }
 
+
+  /**
+   * Reinitialize form adding options
+   * @param options
+   */
   reinitialize(options: OFormInitializationOptions) {
     if (options && Object.keys(options).length) {
       const clonedOpts = Object.assign({}, options);
@@ -772,6 +777,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
+
+  /**
+   * Sets new data for the form
+   * @param data
+   */
   setData(data): void {
     if (Util.isArray(data)) {
       if (data.length > 1) {
@@ -1002,11 +1012,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.deleteData(filter);
   }
 
-  /*
-  Utility methods
-  */
-
-  queryData(filter) {
+  /**
+   * Allow to manage the call to the service data
+   * @param filter
+   */
+  queryData(filter: any) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
       return;
@@ -1078,6 +1088,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return attributes;
   }
 
+
+  /**
+   * Allow to manage the call to the insert service
+   * @param values
+   * @param [sqlTypes]
+   * @returns Observable<any>
+   */
   insertData(values, sqlTypes?: object): Observable<any> {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
@@ -1125,6 +1142,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return types;
   }
 
+
+  /**
+   * Allow to manage the call to the update service
+   * @param filter
+   * @param values
+   * @param [sqlTypes]
+   * @returns  Observable<any>
+   */
   updateData(filter, values, sqlTypes?: object): Observable<any> {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
@@ -1171,7 +1196,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return values;
   }
 
-  deleteData(filter): Observable<any> {
+  /**
+   * Allow to manage the call to the delete service
+   * @param filter
+   * @returns Observable<any>
+   */
+  deleteData(filter: any): Observable<any> {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
@@ -1227,7 +1257,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return undefined;
   }
 
-  getKeysValues() {
+  /**
+   * Gets keys values
+   * @returns keys
+   */
+  getKeysValues(): any {
     const filter = {};
     const currentRecord = this.formData;
     if (!this.keysArray) {

@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Codes } from '../../../../../util/codes';
@@ -19,7 +19,6 @@ import { OColumn } from '../../../column/o-column.class';
 export class OTableVisibleColumnsDialogComponent {
 
   columns: Array<any> = [];
-  protected cd: ChangeDetectorRef;
   rowHeight: string = Codes.DEFAULT_ROW_HEIGHT;
 
   constructor(
@@ -27,12 +26,8 @@ export class OTableVisibleColumnsDialogComponent {
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
-    try {
-      this.cd = this.injector.get(ChangeDetectorRef);      
-    } catch (e) {
-      // no parent form
-    }
-    if (Util.isArray(data.columnsData) && Util.isArray(data.visibleColumns)) {      
+
+    if (Util.isArray(data.columnsData) && Util.isArray(data.visibleColumns)) {
       data.columnsData.forEach((oCol: OColumn) => {
         this.columns.push({
           attr: oCol.attr,

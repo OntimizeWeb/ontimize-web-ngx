@@ -29,6 +29,7 @@ import { Util } from '../../../../../util/util';
 import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
+import { OTableGroupByColumnsDialogComponent } from '../../dialog';
 import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
@@ -52,7 +53,9 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'showConfigurationOption: show-configuration-option',
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu
-  'showFilterOption: show-filter-option'
+  'showFilterOption: show-filter-option',
+  // show-group-by-option [yes|no|true|false]: show group by menu option in the header menu
+  'showGroupByOption: show-group-by-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -82,6 +85,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   showFilterOption: boolean = true;
   @InputConverter()
   columnsVisibilityButton: boolean = true;
+  @InputConverter()
+  showGroupByOption: boolean = true;
 
   public onVisibleFilterOptionChange: EventEmitter<any> = new EventEmitter();
   /* End of inputs */
@@ -282,6 +287,10 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     return !(perm && perm.enabled === false);
   }
 
+  get showGroupByButton(): boolean {
+    return this.showGroupByOption;
+  }
+
   onShowsSelects() {
     const tableOptions = this.table.oTableOptions;
     tableOptions.selectColumn.visible = !tableOptions.selectColumn.visible;
@@ -344,6 +353,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         columnsData: this.table.oTableOptions.columns,
         rowHeight: this.table.rowHeight
       },
+      maxWidth: '35vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
@@ -356,6 +366,27 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         this.table.cd.detectChanges();
         this.table.refreshColumnsWidth();
         this.table.onVisibleColumnsChange.emit(this.table.visibleColArray);
+      }
+    });
+  }
+
+  onGroupByClicked() {
+    const dialogRef = this.dialog.open(OTableGroupByColumnsDialogComponent, {
+      data: {
+        groupedColumns: this.table.groupedColumnsArray,
+        columnsData: this.table.oTableOptions.columns,
+        rowHeight: this.table.rowHeight
+      },
+      height: '75vh',
+      width:'50vw',
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog', 'o-table-group-by-column-dialog']
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.table.groupedColumnsArray = dialogRef.componentInstance.getGroupedColumns();
+        this.table.dataSource.updateGroupedColumns(this.table.groupedColumnsArray);
       }
     });
   }

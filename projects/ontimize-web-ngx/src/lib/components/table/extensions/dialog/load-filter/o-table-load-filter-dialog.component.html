@@ -16,7 +16,7 @@
   <button type="button" mat-stroked-button [disabled]="filterList.selectedOptions.selected.length!==1"
     (click)="removeFilter(filterList.selectedOptions.selected[0].value)">{{ 'DELETE' | oTranslate | uppercase }}</button>
   <span fxFlex></span>
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true"
+  <button type="button" mat-stroked-button [mat-dialog-close]="false">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="true"
     [disabled]="filterList.selectedOptions.selected.length!==1">{{ 'TABLE.BUTTONS.APPLY' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>

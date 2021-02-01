@@ -49,7 +49,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
       this.unRegisterObserver();
     }
   }
-  @ViewChild('container', { static: false }) protected _containerRef: ElementRef;
+  @ViewChild('container', { static: true }) protected _containerRef: ElementRef;
 
   constructor(
     protected elRef: ElementRef,

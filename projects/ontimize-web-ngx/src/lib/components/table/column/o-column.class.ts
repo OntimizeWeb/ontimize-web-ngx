@@ -17,6 +17,7 @@ export class OColumn {
   sqlType: number;
   className: string;
   orderable: boolean;
+  groupable: boolean;
   _searchable: boolean;
   searching: boolean; // this column is used to filter in quickfilter
   visible: boolean;
@@ -54,6 +55,7 @@ export class OColumn {
     this.className = 'o-column-' + (this.type) + ' ';
     this.orderable = args.orderable;
     this.resizable = args.resizable;
+    this.groupable = args.groupable;
     this.searchable = true;
     this.searching = true;
     // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
@@ -81,6 +83,9 @@ export class OColumn {
     }
     if (Util.isDefined(column.searchable)) {
       this.searchable = column.searchable;
+    }
+    if (Util.isDefined(column.groupable)) {
+      this.groupable = column.groupable;
     }
     if (Util.isDefined(column.renderer)) {
       this.renderer = column.renderer;

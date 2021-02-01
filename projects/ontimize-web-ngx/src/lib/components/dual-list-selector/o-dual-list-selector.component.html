@@ -1,0 +1,74 @@
+<div class="o-dual-list-selector-description">{{description | oTranslate }} </div>
+
+<div class="o-dual-list-selector-wrapper-selector-list">
+
+  <div class="o-dual-list-selector-list" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="50%">
+    <span class="title-list">
+      {{ titleListDataSource | oTranslate }}
+    </span>
+    <div fxLayout="row" fxFlex class="o-dual-list-selector-source-wrapper">
+      <mat-selection-list fxFlex dense cdkDropList id="item-source-list" #itemsList [cdkDropListData]="dataSource"
+        [cdkDropListConnectedTo]="['item-destination-list']" (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
+
+        <mat-list-item fxLayoutAlign="space-between center" fxLayoutGap="4px">
+          <mat-checkbox (change)="$event ? masterToggle(itemsList) : null" [checked]="isAllSelected(itemsList)"
+            [indeterminate]="hasValue(itemsList)  && !isAllSelected(itemsList)">
+            <div fxLayout="column" fxLayoutAlign="start start">
+              <span class="mat-caption">{{ getCheckboxLabel(itemsList) }} </span>
+            </div>
+          </mat-checkbox>
+        </mat-list-item>
+
+        <mat-list-option checkboxPosition="before" *ngFor="let item of dataSource" [value]="item" cdkDrag class="o-drag-list-item-box">
+          <span matLine>{{ (item[display]) | oTranslate }}</span>
+        </mat-list-option>
+      </mat-selection-list>
+
+      <div fxLayout="column" fxLayoutAlign="center start">
+        <button mat-icon-button (click)="addToGroupedColumns(itemsList)" [disabled]="itemsList.selectedOptions.selected.length===0">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+        <button mat-icon-button (click)="removeGroupedColumns(selectedItemsList)" [disabled]="selectedItemsList.selectedOptions.selected.length===0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="o-dual-list-selector-list" fxLayout="column" ºfxLayoutAlign="start stretch" fxFlex="50%">
+    <span class="title-list">
+      {{ titleListDataDestination | oTranslate}}
+    </span>
+    <div fxLayout="row" fxFlex class="o-dual-list-selector-destination-wrapper">
+      <mat-selection-list fxFlex dense cdkDropList id="item-destination-list" #selectedItemsList [cdkDropListData]="dataDestination"
+        [cdkDropListConnectedTo]="['item-source-list']" (cdkDropListDropped)="drop($event)">
+        <mat-list-item>
+          <mat-checkbox (change)="$event ? masterToggle(selectedItemsList) : null" [checked]="isAllSelected(selectedItemsList)"
+            [indeterminate]="hasValue(selectedItemsList) && !isAllSelected(selectedItemsList)">
+            <span class="mat-caption">{{ getCheckboxLabel(selectedItemsList) }}</span>
+          </mat-checkbox>
+        </mat-list-item>
+
+        <mat-list-option checkboxPosition="before" *ngFor="let itemSelected of dataDestination" [value]="itemSelected" cdkDrag
+          class="o-drag-list-item-box">
+          <span matLine>{{ itemSelected[display] | oTranslate }} </span>
+        </mat-list-option>
+        <div class="mat-caption drop-empty-message" *ngIf="dataDestination.length===0">
+          {{ 'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE' | oTranslate }}
+        </div>
+      </mat-selection-list>
+
+
+      <div fxLayout="column" fxLayoutAlign="center start">
+        <button mat-icon-button [disabled]="isDisabledSortAsc(selectedItemsList)" (click)="sortAscSelectedItems(selectedItemsList)">
+          <mat-icon>expand_less</mat-icon>
+        </button>
+        <button mat-icon-button [disabled]="isDisabledSortDesc(selectedItemsList)" (click)="sortDescSelectedItems(selectedItemsList)">
+          <mat-icon>expand_more</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -2,6 +2,7 @@ import { EventEmitter } from '@angular/core';
 
 import { OColumn } from '../components/table/column/o-column.class';
 import { OColumnValueFilter } from '../types/o-column-value-filter.type';
+import { OTableGroupedRow } from '../types/o-table-row-group.type';
 
 export interface OTableDataSource {
 
@@ -25,7 +26,10 @@ export interface OTableDataSource {
   addColumnFilter: (filter: OColumnValueFilter) => void;
   initializeColumnsFilters: (filters: OColumnValueFilter[]) => void;
   clearColumnFilters: (trigger?: boolean) => void;
+  clearColumnFilter: (attr: string, trigger?: boolean) => void;
   isColumnValueFilterActive: () => boolean;
   updateRenderedRowData: (rowData: any) => void;
   getAggregateData: (column: OColumn) => any;
+  updateGroupedColumns(column: string[]);
+  toggleGroupByColumn(rowGroup: OTableGroupedRow);
 }

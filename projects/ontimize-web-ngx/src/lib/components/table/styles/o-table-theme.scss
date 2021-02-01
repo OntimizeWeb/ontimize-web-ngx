@@ -8,6 +8,7 @@
   $table-background: mat-color($background, 'card');
   $text-color: mat-color($foreground, secondary-text);
   $text-opacity: opacity($text-color);
+  $is-dark-theme: map-get($theme, is-dark);
 
   .o-table {
     .o-table-column-resizer span {
@@ -37,21 +38,39 @@
           }
 
           .o-table-header-indicator-numbered {
-            bottom: -12px;
-            right: -6px;
             color: mat-color($foreground, secondary-text);
           }
         }
       }
 
       .mat-row {
-        &:hover {
+        &.o-table-group-row-level-1 {
+          font-weight: 900;
+          background-color: if($is-dark-theme, #464646, #b2b2b2);
+        }
+
+        &.o-table-group-row-level-2 {
+          font-weight: 800;
+          background-color: if($is-dark-theme, #575757, #cccccc);
+        }
+
+        &.o-table-group-row-level-3 {
+          font-weight: 700;
+          background-color: if($is-dark-theme,#686868, #e8e8e8);
+        }
+
+        &.o-table-group-row-level-4 {
+          font-weight: 600;
+          background-color: if($is-dark-theme, #7a7a7a, #f9f9f9);
+        }
+
+        &:hover:not(.o-table-group-row) {
           cursor: pointer;
           background-color: mat-color($foreground, base, 0.18);
         }
 
         &.selected {
-          background: mat-color($primary, 50);
+          background: mat-color($primary, 50,if($is-dark-theme, 0.5, 1));
         }
 
         .mat-cell {

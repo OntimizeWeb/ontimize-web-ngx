@@ -3,13 +3,13 @@
     padding-bottom: 24px;
   }
   .content-wrapper {
-    
     padding: 24px 0 12px;
     margin: 0;
     &.content-wrapper-fixed-dimension{
       max-height: 430px;
       min-height: 430px;
       min-width: 250px;
+      width: 100%;
     }
 
     .mat-form-field.hinted {
