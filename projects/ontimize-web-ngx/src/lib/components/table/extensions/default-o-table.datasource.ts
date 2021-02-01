@@ -7,8 +7,10 @@ import { map } from 'rxjs/operators';
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/o-column-value-filter.type';
+import { OTableGroupedRow } from '../../../types/o-table-row-group.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { OTableCellRendererServiceComponent } from '../column';
 import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
@@ -42,10 +44,13 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new Subject();
+  protected groupByColumnChange = new Subject();
   protected _loadDataScrollableChange = new BehaviorSubject<OTableScrollEvent>(new OTableScrollEvent(1));
 
   protected filteredData: any[] = [];
   protected aggregateData: any = {};
+
+  private groupByColumns: string[];
 
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -64,6 +69,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   private columnValueFilters: Array<OColumnValueFilter> = [];
+  private stateRowGrouped: Array<OTableGroupedRow> = [];
 
   constructor(protected table: OTableComponent) {
     super();
@@ -120,6 +126,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       displayDataChanges.push(this._columnValueFilterChange);
     }
 
+    if (this.table.groupable) {
+      displayDataChanges.push(this.groupByColumnChange);
+    }
+
     return merge(...displayDataChanges).pipe(map((x: any) => {
       let data = Object.assign([], this._database.data);
       /*
@@ -156,15 +166,27 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         }
 
         this.renderedData = data;
-        // If a o-table-column-aggregate exists then emit observable
-        // if (this.table.showTotals) {
-        //   this.dataTotalsChange.next(this.renderedData);
-        // }
 
+        if (!Util.isArrayEmpty(this.groupByColumns)) {
+          this.renderedData = this.getSubGroupsOfGroupedRow(data);
+          data = this.filterCollapsedRowGroup(this.renderedData);
+        }
+
+        this.renderedData = data;
         this.aggregateData = this.getAggregatesData(data);
       }
       return this.renderedData;
     }));
+  }
+
+  /**
+   * Gets subgroups of grouped row
+   * @param data
+   * @returns subgroups of grouped row
+   */
+  getSubGroupsOfGroupedRow(data: any[]): any[] {
+    const rootGroup = new OTableGroupedRow();
+    return data = this.getSublevel(data, 0, this.groupByColumns, rootGroup);
   }
 
   getAggregatesData(data: any[]): any {
@@ -263,6 +285,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     this._quickFilterChange.complete();
     this._columnValueFilterChange.complete();
     this._loadDataScrollableChange.complete();
+    this.groupByColumnChange.complete();
   }
 
   protected fulfillsCustomFilterFunctions(filter: string, item: any) {
@@ -319,7 +342,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return this.renderedData;
   }
 
-  public getRenderedData(data: any[]) {
+  public getRenderedData(data: any[]): any[] {
     const visibleColumns = this._tableOptions.columns.filter(oCol => oCol.visible);
     return data.map((row) => {
       const obj = {};
@@ -330,6 +353,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       return obj;
     });
   }
+
+
 
   protected getAllData(usingRendererers?: boolean, onlyVisibleColumns?: boolean) {
     let tableColumns = this._tableOptions.columns;
@@ -564,6 +589,118 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       Object.assign(record, rowData);
     }
   }
+
+  private getSublevel(data: any[], level: number, groupByColumns: string[], parent: OTableGroupedRow): any[] {
+    if (level >= groupByColumns.length) {
+      return data;
+    }
+
+    const self = this;
+    //1. get unique rows Group
+    const groups = Util.uniqueBy(
+      data.map(
+        row => {
+          const result = new OTableGroupedRow();
+          result.level = level + 1;
+          result.parent = parent;
+          result.expanded = !self.table.collapseGroupedColumns;
+          for (let i = 0; i <= level; i++) {
+            const key = {};
+            key[groupByColumns[i]] = this.table.getColumnDataByAttr(groupByColumns[i], row);
+            result.column = key;
+          }
+          if (!Util.isArrayEmpty(self.stateRowGrouped)) {
+            const rowGroup = self.stateRowGrouped.find(x => JSON.stringify(x.column) === JSON.stringify(result.column) && JSON.stringify(x.parent) === JSON.stringify(result.parent));
+            if (Util.isDefined(rowGroup)) {
+              result.expanded = rowGroup.expanded;
+            }
+          }
+          return result;
+        }
+      ),
+      JSON.stringify);
+
+    //2. Get Row group and children
+    const currentColumn = groupByColumns[level];
+    let subGroups = [];
+    groups.forEach(group => {
+      const rowsInGroup = data.filter(row => {
+        const valueRenderer = self.table.getColumnDataByAttr(currentColumn, row);
+        return group.column[currentColumn] === valueRenderer;
+      });
+      group.totalCounts = rowsInGroup.length;
+      const subGroup = this.getSublevel(rowsInGroup, level + 1, groupByColumns, group);
+      subGroup.unshift(group);
+      subGroups = subGroups.concat(subGroup);
+    });
+    return subGroups;
+  }
+
+  /**
+   * Filters collapsed row group
+   * @param data
+   * @returns collapsed row group
+   */
+  filterCollapsedRowGroup(data): any[] {
+    const self = this;
+    return data.filter((row: any) => (row instanceof OTableGroupedRow) ? row.visible : this.getDataRowVisible(row));
+  }
+
+  /**
+ * Gets data row visible
+ *
+ * @param data
+ * @returns true if data row visible
+ */
+  getDataRowVisible(data: any): boolean {
+    let parent: OTableGroupedRow;
+
+    let match = false;
+    for (let index = 0; index < this.renderedData.length && !match; index++) {
+      if (this.renderedData[index] instanceof OTableGroupedRow) {
+        parent = this.renderedData[index];
+      }
+      if (JSON.stringify(this.renderedData[index]) === JSON.stringify(data)) {
+        match = true;
+      }
+    }
+
+    return Util.isDefined(parent) ? (parent.visible && parent.expanded) : true;
+  }
+
+  /**
+   * Updates grouped columns
+   * @param groupByColumns
+   */
+  updateGroupedColumns(groupByColumns: string[]) {
+    this.groupByColumns = groupByColumns;
+    this.groupByColumnChange.next();
+  }
+
+  /**
+   * Toggles group by column
+   * @param rowGroup
+   */
+  toggleGroupByColumn(rowGroup: OTableGroupedRow) {
+    //Update state rowGrouped
+    const stateRowGrouped = this.stateRowGrouped.filter(row => JSON.stringify(rowGroup.column) === JSON.stringify(row.column) && JSON.stringify(rowGroup.parent) === JSON.stringify(row.parent));
+
+    if (Util.isArrayEmpty(stateRowGrouped)) {
+      rowGroup.expanded = !rowGroup.expanded;
+      this.stateRowGrouped.push(rowGroup);
+    } else {
+      stateRowGrouped[0].expanded = !stateRowGrouped[0].expanded;
+      //update rowgroup whose his parent is rowGroup
+      // const parentToUpdate = this.stateRowGrouped.filter(row => JSON.stringify(rowGroup.parent) === JSON.stringify(row.parent));
+      // parentToUpdate.forEach(row =>
+      //   row.parent.expanded = !stateRowGrouped[0].expanded
+      // );
+
+    }
+    this.groupByColumnChange.next();
+  }
+
+
 }
 
 

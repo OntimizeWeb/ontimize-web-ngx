@@ -17,7 +17,7 @@ export const DEFAULT_CONTEXT_MENU_GROUP_INPUTS = [
   inputs: DEFAULT_CONTEXT_MENU_GROUP_INPUTS,
   providers: [{ provide: OComponentMenuItems, useExisting: forwardRef(() => OContextMenuGroupComponent) }]
 })
-export class OContextMenuGroupComponent extends OContextMenuItemComponent implements OnInit, AfterContentInit {
+export class OContextMenuGroupComponent extends OContextMenuItemComponent implements AfterContentInit {
 
   public type = OComponentMenuItems.TYPE_GROUP_MENU;
   public children = [];

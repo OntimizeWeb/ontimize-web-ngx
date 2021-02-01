@@ -27,6 +27,7 @@ import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
 import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { PortalModule } from '@angular/cdk/portal';
+import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selector.module';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { PortalModule } from '@angular/cdk/portal';
     OContextMenuModule,
     ObserversModule,
     OMatSortModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    ODualListSelectorModule
   ],
   exports: [
     OTableComponent,
