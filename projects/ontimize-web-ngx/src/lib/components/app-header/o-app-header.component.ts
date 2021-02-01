@@ -94,12 +94,4 @@ export class OAppHeaderComponent implements OnDestroy {
     return this._color;
   }
 
-  getColorClass(): string {
-    let className='';
-    if (this._color) {
-      className = 'o-app-header-' + this._color;
-    }
-    return className;
-  }
-
 }

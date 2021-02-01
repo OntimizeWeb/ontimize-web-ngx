@@ -1,4 +1,4 @@
-<nav fxFlex fxLayout="row" fxLayoutAlign="space-between stretch" [ngClass]="getColorClass()">
+<nav fxFlex fxLayout="row" fxLayoutAlign="space-between stretch" [ngClass]="color ? 'o-app-header-'+color : ''">
   <div fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
     <ng-content></ng-content>
     <span *ngIf="showHeaderTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
