@@ -117,6 +117,14 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
     return !!this.title || !!this.icon;
   }
 
+  public isAppearanceSetted() :boolean {
+    let isAppearanceSetted = false
+    if (Util.isDefined(this.appearance)) {
+      isAppearanceSetted = this.appearance === OContainerComponent.APPEARANCE_OUTLINE;
+    }
+    return isAppearanceSetted;
+  }
+
   public isAppearanceOutline(): boolean {
     let isAppearanceOutline = (this.matFormDefaultOption && this.matFormDefaultOption.appearance === OContainerComponent.APPEARANCE_OUTLINE);
     if (Util.isDefined(this.appearance)) {
