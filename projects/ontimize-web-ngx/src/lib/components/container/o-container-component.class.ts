@@ -6,7 +6,7 @@ import {
   Injector,
   OnDestroy,
   Optional,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
@@ -121,6 +121,14 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
 
   public hasHeader(): boolean {
     return !!this.title || !!this.icon;
+  }
+
+  isAppearanceSetted() :boolean {
+    let isAppearanceOutline = false
+    if (Util.isDefined(this.appearance)) {
+      isAppearanceOutline = this.appearance === OContainerComponent.APPEARANCE_OUTLINE;
+    }
+    return isAppearanceOutline;
   }
 
   public isAppearanceOutline(): boolean {
