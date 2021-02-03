@@ -19,10 +19,7 @@ export const DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM = [
   selector: 'o-user-info-configuration-item',
   inputs: DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM,
   template: '',
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[class.o-user-info-configuration-item]': 'true'
-  }
+  encapsulation: ViewEncapsulation.None
 })
 
 export class OUserInfoConfigurationItemComponent {
