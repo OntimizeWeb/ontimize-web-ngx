@@ -8,13 +8,13 @@
       <mat-icon svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
     </div>
     <mat-menu #menu="matMenu" yPosition="below">
-      <button type="button" mat-menu-item (click)="onSettingsClick()" *ngIf="showSettings">
-        <mat-icon svgIcon="ontimize:settings"></mat-icon>
-        <span>{{ 'SETTINGS' | oTranslate }}</span>
-      </button>
       <button type="button" mat-menu-item (click)="onProfileClick()" *ngIf="showProfile">
         <mat-icon>person</mat-icon>
-        <span>{{ 'PROFILE' | oTranslate }}</span>
+        <span>{{ 'APP_LAYOUT.USER_PROFILE' | oTranslate }}</span>
+      </button>
+      <button type="button" mat-menu-item (click)="onSettingsClick()" *ngIf="showSettings">
+        <mat-icon svgIcon="ontimize:settings"></mat-icon>
+        <span>{{ 'APP_LAYOUT.SETTINGS' | oTranslate }}</span>
       </button>
       <ng-container *ngIf="userInfoConfiguration">
         <button *ngFor="let item of userInfoConfiguration.userInfoConfigurationItems" type="button" mat-menu-item

@@ -50,9 +50,6 @@ export class OUserInfoComponent implements OnDestroy {
   @InputConverter()
   public showMenu: boolean = false;
 
-
-
-  public userInfoConfigurationArray: Array<OUserInfoConfigurationItemComponent> = []
   public userInfoConfiguration: OUserInfoConfigurationComponent;
 
   constructor(
@@ -98,7 +95,6 @@ export class OUserInfoComponent implements OnDestroy {
   get username(): string {
     return this.userInfo ? this.userInfo.username : undefined;
   }
-
 
   registerUserInfoConfiguration(userInfoMenu: OUserInfoConfigurationComponent) {
     this.userInfoConfiguration = userInfoMenu;
