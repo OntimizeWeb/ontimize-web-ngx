@@ -1,6 +1,6 @@
-import { Component, ContentChildren, ViewEncapsulation } from "@angular/core";
+import { ContentChildren, Directive } from "@angular/core";
 import { InputConverter } from "../../../decorators";
-import { OUserInfoConfigurationItemComponent } from "../user-info-configuration-item/o-user-info-configuration-item.component";
+import { OUserInfoConfigurationItemDirective } from "../user-info-configuration-item/o-user-info-configuration-item.directive";
 
 export const DEFAULT_INPUTS_O_USER_INFO_MENU = [
   'showProfile: show-profile',
@@ -11,17 +11,15 @@ export const DEFAULT_INPUTS_O_USER_INFO_MENU = [
 export const DEFAULT_OUTPUTS_O_USER_INFO_MENU = [
 ];
 
-@Component({
+@Directive({
   selector: 'o-user-info-configuration',
-  template: ``,
   inputs: DEFAULT_INPUTS_O_USER_INFO_MENU,
-  outputs: DEFAULT_OUTPUTS_O_USER_INFO_MENU,
-  encapsulation: ViewEncapsulation.None
+  outputs: DEFAULT_OUTPUTS_O_USER_INFO_MENU
 })
-export class OUserInfoConfigurationComponent {
+export class OUserInfoConfigurationDirective {
 
 
-  @ContentChildren(OUserInfoConfigurationItemComponent) userInfoConfigurationItems: Array<OUserInfoConfigurationItemComponent>;
+  @ContentChildren(OUserInfoConfigurationItemDirective) userInfoConfigurationItems: Array<OUserInfoConfigurationItemDirective>;
 
   @InputConverter()
   showProfile: boolean = false;

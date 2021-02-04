@@ -4,12 +4,12 @@ import { RouterModule } from '@angular/router';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { OUserInfoComponent } from './o-user-info.component';
-import { OUserInfoConfigurationItemComponent } from './user-info-configuration-item/o-user-info-configuration-item.component';
-import { OUserInfoConfigurationComponent } from './user-info-configuration/o-user-info-configuration.component';
+import { OUserInfoConfigurationItemDirective } from './user-info-configuration-item/o-user-info-configuration-item.directive';
+import { OUserInfoConfigurationDirective } from './user-info-configuration/o-user-info-configuration.directive';
 
 @NgModule({
-  declarations: [OUserInfoComponent, OUserInfoConfigurationComponent, OUserInfoConfigurationItemComponent],
+  declarations: [OUserInfoComponent, OUserInfoConfigurationDirective, OUserInfoConfigurationItemDirective],
   imports: [CommonModule, OSharedModule, RouterModule],
-  exports: [OUserInfoComponent, OUserInfoConfigurationComponent, OUserInfoConfigurationItemComponent]
+  exports: [OUserInfoComponent, OUserInfoConfigurationDirective, OUserInfoConfigurationItemDirective]
 })
 export class OUserInfoModule { }

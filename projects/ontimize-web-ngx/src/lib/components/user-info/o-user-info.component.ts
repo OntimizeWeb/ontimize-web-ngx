@@ -6,7 +6,7 @@ import { InputConverter } from '../../decorators';
 import { DialogService } from '../../services/dialog.service';
 import { LoginService } from '../../services/login.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
-import { OUserInfoConfigurationComponent } from './user-info-configuration/o-user-info-configuration.component';
+import { OUserInfoConfigurationDirective } from './user-info-configuration/o-user-info-configuration.directive';
 
 export const DEFAULT_INPUTS_O_USER_INFO = [
   'showProfile: show-profile',
@@ -45,7 +45,7 @@ export class OUserInfoComponent implements OnDestroy {
   @InputConverter()
   public showProfile: boolean = false;
 
-  public userInfoConfiguration: OUserInfoConfigurationComponent;
+  public userInfoConfiguration: OUserInfoConfigurationDirective;
 
   constructor(
     protected elRef: ElementRef,
@@ -91,7 +91,7 @@ export class OUserInfoComponent implements OnDestroy {
     return this.userInfo ? this.userInfo.username : undefined;
   }
 
-  registerUserInfoConfiguration(userInfoMenu: OUserInfoConfigurationComponent) {
+  registerUserInfoConfiguration(userInfoMenu: OUserInfoConfigurationDirective) {
     this.userInfoConfiguration = userInfoMenu;
     this.updateInputsByConfiguration();
   }

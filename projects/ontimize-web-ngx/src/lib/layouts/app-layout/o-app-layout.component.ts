@@ -2,7 +2,7 @@ import { Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } f
 import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
 
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
-import { OUserInfoConfigurationComponent } from '../../components/user-info/user-info-configuration/o-user-info-configuration.component';
+import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
 import { InputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
@@ -54,8 +54,8 @@ export class OAppLayoutComponent {
   @ViewChild('appHeader', { static: false })
   public appHeader: OAppHeaderComponent;
 
-  @ContentChild(OUserInfoConfigurationComponent, { static: false })
-  public userInfoConfiguration: OUserInfoConfigurationComponent;
+  @ContentChild(OUserInfoConfigurationDirective, { static: false })
+  public userInfoConfiguration: OUserInfoConfigurationDirective;
 
   protected _mode: OAppLayoutMode;
   protected _sidenavMode: OSidenavMode;

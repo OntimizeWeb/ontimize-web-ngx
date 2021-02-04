@@ -1,4 +1,4 @@
-import { Component, Injector, ViewEncapsulation } from "@angular/core";
+import { Directive, Injector } from "@angular/core";
 import { Router } from "@angular/router";
 import { InputConverter } from "../../../decorators";
 import { DialogService } from "../../../services";
@@ -15,14 +15,12 @@ export const DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM = [
 ];
 
 
-@Component({
+@Directive({
   selector: 'o-user-info-configuration-item',
-  inputs: DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM,
-  template: '',
-  encapsulation: ViewEncapsulation.None
+  inputs: DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM
 })
 
-export class OUserInfoConfigurationItemComponent {
+export class OUserInfoConfigurationItemDirective {
 
   @InputConverter()
   toolTip: boolean = false;
