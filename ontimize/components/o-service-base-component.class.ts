@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, HostListener, Injector, NgZone, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+
 import { InputConverter } from '../decorators';
 import { DialogService, ILocalStorageComponent, LocalStorageService, OntimizeService } from '../services';
 import { Codes, Util } from '../utils';
@@ -105,9 +106,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent {
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
 
-  @InputConverter()
   set oQueryRows(value: number) {
     if (Util.isDefined(value)) {
+      value = typeof value !== 'number' ? parseInt(value, 10) : value;
       this.originalQueryRows = value;
       this._queryRows = value;
     }
