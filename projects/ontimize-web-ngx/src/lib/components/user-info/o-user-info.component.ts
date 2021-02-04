@@ -6,14 +6,12 @@ import { InputConverter } from '../../decorators';
 import { DialogService } from '../../services/dialog.service';
 import { LoginService } from '../../services/login.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
-import { OUserInfoConfigurationItemComponent } from './user-info-configuration-item/o-user-info-configuration-item.component';
 import { OUserInfoConfigurationComponent } from './user-info-configuration/o-user-info-configuration.component';
 
 export const DEFAULT_INPUTS_O_USER_INFO = [
   'showProfile: show-profile',
   'showSettings: show-settings',
-  'showLogout: show-logout',
-  'showMenu: show-menu',
+  'showLogout: show-logout'
 ];
 
 export const DEFAULT_OUTPUTS_O_USER_INFO = [];
@@ -39,16 +37,13 @@ export class OUserInfoComponent implements OnDestroy {
   protected userInfo: UserInfo;
 
   @InputConverter()
-  public showLogout: boolean = true;;
+  public showLogout: boolean = true;
 
   @InputConverter()
-  public showSettings: boolean = true;;
+  public showSettings: boolean = true;
 
   @InputConverter()
-  public showProfile: boolean = false;;
-
-  @InputConverter()
-  public showMenu: boolean = false;
+  public showProfile: boolean = false;
 
   public userInfoConfiguration: OUserInfoConfigurationComponent;
 
