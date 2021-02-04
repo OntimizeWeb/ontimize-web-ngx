@@ -8,6 +8,7 @@
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
 * **OFormDataComponent**: Show input value when internal value is zero ([a7b2392](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a7b2392))
 * **OFormDataComponent**: Show clear button on inputs when internal value is zero ([512a8c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/512a8c3))
+* **OServiceBaseComponent**: Parse `query-rows` attribute as integer ([f1874cac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1874cac))
 
 ### Bug Fixes
 * **OFormDataComponent**: Show input value when internal value is zero ([7d48606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d48606))
