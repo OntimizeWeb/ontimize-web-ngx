@@ -117,7 +117,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
     return !!this.title || !!this.icon;
   }
 
-  public isAppearanceOutlineSetted() :boolean {
+  public isAppearanceOutlineSetted(): boolean {
     let isAppearanceSetted = false;
     if (Util.isDefined(this.appearance)) {
       isAppearanceSetted = this.appearance === OContainerComponent.APPEARANCE_OUTLINE;
