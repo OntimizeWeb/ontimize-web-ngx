@@ -98,7 +98,7 @@ export class OListPickerDialogComponent {
         if (Util.isDefined(searchVal) && searchVal.length > 0) {
           index = this.visibleData[this.visibleData.length - 1]['_parsedIndex'];
         }
-        let appendData = this.data.slice(index, this.visibleData.length + this.recordsNumber);
+        let appendData = this.data.slice(index + 1, this.visibleData.length + this.recordsNumber);
         if (appendData.length) {
           appendData = this.transform(appendData, {
             filtervalue: this.searchInput.getValue(),
