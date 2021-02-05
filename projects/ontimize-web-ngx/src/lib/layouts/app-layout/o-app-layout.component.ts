@@ -1,5 +1,7 @@
 import { Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
+import { ThemePalette } from '@angular/material';
+
 
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
 import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
@@ -16,7 +18,8 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons',
   'openedSidenavImg: opened-sidenav-image',
-  'closedSidenavImg: closed-sidenav-image'
+  'closedSidenavImg: closed-sidenav-image',
+  'headerColor: header-color'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -47,6 +50,8 @@ export class OAppLayoutComponent {
   useFlagIcons: boolean = false;
   @InputConverter()
   protected _showHeader: boolean;
+
+  public headerColor: ThemePalette;
 
   @ViewChild('appSidenav', { static: false })
   public appSidenav: OAppSidenavComponent;
