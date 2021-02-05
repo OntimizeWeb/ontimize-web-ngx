@@ -1,7 +1,10 @@
-import { Component, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
 import { ThemePalette } from '@angular/material';
 
+
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
+import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
 import { InputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
@@ -52,6 +55,12 @@ export class OAppLayoutComponent {
 
   @ViewChild('appSidenav', { static: false })
   public appSidenav: OAppSidenavComponent;
+
+  @ViewChild('appHeader', { static: false })
+  public appHeader: OAppHeaderComponent;
+
+  @ContentChild(OUserInfoConfigurationDirective, { static: false })
+  public userInfoConfiguration: OUserInfoConfigurationDirective;
 
   protected _mode: OAppLayoutMode;
   protected _sidenavMode: OSidenavMode;
@@ -108,4 +117,11 @@ export class OAppLayoutComponent {
   afterToggle(opened: boolean) {
     opened ? this.afterOpenSidenav.emit() : this.afterCloseSidenav.emit();
   }
+
+  ngAfterViewInit(): void {
+    if (this.appHeader && this.appHeader.userInfo) {
+      this.appHeader.userInfo.registerUserInfoConfiguration(this.userInfoConfiguration);
+    }
+  }
+
 }
