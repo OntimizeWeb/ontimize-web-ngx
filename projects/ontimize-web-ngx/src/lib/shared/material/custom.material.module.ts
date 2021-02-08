@@ -1,4 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
@@ -71,7 +72,8 @@ const MATERIAL_MODULES = [
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  OverlayModule
+  OverlayModule,
+  ScrollingModule
   // OverlayModule,
   // PortalModule,
   // RtlModule,

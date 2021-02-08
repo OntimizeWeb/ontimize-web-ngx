@@ -23,9 +23,14 @@
     .mat-dialog-content {
       margin: 0;
 
-      mat-list mat-list-item {
-        cursor: pointer;
+      .cdk-virtual-scroll-viewport {
+        height: 100%;
+
+        mat-list mat-list-item {
+          cursor: pointer;
+        }
       }
+
     }
 
     .mat-dialog-actions {
