@@ -1,9 +1,9 @@
 import { ElementRef, forwardRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
-import { MatExpansionPanel, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatExpansionPanel } from '@angular/material';
+
 import { InputConverter } from '../../decorators/input-converter';
 import { OFormComponent } from '../form/form-components';
 import { OContainerComponent } from './o-container-component.class';
-
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
   ...OContainerComponent.DEFAULT_INPUTS_O_CONTAINER,
@@ -27,7 +27,6 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   @ViewChild('expPanel') expPanel: MatExpansionPanel;
   protected _containerCollapsibleRef: ElementRef<HTMLElement>;
 
-
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
     protected elRef: ElementRef,
@@ -38,6 +37,8 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   }
 
   ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+
     if (this.expPanel) {
       this._containerCollapsibleRef = this.expPanel._body;
       this.registerContentObserver();
@@ -45,6 +46,7 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
       this.unregisterContentObserver();
     }
   }
+
   protected updateOutlineGap(): void {
     if (this.isAppearanceOutline()) {
       const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
@@ -71,13 +73,17 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
         titleWidth = titleWidth === 0 ? 0 : titleWidth + 4;
       }
 
+      const labelStart = titleEl.getBoundingClientRect().left;
+      const startWidth = labelStart - containerStart - 2;
+      const empty1Width = descrStart - containerStart - titleWidth - 24;
       const descrWidth = this.description ? descrEl.querySelector('span').offsetWidth + 8 : 0;
-      const empty1Width = descrStart - containerStart - 14 - titleWidth - 4;
 
+      const startEls = containerOutline.querySelectorAll('.o-container-outline-start');
       const gapTitleEls = containerOutline.querySelectorAll('.o-container-outline-gap-title');
       const gapEmpty1Els = containerOutline.querySelectorAll('.o-container-outline-gap-empty1');
       const gapDescrEls = containerOutline.querySelectorAll('.o-container-outline-gap-description');
 
+      startEls[0].style.width = `${startWidth}px`;
       gapTitleEls[0].style.width = `${titleWidth}px`;
       gapEmpty1Els[0].style.width = `${empty1Width}px`;
       gapDescrEls[0].style.width = `${descrWidth}px`;
