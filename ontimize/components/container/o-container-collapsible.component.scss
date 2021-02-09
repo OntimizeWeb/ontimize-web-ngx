@@ -29,14 +29,12 @@
       }
 
       .mat-expansion-panel-header {
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
         margin: 0 4px;
         padding-left: 8px;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-       
+
         .mat-expansion-panel-header-title span {
-          font-weight: 500;
-          font-size: 18px;
           padding-left: 8px;
         }
 
@@ -75,18 +73,15 @@
 
     > .o-container {
       .mat-expansion-panel-header {
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin-left: 6px;
-        transform: translate(0, -50%);
         border-bottom: 0;
-
-        span {
-          font-weight: bold;
-        }
+        left: 0;
+        margin-left: 18px;
+        padding-left: 8px;
+        position: absolute;
+        right: 0;
+        transform: translate(0, -50%);
+        top: 0;
+        z-index: 1;
       }
     }
 
