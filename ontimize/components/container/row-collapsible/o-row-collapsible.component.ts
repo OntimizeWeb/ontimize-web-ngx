@@ -20,7 +20,8 @@ export const DEFAULT_INPUTS_O_ROW_COLLAPSIBLE = [
   host: {
     '[class.o-row-collapsible]': 'true',
     '[class.o-appearance-outline]': 'isAppearanceOutline()',
-    '[class.o-appearance-outline-title]': 'hasTitleInAppearanceOutline()'
+    '[class.o-appearance-outline-title]': 'hasTitleInAppearanceOutline()',
+    '[style.height.px]': 'expPanel.expanded ? null : 0'
   }
 })
 export class ORowCollapsibleComponent extends OContainerCollapsibleComponent {

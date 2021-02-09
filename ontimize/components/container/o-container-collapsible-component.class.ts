@@ -23,9 +23,7 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   public expandedHeight = '37px';
   public description: string;
 
-  protected contentObserver = new MutationObserver(() => this.updateHeightExpansionPanelContent());
-  @ViewChild('expPanel') expPanel: MatExpansionPanel;
-  protected _containerCollapsibleRef: ElementRef<HTMLElement>;
+  @ViewChild('expPanel') expPanel: MatExpansionPanel; // Used in subcomponents
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -38,13 +36,6 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
-
-    if (this.expPanel) {
-      this._containerCollapsibleRef = this.expPanel._body;
-      this.registerContentObserver();
-    } else {
-      this.unregisterContentObserver();
-    }
   }
 
   protected updateOutlineGap(): void {
@@ -96,33 +87,6 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
         childList: true,
         characterData: true,
         subtree: true
-      });
-    }
-  }
-
-  protected updateHeightExpansionPanelContent(): void {
-    const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
-    const exPanelContent: HTMLElement = this._containerCollapsibleRef ? this._containerCollapsibleRef.nativeElement.querySelector('.o-container-scroll') : null;
-    const parentHeight = exPanelHeader.parentNode ? exPanelHeader.parentNode.offsetHeight : null;
-
-    const height = (OContainerComponent.APPEARANCE_OUTLINE === this.appearance) ? parentHeight : (parentHeight - exPanelHeader.offsetHeight);
-    if (height > 0) {
-      exPanelContent.style.height = height + 'px';
-    }
-  }
-
-  protected unregisterContentObserver(): any {
-    if (this.contentObserver) {
-      this.contentObserver.disconnect();
-    }
-  }
-
-  protected registerContentObserver(): any {
-    if (this._containerCollapsibleRef) {
-      this.contentObserver.observe(this._containerCollapsibleRef.nativeElement, {
-        childList: true,
-        attributes: true,
-        attributeFilter: ['style']
       });
     }
   }
