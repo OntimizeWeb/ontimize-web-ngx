@@ -9,8 +9,8 @@
 * **OFormDataComponent**:
   * Show input value when internal value is zero ([7d48606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d48606))
   * Show clear button on inputs when internal value is zero ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
-* **o-column**: Fix appearence outline when no title is displayed. ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
-* **o-row**: Fix appearence outline when no title is displayed. ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
+* **o-column**: Fix appearence outline when no title is displayed. If you are using the *lite theme* of OntimizeWeb, you shold update `ontimize-web-ngx-theming` to version 4.0.3 or higher ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
+* **o-row**: Fix appearence outline when no title is displayed. If you are using the *lite theme* of OntimizeWeb, you shold update `ontimize-web-ngx-theming` to version 4.0.3 or higher ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
 * **o-app-layout-sidenav**: Update sidenav image when component attributes change. ([323ad94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/323ad94))
 * **OServiceBaseComponent**: Parse `query-rows` attribute as integer ([f1874cac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1874cac))
 * **o-list-picker** : Closes [#503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/503) ([1b06fa5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b06fa5))
