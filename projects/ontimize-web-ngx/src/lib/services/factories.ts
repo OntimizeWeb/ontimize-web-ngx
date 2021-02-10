@@ -5,6 +5,8 @@ import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { Util } from '../util/util';
+import { AuthService } from './auth.service';
+import { OntimizeAuthService } from './o-auth.service';
 import { OntimizeEEService } from './ontimize/ontimize-ee.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
@@ -40,6 +42,11 @@ export const O_EXPORT_SERVICE = new InjectionToken<IExportService>('Export servi
  * Injection token that can be used to replace the permission service `OntimizePermissionsService or OntimizeEEPermissionsService`.
  */
 export const O_PERMISSION_SERVICE = new InjectionToken<IPermissionsService>('Permission service');
+
+/**
+ * Injection token that can be used to replace the authentication service `AuthService`.
+ */
+export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
@@ -106,6 +113,15 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
   return _createServiceInstance(config.permissionsServiceType, injector);
 }
 
+/**
+ * Creates a new instance of the authentication service.
+ */
+export function authServiceFactory(injector: Injector): AuthService {
+  const serviceClass = _getInjectionTokenValue(O_AUTH_SERVICE, injector);
+  const service = _createServiceInstance(serviceClass, injector);
+  return Util.isDefined(service) ? service : new OntimizeAuthService(injector);
+}
+
 /* ----------------------------------------------------------------------------------------------------
  * -------------------------------------------- PROVIDERS ---------------------------------------------
  * ----------------------------------------------------------------------------------------------------
@@ -116,6 +132,8 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
 export let OntimizeServiceProvider = { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] };
 
 export let OntimizeExportServiceProvider = { provide: OntimizeExportService, useFactory: exportServiceFactory, deps: [Injector] };
+
+export const OntimizeAuthServiceProvider = { provide: AuthService, useFactory: authServiceFactory, deps: [Injector] };
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------

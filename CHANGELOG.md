@@ -1,5 +1,3 @@
-
-
 ## 8.2.0
 ### Features
 * **table**:
@@ -22,6 +20,12 @@
 * **OFormDataComponent**: Show clear button on inputs when internal value is zero ([512a8c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/512a8c3))
 * **o-column**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
 * **o-row**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
+
+### BREAKING CHANGES
+* Authentication has been refactored:
+  * Service `LoginService` has been removed and replaced by `AuthService`. This is an abstract service that provides basic functionality regarding authentication. Its default implementation is `OntimizeAuthService` class that performs authentication with Ontimize based backends. Developers can provide their own implementation using the Injection Token `O_AUTH_SERVICE` and the class of their service that extends `AuthService` class.
+  * Method `redirectLogin` has been removed in class `OntimizeBaseService` and all its subclasses (`OntimizeService`, `OntimizeEEService`, `OntimizeExportService` and `OntimizeFileService`), use method `logout` from `AuthService` instead.
+  * Method `redirectLogin` has been removed in class `ServiceUtils`, now it is a method of Ontimize authentication implementation in `OntimizeAuthService`.
 
 ## 8.1.1 (2020-11-25)
 
