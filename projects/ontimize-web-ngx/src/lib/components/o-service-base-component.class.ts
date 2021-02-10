@@ -110,9 +110,9 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
 
-  @InputConverter()
   set oQueryRows(value: number) {
     if (Util.isDefined(value)) {
+      value = typeof value !== 'number' ? parseInt(value, 10) : value;
       this.originalQueryRows = value;
       this._queryRows = value;
     }
