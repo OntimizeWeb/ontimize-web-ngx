@@ -1,38 +1,29 @@
-import { EventEmitter, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { combineLatest, Observable } from 'rxjs';
-import { share } from 'rxjs/operators';
+import { combineLatest, from, Observable } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
 import { IAuthService } from '../interfaces/auth-service.interface';
-import { ILoginService } from '../interfaces/login-service.interface';
-import { DialogService } from '../services/dialog.service';
-import { PermissionsService } from '../services/permissions/permissions.service';
-import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { Config } from '../types/config.type';
 import { SessionInfo } from '../types/session-info.type';
-import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
-import { ServiceUtils } from '../util/service.utils';
+import { AuthService } from './auth.service';
 import { LoginStorageService } from './login-storage.service';
 import { OntimizeService } from './ontimize/ontimize.service';
+import { PermissionsService } from './permissions/permissions.service';
+import { ORemoteConfigurationService } from './remote-config.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class LoginService implements ILoginService {
-
-  public onLogin: EventEmitter<any> = new EventEmitter();
-  public onLogout: EventEmitter<any> = new EventEmitter();
+@Injectable()
+export class OntimizeAuthService extends AuthService {
 
   private _user: string;
   private _config: Config;
   private router: Router;
   private ontService: OntimizeService;
-  private dialogService: DialogService;
   private loginStorageService: LoginStorageService;
 
   constructor(protected injector: Injector) {
+    super(injector);
     this._config = this.injector.get(AppConfig).getConfiguration();
     this.router = this.injector.get(Router);
     this.loginStorageService = this.injector.get(LoginStorageService);
@@ -40,7 +31,6 @@ export class LoginService implements ILoginService {
     if (sessionInfo && sessionInfo.id && sessionInfo.user && sessionInfo.user.length > 0) {
       this._user = sessionInfo.user;
     }
-    this.dialogService = injector.get(DialogService);
   }
 
   public get user(): string {
@@ -90,7 +80,7 @@ export class LoginService implements ILoginService {
         });
       });
     });
-    return dataObservable.pipe(share());
+    return from(dataObservable.toPromise());
   }
 
   public onLoginSuccess(sessionId: string | number): void {
@@ -100,7 +90,7 @@ export class LoginService implements ILoginService {
       id: sessionId
     };
     this.loginStorageService.storeSessionInfo(session);
-    ObservableWrapper.callEmit(this.onLogin, session);
+    this.onLogin.next(session);
   }
 
   public onLoginError(error: any): void {
@@ -108,7 +98,7 @@ export class LoginService implements ILoginService {
   }
 
   public logout(): Observable<any> {
-    ObservableWrapper.callEmit(this.onLogout, null);
+    this.onLogout.next(null);
     const sessionInfo = this.loginStorageService.getSessionInfo();
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       this.retrieveAuthService().then(service => {
@@ -125,39 +115,28 @@ export class LoginService implements ILoginService {
         });
       });
     });
-    return dataObservable.pipe(share());
+    return from(dataObservable.toPromise());
   }
 
   public onLogoutSuccess(sessionId: number): void {
     if (sessionId === 0) {
-      this.sessionExpired();
+      this.clearSessionData();
+      this.redirectLogin(false);
     }
   }
 
   public onLogoutError(error: any): void {
     console.error('Error on logout');
+    this.clearSessionData();
+    this.redirectLogin(false);
   }
 
-  public sessionExpired(): void {
+  public clearSessionData(): void {
     this.loginStorageService.sessionExpired();
   }
 
   public isLoggedIn(): boolean {
     return this.loginStorageService.isLoggedIn();
-  }
-
-  public logoutAndRedirect(): void {
-    this.logout().subscribe(() => {
-      ServiceUtils.redirectLogin(this.router, false);
-    });
-  }
-
-  public logoutWithConfirmationAndRedirect(): void {
-    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_LOGOUT').then(res => {
-      if (res) {
-        this.logoutAndRedirect();
-      }
-    });
   }
 
   public getSessionInfo(): SessionInfo {
@@ -167,4 +146,13 @@ export class LoginService implements ILoginService {
   public storeSessionInfo(info: SessionInfo): void {
     this.loginStorageService.storeSessionInfo(info);
   }
+
+  redirectLogin(sessionExpired: boolean = false) {
+    const arg = {};
+    arg[Codes.SESSION_EXPIRED_KEY] = sessionExpired;
+    const extras = {};
+    extras[Codes.QUERY_PARAMS] = arg;
+    this.router.navigate([Codes.LOGIN_ROUTE], extras);
+  }
+
 }

@@ -6,6 +6,7 @@ import { map, share } from 'rxjs/operators';
 import { IExportService } from '../../interfaces/export-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { HttpRequestOptions } from '../../types';
+import { Util } from '../../util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable()
@@ -15,7 +16,6 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
   public downloadPath: string;
   public servicePath: string;
 
-  protected _sessionid: string;
   protected exportAll: boolean = false;
 
   constructor(protected injector: Injector) {
@@ -37,10 +37,12 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
   }
 
   protected buildHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Access-Control-Allow-Origin': '*',
-      Authorization: 'Bearer ' + this._sessionid
-    });
+    let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
+    const sessionId = this.authService.getSessionInfo().id;
+    if (Util.isDefined(sessionId)) {
+      headers = headers.append('Authorization', 'Bearer ' + sessionId);
+    }
+    return headers;
   }
 
   public exportData(data: any, format: string, entity?: string): Observable<any> {

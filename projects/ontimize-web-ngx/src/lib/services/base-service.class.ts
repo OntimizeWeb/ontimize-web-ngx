@@ -11,8 +11,8 @@ import { HttpRequestOptions } from '../types';
 import { Config } from '../types/config.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
 import { Codes } from '../util/codes';
+import { AuthService } from './auth.service';
 import { BaseServiceResponse } from './base-service-response.class';
-import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
@@ -25,7 +25,7 @@ export class BaseService {
   protected _appConfig: Config;
   protected _config: AppConfig;
   protected responseParser: OntimizeServiceResponseParser;
-  protected loginStorageService: LoginStorageService;
+  protected authService: AuthService;
   protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
 
   constructor(protected injector: Injector) {
@@ -34,7 +34,7 @@ export class BaseService {
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
     this.responseParser = this.injector.get(OntimizeServiceResponseParser);
-    this.loginStorageService = this.injector.get(LoginStorageService);
+    this.authService = this.injector.get(AuthService);
     this.configureAdapter();
   }
 
@@ -52,7 +52,7 @@ export class BaseService {
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig[Codes.SESSION_KEY] = this.loginStorageService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = this.authService.getSessionInfo();
     return servConfig;
   }
 
