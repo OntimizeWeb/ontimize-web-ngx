@@ -24,6 +24,8 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   public description: string;
 
   @ViewChild('expPanel') expPanel: MatExpansionPanel; // Used in subcomponents
+  @ViewChild('containerContent') protected containerContent: ElementRef;
+  @ViewChild('oContainerOutline') protected oContainerOutline: ElementRef;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -36,16 +38,17 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
+    // this.updateOutlineGap();
   }
 
   protected updateOutlineGap(): void {
     if (this.isAppearanceOutline()) {
       const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
 
-      if (!this._containerRef) {
+      if (!this.oContainerOutline) {
         return;
       }
-      const containerOutline = this._containerRef.nativeElement;
+      const containerOutline = this.oContainerOutline.nativeElement;
       const containerOutlineRect = containerOutline.getBoundingClientRect();
       if (containerOutlineRect.width === 0 && containerOutlineRect.height === 0) {
         return;
@@ -88,6 +91,15 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
         characterData: true,
         subtree: true
       });
+    }
+  }
+
+  updateInnerHeight(height: number): void {
+    if (this.containerContent) {
+      this.containerContent.nativeElement.style.height = height;
+    }
+    if (this.oContainerOutline) {
+      this.oContainerOutline.nativeElement.style.height = height;
     }
   }
 

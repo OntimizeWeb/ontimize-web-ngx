@@ -20,8 +20,7 @@ export const DEFAULT_INPUTS_O_COLUMN_COLLAPSIBLE = [
   host: {
     '[class.o-column-collapsible]': 'true',
     '[class.o-appearance-outline]': 'isAppearanceOutline()',
-    '[class.o-appearance-outline-title]': 'hasTitleInAppearanceOutline()',
-    '[style.height.px]': 'expPanel.expanded ? null : 0'
+    '[class.o-appearance-outline-title]': 'hasTitleInAppearanceOutline()'
   }
 })
 export class OColumnCollapsibleComponent extends OContainerCollapsibleComponent {
