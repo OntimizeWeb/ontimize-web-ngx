@@ -1,13 +1,4 @@
-import {
-  AfterContentChecked,
-  AfterViewInit,
-  ElementRef,
-  Inject,
-  Injector,
-  OnDestroy,
-  Optional,
-  ViewChild
-} from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ElementRef, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 import { Util } from '../../util/util';
@@ -123,8 +114,8 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
     return !!this.title || !!this.icon;
   }
 
-  isAppearanceOutlineSetted() :boolean {
-    let isAppearanceSetted = false
+  isAppearanceOutlineSetted(): boolean {
+    let isAppearanceSetted = false;
     if (Util.isDefined(this.appearance)) {
       isAppearanceSetted = this.appearance === OContainerComponent.APPEARANCE_OUTLINE;
     }
