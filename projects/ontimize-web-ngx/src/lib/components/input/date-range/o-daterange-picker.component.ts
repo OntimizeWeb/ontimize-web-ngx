@@ -556,7 +556,7 @@ export class DaterangepickerComponent implements OnInit {
   updateMonthsInView() {
     if (this.endDate) {
       // if both dates are visible already, do nothing
-      if (!this.singleDatePicker && this.leftCalendar.month && this.rightCalendar.month &&
+      if (this.leftCalendar.month && this.rightCalendar.month &&
         ((this.startDate && this.leftCalendar && this.startDate.format('YYYY-MM') === this.leftCalendar.month.format('YYYY-MM')) ||
           (this.startDate && this.rightCalendar && this.startDate.format('YYYY-MM') === this.rightCalendar.month.format('YYYY-MM')))
         &&
@@ -582,7 +582,7 @@ export class DaterangepickerComponent implements OnInit {
         this.rightCalendar.month = this.startDate.clone().date(2).add(1, 'month');
       }
     }
-    if (this.maxDate && this.linkedCalendars && !this.singleDatePicker && this.rightCalendar.month > this.maxDate) {
+    if (this.maxDate && this.linkedCalendars && this.rightCalendar.month > this.maxDate) {
       this.rightCalendar.month = this.maxDate.clone().date(2);
       this.leftCalendar.month = this.maxDate.clone().date(2).subtract(1, 'month');
     }
@@ -598,7 +598,7 @@ export class DaterangepickerComponent implements OnInit {
     this.calculateChosenLabel();
   }
   updateElement() {
-    if (!this.singleDatePicker && this.autoUpdateInput) {
+    if (this.autoUpdateInput) {
       if (this.startDate && this.endDate) {
         // if we use ranges and should show range label on inpu
         if (this.rangesArray.length && this.showRangeLabelOnInput === true && this.chosenRange &&
@@ -609,9 +609,10 @@ export class DaterangepickerComponent implements OnInit {
             this.locale.separator + this.endDate.format(this.locale.format);
         }
       }
-    } else if (this.autoUpdateInput) {
-      this.chosenLabel = this.startDate.format(this.locale.format);
     }
+    // else if (this.autoUpdateInput) {
+    //   this.chosenLabel = this.startDate.format(this.locale.format);
+    // }
   }
 
   remove() {
@@ -662,7 +663,7 @@ export class DaterangepickerComponent implements OnInit {
   }
 
   clickApply(e?) {
-    if (!this.singleDatePicker && this.startDate && !this.endDate) {
+    if (this.startDate && !this.endDate) {
       this.endDate = this.startDate.clone();
       this.calculateChosenLabel();
     }
@@ -741,9 +742,7 @@ export class DaterangepickerComponent implements OnInit {
       start.minute(minute);
       start.second(second);
       this.setStartDate(start);
-      if (this.singleDatePicker) {
-        this.endDate = this.startDate.clone();
-      } else if (this.endDate && this.endDate.format('YYYY-MM-DD') === start.format('YYYY-MM-DD') && this.endDate.isBefore(start)) {
+      if (this.endDate && this.endDate.format('YYYY-MM-DD') === start.format('YYYY-MM-DD') && this.endDate.isBefore(start)) {
         this.setEndDate(start.clone());
       }
     } else if (this.endDate) {
@@ -876,14 +875,6 @@ export class DaterangepickerComponent implements OnInit {
       this.setEndDate(date.clone());
       if (this.autoApply) {
         this.calculateChosenLabel();
-        this.clickApply();
-      }
-    }
-
-    if (this.singleDatePicker) {
-      this.setEndDate(this.startDate);
-      this.updateElement();
-      if (this.autoApply) {
         this.clickApply();
       }
     }

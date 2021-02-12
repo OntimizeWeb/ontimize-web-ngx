@@ -7,6 +7,7 @@ import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
+import { Codes, OAppLayoutMode } from '../../../util';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
@@ -28,6 +29,7 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   'startKey',
   'endKey',
   'valueType: value-type',
+  'mode',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
@@ -61,6 +63,9 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public showRanges: boolean = false;
 
   protected _oMinDate: _moment.Moment;
+
+  public mode: OAppLayoutMode = Codes.MODE_DESKTOP;
+
   get oMinDate() {
     return this._oMinDate;
   }
@@ -113,6 +118,15 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   get localeOptions() {
     return this._localeOptions;
   }
+
+  isMobileMode(): boolean {
+    return this.mode === Codes.MODE_MOBILE;
+  }
+
+  isDesktopMode(): boolean {
+    return this.mode === Codes.MODE_DESKTOP;
+  }
+
 
   public oformat: string = 'L';
   protected _localeOptions: any;

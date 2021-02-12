@@ -5,7 +5,7 @@
     'shown': isShown || inline,
     'hidden': !isShown && !inline,
     'inline': inline,
-    'double': !singleDatePicker && showCalInRanges,
+    'double': showCalInRanges,
     'show-ranges': rangesArray.length
 }" [class]="'drops-' + drops + '-' + opens">
     <div class="ranges">
@@ -18,7 +18,7 @@
           </li>
         </ul>
     </div>
-    <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}"
+    <div class="calendar" class="left"
         *ngIf="showCalInRanges">
         <div class="calendar-table">
             <table class="table-condensed" *ngIf="calendarVariables">
