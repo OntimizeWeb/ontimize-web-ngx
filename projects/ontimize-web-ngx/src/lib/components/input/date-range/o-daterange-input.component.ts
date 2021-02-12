@@ -64,7 +64,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   protected _oMinDate: _moment.Moment;
 
-  public mode: OAppLayoutMode = Codes.MODE_DESKTOP;
+  public mode: OAppLayoutMode = Codes.APP_LAYOUT_MODE_DESKTOP;
 
   get oMinDate() {
     return this._oMinDate;
@@ -120,11 +120,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   isMobileMode(): boolean {
-    return this.mode === Codes.MODE_MOBILE;
+    return this.mode === Codes.APP_LAYOUT_MODE_MOBILE
   }
 
   isDesktopMode(): boolean {
-    return this.mode === Codes.MODE_DESKTOP;
+    return this.mode === Codes.APP_LAYOUT_MODE_DESKTOP;
   }
 
 
