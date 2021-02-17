@@ -38,7 +38,6 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    // this.updateOutlineGap();
   }
 
   protected updateOutlineGap(): void {
