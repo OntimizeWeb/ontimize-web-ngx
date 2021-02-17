@@ -1,4 +1,5 @@
 import { OTablePaginator } from '../../../../../interfaces/o-table-paginator.interface';
+import { Util } from '../../../../../util';
 
 export class OBaseTablePaginator implements OTablePaginator {
 
@@ -34,7 +35,7 @@ export class OBaseTablePaginator implements OTablePaginator {
 
   set pageSizeOptions(value: Array<any>) {
     if (typeof value == 'string') {
-      this._pageSizeOptions = JSON.parse(value)
+      this._pageSizeOptions = Util.parseArray(value, true);
     } else {
       this._pageSizeOptions = value
     }
