@@ -23,9 +23,9 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
   public expandedHeight = '37px';
   public description: string;
 
-  protected contentObserver = new MutationObserver(() => this.updateHeightExpansionPanelContent());
-  @ViewChild('expPanel') expPanel: MatExpansionPanel;
-  protected _containerCollapsibleRef: ElementRef<HTMLElement>;
+  @ViewChild('expPanel') expPanel: MatExpansionPanel; // Used in subcomponents
+  @ViewChild('containerContent') protected containerContent: ElementRef;
+  @ViewChild('oContainerOutline') protected oContainerOutline: ElementRef;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) protected form: OFormComponent,
@@ -38,23 +38,16 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
-
-    if (this.expPanel) {
-      this._containerCollapsibleRef = this.expPanel._body;
-      this.registerContentObserver();
-    } else {
-      this.unregisterContentObserver();
-    }
   }
 
   protected updateOutlineGap(): void {
     if (this.isAppearanceOutline()) {
       const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
 
-      if (!this._containerRef) {
+      if (!this.oContainerOutline) {
         return;
       }
-      const containerOutline = this._containerRef.nativeElement;
+      const containerOutline = this.oContainerOutline.nativeElement;
       const containerOutlineRect = containerOutline.getBoundingClientRect();
       if (containerOutlineRect.width === 0 && containerOutlineRect.height === 0) {
         return;
@@ -100,30 +93,12 @@ export class OContainerCollapsibleComponent extends OContainerComponent {
     }
   }
 
-  protected updateHeightExpansionPanelContent(): void {
-    const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
-    const exPanelContent: HTMLElement = this._containerCollapsibleRef ? this._containerCollapsibleRef.nativeElement.querySelector('.o-container-scroll') : null;
-    const parentHeight = exPanelHeader.parentNode ? exPanelHeader.parentNode.offsetHeight : null;
-
-    const height = (OContainerComponent.APPEARANCE_OUTLINE === this.appearance) ? parentHeight : (parentHeight - exPanelHeader.offsetHeight);
-    if (height > 0) {
-      exPanelContent.style.height = height + 'px';
+  updateInnerHeight(height: number): void {
+    if (this.containerContent) {
+      this.containerContent.nativeElement.style.height = height;
     }
-  }
-
-  protected unregisterContentObserver(): any {
-    if (this.contentObserver) {
-      this.contentObserver.disconnect();
-    }
-  }
-
-  protected registerContentObserver(): any {
-    if (this._containerCollapsibleRef) {
-      this.contentObserver.observe(this._containerCollapsibleRef.nativeElement, {
-        childList: true,
-        attributes: true,
-        attributeFilter: ['style']
-      });
+    if (this.oContainerOutline) {
+      this.oContainerOutline.nativeElement.style.height = height;
     }
   }
 
