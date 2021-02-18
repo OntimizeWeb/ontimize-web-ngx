@@ -1,5 +1,6 @@
 .o-column-collapsible,
 .o-row-collapsible {
+  box-sizing: content-box;
   display: block;
 
   &[class*="mat-elevation-z"] {
@@ -16,10 +17,10 @@
 
   > .o-container {
     &.mat-expansion-panel {
-      box-shadow: none;
+      height: 100%;
 
-      &.mat-expanded {
-        height: 100%;
+      &:not([class*='mat-elevation-z']) {
+        box-shadow: none;
       }
 
       &:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled='true']).cdk-keyboard-focused,
@@ -28,15 +29,18 @@
         background: transparent;
       }
 
+      &:not(.mat-expanded) .mat-expansion-panel-header {
+        border: none;
+      }
+
       .mat-expansion-panel-header {
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-radius: 0;
         margin: 0 4px;
         padding-left: 8px;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-       
+
         .mat-expansion-panel-header-title span {
-          font-weight: 500;
-          font-size: 18px;
           padding-left: 8px;
         }
 
@@ -56,6 +60,7 @@
         font-size: inherit;
         line-height: inherit;
         font-family: inherit;
+        height: 100%;
 
         .mat-expansion-panel-body {
           height: 100%;
@@ -75,18 +80,15 @@
 
     > .o-container {
       .mat-expansion-panel-header {
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin-left: 6px;
-        transform: translate(0, -50%);
         border-bottom: 0;
-
-        span {
-          font-weight: bold;
-        }
+        left: 0;
+        margin-left: 18px;
+        padding-left: 8px;
+        position: absolute;
+        right: 0;
+        transform: translate(0, -50%);
+        top: 0;
+        z-index: 1;
       }
     }
 
