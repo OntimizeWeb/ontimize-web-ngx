@@ -25,6 +25,7 @@ export class OListPickerDialogComponent implements AfterViewInit {
   public filter: boolean = true;
   public visibleData: any = [];
   public searchVal: string;
+  public itemSize: number = 30;
 
   @ViewChild('searchInput', { static: false })
   public searchInput: OSearchInputComponent;
@@ -32,9 +33,6 @@ export class OListPickerDialogComponent implements AfterViewInit {
   protected data: any[] = [];
   public menuColumns: string;
   protected visibleColsArray: string[];
-  protected _startIndex: number = 0;
-  protected recordsNumber: number = 100;
-  protected scrollThreshold: number = 200;
 
   constructor(
     public dialogRef: MatDialogRef<OListPickerDialogComponent>,
@@ -43,13 +41,12 @@ export class OListPickerDialogComponent implements AfterViewInit {
   ) {
     if (data.data && Util.isArray(data.data)) {
       this.data = data.data;
+      this.visibleData = this.data;
     }
     if (data.visibleColumns && Util.isArray(data.visibleColumns)) {
       this.visibleColsArray = data.visibleColumns;
     }
-    if (data.queryRows !== undefined) {
-      this.recordsNumber = data.queryRows;
-    }
+
     if (data.filter !== undefined) {
       this.filter = data.filter;
     }
@@ -57,7 +54,6 @@ export class OListPickerDialogComponent implements AfterViewInit {
       this.menuColumns = data.menuColumns;
     }
     this.searchVal = data.searchVal;
-    this.startIndex = 0;
   }
 
   public ngAfterViewInit(): void {
@@ -70,14 +66,6 @@ export class OListPickerDialogComponent implements AfterViewInit {
     }
   }
 
-  get startIndex(): number {
-    return this._startIndex;
-  }
-
-  set startIndex(val: number) {
-    this._startIndex = val;
-    this.visibleData = this.data.slice(this.startIndex, this.recordsNumber);
-  }
 
   public onClickListItem(e: any, value: any): void {
     this.dialogRef.close(value);
@@ -87,36 +75,11 @@ export class OListPickerDialogComponent implements AfterViewInit {
     return index;
   }
 
-  public onScroll(event: any): void {
-    if (event && event.target && this.visibleData.length < this.data.length) {
-      const pendingScroll = event.target.scrollHeight - (event.target.scrollTop + event.target.clientHeight);
-      if (!isNaN(pendingScroll) && pendingScroll <= this.scrollThreshold) {
-        let index = this.visibleData.length;
-        const searchVal = this.searchInput.getValue();
-        if (Util.isDefined(searchVal) && searchVal.length > 0) {
-          index = this.visibleData[this.visibleData.length - 1]['_parsedIndex'];
-        }
-        let appendData = this.data.slice(index, this.visibleData.length + this.recordsNumber);
-        if (appendData.length) {
-          appendData = this.transform(appendData, {
-            filtervalue: this.searchInput.getValue(),
-            filtercolumns: this.visibleColsArray
-          });
-          if (appendData.length) {
-            this.visibleData = this.visibleData.concat(appendData);
-          }
-        }
-      }
-    }
-  }
-
   public onFilterList(searchVal: any): void {
-    let transformData = this.transform(this.data, {
+    this.visibleData = this.transform(this.data, {
       filtervalue: searchVal,
       filtercolumns: this.visibleColsArray
     });
-    this._startIndex = 0;
-    this.visibleData = transformData.slice(this.startIndex, this.recordsNumber);
   }
 
   public isEmptyData(): boolean {
