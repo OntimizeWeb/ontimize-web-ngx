@@ -120,6 +120,7 @@ export class DaterangepickerComponent implements OnInit {
   rangesArray: Array<any> = [];
 
   // some state information
+  pickingDate:boolean = false;
   isShown: boolean = false;
   inline: boolean = true;
   leftCalendar: any = {};
@@ -161,7 +162,10 @@ export class DaterangepickerComponent implements OnInit {
 
     this.updateMonthsInView();
     this.renderCalendar(SideEnum.left);
-    this.renderCalendar(SideEnum.right);
+    //Right calendar in singleDatepicker is not rendering
+    if (!this.singleDatePicker) {
+      this.renderCalendar(SideEnum.right);
+    }
     this.renderRanges();
   }
   renderRanges() {
@@ -565,7 +569,9 @@ export class DaterangepickerComponent implements OnInit {
       ) {
         return;
       }
-      if (this.startDate) {
+
+      //don't restart view for start month when select end date when singleDataPicker = true
+      if ((!this.singleDatePicker || (this.singleDatePicker && !this.pickingDate)) && this.startDate) {
         this.leftCalendar.month = this.startDate.clone().date(2);
         if (!this.linkedCalendars && (this.endDate.month() !== this.startDate.month() ||
           this.endDate.year() !== this.startDate.year())) {
@@ -592,7 +598,10 @@ export class DaterangepickerComponent implements OnInit {
    */
   updateCalendars() {
     this.renderCalendar(SideEnum.left);
-    this.renderCalendar(SideEnum.right);
+    //Right calendar in singleDatepicker is not rendering
+    if (!this.singleDatePicker) {
+      this.renderCalendar(SideEnum.right);
+    }
 
     if (this.endDate === null) { return; }
     this.calculateChosenLabel();
@@ -843,6 +852,8 @@ export class DaterangepickerComponent implements OnInit {
    * @param col col position of the current date clicked
    */
   clickDate(e, side: SideEnum, row: number, col: number) {
+    this.pickingDate = true;
+
     if (e.target.tagName === 'TD') {
       if (!e.target.classList.contains('available')) {
         return;
@@ -880,7 +891,7 @@ export class DaterangepickerComponent implements OnInit {
     }
 
     this.updateView();
-
+    this.pickingDate = false
     // This is to cancel the blur event handler if the mouse was in one of the inputs
     e.stopPropagation();
 
