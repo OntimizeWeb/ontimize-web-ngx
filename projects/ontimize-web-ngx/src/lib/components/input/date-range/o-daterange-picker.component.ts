@@ -120,7 +120,7 @@ export class DaterangepickerComponent implements OnInit {
   rangesArray: Array<any> = [];
 
   // some state information
-  pickingDate:boolean = false;
+  pickingDate: boolean = false;
   isShown: boolean = false;
   inline: boolean = true;
   leftCalendar: any = {};
@@ -381,7 +381,7 @@ export class DaterangepickerComponent implements OnInit {
 
     let curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
 
-    for (let i = 0, col = 0, row = 0; i < 42; i++ , col++ , curDate = moment(curDate).add(24, 'hour')) {
+    for (let i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add(24, 'hour')) {
       if (i > 0 && col % 7 === 0) {
         col = 0;
         row++;
@@ -619,9 +619,7 @@ export class DaterangepickerComponent implements OnInit {
         }
       }
     }
-    // else if (this.autoUpdateInput) {
-    //   this.chosenLabel = this.startDate.format(this.locale.format);
-    // }
+
   }
 
   remove() {
@@ -929,10 +927,19 @@ export class DaterangepickerComponent implements OnInit {
       if (!this.keepCalendarOpeningWithRange) {
         this.clickApply();
       } else {
-        this.leftCalendar.month.month(dates[0].month());
-        this.leftCalendar.month.year(dates[0].year());
-        this.rightCalendar.month.month(dates[1].month());
-        this.rightCalendar.month.year(dates[1].year());
+        if (this.maxDate && this.maxDate.isSame(dates[0], 'month')) {
+          this.rightCalendar.month.month(dates[0].month());
+          this.rightCalendar.month.year(dates[0].year());
+          this.leftCalendar.month.month(dates[0].month() - 1);
+          this.leftCalendar.month.year(dates[1].year());
+        } else {
+          this.leftCalendar.month.month(dates[0].month());
+          this.leftCalendar.month.year(dates[0].year());
+          // get the next year
+          const nextMonth = dates[0].clone().add(1, 'month');
+          this.rightCalendar.month.month(nextMonth.month());
+          this.rightCalendar.month.year(nextMonth.year());
+        }
         this.updateCalendars();
         if (this.timePicker) {
           this.renderTimePicker(SideEnum.left);
