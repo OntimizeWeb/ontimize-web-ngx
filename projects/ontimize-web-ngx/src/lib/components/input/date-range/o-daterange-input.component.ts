@@ -65,7 +65,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   protected _oMinDate: _moment.Moment;
 
-  public mode: 'mobile' | 'desktop' | 'auto' = 'desktop';
+  public mode: 'mobile' | 'desktop' | 'auto' = 'auto';
 
   get oMinDate() {
     return this._oMinDate;
