@@ -1,4 +1,6 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import * as _moment from 'moment';
 
@@ -7,7 +9,6 @@ import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
-import { Codes, OAppLayoutMode } from '../../../util';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
@@ -64,7 +65,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   protected _oMinDate: _moment.Moment;
 
-  public mode: OAppLayoutMode = Codes.APP_LAYOUT_MODE_DESKTOP;
+  public mode: 'mobile' | 'desktop' | 'auto' = 'desktop';
 
   get oMinDate() {
     return this._oMinDate;
@@ -120,11 +121,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   isMobileMode(): boolean {
-    return this.mode === Codes.APP_LAYOUT_MODE_MOBILE
+    return this.mode === 'mobile' || (this.mode === 'auto' && this.breakpointObserver.isMatched(Breakpoints.Handset))
   }
 
   isDesktopMode(): boolean {
-    return this.mode === Codes.APP_LAYOUT_MODE_DESKTOP;
+    return this.mode === 'desktop' || (this.mode === 'auto' && !this.breakpointObserver.isMatched(Breakpoints.Handset))
   }
 
 
@@ -139,7 +140,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector
+    injector: Injector,
+    protected breakpointObserver: BreakpointObserver
   ) {
     super(form, elRef, injector);
     this.oTranslate = this.injector.get(OTranslateService);
@@ -164,7 +166,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   ngOnInit() {
     super.ngOnInit();
-
     if (this.oformat) {
       this._localeOptions.format = this.oformat;
     }
@@ -225,7 +226,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     if (Util.isDefined(this.value) && Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
       if (this.value.value[this.pickerDirective.startKey] && this.value.value[this.pickerDirective.endKey]) {
         this.value.value[this.pickerDirective.startKey] = this.ensureDateRangeValue(this.value.value[this.pickerDirective.startKey], this._valueType);
-        this.value.value[this.pickerDirective.endKey]  = this.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
+        this.value.value[this.pickerDirective.endKey] = this.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
           this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
       } else {
@@ -325,11 +326,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       return val;
     }
     let result = val;
-    if(!moment.isMoment(val)) {
+    if (!moment.isMoment(val)) {
       switch (valueType) {
         case 'string':
         case 'date':
-          if ( (val instanceof Date) || typeof val ==='string' ) {
+          if ((val instanceof Date) || typeof val === 'string') {
             const dateString = moment(val).format('YYYY-MM-DDThh:mm') + 'Z';
             const q = moment(dateString);
             if (q.isValid()) {
@@ -342,7 +343,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
           }
           break;
         case 'timestamp':
-          if ( typeof val === 'number') {
+          if (typeof val === 'number') {
             const dateString = moment.unix(val).format('YYYY-MM-DDThh:mm') + 'Z';
             const t = moment(dateString);
             if (t.isValid()) {
@@ -379,4 +380,5 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   get valueType(): any {
     return this._valueType;
   }
+
 }
