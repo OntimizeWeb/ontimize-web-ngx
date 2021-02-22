@@ -95,6 +95,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       this.activeSortDirection = data.activeSortDirection;
     }
 
+    if (data.startView) {
+      this.startView = data.startView;
+    }
+
     if (data.tableData && Array.isArray(data.tableData)) {
       this.tableData = data.tableData;
       this.getDistinctValues(data.tableData, previousFilter);
@@ -353,6 +357,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   public getStartedViewDatepicker(): string {
     return this.startView;
   }
+
 
   protected getTypedValue(control: FormControl): any {
     let value = control.value;

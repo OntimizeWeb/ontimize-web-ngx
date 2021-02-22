@@ -27,14 +27,6 @@ export class OTableColumnsFilterColumnComponent {
 
   public attr: string = '';
   public sort: 'asc' | 'desc' | '' = '';
-  public _startView: 'month' | 'year' | 'multi-year' | '';
-
-  get startView(): any {
-    return this._startView;
-  }
-  
-  set startView(val: any) {
-    this._startView = val;
-  }
+  public startView: 'month' | 'year' | 'multi-year' | '' = 'month';
 
 }
