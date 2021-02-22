@@ -1,15 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+
 export type OFilterColumn = {
   attr: string;
   sort: 'asc' | 'desc' | '';
+  startView: 'month' | 'year' | 'multi-year' | '';
 };
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
   // attr [string]: column name.
   'attr',
   // sort [asc|desc]: initial sorting, with the format column:[ASC|DESC].
-  'sort'
+  'sort',
+  // startView [month|year|multi-year]: Datepicker initial view in case of date column.
+  'startView:start-view'
 ];
 
 @Component({
@@ -23,5 +27,14 @@ export class OTableColumnsFilterColumnComponent {
 
   public attr: string = '';
   public sort: 'asc' | 'desc' | '' = '';
+  public _startView: 'month' | 'year' | 'multi-year' | '';
+
+  get startView(): any {
+    return this._startView;
+  }
+  
+  set startView(val: any) {
+    this._startView = val;
+  }
 
 }
