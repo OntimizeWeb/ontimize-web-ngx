@@ -9,12 +9,14 @@
     * added new sub-menu *Group by*.([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
     * new interface **OnExecuteTableContextEvent**
   * `o-table-visible-columns-dialog`:  added the description in the dialog ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
+  * `o-table-columns-filter-column`:  Added new input start-view to set intial view in datepicker ([33a44c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33a44c6))
 * new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
 * new component `o-user-info-configuration` ([c6cac4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eec6cac4bdc0d))
 * **o-app-layout**: new `header-color`([52187ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52187ef))
 * **o-grid**:
   * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
   * new `insert-button-position` and `insert-button-floatable` inputs ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
+
 
 ### Bug Fixes
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
