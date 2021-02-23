@@ -81,7 +81,7 @@
       <mat-datepicker-toggle matSuffix [for]="datepickerFrom">
         <mat-icon matDatepickerToggleIcon>today</mat-icon>
       </mat-datepicker-toggle>
-      <mat-datepicker #datepickerFrom></mat-datepicker>
+      <mat-datepicker #datepickerFrom [startView]="getStartedViewDatepicker()"></mat-datepicker>
     </mat-form-field>
     <mat-form-field>
       <input matInput [matDatepicker]="datepickerTo" [min]="fcFrom.value" [formControl]="fcTo"
@@ -89,7 +89,7 @@
       <mat-datepicker-toggle matSuffix [for]="datepickerTo">
         <mat-icon matDatepickerToggleIcon>today</mat-icon>
       </mat-datepicker-toggle>
-      <mat-datepicker #datepickerTo></mat-datepicker>
+      <mat-datepicker #datepickerTo [startView]="getStartedViewDatepicker()"></mat-datepicker>
     </mat-form-field>
     <button type="button" matSuffix mat-icon-button (click)="clearValues()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>

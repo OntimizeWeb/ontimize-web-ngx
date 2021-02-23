@@ -1,11 +1,23 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, MatSlideToggleChange } from '@angular/material';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
-import { TableFilterByColumnData, TableFilterByColumnDialogResult } from '../../../../../types/o-table-filter-by-column-data.type';
+import {
+  TableFilterByColumnData,
+  TableFilterByColumnDialogResult
+} from '../../../../../types/o-table-filter-by-column-data.type';
 import { Codes } from '../../../../../util';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
@@ -30,6 +42,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   column: OColumn;
   preloadValues: boolean = true;
   mode: string;
+  startView: 'month' | 'year' | 'multi-year' | '' = 'month';
   public onSortFilterValuesChange: EventEmitter<OFilterColumn> = new EventEmitter();
   private isCustomFilterSubject = new BehaviorSubject<boolean>(false);
   isCustomFilter: Observable<boolean> = this.isCustomFilterSubject.asObservable();
@@ -80,6 +93,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
     if (data.activeSortDirection) {
       this.activeSortDirection = data.activeSortDirection;
+    }
+
+    if (data.startView) {
+      this.startView = data.startView;
     }
 
     if (data.tableData && Array.isArray(data.tableData)) {
@@ -330,11 +347,17 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   getFilterColumn(): OFilterColumn {
-    let obj: OFilterColumn = { attr: '', sort: '' };
+    let obj: OFilterColumn = { attr: '', sort: '', startView: '' };
     obj.attr = this.column.attr;
     obj.sort = this.activeSortDirection;
+    obj.startView = this.startView;
     return obj;
   }
+
+  public getStartedViewDatepicker(): string {
+    return this.startView;
+  }
+
 
   protected getTypedValue(control: FormControl): any {
     let value = control.value;

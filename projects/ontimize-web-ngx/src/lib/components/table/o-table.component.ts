@@ -2023,7 +2023,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         activeSortDirection: this.getSortFilterColumn(column),
         tableData: this.dataSource.getTableData(),
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
-        mode: this.oTableColumnsFilterComponent.mode
+        mode: this.oTableColumnsFilterComponent.mode,
+        startView: this.getStartViewFilterColumn(column)
       },
       minWidth: '380px',
       disableClose: true,
@@ -2067,6 +2068,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.state['filter-columns'] = this.filterColumns;
     }
 
+  }
+
+  getStartViewFilterColumn(column: OColumn): string {
+    let startView;
+    // at first, get state in localstorage
+    if (this.state.hasOwnProperty('filter-columns')) {
+      this.state['filter-columns'].forEach((element: OFilterColumn) => {
+        if (element.attr === column.attr) {
+          startView = element.startView;
+        }
+      });
+    }
+
+    if (!Util.isDefined(startView) && this.oTableColumnsFilterComponent) {
+      startView = this.oTableColumnsFilterComponent.getStartViewValueOfFilterColumn(column.attr);
+    }
+    
+    return startView;
   }
 
   getSortFilterColumn(column: OColumn): string {
