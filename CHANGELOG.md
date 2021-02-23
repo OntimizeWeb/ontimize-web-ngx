@@ -14,6 +14,7 @@
 * **o-app-layout-sidenav**: Update sidenav image when component attributes change. ([323ad94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/323ad94))
 * **OServiceBaseComponent**: Parse `query-rows` attribute as integer ([f1874cac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1874cac))
 * **o-list-picker** : Closes [#503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/503) ([1b06fa5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b06fa5))
+* **language bundle**: Check if data exist on language bundle ([3b2bd5e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b2bd5e)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
 
 
 ## 4.2.0 (2020-11-03)
