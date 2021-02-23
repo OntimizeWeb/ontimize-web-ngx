@@ -23,6 +23,7 @@
 * **o-column**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
 * **o-row**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
 * **o-list-picker**: Fixed duplication of last value when search is side scrolling ([5529b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5529b03))
+* **language bundle**: Check if data exist on language bundle ([f2f8155](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f2f8155)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
 
 ## 8.1.1 (2020-11-25)
 
