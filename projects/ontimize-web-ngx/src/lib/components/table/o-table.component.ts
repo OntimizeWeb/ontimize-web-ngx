@@ -2080,6 +2080,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         }
       });
     }
+
+    if (!Util.isDefined(startView) && this.oTableColumnsFilterComponent) {
+      startView = this.oTableColumnsFilterComponent.getStartViewValueOfFilterColumn(column.attr);
+    }
+    
     return startView;
   }
 

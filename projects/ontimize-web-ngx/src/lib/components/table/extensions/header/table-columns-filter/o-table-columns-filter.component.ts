@@ -104,10 +104,26 @@ export class OTableColumnsFilterComponent implements OnInit {
 
   getSortValueOfFilterColumn(attr: string): string {
     let sortValue = '';
-    if (Util.isDefined(this.columnsArray) && this.columnsArray.find(x => x.attr === attr)) {
-      sortValue = this.columnsArray.find(x => x.attr === attr).sort;
+    if (Util.isDefined(this.columnsArray)) {
+      this.columnsArray.forEach(column => {
+        if (column.attr == attr) {
+          sortValue = column.sort;
+        }
+      });
     }
     return sortValue;
+  }
+
+  getStartViewValueOfFilterColumn(attr: string): string {
+    let startView = '';
+    if (Util.isDefined(this.columnsArray)) {
+      this.columnsArray.forEach(column => {
+        if (column.attr == attr) {
+          startView = column.startView;
+        }
+      });
+    }
+    return startView;
   }
 
   getColumnComparisonValue(column: OColumn, val: any): any {
