@@ -1477,10 +1477,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.expandableItem.toggle(item);
 
-
+    if (this.portalHost) {
+      this.portalHost.detach();
+    }
 
     if (this.getStateExpand(item) === 'collapsed') {
-      this.portalHost.detach();
       this.cd.detectChanges();
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
