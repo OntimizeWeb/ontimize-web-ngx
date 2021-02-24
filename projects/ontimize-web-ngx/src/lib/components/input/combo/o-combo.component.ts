@@ -277,7 +277,12 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     }
 
     if (isDefinedVal) {
-      const record = this.dataArray.find(item => item[this.valueColumn] === val);
+      let record;
+      if (this.multiple) {
+        record = this.dataArray.find(item => val.indexOf(item[this.valueColumn]) > -1);
+      } else {
+        record = this.dataArray.find(item => item[this.valueColumn] === val);
+      }
       if (!Util.isDefined(record)) {
         return;
       }
