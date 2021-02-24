@@ -1,9 +1,10 @@
-import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OSharedModule } from '../../../shared';
+import { Component, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
 import { InputConverter } from '../../../decorators';
-import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputComponent, ORealInputModule } from '../real-input/o-real-input.component';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../pipes/o-percentage.pipe';
+import { OSharedModule } from '../../../shared';
+import { Util } from '../../../util/util';
+import { DEFAULT_INPUTS_O_REAL_INPUT, DEFAULT_OUTPUTS_O_REAL_INPUT, ORealInputComponent, ORealInputModule } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [
   ...DEFAULT_INPUTS_O_REAL_INPUT,
@@ -37,10 +38,10 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   protected pipeArguments: IPercentPipeArgument;
 
   public ngOnInit() {
-    if (this.min == null) {
+    if (!Util.isDefined(this.min)) {
       this.min = 0;
     }
-    if (this.max == null) {
+    if (!Util.isDefined(this.max)) {
       this.max = 100;
     }
     super.ngOnInit();
