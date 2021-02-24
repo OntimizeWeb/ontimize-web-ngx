@@ -9,12 +9,15 @@
     * added new sub-menu *Group by*.([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
     * new interface **OnExecuteTableContextEvent**
   * `o-table-visible-columns-dialog`:  added the description in the dialog ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
+  * `o-table-columns-filter-column`:  Added new input start-view to set initial view in datepicker ([33a44c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33a44c6))
 * new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
 * new component `o-user-info-configuration` ([c6cac4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eec6cac4bdc0d))
 * **o-app-layout**: new `header-color`([52187ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52187ef))
 * **o-grid**:
   * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
   * new `insert-button-position` and `insert-button-floatable` inputs ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
+* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863))([#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481))
+
 
 ### Bug Fixes
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
@@ -24,6 +27,7 @@
 * **o-row**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
 * **o-list-picker**: Fixed duplication of last value when search is side scrolling ([5529b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5529b03))
 * **language bundle**: Check if data exist on language bundle ([f2f8155](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f2f8155)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
+*  **o-combo**: fixing bug when data is null and multiple-trigger-label=true ([bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) ([#bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/484))
 
 ## 8.1.1 (2020-11-25)
 

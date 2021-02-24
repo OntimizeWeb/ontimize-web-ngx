@@ -8,6 +8,8 @@ import { OBaseTablePaginator } from './o-base-table-paginator.class';
 export const DEFAULT_PAGINATOR_TABLE = [
   // page-size [number]: Number of items to display on a page. By default set to 50.
   'pageSize: page-size',
+  // pageSizeOptions [Array]: The set of provided page size options to display to the user.
+  'pageSizeOptions: page-size-options',
   'showFirstLastButtons: show-first-last-buttons'
 ];
 

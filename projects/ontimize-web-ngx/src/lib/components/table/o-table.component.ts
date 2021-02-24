@@ -27,7 +27,7 @@ import {
   ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
-import { BehaviorSubject, combineLatest, forkJoin, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
@@ -65,12 +65,14 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
-import { OBaseTableCellRenderer, OTableCellRendererServiceComponent } from './column';
+import { OBaseTableCellRenderer } from './column';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import {
+  OTableFilterByColumnDataDialogComponent
+} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
@@ -79,7 +81,10 @@ import { OTableOptionComponent } from './extensions/header/table-option/o-table-
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import {
+  OTableRowExpandableComponent,
+  OTableRowExpandedChange
+} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
@@ -1198,10 +1203,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.expandableItem.toggle(item);
 
-
+    if (this.portalHost) {
+      this.portalHost.detach();
+    }
 
     if (this.getStateExpand(item) === 'collapsed') {
-      this.portalHost.detach();
       this.cd.detectChanges();
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
@@ -2018,7 +2024,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         activeSortDirection: this.getSortFilterColumn(column),
         tableData: this.dataSource.getTableData(),
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
-        mode: this.oTableColumnsFilterComponent.mode
+        mode: this.oTableColumnsFilterComponent.mode,
+        startView: this.getStartViewFilterColumn(column)
       },
       minWidth: '380px',
       disableClose: true,
@@ -2062,6 +2069,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.state['filter-columns'] = this.filterColumns;
     }
 
+  }
+
+  getStartViewFilterColumn(column: OColumn): string {
+    let startView;
+    // at first, get state in localstorage
+    if (this.state.hasOwnProperty('filter-columns')) {
+      this.state['filter-columns'].forEach((element: OFilterColumn) => {
+        if (element.attr === column.attr) {
+          startView = element.startView;
+        }
+      });
+    }
+
+    if (!Util.isDefined(startView) && this.oTableColumnsFilterComponent) {
+      startView = this.oTableColumnsFilterComponent.getStartViewValueOfFilterColumn(column.attr);
+    }
+    
+    return startView;
   }
 
   getSortFilterColumn(column: OColumn): string {

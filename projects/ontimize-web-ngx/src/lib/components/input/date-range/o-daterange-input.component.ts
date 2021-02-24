@@ -1,4 +1,6 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import * as _moment from 'moment';
 
@@ -28,6 +30,7 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   'startKey',
   'endKey',
   'valueType: value-type',
+  'mode',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
@@ -61,6 +64,9 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public showRanges: boolean = false;
 
   protected _oMinDate: _moment.Moment;
+
+  public mode: 'mobile' | 'desktop' | 'auto' = 'auto';
+
   get oMinDate() {
     return this._oMinDate;
   }
@@ -114,6 +120,15 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return this._localeOptions;
   }
 
+  isMobileMode(): boolean {
+    return this.mode === 'mobile' || (this.mode === 'auto' && this.breakpointObserver.isMatched(Breakpoints.Handset))
+  }
+
+  isDesktopMode(): boolean {
+    return this.mode === 'desktop' || (this.mode === 'auto' && !this.breakpointObserver.isMatched(Breakpoints.Handset))
+  }
+
+
   public oformat: string = 'L';
   protected _localeOptions: any;
   protected olocale: string;
@@ -125,7 +140,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector
+    injector: Injector,
+    protected breakpointObserver: BreakpointObserver
   ) {
     super(form, elRef, injector);
     this.oTranslate = this.injector.get(OTranslateService);
@@ -150,7 +166,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   ngOnInit() {
     super.ngOnInit();
-
     if (this.oformat) {
       this._localeOptions.format = this.oformat;
     }
@@ -211,7 +226,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     if (Util.isDefined(this.value) && Util.isDefined(this.value.value) && !this.isObjectDataRangeNull(this.value)) {
       if (this.value.value[this.pickerDirective.startKey] && this.value.value[this.pickerDirective.endKey]) {
         this.value.value[this.pickerDirective.startKey] = this.ensureDateRangeValue(this.value.value[this.pickerDirective.startKey], this._valueType);
-        this.value.value[this.pickerDirective.endKey]  = this.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
+        this.value.value[this.pickerDirective.endKey] = this.ensureDateRangeValue(this.value.value[this.pickerDirective.endKey], this._valueType);
         chosenLabel = this.value.value[this.pickerDirective.startKey].format(this.oformat) +
           this.separator + this.value.value[this.pickerDirective.endKey].format(this.oformat);
       } else {
@@ -311,11 +326,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       return val;
     }
     let result = val;
-    if(!moment.isMoment(val)) {
+    if (!moment.isMoment(val)) {
       switch (valueType) {
         case 'string':
         case 'date':
-          if ( (val instanceof Date) || typeof val ==='string' ) {
+          if ((val instanceof Date) || typeof val === 'string') {
             const dateString = moment(val).format('YYYY-MM-DDThh:mm') + 'Z';
             const q = moment(dateString);
             if (q.isValid()) {
@@ -328,7 +343,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
           }
           break;
         case 'timestamp':
-          if ( typeof val === 'number') {
+          if (typeof val === 'number') {
             const dateString = moment.unix(val).format('YYYY-MM-DDThh:mm') + 'Z';
             const t = moment(dateString);
             if (t.isValid()) {
@@ -365,4 +380,5 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   get valueType(): any {
     return this._valueType;
   }
+
 }
