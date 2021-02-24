@@ -1,14 +1,17 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { InputConverter } from '../../../decorators/input-converter';
+import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../pipes/o-percentage.pipe';
+import { Util } from '../../../util/util';
 import {
   DEFAULT_INPUTS_O_REAL_INPUT,
   DEFAULT_OUTPUTS_O_REAL_INPUT,
-  ORealInputComponent,
+  ORealInputComponent
 } from '../real-input/o-real-input.component';
 
+
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [
-  ...DEFAULT_INPUTS_O_REAL_INPUT
+  ...DEFAULT_INPUTS_O_REAL_INPUT,
+  'valueBase: value-base'
 ];
 
 export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
@@ -28,13 +31,24 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   @InputConverter()
   grouping: boolean = true;
 
+  valueBase: OPercentageValueBaseType = 1;
+
+  protected componentPipe: OPercentPipe;
+  protected pipeArguments: IPercentPipeArgument;
+
   public ngOnInit() {
-    if (typeof (this.min) === 'undefined') {
-      this.min = 0;
+    if (!Util.isDefined(this.min)) {
+      this.min = 0; this.min = 0;
     }
-    if (typeof (this.max) === 'undefined') {
-      this.max = 100;
+    if (!Util.isDefined(this.max)) {
+      this.max = 100; this.max = 100;
     }
     super.ngOnInit();
+
+    this.pipeArguments.valueBase = this.valueBase;
+  }
+
+  setComponentPipe(): void {
+    this.componentPipe = new OPercentPipe(this.injector);
   }
 }
