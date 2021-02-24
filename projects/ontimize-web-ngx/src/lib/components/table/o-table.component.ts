@@ -487,7 +487,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected clickTimer;
   protected clickDelay = 200;
   protected clickPrevent = false;
-  protected editingCell: any;
+  public editingCell: any;
   protected editingRow: any;
 
   protected _currentPage: number = 0;
@@ -1166,16 +1166,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected registerDataSourceListeners() {
-    if (!this.pageable) {
-      this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
+    this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
+      this.stopEdition();
+      if (!this.pageable) {
         setTimeout(() => {
           this.loadingSortingSubject.next(false);
           if (this.cd && !(this.cd as ViewRef).destroyed) {
             this.cd.detectChanges();
           }
         }, 500);
-      });
-    }
+      }
+    });
   }
 
   get showLoading() {
@@ -1551,7 +1552,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         length: this.queryRows
       };
     }
-    this.editingCell = undefined;
+    this.stopEdition();
     this.queryData(void 0, queryArgs);
   }
 
@@ -1702,11 +1703,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return res;
     }
     column.editing = false;
-    this.editingCell = undefined;
     if (saveChanges && this.editingRow !== undefined) {
       Object.assign(this.editingRow, data);
     }
-    this.editingRow = undefined;
+    this.stopEdition();
     if (saveChanges && column.editor.updateRecordOnEdit) {
       const toUpdate = {};
       toUpdate[column.attr] = data[column.attr];
@@ -2085,7 +2085,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!Util.isDefined(startView) && this.oTableColumnsFilterComponent) {
       startView = this.oTableColumnsFilterComponent.getStartViewValueOfFilterColumn(column.attr);
     }
-    
+
     return startView;
   }
 
@@ -2141,11 +2141,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  clearSelectionAndEditing() {
-    this.selection.clear();
-    this._oTableOptions.columns.forEach(item => {
-      item.editing = false;
-    });
+  clearSelectionAndEditing(clearSelection: boolean = true) {
+    if (clearSelection) {
+      this.selection.clear();
+    }
+    this._oTableOptions.columns
+      .filter(oColumn => oColumn.editing)
+      .forEach(oColumn => {
+        oColumn.editing = false;
+      });
   }
 
   useDetailButton(column: OColumn): boolean {
@@ -2804,5 +2808,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       className = 'o-table-group-row o-table-group-row-level-' + row.level;
     }
     return className;
+  }
+
+  private stopEdition() {
+    this.editingCell = undefined;
+    this.editingRow = undefined;
+    this.clearSelectionAndEditing(false);
   }
 }
