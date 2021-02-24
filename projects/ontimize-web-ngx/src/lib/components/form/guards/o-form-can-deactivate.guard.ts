@@ -16,7 +16,7 @@ export class CanDeactivateFormGuard implements CanDeactivate<CanComponentDeactiv
 
   canDeactivate(component: CanComponentDeactivate, curr: ActivatedRouteSnapshot, state: RouterStateSnapshot, future: RouterStateSnapshot) {
     const futureQueryParams = future.root.queryParams;
-    if (futureQueryParams.hasOwnProperty(Codes.IGNORE_CAN_DEACTIVATE)) {
+    if (futureQueryParams.hasOwnProperty(Codes.IGNORE_CAN_DEACTIVATE) && futureQueryParams[Codes.IGNORE_CAN_DEACTIVATE]) {
       return true;
     }
     if (this.oForm) {

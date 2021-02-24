@@ -8,6 +8,8 @@ import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layou
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerComponent } from './o-form-layout-manager.component';
+import { OFormLayoutSplitPaneComponent } from './split-pane/o-form-layout-split-pane.component';
+import { OFormLayoutSplitPaneOptionsComponent } from './split-pane/options/o-form-layout-split-pane-options.component';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
 
@@ -19,12 +21,15 @@ import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-l
     OFormLayoutTabGroupComponent,
     OFormLayoutManagerContentDirective,
     OFormLayoutDialogOptionsComponent,
-    OFormLayoutTabGroupOptionsComponent
+    OFormLayoutTabGroupOptionsComponent,
+    OFormLayoutSplitPaneComponent,
+    OFormLayoutSplitPaneOptionsComponent
   ],
   exports: [
     OFormLayoutManagerComponent,
     OFormLayoutDialogOptionsComponent,
-    OFormLayoutTabGroupOptionsComponent
+    OFormLayoutTabGroupOptionsComponent,
+    OFormLayoutSplitPaneOptionsComponent
   ],
   entryComponents: [OFormLayoutDialogComponent],
   providers: [{

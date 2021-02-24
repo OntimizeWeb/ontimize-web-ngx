@@ -264,7 +264,7 @@ export class OServiceComponent extends OServiceBaseComponent {
       relativeTo: relativeTo
     };
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
-      qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+      qParams[Codes.IGNORE_CAN_DEACTIVATE] = this.formLayoutManager.ignoreCanDeactivate;
       this.formLayoutManager.setAsActiveFormLayoutManager();
     }
     extras[Codes.QUERY_PARAMS] = qParams;
