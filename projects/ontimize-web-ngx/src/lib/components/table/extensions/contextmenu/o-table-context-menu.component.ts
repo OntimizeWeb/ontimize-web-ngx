@@ -204,7 +204,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   public edit(event): void {
-    this.table.doHandleClick(event.data.rowValue, event.data.rowIndex, event);
+    this.table.doHandleClick(event.data.rowValue, event.data.cellName, event.data.rowIndex, event);
   }
 
   public add(): void {

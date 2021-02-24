@@ -37,6 +37,7 @@ import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 import { OTableMenu } from '../../interfaces/o-table-menu.interface';
+import { OnCellClickTableEvent } from '../../interfaces/o-table-oncellclick.interface';
 import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
@@ -195,6 +196,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
+  'onCellClick',
   'onClick',
   'onDoubleClick',
   'onRowSelected',
@@ -454,6 +456,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected finishQuerySubscription: boolean = false;
 
   public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
+  public onCellClick: EventEmitter<OnCellClickTableEvent> = new EventEmitter();
   public onDoubleClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDeselected: EventEmitter<any> = new EventEmitter();
@@ -1555,21 +1558,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(item: any, rowIndex: number, $event: MouseEvent) {
+  handleClick(item: any, column: string, rowIndex: number, $event: MouseEvent) {
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
-        this.doHandleClick(item, rowIndex, $event);
+        this.doHandleClick(item, column, rowIndex, $event);
       }
       this.clickPrevent = false;
     }, this.clickDelay);
   }
 
-  doHandleClick(item: any, rowIndex: number, $event: MouseEvent) {
+  doHandleClick(item: any, column: string, rowIndex: number, $event: MouseEvent) {
     if (!this.oenabled) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: columnIndex });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
       this.selectedRow(item);
@@ -1579,7 +1583,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(item);
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: columnIndex });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(item);
     } else if (!this.isSelectionModeNone()) {
@@ -1590,7 +1595,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.clearSelectionAndEditing();
       }
       this.selectedRow(item);
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: this.visibleColArray.indexOf(columnIndex) });
     }
   }
 
@@ -1646,12 +1652,18 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  handleCellClick(column: OColumn, row: any, event?) {
+  handleCellClick(column: OColumn, row: any, rowIndex: number, event?) {
     if (this.oenabled && column.editor
       && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
       && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
 
       this.activateColumnEdition(column, row, event);
+    } else {
+      const columnName = column.attr;
+
+      this.onCellClick.emit({ cell: row[columnName], columnId: columnName, row: row, rowIndex: rowIndex, mouseEvent: event, columnIndex: this.visibleColArray.indexOf(columnName) })
+      this.handleClick(row, column.attr, rowIndex, event);
+
     }
   }
 
@@ -2085,7 +2097,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (!Util.isDefined(startView) && this.oTableColumnsFilterComponent) {
       startView = this.oTableColumnsFilterComponent.getStartViewValueOfFilterColumn(column.attr);
     }
-    
+
     return startView;
   }
 
