@@ -1596,7 +1596,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       this.selectedRow(item);
       let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: this.visibleColArray.indexOf(columnIndex) });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: columnIndex });
     }
   }
 
