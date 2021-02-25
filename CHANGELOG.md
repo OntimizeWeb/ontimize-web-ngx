@@ -11,7 +11,7 @@
   * `o-table-visible-columns-dialog`: Improved the usability and the appearane similar to other modals ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
   * `o-table-columns-filter-column`:  Added new input start-view to set initial view in datepicker ([33a44c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33a44c6))
   * new `onCellClick` event ([75a6eeb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75a6eeb))
-  * Added columnId and columnIndex property in `OnClickTableEvent` interface ([f035953](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f035953))
+  * Added columnName property in `OnClickTableEvent` interface ([7a4e783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a4e783))
 * new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
 * new component `o-user-info-configuration` ([c6cac4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eec6cac4bdc0d))
 * **o-app-layout**: new `header-color`([52187ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52187ef))
@@ -30,6 +30,10 @@
 * **o-list-picker**: Fixed duplication of last value when search is side scrolling ([5529b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5529b03))
 *  **o-combo**: fixing bug when data is null and multiple-trigger-label=true ([bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) ([#bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/484))
 
+### BREAKING CHANGES
+* **table**:
+  *method `handleCellClick` has been removed, you have to use `handleClick` instead  ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
+  *method `handleCellDoubleClick` has been removed, you have to use `handleDoubleClick` instead ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
 ## 8.1.1 (2020-11-25)
 
 ### Bug Fixes
