@@ -92,7 +92,7 @@
 
           <!--Define mat-cell-->
           <td mat-cell *matCellDef="let row;let rowIndex = index" [ngClass]="[column.className, getCellAlignClass(column)]"
-            (click)="handleClick(row,column, rowIndex, $event)" (dblclick)="handleDoubleClick(column, row, $event)"
+            (click)="handleClick(row,column, rowIndex, $event)" (dblclick)="handleDoubleClick(row,column, rowIndex, $event)"
             [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
             matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
             [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"

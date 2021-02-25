@@ -37,7 +37,6 @@ import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 import { OTableMenu } from '../../interfaces/o-table-menu.interface';
-import { OnCellClickTableEvent } from '../../interfaces/o-table-oncellclick.interface';
 import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
@@ -455,7 +454,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected contextMenuSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
-  public onCellClick: EventEmitter<OnCellClickTableEvent> = new EventEmitter();
   public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onDoubleClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onRowSelected: EventEmitter<any> = new EventEmitter();
@@ -1564,8 +1562,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
       this.activateColumnEdition(column, row, $event);
     } else {
-      const columnName = column.attr;
-      this.onCellClick.emit({ cell: row[columnName], columnName: columnName, row: row, rowIndex: rowIndex, mouseEvent: $event })
+
       this.doHandleClick(row, column.attr, rowIndex, $event);
     }
   }
@@ -1577,7 +1574,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           return;
         }
         if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-          this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
+          this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
           this.saveDataNavigationInLocalStorage();
           this.selection.clear();
           this.selectedRow(row);
@@ -1587,7 +1584,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
           // TODO: test $event.metaKey on MAC
           this.selectedRow(row);
-          this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
+          this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
         } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
           this.handleMultipleSelection(row);
         } else if (!this.isSelectionModeNone()) {
@@ -1598,7 +1595,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             this.clearSelectionAndEditing();
           }
           this.selectedRow(row);
-          this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
+          this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
         }
       }
       this.clickPrevent = false;
@@ -1622,7 +1619,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.storePaginationState = true;
   }
 
-  handleDoubleClick(column: OColumn, row: any, event?) {
+  handleDoubleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
 
@@ -1631,7 +1628,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       && (Codes.isDoubleClickMode(this.editionMode))) {
       this.activateColumnEdition(column, row, event);
     } else {
-      this.onDoubleClick.emit(row);
+      this.onDoubleClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column.attr, cell: row[column.attr] });
       if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
         this.saveDataNavigationInLocalStorage();
         this.viewDetail(row);
