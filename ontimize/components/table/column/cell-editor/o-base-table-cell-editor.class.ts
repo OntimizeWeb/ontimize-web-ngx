@@ -86,13 +86,24 @@ export class OBaseTableCellEditor implements OnInit {
     if (!oColumn || !oColumn.editing) {
       return;
     }
-    if (event.keyCode === 27) {
-      // escape
+
+    if (this.checkKey(event, "Escape", 27)) {
       this.onEscClicked();
-    } else if (event.keyCode === 13 || event.keyCode === 9) {
+      return;
+    }
+
+    if (!this.table.editingCell.contains(event.target)) {
+      return;
+    }
+
+    if (this.checkKey(event, "Enter", 13) || this.checkKey(event, "Tab", 9)) {
       // intro or tab
       this.commitEdition();
     }
+  }
+
+  protected checkKey(event: KeyboardEvent, key: string, keyCode: number): boolean {
+    return (event.key && event.key === key) || (event.keyCode && event.keyCode === keyCode);
   }
 
   createFormControl() {

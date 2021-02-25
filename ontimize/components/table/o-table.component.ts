@@ -772,7 +772,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected clickTimer;
   protected clickDelay = 200;
   protected clickPrevent = false;
-  protected editingCell: any;
+  public editingCell: any;
   protected editingRow: any;
 
   protected _currentPage: number = 0;
@@ -1446,13 +1446,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected registerDataSourceListeners() {
-    if (!this.pageable) {
-      this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
+    this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
+      this.stopEdition();
+      if (!this.pageable) {
         setTimeout(() => {
           this.loadingSortingSubject.next(false);
         }, 500);
-      });
-    }
+      }
+    });
   }
 
   get showLoading() {
@@ -1807,7 +1808,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         length: this.queryRows
       };
     }
-    this.editingCell = undefined;
+    this.stopEdition();
     this.queryData(void 0, queryArgs);
   }
 
@@ -1959,11 +1960,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return res;
     }
     column.editing = false;
-    this.editingCell = undefined;
     if (saveChanges && this.editingRow !== undefined) {
       Object.assign(this.editingRow, data);
     }
-    this.editingRow = undefined;
+    this.stopEdition();
     if (saveChanges && column.editor.updateRecordOnEdit) {
       let toUpdate = {};
       toUpdate[column.attr] = data[column.attr];
@@ -2314,11 +2314,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  clearSelectionAndEditing() {
-    this.selection.clear();
-    this._oTableOptions.columns.forEach(item => {
-      item.editing = false;
-    });
+  clearSelectionAndEditing(clearSelection: boolean = true) {
+    if (clearSelection) {
+      this.selection.clear();
+    }
+    this._oTableOptions.columns
+      .filter(oColumn => oColumn.editing)
+      .forEach(oColumn => {
+        oColumn.editing = false;
+      });
   }
 
   useDetailButton(column: OColumn): boolean {
@@ -2778,6 +2782,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   public getClientWidthColumn(col: OColumn): number {
     return col.DOMWidth || this.getThWidthFromOColumn(col);
+  }
+
+  private stopEdition() {
+    this.editingCell = undefined;
+    this.editingRow = undefined;
+    this.clearSelectionAndEditing(false);
   }
 }
 

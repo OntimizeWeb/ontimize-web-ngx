@@ -273,16 +273,17 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   protected handleKeydown(e: KeyboardEvent) {
-    this.activeKeys[e.keyCode] = true;
+    this.activeKeys[(e.key || e.keyCode)] = true;
   }
 
   protected handleKeyup(e: KeyboardEvent) {
-    this.activeKeys[e.keyCode] = false;
+    this.activeKeys[(e.key || e.keyCode)] = false;
     const oColumn = this.table.getOColumn(this.tableColumn.attr);
     if (!oColumn) {
       return;
     }
-    if (e.keyCode === 9 && (this.activeKeys[16] || !this.enabledCommitOnTabPress)) {
+
+    if (this.checkKey(e, "Tab", 9) && (this.activeKeys[16] || this.activeKeys["Shift"] || !this.enabledCommitOnTabPress)) {
       // tab + shift or tab pressed with focus in the date component
       return;
     }
