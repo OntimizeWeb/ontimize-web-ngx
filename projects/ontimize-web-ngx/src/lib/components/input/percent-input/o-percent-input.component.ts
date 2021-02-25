@@ -38,10 +38,10 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 
   public ngOnInit() {
     if (!Util.isDefined(this.min)) {
-      this.min = 0; this.min = 0;
+      this.min = 0;
     }
     if (!Util.isDefined(this.max)) {
-      this.max = 100; this.max = 100;
+      this.max = 100;
     }
     super.ngOnInit();
 
