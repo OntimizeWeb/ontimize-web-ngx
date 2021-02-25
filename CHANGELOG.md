@@ -8,7 +8,7 @@
   * `o-table-context-menu`:
     * added new sub-menu *Group by*.([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
     * new interface **OnExecuteTableContextEvent**
-  * `o-table-visible-columns-dialog`: Improved the usability and the appearane similar to other modals ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
+  * `o-table-visible-columns-dialog`: Improved the usability and the appearance similar to other modals ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
   * `o-table-columns-filter-column`:  Added new input start-view to set initial view in datepicker ([33a44c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33a44c6))
   * Added columnName and cell properties in `OnClickTableEvent` interface ([7a4e783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a4e783))([96e33b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96e33b8))
 * new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
