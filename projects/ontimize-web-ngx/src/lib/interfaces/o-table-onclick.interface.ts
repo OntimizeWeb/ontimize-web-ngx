@@ -5,8 +5,6 @@ export interface OnClickTableEvent {
   rowIndex: number;
   /** mouseEvent */
   mouseEvent: MouseEvent;
-  /**attr column   */
-  columnId: string;
-  /** column index in visible columns */
-  columnIndex: number;
+  /** column name   */
+  columnName: string;
 }

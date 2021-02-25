@@ -2,10 +2,8 @@ export interface OnCellClickTableEvent {
 
   /** cell data */
   cell: any;
-  /** column attr   */
-  columnId: string;
-  /** column index   */
-  columnIndex: number;
+  /** column name   */
+  columnName: string;
   /** row data */
   row: any;
   /** row index */
