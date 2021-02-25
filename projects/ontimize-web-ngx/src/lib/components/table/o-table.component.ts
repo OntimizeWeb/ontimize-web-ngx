@@ -1571,34 +1571,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  doHandleClick(item: any, column: string, rowIndex: number, $event: MouseEvent) {
+  doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
     if (!this.oenabled) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
-      this.selectedRow(item);
-      this.viewDetail(item);
+      this.selectedRow(row);
+      this.viewDetail(row);
       return;
     }
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
-      this.selectedRow(item);
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
+      this.selectedRow(row);
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
-      this.handleMultipleSelection(item);
+      this.handleMultipleSelection(row);
     } else if (!this.isSelectionModeNone()) {
       const selectedItems = this.getSelectedItems();
-      if (this.selection.isSelected(item) && selectedItems.length === 1 && this.editionEnabled) {
+      if (this.selection.isSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
         return;
       } else {
         this.clearSelectionAndEditing();
       }
-      this.selectedRow(item);
-      let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
+      this.selectedRow(row);
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
     }
   }
 
