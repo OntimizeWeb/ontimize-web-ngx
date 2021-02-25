@@ -7,4 +7,6 @@ export interface OnClickTableEvent {
   mouseEvent: MouseEvent;
   /** column name   */
   columnName: string;
+  /** cell data */
+  cell: any;
 }
