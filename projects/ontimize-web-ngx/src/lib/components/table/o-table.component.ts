@@ -455,8 +455,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected contextMenuSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
-  public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onCellClick: EventEmitter<OnCellClickTableEvent> = new EventEmitter();
+  public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onDoubleClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDeselected: EventEmitter<any> = new EventEmitter();
@@ -1558,13 +1558,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(item: any, column: string, rowIndex: number, $event: MouseEvent) {
-    this.clickTimer = setTimeout(() => {
-      if (!this.clickPrevent) {
-        this.doHandleClick(item, column, rowIndex, $event);
-      }
-      this.clickPrevent = false;
-    }, this.clickDelay);
+  handleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
+    if (this.oenabled && column.editor
+      && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
+      && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
+
+      this.activateColumnEdition(column, row, $event);
+    } else {
+      const columnName = column.attr;
+      this.onCellClick.emit({ cell: row[columnName], columnName: columnName, row: row, rowIndex: rowIndex, mouseEvent: $event })
+      this.doHandleClick(row, column.attr, rowIndex, $event);
+    }
   }
 
   doHandleClick(item: any, column: string, rowIndex: number, $event: MouseEvent) {
@@ -1572,8 +1576,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: columnIndex });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
       this.selectedRow(item);
@@ -1583,8 +1586,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(item);
-      let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: columnIndex });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(item);
     } else if (!this.isSelectionModeNone()) {
@@ -1596,7 +1598,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
       this.selectedRow(item);
       let columnIndex: number = this.visibleColArray ? this.visibleColArray.indexOf(column) : -1;
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnId: column, columnIndex: columnIndex });
+      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event, columnName: column });
     }
   }
 
@@ -1617,16 +1619,21 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.storePaginationState = true;
   }
 
-  handleDoubleClick(item: any, event?) {
-    clearTimeout(this.clickTimer);
-    this.clickPrevent = true;
-    ObservableWrapper.callEmit(this.onDoubleClick, item);
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item);
+  handleDoubleClick(column: OColumn, row: any, event?) {
+    if (this.oenabled && column.editor
+      && (!Codes.isDoubleClickMode(this.detailMode))
+      && (Codes.isDoubleClickMode(this.editionMode))) {
+      this.activateColumnEdition(column, row, event);
+    } else {
+      clearTimeout(this.clickTimer);
+      this.clickPrevent = true;
+      this.onDoubleClick.emit(row);
+      if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
+        this.saveDataNavigationInLocalStorage();
+        this.viewDetail(row);
+      }
     }
   }
-
   get editionEnabled(): boolean {
     return this._oTableOptions.columns.some(item => item.editing);
   }
@@ -1652,29 +1659,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  handleCellClick(column: OColumn, row: any, rowIndex: number, event?) {
-    if (this.oenabled && column.editor
-      && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
-      && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
 
-      this.activateColumnEdition(column, row, event);
-    } else {
-      const columnName = column.attr;
-
-      this.onCellClick.emit({ cell: row[columnName], columnId: columnName, row: row, rowIndex: rowIndex, mouseEvent: event, columnIndex: this.visibleColArray.indexOf(columnName) })
-      this.handleClick(row, column.attr, rowIndex, event);
-
-    }
-  }
-
-  handleCellDoubleClick(column: OColumn, row: any, event?) {
-    if (this.oenabled && column.editor
-      && (!Codes.isDoubleClickMode(this.detailMode))
-      && (Codes.isDoubleClickMode(this.editionMode))) {
-
-      this.activateColumnEdition(column, row, event);
-    }
-  }
 
   protected activateColumnEdition(column: OColumn, row: any, event?) {
     if (event) {
