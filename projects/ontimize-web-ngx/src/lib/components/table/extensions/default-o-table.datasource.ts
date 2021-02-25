@@ -165,11 +165,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           data = datapaginate;
         }
 
-        this.renderedData = data;
-
         if (!Util.isArrayEmpty(this.groupByColumns)) {
-          this.renderedData = this.getSubGroupsOfGroupedRow(data);
-          data = this.filterCollapsedRowGroup(this.renderedData);
+          data = this.getSubGroupsOfGroupedRow(data);
+          data = this.filterCollapsedRowGroup(data);
         }
 
         this.renderedData = data;
