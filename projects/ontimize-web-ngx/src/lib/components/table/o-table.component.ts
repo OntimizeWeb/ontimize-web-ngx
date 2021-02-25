@@ -1556,43 +1556,53 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(item: any, rowIndex: number, $event: MouseEvent) {
+  handleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
-        this.doHandleClick(item, rowIndex, $event);
+        if (this.oenabled && column.editor
+          && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
+          && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
+          this.activateColumnEdition(column, row, $event);
+        } else {
+
+          this.doHandleClick(row, column.attr, rowIndex, $event);
+        }
       }
       this.clickPrevent = false;
     }, this.clickDelay);
+
   }
 
-  doHandleClick(item: any, rowIndex: number, $event: MouseEvent) {
+  doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
     if (!this.oenabled) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
-      this.selectedRow(item);
-      this.viewDetail(item);
+      this.selectedRow(row);
+      this.viewDetail(row);
       return;
     }
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
-      this.selectedRow(item);
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.selectedRow(row);
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
-      this.handleMultipleSelection(item);
+      this.handleMultipleSelection(row);
     } else if (!this.isSelectionModeNone()) {
       const selectedItems = this.getSelectedItems();
-      if (this.selection.isSelected(item) && selectedItems.length === 1 && this.editionEnabled) {
+      if (this.selection.isSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
         return;
       } else {
         this.clearSelectionAndEditing();
       }
-      this.selectedRow(item);
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.selectedRow(row);
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
     }
+
+
   }
 
   handleMultipleSelection(item: any) {
@@ -1612,16 +1622,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.storePaginationState = true;
   }
 
-  handleDoubleClick(item: any, event?) {
+  handleDoubleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
-    ObservableWrapper.callEmit(this.onDoubleClick, item);
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item);
+
+    if (this.oenabled && column.editor
+      && (!Codes.isDoubleClickMode(this.detailMode))
+      && (Codes.isDoubleClickMode(this.editionMode))) {
+      this.activateColumnEdition(column, row, event);
+    } else {
+      this.onDoubleClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column.attr, cell: row[column.attr] });
+      if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
+        this.saveDataNavigationInLocalStorage();
+        this.viewDetail(row);
+      }
     }
   }
-
   get editionEnabled(): boolean {
     return this._oTableOptions.columns.some(item => item.editing);
   }
@@ -1647,23 +1663,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  handleCellClick(column: OColumn, row: any, event?) {
-    if (this.oenabled && column.editor
-      && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
-      && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
 
-      this.activateColumnEdition(column, row, event);
-    }
-  }
-
-  handleCellDoubleClick(column: OColumn, row: any, event?) {
-    if (this.oenabled && column.editor
-      && (!Codes.isDoubleClickMode(this.detailMode))
-      && (Codes.isDoubleClickMode(this.editionMode))) {
-
-      this.activateColumnEdition(column, row, event);
-    }
-  }
 
   protected activateColumnEdition(column: OColumn, row: any, event?) {
     if (event) {
