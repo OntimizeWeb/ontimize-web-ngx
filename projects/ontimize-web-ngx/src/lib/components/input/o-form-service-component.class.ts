@@ -13,7 +13,7 @@ import { OFormComponent } from '../form/o-form.component';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
+  OFormDataComponent
 } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
@@ -312,7 +312,7 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   syncDataIndex(queryIfNotFound: boolean = true) {
     this._currentIndex = undefined;
-    if (this.value && this.value.value && this.dataArray) {
+    if (Util.isDefined(this.value) && Util.isDefined(this.value.value) && this.dataArray) {
       const self = this;
       this.dataArray.forEach((item, index) => {
         if (this.value.value instanceof Array) {

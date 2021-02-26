@@ -1,11 +1,20 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit, ContentChildren, QueryList } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  forwardRef,
+  Inject,
+  Injector,
+  OnInit,
+  QueryList
+} from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
-import { OTableColumnsFilterColumnComponent, OFilterColumn } from './columns/o-table-columns-filter-column.component';
+import { OFilterColumn, OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -95,10 +104,26 @@ export class OTableColumnsFilterComponent implements OnInit {
 
   getSortValueOfFilterColumn(attr: string): string {
     let sortValue = '';
-    if (Util.isDefined(this.columnsArray) && this.columnsArray.find(x => x.attr === attr)) {
-      sortValue = this.columnsArray.find(x => x.attr === attr).sort;
+    if (Util.isDefined(this.columnsArray)) {
+      this.columnsArray.forEach(column => {
+        if (column.attr == attr) {
+          sortValue = column.sort;
+        }
+      });
     }
     return sortValue;
+  }
+
+  getStartViewValueOfFilterColumn(attr: string): string {
+    let startView = '';
+    if (Util.isDefined(this.columnsArray)) {
+      this.columnsArray.forEach(column => {
+        if (column.attr == attr) {
+          startView = column.startView;
+        }
+      });
+    }
+    return startView;
   }
 
   getColumnComparisonValue(column: OColumn, val: any): any {
@@ -125,9 +150,10 @@ export class OTableColumnsFilterComponent implements OnInit {
   parseColumns(columns: string) {
     return columns.split(';')
       .map(x => {
-        let obj: OFilterColumn = { attr: '', sort: '' };
+        let obj: OFilterColumn = { attr: '', sort: '', startView: '' };
         obj.attr = x;
         obj.sort = '';
+        obj.startView = '';
         return obj;
       });
   }
@@ -135,9 +161,10 @@ export class OTableColumnsFilterComponent implements OnInit {
   parseFilterColumns(columns: QueryList<OTableColumnsFilterColumnComponent>) {
     return columns
       .map(x => {
-        let obj: OFilterColumn = { attr: '', sort: '' };
+        let obj: OFilterColumn = { attr: '', sort: '', startView: '' };
         obj.attr = x.attr;
         obj.sort = x.sort;
+        obj.startView = x.startView;
         return obj;
       });
   }

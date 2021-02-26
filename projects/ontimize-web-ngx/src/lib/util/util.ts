@@ -345,4 +345,14 @@ export class Util {
     }
     return result;
   }
+
+
+  static uniqueBy(a: Array<any>, key) {
+    const seen = {};
+    return a.filter((item) => {
+      const k = key(item);
+      return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+    });
+  }
+
 }

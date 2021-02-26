@@ -13,6 +13,7 @@ export interface OTableColumn {
   multiline: boolean;
   orderable: boolean;
   searchable: boolean;
+  groupable: boolean;
   resizable: boolean;
   titleAlign: string;
   contentAlign: string;

@@ -216,6 +216,7 @@ export class ODaterangepickerDirective implements OnDestroy {
     instance.maxDate = this.maxDate;
     instance.locale = this.locale;
     instance.showWeekNumbers = this.showWeekNumbers;
+    instance.singleDatePicker = this.singleDatePicker;
 
     if (this.showRanges) {
       instance.ranges = this.ranges;

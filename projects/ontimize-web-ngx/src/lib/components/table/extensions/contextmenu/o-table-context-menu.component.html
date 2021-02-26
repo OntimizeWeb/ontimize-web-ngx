@@ -12,7 +12,7 @@
   <!-- FILTER GROUP -->
   <o-context-menu-group label="TABLE_CONTEXT_MENU.FILTER" icon="filter_alt" type="group" [visible]="isVisibleFilter | async">
     <o-context-menu-item icon="filter_alt" [label]="labelFilterByColumn" (execute)="filterByColumn($event)"></o-context-menu-item>
-    <o-context-menu-item icon="filter_alt" label="TABLE_CONTEXT_MENU.FILTER_BY_VALUE" (execute)="filterByValue($event)"></o-context-menu-item>
+    <o-context-menu-item icon="filter_alt" label="TABLE_CONTEXT_MENU.FILTER_BY_VALUE" (execute)="filterByValue()"></o-context-menu-item>
   </o-context-menu-group>
   <!-- COPY GROUP -->
   <o-context-menu-separator [visible]="isVisibleCopy | async"></o-context-menu-separator>
@@ -25,4 +25,16 @@
   <o-context-menu-separator [visible]="isVisibleSelectAll | async"></o-context-menu-separator>
   <o-context-menu-item attr="select-all" [label]="table.isAllSelected() ? 'TABLE_CONTEXT_MENU.DESELECT_ALL': 'TABLE_CONTEXT_MENU.SELECT_ALL'"
     icon="select_all" (execute)="table.isAllSelected() ? unSelectAll() : selectAll()" [visible]="isVisibleSelectAll | async"></o-context-menu-item>
+
+  <!-- GROUP BY -->
+  <o-context-menu-separator [visible]="isVisibleGroupByRow | async"></o-context-menu-separator>
+  <o-context-menu-group label="TABLE_CONTEXT_MENU.GROUP_BY" icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async">
+    <o-context-menu-item icon="format_indent_increase" [label]="labelGroupByColumn" (execute)="groupByColumn()"
+      [enabled]="isEnabledGroupByColumn | async"></o-context-menu-item>
+    <o-context-menu-item icon="format_indent_decrease" [label]="labelUnGroupByColumn" (execute)="unGroupByColumn()"
+      [enabled]="isEnabledUnGroupByColumn | async"></o-context-menu-item>
+    <o-context-menu-item icon="format_line_spacing" label="TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS" (execute)="unGroupAll()"
+      [enabled]="isEnabledUnGroupAllColumn | async">
+    </o-context-menu-item>
+  </o-context-menu-group>
 </o-context-menu>

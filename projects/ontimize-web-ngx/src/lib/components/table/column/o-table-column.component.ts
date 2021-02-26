@@ -52,6 +52,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // searchable [no|yes]: searchings are performed into column content. Default: yes.
   'searchable',
 
+  // groupable [no|yes|true|false]: Indicates whether or not the column can be groupable
+  'groupable',
+
   // type [boolean|integer|real|currency|date|image]: column type. Default: no value (string).
   'type',
 
@@ -119,6 +122,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected _orderable: boolean;
   protected _resizable: boolean;
   protected _searchable: boolean = true;
+  protected _groupable: boolean;
   @InputConverter()
   public editable: boolean = false;
   public width: string;
@@ -509,6 +513,18 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
 
   get searchable(): any {
     return this._searchable;
+  }
+
+  set groupable(val: any) {
+    this._groupable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    const oCol = this.table.getOColumn(this.attr);
+    if (oCol) {
+      oCol.groupable = this._groupable;
+    }
+  }
+
+  get groupable(): any {
+    return this._groupable;
   }
 
   getSQLType(): number {

@@ -1,4 +1,44 @@
-## 8.1.1(2020-11-25)
+
+
+## 8.2.0(2021-02-26)
+### Features
+* **table**:
+  * Added row grouping ([078931b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/078931b))
+  * new class `OTableGroupedRow`([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
+  * `o-table-context-menu`:
+    * added new sub-menu *Group by*.([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
+    * new interface **OnExecuteTableContextEvent**
+  * `o-table-visible-columns-dialog`: Improved the usability and the appearance similar to other modals ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
+  * `o-table-columns-filter-column`:  Added new input start-view to set initial view in datepicker ([33a44c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33a44c6)) Closes [#508](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/508)
+  * Added columnName and cell properties in `OnClickTableEvent` interface ([7a4e783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a4e783))([96e33b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96e33b8))
+* new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
+* new component `o-user-info-configuration` ([c6cac4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eec6cac4bdc0d))
+* **o-app-layout**: new `header-color`([52187ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52187ef))
+* **o-grid**:
+  * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
+  * new `insert-button-position` and `insert-button-floatable` inputs ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
+* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863)) Closes [#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481)
+* **o-percent-input**: new attribute `value-base` ([44becb6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44becb6)) Closes ([#513](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/513))
+
+### Bug Fixes
+* **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
+* **OFormDataComponent**: Show input value when internal value is zero ([a7b2392](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a7b2392))
+* **OFormDataComponent**: Show clear button on inputs when internal value is zero ([512a8c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/512a8c3))
+* **o-column**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
+* **o-row**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
+* **o-list-picker**: Fixed duplication of last value when search is side scrolling ([5529b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5529b03))
+* **language bundle**: Check if data exist on language bundle ([f2f8155](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f2f8155)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
+*  **o-combo**: fixing bug when data is null and multiple-trigger-label=true ([bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) Closes [#484](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/484)
+* **o-hour-input**: Fix component styles ([cbb6a03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cbb6a03)) Closes ([#485](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/485))
+* **o-table, OBaseTableCellEditor**: Ignoring keyboard events from outside a cell being edited. Also stopping active cell edition when table content has changed ([d888fad](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d888fad)) Closes ([#523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/523))
+
+### BREAKING CHANGES
+* **table**:
+  * method `handleCellClick` has been removed, you have to use `handleClick` instead  ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
+  * method `handleCellDoubleClick` has been removed, you have to use `handleDoubleClick` instead ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
+  * Changed the parametres of the `handleDoubleClick` and `handleCellClick` methods ([e64dcc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e64dcc3)) ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
+## 8.1.1 (2020-11-25)
+
 ### Bug Fixes
 * **table**: fixing bug in filtering by column ([88ac4bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88ac4bf))
 

@@ -1,4 +1,6 @@
+import { ViewChild } from '@angular/core';
 import { Component, ElementRef, EventEmitter, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ThemePalette } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -6,11 +8,13 @@ import { InputConverter } from '../../decorators/input-converter';
 import { DialogService } from '../../services/dialog.service';
 import { OModulesInfoService } from '../../services/o-modules-info.service';
 import { ServiceUtils } from '../../util/service.utils';
+import { OUserInfoComponent } from '../user-info/o-user-info.component';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',
   'showLanguageSelector: show-language-selector',
-  'useFlagIcons: use-flag-icons'
+  'useFlagIcons: use-flag-icons',
+  'color'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -36,6 +40,9 @@ export class OAppHeaderComponent implements OnDestroy {
 
   protected modulesInfoSubscription: Subscription;
 
+  @ViewChild('userInfo', { static: false })
+  public userInfo: OUserInfoComponent;
+
   @InputConverter()
   showUserInfo: boolean = true;
   @InputConverter()
@@ -44,6 +51,8 @@ export class OAppHeaderComponent implements OnDestroy {
   useFlagIcons: boolean = false;
 
   public onSidenavToggle = new EventEmitter<void>();
+
+  private _color: ThemePalette;
 
   constructor(
     protected router: Router,
@@ -80,6 +89,14 @@ export class OAppHeaderComponent implements OnDestroy {
 
   get showHeaderTitle(): boolean {
     return this._headerTitle.length > 0;
+  }
+
+  set color(newValue: ThemePalette) {
+    this._color = newValue;
+  }
+
+  get color(): ThemePalette {
+    return this._color;
   }
 
 }

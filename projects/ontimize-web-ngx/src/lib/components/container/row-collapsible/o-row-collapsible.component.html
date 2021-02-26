@@ -1,4 +1,4 @@
-<mat-expansion-panel #expPanel [expanded]="expanded" class="o-container">
+<mat-expansion-panel #expPanel [expanded]="expanded" class="o-container" (opened)="updateInnerHeight(null)" (closed)="updateInnerHeight(0)">
   <mat-expansion-panel-header #containerTitle [expandedHeight]="expandedHeight" [collapsedHeight]="collapsedHeight">
     <mat-panel-title fxLayout="row" fxLayoutAlign="start center" class="o-container-title">
       <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
@@ -13,8 +13,7 @@
     <ng-content></ng-content>
   </div>
 </mat-expansion-panel>
-<div #container [class.o-container-outline-expanded]="expPanel.expanded" class="o-container-outline"
-  *ngIf="isAppearanceOutline()">
+<div #oContainerOutline *ngIf="isAppearanceOutline()" [class.o-container-outline-expanded]="expPanel.expanded" class="o-container-outline">
   <div class="o-container-outline-start"></div>
   <div class="o-container-outline-gap-title"></div>
   <div class="o-container-outline-gap-empty1"></div>
