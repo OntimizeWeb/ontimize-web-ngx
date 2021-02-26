@@ -166,7 +166,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
         if (!Util.isArrayEmpty(this.groupByColumns)) {
           data = this.getSubGroupsOfGroupedRow(data);
-          /** filters data that belongs to a collapsed grouped row */
+          /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
           data = this.filterCollapsedRowGroup(data);
         }
 
