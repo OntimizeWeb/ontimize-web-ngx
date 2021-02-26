@@ -9,7 +9,7 @@
     * added new sub-menu *Group by*.([ed9607](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed9607))
     * new interface **OnExecuteTableContextEvent**
   * `o-table-visible-columns-dialog`: Improved the usability and the appearance similar to other modals ([73b699d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73b699d))
-  * `o-table-columns-filter-column`:  Added new input start-view to set initial view in datepicker ([33a44c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33a44c6))
+  * `o-table-columns-filter-column`:  Added new input start-view to set initial view in datepicker ([33a44c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33a44c6)) Closes [#508](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/508)
   * Added columnName and cell properties in `OnClickTableEvent` interface ([7a4e783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a4e783))([96e33b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96e33b8))
 * new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
 * new component `o-user-info-configuration` ([c6cac4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eec6cac4bdc0d))
@@ -17,8 +17,8 @@
 * **o-grid**:
   * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
   * new `insert-button-position` and `insert-button-floatable` inputs ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
-* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863)) Closes [#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481)
-
+* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863))([#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481))
+* **o-percent-input**: new attribute `value-base` ([44becb6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44becb6)) Closes ([#513](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/513))
 
 ### Bug Fixes
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
@@ -28,7 +28,9 @@
 * **o-row**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
 * **o-list-picker**: Fixed duplication of last value when search is side scrolling ([5529b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5529b03))
 * **language bundle**: Check if data exist on language bundle ([f2f8155](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f2f8155)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
-*  **o-combo**: fixing bug when data is null and multiple-trigger-label=true ([bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) Closes [#484](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/484)
+*  **o-combo**: fixing bug when data is null and multiple-trigger-label=true ([bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) ([#bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/484))
+* **o-hour-input**: Fix component styles ([cbb6a03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cbb6a03)) Closes ([#485](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/485))
+* **o-table, OBaseTableCellEditor**: Ignoring keyboard events from outside a cell being edited. Also stopping active cell edition when table content has changed ([d888fad](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d888fad)) Closes ([#523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/523))
 
 ### BREAKING CHANGES
 * **table**:
