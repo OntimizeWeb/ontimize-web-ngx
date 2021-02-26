@@ -167,7 +167,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         if (!Util.isArrayEmpty(this.groupByColumns)) {
           data = this.getSubGroupsOfGroupedRow(data);
           /** filters data that belongs to a collapsed grouped row */
-          data = this.filterDataBelongsCollapsedGroupedRow(data);
+          data = this.filterCollapsedRowGroup(data);
         }
 
         this.renderedData = data;
@@ -634,12 +634,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return subGroups;
   }
 
-  /**
-   * Filters data belongs collapsed grouped row
-   * @param data
-   * @returns data belongs collapsed grouped row
-   */
-  filterDataBelongsCollapsedGroupedRow(data: any): any[] {
+/**
+ * Filters collapsed row group
+ * @param data
+ * @returns collapsed row group
+ */
+filterCollapsedRowGroup(data: any): any[] {
     const self = this;
     return data.filter((row: any) => (row instanceof OTableGroupedRow) ? row.visible : this.belongsToExpandedGroupedRow(data, row));
   }
