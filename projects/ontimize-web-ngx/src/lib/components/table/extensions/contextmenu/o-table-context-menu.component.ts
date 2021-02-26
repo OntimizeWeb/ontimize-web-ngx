@@ -245,15 +245,13 @@ export class OTableContextMenuComponent implements AfterViewInit {
     this.table.refresh();
   }
 
-  public filterByValue(event): void {
-    this.table.showFilterByColumnIcon = true;
+  public filterByValue(): void {
     const columValueFilter: OColumnValueFilter = {
       attr: this.column.attr,
       operator: ColumnValueFilterOperator.IN,
       values: [this.row[this.column.attr]]
     };
-    this.table.dataSource.addColumnFilter(columValueFilter);
-    this.table.reloadPaginatedDataFromStart();
+    this.table.filterByColumn(columValueFilter);
   }
 
 
