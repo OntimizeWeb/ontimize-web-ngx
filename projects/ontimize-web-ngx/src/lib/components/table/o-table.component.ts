@@ -2774,7 +2774,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const totalCounts = group.totalCounts;
     const oCol = this.getOColumn(field);
 
-    if (!value && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)) {
+    if (!value && Util.isDefined(oCol.renderer)
+      && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
       value = ' - ';
       if (!this.onDataLoadedCellRendererSubscription) {
         this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {

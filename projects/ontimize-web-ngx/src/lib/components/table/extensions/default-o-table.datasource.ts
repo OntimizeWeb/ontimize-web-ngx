@@ -10,7 +10,6 @@ import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/o-
 import { OTableGroupedRow } from '../../../types/o-table-row-group.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
-import { OTableCellRendererServiceComponent } from '../column';
 import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
@@ -167,6 +166,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
         if (!Util.isArrayEmpty(this.groupByColumns)) {
           data = this.getSubGroupsOfGroupedRow(data);
+          /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
           data = this.filterCollapsedRowGroup(data);
         }
 
@@ -634,31 +634,30 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return subGroups;
   }
 
-  /**
-   * Filters collapsed row group
-   * @param data
-   * @returns collapsed row group
-   */
-  filterCollapsedRowGroup(data): any[] {
+/**
+ * Filters collapsed row group
+ * @param data
+ * @returns collapsed row group
+ */
+filterCollapsedRowGroup(data: any): any[] {
     const self = this;
-    return data.filter((row: any) => (row instanceof OTableGroupedRow) ? row.visible : this.getDataRowVisible(row));
+    return data.filter((row: any) => (row instanceof OTableGroupedRow) ? row.visible : this.belongsToExpandedGroupedRow(data, row));
   }
 
   /**
- * Gets data row visible
- *
- * @param data
- * @returns true if data row visible
- */
-  getDataRowVisible(data: any): boolean {
+   * Belongs to an expanded grouped row
+   * @param data
+   * @param row
+   * @returns true if to expanded grouped row
+   */
+  belongsToExpandedGroupedRow(data: any, row: any): boolean {
     let parent: OTableGroupedRow;
-
     let match = false;
-    for (let index = 0; index < this.renderedData.length && !match; index++) {
-      if (this.renderedData[index] instanceof OTableGroupedRow) {
-        parent = this.renderedData[index];
+    for (let index = 0; index < data.length && !match; index++) {
+      if (data[index] instanceof OTableGroupedRow) {
+        parent = data[index];
       }
-      if (JSON.stringify(this.renderedData[index]) === JSON.stringify(data)) {
+      if (JSON.stringify(data[index]) === JSON.stringify(row)) {
         match = true;
       }
     }
