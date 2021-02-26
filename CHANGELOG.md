@@ -17,7 +17,7 @@
 * **o-grid**:
   * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
   * new `insert-button-position` and `insert-button-floatable` inputs ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
-* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863)) Closes[#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481)
+* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863)) Closes [#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481)
 
 
 ### Bug Fixes
@@ -34,7 +34,7 @@
 * **table**:
   * method `handleCellClick` has been removed, you have to use `handleClick` instead  ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
   * method `handleCellDoubleClick` has been removed, you have to use `handleDoubleClick` instead ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
-  * Changed the parametres of the `handleDoubleClick` and `handleCellClick` methods
+  * Changed the parametres of the `handleDoubleClick` and `handleCellClick` methods ([e64dcc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e64dcc3)) ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
 ## 8.1.1 (2020-11-25)
 
 ### Bug Fixes
