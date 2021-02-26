@@ -1,6 +1,6 @@
 
 
-## 8.2.0
+## 8.2.0(2021-02-26)
 ### Features
 * **table**:
   * Added row grouping ([078931b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/078931b))
@@ -17,7 +17,7 @@
 * **o-grid**:
   * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
   * new `insert-button-position` and `insert-button-floatable` inputs ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
-* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863))([#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481))
+* **o-date-range**: new attribute `mode` ([52fb863](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52fb863)) Closes [#481](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/481)
 * **o-percent-input**: new attribute `value-base` ([44becb6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44becb6)) Closes ([#513](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/513))
 
 ### Bug Fixes
@@ -28,7 +28,7 @@
 * **o-row**: Fix appearence outline when no title is displayed. ([664c518](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/664c518))
 * **o-list-picker**: Fixed duplication of last value when search is side scrolling ([5529b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5529b03))
 * **language bundle**: Check if data exist on language bundle ([f2f8155](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f2f8155)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
-*  **o-combo**: fixing bug when data is null and multiple-trigger-label=true ([bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) ([#bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/484))
+*  **o-combo**: fixing bug when data is null and multiple-trigger-label=true ([bbcbca1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4065cdd)) Closes [#484](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/484)
 * **o-hour-input**: Fix component styles ([cbb6a03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cbb6a03)) Closes ([#485](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/485))
 * **o-table, OBaseTableCellEditor**: Ignoring keyboard events from outside a cell being edited. Also stopping active cell edition when table content has changed ([d888fad](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d888fad)) Closes ([#523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/523))
 
