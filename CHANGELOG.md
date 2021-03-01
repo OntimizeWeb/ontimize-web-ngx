@@ -1,4 +1,8 @@
 
+## 8.2.1
+
+### Bug Fixes
+* **o-slide-toggle**: fixed getValue function ([d386f4d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d386f4d)) Closes ([#535](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/535))
 
 ## 8.2.0(2021-02-26)
 ### Features
