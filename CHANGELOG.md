@@ -1,4 +1,4 @@
-## 4.2.1
+## 4.2.1 (2021-03-01)
 ### Features
 * **o-grid**:
   * added new button ([85c0a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85c0a45))
