@@ -3,6 +3,7 @@
 * **o-grid**:
   * added new button ([85c0a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85c0a45))
   * new `insert-button-position` and `insert-button-floatable` input ([85c0a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85c0a45))
+* **o-percent-input**: new attribute `value-base` ([5a344d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a344d0)) Closes ([#513](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/513))
 
 ### Bug Fixes
 * **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
@@ -15,7 +16,7 @@
 * **OServiceBaseComponent**: Parse `query-rows` attribute as integer ([f1874cac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1874cac))
 * **o-list-picker** : Closes [#503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/503) ([1b06fa5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b06fa5))
 * **language bundle**: Check if data exist on language bundle ([3b2bd5e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b2bd5e)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
-
+* **o-table, OBaseTableCellEditor**: Ignoring keyboard events from outside a cell being edited. Also stopping active cell edition when table content has changed ([c1590ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1590ef)) Closes ([#523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/523))
 
 ## 4.2.0 (2020-11-03)
 ### Features
