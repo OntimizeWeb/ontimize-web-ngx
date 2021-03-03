@@ -171,7 +171,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   public ngAfterViewInit(): void {
     super.afterViewInit();
-    this.parseSortColumns();
     this.filterCaseSensitive = this.state.hasOwnProperty('filter-case-sensitive') ?
       this.state['filter-case-sensitive'] : this.filterCaseSensitive;
     if (Util.isDefined(this.searchInputComponent)) {
