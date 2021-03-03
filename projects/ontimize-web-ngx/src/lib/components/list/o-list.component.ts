@@ -105,7 +105,15 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
   public insertButtonFloatable: boolean = true;
   public quickFilterColumns: string;
   public route: string;
-  public sortColumns: string;
+
+  get sortColumns(): string {
+    return this._sortColumns;
+  }
+  set sortColumns(val: string) {
+    this._sortColumns = val;
+    this.parseSortColumns();
+  }
+  protected _sortColumns: string;
   /* End Inputs */
 
   public sortColArray: SQLOrder[] = [];
@@ -139,7 +147,6 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
 
   public ngAfterViewInit(): void {
     super.afterViewInit();
-    this.parseSortColumns();
     this.filterCaseSensitive = this.state.hasOwnProperty('filter-case-sensitive') ?
       this.state['filter-case-sensitive'] : this.filterCaseSensitive;
     if (Util.isDefined(this.searchInputComponent)) {
