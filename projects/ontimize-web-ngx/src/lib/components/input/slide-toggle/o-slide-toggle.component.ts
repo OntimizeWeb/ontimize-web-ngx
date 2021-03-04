@@ -7,7 +7,7 @@ import { OFormValue } from '../../form/oFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
+  OFormDataComponent
 } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
@@ -92,6 +92,14 @@ export class OSlideToggleComponent extends OFormDataComponent {
       return this.value.value === this.trueValue;
     }
     return false;
+  }
+
+  getValue(): any {
+    if (Util.isDefined(this.value) && this.value.value !== undefined) {
+      return this.value.value ? this.trueValue : this.falseValue;
+    } else {
+      return this.defaultValue;
+    }
   }
 
   onClickBlocker(e: MouseEvent) {
