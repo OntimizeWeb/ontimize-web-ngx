@@ -1,9 +1,28 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewEncapsulation } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  SimpleChange,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatCheckbox } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { merge, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
 import { dataServiceFactory } from '../../services/factories';
@@ -16,7 +35,6 @@ import { OServiceComponent } from '../o-service-component.class';
 import { ISQLOrder, OQueryDataArgs, ServiceUtils } from '../service.utils';
 import { OListItemComponent, OListItemModule } from './list-item/o-list-item.component';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-
 
 export interface IList {
   detailMode: string;
@@ -111,7 +129,15 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
   public insertButtonFloatable: boolean = true;
   public quickFilterColumns: string;
   public route: string;
-  public sortColumns: string;
+
+  get sortColumns(): string {
+    return this._sortColumns;
+  }
+  set sortColumns(val: string) {
+    this._sortColumns = val;
+    this.parseSortColumns();
+  }
+  protected _sortColumns: string;
   /* End Inputs */
 
   public sortColArray: ISQLOrder[] = [];
@@ -145,7 +171,6 @@ export class OListComponent extends OServiceComponent implements AfterContentIni
 
   public ngAfterViewInit(): void {
     super.afterViewInit();
-    this.parseSortColumns();
     this.filterCaseSensitive = this.state.hasOwnProperty('filter-case-sensitive') ?
       this.state['filter-case-sensitive'] : this.filterCaseSensitive;
     if (Util.isDefined(this.searchInputComponent)) {
