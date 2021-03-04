@@ -1,4 +1,5 @@
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Util } from '../util';
 
 const EMAIL_REGEXP = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
 
@@ -92,7 +93,7 @@ export class OValidators {
   public static patternValidator(regex: RegExp, key: string): ValidatorFn {
 
     let validator: ValidatorFn = (control: FormControl): { [key: string]: any } => {
-      if (!control.value) {
+      if (!control.value || !Util.isDefined(regex)) {
         // if control is empty return no error
         return undefined;
       }
