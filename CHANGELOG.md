@@ -2,7 +2,9 @@
 
 ## 8.2.1
 ### Features
-* **validator**: new pattern validator([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
+* **validators**: new pattern validator([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
+
+
 ## 8.2.0(2021-02-26)
 ### Features
 * **table**:
