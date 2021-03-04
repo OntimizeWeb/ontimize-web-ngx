@@ -3,6 +3,7 @@ export * from './checkbox/o-checkbox.module';
 export * from './combo/combo-search/o-combo-search.component';
 export * from './combo/o-combo.component';
 export * from './combo/o-combo.module';
+export * from './combo/combo-renderer/o-combo-renderer.class';
 export * from './currency-input/o-currency-input.component';
 export * from './currency-input/o-currency-input.module';
 export * from './date-input/o-date-input.component';
