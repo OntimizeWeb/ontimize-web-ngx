@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
+import { OListPickerCustomRenderer } from './listpicker-renderer/o-listpicker-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
   'data',
@@ -26,6 +27,7 @@ export class OListPickerDialogComponent implements AfterViewInit {
   public visibleData: any = [];
   public searchVal: string;
   public itemSize: number = 30;
+  public renderer: OListPickerCustomRenderer;
 
   @ViewChild('searchInput', { static: false })
   public searchInput: OSearchInputComponent;
@@ -52,6 +54,9 @@ export class OListPickerDialogComponent implements AfterViewInit {
     }
     if (data.menuColumns) {
       this.menuColumns = data.menuColumns;
+    }
+    if (data.renderer) {
+      this.renderer = data.renderer;
     }
     this.searchVal = data.searchVal;
   }
@@ -125,6 +130,11 @@ export class OListPickerDialogComponent implements AfterViewInit {
 
   private _isBlank(value: string): boolean {
     return !Util.isDefined(value) || value.length === 0;
+  }
+
+  public registerRenderer(renderer: any) {
+    this.renderer = renderer;
+    this.renderer.initialize();
   }
 
 }

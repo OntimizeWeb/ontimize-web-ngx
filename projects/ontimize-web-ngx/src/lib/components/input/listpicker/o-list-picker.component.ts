@@ -21,7 +21,12 @@ import { FormValueOptions } from '../../../types/form-value-options.type';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
-import { DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT, OFormServiceComponent } from '../o-form-service-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  OFormServiceComponent
+} from '../o-form-service-component.class';
+import { OListPickerCustomRenderer } from './listpicker-renderer/o-listpicker-renderer.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
@@ -78,6 +83,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   // @InputConverter()
   // public clearButton: boolean = true;
   /* End inputs */
+
+  public renderer: OListPickerCustomRenderer;
 
   protected matDialog: MatDialog;
   protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
@@ -248,7 +255,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         searchVal: this.visibleInputValue,
         menuColumns: this.visibleColumns, // TODO: improve this, this is passed to `o-search-input` of the dialog
         visibleColumns: this.visibleColArray,
-        queryRows: this.queryRows
+        queryRows: this.queryRows,
+        renderer: this.renderer
       }
     };
     if (this.dialogWidth !== undefined) {
@@ -281,6 +289,28 @@ export class OListPickerComponent extends OFormServiceComponent implements After
       result.push(newItem);
     });
     return result;
+  }
+
+  getRenderedValue() {
+    let descTxt = '';
+    if (this.descriptionColArray && this._currentIndex !== undefined) {
+      const self = this;
+      this.descriptionColArray.forEach((descCol, index) => {
+        const txt = self.dataArray[self._currentIndex][descCol];
+        if (txt) {
+          descTxt += txt;
+        }
+        if (index < self.descriptionColArray.length - 1) {
+          descTxt += self.separator;
+        }
+      });
+    }
+    return this.renderer.getListPickerData(descTxt);
+  }
+
+  public registerRenderer(renderer: any) {
+    this.renderer = renderer;
+    this.renderer.initialize();
   }
 
 }
