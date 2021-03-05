@@ -2,11 +2,16 @@
   <!--TOOLBAR-->
   <mat-toolbar *ngIf="hasControls()" class="o-grid-toolbar">
     <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" fxFill>
+      <!-- button new-->
+      <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-icon-button aria-label="Insert"
+        (click)="add()">
+        <mat-icon svgIcon="ontimize:add"></mat-icon>
+      </button>
+
       <!--button refresh-->
       <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
         <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
       </button>
-
       <!--O-GRID-PAGINATOR-->
       <div class="o-grid-paginator" *ngIf="showPageSize">
         <div class="o-grid-page-size-label">{{ 'GRID.ITEMS_PER_PAGE' | oTranslate }}:</div>
@@ -34,7 +39,7 @@
       <div fxLayoutAlign="center center" fxFlex>
         <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
       </div>
-      <o-search-input *ngIf="quickFilter" [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive" 
+      <o-search-input *ngIf="quickFilter" [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive"
         [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" placeholder="" appearance="legacy"></o-search-input>
     </div>
   </mat-toolbar>
@@ -54,6 +59,12 @@
       <ng-container *ngTemplateOutlet="item.template"></ng-container>
     </mat-grid-tile>
   </mat-grid-list>
+
+  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()"
+    class="o-grid-add-floatable-button" [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
+    [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
+    <mat-icon svgIcon="ontimize:add"></mat-icon>
+  </button>
 
   <!-- GRID FOOTER -->
   <div *ngIf="!paginationControls && showFooter" fxLayout="row" fxLayoutAlign="center center" class="o-grid-footer">

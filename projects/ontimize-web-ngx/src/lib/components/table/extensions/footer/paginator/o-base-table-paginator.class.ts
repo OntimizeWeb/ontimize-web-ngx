@@ -1,4 +1,5 @@
 import { OTablePaginator } from '../../../../../interfaces/o-table-paginator.interface';
+import { Util } from '../../../../../util';
 
 export class OBaseTablePaginator implements OTablePaginator {
 
@@ -28,6 +29,18 @@ export class OBaseTablePaginator implements OTablePaginator {
     this._pageIndex = value;
   }
 
+  get pageSizeOptions(): Array<any> {
+    return this._pageSizeOptions;
+  }
+
+  set pageSizeOptions(value: Array<any>) {
+    if (typeof value == 'string') {
+      this._pageSizeOptions = Util.parseArray(value, true);
+    } else {
+      this._pageSizeOptions = value
+    }
+  }
+
   get pageSize(): number {
     return this._pageSize;
   }
@@ -44,14 +57,6 @@ export class OBaseTablePaginator implements OTablePaginator {
       this._pageSizeOptions.push(this._pageSize);
       this._pageSizeOptions.sort((i: number, j: number) => i - j);
     }
-  }
-
-  get pageSizeOptions(): Array<any> {
-    return this._pageSizeOptions;
-  }
-
-  set pageSizeOptions(value: Array<any>) {
-    this._pageSizeOptions = value;
   }
 
   public isShowingAllRows(selectedLength): boolean {

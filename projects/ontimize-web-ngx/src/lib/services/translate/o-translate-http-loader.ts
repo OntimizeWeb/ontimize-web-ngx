@@ -98,9 +98,11 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
 
   protected parseBundleResponse(data: any[]): any {
     const result = {};
-    data.forEach((item) => {
-      result[item[OTranslateHttpLoader.BUNDLE_KEY]] = item[OTranslateHttpLoader.BUNDLE_VALUE];
-    });
+    if(data) {
+      data.forEach((item) => {
+        result[item[OTranslateHttpLoader.BUNDLE_KEY]] = item[OTranslateHttpLoader.BUNDLE_VALUE];
+      });
+    }
     return result;
   }
 }

@@ -204,7 +204,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   public edit(event): void {
-    this.table.doHandleClick(event.data.rowValue, event.data.rowIndex, event);
+    this.table.doHandleClick(event.data.rowValue, event.data.cellName, event.data.rowIndex, event);
   }
 
   public add(): void {
@@ -245,15 +245,13 @@ export class OTableContextMenuComponent implements AfterViewInit {
     this.table.refresh();
   }
 
-  public filterByValue(event): void {
-    this.table.showFilterByColumnIcon = true;
+  public filterByValue(): void {
     const columValueFilter: OColumnValueFilter = {
       attr: this.column.attr,
       operator: ColumnValueFilterOperator.IN,
       values: [this.row[this.column.attr]]
     };
-    this.table.dataSource.addColumnFilter(columValueFilter);
-    this.table.reloadPaginatedDataFromStart();
+    this.table.filterByColumn(columValueFilter);
   }
 
 

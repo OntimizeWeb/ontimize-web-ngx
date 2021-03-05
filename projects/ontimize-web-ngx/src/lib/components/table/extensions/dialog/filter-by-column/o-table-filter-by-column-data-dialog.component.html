@@ -45,9 +45,9 @@
   <button type="button" mat-stroked-button [mat-dialog-close]="clearAction">
     {{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate | uppercase }} </button>
   <span align="end">
-   <button type="button" mat-stroked-button [mat-dialog-close]="false">
+   <button type="button" mat-stroked-button [mat-dialog-close]="cancelAction">
     {{ 'CANCEL' | oTranslate | uppercase }} </button>
-  <button type="button" mat-stroked-button [mat-dialog-close]="true">
+  <button type="button" mat-stroked-button [mat-dialog-close]="acceptAction">
     {{ 'ACCEPT' | oTranslate | uppercase }} </button>
   </span>
 </mat-dialog-actions>
@@ -81,7 +81,7 @@
       <mat-datepicker-toggle matSuffix [for]="datepickerFrom">
         <mat-icon matDatepickerToggleIcon>today</mat-icon>
       </mat-datepicker-toggle>
-      <mat-datepicker #datepickerFrom></mat-datepicker>
+      <mat-datepicker #datepickerFrom [startView]="getStartedViewDatepicker()"></mat-datepicker>
     </mat-form-field>
     <mat-form-field>
       <input matInput [matDatepicker]="datepickerTo" [min]="fcFrom.value" [formControl]="fcTo"
@@ -89,7 +89,7 @@
       <mat-datepicker-toggle matSuffix [for]="datepickerTo">
         <mat-icon matDatepickerToggleIcon>today</mat-icon>
       </mat-datepicker-toggle>
-      <mat-datepicker #datepickerTo></mat-datepicker>
+      <mat-datepicker #datepickerTo [startView]="getStartedViewDatepicker()"></mat-datepicker>
     </mat-form-field>
     <button type="button" matSuffix mat-icon-button (click)="clearValues()">
       <mat-icon svgIcon="ontimize:close"></mat-icon>

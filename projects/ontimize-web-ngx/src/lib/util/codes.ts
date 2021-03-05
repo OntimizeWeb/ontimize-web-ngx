@@ -115,6 +115,7 @@ export class Codes {
   public static APP_LAYOUT_MODE_DESKTOP: OAppLayoutMode = 'desktop';
   public static APP_LAYOUT_MODE_MOBILE: OAppLayoutMode = 'mobile';
 
+
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
   }

@@ -1,12 +1,18 @@
 import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { InputConverter } from '../../decorators';
 
 import { DialogService } from '../../services/dialog.service';
 import { LoginService } from '../../services/login.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
+import { OUserInfoConfigurationDirective } from './user-info-configuration/o-user-info-configuration.directive';
 
-export const DEFAULT_INPUTS_O_USER_INFO = [];
+export const DEFAULT_INPUTS_O_USER_INFO = [
+  'showProfile: show-profile',
+  'showSettings: show-settings',
+  'showLogout: show-logout'
+];
 
 export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 
@@ -30,6 +36,17 @@ export class OUserInfoComponent implements OnDestroy {
   userInfoSubscription: Subscription;
   protected userInfo: UserInfo;
 
+  @InputConverter()
+  public showLogout: boolean = true;
+
+  @InputConverter()
+  public showSettings: boolean = true;
+
+  @InputConverter()
+  public showProfile: boolean = false;
+
+  public userInfoConfiguration: OUserInfoConfigurationDirective;
+
   constructor(
     protected elRef: ElementRef,
     protected injector: Injector,
@@ -43,6 +60,7 @@ export class OUserInfoComponent implements OnDestroy {
     this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
       this.userInfo = res;
     });
+
   }
 
   ngOnDestroy() {
@@ -57,6 +75,10 @@ export class OUserInfoComponent implements OnDestroy {
     this.router.navigate(['main/settings']);
   }
 
+  onProfileClick() {
+    this.router.navigate(['main/profile']);
+  }
+
   get existsUserInfo(): boolean {
     return this.userInfo !== undefined;
   }
@@ -67,6 +89,17 @@ export class OUserInfoComponent implements OnDestroy {
 
   get username(): string {
     return this.userInfo ? this.userInfo.username : undefined;
+  }
+
+  registerUserInfoConfiguration(userInfoMenu: OUserInfoConfigurationDirective) {
+    this.userInfoConfiguration = userInfoMenu;
+    this.updateInputsByConfiguration();
+  }
+
+  private updateInputsByConfiguration() {
+    this.showLogout = this.userInfoConfiguration.showLogout ? this.userInfoConfiguration.showLogout : this.showLogout;
+    this.showProfile = this.userInfoConfiguration.showProfile ? this.userInfoConfiguration.showProfile : this.showProfile;
+    this.showSettings = this.userInfoConfiguration.showSettings ? this.userInfoConfiguration.showSettings : this.showSettings;
   }
 
 }

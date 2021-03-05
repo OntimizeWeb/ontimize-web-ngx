@@ -1,7 +1,17 @@
 @mixin o-app-header-theme($theme) {
   $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
   .o-app-header {
     nav {
+      &.o-app-header-primary {
+        background-color: mat-color($primary);
+      }
+
+      &.o-app-header-accent {
+        background-color: mat-color($accent);
+      }
+
       .sidenav-toggle {
         color: mat-color($primary, default-contrast);
         background: mat-color($primary);

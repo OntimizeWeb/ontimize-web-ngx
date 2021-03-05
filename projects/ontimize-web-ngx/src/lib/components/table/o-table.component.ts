@@ -27,7 +27,7 @@ import {
   ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
-import { BehaviorSubject, combineLatest, forkJoin, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
@@ -65,12 +65,14 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
-import { OBaseTableCellRenderer, OTableCellRendererServiceComponent } from './column';
+import { OBaseTableCellRenderer } from './column';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import {
+  OTableFilterByColumnDataDialogComponent
+} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
@@ -79,7 +81,10 @@ import { OTableOptionComponent } from './extensions/header/table-option/o-table-
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import {
+  OTableRowExpandableComponent,
+  OTableRowExpandedChange
+} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
@@ -482,7 +487,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   protected clickTimer;
   protected clickDelay = 200;
   protected clickPrevent = false;
-  protected editingCell: any;
+  public editingCell: any;
   protected editingRow: any;
 
   protected _currentPage: number = 0;
@@ -1161,16 +1166,17 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   protected registerDataSourceListeners() {
-    if (!this.pageable) {
-      this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
+    this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
+      this.stopEdition();
+      if (!this.pageable) {
         setTimeout(() => {
           this.loadingSortingSubject.next(false);
           if (this.cd && !(this.cd as ViewRef).destroyed) {
             this.cd.detectChanges();
           }
         }, 500);
-      });
-    }
+      }
+    });
   }
 
   get showLoading() {
@@ -1198,10 +1204,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.expandableItem.toggle(item);
 
-
+    if (this.portalHost) {
+      this.portalHost.detach();
+    }
 
     if (this.getStateExpand(item) === 'collapsed') {
-      this.portalHost.detach();
       this.cd.detectChanges();
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
@@ -1545,47 +1552,57 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         length: this.queryRows
       };
     }
-    this.editingCell = undefined;
+    this.stopEdition();
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(item: any, rowIndex: number, $event: MouseEvent) {
+  handleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
-        this.doHandleClick(item, rowIndex, $event);
+        if (this.oenabled && column.editor
+          && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
+          && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
+          this.activateColumnEdition(column, row, $event);
+        } else {
+
+          this.doHandleClick(row, column.attr, rowIndex, $event);
+        }
       }
       this.clickPrevent = false;
     }, this.clickDelay);
+
   }
 
-  doHandleClick(item: any, rowIndex: number, $event: MouseEvent) {
+  doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
     if (!this.oenabled) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
       this.saveDataNavigationInLocalStorage();
       this.selection.clear();
-      this.selectedRow(item);
-      this.viewDetail(item);
+      this.selectedRow(row);
+      this.viewDetail(row);
       return;
     }
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
-      this.selectedRow(item);
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.selectedRow(row);
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
     } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
-      this.handleMultipleSelection(item);
+      this.handleMultipleSelection(row);
     } else if (!this.isSelectionModeNone()) {
       const selectedItems = this.getSelectedItems();
-      if (this.selection.isSelected(item) && selectedItems.length === 1 && this.editionEnabled) {
+      if (this.selection.isSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
         return;
       } else {
         this.clearSelectionAndEditing();
       }
-      this.selectedRow(item);
-      this.onClick.emit({ row: item, rowIndex: rowIndex, mouseEvent: $event });
+      this.selectedRow(row);
+      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
     }
+
+
   }
 
   handleMultipleSelection(item: any) {
@@ -1605,16 +1622,22 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.storePaginationState = true;
   }
 
-  handleDoubleClick(item: any, event?) {
+  handleDoubleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
-    ObservableWrapper.callEmit(this.onDoubleClick, item);
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item);
+
+    if (this.oenabled && column.editor
+      && (!Codes.isDoubleClickMode(this.detailMode))
+      && (Codes.isDoubleClickMode(this.editionMode))) {
+      this.activateColumnEdition(column, row, event);
+    } else {
+      this.onDoubleClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column.attr, cell: row[column.attr] });
+      if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
+        this.saveDataNavigationInLocalStorage();
+        this.viewDetail(row);
+      }
     }
   }
-
   get editionEnabled(): boolean {
     return this._oTableOptions.columns.some(item => item.editing);
   }
@@ -1640,23 +1663,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  handleCellClick(column: OColumn, row: any, event?) {
-    if (this.oenabled && column.editor
-      && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
-      && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
 
-      this.activateColumnEdition(column, row, event);
-    }
-  }
-
-  handleCellDoubleClick(column: OColumn, row: any, event?) {
-    if (this.oenabled && column.editor
-      && (!Codes.isDoubleClickMode(this.detailMode))
-      && (Codes.isDoubleClickMode(this.editionMode))) {
-
-      this.activateColumnEdition(column, row, event);
-    }
-  }
 
   protected activateColumnEdition(column: OColumn, row: any, event?) {
     if (event) {
@@ -1696,11 +1703,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       return res;
     }
     column.editing = false;
-    this.editingCell = undefined;
     if (saveChanges && this.editingRow !== undefined) {
       Object.assign(this.editingRow, data);
     }
-    this.editingRow = undefined;
+    this.stopEdition();
     if (saveChanges && column.editor.updateRecordOnEdit) {
       const toUpdate = {};
       toUpdate[column.attr] = data[column.attr];
@@ -2018,7 +2024,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         activeSortDirection: this.getSortFilterColumn(column),
         tableData: this.dataSource.getTableData(),
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
-        mode: this.oTableColumnsFilterComponent.mode
+        mode: this.oTableColumnsFilterComponent.mode,
+        startView: this.getStartViewFilterColumn(column)
       },
       minWidth: '380px',
       disableClose: true,
@@ -2062,6 +2069,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.state['filter-columns'] = this.filterColumns;
     }
 
+  }
+
+  getStartViewFilterColumn(column: OColumn): string {
+    let startView;
+    // at first, get state in localstorage
+    if (this.state.hasOwnProperty('filter-columns')) {
+      this.state['filter-columns'].forEach((element: OFilterColumn) => {
+        if (element.attr === column.attr) {
+          startView = element.startView;
+        }
+      });
+    }
+
+    if (!Util.isDefined(startView) && this.oTableColumnsFilterComponent) {
+      startView = this.oTableColumnsFilterComponent.getStartViewValueOfFilterColumn(column.attr);
+    }
+
+    return startView;
   }
 
   getSortFilterColumn(column: OColumn): string {
@@ -2116,11 +2141,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-  clearSelectionAndEditing() {
-    this.selection.clear();
-    this._oTableOptions.columns.forEach(item => {
-      item.editing = false;
-    });
+  clearSelectionAndEditing(clearSelection: boolean = true) {
+    if (clearSelection) {
+      this.selection.clear();
+    }
+    this._oTableOptions.columns
+      .filter(oColumn => oColumn.editing)
+      .forEach(oColumn => {
+        oColumn.editing = false;
+      });
   }
 
   useDetailButton(column: OColumn): boolean {
@@ -2745,7 +2774,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const totalCounts = group.totalCounts;
     const oCol = this.getOColumn(field);
 
-    if (!value && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)) {
+    if (!value && Util.isDefined(oCol.renderer)
+      && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
       value = ' - ';
       if (!this.onDataLoadedCellRendererSubscription) {
         this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
@@ -2779,5 +2809,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       className = 'o-table-group-row o-table-group-row-level-' + row.level;
     }
     return className;
+  }
+
+  private stopEdition() {
+    this.editingCell = undefined;
+    this.editingRow = undefined;
+    this.clearSelectionAndEditing(false);
   }
 }

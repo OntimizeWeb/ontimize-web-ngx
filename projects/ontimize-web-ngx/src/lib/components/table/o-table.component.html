@@ -89,9 +89,10 @@
             </div>
           </th>
 
+
           <!--Define mat-cell-->
-          <td mat-cell *matCellDef="let row;let rowIndex = dataIndex" [ngClass]="[column.className, getCellAlignClass(column)]"
-            (click)="handleCellClick(column, row, $event)" (dblclick)="handleCellDoubleClick(column, row, $event)"
+          <td mat-cell *matCellDef="let row;let rowIndex = index" [ngClass]="[column.className, getCellAlignClass(column)]"
+            (click)="handleClick(row,column, rowIndex, $event)" (dblclick)="handleDoubleClick(row,column, rowIndex, $event)"
             [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
             matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
             [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
@@ -207,7 +208,7 @@
 
         <!-- Definition column group header -->
         <ng-container matColumnDef="groupHeader">
-          <td mat-cell [attr.colspan]="getNumVisibleColumns()" *matCellDef="let group" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}" >
+          <td mat-cell [attr.colspan]="getNumVisibleColumns()" *matCellDef="let group" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
             <mat-icon *ngIf="group.expanded">expand_more</mat-icon>
             <mat-icon *ngIf="!group.expanded">chevron_right</mat-icon>
             <span>{{ getTextGroupRow(group) }}</span>
@@ -217,8 +218,7 @@
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
 
         <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let i = index;let rowIndex = dataIndex;"
-          (click)="handleClick(row, rowIndex, $event)" (dblclick)="handleDoubleClick(row, $event)" [class.selected]="isRowSelected(row)"
-          [ngClass]="row | oTableRowClass: i: rowClass">
+          [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: i: rowClass">
         </tr>
 
         <!-- Row Group header -->

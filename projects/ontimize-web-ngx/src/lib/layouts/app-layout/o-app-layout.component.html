@@ -9,7 +9,7 @@
   <ng-content select="o-app-layout-sidenav" ngProjectAs="o-app-layout-sidenav-projection-end"></ng-content>
 
   <o-app-header #appHeader *ngIf="showHeader" [show-user-info]="showUserInfo" [show-language-selector]="showLanguageSelector"
-    [use-flag-icons]="useFlagIcons" (onSidenavToggle)="appSidenav.toggleSidenav()">
+    [use-flag-icons]="useFlagIcons" (onSidenavToggle)="appSidenav.toggleSidenav()" [color]="headerColor">
     <mat-icon class="sidenav-toggle" svgIcon="ontimize:menu" (click)="appSidenav.toggleSidenav()" *ngIf="appSidenav.isMobileMode()"></mat-icon>
     <ng-content select="o-app-layout-header"></ng-content>
   </o-app-header>

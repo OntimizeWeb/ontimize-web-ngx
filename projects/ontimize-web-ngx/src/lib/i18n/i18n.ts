@@ -258,7 +258,8 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE': 'Drag here to set the grouped columns',
     'TABLE.VISIBLE_COLUMNS_DIALOG.ALL_COLUMNS': 'Available columns',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Click on ',
-    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'to hide/display the column. Use drag and drop to modify the column order.'
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'to hide/display the column. Use drag and drop to modify the column order.',
+    'APP_LAYOUT.SETTINGS': 'Settings'
   },
 
   // Spanish
@@ -512,8 +513,8 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE': 'Arrastre aquí para establecer las columnas agrupadas',
     'TABLE.VISIBLE_COLUMNS_DIALOG.ALL_COLUMNS': 'Columnas disponibles',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Haz click sobre ',
-    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.'
-
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
+    'APP_LAYOUT.SETTINGS': 'Configuración'
 
   },
   // Portuguese - BRAZIL
@@ -764,6 +765,7 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE': 'Arrastre aquí para establecer las columnas agrupadas',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Haz click sobre ',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
-    'TABLE.VISIBLE_COLUMNS_DIALOG.ALL_COLUMNS': 'Columnas disponibles'
+    'TABLE.VISIBLE_COLUMNS_DIALOG.ALL_COLUMNS': 'Columnas disponibles',
+    'APP_LAYOUT.SETTINGS': 'Definições'
   }
 };
