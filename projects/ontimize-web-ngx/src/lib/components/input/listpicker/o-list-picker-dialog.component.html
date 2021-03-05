@@ -13,7 +13,7 @@
       </mat-list-item>
       <mat-list-item (click)="onClickListItem($event, item)" *cdkVirtualFor="let item of visibleData; trackBy: trackByFn">
         <ng-container *ngIf="renderer">
-          <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ listpickervalue: item['_parsedVisibleColumnText'] }">
+          <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ value: item['_parsedVisibleColumnText'] }">
           </ng-template>
         </ng-container>
         <ng-container *ngIf="!renderer">

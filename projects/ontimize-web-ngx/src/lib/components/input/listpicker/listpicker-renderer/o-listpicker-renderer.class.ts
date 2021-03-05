@@ -30,16 +30,16 @@ export class OListPickerCustomRenderer implements OnInit {
   }
 
   /**
-   * Returns the displayed value for listpicker
-   * @param listpickervalue Internal combo value
+   * Returns the displayed value for listPicker
+   * @param value Internal listPicker value
   */
 
-  public getListPickerData(listpickervalue: any): string {
+  public getListPickerValue(value: any): string {
     let parsedValue: string;
-    if (Util.isDefined(listpickervalue)) {
-      parsedValue = listpickervalue;
+    if (Util.isDefined(value)) {
+      parsedValue = value;
     } else {
-      console.warn("getListPickerData() - No listpickervalue received");
+      console.warn("getListPickerData() - No value received");
     }
     return parsedValue;
   }

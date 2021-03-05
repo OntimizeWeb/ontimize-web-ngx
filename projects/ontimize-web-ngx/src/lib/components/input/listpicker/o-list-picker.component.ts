@@ -305,7 +305,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         }
       });
     }
-    return this.renderer.getListPickerData(descTxt);
+    return this.renderer.getListPickerValue(descTxt);
   }
 
   public registerRenderer(renderer: any) {

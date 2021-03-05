@@ -1,4 +1,4 @@
-import { Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
+import { Injector, OnInit, TemplateRef } from '@angular/core';
 
 import { Util } from '../../../../util';
 import { OComboComponent } from '../o-combo.component';
@@ -7,8 +7,6 @@ export class OComboCustomRenderer implements OnInit {
 
   public templateref: TemplateRef<any>;
   public comboComponent: OComboComponent;
-  protected pipeArguments: any;
-  protected componentPipe: PipeTransform;
   
 
   constructor(protected injector: Injector) {
@@ -32,16 +30,16 @@ export class OComboCustomRenderer implements OnInit {
   }
 
   /**
-   * Returns the displayed combo value
-   * @param combovalue Internal combo value
+   * Returns the displayed combo data
+   * @param value Internal combo data
   */
 
-  public getComboData(combovalue: any): string {
+  public getComboData(value: any): string {
     let parsedValue: string;
-    if (Util.isDefined(combovalue)) {
-      parsedValue = combovalue;
+    if (Util.isDefined(value)) {
+      parsedValue = value;
     } else {
-      console.warn("getComboData() - No combovalue received");
+      console.warn("getComboData() - No value received");
     }
     return parsedValue;
   }
