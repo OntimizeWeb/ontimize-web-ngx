@@ -91,10 +91,17 @@ export class OValidators {
    *
    */
   public static patternValidator(regex: RegExp, key: string): ValidatorFn {
+    if (!Util.isDefined(regex)) {
+      console.warn('Regex param must be defined in patternValidator ')
+    }
+
+    if (!Util.isDefined(key)) {
+      console.warn('Validation key param must be defined in patternValidator ')
+    }
 
     let validator: ValidatorFn = (control: FormControl): { [key: string]: any } => {
-      if (!control.value || !Util.isDefined(regex)) {
-        // if control is empty return no error
+      if (!Util.isDefined(regex) || !Util.isDefined(key) || !control.value) {
+        // if regex is not defined or key is not defined or control is empty return no error
         return undefined;
       }
 
