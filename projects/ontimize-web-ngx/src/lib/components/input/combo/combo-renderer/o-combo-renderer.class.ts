@@ -32,7 +32,7 @@ export class OComboCustomRenderer implements OnInit {
   }
 
   /**
-   * Returns the displayed table cell value
+   * Returns the displayed combo value
    * @param combovalue Internal combo value
   */
 
