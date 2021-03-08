@@ -1,11 +1,12 @@
-
-
 ## 8.2.1
 ### Features
 * **validators**: new pattern validator([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
 
+### Bug Fixes
+* **o-list**: use `sort-columns` attribute value on the first query ([3a0cf8a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a0cf8a)) Closes ([#536](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/536))
+* **o-slide-toggle**: fixed getValue function ([d386f4d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d386f4d)) Closes ([#535](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/535))
 
-## 8.2.0(2021-02-26)
+## 8.2.0 (2021-02-26)
 ### Features
 * **table**:
   * Added row grouping ([078931b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/078931b))
