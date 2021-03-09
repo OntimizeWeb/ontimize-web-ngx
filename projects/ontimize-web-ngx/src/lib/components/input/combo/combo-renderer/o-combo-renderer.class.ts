@@ -18,11 +18,14 @@ export class OComboCustomRenderer implements OnInit {
   }
 
   public initialize(): void {
-    
   }
 
   public ngAfterContentInit(): void {
     this.registerRenderer();
+    // let dataArray = this.comboComponent.getDataArray()
+    // dataArray.forEach((element, index) => {
+      
+    // });
   }
 
   public registerRenderer(): void {

@@ -292,19 +292,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   }
 
   getRenderedValue() {
-    let descTxt = '';
-    if (this.descriptionColArray && this._currentIndex !== undefined) {
-      const self = this;
-      this.descriptionColArray.forEach((descCol, index) => {
-        const txt = self.dataArray[self._currentIndex][descCol];
-        if (txt) {
-          descTxt += txt;
-        }
-        if (index < self.descriptionColArray.length - 1) {
-          descTxt += self.separator;
-        }
-      });
-    }
+    let descTxt = this.getDescriptionValue();
     return this.renderer.getListPickerValue(descTxt);
   }
 

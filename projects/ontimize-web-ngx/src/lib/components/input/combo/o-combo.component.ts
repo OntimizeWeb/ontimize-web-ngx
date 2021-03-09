@@ -364,7 +364,11 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       }
 
       // filter
-      this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);
+      if(this.renderer) {
+        this.filteredDataArray = this.dataArray.filter(item => this.renderer.getComboData(item).toLowerCase().indexOf(search) > -1);
+      } else {
+        this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);
+      }
     }
   }
 
