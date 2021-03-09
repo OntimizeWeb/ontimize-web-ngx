@@ -22,10 +22,6 @@ export class OComboCustomRenderer implements OnInit {
 
   public ngAfterContentInit(): void {
     this.registerRenderer();
-    // let dataArray = this.comboComponent.getDataArray()
-    // dataArray.forEach((element, index) => {
-      
-    // });
   }
 
   public registerRenderer(): void {

@@ -18,7 +18,6 @@ export class OListPickerCustomRenderer implements OnInit {
   }
 
   public initialize(): void {
-    
   }
 
   public ngAfterContentInit(): void {
