@@ -1,9 +1,9 @@
-import { Injector, OnInit, TemplateRef } from '@angular/core';
+import { Injector, TemplateRef } from '@angular/core';
 
 import { Util } from '../../../../util';
 import { OComboComponent } from '../o-combo.component';
 
-export class OComboCustomRenderer implements OnInit {
+export class OComboCustomRenderer {
 
   public templateref: TemplateRef<any>;
   public comboComponent: OComboComponent;
@@ -11,13 +11,6 @@ export class OComboCustomRenderer implements OnInit {
 
   constructor(protected injector: Injector) {
     this.comboComponent = this.injector.get(OComboComponent);
-  }
-
-  public ngOnInit() {
-    this.initialize();
-  }
-
-  public initialize(): void {
   }
 
   public ngAfterContentInit(): void {

@@ -298,7 +298,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
-    this.renderer.initialize();
   }
 
 }

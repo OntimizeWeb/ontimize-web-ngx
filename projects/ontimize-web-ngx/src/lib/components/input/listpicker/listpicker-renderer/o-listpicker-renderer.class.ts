@@ -1,9 +1,9 @@
-import { Injector, OnInit, TemplateRef } from '@angular/core';
+import { Injector, TemplateRef } from '@angular/core';
 
 import { Util } from '../../../../util';
 import { OListPickerComponent } from '../o-list-picker.component';
 
-export class OListPickerCustomRenderer implements OnInit {
+export class OListPickerCustomRenderer {
 
   public templateref: TemplateRef<any>;
   public listpickerComponent: OListPickerComponent;
@@ -11,13 +11,6 @@ export class OListPickerCustomRenderer implements OnInit {
 
   constructor(protected injector: Injector) {
     this.listpickerComponent = this.injector.get(OListPickerComponent);
-  }
-
-  public ngOnInit() {
-    this.initialize();
-  }
-
-  public initialize(): void {
   }
 
   public ngAfterContentInit(): void {
