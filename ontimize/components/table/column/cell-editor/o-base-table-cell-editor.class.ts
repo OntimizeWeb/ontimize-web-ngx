@@ -87,7 +87,7 @@ export class OBaseTableCellEditor implements OnInit {
       return;
     }
 
-    if (this.checkKey(event, "Escape", 27)) {
+    if (this.checkKey(event, 'Escape', 27)) {
       this.onEscClicked();
       return;
     }
@@ -96,7 +96,7 @@ export class OBaseTableCellEditor implements OnInit {
       return;
     }
 
-    if (this.checkKey(event, "Enter", 13) || this.checkKey(event, "Tab", 9)) {
+    if (this.checkKey(event, 'Enter', 13) || this.checkKey(event, 'Tab', 9)) {
       // intro or tab
       this.commitEdition();
     }
