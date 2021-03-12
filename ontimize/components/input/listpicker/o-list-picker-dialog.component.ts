@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
+import { OListPickerCustomRenderer } from './listpicker-renderer/o-listpicker-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'data',
@@ -27,6 +28,7 @@ export class OListPickerDialogComponent {
   public visibleData: any = [];
   public searchData: any = [];
   public searchVal: string;
+  public renderer: OListPickerCustomRenderer;
 
   @ViewChild('searchInput')
   public searchInput: OSearchInputComponent;
@@ -57,6 +59,15 @@ export class OListPickerDialogComponent {
     }
     if (data.menuColumns) {
       this.menuColumns = data.menuColumns;
+    }
+    if (data.renderer) {
+      this.renderer = data.renderer;
+    }
+    if (this.data && Util.isArray(this.data)) {
+      this.data.forEach((element, index) => {
+        this.data[index].value = this.renderer ? this.renderer.getListPickerValue(element.value) : element.value;
+        this.data[index]._parsedVisibleColumnText = this.renderer ? this.renderer.getListPickerValue(element._parsedVisibleColumnText) : element._parsedVisibleColumnText;
+      });
     }
     this.searchVal = data.searchVal;
     this.startIndex = 0;
@@ -161,6 +172,10 @@ export class OListPickerDialogComponent {
 
   private _isBlank(value: string): boolean {
     return !Util.isDefined(value) || value.length === 0;
+  }
+
+  public registerRenderer(renderer: any) {
+    this.renderer = renderer;
   }
 
 }

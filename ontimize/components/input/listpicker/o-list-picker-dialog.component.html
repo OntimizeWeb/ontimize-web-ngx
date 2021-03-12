@@ -11,7 +11,9 @@
       </ng-container>
     </mat-list-item>
     <mat-list-item (click)="onClickListItem($event, item)" *ngFor="let item of visibleData; trackBy: trackByFn">
-      <span>{{ item['_parsedVisibleColumnText'] }}</span>
+      <ng-container>
+        <span>{{ item['_parsedVisibleColumnText'] }}</span>
+      </ng-container>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>

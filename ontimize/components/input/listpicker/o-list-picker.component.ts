@@ -1,7 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnInit, Optional, SimpleChange, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnChanges,
+  OnInit,
+  Optional,
+  SimpleChange,
+  ViewChild
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
+
 import { InputConverter } from '../../../decorators';
 import { OntimizeService } from '../../../services';
 import { dataServiceFactory } from '../../../services/factories';
@@ -13,6 +28,7 @@ import { OSearchInputModule } from '../../input/search-input/o-search-input.comp
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
+import { OListPickerCustomRenderer } from './listpicker-renderer/o-listpicker-renderer.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
 
@@ -56,6 +72,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   /* End outputs */
 
   public stateCtrl: FormControl;
+  public renderer: OListPickerCustomRenderer;
 
   /* Inputs */
   @InputConverter()
@@ -244,7 +261,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
         searchVal: this.visibleInputValue,
         menuColumns: this.visibleColumns, // TODO: improve this, this is passed to `o-search-input` of the dialog
         visibleColumns: this.visibleColArray,
-        queryRows: this.queryRows
+        queryRows: this.queryRows,
+        renderer: this.renderer
       }
     };
     if (this.dialogWidth !== undefined) {
@@ -277,6 +295,15 @@ export class OListPickerComponent extends OFormServiceComponent implements After
       result.push(newItem);
     });
     return result;
+  }
+
+  getRenderedValue() {
+    let descTxt = this.getDescriptionValue();
+    return this.renderer.getListPickerValue(descTxt);
+  }
+
+  public registerRenderer(renderer: any) {
+    this.renderer = renderer;
   }
 
 }
