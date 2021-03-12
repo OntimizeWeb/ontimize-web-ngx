@@ -250,10 +250,16 @@
         </ng-container>
 
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
-
-        <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let i = index"
-          [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: i: rowClass">
-        </tr>
+        <ng-container *ngIf="table.multiTemplateDataRows">
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let rowIndex = dataIndex"
+            [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="!table.multiTemplateDataRows">
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let rowIndex = index"
+            [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
+          </tr>
+        </ng-container>
 
         <!-- Row Group header -->
         <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"
