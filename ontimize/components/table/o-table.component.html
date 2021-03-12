@@ -233,10 +233,18 @@
 
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
 
-        <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;let i = index;let rowIndex = dataIndex"
-          (click)="handleClick(row, rowIndex, $event)" (dblclick)="handleDoubleClick(row, $event)" [class.selected]="isRowSelected(row)"
-          [ngClass]="row | oTableRowClass: i: rowClass">
-        </tr>
+        <ng-container *ngIf="!table.multiTemplateDataRows">
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;let rowIndex = index"
+            (click)="handleClick(row, rowIndex, $event)" (dblclick)="handleDoubleClick(row, $event)" [class.selected]="isRowSelected(row)"
+            [ngClass]="row | oTableRowClass: rowIndex: rowClass">
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="table.multiTemplateDataRows">
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;let rowIndex = dataIndex"
+            (click)="handleClick(row, rowIndex, $event)" (dblclick)="handleDoubleClick(row, $event)" [class.selected]="isRowSelected(row)"
+            [ngClass]="row | oTableRowClass: rowIndex: rowClass">
+          </tr>
+        </ng-container>
 
         <ng-container *ngIf="hasExpandedRow()">
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="o-table-row-expanded"></tr>
