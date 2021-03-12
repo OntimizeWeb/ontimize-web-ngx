@@ -283,7 +283,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       return;
     }
 
-    if (this.checkKey(e, "Tab", 9) && (this.activeKeys[16] || this.activeKeys["Shift"] || !this.enabledCommitOnTabPress)) {
+    if (this.checkKey(e, 'Tab', 9) && (this.activeKeys[16] || this.activeKeys['Shift'] || !this.enabledCommitOnTabPress)) {
       // tab + shift or tab pressed with focus in the date component
       return;
     }
