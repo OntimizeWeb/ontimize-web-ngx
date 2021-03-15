@@ -1,12 +1,16 @@
-import { Injector, OnInit, TemplateRef } from '@angular/core';
+import { Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
 
 import { Util } from '../../../../util';
 import { OListPickerComponent } from '../o-list-picker.component';
 
+export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER = [];
 export class OListPickerCustomRenderer implements OnInit {
 
   public templateref: TemplateRef<any>;
   public listpickerComponent: OListPickerComponent;
+
+  protected pipeArguments: any;
+  protected componentPipe: PipeTransform;
   
 
   constructor(protected injector: Injector) {
@@ -36,7 +40,11 @@ export class OListPickerCustomRenderer implements OnInit {
   public getListPickerValue(value: any): string {
     let parsedValue: string;
     if (Util.isDefined(value)) {
-      parsedValue = value;
+      if (this.componentPipe && this.pipeArguments !== undefined && value !== undefined) {
+        parsedValue = this.componentPipe.transform(value, this.pipeArguments);
+      } else {
+        parsedValue = value;
+      }
     } else {
       console.warn("getListPickerData() - No value received");
     }
