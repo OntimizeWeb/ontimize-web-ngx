@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
-import { OListPickerCustomRenderer } from '../o-listpicker-renderer.class';
-import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL } from '../real/o-listpicker-renderer-real.component';
+import { OListPickerCustomRenderer } from '../o-list-picker-renderer.class';
+import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL } from '../real/o-list-picker-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY = [
   ...DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL,
@@ -17,8 +17,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY = [
 ];
 
 @Component({
-  selector: 'o-listpicker-renderer-currency',
-  templateUrl: './o-listpicker-renderer-currency.component.html',
+  selector: 'o-list-picker-renderer-currency',
+  templateUrl: './o-list-picker-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY
 })

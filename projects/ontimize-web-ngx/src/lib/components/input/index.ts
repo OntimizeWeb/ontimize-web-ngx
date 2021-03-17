@@ -25,7 +25,7 @@ export * from './integer-input/o-integer-input.module';
 export * from './listpicker/o-list-picker-dialog.component';
 export * from './listpicker/o-list-picker.component';
 export * from './listpicker/o-list-picker.module';
-export * from './listpicker/listpicker-renderer/o-listpicker-renderer.class';
+export * from './listpicker/listpicker-renderer/o-list-picker-renderer.class';
 export * from './nif-input/o-nif-input.component';
 export * from './nif-input/o-nif-input.module';
 export * from './o-form-control.class';

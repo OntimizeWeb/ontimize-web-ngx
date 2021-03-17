@@ -15,23 +15,13 @@ import {
 } from './percentage/o-combo-renderer-percentage.component';
 import { OComboRendererRealComponent } from './real/o-combo-renderer-real.component';
 
-
-// import { OTableCellRendererImageComponent } from './image/o-table-cell-renderer-image.component';
-// import { OTableCellRendererServiceComponent } from './service/o-table-cell-renderer-service.component';
-// import { OTableCellRendererTimeComponent } from './time/o-table-cell-renderer-time.component';
-// import { OTableCellRendererTranslateComponent } from './translate/o-table-cell-renderer-translate.component';
-
 export const O_COMBO_RENDERERS = [
   OComboRendererBooleanComponent,
   OComboRendererIntegerComponent,
   OComboRendererRealComponent,
   OComboRendererCurrencyComponent,
   OComboRendererDateComponent,
-  OComboRendererPercentageComponent,
-  // OTableCellRendererActionComponent,
-  // OTableCellRendererServiceComponent,
-  // OTableCellRendererTranslateComponent,
-  // OTableCellRendererTimeComponent
+  OComboRendererPercentageComponent
 ];
 
 export const O_COMBO_RENDERERS_INPUTS = [
@@ -50,9 +40,5 @@ export const renderersMapping = {
   currency: OComboRendererCurrencyComponent,
   boolean: OComboRendererBooleanComponent,
   date: OComboRendererDateComponent,
-  percentage: OComboRendererPercentageComponent,
-  // action: OTableCellRendererActionComponent,
-  // service: OTableCellRendererServiceComponent,
-  // translate: OTableCellRendererTranslateComponent,
-  // time: OTableCellRendererTimeComponent
+  percentage: OComboRendererPercentageComponent
 };

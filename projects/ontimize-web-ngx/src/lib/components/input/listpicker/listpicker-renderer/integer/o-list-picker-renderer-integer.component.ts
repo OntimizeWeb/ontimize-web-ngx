@@ -10,7 +10,7 @@ import {
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
-import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER, OListPickerCustomRenderer } from '../o-listpicker-renderer.class';
+import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER, OListPickerCustomRenderer } from '../o-list-picker-renderer.class';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER = [
   ...DEFAULT_INPUTS_O_LISTPICKER_RENDERER,
@@ -21,8 +21,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER = [
 ];
 
 @Component({
-  selector: 'o-listpicker-renderer-integer',
-  templateUrl: './o-listpicker-renderer-integer.component.html',
+  selector: 'o-list-picker-renderer-integer',
+  templateUrl: './o-list-picker-renderer-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER
 })

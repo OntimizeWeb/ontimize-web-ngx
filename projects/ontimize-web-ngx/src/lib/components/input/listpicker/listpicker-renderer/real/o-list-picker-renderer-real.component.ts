@@ -6,7 +6,7 @@ import { NumberService } from '../../../../../services/number.service';
 import {
   DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER,
   OListPickerRendererIntegerComponent
-} from '../integer/o-listpicker-renderer-integer.component';
+} from '../integer/o-list-picker-renderer-integer.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL = [
   ...DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER,
@@ -17,8 +17,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL = [
 ];
 
 @Component({
-  selector: 'o-listpicker-renderer-real',
-  templateUrl: './o-listpicker-renderer-real.component.html',
+  selector: 'o-list-picker-renderer-real',
+  templateUrl: './o-list-picker-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL
 })

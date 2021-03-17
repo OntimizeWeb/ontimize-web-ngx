@@ -26,7 +26,7 @@ import {
   DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   OFormServiceComponent
 } from '../o-form-service-component.class';
-import { OListPickerCustomRenderer } from './listpicker-renderer/o-listpicker-renderer.class';
+import { OListPickerCustomRenderer } from './listpicker-renderer/o-list-picker-renderer.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [

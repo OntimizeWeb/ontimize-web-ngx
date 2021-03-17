@@ -5,7 +5,7 @@ import { NumberService } from '../../../../../services/number.service';
 import {
   DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL,
   OListPickerRendererRealComponent
-} from '../real/o-listpicker-renderer-real.component';
+} from '../real/o-list-picker-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE = [
   ...DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL,
@@ -13,8 +13,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE = [
 ];
 
 @Component({
-  selector: 'o-listpicker-renderer-percentage',
-  templateUrl: './o-listpicker-renderer-percentage.component.html',
+  selector: 'o-list-picker-renderer-percentage',
+  templateUrl: './o-list-picker-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE
 })

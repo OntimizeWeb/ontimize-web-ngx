@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
-import { OListPickerCustomRenderer } from './listpicker-renderer/o-listpicker-renderer.class';
+import { OListPickerCustomRenderer } from './listpicker-renderer/o-list-picker-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
   'data',

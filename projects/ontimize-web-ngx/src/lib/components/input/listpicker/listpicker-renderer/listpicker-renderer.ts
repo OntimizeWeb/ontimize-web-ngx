@@ -1,17 +1,17 @@
 import {
   DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY,
   OListPickerRendererCurrencyComponent
-} from './currency/o-listpicker-renderer-currency.component';
+} from './currency/o-list-picker-renderer-currency.component';
 import {
   DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE,
   OListPickerRendererDateComponent
-} from './date/o-listpicker-renderer-date.component';
-import { OListPickerRendererIntegerComponent } from './integer/o-listpicker-renderer-integer.component';
+} from './date/o-list-picker-renderer-date.component';
+import { OListPickerRendererIntegerComponent } from './integer/o-list-picker-renderer-integer.component';
 import {
   DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE,
   OListPickerRendererPercentageComponent
-} from './percentage/o-listpicker-renderer-percentage.component';
-import { OListPickerRendererRealComponent } from './real/o-listpicker-renderer-real.component';
+} from './percentage/o-list-picker-renderer-percentage.component';
+import { OListPickerRendererRealComponent } from './real/o-list-picker-renderer-real.component';
 
 export const O_LISTPICKER_RENDERERS = [
   OListPickerRendererIntegerComponent,

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
-import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER, OListPickerCustomRenderer } from '../o-listpicker-renderer.class';
+import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER, OListPickerCustomRenderer } from '../o-list-picker-renderer.class';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE = [
   ...DEFAULT_INPUTS_O_LISTPICKER_RENDERER,
@@ -10,8 +10,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE = [
 ];
 
 @Component({
-  selector: 'o-listpicker-renderer-date',
-  templateUrl: './o-listpicker-renderer-date.component.html',
+  selector: 'o-list-picker-renderer-date',
+  templateUrl: './o-list-picker-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE
 })
