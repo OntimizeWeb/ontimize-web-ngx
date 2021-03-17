@@ -17,8 +17,6 @@
     "moment",
     "ngx-material-timepicker",
     "reflect-metadata",
-    "tslib",
-    "country-list",
-    "flag-icon-css"
+    "tslib"
   ]
 }
