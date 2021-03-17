@@ -1,8 +1,8 @@
 ## 8.2.1
 ### Features
-* **validators**: new pattern validator([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
+* **validators**: new pattern validator ([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
 * **o-dialog**: Added classes in the buttons in dialog ([b107153](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b107153))
-
+* **OFormServiceComponent** (**o-combo**, **o-list-picker**, **o-radio**): new attribute `sort`, include `translate` attribute in `o-list-picker` ([7a7032bb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a7032bb)) Closes ([#322](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/322))
 
 ### Bug Fixes
 * **o-list**: use `sort-columns` attribute value on the first query ([3a0cf8a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a0cf8a)) Closes ([#536](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/536))
