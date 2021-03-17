@@ -10,11 +10,7 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent
-} from '../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -49,14 +45,18 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   'setValueOnValueChange: set-value-on-value-change',
 
   // [function]: function to execute on query error. Default: no value.
-  'queryFallbackFunction: query-fallback-function'
-  // ,
+  'queryFallbackFunction: query-fallback-function',
 
   // 'insertFallbackFunction: insert-fallback-function',
 
   // 'updateFallbackFunction: update-fallback-function',
 
   // 'deleteFallbackFunction: delete-fallback-function'
+
+  'translate',
+
+  // sort [string]: sorting ASC or DESC. Default: no value
+  'sort'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
@@ -92,13 +92,16 @@ export class OFormServiceComponent extends OFormDataComponent {
   // public insertFallbackFunction: Function;
   // public updateFallbackFunction: Function;
   // public deleteFallbackFunction: Function;
+  @InputConverter()
+  protected translate: boolean = false;
+  public sort: 'ASC' | 'DESC';
 
   /* Outputs */
   public onSetValueOnValueChange: EventEmitter<object> = new EventEmitter<object>();
   public onDataLoaded: EventEmitter<object> = new EventEmitter<object>();
 
   /* Internal variables */
-  protected dataArray: any[] = [];
+  public dataArray: any[] = [];
   protected colArray: string[] = [];
   protected visibleColArray: string[] = [];
   protected descriptionColArray: string[] = [];
@@ -299,7 +302,7 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
-      this.dataArray = data;
+      this.dataArray = this.sortData(data);
       this.syncDataIndex(false);
     } else if (Util.isObject(data) && Object.keys(data).length > 0) {
       this.dataArray = [data];
@@ -402,6 +405,42 @@ export class OFormServiceComponent extends OFormDataComponent {
       return;
     }
     super.onFormControlChange(value);
+  }
+
+  public getOptionDescriptionValue(item: any = {}): string {
+    let descTxt = '';
+    if (this.descriptionColArray && this.descriptionColArray.length > 0) {
+      this.descriptionColArray.forEach((col, index) => {
+        let txt = item[col];
+        if (Util.isDefined(txt)) {
+          if (this.translate && this.translateService) {
+            txt = this.translateService.get(txt);
+          }
+          descTxt += txt;
+        }
+        if (index < this.descriptionColArray.length - 1) {
+          descTxt += this.separator;
+        }
+      });
+    }
+    return descTxt.trim();
+  }
+
+  protected sortData(data: any[]): any[] {
+    if (!Util.isDefined(this.sort)) {
+      return data;
+    }
+
+    const sortDirection = this.sort.toLowerCase();
+    if (sortDirection !== Codes.ASC_SORT && sortDirection !== Codes.DESC_SORT) {
+      return data;
+    }
+
+    const sortedData = data.sort((a, b) => Util.compare(this.getOptionDescriptionValue(a), this.getOptionDescriptionValue(b)));
+    if (sortDirection === Codes.DESC_SORT) {
+      sortedData.reverse();
+    }
+    return sortedData;
   }
 
 }

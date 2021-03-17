@@ -17,7 +17,7 @@
 
       <div class="o-combo-options-container">
         <mat-option *ngIf="hasNullSelection()" [value]="null"></mat-option>
-        <mat-option *ngFor="let item of getFilteredDataArray()" [value]="getValueColumn(item)">
+        <mat-option *ngFor="let item of filteredDataArray" [value]="getValueColumn(item)">
           {{ getOptionDescriptionValue(item) }}
         </mat-option>
       </div>
