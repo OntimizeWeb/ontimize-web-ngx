@@ -3,7 +3,8 @@
 * **validators**: new pattern validator([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
 * **o-dialog**: Added classes in the buttons in dialog ([b107153](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b107153))
 * **o-table-row-expandable**: new `multiple` input ([fb4fb10](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb4fb10)) Closes ([#545](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/545))
-
+* **o-combo**: new types of render (currency,integer,boolean,percentage,date,custom render) ([eabdd2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eabdd2d)) Closes ([#529](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/529))
+* **o-list-picker**: new types of render (currency,integer,percentage,date,custom render) ([eabdd2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eabdd2d)) Closes ([#529](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/529))
 
 ### Bug Fixes
 * **o-list**: use `sort-columns` attribute value on the first query ([3a0cf8a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a0cf8a)) Closes ([#536](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/536))
