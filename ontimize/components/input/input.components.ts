@@ -1,6 +1,7 @@
 export * from './checkbox/o-checkbox.component';
 export * from './combo/o-combo.component';
 export * from './combo/combo-search/o-combo-search.component';
+export * from './combo/combo-renderer/o-combo-renderer.class';
 export * from './currency-input/o-currency-input.component';
 export * from './date-input/o-date-input.component';
 export * from './email-input/o-email-input.component';
@@ -8,6 +9,7 @@ export * from './file-input/o-file-input.components';
 export * from './html-input/o-html-input.component';
 export * from './integer-input/o-integer-input.component';
 export * from './listpicker/o-list-picker.component';
+export * from './listpicker/listpicker-renderer/o-listpicker-renderer.class';
 export * from './nif-input/o-nif-input.component';
 export * from './password-input/o-password-input.component';
 export * from './percent-input/o-percent-input.component';

@@ -1,4 +1,8 @@
 ## 4.2.2
+### Features
+* **o-combo**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
+* **o-list-picker**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
+
 ### Bug Fixes
 * **o-list**: use `sort-columns` attribute value on the first query ([dacb247](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dacb247)) Closes ([#536](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/536))
 
