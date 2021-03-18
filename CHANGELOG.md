@@ -2,7 +2,9 @@
 ### Features
 * **validators**: new pattern validator([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
 * **o-dialog**: Added classes in the buttons in dialog ([b107153](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b107153))
-
+* **o-table-row-expandable**: new `multiple` input ([fb4fb10](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb4fb10)) Closes ([#545](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/545))
+* **o-combo**: new types of render (currency,integer,boolean,percentage,date,custom render) ([eabdd2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eabdd2d)) Closes ([#529](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/529))
+* **o-list-picker**: new types of render (currency,integer,percentage,date,custom render) ([eabdd2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/eabdd2d)) Closes ([#529](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/529))
 
 ### Bug Fixes
 * **o-list**: use `sort-columns` attribute value on the first query ([3a0cf8a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3a0cf8a)) Closes ([#536](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/536))
@@ -22,7 +24,7 @@
   * Added columnName and cell properties in `OnClickTableEvent` interface ([7a4e783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a4e783))([96e33b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96e33b8))
 * new component `o-dual-list-selector`([7eedc0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eedc0d))
 * new component `o-user-info-configuration` ([c6cac4b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eec6cac4bdc0d))
-* **o-app-layout**: new `header-color`([52187ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52187ef))
+* **o-app-layout**: new `header-color` input([52187ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/52187ef))
 * **o-grid**:
   * added new button ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
   * new `insert-button-position` and `insert-button-floatable` inputs ([10c5bef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/10c5bef))
