@@ -2,6 +2,7 @@
 ### Features
 * **o-combo**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
 * **o-list-picker**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
+* **o-table-row-expandable**: new `multiple` input ([685cb7f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/685cb7f)) Closes ([#545](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/545))
 
 ### Bug Fixes
 * **o-list**: use `sort-columns` attribute value on the first query ([dacb247](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dacb247)) Closes ([#536](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/536))
