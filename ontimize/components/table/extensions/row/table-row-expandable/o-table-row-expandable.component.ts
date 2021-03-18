@@ -12,7 +12,9 @@ export const DEFAULT_INPUTS_O_TABLE_ROW_EXPANDABLE = [
   // icon-collapse : Icon name to expand. Default:remove
   'iconCollapse:icon-collapse',
   // Indicates whether or not to show a expandable column. Default:true
-  'expandableColumnVisible:expandable-column-visible'
+  'expandableColumnVisible:expandable-column-visible',
+  //[boolean]: multiple row expanded .Default: no.
+  'multiple'
 ];
 
 /** Change event object emitted by OTableRowExpanded. */
@@ -42,6 +44,9 @@ export class OTableRowExpandableComponent {
 
   @InputConverter()
   public expandableColumnVisible: boolean = true;
+
+  @InputConverter()
+  public multiple: boolean = false;
 
   set iconCollapse(value: string) {
     this._iconCollapse = value;
