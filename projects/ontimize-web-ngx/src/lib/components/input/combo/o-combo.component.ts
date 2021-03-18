@@ -1,4 +1,16 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -11,7 +23,12 @@ import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
-import { DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT, OFormServiceComponent } from '../o-form-service-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
+  OFormServiceComponent
+} from '../o-form-service-component.class';
+import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -45,6 +62,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   public value: OFormValue;
   public searchControl: FormControl = new FormControl();
+  public renderer: OComboCustomRenderer;
 
   /* Inputs */
   @InputConverter()
@@ -346,8 +364,17 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       }
 
       // filter
-      this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);
+      if(this.renderer) {
+        this.filteredDataArray = this.dataArray.filter(item => this.renderer.getComboData(item).toLowerCase().indexOf(search) > -1);
+      } else {
+        this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);
+      }
     }
+  }
+
+  public registerRenderer(renderer: any) {
+    this.renderer = renderer;
+    this.renderer.initialize();
   }
 
 }
