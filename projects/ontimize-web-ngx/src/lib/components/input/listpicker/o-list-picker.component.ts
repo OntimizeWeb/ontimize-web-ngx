@@ -267,24 +267,14 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     }
     this.dialogRef = this.matDialog.open(OListPickerDialogComponent, cfg);
 
-    this.dialogRef.afterClosed().subscribe(result => {
-      this.onDialogClose(result);
-    });
+    this.dialogRef.afterClosed().subscribe(result => this.onDialogClose(result));
   }
 
   protected getDialogDataArray(dataArray: any[]): any[] {
     const result: any[] = [];
-    const self = this;
     dataArray.forEach((item, itemIndex) => {
-      let element = '';
-      self.visibleColArray.forEach((visibleCol, index) => {
-        element += item[visibleCol];
-        if ((index + 1) < self.visibleColArray.length) {
-          element += self.separator;
-        }
-      });
       const newItem = Object.assign({}, item);
-      newItem._parsedVisibleColumnText = element;
+      newItem._parsedVisibleColumnText = this.getOptionDescriptionValue(item);
       newItem._parsedIndex = itemIndex;
       result.push(newItem);
     });

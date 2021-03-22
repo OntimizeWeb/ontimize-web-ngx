@@ -32,7 +32,6 @@ import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  'translate',
   'multiple',
   'nullSelection: null-selection',
   'multipleTriggerLabel: multiple-trigger-label',
@@ -71,8 +70,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public multipleTriggerLabel: boolean = false;
   @InputConverter()
   public searchable: boolean = false;
-  @InputConverter()
-  protected translate: boolean = false;
   @InputConverter()
   protected nullSelection: boolean = true;
   /* End inputs*/
@@ -235,26 +232,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       emitEvent: false,
       emitModelToViewChange: false
     });
-  }
-
-  public getOptionDescriptionValue(item: any = {}): string {
-    let descTxt = '';
-    if (this.descriptionColArray && this.descriptionColArray.length > 0) {
-      const self = this;
-      this.descriptionColArray.forEach((col, index) => {
-        let txt = item[col];
-        if (Util.isDefined(txt)) {
-          if (self.translate && self.translateService) {
-            txt = self.translateService.get(txt);
-          }
-          descTxt += txt;
-        }
-        if (index < self.descriptionColArray.length - 1) {
-          descTxt += self.separator;
-        }
-      });
-    }
-    return descTxt;
   }
 
   public getValueColumn(item: any): any {
