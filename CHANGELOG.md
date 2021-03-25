@@ -1,4 +1,4 @@
-## 8.2.1
+## 8.2.2 (2021-03-25)
 ### Features
 * **validators**: new pattern validator ([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
 * **o-dialog**: Added classes in the buttons in dialog ([b107153](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b107153))
