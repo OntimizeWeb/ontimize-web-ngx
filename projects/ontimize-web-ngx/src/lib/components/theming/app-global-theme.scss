@@ -180,4 +180,9 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 
+  .mat-checkbox {
+    .mat-checkbox-label {
+      color: mat-color($foreground, text);
+    }
+  }
 }
