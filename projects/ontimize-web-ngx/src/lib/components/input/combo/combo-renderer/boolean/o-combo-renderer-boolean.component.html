@@ -1,0 +1,14 @@
+<ng-template #templateref let-value="value">
+  <ng-container *ngIf="hasComboTrueValue(value)">
+    <ng-container [ngSwitch]="renderType">
+      <ng-container *ngSwitchCase="'number'">{{ renderTrueValue }}</ng-container>
+      <span *ngSwitchDefault>{{ renderTrueValue | oTranslate }}</span>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="!hasComboTrueValue(value)">
+    <ng-container [ngSwitch]="renderType">
+      <ng-container *ngSwitchCase="'number'">{{ renderFalseValue }}</ng-container>
+      <ng-container *ngSwitchDefault>{{ renderFalseValue | oTranslate}}</ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>

@@ -355,4 +355,17 @@ export class Util {
     });
   }
 
+  /**
+   * Compares two strings and returns a negative value if first argument is less than second argument, zero if they're equal and a positive value otherwise.
+   */
+  static compare(a: string, b: string): number {
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
+    return 0;
+  }
+
 }

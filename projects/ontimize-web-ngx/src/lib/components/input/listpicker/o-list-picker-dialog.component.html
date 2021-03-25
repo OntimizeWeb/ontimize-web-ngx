@@ -11,9 +11,10 @@
           {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}
         </ng-container>
       </mat-list-item>
-
       <mat-list-item (click)="onClickListItem($event, item)" *cdkVirtualFor="let item of visibleData; trackBy: trackByFn">
-        <span>{{ item['_parsedVisibleColumnText'] }}</span>
+        <ng-container>
+          <span>{{ item['_parsedVisibleColumnText'] }}</span>
+        </ng-container>
         <mat-divider></mat-divider>
       </mat-list-item>
 
@@ -22,5 +23,5 @@
 
 </div>
 <mat-dialog-actions align="end">
-  <button type="button" mat-stroked-button mat-dialog-close>{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button mat-dialog-close class="o-button-default">{{ 'CANCEL' | oTranslate | uppercase }}</button>
 </mat-dialog-actions>
