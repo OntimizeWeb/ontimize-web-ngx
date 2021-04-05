@@ -8,7 +8,7 @@ import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
 } from '../../o-form-data-component.class';
-import { OBooleanFormDataComponent } from '../o-form-control-boolean.class';
+import { OBooleanFormDataComponent } from '../o-boolean-form-data-component.class';
 
 
 export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
