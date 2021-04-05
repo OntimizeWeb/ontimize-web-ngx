@@ -51,9 +51,7 @@ export class OBooleanFormDataComponent extends OFormDataComponent {
 
   ensureOFormValue(data: any) {
     this.parseInputs();
-    console.log(data, data instanceof OFormValue)
     if (data instanceof OFormValue) {
-      console.log(data, data instanceof OFormValue)
       if (!Util.isDefined(data.value)) {
         data.value = false;
       }
@@ -115,7 +113,6 @@ export class OBooleanFormDataComponent extends OFormDataComponent {
         break;
     }
   }
-
 
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
