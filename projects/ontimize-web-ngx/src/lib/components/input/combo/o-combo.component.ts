@@ -62,6 +62,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public value: OFormValue;
   public searchControl: FormControl = new FormControl();
   public renderer: OComboCustomRenderer;
+  public countryFlag: boolean = false;
 
   /* Inputs */
   @InputConverter()
@@ -352,6 +353,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
     this.renderer.initialize();
+    this.countryFlag = this.renderer.flag ? true : false;
   }
 
 }

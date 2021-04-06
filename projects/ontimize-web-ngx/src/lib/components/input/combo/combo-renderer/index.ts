@@ -4,3 +4,4 @@ export * from './real/o-combo-renderer-real.component';
 export * from './boolean/o-combo-renderer-boolean.component';
 export * from './date/o-combo-renderer-date.component';
 export * from './percentage/o-combo-renderer-percentage.component';
+export * from './country-flag/o-combo-renderer-country-flag.component';
