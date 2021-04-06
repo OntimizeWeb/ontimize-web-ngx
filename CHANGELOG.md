@@ -1,3 +1,7 @@
+## 8.2.3
+### Bug Fixes
+* **o-slide-toggle**:  does not display or submit the correct value in the detail form ([5986e3d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5986e3d)) ([f534274](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f534274))
+
 ## 8.2.2 (2021-03-25)
 ### Features
 * **validators**: new pattern validator ([7eded1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7eded1c))
