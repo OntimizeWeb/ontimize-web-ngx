@@ -5,11 +5,7 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import {
-  DEFAULT_INPUTS_O_INTEGER_INPUT,
-  DEFAULT_OUTPUTS_O_INTEGER_INPUT,
-  OIntegerInputComponent,
-} from '../integer-input/o-integer-input.component';
+import { DEFAULT_INPUTS_O_INTEGER_INPUT, DEFAULT_OUTPUTS_O_INTEGER_INPUT, OIntegerInputComponent } from '../integer-input/o-integer-input.component';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
@@ -69,32 +65,32 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
-    if (Util.isDefined(this.minDecimalDigits)) {
-      validators.push(this.minDecimalDigitsValidator.bind(this));
-    }
+    // if (Util.isDefined(this.minDecimalDigits)) {
+    //   validators.push(this.minDecimalDigitsValidator.bind(this));
+    // }
     if (Util.isDefined(this.maxDecimalDigits)) {
       validators.push(this.maxDecimalDigitsValidator.bind(this));
     }
     return validators;
   }
 
-  protected minDecimalDigitsValidator(control: FormControl): ValidationErrors {
-    let ctrlValue: string = control.value;
-    if (typeof control.value === 'number') {
-      ctrlValue = ctrlValue.toString();
-    }
-    if (ctrlValue && ctrlValue.length) {
-      const valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
-      if (Util.isDefined(this.minDecimalDigits) && (this.minDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length < this.minDecimalDigits)) {
-        return {
-          minDecimaldigits: {
-            requiredMinDecimaldigits: this.minDecimalDigits
-          }
-        };
-      }
-    }
-    return {};
-  }
+  // protected minDecimalDigitsValidator(control: FormControl): ValidationErrors {
+  //   let ctrlValue: string = control.value;
+  //   if (typeof control.value === 'number') {
+  //     ctrlValue = ctrlValue.toString();
+  //   }
+  //   if (ctrlValue && ctrlValue.length) {
+  //     const valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
+  //     if (Util.isDefined(this.minDecimalDigits) && (this.minDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length < this.minDecimalDigits)) {
+  //       return {
+  //         minDecimaldigits: {
+  //           requiredMinDecimaldigits: this.minDecimalDigits
+  //         }
+  //       };
+  //     }
+  //   }
+  //   return {};
+  // }
 
   protected maxDecimalDigitsValidator(control: FormControl): ValidationErrors {
     let ctrlValue: string = control.value;
