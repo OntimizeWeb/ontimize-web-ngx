@@ -18,7 +18,7 @@
       <mat-select-trigger *ngIf="countryFlag && !multiple && !multipleTriggerLabel">
         <ng-container *ngFor="let item of filteredDataArray">
           <ng-container *ngIf="item.key == getValue()">
-            <img alt="{{ item.value }}" src="http://purecatamphetamine.github.io/country-flag-icons/1x1/{{ getValue() | uppercase }}.svg" height="20" width="20"/>
+            <img alt="{{ item.value }}" src="http://purecatamphetamine.github.io/country-flag-icons/1x1/{{ getValue() | uppercase }}.svg" height="15" width="15"/>
             {{ item.value }}
           </ng-container>
         </ng-container>
