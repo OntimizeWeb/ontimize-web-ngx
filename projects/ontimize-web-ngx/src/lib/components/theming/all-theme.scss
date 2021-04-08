@@ -16,6 +16,7 @@
 @import '../../layouts/app-layout/o-app-layout-theme.scss';
 @import '../card-menu-item/o-card-menu-item.component.theme.scss';
 @import '../input/hour-input/o-hour-input-theme.scss';
+@import '../../layouts/form-layout/split-pane/o-form-layout-split-pane-theme.scss';
 @import '../../layouts/form-layout/tabgroup/o-form-layout-tabgroup-theme.scss';
 @import '../bar-menu/o-bar-menu-theme.scss';
 @import '../grid/o-grid.theme.scss';
@@ -41,6 +42,7 @@
   @include o-app-layout-theme($theme);
   @include o-card-menu-item-theme($theme);
   @include o-hour-input-theme($theme);
+  @include o-form-layout-split-pane-theme($theme);
   @include o-form-layout-tabgroup-theme($theme);
   @include o-bar-menu-theme($theme);
   @include o-grid-theme($theme);

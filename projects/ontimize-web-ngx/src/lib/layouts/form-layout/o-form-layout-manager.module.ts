@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ResizableModule } from 'angular-resizable-element';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
@@ -14,7 +15,7 @@ import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.
 import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule],
+  imports: [CommonModule, OSharedModule, RouterModule, ResizableModule],
   declarations: [
     OFormLayoutDialogComponent,
     OFormLayoutManagerComponent,

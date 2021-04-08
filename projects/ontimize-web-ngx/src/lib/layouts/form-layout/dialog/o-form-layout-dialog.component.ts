@@ -10,19 +10,23 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
+import { OServiceComponent } from '../../../components/o-service-component.class';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
+import { OBaseFormLayoutManagerInstanceClass } from '../o-base-form-layout-manager-instance.class';
 
 @Component({
   selector: 'o-form-layout-dialog',
-  templateUrl: 'o-form-layout-dialog.component.html',
-  styleUrls: ['o-form-layout-dialog.component.scss'],
+  templateUrl: './o-form-layout-dialog.component.html',
+  styleUrls: ['./o-form-layout-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-layout-dialog]': 'true'
   }
 })
-export class OFormLayoutDialogComponent implements AfterViewInit {
+export class OFormLayoutDialogComponent
+  extends OBaseFormLayoutManagerInstanceClass
+  implements AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
   params: object;
@@ -37,10 +41,12 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,
-    protected injector: Injector,
-    protected componentFactoryResolver: ComponentFactoryResolver,
+    injector: Injector,
+    componentFactoryResolver: ComponentFactoryResolver,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
+    super(injector, componentFactoryResolver, data.layoutManagerComponent);
+
     if (data.title) {
       this.title = data.title;
     }
@@ -52,9 +58,6 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
     }
-    if (data.layoutManagerComponent) {
-      this.formLayoutManager = data.layoutManagerComponent;
-    }
   }
 
   ngAfterViewInit() {
@@ -65,7 +68,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     }
   }
 
-  updateNavigation(data: any, id: string) {
+  updateNavigation(data: any) {
     let label = this.formLayoutManager.getLabelFromData(data);
     if (label && label.length) {
       label = ': ' + label;
@@ -97,4 +100,15 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     return this.params;
   }
 
+  getFormCacheData() {
+    return this.data;
+  }
+
+  isMainComponent(comp: OServiceComponent): boolean {
+    return !comp.oFormLayoutDialog;
+  }
+
+  closeDetail() {
+    this.dialogRef.close();
+  }
 }

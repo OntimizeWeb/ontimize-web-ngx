@@ -1,5 +1,6 @@
 import { ElementRef, EventEmitter } from '@angular/core';
 
+import { OServiceComponent } from '../components/o-service-component.class';
 import { FormLayoutDetailComponentData } from '../types/form-layout-detail-component-data.type';
 
 export interface OFormLayoutTabGroup {
@@ -14,10 +15,11 @@ export interface OFormLayoutTabGroup {
   getDataToStore: () => object;
   addTab: (compData: FormLayoutDetailComponentData) => void;
   closeTab: (id: string) => void;
-  getFormCacheData: (idArg: string) => FormLayoutDetailComponentData;
+  getFormCacheData: () => FormLayoutDetailComponentData;
   getLastTabId: () => string;
-  setModifiedState: (modified: boolean, id: string) => void;
-  updateNavigation: (data: any, id: string, insertionMode?: boolean) => void;
+  setModifiedState: (modified: boolean) => void;
+  updateNavigation: (data: any, insertionMode?: boolean) => void;
   updateActiveData: (data: any) => void;
   getRouteOfActiveItem: () => any[];
+  isMainComponent: (comp: OServiceComponent) => boolean;
 }

@@ -28,6 +28,7 @@ import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
+import { OBaseFormLayoutManagerInstanceClass } from './o-base-form-layout-manager-instance.class';
 import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
 
 
@@ -60,6 +61,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,
   templateUrl: './o-form-layout-manager.component.html',
+  styleUrls: ['./o-form-layout-manager.component.scss'],
   host: {
     '[class.o-form-layout-manager]': 'true'
   }
@@ -160,9 +162,12 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       if (this.elRef) {
         this.elRef.nativeElement.removeAttribute('title');
       }
-      if (this.storeState && this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      if (this.storeState) {
         const state = this.localStorageService.getComponentStorage(this);
-        this.oTabGroup.initializeComponentState(state);
+        const compRef = this.getLayoutModeComponent();
+        if (Util.isDefined(compRef)) {
+          compRef.initializeComponentState(state);
+        }
       }
     });
   }
@@ -173,7 +178,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     this.updateStateStorage();
     this.oFormLayoutManagerService.removeFormLayoutManager(this);
-    this.destroyAactivateChildGuard();
+    this.destroyActivateChildGuard();
   }
 
   public getAttribute(): string {
@@ -185,11 +190,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   }
 
   public getDataToStore(): object {
-    // only storing in tab mode
-    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      return this.oTabGroup.getDataToStore();
-    }
-    return {};
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? compRef.getDataToStore() : {};
   }
 
   @HostListener('window:beforeunload', [])
@@ -235,7 +237,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
   }
 
-  public destroyAactivateChildGuard(): void {
+  public destroyActivateChildGuard(): void {
     if (!this.addingGuard) {
       return;
     }
@@ -273,35 +275,20 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       label: '',
       modified: false
     };
-    switch (true) {
-      case this.isTabMode() && Util.isDefined(this.oTabGroup):
-        this.oTabGroup.addTab(newDetailComp);
-        break;
-      case this.isDialogMode():
-        this.openFormLayoutDialog(newDetailComp);
-        break;
-      case this.isSplitPaneMode():
-        this.oSplitPane.setDetailComponent(newDetailComp);
-        break;
-      default:
-        break;
+    if (this.isDialogMode()) {
+      this.openFormLayoutDialog(newDetailComp);
+    } else {
+      const compRef = this.getLayoutModeComponent();
+      if (Util.isDefined(compRef)) {
+        compRef.openDetail(newDetailComp);
+      }
     }
   }
 
-  public closeDetail(id?: string): void {
-    switch (true) {
-      case this.isTabMode() && Util.isDefined(this.oTabGroup):
-        this.oTabGroup.closeTab(id);
-        break;
-      case this.isDialogMode():
-        this.dialogRef.close();
-        this.reloadMainComponents();
-        break;
-      case this.isSplitPaneMode():
-        this.oSplitPane.setDetailComponent(null);
-        break;
-      default:
-        break;
+  public closeDetail(): void {
+    const compRef = this.getLayoutModeComponent();
+    if (Util.isDefined(compRef)) {
+      compRef.closeDetail();
     }
   }
 
@@ -334,25 +321,19 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       dialogConfig.disableClose = this.dialogOptions.disableClose;
     }
 
-
     this.dialogRef = this.dialog.open(OFormLayoutDialogComponent, dialogConfig);
     this.dialogRef.afterClosed().subscribe(() => {
-      this.updateIfNeeded();
+      if (this.markForUpdate) {
+        this.updateIfNeeded();
+      } else {
+        this.reloadMainComponents();
+      }
     });
   }
 
-  public getFormCacheData(formId: string): FormLayoutDetailComponentData {
-    switch (true) {
-      case this.isTabMode() && Util.isDefined(this.oTabGroup):
-        return this.oTabGroup.getFormCacheData(formId);
-      case this.isDialogMode() && Util.isDefined(this.dialogRef):
-        return this.dialogRef.componentInstance.data;
-      case this.isSplitPaneMode() && Util.isDefined(this.oSplitPane):
-        return this.oSplitPane.getFormCacheData();
-      default:
-        break;
-    }
-    return undefined;
+  public getFormCacheData(): FormLayoutDetailComponentData {
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? compRef.getFormCacheData() : undefined;
   }
 
   public getLastTabId(): string {
@@ -362,11 +343,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return undefined;
   }
 
-  public setModifiedState(modified: boolean, id: string): void {
-    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      this.oTabGroup.setModifiedState(modified, id);
-    } else if (this.isSplitPaneMode() && Util.isDefined(this.oSplitPane)) {
-      this.oSplitPane.setModifiedState(modified);
+  public setModifiedState(modified: boolean): void {
+    const compRef = this.getLayoutModeComponent();
+    if (Util.isDefined(compRef)) {
+      compRef.setModifiedState(modified);
     }
   }
 
@@ -385,54 +365,31 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return label;
   }
 
-  public updateNavigation(data: any, id: string, insertionMode?: boolean): void {
-    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      this.oTabGroup.updateNavigation(data, id, insertionMode);
-    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
-      this.dialogRef.componentInstance.updateNavigation(data, id);
+  public updateNavigation(data: any, keysValues: any, insertionMode: boolean): void {
+    const compRef = this.getLayoutModeComponent();
+    if (Util.isDefined(compRef)) {
+      compRef.updateNavigation(data, keysValues, insertionMode);
     }
   }
 
   public updateActiveData(data: any) {
-    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      this.oTabGroup.updateActiveData(data);
-    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
-      this.dialogRef.componentInstance.updateActiveData(data);
+    const compRef = this.getLayoutModeComponent();
+    if (Util.isDefined(compRef)) {
+      compRef.updateActiveData(data);
     }
   }
 
   public getRouteOfActiveItem(): any[] {
-    let route = [];
-    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      route = this.oTabGroup.getRouteOfActiveItem();
-    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
-      route = this.dialogRef.componentInstance.getRouteOfActiveItem();
-    }
-    return route;
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? compRef.getRouteOfActiveItem() : [];
   }
 
   public isMainComponent(comp: OServiceComponent): boolean {
-    let result = false;
-    switch (true) {
-      case this.isTabMode() && Util.isDefined(this.oTabGroup):
-        const firstTab = this.oTabGroup.elementRef.nativeElement.getElementsByTagName('mat-tab-body')[0];
-        if (firstTab) {
-          result = firstTab.contains(comp.elementRef.nativeElement);
-        }
-        break;
-      case this.isDialogMode():
-        result = !comp.oFormLayoutDialog;
-        break;
-      case this.isSplitPaneMode():
-        const mainContent = this.oSplitPane.elementRef.nativeElement.getElementsByClassName('main-content')[0]
-        if (mainContent) {
-          result = mainContent.contains(comp.elementRef.nativeElement);
-        }
-        break;
-      default:
-        break;
+    if (this.isDialogMode()) {
+      return !comp.oFormLayoutDialog;
     }
-    return result;
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) && compRef.isMainComponent(comp);
   }
 
   public getRouteForComponent(comp: OServiceComponent): any[] {
@@ -467,7 +424,12 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   }
 
   protected updateStateStorage(): void {
-    if (this.localStorageService && this.isTabMode() && Util.isDefined(this.oTabGroup) && this.storeState) {
+    if (!this.localStorageService || !this.storeState) {
+      return;
+    }
+    const isTabMode = this.isTabMode() && Util.isDefined(this.oTabGroup);
+    const isSplitPaneMode = this.isSplitPaneMode() && Util.isDefined(this.oSplitPane);
+    if (isTabMode || isSplitPaneMode) {
       this.localStorageService.updateComponentStorage(this);
     }
   }
@@ -491,13 +453,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   }
 
   public getParams(): any {
-    let data;
-    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      data = this.oTabGroup.getParams();
-    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
-      data = this.dialogRef.componentInstance.getParams();
-    }
-    return data;
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? compRef.getParams() : undefined;
   }
 
   set markForUpdate(arg: boolean) {
@@ -513,5 +470,17 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   get ignoreCanDeactivate(): boolean {
     return !this.isSplitPaneMode();
+  }
+
+  protected getLayoutModeComponent(): OBaseFormLayoutManagerInstanceClass {
+    let compRef;
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      compRef = this.oTabGroup;
+    } else if (this.isDialogMode() && Util.isDefined(this.dialogRef)) {
+      compRef = this.dialogRef.componentInstance;
+    } else if (this.isSplitPaneMode() && Util.isDefined(this.oSplitPane)) {
+      compRef = this.oSplitPane;
+    }
+    return compRef;
   }
 }

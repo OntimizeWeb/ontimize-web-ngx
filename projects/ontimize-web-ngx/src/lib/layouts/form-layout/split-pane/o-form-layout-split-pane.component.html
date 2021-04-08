@@ -1,9 +1,20 @@
 <div fxFlex fxLayout="row">
-  <div class="main-content" fxFill fxLayout="column" fxLayoutAlign="start" fxFlex="50">
+
+  <div fxFlex fxLayout="row" class="main-content">
     <ng-content></ng-content>
   </div>
 
-  <div class="secondary-content" fxLayout="column" fxLayoutAlign="center stretch" fxFlex>
-    <ng-template o-form-layout-manager-content></ng-template>
+  <div #contentWrapper class="content-wrapper" mwlResizable [enableGhostResize]="true"
+    (resizeEnd)="onResizeEnd('width', $event, contentWrapper)">
+
+    <div class="resize-handle" mwlResizeHandle [resizeEdges]="{ left: true }">
+      <div class="resize-border">
+        <div></div>
+      </div>
+    </div>
+
+    <div class="secondary-content" fxLayout="column" fxLayoutAlign="center stretch" fxFlex>
+      <ng-template o-form-layout-manager-content></ng-template>
+    </div>
   </div>
 </div>
