@@ -56,6 +56,7 @@
     "@ngx-translate/http-loader": "~4.0.0",
     "moment": "2.24.0",
     "ngx-material-timepicker": "5.4.3",
-    "reflect-metadata": "0.1.13"
+    "reflect-metadata": "0.1.13",
+    "angular-resizable-element": "3.3.4"
   }
 }
