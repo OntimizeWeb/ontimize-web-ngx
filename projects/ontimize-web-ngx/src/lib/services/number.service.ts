@@ -103,9 +103,12 @@ export class NumberService {
     }
 
     let formattedRealValue = value;
+    const significantDigits = this.calculateSignificantDigits(value, minDecimalDigits, decimalSeparator);
     const formatterArgs = {
       minimumFractionDigits: minDecimalDigits,
-      maximumFractionDigits: maxDecimalDigits
+      maximumFractionDigits: maxDecimalDigits,
+      minimumSignificantDigits: significantDigits,
+      maximumSignificantDigits: significantDigits
     };
 
     if (Util.isDefined(locale)) {
@@ -145,6 +148,14 @@ export class NumberService {
     }
     const formattedPercentValue = this.getRealValue(parsedValue, args) + ' %';
     return formattedPercentValue;
+  }
+
+  private calculateSignificantDigits(value: number, minDecimals: number, decimalSeparator?: string): number {
+    const valueStr = String(value);
+    const splittedValue = Util.isDefined(decimalSeparator) ? valueStr.split(decimalSeparator) : valueStr.split('.');
+    const sigIntDigits = splittedValue[0].length;
+    const sigDecDigits = Util.isDefined(splittedValue[1]) && splittedValue[1].length > minDecimals ? splittedValue[1].length : minDecimals;
+    return sigIntDigits + sigDecDigits;
   }
 
 }
