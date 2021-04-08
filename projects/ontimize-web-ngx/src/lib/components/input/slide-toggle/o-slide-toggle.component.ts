@@ -7,8 +7,9 @@ import { OFormValue } from '../../form/oFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent
 } from '../../o-form-data-component.class';
+import { OBooleanFormDataComponent } from '../o-boolean-form-data-component.class';
+
 
 export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
   // true-value: true value. Default: true.
@@ -39,11 +40,8 @@ export const DEFAULT_OUTPUTS_O_SLIDETOGGLE = [
     '[class.o-slide-toggle]': 'true'
   }
 })
-export class OSlideToggleComponent extends OFormDataComponent {
+export class OSlideToggleComponent extends OBooleanFormDataComponent {
 
-  public trueValue: number | boolean | string = true;
-  public falseValue: number | boolean | string = false;
-  public booleanType: 'number' | 'boolean' | 'string' = 'boolean';
   public color: ThemePalette;
   public labelPosition: 'before' | 'after' = 'after';
 
@@ -53,57 +51,14 @@ export class OSlideToggleComponent extends OFormDataComponent {
     injector: Injector
   ) {
     super(form, elRef, injector);
-    this._defaultSQLTypeKey = 'BOOLEAN';
-    this.defaultValue = false;
   }
 
-  initialize() {
-    //First, the sqlType must be initialized  before calling super.initialize because it overwritte the value
-    if (!Util.isDefined(this.sqlType)) {
-      switch (this.booleanType) {
-        case 'number':
-          this.sqlType = 'INTEGER';
-          break;
-        case 'string':
-          this.sqlType = 'VARCHAR';
-          break;
-        case 'boolean':
-        default:
-          this.sqlType = 'BOOLEAN';
-      }
-    }
-    this.defaultValue = this.falseValue;
-    super.initialize();
-  }
-
-  ensureOFormValue(value: any) {
-    if (value instanceof OFormValue) {
-      if (!Util.isDefined(value.value)) {
-        value.value = this.falseValue;
-      }
-      this.value = new OFormValue(value.value);
-    } else {
-      this.value = new OFormValue(value === this.trueValue ? this.trueValue : this.falseValue);
-    }
-  }
 
   isChecked(): boolean {
     if (this.value instanceof OFormValue) {
       return this.value.value === this.trueValue;
     }
     return false;
-  }
-
-  getValue(): any {
-    if (Util.isDefined(this.value) && this.value.value !== undefined) {
-      return this.value.value ? this.trueValue : this.falseValue;
-    } else {
-      return this.defaultValue;
-    }
-  }
-
-  onClickBlocker(e: MouseEvent) {
-    e.stopPropagation();
   }
 
 }

@@ -253,7 +253,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
-  portalHost: DomPortalOutlet;
+  portalHost: Array<DomPortalOutlet> = [];
   onDataLoadedCellRendererSubscription: Subscription;
 
   get diameterSpinner() {
@@ -482,7 +482,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
   public showLastInsertableRow: boolean = false;
-  public expandableItem = new SelectionModel<Element>(false, []);
+  public expandableItem: SelectionModel<any>;
 
   protected clickTimer;
   protected clickDelay = 200;
@@ -608,6 +608,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.oTableMenu.registerOptions(this.tableOptions.toArray());
     }
     if (this.tableRowExpandable) {
+      this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
       this.createExpandableColumn();
     }
   }
@@ -619,6 +620,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   ngOnDestroy() {
+    //detach all porta host created
+    if (this.portalHost) {
+      this.portalHost.forEach(x => x.detach());
+    }
     this.destroy();
   }
 
@@ -1204,16 +1209,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.expandableItem.toggle(item);
 
-    if (this.portalHost) {
-      this.portalHost.detach();
+    if (this.portalHost[rowIndex]) {
+      this.portalHost[rowIndex].detach();
     }
 
     if (this.getStateExpand(item) === 'collapsed') {
-      this.cd.detectChanges();
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
-      this.portalHost = new DomPortalOutlet(
+      this.portalHost[rowIndex] = new DomPortalOutlet(
         this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
         this._componentFactoryResolver,
         this.appRef,
@@ -1221,11 +1225,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       );
 
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
-      this.portalHost.attachTemplatePortal(templatePortal);
-      setTimeout(() => {
-        const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
-        this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
-      }, 250);
+      this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
+      const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+      this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
+
 
 
     }

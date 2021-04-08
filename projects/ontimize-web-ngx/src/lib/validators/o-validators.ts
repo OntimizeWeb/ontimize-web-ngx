@@ -1,4 +1,5 @@
-import { FormControl, ValidationErrors } from '@angular/forms';
+import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Util } from '../util';
 
 const EMAIL_REGEXP = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
 
@@ -82,4 +83,42 @@ export class OValidators {
     return undefined;
   }
 
+  /**
+   * Patterns validator
+   * @param regex
+   * @param key
+   * @returns validator
+   *
+   */
+  public static patternValidator(regex: RegExp, key: string): ValidatorFn {
+    if (!Util.isDefined(regex)) {
+      console.warn('Regex param must be defined in patternValidator ')
+    }
+
+    if (!Util.isDefined(key)) {
+      console.warn('Validation key param must be defined in patternValidator ')
+    }
+
+    let validator: ValidatorFn = (control: FormControl): { [key: string]: any } => {
+      if (!Util.isDefined(regex) || !Util.isDefined(key) || !control.value) {
+        // if regex is not defined or key is not defined or control is empty return no error
+        return undefined;
+      }
+
+      // test the value of the control against the regexp supplied
+      const valid = regex.test(control.value);
+
+      let result = {};
+
+      // if true, return no error (no error), else return error passed in the second parameter
+      if (valid) {
+        result = undefined;
+      } else {
+        result[key] = !valid;
+      }
+      return result;
+    };
+    return validator;
+
+  }
 }
