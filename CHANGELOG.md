@@ -3,7 +3,8 @@
 * **o-form**: new output `onCancel` [b1711d7e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1711d7e))
 
 ### Bug Fixes
-* **o-slide-toggle**:  does not display or submit the correct value in the detail form ([5986e3d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5986e3d)) ([f534274](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f534274))
+* **o-slide-toggle**: does not display or submit the correct value in the detail form ([5986e3d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5986e3d)) ([f534274](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f534274))
+* **o-real-input**: ignore minimum decimal digits validation when value has lower precision ([1ee1fafc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1ee1fafc))
 
 ## 8.2.2 (2021-03-25)
 ### Features
