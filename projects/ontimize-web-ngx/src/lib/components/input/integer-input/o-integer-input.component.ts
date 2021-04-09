@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  Optional,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
@@ -17,11 +7,7 @@ import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormValue } from '../../form/OFormValue';
-import {
-  DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT,
-  OTextInputComponent,
-} from '../text-input/o-text-input.component';
+import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT, OTextInputComponent } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
