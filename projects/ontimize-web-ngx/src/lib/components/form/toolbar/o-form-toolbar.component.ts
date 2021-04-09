@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Injector,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
@@ -30,11 +20,16 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'showHeaderNavigation:show-header-navigation'
 ];
 
+export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
+  'onCancel'
+];
+
 @Component({
   selector: 'o-form-toolbar',
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],
   inputs: DEFAULT_INPUTS_O_FORM_TOOLBAR,
+  outputs: DEFAULT_OUTPUTS_O_FORM_TOOLBAR,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-toolbar]': 'true'
@@ -66,13 +61,14 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('breadcrumb', { read: ViewContainerRef, static: false })
   public breadContainer: ViewContainerRef;
 
+  public onCancel: EventEmitter<null> = new EventEmitter();
+
   public isSaveBtnEnabled: Observable<boolean>;
   public isEditBtnEnabled: Observable<boolean>;
   public existsChangesToSave: Observable<boolean>;
 
   get changesToSave(): boolean {
     return this._changesToSave;
-
   }
 
   set changesToSave(val: boolean) {
@@ -84,11 +80,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this._existsChangesToSaveSubject.next(val);
-
   }
 
   protected _changesToSave: boolean = false;
-
 
   get editBtnEnabled(): boolean {
     return this._editBtnEnabled;
@@ -107,7 +101,6 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this._isSaveBtnEnabledSubject.next(this._saveBtnEnabled);
   }
   protected _saveBtnEnabled: boolean = false;
-
 
   protected _dialogService: DialogService;
   protected _navigationService: NavigationService;
@@ -254,6 +247,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public cancelOperation(): void {
+    this.onCancel.emit();
     if (this.isDetail) {
       this.onCloseDetail();
     } else if (this.insertMode) {

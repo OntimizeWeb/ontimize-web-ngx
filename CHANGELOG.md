@@ -1,4 +1,7 @@
 ## 8.2.3
+### Features
+* **o-form**: new output `onCancel` [b1711d7e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1711d7e))
+
 ### Bug Fixes
 * **o-slide-toggle**:  does not display or submit the correct value in the detail form ([5986e3d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5986e3d)) ([f534274](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f534274))
 
