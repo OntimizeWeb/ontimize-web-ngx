@@ -10,15 +10,15 @@ import {
   OnInit,
   Optional,
   SkipSelf,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
-import { OFormLayoutSplitPane } from '../../interfaces/o-form-layout-split-pane.interface';
-import { OFormLayoutTabGroup } from '../../interfaces/o-form-layout-tab-group.interface';
+import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
@@ -28,7 +28,6 @@ import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
-import { OBaseFormLayoutManagerInstanceClass } from './o-base-form-layout-manager-instance.class';
 import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
 
 
@@ -93,10 +92,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   public dialogClass: string = '';
 
   @ViewChild('tabGroup', { static: false })
-  public oTabGroup: OFormLayoutTabGroup;
+  public oTabGroup: OFormLayoutManagerMode;
   public dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
   @ViewChild('splitPane', { static: false })
-  public oSplitPane: OFormLayoutSplitPane;
+  public oSplitPane: OFormLayoutManagerMode;
 
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
@@ -336,13 +335,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return Util.isDefined(compRef) ? compRef.getFormCacheData() : undefined;
   }
 
-  public getLastTabId(): string {
-    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
-      return this.oTabGroup.getLastTabId();
-    }
-    return undefined;
-  }
-
   public setModifiedState(modified: boolean): void {
     const compRef = this.getLayoutModeComponent();
     if (Util.isDefined(compRef)) {
@@ -423,7 +415,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       true;
   }
 
-  protected updateStateStorage(): void {
+  public updateStateStorage(): void {
     if (!this.localStorageService || !this.storeState) {
       return;
     }
@@ -472,7 +464,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return !this.isSplitPaneMode();
   }
 
-  protected getLayoutModeComponent(): OBaseFormLayoutManagerInstanceClass {
+  protected getLayoutModeComponent(): OFormLayoutManagerMode {
     let compRef;
     if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
       compRef = this.oTabGroup;

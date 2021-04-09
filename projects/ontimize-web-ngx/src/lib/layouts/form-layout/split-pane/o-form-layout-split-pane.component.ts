@@ -14,13 +14,12 @@ import { ResizeEvent } from 'angular-resizable-element';
 import { BehaviorSubject } from 'rxjs';
 
 import { OServiceComponent } from '../../../components/o-service-component.class';
-import { OFormLayoutSplitPane } from '../../../interfaces/o-form-layout-split-pane.interface';
+import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { FormLayoutDetailComponentData } from '../../../types';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
-import { OBaseFormLayoutManagerInstanceClass } from '../o-base-form-layout-manager-instance.class';
 
 @Component({
   selector: 'o-form-layout-split-pane',
@@ -31,9 +30,7 @@ import { OBaseFormLayoutManagerInstanceClass } from '../o-base-form-layout-manag
     '[class.o-form-layout-split-pane]': 'true'
   }
 })
-export class OFormLayoutSplitPaneComponent
-  extends OBaseFormLayoutManagerInstanceClass
-  implements OFormLayoutSplitPane {
+export class OFormLayoutSplitPaneComponent implements OFormLayoutManagerMode {
 
   data: FormLayoutDetailComponentData;
   public showLoading = new BehaviorSubject<boolean>(false);
@@ -45,13 +42,12 @@ export class OFormLayoutSplitPaneComponent
   contentDirective: OFormLayoutManagerContentDirective;
 
   constructor(
-    injector: Injector,
-    public elementRef: ElementRef,
-    componentFactoryResolver: ComponentFactoryResolver,
+    protected injector: Injector,
+    protected elementRef: ElementRef,
+    protected componentFactoryResolver: ComponentFactoryResolver,
     public renderer: Renderer2,
-    @Inject(forwardRef(() => OFormLayoutManagerComponent)) formLayoutManager: OFormLayoutManagerComponent
+    @Inject(forwardRef(() => OFormLayoutManagerComponent)) public formLayoutManager: OFormLayoutManagerComponent
   ) {
-    super(injector, componentFactoryResolver, formLayoutManager);
     this.router = this.injector.get(Router);
   }
 
@@ -148,5 +144,9 @@ export class OFormLayoutSplitPaneComponent
 
   closeDetail() {
     this.setDetailComponent(null);
+  }
+
+  updateNavigation(data: any, keysValues: any, insertionMode?: boolean) {
+    // Nothing to do
   }
 }

@@ -1,4 +1,7 @@
 .o-form-layout-split-pane {
+  .row-wrapper {
+    height: 100%;
+  }
   .content-wrapper {
     min-width: 30%;
     > .resize-handle {
@@ -29,6 +32,8 @@
     box-sizing: border-box; // required for the enableGhostResize option to work
   }
   .secondary-content {
+    padding: 0 8px;
+    overflow: auto;
     > * {
       height: 100%;
     }

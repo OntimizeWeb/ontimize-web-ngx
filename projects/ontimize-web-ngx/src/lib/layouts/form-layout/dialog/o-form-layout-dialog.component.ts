@@ -11,9 +11,9 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { OServiceComponent } from '../../../components/o-service-component.class';
+import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
-import { OBaseFormLayoutManagerInstanceClass } from '../o-base-form-layout-manager-instance.class';
 
 @Component({
   selector: 'o-form-layout-dialog',
@@ -24,9 +24,7 @@ import { OBaseFormLayoutManagerInstanceClass } from '../o-base-form-layout-manag
     '[class.o-form-layout-dialog]': 'true'
   }
 })
-export class OFormLayoutDialogComponent
-  extends OBaseFormLayoutManagerInstanceClass
-  implements AfterViewInit {
+export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
   params: object;
@@ -41,12 +39,10 @@ export class OFormLayoutDialogComponent
 
   constructor(
     public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,
-    injector: Injector,
-    componentFactoryResolver: ComponentFactoryResolver,
+    protected injector: Injector,
+    protected componentFactoryResolver: ComponentFactoryResolver,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
-    super(injector, componentFactoryResolver, data.layoutManagerComponent);
-
     if (data.title) {
       this.title = data.title;
     }
@@ -57,6 +53,9 @@ export class OFormLayoutDialogComponent
       this.params = data.data.params;
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
+    }
+    if (data.layoutManagerComponent) {
+      this.formLayoutManager = data.layoutManagerComponent;
     }
   }
 
@@ -110,5 +109,13 @@ export class OFormLayoutDialogComponent
 
   closeDetail() {
     this.dialogRef.close();
+  }
+
+  getDataToStore() {
+    return null;
+  }
+
+  setModifiedState(modified: boolean) {
+
   }
 }

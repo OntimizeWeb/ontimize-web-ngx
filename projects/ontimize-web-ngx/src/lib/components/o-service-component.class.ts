@@ -155,10 +155,8 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
-  protected formLayoutManagerTabIndex: number;
   public oFormLayoutDialog: OFormLayoutDialogComponent;
 
-  protected tabsSubscriptions: any;
   public quickFilterComponent: OSearchInputComponent;
   @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
   public searchInputComponent: OSearchInputComponent;
@@ -187,25 +185,6 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public initialize(): void {
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
-
-      this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
-
-      this.tabsSubscriptions = this.formLayoutManager.oTabGroup.onSelectedTabChange.subscribe(() => {
-        if (this.formLayoutManagerTabIndex !== this.formLayoutManager.oTabGroup.selectedTabIndex) {
-          this.updateStateStorage();
-          // when the storage is updated because a form layout manager tab change
-          // the alreadyStored control variable is changed to its initial value
-          this.alreadyStored = false;
-        }
-      });
-
-      this.tabsSubscriptions.add(this.formLayoutManager.oTabGroup.onCloseTab.subscribe(() => {
-        if (this.formLayoutManagerTabIndex === this.formLayoutManager.oTabGroup.selectedTabIndex) {
-          this.updateStateStorage();
-        }
-      }));
-    }
     super.initialize();
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
@@ -229,9 +208,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     super.destroy();
     if (this.onTriggerUpdateSubscription) {
       this.onTriggerUpdateSubscription.unsubscribe();
-    }
-    if (this.tabsSubscriptions) {
-      this.tabsSubscriptions.unsubscribe();
     }
   }
 
@@ -539,24 +515,6 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   get elementRef(): ElementRef {
     return this.elRef;
-  }
-
-  initializeState() {
-    let routeKey = super.getRouteKey();
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && !this.formLayoutManager.isMainComponent(this)) {
-      try {
-        const params = this.formLayoutManager.oTabGroup.state.tabsData[0].params;
-        if (params) {
-          routeKey = this.router.url;
-          routeKey += '/' + (Object.keys(params).join('/'));
-        }
-      } catch (e) {
-        //
-      }
-    }
-    // Get previous status
-    this.state = this.localStorageService.getComponentStorage(this, routeKey);
-
   }
 
   public showCaseSensitiveCheckbox(): boolean {

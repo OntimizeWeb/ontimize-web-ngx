@@ -19,16 +19,14 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { OServiceComponent } from '../../../components/o-service-component.class';
-import { OFormLayoutTabGroup } from '../../../interfaces/o-form-layout-tab-group.interface';
+import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
 import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
-import { OBaseFormLayoutManagerInstanceClass } from '../o-base-form-layout-manager-instance.class';
 import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
-
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -52,9 +50,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
     '[class.o-form-layout-tabgroup]': 'true'
   }
 })
-export class OFormLayoutTabGroupComponent
-  extends OBaseFormLayoutManagerInstanceClass
-  implements OFormLayoutTabGroup, AfterViewInit, OnDestroy {
+export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, AfterViewInit, OnDestroy {
 
   public data: FormLayoutDetailComponentData[] = [];
   public selectedTabIndex: number | null;
@@ -66,8 +62,7 @@ export class OFormLayoutTabGroupComponent
   @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
-  protected closeTabSubscription: Subscription;
-  protected tabsDirectivesSubscription: Subscription;
+  protected subscriptions: Subscription = new Subscription();
   protected router: Router;
   protected loading: boolean = false;
   protected dialogService: DialogService;
@@ -77,19 +72,18 @@ export class OFormLayoutTabGroupComponent
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
-    injector: Injector,
-    componentFactoryResolver: ComponentFactoryResolver,
+    protected injector: Injector,
+    protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected elRef: ElementRef,
-    @Inject(forwardRef(() => OFormLayoutManagerComponent)) formLayoutManager: OFormLayoutManagerComponent
+    protected elementRef: ElementRef,
+    @Inject(forwardRef(() => OFormLayoutManagerComponent)) public formLayoutManager: OFormLayoutManagerComponent
   ) {
-    super(injector, componentFactoryResolver, formLayoutManager);
     this.dialogService = injector.get(DialogService);
     this.router = this.injector.get(Router);
   }
 
   ngAfterViewInit() {
-    this.tabsDirectivesSubscription = this.tabsDirectives.changes.subscribe(changes => {
+    this.subscriptions.add(this.tabsDirectives.changes.subscribe(changes => {
       if (this.tabsDirectives.length) {
         const tabItem = this.tabsDirectives.last;
         const tabData = this.data[tabItem.index];
@@ -97,15 +91,12 @@ export class OFormLayoutTabGroupComponent
           this.createTabComponent(tabData, tabItem);
         }
       }
-    });
+    }));
   }
 
   ngOnDestroy() {
-    if (this.tabsDirectivesSubscription) {
-      this.tabsDirectivesSubscription.unsubscribe();
-    }
-    if (this.closeTabSubscription) {
-      this.closeTabSubscription.unsubscribe();
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
     }
   }
 
@@ -201,15 +192,12 @@ export class OFormLayoutTabGroupComponent
       this.onMainTabSelected.emit();
     }
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
-      if (this.state.tabsData.length > 1) {
-        if ((arg.index === this.state.tabsData.length) && Util.isDefined(this.state.selectedIndex)) {
-          this.selectedTabIndex = this.state.selectedIndex;
-          this.state = undefined;
-        }
-      } else {
+      if ((arg.index === this.state.tabsData.length) && Util.isDefined(this.state.selectedIndex)) {
+        this.selectedTabIndex = this.state.selectedIndex;
         this.state = undefined;
       }
     }
+    this.formLayoutManager.updateStateStorage();
     this.onSelectedTabChange.emit(this.data[this.selectedTabIndex - 1]);
   }
 
@@ -221,12 +209,13 @@ export class OFormLayoutTabGroupComponent
     const tabData = this.data[tabDataIndex];
     const onCloseTabAccepted: EventEmitter<any> = new EventEmitter<any>();
 
-    this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
+    this.subscriptions.add(onCloseTabAccepted.asObservable().subscribe(res => {
       if (res) {
         this.data.splice(tabDataIndex, 1);
+        this.formLayoutManager.updateStateStorage();
         this.onCloseTab.emit(tabData);
       }
-    });
+    }));
 
     if (Util.isDefined(tabData) && tabData.modified) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
@@ -277,7 +266,12 @@ export class OFormLayoutTabGroupComponent
   }
 
   updateNavigation(data: any, keysValues: any, insertionMode?: boolean) {
-    const index = this.data.findIndex((item: any) => Object.keys(keysValues).every(key => keysValues[key] == item.params[key]));
+    let index;
+    if (insertionMode) {
+      index = this.data.findIndex((item: any) => item.insertionMode !== false);
+    } else {
+      index = this.data.findIndex((item: any) => Object.keys(keysValues).every(key => keysValues[key] == item.params[key]));
+    }
     if (index >= 0) {
       let label = this.formLayoutManager.getLabelFromData(data);
       this.tabGroup.selectedIndex = (index + 1);
@@ -373,10 +367,6 @@ export class OFormLayoutTabGroupComponent
 
   getParams(): any {
     return Util.isDefined(this.data[0]) ? this.data[0].params : undefined;
-  }
-
-  get elementRef(): ElementRef {
-    return this.elRef;
   }
 
   isMainComponent(comp: OServiceComponent): boolean {
