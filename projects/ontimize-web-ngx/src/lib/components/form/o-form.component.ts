@@ -155,8 +155,10 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'beforeInitialMode',
   'onInsertMode',
   'onUpdateMode',
-  'onInitialMode'
+  'onInitialMode',
+  'onCancel'
 ];
+
 @Component({
   selector: 'o-form',
   providers: [
@@ -249,6 +251,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public onInsert: EventEmitter<any> = new EventEmitter();
   public onUpdate: EventEmitter<any> = new EventEmitter();
   public onDelete: EventEmitter<any> = new EventEmitter();
+  public onCancel: EventEmitter<null> = new EventEmitter();
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
