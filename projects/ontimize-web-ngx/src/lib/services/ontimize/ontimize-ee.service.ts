@@ -24,7 +24,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     const url = this.urlBase + this._startSessionPath;
     const options: any = {
       headers: new HttpHeaders({
-        Authorization: 'Basic ' + btoa(user + ':' + password)
+        Authorization: 'xBasic ' + btoa(user + ':' + password)
       }),
       observe: 'response'
     };
