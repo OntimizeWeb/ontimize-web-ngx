@@ -3,12 +3,12 @@ import {
   DEFAULT_INPUTS_O_COMBO_RENDERER_BOOLEAN,
   OComboRendererBooleanComponent
 } from './boolean/o-combo-renderer-boolean.component';
-import { OComboRendererCountryFlagComponent } from './country-flag/o-combo-renderer-country-flag.component';
 import {
   DEFAULT_INPUTS_O_COMBO_RENDERER_CURRENCY,
   OComboRendererCurrencyComponent
 } from './currency/o-combo-renderer-currency.component';
 import { DEFAULT_INPUTS_O_COMBO_RENDERER_DATE, OComboRendererDateComponent } from './date/o-combo-renderer-date.component';
+import { OComboRendererIconComponent } from './icon/o-combo-renderer-icon.component';
 import { OComboRendererIntegerComponent } from './integer/o-combo-renderer-integer.component';
 import {
   DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE,
@@ -23,7 +23,7 @@ export const O_COMBO_RENDERERS = [
   OComboRendererCurrencyComponent,
   OComboRendererDateComponent,
   OComboRendererPercentageComponent,
-  OComboRendererCountryFlagComponent
+  OComboRendererIconComponent
 ];
 
 export const O_COMBO_RENDERERS_INPUTS = [
@@ -43,5 +43,5 @@ export const renderersMapping = {
   boolean: OComboRendererBooleanComponent,
   date: OComboRendererDateComponent,
   percentage: OComboRendererPercentageComponent,
-  countryFlag: OComboRendererCountryFlagComponent
+  icon: OComboRendererIconComponent
 };

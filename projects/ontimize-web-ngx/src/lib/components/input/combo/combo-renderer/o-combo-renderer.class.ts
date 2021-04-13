@@ -43,6 +43,9 @@ export class OComboCustomRenderer implements OnInit {
     let parsedValue: string;
     if (Util.isDefined(value) && Util.isDefined(value.value)) {
       if (this.componentPipe && this.pipeArguments !== undefined && value !== undefined) {
+        if(Util.isDefined(value.key)) {
+          this.pipeArguments["key"] = value.key;
+        }
         parsedValue = this.componentPipe.transform(value.value, this.pipeArguments);
       } else {
         parsedValue = value.value;

@@ -4,6 +4,7 @@ export * from './auth-guard.service';
 export * from './base-service-response.class';
 export * from './base-service.class';
 export * from './currency.service';
+export * from './icon.service';
 export * from './dialog.service';
 export * from './factories';
 export * from './local-storage.service';
