@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
-import { InputConverter } from '../decorators/input-converter';
+import { BooleanConverter, InputConverter } from '../decorators/input-converter';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService } from '../services/navigation.service';
@@ -135,8 +135,13 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected insertFormRoute: string;
   @InputConverter()
   protected recursiveInsert: boolean = false;
-  @InputConverter()
-  public filterCaseSensitive: boolean = false;
+  protected filterCaseSensitivePvt: boolean = false;
+  set filterCaseSensitive(value: boolean) {
+    this.filterCaseSensitivePvt = BooleanConverter(value);
+  }
+  get filterCaseSensitive(): boolean {
+    return this.filterCaseSensitivePvt;
+  }
   protected _quickFilter: boolean = true;
   get quickFilter(): boolean {
     return this._quickFilter;
@@ -155,7 +160,10 @@ export class OServiceComponent extends OServiceBaseComponent {
 
   protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerComponent;
+  protected formLayoutManagerTabIndex: number;
   public oFormLayoutDialog: OFormLayoutDialogComponent;
+
+  protected tabsSubscriptions: any;
 
   public quickFilterComponent: OSearchInputComponent;
   @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
@@ -185,6 +193,25 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public initialize(): void {
+    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
+
+      if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
+        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+      }
+
+      this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.previousIndex) {
+          this.updateStateStorage();
+          this.alreadyStored = false;
+        }
+      });
+
+      this.tabsSubscriptions.add(this.formLayoutManager.onCloseTab.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.index) {
+          this.updateStateStorage();
+        }
+      }));
+    }
     super.initialize();
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
@@ -208,6 +235,9 @@ export class OServiceComponent extends OServiceBaseComponent {
     super.destroy();
     if (this.onTriggerUpdateSubscription) {
       this.onTriggerUpdateSubscription.unsubscribe();
+    }
+    if (this.tabsSubscriptions) {
+      this.tabsSubscriptions.unsubscribe();
     }
   }
 

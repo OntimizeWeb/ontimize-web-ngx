@@ -3,7 +3,8 @@
     height: 100%;
   }
   .content-wrapper {
-    min-width: 30%;
+    z-index: 1000;
+    min-width: 15%;
     > .resize-handle {
       width: 8px;
       position: relative;

@@ -53,7 +53,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
 export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, AfterViewInit, OnDestroy {
 
   public data: FormLayoutDetailComponentData[] = [];
-  public selectedTabIndex: number | null;
   public title: string;
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
@@ -70,6 +69,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
+  
+  protected previousSelectedIndex: number;
 
   constructor(
     protected injector: Injector,
@@ -193,27 +194,34 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
       if ((arg.index === this.state.tabsData.length) && Util.isDefined(this.state.selectedIndex)) {
-        this.selectedTabIndex = this.state.selectedIndex;
+        this.tabGroup.selectedIndex = this.state.selectedIndex;
         this.state = undefined;
       }
     }
-    this.formLayoutManager.updateStateStorage();
-    this.onSelectedTabChange.emit(this.data[this.selectedTabIndex - 1]);
+
+    this.onSelectedTabChange.emit({
+      data: this.data[this.tabGroup.selectedIndex - 1],
+      index: this.tabGroup.selectedIndex,
+      previousIndex: this.previousSelectedIndex
+    });
+
+    this.previousSelectedIndex =  this.tabGroup.selectedIndex;
   }
 
-  closeTab(id: string) {
+  closeTab(index: number) {
     if (!this.formLayoutManager) {
       return;
     }
-    const tabDataIndex = this.data.findIndex((item: FormLayoutDetailComponentData) => item.id === id);
-    const tabData = this.data[tabDataIndex];
+    const tabData = this.data[index];
     const onCloseTabAccepted: EventEmitter<any> = new EventEmitter<any>();
 
     this.subscriptions.add(onCloseTabAccepted.asObservable().subscribe(res => {
       if (res) {
-        this.data.splice(tabDataIndex, 1);
-        this.formLayoutManager.updateStateStorage();
-        this.onCloseTab.emit(tabData);
+        this.data.splice(index, 1);
+        this.onCloseTab.emit({
+          data: tabData,
+          index: index
+        });
       }
     }));
 
@@ -379,9 +387,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   closeDetail() {
-    const tabData = this.data[this.selectedTabIndex - 1];
-    if (Util.isDefined(tabData)) {
-      this.closeTab(tabData.id);
-    }
+    this.closeTab(this.tabGroup.selectedIndex - 1);
   }
 }

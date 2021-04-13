@@ -1,7 +1,10 @@
+import { EventEmitter } from '@angular/core';
+
 import { OServiceComponent } from '../components/o-service-component.class';
 import { FormLayoutDetailComponentData } from '../types/form-layout-detail-component-data.type';
 
 export interface OFormLayoutManagerMode {
+  data: any | any[];
   getParams: () => any;
   initializeComponentState?: (state: any) => void;
   getDataToStore: () => object;
