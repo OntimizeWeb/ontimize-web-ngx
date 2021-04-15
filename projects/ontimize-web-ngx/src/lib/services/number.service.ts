@@ -1,8 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-
-import { AppConfig } from '../config/app-config';
-import { Config } from '../types/config.type';
 import { Util } from '../util/util';
+import { OTranslateService } from './translate/o-translate.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +13,25 @@ export class NumberService {
   protected _minDecimalDigits: number;
   protected _maxDecimalDigits: number;
   protected _locale: string;
-  private _config: Config;
+
+  protected translateService: OTranslateService;
 
   constructor(protected injector: Injector) {
-    this._config = this.injector.get(AppConfig).getConfiguration();
+
+
+    this.translateService = this.injector.get(OTranslateService);
     // TODO: initialize from config
     this._minDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
     this._maxDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
 
     this._grouping = true;
-    this._locale = this._config.locale;
+
+    const self = this;
+    this._locale = this.translateService.getCurrentLang()
+    this.translateService.onLanguageChanged.subscribe(() =>
+      self._locale = self.translateService.getCurrentLang()
+
+    );
   }
 
   get grouping(): boolean {
@@ -61,7 +68,7 @@ export class NumberService {
 
   getIntegerValue(value: any, args: any) {
     const grouping = args ? args.grouping : undefined;
-    if (!Util.isDefined(value) && !Util.isDefined(grouping) || !grouping) {
+    if (!Util.isDefined(value)) {
       return value;
     }
     const thousandSeparator = args ? args.thousandSeparator : undefined;
@@ -84,10 +91,11 @@ export class NumberService {
   }
 
   getRealValue(value: any, args: any) {
-    const grouping = args ? args.grouping : undefined;
-    if (!Util.isDefined(value) && !Util.isDefined(grouping) || !grouping) {
+    const grouping = args ? args.grouping : false;
+    if (!Util.isDefined(value)) {
       return value;
     }
+
     const locale = args ? args.locale : undefined;
     const thousandSeparator = args ? args.thousandSeparator : undefined;
     const decimalSeparator = args ? args.decimalSeparator : undefined;
@@ -108,7 +116,8 @@ export class NumberService {
       minimumFractionDigits: minDecimalDigits,
       maximumFractionDigits: maxDecimalDigits,
       minimumSignificantDigits: significantDigits,
-      maximumSignificantDigits: significantDigits
+      maximumSignificantDigits: significantDigits,
+      useGrouping: grouping
     };
 
     if (Util.isDefined(locale)) {
