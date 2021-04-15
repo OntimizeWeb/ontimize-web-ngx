@@ -18,7 +18,6 @@ export class NumberService {
 
   constructor(protected injector: Injector) {
 
-
     this.translateService = this.injector.get(OTranslateService);
     // TODO: initialize from config
     this._minDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
@@ -30,7 +29,6 @@ export class NumberService {
     this._locale = this.translateService.getCurrentLang()
     this.translateService.onLanguageChanged.subscribe(() =>
       self._locale = self.translateService.getCurrentLang()
-
     );
   }
 

@@ -1,5 +1,4 @@
 import { Injector, Pipe, PipeTransform } from '@angular/core';
-
 import { NumberService } from '../services/number.service';
 
 export interface IIntegerPipeArgument {

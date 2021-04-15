@@ -1,5 +1,4 @@
 import { Injector, Pipe, PipeTransform } from '@angular/core';
-
 import { ORealPipe } from './o-real.pipe';
 
 export type OPercentageValueBaseType = 1 | 100;

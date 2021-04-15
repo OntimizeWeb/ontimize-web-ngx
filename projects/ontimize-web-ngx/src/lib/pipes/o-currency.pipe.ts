@@ -26,6 +26,4 @@ export class OCurrencyPipe implements PipeTransform {
   transform(text: string, args: ICurrencyPipeArgument): string {
     return this.currencyService.getCurrencyValue(text, args);
   }
-
-
 }
