@@ -61,10 +61,20 @@
 * **o-table, OBaseTableCellEditor**: Ignoring keyboard events from outside a cell being edited. Also stopping active cell edition when table content has changed ([d888fad](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d888fad)) Closes ([#523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/523))
 
 ### BREAKING CHANGES
+<<<<<<< HEAD
 * **table**:
   * method `handleCellClick` has been removed, you have to use `handleClick` instead  ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
   * method `handleCellDoubleClick` has been removed, you have to use `handleDoubleClick` instead ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
   * Changed the parametres of the `handleDoubleClick` and `handleCellClick` methods ([e64dcc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e64dcc3)) ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
+=======
+* Authentication has been refactored:
+  * Service `LoginService` has been removed and replaced by `AuthService`. This is an abstract service that provides basic functionality regarding authentication. Its default implementation is `OntimizeAuthService` class that performs authentication with Ontimize based backends. Developers can provide their own implementation using the Injection Token `O_AUTH_SERVICE` and the class of their service that extends `AuthService` class.
+  * Interface `ILoginService` has been removed, use abstract class `AuthService` instead.
+  * Method `redirectLogin` has been removed in class `OntimizeBaseService` and all its subclasses (`OntimizeService`, `OntimizeEEService`, `OntimizeExportService` and `OntimizeFileService`), use method `logout` from `AuthService` instead.
+  * Method `redirectLogin` has been removed in class `ServiceUtils`, now it is a method of Ontimize authentication implementation in `OntimizeAuthService`.
+
+## 8.1.1 (2020-11-25)
+>>>>>>> c4a48cccfe43711c486c7a206661d850c8647920
 
 ## 8.1.1 (2020-11-25)
 ### Bug Fixes
