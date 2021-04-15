@@ -1,3 +1,7 @@
+## 8.2.4
+### Bug Fixes
+* **oCurrency, oReal, oInteger, oPercent** pipes don't update the format of values when language is changed [a9343d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a9343d0)) Closes ([#566](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/566))
+
 ## 8.2.3 (2021-04-09)
 ### Features
 * **o-form**: new output `onCancel` [b1711d7e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1711d7e))

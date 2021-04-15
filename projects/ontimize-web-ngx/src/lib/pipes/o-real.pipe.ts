@@ -1,5 +1,4 @@
 import { Injector, Pipe, PipeTransform } from '@angular/core';
-
 import { OIntegerPipe } from './o-integer.pipe';
 
 export interface IRealPipeArgument {
@@ -12,7 +11,8 @@ export interface IRealPipeArgument {
 }
 
 @Pipe({
-  name: 'oReal'
+  name: 'oReal',
+  pure: false
 })
 export class ORealPipe extends OIntegerPipe implements PipeTransform {
 
