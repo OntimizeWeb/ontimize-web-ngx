@@ -1,4 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
+
+import { IRealPipeArgument } from '../pipes';
 import { Util } from '../util/util';
 import { OTranslateService } from './translate/o-translate.service';
 
@@ -88,7 +90,7 @@ export class NumberService {
     return formattedIntValue;
   }
 
-  getRealValue(value: any, args: any) {
+  getRealValue(value: any, args: IRealPipeArgument) {
     const grouping = args ? args.grouping : false;
     if (!Util.isDefined(value)) {
       return value;
@@ -109,7 +111,7 @@ export class NumberService {
     }
 
     let formattedRealValue = value;
-    const significantDigits = this.calculateSignificantDigits(value, minDecimalDigits, decimalSeparator);
+    const significantDigits = this.calculateSignificantDigits(value, minDecimalDigits, maxDecimalDigits, args.truncate, decimalSeparator);
     const formatterArgs = {
       minimumFractionDigits: minDecimalDigits,
       maximumFractionDigits: maxDecimalDigits,
@@ -157,11 +159,16 @@ export class NumberService {
     return formattedPercentValue;
   }
 
-  private calculateSignificantDigits(value: number, minDecimals: number, decimalSeparator?: string): number {
+  private calculateSignificantDigits(value: number, minDecimals: number, maxDecimals: number, truncate = true, decimalSeparator?: string): number {
     const valueStr = String(value);
     const splittedValue = Util.isDefined(decimalSeparator) ? valueStr.split(decimalSeparator) : valueStr.split('.');
     const sigIntDigits = splittedValue[0].length;
-    const sigDecDigits = Util.isDefined(splittedValue[1]) && splittedValue[1].length > minDecimals ? splittedValue[1].length : minDecimals;
+    let sigDecDigits = 0;
+    if (truncate) {
+      sigDecDigits = Util.isDefined(splittedValue[1]) && splittedValue[1].length > maxDecimals ? maxDecimals : splittedValue[1].length;
+    } else {
+      sigDecDigits = Util.isDefined(splittedValue[1]) && splittedValue[1].length > minDecimals ? splittedValue[1].length : minDecimals;
+    }
     return sigIntDigits + sigDecDigits;
   }
 
