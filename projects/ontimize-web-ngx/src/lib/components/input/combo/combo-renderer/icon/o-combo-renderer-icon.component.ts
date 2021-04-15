@@ -6,7 +6,9 @@ import { OComboCustomRenderer } from '../o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER_ICON = [
   // icon-position [left|right]: position of the icon/image symbol. Default: left.
-  'iconPosition: icon-position'
+  'iconPosition: icon-position',
+  // icon-key [string]: Key to icon name. Default: icon
+  'iconKey: icon-key'
 ];
 
 @Component({
@@ -19,6 +21,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_ICON = [
 export class OComboRendererIconComponent extends OComboCustomRenderer implements OnInit {
 
   protected iconService: IconService;
+  protected iconKey: string;
   protected iconPosition: string;
 
   protected componentPipe: OIconPipe;
@@ -41,9 +44,14 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
     if (typeof this.iconPosition === 'undefined') {
       this.iconPosition = this.iconService.iconPosition;
     }
+
+    if (typeof this.iconKey === 'undefined') {
+      this.iconKey = this.iconService.iconKey;
+    }
     
     this.pipeArguments = {
-      iconPosition: this.iconPosition
+      iconPosition: this.iconPosition,
+      iconKey: this.iconKey
     };
   }
 

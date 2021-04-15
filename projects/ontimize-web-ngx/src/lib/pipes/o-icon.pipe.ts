@@ -4,10 +4,12 @@ import { IconService } from '../services/icon.service';
 
 export interface IIconPipeArgument {
   iconPosition?: string;
+  iconKey?: string;
 }
 
 @Pipe({
-  name: 'oIcon'
+  name: 'oIcon',
+  pure: false
 })
 export class OIconPipe implements PipeTransform {
 
