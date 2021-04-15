@@ -12,7 +12,8 @@ export interface IRealPipeArgument {
 }
 
 @Pipe({
-  name: 'oReal'
+  name: 'oReal',
+  pure: false
 })
 export class ORealPipe extends OIntegerPipe implements PipeTransform {
 

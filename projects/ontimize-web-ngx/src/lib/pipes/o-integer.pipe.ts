@@ -9,7 +9,8 @@ export interface IIntegerPipeArgument {
 }
 
 @Pipe({
-  name: 'oInteger'
+  name: 'oInteger',
+  pure: false
 })
 
 export class OIntegerPipe implements PipeTransform {

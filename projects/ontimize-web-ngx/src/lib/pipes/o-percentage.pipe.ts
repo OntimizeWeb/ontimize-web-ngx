@@ -15,7 +15,8 @@ export interface IPercentPipeArgument {
 }
 
 @Pipe({
-  name: 'oPercent'
+  name: 'oPercent',
+  pure: false
 })
 export class OPercentPipe extends ORealPipe implements PipeTransform {
 
@@ -24,7 +25,9 @@ export class OPercentPipe extends ORealPipe implements PipeTransform {
   }
 
   transform(text: string, args: IPercentPipeArgument): string {
-    args.valueBase = this.parseValueBase(args.valueBase);
+    if (args && args.valueBase) {
+      args.valueBase = this.parseValueBase(args.valueBase);
+    }
     return this.numberService.getPercentValue(text, args);
   }
 
