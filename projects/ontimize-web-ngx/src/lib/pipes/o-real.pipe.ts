@@ -1,4 +1,5 @@
 import { Injector, Pipe, PipeTransform } from '@angular/core';
+
 import { OIntegerPipe } from './o-integer.pipe';
 
 export interface IRealPipeArgument {
@@ -8,6 +9,7 @@ export interface IRealPipeArgument {
   decimalSeparator?: string;
   minDecimalDigits?: number;
   maxDecimalDigits?: number;
+  truncate?: boolean;
 }
 
 @Pipe({
