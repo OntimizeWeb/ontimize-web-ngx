@@ -163,11 +163,14 @@ export class NumberService {
     const valueStr = String(value);
     const splittedValue = Util.isDefined(decimalSeparator) ? valueStr.split(decimalSeparator) : valueStr.split('.');
     const sigIntDigits = splittedValue[0].length;
+    if (!Util.isDefined(splittedValue[1])) {
+      return sigIntDigits;
+    }
     let sigDecDigits = 0;
     if (truncate) {
-      sigDecDigits = Util.isDefined(splittedValue[1]) && splittedValue[1].length > maxDecimals ? maxDecimals : splittedValue[1].length;
+      sigDecDigits = splittedValue[1].length > maxDecimals ? maxDecimals : splittedValue[1].length;
     } else {
-      sigDecDigits = Util.isDefined(splittedValue[1]) && splittedValue[1].length > minDecimals ? splittedValue[1].length : minDecimals;
+      sigDecDigits = splittedValue[1].length > minDecimals ? splittedValue[1].length : minDecimals;
     }
     return sigIntDigits + sigDecDigits;
   }
