@@ -8,14 +8,14 @@ import { Util } from '../util/util';
 })
 export class IconService {
   public static DEFAULT_ICON_POSITION = 'left';
-  public static DEFAULT_ICON_KEY = 'icon';
+  public static DEFAULT_ICON_COLUMN = 'icon';
 
   protected _iconPosition: string;
-  protected _iconKey: string;
+  protected _iconColumn: string;
 
   constructor(protected injector: Injector, private _sanitizer: DomSanitizer) {
     this._iconPosition = IconService.DEFAULT_ICON_POSITION;
-    this._iconKey = IconService.DEFAULT_ICON_KEY;
+    this._iconColumn = IconService.DEFAULT_ICON_COLUMN;
   }
 
   get iconPosition(): string {
@@ -26,12 +26,12 @@ export class IconService {
     this._iconPosition = value;
   }
 
-  get iconKey(): string {
-    return this._iconKey;
+  get iconColumn(): string {
+    return this._iconColumn;
   }
 
-  set iconKey(value: string) {
-    this._iconKey = value;
+  set iconColumn(value: string) {
+    this._iconColumn = value;
   }
 
   getIconValue(value: any, args: any) {
