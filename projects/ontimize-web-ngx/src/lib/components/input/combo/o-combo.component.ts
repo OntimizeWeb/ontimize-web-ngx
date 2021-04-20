@@ -62,7 +62,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public value: OFormValue;
   public searchControl: FormControl = new FormControl();
   public renderer: OComboCustomRenderer;
-  public countryFlag: boolean = false;
 
   /* Inputs */
   @InputConverter()

@@ -8,7 +8,9 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_ICON = [
   // icon-position [left|right]: position of the icon/image symbol. Default: left.
   'iconPosition: icon-position',
   // icon-column [string]: Column key to icon name. Default: icon
-  'iconColumn: icon-column'
+  'iconColumn: icon-column',
+  // icon-type [basic|svg]: Type of icon. Default: basic
+  'iconType: icon-type',
 ];
 
 @Component({
@@ -23,6 +25,7 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
   protected iconService: IconService;
   protected iconColumn: string;
   protected iconPosition: string;
+  protected iconType: string;
 
   protected componentPipe: OIconPipe;
   protected pipeArguments: IIconPipeArgument;
@@ -45,13 +48,18 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
       this.iconPosition = this.iconService.iconPosition;
     }
 
+    if (typeof this.iconType === 'undefined') {
+      this.iconType = this.iconService.iconType;
+    }
+
     if (typeof this.iconColumn === 'undefined') {
       this.iconColumn = this.iconService.iconColumn;
     }
     
     this.pipeArguments = {
       iconPosition: this.iconPosition,
-      iconColumn: this.iconColumn
+      iconColumn: this.iconColumn,
+      iconType: this.iconType
     };
   }
 

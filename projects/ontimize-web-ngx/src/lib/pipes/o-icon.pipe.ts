@@ -4,6 +4,7 @@ import { IconService } from '../services/icon.service';
 
 export interface IIconPipeArgument {
   iconPosition?: string;
+  iconType?: string;
   iconColumn?: string;
 }
 
