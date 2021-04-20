@@ -1,6 +1,8 @@
 ## 8.2.4
 ### Bug Fixes
-* **oCurrency, oReal, oInteger, oPercent** pipes don't update the format of values when language is changed [a9343d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a9343d0)) Closes ([#566](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/566))
+* **oCurrency, oReal, oInteger, oPercent**: pipes don't update the format of values when language is changed [a9343d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a9343d0) Closes ([#566](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/566))
+* **OBaseTableCellEditor**: fixing cell edition bug [6eb72b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6eb72b2) Closes ([#571](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/571))
+
 
 ## 8.2.3 (2021-04-09)
 ### Features
