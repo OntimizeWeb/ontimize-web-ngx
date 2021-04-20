@@ -87,7 +87,6 @@ export class OBaseTableCellEditor implements OnInit {
 
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
-    console.log(event);
     this.handleKeyup(event);
   }
 
