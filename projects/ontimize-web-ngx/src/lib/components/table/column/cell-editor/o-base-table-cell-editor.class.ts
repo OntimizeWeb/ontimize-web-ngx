@@ -105,7 +105,7 @@ export class OBaseTableCellEditor implements OnInit {
       return;
     }
 
-    if (Util.isDefined(this.table.editingCell) && !this.table.editingCell.contains(event.target)) {
+    if (!this.table.editingCell.contains(event.target)) {
       return;
     }
 
@@ -319,7 +319,6 @@ export class OBaseTableCellEditor implements OnInit {
     if (this.showNotificationOnEdit) {
       this.snackBarService.open('MESSAGES.UPDATED', { icon: 'check_circle' });
     }
-    this.table.refresh();
   }
 
   set enabled(arg: boolean) {
