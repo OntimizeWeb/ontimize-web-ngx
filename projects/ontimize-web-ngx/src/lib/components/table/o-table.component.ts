@@ -1510,7 +1510,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   /**
    * Refreshs table component
    */
-  public refresh() {
+  refresh() {
     this.reloadData();
   }
 
