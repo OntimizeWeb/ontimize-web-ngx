@@ -105,7 +105,7 @@ export class OBaseTableCellEditor implements OnInit {
       return;
     }
 
-    if (!this.table.editingCell.contains(event.target)) {
+    if (Util.isDefined(this.table.editingCell) && !this.table.editingCell.contains(event.target)) {
       return;
     }
 
@@ -206,6 +206,7 @@ export class OBaseTableCellEditor implements OnInit {
         this.editionCommitted.emit(this._rowData);
       }
     }
+    this.table.reinitialize();
   }
 
   get tableColumn(): OTableColumn {
@@ -318,6 +319,7 @@ export class OBaseTableCellEditor implements OnInit {
     if (this.showNotificationOnEdit) {
       this.snackBarService.open('MESSAGES.UPDATED', { icon: 'check_circle' });
     }
+    this.table.refresh();
   }
 
   set enabled(arg: boolean) {

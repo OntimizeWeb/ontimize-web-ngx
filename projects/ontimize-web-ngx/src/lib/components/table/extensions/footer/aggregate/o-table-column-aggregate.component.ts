@@ -72,7 +72,7 @@ export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
     ocolumnaggregate.operator = this.aggregate ? this.aggregate : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
     this.table.registerColumnAggregate(ocolumnaggregate);
 
-    this.subscription.add(this.table.onReinitialize.subscribe(() => this.table.registerColumnAggregate(ocolumnaggregate)));
+    this.subscription.add(this.table.onReinitialize.subscribe(() => this.table.registerColumnAggregate(ocolumnaggregate) ));
   }
 
   ngOnDestroy(): void {
