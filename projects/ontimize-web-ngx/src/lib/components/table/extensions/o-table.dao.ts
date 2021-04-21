@@ -45,7 +45,9 @@ export class OTableDao {
 
   updateQuery(kv: object, av: object, sqlTypes?: object): Observable<any> {
     if (this.usingStaticData) {
-      return of(this.data);
+      let newData = Object.assign({}, this.data);
+      this.setDataArray(newData);
+      return of(newData);
     } else {
       return this.dataService[this.methods.update](kv, av, this.entity, sqlTypes);
     }
