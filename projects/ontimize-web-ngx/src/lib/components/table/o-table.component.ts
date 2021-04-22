@@ -713,7 +713,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Allow reinitialize table adding options
    * @param options
    */
-  reinitialize(options?: OTableInitializationOptions): void {
+  reinitialize(options: OTableInitializationOptions): void {
     if (options) {
       const clonedOpts = Object.assign({}, options);
       if (clonedOpts.hasOwnProperty('entity')) {
@@ -1539,7 +1539,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * Reloads data
    * @returns
    */
-    reloadData() {
+  reloadData() {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
