@@ -1,6 +1,8 @@
 .o-menu-layout {
   display: block;
-  height: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
   width: 100%;
 
   .o-card-menu-item {
@@ -9,9 +11,15 @@
     max-width: 290px;
     min-width: 290px;
 
+
     &.compact {
       height: 30%;
       max-height: 250px;
     }
+  }
+
+  @media screen and (max-width: 960px) {
+    top: auto;
+    transform: none;
   }
 }
