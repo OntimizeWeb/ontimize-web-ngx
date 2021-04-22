@@ -1,4 +1,4 @@
-import { EventEmitter, HostListener, Injector, OnInit } from '@angular/core';
+import { ElementRef, EventEmitter, HostListener, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../decorators/input-converter';
@@ -10,8 +10,6 @@ import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
 import { OColumn } from '../o-column.class';
 import { OTableColumnComponent } from '../o-table-column.component';
-
-// import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
   'orequired: required',
@@ -62,7 +60,24 @@ export class OBaseTableCellEditor implements OnInit {
 
   public editorCreated: EventEmitter<object> = new EventEmitter<object>();
 
-  inputRef: any;
+  protected _inputRef: ElementRef;
+  @ViewChild('input', { static: false })
+  set inputRef(value: ElementRef) {
+    if (Util.isDefined(value)) {
+      this._inputRef = value;
+
+      if (this._inputRef && this._inputRef.nativeElement.type === 'text') {
+        const cellData = this.getCellData();
+        this._inputRef.nativeElement.setSelectionRange(0, String(cellData).length);
+
+        this._inputRef.nativeElement.focus();
+      }
+    }
+  }
+
+  get inputRef(): ElementRef {
+    return this._inputRef;
+  }
 
   protected type: string;
   registerInColumn: boolean = true;
@@ -99,18 +114,23 @@ export class OBaseTableCellEditor implements OnInit {
     if (!oColumn || !oColumn.editing) {
       return;
     }
-
-    if (this.checkKey(event, "Escape", 27)) {
+    const escClicked = this.checkKey(event, 'Escape', 27);
+    const enterClicked = this.checkKey(event, 'Enter', 13);
+    const tabClicked = this.checkKey(event, 'Tab', 9);
+    if (!escClicked && !enterClicked && !tabClicked) {
+      return;
+    }
+    
+    if (escClicked) {
       this.onEscClicked();
       return;
     }
 
-    if (!this.table.editingCell.contains(event.target)) {
+    if (this.table.editingCell && !this.table.editingCell.contains(event.target)) {
       return;
     }
 
-    if (this.checkKey(event, "Enter", 13) || this.checkKey(event, "Tab", 9)) {
-      // intro or tab
+    if (enterClicked || tabClicked) {
       this.commitEdition();
     }
   }
@@ -243,10 +263,6 @@ export class OBaseTableCellEditor implements OnInit {
     const cellData = this.getCellData();
     this.formControl.setValue(cellData);
     this.formControl.markAsTouched();
-
-    if (this.inputRef && this.inputRef.nativeElement.type === 'text') {
-      this.inputRef.nativeElement.setSelectionRange(0, String(cellData).length);
-    }
   }
 
 
