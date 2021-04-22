@@ -105,7 +105,7 @@ export class OBaseTableCellEditor implements OnInit {
       return;
     }
 
-    if (!this.table.editingCell.contains(event.target)) {
+    if (this.table.editingCell && !this.table.editingCell.contains(event.target)) {
       return;
     }
 
@@ -180,6 +180,7 @@ export class OBaseTableCellEditor implements OnInit {
       if (updateObserver) {
         updateObserver.subscribe(res => {
           self.onUpdateSuccess(res);
+          self.table.setDataArray(self.table.dataSource.getTableData());
         }, error => {
           self._rowData[self.tableColumnAttr] = self.oldValue;
           self.table.dataSource.updateRenderedRowData(self._rowData);
