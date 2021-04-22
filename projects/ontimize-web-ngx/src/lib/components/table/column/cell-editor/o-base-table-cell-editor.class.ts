@@ -200,7 +200,7 @@ export class OBaseTableCellEditor implements OnInit {
       if (updateObserver) {
         updateObserver.subscribe(res => {
           self.onUpdateSuccess(res);
-          self.table.cd.detectChanges();
+          self.table.setDataArray(self.table.dataSource.getTableData());
         }, error => {
           self._rowData[self.tableColumnAttr] = self.oldValue;
           self.table.dataSource.updateRenderedRowData(self._rowData);
