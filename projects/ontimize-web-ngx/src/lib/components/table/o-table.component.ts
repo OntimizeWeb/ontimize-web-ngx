@@ -1560,6 +1560,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   handleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, event: MouseEvent) {
+    // if (event) {
+    //   event.stopPropagation();
+    //   event.preventDefault();
+    // }
 
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
@@ -1624,10 +1628,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   handleDoubleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, $event: MouseEvent) {
-    if ($event) {
-      $event.stopPropagation();
-      $event.preventDefault();
-    }
+    // if ($event) {
+    //   $event.stopPropagation();
+    //   $event.preventDefault();
+    // }
 
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
@@ -1690,7 +1694,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.editingRow = row;
     column.editing = true;
     column.editor.startEdition(rowData);
-    this.cd.detectChanges();
   }
 
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
