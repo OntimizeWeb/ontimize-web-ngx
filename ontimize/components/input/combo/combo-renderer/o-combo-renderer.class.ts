@@ -7,7 +7,7 @@ export class OComboCustomRenderer {
 
   public templateref: TemplateRef<any>;
   public comboComponent: OComboComponent;
-  
+
 
   constructor(protected injector: Injector) {
     this.comboComponent = this.injector.get(OComboComponent);
@@ -31,10 +31,10 @@ export class OComboCustomRenderer {
     if (Util.isDefined(value)) {
       parsedValue = value;
     } else {
-      console.warn("getComboData() - No value received");
+      console.warn('getComboData() - No value received');
     }
     return parsedValue;
   }
-  
+
 
 }
