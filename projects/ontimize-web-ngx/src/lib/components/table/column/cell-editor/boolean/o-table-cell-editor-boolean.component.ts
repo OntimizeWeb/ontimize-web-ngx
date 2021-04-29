@@ -120,15 +120,15 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
 
   startEdition(data: any) {
     super.startEdition(data);
+    // using setTimeout to force this code execution after super.activateColumnEdition column.editing = true line
     setTimeout(() => {
-      // using setTimeout to forcing this code execution after super.activateColumnEdition column.editing = true line
+      const isCurrentValueTrue = (this.formControl.value === this.trueValue);
       if (this.autoCommit) {
-        const isTrue = (this.formControl.value === this.trueValue);
-        this.formControl.setValue(isTrue ? this.falseValue : this.trueValue, { emitEvent: false });
+        // Toggling value (autocommmit changes component value without no further user interaction)
+        this.formControl.setValue(isCurrentValueTrue ? this.falseValue : this.trueValue, { emitEvent: false });
         this.commitEdition();
       } else {
-        const isTrue = (this.formControl.value === this.trueValue);
-        this.formControl.setValue(isTrue ? this.trueValue : this.falseValue, { emitEvent: false });
+        this.formControl.setValue(isCurrentValueTrue ? this.trueValue : this.falseValue, { emitEvent: false });
       }
     }, 0);
   }
