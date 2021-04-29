@@ -40,10 +40,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[class.o-table-cell-editor-boolean]': 'true'
-  }
+  encapsulation: ViewEncapsulation.None
 })
 
 export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor implements OnInit {
