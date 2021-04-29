@@ -93,6 +93,8 @@ import { OFilterColumn } from './extensions/header/table-columns-filter/columns/
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { OTableGestureConfig } from './config/o-table-gesture-config';
 
 export const NAME_COLUMN_SELECT = 'select';
 export interface OnClickTableEvent {
@@ -2850,6 +2852,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     {
       provide: MatPaginatorIntl,
       useClass: OTableMatPaginatorIntl
+    }, {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: OTableGestureConfig
     }
   ]
 })
