@@ -7,7 +7,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
@@ -57,7 +57,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
   trueValue: any;
   falseValue: any;
 
-  booleanType: string = 'boolean';
+  protected _booleanType: string = 'boolean';
 
   @InputConverter()
   autoCommit: boolean = true;
@@ -69,6 +69,18 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
   initialize() {
     super.initialize();
     this.parseInputs();
+  }
+
+  get booleanType(): string {
+    return this._booleanType;
+  }
+
+  set booleanType(arg: string) {
+    arg = (arg || '').toLowerCase();
+    if (['number', 'boolean', 'string'].indexOf(arg) === -1) {
+      arg = 'boolean';
+    }
+    this._booleanType = arg;
   }
 
   protected parseInputs() {
@@ -108,16 +120,15 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
 
   startEdition(data: any) {
     super.startEdition(data);
-    const self = this;
     setTimeout(() => {
       // using setTimeout to forcing this code execution after super.activateColumnEdition column.editing = true line
-      if (self.autoCommit) {
-        const isTrue = (self.formControl.value === self.trueValue);
-        self.formControl.setValue(isTrue ? self.falseValue : self.trueValue, { emitEvent: false });
-        self.commitEdition();
+      if (this.autoCommit) {
+        const isTrue = (this.formControl.value === this.trueValue);
+        this.formControl.setValue(isTrue ? this.falseValue : this.trueValue, { emitEvent: false });
+        this.commitEdition();
       } else {
-        const isTrue = (self.formControl.value === self.trueValue);
-        self.formControl.setValue(isTrue ? self.trueValue : self.falseValue, { emitEvent: false });
+        const isTrue = (this.formControl.value === this.trueValue);
+        this.formControl.setValue(isTrue ? this.trueValue : this.falseValue, { emitEvent: false });
       }
     }, 0);
   }
@@ -142,7 +153,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
     return result;
   }
 
-  protected parseValueByType(val: any): any {
+  protected parseValueByType(val: any): string | number | boolean {
     let result = val;
     const cellIsTrue = this.hasCellDataTrueValue(val);
     const value = cellIsTrue ? this.trueValue : this.falseValue;
