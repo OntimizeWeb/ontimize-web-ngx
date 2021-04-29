@@ -7,7 +7,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
