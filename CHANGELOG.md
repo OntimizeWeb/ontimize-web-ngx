@@ -4,6 +4,7 @@
 * **oCurrency, oReal, oInteger, oPercent**: pipes don't update the format of values when language is changed [a9343d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a9343d0) Closes ([#566](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/566))
 * **OBaseTableCellEditor**: fixing cell edition bug [6eb72b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6eb72b2) Closes ([#571](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/571))
 * **OTranslateHttpLoader**: Remote bundle request: do not parse error object as translations [4670659](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4670659) Closes ([#563](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/563))
+* **o-table-cell-editor-time**: Fixed not set new value in table-cell-editor-time [16ccf90](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/16ccf90)
 * **o-table-cell-editor-boolean**: fixing cell edition bug [755daf4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/755daf4) Closes ([#573](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/573))
 
 ## 8.2.3 (2021-04-09)
