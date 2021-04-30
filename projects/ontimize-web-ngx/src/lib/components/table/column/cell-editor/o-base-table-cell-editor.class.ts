@@ -1,4 +1,5 @@
-import { ElementRef, EventEmitter, HostListener, Injector, OnInit, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ElementRef, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../decorators/input-converter';
@@ -60,30 +61,15 @@ export class OBaseTableCellEditor implements OnInit {
 
   public editorCreated: EventEmitter<object> = new EventEmitter<object>();
 
-  protected _inputRef: ElementRef;
-  @ViewChild('input', { static: false })
-  set inputRef(value: ElementRef) {
-    if (Util.isDefined(value)) {
-      this._inputRef = value;
-
-      if (this._inputRef && this._inputRef.nativeElement.type === 'text') {
-        const cellData = this.getCellData();
-        this._inputRef.nativeElement.setSelectionRange(0, String(cellData).length);
-
-        this._inputRef.nativeElement.focus();
-      }
-    }
-  }
-
-  get inputRef(): ElementRef {
-    return this._inputRef;
-  }
+  @ViewChild('input', { static: false }) 
+  protected inputRef: any;
 
   protected type: string;
   registerInColumn: boolean = true;
 
   protected snackBarService: SnackBarService;
   protected oldValue: any;
+  cellEditorId: string;
 
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
@@ -94,6 +80,7 @@ export class OBaseTableCellEditor implements OnInit {
     this.snackBarService = this.injector.get(SnackBarService);
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
+    this.cellEditorId = Math.random().toString(36);
   }
 
   ngOnInit(): void {
@@ -120,7 +107,7 @@ export class OBaseTableCellEditor implements OnInit {
     if (!escClicked && !enterClicked && !tabClicked) {
       return;
     }
-    
+
     if (escClicked) {
       this.onEscClicked();
       return;
@@ -183,6 +170,13 @@ export class OBaseTableCellEditor implements OnInit {
     this.rowData = data;
     if (!this.isSilentControl()) {
       this.editionStarted.emit(this._rowData);
+    }
+    this.table.cd.detectChanges();
+
+    // Selecting text if the template input element has defined the id=cellEditorId
+    const inputEl = document.getElementById(this.cellEditorId);
+    if (inputEl) {
+      (inputEl as HTMLInputElement).select();
     }
   }
 
