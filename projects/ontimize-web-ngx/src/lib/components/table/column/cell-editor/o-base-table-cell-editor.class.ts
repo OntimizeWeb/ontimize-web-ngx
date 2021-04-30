@@ -61,7 +61,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   public editorCreated: EventEmitter<object> = new EventEmitter<object>();
 
-  @ViewChild('input', { static: false }) 
+  @ViewChild('input', { static: false })
   protected inputRef: any;
 
   protected type: string;
@@ -189,20 +189,19 @@ export class OBaseTableCellEditor implements OnInit {
   endEdition(saveChanges: boolean) {
     const oColumn: OColumn = this.table.getOColumn(this.tableColumnAttr);
     if (oColumn) {
-      const self = this;
       const updateObserver = this.table.updateCellData(oColumn, this._rowData, saveChanges);
       if (updateObserver) {
         updateObserver.subscribe(res => {
-          self.onUpdateSuccess(res);
-          self.table.setDataArray(self.table.dataSource.getTableData());
+          this.onUpdateSuccess(res);
+          this.table.daoTable.setDataArray(this.table.daoTable.data);
         }, error => {
-          self._rowData[self.tableColumnAttr] = self.oldValue;
-          self.table.dataSource.updateRenderedRowData(self._rowData);
-          self.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
-          self.table.cd.detectChanges();
+          this._rowData[this.tableColumnAttr] = this.oldValue;
+          this.table.dataSource.updateRenderedRowData(this._rowData);
+          this.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
+          this.table.cd.detectChanges();
         });
       } else {
-        self.table.cd.detectChanges();
+        this.table.cd.detectChanges();
       }
     }
   }

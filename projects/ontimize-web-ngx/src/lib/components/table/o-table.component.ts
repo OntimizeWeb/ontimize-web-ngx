@@ -2283,7 +2283,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
 
   /**
-   * Sets data table
+   * Sets data table when is static (ONLY IN THIS CASE)
    * @param data
    */
   setDataArray(data: Array<any>) {
