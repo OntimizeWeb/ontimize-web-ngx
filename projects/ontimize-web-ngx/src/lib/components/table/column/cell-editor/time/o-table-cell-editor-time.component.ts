@@ -167,9 +167,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     this.modifyPickerMethods();
   }
 
-  setTime(event) {
-    event.preventDefault();
-    event.stopPropagation();
+  setTime(event: string) {
     this.picker.updateTime(this.formControlHour.value);
   }
 
@@ -280,9 +278,6 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   public open(e?: Event): void {
-    if (Util.isDefined(e)) {
-      e.stopPropagation();
-    }
     if (this.picker) {
       this.picker.open();
     }
