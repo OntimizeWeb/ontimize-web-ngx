@@ -5,8 +5,7 @@ import { GestureConfig, HammerManager } from '@angular/material';
 export class OTableGestureConfig extends GestureConfig {
   buildHammer(element: HTMLElement) {
     let mc = <HammerManager>super.buildHammer(element);
-    mc.set({ touchAction: 'pan-y' });
-    mc.set({ touchAction: 'pan-x' });
+    mc.set({ touchAction: 'pan-x pan-y' });
     return mc;
   }
 }
