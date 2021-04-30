@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { combineLatest, Observable } from 'rxjs';
-import { share } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { catchError, map, share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
 import { Codes } from '../../util/codes';
@@ -72,37 +72,33 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
 
   getRemoteBundle(lang: string): Observable<any> {
     const bundleEndpoint = this.appConfig.getBundleEndpoint();
-    let innerObserver: any;
-    const dataObservable = new Observable(observer => innerObserver = observer).pipe(share());
     if (!bundleEndpoint) {
-      innerObserver.next([]);
+      return of([]);
     }
     const url = bundleEndpoint + '?lang=' + lang;
 
-    this.httpClient.get(url).subscribe((resp: any) => {
-      let response = {};
-      if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
-        response = this.parseBundleResponse(resp.data);
-      }
-      innerObserver.next(response);
-    },
-      error => {
-        console.log('Remote Bundle service is not available');
-        innerObserver.next(error);
-      },
-      () => innerObserver.complete()
+    return this.httpClient.get(url).pipe(
+      map((resp: any) => {
+        if (resp.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) {
+          return this.parseBundleResponse(resp.data);
+        }
+        return resp;
+      }),
+      catchError(err => {
+        console.log('Remote Bundle service is not available', err);
+        return of([]);
+      })
     );
-
-    return dataObservable;
   }
 
   protected parseBundleResponse(data: any[]): any {
     const result = {};
-    if(data) {
+    if (data) {
       data.forEach((item) => {
         result[item[OTranslateHttpLoader.BUNDLE_KEY]] = item[OTranslateHttpLoader.BUNDLE_VALUE];
       });
     }
     return result;
   }
+
 }

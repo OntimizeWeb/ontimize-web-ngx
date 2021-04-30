@@ -1,7 +1,7 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" class="o-table-cell-editor-date">
-    <mat-form-field floatLabel="never">
-      <input #input matInput [placeholder]="getPlaceholder()" [formControl]="formControl"
+    <mat-form-field floatLabel="never" cdkFocusInitial>
+      <input #input matInput [id]="cellEditorId" [placeholder]="getPlaceholder()" [formControl]="formControl"
         [required]="orequired" [matDatepicker]="d" [matDatepickerFilter]="filterDate"
         (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">
 

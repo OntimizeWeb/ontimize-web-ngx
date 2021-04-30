@@ -51,10 +51,10 @@
     <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn"
       [cancelBtnTmpl]="cancelBtn" (closed)="onTimepickerClosed()"></ngx-material-timepicker>
     <ng-template #confirmBtn>
-      <button mat-stroked-button type="button" (click)="setTime($event)"><span>{{'OK' | oTranslate}}</span></button>
+      <button mat-stroked-button type="button"><span>{{'OK' | oTranslate}}</span></button>
     </ng-template>
     <ng-template #cancelBtn>
-      <button mat-stroked-button type="button" (click)="picker.close()"><span>{{'CANCEL' | oTranslate}}</span></button>
+      <button mat-stroked-button type="button"><span>{{'CANCEL' | oTranslate}}</span></button>
     </ng-template>
   </div>
 

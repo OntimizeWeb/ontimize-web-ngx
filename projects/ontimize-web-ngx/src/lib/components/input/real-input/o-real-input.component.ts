@@ -61,6 +61,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     this.pipeArguments.decimalSeparator = this.decimalSeparator;
     this.pipeArguments.minDecimalDigits = this.minDecimalDigits;
     this.pipeArguments.maxDecimalDigits = this.maxDecimalDigits;
+    this.pipeArguments.truncate = false;
   }
 
   resolveValidators(): ValidatorFn[] {
