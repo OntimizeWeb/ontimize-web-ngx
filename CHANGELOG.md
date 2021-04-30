@@ -8,7 +8,7 @@
   * **o-table-cell-editor-time**: Fixed not set new value in table-cell-editor-time [16ccf90](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/16ccf90)
   * **o-table-cell-editor-boolean**: fixing cell edition bug [755daf4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/755daf4) Closes ([#573](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/573))
   * Fixed prevent touch vertical and horizontal scrolling in table: ([e1b14d1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1b14d1)) Closes ([#576](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/576))
-  * **o-table-row-expandable**: Fixed error when exporting table data [98bdd0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98bdd0e)
+  * **o-table-row-expandable**: Fixed error when exporting table data ([98bdd0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98bdd0e))
 
 
 ## 8.2.3 (2021-04-09)
