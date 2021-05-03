@@ -7,7 +7,7 @@ export class OListPickerCustomRenderer {
 
   public templateref: TemplateRef<any>;
   public listpickerComponent: OListPickerComponent;
-  
+
 
   constructor(protected injector: Injector) {
     this.listpickerComponent = this.injector.get(OListPickerComponent);
@@ -31,10 +31,10 @@ export class OListPickerCustomRenderer {
     if (Util.isDefined(value)) {
       parsedValue = value;
     } else {
-      console.warn("getListPickerData() - No value received");
+      console.warn('getListPickerData() - No value received');
     }
     return parsedValue;
   }
-  
+
 
 }

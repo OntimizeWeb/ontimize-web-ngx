@@ -1,7 +1,7 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, animate, state, state, style, style, transition, transition, trigger, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
-import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
+import { DomPortalOutlet, DomPortalOutlet, TemplatePortal, TemplatePortal } from '@angular/cdk/portal';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import {
@@ -38,6 +38,7 @@ import {
   MatTabGroup,
   PageEvent
 } from '@angular/material';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -59,6 +60,7 @@ import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calc
 import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
 import { O_TABLE_CELL_RENDERERS, OBaseTableCellRenderer } from './column/cell-renderer/cell-renderer';
 import { OColumnTooltip, OTableColumnComponent } from './column/o-table-column.component';
+import { OTableGestureConfig } from './config/o-table-gesture-config';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { O_TABLE_DIALOGS, OTableFilterByColumnDataDialogComponent } from './extensions/dialog/o-table-dialog-components';
 import { OTableExportButton } from './extensions/export-button/o-table-export-button.component';
@@ -2853,6 +2855,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     {
       provide: MatPaginatorIntl,
       useClass: OTableMatPaginatorIntl
+    }, {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: OTableGestureConfig
     }
   ]
 })
