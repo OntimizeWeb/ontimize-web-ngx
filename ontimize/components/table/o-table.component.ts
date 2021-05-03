@@ -1,7 +1,9 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
-import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import {
   ApplicationRef,
   ChangeDetectionStrategy,
@@ -80,19 +82,20 @@ import {
   OTableOptionComponent,
   OTableQuickfilterComponent
 } from './extensions/header/o-table-header-components';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
+import {
+  OTableRowExpandableComponent,
+  OTableRowExpandedChange
+} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
 import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
-import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
-import { trigger, state, transition, style, animate } from '@angular/animations';
-import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 
 export const NAME_COLUMN_SELECT = 'select';
 export interface OnClickTableEvent {
@@ -1477,9 +1480,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.expandableItem.selected;
   }
 
-  public toogleRowExpandable(item: any, rowIndex: number, event: Event): void {
-    event.stopPropagation();
-    event.preventDefault();
+  public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
+    if(event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
 
     this.expandableItem.toggle(item);
 
@@ -1502,8 +1507,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
-
-
 
     }
   }
