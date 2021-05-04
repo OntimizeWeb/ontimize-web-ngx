@@ -985,7 +985,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (this.staticData) {
       this.queryOnBind = false;
-      this.queryOnInit = true;
+      this.queryOnInit = false;
       this.daoTable = new OTableDao(undefined, this.entity, methods);
       this.setDataArray(this.staticData);
     } else {
