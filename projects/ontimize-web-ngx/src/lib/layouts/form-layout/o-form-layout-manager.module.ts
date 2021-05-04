@@ -5,14 +5,14 @@ import { ResizableModule } from 'angular-resizable-element';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
-import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
+import { OFormLayoutDialogOptionsDirective } from './dialog/options/o-form-layout-dialog-options.directive';
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerComponent } from './o-form-layout-manager.component';
 import { OFormLayoutSplitPaneComponent } from './split-pane/o-form-layout-split-pane.component';
-import { OFormLayoutSplitPaneOptionsComponent } from './split-pane/options/o-form-layout-split-pane-options.component';
+import { OFormLayoutSplitPaneOptionsDirective } from './split-pane/options/o-form-layout-split-pane-options.directive';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
-import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
+import { OFormLayoutTabGroupOptionsDirective } from './tabgroup/options/o-form-layout-tabgroup-options.directive';
 
 @NgModule({
   imports: [CommonModule, OSharedModule, RouterModule, ResizableModule],
@@ -21,16 +21,16 @@ import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-l
     OFormLayoutManagerComponent,
     OFormLayoutTabGroupComponent,
     OFormLayoutManagerContentDirective,
-    OFormLayoutDialogOptionsComponent,
-    OFormLayoutTabGroupOptionsComponent,
+    OFormLayoutTabGroupOptionsDirective,
+    OFormLayoutDialogOptionsDirective,
     OFormLayoutSplitPaneComponent,
-    OFormLayoutSplitPaneOptionsComponent
+    OFormLayoutSplitPaneOptionsDirective
   ],
   exports: [
     OFormLayoutManagerComponent,
-    OFormLayoutDialogOptionsComponent,
-    OFormLayoutTabGroupOptionsComponent,
-    OFormLayoutSplitPaneOptionsComponent
+    OFormLayoutTabGroupOptionsDirective,
+    OFormLayoutDialogOptionsDirective,
+    OFormLayoutSplitPaneOptionsDirective
   ],
   entryComponents: [OFormLayoutDialogComponent],
   providers: [{

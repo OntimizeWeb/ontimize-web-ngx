@@ -1,10 +1,8 @@
-<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill
-  (selectedTabChange)="onTabSelectChange($event)" [color]="color" [backgroundColor]="backgroundColor"
-  [headerPosition]="headerPosition" [@.disabled]="disableAnimation">
-  <mat-tab label="{{ (title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL') | oTranslate }}">
+<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill (selectedTabChange)="onTabSelectChange($event)" [color]="color"
+  [backgroundColor]="backgroundColor" [headerPosition]="headerPosition" [@.disabled]="disableAnimation">
+  <mat-tab label="{{ mainTabTitle | oTranslate }}">
     <ng-content></ng-content>
   </mat-tab>
-
 
   <mat-tab *ngFor="let tabData of data; let i = index">
     <ng-template mat-tab-label>

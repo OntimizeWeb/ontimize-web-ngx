@@ -8,7 +8,7 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="OFormLayoutManagerComponent.SPLIT_PANE_MODE">
-    <o-form-layout-split-pane #splitPane>
+    <o-form-layout-split-pane #splitPane [options]="splitPaneOptions">
       <ng-content *ngTemplateOutlet="contentBlock"></ng-content>
     </o-form-layout-split-pane>
   </ng-container>

@@ -5,6 +5,7 @@ import {
   forwardRef,
   Inject,
   Injector,
+  OnInit,
   Renderer2,
   ViewChild,
   ViewEncapsulation,
@@ -21,16 +22,25 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 
+export const DEFAULT_INPUTS_O_FORM_LAYOUT_SPLIT_PANE = [
+  'options'
+];
+
+export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_SPLIT_PANE = [
+];
+
 @Component({
   selector: 'o-form-layout-split-pane',
   templateUrl: './o-form-layout-split-pane.component.html',
   styleUrls: ['./o-form-layout-split-pane.component.scss'],
+  inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_SPLIT_PANE,
+  outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_SPLIT_PANE,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-layout-split-pane]': 'true'
   }
 })
-export class OFormLayoutSplitPaneComponent implements OFormLayoutManagerMode {
+export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManagerMode {
 
   data: FormLayoutDetailComponentData;
   public showLoading = new BehaviorSubject<boolean>(false);
@@ -40,6 +50,20 @@ export class OFormLayoutSplitPaneComponent implements OFormLayoutManagerMode {
 
   @ViewChild(OFormLayoutManagerContentDirective, { static: false })
   contentDirective: OFormLayoutManagerContentDirective;
+
+  @ViewChild('mainWrapper', { read: ElementRef, static: false })
+  protected mainWrapper: ElementRef;
+
+  @ViewChild('detailWrapper', { read: ElementRef, static: false })
+  protected detailWrapper: ElementRef;
+
+  protected _options: any;
+
+  public set options(value: any) {
+    if (Util.isDefined(value) && Object.keys(value).length === 0) {
+      this._options = value;
+    }
+  }
 
   constructor(
     protected injector: Injector,
@@ -51,6 +75,25 @@ export class OFormLayoutSplitPaneComponent implements OFormLayoutManagerMode {
     this.router = this.injector.get(Router);
   }
 
+  ngOnInit() {
+    if (this.mainWrapper && this.mainWrapper.nativeElement) {
+      this.setOption(this.mainWrapper.nativeElement, 'mainWidth', 'width');
+      this.setOption(this.mainWrapper.nativeElement, 'mainMaxWidth', 'max-width');
+      this.setOption(this.mainWrapper.nativeElement, 'mainMinWidth', 'min-width');
+    }
+    if (this.detailWrapper && this.detailWrapper.nativeElement) {
+      this.setOption(this.detailWrapper.nativeElement, 'detailWidth', 'width');
+      this.setOption(this.detailWrapper.nativeElement, 'detailMaxWidth', 'max-width');
+      this.setOption(this.detailWrapper.nativeElement, 'detailMinWidth', 'min-width');
+    }
+  }
+
+  protected setOption(el: any, optionName: string, propertyName: string) {
+    if (Util.isDefined(this._options[optionName])) {
+      this.renderer.setStyle(el, propertyName, this._options[optionName]);
+    }
+  }
+  
   set state(arg: any) {
     this._state = arg;
     if (Util.isDefined(arg)) {

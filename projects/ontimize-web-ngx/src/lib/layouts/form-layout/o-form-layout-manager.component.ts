@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ContentChild,
   ElementRef,
   EventEmitter,
   HostListener,
@@ -14,6 +13,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
@@ -26,20 +26,25 @@ import { OTranslateService } from '../../services/translate/o-translate.service'
 import { FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
-import { OFormLayoutDialogOptionsComponent } from './dialog/options/o-form-layout-dialog-options.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
-import { OFormLayoutTabGroupOptionsComponent } from './tabgroup/options/o-form-layout-tabgroup-options.component';
-
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
   'mode',
+  'storeState: store-state',
+
+  // Common for dialog and tab mode
+  // deprecated, only mantained for legacy reasons
+  'title',
   'labelColumns: label-columns',
   'separator',
-  'title',
-  'storeState: store-state',
-  // attr of the child form from which the data for building the tab title will be obtained
+
+  // attr of the child form from which the data for building the tab title will be obtained (only in tab mode)
+  // deprecated, only mantained for legacy reasons
   'titleDataOrigin: title-data-origin',
+
+  // Only dialog options configurable as an input of the o-form-layout-manager (use the o-form-layout-dialog-options directive)
+  // deprecated, only mantained for legacy reasons
   'dialogWidth: dialog-width',
   'dialogMinWidth: dialog-min-width',
   'dialogMaxWidth: dialog-max-width',
@@ -76,9 +81,30 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   public static SPLIT_PANE_MODE = 'split-pane';
 
   public oattr: string;
-  public mode: string;
-  public labelColumns: string;
-  public separator: string = ' ';
+  public _mode: string;
+
+  public get mode(): string {
+    return this._mode;
+  }
+
+  public set mode(value: string) {
+    const availableModeValues = [OFormLayoutManagerComponent.DIALOG_MODE, OFormLayoutManagerComponent.TAB_MODE, OFormLayoutManagerComponent.SPLIT_PANE_MODE];
+    this._mode = (value || '').toLowerCase();
+    if (availableModeValues.indexOf(this._mode) === -1) {
+      this._mode = OFormLayoutManagerComponent.DIALOG_MODE;
+    }
+  }
+
+  protected _separator: string = ' ';
+
+  set separator(value: string) {
+    this._separator = value;
+  }
+
+  get separator(): string {
+    return this._separator;
+  }
+
   public title: string;
   @InputConverter()
   public storeState: boolean = true;
@@ -101,18 +127,72 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
 
-  protected labelColsArray: string[] = [];
+  protected _labelColumns: string;
+
+  get labelColumns(): string {
+    return this._labelColumns;
+  }
+
+  set labelColumns(value: string) {
+    this._labelColumns = value;
+    this._labelColsArray = Util.parseArray(value);
+  }
+
+  protected _labelColsArray: string[];
+
+  get labelColsArray(): string[] {
+    return this._labelColsArray;
+  }
+
+  set labelColsArray(value: string[]) {
+    this._labelColsArray = value;
+  }
 
   protected translateService: OTranslateService;
   protected oFormLayoutManagerService: OFormLayoutManagerService;
   protected localStorageService: LocalStorageService;
-  protected onRouteChangeStorageSubscription: any;
 
-  @ContentChild(OFormLayoutTabGroupOptionsComponent, { static: false })
-  public tabGroupOptions: OFormLayoutTabGroupOptionsComponent;
+  protected _tabGroupOptions: any = {};
 
-  @ContentChild(OFormLayoutDialogOptionsComponent, { static: false })
-  public dialogOptions: OFormLayoutDialogOptionsComponent;
+  get tabGroupOptions(): any {
+    return this._tabGroupOptions;
+  }
+
+  addTabGroupOptions(value: any) {
+    Object.assign(this._tabGroupOptions, value);
+    if (value.hasOwnProperty('labelColumns')) {
+      this.labelColsArray = Util.parseArray(value['labelColumns']);
+    }
+    if (value.hasOwnProperty('separator')) {
+      this.separator = value['separator'];
+    }
+  }
+
+  protected _dialogOptions: any = {};
+
+  get dialogOptions(): any {
+    return this._dialogOptions;
+  }
+
+  addDialogOptions(value: any) {
+    Object.assign(this._dialogOptions, value);
+    if (value.hasOwnProperty('labelColumns')) {
+      this.labelColsArray = Util.parseArray(value['labelColumns']);
+    }
+    if (value.hasOwnProperty('separator')) {
+      this.separator = value['separator'];
+    }
+  }
+
+  protected _splitPaneOptions: any = {};
+
+  get splitPaneOptions(): any {
+    return this._splitPaneOptions;
+  }
+
+  addSplitPaneOptions(value: any) {
+    Object.assign(this._splitPaneOptions, value);
+  }
 
   protected addingGuard: boolean = false;
 
@@ -120,6 +200,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   public _markForUpdate: boolean = false;
   public onTriggerUpdate: EventEmitter<any> = new EventEmitter<any>();
+
+  protected subscription: Subscription = new Subscription();
 
   constructor(
     protected injector: Injector,
@@ -135,22 +217,16 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
     if (this.storeState) {
-      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
+      this.subscription.add(this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
-      });
+      }));
     }
   }
 
   public ngOnInit(): void {
-    const availableModeValues = [OFormLayoutManagerComponent.DIALOG_MODE, OFormLayoutManagerComponent.TAB_MODE, OFormLayoutManagerComponent.SPLIT_PANE_MODE];
-    this.mode = (this.mode || '').toLowerCase();
-    if (availableModeValues.indexOf(this.mode) === -1) {
-      this.mode = OFormLayoutManagerComponent.DIALOG_MODE;
-    }
-    this.labelColsArray = Util.parseArray(this.labelColumns);
     this.addActivateChildGuard();
     if (!Util.isDefined(this.oattr)) {
-      this.oattr = this.title + this.mode;
+      this.oattr = (this.title || '') + this.mode;
       console.warn('o-form-layout-manager must have an unique attr');
     }
     this.oFormLayoutManagerService.registerFormLayoutManager(this);
@@ -172,8 +248,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   }
 
   public ngOnDestroy(): void {
-    if (this.onRouteChangeStorageSubscription) {
-      this.onRouteChangeStorageSubscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
     this.updateStateStorage();
     this.oFormLayoutManagerService.removeFormLayoutManager(this);
@@ -215,8 +291,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       }
     });
     return formData;
-
   }
+
   public addActivateChildGuard(): void {
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
@@ -296,21 +372,23 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     if (this.dialogClass) {
       cssclass.push(this.dialogClass);
     }
+
+    const dialogOptions = (this.dialogOptions || {});
+
     const dialogConfig: MatDialogConfig = {
       data: {
         data: detailComp,
         layoutManagerComponent: this,
-        title: this.title,
+        title: dialogOptions.title || this.title,
       },
-      width: this.dialogOptions ? this.dialogOptions.width : this.dialogWidth,
-      minWidth: this.dialogOptions ? this.dialogOptions.minWidth : this.dialogMinWidth,
-      maxWidth: this.dialogOptions ? this.dialogOptions.maxWidth : this.dialogMaxWidth,
-      height: this.dialogOptions ? this.dialogOptions.height : this.dialogHeight,
-      minHeight: this.dialogOptions ? this.dialogOptions.minHeight : this.dialogMinHeight,
-      maxHeight: this.dialogOptions ? this.dialogOptions.maxHeight : this.dialogMaxHeight,
-      disableClose: this.dialogOptions ? this.dialogOptions.disableClose : true,
-      panelClass: this.dialogOptions ? this.dialogOptions.class : cssclass
-
+      width: dialogOptions.width || this.dialogWidth,
+      minWidth: dialogOptions.minWidth || this.dialogMinWidth,
+      maxWidth: dialogOptions.maxWidth || this.dialogMaxWidth,
+      height: dialogOptions.height || this.dialogHeight,
+      minHeight: dialogOptions.minHeight || this.dialogMinHeight,
+      maxHeight: dialogOptions.maxHeight || this.dialogMaxHeight,
+      disableClose: dialogOptions.disableClose || true,
+      panelClass: dialogOptions.class || cssclass
     };
 
     if (this.dialogOptions) {

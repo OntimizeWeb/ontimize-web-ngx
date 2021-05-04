@@ -1,11 +1,11 @@
 <div fxFill>
   <div fxLayout="row" class="row-wrapper">
-    <div fxFlex fxLayout="row" class="main-content">
+    <div #mainWrapper fxFlex fxLayout="row" class="main-content">
       <ng-content></ng-content>
     </div>
 
-    <div #contentWrapper class="content-wrapper" mwlResizable [enableGhostResize]="true"
-      (resizeEnd)="onResizeEnd('width', $event, contentWrapper)">
+    <div #detailWrapper class="content-wrapper" mwlResizable [enableGhostResize]="true"
+      (resizeEnd)="onResizeEnd('width', $event, detailWrapper)">
 
       <div class="resize-handle" mwlResizeHandle [resizeEdges]="{ left: true }">
         <div class="resize-border">

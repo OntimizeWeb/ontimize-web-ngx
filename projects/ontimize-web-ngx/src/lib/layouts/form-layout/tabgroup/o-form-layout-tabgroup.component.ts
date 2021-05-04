@@ -69,7 +69,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
-  
+
   protected previousSelectedIndex: number;
 
   constructor(
@@ -99,6 +99,10 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
+  }
+
+  public get mainTabTitle(): string {
+    return (this.options.title || this.title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL');
   }
 
   public get disableAnimation() {
@@ -205,7 +209,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       previousIndex: this.previousSelectedIndex
     });
 
-    this.previousSelectedIndex =  this.tabGroup.selectedIndex;
+    this.previousSelectedIndex = this.tabGroup.selectedIndex;
   }
 
   closeTab(index: number) {
