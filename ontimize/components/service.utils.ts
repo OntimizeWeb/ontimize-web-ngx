@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 
 import { OFormComponent } from '../components/form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
-import { Codes, Util, SQLTypes } from '../utils';
+import { Codes, SQLTypes, Util } from '../utils';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 
 export type OQueryDataArgs = {

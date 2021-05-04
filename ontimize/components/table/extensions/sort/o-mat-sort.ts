@@ -1,6 +1,7 @@
-import { Directive, Output, EventEmitter } from '@angular/core';
+import { Directive, EventEmitter, Output } from '@angular/core';
 import { MatSort, MatSortable } from '@angular/material';
-import { Util, Codes } from '../../../../utils';
+
+import { Codes, Util } from '../../../../utils';
 import { ISQLOrder } from '../../../service.utils';
 
 export type OMatSortGroupedData = {

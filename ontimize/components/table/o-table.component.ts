@@ -1,7 +1,9 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
-import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import {
   ApplicationRef,
   ChangeDetectionStrategy,
@@ -36,6 +38,7 @@ import {
   MatTabGroup,
   PageEvent
 } from '@angular/material';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { DndModule } from '@churchs19/ng2-dnd';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -57,6 +60,7 @@ import { OperatorFunction, OTableColumnCalculatedComponent } from './column/calc
 import { O_TABLE_CELL_EDITORS, OTableCellEditorBooleanComponent } from './column/cell-editor/cell-editor';
 import { O_TABLE_CELL_RENDERERS, OBaseTableCellRenderer } from './column/cell-renderer/cell-renderer';
 import { OColumnTooltip, OTableColumnComponent } from './column/o-table-column.component';
+import { OTableGestureConfig } from './config/o-table-gesture-config';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { O_TABLE_DIALOGS, OTableFilterByColumnDataDialogComponent } from './extensions/dialog/o-table-dialog-components';
 import { OTableExportButton } from './extensions/export-button/o-table-export-button.component';
@@ -80,21 +84,20 @@ import {
   OTableOptionComponent,
   OTableQuickfilterComponent
 } from './extensions/header/o-table-header-components';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
+import {
+  OTableRowExpandableComponent,
+  OTableRowExpandedChange
+} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableExpandedFooter } from './o-table-expanded-footer.directive';
 import { OTableDao } from './o-table.dao';
 import { OTableDataSource } from './o-table.datasource';
-import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
-import { trigger, state, transition, style, animate } from '@angular/animations';
-import { TemplatePortal, DomPortalOutlet } from '@angular/cdk/portal';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
-import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { OTableGestureConfig } from './config/o-table-gesture-config';
 
 export const NAME_COLUMN_SELECT = 'select';
 export interface OnClickTableEvent {
@@ -982,7 +985,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     if (this.staticData) {
       this.queryOnBind = false;
-      this.queryOnInit = false;
+      this.queryOnInit = true;
       this.daoTable = new OTableDao(undefined, this.entity, methods);
       this.setDataArray(this.staticData);
     } else {
@@ -1040,7 +1043,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
     this.addDefaultRowButtons();
-
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -1319,6 +1321,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (!Util.isDefined(oCol) || !oCol.orderable) {
         this.sortColArray.splice(i, 1);
       }
+    }
+    if(this.sortColumns && this.staticData) {
+      this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
     }
   }
 
@@ -2509,7 +2515,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   setFiltersConfiguration(conf: any) {
     //initialize filterCaseSensitive
-
     /*
       Checking the original filterCaseSensitive with the filterCaseSensitive in initial configuration in local storage
       if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input
