@@ -1,7 +1,7 @@
-import { animate, animate, state, state, style, style, transition, transition, trigger, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { ObserversModule } from '@angular/cdk/observers';
-import { DomPortalOutlet, DomPortalOutlet, TemplatePortal, TemplatePortal } from '@angular/cdk/portal';
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import {
