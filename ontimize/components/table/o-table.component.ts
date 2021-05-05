@@ -1485,9 +1485,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.expandableItem.selected;
   }
 
-  public toogleRowExpandable(item: any, rowIndex: number, event: Event): void {
-    event.stopPropagation();
-    event.preventDefault();
+  public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
+    if(event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
 
     this.expandableItem.toggle(item);
 
@@ -1510,8 +1512,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
-
-
 
     }
   }
