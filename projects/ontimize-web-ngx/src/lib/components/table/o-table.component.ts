@@ -1039,6 +1039,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.sortColArray.splice(i, 1);
       }
     }
+
+    if(this.sortColumns && this.staticData) {
+      this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
+    }
   }
 
   initializeParams(): void {
