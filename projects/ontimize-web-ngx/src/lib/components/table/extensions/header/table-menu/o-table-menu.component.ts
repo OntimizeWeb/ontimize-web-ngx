@@ -304,6 +304,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     // get column's attr whose renderer is OTableCellRendererImageComponent
     const colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
     colsNotIncluded.push(Codes.NAME_COLUMN_SELECT);
+    colsNotIncluded.push(Codes.NAME_COLUMN_EXPANDABLE);
 
     // Table data/filters
     switch (this.table.exportMode) {

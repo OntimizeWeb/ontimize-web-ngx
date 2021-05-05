@@ -1,4 +1,5 @@
-import { EventEmitter, HostListener, Injector, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ElementRef, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../decorators/input-converter';
@@ -10,8 +11,6 @@ import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
 import { OColumn } from '../o-column.class';
 import { OTableColumnComponent } from '../o-table-column.component';
-
-// import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
   'orequired: required',
@@ -62,13 +61,15 @@ export class OBaseTableCellEditor implements OnInit {
 
   public editorCreated: EventEmitter<object> = new EventEmitter<object>();
 
-  inputRef: any;
+  @ViewChild('input', { static: false })
+  protected inputRef: any;
 
   protected type: string;
   registerInColumn: boolean = true;
 
   protected snackBarService: SnackBarService;
   protected oldValue: any;
+  cellEditorId: string;
 
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
@@ -79,6 +80,7 @@ export class OBaseTableCellEditor implements OnInit {
     this.snackBarService = this.injector.get(SnackBarService);
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
+    this.cellEditorId = Math.random().toString(36);
   }
 
   ngOnInit(): void {
@@ -99,18 +101,23 @@ export class OBaseTableCellEditor implements OnInit {
     if (!oColumn || !oColumn.editing) {
       return;
     }
+    const escClicked = this.checkKey(event, 'Escape', 27);
+    const enterClicked = this.checkKey(event, 'Enter', 13);
+    const tabClicked = this.checkKey(event, 'Tab', 9);
+    if (!escClicked && !enterClicked && !tabClicked) {
+      return;
+    }
 
-    if (this.checkKey(event, "Escape", 27)) {
+    if (escClicked) {
       this.onEscClicked();
       return;
     }
 
-    if (!this.table.editingCell.contains(event.target)) {
+    if (this.table.editingCell && !this.table.editingCell.contains(event.target)) {
       return;
     }
 
-    if (this.checkKey(event, "Enter", 13) || this.checkKey(event, "Tab", 9)) {
-      // intro or tab
+    if (enterClicked || tabClicked) {
       this.commitEdition();
     }
   }
@@ -164,6 +171,13 @@ export class OBaseTableCellEditor implements OnInit {
     if (!this.isSilentControl()) {
       this.editionStarted.emit(this._rowData);
     }
+    this.table.cd.detectChanges();
+
+    // Selecting text if the template input element has defined the id=cellEditorId
+    const inputEl = document.getElementById(this.cellEditorId);
+    if (inputEl) {
+      (inputEl as HTMLInputElement).select();
+    }
   }
 
 
@@ -175,20 +189,19 @@ export class OBaseTableCellEditor implements OnInit {
   endEdition(saveChanges: boolean) {
     const oColumn: OColumn = this.table.getOColumn(this.tableColumnAttr);
     if (oColumn) {
-      const self = this;
       const updateObserver = this.table.updateCellData(oColumn, this._rowData, saveChanges);
       if (updateObserver) {
         updateObserver.subscribe(res => {
-          self.onUpdateSuccess(res);
-          self.table.cd.detectChanges();
+          this.onUpdateSuccess(res);
+          this.table.daoTable.setDataArray(this.table.daoTable.data);
         }, error => {
-          self._rowData[self.tableColumnAttr] = self.oldValue;
-          self.table.dataSource.updateRenderedRowData(self._rowData);
-          self.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
-          self.table.cd.detectChanges();
+          this._rowData[this.tableColumnAttr] = this.oldValue;
+          this.table.dataSource.updateRenderedRowData(this._rowData);
+          this.table.showDialogError(error, 'MESSAGES.ERROR_UPDATE');
+          this.table.cd.detectChanges();
         });
       } else {
-        self.table.cd.detectChanges();
+        this.table.cd.detectChanges();
       }
     }
   }
@@ -243,10 +256,6 @@ export class OBaseTableCellEditor implements OnInit {
     const cellData = this.getCellData();
     this.formControl.setValue(cellData);
     this.formControl.markAsTouched();
-
-    if (this.inputRef && this.inputRef.nativeElement.type === 'text') {
-      this.inputRef.nativeElement.setSelectionRange(0, String(cellData).length);
-    }
   }
 
 

@@ -1557,16 +1557,15 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.queryData(void 0, queryArgs);
   }
 
-  handleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
+  handleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, event: MouseEvent) {
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
         if (this.oenabled && column.editor
           && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
           && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
-          this.activateColumnEdition(column, row, $event);
+          this.activateColumnEdition(column, row, cellRef);
         } else {
-
-          this.doHandleClick(row, column.attr, rowIndex, $event);
+          this.doHandleClick(row, column.attr, rowIndex, event);
         }
       }
       this.clickPrevent = false;
@@ -1602,8 +1601,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       this.selectedRow(row);
       this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
     }
-
-
   }
 
   handleMultipleSelection(item: any) {
@@ -1623,14 +1620,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.storePaginationState = true;
   }
 
-  handleDoubleClick(row: any, column: OColumn, rowIndex: number, $event: MouseEvent) {
+  handleDoubleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, $event: MouseEvent) {
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
 
     if (this.oenabled && column.editor
       && (!Codes.isDoubleClickMode(this.detailMode))
       && (Codes.isDoubleClickMode(this.editionMode))) {
-      this.activateColumnEdition(column, row, event);
+      this.activateColumnEdition(column, row, cellRef);
     } else {
       this.onDoubleClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column.attr, cell: row[column.attr] });
       if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
@@ -1664,14 +1661,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
   }
 
-
-
-  protected activateColumnEdition(column: OColumn, row: any, event?) {
-    if (event) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    if (event && column.editing && this.editingCell === event.currentTarget) {
+  protected activateColumnEdition(column: OColumn, row: any, cellRef: any) {
+    if (cellRef && column.editing && this.editingCell === cellRef) {
       return;
     }
     const columnPermissions: OPermissions = this.getOColumnPermissions(column.attr);
@@ -1682,9 +1673,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
     this.clearSelectionAndEditing();
     this.selectedRow(row);
-    if (event) {
-      this.editingCell = event.currentTarget;
-    }
+    this.editingCell = cellRef
     const rowData = {};
     this.keysArray.forEach((key) => {
       rowData[key] = row[key];
@@ -1693,7 +1682,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.editingRow = row;
     column.editing = true;
     column.editor.startEdition(rowData);
-    this.cd.detectChanges();
   }
 
   updateCellData(column: OColumn, data: any, saveChanges: boolean) {
@@ -2293,7 +2281,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
 
   /**
-   * Sets data table
+   * Sets data table when is static (ONLY IN THIS CASE)
    * @param data
    */
   setDataArray(data: Array<any>) {

@@ -9,10 +9,12 @@ export interface IRealPipeArgument {
   decimalSeparator?: string;
   minDecimalDigits?: number;
   maxDecimalDigits?: number;
+  truncate?: boolean;
 }
 
 @Pipe({
-  name: 'oReal'
+  name: 'oReal',
+  pure: false
 })
 export class ORealPipe extends OIntegerPipe implements PipeTransform {
 

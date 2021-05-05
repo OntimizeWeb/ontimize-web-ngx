@@ -92,8 +92,8 @@
 
           <!--Define mat-cell-->
           <ng-container *ngIf="!table.multiTemplateDataRows">
-            <td mat-cell *matCellDef="let row;let rowIndex = index " [ngClass]="[column.className, getCellAlignClass(column)]"
-              (click)="handleClick(row,column, rowIndex, $event)" (dblclick)="handleDoubleClick(row,column, rowIndex, $event)"
+            <td #cell mat-cell *matCellDef="let row;let rowIndex = index " [ngClass]="[column.className, getCellAlignClass(column)]"
+              (click)="handleClick(row, column, rowIndex, cell, $event)" (dblclick)="handleDoubleClick(row, column, rowIndex, cell, $event)"
               [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
               matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
               [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
@@ -124,8 +124,8 @@
             </td>
           </ng-container>
           <ng-container *ngIf="table.multiTemplateDataRows">
-            <td mat-cell *matCellDef="let row;let rowIndex = dataIndex " [ngClass]="[column.className, getCellAlignClass(column)]"
-              (click)="handleClick(row,column, rowIndex, $event)" (dblclick)="handleDoubleClick(row,column, rowIndex, $event)"
+            <td #cell mat-cell *matCellDef="let row;let rowIndex = dataIndex " [ngClass]="[column.className, getCellAlignClass(column)]"
+              (click)="handleClick(row, column, rowIndex, cell, $event)" (dblclick)="handleDoubleClick(row, column, rowIndex, cell, $event)"
               [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
               matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
               [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
