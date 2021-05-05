@@ -1043,7 +1043,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
     this.addDefaultRowButtons();
-
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -1427,6 +1426,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
         this.sort.setTableInfo(this.sortColArray);
       }
+    }
+    if(this.sortColumns && this.staticData) {
+      this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
     }
   }
 
@@ -2512,7 +2515,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
   setFiltersConfiguration(conf: any) {
     //initialize filterCaseSensitive
-
     /*
       Checking the original filterCaseSensitive with the filterCaseSensitive in initial configuration in local storage
       if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input

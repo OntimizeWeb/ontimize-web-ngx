@@ -9,6 +9,9 @@
 * **o-table**
   * **o-table-row-expandable**: no expand button in row break ([bda06ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bda06ef)) Closes ([#541](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/541))
   * Fixed prevent touch vertical and horizontal scrolling in table: ([b534317](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b534317)) Closes ([#576](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/576))
+  * **o-table-row-expandable**: set event as optional in toggleRowExpandable ([2653e9e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2653e9e))
+  * Fix sort-columns with static data [fdaa08d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fdaa08d))
+
 
 
 ## 4.2.1 (2021-03-01)
