@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 
 import { IIconPipeArgument, OIconPipe } from '../../../../../pipes/o-icon.pipe';
 import { IconService } from '../../../../../services/icon.service';
+import { Util } from '../../../../../util/util';
 import { OComboCustomRenderer } from '../o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER_ICON = [
@@ -41,11 +42,11 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
 
   initialize() {
     super.initialize();
-    if (typeof this.iconPosition === 'undefined') {
+    if (Util.isDefined(this.iconPosition)) {
       this.iconPosition = this.iconService.iconPosition;
     }
 
-    if (typeof this.iconColumn === 'undefined') {
+    if (Util.isDefined(this.iconColumn)) {
       this.iconColumn = this.iconService.iconColumn;
     }
     
