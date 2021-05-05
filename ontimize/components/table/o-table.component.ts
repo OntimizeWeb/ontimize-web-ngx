@@ -1322,10 +1322,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.sortColArray.splice(i, 1);
       }
     }
-    if(this.sortColumns && this.staticData) {
-      this.loadingSortingSubject.next(true);
-      this.cd.detectChanges();
-    }
   }
 
   initializeParams(): void {
@@ -1430,6 +1426,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
         this.sort.setTableInfo(this.sortColArray);
       }
+    }
+    if(this.sortColumns && this.staticData) {
+      this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
     }
   }
 
