@@ -1,10 +1,10 @@
 import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { InputConverter } from '../../decorators';
 
+import { InputConverter } from '../../decorators';
+import { AuthService } from '../../services/auth.service';
 import { DialogService } from '../../services/dialog.service';
-import { LoginService } from '../../services/login.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
 import { OUserInfoConfigurationDirective } from './user-info-configuration/o-user-info-configuration.directive';
 
@@ -30,7 +30,7 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 export class OUserInfoComponent implements OnDestroy {
 
   protected dialogService: DialogService;
-  protected loginService: LoginService;
+  protected authService: AuthService;
   protected oUserInfoService: OUserInfoService;
 
   userInfoSubscription: Subscription;
@@ -53,14 +53,13 @@ export class OUserInfoComponent implements OnDestroy {
     protected router: Router
   ) {
     this.dialogService = this.injector.get(DialogService);
-    this.loginService = this.injector.get(LoginService);
+    this.authService = this.injector.get(AuthService);
     this.oUserInfoService = this.injector.get(OUserInfoService);
 
     this.userInfo = this.oUserInfoService.getUserInfo();
     this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
       this.userInfo = res;
     });
-
   }
 
   ngOnDestroy() {
@@ -68,7 +67,7 @@ export class OUserInfoComponent implements OnDestroy {
   }
 
   onLogoutClick() {
-    this.loginService.logoutWithConfirmationAndRedirect();
+    this.authService.logoutWithConfirmation();
   }
 
   onSettingsClick() {
@@ -97,9 +96,9 @@ export class OUserInfoComponent implements OnDestroy {
   }
 
   private updateInputsByConfiguration() {
-    this.showLogout = this.userInfoConfiguration.showLogout ? this.userInfoConfiguration.showLogout : this.showLogout;
-    this.showProfile = this.userInfoConfiguration.showProfile ? this.userInfoConfiguration.showProfile : this.showProfile;
-    this.showSettings = this.userInfoConfiguration.showSettings ? this.userInfoConfiguration.showSettings : this.showSettings;
+    this.showLogout = this.userInfoConfiguration ? this.userInfoConfiguration.showLogout : this.showLogout;
+    this.showProfile = this.userInfoConfiguration ? this.userInfoConfiguration.showProfile : this.showProfile;
+    this.showSettings = this.userInfoConfiguration ? this.userInfoConfiguration.showSettings : this.showSettings;
   }
 
 }

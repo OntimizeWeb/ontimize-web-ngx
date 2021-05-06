@@ -9,7 +9,7 @@ import { Config } from '../../types/config.type';
 import { OntimizePermissionsConfig } from '../../types/ontimize-permissions-config.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { LoginStorageService } from '../login-storage.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class OntimizePermissionsService implements IPermissionsService {
@@ -19,29 +19,30 @@ export class OntimizePermissionsService implements IPermissionsService {
   public valueColumn: string;
 
   protected httpClient: HttpClient;
-  protected _sessionid: number = -1;
   protected _user: string;
   protected _urlBase: string;
   protected _appConfig: Config;
   protected _config: AppConfig;
 
+  protected authService: AuthService;
+
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
+    this.authService = this.injector.get(AuthService);
   }
 
   getDefaultServiceConfiguration(): any {
-    const loginStorageService = this.injector.get(LoginStorageService);
+    const authService = this.injector.get(AuthService);
     const servConfig = {};
-    servConfig[Codes.SESSION_KEY] = loginStorageService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = authService.getSessionInfo();
     return servConfig;
   }
 
   configureService(permissionsConfig: OntimizePermissionsConfig): void {
     const config = this.getDefaultServiceConfiguration();
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
-    this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
 
     if (Util.isDefined(permissionsConfig)) {
@@ -69,7 +70,7 @@ export class OntimizePermissionsService implements IPermissionsService {
     };
     const body = JSON.stringify({
       user: this._user,
-      sessionid: this._sessionid,
+      sessionid: this.authService.getSessionInfo().id,
       type: 1,
       entity: this.entity,
       kv: kv,
@@ -104,4 +105,5 @@ export class OntimizePermissionsService implements IPermissionsService {
       'Content-Type': 'application/json;charset=UTF-8'
     });
   }
+
 }
