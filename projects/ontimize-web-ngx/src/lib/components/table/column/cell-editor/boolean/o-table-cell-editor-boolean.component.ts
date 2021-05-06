@@ -40,10 +40,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[class.o-table-cell-editor-boolean]': 'true'
-  }
+  encapsulation: ViewEncapsulation.None
 })
 
 export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor implements OnInit {
@@ -57,7 +54,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
   trueValue: any;
   falseValue: any;
 
-  booleanType: string = 'boolean';
+  protected _booleanType: string = 'boolean';
 
   @InputConverter()
   autoCommit: boolean = true;
@@ -69,6 +66,18 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
   initialize() {
     super.initialize();
     this.parseInputs();
+  }
+
+  get booleanType(): string {
+    return this._booleanType;
+  }
+
+  set booleanType(arg: string) {
+    arg = (arg || '').toLowerCase();
+    if (['number', 'boolean', 'string'].indexOf(arg) === -1) {
+      arg = 'boolean';
+    }
+    this._booleanType = arg;
   }
 
   protected parseInputs() {
@@ -108,16 +117,15 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
 
   startEdition(data: any) {
     super.startEdition(data);
-    const self = this;
+    // using setTimeout to force this code execution after super.activateColumnEdition column.editing = true line
     setTimeout(() => {
-      // using setTimeout to forcing this code execution after super.activateColumnEdition column.editing = true line
-      if (self.autoCommit) {
-        const isTrue = (self.formControl.value === self.trueValue);
-        self.formControl.setValue(isTrue ? self.falseValue : self.trueValue, { emitEvent: false });
-        self.commitEdition();
+      const isCurrentValueTrue = (this.formControl.value === this.trueValue);
+      if (this.autoCommit) {
+        // Toggling value (autocommmit changes component value without no further user interaction)
+        this.formControl.setValue(isCurrentValueTrue ? this.falseValue : this.trueValue, { emitEvent: false });
+        this.commitEdition();
       } else {
-        const isTrue = (self.formControl.value === self.trueValue);
-        self.formControl.setValue(isTrue ? self.trueValue : self.falseValue, { emitEvent: false });
+        this.formControl.setValue(isCurrentValueTrue ? this.trueValue : this.falseValue, { emitEvent: false });
       }
     }, 0);
   }
@@ -142,7 +150,7 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
     return result;
   }
 
-  protected parseValueByType(val: any): any {
+  protected parseValueByType(val: any): string | number | boolean {
     let result = val;
     const cellIsTrue = this.hasCellDataTrueValue(val);
     const value = cellIsTrue ? this.trueValue : this.falseValue;

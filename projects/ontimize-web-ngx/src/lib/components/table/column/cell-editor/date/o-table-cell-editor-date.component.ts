@@ -59,7 +59,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
 export class OTableCellEditorDateComponent extends OBaseTableCellEditor implements OnInit {
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
-  @ViewChild('input', { static: false }) inputRef: ElementRef;
 
   format: string = 'L';
   protected locale: string;
@@ -240,6 +239,8 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   }
 
   onClosed() {
-    this.inputRef.nativeElement.focus();
+    if (this.inputRef) {
+      this.inputRef.nativeElement.focus();
+    }
   }
 }
