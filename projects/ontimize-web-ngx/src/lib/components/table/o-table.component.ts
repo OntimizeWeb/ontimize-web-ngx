@@ -1207,9 +1207,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param rowIndex
    * @param event
    */
-  public toogleRowExpandable(item: any, rowIndex: number, event: Event): void {
-    event.stopPropagation();
-    event.preventDefault();
+  public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
+    if(event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
 
     this.expandableItem.toggle(item);
 
