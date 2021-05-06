@@ -763,7 +763,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
     this.addDefaultRowButtons();
-
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -1144,6 +1143,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
         this.sort.setTableInfo(this.sortColArray);
       }
+    }
+
+    if(this.sortColumns && this.staticData) {
+      this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
     }
   }
 
