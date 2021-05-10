@@ -97,6 +97,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   protected _separator: string = ' ';
 
+  /**
+  * @deprecated user should use the options input
+  */
   set separator(value: string) {
     this._separator = value;
   }
@@ -105,10 +108,22 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return this._separator;
   }
 
+  /**
+   * @deprecated user should use the options input
+   */
   public title: string;
+
   @InputConverter()
   public storeState: boolean = true;
+
+  /**
+  * @deprecated user should use the options input
+  */
   public titleDataOrigin: string;
+
+  /**
+   * @deprecated The next inputs are deprecated and user should use the OFormLayoutDialogOptionsDirective inputs
+   */
   public dialogWidth: string;
   public dialogMinWidth: string;
   public dialogMaxWidth: string;
@@ -133,6 +148,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return this._labelColumns;
   }
 
+  /**
+  * @deprecated user should use the options input
+  */
   set labelColumns(value: string) {
     this._labelColumns = value;
     this._labelColsArray = Util.parseArray(value);
