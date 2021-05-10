@@ -168,7 +168,7 @@ export class LocalStorageService {
       try {
         localStorage.setItem(this._config.uuid, JSON.stringify(appData));
       } catch (e) {
-        console.error("LocalStorage is out of size. Error: " + e);
+        console.error("Cannot set new item in localStorage. Error: " + e);
       }
     }
   }
@@ -178,7 +178,7 @@ export class LocalStorageService {
     try {
       localStorage.setItem(this._config.uuid, JSON.stringify(appData));
     } catch (e) {
-      console.error("LocalStorage is out of size. Error: " + e);
+      console.error("Cannot set new item in localStorage. Error: " + e);
     }
   }
 }
