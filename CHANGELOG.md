@@ -1,3 +1,12 @@
+## 8.3.0
+### BREAKING CHANGES
+* The authentication has been refactored:
+  * Service `LoginService` has been removed and replaced by `AuthService`. This is an abstract service that provides basic functionality regarding authentication. Its default implementation is `OntimizeAuthService` class that performs authentication with Ontimize based backends. Developers can provide their own implementation using the Injection Token `O_AUTH_SERVICE` and the class of their service that extends `AuthService` class.
+  * Interface `ILoginService` has been removed, use abstract class `AuthService` instead.
+  * Method `sessionExpired` from old `LoginService` has been renamed to `clearSessionData` in `AuthService`.
+  * Method `redirectLogin` has been removed in class `OntimizeBaseService` and all its subclasses (`OntimizeService`, `OntimizeEEService`, `OntimizeExportService` and `OntimizeFileService`), use method `logout` from `AuthService` instead.
+  * Method `redirectLogin` has been removed in class `ServiceUtils`, now it is a method of Ontimize authentication implementation in `OntimizeAuthService`.
+
 ## 8.2.4 (2021-04-30)
 ### Bug Fixes
 * **oCurrency, oReal, oInteger, oPercent**: pipes don't update the format of values when language is changed ([a9343d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a9343d0)) Closes [#566](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/566)
@@ -10,7 +19,6 @@
   * **o-table-cell-editor-boolean**: fixing cell edition bug ([755daf4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/755daf4)) Closes [#573](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/573)
   * Fixed prevent touch vertical and horizontal scrolling in table: ([e1b14d1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1b14d1)) Closes [#576](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/576)
   * **o-table-row-expandable**: Fixed error when exporting table data ([98bdd0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98bdd0e))
-
 
 ## 8.2.3 (2021-04-09)
 ### Features
@@ -71,8 +79,8 @@
   * method `handleCellClick` has been removed, you have to use `handleClick` instead  ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
   * method `handleCellDoubleClick` has been removed, you have to use `handleDoubleClick` instead ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
   * Changed the parametres of the `handleDoubleClick` and `handleCellClick` methods ([e64dcc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e64dcc3)) ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
-## 8.1.1 (2020-11-25)
 
+## 8.1.1 (2020-11-25)
 ### Bug Fixes
 * **table**: fixing bug in filtering by column ([88ac4bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88ac4bf))
 

@@ -11,7 +11,6 @@ export class OComboCustomRenderer implements OnInit {
   
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
-  
 
   constructor(protected injector: Injector) {
     this.comboComponent = this.injector.get(OComboComponent);
@@ -41,6 +40,9 @@ export class OComboCustomRenderer implements OnInit {
     let parsedValue: string;
     if (Util.isDefined(value) && Util.isDefined(value.value)) {
       if (this.componentPipe && this.pipeArguments !== undefined && value !== undefined) {
+        if(Util.isDefined(value[this.pipeArguments["iconColumn"]])) {
+          this.pipeArguments["icon"] = value[this.pipeArguments["iconColumn"]];
+        }
         parsedValue = this.componentPipe.transform(value.value, this.pipeArguments);
       } else {
         parsedValue = value.value;

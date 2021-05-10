@@ -8,22 +8,16 @@ import {
   Injector,
   OnDestroy,
   OnInit,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import {
-  MenuItemAction,
-  MenuItemLocale,
-  MenuItemLogout,
-  MenuItemRoute,
-  MenuItemUserInfo,
-} from '../../../interfaces/app-menu.interface';
+import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo } from '../../../interfaces/app-menu.interface';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
+import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
-import { LoginService } from '../../../services/login.service';
 import { OUserInfoService } from '../../../services/o-user-info.service';
 import { PermissionsService } from '../../../services/permissions/permissions.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
@@ -61,7 +55,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   public onClick: EventEmitter<any> = new EventEmitter<any>();
 
   protected translateService: OTranslateService;
-  protected loginService: LoginService;
+  protected authService: AuthService;
   protected dialogService: DialogService;
   protected permissionsService: PermissionsService;
   protected oUserInfoService: OUserInfoService;
@@ -91,7 +85,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     protected cd: ChangeDetectorRef
   ) {
     this.translateService = this.injector.get(OTranslateService);
-    this.loginService = this.injector.get(LoginService);
+    this.authService = this.injector.get(AuthService);
     this.dialogService = this.injector.get(DialogService);
     this.permissionsService = this.injector.get(PermissionsService);
     this.oUserInfoService = this.injector.get(OUserInfoService);
@@ -198,9 +192,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   logout() {
     const menuItem = (this.menuItem as MenuItemLogout);
     if (Util.parseBoolean(menuItem.confirm, true)) {
-      this.loginService.logoutWithConfirmationAndRedirect();
+      this.authService.logoutWithConfirmation();
     } else {
-      this.loginService.logoutAndRedirect();
+      this.authService.logout();
     }
   }
 
