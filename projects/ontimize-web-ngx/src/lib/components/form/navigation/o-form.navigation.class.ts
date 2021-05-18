@@ -342,7 +342,7 @@ export class OFormNavigationClass {
    * Navigates to 'insert' mode
    */
   goInsertMode(options?: any) {
-    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+    if (this.formLayoutManager && this.formLayoutManager.allowNavigation()) {
       this.form.setInsertMode();
     } else if (this.navigationService) {
       if (this.formLayoutManager) {
@@ -376,7 +376,7 @@ export class OFormNavigationClass {
    * Navigates to 'edit' mode
    */
   goEditMode(options?: any) {
-    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+    if (this.formLayoutManager && this.formLayoutManager.allowNavigation()) {
       this.form.setUpdateMode();
     } else if (this.navigationService) {
       let route = [];

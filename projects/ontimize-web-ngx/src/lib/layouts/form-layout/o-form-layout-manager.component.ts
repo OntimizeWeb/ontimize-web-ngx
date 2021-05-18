@@ -571,4 +571,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     return compRef;
   }
+
+  allowNavigation(): boolean {
+    return !this.isTabMode();
+  }
 }
