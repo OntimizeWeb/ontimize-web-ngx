@@ -1,7 +1,7 @@
 ## 8.3.0
 ### Features
 * **o-form-layout-manager**: new `split-pane` mode. 
-* **OFormLayoutManagerMode**: new interface that every form layout manager mode class must implement.
+* **OFormLayoutManagerMode**: new interface that every new `o-form-layout-manager` mode must implement.
 * **OFormLayoutSplitPaneOptionsDirective**: new directive for using the `split-pane` mode inputs.
 
 ### BREAKING CHANGES
@@ -36,12 +36,12 @@
    ```javascript
   <o-form-layout-manager mode="tab" attr="o-form-layout-customer-home">
     
-    <o-form-layout-tabgroup-options color="accent" title="CUSTOMERS" label-columns="SURNAME;NAME" separator="," icon="info" color="warn">
-
+    <o-form-layout-tabgroup-options color="accent" title="CUSTOMERS" 
+      label-columns="SURNAME;NAME" separator="," icon="info" color="warn">
     </o-form-layout-tabgroup-options>
 
     ...
-
+    
   </o-form-layout-manager>
   ```  
 
