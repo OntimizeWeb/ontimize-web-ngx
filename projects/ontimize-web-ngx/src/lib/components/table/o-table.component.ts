@@ -1145,7 +1145,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
 
-    if(this.sortColumns && this.staticData) {
+    if (this.sortColumns && this.staticData) {
       this.loadingSortingSubject.next(true);
       this.cd.detectChanges();
     }
@@ -1208,7 +1208,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param event
    */
   public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
-    if(event) {
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
@@ -2770,8 +2770,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let value = group.column[this.groupedColumnsArray[group.level - 1]];
     const totalCounts = group.totalCounts;
     const oCol = this.getOColumn(field);
+    if (!Util.isDefined(value)) {
+      value = ' - ';
+    }
 
-    if (!value && Util.isDefined(oCol.renderer)
+    if (!Util.isDefined(value) && Util.isDefined(oCol.renderer)
       && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
       value = ' - ';
       if (!this.onDataLoadedCellRendererSubscription) {
