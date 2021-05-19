@@ -35,7 +35,11 @@ export class LoginStorageService {
         stored = {};
       }
       stored[Codes.SESSION_KEY] = sessionInfo;
-      localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
+      try {
+        localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
+      } catch (e) {
+        console.error("Cannot set new item in localStorage. Error: " + e);
+      }
     }
   }
 

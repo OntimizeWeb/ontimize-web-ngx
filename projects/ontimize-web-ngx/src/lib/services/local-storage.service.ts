@@ -165,13 +165,21 @@ export class LocalStorageService {
       usersObject[session.user][LocalStorageService.COMPONENTS_STORAGE_KEY] = componentsInfo;
 
       appData[LocalStorageService.USERS_STORAGE_KEY] = usersObject;
-      localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+      try {
+        localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+      } catch (e) {
+        console.error("Cannot set new item in localStorage. Error: " + e);
+      }
     }
   }
 
   protected setLocalStorage(appData: any) {
     this.onSetLocalStorage.emit();
-    localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+    try {
+      localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+    } catch (e) {
+      console.error("Cannot set new item in localStorage. Error: " + e);
+    }
   }
 
 }
