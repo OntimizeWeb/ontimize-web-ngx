@@ -72,7 +72,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected entity: string;
   protected service: string;
   protected columns: string;
-  protected valueColumn: string;
+  public valueColumn: string;
   protected valueColumnType: string = Codes.TYPE_INT;
   protected parentKeys: string;
   protected visibleColumns: string;

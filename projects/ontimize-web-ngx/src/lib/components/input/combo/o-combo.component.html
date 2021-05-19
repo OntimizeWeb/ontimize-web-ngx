@@ -17,11 +17,11 @@
 
       <mat-select-trigger *ngIf="!multiple && !multipleTriggerLabel">
         <ng-container *ngFor="let item of filteredDataArray">
-          <ng-container *ngIf="renderer && item.key == getValue()">
+          <ng-container *ngIf="renderer && item[valueColumn] == getValue()">
             <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ value: item }">
             </ng-template>
           </ng-container>
-          <ng-container *ngIf="!renderer && item.key == getValue()">
+          <ng-container *ngIf="!renderer && item[valueColumn] == getValue()">
             {{ getOptionDescriptionValue(item) }}
           </ng-container>
         </ng-container>
