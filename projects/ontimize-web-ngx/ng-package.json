@@ -7,18 +7,18 @@
     "umdModuleIds": {
       "@ngx-translate/core": "@ngx-translate/core",
       "@ngx-translate/http-loader": "@ngx-translate/http-loader",
+      "angular-resizable-element": "angularResizableElement",
       "moment": "moment",
-      "ngx-material-timepicker": "ngx-material-timepicker",
-      "angular-resizable-element": "angularResizableElement"
+      "ngx-material-timepicker": "ngx-material-timepicker"
     }
   },
   "whitelistedNonPeerDependencies": [
     "@ngx-translate/core",
     "@ngx-translate/http-loader",
+    "angular-resizable-element",
     "moment",
     "ngx-material-timepicker",
     "reflect-metadata",
-    "tslib",
-    "angular-resizable-element"
+    "tslib"
   ]
 }
