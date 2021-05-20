@@ -93,7 +93,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManager
       this.renderer.setStyle(el, propertyName, this._options[optionName]);
     }
   }
-  
+
   set state(arg: any) {
     this._state = arg;
     if (Util.isDefined(arg)) {
@@ -177,8 +177,8 @@ export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManager
   }
 
   isMainComponent(comp: OServiceComponent): boolean {
-    const mainContent = this.elementRef.nativeElement.getElementsByClassName('main-content')[0];
-    return mainContent && comp.elementRef && mainContent.contains(comp.elementRef.nativeElement);
+    return this.mainWrapper && this.mainWrapper.nativeElement
+      && comp.elementRef && this.mainWrapper.nativeElement.contains(comp.elementRef.nativeElement);
   }
 
   openDetail(detail: FormLayoutDetailComponentData) {

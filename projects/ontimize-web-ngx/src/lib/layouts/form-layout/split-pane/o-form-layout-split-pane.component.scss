@@ -1,15 +1,15 @@
 .o-form-layout-split-pane {
-  .row-wrapper {
+  .o-split-pane-row-wrapper {
     height: 100%;
   }
-  .content-wrapper {
+  .o-split-pane-content-wrapper {
     z-index: 1000;
     min-width: 15%;
-    > .resize-handle {
+    > .o-split-pane-resize-handle {
       width: 8px;
       position: relative;
       cursor: col-resize;
-      > .resize-border {
+      > .o-split-pane-resize-border {
         position: absolute;
         height: 100%;
         width: 2px;
@@ -32,7 +32,7 @@
   mwlResizable {
     box-sizing: border-box; // required for the enableGhostResize option to work
   }
-  .secondary-content {
+  .o-split-pane-secondary-content {
     padding: 0 8px;
     overflow: auto;
     > * {
