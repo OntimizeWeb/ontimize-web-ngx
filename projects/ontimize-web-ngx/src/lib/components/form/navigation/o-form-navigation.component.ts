@@ -224,7 +224,7 @@ export class OFormNavigationComponent implements OnDestroy {
       if (res === true) {
         this.currentIndex = index;
         if (this.formLayoutManager && this.formLayoutManager.allowNavigation()) {
-          this.moveInFormLayoutManager(this.formLayoutManager, index);
+          this.moveInFormLayoutManager(index);
         } else {
           this.moveWithoutManager(index);
         }
@@ -256,7 +256,7 @@ export class OFormNavigationComponent implements OnDestroy {
     }
   }
 
-  private moveInFormLayoutManager(formLayoutManager: OFormLayoutManagerComponent, index: number) {
+  private moveInFormLayoutManager(index: number) {
     this._form.setUrlParamsAndReload(this.navigationData[index]);
   }
 
