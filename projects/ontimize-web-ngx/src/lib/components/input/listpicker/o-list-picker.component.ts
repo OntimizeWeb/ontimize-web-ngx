@@ -10,7 +10,7 @@ import {
   OnInit,
   Optional,
   SimpleChange,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
@@ -24,7 +24,7 @@ import { OFormControl } from '../o-form-control.class';
 import {
   DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
-  OFormServiceComponent
+  OFormServiceComponent,
 } from '../o-form-service-component.class';
 import { OListPickerCustomRenderer } from './listpicker-renderer/o-list-picker-renderer.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
@@ -134,7 +134,9 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   public setEnabled(value: boolean): void {
     super.setEnabled(value);
-    value ? this.stateCtrl.enable() : this.stateCtrl.disable();
+    if (this.stateCtrl && this.hasEnabledPermission() || this.hasVisiblePermission()) {
+      value ? this.stateCtrl.enable() : this.stateCtrl.disable();
+    }
   }
 
   public ngAfterViewInit(): void {

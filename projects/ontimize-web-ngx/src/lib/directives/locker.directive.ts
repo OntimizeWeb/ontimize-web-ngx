@@ -19,7 +19,7 @@ export class OLockerDirective implements OnDestroy {
   private loadingParentDiv;
   private componentDiv;
 
-  private _oLockerMode = 'disable';
+  private _oLockerMode = 'load';
   private subscription: Subscription;
 
   constructor(
@@ -37,10 +37,10 @@ export class OLockerDirective implements OnDestroy {
   }
 
   private manageLockerMode(loading: boolean): void {
-    if (this._oLockerMode === 'load') {
-      this.manageLoadMode(loading);
-    } else {
+    if (this._oLockerMode === 'disable') {
       this.manageDisableMode(loading);
+    } else {
+      this.manageLoadMode(loading);
     }
   }
 
