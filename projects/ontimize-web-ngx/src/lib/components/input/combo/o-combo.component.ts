@@ -215,7 +215,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   }
 
   get showClearButton(): boolean {
-    return this.clearButton && !this.isReadOnly && this.enabled && this.isEmpty();
+    return this.clearButton && !this.isReadOnly && this.enabled && !this.isEmpty();
   }
 
   public getMultiple(): boolean {
