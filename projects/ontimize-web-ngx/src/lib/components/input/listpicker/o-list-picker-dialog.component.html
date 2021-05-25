@@ -1,6 +1,6 @@
 <div class="title-container" *ngIf="filter">
-  <o-search-input #searchInput [columns]="menuColumns" show-menu="no" float-label="never" (onSearch)="onFilterList($event)"
-    class="o-list-picker-search" appearance="legacy"></o-search-input>
+  <o-search-input #searchInput [columns]="menuColumns" show-menu="no" float-label="never"
+    (onSearch)="onFilterList($event)" class="o-list-picker-search" appearance="legacy"></o-search-input>
 </div>
 <div mat-dialog-content [class.o-list-picker-has-filter]="filter" fxFlex>
   <cdk-virtual-scroll-viewport [itemSize]="itemSize">
@@ -11,10 +11,17 @@
           {{ 'LIST.EMPTY_USING_FILTER' | oTranslate : { values: [searchInput.getValue()] } }}
         </ng-container>
       </mat-list-item>
-      <mat-list-item (click)="onClickListItem($event, item)" *cdkVirtualFor="let item of visibleData; trackBy: trackByFn">
-        <ng-container>
+      <mat-list-item (click)="onClickListItem($event, item)"
+        *cdkVirtualFor="let item of visibleData; trackBy: trackByFn">
+
+        <ng-container *ngIf="renderer">
+          <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ value: item }">
+          </ng-template>
+        </ng-container>
+        <ng-container *ngIf="!renderer">
           <span>{{ item['_parsedVisibleColumnText'] }}</span>
         </ng-container>
+
         <mat-divider></mat-divider>
       </mat-list-item>
 
@@ -23,5 +30,6 @@
 
 </div>
 <mat-dialog-actions align="end">
-  <button type="button" mat-stroked-button mat-dialog-close class="o-button-default">{{ 'CANCEL' | oTranslate | uppercase }}</button>
+  <button type="button" mat-stroked-button mat-dialog-close class="o-button-default">{{ 'CANCEL' | oTranslate |
+    uppercase }}</button>
 </mat-dialog-actions>

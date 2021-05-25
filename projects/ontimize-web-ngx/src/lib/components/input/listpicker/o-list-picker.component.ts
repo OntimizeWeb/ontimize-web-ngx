@@ -114,7 +114,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     // Ensuring value in the stateCtrl 
     // (just in case it was created with a empty value before the fControl data initialization)
     if (!Util.isDefined(this.stateCtrl.value)) {
-      this.stateCtrl.setValue(this.getDescriptionValue());
+      this.setStateCtrlValue();
     }
   }
 
@@ -156,19 +156,14 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   }
 
   public getDescriptionValue(): string {
-    let descTxt;
-    if (this.descriptionColArray && this._currentIndex !== undefined) {
-      this.descriptionColArray.forEach((descCol, index) => {
-        const txt = this.dataArray[this._currentIndex][descCol];
-        if (txt) {
-          descTxt = (descTxt || '') + txt;
-        }
-        if (index < this.descriptionColArray.length - 1) {
-          descTxt += this.separator;
-        }
-      });
+    if (!Util.isDefined(this.descriptionColArray) || !Util.isDefined(this._currentIndex)) {
+      return '';
     }
-    return descTxt;
+    if (Util.isDefined(this.renderer)) {
+      return this.renderer.getListPickerValue(this.dataArray[this._currentIndex]);
+    } else {
+      return this.getOptionDescriptionValue(this.dataArray[this._currentIndex]);
+    }
   }
 
   public onClickClear(e: Event): void {
@@ -248,7 +243,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     super.setFormValue(val, options, setDirty);
-    this.stateCtrl.setValue(this.getDescriptionValue());
+    this.setStateCtrlValue();
   }
 
   protected openDialog(): void {
@@ -281,16 +276,13 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     const result: any[] = [];
     dataArray.forEach((item, itemIndex) => {
       const newItem = Object.assign({}, item);
-      newItem._parsedVisibleColumnText = this.getOptionDescriptionValue(item);
+      if (!this.renderer) {
+        newItem._parsedVisibleColumnText = this.getOptionDescriptionValue(item);
+      }
       newItem._parsedIndex = itemIndex;
       result.push(newItem);
     });
     return result;
-  }
-
-  getRenderedValue() {
-    let descTxt = this.getDescriptionValue();
-    return this.renderer.getListPickerValue(descTxt);
   }
 
   public registerRenderer(renderer: any) {
@@ -298,4 +290,11 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.renderer.initialize();
   }
 
+  protected setStateCtrlValue() {
+    let descriptionValue = this.getDescriptionValue();
+    if (typeof descriptionValue === 'string' && descriptionValue.length === 0) {
+      descriptionValue = null;
+    }
+    this.stateCtrl.setValue(descriptionValue);
+  }
 }
