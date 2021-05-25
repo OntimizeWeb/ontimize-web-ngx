@@ -2339,7 +2339,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       filterCaseSensitive will be the value in local storage
     */
     if (Util.isDefined(this.filterCaseSensitive) && this.state.hasOwnProperty('initial-configuration') &&
-      this.state['initial-configuration'].hasOwnProperty('filter-case-sensitive') && conf.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-case-sensitive') && conf.hasOwnProperty('initial-configuration') && 
+      conf['initial-configuration']['filter-case-sensitive'] && 
       this.filterCaseSensitive === conf['initial-configuration']['filter-case-sensitive']) {
       this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
     } else {
@@ -2350,7 +2351,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
 
 
     if (Util.isDefined(this.filterColumnActiveByDefault) && this.state.hasOwnProperty('initial-configuration') &&
-      this.state['initial-configuration'].hasOwnProperty('filter-column-active-by-default')  && conf.hasOwnProperty('initial-configuration') &&
+      this.state['initial-configuration'].hasOwnProperty('filter-column-active-by-default')  && conf.hasOwnProperty('initial-configuration') && 
+      conf['initial-configuration']['filter-column-active-by-default'] && 
       this.originalFilterColumnActiveByDefault !== conf['initial-configuration']['filter-column-active-by-default']) {
       this.showFilterByColumnIcon = this.originalFilterColumnActiveByDefault;
     } else {
