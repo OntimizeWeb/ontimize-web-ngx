@@ -134,7 +134,9 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   public setEnabled(value: boolean): void {
     super.setEnabled(value);
-    value ? this.stateCtrl.enable() : this.stateCtrl.disable();
+    if (this.stateCtrl && this.hasEnabledPermission() || this.hasVisiblePermission()) {
+      value ? this.stateCtrl.enable() : this.stateCtrl.disable();
+    }
   }
 
   public ngAfterViewInit(): void {
