@@ -84,30 +84,14 @@ export class OComboRendererBooleanComponent extends OComboCustomRenderer impleme
     }
   }
 
-  hasComboTrueValue(value: any): boolean {
+  hasComboTrueValue(record: any): boolean {
     let result: boolean;
-    if (Util.isDefined(value) && Util.isDefined(value.value)) {
-      result = (value.value === this.trueValue);
+    if (Util.isDefined(record) && Util.isDefined(record[this.comboComponent.valueColumn])) {
+      const value = record[this.comboComponent.valueColumn];
+      result = (value === this.trueValue);
       if (this.booleanType === 'string' && !Util.isDefined(this.trueValue)) {
-        result = Util.parseBoolean(value.value, false);
+        result = Util.parseBoolean(value, false);
       }
-    }
-    return result;
-  }
-
-  getComboData(value: any) {
-    let result = value.value;
-    const comboIsTrue = this.hasComboTrueValue(value);
-    const newValue = comboIsTrue ? this.trueValue : this.falseValue;
-    switch (this.renderType) {
-      case 'string':
-        result = this.translateService.get(newValue);
-        break;
-      case 'number':
-        result = value.value;
-        break;
-      default:
-        break;
     }
     return result;
   }

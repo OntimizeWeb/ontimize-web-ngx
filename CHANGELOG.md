@@ -5,7 +5,8 @@
 ### Bug Fixes
 * **o-list-picker, OFormDataComponent**: checking if the component has the appropriate permissions to execute the `setEnabled` method ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da)) Closes [#607](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/607)
 * **o-list-picker**: fixing initialization errors ([954b8b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/954b8b2)) Closes [#615](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/615)
-
+* **o-combo**: fixing renders errors ([9d4b5de](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d4b5de)) Closes [#612](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/612)
+ 
 ### BREAKING CHANGES
 * **oLocker**: Default `oLockerMode` is set to 'load' ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da))
 
