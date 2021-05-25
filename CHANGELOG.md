@@ -4,12 +4,17 @@
  
 ### Bug Fixes
 * **o-list-picker, OFormDataComponent**: checking if the component has the appropriate permissions to execute the `setEnabled` method ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da)) Closes [#607](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/607)
-* **o-list-picker**: fixing initialization errors ([954b8b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/954b8b2)) Closes [#615](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/615)
+* **o-list-picker**: 
+  * fixing initialization errors ([954b8b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/954b8b2)) Closes [#615](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/615)
+  * fixing renders errors ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11)) Closes [#616](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/616)
 * **o-combo**: fixing renders errors ([9d4b5de](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d4b5de)) Closes [#612](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/612)
  
 ### BREAKING CHANGES
 * **oLocker**: Default `oLockerMode` is set to 'load' ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da))
-
+* **o-list-picker**: 
+  * `getListPickerValue` method now receives the entire record object ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11)) 
+  * `getRenderedValue` method no longer exists (this shouldn't affect the user) ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11))
+ 
 ## 8.2.4 (2021-04-30)
 ### Bug Fixes
 * **oCurrency, oReal, oInteger, oPercent**: pipes don't update the format of values when language is changed ([a9343d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a9343d0)) Closes [#566](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/566)
