@@ -10,7 +10,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
@@ -25,7 +25,7 @@ import { OInputsOptions } from '../../../../../types/o-inputs-options.type';
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
 import {
-  OTableCellRendererServiceComponent,
+  OTableCellRendererServiceComponent
 } from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
@@ -50,7 +50,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 })
 export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('filter', { static: false })
+  @ViewChild('filter', { static: true })
   public filter: ElementRef;
 
   @ViewChild('menu', { static: true })

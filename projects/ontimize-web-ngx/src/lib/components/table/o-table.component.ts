@@ -1970,6 +1970,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.onFilterByColumnChange.emit(this.dataSource.getColumnValueFilters());
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
+      this.oTableQuickFilterComponent.filter.nativeElement.value = "";
     }
   }
 
