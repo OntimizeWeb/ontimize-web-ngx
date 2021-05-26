@@ -2011,7 +2011,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         column: column,
         activeSortDirection: this.getSortFilterColumn(column),
-        tableData: this.dataSource.getTableData(),
+        tableData: this.dataSource.getCurrentData(),
         preloadValues: this.oTableColumnsFilterComponent.preloadValues,
         mode: this.oTableColumnsFilterComponent.mode,
         startView: this.getStartViewFilterColumn(column)
