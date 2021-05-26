@@ -1,6 +1,7 @@
 ## 8.2.5
 ### Features
 * **o-image**: New attribute `max-file-size`. ([d8a84c0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8a84c0)) Closes [#589](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/589)
+* **o-table**: adding new optional `clearSelectedItems` (defaults to true) argument to `reloadPaginatedDataFromStart` and `reloadData` methods ([1aa26ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa26ec))
  
 ### Bug Fixes
 * **o-list-picker, OFormDataComponent**: checking if the component has the appropriate permissions to execute the `setEnabled` method ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da)) Closes [#607](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/607)
@@ -8,13 +9,19 @@
   * fixing initialization errors ([954b8b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/954b8b2)) Closes [#615](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/615)
   * fixing renderers errors ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11)) Closes [#616](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/616)
 * **o-combo**: fixing renderers errors ([9d4b5de](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d4b5de)) Closes [#612](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/612)
- 
+* **o-table**: solving filters storage bugs ([1aa26ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa26ec)) Closes [#606](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/606)
+
 ### BREAKING CHANGES
 * **oLocker**: Default `oLockerMode` is set to 'load' ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da))
 * **o-list-picker**: 
   * `getListPickerValue` method now receives the entire record object ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11)) 
   * `getRenderedValue` method no longer exists (this shouldn't affect the user) ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11))
- 
+* **o-table**: 
+  * The following changes should not affect the user unless it was specifically using the following properties ([1aa26ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa26ec))
+  * `showFilterByColumnIcon` and `originalFilterColumnActiveByDefault` properties no longer exists.
+  * new `areColumnFiltersActive` property.
+  * deleting arguments from `onFilterByColumnChange` EventEmitter (retrieve same value using dataSource.getColumnValueFilters())
+
 ## 8.2.4 (2021-04-30)
 ### Bug Fixes
 * **oCurrency, oReal, oInteger, oPercent**: pipes don't update the format of values when language is changed ([a9343d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a9343d0)) Closes [#566](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/566)
