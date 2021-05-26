@@ -1,4 +1,4 @@
-## 8.2.5
+## 8.2.5 (2021-05-26)
 ### Features
 * **o-image**: New attribute `max-file-size`. ([d8a84c0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8a84c0)) Closes [#589](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/589)
 * **o-table**: adding new optional `clearSelectedItems` (defaults to true) argument to `reloadPaginatedDataFromStart` and `reloadData` methods ([1aa26ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa26ec))
