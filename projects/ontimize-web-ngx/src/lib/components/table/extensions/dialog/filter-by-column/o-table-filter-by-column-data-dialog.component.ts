@@ -261,11 +261,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   clearValues() {
     if (this.isTextType()) {
       this.fcText.setValue(undefined);
-    } else {
-      if (this.isDateType() || this.isNumericType) {
-        this.fcFrom.setValue(undefined);
-        this.fcTo.setValue(undefined);
-      }
+    } else if (this.isDateType() || this.isNumericType()) {
+      this.fcFrom.setValue(undefined);
+      this.fcTo.setValue(undefined);
     }
   }
 

@@ -1,15 +1,7 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  forwardRef,
-  Inject,
-  Injector,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../../decorators/input-converter';
-import { OnExecuteTableContextEvent } from '../../../../interfaces/o-table-context-onexecute.interface';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
@@ -281,8 +273,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   public filterByColumn(event): void {
     if (this.table.oTableMenu) {
-      this.table.showFilterByColumnIcon = true;
-      this.table.oTableMenu.columnFilterOption.active = true;
+      this.table.isColumnFiltersActive = true;
       this.table.openColumnFilterDialog(this.column, event.event);
     }
   }
@@ -294,10 +285,11 @@ export class OTableContextMenuComponent implements AfterViewInit {
     }
     this.isVisibleFilter.next(isVisible);
   }
-/**
- * Checks group by row options
- */
-public checkGroupByRowOptions(): void {
+
+  /**
+   * Checks group by row options
+   */
+  public checkGroupByRowOptions(): void {
     this.isEnabledUnGroupByColumn.next(false);
     this.isEnabledUnGroupAllColumn.next(false);
     let grouped = false;

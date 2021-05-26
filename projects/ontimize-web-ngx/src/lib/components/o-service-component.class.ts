@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
-import { InputConverter } from '../decorators/input-converter';
+import { BooleanConverter, InputConverter } from '../decorators/input-converter';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService } from '../services/navigation.service';
@@ -135,8 +135,15 @@ export class OServiceComponent extends OServiceBaseComponent {
   protected insertFormRoute: string;
   @InputConverter()
   protected recursiveInsert: boolean = false;
-  @InputConverter()
-  public filterCaseSensitive: boolean = false;
+
+  protected _filterCaseSensitive: boolean = false;
+  set filterCaseSensitive(value: boolean) {
+    this._filterCaseSensitive = BooleanConverter(value);
+  }
+  get filterCaseSensitive(): boolean {
+    return this._filterCaseSensitive;
+  }
+
   protected _quickFilter: boolean = true;
   get quickFilter(): boolean {
     return this._quickFilter;
