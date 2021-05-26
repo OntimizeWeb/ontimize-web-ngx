@@ -4,17 +4,17 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   forwardRef,
   Inject,
   Injector,
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
-  EventEmitter
+  ViewEncapsulation
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
@@ -30,10 +30,14 @@ import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
-import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import {
+  OTableApplyConfigurationDialogComponent
+} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import {
+  OTableStoreConfigurationDialogComponent
+} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
@@ -142,13 +146,12 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   get isColumnFilterOptionActive() {
-    return this.table && this.table.showFilterByColumnIcon;
+    return this.table && this.table.areColumnFiltersActive;
   }
 
   ngAfterViewInit() {
 
     this.showColumnsFilterOptionSubject.next(this.table.oTableColumnsFilterComponent !== undefined);
-
 
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
@@ -379,7 +382,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         rowHeight: this.table.rowHeight
       },
       height: '75vh',
-      width:'50vw',
+      width: '50vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog', 'o-table-group-by-column-dialog']
     });
@@ -393,16 +396,15 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onFilterByColumnClicked() {
-    if (this.table.showFilterByColumnIcon && this.table.dataSource.isColumnValueFilterActive()) {
-      const self = this;
+    if (this.table.areColumnFiltersActive && this.table.dataSource.isColumnValueFilterActive()) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN').then(res => {
         if (res) {
-          self.table.clearColumnFilters();
+          this.table.clearColumnFilters();
         }
-        self.table.showFilterByColumnIcon = !res;
+        this.table.areColumnFiltersActive = !res;
       });
     } else {
-      this.table.showFilterByColumnIcon = !this.table.showFilterByColumnIcon;
+      this.table.areColumnFiltersActive = !this.table.areColumnFiltersActive;
     }
   }
 
@@ -441,7 +443,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
           const storedFilter = this.table.oTableStorage.getStoredFilterConf(selectedFilterName);
           if (storedFilter) {
             this.table.setFiltersConfiguration(storedFilter);
-            this.table.reloadPaginatedDataFromStart();
+            this.table.reloadPaginatedDataFromStart(false);
           }
         }
       }
@@ -452,7 +454,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_CLEAR_FILTER').then(result => {
       if (result) {
         this.table.clearFilters();
-        this.table.reloadPaginatedDataFromStart();
+        this.table.reloadPaginatedDataFromStart(false);
       }
     });
   }

@@ -10,7 +10,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange, MatMenu } from '@angular/material';
@@ -25,7 +25,7 @@ import { OInputsOptions } from '../../../../../types/o-inputs-options.type';
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
 import {
-  OTableCellRendererServiceComponent,
+  OTableCellRendererServiceComponent
 } from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
@@ -181,6 +181,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
 
   public setValue(value: any, trigger: boolean = true): void {
     this.value = value;
+    this.formControl.setValue(this.value);
     if (trigger && this.table && this.table.dataSource) {
       this.table.dataSource.quickFilter = this.value;
     }
