@@ -7,14 +7,14 @@ assignees: ''
 
 ---
 
-**What is the current behavior?**
+### What is the current behavior?
 A clear and concise description of what the bug is.
 
-**Steps to reproduce**
+### Steps to reproduce
 Steps to reproduce the behavior.
 
-**Affected versions:**
+### Affected versions:
 - `ontimize-web-ngx`: X.Y.Z
 
-**Additional context**
+### Additional context
 Add any other context about the problem here.
