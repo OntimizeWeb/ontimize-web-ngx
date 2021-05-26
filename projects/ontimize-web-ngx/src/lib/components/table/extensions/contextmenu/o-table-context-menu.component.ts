@@ -273,7 +273,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   public filterByColumn(event): void {
     if (this.table.oTableMenu) {
-      this.table.areColumnFiltersActive = true;
+      this.table.isColumnFiltersActive = true;
       this.table.openColumnFilterDialog(this.column, event.event);
     }
   }

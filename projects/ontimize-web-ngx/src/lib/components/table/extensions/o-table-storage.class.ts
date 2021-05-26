@@ -127,7 +127,7 @@ export class OTableStorage {
   protected getFilterColumnActiveByDefaultState() {
     const result = {};
     if (this.table.oTableColumnsFilterComponent) {
-      result['filter-column-active'] = this.table.areColumnFiltersActive;
+      result['filter-column-active'] = this.table.isColumnFiltersActive;
     }
     return result;
   }

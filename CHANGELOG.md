@@ -19,7 +19,7 @@
 * **o-table**: 
   * The following changes should not affect the user unless it was specifically using the following properties ([1aa26ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa26ec))
   * `showFilterByColumnIcon` and `originalFilterColumnActiveByDefault` properties no longer exists.
-  * new `areColumnFiltersActive` property.
+  * new `isColumnFiltersActive` property.
   * deleting arguments from `onFilterByColumnChange` EventEmitter (retrieve same value using dataSource.getColumnValueFilters())
 
 ## 8.2.4 (2021-04-30)

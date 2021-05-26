@@ -146,7 +146,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   get isColumnFilterOptionActive() {
-    return this.table && this.table.areColumnFiltersActive;
+    return this.table && this.table.isColumnFiltersActive;
   }
 
   ngAfterViewInit() {
@@ -396,15 +396,15 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onFilterByColumnClicked() {
-    if (this.table.areColumnFiltersActive && this.table.dataSource.isColumnValueFilterActive()) {
+    if (this.table.isColumnFiltersActive && this.table.dataSource.isColumnValueFilterActive()) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DISCARD_FILTER_BY_COLUMN').then(res => {
         if (res) {
           this.table.clearColumnFilters();
         }
-        this.table.areColumnFiltersActive = !res;
+        this.table.isColumnFiltersActive = !res;
       });
     } else {
-      this.table.areColumnFiltersActive = !this.table.areColumnFiltersActive;
+      this.table.isColumnFiltersActive = !this.table.isColumnFiltersActive;
     }
   }
 

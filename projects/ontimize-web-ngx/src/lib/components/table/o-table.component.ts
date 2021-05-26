@@ -308,14 +308,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   set filterCaseSensitive(value: boolean) {
-    this.filterCaseSensitivePvt = BooleanConverter(value);
+    this._filterCaseSensitive = BooleanConverter(value);
     if (this._oTableOptions) {
-      this._oTableOptions.filterCaseSensitive = this.filterCaseSensitivePvt;
+      this._oTableOptions.filterCaseSensitive = this._filterCaseSensitive;
     }
   }
 
   get filterCaseSensitive(): boolean {
-    return this.filterCaseSensitivePvt;
+    return this._filterCaseSensitive;
   }
 
   @InputConverter()
@@ -555,14 +555,14 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.refreshColumnsWidth();
   }
 
-  protected _areColumnFiltersActive: boolean = false;
+  protected _isColumnFiltersActive: boolean = false;
 
-  get areColumnFiltersActive(): boolean {
-    return this._areColumnFiltersActive;
+  get isColumnFiltersActive(): boolean {
+    return this._isColumnFiltersActive;
   }
 
-  set areColumnFiltersActive(val: boolean) {
-    this._areColumnFiltersActive = val;
+  set isColumnFiltersActive(val: boolean) {
+    this._isColumnFiltersActive = val;
   }
 
   constructor(
@@ -1095,7 +1095,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
 
     //Initialize show filter by column icon
-    this.areColumnFiltersActive = this.filterColumnActiveByDefault;
+    this.isColumnFiltersActive = this.filterColumnActiveByDefault;
 
     this.initializeCheckboxColumn();
 
@@ -1965,7 +1965,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
-      this.oTableMenu.columnFilterOption.setActive(this.areColumnFiltersActive);
+      this.oTableMenu.columnFilterOption.setActive(this.isColumnFiltersActive);
     }
     this.onFilterByColumnChange.emit();
     if (this.oTableQuickFilterComponent) {
@@ -1996,11 +1996,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   isModeColumnFilterable(column: OColumn): boolean {
-    return this.areColumnFiltersActive && this.isColumnFilterable(column);
+    return this.isColumnFiltersActive && this.isColumnFilterable(column);
   }
 
   isColumnFilterActive(column: OColumn): boolean {
-    return this.areColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
+    return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
   }
 
   openColumnFilterDialog(column: OColumn, event: Event) {
@@ -2343,10 +2343,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
 
     if (initialConf['filter-column-active-by-default'] !== this.filterColumnActiveByDefault) {
-      this.areColumnFiltersActive = this.filterColumnActiveByDefault;
+      this.isColumnFiltersActive = this.filterColumnActiveByDefault;
     } else {
       const confFilterColumnActiveByDefault = conf.hasOwnProperty('filter-column-active') ? conf['filter-column-active'] : this.filterColumnActiveByDefault;
-      this.areColumnFiltersActive = confFilterColumnActiveByDefault || storedColumnFilters.length > 0;
+      this.isColumnFiltersActive = confFilterColumnActiveByDefault || storedColumnFilters.length > 0;
     }
 
     if (this.oTableColumnsFilterComponent) {

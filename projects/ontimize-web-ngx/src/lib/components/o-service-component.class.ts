@@ -136,12 +136,12 @@ export class OServiceComponent extends OServiceBaseComponent {
   @InputConverter()
   protected recursiveInsert: boolean = false;
 
-  protected filterCaseSensitivePvt: boolean = false;
+  protected _filterCaseSensitive: boolean = false;
   set filterCaseSensitive(value: boolean) {
-    this.filterCaseSensitivePvt = BooleanConverter(value);
+    this._filterCaseSensitive = BooleanConverter(value);
   }
   get filterCaseSensitive(): boolean {
-    return this.filterCaseSensitivePvt;
+    return this._filterCaseSensitive;
   }
 
   protected _quickFilter: boolean = true;
