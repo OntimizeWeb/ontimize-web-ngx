@@ -22,7 +22,7 @@ export class OTableStorage {
     const dataToStore = {
     };
 
-    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration', 'filter-columns', 'filter-column-active-by-default', 'grouped-columns'];
+    const properties = ['sort', 'columns-display', 'columns-filter', 'quick-filter', 'page', 'selection', 'initial-configuration', 'filter-columns', 'filter-column-active', 'grouped-columns'];
 
     Object.assign(dataToStore, this.getTablePropertiesToStore(properties));
 
@@ -70,7 +70,7 @@ export class OTableStorage {
       case 'initial-configuration':
         result = this.getInitialConfigurationState();
         break;
-      case 'filter-column-active-by-default':
+      case 'filter-column-active':
         result = this.getFilterColumnActiveByDefaultState();
         break;
       case 'filter-columns':
@@ -127,7 +127,7 @@ export class OTableStorage {
   protected getFilterColumnActiveByDefaultState() {
     const result = {};
     if (this.table.oTableColumnsFilterComponent) {
-      result['filter-column-active-by-default'] = this.table.filterColumnActiveByDefault;
+      result['filter-column-active'] = this.table.areColumnFiltersActive;
     }
     return result;
   }

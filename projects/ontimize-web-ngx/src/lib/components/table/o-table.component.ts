@@ -2328,23 +2328,26 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   setFiltersConfiguration(conf: any = {}) {
-    const paramInitialConfiguration = conf['initial-configuration'] || {};
-    const stateInitialConf = this.state['initial-configuration'] || {};
+    const initialConf = conf['initial-configuration'] || {};
     /*
       Checking the original filterCaseSensitive with the filterCaseSensitive in initial configuration in local storage
       if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input
       filterCaseSensitive will be the value in local storage
     */
-    if (stateInitialConf.hasOwnProperty('filter-case-sensitive') && this.filterCaseSensitive === paramInitialConfiguration['filter-case-sensitive']) {
-      this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
+    if (initialConf['filter-case-sensitive'] !== this.filterCaseSensitive) {
+      this.filterCaseSensitive = this.filterCaseSensitive;
     } else {
-      this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : (Util.isDefined(this.filterCaseSensitive) ? this.filterCaseSensitive : false);
+      this.filterCaseSensitive = conf.hasOwnProperty('filter-case-sensitive') ? conf['filter-case-sensitive'] : this.filterCaseSensitive;
     }
 
     const storedColumnFilters = this.oTableStorage.getStoredColumnsFilters(conf);
 
-    const filterColumnActiveByDefaultState = conf['filter-column-active-by-default'] || this.filterColumnActiveByDefault;
-    this.areColumnFiltersActive = filterColumnActiveByDefaultState || storedColumnFilters.length > 0;
+    if (initialConf['filter-column-active-by-default'] !== this.filterColumnActiveByDefault) {
+      this.areColumnFiltersActive = this.filterColumnActiveByDefault;
+    } else {
+      const confFilterColumnActiveByDefault = conf.hasOwnProperty('filter-column-active') ? conf['filter-column-active'] : this.filterColumnActiveByDefault;
+      this.areColumnFiltersActive = confFilterColumnActiveByDefault || storedColumnFilters.length > 0;
+    }
 
     if (this.oTableColumnsFilterComponent) {
       this.dataSource.initializeColumnsFilters(storedColumnFilters);
