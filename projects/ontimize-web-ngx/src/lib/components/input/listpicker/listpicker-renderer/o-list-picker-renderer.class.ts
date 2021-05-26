@@ -11,8 +11,6 @@ export class OListPickerCustomRenderer implements OnInit {
 
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
-  
-
   constructor(protected injector: Injector) {
     this.listpickerComponent = this.injector.get(OListPickerComponent);
   }
@@ -37,19 +35,26 @@ export class OListPickerCustomRenderer implements OnInit {
    * @param value Internal listPicker value
   */
 
-  public getListPickerValue(value: any): string {
-    let parsedValue: string;
-    if (Util.isDefined(value)) {
-      if (this.componentPipe && this.pipeArguments !== undefined && value !== undefined) {
-        parsedValue = this.componentPipe.transform(value, this.pipeArguments);
-      } else {
-        parsedValue = value;
-      }
-    } else {
-      console.warn("getListPickerData() - No value received");
+  public getListPickerValue(record: any): string {
+    let result = '';
+    if (!Util.isDefined(record)) {
+      return result;
     }
-    return parsedValue;
-  }
-  
+    this.listpickerComponent.descriptionColArray.forEach((col, index) => {
+      if (Util.isDefined(record[col])) {
+        let value = record[col];
+        if (this.componentPipe && this.pipeArguments != null) {
+          value = this.componentPipe.transform(value, this.pipeArguments);
+        }
+        if (Util.isDefined(value)) {
+          result += value;
 
+          if (index < this.listpickerComponent.descriptionColArray.length - 1) {
+            result += this.listpickerComponent.separator;
+          }
+        }
+      }
+    });
+    return result;
+  }
 }

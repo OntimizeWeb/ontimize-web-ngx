@@ -58,12 +58,6 @@ export class OListPickerDialogComponent implements AfterViewInit {
     if (data.renderer) {
       this.renderer = data.renderer;
     }
-    if (this.data && Util.isArray(this.data)) {
-      this.data.forEach((element, index) => {
-        this.data[index].value = this.renderer ? this.renderer.getListPickerValue(element.value) : element.value;
-        this.data[index]._parsedVisibleColumnText = this.renderer ? this.renderer.getListPickerValue(element._parsedVisibleColumnText) : element._parsedVisibleColumnText;
-      });
-    }
     this.searchVal = data.searchVal;
   }
 
@@ -136,11 +130,6 @@ export class OListPickerDialogComponent implements AfterViewInit {
 
   private _isBlank(value: string): boolean {
     return !Util.isDefined(value) || value.length === 0;
-  }
-
-  public registerRenderer(renderer: any) {
-    this.renderer = renderer;
-    this.renderer.initialize();
   }
 
 }

@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+
 import { OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
+import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column';
 import { OTableComponent } from '../../../o-table.component';
+
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_ICON = [
   'column'
 ]
@@ -21,7 +24,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_ICON = [
 export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy {
 
   public column: OColumn;
-  public columnValueFilters: Array<OColumnValueFilter> = [];
 
   public isColumnFilterActive: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public indicatorNumber: BehaviorSubject<string> = new BehaviorSubject('');
@@ -30,25 +32,23 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
   ) {
-    const self = this;
-    const sFilterByColumnChange = this.table.onFilterByColumnChange.subscribe(x => {
-      self.updateStateColumnFilter(x);
-    });
-    this.subscription.add(sFilterByColumnChange);
+    this.subscription.add(this.table.onFilterByColumnChange.subscribe(() => {
+      this.updateStateColumnFilter();
+    }));
   }
 
   ngOnInit(): void {
-    this.updateStateColumnFilter(this.table.dataSource.getColumnValueFilters());
+    this.updateStateColumnFilter();
   }
 
-  public updateStateColumnFilter(columnValueFilters: Array<OColumnValueFilter>) {
-    this.columnValueFilters = columnValueFilters;
+  public updateStateColumnFilter() {
     this.indicatorNumber.next(this.getFilterIndicatorNumbered());
-    this.isColumnFilterActive.next(this.getColumnValueFilterByAttr() !== undefined);
+    this.isColumnFilterActive.next(Util.isDefined(this.getColumnValueFilterByAttr()));
   }
 
-  public getColumnValueFilterByAttr(): OColumnValueFilter {
-    return this.columnValueFilters.filter(item => item.attr === this.column.attr)[0];
+  protected getColumnValueFilterByAttr(): OColumnValueFilter {
+    const columnValueFilters = this.table.dataSource.getColumnValueFilters();
+    return columnValueFilters.find(item => item.attr === this.column.attr);
   }
 
   public openColumnFilterDialog(event) {
@@ -58,8 +58,11 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
   public getFilterIndicatorNumbered(): string {
     let result = '';
 
-    const columnsValueFilters = this.columnValueFilters;
-    if (columnsValueFilters.length < 2) { return result; }
+    const columnValueFilters = this.table.dataSource.getColumnValueFilters();
+    const columnsValueFilters = columnValueFilters;
+    if (columnsValueFilters.length < 2) {
+      return result;
+    }
 
     const index = columnsValueFilters.findIndex(x => x.attr === this.column.attr);
     if (index > -1) {

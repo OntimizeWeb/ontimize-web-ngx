@@ -42,7 +42,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _sort: OMatSort;
 
   protected _quickFilterChange = new BehaviorSubject('');
-  protected _columnValueFilterChange = new Subject();
+  protected _columnValueFilterChange = new BehaviorSubject(null);
   protected groupByColumnChange = new Subject();
   protected _loadDataScrollableChange = new BehaviorSubject<OTableScrollEvent>(new OTableScrollEvent(1));
 
@@ -397,7 +397,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       this.columnValueFilters.push(filter);
     });
     if (!this.table.pageable) {
-      this._columnValueFilterChange.next();
+      this._columnValueFilterChange.next(null);
     }
   }
 
@@ -416,14 +416,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   clearColumnFilters(trigger: boolean = true) {
     this.columnValueFilters = [];
     if (trigger) {
-      this._columnValueFilterChange.next();
+      this._columnValueFilterChange.next(null);
     }
   }
 
   clearColumnFilter(attr: string, trigger: boolean = true) {
     this.columnValueFilters = this.columnValueFilters.filter(x => x.attr !== attr);
     if (trigger) {
-      this._columnValueFilterChange.next();
+      this._columnValueFilterChange.next(null);
     }
   }
 
@@ -445,7 +445,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
     // If the table is paginated, filter will be applied on remote query
     if (!this.table.pageable) {
-      this._columnValueFilterChange.next();
+      this._columnValueFilterChange.next(null);
     }
   }
 

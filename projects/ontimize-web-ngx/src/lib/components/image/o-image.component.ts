@@ -1,30 +1,15 @@
-import {
-  Component,
-  ElementRef,
-  forwardRef,
-  HostBinding,
-  Inject,
-  Injector,
-  OnDestroy,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { InputConverter } from '../../decorators/input-converter';
+import { FormValueOptions } from '../../types';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormValue } from '../form/OFormValue';
 import { OFormControl } from '../input/o-form-control.class';
-import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
-} from '../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
 import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 
@@ -44,7 +29,9 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   'fullScreenButton: full-screen-button',
   // accept-file-type [string]: file types allowed on the file input, separated by ';'. Default: image/*.
   // file_extension, image/*, media_type. See https://www.w3schools.com/tags/att_input_accept.asp
-  'acceptFileType: accept-file-type'
+  'acceptFileType: accept-file-type',
+  // max-file-size [number]: maximum file size allowed, in bytes. Default: no value.
+  'maxFileSize: max-file-size'
 ];
 
 export const DEFAULT_OUTPUTS_O_IMAGE = [
@@ -65,6 +52,8 @@ export const DEFAULT_OUTPUTS_O_IMAGE = [
 export class OImageComponent extends OFormDataComponent implements OnInit, OnDestroy {
 
   public acceptFileType: string = 'image/*';
+  @InputConverter()
+  public maxFileSize: number;
   public emptyimage: string;
   public notfoundimage: string;
   public emptyicon: string;
@@ -100,7 +89,6 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     this._domSanitizer = this.injector.get(DomSanitizer);
     this._defaultSQLTypeKey = 'BASE64';
     this.dialog = this.injector.get(MatDialog);
-    this.stateCtrl = new FormControl();
   }
 
   public ngOnInit(): void {
@@ -146,8 +134,9 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     return !this.getValue() || this.getValue().length === 0;
   }
 
-  public createFormControl(): OFormControl {
-    this._fControl = super.createFormControl();
+  public createFormControl(cfg?: { value: any, disabled: boolean }, validators?: ValidatorFn[]): OFormControl {
+    this._fControl = super.createFormControl(cfg, validators);
+    this.stateCtrl = new FormControl(void 0, this.resolveValidators());
     this._fControl.fControlChildren = [this.stateCtrl];
     return this._fControl;
   }
@@ -155,16 +144,15 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   public fileChange(input): void {
     if (input.files[0]) {
       const reader = new FileReader();
-      const self = this;
       reader.addEventListener('load', event => {
         let result = event.target['result'];
-        if (result && result.length > 300 && result.substring(0, 4) === 'data') {
+        if (result && typeof (result) === 'string' && result.length > 300 && result.substring(0, 4) === 'data') {
           // Removing "data:image/*;base64,"
           result = result.substring(result.indexOf('base64') + 7);
         }
-        self.setValue(result);
-        if (self._fControl) {
-          self._fControl.markAsTouched();
+        this.setValue(result);
+        if (this._fControl) {
+          this._fControl.markAsTouched();
         }
         event.stopPropagation();
       }, false);
@@ -203,11 +191,11 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
         }
         return this._domSanitizer.bypassSecurityTrustUrl(src);
       }
-      if(this.value.value) {
+      if (this.value.value) {
         return this.value.value;
       } else {
         return this.emptyimage;
-      } 
+      }
     } else if (this.emptyimage) {
       return this.emptyimage;
     }
@@ -277,6 +265,37 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
 
   public internalFormControl(): string {
     return this.getAttribute() + '_value';
+  }
+
+  public resolveValidators(): ValidatorFn[] {
+    const validators: ValidatorFn[] = super.resolveValidators();
+    if (Util.isDefined(this.maxFileSize)) {
+      validators.push(this.maxFileSizeValidator.bind(this));
+    }
+    return validators;
+  }
+
+  public setValue(val: any, options: FormValueOptions = {}, setDirty: boolean = false): void {
+    super.setValue(val, options, setDirty);
+    if (!Util.isDefined(this.getValue()) || !this.currentFileName) {
+      this.stateCtrl.reset();
+    }
+  }
+
+  protected maxFileSizeValidator(control: FormControl): ValidationErrors {
+    if (control.value && control.value.length > 0 && Util.isDefined(this.maxFileSize)) {
+      if (!Util.isDefined(this.fileInput.nativeElement.files)) {
+        return {};
+      }
+      if (this.fileInput.nativeElement.files && !Array.from<File>(this.fileInput.nativeElement.files).every(file => file.size < this.maxFileSize)) {
+        return {
+          fileSize: {
+            maxFileSize: this.maxFileSize
+          }
+        };
+      }
+    }
+    return {};
   }
 
 }

@@ -18,6 +18,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/mat
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
+import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
@@ -110,6 +111,11 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   public ngOnInit(): void {
     this.initialize();
+    // Ensuring value in the stateCtrl 
+    // (just in case it was created with a empty value before the fControl data initialization)
+    if (!Util.isDefined(this.stateCtrl.value)) {
+      this.setStateCtrlValue();
+    }
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
@@ -120,8 +126,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     }
   }
 
-  public createFormControl(): OFormControl {
-    this._fControl = super.createFormControl();
+  public createFormControl(cfg?, validators?): OFormControl {
+    this._fControl = super.createFormControl(cfg, validators);
     this._fControl.fControlChildren = [this.stateCtrl];
     return this._fControl;
   }
@@ -134,7 +140,9 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   public setEnabled(value: boolean): void {
     super.setEnabled(value);
-    value ? this.stateCtrl.enable() : this.stateCtrl.disable();
+    if (this.stateCtrl && this.hasEnabledPermission() || this.hasVisiblePermission()) {
+      value ? this.stateCtrl.enable() : this.stateCtrl.disable();
+    }
   }
 
   public ngAfterViewInit(): void {
@@ -148,20 +156,14 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   }
 
   public getDescriptionValue(): string {
-    let descTxt = '';
-    if (this.descriptionColArray && this._currentIndex !== undefined) {
-      const self = this;
-      this.descriptionColArray.forEach((descCol, index) => {
-        const txt = self.dataArray[self._currentIndex][descCol];
-        if (txt) {
-          descTxt += txt;
-        }
-        if (index < self.descriptionColArray.length - 1) {
-          descTxt += self.separator;
-        }
-      });
+    if (!Util.isDefined(this.descriptionColArray) || !Util.isDefined(this._currentIndex)) {
+      return '';
     }
-    return descTxt;
+    if (Util.isDefined(this.renderer)) {
+      return this.renderer.getListPickerValue(this.dataArray[this._currentIndex]);
+    } else {
+      return this.getOptionDescriptionValue(this.dataArray[this._currentIndex]);
+    }
   }
 
   public onClickClear(e: Event): void {
@@ -241,7 +243,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     super.setFormValue(val, options, setDirty);
-    this.stateCtrl.setValue(this.getDescriptionValue());
+    this.setStateCtrlValue();
   }
 
   protected openDialog(): void {
@@ -274,16 +276,13 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     const result: any[] = [];
     dataArray.forEach((item, itemIndex) => {
       const newItem = Object.assign({}, item);
-      newItem._parsedVisibleColumnText = this.getOptionDescriptionValue(item);
+      if (!this.renderer) {
+        newItem._parsedVisibleColumnText = this.getOptionDescriptionValue(item);
+      }
       newItem._parsedIndex = itemIndex;
       result.push(newItem);
     });
     return result;
-  }
-
-  getRenderedValue() {
-    let descTxt = this.getDescriptionValue();
-    return this.renderer.getListPickerValue(descTxt);
   }
 
   public registerRenderer(renderer: any) {
@@ -291,4 +290,11 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.renderer.initialize();
   }
 
+  protected setStateCtrlValue() {
+    let descriptionValue = this.getDescriptionValue();
+    if (typeof descriptionValue === 'string' && descriptionValue.length === 0) {
+      descriptionValue = null;
+    }
+    this.stateCtrl.setValue(descriptionValue);
+  }
 }
