@@ -18,6 +18,8 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
+import { OServiceComponent } from '../../../components/o-service-component.class';
+import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
 import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
@@ -25,7 +27,6 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
-import { OFormLayoutTabGroup } from '../../../interfaces/o-form-layout-tab-group.interface';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -49,10 +50,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
     '[class.o-form-layout-tabgroup]': 'true'
   }
 })
-export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterViewInit, OnDestroy {
+export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, AfterViewInit, OnDestroy {
 
   public data: FormLayoutDetailComponentData[] = [];
-  public selectedTabIndex: number | null;
   public title: string;
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
@@ -61,8 +61,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
   @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
-  protected closeTabSubscription: Subscription;
-  protected tabsDirectivesSubscription: Subscription;
+  protected subscriptions: Subscription = new Subscription();
   protected router: Router;
   protected loading: boolean = false;
   protected dialogService: DialogService;
@@ -71,20 +70,21 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
   public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
 
+  protected previousSelectedIndex: number;
+
   constructor(
     protected injector: Injector,
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
-    protected elRef: ElementRef,
-    @Inject(forwardRef(() => OFormLayoutManagerComponent)) protected formLayoutManager: OFormLayoutManagerComponent
+    protected elementRef: ElementRef,
+    @Inject(forwardRef(() => OFormLayoutManagerComponent)) public formLayoutManager: OFormLayoutManagerComponent
   ) {
     this.dialogService = injector.get(DialogService);
     this.router = this.injector.get(Router);
   }
 
   ngAfterViewInit() {
-
-    this.tabsDirectivesSubscription = this.tabsDirectives.changes.subscribe(changes => {
+    this.subscriptions.add(this.tabsDirectives.changes.subscribe(changes => {
       if (this.tabsDirectives.length) {
         const tabItem = this.tabsDirectives.last;
         const tabData = this.data[tabItem.index];
@@ -92,18 +92,18 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
           this.createTabComponent(tabData, tabItem);
         }
       }
-    });
+    }));
   }
 
   ngOnDestroy() {
-    if (this.tabsDirectivesSubscription) {
-      this.tabsDirectivesSubscription.unsubscribe();
-    }
-    if (this.closeTabSubscription) {
-      this.closeTabSubscription.unsubscribe();
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
     }
   }
 
+  public get mainTabTitle(): string {
+    return (this.options.title || this.title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL');
+  }
 
   public get disableAnimation() {
     return this.options && this.options.disableAnimation;
@@ -197,37 +197,38 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
       this.onMainTabSelected.emit();
     }
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
-      if (this.state.tabsData.length > 1) {
-        if ((arg.index === this.state.tabsData.length) && Util.isDefined(this.state.selectedIndex)) {
-          this.selectedTabIndex = this.state.selectedIndex;
-          this.state = undefined;
-        }
-      } else {
+      if ((arg.index === this.state.tabsData.length) && Util.isDefined(this.state.selectedIndex)) {
+        this.tabGroup.selectedIndex = this.state.selectedIndex;
         this.state = undefined;
       }
     }
-    this.onSelectedTabChange.emit(this.data[this.selectedTabIndex - 1]);
+
+    this.onSelectedTabChange.emit({
+      data: this.data[this.tabGroup.selectedIndex - 1],
+      index: this.tabGroup.selectedIndex,
+      previousIndex: this.previousSelectedIndex
+    });
+
+    this.previousSelectedIndex = this.tabGroup.selectedIndex;
   }
 
-  closeTab(id: string) {
+  closeTab(index: number) {
     if (!this.formLayoutManager) {
       return;
     }
+    const tabData = this.data[index];
     const onCloseTabAccepted: EventEmitter<any> = new EventEmitter<any>();
-    const self = this;
-    this.closeTabSubscription = onCloseTabAccepted.asObservable().subscribe(res => {
+
+    this.subscriptions.add(onCloseTabAccepted.asObservable().subscribe(res => {
       if (res) {
-        let closedTabData;
-        for (let i = self.data.length - 1; i >= 0; i--) {
-          if (self.data[i].id === id) {
-            closedTabData = self.data.splice(i, 1)[0];
-            break;
-          }
-        }
-        self.onCloseTab.emit(closedTabData);
+        this.data.splice(index, 1);
+        this.onCloseTab.emit({
+          data: tabData,
+          index: index
+        });
       }
-    });
-    const tabData = this.data.find((item: FormLayoutDetailComponentData) => item.id === id);
+    }));
+
     if (Util.isDefined(tabData) && tabData.modified) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
@@ -246,8 +247,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
     tabData.rendered = true;
   }
 
-  getFormCacheData(idArg: string): FormLayoutDetailComponentData {
-    return this.data.filter(cacheItem => cacheItem.id === idArg)[0];
+  getFormCacheData(): FormLayoutDetailComponentData {
+    return this.data.length > 0 ? this.data[this.data.length - 1] : undefined;
   }
 
   getLastTabId(): string {
@@ -266,7 +267,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
     return route;
   }
 
-  setModifiedState(modified: boolean, id: string) {
+  setModifiedState(modified: boolean) {
+    const id = this.getLastTabId();
     for (let i = 0, len = this.data.length; i < len; i++) {
       if (this.data[i].id === id) {
         this.data[i].modified = modified;
@@ -275,8 +277,13 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
     }
   }
 
-  updateNavigation(data: any, id: string, insertionMode?: boolean) {
-    const index = this.data.findIndex((item: any) => item.id === id);
+  updateNavigation(data: any, keysValues: any, insertionMode?: boolean) {
+    let index;
+    if (insertionMode) {
+      index = this.data.findIndex((item: any) => item.insertionMode !== false);
+    } else {
+      index = this.data.findIndex((item: any) => Object.keys(keysValues).every(key => keysValues[key] == item.params[key]));
+    }
     if (index >= 0) {
       let label = this.formLayoutManager.getLabelFromData(data);
       this.tabGroup.selectedIndex = (index + 1);
@@ -303,7 +310,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
         params: data.params,
         queryParams: data.queryParams,
         urlSegments: data.urlSegments,
-        url: data.url
+        url: data.url,
+        label: data.label
       });
     });
     return {
@@ -317,14 +325,13 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
       this.state = state;
       const extras = {};
       extras[Codes.QUERY_PARAMS] = state.tabsData[0].queryParams;
-      const self = this;
       if (this.formLayoutManager) {
         this.formLayoutManager.setAsActiveFormLayoutManager();
       }
       this.router.navigate([state.tabsData[0].url], extras).then(val => {
-        if (self.data[0]) {
+        if (this.data[0]) {
           setTimeout(() => {
-            self.createTabsFromState();
+            this.createTabsFromState();
           }, 0);
         }
       });
@@ -332,13 +339,12 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
   }
 
   protected createTabsFromState() {
-    const self = this;
-    const tabComponent = self.data[0].component;
+    const tabComponent = this.data[0].component;
     this.state.tabsData.forEach((tabData: any, index: number) => {
       if (tabComponent && index > 0) {
         setTimeout(() => {
-          const newDetailData = self.createDetailComponent(tabComponent, tabData);
-          self.data.push(newDetailData);
+          const newDetailData = this.createDetailComponent(tabComponent, tabData);
+          this.data.push(newDetailData);
         }, 0);
       }
     });
@@ -352,7 +358,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
       component: component,
       url: paramsObj.url,
       id: Math.random().toString(36),
-      label: '',
+      label: paramsObj.label,
       modified: false
     };
     return newDetailComp;
@@ -375,7 +381,16 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutTabGroup, AfterV
     return Util.isDefined(this.data[0]) ? this.data[0].params : undefined;
   }
 
-  get elementRef(): ElementRef {
-    return this.elRef;
+  isMainComponent(comp: OServiceComponent): boolean {
+    const firstTab = this.elementRef.nativeElement.getElementsByTagName('mat-tab-body')[0];
+    return firstTab && comp.elementRef && firstTab.contains(comp.elementRef.nativeElement);
+  }
+
+  openDetail(detail: FormLayoutDetailComponentData) {
+    this.addTab(detail);
+  }
+
+  closeDetail() {
+    this.closeTab(this.tabGroup.selectedIndex - 1);
   }
 }

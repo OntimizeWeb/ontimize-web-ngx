@@ -10,19 +10,21 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
+import { OServiceComponent } from '../../../components/o-service-component.class';
+import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 
 @Component({
   selector: 'o-form-layout-dialog',
-  templateUrl: 'o-form-layout-dialog.component.html',
-  styleUrls: ['o-form-layout-dialog.component.scss'],
+  templateUrl: './o-form-layout-dialog.component.html',
+  styleUrls: ['./o-form-layout-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-layout-dialog]': 'true'
   }
 })
-export class OFormLayoutDialogComponent implements AfterViewInit {
+export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, AfterViewInit {
   formLayoutManager: OFormLayoutManagerComponent;
   queryParams: any;
   params: object;
@@ -65,7 +67,7 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     }
   }
 
-  updateNavigation(data: any, id: string) {
+  updateNavigation(data: any) {
     let label = this.formLayoutManager.getLabelFromData(data);
     if (label && label.length) {
       label = ': ' + label;
@@ -97,4 +99,23 @@ export class OFormLayoutDialogComponent implements AfterViewInit {
     return this.params;
   }
 
+  getFormCacheData() {
+    return this.data;
+  }
+
+  isMainComponent(comp: OServiceComponent): boolean {
+    return !comp.oFormLayoutDialog;
+  }
+
+  closeDetail() {
+    this.dialogRef.close();
+  }
+
+  getDataToStore() {
+    return null;
+  }
+
+  setModifiedState(modified: boolean) {
+
+  }
 }

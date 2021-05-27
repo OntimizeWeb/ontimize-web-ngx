@@ -11,7 +11,7 @@ export * from './form-data-type-component.interface';
 export * from './local-storage-component.interface';
 export * from './multiple-selection.interface';
 export * from './o-context-menu.interface';
-export * from './o-form-layout-tab-group.interface';
+export * from './o-form-layout-manager-mode.interface';
 export * from './o-grid-item.interface';
 export * from './o-list-item.interface';
 export * from './o-list.interface';

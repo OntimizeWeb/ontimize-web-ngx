@@ -34,7 +34,6 @@ export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
   host: {
     '[class.o-form-toolbar]': 'true'
   }
-  // providers: [{ provide: OFormComponent, useExisting: forwardRef(() => OFormComponent) }]
 })
 export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -202,10 +201,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.checkEnabledPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
-    const self = this;
     this._form.showConfirmDiscardChanges().then(val => {
       if (val) {
-        self._form.executeToolbarAction(Codes.RELOAD_ACTION);
+        this._form.executeToolbarAction(Codes.RELOAD_ACTION);
       }
     });
   }
@@ -247,15 +245,21 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public cancelOperation(): void {
-    this.onCancel.emit();
-    if (this.isDetail) {
-      this.onCloseDetail();
-    } else if (this.insertMode) {
-      this.onBack();
-    } else {
-      this.onReload();
-      this._form.setInitialMode();
-    }
+    this._form.showConfirmDiscardChanges().then(val => {
+      if (val) {
+        // ensuring editMode to false to avoid o-form canDeactivate function triggering
+        this.editMode = false;
+        this.onCancel.emit();
+        if (this.isDetail) {
+          this.onCloseDetail();
+        } else if (this.insertMode) {
+          this.onBack();
+        } else {
+          this.onReload();
+          this._form.setInitialMode();
+        }
+      }
+    });
   }
 
   public acceptOperation(): void {
@@ -350,10 +354,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
     this.editBtnEnabled = this.editBtnEnabled && !isEditableDetail;
 
-    const self = this;
     this._form.getFormCache().onCacheStateChanges.asObservable().subscribe((value: any) => {
-      if (self._form.isEditableDetail()) {
-        self.changesToSave = self._form.isInitialStateChanged();
+      if (this._form.isEditableDetail()) {
+        this.changesToSave = this._form.isInitialStateChanged();
       }
     });
   }
