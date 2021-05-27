@@ -77,7 +77,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected parentKeys: string;
   protected visibleColumns: string;
   protected descriptionColumns: string;
-  protected separator: string = Codes.SPACE_SEPARATOR;
+  public separator: string = Codes.SPACE_SEPARATOR;
   @InputConverter()
   protected queryOnInit: boolean = true;
   @InputConverter()
@@ -104,7 +104,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   public dataArray: any[] = [];
   protected colArray: string[] = [];
   protected visibleColArray: string[] = [];
-  protected descriptionColArray: string[] = [];
+  public descriptionColArray: string[] = [];
   protected dataService: OntimizeService;
   public loaderSubscription: Subscription;
   loading: boolean = false;

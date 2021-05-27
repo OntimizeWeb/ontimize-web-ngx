@@ -435,12 +435,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   public setEnabled(value: boolean): void {
     super.setEnabled(value);
-    if (this.hasVisiblePermission()) {
-      if (this._fControl && value) {
-        this._fControl.enable();
-      } else if (this._fControl) {
-        this._fControl.disable();
-      }
+    if (this._fControl && this.hasEnabledPermission() && this.hasVisiblePermission()) {
+      value ? this._fControl.enable() : this._fControl.disable();
     }
   }
 

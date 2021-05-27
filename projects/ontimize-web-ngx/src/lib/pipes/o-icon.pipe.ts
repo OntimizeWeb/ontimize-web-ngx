@@ -4,7 +4,7 @@ import { IconService } from '../services/icon.service';
 
 export interface IIconPipeArgument {
   iconPosition?: string;
-  iconColumn?: string;
+  icon: string;
 }
 
 @Pipe({

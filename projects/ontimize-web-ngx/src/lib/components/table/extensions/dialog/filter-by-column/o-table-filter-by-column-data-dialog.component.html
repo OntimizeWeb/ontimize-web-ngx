@@ -1,7 +1,8 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }}: {{ column.title | oTranslate }}</span>
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between stretch" class="dialog-list-container">
   <div fxLayout="column" class="content-wrapper" [class.content-wrapper-fixed-dimension]="getFixedDimensionClass()">
-    <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)" *ngIf="isDefaultFilter | async">
+    <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)"
+      *ngIf="isDefaultFilter | async">
       {{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}
     </mat-slide-toggle>
     <div fxFlex *ngIf="!(isCustomFilter | async);else customFilterTemplate" fxLayout="column">
@@ -10,30 +11,37 @@
         <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
         <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
       </mat-form-field>
-      <div fxLayout="row" fxLayoutAlign="space-between start">
+      <div *ngIf="(listData | async).length > 0; else emptyListData" fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="row" fxLayoutAlign="start start">
-          <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"
-            class="select-all-checkbox">
+          <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()"
+            [indeterminate]="isIndeterminate()" [disabled]="!listData" class="select-all-checkbox">
             {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
           </mat-checkbox>
           <span *ngIf="!listData" class="column-filter-empty-list">
             {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' | oTranslate }}
           </span>
-          <span *ngIf="(listData | async).length === 0" class="column-filter-empty-list">{{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' |
-            oTranslate }}</span>
         </div>
         <button type="button" mat-icon-button (click)="onClickSortValues()">
           <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
         </button>
       </div>
-      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list">
-        <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before" [selected]="record.selected"
-          [value]="record.value">
+
+      <ng-template #emptyListData>
+        <span class="column-filter-empty-list">
+          {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' | oTranslate }}
+        </span>
+      </ng-template>
+
+      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column"
+        class="select-values-list">
+        <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before"
+          [selected]="record.selected" [value]="record.value">
           <ng-container *ngIf="!column.renderer">
             {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
           </ng-container>
           <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
-            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(record.tableIndex) }"></ng-template>
+            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(record.tableIndex) }">
+          </ng-template>
         </mat-list-option>
       </mat-selection-list>
     </div>

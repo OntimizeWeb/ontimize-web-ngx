@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 
 import { IIconPipeArgument, OIconPipe } from '../../../../../pipes/o-icon.pipe';
 import { IconService } from '../../../../../services/icon.service';
@@ -27,7 +28,7 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
 
   protected componentPipe: OIconPipe;
   protected pipeArguments: IIconPipeArgument;
-  
+
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
@@ -42,18 +43,29 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
 
   initialize() {
     super.initialize();
-    if (Util.isDefined(this.iconPosition)) {
-      this.iconPosition = this.iconService.iconPosition;
-    }
 
-    if (Util.isDefined(this.iconColumn)) {
-      this.iconColumn = this.iconService.iconColumn;
-    }
-    
     this.pipeArguments = {
       iconPosition: this.iconPosition,
-      iconColumn: this.iconColumn
+      icon: undefined
     };
   }
 
+  public getComboData(record: any): string {
+    if (!Util.isDefined(record)) {
+      return '';
+    }
+    const descriptionColsValue = this.comboComponent.getOptionDescriptionValue(record);
+    return `${descriptionColsValue} ${record[this.iconColumn]}`;
+  }
+
+  public getSafeHtmlComboData(record: any): SafeHtml {
+    if (!Util.isDefined(record)) {
+      return '';
+    }
+    if (Util.isDefined(record[this.iconColumn])) {
+      this.pipeArguments.icon = record[this.iconColumn];
+    }
+    const descriptionColsValue = this.comboComponent.getOptionDescriptionValue(record);
+    return this.componentPipe.transform(descriptionColsValue, this.pipeArguments);
+  }
 }
