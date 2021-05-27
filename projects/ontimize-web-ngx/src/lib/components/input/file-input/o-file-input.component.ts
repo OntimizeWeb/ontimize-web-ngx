@@ -98,6 +98,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   @InputConverter()
   public splitUpload: boolean = true;
   public acceptFileType: string;
+  @InputConverter()
   public maxFileSize: number;
   @InputConverter()
   public maxFiles: number = -1;

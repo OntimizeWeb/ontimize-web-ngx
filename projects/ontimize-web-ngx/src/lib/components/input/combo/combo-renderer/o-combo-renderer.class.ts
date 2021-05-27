@@ -8,7 +8,7 @@ export class OComboCustomRenderer implements OnInit {
 
   public templateref: TemplateRef<any>;
   public comboComponent: OComboComponent;
-  
+
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
 
@@ -36,22 +36,26 @@ export class OComboCustomRenderer implements OnInit {
    * @param value Internal combo data
   */
 
-  public getComboData(value: any): string {
-    let parsedValue: string;
-    if (Util.isDefined(value) && Util.isDefined(value.value)) {
-      if (this.componentPipe && this.pipeArguments !== undefined && value !== undefined) {
-        if(Util.isDefined(value[this.pipeArguments["iconColumn"]])) {
-          this.pipeArguments["icon"] = value[this.pipeArguments["iconColumn"]];
-        }
-        parsedValue = this.componentPipe.transform(value.value, this.pipeArguments);
-      } else {
-        parsedValue = value.value;
-      }
-    } else {
-      console.warn("getComboData() - No value received");
+  public getComboData(record: any): string {
+    let descTxt = '';
+    if (!Util.isDefined(record)) {
+      return descTxt;
     }
-    return parsedValue;
-  }
-  
+    this.comboComponent.descriptionColArray.forEach((col, index) => {
+      if (Util.isDefined(record[col])) {
+        let value = record[col];
+        if (this.componentPipe && this.pipeArguments != null) {
+          value = this.componentPipe.transform(value, this.pipeArguments);
+        }
+        if (Util.isDefined(value)) {
+          descTxt += value;
 
+          if (index < this.comboComponent.descriptionColArray.length - 1) {
+            descTxt += this.comboComponent.separator;
+          }
+        }
+      }
+    });
+    return descTxt;
+  }
 }
