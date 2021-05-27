@@ -358,7 +358,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   autoAdjust: boolean = false;
   @InputConverter()
-  groupable: boolean = false;
+  groupable: boolean = true;
   @InputConverter()
   collapseGroupedColumns: boolean = false;
 
