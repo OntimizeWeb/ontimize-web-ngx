@@ -2753,7 +2753,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   groupHeaderClick(row: OTableGroupedRow) {
-    this.dataSource.toggleGroupByColumn(row);
+    this.dataSource.renderedData.forEach(rowGroup => {
+      if(Util.isDefined(rowGroup.level) && rowGroup.level == row.level) {
+        this.dataSource.toggleGroupByColumn(rowGroup);
+      }
+    });
   }
 
   getTextGroupRow(group: OTableGroupedRow) {

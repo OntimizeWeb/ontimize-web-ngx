@@ -6,6 +6,9 @@
   * Method `sessionExpired` from old `LoginService` has been renamed to `clearSessionData` in `AuthService`.
   * Method `redirectLogin` has been removed in class `OntimizeBaseService` and all its subclasses (`OntimizeService`, `OntimizeEEService`, `OntimizeExportService` and `OntimizeFileService`), use method `logout` from `AuthService` instead.
   * Method `redirectLogin` has been removed in class `ServiceUtils`, now it is a method of Ontimize authentication implementation in `OntimizeAuthService`.
+
+### Features
+* **o-table**: Option to group rows by column setted to true as default.
 ## 8.2.5 (2021-05-26)
 ### Features
 * **o-image**: New attribute `max-file-size`. ([d8a84c0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8a84c0)) Closes [#589](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/589)
