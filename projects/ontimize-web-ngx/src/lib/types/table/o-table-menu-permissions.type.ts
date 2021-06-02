@@ -1,4 +1,4 @@
-import { OPermissions } from './o-permissions.type';
+import { OPermissions } from '../o-permissions.type';
 
 export type OTableMenuPermissions = {
   visible: boolean;
