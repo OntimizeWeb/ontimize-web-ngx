@@ -1266,6 +1266,24 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return this.oTableOptions.visibleColumns.length;
   }
 
+  public getNumVisibleColumnsArray(): any {
+    let NumVisibleColumnsArray = new Array(this.oTableOptions.visibleColumns.length);
+    return NumVisibleColumnsArray;
+  }
+
+  // Testing
+  public getGroupingHeaderRowsArray(): any {
+    let NumVisibleColumnsArray = []
+    if(this.dataSource && this.dataSource.renderedData) {
+      this.dataSource.renderedData.forEach((element, index) => {
+        if(element.level) {
+          NumVisibleColumnsArray.push('groupHeader-'+index);  
+        }
+      });
+    }
+    return NumVisibleColumnsArray;
+  }
+
   /**
    * This method manages the call to the service
    * @param filter
@@ -2752,12 +2770,25 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !Util.isDefined(item.level);
   }
 
+  getLastGroups() {
+    // Get last groups
+    let scores = this.dataSource.renderedData;
+    const maxLevel = scores.reduce((acc, curr) => curr.level > acc ? curr.level : acc, 0);
+    const maxLevelRenderedData = scores.reduce((r, o) => o.level === maxLevel ? [...r,o] : r, []);
+    return maxLevelRenderedData.length;
+  }
+
   groupHeaderClick(row: OTableGroupedRow) {
     this.dataSource.renderedData.forEach(rowGroup => {
       if(Util.isDefined(rowGroup.level) && rowGroup.level == row.level) {
         this.dataSource.toggleGroupByColumn(rowGroup);
       }
     });
+  }
+
+  // Testing
+  aggregate(group: OTableGroupedRow) {
+    return group.level;
   }
 
   getTextGroupRow(group: OTableGroupedRow) {

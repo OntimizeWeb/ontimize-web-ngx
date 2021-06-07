@@ -240,13 +240,24 @@
 
         </ng-container>
 
-        <!-- Definition column group header -->
-        <ng-container matColumnDef="groupHeader">
-          <td mat-cell [attr.colspan]="getNumVisibleColumns()" *matCellDef="let group" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
-            <mat-icon *ngIf="group.expanded">expand_more</mat-icon>
-            <mat-icon *ngIf="!group.expanded">chevron_right</mat-icon>
-            <span>{{ getTextGroupRow(group) }}</span>
+        <!-- Definition column group header // Testing -->
+        <ng-container *ngFor="let column of getGroupingHeaderRowsArray(); let i = index" matColumnDef="{{column}}">
+          <!-- [attr.colspan]="getNumVisibleColumns()" -->
+          <!-- [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}" -->
+          <td mat-cell *matCellDef="let group" [ngStyle]="{'position': 'relative'}" style="padding-top:30px;">
+            <div *ngIf="i==0" style="position:absolute; width:100%; left:0; top:0;">
+              <mat-icon *ngIf="group.expanded">expand_more</mat-icon>
+              <mat-icon *ngIf="!group.expanded">chevron_right</mat-icon>
+              <span>{{ getTextGroupRow(group) }}</span>
+            </div>
+            <div *ngIf="i<getNumVisibleColumns()">
+              {{aggregate(group)}}
+            </div>
           </td>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+          <td mat-cell *matCellDef="let row"> {{row}} </td>
         </ng-container>
 
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
@@ -262,8 +273,12 @@
         </ng-container>
 
         <!-- Row Group header -->
-        <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"
-          [ngClass]="getClassNameGroupHeader(row)"> </tr>
+        <!-- <ng-container *ngFor="let column of getNumVisibleColumnsArray(); let i = index"> -->
+          <tr mat-row *matRowDef="let row; columns: getGroupingHeaderRowsArray(); when: isGroup" (click)="groupHeaderClick(row)"
+            [ngClass]="getClassNameGroupHeader(row)">
+          </tr>
+
+        <!-- </ng-container> -->
 
         <!-- Expanded detail row-->
         <ng-container *ngIf="hasExpandedRow()">
