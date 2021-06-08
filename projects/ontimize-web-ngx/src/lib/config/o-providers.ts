@@ -6,7 +6,7 @@ import { combineLatest } from 'rxjs';
 
 import { AppConfig, O_INPUTS_OPTIONS } from '../config/app-config';
 import { appConfigFactory } from '../services/app-config.provider';
-import { OntimizeAuthServiceProvider, OntimizeServiceProvider } from '../services/factories';
+import { ComponentStateServiceProvider, OntimizeAuthServiceProvider, OntimizeServiceProvider } from '../services/factories';
 import { LocalStorageService } from '../services/local-storage.service';
 import { NavigationService } from '../services/navigation.service';
 import { OntimizeMatIconRegistry } from '../services/ontimize-icon-registry.service';
@@ -80,6 +80,7 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   OntimizeServiceProvider,
   OntimizeServiceResponseAdapter,
   OntimizeAuthServiceProvider,
+  ComponentStateServiceProvider,
   // disabled global ripple
   { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },
   { provide: O_MAT_ERROR_OPTIONS, useValue: {} },

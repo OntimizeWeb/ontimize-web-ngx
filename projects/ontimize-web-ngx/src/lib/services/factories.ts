@@ -13,6 +13,7 @@ import { OntimizeFileService } from './ontimize/ontimize-file.service';
 import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
+import { ComponentStateService } from './state/component-state.service';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -129,11 +130,13 @@ export function authServiceFactory(injector: Injector): AuthService {
  * building with ng-packagr, so we reused the providers defined here.
  * ---------------------------------------------------------------------------------------------------- */
 
-export let OntimizeServiceProvider = { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] };
+export const OntimizeServiceProvider = { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] };
 
-export let OntimizeExportServiceProvider = { provide: OntimizeExportService, useFactory: exportServiceFactory, deps: [Injector] };
+export const OntimizeExportServiceProvider = { provide: OntimizeExportService, useFactory: exportServiceFactory, deps: [Injector] };
 
 export const OntimizeAuthServiceProvider = { provide: AuthService, useFactory: authServiceFactory, deps: [Injector] };
+
+export const ComponentStateServiceProvider = { provide: ComponentStateService, useClass: ComponentStateService, deps: [Injector] };
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
