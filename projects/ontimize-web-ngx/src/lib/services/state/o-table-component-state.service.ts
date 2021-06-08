@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { OTableComponent } from '../../components';
 import { OColumn } from '../../components/table/column/o-column.class';
+import { OTableComponent } from '../../components/table/o-table.component';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OColumnDisplay } from '../../types/table/o-column-display.type';
 import { OColumnSearchable } from '../../types/table/o-column-searchable.type';
@@ -23,9 +23,7 @@ export class OTableComponentStateService extends ComponentStateService {
     this.state =
       new TableLocalStorage(this.localStorageService.getComponentStorage(comp, comp.getRouteKey()));
 
-    // if (this.state.initialConfiguration) {
     this.state.initialConfiguration = new TableLocalStorage(this.state.initialConfiguration || {});
-    // }
   }
 
   refreshSelection() {
