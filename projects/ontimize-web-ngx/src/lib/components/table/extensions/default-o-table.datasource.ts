@@ -627,6 +627,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         return group.column[currentColumn] === valueRenderer;
       });
       group.totalCounts = rowsInGroup.length;
+      group.rows = JSON.stringify(rowsInGroup);
       const subGroup = this.getSublevel(rowsInGroup, level + 1, groupByColumns, group);
       subGroup.unshift(group);
       subGroups = subGroups.concat(subGroup);

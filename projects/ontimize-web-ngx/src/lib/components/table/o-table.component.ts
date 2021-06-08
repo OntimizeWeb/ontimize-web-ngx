@@ -1276,8 +1276,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     let NumVisibleColumnsArray = []
     if(this.dataSource && this.dataSource.renderedData) {
       this.dataSource.renderedData.forEach((element, index) => {
-        if(element.level) {
-          NumVisibleColumnsArray.push('groupHeader-'+index);  
+        if(element.level && NumVisibleColumnsArray.length < this.getNumVisibleColumns()) {
+          NumVisibleColumnsArray.push('groupHeader-'+index);
         }
       });
     }
