@@ -3,7 +3,7 @@ import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild } from '@a
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
 import { DialogService } from '../../../../../services/dialog.service';
-import { OTableConfiguration } from '../../../../../types/o-table-configuration.type';
+import { OTableConfiguration } from '../../../../../types/table/o-table-configuration.type';
 
 @Component({
   selector: 'o-table-apply-configuration-dialog',
