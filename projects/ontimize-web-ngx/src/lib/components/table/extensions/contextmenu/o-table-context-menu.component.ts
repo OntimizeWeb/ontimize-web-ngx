@@ -3,7 +3,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
-import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/o-column-value-filter.type';
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
 import { OColumn } from '../../column/o-column.class';

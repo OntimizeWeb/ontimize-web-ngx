@@ -6,8 +6,8 @@ import { map } from 'rxjs/operators';
 
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
-import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/o-column-value-filter.type';
-import { OTableGroupedRow } from '../../../types/o-table-row-group.type';
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
+import { OTableGroupedRow } from '../../../types/table/o-table-row-group.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OColumn } from '../column/o-column.class';

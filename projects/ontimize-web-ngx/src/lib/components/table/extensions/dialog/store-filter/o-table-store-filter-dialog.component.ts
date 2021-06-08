@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/c
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { OTableFiltersStatus } from '../../../../../types/o-table-filter-status.type';
+import { OTableFiltersStatus } from '../../../../../types/table/o-table-filter-status.type';
 import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
 @Component({

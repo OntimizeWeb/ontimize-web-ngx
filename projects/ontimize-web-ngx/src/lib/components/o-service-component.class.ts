@@ -13,7 +13,7 @@ import { PermissionsService } from '../services/permissions/permissions.service'
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Expression } from '../types/expression.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
-import { OTableInitializationOptions } from '../types/o-table-initialization-options.type';
+import { OTableInitializationOptions } from '../types/table/o-table-initialization-options.type';
 import { Codes } from '../util/codes';
 import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
