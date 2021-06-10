@@ -213,7 +213,7 @@ $o_table_row_padding: 24px;
       .mat-row {
         box-sizing: border-box;
         transition: background-color .2s;
-
+        position: relative;
         /* iOS Safari */
         -webkit-touch-callout: none;
         /* Safari */

@@ -1280,6 +1280,12 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           NumVisibleColumnsArray.push('groupHeader-'+index);
         }
       });
+      // Check count of groups
+      if(NumVisibleColumnsArray.length < this.getNumVisibleColumns()) {
+        for (let index = NumVisibleColumnsArray.length; index < this.getNumVisibleColumns(); index++) {
+          NumVisibleColumnsArray.push('groupHeader-'+(index + 1));
+        }
+      }
     }
     return NumVisibleColumnsArray;
   }
@@ -2486,12 +2492,13 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   public getCellAlignClass(column: OColumn): string {
     return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
   }
-
-  onTableScroll(e) {
+  
+  @HostListener('scroll', ['$event'])
+  onTableScroll(event) {
     if (this.hasScrollableContainer()) {
-      const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
-      const tableScrollHeight = e.target.scrollHeight; // length of all table
-      const scrollLocation = e.target.scrollTop; // how far user scrolled
+      const tableViewHeight = event.target.offsetHeight; // viewport: ~500px
+      const tableScrollHeight = event.target.scrollHeight; // length of all table
+      const scrollLocation = event.target.scrollTop; // how far user scrolled
 
       // If the user has scrolled within 200px of the bottom, add more data
       const buffer = 100;
@@ -2787,8 +2794,16 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   // Testing
-  aggregate(group: OTableGroupedRow) {
-    return group.level;
+  groupingAggregate(group: OTableGroupedRow, i: number) {
+    let rowsInGroup = JSON.parse(group.rows);
+    let sum: number = 0;
+    rowsInGroup.forEach(element => {
+      let currentColumn = this.colArray[i];
+      if(currentColumn == Object.keys(element)[i] && !isNaN(element[Object.keys(element)[i]])) {
+        sum = sum + element[Object.keys(element)[i]];
+      }
+    });
+    return sum > 0 ? "Sum: "+ sum : '';
   }
 
   getTextGroupRow(group: OTableGroupedRow) {

@@ -1,5 +1,5 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
-  (scroll)="onTableScroll($event)" [class.block-events]="showLoading | async" [class.o-scrollable-container]="hasScrollableContainer()">
+  (scroll)="onTableScroll($event)" [class.block-events]="showLoading | async" [class.onTableScroll]="hasScrollableContainer()">
   <div #tableToolbar *ngIf="hasControls()" class="toolbar">
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
@@ -240,18 +240,26 @@
 
         </ng-container>
 
+
         <!-- Definition column group header // Testing -->
+        <!-- ORIGINAL -->
+        <!-- <ng-container matColumnDef="groupHeader">
+          <td mat-cell [attr.colspan]="getNumVisibleColumns()" *matCellDef="let group" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
+            <mat-icon *ngIf="group.expanded">expand_more</mat-icon>
+            <mat-icon *ngIf="!group.expanded">chevron_right</mat-icon>
+            <span>{{ getTextGroupRow(group) }}</span>
+          </td>
+        </ng-container> -->
+        <!-- PAKO VERSION -->
         <ng-container *ngFor="let column of getGroupingHeaderRowsArray(); let i = index" matColumnDef="{{column}}">
-          <!-- [attr.colspan]="getNumVisibleColumns()" -->
-          <!-- [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}" -->
           <td mat-cell *matCellDef="let group" style="padding-top:30px;">
             <div *ngIf="i==0" style="position:absolute; width:100%; left:0; top:0;" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
               <mat-icon *ngIf="group.expanded">expand_more</mat-icon>
               <mat-icon *ngIf="!group.expanded">chevron_right</mat-icon>
               <span>{{ getTextGroupRow(group) }}</span>
             </div>
-            <div *ngIf="i<getNumVisibleColumns()">
-              {{aggregate(group)}}
+            <div>
+              {{groupingAggregate(group, i)}}
             </div>
           </td>
         </ng-container>
@@ -273,12 +281,13 @@
         </ng-container>
 
         <!-- Row Group header -->
-        <!-- <ng-container *ngFor="let column of getNumVisibleColumnsArray(); let i = index"> -->
-          <tr mat-row *matRowDef="let row; columns: getGroupingHeaderRowsArray(); when: isGroup" (click)="groupHeaderClick(row)"
-            [ngClass]="getClassNameGroupHeader(row)" [ngStyle]="{'position': 'relative'}">
-          </tr>
-
-        <!-- </ng-container> -->
+        <!-- ORIGINAL -->
+        <!-- <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"
+          [ngClass]="getClassNameGroupHeader(row)"> </tr> -->
+        <!-- PAKO VERSION -->
+        <tr mat-row *matRowDef="let row; columns: getGroupingHeaderRowsArray(); when: isGroup" (click)="groupHeaderClick(row)"
+          [ngClass]="getClassNameGroupHeader(row)">
+        </tr>
 
         <!-- Expanded detail row-->
         <ng-container *ngIf="hasExpandedRow()">
