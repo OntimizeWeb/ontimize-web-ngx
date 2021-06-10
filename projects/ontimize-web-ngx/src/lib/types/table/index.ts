@@ -11,4 +11,3 @@ export * from './o-table-initialization-options.type';
 export * from './o-table-menu-permissions.type';
 export * from './o-table-permissions.type';
 export * from './o-table-row-group.type';
-export * from './o-table-state.type';
