@@ -1,7 +1,5 @@
-import { EventEmitter } from '@angular/core';
-
-import { OServiceComponent } from '../components/o-service-component.class';
 import { FormLayoutDetailComponentData } from '../types/form-layout-detail-component-data.type';
+import { ILayoutManagerComponent } from './layout-manager-component.interface';
 
 export interface OFormLayoutManagerMode {
   data: any | any[];
@@ -13,7 +11,7 @@ export interface OFormLayoutManagerMode {
   updateNavigation: (data: any, keysValues: any, insertionMode?: boolean) => void;
   updateActiveData: (data: any) => void;
   getRouteOfActiveItem: () => any[];
-  isMainComponent: (comp: OServiceComponent) => boolean;
+  isMainComponent: (comp: ILayoutManagerComponent) => boolean;
   openDetail?: (detail: FormLayoutDetailComponentData) => void;
   closeDetail: () => void;
 }
