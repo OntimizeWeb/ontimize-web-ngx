@@ -1,20 +1,41 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
+import { AbstractComponentStateClass, DefaultComponentStateClass } from '../../types/table/o-component-state.class';
+import { Util } from '../../util';
 import { LocalStorageService } from '../local-storage.service';
 
 @Injectable()
-export class ComponentStateService {
+export abstract class AbstractComponentStateService<S extends AbstractComponentStateClass, C extends ILocalStorageComponent = any>{
+
   protected localStorageService: LocalStorageService;
-  protected component: ILocalStorageComponent;
-  public state: any;
+
+  protected component: C;
+  public state: S;
 
   constructor(protected injector: Injector) {
     this.localStorageService = injector.get(LocalStorageService);
   }
 
-  initialize(comp: ILocalStorageComponent) {
+  initialize(comp: C) {
     this.component = comp;
-    this.state = this.localStorageService.getComponentStorage(comp, comp.getRouteKey());
+    if (Util.isDefined(this.state)) {
+      this.initializeState(this.state);
+    }
+  }
+
+  initializeState(state: S) {
+    if (Util.isDefined(this.state)) {
+      state.setData(this.localStorageService.getComponentStorage(this.component, this.component.getRouteKey()));
+    }
+  }
+}
+
+@Injectable()
+export class DefaultComponentStateService extends AbstractComponentStateService<DefaultComponentStateClass, ILocalStorageComponent> {
+
+  initialize(comp: ILocalStorageComponent) {
+    this.state = new DefaultComponentStateClass();
+    super.initialize(comp);
   }
 }

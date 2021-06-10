@@ -2,28 +2,27 @@ import { Injectable } from '@angular/core';
 
 import { OColumn } from '../../components/table/column/o-column.class';
 import { OTableComponent } from '../../components/table/o-table.component';
-import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OColumnDisplay } from '../../types/table/o-column-display.type';
 import { OColumnSearchable } from '../../types/table/o-column-searchable.type';
 import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
-import { TableLocalStorage } from '../../types/table/o-table-state.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { ComponentStateService } from './component-state.service';
+import { AbstractComponentStateService } from './component-state.service';
+import { OTableComponentStateClass } from './o-table-component-state.class';
 
 @Injectable()
-export class OTableComponentStateService extends ComponentStateService {
+export class OTableComponentStateService extends AbstractComponentStateService<OTableComponentStateClass, OTableComponent> {
 
-  state: TableLocalStorage;
-  protected component: OTableComponent;
+  initialize(component: OTableComponent) {
+    this.state = new OTableComponentStateClass();
+    super.initialize(component);
+  }
 
-  initialize(comp: ILocalStorageComponent) {
-    this.component = comp as OTableComponent;
-    this.state =
-      new TableLocalStorage(this.localStorageService.getComponentStorage(comp, comp.getRouteKey()));
-
-    this.state.initialConfiguration = new TableLocalStorage(this.state.initialConfiguration || {});
+  initializeState(state: OTableComponentStateClass) {
+    super.initializeState(state);
+    state.initialConfiguration = new OTableComponentStateClass();
+    state.initialConfiguration.setData(this.state.initialConfiguration || {});
   }
 
   refreshSelection() {
