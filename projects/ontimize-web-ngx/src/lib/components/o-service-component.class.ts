@@ -6,10 +6,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
 import { BooleanConverter, InputConverter } from '../decorators/input-converter';
+import { IServiceDataComponent } from '../interfaces/service-data-component.interface';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService } from '../services/navigation.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
+import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/component-state.service';
+import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Expression } from '../types/expression.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
@@ -18,7 +21,7 @@ import { Codes } from '../util/codes';
 import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
-import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
+import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -80,7 +83,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'quickFilter: quick-filter',
 ];
 
-export class OServiceComponent extends OServiceBaseComponent {
+export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
+  extends AbstractOServiceBaseComponent<T>
+  implements IServiceDataComponent {
 
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
@@ -390,7 +395,7 @@ export class OServiceComponent extends OServiceBaseComponent {
         queryMethod: this.pageable ? this.paginatedQueryMethod : this.queryMethod,
         totalRecordsNumber: this.getTotalRecordsNumber(),
         queryRows: this.queryRows,
-        queryRecordOffset: Math.max(this.state.queryRecordOffset - this.queryRows, 0)
+        queryRecordOffset: Math.max(this.state['queryRecordOffset'] - this.queryRows, 0)
       }, result);
     }
     return result;
@@ -562,10 +567,10 @@ export class OServiceComponent extends OServiceBaseComponent {
     this.quickFilterComponent = quickFilter;
     if (Util.isDefined(this.quickFilterComponent)) {
       if (this.state.hasOwnProperty('filterValue')) {
-        this.quickFilterComponent.setValue(this.state.filterValue);
+        this.quickFilterComponent.setValue(this.state['filterValue']);
       }
       if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
-        const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
+        const parsedArr = Util.parseArray(this.state['quickFilterActiveColumns'], true);
         this.quickFilterComponent.setActiveColumns(parsedArr);
       }
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
@@ -612,4 +617,9 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
     return result;
   }
+}
+
+/*This class is definied to mantain bacwards compatibility */
+export class OServiceComponent extends AbstractOServiceComponent<DefaultComponentStateService> {
+
 }

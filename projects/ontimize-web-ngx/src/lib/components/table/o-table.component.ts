@@ -31,7 +31,6 @@ import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rx
 import { map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
-import { ServiceResponse } from '../../interfaces';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
@@ -41,9 +40,11 @@ import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
-import { ComponentStateService } from '../../services/state/component-state.service';
+import { AbstractComponentStateService } from '../../services/state/component-state.service';
+import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
@@ -58,7 +59,6 @@ import { OTableInitializationOptions } from '../../types/table/o-table-initializ
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
 import { OTableGroupedRow } from '../../types/table/o-table-row-group.type';
-import { TableLocalStorage } from '../../types/table/o-table-state.type';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
@@ -68,9 +68,9 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
-import { OBaseTableCellRenderer } from './column';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
+import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
@@ -214,7 +214,7 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   providers: [
     OntimizeServiceProvider,
     OTableDataSourceService,
-    { provide: ComponentStateService, useClass: OTableComponentStateService }
+    { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] }
   ],
   animations: [
     trigger('detailExpand', [
@@ -235,7 +235,7 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
     '(document:click)': 'handleDOMClick($event)'
   }
 })
-export class OTableComponent extends OServiceComponent implements OnInit, OnDestroy, AfterViewInit {
+export class OTableComponent extends AbstractOServiceComponent<OTableComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
@@ -566,8 +566,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this._isColumnFiltersActive = val;
   }
 
-  componentStateService: OTableComponentStateService;
-
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -592,7 +590,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.snackBarService = this.injector.get(SnackBarService);
   }
 
-  get state(): TableLocalStorage {
+  get state(): OTableComponentStateClass {
     return this.componentStateService.state;
   }
 
@@ -2306,7 +2304,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     return !Util.isDefined(value) || ((typeof value === 'string') && !value);
   }
 
-  setFiltersConfiguration(storage: TableLocalStorage = this.state) {
+  setFiltersConfiguration(storage: OTableComponentStateClass = this.state) {
     /*
       Checking the original filterCaseSensitive with the filterCaseSensitive in initial configuration in local storage
       if filterCaseSensitive in initial configuration is equals to original filterCaseSensitive input

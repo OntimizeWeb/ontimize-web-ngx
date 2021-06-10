@@ -8,7 +8,8 @@ import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
-import { ComponentStateService } from '../services/state/component-state.service';
+import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/component-state.service';
+import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
@@ -84,10 +85,10 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
-export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges {
+export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>> implements ILocalStorageComponent, OnChanges {
 
   protected localStorageService: LocalStorageService;
-  componentStateService: ComponentStateService;
+  componentStateService: T;
   protected dialogService: DialogService;
 
   /* inputs variables */
@@ -178,7 +179,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
-    this.componentStateService = this.injector.get(ComponentStateService);
+    this.componentStateService = this.injector.get(AbstractComponentStateService);
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
     try {
@@ -499,7 +500,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
 
     let queryArguments = [compFilter, queryCols, this.entity, sqlTypes];
     if (this.pageable) {
-      const queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
+      const queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state['queryRecordOffset'];
       const queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
       queryArguments = queryArguments.concat([queryOffset, queryRowsN, undefined]);
     }
@@ -509,15 +510,15 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   updatePaginationInfo(queryRes: ServiceResponse) {
     const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
     if (queryRes.startRecordIndex !== undefined) {
-      this.state.queryRecordOffset = resultEndIndex;
+      this.state['queryRecordOffset'] = resultEndIndex;
     }
     if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
+      this.state['totalQueryRecordsNumber'] = queryRes.totalQueryRecordsNumber;
     }
   }
 
   getTotalRecordsNumber(): number {
-    return (this.state && this.state.totalQueryRecordsNumber !== undefined) ? this.state.totalQueryRecordsNumber : undefined;
+    return (this.state && this.state['totalQueryRecordsNumber'] !== undefined) ? this.state['totalQueryRecordsNumber'] : undefined;
   }
 
   getContextComponent() {
@@ -549,5 +550,15 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
     //
   }
+
+}
+
+
+export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
+
+}
+
+/* This class is being defined to mantain the backwards compatibility with previous versions, use DefaultOServiceBaseComponent*/
+export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
 
 }

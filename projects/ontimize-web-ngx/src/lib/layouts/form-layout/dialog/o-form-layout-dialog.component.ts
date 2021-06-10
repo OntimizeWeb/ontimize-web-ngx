@@ -6,11 +6,11 @@ import {
   Inject,
   Injector,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { OServiceComponent } from '../../../components/o-service-component.class';
+import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
@@ -103,7 +103,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     return this.data;
   }
 
-  isMainComponent(comp: OServiceComponent): boolean {
+  isMainComponent(comp: ILayoutManagerComponent): boolean {
     return !comp.oFormLayoutDialog;
   }
 

@@ -23,6 +23,8 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
 import { OntimizeServiceProvider } from '../../services/factories';
+import { AbstractComponentStateService } from '../../services/state/component-state.service';
+import { AbstractComponentStateClass } from '../../services/state/o-component-state.class';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -31,7 +33,7 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
 export const DEFAULT_INPUTS_O_LIST = [
@@ -85,7 +87,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
     '[class.o-list]': 'true'
   }
 })
-export class OListComponent extends OServiceComponent implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
+export class OListComponent extends AbstractOServiceComponent<AbstractComponentStateService<AbstractComponentStateClass>> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
   public listItemComponents: IListItem[] = [];
 
@@ -138,6 +140,10 @@ export class OListComponent extends OServiceComponent implements IList, AfterCon
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
+  }
+
+  get state(): any {
+    return this.componentStateService.state;
   }
 
   public ngOnInit(): void {

@@ -22,6 +22,8 @@ import { Subscription } from 'rxjs';
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { OntimizeServiceProvider } from '../../services/factories';
+import { AbstractComponentStateService } from '../../services/state/component-state.service';
+import { AbstractComponentStateClass } from '../../services/state/o-component-state.class';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
@@ -29,7 +31,7 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
@@ -90,10 +92,10 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
     '[class.o-grid-fixed]': 'fixedHeader',
   }
 })
-export class OGridComponent extends OServiceComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
+export class OGridComponent extends AbstractOServiceComponent<AbstractComponentStateService<AbstractComponentStateClass>> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
 
   /* Inputs */
-  public queryRows: number = 32;
+  protected _queryRows = 32;
 
   @InputConverter()
   public fixedHeader: boolean = false;
@@ -283,7 +285,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
   public reloadData(): void {
     let queryArgs: OQueryDataArgs = {};
     if (this.pageable) {
-      this.state.queryRecordOffset = 0;
+      this.state['queryRecordOffset'] = 0;
       queryArgs = {
         offset: this.paginationControls ? (this.currentPage * this.queryRows) : 0,
         length: Math.max(this.queryRows, this.dataResponseArray.length),
@@ -319,7 +321,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
   public filterData(value?: string, loadMore?: boolean): void {
     value = Util.isDefined(value) ? value : Util.isDefined(this.quickFilterComponent) ? this.quickFilterComponent.getValue() : void 0;
     if (this.state && Util.isDefined(value)) {
-      this.state.filterValue = value;
+      this.state['filterValue'] = value;
     }
     if (this.pageable) {
       const queryArgs: OQueryDataArgs = {
@@ -409,7 +411,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
     this.currentPage += 1;
     if (this.pageable) {
       const queryArgs: OQueryDataArgs = {
-        offset: this.state.queryRecordOffset,
+        offset: this.state['queryRecordOffset'],
         length: this.queryRows
       };
       this.queryData(void 0, queryArgs);
@@ -467,8 +469,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
       this.filterData();
       return;
     }
-    const tableState = this.state;
-
     const goingBack = e.pageIndex < this.currentPage;
     this.currentPage = e.pageIndex;
     const pageSize = e.pageSize;
@@ -484,8 +484,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
       newStartRecord = (this.currentPage * this.queryRows);
       queryLength = this.queryRows;
     } else {
-      newStartRecord = Math.max(tableState.queryRecordOffset, (this.currentPage * this.queryRows));
-      const newEndRecord = Math.min(newStartRecord + this.queryRows, tableState.totalQueryRecordsNumber);
+      newStartRecord = Math.max(this.state['queryRecordOffset'], (this.currentPage * this.queryRows));
+      const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state['totalQueryRecordsNumber']);
       queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
     }
 
@@ -502,8 +502,8 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
 
     if (this.storePaginationState) {
       dataToStore['queryRecordOffset'] = Math.max(
-        (this.state.queryRecordOffset - this.dataArray.length),
-        (this.state.queryRecordOffset - this.queryRows)
+        (this.state['queryRecordOffset'] - this.dataArray.length),
+        (this.state['queryRecordOffset'] - this.queryRows)
       );
     } else {
       delete dataToStore['queryRecordOffset'];
@@ -528,7 +528,7 @@ export class OGridComponent extends OServiceComponent implements AfterViewInit, 
     return result;
   }
 
-  public add():void {
+  public add(): void {
     super.insertDetail();
   }
 
