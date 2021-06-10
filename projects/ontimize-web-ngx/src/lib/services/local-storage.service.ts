@@ -37,7 +37,7 @@ export class LocalStorageService {
     });
   }
 
-  getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): object {
+  getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): any {
     const componentKey = comp.getComponentKey();
     let completeKey = componentKey;
     if (routeKey) {
