@@ -21,8 +21,9 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
 
   initializeState(state: OTableComponentStateClass) {
     super.initializeState(state);
+    const initialConfigurationRawObj = state.initialConfiguration || {};
     state.initialConfiguration = new OTableComponentStateClass();
-    state.initialConfiguration.setData(this.state.initialConfiguration || {});
+    state.initialConfiguration.setData(initialConfigurationRawObj);
   }
 
   refreshSelection() {
