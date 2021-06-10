@@ -102,14 +102,6 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     }
   }
 
-  // set state(arg: any) {
-  //   this._state = arg;
-  //   if (Util.isDefined(arg)) {
-  //     this.showLoading.next(true);
-  //   } else {
-  //     this.showLoading.next(false);
-  //   }
-  // }
 
   getFormCacheData(): FormLayoutDetailComponentData {
     return this.data;
