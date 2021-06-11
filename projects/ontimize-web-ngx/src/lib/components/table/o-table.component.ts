@@ -1121,9 +1121,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected insideTabBugWorkaround() {
-    this.sortHeaders.forEach(sortH => {
-      sortH.refresh();
-    });
+    this.refreshSortHeaders();
   }
 
   registerSortListener() {
@@ -2360,7 +2358,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.initializeParams();
     this.parseVisibleColumns();
     this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
-    this.insideTabBugWorkaround();
+    this.reinitializeSortColumns();
     this.onReinitialize.emit(null);
     this.clearFilters(false);
     this.reloadData();
@@ -2374,7 +2372,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       properties.forEach(property => {
         switch (property) {
           case 'sort-columns':
-            this.parseSortColumns();
+            this.reinitializeSortColumns();
             break;
           case 'oColumns-display':
             this.parseVisibleColumns();
@@ -2766,5 +2764,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   storeFilterInState(arg: OTableFiltersStatus) {
     this.componentStateService.storeFilter(arg);
+  }
+
+  protected reinitializeSortColumns() {
+    this.parseSortColumns();
+    this.sort.setSortColumns(this.sortColArray);
+    this.refreshSortHeaders();
+  }
+
+  protected refreshSortHeaders() {
+    this.sortHeaders.forEach(sortH => sortH.refresh());
   }
 }
