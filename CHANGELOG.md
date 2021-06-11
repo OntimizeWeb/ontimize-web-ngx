@@ -45,6 +45,9 @@
   </o-form-layout-manager>
   ```  
 
+### Bug Fixes
+* **o-table**: fixing header sort bug ([794210d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794210d)) Closes [#629](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/629)
+ 
 ## 8.2.5 (2021-05-26)
 ### Features
 * **o-image**: New attribute `max-file-size`. ([d8a84c0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8a84c0)) Closes [#589](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/589)
