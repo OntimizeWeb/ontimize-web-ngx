@@ -18,6 +18,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
 import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
@@ -75,7 +76,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     this.router = this.injector.get(Router);
   }
 
-  get state(): any {
+  get state(): OFormLayoutManagerComponentStateClass {
     return this.formLayoutManager.state;
   }
 
@@ -134,7 +135,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     }
   }
 
-  getDataToStore(): object {
+  getDataToStore(): any {
     return this.data;
   }
 
@@ -145,12 +146,13 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
   initializeComponentState() {
     this.showLoading.next(true);
     if (Util.isDefined(this.state) && Object.keys(this.state).length > 0) {
-      const extras = {};
-      extras[Codes.QUERY_PARAMS] = this.state.queryParams;
       if (this.formLayoutManager) {
         this.formLayoutManager.setAsActiveFormLayoutManager();
       }
       if (Util.isDefined(this.state.url)) {
+        const extras = {};
+        extras[Codes.QUERY_PARAMS] = this.state.queryParams;
+
         this.router.navigate([this.state.url], extras).then(() => {
           this.showLoading.next(false);
         });

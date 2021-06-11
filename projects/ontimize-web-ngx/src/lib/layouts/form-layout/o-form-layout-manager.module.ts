@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ResizableModule } from 'angular-resizable-element';
+import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
@@ -36,7 +37,9 @@ import { OFormLayoutTabGroupOptionsDirective } from './tabgroup/options/o-form-l
   providers: [{
     provide: CanActivateFormLayoutChildGuard,
     useClass: CanActivateFormLayoutChildGuard
-  }],
+  },
+    OFormLayoutManagerComponentStateService
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OFormLayoutManagerModule { }

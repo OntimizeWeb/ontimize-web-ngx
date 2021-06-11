@@ -22,6 +22,7 @@ import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-comp
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
+import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
 import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
@@ -82,7 +83,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.router = this.injector.get(Router);
   }
 
-  get state(): any {
+  get state(): OFormLayoutManagerComponentStateClass {
     return this.formLayoutManager.state;
   }
 
@@ -313,7 +314,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
   }
 
-  getDataToStore(): object {
+  getDataToStore(): any {
     const tabsData = [];
     this.data.forEach((data: FormLayoutDetailComponentData) => {
       tabsData.push({

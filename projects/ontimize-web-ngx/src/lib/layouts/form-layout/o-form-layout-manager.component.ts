@@ -22,8 +22,9 @@ import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-m
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
-import { AbstractComponentStateService } from '../../services/state/component-state.service';
-import { AbstractComponentStateClass } from '../../services/state/o-component-state.class';
+import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-form-layout-manager-component-state.class';
+import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
 import { Util } from '../../util/util';
@@ -68,6 +69,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,
   templateUrl: './o-form-layout-manager.component.html',
   styleUrls: ['./o-form-layout-manager.component.scss'],
+  providers: [
+    { provide: AbstractComponentStateService, useClass: OFormLayoutManagerComponentStateService, deps: [Injector] }
+  ],
   host: {
     '[class.o-form-layout-manager]': 'true'
   }
@@ -223,7 +227,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   protected subscription: Subscription = new Subscription();
 
-  protected componentStateService: AbstractComponentStateService<AbstractComponentStateClass, OFormLayoutManagerComponent>;
+  protected componentStateService: OFormLayoutManagerComponentStateService;
 
   constructor(
     protected injector: Injector,
@@ -238,7 +242,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     this.localStorageService = this.injector.get(LocalStorageService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
-    this.componentStateService = this.injector.get(AbstractComponentStateService);
+    this.componentStateService = this.injector.get(OFormLayoutManagerComponentStateService);
     if (this.storeState) {
       this.subscription.add(this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
@@ -246,7 +250,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
   }
 
-  get state() {
+  get state(): OFormLayoutManagerComponentStateClass {
     return this.componentStateService.state;
   }
 
@@ -297,7 +301,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return route;
   }
 
-  public getDataToStore(): object {
+  public getDataToStore(): any {
     const compRef = this.getLayoutModeComponent();
     return Util.isDefined(compRef) ? compRef.getDataToStore() : {};
   }
