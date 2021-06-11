@@ -11,8 +11,8 @@ import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService } from '../services/navigation.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
-import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/component-state.service';
 import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
+import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Expression } from '../types/expression.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
@@ -395,7 +395,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
         queryMethod: this.pageable ? this.paginatedQueryMethod : this.queryMethod,
         totalRecordsNumber: this.getTotalRecordsNumber(),
         queryRows: this.queryRows,
-        queryRecordOffset: Math.max(this.state['queryRecordOffset'] - this.queryRows, 0)
+        queryRecordOffset: Math.max(this.state.queryRecordOffset - this.queryRows, 0)
       }, result);
     }
     return result;
@@ -566,8 +566,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     }
     this.quickFilterComponent = quickFilter;
     if (Util.isDefined(this.quickFilterComponent)) {
-      if (this.state.hasOwnProperty('filterValue')) {
-        this.quickFilterComponent.setValue(this.state['filterValue']);
+      if (Util.isDefined(this.state.quickFilterValue)) {
+        this.quickFilterComponent.setValue(this.state.quickFilterValue);
       }
       if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
         const parsedArr = Util.parseArray(this.state['quickFilterActiveColumns'], true);

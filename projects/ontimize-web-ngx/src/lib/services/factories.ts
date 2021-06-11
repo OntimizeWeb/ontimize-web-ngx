@@ -13,7 +13,7 @@ import { OntimizeFileService } from './ontimize/ontimize-file.service';
 import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
-import { AbstractComponentStateService, DefaultComponentStateService } from './state/component-state.service';
+import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------

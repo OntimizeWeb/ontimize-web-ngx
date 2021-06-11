@@ -16,7 +16,6 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   protected 'oColumns-display': OColumnDisplay[];
   protected 'select-column-visible': boolean;
   // quick-filter
-  protected 'filter-case-sensitive': boolean;
   protected 'filter': string;
   protected 'oColumns': OColumnSearchable[];
   // columns-filter
@@ -24,8 +23,6 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   // page
   protected 'query-rows': number;
   'currentPage': number;
-  'totalQueryRecordsNumber': number;
-  'queryRecordOffset': number;
   // selection
   'selection': any[];
   // initial-configuration
@@ -47,14 +44,6 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
 
   set selectColumnVisible(value: boolean) {
     this['select-column-visible'] = value;
-  }
-
-  get filterCaseSensitive(): boolean {
-    return this['filter-case-sensitive'];
-  }
-
-  set filterCaseSensitive(value: boolean) {
-    this['filter-case-sensitive'] = value;
   }
 
   get quickFilterValue(): string {

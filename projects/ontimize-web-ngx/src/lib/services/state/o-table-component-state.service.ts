@@ -8,7 +8,7 @@ import { OTableConfiguration } from '../../types/table/o-table-configuration.typ
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { AbstractComponentStateService } from './component-state.service';
+import { AbstractComponentStateService } from './o-component-state.service';
 import { OTableComponentStateClass } from './o-table-component-state.class';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
     this.state['selection'] = this.getSelectionState();
   }
 
-  getDataToStore(): any { // tablestate
+  getDataToStore(): any {
     const dataToStore: any = {};
     const propertiesKeys = [
       'sort-columns',

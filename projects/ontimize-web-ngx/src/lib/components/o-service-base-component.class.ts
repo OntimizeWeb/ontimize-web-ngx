@@ -8,8 +8,8 @@ import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
-import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/component-state.service';
 import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
+import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
@@ -195,7 +195,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
   }
 
-  get state() {
+  get state(): AbstractComponentStateClass {
     return this.componentStateService.state;
   }
 
@@ -307,7 +307,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     return this.getAttribute();
   }
 
-  getDataToStore(): object {
+  getDataToStore(): any {
     return this.state;
   }
 
@@ -510,15 +510,15 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   updatePaginationInfo(queryRes: ServiceResponse) {
     const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
     if (queryRes.startRecordIndex !== undefined) {
-      this.state['queryRecordOffset'] = resultEndIndex;
+      this.state.queryRecordOffset = resultEndIndex;
     }
     if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.state['totalQueryRecordsNumber'] = queryRes.totalQueryRecordsNumber;
+      this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
     }
   }
 
   getTotalRecordsNumber(): number {
-    return (this.state && this.state['totalQueryRecordsNumber'] !== undefined) ? this.state['totalQueryRecordsNumber'] : undefined;
+    return Util.isDefined(this.state.totalQueryRecordsNumber) ? this.state.totalQueryRecordsNumber : undefined;
   }
 
   getContextComponent() {

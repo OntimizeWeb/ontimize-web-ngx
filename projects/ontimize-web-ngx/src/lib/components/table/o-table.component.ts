@@ -43,7 +43,7 @@ import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interfac
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
-import { AbstractComponentStateService } from '../../services/state/component-state.service';
+import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
 import { Expression } from '../../types/expression.type';
@@ -318,6 +318,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   get filterCaseSensitive(): boolean {
+    this.state
     return this._filterCaseSensitive;
   }
 
@@ -2332,7 +2333,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(storage['filter']);
-      storage['oColumns'] || [].forEach((oColData: any) => {
+      (storage['oColumns'] || []).forEach((oColData: any) => {
         const oCol = this.getOColumn(oColData.attr);
         if (oCol) {
           if (oColData.hasOwnProperty('searching')) {

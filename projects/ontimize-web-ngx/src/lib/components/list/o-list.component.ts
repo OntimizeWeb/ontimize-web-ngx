@@ -23,8 +23,9 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
 import { OntimizeServiceProvider } from '../../services/factories';
-import { AbstractComponentStateService } from '../../services/state/component-state.service';
-import { AbstractComponentStateClass } from '../../services/state/o-component-state.class';
+import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
+import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -76,7 +77,8 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 @Component({
   selector: 'o-list',
   providers: [
-    OntimizeServiceProvider
+    OntimizeServiceProvider,
+    { provide: AbstractComponentStateService, useClass: OListComponentStateService, deps: [Injector] }
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,
@@ -87,7 +89,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
     '[class.o-list]': 'true'
   }
 })
-export class OListComponent extends AbstractOServiceComponent<AbstractComponentStateService<AbstractComponentStateClass>> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
+export class OListComponent extends AbstractOServiceComponent<OListComponentStateService> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
   public listItemComponents: IListItem[] = [];
 
@@ -131,7 +133,7 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
   public enabledDeleteButton: boolean = false;
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   protected dataResponseArray: any[] = [];
-  protected storePaginationState: boolean = false;
+  public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
 
   constructor(
@@ -142,7 +144,7 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
     super(injector, elRef, form);
   }
 
-  get state(): any {
+  get state(): OListComponentStateClass {
     return this.componentStateService.state;
   }
 
@@ -153,11 +155,10 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
 
   public ngAfterViewInit(): void {
     super.afterViewInit();
-    this.filterCaseSensitive = this.state.hasOwnProperty('filter-case-sensitive') ?
-      this.state['filter-case-sensitive'] : this.filterCaseSensitive;
-    if (Util.isDefined(this.searchInputComponent)) {
-      this.registerQuickFilter(this.searchInputComponent);
-    }
+    this.filterCaseSensitive = Util.isDefined(this.state.filterCaseSensitive) ?
+      this.state.filterCaseSensitive :
+      this.filterCaseSensitive
+    this.registerQuickFilter(this.searchInputComponent);
   }
 
   public ngAfterContentInit(): void {
@@ -173,8 +174,9 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
     if (changes.staticData !== undefined) {
       this.dataResponseArray = changes.staticData.currentValue;
-      const filter = (this.state && this.state.filterValue) ? this.state.filterValue : undefined;
-      this.filterData(filter);
+      if (Util.isDefined(this.state)) {
+        this.filterData(this.state.quickFilterValue);
+      }
     }
   }
 
@@ -193,11 +195,11 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
     }
     this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     let initialQueryLength: number;
-    if (this.state.hasOwnProperty('queryRecordOffset')) {
+    if (Util.isDefined(this.state.queryRecordOffset)) {
       initialQueryLength = this.state.queryRecordOffset;
     }
     this.state.queryRecordOffset = 0;
-    if (!this.state.hasOwnProperty('totalQueryRecordsNumber')) {
+    if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
     if (this.queryOnInit) {
@@ -246,16 +248,8 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
     ObservableWrapper.callEmit(this.onDoubleClick, data);
   }
 
-  public getDataToStore(): object {
-    const dataToStore = super.getDataToStore();
-    if (!this.storePaginationState) {
-      delete dataToStore['queryRecordOffset'];
-    }
-    if (this.quickFilter && Util.isDefined(this.quickFilterComponent)) {
-      dataToStore['quickFilterActiveColumns'] = this.quickFilterComponent.getActiveColumns().join(Codes.ARRAY_INPUT_SEPARATOR);
-    }
-    dataToStore['filter-case-sensitive'] = this.isFilterCaseSensitive();
-    return dataToStore;
+  getDataToStore() {
+    return this.componentStateService.getDataToStore();
   }
 
   public reloadData(): void {
@@ -286,7 +280,7 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
    */
   public filterData(value: string, loadMore?: boolean): void {
     if (this.state) {
-      this.state.filterValue = value;
+      this.state.quickFilterValue = value;
     }
     if (this.pageable) {
       const queryArgs: OQueryDataArgs = {
@@ -371,7 +365,7 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
   }
 
   public parseSortColumns(): void {
-    const sortColumnsParam = this.state['sort-columns'] || this.sortColumns;
+    const sortColumnsParam = this.state.sortColumns || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
   }
 
@@ -418,7 +412,7 @@ export class OListComponent extends AbstractOServiceComponent<AbstractComponentS
       }
       this.dataResponseArray = respDataArray;
       if (!this.pageable) {
-        this.filterData(this.state.filterValue);
+        this.filterData(this.state.quickFilterValue);
       } else {
         this.setDataArray(this.dataResponseArray);
       }
