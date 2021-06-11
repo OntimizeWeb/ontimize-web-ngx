@@ -2214,9 +2214,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const oldQueryRows = this.queryRows;
     const changingPageSize = (oldQueryRows !== pageSize);
     this.queryRows = pageSize;
+    this.paginator.pageSize = pageSize;
 
-    let newStartRecord;
-    let queryLength;
+    let newStartRecord: number;
+    let queryLength: number;
 
     if (goingBack || changingPageSize) {
       newStartRecord = (this.currentPage * this.queryRows);
