@@ -24,16 +24,16 @@ export class OBaseTablePaginator implements OTablePaginator {
     this._pageIndex = value;
   }
 
-  get pageSizeOptions(): Array<any> {
+  get pageSizeOptions(): number[] {
     return this._pageSizeOptions;
   }
 
-  set pageSizeOptions(value: Array<any>) {
-    if (typeof value == 'string') {
-      this._pageSizeOptions = Util.parseArray(value, true);
-    } else {
-      this._pageSizeOptions = value
+  set pageSizeOptions(value: number[]) {
+    if (typeof value === 'string') {
+      const opts = Util.parseArray(value, true);
+      value = opts.map(o => parseInt(o, 10)).filter(o => !isNaN(o));
     }
+    this._pageSizeOptions = value;
   }
 
   get pageSize(): number {
