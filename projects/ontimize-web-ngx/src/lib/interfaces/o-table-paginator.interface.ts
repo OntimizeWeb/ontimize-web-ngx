@@ -1,7 +1,7 @@
 export interface OTablePaginator {
   pageIndex: number;
   pageSize: number;
-  pageSizeOptions: any[];
+  pageSizeOptions: number[];
   showFirstLastButtons: boolean;
 
   isShowingAllRows: (arg: any) => boolean;

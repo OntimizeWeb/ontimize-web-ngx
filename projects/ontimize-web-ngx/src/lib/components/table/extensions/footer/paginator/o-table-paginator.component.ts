@@ -21,10 +21,6 @@ export const DEFAULT_PAGINATOR_TABLE = [
 })
 export class OTablePaginatorComponent extends OBaseTablePaginator implements OTablePaginator, OnInit {
 
-  protected _pageIndex: number = 0;
-  protected _pageSize: number = 10;
-  protected _pageSizeOptions: Array<any>;
-
   @InputConverter()
   showFirstLastButtons: boolean = true;
 
@@ -33,12 +29,13 @@ export class OTablePaginatorComponent extends OBaseTablePaginator implements OTa
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
     super();
-    this.pageSize = this.table.queryRows;
-    this.pageIndex = this.table.currentPage;
-    this.showFirstLastButtons = this.table.showPaginatorFirstLastButtons;
   }
 
   ngOnInit() {
+    this.pageSize = this.table.queryRows;
+    this.pageIndex = this.table.currentPage;
+    this.showFirstLastButtons = this.table.showPaginatorFirstLastButtons;
+
     this.table.registerPagination(this);
   }
 

@@ -70,9 +70,7 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import {
-  OTableFilterByColumnDataDialogComponent
-} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
@@ -81,10 +79,7 @@ import { OTableOptionComponent } from './extensions/header/table-option/o-table-
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableStorage } from './extensions/o-table-storage.class';
 import { OTableDao } from './extensions/o-table.dao';
-import {
-  OTableRowExpandableComponent,
-  OTableRowExpandedChange
-} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
@@ -1143,7 +1138,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
 
-    if(this.sortColumns && this.staticData) {
+    if (this.sortColumns && this.staticData) {
       this.loadingSortingSubject.next(true);
       this.cd.detectChanges();
     }
@@ -1206,7 +1201,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param event
    */
   public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
-    if(event) {
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
@@ -1812,9 +1807,8 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         });
       }
 
-
-      const asyncAndVisible = self.asyncLoadColumns.filter(c => self._oTableOptions.visibleColumns.indexOf(c) !== -1);
-      if (self.asyncLoadColumns.length && asyncAndVisible.length > 0 && !self.finishQuerySubscription) {
+      const hasAsyncAndVisibleCols = this.asyncLoadColumns.some(c => this._oTableOptions.visibleColumns.includes(c));
+      if (self.asyncLoadColumns.length && hasAsyncAndVisibleCols && !self.finishQuerySubscription) {
         self.queryRowAsyncData(index, item);
         if (self.paginator && index === (self.paginator.pageSize - 1)) {
           self.finishQuerySubscription = true;
@@ -2220,9 +2214,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const oldQueryRows = this.queryRows;
     const changingPageSize = (oldQueryRows !== pageSize);
     this.queryRows = pageSize;
+    this.paginator.pageSize = pageSize;
 
-    let newStartRecord;
-    let queryLength;
+    let newStartRecord: number;
+    let queryLength: number;
 
     if (goingBack || changingPageSize) {
       newStartRecord = (this.currentPage * this.queryRows);
