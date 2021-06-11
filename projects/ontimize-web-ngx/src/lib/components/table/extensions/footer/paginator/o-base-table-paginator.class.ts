@@ -5,13 +5,8 @@ export class OBaseTablePaginator implements OTablePaginator {
 
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;
-  protected _pageSizeOptions: Array<any>;
+  protected _pageSizeOptions: number[] = [10, 25, 50, 100];
   showFirstLastButtons: boolean = true;
-
-  constructor() {
-    this._pageIndex = 0;
-    this._pageSizeOptions = [10, 25, 50, 100];
-  }
 
   get pageLenght(): number {
     return this._pageSize;
@@ -64,4 +59,5 @@ export class OBaseTablePaginator implements OTablePaginator {
     // temporal while not having an option for showing all records in paginated tables
     return false;
   }
+
 }
