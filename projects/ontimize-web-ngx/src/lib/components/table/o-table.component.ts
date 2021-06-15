@@ -65,8 +65,8 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import { DEFAULT_INPUTS_O_SERVICE_COMPONENT, OServiceComponent } from '../o-service-component.class';
-import { OBaseTableCellRenderer } from './column';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
+import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
@@ -1143,7 +1143,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
       }
     }
 
-    if(this.sortColumns && this.staticData) {
+    if (this.sortColumns && this.staticData) {
       this.loadingSortingSubject.next(true);
       this.cd.detectChanges();
     }
@@ -1206,7 +1206,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param event
    */
   public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
-    if(event) {
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
@@ -1280,7 +1280,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     }
     this.pendingQuery = false;
     this.pendingQueryFilter = undefined;
-    super.queryData(filter, ovrrArgs);
+
+    this.queryCellRenderers().subscribe(() => {
+      super.queryData(filter, ovrrArgs);
+    });
   }
 
   protected isInsideInactiveTab(): boolean {
@@ -1308,6 +1311,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
           FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
       }
     }
+
     return super.getComponentFilter(filter);
   }
 
@@ -2762,8 +2766,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     const totalCounts = group.totalCounts;
     const oCol = this.getOColumn(field);
 
-    if (!value && Util.isDefined(oCol.renderer)
-      && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
+    if (!value && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
       value = ' - ';
       if (!this.onDataLoadedCellRendererSubscription) {
         this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
@@ -2776,7 +2779,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   private isInstanceOfOTableCellRendererServiceComponent(renderer: OBaseTableCellRenderer) {
-    return (renderer as any).onDataLoaded;
+    return Util.isDefined(renderer) && (renderer as any).onDataLoaded && (renderer as any).queryAllData;
   }
 
   /**
@@ -2803,5 +2806,33 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.editingCell = undefined;
     this.editingRow = undefined;
     this.clearSelectionAndEditing(false);
+  }
+
+  getQuickFilterValue(): string {
+    return Util.isDefined(this.oTableQuickFilterComponent) ?
+      this.oTableQuickFilterComponent.value :
+      '';
+  }
+
+  protected queryCellRenderers(): Observable<any> {
+    const quickFilterValue = this.getQuickFilterValue();
+    if (this.pageable && Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) {
+      const queries = this.oTableOptions.columns
+        .filter(oCol => oCol.searching && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))
+        .map(oCol => (oCol.renderer as any).queryAllData());
+
+      return queries.length > 0 ? combineLatest(queries) : of(null);
+    }
+    return of(null);
+  }
+
+  tableQuickFilterChanged() {
+    if (this.pageable) {
+      this.queryCellRenderers().subscribe(() => {
+        this.reloadPaginatedDataFromStart();
+      });
+    } else {
+      this.reloadData();
+    }
   }
 }
