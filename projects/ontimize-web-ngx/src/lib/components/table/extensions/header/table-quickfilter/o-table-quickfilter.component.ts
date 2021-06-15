@@ -212,6 +212,16 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     return result;
   }
 
+  public getCountColumnsChecked(): number {
+    let count = 0;
+    this.quickFilterColumns.forEach((col: OColumn) => {
+      if(col.searching){
+        count++;
+      }
+    });
+    return count;
+  }
+
   public onSelectAllChange(event: MatCheckboxChange): void {
     this.quickFilterColumns.forEach((col: OColumn) => {
       col.searching = event.checked;

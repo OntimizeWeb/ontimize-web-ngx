@@ -3,10 +3,31 @@
     padding-right: 24px;
 
     .mat-form-field-flex {
-      align-items: flex-end;
+      align-items: initial;
 
       .mat-form-field-prefix {
-        padding-bottom: 2px;
+        //padding-bottom: 2px;
+        margin-right: 0 .75em 0.25em 0;
+
+        .mat-icon:first-child {
+          margin-right: 12px;
+        }
+
+        div {
+          border-right: 1px solid #e0e0e0;
+          align-items: center;
+          display: inline-flex;
+
+          .mat-badge-content {
+            background-color: #3C8500;
+            width: 14px;
+            height: 14px;
+            line-height: 14px;
+            top: -4px;
+            right: -4px;
+          }
+
+        }
       }
     }
   }
@@ -15,12 +36,12 @@
     cursor: pointer;
   }
 
-  .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-icon.search-icon,
-  .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-icon.search-icon {
-    height: 20px;
-    line-height: 20px;
-    width: 20px;
-  }
+  // .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-icon.search-icon,
+  // .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-icon.search-icon {
+  //   height: 20px;
+  //   line-height: 20px;
+  //   width: 20px;
+  // }
 }
 
 .o-table-quickfilter-menu {
