@@ -455,12 +455,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       if (filterColumn) {
         switch (filter.operator) {
           case ColumnValueFilterOperator.IN:
+            const filterValues = (filter.values || []).reduce((previous, current) =>
+              previous.concat(filterColumn.getFilterValue(current).map(f => Util.normalizeString(f))), []);
+
             data = data.filter((item: any) => {
               if (filterColumn.renderer && filterColumn.renderer.filterFunction) {
                 return filterColumn.renderer.filterFunction(item[filter.attr], item);
               } else {
                 const colValues = filterColumn.getFilterValue(item[filter.attr], item).map(f => Util.normalizeString(f));
-                const filterValues = filter.values.map(f => Util.normalizeString(f));
                 return filterValues.some(value => colValues.indexOf(value) !== -1);
               }
             });
@@ -634,12 +636,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return subGroups;
   }
 
-/**
- * Filters collapsed row group
- * @param data
- * @returns collapsed row group
- */
-filterCollapsedRowGroup(data: any): any[] {
+  /**
+   * Filters collapsed row group
+   * @param data
+   * @returns collapsed row group
+   */
+  filterCollapsedRowGroup(data: any): any[] {
     const self = this;
     return data.filter((row: any) => (row instanceof OTableGroupedRow) ? row.visible : this.belongsToExpandedGroupedRow(data, row));
   }

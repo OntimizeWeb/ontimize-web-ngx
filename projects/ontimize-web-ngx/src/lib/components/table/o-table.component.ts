@@ -1268,7 +1268,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.pendingQuery = false;
     this.pendingQueryFilter = undefined;
-    super.queryData(filter, ovrrArgs);
+
+    this.queryCellRenderers().subscribe(() => {
+      super.queryData(filter, ovrrArgs);
+    });
   }
 
   protected isInsideInactiveTab(): boolean {
@@ -1296,6 +1299,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
           FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
       }
     }
+
     return super.getComponentFilter(filter);
   }
 
@@ -1800,9 +1804,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         });
       }
 
-
-      const asyncAndVisible = self.asyncLoadColumns.filter(c => self._oTableOptions.visibleColumns.indexOf(c) !== -1);
-      if (self.asyncLoadColumns.length && asyncAndVisible.length > 0 && !self.finishQuerySubscription) {
+      const hasAsyncAndVisibleCols = this.asyncLoadColumns.some(c => this._oTableOptions.visibleColumns.includes(c));
+      if (self.asyncLoadColumns.length && hasAsyncAndVisibleCols && !self.finishQuerySubscription) {
         self.queryRowAsyncData(index, item);
         if (self.paginator && index === (self.paginator.pageSize - 1)) {
           self.finishQuerySubscription = true;
@@ -2190,9 +2193,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const oldQueryRows = this.queryRows;
     const changingPageSize = (oldQueryRows !== pageSize);
     this.queryRows = pageSize;
+    this.paginator.pageSize = pageSize;
 
-    let newStartRecord;
-    let queryLength;
+    let newStartRecord: number;
+    let queryLength: number;
 
     if (goingBack || changingPageSize) {
       newStartRecord = (this.currentPage * this.queryRows);
@@ -2719,8 +2723,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const totalCounts = group.totalCounts;
     const oCol = this.getOColumn(field);
 
-    if (!value && Util.isDefined(oCol.renderer)
-      && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
+    if (!value && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
       value = ' - ';
       if (!this.onDataLoadedCellRendererSubscription) {
         this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
@@ -2733,7 +2736,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   private isInstanceOfOTableCellRendererServiceComponent(renderer: OBaseTableCellRenderer) {
-    return (renderer as any).onDataLoaded;
+    return Util.isDefined(renderer) && (renderer as any).onDataLoaded && (renderer as any).queryAllData;
   }
 
   /**
@@ -2774,5 +2777,33 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected refreshSortHeaders() {
     this.sortHeaders.forEach(sortH => sortH.refresh());
+  }
+
+  getQuickFilterValue(): string {
+    return Util.isDefined(this.oTableQuickFilterComponent) ?
+      this.oTableQuickFilterComponent.value :
+      '';
+  }
+
+  protected queryCellRenderers(): Observable<any> {
+    const quickFilterValue = this.getQuickFilterValue();
+    if (this.pageable && Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) {
+      const queries = this.oTableOptions.columns
+        .filter(oCol => oCol.searching && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))
+        .map(oCol => (oCol.renderer as any).queryAllData());
+
+      return queries.length > 0 ? combineLatest(queries) : of(null);
+    }
+    return of(null);
+  }
+
+  tableQuickFilterChanged() {
+    if (this.pageable) {
+      this.queryCellRenderers().subscribe(() => {
+        this.reloadPaginatedDataFromStart();
+      });
+    } else {
+      this.reloadData();
+    }
   }
 }

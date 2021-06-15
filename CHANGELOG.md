@@ -3,6 +3,10 @@
 * **o-form-layout-manager**: new `split-pane` mode. 
 * **OFormLayoutManagerMode**: new interface that every new `o-form-layout-manager` mode must implement.
 * **OFormLayoutSplitPaneOptionsDirective**: new directive for using the `split-pane` mode inputs.
+* **OBaseTableCellRenderer**: 
+ * new `getFilterExpression` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
+* **o-table-cell-renderer-service**: 
+ * adding `value-column-type` attribute and `queryAllData` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
 
 ### BREAKING CHANGES
 * The authentication has been refactored:

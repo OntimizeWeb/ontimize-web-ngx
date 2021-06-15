@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, HostListener, Injector, NgZone, OnChanges, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 
 import { InputConverter } from '../decorators/input-converter';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
@@ -174,6 +175,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   protected sqlTypes = undefined;
 
+  public abortQuery: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   constructor(
     protected injector: Injector
   ) {
@@ -266,7 +269,17 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   afterViewInit() {
-    //
+    this.abortQuery.subscribe(value => {
+      if (value) {
+        if (this.querySubscription) {
+          this.querySubscription.unsubscribe();
+        }
+        if (this.loaderSubscription) {
+          this.loaderSubscription.unsubscribe();
+        }
+        this.setData([]);
+      }
+    })
   }
 
   destroy() {
@@ -389,7 +402,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (!ServiceUtils.filterContainsAllParentKeys(filterParentKeys, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setData([], []);
     } else {
-      const queryArguments = this.getQueryArguments(filter, ovrrArgs);
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
       }
@@ -397,10 +409,14 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.loaderSubscription.unsubscribe();
       }
       this.loaderSubscription = this.load();
-      const self = this;
-      this.queryArguments = queryArguments;
-      this.querySubscription = this.dataService[queryMethodName]
-        .apply(this.dataService, queryArguments)
+
+      // ensuring false value 
+      this.abortQuery.next(false);
+
+      this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
+
+      this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
+        .pipe(takeWhile(() => !this.abortQuery.value))
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;
@@ -415,17 +431,17 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
               this.updatePaginationInfo(res);
             }
           }
-          self.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
-          self.loaderSubscription.unsubscribe();
+          this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
+          this.loaderSubscription.unsubscribe();
         }, err => {
-          self.setData([], []);
-          self.loaderSubscription.unsubscribe();
-          if (Util.isDefined(self.queryFallbackFunction)) {
-            self.queryFallbackFunction(err);
+          this.setData([], []);
+          this.loaderSubscription.unsubscribe();
+          if (Util.isDefined(this.queryFallbackFunction)) {
+            this.queryFallbackFunction(err);
           } else if (err && typeof err !== 'object') {
-            self.dialogService.alert('ERROR', err);
+            this.dialogService.alert('ERROR', err);
           } else {
-            self.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
           }
         });
     }
