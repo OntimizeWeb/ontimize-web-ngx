@@ -248,11 +248,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   getQuickFilterData(data: any[]): any[] {
-    let filterData = this.quickFilter;
-    if (filterData !== undefined && filterData.length > 0) {
-      if (!this._tableOptions.filterCaseSensitive) {
-        filterData = filterData.toLowerCase();
-      }
+
+    if (Util.isDefined(this.quickFilter) && this.quickFilter.length > 0) {
+      const filterData = !this._tableOptions.filterCaseSensitive ? this.quickFilter.toLowerCase() : this.quickFilter;
       return data.filter((item: any) => {
         // Getting custom columns filter columns result
         const passCustomFilter = this.fulfillsCustomFilterFunctions(filterData, item);

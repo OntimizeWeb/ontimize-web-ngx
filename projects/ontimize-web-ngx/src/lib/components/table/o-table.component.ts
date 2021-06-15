@@ -2337,10 +2337,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.oTableQuickFilterComponent.setValue(storage['filter']);
       (storage['oColumns'] || []).forEach((oColData: any) => {
         const oCol = this.getOColumn(oColData.attr);
-        if (oCol) {
-          if (oColData.hasOwnProperty('searching')) {
-            oCol.searching = oColData.searching;
-          }
+        if (oCol && oColData.hasOwnProperty('searching')) {
+          oCol.searching = oColData.searching;
         }
       });
     }
@@ -2787,7 +2785,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected queryCellRenderers(): Observable<any> {
     const quickFilterValue = this.getQuickFilterValue();
-    if (this.pageable && Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) {
+    if (Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) {
       const queries = this.oTableOptions.columns
         .filter(oCol => oCol.searching && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))
         .map(oCol => (oCol.renderer as any).queryAllData());
