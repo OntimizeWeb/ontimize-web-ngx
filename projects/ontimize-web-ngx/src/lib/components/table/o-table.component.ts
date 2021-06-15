@@ -761,7 +761,6 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.registerSortListener();
     this.setFiltersConfiguration(this.state);
     this.addDefaultRowButtons();
-
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -1143,6 +1142,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.sort.setTableInfo(this.sortColArray);
       }
     }
+
+    if(this.sortColumns && this.staticData) {
+      this.loadingSortingSubject.next(true);
+      this.cd.detectChanges();
+    }
   }
 
   protected onSortChange(sortArray: any[]) {
@@ -1201,9 +1205,11 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
    * @param rowIndex
    * @param event
    */
-  public toogleRowExpandable(item: any, rowIndex: number, event: Event): void {
-    event.stopPropagation();
-    event.preventDefault();
+  public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
+    if(event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
 
     this.expandableItem.toggle(item);
 

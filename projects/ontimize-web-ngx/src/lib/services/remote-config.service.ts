@@ -8,8 +8,8 @@ import { ORemoteConfiguration, ORemoteConfigurationColumns } from '../types/remo
 import { SessionInfo } from '../types/session-info.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
+import { AuthService } from './auth.service';
 import { LocalStorageService } from './local-storage.service';
-import { LoginStorageService } from './login-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class ORemoteConfigurationService {
   public static DEFAULT_STORAGE_TIMEOUT = 60000;
 
   protected localStorageService: LocalStorageService;
-  protected loginStorageService: LoginStorageService;
+  protected authService: AuthService;
   protected httpClient: HttpClient;
   protected _appConfig: AppConfig;
   protected _url: string;
@@ -47,7 +47,7 @@ export class ORemoteConfigurationService {
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
     this._appConfig = this.injector.get(AppConfig);
-    this.loginStorageService = this.injector.get(LoginStorageService);
+    this.authService = this.injector.get(AuthService);
     this.localStorageService = this.injector.get(LocalStorageService);
 
     this.httpClient = this.injector.get(HttpClient);
@@ -72,7 +72,7 @@ export class ORemoteConfigurationService {
   public getUserConfiguration(): Observable<ServiceResponse> {
     const self = this;
     const observable = new Observable((observer: Subscriber<ServiceResponse>) => {
-      const sessionInfo = self.loginStorageService.getSessionInfo();
+      const sessionInfo = self.authService.getSessionInfo();
       if (!self.hasSession(sessionInfo)) {
         observer.error();
         return;
@@ -103,7 +103,7 @@ export class ORemoteConfigurationService {
       self.storeSubscription.unsubscribe();
     }
     const observable = new Observable((observer: Subscriber<ServiceResponse>) => {
-      const sessionInfo = self.loginStorageService.getSessionInfo();
+      const sessionInfo = self.authService.getSessionInfo();
       if (!self._appConfig.useRemoteConfiguration() || !self.hasSession(sessionInfo)) {
         observer.next();
         observer.complete();
@@ -183,7 +183,7 @@ export class ORemoteConfigurationService {
   }
 
   protected buildHeaders(): HttpHeaders {
-    const sessionInfo = this.loginStorageService.getSessionInfo();
+    const sessionInfo = this.authService.getSessionInfo();
     return new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json;charset=UTF-8',

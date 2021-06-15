@@ -1,14 +1,13 @@
-import { Router } from '@angular/router';
-
+import { OExpandableContainerComponent } from '../components/expandable-container/o-expandable-container.component';
 import { OFormComponent } from '../components/form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
 import { SQLOrder } from '../types/sql-order.type';
 import { Codes } from './codes';
 import { SQLTypes } from './sqltypes';
 import { Util } from './util';
-import { OExpandableContainerComponent } from '../components/expandable-container/o-expandable-container.component';
 
 export class ServiceUtils {
+
   static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent): {} {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
@@ -160,14 +159,6 @@ export class ServiceUtils {
       });
     }
     return sortColArray;
-  }
-
-  static redirectLogin(router: Router, sessionExpired: boolean = false) {
-    const arg = {};
-    arg[Codes.SESSION_EXPIRED_KEY] = sessionExpired;
-    const extras = {};
-    extras[Codes.QUERY_PARAMS] = arg;
-    router.navigate([Codes.LOGIN_ROUTE], extras);
   }
 
 }

@@ -8,6 +8,7 @@ import {
   OComboRendererCurrencyComponent
 } from './currency/o-combo-renderer-currency.component';
 import { DEFAULT_INPUTS_O_COMBO_RENDERER_DATE, OComboRendererDateComponent } from './date/o-combo-renderer-date.component';
+import { OComboRendererIconComponent } from './icon/o-combo-renderer-icon.component';
 import { OComboRendererIntegerComponent } from './integer/o-combo-renderer-integer.component';
 import {
   DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE,
@@ -21,7 +22,8 @@ export const O_COMBO_RENDERERS = [
   OComboRendererRealComponent,
   OComboRendererCurrencyComponent,
   OComboRendererDateComponent,
-  OComboRendererPercentageComponent
+  OComboRendererPercentageComponent,
+  OComboRendererIconComponent
 ];
 
 export const O_COMBO_RENDERERS_INPUTS = [
@@ -40,5 +42,6 @@ export const renderersMapping = {
   currency: OComboRendererCurrencyComponent,
   boolean: OComboRendererBooleanComponent,
   date: OComboRendererDateComponent,
-  percentage: OComboRendererPercentageComponent
+  percentage: OComboRendererPercentageComponent,
+  icon: OComboRendererIconComponent
 };

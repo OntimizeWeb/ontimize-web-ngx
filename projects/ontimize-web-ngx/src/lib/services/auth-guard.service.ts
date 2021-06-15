@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 
 import { OUserInfoService } from '../services/o-user-info.service';
 import { Codes } from '../util/codes';
-import { LoginStorageService } from './login-storage.service';
+import { AuthService } from './auth.service';
 import { PermissionsService } from './permissions/permissions.service';
 
 @Injectable({
@@ -12,19 +12,19 @@ import { PermissionsService } from './permissions/permissions.service';
 export class AuthGuardService implements CanActivate {
 
   protected router: Router;
-  protected loginStorageService: LoginStorageService;
+  protected authService: AuthService;
   protected oUserInfoService: OUserInfoService;
   protected permissionsService: PermissionsService;
 
   constructor(protected injector: Injector) {
     this.router = this.injector.get(Router);
-    this.loginStorageService = this.injector.get(LoginStorageService);
+    this.authService = this.injector.get(AuthService);
     this.oUserInfoService = this.injector.get(OUserInfoService);
     this.permissionsService = this.injector.get(PermissionsService);
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
-    const isLoggedIn = this.loginStorageService.isLoggedIn();
+    const isLoggedIn = this.authService.isLoggedIn();
     let result: Promise<boolean> | boolean = isLoggedIn;
     if (!isLoggedIn) {
       this.permissionsService.restart();
@@ -40,11 +40,12 @@ export class AuthGuardService implements CanActivate {
   }
 
   setUserInformation() {
-    const sessionInfo = this.loginStorageService.getSessionInfo();
+    const sessionInfo = this.authService.getSessionInfo();
     // TODO query user information
     this.oUserInfoService.setUserInfo({
       username: sessionInfo.user,
       avatar: './assets/images/user_profile.png'
     });
   }
+
 }

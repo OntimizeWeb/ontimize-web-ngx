@@ -52,7 +52,11 @@ export class OTranslateService {
       const dataStr = localStorage.getItem(this.localStorageKey);
       const data = (dataStr && dataStr.length > 0) ? JSON.parse(dataStr) : {};
       data[Codes.LANGUAGE_KEY] = language;
-      localStorage.setItem(this.localStorageKey, JSON.stringify(data));
+      try {
+        localStorage.setItem(this.localStorageKey, JSON.stringify(data));
+      } catch (e) {
+        console.error("Cannot set new item in localStorage. Error: " + e);
+      }
     }
   }
 

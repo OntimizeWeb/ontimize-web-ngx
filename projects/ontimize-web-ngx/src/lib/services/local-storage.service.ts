@@ -7,7 +7,7 @@ import { Config } from '../types/config.type';
 import { SessionInfo } from '../types/session-info.type';
 import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
-import { LoginStorageService } from './login-storage.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,12 @@ export class LocalStorageService {
 
   private _config: Config;
   private _router: Router;
-  private loginStorageService: LoginStorageService;
+  private authService: AuthService;
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig).getConfiguration();
     this._router = this.injector.get(Router);
-    this.loginStorageService = this.injector.get(LoginStorageService);
+    this.authService = this.injector.get(AuthService);
 
     const self = this;
     this._router.events.subscribe(event => {
@@ -117,7 +117,7 @@ export class LocalStorageService {
       return;
     }
     const users = appData[LocalStorageService.USERS_STORAGE_KEY] || {}; // uuid -> users
-    const idUser = session.user || this.loginStorageService.getSessionInfo().user;
+    const idUser = session.user || this.authService.getSessionInfo().user;
     const user = users[idUser] || {}; // uuid -> users-> user
 
     let componentData = {};
@@ -165,13 +165,21 @@ export class LocalStorageService {
       usersObject[session.user][LocalStorageService.COMPONENTS_STORAGE_KEY] = componentsInfo;
 
       appData[LocalStorageService.USERS_STORAGE_KEY] = usersObject;
-      localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+      try {
+        localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+      } catch (e) {
+        console.error("Cannot set new item in localStorage. Error: " + e);
+      }
     }
   }
 
   protected setLocalStorage(appData: any) {
     this.onSetLocalStorage.emit();
-    localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+    try {
+      localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+    } catch (e) {
+      console.error("Cannot set new item in localStorage. Error: " + e);
+    }
   }
-}
 
+}

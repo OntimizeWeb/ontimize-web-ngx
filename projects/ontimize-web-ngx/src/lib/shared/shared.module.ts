@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
 import { ColumnsFilterPipe } from '../pipes/columns-filter.pipe';
 import { OCurrencyPipe } from '../pipes/o-currency.pipe';
+import { OIconPipe } from '../pipes/o-icon.pipe';
 import { OIntegerPipe } from '../pipes/o-integer.pipe';
 import { OMomentPipe } from '../pipes/o-moment.pipe';
 import { OPercentPipe } from '../pipes/o-percentage.pipe';
@@ -36,6 +37,7 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
     OMomentPipe,
     OCurrencyPipe,
     OPercentPipe,
+    OIconPipe,
     ONTIMIZE_DIRECTIVES,
     Error403Component,
     ODialogComponent,
@@ -56,6 +58,7 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
     OMomentPipe,
     OCurrencyPipe,
     OPercentPipe,
+    OIconPipe,
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule,
     Error403Component,

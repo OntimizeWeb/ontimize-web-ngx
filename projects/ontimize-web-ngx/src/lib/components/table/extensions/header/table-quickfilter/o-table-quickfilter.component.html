@@ -1,10 +1,13 @@
 <div class="quickFilter" fxLayout="row">
-  <mat-form-field floatLabel="never" appearance="legacy">
-    <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate}}" [formControl]="formControl" (click)="$event.stopPropagation()">
-    <span class="icon-btn search-icon" matPrefix fxFlexLayout="flex-end" (menuClosed)="onMenuClosed()"
-      [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
-      <mat-icon svgIcon="ontimize:search"></mat-icon>
-    </span>
+  <mat-form-field appearance="outline">
+    <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate}}" [formControl]="formControl"
+      (click)="$event.stopPropagation()">
+    <div matPrefix>
+      <mat-icon svgIcon="ontimize:search" [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()"
+        matBadgeSize="small"></mat-icon>
+      <mat-icon [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()"
+        class="search-icon">expand_more</mat-icon>
+    </div>
     <mat-menu #menu="matMenu" class="o-table-quickfilter-menu">
       <div fxLayout="column" class="checkbox-container">
 
@@ -15,14 +18,15 @@
         <mat-divider></mat-divider>
 
         <ng-container *ngFor="let column of quickFilterColumns">
-          <mat-checkbox (click)="$event.stopPropagation()"  [checked]="isChecked(column)" (change)="onCheckboxChange(column, $event)">
+          <mat-checkbox (click)="$event.stopPropagation()" [checked]="isChecked(column)"
+            (change)="onCheckboxChange(column, $event)">
             {{ column.title | oTranslate }}
           </mat-checkbox>
         </ng-container>
 
         <ng-container *ngIf="showCaseSensitiveCheckbox()">
           <mat-divider></mat-divider>
-          <mat-checkbox (click)="$event.stopPropagation()"  [checked]="oTableOptions.filterCaseSensitive"
+          <mat-checkbox (click)="$event.stopPropagation()" [checked]="oTableOptions.filterCaseSensitive"
             (change)="oTableOptions.filterCaseSensitive = $event.checked">
             {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate}}
           </mat-checkbox>

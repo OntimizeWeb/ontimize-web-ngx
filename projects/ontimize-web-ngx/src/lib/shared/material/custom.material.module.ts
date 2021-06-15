@@ -34,6 +34,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatBadgeModule
 } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
@@ -73,7 +74,8 @@ const MATERIAL_MODULES = [
   MatPaginatorModule,
   MatSortModule,
   OverlayModule,
-  ScrollingModule
+  ScrollingModule,
+  MatBadgeModule
   // OverlayModule,
   // PortalModule,
   // RtlModule,

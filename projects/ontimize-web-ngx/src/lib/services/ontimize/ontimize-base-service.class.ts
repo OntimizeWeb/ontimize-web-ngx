@@ -2,12 +2,10 @@ import { Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { IAuthService } from '../../interfaces/auth-service.interface';
-import { ServiceUtils } from '../../util/service.utils';
 import { BaseService } from '../base-service.class';
 
 export class OntimizeBaseService extends BaseService implements IAuthService {
 
-  protected _sessionid: string;
   protected _startSessionPath: string;
 
   public kv = {};
@@ -24,7 +22,6 @@ export class OntimizeBaseService extends BaseService implements IAuthService {
 
   public configureService(config: any): void {
     super.configureService(config);
-    this._sessionid = config.session ? config.session.id : -1;
   }
 
   public startsession(user: string, password: string): Observable<any> {
@@ -39,16 +36,10 @@ export class OntimizeBaseService extends BaseService implements IAuthService {
     return null;
   }
 
-  public redirectLogin(sessionExpired: boolean = false) {
-    if (sessionExpired) {
-      this.loginStorageService.sessionExpired();
-    }
-    ServiceUtils.redirectLogin(this.router, sessionExpired);
-  }
-
   public clientErrorFallback(errorCode: number) {
     if (errorCode === 401) {
-      this.redirectLogin(true);
+      this.authService.logout();
     }
   }
+
 }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { IFileService } from '../../interfaces/file-service.interface';
+import { Util } from '../../util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable()
@@ -57,7 +58,7 @@ export class OntimizeFileService extends OntimizeBaseService implements IFileSer
           // Full response received
           if (resp.body) {
             if (resp.body['code'] === 3) {
-              this.redirectLogin(true);
+              this.authService.logout();
             } else if (resp.body['code'] === 1) {
               observer.error(resp.body['message']);
             } else if (resp.body['code'] === 0) {
@@ -74,7 +75,7 @@ export class OntimizeFileService extends OntimizeBaseService implements IFileSer
       }, error => {
         console.error(error);
         if (error.status === 401) {
-          this.redirectLogin(true);
+          this.authService.logout();
         } else {
           observer.error(error);
         }
@@ -85,11 +86,12 @@ export class OntimizeFileService extends OntimizeBaseService implements IFileSer
   }
 
   protected buildHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Access-Control-Allow-Origin': '*',
-      Authorization: 'Bearer ' + this._sessionid
-    });
+    let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
+    const sessionId = this.authService.getSessionInfo().id;
+    if (Util.isDefined(sessionId)) {
+      headers = headers.append('Authorization', 'Bearer ' + sessionId);
+    }
+    return headers;
   }
-
 
 }

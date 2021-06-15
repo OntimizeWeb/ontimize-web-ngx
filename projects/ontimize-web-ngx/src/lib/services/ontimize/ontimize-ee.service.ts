@@ -167,8 +167,12 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
   }
 
   protected buildHeaders(): HttpHeaders {
-    const headers = super.buildHeaders();
-    return headers.append('Authorization', 'Bearer ' + this._sessionid);
+    let headers = super.buildHeaders();
+    const sessionId = this.authService.getSessionInfo().id;
+    if (Util.isDefined(sessionId)) {
+      headers = headers.append('Authorization', 'Bearer ' + sessionId);
+    }
+    return headers;
   }
 
 }
