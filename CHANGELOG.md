@@ -1,3 +1,59 @@
+## 8.3.0 (2021-06-16)
+### Features
+* **o-form-layout-manager**: new `split-pane` mode. 
+* **OFormLayoutManagerMode**: new interface that every new `o-form-layout-manager` mode must implement.
+* **OFormLayoutSplitPaneOptionsDirective**: new directive for using the `split-pane` mode inputs.
+* **OBaseTableCellRenderer**: 
+ * new `getFilterExpression` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
+* **o-table-cell-renderer-service**: 
+ * adding `value-column-type` attribute and `queryAllData` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
+* **o-table-quickfilter**: new `placeholder` input ([#635](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/635)) ([f79fab4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f79fab4))
+* **OServiceComponent**: new `quick-filter-placeholder` input ([#635](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/635)) ([f79fab4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f79fab4))
+
+### BREAKING CHANGES
+* The authentication has been refactored:
+  * Service `LoginService` has been removed and replaced by `AuthService`. This is an abstract service that provides basic functionality regarding authentication. Its default implementation is `OntimizeAuthService` class that performs authentication with Ontimize based backends. Developers can provide their own implementation using the Injection Token `O_AUTH_SERVICE` and the class of their service that extends `AuthService` class.
+  * Interface `ILoginService` has been removed, use abstract class `AuthService` instead.
+  * Method `sessionExpired` from old `LoginService` has been renamed to `clearSessionData` in `AuthService`.
+  * Method `redirectLogin` has been removed in class `OntimizeBaseService` and all its subclasses (`OntimizeService`, `OntimizeEEService`, `OntimizeExportService` and `OntimizeFileService`), use method `logout` from `AuthService` instead.
+  * Method `redirectLogin` has been removed in class `ServiceUtils`, now it is a method of Ontimize authentication implementation in `OntimizeAuthService`.
+* **o-service-component.class**: 
+  * Method `initializeState` no longer exists. This change will only affect to extended components which have overrided or extended this method.  
+* **o-form-layout-manager**:
+  * Methods `getFormCacheData`, `setModifiedState` and `closeDetail` no longer has the `id` argument.   
+  * Method `updateNavigation` changed the `id` argument for the `keyValues` (object that contains the form keys values) argument.   
+  * This changes will only affect to applications which have extended the `OFormLayoutManagerComponent` and have overrided or extended the affected methods.
+  * The following inputs have been deprecated: `title`, `title-data-origin`, `label-columns`, `separator`, `dialog-width`, `dialog-min-width`, `dialog-max-width`, `dialog-height`, `dialog-min-height`, `dialog-max-height` and `dialog-class`. User should use the option inputs.
+* **OFormLayoutDialogOptionsComponent, OFormLayoutTabGroupOptionsComponent**: 
+  * This components no longer exists. Both components have been refactored into two directives: `OFormLayoutDialogOptionsDirective` and `OFormLayoutTabGroupOptionsDirective`.
+  * This change is transparent to the user, now the `o-form-layout-manager` mode inputs can be setted in two ways: using the mode option tag (the same way `o-form-layout-dialog-options` or `o-form-layout-tabgroup-options` were used before) or including the mode inputs in the `o-form-layout-manager` tag.
+
+  ```javascript
+  <o-form-layout-manager mode="tab" attr="o-form-layout-customer-home"
+   title="CUSTOMERS" label-columns="SURNAME;NAME" separator="," icon="info" color="warn">
+  
+  ...
+
+  </o-form-layout-manager>
+  ```  
+
+  Is equivalent to:
+
+   ```javascript
+  <o-form-layout-manager mode="tab" attr="o-form-layout-customer-home">
+    
+    <o-form-layout-tabgroup-options color="accent" title="CUSTOMERS" 
+      label-columns="SURNAME;NAME" separator="," icon="info" color="warn">
+    </o-form-layout-tabgroup-options>
+
+    ...
+    
+  </o-form-layout-manager>
+  ```  
+
+### Bug Fixes
+* **o-table**: fixing header sort bug ([794210d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794210d)) Closes [#629](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/629)
+ 
 ## 8.2.5 (2021-05-26)
 ### Features
 * **o-image**: New attribute `max-file-size`. ([d8a84c0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8a84c0)) Closes [#589](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/589)
@@ -34,7 +90,6 @@
   * **o-table-cell-editor-boolean**: fixing cell edition bug ([755daf4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/755daf4)) Closes [#573](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/573)
   * Fixed prevent touch vertical and horizontal scrolling in table: ([e1b14d1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e1b14d1)) Closes [#576](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/576)
   * **o-table-row-expandable**: Fixed error when exporting table data ([98bdd0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98bdd0e))
-
 
 ## 8.2.3 (2021-04-09)
 ### Features
@@ -95,8 +150,8 @@
   * method `handleCellClick` has been removed, you have to use `handleClick` instead  ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
   * method `handleCellDoubleClick` has been removed, you have to use `handleDoubleClick` instead ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
   * Changed the parametres of the `handleDoubleClick` and `handleCellClick` methods ([e64dcc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e64dcc3)) ([0cc55af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0cc55af))
-## 8.1.1 (2020-11-25)
 
+## 8.1.1 (2020-11-25)
 ### Bug Fixes
 * **table**: fixing bug in filtering by column ([88ac4bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88ac4bf))
 

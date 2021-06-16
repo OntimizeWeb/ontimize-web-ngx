@@ -12,7 +12,6 @@ export class OComboCustomRenderer implements OnInit {
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
 
-
   constructor(protected injector: Injector) {
     this.comboComponent = this.injector.get(OComboComponent);
   }

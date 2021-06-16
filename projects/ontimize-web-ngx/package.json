@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "8.2.5",
+  "version": "8.3.0",
   "description": "Ontimize Web framework using Angular 8",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -54,6 +54,7 @@
   "dependencies": {
     "@ngx-translate/core": "~12.1.2",
     "@ngx-translate/http-loader": "~4.0.0",
+    "angular-resizable-element": "3.3.4",
     "moment": "2.24.0",
     "ngx-material-timepicker": "5.4.3",
     "reflect-metadata": "0.1.13"

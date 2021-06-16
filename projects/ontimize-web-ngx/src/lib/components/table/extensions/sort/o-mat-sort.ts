@@ -41,6 +41,16 @@ export class OMatSort extends MatSort {
     return activeData;
   }
 
+  setSortColumns(sortColArray: SQLOrder[]) {
+    this.restart();
+    this.setTableInfo(sortColArray);
+  }
+
+  private restart() {
+    this.activeArray = [];
+    this.directionById = {};
+  }
+
   setTableInfo(sortColArray: Array<SQLOrder>) {
     sortColArray.forEach((colData: SQLOrder) => {
       const sortDirection: any = colData.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT;
@@ -77,11 +87,9 @@ export class OMatSort extends MatSort {
 
   protected deleteSortColumn(id: string) {
     delete this.directionById[id];
-    for (let i = 0, len = this.activeArray.length; i < len; i++) {
-      if (this.activeArray[i].id === id) {
-        this.activeArray.splice(i, 1);
-        break;
-      }
+    const index = this.activeArray.findIndex(element => element.id === id);
+    if (index > -1) {
+      this.activeArray.splice(index, 1);
     }
   }
 

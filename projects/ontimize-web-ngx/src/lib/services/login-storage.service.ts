@@ -5,10 +5,9 @@ import { Config } from '../types/config.type';
 import { SessionInfo } from '../types/session-info.type';
 import { Codes } from '../util/codes';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class LoginStorageService {
+
   private _config: Config;
   public _localStorageKey: string;
 
@@ -36,7 +35,11 @@ export class LoginStorageService {
         stored = {};
       }
       stored[Codes.SESSION_KEY] = sessionInfo;
-      localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
+      try {
+        localStorage.setItem(this._localStorageKey, JSON.stringify(stored));
+      } catch (e) {
+        console.error("Cannot set new item in localStorage. Error: " + e);
+      }
     }
   }
 
@@ -57,4 +60,5 @@ export class LoginStorageService {
     }
     return false;
   }
+
 }

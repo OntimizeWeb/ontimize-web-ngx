@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDes
 import { Subscription } from 'rxjs';
 
 import { AggregateFunction } from '../../../../../types/aggregate-function.type';
-import { OColumnAggregate } from '../../../../../types/o-column-aggregate.type';
+import { OColumnAggregate } from '../../../../../types/table/o-column-aggregate.type';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_TABLE_COLUMN_AGGREGATE = [

@@ -6,19 +6,22 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
 import { BooleanConverter, InputConverter } from '../decorators/input-converter';
+import { IServiceDataComponent } from '../interfaces/service-data-component.interface';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService } from '../services/navigation.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
+import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
+import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Expression } from '../types/expression.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
-import { OTableInitializationOptions } from '../types/o-table-initialization-options.type';
+import { OTableInitializationOptions } from '../types/table/o-table-initialization-options.type';
 import { Codes } from '../util/codes';
 import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
-import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
+import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -78,9 +81,14 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilter: quick-filter',
+
+  // quick-filter-placeholder: quick filter placeholder
+  'quickFilterPlaceholder: quick-filter-placeholder',
 ];
 
-export class OServiceComponent extends OServiceBaseComponent {
+export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
+  extends AbstractOServiceBaseComponent<T>
+  implements IServiceDataComponent {
 
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
@@ -155,6 +163,8 @@ export class OServiceComponent extends OServiceBaseComponent {
       setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
     }
   }
+
+  public quickFilterPlaceholder: string;
   /* end of inputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
@@ -166,6 +176,7 @@ export class OServiceComponent extends OServiceBaseComponent {
   public oFormLayoutDialog: OFormLayoutDialogComponent;
 
   protected tabsSubscriptions: any;
+
   public quickFilterComponent: OSearchInputComponent;
   @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
   public searchInputComponent: OSearchInputComponent;
@@ -196,19 +207,19 @@ export class OServiceComponent extends OServiceBaseComponent {
   public initialize(): void {
     if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
 
-      this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+      if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
+        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+      }
 
-      this.tabsSubscriptions = this.formLayoutManager.oTabGroup.onSelectedTabChange.subscribe(() => {
-        if (this.formLayoutManagerTabIndex !== this.formLayoutManager.oTabGroup.selectedTabIndex) {
+      this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.previousIndex) {
           this.updateStateStorage();
-          // when the storage is updated because a form layout manager tab change
-          // the alreadyStored control variable is changed to its initial value
           this.alreadyStored = false;
         }
       });
 
-      this.tabsSubscriptions.add(this.formLayoutManager.oTabGroup.onCloseTab.subscribe(() => {
-        if (this.formLayoutManagerTabIndex === this.formLayoutManager.oTabGroup.selectedTabIndex) {
+      this.tabsSubscriptions.add(this.formLayoutManager.onCloseTab.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.index) {
           this.updateStateStorage();
         }
       }));
@@ -271,7 +282,7 @@ export class OServiceComponent extends OServiceBaseComponent {
       relativeTo: relativeTo
     };
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
-      qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+      qParams[Codes.IGNORE_CAN_DEACTIVATE] = this.formLayoutManager.ignoreCanDeactivate;
       this.formLayoutManager.setAsActiveFormLayoutManager();
     }
     extras[Codes.QUERY_PARAMS] = qParams;
@@ -548,24 +559,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     return this.elRef;
   }
 
-  initializeState() {
-    let routeKey = super.getRouteKey();
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && !this.formLayoutManager.isMainComponent(this)) {
-      try {
-        const params = this.formLayoutManager.oTabGroup.state.tabsData[0].params;
-        if (params) {
-          routeKey = this.router.url;
-          routeKey += '/' + (Object.keys(params).join('/'));
-        }
-      } catch (e) {
-        //
-      }
-    }
-    // Get previous status
-    this.state = this.localStorageService.getComponentStorage(this, routeKey);
-
-  }
-
   public showCaseSensitiveCheckbox(): boolean {
     return !this.pageable;
   }
@@ -578,12 +571,8 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
     this.quickFilterComponent = quickFilter;
     if (Util.isDefined(this.quickFilterComponent)) {
-      if (this.state.hasOwnProperty('filterValue')) {
-        this.quickFilterComponent.setValue(this.state.filterValue);
-      }
-      if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
-        const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
-        this.quickFilterComponent.setActiveColumns(parsedArr);
+      if (Util.isDefined(this.state.quickFilterValue)) {
+        this.quickFilterComponent.setValue(this.state.quickFilterValue);
       }
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
     }
@@ -629,4 +618,9 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
     return result;
   }
+}
+
+/*This class is definied to mantain bacwards compatibility */
+export class OServiceComponent extends AbstractOServiceComponent<DefaultComponentStateService> {
+
 }

@@ -76,7 +76,7 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this._sessionid,
+      sessionid: this.authService.getSessionInfo().id,
       type: 1,
       entity: entity,
       kv: kv,
@@ -109,7 +109,7 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this._sessionid,
+      sessionid: this.authService.getSessionInfo().id,
       type: 1,
       entity: entity,
       kv: kv,
@@ -138,7 +138,7 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this._sessionid,
+      sessionid: this.authService.getSessionInfo().id,
       entity: entity,
       av: av,
       sqltypes: sqltypes
@@ -164,7 +164,7 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this._sessionid,
+      sessionid: this.authService.getSessionInfo().id,
       entity: entity,
       kv: kv,
       av: av,
@@ -189,7 +189,7 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
 
     const body = JSON.stringify({
       user: this.user,
-      sessionid: this._sessionid,
+      sessionid: this.authService.getSessionInfo().id,
       entity: entity,
       kv: kv,
       sqltypes: sqltypes

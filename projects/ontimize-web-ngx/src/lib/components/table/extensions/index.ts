@@ -6,7 +6,6 @@ export * from './export-button/o-table-export-button.component';
 export * from './export-button/o-table-export-button.service';
 export * from './footer/index';
 export * from './header/index';
-export * from './o-table-storage.class';
 export * from './o-table.dao';
 export * from './row/o-table-row.directive';
 export * from './sort/o-mat-sort';

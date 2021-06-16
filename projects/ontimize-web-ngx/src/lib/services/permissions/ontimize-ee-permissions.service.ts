@@ -9,46 +9,48 @@ import { Config } from '../../types/config.type';
 import { OntimizeEEPermissionsConfig } from '../../types/ontimize-ee-permissions-config.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { LoginStorageService } from '../login-storage.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class OntimizeEEPermissionsService implements IPermissionsService {
+
   public static DEFAULT_PERMISSIONS_PATH = '/loadPermissions';
   public static PERMISSIONS_KEY = 'permission';
 
   public path: string = '';
 
   protected httpClient: HttpClient;
-  protected _sessionid: number = -1;
   protected _user: string;
   protected _urlBase: string;
   protected _appConfig: Config;
   protected _config: AppConfig;
 
+  protected authService: AuthService;
+
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
     this._config = this.injector.get(AppConfig);
     this._appConfig = this._config.getConfiguration();
+    this.authService = this.injector.get(AuthService);
   }
 
   getDefaultServiceConfiguration(permissionsConfig: OntimizeEEPermissionsConfig): any {
     const serviceName: string = permissionsConfig ? permissionsConfig.service : undefined;
 
-    const loginStorageService = this.injector.get(LoginStorageService);
+    const authService = this.injector.get(AuthService);
     const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
     if (serviceName && configuration.hasOwnProperty(serviceName)) {
       servConfig = configuration[serviceName];
     }
-    servConfig[Codes.SESSION_KEY] = loginStorageService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = authService.getSessionInfo();
     return servConfig;
   }
 
   configureService(permissionsConfig: OntimizeEEPermissionsConfig): void {
     const config = this.getDefaultServiceConfiguration(permissionsConfig);
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
-    this._sessionid = config.session ? config.session.id : -1;
     this._user = config.session ? config.session.user : '';
     this.path = config.path ? config.path : OntimizeEEPermissionsService.DEFAULT_PERMISSIONS_PATH;
   }
@@ -82,11 +84,15 @@ export class OntimizeEEPermissionsService implements IPermissionsService {
   }
 
   protected buildHeaders(): HttpHeaders {
-    return new HttpHeaders({
+    let headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json;charset=UTF-8',
-      Authorization: 'Bearer ' + this._sessionid
+      'Content-Type': 'application/json;charset=UTF-8'
     });
+    const sessionId = this.authService.getSessionInfo().id;
+    if (Util.isDefined(sessionId)) {
+      headers = headers.append('Authorization', 'Bearer ' + sessionId);
+    }
+    return headers;
   }
 
 }

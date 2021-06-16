@@ -5,12 +5,15 @@ import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { Util } from '../util/util';
+import { AuthService } from './auth.service';
+import { OntimizeAuthService } from './o-auth.service';
 import { OntimizeEEService } from './ontimize/ontimize-ee.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
 import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
+import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -40,6 +43,16 @@ export const O_EXPORT_SERVICE = new InjectionToken<IExportService>('Export servi
  * Injection token that can be used to replace the permission service `OntimizePermissionsService or OntimizeEEPermissionsService`.
  */
 export const O_PERMISSION_SERVICE = new InjectionToken<IPermissionsService>('Permission service');
+
+/**
+ * Injection token that can be used to replace the authentication service `AuthService`.
+ */
+export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication service');
+
+/**
+* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
+*/
+export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
@@ -106,6 +119,21 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
   return _createServiceInstance(config.permissionsServiceType, injector);
 }
 
+/**
+ * Creates a new instance of the authentication service.
+ */
+export function authServiceFactory(injector: Injector): AuthService {
+  const serviceClass = _getInjectionTokenValue(O_AUTH_SERVICE, injector);
+  const service = _createServiceInstance(serviceClass, injector);
+  return Util.isDefined(service) ? service : new OntimizeAuthService(injector);
+}
+
+export function componentStateFactory(injector: Injector): AuthService {
+  const serviceClass = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
+  const service = _createServiceInstance(serviceClass, injector);
+  return Util.isDefined(service) ? service : new DefaultComponentStateService(injector);
+}
+
 /* ----------------------------------------------------------------------------------------------------
  * -------------------------------------------- PROVIDERS ---------------------------------------------
  * ----------------------------------------------------------------------------------------------------
@@ -113,9 +141,13 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
  * building with ng-packagr, so we reused the providers defined here.
  * ---------------------------------------------------------------------------------------------------- */
 
-export let OntimizeServiceProvider = { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] };
+export const OntimizeServiceProvider = { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] };
 
-export let OntimizeExportServiceProvider = { provide: OntimizeExportService, useFactory: exportServiceFactory, deps: [Injector] };
+export const OntimizeExportServiceProvider = { provide: OntimizeExportService, useFactory: exportServiceFactory, deps: [Injector] };
+
+export const OntimizeAuthServiceProvider = { provide: AuthService, useFactory: authServiceFactory, deps: [Injector] };
+
+export const ComponentStateServiceProvider = { provide: AbstractComponentStateService, useFactory: componentStateFactory, deps: [Injector] };
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
