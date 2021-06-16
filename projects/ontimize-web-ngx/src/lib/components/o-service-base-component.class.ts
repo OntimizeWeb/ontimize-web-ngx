@@ -9,6 +9,8 @@ import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
+import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
+import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
@@ -84,9 +86,10 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
-export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges {
+export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>> implements ILocalStorageComponent, OnChanges {
 
   protected localStorageService: LocalStorageService;
+  componentStateService: T;
   protected dialogService: DialogService;
 
   /* inputs variables */
@@ -155,7 +158,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   protected loaderSubscription: Subscription;
   protected querySubscription: Subscription;
   protected dataService: any;
-  protected _state: any = {};
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
@@ -180,6 +182,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.localStorageService = this.injector.get(LocalStorageService);
+    this.componentStateService = this.injector.get(AbstractComponentStateService);
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
     try {
@@ -195,6 +198,10 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     }
   }
 
+  get state(): AbstractComponentStateClass {
+    return this.componentStateService.state;
+  }
+
   initialize(): void {
     if (!Util.isDefined(this.oattr) && Util.isDefined(this.entity)) {
       this.oattr = this.entity.replace('.', '_');
@@ -205,6 +212,8 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
+    this.componentStateService.initialize(this);
+
     if (this.storeState) {
       this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
@@ -213,14 +222,13 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
         this.alreadyStored = false;
       });
 
-      this.initializeState();
-
       // if query-rows in initial configuration is equals to original query-rows input
       // query_rows will be the value in local storage
-      if (this.state.hasOwnProperty('query-rows')) {
-        if (this.state.hasOwnProperty('initial-configuration') && this.state['initial-configuration'].hasOwnProperty('query-rows')
+      if (Util.isDefined(this.state.queryRows)) {
+        if (this.state.hasOwnProperty('initial-configuration')
+          && this.state['initial-configuration'].hasOwnProperty('query-rows')
           && this.state['initial-configuration']['query-rows'] === this.originalQueryRows) {
-          this.queryRows = this.state['query-rows'];
+          this.queryRows = this.state.queryRows;
         }
       }
     }
@@ -312,7 +320,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     return this.getAttribute();
   }
 
-  getDataToStore(): object {
+  getDataToStore(): any {
     return this.state;
   }
 
@@ -526,7 +534,7 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
   }
 
   getTotalRecordsNumber(): number {
-    return (this.state && this.state.totalQueryRecordsNumber !== undefined) ? this.state.totalQueryRecordsNumber : undefined;
+    return Util.isDefined(this.state.totalQueryRecordsNumber) ? this.state.totalQueryRecordsNumber : undefined;
   }
 
   getContextComponent() {
@@ -541,14 +549,6 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
 
   getSqlTypes() {
     return Util.isDefined(this.sqlTypes) ? this.sqlTypes : {};
-  }
-
-  get state(): any {
-    return this._state;
-  }
-
-  set state(arg: any) {
-    this._state = arg;
   }
 
   getParentKeysValues() {
@@ -567,8 +567,14 @@ export class OServiceBaseComponent implements ILocalStorageComponent, OnChanges 
     //
   }
 
-  initializeState() {
-    // Get previous status
-    this.state = this.localStorageService.getComponentStorage(this, this.getRouteKey());
-  }
+}
+
+
+export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
+
+}
+
+/* This class is being defined to mantain the backwards compatibility with previous versions, use DefaultOServiceBaseComponent*/
+export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
+
 }

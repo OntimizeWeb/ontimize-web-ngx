@@ -13,11 +13,11 @@ import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, Mat
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
 import {
   TableFilterByColumnData,
   TableFilterByColumnDialogResult
-} from '../../../../../types/o-table-filter-by-column-data.type';
+} from '../../../../../types/table/o-table-filter-by-column-data.type';
 import { Codes } from '../../../../../util';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';

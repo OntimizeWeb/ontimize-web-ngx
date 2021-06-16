@@ -37,7 +37,7 @@ export class LocalStorageService {
     });
   }
 
-  getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): object {
+  getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): any {
     const componentKey = comp.getComponentKey();
     let completeKey = componentKey;
     if (routeKey) {
@@ -120,13 +120,13 @@ export class LocalStorageService {
     const idUser = session.user || this.authService.getSessionInfo().user;
     const user = users[idUser] || {}; // uuid -> users-> user
 
-    let componentData = {};
+    let componentsData = {};
     if (users[idUser]) {
-      componentData = users[idUser][LocalStorageService.COMPONENTS_STORAGE_KEY];
+      componentsData = users[idUser][LocalStorageService.COMPONENTS_STORAGE_KEY] || {};
     }
-    componentData[componentKey] = componentDataB64 || {};
+    componentsData[componentKey] = componentDataB64 || {};
 
-    user[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentData;
+    user[LocalStorageService.COMPONENTS_STORAGE_KEY] = componentsData;
     users[idUser] = user;
     appData[LocalStorageService.USERS_STORAGE_KEY] = users;
 

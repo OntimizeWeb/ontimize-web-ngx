@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ElementRef,
@@ -8,16 +9,17 @@ import {
   OnInit,
   Renderer2,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResizeEvent } from 'angular-resizable-element';
 import { BehaviorSubject } from 'rxjs';
 
-import { OServiceComponent } from '../../../components/o-service-component.class';
+import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
-import { FormLayoutDetailComponentData } from '../../../types';
+import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
+import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
@@ -40,11 +42,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_SPLIT_PANE = [
     '[class.o-form-layout-split-pane]': 'true'
   }
 })
-export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManagerMode {
+export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFormLayoutManagerMode {
 
   data: FormLayoutDetailComponentData;
   public showLoading = new BehaviorSubject<boolean>(false);
-  protected _state: any;
 
   protected router: Router;
 
@@ -75,6 +76,10 @@ export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManager
     this.router = this.injector.get(Router);
   }
 
+  get state(): OFormLayoutManagerComponentStateClass {
+    return this.formLayoutManager.state;
+  }
+
   ngOnInit() {
     if (this.mainWrapper && this.mainWrapper.nativeElement) {
       this.setOption(this.mainWrapper.nativeElement, 'mainWidth', 'width');
@@ -88,24 +93,16 @@ export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManager
     }
   }
 
+  ngAfterViewInit() {
+    this.initializeComponentState();
+  }
+
   protected setOption(el: any, optionName: string, propertyName: string) {
     if (Util.isDefined(this._options[optionName])) {
       this.renderer.setStyle(el, propertyName, this._options[optionName]);
     }
   }
 
-  set state(arg: any) {
-    this._state = arg;
-    if (Util.isDefined(arg)) {
-      this.showLoading.next(true);
-    } else {
-      this.showLoading.next(false);
-    }
-  }
-
-  get state(): any {
-    return this._state;
-  }
 
   getFormCacheData(): FormLayoutDetailComponentData {
     return this.data;
@@ -138,7 +135,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManager
     }
   }
 
-  getDataToStore(): object {
+  getDataToStore(): any {
     return this.data;
   }
 
@@ -146,15 +143,21 @@ export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManager
     return Util.isDefined(this.data) ? this.data.params : undefined;
   }
 
-  initializeComponentState(state: any) {
-    if (Util.isDefined(state) && Object.keys(state).length > 0) {
-      this.state = state;
-      const extras = {};
-      extras[Codes.QUERY_PARAMS] = state.queryParams;
+  initializeComponentState() {
+    this.showLoading.next(true);
+    if (Util.isDefined(this.state) && Object.keys(this.state).length > 0) {
       if (this.formLayoutManager) {
         this.formLayoutManager.setAsActiveFormLayoutManager();
       }
-      this.router.navigate([state.url], extras);
+      if (Util.isDefined(this.state.url)) {
+        const extras = {};
+        extras[Codes.QUERY_PARAMS] = this.state.queryParams;
+
+        this.router.navigate([this.state.url], extras).then(() => {
+          this.showLoading.next(false);
+        });
+      }
+      this.showLoading.next(false);
     }
   }
 
@@ -176,7 +179,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, OFormLayoutManager
     return route;
   }
 
-  isMainComponent(comp: OServiceComponent): boolean {
+  isMainComponent(comp: ILayoutManagerComponent): boolean {
     return this.mainWrapper && this.mainWrapper.nativeElement
       && comp.elementRef && this.mainWrapper.nativeElement.contains(comp.elementRef.nativeElement);
   }

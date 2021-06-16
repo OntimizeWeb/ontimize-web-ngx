@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { OColumnValueFilter } from '../../../../../types/o-column-value-filter.type';
+import { OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column';
 import { OTableComponent } from '../../../o-table.component';

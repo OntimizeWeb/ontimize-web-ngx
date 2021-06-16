@@ -9,19 +9,22 @@ import {
   OnInit,
   Optional,
   SkipSelf,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
+import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
+import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-form-layout-manager-component-state.class';
+import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
 import { Util } from '../../util/util';
@@ -66,6 +69,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,
   templateUrl: './o-form-layout-manager.component.html',
   styleUrls: ['./o-form-layout-manager.component.scss'],
+  providers: [
+    { provide: AbstractComponentStateService, useClass: OFormLayoutManagerComponentStateService, deps: [Injector] }
+  ],
   host: {
     '[class.o-form-layout-manager]': 'true'
   }
@@ -221,6 +227,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   protected subscription: Subscription = new Subscription();
 
+  protected componentStateService: OFormLayoutManagerComponentStateService;
+
   constructor(
     protected injector: Injector,
     protected router: Router,
@@ -234,11 +242,16 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     this.localStorageService = this.injector.get(LocalStorageService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
+    this.componentStateService = this.injector.get(OFormLayoutManagerComponentStateService);
     if (this.storeState) {
       this.subscription.add(this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
       }));
     }
+  }
+
+  get state(): OFormLayoutManagerComponentStateClass {
+    return this.componentStateService.state;
   }
 
   public ngOnInit(): void {
@@ -248,19 +261,15 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       console.warn('o-form-layout-manager must have an unique attr');
     }
     this.oFormLayoutManagerService.registerFormLayoutManager(this);
+    if (this.storeState) {
+      this.componentStateService.initialize(this);
+    }
   }
 
   public ngAfterViewInit(): void {
     setTimeout(() => {
       if (this.elRef) {
         this.elRef.nativeElement.removeAttribute('title');
-      }
-      if (this.storeState) {
-        const state = this.localStorageService.getComponentStorage(this);
-        const compRef = this.getLayoutModeComponent();
-        if (Util.isDefined(compRef)) {
-          compRef.initializeComponentState(state);
-        }
       }
     });
   }
@@ -282,7 +291,17 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return 'OFormLayoutManagerComponent_' + this.oattr;
   }
 
-  public getDataToStore(): object {
+  public getRouteKey(): string {
+    let route = this.router.url;
+    this.actRoute.params.subscribe(params => {
+      Object.keys(params).forEach(key => {
+        route = route.replace(params[key], key);
+      });
+    });
+    return route;
+  }
+
+  public getDataToStore(): any {
     const compRef = this.getLayoutModeComponent();
     return Util.isDefined(compRef) ? compRef.getDataToStore() : {};
   }
@@ -472,7 +491,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return Util.isDefined(compRef) ? compRef.getRouteOfActiveItem() : [];
   }
 
-  public isMainComponent(comp: OServiceComponent): boolean {
+  public isMainComponent(comp: ILayoutManagerComponent): boolean {
     if (this.isDialogMode()) {
       return !comp.oFormLayoutDialog;
     }
@@ -480,7 +499,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return Util.isDefined(compRef) && compRef.isMainComponent(comp);
   }
 
-  public getRouteForComponent(comp: OServiceComponent): any[] {
+  public getRouteForComponent(comp: ILayoutManagerComponent): any[] {
     const result = [];
     if (this.parentFormLayoutManager) {
       const parentRoute = this.parentFormLayoutManager.getRouteForComponent(comp);

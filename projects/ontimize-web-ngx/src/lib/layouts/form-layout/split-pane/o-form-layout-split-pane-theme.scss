@@ -3,6 +3,7 @@
   $background: map-get($theme, background);
 
   .o-form-layout-split-pane {
+    .spinner-container,
     .o-split-pane-secondary-content {
       background-color: mat-color($background, background);
     }

@@ -39,4 +39,17 @@
       height: 100%;
     }
   }
+  .spinner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+    visibility: visible;
+    opacity: 1;
+    -moz-transition: opacity 0.25s linear;
+    -webkit-transition: opacity 0.25s linear;
+    transition: opacity 0.25s linear;
+  }
 }

@@ -12,16 +12,17 @@ import {
   ViewChild,
   ViewChildren,
   ViewContainerRef,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { OServiceComponent } from '../../../components/o-service-component.class';
+import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
 import { ONavigationItem } from '../../../services/navigation.service';
+import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
 import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
@@ -56,14 +57,13 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public title: string;
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
-  protected _state: any;
 
   @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
   protected subscriptions: Subscription = new Subscription();
   protected router: Router;
-  protected loading: boolean = false;
+  protected _loading: boolean;
   protected dialogService: DialogService;
 
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
@@ -83,7 +83,13 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.router = this.injector.get(Router);
   }
 
+  get state(): OFormLayoutManagerComponentStateClass {
+    return this.formLayoutManager.state;
+  }
+
   ngAfterViewInit() {
+    this.initializeComponentState();
+
     this.subscriptions.add(this.tabsDirectives.changes.subscribe(changes => {
       if (this.tabsDirectives.length) {
         const tabItem = this.tabsDirectives.last;
@@ -153,6 +159,11 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return this.options && this.options.iconPosition === 'left';
   }
 
+  set loading(val: boolean) {
+    this.showLoading.next(val);
+    this._loading = val;
+  }
+
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
@@ -196,10 +207,10 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       this.formLayoutManager.updateIfNeeded();
       this.onMainTabSelected.emit();
     }
-    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
-      if ((arg.index === this.state.tabsData.length) && Util.isDefined(this.state.selectedIndex)) {
+    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) && this._loading) {
+      if (arg.index === this.state.tabsData.length) {
         this.tabGroup.selectedIndex = this.state.selectedIndex;
-        this.state = undefined;
+        this.loading = false;
       }
     }
 
@@ -224,7 +235,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         this.data.splice(index, 1);
         this.onCloseTab.emit({
           data: tabData,
-          index: index
+          index: index + 1
         });
       }
     }));
@@ -303,7 +314,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
   }
 
-  getDataToStore(): object {
+  getDataToStore(): any {
     const tabsData = [];
     this.data.forEach((data: FormLayoutDetailComponentData) => {
       tabsData.push({
@@ -320,28 +331,35 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     };
   }
 
-  initializeComponentState(state: any) {
-    if (Util.isDefined(state) && Util.isDefined(state.tabsData) && Util.isDefined(state.tabsData[0])) {
-      this.state = state;
-      const extras = {};
-      extras[Codes.QUERY_PARAMS] = state.tabsData[0].queryParams;
+  initializeComponentState() {
+    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
       if (this.formLayoutManager) {
         this.formLayoutManager.setAsActiveFormLayoutManager();
       }
-      this.router.navigate([state.tabsData[0].url], extras).then(val => {
-        if (this.data[0]) {
-          setTimeout(() => {
-            this.createTabsFromState();
-          }, 0);
-        }
-      });
+
+      if (this.state.tabsData.length >= 1) {
+        this.loading = true;
+        const extras = {};
+        extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
+        // Triggering first tab navigation
+        this.router.navigate([this.state.tabsData[0].url], extras).then(val => {
+          if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
+            // Triggering rest of the tabs creation
+            setTimeout(() => {
+              this.createTabsFromState();
+            }, 0);
+          } else {
+            this.loading = false;
+          }
+        });
+      }
     }
   }
 
   protected createTabsFromState() {
     const tabComponent = this.data[0].component;
     this.state.tabsData.forEach((tabData: any, index: number) => {
-      if (tabComponent && index > 0) {
+      if (index >= 1) {
         setTimeout(() => {
           const newDetailData = this.createDetailComponent(tabComponent, tabData);
           this.data.push(newDetailData);
@@ -364,24 +382,11 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return newDetailComp;
   }
 
-  set state(arg: any) {
-    this._state = arg;
-    if (Util.isDefined(arg)) {
-      this.showLoading.next(true);
-    } else {
-      this.showLoading.next(false);
-    }
-  }
-
-  get state(): any {
-    return this._state;
-  }
-
   getParams(): any {
     return Util.isDefined(this.data[0]) ? this.data[0].params : undefined;
   }
 
-  isMainComponent(comp: OServiceComponent): boolean {
+  isMainComponent(comp: ILayoutManagerComponent): boolean {
     const firstTab = this.elementRef.nativeElement.getElementsByTagName('mat-tab-body')[0];
     return firstTab && comp.elementRef && firstTab.contains(comp.elementRef.nativeElement);
   }

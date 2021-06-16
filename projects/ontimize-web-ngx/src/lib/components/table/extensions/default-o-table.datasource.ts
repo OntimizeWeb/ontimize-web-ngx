@@ -6,8 +6,8 @@ import { map } from 'rxjs/operators';
 
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
-import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/o-column-value-filter.type';
-import { OTableGroupedRow } from '../../../types/o-table-row-group.type';
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
+import { OTableGroupedRow } from '../../../types/table/o-table-row-group.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OColumn } from '../column/o-column.class';
@@ -248,11 +248,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   getQuickFilterData(data: any[]): any[] {
-    let filterData = this.quickFilter;
-    if (filterData !== undefined && filterData.length > 0) {
-      if (!this._tableOptions.filterCaseSensitive) {
-        filterData = filterData.toLowerCase();
-      }
+
+    if (Util.isDefined(this.quickFilter) && this.quickFilter.length > 0) {
+      const filterData = !this._tableOptions.filterCaseSensitive ? this.quickFilter.toLowerCase() : this.quickFilter;
       return data.filter((item: any) => {
         // Getting custom columns filter columns result
         const passCustomFilter = this.fulfillsCustomFilterFunctions(filterData, item);
