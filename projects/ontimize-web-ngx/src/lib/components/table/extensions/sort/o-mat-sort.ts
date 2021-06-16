@@ -1,5 +1,5 @@
-import { Directive, ElementRef, EventEmitter, Output, Renderer2 } from '@angular/core';
-import { ArrowViewStateTransition, MatSort, MatSortable } from '@angular/material';
+import { Directive, EventEmitter, Output } from '@angular/core';
+import { MatSort, MatSortable } from '@angular/material';
 
 import { SQLOrder } from '../../../../types/sql-order.type';
 import { Codes } from '../../../../util/codes';
