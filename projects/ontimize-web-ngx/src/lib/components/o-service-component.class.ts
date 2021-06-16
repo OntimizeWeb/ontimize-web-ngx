@@ -569,10 +569,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       if (Util.isDefined(this.state.quickFilterValue)) {
         this.quickFilterComponent.setValue(this.state.quickFilterValue);
       }
-      if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
-        const parsedArr = Util.parseArray(this.state['quickFilterActiveColumns'], true);
-        this.quickFilterComponent.setActiveColumns(parsedArr);
-      }
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
     }
   }

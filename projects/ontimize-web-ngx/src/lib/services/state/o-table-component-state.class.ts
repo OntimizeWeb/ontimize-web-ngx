@@ -21,7 +21,6 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   // columns-filter
   protected 'column-value-filters': OColumnValueFilter[];
   // page
-  protected 'query-rows': number;
   'currentPage': number;
   // selection
   'selection': any[];
@@ -108,14 +107,6 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
 
   set columnValueFilters(value: OColumnValueFilter[]) {
     this['column-value-filters'] = value;
-  }
-
-  get queryRows(): number {
-    return this['query-rows'];
-  }
-
-  set queryRows(value: number) {
-    this['query-rows'] = value;
   }
 
   get storedFilters(): OTableFiltersStatus[] {

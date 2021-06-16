@@ -1,5 +1,6 @@
 export abstract class AbstractComponentStateClass {
   abstract setData(data: any);
+  abstract queryRows: number;
   abstract totalQueryRecordsNumber: number;
   abstract queryRecordOffset: number;
   abstract quickFilterValue: string;
@@ -13,6 +14,7 @@ export class DefaultComponentStateClass extends AbstractComponentStateClass {
   // page
   totalQueryRecordsNumber: number;
   queryRecordOffset: number;
+  protected 'query-rows': number;
 
   get filterCaseSensitive(): boolean {
     return this['filter-case-sensitive'];
@@ -28,6 +30,14 @@ export class DefaultComponentStateClass extends AbstractComponentStateClass {
 
   set quickFilterValue(value: string) {
     this['filterValue'] = value;
+  }
+
+  get queryRows(): number {
+    return this['query-rows'];
+  }
+
+  set queryRows(value: number) {
+    this['query-rows'] = value;
   }
 
   constructor() {

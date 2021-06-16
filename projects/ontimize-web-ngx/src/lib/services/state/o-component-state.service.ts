@@ -25,7 +25,7 @@ export abstract class AbstractComponentStateService<S extends AbstractComponentS
   }
 
   initializeState(state: S) {
-    if (Util.isDefined(this.state)) {
+    if (Util.isDefined(this.state) && this.component.storeState) {
       state.setData(this.localStorageService.getComponentStorage(this.component, this.component.getRouteKey()));
     }
   }

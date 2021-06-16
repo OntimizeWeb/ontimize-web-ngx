@@ -428,4 +428,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
   }
 
+  public registerQuickFilter(arg: any): void {
+    super.registerQuickFilter(arg);
+    if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state.quickFilterActiveColumns)) {
+      const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
+      this.quickFilterComponent.setActiveColumns(parsedArr);
+    }
+  }
 }

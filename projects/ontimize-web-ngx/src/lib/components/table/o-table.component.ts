@@ -597,7 +597,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   ngOnInit() {
     this.initialize();
-    if (this.oTableButtons) {
+    if (this.oTableButtons && this.tableButtons && this.tableButtons.length > 0) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
   }
@@ -2612,7 +2612,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public registerOTableButtons(arg: OTableButtons) {
     this.oTableButtons = arg;
-    if (this.oTableButtons) {
+    if (this.oTableButtons && this.tableButtons && this.tableButtons.length > 0) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
   }

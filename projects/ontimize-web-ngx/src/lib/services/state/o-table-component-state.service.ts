@@ -27,7 +27,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
   }
 
   refreshSelection() {
-    this.state['selection'] = this.getSelectionState();
+    this.state.selection = this.getSelectionState();
   }
 
   getDataToStore(): any {

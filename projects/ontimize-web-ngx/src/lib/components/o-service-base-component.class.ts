@@ -212,6 +212,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
+    this.componentStateService.initialize(this);
+
     if (this.storeState) {
       this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
@@ -220,15 +222,13 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.alreadyStored = false;
       });
 
-      this.componentStateService.initialize(this);
-
       // if query-rows in initial configuration is equals to original query-rows input
       // query_rows will be the value in local storage
-      if (this.state.hasOwnProperty('query-rows')) {
+      if (Util.isDefined(this.state.queryRows)) {
         if (this.state.hasOwnProperty('initial-configuration')
           && this.state['initial-configuration'].hasOwnProperty('query-rows')
           && this.state['initial-configuration']['query-rows'] === this.originalQueryRows) {
-          this.queryRows = this.state['query-rows'];
+          this.queryRows = this.state.queryRows;
         }
       }
     }
@@ -516,7 +516,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
     let queryArguments = [compFilter, queryCols, this.entity, sqlTypes];
     if (this.pageable) {
-      const queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state['queryRecordOffset'];
+      const queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
       const queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
       queryArguments = queryArguments.concat([queryOffset, queryRowsN, undefined]);
     }
