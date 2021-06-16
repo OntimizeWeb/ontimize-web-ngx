@@ -318,7 +318,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   get filterCaseSensitive(): boolean {
-    this.state
     return this._filterCaseSensitive;
   }
 

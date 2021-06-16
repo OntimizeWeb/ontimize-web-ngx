@@ -49,9 +49,9 @@ export const O_PERMISSION_SERVICE = new InjectionToken<IPermissionsService>('Per
  */
 export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication service');
 
-// /**
-// * Injection token that can be used to replace the component state service `DefaultComponentStateService`.
-// */
+/**
+* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
+*/
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
 
 /* ----------------------------------------------------------------------------------------------------
