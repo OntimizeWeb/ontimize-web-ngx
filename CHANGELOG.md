@@ -1,4 +1,4 @@
-## 8.3.0
+## 8.3.0 (2021-06-16)
 ### Features
 * **o-form-layout-manager**: new `split-pane` mode. 
 * **OFormLayoutManagerMode**: new interface that every new `o-form-layout-manager` mode must implement.
