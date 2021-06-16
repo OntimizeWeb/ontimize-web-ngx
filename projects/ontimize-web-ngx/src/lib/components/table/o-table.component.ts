@@ -2065,9 +2065,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   getSortFilterColumn(column: OColumn): string {
     let sortColumn;
     // at first, get state in localstorage
-    const stateFilterCols = this.state.filterColumns;
-    if (stateFilterCols) {
-      const filterCol = stateFilterCols.find((element: OFilterColumn) => element.attr === column.attr);
+    if (this.state.filterColumns) {
+      const filterCol = this.state.filterColumns.find((element: OFilterColumn) => element.attr === column.attr);
       if (filterCol) {
         sortColumn = filterCol.sort;
       }
@@ -2319,17 +2318,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.filterCaseSensitive = storage.hasOwnProperty('filter-case-sensitive') ? storage['filter-case-sensitive'] : this.filterCaseSensitive;
     }
 
-    const storedColumnFilters = this.state.columnValueFilters;
-
     if (storage.initialConfiguration.filterColumnActiveByDefault !== this.filterColumnActiveByDefault) {
       this.isColumnFiltersActive = this.filterColumnActiveByDefault;
     } else {
       const confFilterColumnActiveByDefault = storage.hasOwnProperty('filter-column-active') ? storage['filter-column-active'] : this.filterColumnActiveByDefault;
-      this.isColumnFiltersActive = confFilterColumnActiveByDefault || storedColumnFilters.length > 0;
+      this.isColumnFiltersActive = confFilterColumnActiveByDefault || this.state.columnValueFilters.length > 0;
     }
 
     if (this.oTableColumnsFilterComponent) {
-      this.dataSource.initializeColumnsFilters(storedColumnFilters);
+      this.dataSource.initializeColumnsFilters(this.state.columnValueFilters);
       this.onFilterByColumnChange.emit();
     }
 
@@ -2633,7 +2630,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Parses grouped columns
    */
   parseGroupedColumns() {
-
     this.groupedColumnsArray = this.state.groupedColumns || this.originalGroupedColumnsArray;
     if (this.state.groupedColumns && this.state.initialConfiguration.groupedColumns) {
       const difference = this.state.initialConfiguration.groupedColumns

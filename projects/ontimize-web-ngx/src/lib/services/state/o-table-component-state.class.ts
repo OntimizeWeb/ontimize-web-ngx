@@ -54,7 +54,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   }
 
   get columnsDisplay(): OColumnDisplay[] {
-    return this['oColumns-display'] || [];
+    return this['oColumns-display'];
   }
 
   set columnsDisplay(value: OColumnDisplay[]) {
@@ -82,7 +82,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   }
 
   get filterColumns(): OFilterColumn[] {
-    return this['filter-columns'] || [];
+    return this['filter-columns'];
   }
 
   set filterColumns(value: OFilterColumn[]) {
@@ -94,7 +94,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   }
 
   get groupedColumns(): string[] {
-    return this['grouped-columns'] || [];
+    return this['grouped-columns'];
   }
 
   set groupedColumns(value: string[]) {
