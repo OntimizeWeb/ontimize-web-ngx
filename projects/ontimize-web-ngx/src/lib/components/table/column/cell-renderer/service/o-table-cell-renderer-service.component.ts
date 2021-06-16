@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Injector,
-  OnDestroy,
-  OnInit,
-  TemplateRef,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Injector, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
@@ -38,9 +28,10 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'serviceType : service-type',
   'translateArgsFn: translate-params'
 ];
+
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'onDataLoaded'
-]
+];
 
 @Component({
   selector: 'o-table-cell-renderer-service',
@@ -126,6 +117,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   public getDescriptionValue(cellvalue: any, rowValue: any): string {
     if (Util.isDefined(cellvalue) && this.cellValues.indexOf(cellvalue) === -1) {
       this.queryData(cellvalue, rowValue);
+      this.cellValues.push(cellvalue);
     }
     return '';
   }
@@ -144,11 +136,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } else {
       filter[this.column] = cellvalue;
     }
-    this.subscritpions.add(this.dataService[this.queryMethod](filter, this.colArray, this.entity)
+    this.dataService[this.queryMethod](filter, this.colArray, this.entity)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.responseMap[cellvalue] = resp.data[0][this.valueColumn];
-          this.cellValues.push(cellvalue);
           this.onDataLoaded.emit(this.responseMap[cellvalue]);
         }
       }, err => {
@@ -158,7 +149,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
         } else {
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         }
-      }));
+      });
   }
 
   public configureService(): void {
