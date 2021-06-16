@@ -48,7 +48,18 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   public onSearch: EventEmitter<any> = new EventEmitter<any>();
 
   public colArray: ColumnObject[] = [];
-  public placeholder: string = 'SEARCH';
+  public _placeholder: string = 'SEARCH';
+
+  get placeholder(): string {
+    return this._placeholder;
+  }
+
+  set placeholder(value: string) {
+    if (Util.isDefined(value)) {
+      this._placeholder = value;
+    }
+  }
+
   public width: string;
   public columns: string;
   @InputConverter()

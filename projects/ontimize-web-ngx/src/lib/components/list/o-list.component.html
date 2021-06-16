@@ -22,7 +22,8 @@
         <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
       </div>
       <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive"
-        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [columns]="quickFilterColumns" placeholder="" appearance="legacy">
+        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [columns]="quickFilterColumns"
+        [placeholder]="quickFilterPlaceholder" appearance="legacy">
       </o-search-input>
     </div>
   </mat-toolbar>

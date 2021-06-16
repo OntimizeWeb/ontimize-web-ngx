@@ -7,6 +7,8 @@
  * new `getFilterExpression` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
 * **o-table-cell-renderer-service**: 
  * adding `value-column-type` attribute and `queryAllData` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
+* **o-table-quickfilter**: new `placeholder` input ([#635](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/635)) ([f79fab4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f79fab4))
+* **OServiceComponent**: new `quick-filter-placeholder` input ([#635](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/635)) ([f79fab4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f79fab4))
 
 ### BREAKING CHANGES
 * The authentication has been refactored:

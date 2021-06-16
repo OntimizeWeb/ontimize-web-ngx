@@ -78,6 +78,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilter: quick-filter',
+
+  // quick-filter-placeholder: quick filter placeholder
+  'quickFilterPlaceholder: quick-filter-placeholder',
 ];
 
 export class OServiceComponent extends OServiceBaseComponent {
@@ -155,6 +158,8 @@ export class OServiceComponent extends OServiceBaseComponent {
       setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
     }
   }
+
+  public quickFilterPlaceholder: string;
   /* end of inputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
