@@ -27,7 +27,9 @@ import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 
-export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
+export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
+  'placeholder'
+];
 
 export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   'onChange'
@@ -46,6 +48,18 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   }
 })
 export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, AfterViewInit, OnDestroy {
+
+  protected _placeholder: string = 'TABLE.FILTER';
+
+  get placeholder(): string {
+    return this._placeholder;
+  }
+
+  set placeholder(value: string) {
+    if (Util.isDefined(value)) {
+      this._placeholder = value;
+    }
+  }
 
   @ViewChild('filter', { static: false })
   public filter: ElementRef;

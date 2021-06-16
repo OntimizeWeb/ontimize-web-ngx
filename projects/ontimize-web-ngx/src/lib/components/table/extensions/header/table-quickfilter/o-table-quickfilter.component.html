@@ -1,18 +1,21 @@
 <div class="quickFilter" fxLayout="row">
   <mat-form-field floatLabel="never" appearance="legacy">
-    <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate}}" [formControl]="formControl" (click)="$event.stopPropagation()">
-    <mat-icon matPrefix svgIcon="ontimize:search" [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()"
-      class="icon-btn search-icon"></mat-icon>
+    <input matInput #filter placeholder="{{ placeholder | oTranslate}}" [formControl]="formControl"
+      (click)="$event.stopPropagation()">
+    <mat-icon matPrefix svgIcon="ontimize:search" [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()"
+      (click)="$event.stopPropagation()" class="icon-btn search-icon"></mat-icon>
     <mat-menu #menu="matMenu" class="o-table-quickfilter-menu">
       <div fxLayout="column" class="checkbox-container">
 
-        <mat-checkbox (click)="$event.stopPropagation()" [checked]="areAllColumnsChecked()" (change)="onSelectAllChange($event)">
+        <mat-checkbox (click)="$event.stopPropagation()" [checked]="areAllColumnsChecked()"
+          (change)="onSelectAllChange($event)">
           {{ 'SELECT_ALL' | oTranslate}}
         </mat-checkbox>
         <mat-divider></mat-divider>
 
         <ng-container *ngFor="let column of quickFilterColumns">
-          <mat-checkbox (click)="$event.stopPropagation()" [checked]="isChecked(column)" (change)="onCheckboxChange(column, $event)">
+          <mat-checkbox (click)="$event.stopPropagation()" [checked]="isChecked(column)"
+            (change)="onCheckboxChange(column, $event)">
             {{ column.title | oTranslate }}
           </mat-checkbox>
         </ng-container>
