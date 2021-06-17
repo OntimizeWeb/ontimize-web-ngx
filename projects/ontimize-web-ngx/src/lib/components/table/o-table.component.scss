@@ -246,6 +246,16 @@ $o_table_row_padding: 24px;
             padding-right: $o_table_row_padding;
           }
 
+          &.grouping-row {
+            padding-top: 30px;
+            .grouping-title-wrapper {
+              position:absolute;
+              width:100%;
+              left:0;
+              top:0;
+            }
+          }
+
           &.empty-cell {
             min-height: 16px;
           }

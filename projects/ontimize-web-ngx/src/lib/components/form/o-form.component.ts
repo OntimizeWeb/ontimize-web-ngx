@@ -529,6 +529,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    const readOnly = this.isInInitialMode() && !this.isEditableDetail();
+    const cancelledEdition = this.isInUpdateMode() && this._formToolbar && !this._formToolbar.editMode;
+    if (readOnly || cancelledEdition) {
+      return true;
+    }
+
     if (!this.confirmExit) {
       return true;
     }
@@ -568,9 +574,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   addDeactivateGuard() {
-    if (this.isInInitialMode() && !this.isEditableDetail()) {
-      return;
-    }
     if (!this.actRoute || !this.actRoute.routeConfig) {
       return;
     }

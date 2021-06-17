@@ -58,7 +58,7 @@ export class OFormNavigationComponent implements OnDestroy {
     this.formLayoutManager = this._form.getFormManager();
 
     let navData;
-    if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
+    if (this.formLayoutManager && this.formLayoutManager.allowNavigation()) {
       navData = this.navigationService.getLastItem();
     } else {
       navData = this.navigationService.getPreviousRouteData();
@@ -223,8 +223,8 @@ export class OFormNavigationComponent implements OnDestroy {
     this._form.showConfirmDiscardChanges().then(res => {
       if (res === true) {
         this.currentIndex = index;
-        if (this.formLayoutManager && this.formLayoutManager.isDialogMode()) {
-          this.moveInDialogManager(this.formLayoutManager, index);
+        if (this.formLayoutManager && this.formLayoutManager.allowNavigation()) {
+          this.moveInFormLayoutManager(index);
         } else {
           this.moveWithoutManager(index);
         }
@@ -256,8 +256,7 @@ export class OFormNavigationComponent implements OnDestroy {
     }
   }
 
-  private moveInDialogManager(formLayoutManager: any, index: number) {
-    formLayoutManager.dialogRef.componentInstance.urlParams = this.navigationData[index];
+  private moveInFormLayoutManager(index: number) {
     this._form.setUrlParamsAndReload(this.navigationData[index]);
   }
 

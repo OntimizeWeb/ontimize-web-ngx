@@ -7,12 +7,12 @@ import {
   Inject,
   Injector,
   OnInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
 import { DialogService } from '../../../../../services/dialog.service';
-import { OTableFiltersStatus } from '../../../../../types/o-table-filter-status.type';
+import { OTableFiltersStatus } from '../../../../../types/table/o-table-filter-status.type';
 
 @Component({
   selector: 'o-table-load-filter-dialog',
@@ -24,7 +24,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
 
   @ViewChild(MatSelectionList, { static: true }) filterList: MatSelectionList;
 
-  filters: Array<OTableFiltersStatus> = [];
+  filters: OTableFiltersStatus[] = [];
 
   onDelete: EventEmitter<string> = new EventEmitter();
 
@@ -33,7 +33,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<OTableLoadFilterDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: Array<OTableFiltersStatus>,
+    @Inject(MAT_DIALOG_DATA) data: OTableFiltersStatus[],
     protected injector: Injector
   ) {
     this.loadFilters(data);
@@ -49,7 +49,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
     this.filterList.selectedOptions = new SelectionModel<MatListOption>(false);
   }
 
-  loadFilters(filters: Array<OTableFiltersStatus>): void {
+  loadFilters(filters: OTableFiltersStatus[]): void {
     this.filters = filters;
   }
 

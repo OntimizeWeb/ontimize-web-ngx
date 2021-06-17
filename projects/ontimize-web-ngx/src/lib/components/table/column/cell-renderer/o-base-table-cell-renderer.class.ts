@@ -1,6 +1,8 @@
 import { AfterContentInit, Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
 
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
+import { Expression } from '../../../../types/expression.type';
+import { FilterExpressionUtils } from '../../../../util/filter-expression.utils';
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
 import { OTableColumnComponent } from '../o-table-column.component';
@@ -108,4 +110,7 @@ export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
     return result;
   }
 
+  public getFilterExpression(quickFilter: string): Expression {
+    return FilterExpressionUtils.buildExpressionLike(this.tableColumn.attr, quickFilter);
+  }
 }
