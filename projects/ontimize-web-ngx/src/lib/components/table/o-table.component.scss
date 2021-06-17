@@ -248,11 +248,20 @@ $o_table_row_padding: 24px;
 
           &.grouping-row {
             padding-top: 30px;
+            cursor: pointer;
             .grouping-title-wrapper {
               position:absolute;
               width:100%;
               left:0;
               top:0;
+            }
+            .grouping-aggregate {
+              font-weight: bold;
+              font-size: 14px;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              padding-bottom: 8px;
             }
           }
 
