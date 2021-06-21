@@ -19,18 +19,22 @@
   .mat-form-field {
     &.mat-form-field-disabled.accent {
       @include icon-color-mixin(mat-color($accent, 0.42));
+      .placeholder {
+        color: mat-color($accent, 0.42);
+      }
     }
 
     &:not(.mat-form-field-disabled) {
       @include icon-color-mixin(mat-color($foreground, icon));
-
+      .placeholder {
+        color: mat-color($foreground, icon);
+      }
       &.accent {
         @include icon-color-mixin(mat-color($accent));
+        .placeholder {
+          color: mat-color($accent);
+        }
       }
-    }
-
-    .placeholder {
-      color: mat-color($accent) ;
     }
 
 
