@@ -1,6 +1,7 @@
 <div class="quickFilter" fxLayout="row">
   <mat-form-field floatLabel="never" appearance="legacy">
-    <input matInput #filter placeholder="{{ placeholder | oTranslate}}" [formControl]="formControl" (click)="$event.stopPropagation()">
+    <input matInput #filter [formControl]="formControl" (click)="$event.stopPropagation()">
+    <mat-placeholder class="placeholder">{{ placeholder | oTranslate}}</mat-placeholder>
     <mat-icon matPrefix svgIcon="ontimize:search" [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()"
       class="icon-btn search-icon"></mat-icon>
     <mat-menu #menu="matMenu" class="o-table-quickfilter-menu">

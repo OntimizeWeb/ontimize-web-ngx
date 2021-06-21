@@ -29,6 +29,11 @@
       }
     }
 
+    .placeholder {
+      color: mat-color($accent) ;
+    }
+
+
     .mat-disabled {
       color: mat-color($foreground, disabled-button);
     }
