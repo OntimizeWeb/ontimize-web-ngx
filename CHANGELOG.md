@@ -1,3 +1,17 @@
+## 8.3.1
+### Features
+* **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)
+* **o-grid**: new `pageSizeChanged` and `sortColumnChanged` methods ([#643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/643)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **AbstractOServiceComponent**: ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+  * New `filterData` and `setData` common methods defintions (used in `o-list` and `o-grid`, overrided in `o-table`)
+  * New `getQuickFilterDataFromArray`, `getSortedDataFromArray`, `getPaginationDataFromArray` and `parseResponseArray` methods 
+  * `onDataLoaded` and `onPaginatedDataLoaded` common outputs variables definition (removed from `o-list`, `o-grid` and `o-table`)
+
+### Bug Fixes
+* **o-grid**: adding `registerQuickFilter` method extension ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([17a3263](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17a3263))
+* **o-list**: fixing `sort-columns` initialization error ([#639](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/639)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **OGridComponentStateService, OListmponentStateService**: storing missing properties ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+
 ## 8.3.0 (2021-06-16)
 ### Features
 * **o-form-layout-manager**: new `split-pane` mode. 
