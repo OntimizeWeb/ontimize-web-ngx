@@ -34,6 +34,7 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
@@ -205,6 +206,8 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected subscription: Subscription = new Subscription();
   protected media: MediaObserver;
 
+  protected oMatSort: OMatSort;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -212,6 +215,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   ) {
     super(injector, elRef, form);
     this.media = this.injector.get(MediaObserver);
+    this.oMatSort = new OMatSort();
   }
 
   get state(): OGridComponentStateClass {
@@ -520,6 +524,14 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
       this.reloadData();
     } else {
       this.filterData();
+    }
+  }
+
+  public registerQuickFilter(arg: any): void {
+    super.registerQuickFilter(arg);
+    if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state.quickFilterActiveColumns)) {
+      const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
+      this.quickFilterComponent.setActiveColumns(parsedArr);
     }
   }
 }
