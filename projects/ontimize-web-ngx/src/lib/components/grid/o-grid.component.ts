@@ -569,4 +569,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     });
   }
 
+  public registerQuickFilter(arg: any): void {
+    super.registerQuickFilter(arg);
+    if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state.quickFilterActiveColumns)) {
+      const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
+      this.quickFilterComponent.setActiveColumns(parsedArr);
+    }
+  }
 }
