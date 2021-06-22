@@ -64,6 +64,40 @@
     
   </o-form-layout-manager>
   ```  
+* The service components hierarchy has been changed, now using abstract classes.
+  * New `OServiceBaseComponent` hierarchy:
+    * New `AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>`.
+    * New `DefaultOServiceBaseComponent` default implementation of `AbstractOServiceBaseComponent` using the `DefaultComponentStateService`.
+    * `OServiceBaseComponent` keeps existing to have backwards compatibility, its equals to the `DefaultOServiceBaseComponent`.
+  * New `OServiceComponent` hierarchy:
+    * New `AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>` extending `AbstractOServiceBaseComponent<T>`. 
+    * `OServiceComponent` keeps existing to have backwards compatibility, its a default implementation of `AbstractOServiceComponent` using the `DefaultComponentStateService`.
+  * If you have a component extending `OServiceBaseComponent` or `OServiceComponent` it should keep working as usual.
+  * If you have a component extending a `o-table`, `o-list` or `o-grid` you have to add its own component state service to the providers array:
+    * `o-table`:
+      ```javascript 
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```
+    * `o-list`:
+      ```javascript 
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OListComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```
+    * `o-grid`:
+      ```javascript 
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OGridComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```     
 
 ### Bug Fixes
 * **o-table**: fixing header sort bug ([794210d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794210d)) Closes [#629](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/629)
