@@ -1,6 +1,6 @@
 ## 8.3.1
 ### Bug Fixes
-* **o-table**: New attribute for o-table visible-columns-by-default to set the initial visible columns ([f5245fd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5245fd)) Closes [#641](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/641)
+* **o-table**: New attribute for o-table visible-columns-by-default to set the initial visible columns ([9891e29](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9891e29)) Closes [#647](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/647)
 
 ## 8.3.0 (2021-06-16)
 ### Features
