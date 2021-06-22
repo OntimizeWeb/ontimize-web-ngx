@@ -97,6 +97,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
 
+  // visible-columns-by-default [string]: columns that are visible by default, separated by ';'. Default: no value.
+  'visibleColumnsByDefault: visible-columns-by-default',
+
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
   // 'editableColumns: editable-columns',
 
@@ -392,6 +395,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
+  public visibleColumnsByDefault: string;
   public groupedColumns: string;
 
   public sortColumns: string;
@@ -729,6 +733,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (clonedOpts.hasOwnProperty('visibleColumns')) {
         this.visibleColumns = clonedOpts.visibleColumns;
       }
+      if (clonedOpts.hasOwnProperty('visibleColumnsByDefault')) {
+        this.visibleColumnsByDefault = clonedOpts.visibleColumnsByDefault;
+      }
       if (clonedOpts.hasOwnProperty('keys')) {
         this.keys = clonedOpts.keys;
       }
@@ -935,7 +942,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
-      this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+      this.visibleColArray = Util.parseArray(this.visibleColumnsByDefault ? this.visibleColumnsByDefault : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
   }

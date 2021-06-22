@@ -1,3 +1,7 @@
+## 8.3.1
+### Bug Fixes
+* **o-table**: New attribute for o-table visible-columns-by-default to set the initial visible columns ([f5245fd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5245fd)) Closes [#641](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/641)
+
 ## 8.3.0 (2021-06-16)
 ### Features
 * **o-form-layout-manager**: new `split-pane` mode. 
