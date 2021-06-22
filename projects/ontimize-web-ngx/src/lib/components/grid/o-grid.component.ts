@@ -12,11 +12,12 @@ import {
   OnInit,
   Optional,
   QueryList,
+  SimpleChange,
   ViewChild,
   ViewChildren
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatPaginator, PageEvent } from '@angular/material';
+import { MatPaginator, MatSelectChange, PageEvent } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -162,8 +163,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   public onClick: EventEmitter<any> = new EventEmitter();
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
-  public onDataLoaded: EventEmitter<any> = new EventEmitter();
-  public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
 
   @ContentChildren(forwardRef(() => OGridItemComponent))
   public inputGridItems: QueryList<OGridItemComponent>;
@@ -181,7 +180,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected _colsDefault = 1;
   protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
   protected sortColumn: string;
-  protected dataResponseArray: any[] = [];
   public storePaginationState: boolean = false;
 
   set gridItems(value: IGridItem[]) {
@@ -227,10 +225,17 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public initialize(): void {
     super.initialize();
 
+    if (this.staticData && this.staticData.length) {
+      this.dataResponseArray = this.staticData;
+    }
+    if (!Util.isDefined(this.quickFilterColumns)) {
+      this.quickFilterColumns = this.columns;
+    }
+    this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
+
     if (Util.isDefined(this.state.sortColumn)) {
       this.sortColumn = this.state.sortColumn;
     }
-
     this.parseSortColumn();
 
     const existingOption = this.pageSizeOptions.find(option => option === this.queryRows);
@@ -238,28 +243,25 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
       this._pageSizeOptions.push(this.queryRows);
       this._pageSizeOptions.sort((i: number, j: number) => i - j);
     }
-
-    if (!Util.isDefined(this.quickFilterColumns)) {
-      this.quickFilterColumns = this.columns;
-    }
-    this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
-
     if (Util.isDefined(this.state.currentPage)) {
       this.currentPage = this.state.currentPage;
     }
-
-    if (this.queryOnInit) {
-      this.queryData();
+    if (Util.isDefined(this.state.queryRows)) {
+      this.queryRows = this.state.queryRows;
     }
   }
 
   public ngAfterViewInit(): void {
     super.afterViewInit();
+    this.filterCaseSensitive = Util.isDefined(this.state.filterCaseSensitive) ?
+      this.state.filterCaseSensitive :
+      this.filterCaseSensitive;
     this.setGridItemDirectivesData();
-    if (this.searchInputComponent) {
-      this.registerQuickFilter(this.searchInputComponent);
-    }
     this.subscribeToMediaChanges();
+    this.registerQuickFilter(this.searchInputComponent);
+    if (this.queryOnInit) {
+      this.queryData();
+    }
   }
 
   public ngAfterContentInit(): void {
@@ -307,81 +309,30 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     this.reloadData();
   }
 
-
-  public setDataArray(data: any): void {
-    if (Util.isArray(data)) {
-      this.dataResponseArray = data;
-    } else if (Util.isObject(data)) {
-      this.dataResponseArray = [data];
-    } else {
-      console.warn('Component has received not supported service data. Supported data are Array or Object');
-      this.dataResponseArray = [];
+  protected getSortedDataFromArray(dataArray: any[]): any[] {
+    if (Util.isDefined(this.sortColumnOrder)) {
+      return this.oMatSort.getSortedDataBySQLOrder(dataArray, [this.sortColumnOrder]);
     }
-    this.filterData();
+    return dataArray;
   }
 
-  /**
-   * Filters data locally
-   * @param value the filtering value
-   */
-  public filterData(value?: string, loadMore?: boolean): void {
-    value = Util.isDefined(value) ? value : Util.isDefined(this.quickFilterComponent) ? this.quickFilterComponent.getValue() : void 0;
-    if (this.state && Util.isDefined(value)) {
-      this.state.quickFilterValue = value;
-    }
-    if (this.pageable) {
-      const queryArgs: OQueryDataArgs = {
-        offset: 0,
-        length: this.queryRows,
-        replace: true
-      };
-      this.queryData(void 0, queryArgs);
-      return;
-    }
-
-    if (this.dataResponseArray && this.dataResponseArray.length > 0) {
-      let filteredData = this.dataResponseArray.slice(0);
-      if (value && value.length > 0) {
-        const caseSensitive = this.isFilterCaseSensitive();
-        const self = this;
-
-        filteredData = filteredData.filter(item => {
-          return self.getQuickFilterColumns().some(col => {
-            const regExpStr = Util.escapeSpecialCharacter(Util.normalizeString(value, !caseSensitive));
-            return new RegExp(regExpStr).test(Util.normalizeString(item[col] + '', !caseSensitive));
-          });
-
-        });
-      }
-      if (Util.isDefined(this.sortColumnOrder)) {
-        // Simple sorting
-        const sort = this.sortColumnOrder;
-        const factor = (sort.ascendent ? 1 : -1);
-        // filteredData = filteredData.sort((a, b) => (Util.normalizeString(a[sort.columnName]) > Util.normalizeString(b[sort.columnName])) ? (1 * factor) : (Util.normalizeString(b[sort.columnName]) > Util.normalizeString(a[sort.columnName])) ? (-1 * factor) : 0);
-        filteredData.sort((a, b) => {
-          const aOp = isNaN(a[sort.columnName]) ? Util.normalizeString(a[sort.columnName]) : a[sort.columnName];
-          const bOp = isNaN(b[sort.columnName]) ? Util.normalizeString(b[sort.columnName]) : b[sort.columnName];
-          return (aOp > bOp) ? (1 * factor) : (bOp > aOp) ? (-1 * factor) : 0;
-        });
-      }
-      if (this.paginationControls) {
-        this.dataArray = filteredData.splice(this.currentPage * this.queryRows, this.queryRows);
-      } else {
-        this.dataArray = filteredData.splice(0, this.queryRows * (this.currentPage + 1));
-      }
+  protected getPaginationDataFromArray(dataArray: any[]): any[] {
+    let result = dataArray;
+    if (this.paginationControls) {
+      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
     } else {
-      this.dataArray = this.dataResponseArray;
+      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
     }
+    return result;
   }
 
   public registerGridItemDirective(item: OGridItemDirective): void {
     if (item) {
-      const self = this;
-      if (self.detailMode === Codes.DETAIL_MODE_CLICK) {
-        item.onClick(gridItem => self.onItemDetailClick(gridItem));
+      if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
+        item.onClick(gridItem => this.onItemDetailClick(gridItem));
       }
-      if (Codes.isDoubleClickMode(self.detailMode)) {
-        item.onDoubleClick(gridItem => self.onItemDetailDblClick(gridItem));
+      if (Codes.isDoubleClickMode(this.detailMode)) {
+        item.onDoubleClick(gridItem => this.onItemDetailDblClick(gridItem));
       }
     }
   }
@@ -404,6 +355,13 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   public ngOnDestroy(): void {
     this.destroy();
+  }
+
+  public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
+    if (changes.staticData !== undefined) {
+      this.dataResponseArray = changes.staticData.currentValue;
+      this.filterData();
+    }
   }
 
   public destroy(): void {
@@ -444,28 +402,27 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   public parseSortColumn(): void {
     const parsed = (ServiceUtils.parseSortColumns(this.sortColumn) || [])[0];
-    const exists = parsed ? this.sortableColumns.find((item: SQLOrder) => (item.columnName === parsed.columnName) && (item.ascendent === parsed.ascendent)) : false;
-    if (exists) {
+    const index = this.findSortableColumnIndex(parsed);
+    if (Util.isDefined(index) && index !== -1) {
       this.sortColumnOrder = parsed;
     }
   }
 
   get currentOrderColumn(): number {
-    if (!Util.isDefined(this.sortColumnOrder)) {
-      return undefined;
-    }
-    let index;
-    this.sortableColumns.forEach((item: SQLOrder, i: number) => {
-      if ((item.columnName === this.sortColumnOrder.columnName) &&
-        (item.ascendent === this.sortColumnOrder.ascendent)) {
-        index = i;
-      }
-    });
-    return index;
+    return this.findSortableColumnIndex(this.sortColumnOrder);
   }
 
   set currentOrderColumn(val: number) {
     this.sortColumnOrder = this.sortableColumns[val];
+  }
+
+  protected findSortableColumnIndex(sortableColumn: SQLOrder): number {
+    if (!Util.isDefined(sortableColumn)) {
+      return null;
+    }
+    return this.sortableColumns
+      .findIndex(item => item.columnName === sortableColumn.columnName
+        && item.ascendent === sortableColumn.ascendent);
   }
 
   public onChangePage(e: PageEvent): void {
@@ -522,35 +479,16 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     super.insertDetail();
   }
 
-  protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
-    if (Util.isArray(data)) {
-      let dataArray = data;
-      let respDataArray = data;
-      if (!replace) {
-        if (this.pageable) {
-          dataArray = this.paginationControls ? data : (this.dataArray || []).concat(data);
-          respDataArray = this.paginationControls ? data : (this.dataResponseArray || []).concat(data);
-        } else {
-          dataArray = data.slice(this.paginationControls ? ((this.queryRows * (this.currentPage + 1)) - this.queryRows) : 0, this.queryRows * (this.currentPage + 1));
-          respDataArray = data;
-        }
-      }
-      this.dataArray = dataArray;
-      this.dataResponseArray = respDataArray;
-      if (!this.pageable) {
-        this.filterData();
-      }
-    } else {
-      this.dataArray = [];
-      this.dataResponseArray = [];
+  protected parseResponseArray(data: any[], replace?: boolean) {
+    let result = data;
+    if (this.pageable && !replace) {
+      // dataArray = this.paginationControls ? data : (this.dataArray || []).concat(data);
+      result = this.paginationControls ? data : (this.dataResponseArray || []).concat(data);
+    } else if (!this.pageable) {
+      // dataArray = data.slice(this.paginationControls ? ((this.queryRows * (this.currentPage + 1)) - this.queryRows) : 0, this.queryRows * (this.currentPage + 1));
+      result = data;
     }
-    if (this.loaderSubscription) {
-      this.loaderSubscription.unsubscribe();
-    }
-    if (this.pageable) {
-      ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
-    }
-    ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
+    return result;
   }
 
   protected saveDataNavigationInLocalStorage(): void {
@@ -559,14 +497,29 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
   protected setGridItemDirectivesData(): void {
-    const self = this;
     this.gridItemDirectives.changes.subscribe(() => {
       this.gridItemDirectives.toArray().forEach((element: OGridItemDirective, index) => {
-        element.setItemData(self.dataArray[index]);
-        element.setGridComponent(self);
-        self.registerGridItemDirective(element);
+        element.setItemData(this.dataArray[index]);
+        element.setGridComponent(this);
+        this.registerGridItemDirective(element);
       });
     });
   }
 
+  public pageSizeChanged() {
+    if (this.pageable) {
+      this.reloadData();
+    } else {
+      this.filterData();
+    }
+  }
+
+  public sortColumnChanged(event: MatSelectChange) {
+    this.currentOrderColumn = event.value;
+    if (this.pageable) {
+      this.reloadData();
+    } else {
+      this.filterData();
+    }
+  }
 }

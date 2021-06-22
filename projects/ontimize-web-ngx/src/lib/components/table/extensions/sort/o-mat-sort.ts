@@ -105,6 +105,11 @@ export class OMatSort extends MatSort {
     return (direction === 'asc' || direction === 'desc');
   }
 
+  getSortedDataBySQLOrder(data: any[], sqlOrderArray: SQLOrder[]): any[] {
+    this.setSortColumns(sqlOrderArray);
+    return this.getSortedData(data);
+  }
+
   getSortedData(data: any[]): any[] {
     const sortColumns = this.getSortColumns();
     if (sortColumns.length === 0 || data.length === 0) {
