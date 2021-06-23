@@ -10,7 +10,7 @@
 ### Bug Fixes
 * **o-grid**: adding `registerQuickFilter` method extension ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([17a3263](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17a3263))
 * **o-list**: fixing `sort-columns` initialization error ([#639](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/639)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
-* **OGridComponentStateService, OListmponentStateService**: storing missing properties ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **OGridComponentStateService, OListComponentStateService**: storing missing properties ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
 * **o-table**: Quickfilter glass icon position and placeholder color ([f5245fd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5245fd)) Closes [#641](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/641)
 
 ## 8.3.0 (2021-06-16)
