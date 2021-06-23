@@ -35,6 +35,7 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
 export const DEFAULT_INPUTS_O_LIST = [
@@ -109,15 +110,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public insertButtonFloatable: boolean = true;
   public quickFilterColumns: string;
   public route: string;
-
-  get sortColumns(): string {
-    return this._sortColumns;
-  }
-  set sortColumns(val: string) {
-    this._sortColumns = val;
-    this.parseSortColumns();
-  }
-  protected _sortColumns: string;
+  public sortColumns: string;
   /* End Inputs */
 
   public sortColArray: SQLOrder[] = [];
@@ -126,15 +119,14 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
   public onItemDeleted: EventEmitter<any> = new EventEmitter();
-  public onDataLoaded: EventEmitter<any> = new EventEmitter();
-  public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
 
   public selection = new SelectionModel<Element>(true, []);
   public enabledDeleteButton: boolean = false;
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
-  protected dataResponseArray: any[] = [];
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
+
+  protected oMatSort: OMatSort;
 
   constructor(
     injector: Injector,
@@ -142,6 +134,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
+    this.oMatSort = new OMatSort();
   }
 
   get state(): OListComponentStateClass {
@@ -157,8 +150,12 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     super.afterViewInit();
     this.filterCaseSensitive = Util.isDefined(this.state.filterCaseSensitive) ?
       this.state.filterCaseSensitive :
-      this.filterCaseSensitive
+      this.filterCaseSensitive;
+    this.parseSortColumns();
     this.registerQuickFilter(this.searchInputComponent);
+    if (this.queryOnInit) {
+      this.queryData();
+    }
   }
 
   public ngAfterContentInit(): void {
@@ -174,9 +171,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
     if (changes.staticData !== undefined) {
       this.dataResponseArray = changes.staticData.currentValue;
-      if (Util.isDefined(this.state)) {
-        this.filterData(this.state.quickFilterValue);
-      }
+      this.filterData();
     }
   }
 
@@ -194,20 +189,12 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       this.quickFilterColumns = this.columns;
     }
     this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
-    let initialQueryLength: number;
-    if (Util.isDefined(this.state.queryRecordOffset)) {
-      initialQueryLength = this.state.queryRecordOffset;
-    }
     this.state.queryRecordOffset = 0;
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
-    if (this.queryOnInit) {
-      const queryArgs: OQueryDataArgs = {
-        offset: 0,
-        length: initialQueryLength || this.queryRows
-      };
-      this.queryData(void 0, queryArgs);
+    if (Util.isDefined(this.state.queryRows)) {
+      this.queryRows = this.state.queryRows;
     }
   }
 
@@ -274,34 +261,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     this.reloadData();
   }
 
-  /**
-   * Filters data locally
-   * @param value the filtering value
-   */
-  public filterData(value: string, loadMore?: boolean): void {
-    if (this.state) {
-      this.state.quickFilterValue = value;
-    }
-    if (this.pageable) {
-      const queryArgs: OQueryDataArgs = {
-        offset: 0,
-        length: this.queryRows,
-        replace: true
-      };
-      this.queryData(void 0, queryArgs);
-    } else if (value && value.length > 0 && this.dataResponseArray && this.dataResponseArray.length > 0) {
-      const self = this;
-      const caseSensitive = this.isFilterCaseSensitive();
-      const filteredData = this.dataResponseArray.filter(item => {
-        return self.getQuickFilterColumns().some(col => {
-          const regExpStr = Util.escapeSpecialCharacter(Util.normalizeString(value, !caseSensitive));
-          return new RegExp(regExpStr).test(Util.normalizeString(item[col] + '', !caseSensitive));
-        });
-      });
-      this.setDataArray(filteredData);
-    } else {
-      this.setDataArray(this.dataResponseArray);
-    }
+  protected getSortedDataFromArray(dataArray: any[]): any[] {
+    return this.oMatSort.getSortedDataBySQLOrder(dataArray, this.sortColArray);
   }
 
   public isItemSelected(item: any): boolean {
@@ -397,35 +358,18 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     this.storePaginationState = true;
   }
 
-  protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
-    if (Util.isArray(data)) {
-      let respDataArray = data;
-      if (this.pageable && !replace) {
-        respDataArray = (this.dataResponseArray || []).concat(data);
-      }
-
-      const selectedIndexes = this.state.selectedIndexes || [];
-      for (const selIndex of selectedIndexes) {
-        if (selIndex < this.dataResponseArray.length) {
-          this.selection.select(this.dataResponseArray[selIndex]);
-        }
-      }
-      this.dataResponseArray = respDataArray;
-      if (!this.pageable) {
-        this.filterData(this.state.quickFilterValue);
-      } else {
-        this.setDataArray(this.dataResponseArray);
-      }
-    } else {
-      this.setDataArray([]);
+  protected parseResponseArray(data: any[], replace?: boolean) {
+    let result = data;
+    if (this.pageable && !replace) {
+      result = (this.dataResponseArray || []).concat(data);
     }
-    if (this.loaderSubscription) {
-      this.loaderSubscription.unsubscribe();
+    const selectedIndexes = this.state.selectedIndexes || [];
+    for (const selIndex of selectedIndexes) {
+      if (selIndex < this.dataResponseArray.length) {
+        this.selection.select(this.dataResponseArray[selIndex]);
+      }
     }
-    if (this.pageable) {
-      ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
-    }
-    ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
+    return result;
   }
 
   public registerQuickFilter(arg: any): void {

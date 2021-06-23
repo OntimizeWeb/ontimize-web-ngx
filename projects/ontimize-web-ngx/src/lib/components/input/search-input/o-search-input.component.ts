@@ -8,6 +8,7 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { SnackBarService } from '../../../services/snackbar.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { Expression } from '../../../types/expression.type';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { OInputsOptions } from '../../../types/o-inputs-options.type';
 import { FilterExpressionUtils } from '../../../util/filter-expression.utils';
 import { Util } from '../../../util/util';
@@ -155,8 +156,8 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     return this.term.value;
   }
 
-  public setValue(val: string): void {
-    this.term.setValue(val);
+  public setValue(val: string, options?: FormValueOptions): void {
+    this.term.setValue(val, options);
   }
 
   public getFormControl(): FormControl {

@@ -1,5 +1,17 @@
 ## 8.3.1
+### Features
+* **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)
+* **o-grid**: new `pageSizeChanged` and `sortColumnChanged` methods ([#643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/643)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **AbstractOServiceComponent**: ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+  * New `filterData` and `setData` common methods defintions (used in `o-list` and `o-grid`, overrided in `o-table`)
+  * New `getQuickFilterDataFromArray`, `getSortedDataFromArray`, `getPaginationDataFromArray` and `parseResponseArray` methods 
+  * `onDataLoaded` and `onPaginatedDataLoaded` common outputs variables definition (removed from `o-list`, `o-grid` and `o-table`)
+
 ### Bug Fixes
+* **o-grid**: adding `registerQuickFilter` method extension ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([17a3263](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17a3263))
+* **o-list**: fixing `sort-columns` initialization error ([#639](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/639)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **OGridComponentStateService, OListComponentStateService**: storing missing properties ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **o-table**: Quickfilter glass icon position and placeholder color ([f5245fd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5245fd)) Closes [#641](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/641)
 * **o-table**: New attribute for o-table visible-columns-by-default to set the initial visible columns ([9891e29](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9891e29)) Closes [#647](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/647)
 
 ## 8.3.0 (2021-06-16)
@@ -54,6 +66,40 @@
     
   </o-form-layout-manager>
   ```  
+* The service components hierarchy has been changed, now using abstract classes.
+  * New `OServiceBaseComponent` hierarchy:
+    * New `AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>`.
+    * New `DefaultOServiceBaseComponent` default implementation of `AbstractOServiceBaseComponent` using the `DefaultComponentStateService`.
+    * `OServiceBaseComponent` keeps existing to have backwards compatibility, its equals to the `DefaultOServiceBaseComponent`.
+  * New `OServiceComponent` hierarchy:
+    * New `AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>` extending `AbstractOServiceBaseComponent<T>`. 
+    * `OServiceComponent` keeps existing to have backwards compatibility, its a default implementation of `AbstractOServiceComponent` using the `DefaultComponentStateService`.
+  * If you have a component extending `OServiceBaseComponent` or `OServiceComponent` it should keep working as usual.
+  * If you have a component extending a `o-table`, `o-list` or `o-grid` you have to add its own component state service to the providers array:
+    * `o-table`:
+      ```javascript 
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```
+    * `o-list`:
+      ```javascript 
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OListComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```
+    * `o-grid`:
+      ```javascript 
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OGridComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```     
 
 ### Bug Fixes
 * **o-table**: fixing header sort bug ([794210d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794210d)) Closes [#629](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/629)
