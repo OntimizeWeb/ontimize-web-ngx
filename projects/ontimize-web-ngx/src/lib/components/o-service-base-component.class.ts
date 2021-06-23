@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, HostListener, Injector, NgZone, OnChanges, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
 
 import { InputConverter } from '../decorators/input-converter';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
@@ -400,13 +399,20 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       }
       this.loaderSubscription = this.load();
 
-      // ensuring false value 
+      // ensuring false value
       this.abortQuery.next(false);
 
       this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
 
+      if (this.abortQuery.value) {
+        // Update pagination info
+        this.state.queryRecordOffset = 0;
+        this.state.totalQueryRecordsNumber = 0;
+        // Set empty data (order is important)
+        this.setData([]);
+        return;
+      }
       this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
-        .pipe(takeWhile(() => !this.abortQuery.value))
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;
