@@ -221,16 +221,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         // the alreadyStored control variable is changed to its initial value
         this.alreadyStored = false;
       });
-
-      // if query-rows in initial configuration is equals to original query-rows input
-      // query_rows will be the value in local storage
-      if (Util.isDefined(this.state.queryRows)) {
-        if (this.state.hasOwnProperty('initial-configuration')
-          && this.state['initial-configuration'].hasOwnProperty('query-rows')
-          && this.state['initial-configuration']['query-rows'] === this.originalQueryRows) {
-          this.queryRows = this.state.queryRows;
-        }
-      }
     }
 
     if (this.staticData) {

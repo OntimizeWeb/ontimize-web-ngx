@@ -20,6 +20,7 @@ export class OGridComponentStateService extends AbstractComponentStateService<OG
 
   getDataToStore(): any {
     const dataToStore = Object.assign({}, this.state);
+    dataToStore['query-rows'] = this.component.queryRows;
     dataToStore['currentPage'] = this.component.currentPage;
 
     if (this.component.storePaginationState) {
@@ -35,6 +36,7 @@ export class OGridComponentStateService extends AbstractComponentStateService<OG
       dataToStore['sort-column'] = this.component.sortColumnOrder.columnName + Codes.COLUMNS_ALIAS_SEPARATOR +
         (this.component.sortColumnOrder.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT);
     }
+    dataToStore['filter-case-sensitive'] = this.component.isFilterCaseSensitive();
 
     if (this.component.quickFilter && Util.isDefined(this.component.quickFilterComponent)) {
       dataToStore['quickFilterActiveColumns'] = this.component.quickFilterComponent.getActiveColumns().join(Codes.ARRAY_INPUT_SEPARATOR);
