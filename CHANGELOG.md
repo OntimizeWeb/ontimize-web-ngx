@@ -1,4 +1,4 @@
-## 8.3.1
+## 8.3.1 (2021-06-24)
 ### Features
 * **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)
 * **o-grid**: new `pageSizeChanged` and `sortColumnChanged` methods ([#643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/643)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
