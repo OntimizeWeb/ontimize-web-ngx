@@ -181,7 +181,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
   'rowClass: row-class',
 
-  // filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
+  // filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table. Default:yes
   'filterColumnActiveByDefault:filter-column-active-by-default',
 
   //grouped-columns [string]: grouped columns separated by ';'. Default: no value.
@@ -284,7 +284,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   @InputConverter()
   showButtonsText: boolean = true;
   @InputConverter()
-  filterColumnActiveByDefault: boolean = false;
+  filterColumnActiveByDefault: boolean = true;
 
 
   protected _oTableOptions: OTableOptions;
