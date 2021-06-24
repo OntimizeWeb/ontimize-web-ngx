@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, HostListener, Injector, NgZone, OnChanges, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
 
 import { InputConverter } from '../decorators/input-converter';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
@@ -221,16 +220,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         // the alreadyStored control variable is changed to its initial value
         this.alreadyStored = false;
       });
-
-      // if query-rows in initial configuration is equals to original query-rows input
-      // query_rows will be the value in local storage
-      if (Util.isDefined(this.state.queryRows)) {
-        if (this.state.hasOwnProperty('initial-configuration')
-          && this.state['initial-configuration'].hasOwnProperty('query-rows')
-          && this.state['initial-configuration']['query-rows'] === this.originalQueryRows) {
-          this.queryRows = this.state.queryRows;
-        }
-      }
     }
 
     if (this.staticData) {
@@ -410,13 +399,20 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       }
       this.loaderSubscription = this.load();
 
-      // ensuring false value 
+      // ensuring false value
       this.abortQuery.next(false);
 
       this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
 
+      if (this.abortQuery.value) {
+        // Update pagination info
+        this.state.queryRecordOffset = 0;
+        this.state.totalQueryRecordsNumber = 0;
+        // Set empty data (order is important)
+        this.setData([]);
+        return;
+      }
       this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
-        .pipe(takeWhile(() => !this.abortQuery.value))
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;

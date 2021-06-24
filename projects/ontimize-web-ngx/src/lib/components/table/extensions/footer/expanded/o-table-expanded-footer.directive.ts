@@ -1,5 +1,6 @@
-import { AfterViewInit, Directive, ElementRef, forwardRef, Inject, Injector, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Injector, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OTableComponent } from './../../../o-table.component';
@@ -14,18 +15,16 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private tableBody: any;
   private tableHeader: any;
   private tdTableWithMessage: any;
-  private onContentChangeSubscription: Subscription;
-  private onVisibleColumnsChangeSubscription: Subscription;
+  private subscription = new Subscription();
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
+    public table: OTableComponent,
     public element: ElementRef,
     private renderer: Renderer2,
     protected injector: Injector
   ) {
     this.translateService = this.injector.get(OTranslateService);
   }
-
 
   ngAfterViewInit() {
     if (this.element.nativeElement.childNodes[2]) {
@@ -37,46 +36,40 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   registerContentChange() {
-    /** Create a tr with a td and inside put the message and add to tbody
-    * <tr><td><span> {message}</span><td><tr>
-    */
-    let tr = this.renderer.createElement('tr');
+    // Create a tr with a td and inside put the message and add to tbody
+    // <tr><td><span>{message}</span><td><tr>
+    const tr = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
     this.renderer.addClass(tr, 'o-table-no-results');
     tr.appendChild(this.tdTableWithMessage);
     this.renderer.appendChild(this.tableBody, tr);
 
-    const self = this;
-    this.onContentChangeSubscription = this.table.onContentChange.subscribe((data) => {
-      self.updateMessageNotResults(data);
-      self.table.cd.detectChanges();
-    });
+    this.subscription.add(this.table.onDataLoaded.subscribe(() => this.updateMessageNotResults()));
+    if (this.table.quickFilter) {
+      this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessageNotResults()));
+    }
   }
 
   registerVisibleColumnsChange() {
-    const self = this;
-    this.onVisibleColumnsChangeSubscription = this.table.onVisibleColumnsChange.subscribe(() => {
-      self.updateColspanTd();
-    });
-
+    this.subscription.add(this.table.onVisibleColumnsChange.subscribe(() => this.updateColspanTd()));
   }
 
-  updateMessageNotResults(data) {
+  updateMessageNotResults(): void {
     // reset span message
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
-    //generate new message
-    if (data.length === 0) {
 
-      let result = '';
-      result = this.translateService.get('TABLE.EMPTY');
-      if (this.table.quickFilter && this.table.oTableQuickFilterComponent &&
-        this.table.oTableQuickFilterComponent.value && this.table.oTableQuickFilterComponent.value.length > 0) {
-        result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
+    if (this.table.daoTable.data.length === 0) {
+      // generate new message
+      let message = '';
+      message = this.translateService.get('TABLE.EMPTY');
+      if (this.table.quickFilter && this.table.oTableQuickFilterComponent && this.table.oTableQuickFilterComponent.value) {
+        message += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
       }
+
       this.spanMessageNotResults = this.renderer.createElement('span');
-      let messageNotResults = this.renderer.createText(result);
+      const messageNotResults = this.renderer.createText(message);
       this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
       this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
       this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
@@ -91,12 +84,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   destroy() {
-    if (this.onContentChangeSubscription) {
-      this.onContentChangeSubscription.unsubscribe();
-    }
-
-    if (this.onVisibleColumnsChangeSubscription) {
-      this.onVisibleColumnsChangeSubscription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
   }
+
 }
