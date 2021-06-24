@@ -32,9 +32,8 @@
             color: mat-color($background, disabled-button);
           }
 
-          .column-filter-icon-active,
-          .column-filter-icon.active {
-            color: mix($table-background, rgba($text-color, 1), (1 - $text-opacity) * 100%);
+          .column-filter-icon-active {
+            color: mat-color($primary);
           }
 
           .o-table-header-indicator-numbered {
