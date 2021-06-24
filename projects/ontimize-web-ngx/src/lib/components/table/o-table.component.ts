@@ -97,6 +97,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
 
+  // visible-columns-by-default [string]: columns that are visible by default, separated by ';'. Default: no value.
+  'defaultVisibleColumns: default-visible-columns',
+
   // editable-columns [string]: columns that can be edited directly over the table, separated by ';'. Default: no value.
   // 'editableColumns: editable-columns',
 
@@ -392,6 +395,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
+  public defaultVisibleColumns: string;
   public groupedColumns: string;
 
   public sortColumns: string;
@@ -450,8 +454,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDeselected: EventEmitter<any> = new EventEmitter();
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
-  public onDataLoaded: EventEmitter<any> = new EventEmitter();
-  public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
   public onVisibleColumnsChange: EventEmitter<any> = new EventEmitter();
@@ -602,7 +604,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   ngAfterViewInit() {
-    this.afterViewInit();
+    super.afterViewInit();
     this.initTableAfterViewInit();
     if (this.oTableMenu) {
       this.matMenu = this.oTableMenu.matMenu;
@@ -728,6 +730,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
       if (clonedOpts.hasOwnProperty('visibleColumns')) {
         this.visibleColumns = clonedOpts.visibleColumns;
+      }
+      if (clonedOpts.hasOwnProperty('defaultVisibleColumns')) {
+        this.defaultVisibleColumns = clonedOpts.defaultVisibleColumns;
       }
       if (clonedOpts.hasOwnProperty('keys')) {
         this.keys = clonedOpts.keys;
@@ -935,7 +940,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
-      this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+      this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
   }
@@ -1090,6 +1095,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     this.initializeCheckboxColumn();
 
+    if (this.storeState) {
+      // if query-rows in initial configuration is equals to original query-rows input
+      // query_rows will be the value in local storage
+      if (Util.isDefined(this.state.queryRows) && Util.isDefined(this.state.initialConfiguration.queryRows)
+        && this.state.initialConfiguration.queryRows === this.originalQueryRows) {
+        this.queryRows = this.state.queryRows;
+      }
+    }
   }
   updateStateExpandedColumn() {
     if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
@@ -2798,5 +2811,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     } else {
       this.reloadData();
     }
+  }
+
+  public filterData(value?: string, loadMore?: boolean): void {
+    //
   }
 }

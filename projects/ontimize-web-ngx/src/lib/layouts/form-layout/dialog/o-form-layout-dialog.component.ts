@@ -111,7 +111,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     this.dialogRef.close();
   }
 
-  getDataToStore() {
+  getDataToStore(): any {
     return null;
   }
 

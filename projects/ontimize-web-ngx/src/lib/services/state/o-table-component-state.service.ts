@@ -159,7 +159,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
 
   protected getColumnFiltersState() {
     const result = {};
-    if (this.component.oTableColumnsFilterComponent) {
+    if (this.component.oTableColumnsFilterComponent && this.component.dataSource) {
       const columnValueFilters = this.component.dataSource.getColumnValueFilters();
       if (columnValueFilters.length > 0) {
         result['column-value-filters'] = columnValueFilters;

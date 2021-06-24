@@ -21,6 +21,7 @@ export class OListComponentStateService extends AbstractComponentStateService<OL
 
   getDataToStore(): any {
     let dataToStore = Object.assign({}, this.state);
+    dataToStore['query-rows'] = this.component.queryRows;
     if (!this.component.storePaginationState) {
       delete dataToStore['queryRecordOffset'];
     }
