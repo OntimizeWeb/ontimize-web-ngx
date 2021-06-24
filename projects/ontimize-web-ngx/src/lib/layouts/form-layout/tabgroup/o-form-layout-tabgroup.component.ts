@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
@@ -63,7 +63,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   protected subscriptions: Subscription = new Subscription();
   protected router: Router;
-  protected _loading: boolean;
   protected dialogService: DialogService;
 
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
@@ -71,6 +70,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public onCloseTab: EventEmitter<any> = new EventEmitter<any>();
 
   protected previousSelectedIndex: number;
+
+  public updateTabComponentsState = new Subject<any>();
 
   constructor(
     protected injector: Injector,
@@ -159,11 +160,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return this.options && this.options.iconPosition === 'left';
   }
 
-  set loading(val: boolean) {
-    this.showLoading.next(val);
-    this._loading = val;
-  }
-
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
@@ -207,19 +203,20 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       this.formLayoutManager.updateIfNeeded();
       this.onMainTabSelected.emit();
     }
-    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) && this._loading) {
-      if (arg.index === this.state.tabsData.length) {
-        this.tabGroup.selectedIndex = this.state.selectedIndex;
-        this.loading = false;
-      }
+    const isLoading = this.showLoading.getValue();
+    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) &&
+      isLoading && arg.index === this.state.tabsData.length) {
+      // this is only triggered once when all tabs are loaded 
+      this.tabGroup.selectedIndex = this.state.selectedIndex;
+      this.showLoading.next(false);
     }
-
-    this.onSelectedTabChange.emit({
-      data: this.data[this.tabGroup.selectedIndex - 1],
-      index: this.tabGroup.selectedIndex,
-      previousIndex: this.previousSelectedIndex
-    });
-
+    if (!isLoading) {
+      this.onSelectedTabChange.emit({
+        data: this.data[this.tabGroup.selectedIndex - 1],
+        index: this.tabGroup.selectedIndex,
+        previousIndex: this.previousSelectedIndex
+      });
+    }
     this.previousSelectedIndex = this.tabGroup.selectedIndex;
   }
 
@@ -332,27 +329,29 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   initializeComponentState() {
-    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData)) {
-      if (this.formLayoutManager) {
-        this.formLayoutManager.setAsActiveFormLayoutManager();
-      }
+    if (this.formLayoutManager) {
+      this.formLayoutManager.setAsActiveFormLayoutManager();
+    }
 
-      if (this.state.tabsData.length >= 1) {
-        this.loading = true;
-        const extras = {};
-        extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
-        // Triggering first tab navigation
-        this.router.navigate([this.state.tabsData[0].url], extras).then(val => {
-          if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
-            // Triggering rest of the tabs creation
-            setTimeout(() => {
-              this.createTabsFromState();
-            }, 0);
-          } else {
-            this.loading = false;
-          }
-        });
-      }
+    if (!Util.isDefined(this.state) || !Util.isDefined(this.state.tabsData)) {
+      return;
+    }
+
+    if (this.state.tabsData.length >= 1) {
+      this.showLoading.next(true);
+      const extras = {};
+      extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
+      // Triggering first tab navigation
+      this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
+        if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
+          // Triggering rest of the tabs creation
+          setTimeout(() => {
+            this.createTabsFromState();
+          }, 0);
+        } else {
+          this.showLoading.next(false);
+        }
+      });
     }
   }
 

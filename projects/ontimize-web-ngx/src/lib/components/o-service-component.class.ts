@@ -9,6 +9,7 @@ import { BooleanConverter, InputConverter } from '../decorators/input-converter'
 import { IServiceDataComponent } from '../interfaces/service-data-component.interface';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutTabGroupComponent } from '../layouts/form-layout/tabgroup/o-form-layout-tabgroup.component';
 import { NavigationService } from '../services/navigation.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
 import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
@@ -214,30 +215,11 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public initialize(): void {
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
-
-      if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
-        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
-      }
-
-      this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
-        if (this.formLayoutManagerTabIndex === arg.previousIndex) {
-          this.updateStateStorage();
-          this.alreadyStored = false;
-        }
-      });
-
-      this.tabsSubscriptions.add(this.formLayoutManager.onCloseTab.subscribe((arg) => {
-        if (this.formLayoutManagerTabIndex === arg.index) {
-          this.updateStateStorage();
-        }
-      }));
-    }
+    this.registerFormLayoutManagerState();
     super.initialize();
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
     }
-
   }
 
   public afterViewInit(): void {
@@ -698,6 +680,43 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
   protected parseResponseArray(data: any[], replace?: boolean) {
     return data;
+  }
+
+  protected registerFormLayoutManagerState() {
+    if (this.storeState && this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
+      if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
+        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+      }
+      const updateComponentStateSubject = (this.formLayoutManager.oTabGroup as OFormLayoutTabGroupComponent).updateTabComponentsState;
+
+      this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.previousIndex) {
+          this.updateStateStorage();
+          // setting alreadyStored to false to force triggering a new storage update after this
+          this.alreadyStored = false;
+          if (arg.index !== 0) {
+            updateComponentStateSubject.next(arg);
+          }
+        }
+      });
+
+      this.tabsSubscriptions.add(updateComponentStateSubject.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.index) {
+          this.componentStateService.initialize(this);
+          this.applyDefaultConfiguration();
+        }
+      }));
+
+      this.tabsSubscriptions.add(this.formLayoutManager.onCloseTab.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.index) {
+          this.updateStateStorage();
+        }
+      }));
+    }
+  }
+
+  applyDefaultConfiguration() {
+
   }
 }
 
