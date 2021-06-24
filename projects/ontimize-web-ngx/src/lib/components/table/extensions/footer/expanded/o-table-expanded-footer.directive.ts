@@ -60,7 +60,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
 
-    if (this.table.dataSource.resultsLength === 0) {
+    if (this.table.daoTable.data.length === 0) {
       // generate new message
       let message = '';
       message = this.translateService.get('TABLE.EMPTY');

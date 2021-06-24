@@ -4,7 +4,8 @@
     <mat-icon *ngIf="!showFilterMenu" svgIcon="ontimize:search" matPrefix></mat-icon>
     <mat-icon *ngIf="showFilterMenu" svgIcon="ontimize:search" matPrefix [matMenuTriggerFor]="menu"
       class="menu-trigger" (menuClosed)="onMenuClosed()"></mat-icon>
-    <input #term matInput id="term" type="search" placeholder="{{ placeholder | oTranslate }}" formControlName="term">
+    <input #term matInput id="term" type="search" formControlName="term">
+    <mat-placeholder class="placeholder">{{ placeholder | oTranslate}}</mat-placeholder>
   </mat-form-field>
 </form>
 
