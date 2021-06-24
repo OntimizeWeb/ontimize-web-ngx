@@ -694,7 +694,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
           this.updateStateStorage();
           // setting alreadyStored to false to force triggering a new storage update after this
           this.alreadyStored = false;
-          updateComponentStateSubject.next(arg);
+          if (arg.index !== 0) {
+            updateComponentStateSubject.next(arg);
+          }
         }
       });
 
