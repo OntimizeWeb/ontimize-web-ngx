@@ -28,7 +28,6 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_ICON = [
     trigger('iconState', [
       state('ACTIVE, HINT', style({ opacity: 1 })),
       state('INACTIVE', style({ opacity: 0 })),
-      //transition('* <=> INACTIVE', animate(AnimationDurations.EXITING)),
       transition('* <=> HINT', animate(AnimationDurations.ENTERING))
     ]),
 
