@@ -117,16 +117,6 @@
       }
     }
 
-    .buttons {
-      button {
-        color: mat-color($foreground, secondary-text);
-
-        &.disabled {
-          color: mat-color($background, disabled-button);
-        }
-      }
-    }
-
     .o-table-body.horizontal-scroll {
       &::-webkit-scrollbar-thumb {
         background-color: mat-color($primary, 200, 0.5);
