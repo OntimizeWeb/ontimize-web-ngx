@@ -16,7 +16,7 @@
            > a:hover,
           &:hover,
           > a.is-selected {
-            color: mat-color($accent);
+            color: mat-color($primary, default-contrast);
           }
         }
       }
@@ -34,11 +34,11 @@
         color: mat-color($primary, default-contrast, 0.54);
 
         .o-app-sidenav-viewer-sidenav-item-selected {
-          color: mat-color($accent);
+          color: mat-color($primary, default-contrast);
         }
 
-        &.o-user-info,
         &.o-user-info {
+
           &:focus,
           &:hover {
             color: inherit;
