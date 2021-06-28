@@ -25,7 +25,7 @@ export interface OTableDataSource {
   getTableData: () => any[];
   addColumnFilter: (filter: OColumnValueFilter) => void;
   initializeColumnsFilters: (filters: OColumnValueFilter[]) => void;
-  clearColumnFilters: (trigger?: boolean) => void;
+  clearColumnFilters: (trigger?: boolean, columnAttrs?: string[]) => void;
   clearColumnFilter: (attr: string, trigger?: boolean) => void;
   isColumnValueFilterActive: () => boolean;
   updateRenderedRowData: (rowData: any) => void;

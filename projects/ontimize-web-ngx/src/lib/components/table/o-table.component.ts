@@ -430,7 +430,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  sortColArray: Array<SQLOrder> = [];
+  sortColArray: SQLOrder[] = [];
   /*end of parsed inputs variables */
 
   protected tabGroupContainer: MatTabGroup;
@@ -1988,8 +1988,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.reloadPaginatedDataFromStart(false);
   }
 
-  clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
-    this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
+  clearColumnFilters(triggerDatasourceUpdate: boolean = true, columnsAttr?: string[]): void {
+    this.dataSource.clearColumnFilters(triggerDatasourceUpdate, columnsAttr);
     this.onFilterByColumnChange.emit();
     this.reloadPaginatedDataFromStart(false);
   }
@@ -2775,8 +2775,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.componentStateService.storeFilter(arg);
   }
 
-  protected reinitializeSortColumns() {
-    this.parseSortColumns();
+  reinitializeSortColumns(sortColumns?: SQLOrder[]) {
+    if (Util.isDefined(sortColumns)) {
+      this.sortColArray = sortColumns;
+    } else {
+      this.parseSortColumns();
+    }
     this.sort.setSortColumns(this.sortColArray);
     this.refreshSortHeaders();
   }
