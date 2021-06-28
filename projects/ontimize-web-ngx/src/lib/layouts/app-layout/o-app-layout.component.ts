@@ -19,7 +19,8 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'useFlagIcons: use-flag-icons',
   'openedSidenavImg: opened-sidenav-image',
   'closedSidenavImg: closed-sidenav-image',
-  'headerColor: header-color'
+  'headerColor: header-color',
+  'headerHeight: header-height'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -52,6 +53,7 @@ export class OAppLayoutComponent {
   protected _showHeader: boolean;
 
   public headerColor: ThemePalette;
+  public headerHeight = Codes.DEFAULT_ROW_HEIGHT;
 
   @ViewChild('appSidenav', { static: false })
   public appSidenav: OAppSidenavComponent;

@@ -1,6 +1,7 @@
 <div class="o-user-info-container" fxLayout="row" fxLayoutAlign="center">
   <ng-container *ngIf="existsUserInfo">
-    <div class="o-user-info-wrapper" fxLayout="row" fxLayoutAlign="center center" [matMenuTriggerFor]="menu">
+    <div class="o-user-info-wrapper" fxLayout="row" fxLayoutAlign="center center" [matMenuTriggerFor]="menu"
+      fxLayoutGap="16px">
       <div fxLayout="row" fxLayoutAlign="center center" class="o-user-info-avatar-wrapper">
         <img [src]="avatar" *ngIf="avatar" />
       </div>
@@ -18,7 +19,8 @@
       </button>
       <ng-container *ngIf="userInfoConfiguration">
         <button *ngFor="let item of userInfoConfiguration.userInfoConfigurationItems" type="button" mat-menu-item
-          [matTooltip]="item.name | oTranslate" matTooltipDisabled="item.tooltip" [ngClass]="item.class" (click)="item.triggerOnClick($event)">
+          [matTooltip]="item.name | oTranslate" matTooltipDisabled="item.tooltip" [ngClass]="item.class"
+          (click)="item.triggerOnClick($event)">
           <mat-icon>{{item.icon}} </mat-icon>
           <span>{{ item.name | oTranslate }}</span>
         </button>
