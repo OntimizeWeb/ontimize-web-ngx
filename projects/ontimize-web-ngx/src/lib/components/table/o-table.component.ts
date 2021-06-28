@@ -1996,15 +1996,9 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
     this.onFilterByColumnChange.emit();
     this.reloadPaginatedDataFromStart(false);
   }
-
   isColumnFilterable(column: OColumn): boolean {
     return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
   }
-
-  isModeColumnFilterable(column: OColumn): boolean {
-    return this.isColumnFiltersActive && this.isColumnFilterable(column);
-  }
-
   isColumnFilterActive(column: OColumn): boolean {
     return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
   }

@@ -8,6 +8,7 @@ import { OTableOptionComponent } from './table-option/o-table-option.component';
 import { OTableQuickfilterComponent } from './table-quickfilter/o-table-quickfilter.component';
 import { OTableColumnsFilterColumnComponent } from './table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableHeaderColumnFilterIconComponent } from './table-header-column-filter-icon/o-table-header-column-filter-icon.component';
+import { OTableHeaderComponent } from './o-table-header.component';
 
 export const O_TABLE_HEADER_COMPONENTS = [
   OTableButtonComponent,
@@ -19,5 +20,6 @@ export const O_TABLE_HEADER_COMPONENTS = [
   OTableInsertableRowComponent,
   OTableQuickfilterComponent,
   OTableColumnsFilterColumnComponent,
-  OTableHeaderColumnFilterIconComponent
+  OTableHeaderColumnFilterIconComponent,
+  OTableHeaderComponent
 ];
