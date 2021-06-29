@@ -41,7 +41,7 @@
     <div class="o-table-overflow o-scroll">
       <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
         [ngClass]="rowHeightObservable | async" (scroll)="onTableScroll($event)" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
-        [multiTemplateDataRows]="showExpandedColumn()">
+        [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandedColumn()">
 
         <!--Checkbox Column -->
         <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">

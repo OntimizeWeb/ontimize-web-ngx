@@ -74,9 +74,7 @@ import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import {
-  OTableFilterByColumnDataDialogComponent
-} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
@@ -84,10 +82,7 @@ import { OTableInsertableRowComponent } from './extensions/header/table-insertab
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableDao } from './extensions/o-table.dao';
-import {
-  OTableRowExpandableComponent,
-  OTableRowExpandedChange
-} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
@@ -402,13 +397,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
-  protected _visibleColArray: Array<string> = [];
+  protected _visibleColArray: string[] = [];
 
-  get visibleColArray(): Array<any> {
+  get visibleColArray(): any[] {
     return this._visibleColArray;
   }
 
-  set visibleColArray(arg: Array<any>) {
+  set visibleColArray(arg: any[]) {
     const permissionsBlocked = this.permissions ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
     this._visibleColArray = permissionsChecked;
@@ -456,7 +451,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
-  public onVisibleColumnsChange: EventEmitter<any> = new EventEmitter();
   public onFilterByColumnChange: EventEmitter<any> = new EventEmitter();
 
   protected selectionChangeSubscription: Subscription;
