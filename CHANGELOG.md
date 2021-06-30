@@ -1,3 +1,7 @@
+## 8.4.0
+### Features
+* **AbstractOServiceBaseComponent**: component now looks for parent keys values in route params if form is not present ([89a4fb75](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89a4fb75)) Closes [#634](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/634)
+
 ## 8.3.1 (2021-06-24)
 ### Features
 * **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)
