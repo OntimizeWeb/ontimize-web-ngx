@@ -389,8 +389,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.table.groupedColumnsArray = dialogRef.componentInstance.getGroupedColumns();
-        this.table.dataSource.updateGroupedColumns(this.table.groupedColumnsArray);
+        this.table.setGroupColumns(dialogRef.componentInstance.getGroupedColumns());
       }
     });
   }

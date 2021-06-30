@@ -292,7 +292,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   filterColumnActiveByDefault: boolean = false;
 
-
   protected _oTableOptions: OTableOptions;
 
   get oTableOptions(): OTableOptions {
@@ -428,6 +427,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
+      this.groupingHeadersRows = this._oTableOptions.visibleColumns.map(visibleCol => 'groupHeader-' + visibleCol);
     }
   }
 
@@ -570,6 +570,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   set isColumnFiltersActive(val: boolean) {
     this._isColumnFiltersActive = val;
   }
+
+  groupingHeadersRows: string[] = [];
 
   constructor(
     injector: Injector,
@@ -1252,34 +1254,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public hasExpandedRow(): boolean {
     return Util.isDefined(this.tableRowExpandable);
-  }
-
-  public getNumVisibleColumns(): number {
-    return this.oTableOptions.visibleColumns.length;
-  }
-
-  public getNumVisibleColumnsArray(): any {
-    let NumVisibleColumnsArray = new Array(this.oTableOptions.visibleColumns.length);
-    return NumVisibleColumnsArray;
-  }
-
-  // Testing
-  public getGroupingHeaderRowsArray(): any {
-    let NumVisibleColumnsArray = []
-    if(this.dataSource && this.dataSource.renderedData) {
-      this.dataSource.renderedData.forEach((element, index) => {
-        if(element.level && NumVisibleColumnsArray.length < this.getNumVisibleColumns()) {
-          NumVisibleColumnsArray.push('groupHeader-'+index);
-        }
-      });
-      // Check count of groups
-      if(NumVisibleColumnsArray.length < this.getNumVisibleColumns()) {
-        for (let index = NumVisibleColumnsArray.length; index < this.getNumVisibleColumns(); index++) {
-          NumVisibleColumnsArray.push('groupHeader-'+(index + 1));
-        }
-      }
-    }
-    return NumVisibleColumnsArray;
   }
 
   /**
@@ -2453,7 +2427,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public getCellAlignClass(column: OColumn): string {
     return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
   }
-  
+
   @HostListener('scroll', ['$event'])
   onTableScroll(event) {
     if (this.hasScrollableContainer()) {
@@ -2659,24 +2633,23 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Parses grouped columns
    */
   parseGroupedColumns() {
-    this.groupedColumnsArray = this.state.groupedColumns || this.originalGroupedColumnsArray;
+    let result = this.state.groupedColumns || this.originalGroupedColumnsArray;
     if (this.state.groupedColumns && this.state.initialConfiguration.groupedColumns) {
       const difference = this.state.initialConfiguration.groupedColumns
         .filter(x => !this.originalGroupedColumnsArray.includes(x));
 
       if (difference.length > 0) {
-        this.groupedColumnsArray = this.originalGroupedColumnsArray;
+        result = this.originalGroupedColumnsArray;
       }
     }
-
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.setGroupColumns(result);
   }
 
   /**
    * Groups by column
    * @param column
    */
-  public groupByColumn(column: OColumn) {
+  groupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, true);
     this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
   }
@@ -2694,7 +2667,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Ungroup by all columns
    */
   unGroupByAllColumns() {
-    this.groupedColumnsArray = [];
+    this.setGroupColumns([]);
+  }
+
+  setGroupColumns(value: string[]) {
+    this.groupedColumnsArray = value;
     this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
   }
 
@@ -2723,7 +2700,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns true if group
    */
   isGroup(index, item): boolean {
-    return Util.isDefined(item.level);
+    return item instanceof OTableGroupedRow;
   }
 
   /**
@@ -2733,58 +2710,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns true if not group
    */
   isNotGroup(index, item): boolean {
-    return !Util.isDefined(item.level);
+    return !(item instanceof OTableGroupedRow);
   }
 
   getLastGroups() {
     // Get last groups
     let scores = this.dataSource.renderedData;
     const maxLevel = scores.reduce((acc, curr) => curr.level > acc ? curr.level : acc, 0);
-    const maxLevelRenderedData = scores.reduce((r, o) => o.level === maxLevel ? [...r,o] : r, []);
+    const maxLevelRenderedData = scores.reduce((r, o) => o.level === maxLevel ? [...r, o] : r, []);
     return maxLevelRenderedData.length;
   }
 
   groupHeaderClick(row: OTableGroupedRow) {
-    if(this.expandGroupsSameLevel) {
-      this.dataSource.renderedData.forEach(rowGroup => {
-        if(Util.isDefined(rowGroup.level) && rowGroup.level == row.level) {
-          this.dataSource.toggleGroupByColumn(rowGroup);
-        }
-      });
-    } else {
-      this.dataSource.toggleGroupByColumn(row);
-    }
-  }
-
-  // Testing
-  groupingAggregate(group: OTableGroupedRow, i: number) {
-    let rowsInGroup = JSON.parse(group.rows);
-    let sum: number = 0;
-    rowsInGroup.forEach(element => {
-      let currentColumn = this.colArray[i];
-      if(currentColumn == Object.keys(element)[i] && !isNaN(element[Object.keys(element)[i]])) {
-        sum = sum + element[Object.keys(element)[i]];
-      }
-    });
-    return sum > 0 ? "Sum: "+ sum : '';
-  }
-
-  getTextGroupRow(group: OTableGroupedRow) {
-    const field = this.groupedColumnsArray[group.level - 1];
-    let value = group.column[this.groupedColumnsArray[group.level - 1]];
-    const totalCounts = group.totalCounts;
-    const oCol = this.getOColumn(field);
-
-    if (!value && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
-      value = ' - ';
-      if (!this.onDataLoadedCellRendererSubscription) {
-        this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
-          this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
-        });
-      }
-    }
-    return this.translateService.get(oCol.title) + ': ' + value + ' (' + totalCounts + ')';
-
+    this.dataSource.toggleGroupByColumn(row);
   }
 
   private isInstanceOfOTableCellRendererServiceComponent(renderer: OBaseTableCellRenderer) {

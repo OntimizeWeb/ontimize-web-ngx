@@ -68,7 +68,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   private columnValueFilters: Array<OColumnValueFilter> = [];
-  private stateRowGrouped: Array<OTableGroupedRow> = [];
+  private groupedRowState: OTableGroupedRow[] = [];
+  private levelsExpansionState = {};
 
   constructor(protected table: OTableComponent) {
     super();
@@ -164,7 +165,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           data = datapaginate;
         }
 
-        if (!Util.isArrayEmpty(this.groupByColumns)) {
+        if (this.table.groupable && !Util.isArrayEmpty(this.groupByColumns) && data.length > 0) {
           data = this.getSubGroupsOfGroupedRow(data);
           /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
           data = this.filterCollapsedRowGroup(data);
@@ -188,7 +189,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   getAggregatesData(data: any[]): any {
-    const self = this;
     const obj = {};
 
     if (typeof this._tableOptions === 'undefined') {
@@ -198,7 +198,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     this._tableOptions.columns.forEach((column: OColumn) => {
       let totalValue = '';
       if (column.aggregate && column.visible) {
-        totalValue = self.calculateAggregate(data, column);
+        totalValue = this.calculateAggregate(data, column);
       }
       const key = column.attr;
       obj[key] = totalValue;
@@ -593,46 +593,51 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       return data;
     }
 
-    const self = this;
-    //1. get unique rows Group
-    const groups = Util.uniqueBy(
-      data.map(
-        row => {
-          const result = new OTableGroupedRow();
-          result.level = level + 1;
-          result.parent = parent;
-          result.expanded = !self.table.collapseGroupedColumns;
-          for (let i = 0; i <= level; i++) {
-            const key = {};
-            key[groupByColumns[i]] = this.table.getColumnDataByAttr(groupByColumns[i], row);
-            result.column = key;
-          }
-          if (!Util.isArrayEmpty(self.stateRowGrouped)) {
-            const rowGroup = self.stateRowGrouped.find(x => JSON.stringify(x.column) === JSON.stringify(result.column) && JSON.stringify(x.parent) === JSON.stringify(result.parent));
-            if (Util.isDefined(rowGroup)) {
-              result.expanded = rowGroup.expanded;
-            }
-          }
-          return result;
-        }
-      ),
-      JSON.stringify);
-
-    //2. Get Row group and children
-    const currentColumn = groupByColumns[level];
-    let subGroups = [];
-    groups.forEach(group => {
-      const rowsInGroup = data.filter(row => {
-        const valueRenderer = self.table.getColumnDataByAttr(currentColumn, row);
-        return group.column[currentColumn] === valueRenderer;
-      });
-      group.totalCounts = rowsInGroup.length;
-      group.rows = JSON.stringify(rowsInGroup);
-      const subGroup = this.getSublevel(rowsInGroup, level + 1, groupByColumns, group);
-      subGroup.unshift(group);
-      subGroups = subGroups.concat(subGroup);
+    const recordHash = {};
+    data.forEach((row, i) => {
+      const keys = {};
+      for (let i = 0; i <= level; i++) {
+        keys[groupByColumns[i]] = this.table.getColumnDataByAttr(groupByColumns[i], row);
+      }
+      const recordKey = JSON.stringify(keys);
+      if (recordHash.hasOwnProperty(recordKey)) {
+        recordHash[recordKey].push(i);
+      } else {
+        recordHash[recordKey] = [i];
+      }
     });
-    return subGroups;
+
+    let result = [];
+    Object.keys(recordHash).forEach(recordKey => {
+
+      const group = new OTableGroupedRow();
+      group.keysAsString = recordKey;
+      group.level = level + 1;
+      group.parent = parent;
+      let expansionState = !this.table.collapseGroupedColumns;
+      if (this.table.expandGroupsSameLevel) {
+        expansionState = this.levelsExpansionState.hasOwnProperty(group.level) ? this.levelsExpansionState[group.level] : expansionState;
+      } else {
+        const rowGroup = this.groupedRowState.find(x => x.keysAsString === group.keysAsString && JSON.stringify(x.parent) === JSON.stringify(group.parent));
+        expansionState = rowGroup ? rowGroup.expanded : expansionState;
+      }
+      group.expanded = expansionState;
+
+      const affectedIndexes = recordHash[group.keysAsString];
+      group.totalCounts = affectedIndexes.length;
+      const groupData = data.filter((row, index) => affectedIndexes.includes(index));
+      this.table.visibleColArray.forEach((col, i) => {
+        group.columnsAggregate[col] = this.groupingAggregate(col, groupData);
+        if (i === 0) {
+          group.title = this.getTextGroupRow(group);
+        }
+      });
+
+      const subGroup = this.getSublevel(groupData, level + 1, groupByColumns, group);
+      subGroup.unshift(group);
+      result = result.concat(subGroup);
+    });
+    return result;
   }
 
   /**
@@ -641,7 +646,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
    * @returns collapsed row group
    */
   filterCollapsedRowGroup(data: any): any[] {
-    const self = this;
     return data.filter((row: any) => (row instanceof OTableGroupedRow) ? row.visible : this.belongsToExpandedGroupedRow(data, row));
   }
 
@@ -680,25 +684,48 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
    * @param rowGroup
    */
   toggleGroupByColumn(rowGroup: OTableGroupedRow) {
-    //Update state rowGrouped
-    const stateRowGrouped = this.stateRowGrouped.filter(row => JSON.stringify(rowGroup.column) === JSON.stringify(row.column) && JSON.stringify(rowGroup.parent) === JSON.stringify(row.parent));
-
-    if (Util.isArrayEmpty(stateRowGrouped)) {
-      rowGroup.expanded = !rowGroup.expanded;
-      this.stateRowGrouped.push(rowGroup);
+    if (this.table.expandGroupsSameLevel) {
+      this.levelsExpansionState[rowGroup.level] = !rowGroup.expanded;
     } else {
-      stateRowGrouped[0].expanded = !stateRowGrouped[0].expanded;
-      //update rowgroup whose his parent is rowGroup
-      // const parentToUpdate = this.stateRowGrouped.filter(row => JSON.stringify(rowGroup.parent) === JSON.stringify(row.parent));
-      // parentToUpdate.forEach(row =>
-      //   row.parent.expanded = !stateRowGrouped[0].expanded
-      // );
-
+      this.updateStateRowGrouped(rowGroup);
     }
     this.groupByColumnChange.next();
   }
 
+  private updateStateRowGrouped(rowGroup: OTableGroupedRow) {
+    const stateRowGrouped = this.groupedRowState.find(row => rowGroup.keysAsString === row.keysAsString && JSON.stringify(rowGroup.parent) === JSON.stringify(row.parent));
+    if (Util.isDefined(stateRowGrouped)) {
+      stateRowGrouped.expanded = !stateRowGrouped.expanded;
+    } else {
+      rowGroup.expanded = !rowGroup.expanded;
+      this.groupedRowState.push(rowGroup);
+    }
+  }
 
+  private groupingAggregate(column: string, data: any[]) {
+    let sum: number = 0;
+    data.forEach(element => {
+      sum += !isNaN(element[column]) ? element[column] : 0;
+    });
+    return sum > 0 ? "Sum: " + sum : '';
+  }
+
+  private getTextGroupRow(group: OTableGroupedRow) {
+    const field = this.table.groupedColumnsArray[group.level - 1];
+    let value = JSON.parse(group.keysAsString)[this.table.groupedColumnsArray[group.level - 1]];
+    const oCol = this.table.getOColumn(field);
+
+    if (!value && Util.isDefined((this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
+      value = ' - ';
+      if (!this.table.onDataLoadedCellRendererSubscription) {
+        this.table.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
+          this.updateGroupedColumns(this.table.groupedColumnsArray);
+        });
+      }
+    }
+    return (this.table as any).translateService.get(oCol.title) + ': ' + value + ' (' + group.totalCounts + ')';
+
+  }
 }
 
 

@@ -1,11 +1,12 @@
 export class OTableGroupedRow {
   level = 0;
-  column = {};
+  keysAsString: string;
   parent: OTableGroupedRow;
   expanded = true;
-  rows: string;
   totalCounts = 0;
   get visible(): boolean {
     return !this.parent || (this.parent.visible && this.parent.expanded);
   }
+  title: string;
+  columnsAggregate: any = {};
 }

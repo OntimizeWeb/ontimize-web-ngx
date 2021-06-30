@@ -174,7 +174,7 @@
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
         <ng-container *ngIf="hasExpandedRow()">
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let row;let rowIndex= dataIndex" [attr.colspan]="getNumVisibleColumns()">
+            <td mat-cell *matCellDef="let row; let rowIndex= dataIndex" [attr.colspan]="oTableOptions.visibleColumns.length">
               <div [ngClass]="getExpandedRowContainerClass(rowIndex)" [@detailExpand]="getStateExpand(row)">
               </div>
             </td>
@@ -240,17 +240,15 @@
 
         </ng-container>
 
-
         <!-- Definition column group header -->
-        <ng-container *ngFor="let column of getGroupingHeaderRowsArray(); let i = index" matColumnDef="{{column}}">
+        <ng-container *ngFor="let column of groupingHeadersRows; let i = index" [matColumnDef]="column">
           <td mat-cell *matCellDef="let group" class="grouping-row">
-            <div *ngIf="i==0" class="grouping-title-wrapper" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
-              <mat-icon *ngIf="group.expanded">expand_more</mat-icon>
-              <mat-icon *ngIf="!group.expanded">chevron_right</mat-icon>
-              <span>{{ getTextGroupRow(group) }}</span>
+            <div *ngIf="i===0" class="grouping-title-wrapper" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
+              <mat-icon>{{ group.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
+              {{ group.title }}
             </div>
             <div class="grouping-aggregate">
-              {{groupingAggregate(group, i)}}
+              {{ group.columnsAggregate[colArray[i]] }}
             </div>
           </td>
         </ng-container>
@@ -261,18 +259,18 @@
 
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
         <ng-container *ngIf="table.multiTemplateDataRows">
-          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let rowIndex = dataIndex"
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns; when:isNotGroup; let rowIndex = dataIndex"
             [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
           </tr>
         </ng-container>
         <ng-container *ngIf="!table.multiTemplateDataRows">
-          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let rowIndex = index"
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns; when:isNotGroup; let rowIndex = index"
             [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
           </tr>
         </ng-container>
 
         <!-- Row Group header -->
-        <tr mat-row *matRowDef="let row; columns: getGroupingHeaderRowsArray(); when: isGroup" (click)="groupHeaderClick(row)"
+        <tr mat-row *matRowDef="let row; columns: groupingHeadersRows; when: isGroup" (click)="groupHeaderClick(row)"
           [ngClass]="getClassNameGroupHeader(row)">
         </tr>
 
