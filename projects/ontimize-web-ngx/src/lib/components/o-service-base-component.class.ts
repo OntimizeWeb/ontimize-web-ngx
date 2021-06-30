@@ -268,7 +268,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         }
         this.setData([]);
       }
-    })
+    });
   }
 
   destroy() {
@@ -373,10 +373,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   public getParentKeysFromContext(parentKeys: object, context: any) {
     let result = {};
+    const checkRouteParams = this.router.paramsInheritanceStrategy !== 'always';
     if (context instanceof OExpandableContainerComponent) {
-      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context);
+      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context, checkRouteParams ? this.actRoute : null);
     } else {
-      result = ServiceUtils.getParentKeysFromForm(parentKeys, context);
+      result = ServiceUtils.getParentKeysFromForm(parentKeys, context, checkRouteParams ? this.actRoute : null);
     }
     return result;
 
@@ -565,12 +566,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 }
 
-
-export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
+export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService> {
 
 }
 
 /* This class is being defined to mantain the backwards compatibility with previous versions, use DefaultOServiceBaseComponent*/
-export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
+export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService> {
 
 }

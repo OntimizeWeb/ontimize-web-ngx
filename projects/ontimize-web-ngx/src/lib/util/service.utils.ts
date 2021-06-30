@@ -1,3 +1,5 @@
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+
 import { OExpandableContainerComponent } from '../components/expandable-container/o-expandable-container.component';
 import { OFormComponent } from '../components/form/o-form.component';
 import { OFormValue } from '../components/form/OFormValue';
@@ -8,31 +10,37 @@ import { Util } from './util';
 
 export class ServiceUtils {
 
-  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent): {} {
+  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent, route?: ActivatedRoute): {} {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
+
     const dataComponent = expandableContainer ? expandableContainer.data : {};
     const existsData = Object.keys(dataComponent).length > 0;
 
+    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot) : {};
+    const existsRouteParams = Object.keys(routeParams).length > 0;
 
-    if (existsData) {
+    if (existsData || existsRouteParams) {
       ownKeys.forEach(ownKey => {
         const keyValue = parentKeysObject[ownKey];
+        let value;
         if (dataComponent.hasOwnProperty(keyValue)) {
-          const value = dataComponent[keyValue];
-          if (Util.isDefined(value)) {
-            switch (typeof (value)) {
-              case 'string':
-                if (value.trim().length > 0) {
-                  result[ownKey] = value.trim();
-                }
-                break;
-              case 'number':
-                if (!isNaN(value)) {
-                  result[ownKey] = value;
-                }
-                break;
-            }
+          value = dataComponent[keyValue];
+        } else if (routeParams.hasOwnProperty(keyValue)) {
+          value = routeParams[keyValue];
+        }
+        if (Util.isDefined(value)) {
+          switch (typeof (value)) {
+            case 'string':
+              if (value.trim().length > 0) {
+                result[ownKey] = value.trim();
+              }
+              break;
+            case 'number':
+              if (!isNaN(value)) {
+                result[ownKey] = value;
+              }
+              break;
           }
         }
       });
@@ -40,7 +48,7 @@ export class ServiceUtils {
     return result;
   }
 
-  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent) {
+  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent, route?: ActivatedRoute) {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
 
@@ -60,7 +68,10 @@ export class ServiceUtils {
       });
     }
 
-    if (existsComponents || existsProperties || existsUrlData) {
+    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot) : {};
+    const existsRouteParams = Object.keys(routeParams).length > 0;
+
+    if (existsComponents || existsProperties || existsUrlData || existsRouteParams) {
       ownKeys.forEach(ownKey => {
         const keyValue = parentKeysObject[ownKey];
         // Parent key equivalence may be an object
@@ -80,6 +91,8 @@ export class ServiceUtils {
           currentData = formPropValue instanceof OFormValue ? formPropValue.value : formPropValue;
         } else if (urlData.hasOwnProperty(formFieldAttr)) {
           currentData = urlData[formFieldAttr];
+        } else if (routeParams.hasOwnProperty(formFieldAttr)) {
+          currentData = routeParams[formFieldAttr];
         }
         if (Util.isDefined(currentData)) {
           switch (typeof (currentData)) {
@@ -159,6 +172,20 @@ export class ServiceUtils {
       });
     }
     return sortColArray;
+  }
+
+  /**
+   * Recursive function that returns all the params of a route and its ancestor routes.
+   * Params from parent routes are replaced by child route param values if repeated.
+   * @param route the route
+   * @returns params containing all the route parameters
+   */
+  static getRouteParams(route: ActivatedRouteSnapshot): object {
+    let params = { ...route.params };
+    if (route.parent) {
+      params = { ...this.getRouteParams(route.parent), ...params };
+    }
+    return params;
   }
 
 }
