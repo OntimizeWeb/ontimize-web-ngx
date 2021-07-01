@@ -373,11 +373,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   public getParentKeysFromContext(parentKeys: object, context: any) {
     let result = {};
-    const checkRouteParams = this.router.paramsInheritanceStrategy !== 'always';
+    const checkRouteParamsRecursive = this.router.paramsInheritanceStrategy !== 'always';
     if (context instanceof OExpandableContainerComponent) {
-      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context, checkRouteParams ? this.actRoute : null);
+      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context, this.actRoute, checkRouteParamsRecursive);
     } else {
-      result = ServiceUtils.getParentKeysFromForm(parentKeys, context, checkRouteParams ? this.actRoute : null);
+      result = ServiceUtils.getParentKeysFromForm(parentKeys, context, this.actRoute, checkRouteParamsRecursive);
     }
     return result;
 

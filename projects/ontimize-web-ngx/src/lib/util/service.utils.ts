@@ -10,14 +10,14 @@ import { Util } from './util';
 
 export class ServiceUtils {
 
-  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent, route?: ActivatedRoute): {} {
+  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent, route?: ActivatedRoute, checkRouteParamsRecursive: boolean = true): {} {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
 
     const dataComponent = expandableContainer ? expandableContainer.data : {};
     const existsData = Object.keys(dataComponent).length > 0;
 
-    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot) : {};
+    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot, checkRouteParamsRecursive) : {};
     const existsRouteParams = Object.keys(routeParams).length > 0;
 
     if (existsData || existsRouteParams) {
@@ -48,7 +48,7 @@ export class ServiceUtils {
     return result;
   }
 
-  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent, route?: ActivatedRoute) {
+  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent, route?: ActivatedRoute, checkRouteParamsRecursive: boolean = true) {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
 
@@ -68,7 +68,7 @@ export class ServiceUtils {
       });
     }
 
-    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot) : {};
+    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot, checkRouteParamsRecursive) : {};
     const existsRouteParams = Object.keys(routeParams).length > 0;
 
     if (existsComponents || existsProperties || existsUrlData || existsRouteParams) {
@@ -175,15 +175,16 @@ export class ServiceUtils {
   }
 
   /**
-   * Recursive function that returns all the params of a route and its ancestor routes.
+   * Return the params of the provided route.
    * Params from parent routes are replaced by child route param values if repeated.
    * @param route the route
+   * @param recursive indicates whether or not to return route params from route ancestors.
    * @returns params containing all the route parameters
    */
-  static getRouteParams(route: ActivatedRouteSnapshot): object {
+  static getRouteParams(route: ActivatedRouteSnapshot, recursive: boolean): object {
     let params = { ...route.params };
-    if (route.parent) {
-      params = { ...this.getRouteParams(route.parent), ...params };
+    if (recursive && route.parent) {
+      params = { ...this.getRouteParams(route.parent, recursive), ...params };
     }
     return params;
   }
