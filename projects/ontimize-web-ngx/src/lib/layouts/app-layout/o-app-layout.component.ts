@@ -50,7 +50,7 @@ export class OAppLayoutComponent {
   @InputConverter()
   useFlagIcons: boolean = false;
   @InputConverter()
-  protected _showHeader: boolean;
+  protected _showHeader: boolean = true;
 
   public headerColor: ThemePalette;
   public headerHeight = Codes.DEFAULT_ROW_HEIGHT;
