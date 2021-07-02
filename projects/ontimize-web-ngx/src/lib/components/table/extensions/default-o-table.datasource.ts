@@ -411,8 +411,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return this.columnValueFilters.filter(item => item.attr === attr)[0];
   }
 
-  clearColumnFilters(trigger: boolean = true) {
-    this.columnValueFilters = [];
+  clearColumnFilters(trigger: boolean = true, columnsAttr?: string[]) {
+    if (Util.isDefined(columnsAttr)) {
+      this.columnValueFilters = this.columnValueFilters.filter(x => !columnsAttr.includes(x.attr));
+    } else {
+      this.columnValueFilters = [];
+    }
     if (trigger) {
       this._columnValueFilterChange.next(null);
     }
