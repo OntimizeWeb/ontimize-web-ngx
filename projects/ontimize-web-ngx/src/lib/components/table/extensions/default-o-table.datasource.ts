@@ -624,12 +624,11 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       group.expanded = expansionState;
 
       const affectedIndexes = recordHash[group.keysAsString];
-      group.totalCounts = affectedIndexes.length;
       const groupData = data.filter((row, index) => affectedIndexes.includes(index));
       this.table.visibleColArray.forEach((col, i) => {
         group.columnsAggregate[col] = this.groupingAggregate(col, groupData);
         if (i === 0) {
-          group.title = this.getTextGroupRow(group);
+          group.title = this.getTextGroupRow(group, affectedIndexes.length);
         }
       });
 
@@ -710,7 +709,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return sum > 0 ? "Sum: " + sum : '';
   }
 
-  private getTextGroupRow(group: OTableGroupedRow) {
+  private getTextGroupRow(group: OTableGroupedRow, totalCounts: number) {
     const field = this.table.groupedColumnsArray[group.level - 1];
     let value = JSON.parse(group.keysAsString)[this.table.groupedColumnsArray[group.level - 1]];
     const oCol = this.table.getOColumn(field);
@@ -723,7 +722,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         });
       }
     }
-    return (this.table as any).translateService.get(oCol.title) + ': ' + value + ' (' + group.totalCounts + ')';
+    return (this.table as any).translateService.get(oCol.title) + ': ' + value + ' (' + totalCounts + ')';
 
   }
 }

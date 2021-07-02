@@ -1252,7 +1252,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
   }
 
-  public hasExpandedRow(): boolean {
+  get hasExpandedRow(): boolean {
     return Util.isDefined(this.tableRowExpandable);
   }
 
