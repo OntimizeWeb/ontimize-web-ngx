@@ -12,13 +12,13 @@
         <mat-icon svgIcon="ontimize:today"></mat-icon>
       </span>
 
-      <mat-error *ngIf="formControl.hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-      <mat-error *ngIf="formControl.hasError('matDatepickerParse')" text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ format }}
+      <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+      <mat-error *ngIf="hasError('matDatepickerParse')" text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ format }}
       "></mat-error>
-      <mat-error *ngIf="formControl.hasError('matDatepickerFilter')" text="{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}"></mat-error>
-      <mat-error *ngIf="formControl.hasError('matDatepickerMin')" text="{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}
+      <mat-error *ngIf="hasError('matDatepickerFilter')" text="{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}"></mat-error>
+      <mat-error *ngIf="hasError('matDatepickerMin')" text="{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}
       "></mat-error>
-      <mat-error *ngIf="formControl.hasError('matDatepickerMax')" text="{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}
+      <mat-error *ngIf="hasError('matDatepickerMax')" text="{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}
       "></mat-error>
     </mat-form-field>
   </div>
