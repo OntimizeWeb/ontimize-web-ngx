@@ -3,7 +3,7 @@
     <mat-form-field floatLabel="never" cdkFocusInitial>
       <input #input matInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId"
         [required]="orequired">
-      <mat-error *ngIf="hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
+      <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     </mat-form-field>
   </div>
 </ng-template>
