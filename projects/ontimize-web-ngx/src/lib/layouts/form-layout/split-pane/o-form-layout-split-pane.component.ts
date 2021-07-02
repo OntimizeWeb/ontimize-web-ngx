@@ -144,20 +144,17 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
   }
 
   initializeComponentState() {
-    this.showLoading.next(true);
-    if (Util.isDefined(this.state) && Object.keys(this.state).length > 0) {
-      if (this.formLayoutManager) {
-        this.formLayoutManager.setAsActiveFormLayoutManager();
-      }
-      if (Util.isDefined(this.state.url)) {
-        const extras = {};
-        extras[Codes.QUERY_PARAMS] = this.state.queryParams;
+    if (this.formLayoutManager) {
+      this.formLayoutManager.setAsActiveFormLayoutManager();
+    }
+    if (Util.isDefined(this.state.url)) {
+      this.showLoading.next(true);
+      const extras = {};
+      extras[Codes.QUERY_PARAMS] = this.state.queryParams;
 
-        this.router.navigate([this.state.url], extras).then(() => {
-          this.showLoading.next(false);
-        });
-      }
-      this.showLoading.next(false);
+      this.router.navigate([this.state.url], extras).then(() => {
+        this.showLoading.next(false);
+      });
     }
   }
 

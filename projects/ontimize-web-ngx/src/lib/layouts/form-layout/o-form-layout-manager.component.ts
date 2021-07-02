@@ -87,7 +87,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   public static SPLIT_PANE_MODE = 'split-pane';
 
   public oattr: string;
-  public _mode: string;
+  public _mode: string = OFormLayoutManagerComponent.DIALOG_MODE;
 
   public get mode(): string {
     return this._mode;
@@ -537,7 +537,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     const isTabMode = this.isTabMode() && Util.isDefined(this.oTabGroup);
     const isSplitPaneMode = this.isSplitPaneMode() && Util.isDefined(this.oSplitPane);
     if (isTabMode || isSplitPaneMode) {
-      this.localStorageService.updateComponentStorage(this);
+      this.localStorageService.updateComponentStorage(this, this.getRouteKey());
     }
   }
 
