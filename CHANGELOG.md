@@ -1,5 +1,6 @@
 ## 8.4.0
 ### Features
+* **AbstractOServiceBaseComponent**: component now looks for parent keys values in route params if form is not present ([658](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/658)) Closes [#634](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/634)
 * **o-table**: ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
   * Adding new warn message when user wants to hide a column with an active filter or sorting.
   * Adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method. 
