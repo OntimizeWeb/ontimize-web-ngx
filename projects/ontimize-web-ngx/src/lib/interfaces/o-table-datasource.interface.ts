@@ -30,6 +30,6 @@ export interface OTableDataSource {
   isColumnValueFilterActive: () => boolean;
   updateRenderedRowData: (rowData: any) => void;
   getAggregateData: (column: OColumn) => any;
-  updateGroupedColumns(column: string[]);
+  updateGroupedColumns();
   toggleGroupByColumn(rowGroup: OTableGroupedRow);
 }

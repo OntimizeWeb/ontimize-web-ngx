@@ -260,6 +260,7 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.HIDE_COLUMN_WARNING': 'Are you sure you want to hide this column? The following properties of this column will be erased if you hide it: <ul> {0} {1} </ul>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.VALUE_FILTER_WARN': '<li>Column value filter</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.SORT_WARN': '<li>Column sorting</li>',
+    'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Column grouping</li>',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Click on ',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'to hide/display the column. Use drag and drop to modify the column order.',
     'APP_LAYOUT.SETTINGS': 'Settings'
@@ -518,6 +519,7 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.HIDE_COLUMN_WARNING': '¿Está seguro de que quiere ocultar esta columna? Las siguientes propiedades serán eliminadas si la oculta: <ul> {0} {1} </ul>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.VALUE_FILTER_WARN': '<li>Filtrado de columna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.SORT_WARN': '<li>Ordenación por columna</li>',
+    'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Agrupamento por coluna</li>',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Haz click sobre ',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
     'APP_LAYOUT.SETTINGS': 'Configuración'
@@ -775,6 +777,7 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.HIDE_COLUMN_WARNING': 'Tem certeza de que quer esconder esta coluna? As seguintes propriedades desta coluna serão apagadas se você a esconder: <ul> {0} {1} </ul>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.VALUE_FILTER_WARN': '<li>Filtro de valor de coluna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.SORT_WARN': '<li>Ordenação de coluna</li>',
+    'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Column grouping</li>',
     'APP_LAYOUT.SETTINGS': 'Definições'
   }
 };

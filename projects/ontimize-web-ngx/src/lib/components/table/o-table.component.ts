@@ -2664,7 +2664,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   groupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, true);
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.dataSource.updateGroupedColumns();
   }
 
   /**
@@ -2673,7 +2673,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, false);
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.dataSource.updateGroupedColumns();
   }
 
   /**
@@ -2685,7 +2685,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   setGroupColumns(value: string[]) {
     this.groupedColumnsArray = value;
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.dataSource.updateGroupedColumns();
   }
 
   checkGroupByColumn(field: string, add: boolean) {

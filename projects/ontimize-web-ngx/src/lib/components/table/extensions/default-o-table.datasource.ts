@@ -49,8 +49,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected filteredData: any[] = [];
   protected aggregateData: any = {};
 
-  private groupByColumns: string[];
-
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
   // load data in scroll
@@ -165,7 +163,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           data = datapaginate;
         }
 
-        if (this.table.groupable && !Util.isArrayEmpty(this.groupByColumns) && data.length > 0) {
+        if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
           data = this.getSubGroupsOfGroupedRow(data);
           /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
           data = this.filterCollapsedRowGroup(data);
@@ -185,7 +183,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
    */
   getSubGroupsOfGroupedRow(data: any[]): any[] {
     const rootGroup = new OTableGroupedRow();
-    return data = this.getSublevel(data, 0, this.groupByColumns, rootGroup);
+    return data = this.getSublevel(data, 0, rootGroup);
   }
 
   getAggregatesData(data: any[]): any {
@@ -592,8 +590,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     }
   }
 
-  private getSublevel(data: any[], level: number, groupByColumns: string[], parent: OTableGroupedRow): any[] {
-    if (level >= groupByColumns.length) {
+  private getSublevel(data: any[], level: number, parent: OTableGroupedRow): any[] {
+    if (level >= this.table.groupedColumnsArray.length) {
       return data;
     }
 
@@ -601,7 +599,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     data.forEach((row, i) => {
       const keys = {};
       for (let i = 0; i <= level; i++) {
-        keys[groupByColumns[i]] = this.table.getColumnDataByAttr(groupByColumns[i], row);
+        keys[this.table.groupedColumnsArray[i]] = this.table.getColumnDataByAttr(this.table.groupedColumnsArray[i], row);
       }
       const recordKey = JSON.stringify(keys);
       if (recordHash.hasOwnProperty(recordKey)) {
@@ -636,7 +634,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         }
       });
 
-      const subGroup = this.getSublevel(groupData, level + 1, groupByColumns, group);
+      const subGroup = this.getSublevel(groupData, level + 1, group);
       subGroup.unshift(group);
       result = result.concat(subGroup);
     });
@@ -673,12 +671,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return Util.isDefined(parent) ? (parent.visible && parent.expanded) : true;
   }
 
-  /**
-   * Updates grouped columns
-   * @param groupByColumns
-   */
-  updateGroupedColumns(groupByColumns: string[]) {
-    this.groupByColumns = groupByColumns;
+  updateGroupedColumns() {
     this.groupByColumnChange.next();
   }
 
@@ -722,7 +715,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       value = ' - ';
       if (!this.table.onDataLoadedCellRendererSubscription) {
         this.table.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
-          this.updateGroupedColumns(this.table.groupedColumnsArray);
+          this.updateGroupedColumns();
         });
       }
     }
