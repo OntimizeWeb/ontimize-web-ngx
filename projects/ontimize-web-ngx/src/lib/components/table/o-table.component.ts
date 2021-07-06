@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
+import { VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   ApplicationRef,
@@ -83,6 +84,8 @@ import { OTableColumnsFilterComponent } from './extensions/header/table-columns-
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
+import { CustomVirtualScrollStrategy } from './extensions/o-table-strategy.service';
+
 import { OTableDao } from './extensions/o-table.dao';
 import {
   OTableRowExpandableComponent,
@@ -210,6 +213,7 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   'onPaginatedDataLoaded'
 ];
 
+
 @Component({
   selector: 'o-table',
   templateUrl: './o-table.component.html',
@@ -217,7 +221,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   providers: [
     OntimizeServiceProvider,
     OTableDataSourceService,
-    { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] }
+    { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] },
+    { provide: VIRTUAL_SCROLL_STRATEGY, useClass: CustomVirtualScrollStrategy }
   ],
   animations: [
     trigger('detailExpand', [
@@ -247,7 +252,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public paginator: OTablePaginator;
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
-  @ViewChild(OMatSort, { static: true }) sort: OMatSort;
+  @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
@@ -521,6 +526,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /* In the case the table havent paginationControl and pageable, the table has pagination virtual*/
   pageScrollVirtual = 1;
 
+  public static ITEM_SIZE = 36;
   protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
@@ -569,13 +575,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   constructor(
-    injector: Injector,
+    public injector: Injector,
     elRef: ElementRef,
     protected dialog: MatDialog,
     private _viewContainerRef: ViewContainerRef,
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly viewPort: CustomVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 
@@ -601,6 +608,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.oTableButtons && this.tableButtons && this.tableButtons.length > 0) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
+
+    if (this.viewPort) {
+      this.viewPort.setScrollHeight(36, 40);
+    }
+
   }
 
   ngAfterViewInit() {
@@ -614,6 +626,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
       this.createExpandableColumn();
     }
+
   }
 
   protected createExpandableColumn() {
@@ -1800,9 +1813,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const self = this;
 
     return (index: number, item: any) => {
-      if (self.hasScrollableContainer() && index < (self.pageScrollVirtual - 1) * Codes.LIMIT_SCROLLVIRTUAL) {
-        return null;
-      }
 
       let itemId: string = '';
 
@@ -2438,39 +2448,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
   }
 
-  onTableScroll(e) {
-    if (this.hasScrollableContainer()) {
-      const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
-      const tableScrollHeight = e.target.scrollHeight; // length of all table
-      const scrollLocation = e.target.scrollTop; // how far user scrolled
-
-      // If the user has scrolled within 200px of the bottom, add more data
-      const buffer = 100;
-      const limit_SCROLLVIRTUAL = tableScrollHeight - tableViewHeight - buffer;
-      if (scrollLocation > limit_SCROLLVIRTUAL) {
-        this.getDataScrollable();
-      }
-    }
-  }
-
-  getDataScrollable(): any {
-    const pageVirtualBefore = this.pageScrollVirtual;
-    const pageVirtualEnd = Math.ceil(this.dataSource.resultsLength / Codes.LIMIT_SCROLLVIRTUAL);
-
-    if (pageVirtualEnd !== this.pageScrollVirtual) {
-      this.pageScrollVirtual++;
-    }
-
-    // throw event change scroll
-    if (pageVirtualBefore !== this.pageScrollVirtual) {
-      this.loadingScrollSubject.next(true);
-      this.dataSource.loadDataScrollable = this.pageScrollVirtual;
-    }
-  }
-
-  hasScrollableContainer(): boolean {
-    return this.dataSource && !this.paginationControls && !this.pageable;
-  }
 
   protected addDefaultRowButtons() {
     // check permissions
