@@ -1,5 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ScrollingModule as ExperimentalScrollingModule } from "@angular/cdk-experimental/scrolling";
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
@@ -35,6 +36,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
 } from '@angular/material';
+
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
@@ -73,7 +75,8 @@ const MATERIAL_MODULES = [
   MatPaginatorModule,
   MatSortModule,
   OverlayModule,
-  ScrollingModule
+  ScrollingModule,
+  ExperimentalScrollingModule
   // OverlayModule,
   // PortalModule,
   // RtlModule,
