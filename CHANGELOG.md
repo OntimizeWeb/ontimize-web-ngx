@@ -1,3 +1,7 @@
+## 8.4.0 (2021-07-15)
+### Features
+* **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
+
 ## 8.3.1 (2021-06-24)
 ### Features
 * **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)
