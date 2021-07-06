@@ -11,6 +11,7 @@
   * Fixed prevent touch vertical and horizontal scrolling in table: ([b534317](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b534317)) Closes ([#576](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/576))
   * **o-table-row-expandable**: set event as optional in toggleRowExpandable ([2653e9e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2653e9e))
   * Fix sort-columns with static data [fdaa08d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fdaa08d))
+  * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
 
 
 
