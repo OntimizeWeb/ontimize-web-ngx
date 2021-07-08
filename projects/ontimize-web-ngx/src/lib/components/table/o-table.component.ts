@@ -213,6 +213,9 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   'onPaginatedDataLoaded'
 ];
 
+const stickyHeaderSelector = '.mat-header-row .mat-table-sticky';
+const stickyFooterSelector = '.mat-footer-row .mat-table-sticky';
+const rowSelector = '.mat-row'
 
 @Component({
   selector: 'o-table',
@@ -607,10 +610,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.initialize();
     if (this.oTableButtons && this.tableButtons && this.tableButtons.length > 0) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
-    }
-
-    if (this.viewPort) {
-      this.viewPort.setScrollHeight(36, 40);
     }
 
   }
@@ -1383,6 +1382,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     super.updatePaginationInfo(queryRes);
   }
 
+  initViewPort() {
+    if (this.viewPort) {
+      const headerElRef = this.elRef.nativeElement.querySelector(stickyHeaderSelector)
+      const footerElRef = this.elRef.nativeElement.querySelector(stickyFooterSelector)
+      const rowElRef = this.elRef.nativeElement.querySelector(rowSelector)
+
+      const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
+      const footerHeight = footerElRef ? footerElRef.offsetHeight : 0;
+      const rowHeight = rowElRef ? rowElRef.offsetHeight : 36;
+      this.viewPort.setScrollHeight(rowHeight,headerHeight);
+      // this.viewPort.setScrollHeight(100, rowHeight, headerHeight, footerHeight);
+    }
+  }
+
   protected setData(data: any, sqlTypes: any) {
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.setDataArray(data);
@@ -1391,6 +1404,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
     ObservableWrapper.callEmit(this.onDataLoaded, this.daoTable.data);
+    setTimeout(() => {
+      if (this.viewPort) {
+        this.initViewPort();
+      }
+    }, 0)
   }
 
   showDialogError(error: string, errorOptional?: string) {
@@ -2292,6 +2310,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
+      setTimeout(() => {
+        if (this.viewPort) {
+          this.initViewPort();
+        }
+      }, 0);
+
     }
   }
 

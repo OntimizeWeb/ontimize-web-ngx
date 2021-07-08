@@ -15,8 +15,14 @@ import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
 import { OMatSort } from './sort/o-mat-sort';
 
-export const SCROLLVIRTUAL = 'scroll';
+export class OnIndexChangeVirtualScroll {
+  public value: number;
 
+  constructor(data: number) {
+    this.value = data;
+
+  }
+}
 
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
@@ -30,7 +36,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _tableOptions: OTableOptions;
   protected _sort: OMatSort;
 
-  protected _virtualPageChange = new BehaviorSubject(0);
+  protected _virtualPageChange = new BehaviorSubject<OnIndexChangeVirtualScroll>(new OnIndexChangeVirtualScroll(0));
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject(null);
   protected groupByColumnChange = new Subject();
@@ -65,11 +71,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     } else {
       this.table.viewPort.scrolledIndexChange.subscribe(
         (value: any) => {
-          const index = value;
           const lastPageIndex = this._pageIndex;
-          this._pageIndex = Math.floor(index / this._pageSize);
+          this._pageIndex = value;
           if (lastPageIndex != this._pageIndex) {
-            this._virtualPageChange.next(this._pageIndex);
+            this._virtualPageChange.next(new OnIndexChangeVirtualScroll(this._pageIndex));
           }
         });
 
@@ -151,52 +156,55 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
     return merge(...displayDataChanges).pipe(map((x: any) => {
       let data = Object.assign([], this._database.data);
-      /*
-        it is necessary to first calculate the calculated columns and
-        then filter and sort the data
-      */
-
-      if (this.existsAnyCalculatedColumn()) {
-        data = this.getColumnCalculatedData(data);
-      }
-
-      if (!this.table.pageable) {
-        data = this.getColumnValueFilterData(data);
-        data = this.getQuickFilterData(data);
-        data = this.getSortedData(data);
-      }
-
-      this.filteredData = Object.assign([], data);
-
-      if (this.table.pageable) {
-        const totalRecordsNumber = this.table.getTotalRecordsNumber();
-        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+      if (x instanceof OnIndexChangeVirtualScroll) {
+        data = this.renderedData.slice(x.value, (x.value + this.table.viewPort.amount) - 1);
       } else {
-        this.resultsLength = data.length;
-        data = this.getPaginationData(data);
+        /*
+          it is necessary to first calculate the calculated columns and
+          then filter and sort the data
+        */
+
+        if (this.existsAnyCalculatedColumn()) {
+          data = this.getColumnCalculatedData(data);
+        }
+
+        if (!this.table.pageable) {
+          data = this.getColumnValueFilterData(data);
+          data = this.getQuickFilterData(data);
+          data = this.getSortedData(data);
+        }
+
+        this.filteredData = Object.assign([], data);
+
+        if (this.table.pageable) {
+          const totalRecordsNumber = this.table.getTotalRecordsNumber();
+          this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+        } else {
+          this.resultsLength = data.length;
+          data = this.getPaginationData(data);
+        }
+
+
+
+        if (!Util.isArrayEmpty(this.groupByColumns)) {
+          data = this.getSubGroupsOfGroupedRow(data);
+          /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
+          data = this.filterCollapsedRowGroup(data);
+        }
+
+
+        this.renderedData = data;
+        /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table */
+        if (!this.table.pageable && !this.table.paginationControls) {
+          data = data.slice(this._pageIndex, (this._pageIndex + (this.table.viewPort.amount ? this.table.viewPort.amount : Codes.LIMIT_SCROLLVIRTUAL)) - 1);
+          //data.length +1
+          //this.table.viewPort.setTotalContentSize(OTableComponent.ITEM_SIZE * (data.length + 1));
+        }
+
+        this.aggregateData = this.getAggregatesData(data);
+
       }
-
-      Math.round(this.resultsLength / Codes.LIMIT_SCROLLVIRTUAL)
-      this._pageIndex
-      /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table */
-      if (this._pageIndex < Math.round(this.resultsLength / Codes.LIMIT_SCROLLVIRTUAL) && !this.table.pageable && !this.table.paginationControls && data.length > Codes.LIMIT_SCROLLVIRTUAL) {
-        const datapaginate = data.slice(this._pageIndex, ((this._pageIndex + 1) * Codes.LIMIT_SCROLLVIRTUAL) - 1);
-        data = datapaginate;
-        //data.length +1
-        //this.table.viewPort.setTotalContentSize(OTableComponent.ITEM_SIZE * (data.length + 1));
-      }
-
-      if (!Util.isArrayEmpty(this.groupByColumns)) {
-        data = this.getSubGroupsOfGroupedRow(data);
-        /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
-        data = this.filterCollapsedRowGroup(data);
-      }
-
-      this.renderedData = data;
-      this.aggregateData = this.getAggregatesData(data);
-
-    
-      return this.renderedData;
+      return data;
     }));
   }
 

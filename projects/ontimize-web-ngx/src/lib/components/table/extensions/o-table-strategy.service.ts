@@ -8,6 +8,7 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     private scrollHeight!: number;
     private scrollHeader!: number;
     public scrolledIndexChange: Observable<number>;
+    amount!: number;
 
     constructor() {
         this.scrolledIndexChange = this.indexChange.asObservable().pipe(distinctUntilChanged());
@@ -16,7 +17,7 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
 
     attach(viewport: CdkVirtualScrollViewport): void {
         this.viewport = viewport;
-        
+
         this.onDataLengthChanged();
         this.updateContent(viewport);
     }
@@ -52,12 +53,17 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     }
 
     private updateContent(viewport: CdkVirtualScrollViewport) {
-        if (this.viewport) {
+        if (this.viewport && this.scrollHeight) {
             const newIndex = Math.max(0, Math.round((viewport.measureScrollOffset() - this.scrollHeader) / this.scrollHeight) - 2);
-            console.log('viewport.measureScrollOffset() ', viewport.measureScrollOffset(), newIndex, this.viewport.getRenderedRange());
+            console.log('index to scroll', newIndex);
+            const itemsByViewportSize = Math.ceil(this.viewport.getViewportSize() / this.scrollHeight);
+            this.amount =  Math.ceil(itemsByViewportSize + (itemsByViewportSize / 2));
+            //altura del componente seria 
             viewport.setRenderedContentOffset(this.scrollHeight * newIndex);
+            console.log('index real to Change', Math.round((viewport.measureScrollOffset() - this.scrollHeader) / this.scrollHeight) + 1);
             this.indexChange.next(
                 Math.round((viewport.measureScrollOffset() - this.scrollHeader) / this.scrollHeight) + 1
+
             );
         }
     }
