@@ -78,28 +78,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           }
         });
 
-      // this.table.viewPort.elementScrolled().subscribe(async (ev: any) => {
-      //   const start = Math.floor(ev.currentTarget.scrollTop / OTableComponent.ITEM_SIZE);
-      //   const prevExtraData = start > (this._pageSize / 2) ? (this._pageSize / 2) : start;
-      //   this._pageOffset = this._pageSize * (start - prevExtraData);
-
-      //   const previousPage = this._pageIndex;
-      //   this._pageIndex = Math.floor(start / this._pageSize);
-
-      //   if (previousPage <= this._pageIndex && this._pageIndex < (this.resultsLength / Codes.LIMIT_SCROLLVIRTUAL)) {
-      //     console.log('this.pageOffset', this._pageOffset, 'start '+ start );
-      //     //this.table.viewPort.setRenderedContentOffset(this._pageOffset);
-      //     const newIndex = Math.max(0, Math.round((this.table.viewPort.measureScrollOffset() - 40) / OTableComponent.ITEM_SIZE) - 2);
-      //     console.log('this.pageOffset', OTableComponent.ITEM_SIZE * newIndex, 'start '+ newIndex );
-      //    // this.table.viewPort.setRenderedContentOffset(OTableComponent.ITEM_SIZE * newIndex);
-      //     if (previousPage !== this._pageIndex) {
-      //       this._virtualPageChange.next(this._pageIndex);
-      //     }
-
-      //   }
-      //   console.log('start: ', start, ' prevExtraData: ', prevExtraData, ' pageOffset: ', this._pageOffset, ' pageIndex: ', this._pageIndex);
-      //   //this.visibleData.next(slicedData);
-      // });
+ 
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
@@ -157,7 +136,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return merge(...displayDataChanges).pipe(map((x: any) => {
       let data = Object.assign([], this._database.data);
       if (x instanceof OnIndexChangeVirtualScroll) {
-        data = this.renderedData.slice(x.value, (x.value + this.table.viewPort.amount) - 1);
+        data.slice(Math.max(0,(this._pageIndex-this.table.viewPort.buffer)), (this._pageIndex + (this.table.viewPort.amount ? (Math.max(0,(this.table.viewPort.amount+this.table.viewPort.buffer))): Codes.LIMIT_SCROLLVIRTUAL)) - 1);
+        data = this.renderedData.slice(Math.max(0,x.value), (x.value + this.table.viewPort.amount+this.table.viewPort.buffer));
       } else {
         /*
           it is necessary to first calculate the calculated columns and
@@ -194,14 +174,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
 
         this.renderedData = data;
-        /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table */
+
+        /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table the first time 
+         * to calculate header height, row height and footer header*/
         if (!this.table.pageable && !this.table.paginationControls) {
-          data = data.slice(this._pageIndex, (this._pageIndex + (this.table.viewPort.amount ? this.table.viewPort.amount : Codes.LIMIT_SCROLLVIRTUAL)) - 1);
-          //data.length +1
-          //this.table.viewPort.setTotalContentSize(OTableComponent.ITEM_SIZE * (data.length + 1));
+          data = data.slice(Math.max(0,(this._pageIndex-this.table.viewPort.buffer)), (this._pageIndex + (this.table.viewPort.amount ? (Math.max(0,(this.table.viewPort.amount+this.table.viewPort.buffer))): Codes.LIMIT_SCROLLVIRTUAL)));
         }
 
-        this.aggregateData = this.getAggregatesData(data);
+        this.aggregateData = this.getAggregatesData(this.renderedData);
 
       }
       return data;

@@ -1391,8 +1391,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
       const footerHeight = footerElRef ? footerElRef.offsetHeight : 0;
       const rowHeight = rowElRef ? rowElRef.offsetHeight : 36;
-      this.viewPort.setScrollHeight(rowHeight,headerHeight);
-      // this.viewPort.setScrollHeight(100, rowHeight, headerHeight, footerHeight);
+      this.viewPort.setScrollHeight(rowHeight, headerHeight, footerHeight);
     }
   }
 
@@ -1404,11 +1403,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
     ObservableWrapper.callEmit(this.onDataLoaded, this.daoTable.data);
-    setTimeout(() => {
-      if (this.viewPort) {
-        this.initViewPort();
-      }
-    }, 0)
   }
 
   showDialogError(error: string, errorOptional?: string) {
@@ -1428,6 +1422,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.previousRendererData !== this.dataSource.renderedData) {
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
+
+      if (this.viewPort) {
+        this.initViewPort();
+        this.viewPort.dataLength = this.dataSource.renderedData.length;
+      }
+
     }
 
     if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
@@ -2310,11 +2310,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
-      setTimeout(() => {
-        if (this.viewPort) {
-          this.initViewPort();
-        }
-      }, 0);
+
 
     }
   }
