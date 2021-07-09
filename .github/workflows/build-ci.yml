@@ -23,9 +23,16 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Node 12.x
+        if: github.base_ref == '8.x.x'
         uses: actions/setup-node@v1
         with:
           node-version: 12.10.0
+
+      - name: Node 10.x
+        if: github.base_ref == '4.x.x'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.23.0
 
       - name: npm install and npm run build
         run: |
