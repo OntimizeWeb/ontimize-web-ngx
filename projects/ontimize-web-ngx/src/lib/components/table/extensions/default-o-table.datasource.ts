@@ -1,4 +1,4 @@
-import { DataSource } from '@angular/cdk/collections';
+import { DataSource, ListRange } from '@angular/cdk/collections';
 import { EventEmitter } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
@@ -16,10 +16,10 @@ import { OTableDao } from './o-table.dao';
 import { OMatSort } from './sort/o-mat-sort';
 
 export class OnIndexChangeVirtualScroll {
-  public value: number;
+  public range: ListRange;
 
-  constructor(data: number) {
-    this.value = data;
+  constructor(data: ListRange) {
+    this.range = data;
 
   }
 }
@@ -27,8 +27,10 @@ export class OnIndexChangeVirtualScroll {
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   subscription: any;
-  public _pageSize: any = Codes.LIMIT_SCROLLVIRTUAL;
-  public _pageIndex = 0;
+
+  private _pageStart: any;
+  private _pageEnd: any;
+
   get data(): any[] { return this.dataTotalsChange.value; }
 
   protected _database: OTableDao;
@@ -36,7 +38,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _tableOptions: OTableOptions;
   protected _sort: OMatSort;
 
-  protected _virtualPageChange = new BehaviorSubject<OnIndexChangeVirtualScroll>(new OnIndexChangeVirtualScroll(0));
+  protected _virtualPageChange = new BehaviorSubject<OnIndexChangeVirtualScroll>(new OnIndexChangeVirtualScroll({ start: 0, end: 0 }));
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject(null);
   protected groupByColumnChange = new Subject();
@@ -69,16 +71,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     if (table.paginator) {
       this._paginator = table.matpaginator;
     } else {
-      this.table.viewPort.scrolledIndexChange.subscribe(
-        (value: any) => {
-          const lastPageIndex = this._pageIndex;
-          this._pageIndex = value;
-          if (lastPageIndex != this._pageIndex) {
-            this._virtualPageChange.next(new OnIndexChangeVirtualScroll(this._pageIndex));
-          }
+      this.table.scrollStrategy.renderedRangeStream.subscribe(
+        (value: ListRange) => {
+          this._pageStart = value.start;
+          this._pageEnd = value.end;
+          this._virtualPageChange.next(new OnIndexChangeVirtualScroll(value));
         });
 
- 
+
     }
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
@@ -108,7 +108,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
     if (!this.table.pageable) {
 
-      if (this.table.viewPort) {
+      if (this.table.scrollStrategy) {
         displayDataChanges.push(this._virtualPageChange);
       }
 
@@ -136,8 +136,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return merge(...displayDataChanges).pipe(map((x: any) => {
       let data = Object.assign([], this._database.data);
       if (x instanceof OnIndexChangeVirtualScroll) {
-        data.slice(Math.max(0,(this._pageIndex-this.table.viewPort.buffer)), (this._pageIndex + (this.table.viewPort.amount ? (Math.max(0,(this.table.viewPort.amount+this.table.viewPort.buffer))): Codes.LIMIT_SCROLLVIRTUAL)) - 1);
-        data = this.renderedData.slice(Math.max(0,x.value), (x.value + this.table.viewPort.amount+this.table.viewPort.buffer));
+        data = this.renderedData.slice(x.range.start, x.range.end > 0 ? x.range.end : Codes.LIMIT_SCROLLVIRTUAL);
       } else {
         /*
           it is necessary to first calculate the calculated columns and
@@ -178,7 +177,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table the first time 
          * to calculate header height, row height and footer header*/
         if (!this.table.pageable && !this.table.paginationControls) {
-          data = data.slice(Math.max(0,(this._pageIndex-this.table.viewPort.buffer)), (this._pageIndex + (this.table.viewPort.amount ? (Math.max(0,(this.table.viewPort.amount+this.table.viewPort.buffer))): Codes.LIMIT_SCROLLVIRTUAL)));
+          data = data.slice(this._pageStart, this._pageEnd > 0 ? this._pageEnd : Codes.LIMIT_SCROLLVIRTUAL);
         }
 
         this.aggregateData = this.getAggregatesData(this.renderedData);

@@ -1,17 +1,20 @@
+import { ListRange } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport, VirtualScrollStrategy } from "@angular/cdk/scrolling";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 
 export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     private viewport: CdkVirtualScrollViewport;
-    public readonly indexChange = new Subject<number>();
+ 
     private rowHeight!: number;
     private headerHeight!: number;
     private footerHeight!: number;
+    public readonly indexChange = new Subject<number>();
     public scrolledIndexChange: Observable<number>;
-    public amount!: number;
-    public offset!: number;
+    public renderedRangeStream = new BehaviorSubject<ListRange>({ start: 0, end: 0 });
+    public stickyChange = new Subject<number>();
     buffer: number;
+    bufferMultiplier: number = 0.5;
 
     constructor() {
         this.scrolledIndexChange = this.indexChange.asObservable().pipe(distinctUntilChanged());
@@ -31,12 +34,14 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
 
     attach(viewport: CdkVirtualScrollViewport): void {
         this.viewport = viewport;
+        this.viewport.renderedRangeStream.subscribe(this.renderedRangeStream);
 
         this.onDataLengthChanged();
         this.updateContent(viewport);
     }
 
     public detach(): void {
+        this.renderedRangeStream.complete();
         // no-op
     }
     public onContentRendered(): void {
@@ -72,43 +77,22 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     }
 
     private updateContent(viewport: CdkVirtualScrollViewport) {
-        if (this.viewport && this.rowHeight) {
-            const newIndex = Math.max(0, Math.round((viewport.measureScrollOffset() - this.headerHeight) / this.rowHeight) - 2);
-            const itemsByViewport = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
-
-            //if header is fixed, then set top Offset 
-            this.offset = newIndex * this.rowHeight;
-            this.buffer = itemsByViewport / 2
-            this.amount = Math.ceil(itemsByViewport);
-
-            viewport.setRenderedContentOffset(this.rowHeight * newIndex);
-
-            console.log('newIndex: ', newIndex, ' itemsByViewport:', itemsByViewport, ' offset: ', this.offset, ' setRenderedContentOffset: ', this.rowHeight * newIndex, ' indexChange ', Math.round((viewport.measureScrollOffset() - this.headerHeight) / this.rowHeight) + 1)
-            this.indexChange.next(
-
-                Math.round((viewport.measureScrollOffset() - this.headerHeight) / this.rowHeight)
-
-            );
-
-            // const scrollOffset = this.viewport.measureScrollOffset();
-            // this.amount = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
-            // const offset = Math.max(scrollOffset - this.headerHeight, 0);
-
-            // const buffer = Math.ceil(this.amount * 0.5);
-
-
-            // const skip = Math.round(this.offset / this.rowHeight);
-            // const index = Math.max(0, skip);
-            // const start = Math.max(0, index - buffer);
-            // const renderedOffset = start * this.rowHeight;
-            // const end = Math.min(this.dataLength, index + this.amount);
-            // this.amount += buffer*2;
-            // this.offset =  start * this.rowHeight;
-            // console.log('start: ', start, 'end :', end)
-            // console.log('scrollOffset: ', scrollOffset, ' amount:', this.amount, ' offset: ', this.offset, ' renderedOffset: ', renderedOffset, ' indexChange ', index)
-            // this.viewport.setRenderedContentOffset(renderedOffset);
-            // this.viewport.setRenderedRange({ start, end });
-            // this.indexChange.next(start);
+        if (!this.viewport || !this.rowHeight) {
+            return;
         }
+        const scrollOffset = this.viewport.measureScrollOffset();
+        const amount = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
+        const offset = Math.max(scrollOffset - this.headerHeight, 0);
+        const buffer = Math.ceil(amount * this.bufferMultiplier);
+
+        const skip = Math.round(offset / this.rowHeight);
+        const index = Math.max(0, skip);
+        const start = Math.max(0, index - buffer);
+        const end = Math.min(this.dataLength, index + amount + buffer);
+        const renderedOffset = start * this.rowHeight;
+        this.viewport.setRenderedContentOffset(renderedOffset);
+        this.viewport.setRenderedRange({ start, end });
+        this.indexChange.next(index);
+        this.stickyChange.next(renderedOffset);
     }
 }

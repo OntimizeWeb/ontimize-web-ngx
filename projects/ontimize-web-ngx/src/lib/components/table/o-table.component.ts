@@ -585,7 +585,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly viewPort: CustomVirtualScrollStrategy
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: CustomVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 
@@ -621,10 +621,24 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.matMenu = this.oTableMenu.matMenu;
       this.oTableMenu.registerOptions(this.tableOptions.toArray());
     }
+
     if (this.tableRowExpandable) {
       this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
       this.createExpandableColumn();
     }
+    this.updateHeaderAndFooterStickyPositions();
+
+  }
+
+  updateHeaderAndFooterStickyPositions() {
+    this.scrollStrategy.stickyChange.subscribe(x => {
+      this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
+        el.style.top = - x + 'px';
+      });
+      this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
+        el.style.bottom = x + 'px';
+      });
+    });
 
   }
 
@@ -1383,7 +1397,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   initViewPort() {
-    if (this.viewPort) {
+    if (this.scrollStrategy) {
       const headerElRef = this.elRef.nativeElement.querySelector(stickyHeaderSelector)
       const footerElRef = this.elRef.nativeElement.querySelector(stickyFooterSelector)
       const rowElRef = this.elRef.nativeElement.querySelector(rowSelector)
@@ -1391,7 +1405,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
       const footerHeight = footerElRef ? footerElRef.offsetHeight : 0;
       const rowHeight = rowElRef ? rowElRef.offsetHeight : 36;
-      this.viewPort.setScrollHeight(rowHeight, headerHeight, footerHeight);
+      this.scrollStrategy.setScrollHeight(rowHeight, headerHeight, footerHeight);
     }
   }
 
@@ -1423,9 +1437,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
 
-      if (this.viewPort) {
+      if (this.scrollStrategy) {
         this.initViewPort();
-        this.viewPort.dataLength = this.dataSource.renderedData.length;
+        this.scrollStrategy.dataLength = this.dataSource.renderedData.length;
       }
 
     }

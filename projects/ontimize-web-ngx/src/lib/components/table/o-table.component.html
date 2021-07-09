@@ -78,7 +78,7 @@
 
     <!--Checkbox Column -->
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
-      <th mat-header-cell *matHeaderCellDef [style.top.px]="-viewPort?.offset">
+      <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
       </th>
@@ -90,7 +90,7 @@
 
     <!--Expandable Column -->
     <ng-container [matColumnDef]="oTableOptions.expandableColumn.name" *ngIf="isColumnExpandable()">
-      <th mat-header-cell *matHeaderCellDef [style.top.px]="-viewPort?.offset">
+      <th mat-header-cell *matHeaderCellDef>
         {{ oTableOptions.expandableColumn.title }}
       </th>
       <td mat-cell *matCellDef="let row;let rowIndex = dataIndex">
@@ -107,8 +107,7 @@
 
       <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [class.resizable]="resizable"
         [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))"
-        [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth"
-        [style.top.px]="-viewPort?.offset">
+        [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
 
         <div class="content">
           <o-table-header-column-filter-icon *ngIf="isModeColumnFilterable(column)" [column]="column">
@@ -207,7 +206,7 @@
       </ng-container>
       <!--Define mat-footer-cell-->
       <ng-container *ngIf="showTotals | async">
-        <td mat-footer-cell *matFooterCellDef [ngClass]="column.className" [style.bottom.px]="viewPort?.offset">
+        <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
           <div class="title" *ngIf="column.aggregate && column.aggregate.title">
             {{ column.aggregate.title | oTranslate }}
           </div>
@@ -235,13 +234,13 @@
     <ng-container *ngIf="showLastInsertableRow && oTableInsertableRowComponent">
       <ng-container [matColumnDef]="oTableOptions.selectColumn.name + getSuffixColumnInsertable()"
         *ngIf="oTableOptions.selectColumn.visible">
-        <td mat-footer-cell *matFooterCellDef [style.bottom.px]="viewPort?.offset">
+        <td mat-footer-cell *matFooterCellDef>
         </td>
       </ng-container>
       <ng-container *ngFor="let column of oTableOptions.columns"
         [matColumnDef]="column.name+ getSuffixColumnInsertable()">
 
-        <td mat-footer-cell *matFooterCellDef [ngClass]="column.className" [style.bottom.px]="viewPort?.offset">
+        <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
           <ng-container
             *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
             <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatLabel="never">
@@ -268,12 +267,12 @@
     <ng-container *ngIf="showFirstInsertableRow && oTableInsertableRowComponent">
       <ng-container [matColumnDef]="getColumnInsertable(oTableOptions.selectColumn.name)"
         *ngIf="oTableOptions.selectColumn.visible">
-        <td mat-header-cell *matHeaderCellDef [style.top.px]="-viewPort?.offset">
+        <td mat-header-cell *matHeaderCellDef>
         </td>
       </ng-container>
       <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="getColumnInsertable(column.name)">
 
-        <td mat-header-cell *matHeaderCellDef [ngClass]="column.className" [style.top.px]="-viewPort?.offset">
+        <td mat-header-cell *matHeaderCellDef [ngClass]="column.className">
           <ng-container
             *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
             <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatLabel="never">
@@ -331,7 +330,7 @@
     </ng-container>
 
     <ng-container *ngIf="showLastInsertableRow">
-      <tr mat-footer-row *matFooterRowDef="oTableOptions.columnsInsertables; sticky: true" 
+      <tr mat-footer-row *matFooterRowDef="oTableOptions.columnsInsertables; sticky: true"
         (keyup)="oTableInsertableRowComponent.handleKeyboardEvent($event)" class="o-table-insertable"></tr>
     </ng-container>
     <ng-container *ngIf="showFirstInsertableRow">
@@ -339,7 +338,7 @@
         (keyup)="oTableInsertableRowComponent.handleKeyboardEvent($event)" class="o-table-insertable"> </tr>
     </ng-container>
     <ng-container *ngIf="showTotals | async">
-      <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: true" class="o-table-aggregate" >
+      <tr mat-footer-row *matFooterRowDef="oTableOptions.visibleColumns; sticky: true" class="o-table-aggregate">
       </tr>
     </ng-container>
   </table>
