@@ -8,7 +8,7 @@ import { OTableDataSource } from '../../../interfaces/o-table-datasource.interfa
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
 import { OTableGroupedRow } from '../../../types/table/o-table-row-group.type';
-import { Codes } from '../../../util/codes';
+import { Codes } from '../../../util';
 import { Util } from '../../../util/util';
 import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
@@ -20,16 +20,12 @@ export class OnIndexChangeVirtualScroll {
 
   constructor(data: ListRange) {
     this.range = data;
-
   }
 }
 
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
   subscription: any;
-
-  private _pageStart: any;
-  private _pageEnd: any;
 
   get data(): any[] { return this.dataTotalsChange.value; }
 
@@ -70,16 +66,13 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     }
     if (table.paginator) {
       this._paginator = table.matpaginator;
-    } else {
-      this.table.scrollStrategy.renderedRangeStream.subscribe(
-        (value: ListRange) => {
-          this._pageStart = value.start;
-          this._pageEnd = value.end;
-          this._virtualPageChange.next(new OnIndexChangeVirtualScroll(value));
-        });
-
-
     }
+
+    this.table.scrollStrategy.renderedRangeStream.subscribe(
+      (value: ListRange) => {
+        this._virtualPageChange.next(new OnIndexChangeVirtualScroll(value));
+      });
+
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
 
@@ -108,9 +101,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
     if (!this.table.pageable) {
 
-      if (this.table.scrollStrategy) {
-        displayDataChanges.push(this._virtualPageChange);
-      }
 
       if (this._sort) {
         displayDataChanges.push(this._sort.oSortChange);
@@ -125,6 +115,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     }
 
+    if (this.table.scrollStrategy) {
+      displayDataChanges.push(this._virtualPageChange);
+    }
+
     if (this.table.oTableColumnsFilterComponent) {
       displayDataChanges.push(this._columnValueFilterChange);
     }
@@ -136,7 +130,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return merge(...displayDataChanges).pipe(map((x: any) => {
       let data = Object.assign([], this._database.data);
       if (x instanceof OnIndexChangeVirtualScroll) {
-        data = this.renderedData.slice(x.range.start, x.range.end > 0 ? x.range.end : Codes.LIMIT_SCROLLVIRTUAL);
+        data = this.getVirtualScrollData(this.renderedData, x);
       } else {
         /*
           it is necessary to first calculate the calculated columns and
@@ -163,29 +157,25 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           data = this.getPaginationData(data);
         }
 
-
-
         if (!Util.isArrayEmpty(this.groupByColumns)) {
           data = this.getSubGroupsOfGroupedRow(data);
           /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
           data = this.filterCollapsedRowGroup(data);
         }
 
-
         this.renderedData = data;
 
-        /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table the first time 
-         * to calculate header height, row height and footer header*/
-        if (!this.table.pageable && !this.table.paginationControls) {
-          data = data.slice(this._pageStart, this._pageEnd > 0 ? this._pageEnd : Codes.LIMIT_SCROLLVIRTUAL);
-        }
 
         this.aggregateData = this.getAggregatesData(this.renderedData);
 
+        if (this.renderedData.length > Codes.LIMIT_SCROLLVIRTUAL && !this._paginator) {
+          this._virtualPageChange.next(new OnIndexChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+        }
       }
       return data;
     }));
   }
+
 
   /**
    * Gets subgroups of grouped row
@@ -283,6 +273,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       this._paginator.pageIndex = 0;
     }
     return data.splice(startIndex, this._paginator.pageSize);
+  }
+
+  getVirtualScrollData(data: any[], x: OnIndexChangeVirtualScroll): any[] {
+    return data.slice(x.range.start, x.range.end)
   }
 
   disconnect() {

@@ -42,15 +42,9 @@
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
     [class.scrolled]="horizontalScrolled">
     <div class="o-table-overflow o-scroll">
-      <ng-container *ngIf="paginator; else tableWithVirtualScroll">
+      <cdk-virtual-scroll-viewport #virtualScrollViewPort>
         <ng-template *ngTemplateOutlet="table"></ng-template>
-      </ng-container>
-      <ng-template #tableWithVirtualScroll>
-        <cdk-virtual-scroll-viewport #virtualScrollViewPort>
-          <ng-template *ngTemplateOutlet="table"></ng-template>
-        </cdk-virtual-scroll-viewport>
-      </ng-template>
-
+      </cdk-virtual-scroll-viewport>
     </div>
   </div>
 
