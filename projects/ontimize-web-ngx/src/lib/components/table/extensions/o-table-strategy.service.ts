@@ -5,7 +5,7 @@ import { distinctUntilChanged } from "rxjs/operators";
 
 export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     private viewport: CdkVirtualScrollViewport;
- 
+
     private rowHeight!: number;
     private headerHeight!: number;
     private footerHeight!: number;
@@ -37,12 +37,13 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
         this.viewport.renderedRangeStream.subscribe(this.renderedRangeStream);
 
         this.onDataLengthChanged();
-        this.updateContent(viewport);
+        this.updateContent();
     }
 
     public detach(): void {
+        this.indexChange.complete();
+        this.stickyChange.complete();
         this.renderedRangeStream.complete();
-        // no-op
     }
     public onContentRendered(): void {
         // no-op
@@ -53,30 +54,28 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     }
 
     public scrollToIndex(index: number, behavior: ScrollBehavior): void {
-        // if (!this.viewport || !this.rowHeight) {
-        //     return;
-        //   }
-        //   this.viewport.scrollToOffset((index - 1 ) * this.rowHeight + this.headerHeight, behavior);
+        // no-op
     }
 
     public onContentScrolled(): void {
-        this.updateContent(this.viewport);
+        this.updateContent();
     }
 
     public setScrollHeight(rowHeight: number, headerHeight: number, footerHeight: number) {
         this.rowHeight = rowHeight;
         this.headerHeight = headerHeight;
         this.footerHeight = footerHeight;
-        this.updateContent(this.viewport);
+        this.updateContent();
     }
 
     public onDataLengthChanged(): void {
         if (this.viewport) {
-            this.viewport.setTotalContentSize(this.dataLength * this.rowHeight);
+            this.viewport.setTotalContentSize(this.dataLength * this.rowHeight + this.headerHeight + this.footerHeight);
         }
+        this.updateContent();
     }
 
-    private updateContent(viewport: CdkVirtualScrollViewport) {
+    private updateContent() {
         if (!this.viewport || !this.rowHeight) {
             return;
         }
@@ -94,5 +93,6 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
         this.viewport.setRenderedRange({ start, end });
         this.indexChange.next(index);
         this.stickyChange.next(renderedOffset);
+        
     }
 }
