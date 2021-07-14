@@ -10,10 +10,6 @@ $o_table_row_padding: 24px;
   height: 100%;
   max-height: 100%;
   width: 100%;
-  
-  .cdk-virtual-scroll-viewport {
-    height: 100%;
-  }
 
   &.o-table-disabled {
     opacity: .4;
@@ -28,7 +24,7 @@ $o_table_row_padding: 24px;
     align-items: flex-start;
     align-content: stretch;
     min-width: 100%;
-    min-height: 100%;
+    min-height: 400px;
 
     .o-table-body {
       display: flex;
@@ -54,8 +50,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .toolbar {
         opacity: .75;
       }
     }
@@ -328,7 +324,7 @@ $o_table_row_padding: 24px;
           padding-right: 24px;
         }
 
-        &:first-of-type{
+        &:first-of-type {
           padding-left: 0;
           padding-right: 0;
         }

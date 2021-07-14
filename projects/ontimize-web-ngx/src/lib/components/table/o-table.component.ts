@@ -2646,7 +2646,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return Util.extractPixelsValue(col.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH) + 'px';
   }
 
-  showExpandedColumn(): boolean {
+  showExpandableRow(): boolean {
     return Util.isDefined(this.tableRowExpandable);
   }
 

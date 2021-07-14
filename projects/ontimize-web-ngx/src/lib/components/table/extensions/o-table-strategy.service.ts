@@ -71,9 +71,10 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     public onDataLengthChanged(): void {
         if (this.viewport) {
             this.viewport.setTotalContentSize(this.dataLength * this.rowHeight + this.headerHeight + this.footerHeight);
+            this.viewport.scrollToOffset(0);//set scroll up 
+            this.updateContent();
         }
-        this.viewport.scrollToOffset(0);//set scroll up 
-        this.updateContent();
+
     }
 
     private updateContent() {
@@ -93,9 +94,9 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
 
         this.viewport.setRenderedContentOffset(renderedOffset);
         this.viewport.setRenderedRange({ start, end });
-        
+
         this.indexChange.next(index);
         this.stickyChange.next(renderedOffset);
-        
+
     }
 }
