@@ -4,20 +4,24 @@ import {
   Component,
   ComponentFactory,
   ComponentFactoryResolver,
+  ContentChildren,
   EventEmitter,
   forwardRef,
   Inject,
   Injector,
   OnDestroy,
   OnInit,
+  QueryList,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { OTableColumn } from '../../../interfaces/o-table-column.interface';
 import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
+import { OValidatorComponent } from '../../../shared/components/validation/o-validator.component';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { Expression } from '../../../types/expression.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
@@ -89,6 +93,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'class',
 
+  'angularValidatorsFn: validators',
+
   ...O_TABLE_CELL_RENDERERS_INPUTS,
   ...O_TABLE_CELL_EDITORS_INPUTS
 ];
@@ -142,6 +148,12 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     return this._multiline;
   }
   protected _multiline: boolean = false;
+
+  public angularValidatorsFn: ValidatorFn[] = [];
+
+  protected validatorsSubscription: Subscription;
+  @ContentChildren(OValidatorComponent)
+  protected validatorChildren: QueryList<OValidatorComponent>;
 
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
