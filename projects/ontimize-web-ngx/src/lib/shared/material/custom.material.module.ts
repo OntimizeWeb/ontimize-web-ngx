@@ -1,6 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { ScrollingModule as ExperimentalScrollingModule } from "@angular/cdk-experimental/scrolling";
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
@@ -76,7 +75,6 @@ const MATERIAL_MODULES = [
   MatSortModule,
   OverlayModule,
   ScrollingModule,
-  ExperimentalScrollingModule
   // OverlayModule,
   // PortalModule,
   // RtlModule,
