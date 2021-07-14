@@ -41,11 +41,16 @@
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
     [class.scrolled]="horizontalScrolled">
-    <div class="o-table-overflow o-scroll">
-      <cdk-virtual-scroll-viewport #virtualScrollViewPort>
+    <ng-container *ngIf="showExpandableRow(); else tableWithVirtualScroll">
+      <div class="o-table-overflow o-scroll">
+        <ng-template *ngTemplateOutlet="table"></ng-template>
+      </div>
+    </ng-container>
+    <ng-template #tableWithVirtualScroll>
+      <cdk-virtual-scroll-viewport #virtualScrollViewPort fxFlex>
         <ng-template *ngTemplateOutlet="table"></ng-template>
       </cdk-virtual-scroll-viewport>
-    </div>
+    </ng-template>
   </div>
 
   <!--TABLE PAGINATOR-->
@@ -64,11 +69,12 @@
   <!-- Disable blocker -->
   <div *ngIf="!enabled" class="o-table-disabled-blocker"></div>
 </div>
+
 <ng-template #table>
 
   <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource"
     oMatSort [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
-    [multiTemplateDataRows]="showExpandedColumn()">
+    [multiTemplateDataRows]="showExpandableRow()">
 
     <!--Checkbox Column -->
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
