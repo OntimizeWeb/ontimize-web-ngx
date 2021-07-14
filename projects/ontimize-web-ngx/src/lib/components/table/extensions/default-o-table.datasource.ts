@@ -15,7 +15,7 @@ import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
 import { OMatSort } from './sort/o-mat-sort';
 
-export class OnIndexChangeVirtualScroll {
+export class OnRangeChangeVirtualScroll {
   public range: ListRange;
 
   constructor(data: ListRange) {
@@ -34,7 +34,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _tableOptions: OTableOptions;
   protected _sort: OMatSort;
 
-  protected _virtualPageChange = new BehaviorSubject<OnIndexChangeVirtualScroll>(new OnIndexChangeVirtualScroll({ start: 0, end: 0 }));
+  protected _virtualPageChange = new BehaviorSubject<OnRangeChangeVirtualScroll>(new OnRangeChangeVirtualScroll({ start: 0, end: 0 }));
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject(null);
   protected groupByColumnChange = new Subject();
@@ -72,7 +72,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       .pipe(distinctUntilChanged())
       .subscribe(
         (value: ListRange) => {
-          this._virtualPageChange.next(new OnIndexChangeVirtualScroll(value));
+          this._virtualPageChange.next(new OnRangeChangeVirtualScroll(value));
         });
 
     this._tableOptions = table.oTableOptions;
@@ -134,7 +134,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return merge(...displayDataChanges).pipe(
       map((x: any) => {
         let data = Object.assign([], this._database.data);
-        if (x instanceof OnIndexChangeVirtualScroll) {
+        if (x instanceof OnRangeChangeVirtualScroll) {
           data = this.getVirtualScrollData(this.renderedData, x);
         } else {
           /*
@@ -167,15 +167,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
           this.renderedData = data;
 
-          if (data.length > Codes.LIMIT_SCROLLVIRTUAL && !this._paginator) {
-            data = this.getVirtualScrollData(data, new OnIndexChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
-          }
-         
+          // if (data.length > Codes.LIMIT_SCROLLVIRTUAL && !this._paginator) {
+          //   data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+          // }
 
           this.aggregateData = this.getAggregatesData(this.renderedData);
-          if (this.renderedData.length > Codes.LIMIT_SCROLLVIRTUAL && !this._paginator) {
-            this._virtualPageChange.next(new OnIndexChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
-          }
+        
         }
         return data;
       }));
@@ -286,7 +283,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return data.splice(startIndex, this._paginator.pageSize);
   }
 
-  getVirtualScrollData(data: any[], x: OnIndexChangeVirtualScroll): any[] {
+  getVirtualScrollData(data: any[], x: OnRangeChangeVirtualScroll): any[] {
     return data.slice(x.range.start, x.range.end)
   }
 
