@@ -216,6 +216,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
 const stickyHeaderSelector = '.mat-header-row .mat-table-sticky';
 const stickyFooterSelector = '.mat-footer-row .mat-table-sticky';
 const rowSelector = '.mat-row'
+const headerSelector = '.mat-header-row';
+const footerSelector = '.mat-footer-row';
 
 @Component({
   selector: 'o-table',
@@ -626,8 +628,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
       this.createExpandableColumn();
     }
-    this.updateHeaderAndFooterStickyPositions();
 
+    this.updateHeaderAndFooterStickyPositions();
   }
 
   updateHeaderAndFooterStickyPositions() {
@@ -1398,8 +1400,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   initViewPort() {
     if (this.scrollStrategy) {
-      const headerElRef = this.elRef.nativeElement.querySelector(stickyHeaderSelector)
-      const footerElRef = this.elRef.nativeElement.querySelector(stickyFooterSelector)
+      const headerElRef = this.elRef.nativeElement.querySelector(headerSelector)
+      const footerElRef = this.elRef.nativeElement.querySelector(footerSelector)
       const rowElRef = this.elRef.nativeElement.querySelector(rowSelector)
 
       const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
@@ -1436,12 +1438,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.previousRendererData !== this.dataSource.renderedData) {
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
-
+      
       if (this.scrollStrategy) {
         this.initViewPort();
-        this.scrollStrategy.dataLength = this.dataSource.renderedData.length;
+        this.scrollStrategy.dataLength = this.previousRendererData.length;
       }
-
     }
 
     if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
