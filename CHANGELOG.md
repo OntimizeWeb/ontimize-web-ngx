@@ -1,4 +1,5 @@
 ## 8.4.0
+* **o-table**: integrating virtual scroll ([e14c424](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14c424)([238da22](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238da22)([b5668c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5668c3)
 
 ## 8.3.1 (2021-06-24)
 ### Features
