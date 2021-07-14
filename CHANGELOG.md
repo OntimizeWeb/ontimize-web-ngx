@@ -6,7 +6,7 @@
   * Adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method. 
   * Adding new optional parameter (indicating the new sort columns) to the `reinitializeSortColumns` method and changing its access level to public. 
   * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
-  * Adding virtual scroll ([e14c424](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14c424)([238da22](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238da22)([b5668c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5668c3)
+  * Adding virtual scroll ([e14c424](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14c424) ([238da22](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238da22) ([b5668c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5668c3)
 * **OTableDataSource**: adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece)).
 
 
