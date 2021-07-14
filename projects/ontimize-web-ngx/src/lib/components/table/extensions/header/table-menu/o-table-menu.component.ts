@@ -30,14 +30,10 @@ import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
-import {
-  OTableApplyConfigurationDialogComponent
-} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import {
-  OTableStoreConfigurationDialogComponent
-} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
@@ -355,7 +351,9 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       data: {
         visibleColumns: Util.parseArray(this.table.visibleColumns, true),
         columnsData: this.table.oTableOptions.columns,
-        rowHeight: this.table.rowHeight
+        rowHeight: this.table.rowHeight,
+        activeColumnValueFilters: this.table.dataSource.getColumnValueFilters().map(colValueFilter => colValueFilter.attr),
+        activeSortColumns: this.table.sortColArray.map(col => col.columnName)
       },
       maxWidth: '35vw',
       disableClose: true,
@@ -367,9 +365,15 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
         const columnsOrder = dialogRef.componentInstance.getColumnsOrder();
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+        const columnValueFiltersToRemove = dialogRef.componentInstance.getColumnValueFiltersToRemove();
+        const columnSortingToRemove = dialogRef.componentInstance.getColumnSortingToRemove();
+        if (columnValueFiltersToRemove.length > 0 || columnSortingToRemove.length > 0) {
+          const sortColumns = this.table.sortColArray.filter(col => !columnSortingToRemove.includes(col.columnName))
+          this.table.reinitializeSortColumns(sortColumns);
+          this.table.clearColumnFilters(true, columnValueFiltersToRemove);
+        }
         this.table.cd.detectChanges();
         this.table.refreshColumnsWidth();
-        this.table.onVisibleColumnsChange.emit(this.table.visibleColArray);
       }
     });
   }
