@@ -1,13 +1,4 @@
-import {
-  ContentChildren,
-  EventEmitter,
-  HostListener,
-  Injector,
-  OnInit,
-  QueryList,
-  SimpleChange,
-  ViewChild
-} from '@angular/core';
+import { ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -82,7 +73,7 @@ export class OBaseTableCellEditor implements OnInit {
   protected oldValue: any;
   cellEditorId: string;
 
-  errorsData: ErrorData[] = [];
+  public errorsData: ErrorData[] = [];
   protected validatorsSubscription: Subscription;
   @ContentChildren(OValidatorComponent)
   protected validatorChildren: QueryList<OValidatorComponent>;
@@ -103,10 +94,8 @@ export class OBaseTableCellEditor implements OnInit {
     this.initialize();
   }
 
-  public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
-    if (Util.isDefined(changes.angularValidatorsFn)) {
-      this.updateValidators();
-    }
+  public ngOnChanges(): void {
+    this.updateValidators();
   }
 
   ngAfterViewInit(): void {
@@ -309,17 +298,22 @@ export class OBaseTableCellEditor implements OnInit {
     return validators;
   }
 
-  public getActiveOErrors(): ErrorData[] {
-    return this.errorsData.filter((item: ErrorData) => this.hasError(item.name));
+  public getActiveOErrors() {
+    // this.formControl.errors recorrer
+    // this.tableColumn.editor.errorsData
+    // return this.errorsData.filter((item: ErrorData) => this.hasError(item.name));
+    return this.formControl.errors; //Convertir a array
+  }
+
+  public getErrorText(oError: any) {
+    return this.tableColumn.editor.errorsData.find((item) => item.name === oError ).text;
   }
 
   protected updateValidators(): void {
     if (!this.formControl) {
       return;
     }
-    const self = this;
     this.formControl.clearValidators();
-    this.errorsData = [];
     const validators = this.resolveValidators();
     if (this.validatorChildren) {
       this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
@@ -328,7 +322,7 @@ export class OBaseTableCellEditor implements OnInit {
           validators.push(validatorFunction);
         }
         const errorsData: ErrorData[] = oValidator.getErrorsData();
-        self.errorsData.push(...errorsData);
+        this.errorsData.push(...errorsData);
       });
     }
     this.formControl.setValidators(validators);
@@ -340,7 +334,7 @@ export class OBaseTableCellEditor implements OnInit {
    * @returns true if error
    */
   hasError(error: string): boolean {
-    return this.formControl && this.formControl.touched && this.hasErrorExclusive(error);
+    return this.formControl && this.formControl.touched && (this.hasErrorExclusive(error) || this.formControl.hasError(error));
   }
 
   hasErrorExclusive(error: string): boolean {
