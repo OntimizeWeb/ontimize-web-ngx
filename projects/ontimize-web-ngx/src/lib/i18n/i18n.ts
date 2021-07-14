@@ -251,6 +251,9 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Group by {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'UnGroup by {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'UnGroup all',
+    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION' : 'Aggregate function',
+    'TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS': 'Expand all',
+    'TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS': 'Collapse all',
     'TABLE.BUTTONS.GROUPBY': 'Group / ungroup by',
     'TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION': 'Drag and drop item from the left (Available columns) to the right (Grouped columns). Reorder the items in Grouped columns as needed.',
     'TABLE_GROUP_BY_COLUMNS_DIALOG.ALL_COLUMNS': 'Available columns',
@@ -263,7 +266,12 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Column grouping</li>',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Click on ',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'to hide/display the column. Use drag and drop to modify the column order.',
-    'APP_LAYOUT.SETTINGS': 'Settings'
+    'APP_LAYOUT.SETTINGS': 'Settings',
+    'AGGREGATE_FUNCTION.count' :'Count',
+    'AGGREGATE_FUNCTION.min' :'Min',
+    'AGGREGATE_FUNCTION.max' :'Max',
+    'AGGREGATE_FUNCTION.avg' :'Avg',
+    'AGGREGATE_FUNCTION.sum' :'Sum'
   },
 
   // Spanish
@@ -509,6 +517,9 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
+    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION' : 'Función de agrupamiento',
+    'TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS': 'Expandir todas',
+    'TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS': 'Colapsar todas',
     'TABLE.BUTTONS.GROUPBY': 'Agrupar por',
     'TABLE.DIALOG.TITLE_GROUPBY': 'Agrupar / desagrupar por columnas',
     'TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION': 'Arrastre y suelte de la izquierda (Columnas disponibles) a la derecha (Columnas agrupadas). Reordena las columnas agrupadas si fuera necesario',
@@ -522,8 +533,12 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Agrupamento por coluna</li>',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Haz click sobre ',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
-    'APP_LAYOUT.SETTINGS': 'Configuración'
-
+    'APP_LAYOUT.SETTINGS': 'Configuración',
+    'AGGREGATE_FUNCTION.count' :'Count',
+    'AGGREGATE_FUNCTION.min' :'Min',
+    'AGGREGATE_FUNCTION.max' :'Max',
+    'AGGREGATE_FUNCTION.avg' :'Media',
+    'AGGREGATE_FUNCTION.sum' :'Sum'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -765,6 +780,9 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
+    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION' : 'Función de agrupamiento',
+    'TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS': 'Expandir todas',
+    'TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS': 'Colapsar todas',
     'TABLE.BUTTONS.GROUPBY': 'Agrupar / desagrupar por',
     'TABLE.DIALOG.TITLE_GROUPBY': 'Agrupar / desagrupar por columnas',
     'TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION': 'Arrastre y suelte de la izquierda (Columnas disponibles) a la derecha (Columnas agrupadas). Reordena las columnas agrupadas si fuera necesario',
@@ -778,6 +796,11 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.VALUE_FILTER_WARN': '<li>Filtro de valor de coluna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.SORT_WARN': '<li>Ordenação de coluna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Column grouping</li>',
-    'APP_LAYOUT.SETTINGS': 'Definições'
+    'APP_LAYOUT.SETTINGS': 'Definições',
+    'AGGREGATE_FUNCTION.count' :'Count',
+    'AGGREGATE_FUNCTION.min' :'Min',
+    'AGGREGATE_FUNCTION.max' :'Max',
+    'AGGREGATE_FUNCTION.avg' :'Media',
+    'AGGREGATE_FUNCTION.sum' :'Sum'
   }
 };

@@ -7,6 +7,8 @@ import { Codes } from './codes';
 
 export class Util {
 
+  static columnAggregates = ['sum', 'count', 'avg', 'min', 'max'];
+
   static isObject(val: any): boolean {
     const valType = typeof val;
     return valType === 'object';

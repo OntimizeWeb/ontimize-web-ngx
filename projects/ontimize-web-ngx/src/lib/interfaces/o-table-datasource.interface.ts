@@ -32,4 +32,5 @@ export interface OTableDataSource {
   getAggregateData: (column: OColumn) => any;
   updateGroupedColumns();
   toggleGroupByColumn(rowGroup: OTableGroupedRow);
+  setRowGroupLevelExpansion(rowGroup: OTableGroupedRow, value: boolean);
 }
