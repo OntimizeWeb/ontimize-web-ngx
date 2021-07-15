@@ -62,10 +62,19 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
     }
 
     public setConfig(rowHeight: number, headerHeight: number, footerHeight: number) {
+        if (
+            this.rowHeight === rowHeight
+            && this.headerHeight === headerHeight
+            && this.footerHeight === footerHeight
+
+        ) {
+            return;
+        }
         this.rowHeight = rowHeight;
         this.headerHeight = headerHeight;
         this.footerHeight = footerHeight;
-        this.updateContent();
+        //if change heights, then update content size
+        this.onDataLengthChanged();
     }
 
     public onDataLengthChanged(): void {
@@ -74,7 +83,6 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
             this.viewport.scrollToOffset(0);//set scroll up 
             this.updateContent();
         }
-
     }
 
     private updateContent() {

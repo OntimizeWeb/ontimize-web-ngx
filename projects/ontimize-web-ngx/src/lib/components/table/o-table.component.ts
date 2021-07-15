@@ -1392,7 +1392,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     super.updatePaginationInfo(queryRes);
   }
 
-  initViewPort() {
+  initViewPort(data: any[]) {
     if (this.scrollStrategy) {
       const headerElRef = this.elRef.nativeElement.querySelector(headerSelector)
       const footerElRef = this.elRef.nativeElement.querySelector(footerSelector)
@@ -1401,8 +1401,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
       const footerHeight = footerElRef ? footerElRef.offsetHeight : 0;
       const rowHeight = rowElRef ? rowElRef.offsetHeight : OTableComponent.DEFAULT_ROW_HEIGHT;
+
       //set config viewport
       this.scrollStrategy.setConfig(rowHeight, headerHeight, footerHeight);
+      if (this.previousRendererData !== this.dataSource.renderedData ) {
+        this.scrollStrategy.dataLength = data.length;
+      }
     }
   }
 
@@ -1430,14 +1434,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }, 500);
     this.loadingScrollSubject.next(false);
 
-    if (this.previousRendererData !== this.dataSource.renderedData) {
+    if (this.scrollStrategy) {
+      this.initViewPort(this.dataSource.renderedData);
+    }
+
+    if (this.previousRendererData !== this.dataSource.renderedData ) {
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
-      
-      if (this.scrollStrategy) {
-        this.initViewPort();
-        this.scrollStrategy.dataLength = this.previousRendererData.length;
-      }
     }
 
     if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
