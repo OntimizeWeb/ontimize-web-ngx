@@ -525,7 +525,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /* In the case the table havent paginationControl and pageable, the table has pagination virtual*/
   pageScrollVirtual = 1;
 
-  public static ITEM_SIZE = 36;
+  public static DEFAULT_ROW_HEIGHT = 36;
   protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
@@ -1400,8 +1400,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
       const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
       const footerHeight = footerElRef ? footerElRef.offsetHeight : 0;
-      const rowHeight = rowElRef ? rowElRef.offsetHeight : 36;
-      this.scrollStrategy.setScrollHeight(rowHeight, headerHeight, footerHeight);
+      const rowHeight = rowElRef ? rowElRef.offsetHeight : OTableComponent.DEFAULT_ROW_HEIGHT;
+      //set config viewport
+      this.scrollStrategy.setConfig(rowHeight, headerHeight, footerHeight);
     }
   }
 

@@ -25,7 +25,6 @@ export class OnRangeChangeVirtualScroll {
 
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
-  subscription: any;
 
   get data(): any[] { return this.dataTotalsChange.value; }
 
@@ -135,6 +134,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       map((x: any) => {
         let data = Object.assign([], this._database.data);
         if (x instanceof OnRangeChangeVirtualScroll) {
+          // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
           data = this.getVirtualScrollData(this.renderedData, x);
         } else {
           /*
@@ -167,12 +167,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
           this.renderedData = data;
 
-          // if (data.length > Codes.LIMIT_SCROLLVIRTUAL && !this._paginator) {
-          //   data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
-          // }
-
           this.aggregateData = this.getAggregatesData(this.renderedData);
-        
+
         }
         return data;
       }));

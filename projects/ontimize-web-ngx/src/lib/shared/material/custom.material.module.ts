@@ -74,7 +74,7 @@ const MATERIAL_MODULES = [
   MatPaginatorModule,
   MatSortModule,
   OverlayModule,
-  ScrollingModule,
+  ScrollingModule
   // OverlayModule,
   // PortalModule,
   // RtlModule,
@@ -91,17 +91,17 @@ const MATERIAL_MODULES = [
   ],
   exports: MATERIAL_MODULES,
   providers: [
-  //   {
-  //   provide: DateAdapter,
-  //   useClass: OntimizeMomentDateAdapter,
-  //   deps: [MAT_DATE_LOCALE]
-  // },
-   {
-    provide: MAT_DATE_FORMATS,
-    useFactory: dateFormatFactory
-  }, {
-    provide: OntimizeMatIconRegistry,
-    useClass: OntimizeMatIconRegistry
-  }]
+    //   {
+    //   provide: DateAdapter,
+    //   useClass: OntimizeMomentDateAdapter,
+    //   deps: [MAT_DATE_LOCALE]
+    // },
+    {
+      provide: MAT_DATE_FORMATS,
+      useFactory: dateFormatFactory
+    }, {
+      provide: OntimizeMatIconRegistry,
+      useClass: OntimizeMatIconRegistry
+    }]
 })
 export class OCustomMaterialModule { }

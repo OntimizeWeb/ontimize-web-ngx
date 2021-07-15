@@ -61,7 +61,7 @@ export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
         this.updateContent();
     }
 
-    public setScrollHeight(rowHeight: number, headerHeight: number, footerHeight: number) {
+    public setConfig(rowHeight: number, headerHeight: number, footerHeight: number) {
         this.rowHeight = rowHeight;
         this.headerHeight = headerHeight;
         this.footerHeight = footerHeight;
