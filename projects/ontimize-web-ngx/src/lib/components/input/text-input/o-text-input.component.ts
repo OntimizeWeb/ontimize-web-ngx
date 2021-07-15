@@ -1,23 +1,12 @@
-import {
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
-import { MatInput } from '@angular/material';
 
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
+  OFormDataComponent
 } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
