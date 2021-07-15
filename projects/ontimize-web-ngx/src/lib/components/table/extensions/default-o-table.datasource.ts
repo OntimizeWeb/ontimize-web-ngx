@@ -128,8 +128,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       displayDataChanges.push(this.groupByColumnChange);
     }
 
-
-
     return merge(...displayDataChanges).pipe(
       map((x: any) => {
         let data = Object.assign([], this._database.data);
@@ -166,6 +164,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           }
 
           this.renderedData = data;
+
+          /* 
+            when the data is very large, the application crashes so it gets a limited range of data the first time
+            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll 
+          */
+          if (this.table.scrollStrategy && !this._paginator) {
+            data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: 0}));
+          }
 
           this.aggregateData = this.getAggregatesData(this.renderedData);
 
