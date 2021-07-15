@@ -1,10 +1,10 @@
 import { Subject } from 'rxjs';
 
+import { GroupedColumnAggregateConfiguration } from '../../../../interfaces/o-table-columns-grouping-interface';
+import { Util } from '../../../../util/util';
 import {
   OTableColumnsGroupingColumnComponent
-} from '../../components/table/extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
-import { GroupedColumnAggregateConfiguration } from '../../interfaces/o-table-columns-grouping-interface';
-import { Util } from '../../util/util';
+} from '../header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
 
 export type AggregateChangeArg = {
   columnAttr: string;
@@ -12,6 +12,7 @@ export type AggregateChangeArg = {
   changeAllGroupedRows: boolean;
   row: OTableGroupedRow;
 }
+
 export class OTableGroupedRow {
   column: string;
   title: string;

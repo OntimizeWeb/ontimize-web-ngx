@@ -3,12 +3,12 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
-import { OTableGroupedRow } from '../../../../types';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
 import { OColumn } from '../../column/o-column.class';
 import { OTableComponent } from '../../o-table.component';
+import { OTableGroupedRow } from '../row/o-table-row-group.class';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',

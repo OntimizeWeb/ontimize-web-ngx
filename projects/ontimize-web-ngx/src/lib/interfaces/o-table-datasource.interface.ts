@@ -1,8 +1,8 @@
 import { EventEmitter } from '@angular/core';
 
 import { OColumn } from '../components/table/column/o-column.class';
+import { OTableGroupedRow } from '../components/table/extensions/row/o-table-row-group.class';
 import { OColumnValueFilter } from '../types/table/o-column-value-filter.type';
-import { OTableGroupedRow } from '../types/table/o-table-row-group.type';
 
 export interface OTableDataSource {
 

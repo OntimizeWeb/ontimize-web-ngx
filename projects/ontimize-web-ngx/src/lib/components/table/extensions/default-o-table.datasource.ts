@@ -8,12 +8,12 @@ import { GroupedColumnAggregateConfiguration } from '../../../interfaces/o-table
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
-import { OTableGroupedRow } from '../../../types/table/o-table-row-group.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
+import { OTableGroupedRow } from './row/o-table-row-group.class';
 import { OMatSort } from './sort/o-mat-sort';
 
 export const SCROLLVIRTUAL = 'scroll';
