@@ -91,7 +91,7 @@
 
 
           <!--Define mat-cell-->
-          <ng-container *ngIf="!table.multiTemplateDataRows">
+          <ng-container *ngIf="!table.multiTemplateDataRows; else cellTemplateMultiTemplateDataRows">
             <td #cell mat-cell *matCellDef="let row;let rowIndex = index " [ngClass]="[column.className, getCellAlignClass(column)]"
               (click)="handleClick(row, column, rowIndex, cell, $event)" (dblclick)="handleDoubleClick(row, column, rowIndex, cell, $event)"
               [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
@@ -123,7 +123,8 @@
               </div>
             </td>
           </ng-container>
-          <ng-container *ngIf="table.multiTemplateDataRows">
+
+          <ng-template #cellTemplateMultiTemplateDataRows>
             <td #cell mat-cell *matCellDef="let row;let rowIndex = dataIndex " [ngClass]="[column.className, getCellAlignClass(column)]"
               (click)="handleClick(row, column, rowIndex, cell, $event)" (dblclick)="handleDoubleClick(row, column, rowIndex, cell, $event)"
               [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
@@ -151,10 +152,10 @@
                   </ng-container>
                   <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
                 </ng-container>
-
               </div>
             </td>
-          </ng-container>
+          </ng-template>
+
           <!--Define mat-footer-cell-->
           <ng-container *ngIf="showTotals | async">
             <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
@@ -172,9 +173,9 @@
         </ng-container>
 
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-        <ng-container *ngIf="hasExpandedRow()">
+        <ng-container *ngIf="hasExpandedRow">
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let row;let rowIndex= dataIndex" [attr.colspan]="getNumVisibleColumns()">
+            <td mat-cell *matCellDef="let row; let rowIndex= dataIndex" [attr.colspan]="oTableOptions.visibleColumns.length">
               <div [ngClass]="getExpandedRowContainerClass(rowIndex)" [@detailExpand]="getStateExpand(row)">
               </div>
             </td>
@@ -239,32 +240,42 @@
         </ng-container>
 
         <!-- Definition column group header -->
-        <ng-container matColumnDef="groupHeader">
-          <td mat-cell [attr.colspan]="getNumVisibleColumns()" *matCellDef="let group" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
-            <mat-icon *ngIf="group.expanded">expand_more</mat-icon>
-            <mat-icon *ngIf="!group.expanded">chevron_right</mat-icon>
-            <span>{{ getTextGroupRow(group) }}</span>
+        <ng-container *ngFor="let column of groupingHeadersRows; let i = index" [matColumnDef]="column">
+          <td mat-cell *matCellDef="let group" class="grouping-row" [oContextMenu]="tableContextMenu"
+            [oContextMenuData]="{ cellName:column, rowValue:group, rowIndex:i}">
+            <div *ngIf="i===0" class="grouping-title-wrapper" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
+              <mat-icon>{{ group.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
+              {{ group.title }}
+            </div>
+            <div class="grouping-aggregate" *ngIf="group.hasColumnData(visibleColArray[i])">
+              {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateFunction(visibleColArray[i]) | oTranslate }} : {{ group.getColumnAggregateValue(visibleColArray[i]) }}
+            </div>
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="position">
+          <td mat-cell *matCellDef="let row"> {{row}} </td>
+        </ng-container>
+
         <tr #tableHeader mat-header-row *matHeaderRowDef="oTableOptions.visibleColumns; sticky: fixedHeader"></tr>
-        <ng-container *ngIf="table.multiTemplateDataRows">
-          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let rowIndex = dataIndex"
+        <ng-container *ngIf="!table.multiTemplateDataRows; else rowTemplateMultiTemplateDataRows">
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns; when:isNotGroup; let rowIndex = index"
             [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
           </tr>
         </ng-container>
-        <ng-container *ngIf="!table.multiTemplateDataRows">
-          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns;  when:isNotGroup; let rowIndex = index"
+        <ng-template #rowTemplateMultiTemplateDataRows>
+          <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns; when:isNotGroup; let rowIndex = dataIndex"
             [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
           </tr>
-        </ng-container>
+        </ng-template>
 
         <!-- Row Group header -->
-        <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"
-          [ngClass]="getClassNameGroupHeader(row)"> </tr>
+        <tr mat-row *matRowDef="let row; columns: groupingHeadersRows; when:isGroup" (click)="groupHeaderClick(row)"
+          [ngClass]="getClassNameGroupHeader(row)">
+        </tr>
 
         <!-- Expanded detail row-->
-        <ng-container *ngIf="hasExpandedRow()">
+        <ng-container *ngIf="hasExpandedRow">
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="o-table-row-expanded"></tr>
         </ng-container>
 
