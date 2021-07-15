@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, Injector, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Injector, Input, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -13,9 +13,20 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private spanMessageNotResults: any;
   private translateService: OTranslateService;
   private tableBody: any;
-  private tableHeader: any;
   private tdTableWithMessage: any;
   private subscription = new Subscription();
+
+  @Input('oTableExpandedFooterColspan')
+  set colspan(value: number) {
+    this._colspan = value;
+    if (this.tdTableWithMessage) {
+      this.tdTableWithMessage.setAttribute('colspan', value);
+    }
+  }
+  get colspan(): number {
+    return this._colspan;
+  }
+  private _colspan: number;
 
   constructor(
     public table: OTableComponent,
@@ -29,10 +40,8 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   ngAfterViewInit() {
     if (this.element.nativeElement.childNodes[2]) {
       this.tableBody = this.element.nativeElement.childNodes[1];
-      this.tableHeader = this.element.nativeElement.childNodes[0];
     }
     this.registerContentChange();
-    this.registerVisibleColumnsChange();
   }
 
   registerContentChange() {
@@ -48,10 +57,6 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     if (this.table.quickFilter) {
       this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessageNotResults()));
     }
-  }
-
-  registerVisibleColumnsChange() {
-    this.subscription.add(this.table.onVisibleColumnsChange.subscribe(() => this.updateColspanTd()));
   }
 
   updateMessageNotResults(): void {
@@ -70,16 +75,9 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
 
       this.spanMessageNotResults = this.renderer.createElement('span');
       const messageNotResults = this.renderer.createText(message);
-      this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
+      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
       this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
       this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
-    }
-  }
-
-  /* Update colspan in td that show message not results */
-  updateColspanTd() {
-    if (this.tdTableWithMessage) {
-      this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
     }
   }
 
