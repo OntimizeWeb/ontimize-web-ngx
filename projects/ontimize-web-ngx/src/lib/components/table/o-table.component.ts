@@ -258,9 +258,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild(OTableRowExpandableComponent, { static: false })
   tableRowExpandable: OTableRowExpandableComponent;
 
-  @ContentChild(OTableInsertableRowComponent, { static: false })
-  insertableRow: OTableInsertableRowComponent;
-
   _filterColumns: Array<OFilterColumn>;
   portalHost: Array<DomPortalOutlet> = [];
   onDataLoadedCellRendererSubscription: Subscription;
