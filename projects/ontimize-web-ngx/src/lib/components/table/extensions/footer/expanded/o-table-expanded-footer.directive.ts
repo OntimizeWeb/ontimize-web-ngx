@@ -54,7 +54,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     this.renderer.appendChild(this.tableBody, tr);
 
     this.subscription.add(this.table.onDataLoaded.subscribe(() => this.updateMessageNotResults()));
-    if (this.table.quickFilter) {
+    if (this.table.quickFilter && this.table.hasControls()) {
       this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessageNotResults()));
     }
   }
