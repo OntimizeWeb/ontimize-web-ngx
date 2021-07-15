@@ -27,6 +27,7 @@
 
       <mat-error *ngIf="hasErrorDate('matDatepickerMax')"
         text="{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}"></mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ getErrorText(oError) }}"></mat-error>
 
     </mat-form-field>
 
@@ -45,6 +46,7 @@
 
       <mat-error *ngIf="hasErrorHour('invalidFormatHour')"
         text="{{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}"></mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
 
     </mat-form-field>
 

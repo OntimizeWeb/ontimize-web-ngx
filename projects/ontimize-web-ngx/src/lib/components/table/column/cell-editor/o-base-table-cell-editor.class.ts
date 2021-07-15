@@ -1,11 +1,13 @@
-import { DOCUMENT } from '@angular/common';
-import { ElementRef, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { SnackBarService } from '../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
+import { OValidatorComponent } from '../../../../shared/components/validation/o-validator.component';
+import { ErrorData } from '../../../../types/error-data.type';
 import { ObservableWrapper } from '../../../../util/async';
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
@@ -71,6 +73,11 @@ export class OBaseTableCellEditor implements OnInit {
   protected oldValue: any;
   cellEditorId: string;
 
+  public errorsData: ErrorData[] = [];
+  protected validatorsSubscription: Subscription;
+  @ContentChildren(OValidatorComponent)
+  protected validatorChildren: QueryList<OValidatorComponent>;
+
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
     this.handleKeyup(event);
@@ -85,6 +92,21 @@ export class OBaseTableCellEditor implements OnInit {
 
   ngOnInit(): void {
     this.initialize();
+  }
+
+  public ngOnChanges(): void {
+    this.updateValidators();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.validatorChildren) {
+      this.validatorsSubscription = this.validatorChildren.changes.subscribe(() => {
+        this.updateValidators();
+      });
+      if (this.validatorChildren.length > 0) {
+        this.updateValidators();
+      }
+    }
   }
 
   /**
@@ -265,12 +287,48 @@ export class OBaseTableCellEditor implements OnInit {
    */
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
+    if(this.tableColumn.angularValidatorsFn) {
+      this.tableColumn.angularValidatorsFn.forEach((fn: ValidatorFn) => {
+        validators.push(fn);
+      });
+    }
     if (this.orequired) {
       validators.push(Validators.required);
     }
     return validators;
   }
 
+  public getActiveOErrors() {
+    return this.formControl.errors ? Object.keys(this.formControl.errors) : [];
+  }
+
+  public getErrorText(oError: any) {
+    if(this.tableColumn.editor.errorsData) {
+      const error = this.tableColumn.editor.errorsData.find((item) => item.name === oError);
+      return error ? error.text : '';
+    } else {
+      return '';
+    }
+  }
+
+  protected updateValidators(): void {
+    if (!this.formControl) {
+      return;
+    }
+    this.formControl.clearValidators();
+    const validators = this.resolveValidators();
+    if (this.validatorChildren) {
+      this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
+        const validatorFunction: ValidatorFn = oValidator.getValidatorFn();
+        if (validatorFunction) {
+          validators.push(validatorFunction);
+        }
+        const errorsData: ErrorData[] = oValidator.getErrorsData();
+        this.errorsData.push(...errorsData);
+      });
+    }
+    this.formControl.setValidators(validators);
+  }
 
   /**
    * Determines whether error has
@@ -278,7 +336,7 @@ export class OBaseTableCellEditor implements OnInit {
    * @returns true if error
    */
   hasError(error: string): boolean {
-    return this.formControl && this.formControl.touched && this.hasErrorExclusive(error);
+    return this.formControl && this.formControl.touched && (this.hasErrorExclusive(error) || this.formControl.hasError(error));
   }
 
   hasErrorExclusive(error: string): boolean {

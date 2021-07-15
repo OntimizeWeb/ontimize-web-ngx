@@ -6,9 +6,10 @@
   * Adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method. 
   * Adding new optional parameter (indicating the new sort columns) to the `reinitializeSortColumns` method and changing its access level to public. 
   * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
-  * Row grouping new features:
+  * Added validators functionality to cell editors and insertable row ([4d66853](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d66853)) Closes [#517](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/517)
+  * Row grouping new features [#597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/597):
     * **o-table-columns-grouping**: new `o-table` inner component used to configure the row grouping columns
-    * **o-table-columns-grouping-column**: new `o-table-columns-grouping` inner comopnent used to configure the grouping features of a specific column
+    * **o-table-columns-grouping-column**: new `o-table-columns-grouping` inner comopnent used to configure the grouping features of a specific column 
 * **OTableDataSource**: adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece)).
 
 ## 8.3.1 (2021-06-24)

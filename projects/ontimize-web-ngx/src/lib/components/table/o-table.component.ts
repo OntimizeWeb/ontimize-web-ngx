@@ -924,9 +924,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const editableColumns = this._oTableOptions.columns.filter(col => {
       return Util.isDefined(col.editor);
     });
-    if (editableColumns.length > 0) {
-      console.warn('Using a column with a editor but there is no edition-mode defined');
-    }
+    setTimeout(() => {
+      if (editableColumns.length > 0 && !this.hasInsertableRow()) {
+        console.warn('Using a column with a editor but there is no edition-mode defined');
+      }
+    }, 100);
   }
 
   registerColumnAggregate(column: OColumnAggregate) {
@@ -1273,6 +1275,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   get hasExpandedRow(): boolean {
     return Util.isDefined(this.tableRowExpandable);
+  }
+
+  public hasInsertableRow(): boolean {
+    return Util.isDefined(this.oTableInsertableRowComponent);
+  }
+
+  public getNumVisibleColumns(): number {
+    return this.oTableOptions.visibleColumns.length;
   }
 
   /**
