@@ -299,14 +299,16 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   public getActiveOErrors() {
-    // this.formControl.errors recorrer
-    // this.tableColumn.editor.errorsData
-    // return this.errorsData.filter((item: ErrorData) => this.hasError(item.name));
-    return this.formControl.errors; //Convertir a array
+    return this.formControl.errors ? Object.keys(this.formControl.errors) : [];
   }
 
   public getErrorText(oError: any) {
-    return this.tableColumn.editor.errorsData.find((item) => item.name === oError ).text;
+    if(this.tableColumn.editor.errorsData) {
+      const error = this.tableColumn.editor.errorsData.find((item) => item.name === oError);
+      return error ? error.text : '';
+    } else {
+      return '';
+    }
   }
 
   protected updateValidators(): void {
