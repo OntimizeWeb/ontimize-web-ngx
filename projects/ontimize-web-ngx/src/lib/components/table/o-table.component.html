@@ -42,7 +42,7 @@
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll"
     [class.scrolled]="horizontalScrolled">
-    <ng-container *ngIf="showExpandableRow(); else tableWithVirtualScroll">
+    <ng-container *ngIf="!enabledVirtualScroll; else tableWithVirtualScroll">
       <div class="o-table-overflow o-scroll">
         <ng-template *ngTemplateOutlet="table"></ng-template>
       </div>

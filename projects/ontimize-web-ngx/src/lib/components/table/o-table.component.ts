@@ -2673,6 +2673,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   /**
+   * Gets enable virtual scroll
+   */
+  get enabledVirtualScroll(): boolean {
+    return !this.showExpandableRow() && this.groupedColumnsArray.length === 0;
+  }
+  /**
    * Parses grouped columns
    */
   parseGroupedColumns() {
