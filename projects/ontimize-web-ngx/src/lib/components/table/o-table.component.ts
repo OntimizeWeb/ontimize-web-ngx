@@ -2766,7 +2766,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   getColumnDataByAttr(attr, row: any): any {
     const oCol = this.getOColumn(attr);
-    const useRenderer = oCol && oCol.renderer && oCol.renderer.getCellData;
+    if (!Util.isDefined(oCol)){
+      return row[attr];
+    }
+    const useRenderer = oCol.renderer && oCol.renderer.getCellData;
     return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
   }
 
@@ -2853,7 +2856,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     const sqlType = this.getSqlTypes()[columnAttr];
     const hasDefaultAggregate = SQLTypes.isNumericSQLType(sqlType)
-      || OTableComponent.AVAILABLE_GROUPING_COLUMNS_RENDERERS.includes(oCol.type);
+      && (!Util.isDefined(oCol.renderer) || OTableComponent.AVAILABLE_GROUPING_COLUMNS_RENDERERS.includes(oCol.type));
 
     if (!Util.isDefined(this.oTableColumnsGroupingComponent)) {
       return hasDefaultAggregate;
