@@ -43,8 +43,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected filteredData: any[] = [];
   protected aggregateData: any = {};
 
-  private groupByColumns: string[] = [];
-
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
 
