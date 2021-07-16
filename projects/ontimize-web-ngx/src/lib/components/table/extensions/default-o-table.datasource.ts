@@ -1,14 +1,15 @@
-import { DataSource } from '@angular/cdk/collections';
+import { DataSource, ListRange } from '@angular/cdk/collections';
 import { EventEmitter } from '@angular/core';
 import { MatPaginator } from '@angular/material';
-import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable, Subject,Subscription } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
+
 
 import { GroupedColumnAggregateConfiguration } from '../../../interfaces/o-table-columns-grouping-interface';
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
-import { Codes } from '../../../util/codes';
+import { Codes } from '../../../util';
 import { Util } from '../../../util/util';
 import { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
@@ -16,25 +17,17 @@ import { OTableDao } from './o-table.dao';
 import { OTableGroupedRow } from './row/o-table-row-group.class';
 import { OMatSort } from './sort/o-mat-sort';
 
-export const SCROLLVIRTUAL = 'scroll';
+export class OnRangeChangeVirtualScroll {
+  public range: ListRange;
 
-export interface ITableOScrollEvent {
-  type: string;
-  data: number;
-}
-
-export class OTableScrollEvent implements ITableOScrollEvent {
-  public data: number;
-  public type: string;
-
-  constructor(data: number) {
-    this.data = data;
-    this.type = SCROLLVIRTUAL;
+  constructor(data: ListRange) {
+    this.range = data;
   }
 }
 
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
   dataTotalsChange = new BehaviorSubject<any[]>([]);
+
   get data(): any[] { return this.dataTotalsChange.value; }
 
   protected _database: OTableDao;
@@ -42,21 +35,16 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _tableOptions: OTableOptions;
   protected _sort: OMatSort;
 
+  protected _virtualPageChange = new BehaviorSubject<OnRangeChangeVirtualScroll>(new OnRangeChangeVirtualScroll({ start: 0, end: 0 }));
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject(null);
   protected groupByColumnChange = new Subject();
-  protected _loadDataScrollableChange = new BehaviorSubject<OTableScrollEvent>(new OTableScrollEvent(1));
 
   protected filteredData: any[] = [];
   protected aggregateData: any = {};
 
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
-  // load data in scroll
-  get loadDataScrollable(): number { return this._loadDataScrollableChange.getValue().data || 1; }
-  set loadDataScrollable(page: number) {
-    this._loadDataScrollableChange.next(new OTableScrollEvent(page));
-  }
 
   protected _renderedData: any[] = [];
   resultsLength: number = 0;
@@ -81,8 +69,17 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     if (table.paginator) {
       this._paginator = table.matpaginator;
     }
+
+    this.table.scrollStrategy.renderedRangeStream
+      .pipe(distinctUntilChanged())
+      .subscribe(
+        (value: ListRange) => {
+          this._virtualPageChange.next(new OnRangeChangeVirtualScroll(value));
+        });
+
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
+
   }
 
   sortFunction(a: any, b: any): number {
@@ -108,6 +105,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
     if (!this.table.pageable) {
 
+
       if (this._sort) {
         displayDataChanges.push(this._sort.oSortChange);
       }
@@ -118,9 +116,11 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
       if (this._paginator) {
         displayDataChanges.push(this._paginator.page);
-      } else {
-        displayDataChanges.push(this._loadDataScrollableChange);
       }
+    }
+
+    if (this.table.scrollStrategy) {
+      displayDataChanges.push(this._virtualPageChange);
     }
 
     if (this.table.oTableColumnsFilterComponent) {
@@ -131,52 +131,63 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       displayDataChanges.push(this.groupByColumnChange);
     }
 
-    return merge(...displayDataChanges).pipe(map((x: any) => {
-      let data = Object.assign([], this._database.data);
-      /*
-        it is necessary to first calculate the calculated columns and
-        then filter and sort the data
-      */
-      if (x instanceof OTableScrollEvent) {
-        this.renderedData = data.slice(0, (x.data * Codes.LIMIT_SCROLLVIRTUAL) - 1);
-      } else {
-        if (this.existsAnyCalculatedColumn()) {
-          data = this.getColumnCalculatedData(data);
-        }
-
-        if (!this.table.pageable) {
-          data = this.getColumnValueFilterData(data);
-          data = this.getQuickFilterData(data);
-          data = this.getSortedData(data);
-        }
-
-        this.filteredData = Object.assign([], data);
-
-        if (this.table.pageable) {
-          const totalRecordsNumber = this.table.getTotalRecordsNumber();
-          this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+    return merge(...displayDataChanges).pipe(
+      map((x: any) => {
+        let data = Object.assign([], this._database.data);
+        if (x instanceof OnRangeChangeVirtualScroll) {
+          // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
+          data = this.getVirtualScrollData(this.renderedData, x);
         } else {
-          this.resultsLength = data.length;
-          data = this.getPaginationData(data);
-        }
+          /*
+            it is necessary to first calculate the calculated columns and
+            then filter and sort the data
+          */
 
-        /** in pagination virtual only show OTableComponent.LIMIT items for better performance of the table */
-        if (!this.table.pageable && !this.table.paginationControls && data.length > Codes.LIMIT_SCROLLVIRTUAL) {
-          const datapaginate = data.slice(0, (this.table.pageScrollVirtual * Codes.LIMIT_SCROLLVIRTUAL) - 1);
-          data = datapaginate;
-        }
+          if (this.existsAnyCalculatedColumn()) {
+            data = this.getColumnCalculatedData(data);
+          }
 
-        if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
-          data = this.getSubGroupsOfGroupedRow(data);
-          /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
-          data = this.filterCollapsedRowGroup(data);
-        }
+          if (!this.table.pageable) {
+            data = this.getColumnValueFilterData(data);
+            data = this.getQuickFilterData(data);
+            data = this.getSortedData(data);
+          }
 
-        this.renderedData = data;
-        this.aggregateData = this.getAggregatesData(data);
-      }
-      return this.renderedData;
-    }));
+          this.filteredData = Object.assign([], data);
+
+          if (this.table.pageable) {
+            const totalRecordsNumber = this.table.getTotalRecordsNumber();
+            this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+          } else {
+            this.resultsLength = data.length;
+            data = this.getPaginationData(data);
+          }
+          if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
+            data = this.getGroupedData(data);
+          }
+
+          this.renderedData = data;
+
+          /* 
+            when the data is very large, the application crashes so it gets a limited range of data the first time
+            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll 
+          */
+          if (this.table.scrollStrategy && !this._paginator) {
+            data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL}));
+          }
+
+          this.aggregateData = this.getAggregatesData(this.renderedData);
+
+        }
+        return data;
+      }));
+  }
+
+  getGroupedData(data: any[]) {
+    data = this.getSubGroupsOfGroupedRow(data);
+    /** data contains row group headers (OTableGroupedRow) and the data belonging to expanded grouped rows */
+    data = this.filterCollapsedRowGroup(data);
+    return data;
   }
 
   /**
@@ -274,12 +285,15 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return data.splice(startIndex, this._paginator.pageSize);
   }
 
+  getVirtualScrollData(data: any[], x: OnRangeChangeVirtualScroll): any[] {
+    return data.slice(x.range.start, x.range.end)
+  }
+
   disconnect() {
     this.onRenderedDataChange.complete();
     this.dataTotalsChange.complete();
     this._quickFilterChange.complete();
     this._columnValueFilterChange.complete();
-    this._loadDataScrollableChange.complete();
     this.groupByColumnChange.complete();
   }
 

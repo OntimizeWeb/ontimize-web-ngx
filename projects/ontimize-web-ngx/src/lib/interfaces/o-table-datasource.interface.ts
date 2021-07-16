@@ -11,7 +11,6 @@ export interface OTableDataSource {
   resultsLength: number;
   sqlTypes: any;
   data: any[];
-  loadDataScrollable: number;
   quickFilter: string;
 
   getColumnData: (column: string) => any;
