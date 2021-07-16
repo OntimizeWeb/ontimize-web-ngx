@@ -1,12 +1,11 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
 
-import { Util } from '../../../util/util';
+import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/oFormValue';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 } from '../../o-form-data-component.class';
 import { OBooleanFormDataComponent } from '../o-boolean-form-data-component.class';
 
