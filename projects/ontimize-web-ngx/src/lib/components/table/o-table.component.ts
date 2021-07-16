@@ -35,6 +35,7 @@ import { BooleanConverter, InputConverter } from '../../decorators/input-convert
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
+import { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 import { OTableMenu } from '../../interfaces/o-table-menu.interface';
 import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
@@ -59,7 +60,6 @@ import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.typ
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
-import { OTableGroupedRow } from '../../types/table/o-table-row-group.type';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
@@ -75,17 +75,26 @@ import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import {
+  OTableFilterByColumnDataDialogComponent
+} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
+import {
+  OTableColumnsGroupingColumnComponent
+} from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { CustomVirtualScrollStrategy } from './extensions/o-table-strategy.service';
 
 import { OTableDao } from './extensions/o-table.dao';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
+import {
+  OTableRowExpandableComponent,
+  OTableRowExpandedChange
+} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
@@ -194,6 +203,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   //groupable[boolean]: Indicates whether or not the column can be groupable. By default: false
   'groupable',
 
+  //expand-groups-same-level[boolean]: Indicates if click in row expands/collapses all rows on same level. By default: true
+  'expandGroupsSameLevel: expand-groups-same-level',
+
   //collapse-grouped-columns [yes|no|true|false]: Whether collapse the grouped columns by default
   'collapseGroupedColumns: collapse-grouped-columns'
 ];
@@ -247,6 +259,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
+  public static AVAILABLE_GROUPING_COLUMNS_RENDERERS = ['currency', 'integer', 'real'];
 
   protected snackBarService: SnackBarService;
 
@@ -296,7 +309,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   showButtonsText: boolean = true;
   @InputConverter()
   filterColumnActiveByDefault: boolean = false;
-
 
   protected _oTableOptions: OTableOptions;
 
@@ -368,7 +380,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   autoAdjust: boolean = false;
   @InputConverter()
-  groupable: boolean = false;
+  groupable: boolean = true;
+  @InputConverter()
+  expandGroupsSameLevel: boolean = true;
   @InputConverter()
   collapseGroupedColumns: boolean = false;
 
@@ -432,6 +446,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
+      this.groupingHeadersRows = this._oTableOptions.visibleColumns.map(visibleCol => 'groupHeader-' + visibleCol);
     }
   }
 
@@ -572,6 +587,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   set isColumnFiltersActive(val: boolean) {
     this._isColumnFiltersActive = val;
   }
+
+  groupingHeadersRows: string[] = [];
+
+  public oTableColumnsGroupingComponent: OTableColumnsGrouping;
 
   constructor(
     public injector: Injector,
@@ -791,6 +810,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.registerSortListener();
     this.setFiltersConfiguration();
     this.addDefaultRowButtons();
+    if (Util.isDefined(this.oTableColumnsGroupingComponent)) {
+      this.setGroupColumns(this.oTableColumnsGroupingComponent.columnsArray);
+    }
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -801,7 +823,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.tabGroupChangeSubscription) {
       this.tabGroupChangeSubscription.unsubscribe();
     }
-
     if (this.selectionChangeSubscription) {
       this.selectionChangeSubscription.unsubscribe();
     }
@@ -811,7 +832,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.onRenderedDataChange) {
       this.onRenderedDataChange.unsubscribe();
     }
-
     if (this.contextMenuSubscription) {
       this.contextMenuSubscription.unsubscribe();
     }
@@ -820,7 +840,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.asyncLoadSubscriptions[idx].unsubscribe();
       }
     });
-
   }
 
   /**
@@ -933,9 +952,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const editableColumns = this._oTableOptions.columns.filter(col => {
       return Util.isDefined(col.editor);
     });
-    if (editableColumns.length > 0) {
-      console.warn('Using a column with a editor but there is no edition-mode defined');
-    }
+    setTimeout(() => {
+      if (editableColumns.length > 0 && !this.hasInsertableRow()) {
+        console.warn('Using a column with a editor but there is no edition-mode defined');
+      }
+    }, 100);
   }
 
   registerColumnAggregate(column: OColumnAggregate) {
@@ -1280,8 +1301,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
   }
 
-  public hasExpandedRow(): boolean {
+  get hasExpandedRow(): boolean {
     return Util.isDefined(this.tableRowExpandable);
+  }
+
+  public hasInsertableRow(): boolean {
+    return Util.isDefined(this.oTableInsertableRowComponent);
   }
 
   public getNumVisibleColumns(): number {
@@ -1404,7 +1429,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
       //set config viewport
       this.scrollStrategy.setConfig(rowHeight, headerHeight, footerHeight);
-      if (this.previousRendererData !== this.dataSource.renderedData ) {
+      if (this.previousRendererData !== this.dataSource.renderedData) {
         this.scrollStrategy.dataLength = data.length;
       }
     }
@@ -1438,7 +1463,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.initViewPort(this.dataSource.renderedData);
     }
 
-    if (this.previousRendererData !== this.dataSource.renderedData ) {
+    if (this.previousRendererData !== this.dataSource.renderedData) {
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
@@ -2481,7 +2506,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
   }
 
-
   protected addDefaultRowButtons() {
     // check permissions
     if (this.editButtonInRow) {
@@ -2652,26 +2676,25 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Parses grouped columns
    */
   parseGroupedColumns() {
-    this.groupedColumnsArray = this.state.groupedColumns || this.originalGroupedColumnsArray;
+    let result = this.state.groupedColumns || this.originalGroupedColumnsArray;
     if (this.state.groupedColumns && this.state.initialConfiguration.groupedColumns) {
       const difference = this.state.initialConfiguration.groupedColumns
         .filter(x => !this.originalGroupedColumnsArray.includes(x));
 
       if (difference.length > 0) {
-        this.groupedColumnsArray = this.originalGroupedColumnsArray;
+        result = this.originalGroupedColumnsArray;
       }
     }
-
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.setGroupColumns(result);
   }
 
   /**
    * Groups by column
    * @param column
    */
-  public groupByColumn(column: OColumn) {
+  groupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, true);
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.dataSource.updateGroupedColumns();
   }
 
   /**
@@ -2680,15 +2703,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, false);
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.dataSource.updateGroupedColumns();
   }
 
   /**
    * Ungroup by all columns
    */
   unGroupByAllColumns() {
-    this.groupedColumnsArray = [];
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.setGroupColumns([]);
+  }
+
+  setGroupColumns(value: string[]) {
+    this.groupedColumnsArray = value;
+    this.dataSource.updateGroupedColumns();
   }
 
   checkGroupByColumn(field: string, add: boolean) {
@@ -2716,7 +2743,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns true if group
    */
   isGroup(index, item): boolean {
-    return Util.isDefined(item.level);
+    return item instanceof OTableGroupedRow;
   }
 
   /**
@@ -2726,29 +2753,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns true if not group
    */
   isNotGroup(index, item): boolean {
-    return !Util.isDefined(item.level);
+    return !(item instanceof OTableGroupedRow);
+  }
+
+  getLastGroups() {
+    // Get last groups
+    let scores = this.dataSource.renderedData;
+    const maxLevel = scores.reduce((acc, curr) => curr.level > acc ? curr.level : acc, 0);
+    const maxLevelRenderedData = scores.reduce((r, o) => o.level === maxLevel ? [...r, o] : r, []);
+    return maxLevelRenderedData.length;
   }
 
   groupHeaderClick(row: OTableGroupedRow) {
     this.dataSource.toggleGroupByColumn(row);
-  }
-
-  getTextGroupRow(group: OTableGroupedRow) {
-    const field = this.groupedColumnsArray[group.level - 1];
-    let value = group.column[this.groupedColumnsArray[group.level - 1]];
-    const totalCounts = group.totalCounts;
-    const oCol = this.getOColumn(field);
-
-    if (!value && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
-      value = ' - ';
-      if (!this.onDataLoadedCellRendererSubscription) {
-        this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
-          this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
-        });
-      }
-    }
-    return this.translateService.get(oCol.title) + ': ' + value + ' (' + totalCounts + ')';
-
   }
 
   private isInstanceOfOTableCellRendererServiceComponent(renderer: OBaseTableCellRenderer) {
@@ -2829,5 +2846,32 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public filterData(value?: string, loadMore?: boolean): void {
     //
+  }
+
+  setOTableColumnsGrouping(value: OTableColumnsGrouping) {
+    this.oTableColumnsGroupingComponent = value;
+  }
+
+  getColumnGroupingComponent(columnAttr: string): OTableColumnsGroupingColumnComponent {
+    let result: OTableColumnsGroupingColumnComponent;
+    if (Util.isDefined(this.oTableColumnsGroupingComponent)) {
+      result = this.oTableColumnsGroupingComponent.getColumnGrouping(columnAttr);
+    }
+    return result;
+  }
+
+  useColumnGroupingAggregate(columnAttr: string): boolean {
+    const oCol = this.getOColumn(columnAttr);
+    if (!Util.isDefined(oCol)) {
+      return false;
+    }
+    const sqlType = this.getSqlTypes()[columnAttr];
+    const hasDefaultAggregate = SQLTypes.isNumericSQLType(sqlType)
+      || OTableComponent.AVAILABLE_GROUPING_COLUMNS_RENDERERS.includes(oCol.type);
+
+    if (!Util.isDefined(this.oTableColumnsGroupingComponent)) {
+      return hasDefaultAggregate;
+    }
+    return this.oTableColumnsGroupingComponent.useColumnAggregate(columnAttr, hasDefaultAggregate);
   }
 }

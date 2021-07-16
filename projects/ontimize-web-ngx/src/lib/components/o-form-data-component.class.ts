@@ -10,7 +10,7 @@ import {
   OnInit,
   QueryList,
   SimpleChange,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
