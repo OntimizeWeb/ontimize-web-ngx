@@ -539,7 +539,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
       }, value);
     }
-    return value;
+    return  +(value).toFixed(2);
   }
 
   protected count(column, data): number {
@@ -728,7 +728,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   private updateStateRowGrouped(rowGroup: OTableGroupedRow) {
     const stateRowGrouped = this.groupedRowState.find(row => rowGroup.keysAsString === row.keysAsString && JSON.stringify(rowGroup.parent) === JSON.stringify(row.parent));
-    if (!Util.isDefined(stateRowGrouped)) {
+    if (Util.isDefined(stateRowGrouped)) {
       stateRowGrouped.expanded = !stateRowGrouped.expanded;
     } else {
       rowGroup.expanded = !rowGroup.expanded;
