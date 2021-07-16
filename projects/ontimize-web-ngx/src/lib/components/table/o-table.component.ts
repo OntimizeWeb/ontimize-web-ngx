@@ -87,7 +87,7 @@ import {
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
-import { CustomVirtualScrollStrategy } from './extensions/o-table-strategy.service';
+import { OTableVirtualScrollStrategy } from './extensions/o-table-strategy.service';
 
 import { OTableDao } from './extensions/o-table.dao';
 import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
@@ -234,7 +234,7 @@ const footerSelector = '.mat-footer-row';
     OntimizeServiceProvider,
     OTableDataSourceService,
     { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] },
-    { provide: VIRTUAL_SCROLL_STRATEGY, useClass: CustomVirtualScrollStrategy }
+    { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy }
   ],
   animations: [
     trigger('detailExpand', [
@@ -600,7 +600,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: CustomVirtualScrollStrategy
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 

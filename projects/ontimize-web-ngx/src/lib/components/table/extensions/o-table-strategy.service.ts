@@ -3,7 +3,7 @@ import { CdkVirtualScrollViewport, VirtualScrollStrategy } from "@angular/cdk/sc
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 
-export class CustomVirtualScrollStrategy implements VirtualScrollStrategy {
+export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
     private viewport: CdkVirtualScrollViewport;
 
     private rowHeight!: number;
