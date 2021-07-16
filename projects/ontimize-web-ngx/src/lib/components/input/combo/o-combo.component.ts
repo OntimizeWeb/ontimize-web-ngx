@@ -20,8 +20,8 @@ import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import {
   DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,

@@ -39,7 +39,7 @@ import { OFormControl } from '../input/o-form-control.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
-import { OFormValue } from './OFormValue';
+import { OFormValue } from './o-form-value';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
 interface IFormDataComponentHash {

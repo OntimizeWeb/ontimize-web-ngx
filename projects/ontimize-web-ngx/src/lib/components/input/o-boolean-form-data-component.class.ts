@@ -1,8 +1,9 @@
-import { ElementRef, forwardRef, Inject, Injector, Optional } from "@angular/core";
-import { Util } from "../../util";
-import { OFormComponent } from "../form/o-form.component";
-import { OFormValue } from "../form/OFormValue";
-import { OFormDataComponent } from "../o-form-data-component.class";
+import { ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
+
+import { Util } from '../../util';
+import { OFormValue } from '../form/o-form-value';
+import { OFormComponent } from '../form/o-form.component';
+import { OFormDataComponent } from '../o-form-data-component.class';
 
 
 export const DEFAULT_INPUTS_O_BOOLEAN_FORM_DATA = [
