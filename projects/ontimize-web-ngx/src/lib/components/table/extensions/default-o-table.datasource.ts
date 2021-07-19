@@ -1,7 +1,7 @@
 import { DataSource, ListRange } from '@angular/cdk/collections';
 import { EventEmitter } from '@angular/core';
 import { MatPaginator } from '@angular/material';
-import { BehaviorSubject, merge, Observable, Subject,Subscription } from 'rxjs';
+import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
 
@@ -173,7 +173,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
             because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll 
           */
           if (this.table.scrollStrategy && !this._paginator) {
-            data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL}));
+            data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
           }
 
           this.aggregateData = this.getAggregatesData(this.renderedData);
@@ -290,6 +290,13 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   disconnect() {
+    //no-op because the destroy method will be called instead
+  }
+
+  destroy() {
+    /* The table template is modified according to whether it is groupable or not,
+     so the destroy method is defined to launch when the table component is destroyed
+     */
     this.onRenderedDataChange.complete();
     this.dataTotalsChange.complete();
     this._quickFilterChange.complete();
@@ -553,7 +560,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
       }, value);
     }
-    return  +(value).toFixed(2);
+    return +(value).toFixed(2);
   }
 
   protected count(column, data): number {
