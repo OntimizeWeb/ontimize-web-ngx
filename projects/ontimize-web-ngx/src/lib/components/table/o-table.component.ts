@@ -835,6 +835,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.contextMenuSubscription) {
       this.contextMenuSubscription.unsubscribe();
     }
+    if (this.dataSource) {
+      this.dataSource.destroy();
+    }
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
@@ -1419,9 +1422,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   initViewPort(data: any[]) {
     if (this.scrollStrategy) {
-      const headerElRef = this.elRef.nativeElement.querySelector(headerSelector)
-      const footerElRef = this.elRef.nativeElement.querySelector(footerSelector)
-      const rowElRef = this.elRef.nativeElement.querySelector(rowSelector)
+      const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
+      const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
+      const rowElRef = this.elRef.nativeElement.querySelector(rowSelector);
 
       const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
       const footerHeight = footerElRef ? footerElRef.offsetHeight : 0;
@@ -2786,7 +2789,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   getColumnDataByAttr(attr, row: any): any {
     const oCol = this.getOColumn(attr);
-    if (!Util.isDefined(oCol)){
+    if (!Util.isDefined(oCol)) {
       return row[attr];
     }
     const useRenderer = oCol.renderer && oCol.renderer.getCellData;
