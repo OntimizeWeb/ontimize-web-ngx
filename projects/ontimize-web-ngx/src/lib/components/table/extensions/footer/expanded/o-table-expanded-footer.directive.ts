@@ -1,8 +1,9 @@
 import { AfterViewInit, Directive, ElementRef, Injector, Input, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { Util } from '../../../../../util';
 import { OTableComponent } from './../../../o-table.component';
 
 @Directive({
@@ -53,36 +54,51 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     tr.appendChild(this.tdTableWithMessage);
     this.renderer.appendChild(this.tableBody, tr);
 
-    this.subscription.add(this.table.onDataLoaded.subscribe(() => this.updateMessageNotResults()));
-    if (this.table.quickFilter && this.table.hasControls()) {
-      this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessageNotResults()));
-    }
+    this.subscription.add(this.table.onContentChange
+      .pipe(distinctUntilChanged((prev, curr) => prev.length === curr.length))
+      .subscribe((data: any[]) => this.showMessage(data)));
+    this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessage()));
   }
 
-  updateMessageNotResults(): void {
+  public showMessage(tableData: any[]): void {
     // reset span message
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
 
-    if (this.table.daoTable.data.length === 0) {
+    if (tableData.length === 0) {
       // generate new message
-      let message = '';
-      message = this.translateService.get('TABLE.EMPTY');
-      if (this.table.quickFilter && this.table.oTableQuickFilterComponent && this.table.oTableQuickFilterComponent.value) {
-        message += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
-      }
+      const message = this.buildMessage();
 
       this.spanMessageNotResults = this.renderer.createElement('span');
       const messageNotResults = this.renderer.createText(message);
-      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
       this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
       this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
     }
   }
 
+  public updateMessage(): void {
+    if (this.spanMessageNotResults) {
+      const message = this.buildMessage();
+      this.spanMessageNotResults.innerHTML = message;
+    }
+  }
+
   destroy() {
     this.subscription.unsubscribe();
+  }
+
+  protected buildMessage(): string {
+    let message = '';
+    message = this.translateService.get('TABLE.EMPTY');
+    if (this.tableHasQuickFilter() && this.table.oTableQuickFilterComponent.value) {
+      message += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
+    }
+    return message;
+  }
+
+  protected tableHasQuickFilter(): boolean {
+    return Util.isDefined(this.table.quickFilter && this.table.oTableQuickFilterComponent);
   }
 
 }
