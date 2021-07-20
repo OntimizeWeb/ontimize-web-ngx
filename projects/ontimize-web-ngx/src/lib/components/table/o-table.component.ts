@@ -28,8 +28,8 @@ import {
   ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
-import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription, timer } from 'rxjs';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
@@ -225,6 +225,7 @@ const stickyFooterSelector = '.mat-footer-row .mat-table-sticky';
 const rowSelector = '.mat-row'
 const headerSelector = '.mat-header-row';
 const footerSelector = '.mat-footer-row';
+
 
 @Component({
   selector: 'o-table',
@@ -467,6 +468,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected querySubscription: Subscription;
   protected contextMenuSubscription: Subscription;
+  protected virtualScrollSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
   public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
@@ -646,7 +648,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateHeaderAndFooterStickyPositions() {
-    this.scrollStrategy.stickyChange.subscribe(x => {
+
+
+    this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
+      distinctUntilChanged(),
+      filter(() => this.fixedHeader || this.hasInsertableRow())
+    ).subscribe(x => {
+
       this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
         el.style.top = - x + 'px';
       });
@@ -838,6 +846,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.dataSource) {
       this.dataSource.destroy();
     }
+
+    if (this.virtualScrollSubscription) {
+      this.virtualScrollSubscription.unsubscribe();
+    }
+
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
