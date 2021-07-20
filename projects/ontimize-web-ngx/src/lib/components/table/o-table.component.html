@@ -73,9 +73,9 @@
 
 <ng-template #table>
 
-  <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource"
-    oMatSort [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
-    [multiTemplateDataRows]="showExpandableRow()">
+  <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
+    [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
+    [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()">
 
     <!--Checkbox Column -->
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
