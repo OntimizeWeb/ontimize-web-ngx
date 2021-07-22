@@ -213,15 +213,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
     this.componentStateService.initialize(this);
 
-    if (this.storeState) {
-      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
-        this.updateStateStorage();
-        // when the storage is updated because a route change
-        // the alreadyStored control variable is changed to its initial value
-        this.alreadyStored = false;
-      });
-    }
-
     if (this.staticData) {
       this.queryOnBind = false;
       this.queryOnInit = false;
@@ -258,6 +249,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   afterViewInit() {
+    this.registerLocalStorageServiceRouteChange();
+
     this.abortQuery.subscribe(value => {
       if (value) {
         if (this.querySubscription) {
@@ -562,6 +555,15 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
     //
+  }
+
+
+  protected registerLocalStorageServiceRouteChange() {
+    if (this.storeState) {
+      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
+        this.updateStateStorage();
+      });
+    }
   }
 
 }
