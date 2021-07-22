@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
-import { VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   ApplicationRef,
@@ -268,16 +268,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginator;
-  private virtualScrollViewport: OTableVirtualScrollStrategy;
+  private virtualScrollViewport: CdkVirtualScrollViewport;
   public activeVirtualScroll = true;
 
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
-  @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: OTableVirtualScrollStrategy) {
+  @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
-      this.activeVirtualScroll = value instanceof OTableVirtualScrollStrategy;
+      this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
       this.setDatasource();
     }
   }
