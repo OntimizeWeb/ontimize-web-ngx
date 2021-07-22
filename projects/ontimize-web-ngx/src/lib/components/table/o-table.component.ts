@@ -619,7 +619,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public scrollStrategy: OTableVirtualScrollStrategy
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 

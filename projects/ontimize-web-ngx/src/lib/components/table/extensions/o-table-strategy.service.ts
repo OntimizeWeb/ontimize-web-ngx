@@ -105,6 +105,5 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
 
         this.indexChange.next(index);
         this.stickyChange.next(renderedOffset);
-       
     }
 }
