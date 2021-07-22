@@ -278,6 +278,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
       this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
+      if(this.activeVirtualScroll){
+        this.updateHeaderAndFooterStickyPositions();
+      }
       this.setDatasource();
     }
   }
@@ -619,7 +622,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 
@@ -661,7 +664,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.createExpandableColumn();
     }
 
-    this.updateHeaderAndFooterStickyPositions();
   }
 
   updateHeaderAndFooterStickyPositions() {
@@ -864,6 +866,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.virtualScrollSubscription) {
       this.virtualScrollSubscription.unsubscribe();
+    }
+    if(this.scrollStrategy){
+      this.scrollStrategy.destroy();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {

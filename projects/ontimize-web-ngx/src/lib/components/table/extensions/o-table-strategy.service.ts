@@ -18,7 +18,6 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
 
     constructor() {
         this.scrolledIndexChange = this.indexChange.asObservable().pipe(distinctUntilChanged());
-
     }
 
     get dataLength(): number {
@@ -34,13 +33,15 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
 
     attach(viewport: CdkVirtualScrollViewport): void {
         this.viewport = viewport;
-        this.viewport.renderedRangeStream.pipe(distinctUntilChanged()).subscribe(this.renderedRangeStream);
-
         this.onDataLengthChanged();
         this.updateContent();
     }
 
     public detach(): void {
+        //no-op
+    }
+
+    public destroy(): void {
         this.indexChange.complete();
         this.stickyChange.complete();
         this.renderedRangeStream.complete();
@@ -99,9 +100,9 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
         const start = Math.max(0, index - buffer);
         const end = Math.min(this.dataLength, index + amount + buffer);
         const renderedOffset = start * this.rowHeight;
-    
+
         this.viewport.setRenderedContentOffset(renderedOffset);
-        this.viewport.setRenderedRange({ start, end });
+        this.renderedRangeStream.next({ start, end });
 
         this.indexChange.next(index);
         this.stickyChange.next(renderedOffset);

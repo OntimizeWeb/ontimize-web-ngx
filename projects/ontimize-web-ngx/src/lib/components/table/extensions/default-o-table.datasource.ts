@@ -78,7 +78,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
             this._virtualPageChange.next(new OnRangeChangeVirtualScroll(value));
           });
     }
-    
+
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
 
@@ -296,6 +296,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     this._quickFilterChange.complete();
     this._columnValueFilterChange.complete();
     this.groupByColumnChange.complete();
+    this._virtualPageChange.complete();
   }
 
   protected fulfillsCustomFilterFunctions(filter: string, item: any) {
