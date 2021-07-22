@@ -207,7 +207,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'expandGroupsSameLevel: expand-groups-same-level',
 
   //collapse-grouped-columns [yes|no|true|false]: Whether collapse the grouped columns by default
-  'collapseGroupedColumns: collapse-grouped-columns'
+  'collapseGroupedColumns: collapse-grouped-columns',
+
+  //virtual-scroll [yes|no|true|false]: Whether enabled or not the virtual scroll
+  'virtualScroll: virtual-scroll'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -265,8 +268,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginator;
+  private virtualScrollViewport: OTableVirtualScrollStrategy;
+  public activeVirtualScroll = true;
+
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
+
+  @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: OTableVirtualScrollStrategy) {
+    if (value != this.virtualScrollViewport) {
+      this.virtualScrollViewport = value;
+      this.activeVirtualScroll = value instanceof OTableVirtualScrollStrategy;
+      this.setDatasource();
+    }
+  }
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
@@ -386,6 +400,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   expandGroupsSameLevel: boolean = true;
   @InputConverter()
   collapseGroupedColumns: boolean = false;
+  @InputConverter()
+  virtualScroll: boolean = true;
 
   protected _enabled: boolean = true;
   get enabled(): boolean {
@@ -594,6 +610,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public oTableColumnsGroupingComponent: OTableColumnsGrouping;
 
+
   constructor(
     public injector: Injector,
     elRef: ElementRef,
@@ -602,7 +619,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 
@@ -649,19 +666,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   updateHeaderAndFooterStickyPositions() {
 
+    if (this.activeVirtualScroll) {
+      this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
+        distinctUntilChanged(),
+        filter(() => this.fixedHeader || this.hasInsertableRow())
+      ).subscribe(x => {
 
-    this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
-      distinctUntilChanged(),
-      filter(() => this.fixedHeader || this.hasInsertableRow())
-    ).subscribe(x => {
-
-      this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
-        el.style.top = - x + 'px';
+        this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
+          el.style.top = - x + 'px';
+        });
+        this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
+          el.style.bottom = x + 'px';
+        });
       });
-      this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
-        el.style.bottom = x + 'px';
-      });
-    });
+    }
 
   }
 
@@ -842,9 +860,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     if (this.contextMenuSubscription) {
       this.contextMenuSubscription.unsubscribe();
-    }
-    if (this.dataSource) {
-      this.dataSource.destroy();
     }
 
     if (this.virtualScrollSubscription) {
@@ -1434,7 +1449,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   initViewPort(data: any[]) {
-    if (this.scrollStrategy) {
+
+    if (this.activeVirtualScroll) {
       const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
       const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
       const rowElRef = this.elRef.nativeElement.querySelector(rowSelector);
@@ -1475,9 +1491,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }, 500);
     this.loadingScrollSubject.next(false);
 
-    if (this.scrollStrategy) {
-      this.initViewPort(this.dataSource.renderedData);
-    }
+    this.initViewPort(this.dataSource.renderedData);
 
     if (this.previousRendererData !== this.dataSource.renderedData) {
       this.previousRendererData = this.dataSource.renderedData;
@@ -2692,7 +2706,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Gets enable virtual scroll
    */
   get enabledVirtualScroll(): boolean {
-    return !this.showExpandableRow() && this.groupedColumnsArray.length === 0;
+    return this.virtualScroll && !this.showExpandableRow() && this.groupedColumnsArray.length === 0;
   }
   /**
    * Parses grouped columns

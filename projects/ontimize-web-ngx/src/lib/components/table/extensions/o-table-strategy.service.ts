@@ -14,7 +14,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
     public renderedRangeStream = new BehaviorSubject<ListRange>({ start: 0, end: 0 });
     public stickyChange = new Subject<number>();
     buffer: number;
-    bufferMultiplier: number = 0.5;
+    bufferMultiplier: number = 1;
 
     constructor() {
         this.scrolledIndexChange = this.indexChange.asObservable().pipe(distinctUntilChanged());
@@ -34,7 +34,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
 
     attach(viewport: CdkVirtualScrollViewport): void {
         this.viewport = viewport;
-        this.viewport.renderedRangeStream.subscribe(this.renderedRangeStream);
+        this.viewport.renderedRangeStream.pipe(distinctUntilChanged()).subscribe(this.renderedRangeStream);
 
         this.onDataLengthChanged();
         this.updateContent();
@@ -45,6 +45,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
         this.stickyChange.complete();
         this.renderedRangeStream.complete();
     }
+
     public onContentRendered(): void {
         // no-op
     }
@@ -66,7 +67,6 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
             this.rowHeight === rowHeight
             && this.headerHeight === headerHeight
             && this.footerHeight === footerHeight
-
         ) {
             return;
         }
@@ -99,12 +99,12 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
         const start = Math.max(0, index - buffer);
         const end = Math.min(this.dataLength, index + amount + buffer);
         const renderedOffset = start * this.rowHeight;
-
+    
         this.viewport.setRenderedContentOffset(renderedOffset);
         this.viewport.setRenderedRange({ start, end });
 
         this.indexChange.next(index);
         this.stickyChange.next(renderedOffset);
-
+       
     }
 }
