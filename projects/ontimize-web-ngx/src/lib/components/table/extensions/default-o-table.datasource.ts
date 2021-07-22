@@ -70,13 +70,15 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       this._paginator = table.matpaginator;
     }
 
-    this.table.scrollStrategy.renderedRangeStream
-      .pipe(distinctUntilChanged())
-      .subscribe(
-        (value: ListRange) => {
-          this._virtualPageChange.next(new OnRangeChangeVirtualScroll(value));
-        });
-
+    if (this.table.activeVirtualScroll) {
+      this.table.scrollStrategy.renderedRangeStream
+        .pipe(distinctUntilChanged())
+        .subscribe(
+          (value: ListRange) => {
+            this._virtualPageChange.next(new OnRangeChangeVirtualScroll(value));
+          });
+    }
+    
     this._tableOptions = table.oTableOptions;
     this._sort = table.sort;
 
@@ -119,7 +121,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     }
 
-    if (this.table.scrollStrategy) {
+    if (this.table.activeVirtualScroll) {
       displayDataChanges.push(this._virtualPageChange);
     }
 
@@ -172,7 +174,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
             when the data is very large, the application crashes so it gets a limited range of data the first time
             because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll 
           */
-          if (this.table.scrollStrategy && !this._paginator) {
+          if (this.table.activeVirtualScroll && !this._paginator) {
             data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
           }
 
@@ -290,14 +292,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   disconnect() {
-    //no-op because the destroy method will be called instead
-  }
-
-  destroy() {
-    /* The table template is modified according to whether it is groupable or not,
-     so the destroy method is defined to launch when the table component is destroyed
-     */
-    this.onRenderedDataChange.complete();
     this.dataTotalsChange.complete();
     this._quickFilterChange.complete();
     this._columnValueFilterChange.complete();
@@ -766,7 +760,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     let value = JSON.parse(group.keysAsString)[this.table.groupedColumnsArray[group.level - 1]];
     const oCol = this.table.getOColumn(field);
 
-    if (!value && Util.isDefined((this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
+    if (!value && Util.isDefined(oCol.renderer) && Util.isDefined((this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
       value = ' - ';
       if (!this.table.onDataLoadedCellRendererSubscription) {
         this.table.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {

@@ -32,5 +32,4 @@ export interface OTableDataSource {
   updateGroupedColumns();
   toggleGroupByColumn(rowGroup: OTableGroupedRow);
   setRowGroupLevelExpansion(rowGroup: OTableGroupedRow, value: boolean);
-  destroy(): void;
 }
