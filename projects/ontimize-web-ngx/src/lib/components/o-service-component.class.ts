@@ -215,7 +215,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public initialize(): void {
-    this.registerFormLayoutManagerState();
     super.initialize();
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
@@ -223,6 +222,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public afterViewInit(): void {
+    this.registerFormLayoutManagerState();
     super.afterViewInit();
     if (this.elRef) {
       this.elRef.nativeElement.removeAttribute('title');

@@ -760,7 +760,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     let value = JSON.parse(group.keysAsString)[this.table.groupedColumnsArray[group.level - 1]];
     const oCol = this.table.getOColumn(field);
 
-    if (!value && Util.isDefined(oCol.renderer) && Util.isDefined((this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
+    if (!value && Util.isDefined(oCol.renderer) && (this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)) {
       value = ' - ';
       if (!this.table.onDataLoadedCellRendererSubscription) {
         this.table.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
