@@ -7,6 +7,9 @@
   * Adding new optional parameter (indicating the new sort columns) to the `reinitializeSortColumns` method and changing its access level to public.([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
   * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
   * Adding virtual scroll ([#598](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/598)) ([e14c424](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14c424) ([238da22](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238da22) ([b5668c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5668c3)
+  
+    *NOTE*: Set min-height='400px' in o-table, you can modify the height table in .o-table class
+
   * Added validators functionality to cell editors and insertable row ([4d66853](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d66853)) Closes [#517](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/517)
   * Row grouping new features [#597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/597):
     * **o-table-columns-grouping**: new `o-table` inner component used to configure the row grouping columns
