@@ -1,3 +1,5 @@
+## 8.4.1
+
 ## 8.4.0 (2021-07-23)
 ### Features
 * **AbstractOServiceBaseComponent**: component now looks for parent keys values in route params if form is not present ([658](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/658)) Closes [#634](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/634)
