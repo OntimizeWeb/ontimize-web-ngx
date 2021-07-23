@@ -145,7 +145,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
   'paginationControls: pagination-controls',
 
-  // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: no.
+  // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: yes.
   'fixedHeader: fixed-header',
 
   // show-title [yes|no|true|false]: show the table title. Default: no.
@@ -368,7 +368,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   paginationControls: boolean = true;
   @InputConverter()
-  fixedHeader: boolean = false;
+  fixedHeader: boolean = true;
   @InputConverter()
   showTitle: boolean = false;
   editionMode: string = Codes.DETAIL_MODE_NONE;
