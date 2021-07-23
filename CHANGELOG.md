@@ -14,11 +14,15 @@
   * Row grouping new features [#597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/597):
     * **o-table-columns-grouping**: new `o-table` inner component used to configure the row grouping columns
     * **o-table-columns-grouping-column**: new `o-table-columns-grouping` inner comopnent used to configure the grouping features of a specific column 
+  
 * **OTableDataSource**: adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece)).
 
 ### Bugfix
 * **o-table**:
   * Cannot read property 'onChange' of undefined in oTableExpandedFooter directive ([9b853f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9b853f8)) Closes [#668](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/668)
+
+### BREAKING CHANGES
+* **o-table**: `fixed-header` value `no` has been replaced by `yes` ([aa53bd8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa53bd8))
 
 ## 8.3.1 (2021-06-24)
 ### Features
