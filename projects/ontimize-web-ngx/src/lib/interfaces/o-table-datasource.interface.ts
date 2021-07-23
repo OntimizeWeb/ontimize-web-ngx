@@ -1,8 +1,8 @@
 import { EventEmitter } from '@angular/core';
 
 import { OColumn } from '../components/table/column/o-column.class';
+import { OTableGroupedRow } from '../components/table/extensions/row/o-table-row-group.class';
 import { OColumnValueFilter } from '../types/table/o-column-value-filter.type';
-import { OTableGroupedRow } from '../types/table/o-table-row-group.type';
 
 export interface OTableDataSource {
 
@@ -11,7 +11,6 @@ export interface OTableDataSource {
   resultsLength: number;
   sqlTypes: any;
   data: any[];
-  loadDataScrollable: number;
   quickFilter: string;
 
   getColumnData: (column: string) => any;
@@ -25,11 +24,12 @@ export interface OTableDataSource {
   getTableData: () => any[];
   addColumnFilter: (filter: OColumnValueFilter) => void;
   initializeColumnsFilters: (filters: OColumnValueFilter[]) => void;
-  clearColumnFilters: (trigger?: boolean) => void;
+  clearColumnFilters: (trigger?: boolean, columnAttrs?: string[]) => void;
   clearColumnFilter: (attr: string, trigger?: boolean) => void;
   isColumnValueFilterActive: () => boolean;
   updateRenderedRowData: (rowData: any) => void;
   getAggregateData: (column: OColumn) => any;
-  updateGroupedColumns(column: string[]);
+  updateGroupedColumns();
   toggleGroupByColumn(rowGroup: OTableGroupedRow);
+  setRowGroupLevelExpansion(rowGroup: OTableGroupedRow, value: boolean);
 }

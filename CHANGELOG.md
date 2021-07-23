@@ -1,3 +1,33 @@
+## 8.4.0 (2021-07-23)
+### Features
+* **AbstractOServiceBaseComponent**: component now looks for parent keys values in route params if form is not present ([658](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/658)) Closes [#634](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/634)
+* **o-table**:
+  * Adding new warn message when user wants to hide a column with an active filter or sorting. ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
+  * Adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method. ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
+  * Adding new optional parameter (indicating the new sort columns) to the `reinitializeSortColumns` method and changing its access level to public.([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
+  * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
+  * Adding virtual scroll ([#598](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/598)) ([e14c424](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14c424) ([238da22](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238da22)) ([b5668c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5668c3)) ([4cabf1a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cabf1a)) ([59e7684](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59e7684)) 
+  
+    *NOTE*
+      * The virtual scrolling and the table tooltip are incompatible due to a recognized bug in Angular library ([#686](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/686)), if you want the tooltip functionality on the table, you must deactivate virtual scrolling as follows `virtual-scroll = no` because it is actived by default
+      * It has been set min-height='400px' in o-table by default, you can modify the height table in .o-table class
+
+  * Added validators functionality to cell editors and insertable row ([4d66853](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d66853)) Closes [#517](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/517)
+  * Row grouping new features [#597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/597):
+    * **o-table-columns-grouping**: new `o-table` inner component used to configure the row grouping columns
+    * **o-table-columns-grouping-column**: new `o-table-columns-grouping` inner comopnent used to configure the grouping features of a specific column 
+  
+* **OTableDataSource**: adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece)).
+
+
+
+### Bugfix
+* **o-table**:
+  * Cannot read property 'onChange' of undefined in oTableExpandedFooter directive ([9b853f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9b853f8)) Closes [#668](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/668)
+
+### BREAKING CHANGES
+* **o-table**: `fixed-header` value `no` has been replaced by `yes` ([aa53bd8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa53bd8))
+
 ## 8.3.1 (2021-06-24)
 ### Features
 * **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)

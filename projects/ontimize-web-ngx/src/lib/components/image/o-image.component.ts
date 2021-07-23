@@ -1,4 +1,16 @@
-import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  HostBinding,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -6,10 +18,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { InputConverter } from '../../decorators/input-converter';
 import { FormValueOptions } from '../../types';
 import { Util } from '../../util/util';
+import { OFormValue } from '../form/o-form-value';
 import { OFormComponent } from '../form/o-form.component';
-import { OFormValue } from '../form/OFormValue';
 import { OFormControl } from '../input/o-form-control.class';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent
+} from '../o-form-data-component.class';
 import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 

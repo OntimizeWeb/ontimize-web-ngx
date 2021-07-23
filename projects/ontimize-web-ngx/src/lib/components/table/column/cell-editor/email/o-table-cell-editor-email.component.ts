@@ -6,25 +6,25 @@ import {
   OBaseTableCellEditor
 } from '../o-base-table-cell-editor.class';
 
-export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT = [
+export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_EMAIL = [
   ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT = [
+export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_EMAIL = [
   ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({
-  selector: 'o-table-cell-editor-text',
-  templateUrl: './o-table-cell-editor-text.component.html',
-  styleUrls: ['./o-table-cell-editor-text.component.scss'],
+  selector: 'o-table-cell-editor-email',
+  templateUrl: './o-table-cell-editor-email.component.html',
+  styleUrls: ['./o-table-cell-editor-email.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT,
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_EMAIL,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_EMAIL,
   encapsulation: ViewEncapsulation.None
 })
 
-export class OTableCellEditorTextComponent extends OBaseTableCellEditor {
+export class OTableCellEditorEmailComponent extends OBaseTableCellEditor {
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 

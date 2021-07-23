@@ -20,9 +20,13 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
+import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent
+} from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { ODateInputComponent } from '../date-input/o-date-input.component';
 import { OHourInputComponent } from '../hour-input/o-hour-input.component';

@@ -6,9 +6,7 @@ import { Subject, Subscription } from 'rxjs';
 import { IOContextMenuClickEvent, IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class OContextMenuService implements OnDestroy {
 
   public showContextMenu: Subject<IOContextMenuClickEvent> = new Subject<IOContextMenuClickEvent>();

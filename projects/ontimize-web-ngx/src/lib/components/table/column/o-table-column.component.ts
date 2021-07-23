@@ -11,12 +11,14 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef,
+  ViewContainerRef
 } from '@angular/core';
+import { ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { OTableColumn } from '../../../interfaces/o-table-column.interface';
+import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { Expression } from '../../../types/expression.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
@@ -28,9 +30,8 @@ import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPU
 import {
   O_TABLE_CELL_RENDERERS_INPUTS,
   O_TABLE_CELL_RENDERERS_OUTPUTS,
-  renderersMapping,
+  renderersMapping
 } from './cell-renderer/cell-renderer';
-import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -89,6 +90,8 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'class',
 
+  'angularValidatorsFn: validators',
+
   ...O_TABLE_CELL_RENDERERS_INPUTS,
   ...O_TABLE_CELL_EDITORS_INPUTS
 ];
@@ -142,6 +145,8 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     return this._multiline;
   }
   protected _multiline: boolean = false;
+
+  public angularValidatorsFn: ValidatorFn[] = [];
 
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 

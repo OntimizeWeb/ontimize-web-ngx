@@ -35,6 +35,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
 } from '@angular/material';
+
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
@@ -90,17 +91,17 @@ const MATERIAL_MODULES = [
   ],
   exports: MATERIAL_MODULES,
   providers: [
-  //   {
-  //   provide: DateAdapter,
-  //   useClass: OntimizeMomentDateAdapter,
-  //   deps: [MAT_DATE_LOCALE]
-  // },
-   {
-    provide: MAT_DATE_FORMATS,
-    useFactory: dateFormatFactory
-  }, {
-    provide: OntimizeMatIconRegistry,
-    useClass: OntimizeMatIconRegistry
-  }]
+    //   {
+    //   provide: DateAdapter,
+    //   useClass: OntimizeMomentDateAdapter,
+    //   deps: [MAT_DATE_LOCALE]
+    // },
+    {
+      provide: MAT_DATE_FORMATS,
+      useFactory: dateFormatFactory
+    }, {
+      provide: OntimizeMatIconRegistry,
+      useClass: OntimizeMatIconRegistry
+    }]
 })
 export class OCustomMaterialModule { }

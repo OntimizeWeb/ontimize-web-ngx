@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
+import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   ApplicationRef,
@@ -28,12 +29,13 @@ import {
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
+import { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 import { OTableMenu } from '../../interfaces/o-table-menu.interface';
 import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
@@ -58,7 +60,6 @@ import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.typ
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
-import { OTableGroupedRow } from '../../types/table/o-table-row-group.type';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
@@ -80,10 +81,16 @@ import {
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
+import {
+  OTableColumnsGroupingColumnComponent
+} from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
+import { OTableVirtualScrollStrategy } from './extensions/o-table-strategy.service';
+
 import { OTableDao } from './extensions/o-table.dao';
+import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
 import {
   OTableRowExpandableComponent,
   OTableRowExpandedChange
@@ -138,7 +145,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
   'paginationControls: pagination-controls',
 
-  // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: no.
+  // fix-header [yes|no|true|false]: fixed header and footer when the content is greather than its own height. Default: yes.
   'fixedHeader: fixed-header',
 
   // show-title [yes|no|true|false]: show the table title. Default: no.
@@ -196,8 +203,14 @@ export const DEFAULT_INPUTS_O_TABLE = [
   //groupable[boolean]: Indicates whether or not the column can be groupable. By default: false
   'groupable',
 
+  //expand-groups-same-level[boolean]: Indicates if click in row expands/collapses all rows on same level. By default: true
+  'expandGroupsSameLevel: expand-groups-same-level',
+
   //collapse-grouped-columns [yes|no|true|false]: Whether collapse the grouped columns by default
-  'collapseGroupedColumns: collapse-grouped-columns'
+  'collapseGroupedColumns: collapse-grouped-columns',
+
+  //virtual-scroll [yes|no|true|false]: Whether enabled or not the virtual scroll
+  'virtualScroll: virtual-scroll'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -210,6 +223,13 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   'onPaginatedDataLoaded'
 ];
 
+const stickyHeaderSelector = '.mat-header-row .mat-table-sticky';
+const stickyFooterSelector = '.mat-footer-row .mat-table-sticky';
+const rowSelector = '.mat-row'
+const headerSelector = '.mat-header-row';
+const footerSelector = '.mat-footer-row';
+
+
 @Component({
   selector: 'o-table',
   templateUrl: './o-table.component.html',
@@ -217,7 +237,8 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   providers: [
     OntimizeServiceProvider,
     OTableDataSourceService,
-    { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] }
+    { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] },
+    { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy }
   ],
   animations: [
     trigger('detailExpand', [
@@ -242,12 +263,27 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
+  public static AVAILABLE_GROUPING_COLUMNS_RENDERERS = ['currency', 'integer', 'real'];
 
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginator;
+  private virtualScrollViewport: CdkVirtualScrollViewport;
+  public activeVirtualScroll = true;
+
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
-  @ViewChild(OMatSort, { static: true }) sort: OMatSort;
+  @ViewChild(OMatSort, { static: false }) sort: OMatSort;
+
+  @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
+    if (value != this.virtualScrollViewport) {
+      this.virtualScrollViewport = value;
+      this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
+      if(this.activeVirtualScroll){
+        this.updateHeaderAndFooterStickyPositions();
+      }
+      this.setDatasource();
+    }
+  }
 
   // only for insideTabBugWorkaround
   @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
@@ -292,7 +328,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   filterColumnActiveByDefault: boolean = false;
 
-
   protected _oTableOptions: OTableOptions;
 
   get oTableOptions(): OTableOptions {
@@ -333,7 +368,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   paginationControls: boolean = true;
   @InputConverter()
-  fixedHeader: boolean = false;
+  fixedHeader: boolean = true;
   @InputConverter()
   showTitle: boolean = false;
   editionMode: string = Codes.DETAIL_MODE_NONE;
@@ -363,9 +398,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   autoAdjust: boolean = false;
   @InputConverter()
-  groupable: boolean = false;
+  groupable: boolean = true;
+  @InputConverter()
+  expandGroupsSameLevel: boolean = true;
   @InputConverter()
   collapseGroupedColumns: boolean = false;
+  @InputConverter()
+  virtualScroll: boolean = true;
 
   protected _enabled: boolean = true;
   get enabled(): boolean {
@@ -402,13 +441,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
-  protected _visibleColArray: Array<string> = [];
+  protected _visibleColArray: string[] = [];
 
-  get visibleColArray(): Array<any> {
+  get visibleColArray(): any[] {
     return this._visibleColArray;
   }
 
-  set visibleColArray(arg: Array<any>) {
+  set visibleColArray(arg: any[]) {
     const permissionsBlocked = this.permissions ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
     this._visibleColArray = permissionsChecked;
@@ -427,10 +466,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }
       }
       this._oTableOptions.visibleColumns = this._visibleColArray;
+      this.groupingHeadersRows = this._oTableOptions.visibleColumns.map(visibleCol => 'groupHeader-' + visibleCol);
     }
   }
 
-  sortColArray: Array<SQLOrder> = [];
+  sortColArray: SQLOrder[] = [];
   /*end of parsed inputs variables */
 
   protected tabGroupContainer: MatTabGroup;
@@ -447,6 +487,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected querySubscription: Subscription;
   protected contextMenuSubscription: Subscription;
+  protected virtualScrollSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
   public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
@@ -456,7 +497,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
-  public onVisibleColumnsChange: EventEmitter<any> = new EventEmitter();
   public onFilterByColumnChange: EventEmitter<any> = new EventEmitter();
 
   protected selectionChangeSubscription: Subscription;
@@ -521,6 +561,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /* In the case the table havent paginationControl and pageable, the table has pagination virtual*/
   pageScrollVirtual = 1;
 
+  public static DEFAULT_ROW_HEIGHT = 36;
   protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
@@ -568,14 +609,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this._isColumnFiltersActive = val;
   }
 
+  groupingHeadersRows: string[] = [];
+
+  public oTableColumnsGroupingComponent: OTableColumnsGrouping;
+
+
   constructor(
-    injector: Injector,
+    public injector: Injector,
     elRef: ElementRef,
     protected dialog: MatDialog,
     private _viewContainerRef: ViewContainerRef,
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 
@@ -601,6 +648,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.oTableButtons && this.tableButtons && this.tableButtons.length > 0) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
+
   }
 
   ngAfterViewInit() {
@@ -610,10 +658,31 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.matMenu = this.oTableMenu.matMenu;
       this.oTableMenu.registerOptions(this.tableOptions.toArray());
     }
+
     if (this.tableRowExpandable) {
       this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
       this.createExpandableColumn();
     }
+
+  }
+
+  updateHeaderAndFooterStickyPositions() {
+
+    if (this.activeVirtualScroll) {
+      this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
+        distinctUntilChanged(),
+        filter(() => this.fixedHeader || this.hasInsertableRow())
+      ).subscribe(x => {
+
+        this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
+          el.style.top = - x + 'px';
+        });
+        this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
+          el.style.bottom = x + 'px';
+        });
+      });
+    }
+
   }
 
   protected createExpandableColumn() {
@@ -769,6 +838,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.registerSortListener();
     this.setFiltersConfiguration();
     this.addDefaultRowButtons();
+    if (Util.isDefined(this.oTableColumnsGroupingComponent)) {
+      this.setGroupColumns(this.oTableColumnsGroupingComponent.columnsArray);
+    }
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -779,7 +851,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.tabGroupChangeSubscription) {
       this.tabGroupChangeSubscription.unsubscribe();
     }
-
     if (this.selectionChangeSubscription) {
       this.selectionChangeSubscription.unsubscribe();
     }
@@ -789,16 +860,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.onRenderedDataChange) {
       this.onRenderedDataChange.unsubscribe();
     }
-
     if (this.contextMenuSubscription) {
       this.contextMenuSubscription.unsubscribe();
     }
+
+    if (this.virtualScrollSubscription) {
+      this.virtualScrollSubscription.unsubscribe();
+    }
+    if(this.scrollStrategy){
+      this.scrollStrategy.destroy();
+    }
+
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
         this.asyncLoadSubscriptions[idx].unsubscribe();
       }
     });
-
   }
 
   /**
@@ -911,9 +988,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const editableColumns = this._oTableOptions.columns.filter(col => {
       return Util.isDefined(col.editor);
     });
-    if (editableColumns.length > 0) {
-      console.warn('Using a column with a editor but there is no edition-mode defined');
-    }
+    setTimeout(() => {
+      if (editableColumns.length > 0 && !this.hasInsertableRow()) {
+        console.warn('Using a column with a editor but there is no edition-mode defined');
+      }
+    }, 100);
   }
 
   registerColumnAggregate(column: OColumnAggregate) {
@@ -1258,8 +1337,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return (Util.isDefined(this.tableRowExpandable) && Util.isDefined(this._oTableOptions.expandableColumn)) ? this._oTableOptions.expandableColumn.visible : false;
   }
 
-  public hasExpandedRow(): boolean {
+  get hasExpandedRow(): boolean {
     return Util.isDefined(this.tableRowExpandable);
+  }
+
+  public hasInsertableRow(): boolean {
+    return Util.isDefined(this.oTableInsertableRowComponent);
   }
 
   public getNumVisibleColumns(): number {
@@ -1370,6 +1453,25 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     super.updatePaginationInfo(queryRes);
   }
 
+  initViewPort(data: any[]) {
+
+    if (this.activeVirtualScroll) {
+      const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
+      const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
+      const rowElRef = this.elRef.nativeElement.querySelector(rowSelector);
+
+      const headerHeight = headerElRef ? headerElRef.offsetHeight : 0;
+      const footerHeight = footerElRef ? footerElRef.offsetHeight : 0;
+      const rowHeight = rowElRef ? rowElRef.offsetHeight : OTableComponent.DEFAULT_ROW_HEIGHT;
+
+      //set config viewport
+      this.scrollStrategy.setConfig(rowHeight, headerHeight, footerHeight);
+      if (this.previousRendererData !== this.dataSource.renderedData) {
+        this.scrollStrategy.dataLength = data.length;
+      }
+    }
+  }
+
   protected setData(data: any, sqlTypes: any) {
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.setDataArray(data);
@@ -1393,6 +1495,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.loadingSortingSubject.next(false);
     }, 500);
     this.loadingScrollSubject.next(false);
+
+    this.initViewPort(this.dataSource.renderedData);
 
     if (this.previousRendererData !== this.dataSource.renderedData) {
       this.previousRendererData = this.dataSource.renderedData;
@@ -1800,9 +1904,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const self = this;
 
     return (index: number, item: any) => {
-      if (self.hasScrollableContainer() && index < (self.pageScrollVirtual - 1) * Codes.LIMIT_SCROLLVIRTUAL) {
-        return null;
-      }
 
       let itemId: string = '';
 
@@ -1988,8 +2089,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.reloadPaginatedDataFromStart(false);
   }
 
-  clearColumnFilters(triggerDatasourceUpdate: boolean = true): void {
-    this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
+  clearColumnFilters(triggerDatasourceUpdate: boolean = true, columnsAttr?: string[]): void {
+    this.dataSource.clearColumnFilters(triggerDatasourceUpdate, columnsAttr);
     this.onFilterByColumnChange.emit();
     this.reloadPaginatedDataFromStart(false);
   }
@@ -2282,6 +2383,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
+
+
     }
   }
 
@@ -2436,40 +2539,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public getCellAlignClass(column: OColumn): string {
     return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
-  }
-
-  onTableScroll(e) {
-    if (this.hasScrollableContainer()) {
-      const tableViewHeight = e.target.offsetHeight; // viewport: ~500px
-      const tableScrollHeight = e.target.scrollHeight; // length of all table
-      const scrollLocation = e.target.scrollTop; // how far user scrolled
-
-      // If the user has scrolled within 200px of the bottom, add more data
-      const buffer = 100;
-      const limit_SCROLLVIRTUAL = tableScrollHeight - tableViewHeight - buffer;
-      if (scrollLocation > limit_SCROLLVIRTUAL) {
-        this.getDataScrollable();
-      }
-    }
-  }
-
-  getDataScrollable(): any {
-    const pageVirtualBefore = this.pageScrollVirtual;
-    const pageVirtualEnd = Math.ceil(this.dataSource.resultsLength / Codes.LIMIT_SCROLLVIRTUAL);
-
-    if (pageVirtualEnd !== this.pageScrollVirtual) {
-      this.pageScrollVirtual++;
-    }
-
-    // throw event change scroll
-    if (pageVirtualBefore !== this.pageScrollVirtual) {
-      this.loadingScrollSubject.next(true);
-      this.dataSource.loadDataScrollable = this.pageScrollVirtual;
-    }
-  }
-
-  hasScrollableContainer(): boolean {
-    return this.dataSource && !this.paginationControls && !this.pageable;
   }
 
   protected addDefaultRowButtons() {
@@ -2634,34 +2703,39 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return Util.extractPixelsValue(col.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH) + 'px';
   }
 
-  showExpandedColumn(): boolean {
+  showExpandableRow(): boolean {
     return Util.isDefined(this.tableRowExpandable);
   }
 
   /**
+   * Gets enable virtual scroll
+   */
+  get enabledVirtualScroll(): boolean {
+    return this.virtualScroll && !this.showExpandableRow() && this.groupedColumnsArray.length === 0;
+  }
+  /**
    * Parses grouped columns
    */
   parseGroupedColumns() {
-    this.groupedColumnsArray = this.state.groupedColumns || this.originalGroupedColumnsArray;
+    let result = this.state.groupedColumns || this.originalGroupedColumnsArray;
     if (this.state.groupedColumns && this.state.initialConfiguration.groupedColumns) {
       const difference = this.state.initialConfiguration.groupedColumns
         .filter(x => !this.originalGroupedColumnsArray.includes(x));
 
       if (difference.length > 0) {
-        this.groupedColumnsArray = this.originalGroupedColumnsArray;
+        result = this.originalGroupedColumnsArray;
       }
     }
-
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.setGroupColumns(result);
   }
 
   /**
    * Groups by column
    * @param column
    */
-  public groupByColumn(column: OColumn) {
+  groupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, true);
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.dataSource.updateGroupedColumns();
   }
 
   /**
@@ -2670,15 +2744,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, false);
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.dataSource.updateGroupedColumns();
   }
 
   /**
    * Ungroup by all columns
    */
   unGroupByAllColumns() {
-    this.groupedColumnsArray = [];
-    this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
+    this.setGroupColumns([]);
+  }
+
+  setGroupColumns(value: string[]) {
+    this.groupedColumnsArray = value;
+    this.dataSource.updateGroupedColumns();
   }
 
   checkGroupByColumn(field: string, add: boolean) {
@@ -2706,7 +2784,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns true if group
    */
   isGroup(index, item): boolean {
-    return Util.isDefined(item.level);
+    return item instanceof OTableGroupedRow;
   }
 
   /**
@@ -2716,29 +2794,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns true if not group
    */
   isNotGroup(index, item): boolean {
-    return !Util.isDefined(item.level);
+    return !(item instanceof OTableGroupedRow);
+  }
+
+  getLastGroups() {
+    // Get last groups
+    let scores = this.dataSource.renderedData;
+    const maxLevel = scores.reduce((acc, curr) => curr.level > acc ? curr.level : acc, 0);
+    const maxLevelRenderedData = scores.reduce((r, o) => o.level === maxLevel ? [...r, o] : r, []);
+    return maxLevelRenderedData.length;
   }
 
   groupHeaderClick(row: OTableGroupedRow) {
     this.dataSource.toggleGroupByColumn(row);
-  }
-
-  getTextGroupRow(group: OTableGroupedRow) {
-    const field = this.groupedColumnsArray[group.level - 1];
-    let value = group.column[this.groupedColumnsArray[group.level - 1]];
-    const totalCounts = group.totalCounts;
-    const oCol = this.getOColumn(field);
-
-    if (!value && Util.isDefined(this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))) {
-      value = ' - ';
-      if (!this.onDataLoadedCellRendererSubscription) {
-        this.onDataLoadedCellRendererSubscription = (oCol.renderer as any).onDataLoaded.subscribe(x => {
-          this.dataSource.updateGroupedColumns(this.groupedColumnsArray);
-        });
-      }
-    }
-    return this.translateService.get(oCol.title) + ': ' + value + ' (' + totalCounts + ')';
-
   }
 
   private isInstanceOfOTableCellRendererServiceComponent(renderer: OBaseTableCellRenderer) {
@@ -2753,7 +2821,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   getColumnDataByAttr(attr, row: any): any {
     const oCol = this.getOColumn(attr);
-    const useRenderer = oCol && oCol.renderer && oCol.renderer.getCellData;
+    if (!Util.isDefined(oCol)) {
+      return row[attr];
+    }
+    const useRenderer = oCol.renderer && oCol.renderer.getCellData;
     return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
   }
 
@@ -2775,8 +2846,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.componentStateService.storeFilter(arg);
   }
 
-  protected reinitializeSortColumns() {
-    this.parseSortColumns();
+  reinitializeSortColumns(sortColumns?: SQLOrder[]) {
+    if (Util.isDefined(sortColumns)) {
+      this.sortColArray = sortColumns;
+    } else {
+      this.parseSortColumns();
+    }
     this.sort.setSortColumns(this.sortColArray);
     this.refreshSortHeaders();
   }
@@ -2815,5 +2890,32 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public filterData(value?: string, loadMore?: boolean): void {
     //
+  }
+
+  setOTableColumnsGrouping(value: OTableColumnsGrouping) {
+    this.oTableColumnsGroupingComponent = value;
+  }
+
+  getColumnGroupingComponent(columnAttr: string): OTableColumnsGroupingColumnComponent {
+    let result: OTableColumnsGroupingColumnComponent;
+    if (Util.isDefined(this.oTableColumnsGroupingComponent)) {
+      result = this.oTableColumnsGroupingComponent.getColumnGrouping(columnAttr);
+    }
+    return result;
+  }
+
+  useColumnGroupingAggregate(columnAttr: string): boolean {
+    const oCol = this.getOColumn(columnAttr);
+    if (!Util.isDefined(oCol)) {
+      return false;
+    }
+    const sqlType = this.getSqlTypes()[columnAttr];
+    const hasDefaultAggregate = SQLTypes.isNumericSQLType(sqlType)
+      && (!Util.isDefined(oCol.renderer) || OTableComponent.AVAILABLE_GROUPING_COLUMNS_RENDERERS.includes(oCol.type));
+
+    if (!Util.isDefined(this.oTableColumnsGroupingComponent)) {
+      return hasDefaultAggregate;
+    }
+    return this.oTableColumnsGroupingComponent.useColumnAggregate(columnAttr, hasDefaultAggregate);
   }
 }

@@ -30,14 +30,10 @@ import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
-import {
-  OTableApplyConfigurationDialogComponent
-} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import {
-  OTableStoreConfigurationDialogComponent
-} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
@@ -353,9 +349,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   onChangeColumnsVisibilityClicked() {
     const dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
-        visibleColumns: Util.parseArray(this.table.visibleColumns, true),
-        columnsData: this.table.oTableOptions.columns,
-        rowHeight: this.table.rowHeight
+        table: this.table
       },
       maxWidth: '35vw',
       disableClose: true,
@@ -363,13 +357,25 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
-        const columnsOrder = dialogRef.componentInstance.getColumnsOrder();
+      if (Util.isDefined(result)) {
+        this.table.visibleColArray = result.visibleColArray;
+        const columnsOrder = result.columnsOrder;
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+
+        if (Util.isDefined(result.sortColumns)) {
+          this.table.reinitializeSortColumns(result.sortColumns);
+        }
+
+        if (Util.isDefined(result.groupColumns)) {
+          this.table.setGroupColumns(result.groupColumns);
+        }
+
+        if (result.columnValueFiltersToRemove.length > 0) {
+          this.table.clearColumnFilters(false, result.columnValueFiltersToRemove);
+        }
+
         this.table.cd.detectChanges();
         this.table.refreshColumnsWidth();
-        this.table.onVisibleColumnsChange.emit(this.table.visibleColArray);
       }
     });
   }
@@ -389,8 +395,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.table.groupedColumnsArray = dialogRef.componentInstance.getGroupedColumns();
-        this.table.dataSource.updateGroupedColumns(this.table.groupedColumnsArray);
+        this.table.setGroupColumns(dialogRef.componentInstance.getGroupedColumns());
       }
     });
   }

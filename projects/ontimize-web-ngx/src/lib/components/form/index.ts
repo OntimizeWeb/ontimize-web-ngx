@@ -4,6 +4,6 @@ export * from './navigation/o-form-navigation.component';
 export * from './navigation/o-form.navigation.class';
 export * from './o-form.component';
 export * from './o-form.module';
-export * from './OFormValue';
+export * from './o-form-value';
 export * from './toolbar/o-form-toolbar.component';
 export * from './toolbar/o-form-toolbar.module';

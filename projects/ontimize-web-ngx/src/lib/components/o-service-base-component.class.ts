@@ -213,15 +213,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
     this.componentStateService.initialize(this);
 
-    if (this.storeState) {
-      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
-        this.updateStateStorage();
-        // when the storage is updated because a route change
-        // the alreadyStored control variable is changed to its initial value
-        this.alreadyStored = false;
-      });
-    }
-
     if (this.staticData) {
       this.queryOnBind = false;
       this.queryOnInit = false;
@@ -258,6 +249,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   afterViewInit() {
+    this.registerLocalStorageServiceRouteChange();
+
     this.abortQuery.subscribe(value => {
       if (value) {
         if (this.querySubscription) {
@@ -268,7 +261,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         }
         this.setData([]);
       }
-    })
+    });
   }
 
   destroy() {
@@ -373,10 +366,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   public getParentKeysFromContext(parentKeys: object, context: any) {
     let result = {};
+    const checkRouteParamsRecursive = this.router.paramsInheritanceStrategy !== 'always';
     if (context instanceof OExpandableContainerComponent) {
-      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context);
+      result = ServiceUtils.getParentKeysFromExpandableContainer(parentKeys, context, this.actRoute, checkRouteParamsRecursive);
     } else {
-      result = ServiceUtils.getParentKeysFromForm(parentKeys, context);
+      result = ServiceUtils.getParentKeysFromForm(parentKeys, context, this.actRoute, checkRouteParamsRecursive);
     }
     return result;
 
@@ -563,14 +557,22 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     //
   }
 
+
+  protected registerLocalStorageServiceRouteChange() {
+    if (this.storeState) {
+      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
+        this.updateStateStorage();
+      });
+    }
+  }
+
 }
 
-
-export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
+export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService> {
 
 }
 
 /* This class is being defined to mantain the backwards compatibility with previous versions, use DefaultOServiceBaseComponent*/
-export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService>{
+export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService> {
 
 }
