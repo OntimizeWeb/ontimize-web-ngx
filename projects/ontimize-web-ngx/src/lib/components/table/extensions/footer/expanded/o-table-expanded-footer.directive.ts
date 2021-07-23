@@ -74,6 +74,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
 
       this.spanMessageNotResults = this.renderer.createElement('span');
       const messageNotResults = this.renderer.createText(message);
+      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
       this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
       this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
     }
