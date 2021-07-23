@@ -10,8 +10,7 @@
   
     *NOTE*
       * The virtual scrolling and the table tooltip are incompatible, if you want the tooltip functionality on the table, you must deactivate virtual scrolling as follows `virtual-scroll = no` because it is actived by default
-      * Set min-height='400px' in o-table, you can modify the height table in .o-table class
-
+      * It has been set min-height='400px' in o-table by default, you can modify the height table in .o-table class
 
   * Added validators functionality to cell editors and insertable row ([4d66853](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d66853)) Closes [#517](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/517)
   * Row grouping new features [#597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/597):
