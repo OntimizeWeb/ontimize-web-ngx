@@ -21,9 +21,9 @@
 * **o-table**:
   * Cannot read property 'onChange' of undefined in oTableExpandedFooter directive ([9b853f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9b853f8)) Closes [#668](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/668)
 
-
 ### BREAKING CHANGES
 * **o-table**: `fixed-header` value `no` has been replaced by `yes` ([aa53bd8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa53bd8))
+
 ## 8.3.1 (2021-06-24)
 ### Features
 * **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)
