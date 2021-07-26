@@ -200,23 +200,30 @@ export class OFormCacheClass {
     return (this.valueChangesStack.length === 0);
   }
 
-  isInitialStateChanged(): boolean {
-    let currentCache;
+  isInitialStateChanged(ignoreAttrs: string[] = []): boolean {
+    const initialCache = Object.assign({}, this.initialDataCache);
+    let currentCache: object;
     if (this.formDataCache) {
       currentCache = Object.assign({}, this.formDataCache);
       this.removeUndefinedProperties(currentCache);
     }
 
-    const initialKeys = Object.keys(this.initialDataCache);
+    let initialKeys = Object.keys(initialCache);
     const currentKeys = currentCache ? Object.keys(currentCache) : initialKeys;
     if (initialKeys.length !== currentKeys.length) {
       return true;
     }
+    // Remove ignored fields from temporary initial cache data
+    if (ignoreAttrs.length) {
+      initialKeys = initialKeys.filter(key => !ignoreAttrs.includes(key));
+      ignoreAttrs.forEach(key => delete initialCache[key]);
+    }
+
     let res = false;
     for (let i = 0, len = initialKeys.length; i < len; i++) {
       const key = initialKeys[i];
       // TODO be careful with types comparisions
-      res = (this.initialDataCache[key] !== currentCache[key]);
+      res = (initialCache[key] !== currentCache[key]);
       if (res) {
         break;
       }

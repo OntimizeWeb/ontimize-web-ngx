@@ -131,6 +131,9 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'confirmExit: confirm-exit',
 
+  // ignore-on-exit [string]: fields attr's that will be ignored when the form is closed, separated by ';'. Default: no value.
+  'ignoreOnExit: ignore-on-exit',
+
   // [function]: function to execute on query error. Default: no value.
   'queryFallbackFunction: query-fallback-function'
   // ,
@@ -218,6 +221,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @InputConverter()
   confirmExit: boolean = true;
+  set ignoreOnExit(val: string[]) {
+    if (typeof val === 'string') {
+      val = Util.parseArray(val, true);
+    }
+    this._ignoreOnExit = val;
+  }
+  get ignoreOnExit(): string[] {
+    return this._ignoreOnExit;
+  }
+  protected _ignoreOnExit: string[];
   public queryFallbackFunction: (error: any) => void;
   // public insertFallbackFunction: Function;
   // public updateFallbackFunction: Function;
@@ -544,7 +557,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   showConfirmDiscardChanges(): Promise<boolean> {
-    return this.formNavigation.showConfirmDiscardChanges();
+    return this.formNavigation.showConfirmDiscardChanges(this.ignoreOnExit);
   }
 
   executeToolbarAction(action: string, options?: any) {
@@ -1394,8 +1407,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.editableDetail;
   }
 
-  isInitialStateChanged(): boolean {
-    return this.formCache.isInitialStateChanged();
+  isInitialStateChanged(ignoreAttrs: string[] = []): boolean {
+    return this.formCache.isInitialStateChanged(ignoreAttrs);
   }
 
   /**

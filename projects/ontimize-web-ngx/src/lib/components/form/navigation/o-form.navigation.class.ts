@@ -448,9 +448,9 @@ export class OFormNavigationClass {
     return fullUrlSegments;
   }
 
-  showConfirmDiscardChanges(): Promise<boolean> {
+  showConfirmDiscardChanges(ignoreAttrs: string[] = []): Promise<boolean> {
     let subscription: Promise<boolean>;
-    if (this.form.isInitialStateChanged() && !this.form.isInInsertMode()) {
+    if (this.form.isInitialStateChanged(ignoreAttrs) && !this.form.isInInsertMode()) {
       subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
     }
     if (subscription === undefined) {
