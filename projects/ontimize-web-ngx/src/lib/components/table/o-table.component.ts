@@ -666,6 +666,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   }
 
+  ngAfterViewChecked() {
+    this.cd.detectChanges();
+  }
+
   updateHeaderAndFooterStickyPositions() {
 
     if (this.activeVirtualScroll) {
