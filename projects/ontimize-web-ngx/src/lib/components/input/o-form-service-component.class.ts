@@ -330,13 +330,12 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       });
 
-      if (this._currentIndex === undefined && queryIfNotFound) {
-        if (this.queryOnBind && this.dataArray && this.dataArray.length === 0 && !this.cacheQueried) {
+      if (this._currentIndex === undefined) {
+        if (queryIfNotFound &&
+          this.queryOnBind && this.dataArray && this.dataArray.length === 0 && !this.cacheQueried) {
           this.queryData();
-        }
-      } else {
-        if (this._currentIndex === undefined && !queryIfNotFound && this.dataArray && this.dataArray.length > 0) {
-          console.warn('Component ' + this.oattr + ' was set to the value ' + this.value.value + ' but this value doesnt exist in the data array and this value will be set to undefined');
+        } else if (!queryIfNotFound && this.dataArray && this.dataArray.length > 0) {
+          console.warn('It was set the value ' + this.value.value + ' to the component ' + this.oattr + ' but this value does not exist in the data array and this value will be set to undefined');
           this.setValue(void 0);
         }
       }
