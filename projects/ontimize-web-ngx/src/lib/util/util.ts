@@ -372,9 +372,9 @@ export class Util {
     return 0;
   }
 
-  static parseByValueType(timestamp: any, valueType: ODateValueType, format: string) {
-    let result = timestamp;
-    const m = moment(timestamp);
+  static parseByValueType(value: any, valueType: ODateValueType, format: string) {
+    let result = value;
+    const m = moment(value);
     if (!m.isValid()) {
       return void 0;
     }
