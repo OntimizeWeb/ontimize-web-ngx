@@ -591,7 +591,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       return;
     }
     this.deactivateGuard = this.injector.get(CanDeactivateFormGuard);
-    this.deactivateGuard.setForm(this);
+    this.deactivateGuard.addForm(this);
     const canDeactivateArray = (this.actRoute.routeConfig.canDeactivate || []);
     let previouslyAdded = false;
     for (let i = 0, len = canDeactivateArray.length; i < len; i++) {
@@ -611,7 +611,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (!this.deactivateGuard || !this.actRoute || !this.actRoute.routeConfig || !this.actRoute.routeConfig.canDeactivate) {
         return;
       }
-      this.deactivateGuard.setForm(undefined);
+      this.deactivateGuard.removeForm(this);
       for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
         if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
           this.actRoute.routeConfig.canDeactivate.splice(i, 1);
