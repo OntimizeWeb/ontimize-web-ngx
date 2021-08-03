@@ -89,9 +89,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   queryWithNullParentKeys: boolean = false;
   public setValueOnValueChange: string;
   public queryFallbackFunction: (error: any) => void;
-  // public insertFallbackFunction: Function;
-  // public updateFallbackFunction: Function;
-  // public deleteFallbackFunction: Function;
+
   @InputConverter()
   protected translate: boolean = false;
   public sort: 'ASC' | 'DESC';
@@ -118,6 +116,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected dialogService: DialogService;
 
   protected queryOnEventSubscription: Subscription;
+  protected subscriptionDataLoad: Subscription = new Subscription();
   public delayLoad = 250;
   public loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -134,6 +133,8 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   initialize() {
     super.initialize();
+
+    this.subscriptionDataLoad.add(this.onDataLoaded.subscribe(() => this.syncDataIndex(false)));
 
     this.cacheQueried = false;
     this.colArray = Util.parseArray(this.columns, true);
@@ -181,15 +182,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
-    // if (typeof this.insertFallbackFunction !== 'function') {
-    //   this.insertFallbackFunction = undefined;
-    // }
-    // if (typeof this.updateFallbackFunction !== 'function') {
-    //   this.updateFallbackFunction = undefined;
-    // }
-    // if (typeof this.deleteFallbackFunction !== 'function') {
-    //   this.deleteFallbackFunction = undefined;
-    // }
+
+
+
   }
 
   destroy() {
@@ -202,6 +197,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
+    }
+    if (this.subscriptionDataLoad) {
+      this.subscriptionDataLoad.unsubscribe();
     }
   }
 
@@ -303,7 +301,6 @@ export class OFormServiceComponent extends OFormDataComponent {
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
       this.dataArray = this.sortData(data);
-      this.syncDataIndex(false);
     } else if (Util.isObject(data) && Object.keys(data).length > 0) {
       this.dataArray = [data];
     } else {
@@ -315,7 +312,7 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   syncDataIndex(queryIfNotFound: boolean = true) {
     this._currentIndex = undefined;
-    if (Util.isDefined(this.value) && Util.isDefined(this.value.value) && this.dataArray) {
+    if (Util.isDefined(this.value) && !this.isEmpty() && this.dataArray) {
       const self = this;
       this.dataArray.forEach((item, index) => {
         if (this.value.value instanceof Array) {
@@ -333,12 +330,14 @@ export class OFormServiceComponent extends OFormDataComponent {
         }
       });
 
-      if (this._currentIndex === undefined && queryIfNotFound) {
-        if (this.queryOnBind && this.dataArray && this.dataArray.length === 0
-          && !this.cacheQueried && !this.isEmpty()) {
+      if (this._currentIndex === undefined) {
+        if (queryIfNotFound &&
+          this.queryOnBind && this.dataArray && this.dataArray.length === 0 && !this.cacheQueried) {
           this.queryData();
+        } else if (!queryIfNotFound && this.dataArray && this.dataArray.length > 0) {
+          console.warn('It was set the value ' + this.value.value + ' to the component ' + this.oattr + ' but this value does not exist in the data array and this value will be set to undefined');
+          this.setValue(void 0);
         }
-        return;
       }
     }
   }

@@ -111,7 +111,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
 
   public ngOnInit(): void {
     this.initialize();
-    // Ensuring value in the stateCtrl 
+    // Ensuring value in the stateCtrl
     // (just in case it was created with a empty value before the fControl data initialization)
     if (!Util.isDefined(this.stateCtrl.value)) {
       this.setStateCtrlValue();
