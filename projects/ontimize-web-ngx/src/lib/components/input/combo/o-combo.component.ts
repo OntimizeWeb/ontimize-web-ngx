@@ -271,21 +271,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       return;
     }
 
-    if (isDefinedVal) {
-      let record;
-      if (this.multiple) {
-        record = this.dataArray.find(item => val.indexOf(item[this.valueColumn]) > -1);
-      } else {
-        record = this.dataArray.find(item => item[this.valueColumn] === val);
-      }
-      if (!Util.isDefined(record)) {
-        return;
-      }
-    } else {
-      if (Util.isDefined(val)) {
-        super.setValue(val, options);
-      }
-    }
     super.setValue(val, options);
   }
 
@@ -341,7 +326,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       }
 
       // filter
-      if(this.renderer) {
+      if (this.renderer) {
         this.filteredDataArray = this.dataArray.filter(item => this.renderer.getComboData(item).toLowerCase().indexOf(search) > -1);
       } else {
         this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);

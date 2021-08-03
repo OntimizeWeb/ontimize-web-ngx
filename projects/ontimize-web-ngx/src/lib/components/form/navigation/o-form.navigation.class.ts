@@ -4,21 +4,21 @@ import { combineLatest, Observable, Subscription } from 'rxjs';
 
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
-import { DialogService } from '../../../services/dialog.service';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../o-form.component';
+import { OFormConfirmExitService } from './o-form-confirm-exit.service';
 
 export class OFormNavigationClass {
 
   formLayoutManager: OFormLayoutManagerComponent;
   formLayoutDialog: OFormLayoutDialogComponent;
 
-  protected dialogService: DialogService;
   protected navigationService: NavigationService;
+  protected confirmExitService: OFormConfirmExitService;
 
   protected qParamSub: Subscription;
   protected queryParams: any;
@@ -44,8 +44,8 @@ export class OFormNavigationClass {
     protected router: Router,
     protected actRoute: ActivatedRoute
   ) {
-    this.dialogService = injector.get(DialogService);
     this.navigationService = injector.get(NavigationService);
+    this.confirmExitService = injector.get(OFormConfirmExitService);
 
     try {
       this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
@@ -448,19 +448,8 @@ export class OFormNavigationClass {
     return fullUrlSegments;
   }
 
-  showConfirmDiscardChanges(): Promise<boolean> {
-    let subscription: Promise<boolean>;
-    if (this.form.isInitialStateChanged() && !this.form.isInInsertMode()) {
-      subscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
-    }
-    if (subscription === undefined) {
-      const observable = new Observable<boolean>(observer => {
-        observer.next(true);
-        observer.complete();
-      });
-      subscription = observable.toPromise();
-    }
-    return subscription;
+  showConfirmDiscardChanges(ignoreAttrs: string[] = []): Promise<boolean> {
+    return this.confirmExitService.subscribeToDiscardChanges(this.form, ignoreAttrs);
   }
 
   protected storeNavigationFormRoutes(activeMode: string) {
