@@ -1,8 +1,9 @@
 ## 8.4.1
 ### Features
+* **o-form**: new attribute `ignore-on-exit`, ignores form fields changes when closing a form. ([695](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/695)) Closes [#663](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/663)
 * **o-time-input**: new `value-type` and `value-format` inputs ([b7b4d24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b7b4d24)) Closes [#693](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/693)
 
-### Bug fix
+### Bug fixes
 * **o-table-quickfilter**: fixing ExpressionChangedAfterItHasBeenCheckedError errors ([bc78f3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bc78f3a)) Closes [#670](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/670)
 * **o-form-service-component.class**, **o-combo**, **o-listpicker**: fixing setFieldValues method error ([3e9fe3b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e9fe3b)) Closes [#675](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/675)
 
