@@ -594,4 +594,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   allowNavigation(): boolean {
     return !this.isTabMode();
   }
+
+  public canAddDetailComponent(): boolean {
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? compRef.canAddDetailComponent() : true;
+  }
 }

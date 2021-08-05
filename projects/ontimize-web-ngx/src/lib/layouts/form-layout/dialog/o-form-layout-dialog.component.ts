@@ -118,4 +118,8 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   setModifiedState(modified: boolean) {
 
   }
+
+  canAddDetailComponent(): boolean {
+    return true;
+  }
 }

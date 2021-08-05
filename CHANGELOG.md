@@ -1,3 +1,7 @@
+## 8.5.0
+### Features
+* **o-form-layout-tabgroup-options**: new `max-tabs` input ([9d78d40](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d78d40)) Closes [#694](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/694) 
+
 ## 8.4.1 (2021-08-03)
 ### Features
 * **o-form**: new attribute `ignore-on-exit`, ignores form fields changes when closing a form. ([695](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/695)) Closes [#663](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/663)
