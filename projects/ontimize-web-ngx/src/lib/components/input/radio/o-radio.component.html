@@ -1,6 +1,6 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay" class="relative">
+  [matTooltipHideDelay]="tooltipHideDelay" class="relative" [oContextMenu]="oContextMenu">
   <!-- mat-form-field and hidden input are used only for displaying component label and errors as mat-radio is not supported inside form-field -->
   <!-- https://github.com/angular/material2/issues/7891 -->
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
