@@ -16,7 +16,8 @@
            > a:hover,
           &:hover,
           > a.is-selected {
-            color: mat-color($primary, default-contrast);
+            color: mat-color($accent, 900);
+            background-color: mat-color($primary, 100);
           }
         }
       }
@@ -31,14 +32,14 @@
 
       .o-app-sidenav-item {
         border-color: mat-color($primary, default-contrast, 0.12);
-        color: mat-color($primary, default-contrast, 0.54);
+        color: mat-color($primary, default-contrast);
 
-        .o-app-sidenav-viewer-sidenav-item-selected {
-          color: mat-color($primary, default-contrast);
-        }
+        // .o-app-sidenav-viewer-sidenav-item-selected {
+        //   color: mat-color($accent, 900);
+        //   background-color: mat-color($primary, 100);
+        // }
 
         &.o-user-info {
-
           &:focus,
           &:hover {
             color: inherit;
@@ -54,14 +55,14 @@
       .o-app-sidenav-menugroup {
         &.active {
           &:not(.disabled) {
-            background: mat-color($primary, 900);
+            background: mat-color($primary);
             color: mat-color($primary, default-contrast);
           }
 
-          + .o-app-sidenav-menugroup-items-container ul {
-            background: rgba(0, 0, 0, 0.1);
-            box-shadow: 6px 4px 36px -12px $black-87-opacity inset;
-          }
+           + .o-app-sidenav-menugroup-items-container ul {
+             background: mat-color($primary, 900 )
+          //   box-shadow: 6px 4px 36px -12px $black-87-opacity inset;
+           }
         }
 
       }

@@ -4,7 +4,7 @@
     <div fxLayout="row" fxLayoutAlign="start center" fxFill>
       <ng-container *ngIf="sidenavOpened">
         <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
-        <h3>{{ menuGroup.name | oTranslate }}</h3>
+        {{ menuGroup.name | oTranslate }}
         <span class="fill-remaining"></span>
         <mat-icon class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
       </ng-container>
