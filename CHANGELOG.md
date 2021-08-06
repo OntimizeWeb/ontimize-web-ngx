@@ -1,6 +1,9 @@
 ## 8.5.0
 ### Features
 * **o-form-layout-tabgroup-options**: new `max-tabs` input ([9d78d40](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d78d40)) Closes [#694](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/694) 
+* **OFormServiceComponent** (**o-combo**, **o-list-picker**, **o-radio**) ([e92a78e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e92a78e5)) Closes [#706](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/706)
+  * Showing a context menu with the reload data option
+  * New `refresh` method
 
 ## 8.4.1 (2021-08-03)
 ### Features
