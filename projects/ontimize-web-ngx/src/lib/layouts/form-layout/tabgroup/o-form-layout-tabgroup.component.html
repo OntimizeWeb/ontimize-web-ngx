@@ -4,8 +4,6 @@
   <mat-tab label="{{ (title || 'LAYOUT_MANANGER.MAIN_TAB_LABEL') | oTranslate }}">
     <ng-content></ng-content>
   </mat-tab>
-
-
   <mat-tab *ngFor="let tabData of data; let i = index">
     <ng-template mat-tab-label>
 
@@ -23,7 +21,9 @@
         <ng-container *ngIf="icon && !isIconPositionLeft">
           <mat-icon>{{ icon }}</mat-icon>
         </ng-container>
+        <span class="gradient-layer"></span>
       </span>
+
       <mat-icon (click)="closeTab(tabData.id)" svgIcon="ontimize:close"></mat-icon>
     </ng-template>
     <ng-template o-form-layout-manager-content [index]="i"></ng-template>
