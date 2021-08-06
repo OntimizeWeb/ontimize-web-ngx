@@ -20,4 +20,9 @@
     <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
   <div *ngIf="isReadOnly" (click)="$event.stopPropagation()" class="read-only-blocker" fxFill></div>
+  
+  <o-context-menu *ngIf="!this.isReadOnly && this.enabled">
+    <o-context-menu-item attr="refresh" label="FORM_SERVICE_COMPONENT.REFRESH" svg-icon="ontimize:autorenew" (execute)="refresh()">
+    </o-context-menu-item>
+  </o-context-menu>
 </div>
