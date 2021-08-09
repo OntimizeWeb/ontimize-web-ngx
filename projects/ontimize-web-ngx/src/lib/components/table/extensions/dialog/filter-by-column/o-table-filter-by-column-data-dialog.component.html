@@ -33,9 +33,9 @@
       </ng-template>
 
       <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column"
-        class="select-values-list">
+        class="select-values-list" (selectionChange)="onSelect($event)">
         <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before"
-          [selected]="record.selected" [value]="record.value">
+          [selected]="record.selected" [value]="record">
           <ng-container *ngIf="!column.renderer">
             {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
           </ng-container>

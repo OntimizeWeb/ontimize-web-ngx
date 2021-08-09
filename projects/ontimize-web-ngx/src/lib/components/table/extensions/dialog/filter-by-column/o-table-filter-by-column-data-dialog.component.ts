@@ -9,7 +9,14 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatCheckboxChange, MatDialogRef, MatSelectionList, MatSlideToggleChange } from '@angular/material';
+import {
+  MAT_DIALOG_DATA,
+  MatCheckboxChange,
+  MatDialogRef,
+  MatSelectionList,
+  MatSelectionListChange,
+  MatSlideToggleChange
+} from '@angular/material';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -22,6 +29,8 @@ import { Codes } from '../../../../../util';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
+
+const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',
@@ -54,12 +63,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   fcFrom = new FormControl();
   fcTo = new FormControl();
 
-  protected columnData: Array<TableFilterByColumnData> = [];
-  protected tableData: Array<any> = [];
+  protected columnData: TableFilterByColumnData[] = [];
+  protected tableData: any[] = [];
 
-  private listDataSubject = new BehaviorSubject<Array<TableFilterByColumnData>>([]);
-  protected _listData: Observable<Array<TableFilterByColumnData>> = this.listDataSubject.asObservable();
-
+  private listDataSubject = new BehaviorSubject<TableFilterByColumnData[]>([]);
+  protected _listData: Observable<TableFilterByColumnData[]> = this.listDataSubject.asObservable();
 
   @ViewChild('filter', { static: false }) filter: ElementRef;
   @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
@@ -72,25 +80,28 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (data.column) {
       this.column = data.column;
     }
-    let previousFilter: OColumnValueFilter = {
-      attr: undefined,
-      operator: undefined,
-      values: undefined
-    };
+
     if (data.mode) {
       this.isDefaultFilterSubject.next(data.mode === 'default');
       this.isCustomFilterSubject.next(data.mode === 'custom');
       this.mode = data.mode;
     }
 
-    if (data.previousFilter) {
-      previousFilter = data.previousFilter;
-      this.isCustomFilterSubject.next([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL].indexOf(previousFilter.operator) !== -1);
+    let previousFilter: OColumnValueFilter = data.previousFilter || {
+      attr: undefined,
+      operator: undefined,
+      values: undefined,
+      availableValues: undefined
+    }
+
+    if (Util.isDefined(previousFilter.operator)) {
+      this.isCustomFilterSubject.next(CUSTOM_FILTERS_OPERATORS.indexOf(previousFilter.operator) !== -1);
     }
 
     if (data.hasOwnProperty('preloadValues')) {
       this.preloadValues = data.preloadValues;
     }
+
     if (data.activeSortDirection) {
       this.activeSortDirection = data.activeSortDirection;
     }
@@ -101,12 +112,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
     if (data.tableData && Array.isArray(data.tableData)) {
       this.tableData = data.tableData;
-      this.getDistinctValues(data.tableData, previousFilter);
+      this.getDistinctValues(previousFilter);
       this.initializeCustomFilterValues(previousFilter);
       this.initializeDataList(previousFilter);
-    }
-    if (data.mode) {
-      this.mode = data.mode;
     }
   }
 
@@ -114,15 +122,15 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.initializeFilterEvent();
   }
 
-  get listData(): Observable<Array<TableFilterByColumnData>> {
+  get listData(): Observable<TableFilterByColumnData[]> {
     return this._listData;
   }
 
-  set listData(arg: Observable<Array<TableFilterByColumnData>>) {
+  set listData(arg: Observable<TableFilterByColumnData[]>) {
     this._listData = arg;
   }
 
-  initializeDataList(filter?: OColumnValueFilter): void {
+  protected initializeDataList(filter?: OColumnValueFilter): void {
     if (this.preloadValues || (filter && filter.operator === ColumnValueFilterOperator.IN)) {
       if (this.activeSortDirection === Codes.ASC_SORT || this.activeSortDirection === Codes.DESC_SORT) {
         this.sortData();
@@ -132,60 +140,47 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  initializeFilterEvent() {
+  protected initializeFilterEvent() {
     if (this.filter) {
-      const self = this;
       fromEvent(this.filter.nativeElement, 'keyup')
         .pipe(debounceTime(150))
         .pipe(distinctUntilChanged())
         .subscribe(() => {
-          let filterValue: string = self.filter.nativeElement.value;
+          let filterValue: string = this.filter.nativeElement.value;
           filterValue = Util.normalizeString(filterValue);
           if (filterValue.indexOf('*') !== -1) {
-            self.listDataSubject.next(self.columnData.filter(item => new RegExp('^' + Util.normalizeString(filterValue).split('*').join('.*') + '$').test(Util.normalizeString(item.renderedValue))));
+            this.listDataSubject.next(this.columnData.filter(item => new RegExp('^' + Util.normalizeString(filterValue).split('*').join('.*') + '$').test(Util.normalizeString(item.renderedValue))));
           } else {
-            self.listDataSubject.next(self.columnData.filter(item => (Util.normalizeString(item.renderedValue).indexOf(filterValue) !== -1)));
+            this.listDataSubject.next(this.columnData.filter(item => (Util.normalizeString(item.renderedValue).indexOf(filterValue) !== -1)));
           }
         });
     }
   }
 
-  initializeCustomFilterValues(filter: OColumnValueFilter): void {
-    if (filter.operator !== ColumnValueFilterOperator.IN) {
-      if (ColumnValueFilterOperator.EQUAL === filter.operator) {
+  protected initializeCustomFilterValues(filter: OColumnValueFilter): void {
+    switch (true) {
+      case filter.operator === ColumnValueFilterOperator.EQUAL:
         if (this.isTextType()) {
           this.fcText.setValue(filter.values);
         }
-      }
-      if (filter.operator === ColumnValueFilterOperator.BETWEEN) {
-        if (this.isDateType()) {
-          this.fcFrom.setValue(new Date(filter.values[0]));
-          this.fcTo.setValue(new Date(filter.values[1]));
-        } else {
-          this.fcFrom.setValue(filter.values[0]);
-          this.fcTo.setValue(filter.values[1]);
-        }
-      } else {
-        if (filter.operator === ColumnValueFilterOperator.MORE_EQUAL) {
-          if (this.isDateType()) {
-            this.fcFrom.setValue(new Date(filter.values));
-          } else {
-            this.fcFrom.setValue(filter.values);
-          }
-        }
-        if (filter.operator === ColumnValueFilterOperator.LESS_EQUAL) {
-          if (this.isDateType()) {
-            this.fcTo.setValue(new Date(filter.values));
-          } else {
-            this.fcTo.setValue(filter.values);
-          }
-        }
-      }
+        break;
+      case filter.operator === ColumnValueFilterOperator.BETWEEN:
+        this.fcFrom.setValue(this.isDateType() ? new Date(filter.values[0]) : filter.values[0]);
+        this.fcTo.setValue(this.isDateType() ? new Date(filter.values[1]) : filter.values[1]);
+        break;
+      case filter.operator === ColumnValueFilterOperator.MORE_EQUAL:
+        this.fcFrom.setValue(this.isDateType() ? new Date(filter.values) : filter.values);
+        break;
+      case filter.operator === ColumnValueFilterOperator.LESS_EQUAL:
+        this.fcTo.setValue(this.isDateType() ? new Date(filter.values) : filter.values);
+        break;
+      default:
+        break;
     }
   }
 
-  get selectedValues(): Array<TableFilterByColumnData> {
-    return this.filterValueList ? this.filterValueList.selectedOptions.selected : [];
+  get selectedValues(): TableFilterByColumnData[] {
+    return this.filterValueList ? this.filterValueList.selectedOptions.selected.map(selected => selected.value) : [];
   }
 
   areAllSelected(): boolean {
@@ -193,7 +188,12 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   isIndeterminate(): boolean {
-    return this.selectedValues.length > 0 && this.selectedValues.length !== this.columnData.length;
+    const selectedValues = this.selectedValues;
+    return selectedValues.length > 0 && selectedValues.length !== this.columnData.length;
+  }
+
+  onSelect(event: MatSelectionListChange) {
+    event.option.value.selected = event.option.selected;
   }
 
   onSelectAllChange(event: MatCheckboxChange) {
@@ -204,35 +204,42 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  getDistinctValues(data: Array<any>, filter: OColumnValueFilter): void {
-    const colRenderedValues = this.getColumnDataUsingRenderer();
-    const colValues: any[] = data.map(elem => elem[this.column.attr]);
+  protected getDistinctValues(filter: OColumnValueFilter): void {
+    if (Util.isDefined(filter.availableValues)) {
+      this.columnData = filter.availableValues;
+    } else {
+      const colRenderedValues = this.getColumnDataUsingRenderer();
+      const colValues: any[] = this.tableData.map(elem => elem[this.column.attr]);
 
-    colRenderedValues.forEach((renderedValue, i) => {
-      if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
-        this.columnData.push({
-          renderedValue: renderedValue,
-          value: colValues[i],
-          selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(colValues[i]) !== -1,
-          // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
-          // row value of this index
-          tableIndex: i
-        });
-      }
-    });
+      colRenderedValues.forEach((renderedValue, i) => {
+        if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
+          this.columnData.push({
+            renderedValue: renderedValue,
+            value: colValues[i],
+            selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(colValues[i]) !== -1,
+            // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
+            // row value of this index
+            tableIndex: i
+          });
+        }
+      });
+    }
   }
 
   getColumnValuesFilter(): OColumnValueFilter {
-    const filter = {
+    const filter: OColumnValueFilter = {
       attr: this.column.attr,
       operator: undefined,
-      values: undefined
+      values: undefined,
+      availableValues: undefined
     };
 
     if (!this.isCustomFilterSubject.getValue()) {
-      if (this.selectedValues.length) {
+      const selectedValues = this.selectedValues;
+      if (selectedValues.length) {
         filter.operator = ColumnValueFilterOperator.IN;
-        filter.values = this.selectedValues.map((item) => item.value);
+        filter.values = selectedValues.map((item) => item.value);
+        filter.availableValues = this.columnData;
       }
     } else {
       if (this.fcText.value) {
@@ -283,7 +290,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.sortData();
   }
 
-  sortData() {
+  protected sortData() {
     const sortedData = Object.assign([], this.columnData);
     if (this.activeSortDirection !== '') {
       this.listDataSubject.next(sortedData.sort(this.sortFunction.bind(this)));
@@ -293,7 +300,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   }
 
-  sortFunction(a: any, b: any): number {
+  protected sortFunction(a: any, b: any): number {
     let propertyA: number | string = '';
     let propertyB: number | string = '';
     [propertyA, propertyB] = [a['value'], b['value']];
@@ -309,9 +316,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (!e.checked) {
       // Selection mode
       this.initializeDataList();
-      const self = this;
       setTimeout(() => {
-        self.initializeFilterEvent();
+        this.initializeFilterEvent();
       }, 0);
     }
   }
@@ -344,7 +350,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return icon;
   }
 
-  getFilterColumn(): OFilterColumn {
+  protected getFilterColumn(): OFilterColumn {
     let obj: OFilterColumn = { attr: '', sort: '', startView: '' };
     obj.attr = this.column.attr;
     obj.sort = this.activeSortDirection;
@@ -355,7 +361,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   public getStartedViewDatepicker(): string {
     return this.startView;
   }
-
 
   protected getTypedValue(control: FormControl): any {
     let value = control.value;

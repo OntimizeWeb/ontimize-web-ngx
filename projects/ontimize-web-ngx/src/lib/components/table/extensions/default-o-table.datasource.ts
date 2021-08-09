@@ -421,7 +421,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   getColumnValueFilterByAttr(attr: string): OColumnValueFilter {
-    return this.columnValueFilters.filter(item => item.attr === attr)[0];
+    return this.columnValueFilters.find(item => item.attr === attr);
   }
 
   clearColumnFilters(trigger: boolean = true, columnsAttr?: string[]) {
@@ -443,21 +443,32 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   addColumnFilter(filter: OColumnValueFilter) {
-    const existingFilter = this.getColumnValueFilterByAttr(filter.attr);
-    if (existingFilter) {
-      const idx = this.columnValueFilters.indexOf(existingFilter);
-      this.columnValueFilters.splice(idx, 1);
+    const existingFilterIndex = this.columnValueFilters.findIndex(item => item.attr === filter.attr);
+    if (existingFilterIndex > -1) {
+      this.columnValueFilters.splice(existingFilterIndex, 1, filter);
+    } else {
+      let validFilter = Util.isDefined(filter.values);
+      if (validFilter) {
+        switch (filter.operator) {
+          case ColumnValueFilterOperator.IN:
+            validFilter = filter.values.length > 0;
+            break;
+          case ColumnValueFilterOperator.BETWEEN:
+            validFilter = filter.values.length === 2;
+            break;
+          case ColumnValueFilterOperator.EQUAL:
+          case ColumnValueFilterOperator.LESS_EQUAL:
+          case ColumnValueFilterOperator.MORE_EQUAL:
+            validFilter = true;
+            break;
+          default:
+            validFilter = false;
+        }
+        if (validFilter) {
+          this.columnValueFilters.push(filter);
+        }
+      }
     }
-
-    if (
-      (ColumnValueFilterOperator.IN === filter.operator && filter.values.length > 0) ||
-      (ColumnValueFilterOperator.EQUAL === filter.operator && filter.values) ||
-      (ColumnValueFilterOperator.BETWEEN === filter.operator && filter.values.length === 2) ||
-      ((ColumnValueFilterOperator.LESS_EQUAL === filter.operator || ColumnValueFilterOperator.MORE_EQUAL === filter.operator) && filter.values)
-    ) {
-      this.columnValueFilters.push(filter);
-    }
-
     // If the table is paginated, filter will be applied on remote query
     if (!this.table.pageable) {
       this._columnValueFilterChange.next(null);
