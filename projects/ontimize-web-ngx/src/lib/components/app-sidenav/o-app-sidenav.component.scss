@@ -65,26 +65,8 @@ $transition-duration: 500ms;
       overflow: auto;
       height: 100%;
 
-      h3 {
-        font-size: 16px;
-        border: none;
-        line-height: $sidenav-spacing-unit * 3;
-        text-transform: capitalize;
-        margin: 0;
-        padding-left: ($sidenav-spacing-unit * 2);
-      }
-
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      li {
-        margin: 0;
-        padding: 0;
-
-        > a {
+      nav {
+        a {
           box-sizing: border-box;
           display: block;
           font-size: 14px;
@@ -94,6 +76,17 @@ $transition-duration: 500ms;
           // transition: all .3s;
           padding: 0 ($sidenav-spacing-unit * 2);
           position: relative;
+        }
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          margin: 0;
+          padding: 0;
         }
       }
 
@@ -178,7 +171,6 @@ $transition-duration: 500ms;
         }
 
         .o-app-sidenav-menugroup {
-          padding: ($sidenav-spacing-unit * 2);
           transition: padding $transition-duration 0s;
 
           .o-app-sidenav-menugroup-arrow {
@@ -191,15 +183,21 @@ $transition-duration: 500ms;
             .o-app-sidenav-menugroup-arrow {
               transform: rotate(90deg);
             }
+          }
+        }
 
-            + .o-app-sidenav-menugroup-items-container {
-              ul li > a {
-                padding-left: ($sidenav-spacing-unit * 4);
-              }
+        $sizes: 5;
+        @for $size from 1 through $sizes {
+          .o-app-sidenav-menu-group-level-#{$size} {
+            .o-app-sidenav-menugroup-items-container a {
+              $i: ($size+2);
+              padding-left: $sidenav-spacing-unit *2 + ($sidenav-spacing-unit * $size);
+
             }
           }
         }
 
+        .o-app-sidenav-menugroup,
         .o-app-sidenav-menuitem {
           mat-icon {
             margin-right: ($sidenav-spacing-unit * 2);
