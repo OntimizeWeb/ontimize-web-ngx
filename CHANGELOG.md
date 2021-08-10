@@ -7,6 +7,13 @@
 * **o-table** ([2f5b2bb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f5b2bb9)) Closes [#620](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/620) 
   * Showing all the available values after the first configuration of a column filter
   * **OColumnValueFilter**: adding `availableValues` to stored filter properties
+* **o-app-layout-sidenav**: implementing multilevel navigation but only construction up to the 3rd level is recommended ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
+
+### BREAKING CHANGES
+* **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
+  * removing h3 tag in o-app-sidenav-menu-group component
+  * adding the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
+
 
 ## 8.4.1 (2021-08-03)
 ### Features
@@ -16,6 +23,7 @@
 ### Bug fixes
 * **o-table-quickfilter**: fixing ExpressionChangedAfterItHasBeenCheckedError errors ([bc78f3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bc78f3a)) Closes [#670](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/670)
 * **o-form-service-component.class**, **o-combo**, **o-listpicker**: fixing setFieldValues method error ([3e9fe3b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e9fe3b)) Closes [#675](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/675)
+
 
 ## 8.4.0 (2021-07-23)
 ### Features

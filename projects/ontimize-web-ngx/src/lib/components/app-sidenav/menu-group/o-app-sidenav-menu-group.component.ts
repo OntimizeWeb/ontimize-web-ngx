@@ -25,7 +25,8 @@ import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',
-  'sidenavOpened : sidenav-opened'
+  'sidenavOpened : sidenav-opened',
+  'level'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
@@ -61,7 +62,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   protected permissionsService: PermissionsService;
 
   appMenuService: AppMenuService;
-  protected sidenav: OAppSidenavComponent;
+  public sidenav: OAppSidenavComponent;
   protected sidenavSubscription: Subscription;
   protected permissions: OPermissions;
   protected mutationObserver: MutationObserver;
@@ -70,6 +71,9 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
 
   @InputConverter()
   sidenavOpened: boolean = true;
+
+  @InputConverter()
+  level: number = 1;
 
   hidden: boolean;
   disabled: boolean;
@@ -163,7 +167,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   }
 
   getClass() {
-    let className = 'o-app-sidenav-menu-group';
+    let className = 'o-app-sidenav-menu-group o-app-sidenav-menu-group-level-'+this.level;
     if (this.menuGroup.class) {
       className += ' ' + this.menuGroup.class;
     }

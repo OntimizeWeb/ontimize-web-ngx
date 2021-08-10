@@ -23,8 +23,9 @@
         </o-app-sidenav-menu-item>
       </ul>
 
-      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened"
-        *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()">
+      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
+        *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()"
+        >
       </o-app-sidenav-menu-group>
     </nav>
 
