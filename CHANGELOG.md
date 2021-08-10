@@ -1,5 +1,12 @@
 ## 8.5.0
-* **o-app-layout-sidenav**: implementing 3rd level navigation  ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9)) ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e)) Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
+### Features
+* **o-app-layout-sidenav**: implementing multilevel navigation but only construction up to the 3rd level is recommended ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
+
+### BREAKING CHANGES
+* **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
+  * removing h3 tag in o-app-sidenav-menu-group component
+  * adding the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
+
 ## 8.4.0 (2021-07-23)
 ### Features
 * **AbstractOServiceBaseComponent**: component now looks for parent keys values in route params if form is not present ([658](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/658)) Closes [#634](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/634)
