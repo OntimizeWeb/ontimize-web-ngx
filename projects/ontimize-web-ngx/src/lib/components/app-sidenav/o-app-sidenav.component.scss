@@ -7,6 +7,17 @@ $sidenav-diff: -191px;
 $header-height: 56px;
 $transition-duration: 500ms;
 
+@mixin sideNaveSubLevels() {
+  $sublevels: 5;
+  @for $sublevel from 1 through $sublevels {
+    .o-app-sidenav-menu-group-level-#{$sublevel} {
+      .o-app-sidenav-menugroup-items-container a {
+        padding-left: $sidenav-spacing-unit *2 + ($sidenav-spacing-unit * $sublevel);
+      }
+    }
+  }
+}
+
 .o-app-sidenav {
   &.header-layout {
     .o-app-sidenav-container {
@@ -185,17 +196,7 @@ $transition-duration: 500ms;
             }
           }
         }
-
-        $sizes: 5;
-        @for $size from 1 through $sizes {
-          .o-app-sidenav-menu-group-level-#{$size} {
-            .o-app-sidenav-menugroup-items-container a {
-              $i: ($size+2);
-              padding-left: $sidenav-spacing-unit *2 + ($sidenav-spacing-unit * $size);
-
-            }
-          }
-        }
+        @include sideNaveSubLevels();
 
         .o-app-sidenav-menugroup,
         .o-app-sidenav-menuitem {
@@ -217,4 +218,5 @@ $transition-duration: 500ms;
       }
     }
   }
+
 }
