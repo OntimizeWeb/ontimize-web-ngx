@@ -4,6 +4,9 @@
 * **OFormServiceComponent** (**o-combo**, **o-list-picker**, **o-radio**) ([e92a78e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e92a78e5)) Closes [#706](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/706)
   * Showing a context menu with the reload data option
   * New `refresh` method
+* **o-table** ([2f5b2bb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f5b2bb9)) Closes [#620](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/620) 
+  * Showing all the available values after the first configuration of a column filter
+  * **OColumnValueFilter**: adding `availableValues` to stored filter properties
 
 ## 8.4.1 (2021-08-03)
 ### Features

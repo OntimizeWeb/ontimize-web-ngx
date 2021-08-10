@@ -43,12 +43,7 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
 
   public updateStateColumnFilter() {
     this.indicatorNumber.next(this.getFilterIndicatorNumbered());
-    this.isColumnFilterActive.next(Util.isDefined(this.getColumnValueFilterByAttr()));
-  }
-
-  protected getColumnValueFilterByAttr(): OColumnValueFilter {
-    const columnValueFilters = this.table.dataSource.getColumnValueFilters();
-    return columnValueFilters.find(item => item.attr === this.column.attr);
+    this.isColumnFilterActive.next(Util.isDefined(this.table.dataSource.getColumnValueFilterByAttr(this.column.attr)));
   }
 
   public openColumnFilterDialog(event) {
@@ -59,12 +54,11 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
     let result = '';
 
     const columnValueFilters = this.table.dataSource.getColumnValueFilters();
-    const columnsValueFilters = columnValueFilters;
-    if (columnsValueFilters.length < 2) {
+    if (columnValueFilters.length < 2) {
       return result;
     }
 
-    const index = columnsValueFilters.findIndex(x => x.attr === this.column.attr);
+    const index = columnValueFilters.findIndex(x => x.attr === this.column.attr);
     if (index > -1) {
       result += index + 1;
     }
