@@ -195,24 +195,8 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   public onChangeEvent(event: MatDatepickerInputEvent<any>): void {
     const isValid = event.value && event.value.isValid && event.value.isValid();
     let val = isValid ? event.value.valueOf() : event.value;
-    const m = moment(val);
-    switch (this.valueType) {
-      case 'string':
-        if (val) {
-          val = m.format(this.oformat);
-        }
-        break;
-      case 'date':
-        val = new Date(val);
-        break;
-      case 'iso-8601':
-        val = m.toISOString();
-        break;
-      case 'timestamp':
-      default:
-        break;
-    }
-    this.setValue(val, {
+    const parsedVal = Util.parseByValueType(val, this.valueType, this.oformat);
+    this.setValue(parsedVal, {
       changeType: OValueChangeEvent.USER_CHANGE,
       emitEvent: false,
       emitModelToViewChange: false

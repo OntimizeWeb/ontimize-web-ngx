@@ -192,4 +192,8 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
   updateNavigation(data: any, keysValues: any, insertionMode?: boolean) {
     // Nothing to do
   }
+
+  canAddDetailComponent(): boolean {
+    return true;
+  }
 }

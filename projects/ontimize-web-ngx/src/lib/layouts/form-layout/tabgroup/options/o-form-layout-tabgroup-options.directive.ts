@@ -1,7 +1,7 @@
 import { ContentChild, Directive, Input, TemplateRef } from '@angular/core';
 import { MatTabHeaderPosition, ThemePalette } from '@angular/material';
 
-import { BooleanConverter } from '../../../../decorators/input-converter';
+import { BooleanConverter, NumberConverter } from '../../../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 @Directive({
@@ -50,6 +50,12 @@ export class OFormLayoutTabGroupOptionsDirective {
   @Input()
   public separator: string;
 
+  protected _maxTabs: number;
+  @Input('max-tabs')
+  public set maxTabs(value: number) {
+    this._maxTabs = NumberConverter(value);
+  }
+
   @ContentChild(TemplateRef, { static: false })
   templateMatTabLabel: TemplateRef<any>;
 
@@ -58,13 +64,14 @@ export class OFormLayoutTabGroupOptionsDirective {
       backgroundColor: this.backgroundColor,
       color: this.color,
       headerPosition: this.headerPosition,
-      disableAnimation: this.disableAnimation,
+      disableAnimation: this._disableAnimation,
       icon: this.icon,
       iconPosition: this.iconPosition,
       titleDataOrigin: this.titleDataOrigin,
       title: this.title,
       labelColumns: this.labelColumns,
-      separator: this.separator
+      separator: this.separator,
+      maxTabs: this._maxTabs
     }
     // Deleting undefined properties
     Object.keys(result).forEach(key => result[key] == null ? delete result[key] : {});

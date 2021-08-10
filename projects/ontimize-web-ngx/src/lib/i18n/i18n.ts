@@ -213,6 +213,7 @@ export const MAP = {
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Home',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detail',
     'LAYOUT_MANANGER.INSERTION_MODE_TITLE': 'New',
+    'LAYOUT_MANANGER.MAX_TABS_NUMBER_REACHED': 'Operation is not allowed: you have reached the maximum number of opened tabs',
     'APP_LAYOUT.USER_PROFILE': 'My profile',
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'View list',
     'GRID.ITEMS_PER_PAGE': 'Items per page',
@@ -251,7 +252,7 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Group by {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'UnGroup by {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'UnGroup all',
-    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION' : 'Aggregate function',
+    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION': 'Aggregate function',
     'TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS': 'Expand all',
     'TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS': 'Collapse all',
     'TABLE.BUTTONS.GROUPBY': 'Group / ungroup by',
@@ -267,11 +268,12 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Click on ',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'to hide/display the column. Use drag and drop to modify the column order.',
     'APP_LAYOUT.SETTINGS': 'Settings',
-    'AGGREGATE_FUNCTION.count' :'Count',
-    'AGGREGATE_FUNCTION.min' :'Min',
-    'AGGREGATE_FUNCTION.max' :'Max',
-    'AGGREGATE_FUNCTION.avg' :'Avg',
-    'AGGREGATE_FUNCTION.sum' :'Sum'
+    'AGGREGATE_FUNCTION.count': 'Count',
+    'AGGREGATE_FUNCTION.min': 'Min',
+    'AGGREGATE_FUNCTION.max': 'Max',
+    'AGGREGATE_FUNCTION.avg': 'Avg',
+    'AGGREGATE_FUNCTION.sum': 'Sum',
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Refresh'
   },
 
   // Spanish
@@ -488,6 +490,7 @@ export const MAP = {
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Inicio',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalle',
     'LAYOUT_MANANGER.INSERTION_MODE_TITLE': 'Nuevo',
+    'LAYOUT_MANANGER.MAX_TABS_NUMBER_REACHED': 'Operación no permitida: ha alcanzado el número máximo de pestañas abiertas.',
     'APP_LAYOUT.USER_PROFILE': 'Mi perfil',
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acceder',
     'GRID.ITEMS_PER_PAGE': 'Elementos por página',
@@ -517,7 +520,7 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
-    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION' : 'Función de agrupamiento',
+    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION': 'Función de agrupamiento',
     'TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS': 'Expandir todas',
     'TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS': 'Colapsar todas',
     'TABLE.BUTTONS.GROUPBY': 'Agrupar por',
@@ -534,11 +537,12 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART1': 'Haz click sobre ',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION_PART2': 'para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
     'APP_LAYOUT.SETTINGS': 'Configuración',
-    'AGGREGATE_FUNCTION.count' :'Count',
-    'AGGREGATE_FUNCTION.min' :'Min',
-    'AGGREGATE_FUNCTION.max' :'Max',
-    'AGGREGATE_FUNCTION.avg' :'Media',
-    'AGGREGATE_FUNCTION.sum' :'Sum'
+    'AGGREGATE_FUNCTION.count': 'Count',
+    'AGGREGATE_FUNCTION.min': 'Min',
+    'AGGREGATE_FUNCTION.max': 'Max',
+    'AGGREGATE_FUNCTION.avg': 'Media',
+    'AGGREGATE_FUNCTION.sum': 'Sum',
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Refrescar'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -752,6 +756,7 @@ export const MAP = {
     'LAYOUT_MANANGER.MAIN_TAB_LABEL': 'Início',
     'LAYOUT_MANANGER.DIALOG_TITLE': 'Detalhe',
     'LAYOUT_MANANGER.INSERTION_MODE_TITLE': 'Novo',
+    'LAYOUT_MANANGER.MAX_TABS_NUMBER_REACHED': 'Operação não permitida: você atingiu o número máximo de abas abertas.',
     'APP_LAYOUT.USER_PROFILE': 'Meu perfil',
     'CARD_MENU_LAYOUT.BUTTON_TEXT': 'Acessar',
     'GRID.ITEMS_PER_PAGE': 'Elementos por página',
@@ -780,7 +785,7 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
-    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION' : 'Función de agrupamiento',
+    'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION': 'Función de agrupamiento',
     'TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS': 'Expandir todas',
     'TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS': 'Colapsar todas',
     'TABLE.BUTTONS.GROUPBY': 'Agrupar / desagrupar por',
@@ -797,10 +802,11 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.SORT_WARN': '<li>Ordenação de coluna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Column grouping</li>',
     'APP_LAYOUT.SETTINGS': 'Definições',
-    'AGGREGATE_FUNCTION.count' :'Count',
-    'AGGREGATE_FUNCTION.min' :'Min',
-    'AGGREGATE_FUNCTION.max' :'Max',
-    'AGGREGATE_FUNCTION.avg' :'Media',
-    'AGGREGATE_FUNCTION.sum' :'Sum'
+    'AGGREGATE_FUNCTION.count': 'Count',
+    'AGGREGATE_FUNCTION.min': 'Min',
+    'AGGREGATE_FUNCTION.max': 'Max',
+    'AGGREGATE_FUNCTION.avg': 'Media',
+    'AGGREGATE_FUNCTION.sum': 'Sum',
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Recarregar'
   }
 };

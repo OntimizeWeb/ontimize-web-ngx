@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injector, NgZone } from '@angular/core';
+import { ElementRef, EventEmitter, Injector, NgZone, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -9,8 +9,13 @@ import { FormValueOptions } from '../../types/form-value-options.type';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
+import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent
+} from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -89,9 +94,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   queryWithNullParentKeys: boolean = false;
   public setValueOnValueChange: string;
   public queryFallbackFunction: (error: any) => void;
-  // public insertFallbackFunction: Function;
-  // public updateFallbackFunction: Function;
-  // public deleteFallbackFunction: Function;
+
   @InputConverter()
   protected translate: boolean = false;
   public sort: 'ASC' | 'DESC';
@@ -118,8 +121,15 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected dialogService: DialogService;
 
   protected queryOnEventSubscription: Subscription;
+  protected subscriptionDataLoad: Subscription = new Subscription();
   public delayLoad = 250;
   public loadingSubject = new BehaviorSubject<boolean>(false);
+
+  public oContextMenu: OContextMenuComponent;
+  @ViewChild(OContextMenuComponent, { static: false })
+  set oContextMenuRef(value: OContextMenuComponent) {
+    this.oContextMenu = value;
+  }
 
   constructor(
     form: OFormComponent,
@@ -134,6 +144,8 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   initialize() {
     super.initialize();
+
+    this.subscriptionDataLoad.add(this.onDataLoaded.subscribe(() => this.syncDataIndex(false)));
 
     this.cacheQueried = false;
     this.colArray = Util.parseArray(this.columns, true);
@@ -157,8 +169,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     this._setValueOnValueChangeEquiv = Util.parseParentKeysEquivalences(setValueSetArray);
 
     if (this.form && this.queryOnBind) {
-      const self = this;
-      this._formDataSubcribe = this.form.onDataLoaded.subscribe(() => self.queryData());
+      this._formDataSubcribe = this.form.onDataLoaded.subscribe(() => this.queryData());
     }
 
     if (this.staticData) {
@@ -170,10 +181,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
 
     if (this.queryOnEvent !== undefined && this.queryOnEvent.subscribe !== undefined) {
-      const self = this;
       this.queryOnEventSubscription = this.queryOnEvent.subscribe((value) => {
         if (Util.isDefined(value) || this.queryWithNullParentKeys) {
-          self.queryData();
+          this.queryData();
         }
       });
     }
@@ -181,15 +191,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
-    // if (typeof this.insertFallbackFunction !== 'function') {
-    //   this.insertFallbackFunction = undefined;
-    // }
-    // if (typeof this.updateFallbackFunction !== 'function') {
-    //   this.updateFallbackFunction = undefined;
-    // }
-    // if (typeof this.deleteFallbackFunction !== 'function') {
-    //   this.deleteFallbackFunction = undefined;
-    // }
+
+
+
   }
 
   destroy() {
@@ -202,6 +206,9 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
+    }
+    if (this.subscriptionDataLoad) {
+      this.subscriptionDataLoad.unsubscribe();
     }
   }
 
@@ -278,7 +285,6 @@ export class OFormServiceComponent extends OFormDataComponent {
             this.cacheQueried = true;
             this.setDataArray(resp.data);
           }
-          // window.setTimeout(() => { this.loading = false; self.loadingSubject.next(false); self.loaderSubscription.unsubscribe(); }, 10000);
           this.loadingSubject.next(false);
           this.loaderSubscription.unsubscribe();
         }, err => {
@@ -303,7 +309,6 @@ export class OFormServiceComponent extends OFormDataComponent {
   setDataArray(data: any): void {
     if (Util.isArray(data)) {
       this.dataArray = this.sortData(data);
-      this.syncDataIndex(false);
     } else if (Util.isObject(data) && Object.keys(data).length > 0) {
       this.dataArray = [data];
     } else {
@@ -315,30 +320,31 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   syncDataIndex(queryIfNotFound: boolean = true) {
     this._currentIndex = undefined;
-    if (Util.isDefined(this.value) && Util.isDefined(this.value.value) && this.dataArray) {
-      const self = this;
+    if (Util.isDefined(this.value) && !this.isEmpty() && this.dataArray) {
       this.dataArray.forEach((item, index) => {
         if (this.value.value instanceof Array) {
           this._currentIndex = [];
           this.value.value.forEach((itemValue, indexValue) => {
-            if (item[self.valueColumn] === itemValue) {
+            if (item[this.valueColumn] === itemValue) {
               this._currentIndex[this._currentIndex.length] = indexValue;
             }
           });
-        } else if (item[self.valueColumn] === this.value.value) {
-          self._currentIndex = index;
+        } else if (item[this.valueColumn] === this.value.value) {
+          this._currentIndex = index;
         }
-        if (item[self.valueColumn] === this.value.value) {
-          self._currentIndex = index;
+        if (item[this.valueColumn] === this.value.value) {
+          this._currentIndex = index;
         }
       });
 
-      if (this._currentIndex === undefined && queryIfNotFound) {
-        if (this.queryOnBind && this.dataArray && this.dataArray.length === 0
-          && !this.cacheQueried && !this.isEmpty()) {
+      if (this._currentIndex === undefined) {
+        if (queryIfNotFound &&
+          this.queryOnBind && this.dataArray && this.dataArray.length === 0 && !this.cacheQueried) {
           this.queryData();
+        } else if (!queryIfNotFound && this.dataArray && this.dataArray.length > 0) {
+          console.warn('It was set the value ' + this.value.value + ' to the component ' + this.oattr + ' but this value does not exist in the data array and this value will be set to undefined');
+          this.setValue(void 0);
         }
-        return;
       }
     }
   }
@@ -375,26 +381,25 @@ export class OFormServiceComponent extends OFormDataComponent {
   }
 
   load(): any {
-    const self = this;
     const zone = this.injector.get(NgZone);
     const loadObservable = new Observable(observer => {
       const timer = window.setTimeout(() => {
         observer.next(true);
-      }, self.delayLoad);
+      }, this.delayLoad);
 
       return () => {
         window.clearTimeout(timer);
         zone.run(() => {
           observer.next(false);
-          self.loading = false;
+          this.loading = false;
         });
       };
 
     });
     const subscription = loadObservable.subscribe(val => {
       zone.run(() => {
-        self.loading = val as boolean;
-        self.loadingSubject.next(val as boolean);
+        this.loading = val as boolean;
+        this.loadingSubject.next(val as boolean);
       });
     });
     return subscription;
@@ -441,6 +446,10 @@ export class OFormServiceComponent extends OFormDataComponent {
       sortedData.reverse();
     }
     return sortedData;
+  }
+
+  refresh() {
+    this.queryData();
   }
 
 }

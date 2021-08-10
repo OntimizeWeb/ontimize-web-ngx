@@ -14,4 +14,5 @@ export interface OFormLayoutManagerMode {
   isMainComponent: (comp: ILayoutManagerComponent) => boolean;
   openDetail?: (detail: FormLayoutDetailComponentData) => void;
   closeDetail: () => void;
+  canAddDetailComponent: () => boolean;
 }

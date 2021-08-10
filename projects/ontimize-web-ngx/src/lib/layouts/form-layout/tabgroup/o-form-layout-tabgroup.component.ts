@@ -160,6 +160,14 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return this.options && this.options.iconPosition === 'left';
   }
 
+  get maxTabs(): number {
+    let maxTabs;
+    if (this.options && this.options.maxTabs) {
+      maxTabs = this.options.maxTabs;
+    }
+    return maxTabs;
+  }
+
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
@@ -396,5 +404,14 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   closeDetail() {
     this.closeTab(this.tabGroup.selectedIndex - 1);
+  }
+
+  canAddDetailComponent(): boolean {
+    // The max tabs number includes the main tab
+    const maxReached = (this.data.length + 1) >= this.maxTabs;
+    if (maxReached) {
+      this.dialogService.info('INFO', 'LAYOUT_MANANGER.MAX_TABS_NUMBER_REACHED')
+    }
+    return !maxReached;
   }
 }
