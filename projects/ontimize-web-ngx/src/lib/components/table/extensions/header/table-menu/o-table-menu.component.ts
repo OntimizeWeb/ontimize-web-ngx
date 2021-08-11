@@ -22,7 +22,7 @@ import { DialogService } from '../../../../../services/dialog.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OPermissions } from '../../../../../types/o-permissions.type';
-import { OTableMenuPermissions } from '../../../../../types/o-table-menu-permissions.type';
+import { OTableMenuPermissions } from '../../../../../types/table/o-table-menu-permissions.type';
 import { Codes } from '../../../../../util/codes';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
@@ -30,14 +30,10 @@ import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
-import {
-  OTableApplyConfigurationDialogComponent
-} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import {
-  OTableStoreConfigurationDialogComponent
-} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
@@ -353,9 +349,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   onChangeColumnsVisibilityClicked() {
     const dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
-        visibleColumns: Util.parseArray(this.table.visibleColumns, true),
-        columnsData: this.table.oTableOptions.columns,
-        rowHeight: this.table.rowHeight
+        table: this.table
       },
       maxWidth: '35vw',
       disableClose: true,
@@ -363,13 +357,25 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.table.visibleColArray = dialogRef.componentInstance.getVisibleColumns();
-        const columnsOrder = dialogRef.componentInstance.getColumnsOrder();
+      if (Util.isDefined(result)) {
+        this.table.visibleColArray = result.visibleColArray;
+        const columnsOrder = result.columnsOrder;
         this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+
+        if (Util.isDefined(result.sortColumns)) {
+          this.table.reinitializeSortColumns(result.sortColumns);
+        }
+
+        if (Util.isDefined(result.groupColumns)) {
+          this.table.setGroupColumns(result.groupColumns);
+        }
+
+        if (result.columnValueFiltersToRemove.length > 0) {
+          this.table.clearColumnFilters(false, result.columnValueFiltersToRemove);
+        }
+
         this.table.cd.detectChanges();
         this.table.refreshColumnsWidth();
-        this.table.onVisibleColumnsChange.emit(this.table.visibleColArray);
       }
     });
   }
@@ -389,8 +395,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.table.groupedColumnsArray = dialogRef.componentInstance.getGroupedColumns();
-        this.table.dataSource.updateGroupedColumns(this.table.groupedColumnsArray);
+        this.table.setGroupColumns(dialogRef.componentInstance.getGroupedColumns());
       }
     });
   }
@@ -410,7 +415,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
   public onStoreFilterClicked(): void {
     const dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
-      data: this.table.oTableStorage.getStoredFilters().map(filter => filter.name),
+      data: this.table.state.storedFilters.map(filter => filter.name),
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
       minWidth: '30vw',
@@ -420,14 +425,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.table.oTableStorage.storeFilter(dialogRef.componentInstance.getFilterAttributes());
+        this.table.storeFilterInState(dialogRef.componentInstance.getFilterAttributes());
       }
     });
   }
 
   public onLoadFilterClicked(): void {
     const dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
-      data: this.table.oTableStorage.getStoredFilters(),
+      data: this.table.state.storedFilters,
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
       minWidth: '30vw',
@@ -435,16 +440,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
 
-    dialogRef.componentInstance.onDelete.subscribe(filterName => this.table.oTableStorage.deleteStoredFilter(filterName));
+    dialogRef.componentInstance.onDelete.subscribe(filterName => this.table.state.deleteStoredFilter(filterName));
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const selectedFilterName: string = dialogRef.componentInstance.getSelectedFilterName();
         if (selectedFilterName) {
-          const storedFilter = this.table.oTableStorage.getStoredFilterConf(selectedFilterName);
-          if (storedFilter) {
-            this.table.setFiltersConfiguration(storedFilter);
-            this.table.reloadPaginatedDataFromStart(false);
-          }
+          this.table.state.applyFilter(selectedFilterName);
+          this.table.setFiltersConfiguration();
+          this.table.reloadPaginatedDataFromStart(false);
         }
       }
     });
@@ -467,34 +470,34 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
-    const self = this;
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const configurationData = dialogRef.componentInstance.getConfigurationAttributes();
         const tableProperties = dialogRef.componentInstance.getSelectedTableProperties();
-        self.table.oTableStorage.storeConfiguration(configurationData, tableProperties);
+        this.table.componentStateService.storeConfiguration(configurationData, tableProperties);
       }
     });
   }
 
   public onApplyConfigurationClicked(): void {
     const dialogRef = this.dialog.open(OTableApplyConfigurationDialogComponent, {
-      data: this.table.oTableStorage.getStoredConfigurations(),
+      data: this.table.state.storedConfigurations,
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
       minWidth: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
-    const self = this;
-    dialogRef.componentInstance.onDelete.subscribe(configurationName => this.table.oTableStorage.deleteStoredConfiguration(configurationName));
+    dialogRef.componentInstance.onDelete.subscribe(configurationName => this.table.state.deleteStoredConfiguration(configurationName));
     dialogRef.afterClosed().subscribe(result => {
       if (result && dialogRef.componentInstance.isDefaultConfigurationSelected()) {
-        self.table.applyDefaultConfiguration();
+        this.table.state.reset(this.table.pageable);
+        this.table.applyDefaultConfiguration();
       } else if (result) {
         const selectedConfigurationName: string = dialogRef.componentInstance.getSelectedConfigurationName();
         if (selectedConfigurationName) {
-          self.table.applyConfiguration(selectedConfigurationName);
+          this.table.state.applyConfiguration(selectedConfigurationName);
+          this.table.applyConfiguration(selectedConfigurationName);
         }
       }
     });

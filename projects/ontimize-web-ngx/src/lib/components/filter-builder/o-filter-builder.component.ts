@@ -3,10 +3,10 @@ import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { OFormComponent } from '../../components/form/o-form.component';
-import { OServiceComponent } from '../../components/o-service-component.class';
 import { InputConverter } from '../../decorators/input-converter';
 import { IFilterBuilderCmpTarget } from '../../interfaces/filter-builder-component-target.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
+import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
 import { Codes } from '../../util/codes';
@@ -53,7 +53,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   public onClear: EventEmitter<any> = new EventEmitter<any>();
 
   public filters: string;
-  public targetCmp: OServiceComponent;
+  public targetCmp: IServiceDataComponent;
   public expressionBuilder: (values: Array<{ attr, value }>) => Expression;
   @InputConverter()
   public queryOnChange: boolean = false;
@@ -160,7 +160,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
    * Returns the filter builder target component.
    * @returns the target component.
    */
-  getTargetComponent(): OServiceComponent {
+  getTargetComponent(): IServiceDataComponent {
     return this.targetCmp;
   }
 

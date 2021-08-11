@@ -7,6 +7,17 @@ $sidenav-diff: -191px;
 $header-height: 48px;
 $transition-duration: 500ms;
 
+@mixin sideNaveSubLevels() {
+  $sublevels: 5;
+  @for $sublevel from 1 through $sublevels {
+    .o-app-sidenav-menu-group-level-#{$sublevel} {
+      .o-app-sidenav-menugroup-items-container a {
+        padding-left: $sidenav-spacing-unit *2 + ($sidenav-spacing-unit * $sublevel);
+      }
+    }
+  }
+}
+
 .o-app-sidenav {
   &.header-layout {
     .o-app-sidenav-container {
@@ -65,36 +76,30 @@ $transition-duration: 500ms;
       overflow: auto;
       height: 100%;
 
-      // h3 {
-      //   border: none;
-      //   line-height: $sidenav-spacing-unit * 3;
-      //   text-transform: capitalize;
-      //   margin: 0;
-      //   padding-left: ($sidenav-spacing-unit * 2);
-      // }
-
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      li {
-        margin: 0;
-        padding: 0;
-
-        > a {
-          //   // box-sizing: border-box;
-          //display: block;
-          //   // // font-size: 12px;
-          //   // font-weight: 400;
-          //   // line-height: ($sidenav-spacing-unit * 6) - 1;
+      nav {
+        a {
+          box-sizing: border-box;
+          display: block;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: ($sidenav-spacing-unit * 6) - 1;
           text-decoration: none;
           //   // // transition: all .3s;
           padding: 0 ($sidenav-spacing-unit * 3);
           //   // position: relative;
           //   // border-radius: 0;
 
+        }
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          margin: 0;
+          padding: 0;
         }
       }
 
@@ -205,7 +210,6 @@ $transition-duration: 500ms;
         }
 
         .o-app-sidenav-menugroup {
-          padding: 0 ($sidenav-spacing-unit * 3);
           transition: padding $transition-duration 0s;
 
           .o-app-sidenav-menugroup-arrow {
@@ -218,14 +222,9 @@ $transition-duration: 500ms;
             .o-app-sidenav-menugroup-arrow {
               transform: rotate(90deg);
             }
-
-            + .o-app-sidenav-menugroup-items-container {
-              ul li > a {
-                padding-left: ($sidenav-spacing-unit * 4);
-              }
-            }
           }
         }
+        @include sideNaveSubLevels();
 
         .o-app-sidenav-menugroup,
         .o-app-sidenav-menuitem {
@@ -247,4 +246,5 @@ $transition-duration: 500ms;
       }
     }
   }
+
 }

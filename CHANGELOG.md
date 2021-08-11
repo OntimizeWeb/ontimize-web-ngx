@@ -1,4 +1,90 @@
-## 8.3.0
+## 8.5.0
+### Features
+* **o-form-layout-tabgroup-options**: new `max-tabs` input ([9d78d40](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d78d40)) Closes [#694](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/694) 
+* **OFormServiceComponent** (**o-combo**, **o-list-picker**, **o-radio**) ([e92a78e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e92a78e5)) Closes [#706](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/706)
+  * Showing a context menu with the reload data option
+  * New `refresh` method
+* **o-table** ([2f5b2bb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f5b2bb9)) Closes [#620](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/620) 
+  * Showing all the available values after the first configuration of a column filter
+  * **OColumnValueFilter**: adding `availableValues` to stored filter properties
+* **o-app-layout-sidenav**: implementing multilevel navigation but only construction up to the 3rd level is recommended ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
+
+### BREAKING CHANGES
+* **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
+  * removing h3 tag in o-app-sidenav-menu-group component
+  * adding the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
+
+
+## 8.4.1 (2021-08-03)
+### Features
+* **o-form**: new attribute `ignore-on-exit`, ignores form fields changes when closing a form. ([695](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/695)) Closes [#663](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/663)
+* **o-time-input**: new `value-type` and `value-format` inputs ([b7b4d24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b7b4d24)) Closes [#693](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/693)
+
+### Bug fixes
+* **o-table-quickfilter**: fixing ExpressionChangedAfterItHasBeenCheckedError errors ([bc78f3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bc78f3a)) Closes [#670](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/670)
+* **o-form-service-component.class**, **o-combo**, **o-listpicker**: fixing setFieldValues method error ([3e9fe3b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3e9fe3b)) Closes [#675](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/675)
+
+
+## 8.4.0 (2021-07-23)
+### Features
+* **AbstractOServiceBaseComponent**: component now looks for parent keys values in route params if form is not present ([658](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/658)) Closes [#634](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/634)
+* **o-table**:
+  * Adding new warn message when user wants to hide a column with an active filter or sorting. ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
+  * Adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method. ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
+  * Adding new optional parameter (indicating the new sort columns) to the `reinitializeSortColumns` method and changing its access level to public.([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece))
+  * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
+  * Adding virtual scroll ([#598](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/598)) ([e14c424](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e14c424) ([238da22](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238da22)) ([b5668c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5668c3)) ([4cabf1a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cabf1a)) ([59e7684](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59e7684))
+
+    *NOTE*
+      * The virtual scrolling and the table tooltip are incompatible due to a recognized bug in Angular library ([#686](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/686)), if you want the tooltip functionality on the table, you must deactivate virtual scrolling as follows `virtual-scroll = no` because it is actived by default
+      * It has been set min-height='400px' in o-table by default, you can modify the height table in .o-table class
+
+  * Added validators functionality to cell editors and insertable row ([4d66853](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d66853)) Closes [#517](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/517)
+  * Row grouping new features [#597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/597):
+    * **o-table-columns-grouping**: new `o-table` inner component used to configure the row grouping columns
+    * **o-table-columns-grouping-column**: new `o-table-columns-grouping` inner comopnent used to configure the grouping features of a specific column
+
+* **OTableDataSource**: adding new optional parameter (indicating the columns attr to clean filters) to the `clearColumnFilters` method ([#628](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/628)) ([c413ece](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c413ece)).
+
+
+
+### Bugfix
+* **o-table**:
+  * Cannot read property 'onChange' of undefined in oTableExpandedFooter directive ([9b853f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9b853f8)) Closes [#668](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/668)
+
+### BREAKING CHANGES
+* **o-table**: `fixed-header` value `no` has been replaced by `yes` ([aa53bd8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa53bd8))
+
+## 8.3.1 (2021-06-24)
+### Features
+* **o-search-input**: new `options` optional argument in `setValue` method ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba)
+* **o-grid**: new `pageSizeChanged` and `sortColumnChanged` methods ([#643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/643)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **AbstractOServiceComponent**: ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+  * New `filterData` and `setData` common methods defintions (used in `o-list` and `o-grid`, overrided in `o-table`)
+  * New `getQuickFilterDataFromArray`, `getSortedDataFromArray`, `getPaginationDataFromArray` and `parseResponseArray` methods
+  * `onDataLoaded` and `onPaginatedDataLoaded` common outputs variables definition (removed from `o-list`, `o-grid` and `o-table`)
+* **o-table**: New attribute for o-table default-visible-columns to set the initial visible columns ([9891e29](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9891e29)) Closes [#647](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/647)
+
+### Bug Fixes
+* **o-grid**: adding `registerQuickFilter` method extension ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([17a3263](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/17a3263))
+* **o-list**: fixing `sort-columns` initialization error ([#639](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/639)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **OGridComponentStateService, OListComponentStateService**: storing missing properties ([#640](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/640)) ([01a12ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01a12ba))
+* **o-table**:
+  * Quickfilter glass icon position and placeholder color ([f5245fd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5245fd)) Closes [#641](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/641)
+  * Update *No results* message with quick filter value ([c3bb839](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c3bb839)) Closes [#638](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/638)
+
+## 8.3.0 (2021-06-16)
+### Features
+* **o-form-layout-manager**: new `split-pane` mode.
+* **OFormLayoutManagerMode**: new interface that every new `o-form-layout-manager` mode must implement.
+* **OFormLayoutSplitPaneOptionsDirective**: new directive for using the `split-pane` mode inputs.
+* **OBaseTableCellRenderer**:
+ * new `getFilterExpression` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
+* **o-table-cell-renderer-service**:
+ * adding `value-column-type` attribute and `queryAllData` method ([#630](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/630)) ([0866de1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0866de1))
+* **o-table-quickfilter**: new `placeholder` input ([#635](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/635)) ([f79fab4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f79fab4))
+* **OServiceComponent**: new `quick-filter-placeholder` input ([#635](https://github.com/OntimizeWeb/ontimize-web-ng2/issues/635)) ([f79fab4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f79fab4))
+
 ### BREAKING CHANGES
 * The authentication has been refactored:
   * Service `LoginService` has been removed and replaced by `AuthService`. This is an abstract service that provides basic functionality regarding authentication. Its default implementation is `OntimizeAuthService` class that performs authentication with Ontimize based backends. Developers can provide their own implementation using the Injection Token `O_AUTH_SERVICE` and the class of their service that extends `AuthService` class.
@@ -6,14 +92,85 @@
   * Method `sessionExpired` from old `LoginService` has been renamed to `clearSessionData` in `AuthService`.
   * Method `redirectLogin` has been removed in class `OntimizeBaseService` and all its subclasses (`OntimizeService`, `OntimizeEEService`, `OntimizeExportService` and `OntimizeFileService`), use method `logout` from `AuthService` instead.
   * Method `redirectLogin` has been removed in class `ServiceUtils`, now it is a method of Ontimize authentication implementation in `OntimizeAuthService`.
+* **o-service-component.class**:
+  * Method `initializeState` no longer exists. This change will only affect to extended components which have overrided or extended this method.
+* **o-form-layout-manager**:
+  * Methods `getFormCacheData`, `setModifiedState` and `closeDetail` no longer has the `id` argument.
+  * Method `updateNavigation` changed the `id` argument for the `keyValues` (object that contains the form keys values) argument.
+  * This changes will only affect to applications which have extended the `OFormLayoutManagerComponent` and have overrided or extended the affected methods.
+  * The following inputs have been deprecated: `title`, `title-data-origin`, `label-columns`, `separator`, `dialog-width`, `dialog-min-width`, `dialog-max-width`, `dialog-height`, `dialog-min-height`, `dialog-max-height` and `dialog-class`. User should use the option inputs.
+* **OFormLayoutDialogOptionsComponent, OFormLayoutTabGroupOptionsComponent**:
+  * This components no longer exists. Both components have been refactored into two directives: `OFormLayoutDialogOptionsDirective` and `OFormLayoutTabGroupOptionsDirective`.
+  * This change is transparent to the user, now the `o-form-layout-manager` mode inputs can be setted in two ways: using the mode option tag (the same way `o-form-layout-dialog-options` or `o-form-layout-tabgroup-options` were used before) or including the mode inputs in the `o-form-layout-manager` tag.
+
+  ```javascript
+  <o-form-layout-manager mode="tab" attr="o-form-layout-customer-home"
+   title="CUSTOMERS" label-columns="SURNAME;NAME" separator="," icon="info" color="warn">
+
+  ...
+
+  </o-form-layout-manager>
+  ```
+
+  Is equivalent to:
+
+   ```javascript
+  <o-form-layout-manager mode="tab" attr="o-form-layout-customer-home">
+
+    <o-form-layout-tabgroup-options color="accent" title="CUSTOMERS"
+      label-columns="SURNAME;NAME" separator="," icon="info" color="warn">
+    </o-form-layout-tabgroup-options>
+
+    ...
+
+  </o-form-layout-manager>
+  ```
+* The service components hierarchy has been changed, now using abstract classes.
+  * New `OServiceBaseComponent` hierarchy:
+    * New `AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>`.
+    * New `DefaultOServiceBaseComponent` default implementation of `AbstractOServiceBaseComponent` using the `DefaultComponentStateService`.
+    * `OServiceBaseComponent` keeps existing to have backwards compatibility, its equals to the `DefaultOServiceBaseComponent`.
+  * New `OServiceComponent` hierarchy:
+    * New `AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>` extending `AbstractOServiceBaseComponent<T>`.
+    * `OServiceComponent` keeps existing to have backwards compatibility, its a default implementation of `AbstractOServiceComponent` using the `DefaultComponentStateService`.
+  * If you have a component extending `OServiceBaseComponent` or `OServiceComponent` it should keep working as usual.
+  * If you have a component extending a `o-table`, `o-list` or `o-grid` you have to add its own component state service to the providers array:
+    * `o-table`:
+      ```javascript
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```
+    * `o-list`:
+      ```javascript
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OListComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```
+    * `o-grid`:
+      ```javascript
+        providers: [
+          ...
+          { provide: AbstractComponentStateService, useClass: OGridComponentStateService, deps: [Injector] }
+          ...
+        ]
+      ```
+
+### Bug Fixes
+* **o-table**: fixing header sort bug ([794210d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794210d)) Closes [#629](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/629)
+
 ## 8.2.5 (2021-05-26)
 ### Features
 * **o-image**: New attribute `max-file-size`. ([d8a84c0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d8a84c0)) Closes [#589](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/589)
 * **o-table**: adding new optional `clearSelectedItems` (defaults to true) argument to `reloadPaginatedDataFromStart` and `reloadData` methods ([1aa26ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa26ec))
- 
+
 ### Bug Fixes
 * **o-list-picker, OFormDataComponent**: checking if the component has the appropriate permissions to execute the `setEnabled` method ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da)) Closes [#607](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/607)
-* **o-list-picker**: 
+* **o-list-picker**:
   * fixing initialization errors ([954b8b2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/954b8b2)) Closes [#615](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/615)
   * fixing renderers errors ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11)) Closes [#616](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/616)
 * **o-combo**: fixing renderers errors ([9d4b5de](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d4b5de)) Closes [#612](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/612)
@@ -21,10 +178,10 @@
 
 ### BREAKING CHANGES
 * **oLocker**: Default `oLockerMode` is set to 'load' ([40089da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40089da))
-* **o-list-picker**: 
-  * `getListPickerValue` method now receives the entire record object ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11)) 
+* **o-list-picker**:
+  * `getListPickerValue` method now receives the entire record object ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11))
   * `getRenderedValue` method no longer exists (this shouldn't affect the user) ([dba5a11](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dba5a11))
-* **o-table**: 
+* **o-table**:
   * The following changes should not affect the user unless it was specifically using the following properties ([1aa26ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1aa26ec))
   * `showFilterByColumnIcon` and `originalFilterColumnActiveByDefault` properties no longer exists.
   * new `isColumnFiltersActive` property.

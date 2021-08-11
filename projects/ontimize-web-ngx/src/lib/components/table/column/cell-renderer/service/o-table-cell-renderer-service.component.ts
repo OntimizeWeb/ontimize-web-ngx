@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Injector, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
@@ -22,14 +22,16 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'columns',
   'translate',
   'valueColumn: value-column',
+  'valueColumnType: value-column-type',
   'parentKeys: parent-keys',
   'queryMethod: query-method',
   'serviceType : service-type',
   'translateArgsFn: translate-params'
 ];
+
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'onDataLoaded'
-]
+];
 
 @Component({
   selector: 'o-table-cell-renderer-service',
@@ -59,6 +61,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected columns: string;
   protected translate: boolean = false;
   protected valueColumn: string;
+  public valueColumnType: string = Codes.TYPE_INT;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
@@ -69,14 +72,13 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected colArray: string[] = [];
   protected dataService: any;
   protected _pKeysEquiv = {};
-  protected querySubscription: Subscription;
   protected dialogService: DialogService;
 
   public translateArgsFn: (rowData: any) => any[];
   protected componentPipe: OTranslatePipe;
   protected pipeArguments: ITranslatePipeArgument = {};
 
-  protected editorSuscription: Subscription;
+  protected subscritpions: Subscription = new Subscription();
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -100,20 +102,20 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   public ngAfterViewInit(): void {
     const oCol: OColumn = this.table.getOColumn(this.column);
     if (Util.isDefined(oCol.editor)) {
-      this.editorSuscription = oCol.editor.onPostUpdateRecord.subscribe((data: any) => {
+      this.subscritpions.add(oCol.editor.onPostUpdateRecord.subscribe((data: any) => {
         this.queryData(data[this.tableColumn.attr], data);
-      });
+      }));
     }
   }
 
   public ngOnDestroy(): void {
-    if (this.editorSuscription) {
-      this.editorSuscription.unsubscribe();
+    if (this.subscritpions) {
+      this.subscritpions.unsubscribe();
     }
   }
 
   public getDescriptionValue(cellvalue: any, rowValue: any): string {
-    if (cellvalue !== undefined && this.cellValues.indexOf(cellvalue) === -1) {
+    if (Util.isDefined(cellvalue) && this.cellValues.indexOf(cellvalue) === -1) {
       this.queryData(cellvalue, rowValue);
       this.cellValues.push(cellvalue);
     }
@@ -121,7 +123,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   public queryData(cellvalue, parentItem?: any): void {
-    const self = this;
     if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
       console.warn('Service not properly configured! aborting query');
       return;
@@ -135,11 +136,11 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } else {
       filter[this.column] = cellvalue;
     }
-    this.querySubscription = this.dataService[this.queryMethod](filter, this.colArray, this.entity)
+    this.dataService[this.queryMethod](filter, this.colArray, this.entity)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
-          self.responseMap[cellvalue] = resp.data[0][self.valueColumn];
-          self.onDataLoaded.emit(self.responseMap[cellvalue]);
+          this.responseMap[cellvalue] = resp.data[0][this.valueColumn];
+          this.onDataLoaded.emit(this.responseMap[cellvalue]);
         }
       }, err => {
         console.error(err);
@@ -177,8 +178,9 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   public getFilterExpression(quickFilter: string): Expression {
     const oCol: OColumn = this.table.getOColumn(this.column);
     let result: Expression;
-    const cacheValue = Object.keys(this.responseMap).find(key => Util.normalizeString(this.responseMap[key]).indexOf(Util.normalizeString(quickFilter)) !== -1);
+    let cacheValue = Object.keys(this.responseMap).find(key => Util.normalizeString(this.responseMap[key]).indexOf(Util.normalizeString(quickFilter)) !== -1);
     if (cacheValue) {
+      cacheValue = this.parseByValueColumnType(cacheValue);
       result = FilterExpressionUtils.buildExpressionEquals(this.column, SQLTypes.parseUsingSQLType(cacheValue, SQLTypes.getSQLTypeKey(oCol.sqlType)));
     }
     return result;
@@ -195,5 +197,43 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } else {
       return cellvalue;
     }
+  }
+
+  protected parseByValueColumnType(val: any) {
+    let value = val;
+
+    if (this.valueColumnType === Codes.TYPE_INT) {
+      const parsed = parseInt(value, 10);
+      if (!isNaN(parsed)) {
+        value = parsed;
+      }
+    }
+    return value;
+  }
+
+  /** Querying all entity records to have the responseMap fully filled */
+  queryAllData(): Observable<any> {
+    return new Observable(observer => {
+      if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
+        console.warn('Service not properly configured! aborting query');
+        observer.next();
+      }
+      this.dataService[this.queryMethod]({}, this.colArray, this.entity)
+        .subscribe((resp: ServiceResponse) => {
+          if (resp.isSuccessful()) {
+            (resp.data || []).forEach(item => {
+              if (Util.isDefined(item[this.column])) {
+                this.cellValues.push(item[this.column]);
+                this.responseMap[item[this.column]] = item[this.valueColumn];
+              }
+            });
+            this.onDataLoaded.emit(this.responseMap);
+          }
+          observer.next();
+        }, err => {
+          console.error(err);
+          observer.next();
+        });
+    });
   }
 }

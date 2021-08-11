@@ -1,4 +1,4 @@
-import { AggregateFunction } from './aggregate-function.type';
+import { AggregateFunction } from '../aggregate-function.type';
 
 export type OColumnAggregate = {
   title?: string;

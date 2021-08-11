@@ -3,9 +3,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { OTableColumnCalculated } from '../../../interfaces/o-table-column-calculated.interface';
 import { OTableColumn } from '../../../interfaces/o-table-column.interface';
 import { Expression } from '../../../types/expression.type';
-import { OColumnAggregate } from '../../../types/o-column-aggregate.type';
-import { OColumnTooltip } from '../../../types/o-column-tooltip.type';
 import { OperatorFunction } from '../../../types/operation-function.type';
+import { OColumnAggregate } from '../../../types/table/o-column-aggregate.type';
+import { OColumnTooltip } from '../../../types/table/o-column-tooltip.type';
 import { Codes, Util } from '../../../util';
 import { OBaseTableCellRenderer } from './cell-renderer/o-base-table-cell-renderer.class';
 

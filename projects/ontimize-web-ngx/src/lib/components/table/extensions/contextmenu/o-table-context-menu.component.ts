@@ -3,11 +3,12 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
-import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/o-column-value-filter.type';
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
 import { OColumn } from '../../column/o-column.class';
 import { OTableComponent } from '../../o-table.component';
+import { OTableGroupedRow } from '../row/o-table-row-group.class';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -43,6 +44,9 @@ export class OTableContextMenuComponent implements AfterViewInit {
   public isEnabledUnGroupByColumn: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public isEnabledUnGroupAllColumn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  public isDataCell: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  public isTableGroupedRow: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  public isGroupableCell: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
   set showInsert(value: boolean) {
     if (typeof value !== 'boolean') {
@@ -147,7 +151,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   @ViewChild('defaultContextMenu', { static: false })
   protected defaultContextMenu: OContextMenuComponent;
-  protected row: any;
+  protected _row: any;
   protected column: OColumn;
   protected translateService: OTranslateService;
   protected contextMenuSubscription: Subscription = new Subscription();
@@ -241,7 +245,8 @@ export class OTableContextMenuComponent implements AfterViewInit {
     const columValueFilter: OColumnValueFilter = {
       attr: this.column.attr,
       operator: ColumnValueFilterOperator.IN,
-      values: [this.row[this.column.attr]]
+      values: [this.row[this.column.attr]],
+      availableValues: undefined
     };
     this.table.filterByColumn(columValueFilter);
   }
@@ -271,6 +276,34 @@ export class OTableContextMenuComponent implements AfterViewInit {
     return (this.column && this.column.attr) ? this.translateService.get('TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.attr) : '';
   }
 
+  get row(): any {
+    return this._row;
+  }
+
+  set row(value: any) {
+    this._row = value.rowValue;
+    const isTableGroupedRow = this._row instanceof OTableGroupedRow;
+    let columnName = value.cellName;
+    if (isTableGroupedRow) {
+      columnName = columnName.substring('groupHeader-'.length);
+    }
+    this.column = this.table.getOColumn(columnName);
+    this.isDataCell.next(!isTableGroupedRow);
+    this.isTableGroupedRow.next(isTableGroupedRow);
+    this.isGroupableCell.next(isTableGroupedRow && (this._row as OTableGroupedRow).hasColumnData(this.column.attr));
+  }
+
+  get availableColumnAggregates(): string[] {
+    let result = Util.columnAggregates;
+    if (this.row instanceof OTableGroupedRow)  {
+      const customAggregationName = this.row.getColumnCustomAggregateName(this.column.attr);
+      if (Util.isDefined(customAggregationName)){
+        result = result.concat(customAggregationName);
+      }
+    }
+    return result;
+  }
+
   public filterByColumn(event): void {
     if (this.table.oTableMenu) {
       this.table.isColumnFiltersActive = true;
@@ -293,7 +326,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
     this.isEnabledUnGroupByColumn.next(false);
     this.isEnabledUnGroupAllColumn.next(false);
     let grouped = false;
-    if (this.column.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && this.table.groupedColumnsArray.indexOf(this.column.attr) > -1) {
+    if (this.column.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && this.table.groupedColumnsArray.includes(this.column.attr)) {
       this.isEnabledUnGroupByColumn.next(true);
       grouped = true;
     }
@@ -304,15 +337,28 @@ export class OTableContextMenuComponent implements AfterViewInit {
     }
   }
 
-  protected initProperties(param: any): void {
-    const data = param.data;
-    if (data) {
-      const columnName = data.cellName;
-      this.column = this.table.getOColumn(columnName);
-      this.row = data.rowValue;
-      this.checkVisibleFilter();
-      this.checkGroupByRowOptions();
+  public changeAggregateFunction(arg: any, aggregateFnName: string): void {
+    if (arg.data.rowValue instanceof OTableGroupedRow) {
+      (arg.data.rowValue as OTableGroupedRow).setColumnActiveAggregateFunction(this.column.attr, aggregateFnName);
     }
   }
 
+  protected initProperties(param: any): void {
+    const data = param.data;
+    if (!Util.isDefined(data)) {
+      return;
+    }
+    this.row = { rowValue: data.rowValue, cellName: data.cellName };
+    this.checkVisibleFilter();
+    this.checkGroupByRowOptions();
+  }
+
+  expandRowGroupsSameLevel() {
+    this.table.dataSource.setRowGroupLevelExpansion(this._row, true);
+  } 
+
+  collapseRowGroupsSameLevel() {
+    this.table.dataSource.setRowGroupLevelExpansion(this._row, false);
+
+  }
 }

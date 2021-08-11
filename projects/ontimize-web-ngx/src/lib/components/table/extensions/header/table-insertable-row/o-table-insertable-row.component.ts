@@ -6,7 +6,7 @@ import {
   forwardRef,
   Inject,
   Injector,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 
@@ -151,6 +151,11 @@ export class OTableInsertableRowComponent implements OnInit {
 
   resolveValidators(column: OColumn): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
+    if(column.definition && column.definition.angularValidatorsFn) {
+      column.definition.angularValidatorsFn.forEach((fn: ValidatorFn) => {
+        validators.push(fn);
+      });
+    }
     if (this.isColumnRequired(column)) {
       validators.push(Validators.required);
     }

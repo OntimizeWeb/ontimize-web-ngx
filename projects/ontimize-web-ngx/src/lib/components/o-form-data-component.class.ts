@@ -10,7 +10,7 @@ import {
   OnInit,
   QueryList,
   SimpleChange,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
@@ -32,8 +32,8 @@ import { Codes } from '../util/codes';
 import { PermissionsUtils } from '../util/permissions';
 import { SQLTypes } from '../util/sqltypes';
 import { Util } from '../util/util';
+import { OFormValue } from './form/o-form-value';
 import { OFormComponent } from './form/o-form.component';
-import { OFormValue } from './form/OFormValue';
 import { OFormControl } from './input/o-form-control.class';
 import { OBaseComponent } from './o-component.class';
 import { OValueChangeEvent } from './o-value-change-event.class';

@@ -1,24 +1,30 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ElementRef, forwardRef, Injector, ViewChild } from '@angular/core';
+import { ElementRef, EventEmitter, forwardRef, Injector, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
 import { BooleanConverter, InputConverter } from '../decorators/input-converter';
+import { IServiceDataComponent } from '../interfaces/service-data-component.interface';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutTabGroupComponent } from '../layouts/form-layout/tabgroup/o-form-layout-tabgroup.component';
 import { NavigationService } from '../services/navigation.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
+import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
+import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Expression } from '../types/expression.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
-import { OTableInitializationOptions } from '../types/o-table-initialization-options.type';
+import { OQueryDataArgs } from '../types/query-data-args.type';
+import { OTableInitializationOptions } from '../types/table/o-table-initialization-options.type';
+import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
-import { DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT, OServiceBaseComponent } from './o-service-base-component.class';
+import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
 
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
@@ -78,9 +84,14 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // quick-filter [no|yes]: show quick filter. Default: yes.
   'quickFilter: quick-filter',
+
+  // quick-filter-placeholder: quick filter placeholder
+  'quickFilterPlaceholder: quick-filter-placeholder',
 ];
 
-export class OServiceComponent extends OServiceBaseComponent {
+export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
+  extends AbstractOServiceBaseComponent<T>
+  implements IServiceDataComponent {
 
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
@@ -155,7 +166,14 @@ export class OServiceComponent extends OServiceBaseComponent {
       setTimeout(() => this.registerQuickFilter(this.searchInputComponent), 0);
     }
   }
+
+  public quickFilterPlaceholder: string;
   /* end of inputs variables */
+
+  /* outputs variables */
+  public onDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
+  /* end of outputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
   public selection = new SelectionModel<Element>(true, []);
@@ -166,10 +184,13 @@ export class OServiceComponent extends OServiceBaseComponent {
   public oFormLayoutDialog: OFormLayoutDialogComponent;
 
   protected tabsSubscriptions: any;
+
   public quickFilterComponent: OSearchInputComponent;
   @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
   public searchInputComponent: OSearchInputComponent;
   protected quickFilterColArray: string[];
+
+  protected dataResponseArray: any[] = [];
 
   constructor(
     injector: Injector,
@@ -194,33 +215,14 @@ export class OServiceComponent extends OServiceBaseComponent {
   }
 
   public initialize(): void {
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
-
-      this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
-
-      this.tabsSubscriptions = this.formLayoutManager.oTabGroup.onSelectedTabChange.subscribe(() => {
-        if (this.formLayoutManagerTabIndex !== this.formLayoutManager.oTabGroup.selectedTabIndex) {
-          this.updateStateStorage();
-          // when the storage is updated because a form layout manager tab change
-          // the alreadyStored control variable is changed to its initial value
-          this.alreadyStored = false;
-        }
-      });
-
-      this.tabsSubscriptions.add(this.formLayoutManager.oTabGroup.onCloseTab.subscribe(() => {
-        if (this.formLayoutManagerTabIndex === this.formLayoutManager.oTabGroup.selectedTabIndex) {
-          this.updateStateStorage();
-        }
-      }));
-    }
     super.initialize();
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
     }
-
   }
 
   public afterViewInit(): void {
+    this.registerFormLayoutManagerState();
     super.afterViewInit();
     if (this.elRef) {
       this.elRef.nativeElement.removeAttribute('title');
@@ -271,7 +273,7 @@ export class OServiceComponent extends OServiceBaseComponent {
       relativeTo: relativeTo
     };
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
-      qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
+      qParams[Codes.IGNORE_CAN_DEACTIVATE] = this.formLayoutManager.ignoreCanDeactivate;
       this.formLayoutManager.setAsActiveFormLayoutManager();
     }
     extras[Codes.QUERY_PARAMS] = qParams;
@@ -548,24 +550,6 @@ export class OServiceComponent extends OServiceBaseComponent {
     return this.elRef;
   }
 
-  initializeState() {
-    let routeKey = super.getRouteKey();
-    if (this.formLayoutManager && this.formLayoutManager.isTabMode() && !this.formLayoutManager.isMainComponent(this)) {
-      try {
-        const params = this.formLayoutManager.oTabGroup.state.tabsData[0].params;
-        if (params) {
-          routeKey = this.router.url;
-          routeKey += '/' + (Object.keys(params).join('/'));
-        }
-      } catch (e) {
-        //
-      }
-    }
-    // Get previous status
-    this.state = this.localStorageService.getComponentStorage(this, routeKey);
-
-  }
-
   public showCaseSensitiveCheckbox(): boolean {
     return !this.pageable;
   }
@@ -577,20 +561,14 @@ export class OServiceComponent extends OServiceBaseComponent {
       return;
     }
     this.quickFilterComponent = quickFilter;
-    if (Util.isDefined(this.quickFilterComponent)) {
-      if (this.state.hasOwnProperty('filterValue')) {
-        this.quickFilterComponent.setValue(this.state.filterValue);
-      }
-      if (this.state.hasOwnProperty('quickFilterActiveColumns')) {
-        const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
-        this.quickFilterComponent.setActiveColumns(parsedArr);
-      }
+    if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state)) {
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
+      if ((this.state.quickFilterValue || '').length > 0) {
+        this.quickFilterComponent.setValue(this.state.quickFilterValue, {
+          emitEvent: false
+        });
+      }
     }
-  }
-
-  public filterData(value?: string, loadMore?: boolean): void {
-    //
   }
 
   public isFilterCaseSensitive(): boolean {
@@ -629,4 +607,120 @@ export class OServiceComponent extends OServiceBaseComponent {
     }
     return result;
   }
+
+  /**
+   * Filters data locally
+   * @param value the filtering value
+   */
+  public filterData(value?: string, loadMore?: boolean): void {
+    value = Util.isDefined(value) ? value : Util.isDefined(this.quickFilterComponent) ? this.quickFilterComponent.getValue() : void 0;
+    if (Util.isDefined(this.state) && Util.isDefined(value)) {
+      this.state.quickFilterValue = value;
+    }
+    if (this.pageable) {
+      const queryArgs: OQueryDataArgs = {
+        offset: 0,
+        length: this.queryRows,
+        replace: true
+      };
+      this.queryData(void 0, queryArgs);
+      return;
+    }
+    if (this.dataResponseArray && this.dataResponseArray.length > 0) {
+      let filteredData = this.dataResponseArray.slice(0);
+      filteredData = this.getQuickFilterDataFromArray(value, filteredData);
+      filteredData = this.getSortedDataFromArray(filteredData);
+      filteredData = this.getPaginationDataFromArray(filteredData);
+      this.setDataArray(filteredData);
+    } else {
+      this.setDataArray(this.dataResponseArray);
+    }
+  }
+
+  protected getQuickFilterDataFromArray(quickfilter: string, dataArray: any[]): any[] {
+    let result = dataArray;
+    if (quickfilter && quickfilter.length > 0) {
+      const caseSensitive = this.isFilterCaseSensitive();
+      const quickFilterColumns = this.getQuickFilterColumns();
+      const regExpStr = new RegExp(Util.escapeSpecialCharacter(Util.normalizeString(quickfilter, !caseSensitive)));
+      result = dataArray.filter(item => {
+        return quickFilterColumns.some(col => regExpStr.test(Util.normalizeString(item[col] + '', !caseSensitive)));
+      });
+    }
+    return result;
+  }
+
+  protected getSortedDataFromArray(dataArray: any[]): any[] {
+    return dataArray;
+  }
+
+  protected getPaginationDataFromArray(dataArray: any[]): any[] {
+    return dataArray;
+  }
+
+  protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
+    if (!Util.isArray(data)) {
+      this.setDataArray([]);
+    } else {
+      this.dataResponseArray = this.parseResponseArray(data, replace);
+      if (this.pageable) {
+        this.setDataArray(this.dataResponseArray);
+      } else {
+        this.filterData();
+      }
+    }
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
+    if (this.pageable) {
+      ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
+    }
+    ObservableWrapper.callEmit(this.onDataLoaded, this.dataResponseArray);
+  }
+
+  protected parseResponseArray(data: any[], replace?: boolean) {
+    return data;
+  }
+
+  protected registerFormLayoutManagerState() {
+    if (this.storeState && this.formLayoutManager && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
+      if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
+        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+      }
+      const updateComponentStateSubject = (this.formLayoutManager.oTabGroup as OFormLayoutTabGroupComponent).updateTabComponentsState;
+
+      this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.previousIndex) {
+          this.updateStateStorage();
+          // setting alreadyStored to false to force triggering a new storage update after this
+          this.alreadyStored = false;
+          if (arg.index !== 0) {
+            updateComponentStateSubject.next(arg);
+          }
+        }
+      });
+
+      this.tabsSubscriptions.add(updateComponentStateSubject.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.index) {
+          this.componentStateService.initialize(this);
+          this.applyDefaultConfiguration();
+        }
+      }));
+
+      this.tabsSubscriptions.add(this.formLayoutManager.onCloseTab.subscribe((arg) => {
+        if (this.formLayoutManagerTabIndex === arg.index) {
+          this.updateStateStorage();
+        }
+      }));
+    }
+  }
+
+  applyDefaultConfiguration() {
+
+  }
+}
+
+/*This class is definied to mantain bacwards compatibility */
+export class OServiceComponent extends AbstractOServiceComponent<DefaultComponentStateService> {
+
 }

@@ -24,13 +24,12 @@ import { Expression } from '../../../../../types/expression.type';
 import { OInputsOptions } from '../../../../../types/o-inputs-options.type';
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
-import {
-  OTableCellRendererServiceComponent
-} from '../../../column/cell-renderer/service/o-table-cell-renderer-service.component';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 
-export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [];
+export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
+  'placeholder'
+];
 
 export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   'onChange'
@@ -49,6 +48,18 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
   }
 })
 export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, AfterViewInit, OnDestroy {
+
+  protected _placeholder: string = 'TABLE.FILTER';
+
+  get placeholder(): string {
+    return this._placeholder;
+  }
+
+  set placeholder(value: string) {
+    if (Util.isDefined(value)) {
+      this._placeholder = value;
+    }
+  }
 
   @ViewChild('filter', { static: false })
   public filter: ElementRef;
@@ -110,31 +121,22 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     let result: Expression = this.getUserFilter();
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       const expressions: Expression[] = [];
-      this.oTableOptions.columns
-        .filter((oCol: OColumn) => oCol.searching && oCol.visible && this.isFilterableColumn(oCol))
-        .forEach((oCol: OColumn) => {
-          // CHECK: Why columns with renderers are not filtered?
-          // if (!oCol.renderer) {
-          if (oCol.filterExpressionFunction) {
-            expressions.push(oCol.filterExpressionFunction(oCol.attr, this.value));
-          } else if (oCol.renderer instanceof OTableCellRendererServiceComponent) {
-            // Filter column with service renderer. Look for the value in the renderer cache
-            const expr = oCol.renderer.getFilterExpression(this.value);
-            if (expr) {
-              expressions.push(expr);
-            }
-            // }
-            //  else if (SQLTypes.isNumericSQLType(oCol.sqlType)) {
-            //   // Filter numeric column
-            //   const numValue: any = SQLTypes.parseUsingSQLType(this.value, SQLTypes.getSQLTypeKey(oCol.sqlType));
-            //   if (numValue) {
-            //     expressions.push(FilterExpressionUtils.buildExpressionEquals(oCol.attr, numValue));
-            //   }
-          } else {
-            // Default
-            expressions.push(FilterExpressionUtils.buildExpressionLike(oCol.attr, this.value));
-          }
-        });
+
+      const searchingCols = this.oTableOptions.columns.filter(oCol => oCol.searching && oCol.visible && this.isFilterableColumn(oCol));
+      expressions.push(...this.getColumnsWithoutRendererExpressions(searchingCols));
+
+      const renderersExpr = this.getColumnsRendererExpressions(searchingCols);
+
+      const notNullExpressions = renderersExpr.filter(expr => Util.isDefined(expr));
+      if (expressions.length === 0 && notNullExpressions.length === 0) {
+        // All filters in the renderer are empty and there are no other filters configured,
+        // so we already know that the table should not have any information but 
+        // it would make a query with empty filters and retrieve information not consistent with the configured quickfilter value,
+        // so we force to stop the query and set an empty array on the table
+        this.table.abortQuery.next(true);
+      }
+      expressions.push(...notNullExpressions);
+
       if (expressions.length > 0) {
         result = expressions.reduce((a, b) => FilterExpressionUtils.buildComplexExpression(a, b, FilterExpressionUtils.OP_OR));
       }
@@ -182,7 +184,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
   public setValue(value: any, trigger: boolean = true): void {
     this.value = value;
     this.formControl.setValue(this.value);
-    if (trigger && this.table && this.table.dataSource) {
+    if (trigger && this.table && !this.table.pageable && this.table.dataSource) {
       this.table.dataSource.quickFilter = this.value;
     }
   }
@@ -205,11 +207,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
   }
 
   public areAllColumnsChecked(): boolean {
-    let result: boolean = true;
-    this.quickFilterColumns.forEach((col: OColumn) => {
-      result = result && col.searching;
-    });
-    return result;
+    return this.quickFilterColumns.every((col: OColumn) => col.searching);
   }
 
   public getCountColumnsChecked(): number {
@@ -223,9 +221,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
   }
 
   public onSelectAllChange(event: MatCheckboxChange): void {
-    this.quickFilterColumns.forEach((col: OColumn) => {
-      col.searching = event.checked;
-    });
+    this.quickFilterColumns.forEach((col: OColumn) => col.searching = event.checked);
   }
 
   protected isFilterableColumn(column: OColumn): boolean {
@@ -238,6 +234,31 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
       column.type === 'currency' ||
       column.type === 'service'
     );
+  }
+
+  protected getColumnsWithoutRendererExpressions(columns: OColumn[]): Expression[] {
+    return columns
+      .filter(oCol => !Util.isDefined(oCol.renderer))
+      .map(oCol => {
+        if (Util.isDefined(oCol.filterExpressionFunction)) {
+          return oCol.filterExpressionFunction(oCol.attr, this.value);
+        } else {
+          // Default behaviour
+          return FilterExpressionUtils.buildExpressionLike(oCol.attr, this.value);
+        }
+      });
+  }
+
+  protected getColumnsRendererExpressions(columns: OColumn[]) {
+    return columns
+      .filter(oCol => Util.isDefined(oCol.renderer) && !Util.isDefined(oCol.filterExpressionFunction))
+      .map(oCol => {
+        if (Util.isDefined(oCol.renderer.getFilterExpression)) {
+          return oCol.renderer.getFilterExpression(this.value);
+        }
+        // Default behaviour
+        return FilterExpressionUtils.buildExpressionLike(oCol.attr, this.value);
+      });
   }
 
 }

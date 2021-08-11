@@ -1,6 +1,8 @@
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+
 import { OExpandableContainerComponent } from '../components/expandable-container/o-expandable-container.component';
+import { OFormValue } from '../components/form/o-form-value';
 import { OFormComponent } from '../components/form/o-form.component';
-import { OFormValue } from '../components/form/OFormValue';
 import { SQLOrder } from '../types/sql-order.type';
 import { Codes } from './codes';
 import { SQLTypes } from './sqltypes';
@@ -8,31 +10,37 @@ import { Util } from './util';
 
 export class ServiceUtils {
 
-  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent): {} {
+  static getParentKeysFromExpandableContainer(parentKeysObject: object, expandableContainer: OExpandableContainerComponent, route?: ActivatedRoute, checkRouteParamsRecursive: boolean = true): {} {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
+
     const dataComponent = expandableContainer ? expandableContainer.data : {};
     const existsData = Object.keys(dataComponent).length > 0;
 
+    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot, checkRouteParamsRecursive) : {};
+    const existsRouteParams = Object.keys(routeParams).length > 0;
 
-    if (existsData) {
+    if (existsData || existsRouteParams) {
       ownKeys.forEach(ownKey => {
         const keyValue = parentKeysObject[ownKey];
+        let value;
         if (dataComponent.hasOwnProperty(keyValue)) {
-          const value = dataComponent[keyValue];
-          if (Util.isDefined(value)) {
-            switch (typeof (value)) {
-              case 'string':
-                if (value.trim().length > 0) {
-                  result[ownKey] = value.trim();
-                }
-                break;
-              case 'number':
-                if (!isNaN(value)) {
-                  result[ownKey] = value;
-                }
-                break;
-            }
+          value = dataComponent[keyValue];
+        } else if (routeParams.hasOwnProperty(keyValue)) {
+          value = routeParams[keyValue];
+        }
+        if (Util.isDefined(value)) {
+          switch (typeof (value)) {
+            case 'string':
+              if (value.trim().length > 0) {
+                result[ownKey] = value.trim();
+              }
+              break;
+            case 'number':
+              if (!isNaN(value)) {
+                result[ownKey] = value;
+              }
+              break;
           }
         }
       });
@@ -40,7 +48,7 @@ export class ServiceUtils {
     return result;
   }
 
-  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent) {
+  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent, route?: ActivatedRoute, checkRouteParamsRecursive: boolean = true) {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
 
@@ -60,7 +68,10 @@ export class ServiceUtils {
       });
     }
 
-    if (existsComponents || existsProperties || existsUrlData) {
+    const routeParams = route ? ServiceUtils.getRouteParams(route.snapshot, checkRouteParamsRecursive) : {};
+    const existsRouteParams = Object.keys(routeParams).length > 0;
+
+    if (existsComponents || existsProperties || existsUrlData || existsRouteParams) {
       ownKeys.forEach(ownKey => {
         const keyValue = parentKeysObject[ownKey];
         // Parent key equivalence may be an object
@@ -80,6 +91,8 @@ export class ServiceUtils {
           currentData = formPropValue instanceof OFormValue ? formPropValue.value : formPropValue;
         } else if (urlData.hasOwnProperty(formFieldAttr)) {
           currentData = urlData[formFieldAttr];
+        } else if (routeParams.hasOwnProperty(formFieldAttr)) {
+          currentData = routeParams[formFieldAttr];
         }
         if (Util.isDefined(currentData)) {
           switch (typeof (currentData)) {
@@ -159,6 +172,21 @@ export class ServiceUtils {
       });
     }
     return sortColArray;
+  }
+
+  /**
+   * Return the params of the provided route.
+   * Params from parent routes are replaced by child route param values if repeated.
+   * @param route the route
+   * @param recursive indicates whether or not to return route params from route ancestors.
+   * @returns params containing all the route parameters
+   */
+  static getRouteParams(route: ActivatedRouteSnapshot, recursive: boolean): object {
+    let params = { ...route.params };
+    if (recursive && route.parent) {
+      params = { ...this.getRouteParams(route.parent, recursive), ...params };
+    }
+    return params;
   }
 
 }

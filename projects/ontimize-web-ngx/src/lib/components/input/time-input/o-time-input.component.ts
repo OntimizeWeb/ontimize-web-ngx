@@ -19,16 +19,23 @@ import { merge, Subscription } from 'rxjs';
 import { InputConverter } from '../../../decorators/input-converter';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
+import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
+import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  OFormDataComponent
+} from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { ODateInputComponent } from '../date-input/o-date-input.component';
 import { OHourInputComponent } from '../hour-input/o-hour-input.component';
 import { OFormControl } from '../o-form-control.class';
 
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
+  'valueType: value-type',
+  'oformat: value-format',
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'oDateFormat: date-format',
   'oDateLocale: date-locale',
@@ -82,6 +89,8 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   public oHourTextInputEnabled: boolean = true;
   public oHourPlaceholder = '';
   public oDatePlaceholder = '';
+  protected oformat: string = 'L';
+  protected _valueType: ODateValueType = 'timestamp';
 
   protected blockGroupValueChanges: boolean;
   protected formGroup: FormGroup = new FormGroup({});
@@ -112,14 +121,13 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     this.dateAttr += '_' + this.oattr;
     this.hourAttr += '_' + this.oattr;
 
-    const self = this;
     this.subscription.add(
       merge(this.dateInput.onValueChange, this.hourInput.onValueChange).subscribe((event: OValueChangeEvent) => {
         if (event.isUserChange()) {
-          self.updateComponentValue();
-          const newValue = self._fControl.value;
-          self.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, self.oldValue);
-          self.oldValue = newValue;
+          this.updateComponentValue();
+          const newValue = this._fControl.value;
+          this.emitOnValueChange(OValueChangeEvent.USER_CHANGE, newValue, this.oldValue);
+          this.oldValue = newValue;
         }
       })
     );
@@ -194,25 +202,19 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
       .set('hour', mHour.get('hour'))
       .set('minute', mHour.get('minutes'))
       .valueOf();
-    if (this._fControl) {
-      this._fControl.setValue(timeValue);
-      this._fControl.markAsDirty();
-    }
-    this.ensureOFormValue(timeValue);
+    this.setFormValue(timeValue);
   }
 
   protected modifyFormControls(): void {
     if (this.dateInput) {
-      const self = this;
       this.dateInput.getFormGroup = () => {
-        return self.formGroup;
+        return this.formGroup;
       };
     }
 
     if (this.hourInput) {
-      const self = this;
       this.hourInput.getFormGroup = () => {
-        return self.formGroup;
+        return this.formGroup;
       };
     }
 
@@ -233,4 +235,20 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
+  set valueType(val: any) {
+    this._valueType = Util.convertToODateValueType(val);
+  }
+
+  get valueType(): any {
+    return this._valueType;
+  }
+
+  public ensureOFormValue(arg: any): void {
+    let value = arg;
+    if (arg instanceof OFormValue) {
+      value = arg.value;
+    }
+    value = Util.parseByValueType(value, this.valueType, this.oformat);
+    super.ensureOFormValue(value);
+  }
 }

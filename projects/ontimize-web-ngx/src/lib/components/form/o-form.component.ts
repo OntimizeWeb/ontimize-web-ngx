@@ -39,7 +39,7 @@ import { OFormControl } from '../input/o-form-control.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
-import { OFormValue } from './OFormValue';
+import { OFormValue } from './o-form-value';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
 interface IFormDataComponentHash {
@@ -131,6 +131,9 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'confirmExit: confirm-exit',
 
+  // ignore-on-exit [string]: fields attr's that will be ignored when the form is closed, separated by ';'. Default: no value.
+  'ignoreOnExit: ignore-on-exit',
+
   // [function]: function to execute on query error. Default: no value.
   'queryFallbackFunction: query-fallback-function'
   // ,
@@ -218,6 +221,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @InputConverter()
   confirmExit: boolean = true;
+  set ignoreOnExit(val: string[]) {
+    if (typeof val === 'string') {
+      val = Util.parseArray(val, true);
+    }
+    this._ignoreOnExit = val;
+  }
+  get ignoreOnExit(): string[] {
+    return this._ignoreOnExit;
+  }
+  protected _ignoreOnExit: string[];
   public queryFallbackFunction: (error: any) => void;
   // public insertFallbackFunction: Function;
   // public updateFallbackFunction: Function;
@@ -529,6 +542,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    const readOnly = this.isInInitialMode() && !this.isEditableDetail();
+    const cancelledEdition = this.isInUpdateMode() && this._formToolbar && !this._formToolbar.editMode;
+    if (readOnly || cancelledEdition) {
+      return true;
+    }
+
     if (!this.confirmExit) {
       return true;
     }
@@ -538,7 +557,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   showConfirmDiscardChanges(): Promise<boolean> {
-    return this.formNavigation.showConfirmDiscardChanges();
+    return this.formNavigation.showConfirmDiscardChanges(this.ignoreOnExit);
   }
 
   executeToolbarAction(action: string, options?: any) {
@@ -568,14 +587,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   addDeactivateGuard() {
-    if (this.isInInitialMode() && !this.isEditableDetail()) {
-      return;
-    }
     if (!this.actRoute || !this.actRoute.routeConfig) {
       return;
     }
     this.deactivateGuard = this.injector.get(CanDeactivateFormGuard);
-    this.deactivateGuard.setForm(this);
+    this.deactivateGuard.addForm(this);
     const canDeactivateArray = (this.actRoute.routeConfig.canDeactivate || []);
     let previouslyAdded = false;
     for (let i = 0, len = canDeactivateArray.length; i < len; i++) {
@@ -595,7 +611,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (!this.deactivateGuard || !this.actRoute || !this.actRoute.routeConfig || !this.actRoute.routeConfig.canDeactivate) {
         return;
       }
-      this.deactivateGuard.setForm(undefined);
+      this.deactivateGuard.removeForm(this);
       for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
         if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
           this.actRoute.routeConfig.canDeactivate.splice(i, 1);
@@ -1391,8 +1407,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.editableDetail;
   }
 
-  isInitialStateChanged(): boolean {
-    return this.formCache.isInitialStateChanged();
+  isInitialStateChanged(ignoreAttrs: string[] = []): boolean {
+    return this.formCache.isInitialStateChanged(ignoreAttrs);
   }
 
   /**

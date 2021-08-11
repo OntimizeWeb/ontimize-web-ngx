@@ -1,7 +1,9 @@
-import { AfterViewInit, Directive, ElementRef, forwardRef, Inject, Injector, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Injector, Input, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { Util } from '../../../../../util';
 import { OTableComponent } from './../../../o-table.component';
 
 @Directive({
@@ -12,13 +14,23 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private spanMessageNotResults: any;
   private translateService: OTranslateService;
   private tableBody: any;
-  private tableHeader: any;
   private tdTableWithMessage: any;
-  private onContentChangeSubscription: Subscription;
-  private onVisibleColumnsChangeSubscription: Subscription;
+  private subscription = new Subscription();
+
+  @Input('oTableExpandedFooterColspan')
+  set colspan(value: number) {
+    this._colspan = value;
+    if (this.tdTableWithMessage) {
+      this.tdTableWithMessage.setAttribute('colspan', value);
+    }
+  }
+  get colspan(): number {
+    return this._colspan;
+  }
+  private _colspan: number;
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
+    public table: OTableComponent,
     public element: ElementRef,
     private renderer: Renderer2,
     protected injector: Injector
@@ -26,77 +38,70 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     this.translateService = this.injector.get(OTranslateService);
   }
 
-
   ngAfterViewInit() {
     if (this.element.nativeElement.childNodes[2]) {
       this.tableBody = this.element.nativeElement.childNodes[1];
-      this.tableHeader = this.element.nativeElement.childNodes[0];
     }
     this.registerContentChange();
-    this.registerVisibleColumnsChange();
   }
 
   registerContentChange() {
-    /** Create a tr with a td and inside put the message and add to tbody
-    * <tr><td><span> {message}</span><td><tr>
-    */
-    let tr = this.renderer.createElement('tr');
+    // Create a tr with a td and inside put the message and add to tbody
+    // <tr><td><span>{message}</span><td><tr>
+    const tr = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
     this.renderer.addClass(tr, 'o-table-no-results');
     tr.appendChild(this.tdTableWithMessage);
     this.renderer.appendChild(this.tableBody, tr);
 
-    const self = this;
-    this.onContentChangeSubscription = this.table.onContentChange.subscribe((data) => {
-      self.updateMessageNotResults(data);
-      self.table.cd.detectChanges();
-    });
+    this.subscription.add(this.table.onContentChange
+      .pipe(distinctUntilChanged((prev, curr) => prev.length === curr.length))
+      .subscribe((data: any[]) => this.showMessage(data)));
+    if (this.table.oTableQuickFilterComponent) {
+      this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessage()));
+    }
   }
 
-  registerVisibleColumnsChange() {
-    const self = this;
-    this.onVisibleColumnsChangeSubscription = this.table.onVisibleColumnsChange.subscribe(() => {
-      self.updateColspanTd();
-    });
-
-  }
-
-  updateMessageNotResults(data) {
+  public showMessage(tableData: any[]): void {
     // reset span message
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
-    //generate new message
-    if (data.length === 0) {
 
-      let result = '';
-      result = this.translateService.get('TABLE.EMPTY');
-      if (this.table.quickFilter && this.table.oTableQuickFilterComponent &&
-        this.table.oTableQuickFilterComponent.value && this.table.oTableQuickFilterComponent.value.length > 0) {
-        result += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
-      }
+    if (tableData.length === 0) {
+      // generate new message
+      const message = this.buildMessage();
+
       this.spanMessageNotResults = this.renderer.createElement('span');
-      let messageNotResults = this.renderer.createText(result);
-      this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
+      const messageNotResults = this.renderer.createText(message);
+      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
       this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
       this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
     }
   }
 
-  /* Update colspan in td that show message not results */
-  updateColspanTd() {
-    if (this.tdTableWithMessage) {
-      this.tdTableWithMessage.setAttribute('colspan', this.tableHeader.querySelectorAll('th').length);
+  public updateMessage(): void {
+    if (this.spanMessageNotResults) {
+      const message = this.buildMessage();
+      this.spanMessageNotResults.innerHTML = message;
     }
   }
 
   destroy() {
-    if (this.onContentChangeSubscription) {
-      this.onContentChangeSubscription.unsubscribe();
-    }
-
-    if (this.onVisibleColumnsChangeSubscription) {
-      this.onVisibleColumnsChangeSubscription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
   }
+
+  protected buildMessage(): string {
+    let message = '';
+    message = this.translateService.get('TABLE.EMPTY');
+    if (this.tableHasQuickFilter() && this.table.oTableQuickFilterComponent.value) {
+      message += this.translateService.get('TABLE.EMPTY_USING_FILTER', [(this.table.oTableQuickFilterComponent.value)]);
+    }
+    return message;
+  }
+
+  protected tableHasQuickFilter(): boolean {
+    return Util.isDefined(this.table.quickFilter && this.table.oTableQuickFilterComponent);
+  }
+
 }

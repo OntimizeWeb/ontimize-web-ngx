@@ -16,7 +16,7 @@
       <div class="o-grid-paginator" *ngIf="showPageSize">
         <div class="o-grid-page-size-label">{{ 'GRID.ITEMS_PER_PAGE' | oTranslate }}:</div>
         <mat-form-field class="o-grid-select-page" floatLabel="never">
-          <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="reloadData()">
+          <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="pageSizeChanged()">
             <mat-option *ngFor="let page of pageSizeOptions" [value]="page">
               {{ page }}
             </mat-option>
@@ -28,7 +28,7 @@
       <div class="o-grid-sort" *ngIf="showSort && sortableColumns.length > 0">
         <mat-form-field class="o-grid-select-sort" floatLabel="never">
           <mat-icon matPrefix>sort</mat-icon>
-          <mat-select #sortSelect [(value)]="currentOrderColumn" (selectionChange)="reloadData()" placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
+          <mat-select #sortSelect [value]="currentOrderColumn" (selectionChange)="sortColumnChanged($event)" placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
             <mat-option *ngFor="let column of sortableColumns; let i = index" [value]="i">
               {{ getSortOptionText(column) }}
             </mat-option>
@@ -40,7 +40,7 @@
         <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
       </div>
       <o-search-input *ngIf="quickFilter" [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive"
-        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" placeholder="" appearance="legacy"></o-search-input>
+        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [placeholder]="quickFilterPlaceholder" appearance="legacy"></o-search-input>
     </div>
   </mat-toolbar>
 
@@ -60,8 +60,8 @@
     </mat-grid-tile>
   </mat-grid-list>
 
-  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()"
-    class="o-grid-add-floatable-button" [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
+  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()" class="o-grid-add-floatable-button"
+    [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
     [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
     <mat-icon svgIcon="ontimize:add"></mat-icon>
   </button>
@@ -72,7 +72,8 @@
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
     <span fxFlex></span>
-    <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [getDataArray().length, totalRecords]} }}</span>
+    <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [getDataArray().length, totalRecords]}
+      }}</span>
   </div>
 
   <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls && showFooter" [length]="totalRecords" [pageSize]="queryRows"

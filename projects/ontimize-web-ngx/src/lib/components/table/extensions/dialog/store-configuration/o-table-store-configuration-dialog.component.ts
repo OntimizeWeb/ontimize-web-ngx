@@ -16,11 +16,11 @@ export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogCla
   public propertiesList: MatSelectionList;
 
   public properties: any[] = [{
-    property: 'sort',
+    property: 'sort-columns',
     name: 'TABLE.DIALOG.PROPERTIES.SORT',
     info: 'TABLE.DIALOG.PROPERTIES.SORT.INFO'
   }, {
-    property: 'columns-display',
+    property: 'oColumns-display',
     name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY',
     info: 'TABLE.DIALOG.PROPERTIES.COLUMNS_DISPLAY.INFO'
   }, {

@@ -1,5 +1,6 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { OServiceComponent } from '../o-service-component.class';
+import { AfterViewInit, Component } from '@angular/core';
+
+import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
 
 export const DEFAULT_INPUT_O_EXPANDABLE_CONTAINER = [
   // targets [`OServiceComponent` instance]: Components whose query will be launched when expanding the row.
@@ -13,7 +14,7 @@ export const DEFAULT_INPUT_O_EXPANDABLE_CONTAINER = [
 })
 export class OExpandableContainerComponent implements AfterViewInit {
 
-  public targets: Array<OServiceComponent>;
+  public targets: IServiceDataComponent[];
   public data: any;
   constructor() { }
 

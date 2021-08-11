@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import { IDataService } from '../interfaces/data-service.interface';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
@@ -6,6 +8,8 @@ import { Base64 } from './base64';
 import { Codes } from './codes';
 
 export class Util {
+
+  static columnAggregates = ['sum', 'count', 'avg', 'min', 'max'];
 
   static isObject(val: any): boolean {
     const valType = typeof val;
@@ -366,6 +370,32 @@ export class Util {
       return 1;
     }
     return 0;
+  }
+
+  static parseByValueType(value: any, valueType: ODateValueType, format: string) {
+    let result = value;
+    const m = moment(value);
+    if (!m.isValid()) {
+      return void 0;
+    }
+    switch (valueType) {
+      case 'string':
+        result = m.format(format);
+        break;
+      case 'date':
+        result = m.toDate();
+        break;
+      case 'iso-8601':
+        result = m.toISOString();
+        break;
+      case 'timestamp':
+        result = m.valueOf();
+        break;
+      default:
+        result = void 0;
+        break;
+    }
+    return result;
   }
 
 }

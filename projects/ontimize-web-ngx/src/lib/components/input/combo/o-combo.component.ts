@@ -20,8 +20,8 @@ import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import {
   DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -271,21 +271,6 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       return;
     }
 
-    if (isDefinedVal) {
-      let record;
-      if (this.multiple) {
-        record = this.dataArray.find(item => val.indexOf(item[this.valueColumn]) > -1);
-      } else {
-        record = this.dataArray.find(item => item[this.valueColumn] === val);
-      }
-      if (!Util.isDefined(record)) {
-        return;
-      }
-    } else {
-      if (Util.isDefined(val)) {
-        super.setValue(val, options);
-      }
-    }
     super.setValue(val, options);
   }
 
@@ -341,7 +326,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       }
 
       // filter
-      if(this.renderer) {
+      if (this.renderer) {
         this.filteredDataArray = this.dataArray.filter(item => this.renderer.getComboData(item).toLowerCase().indexOf(search) > -1);
       } else {
         this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);

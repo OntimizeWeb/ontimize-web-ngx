@@ -4,4 +4,5 @@ export type OColumnValueFilter = {
   attr: string;
   operator: ColumnValueFilterOperator;
   values: any;
+  availableValues: any[];
 };

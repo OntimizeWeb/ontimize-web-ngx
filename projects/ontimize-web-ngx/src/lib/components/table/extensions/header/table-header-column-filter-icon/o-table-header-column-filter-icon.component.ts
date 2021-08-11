@@ -2,8 +2,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { AnimationDurations } from '@angular/material';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { OColumnValueFilter } from '../../../../../types';
 
+import { OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column';
 import { OTableComponent } from '../../../o-table.component';
@@ -49,7 +49,7 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
     }));
 
     this.subscription.add(this.filterIconHintVisible.subscribe((value) => {
-      
+
       this.setFilterIconHintVisible(value);
     }));
   }
@@ -78,12 +78,11 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
     let result = '';
 
     const columnValueFilters = this.table.dataSource.getColumnValueFilters();
-    const columnsValueFilters = columnValueFilters;
-    if (columnsValueFilters.length < 2) {
+    if (columnValueFilters.length < 2) {
       return result;
     }
 
-    const index = columnsValueFilters.findIndex(x => x.attr === this.column.attr);
+    const index = columnValueFilters.findIndex(x => x.attr === this.column.attr);
     if (index > -1) {
       result += index + 1;
     }
@@ -99,8 +98,6 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
     // No-op if the sort header is ACTIVE - should not make the hint visible.
     if (this.filterIconStateView.getValue() === 'ACTIVE') { return; }
     this.filterIconStateView.next(visible ? 'HINT' : 'INACTIVE');
-
-
   }
 
   ngOnDestroy(): void {

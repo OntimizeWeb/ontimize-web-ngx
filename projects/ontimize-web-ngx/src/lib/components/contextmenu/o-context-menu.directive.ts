@@ -1,7 +1,7 @@
 import { Directive, HostListener, Injector } from '@angular/core';
 
+import { Util } from '../../util/util';
 import { OContextMenuComponent } from './o-context-menu.component';
-import { OContextMenuService } from './o-context-menu.service';
 
 export const DEFAULT_CONTEXT_MENU_DIRECTIVE_INPUTS = [
   'oContextMenu',
@@ -17,23 +17,20 @@ export class OContextMenuDirective {
   public oContextMenu: OContextMenuComponent;
   public oContextMenuData: any;
 
-  protected oContextMenuService: OContextMenuService;
-
-  constructor(
-    protected injector: Injector
-  ) {
-    this.oContextMenuService = this.injector.get(OContextMenuService);
+  constructor(protected injector: Injector) {
   }
 
   @HostListener('contextmenu', ['$event'])
   public onRightClick(event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.oContextMenuService.showContextMenu.next({
-      contextMenu: this.oContextMenu,
-      event: event,
-      data: this.oContextMenuData
-    });
+    if (Util.isDefined(this.oContextMenu)) {
+      this.oContextMenu.oContextMenuService.showContextMenu.next({
+        contextMenu: this.oContextMenu,
+        event: event,
+        data: this.oContextMenuData
+      });
+    }
   }
 
 }

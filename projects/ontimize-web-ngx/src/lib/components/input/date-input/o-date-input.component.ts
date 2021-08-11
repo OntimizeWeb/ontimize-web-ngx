@@ -14,8 +14,8 @@ import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
+import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormValue } from '../../form/OFormValue';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
@@ -195,24 +195,8 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   public onChangeEvent(event: MatDatepickerInputEvent<any>): void {
     const isValid = event.value && event.value.isValid && event.value.isValid();
     let val = isValid ? event.value.valueOf() : event.value;
-    const m = moment(val);
-    switch (this.valueType) {
-      case 'string':
-        if (val) {
-          val = m.format(this.oformat);
-        }
-        break;
-      case 'date':
-        val = new Date(val);
-        break;
-      case 'iso-8601':
-        val = m.toISOString();
-        break;
-      case 'timestamp':
-      default:
-        break;
-    }
-    this.setValue(val, {
+    const parsedVal = Util.parseByValueType(val, this.valueType, this.oformat);
+    this.setValue(parsedVal, {
       changeType: OValueChangeEvent.USER_CHANGE,
       emitEvent: false,
       emitModelToViewChange: false
