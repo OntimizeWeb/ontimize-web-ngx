@@ -230,6 +230,13 @@ $transition-duration: 500ms;
           }
         }
 
+        .o-app-sidenav-menugroup-title,
+        .o-app-sidenav-menuitem-title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
         .o-app-sidenav-menu-group-level-1 a {
           + .o-app-sidenav-menugroup-items-container {
             .o-app-sidenav-menu-group,
