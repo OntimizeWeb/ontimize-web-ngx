@@ -10,15 +10,12 @@
     .o-app-sidenav-menu-group,
     .o-app-sidenav-menu-item {
       &:not([disabled=true]) {
-        > .o-app-sidenav-item {
-           &:focus,
-           > a:focus,
-           > a:hover,
-          &:hover,
-          > a.is-selected {
-            color: mat-color($accent, 900);
-            background-color: mat-color($primary, 100);
-          }
+        a.active,
+        a.o-app-sidenav-viewer-sidenav-item-selected,
+        a:focus,
+        a:hover {
+          color: mat-color($accent, 900);
+          background-color: mat-color($primary, 100);
         }
       }
     }
@@ -31,13 +28,7 @@
       }
 
       .o-app-sidenav-item {
-        border-color: mat-color($primary, default-contrast, 0.12);
         color: mat-color($primary, default-contrast);
-
-        // .o-app-sidenav-viewer-sidenav-item-selected {
-        //   color: mat-color($accent, 900);
-        //   background-color: mat-color($primary, 100);
-        // }
 
         &.o-user-info {
           &:focus,
@@ -52,19 +43,27 @@
         }
       }
 
-      .o-app-sidenav-menugroup {
-        &.active {
-          &:not(.disabled) {
-            background: mat-color($primary);
-            color: mat-color($primary, default-contrast);
+      /* Side Navigation Level Styles */
+      .o-app-sidenav-menu-group-level-1 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            + .o-app-sidenav-menugroup-items-container ul {
+              background: mat-color($primary, 800 );
+            }
           }
-
-           + .o-app-sidenav-menugroup-items-container ul {
-             background: mat-color($primary, 900 )
-          //   box-shadow: 6px 4px 36px -12px $black-87-opacity inset;
-           }
         }
+      }
 
+      .o-app-sidenav-menu-group-level-2,
+      .o-app-sidenav-menu-group-level-3,
+      .o-app-sidenav-menu-group-level-4 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            + .o-app-sidenav-menugroup-items-container ul {
+              background: mat-color($primary, 900 );
+            }
+          }
+        }
       }
 
       li a {
