@@ -1,13 +1,11 @@
 .cdk-overlay-list-picker .mat-dialog-container {
-  padding: 0;
-
   .o-list-picker-dialog {
     display: flex;
     flex-direction: column;
     height: 100%;
 
-    .title-container {
-      padding: 5px 20px;
+    .mat-dialog-title {
+      margin-top: -24px;
 
       .o-search-input mat-form-field {
         .mat-form-field-wrapper {
@@ -21,7 +19,6 @@
     }
 
     .mat-dialog-content {
-      margin: 0;
 
       .cdk-virtual-scroll-viewport {
         height: 100%;
@@ -33,9 +30,5 @@
 
     }
 
-    .mat-dialog-actions {
-      padding-top: 12px;
-      margin: 0 12px;
-    }
   }
 }

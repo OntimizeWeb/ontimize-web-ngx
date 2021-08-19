@@ -86,46 +86,32 @@
     }
   }
 
-  $dialog-borders-color: #929292;
-
+  /* DIALOG */
+  .o-dialog-class.o-dialog-class,
   .o-form-layout-dialog-overlay,
   .o-list-picker-dialog {
-    .title-container {
-      border-bottom: 1px solid $dialog-borders-color;
     }
-  }
 
-  .o-form-layout-dialog-overlay {
-    .title-container {
-      .mat-icon {
-        color: $dialog-borders-color;
-      }
-    }
-  }
-
-  .o-dialog-class {
+  .o-dialog-class,
+  .o-form-layout-dialog-overlay,
+  .o-list-picker-dialog {
     .mat-dialog-container {
-      border: 1px solid $dialog-borders-color;
-
       .mat-dialog-title {
-        border-bottom: 1px solid $dialog-borders-color;
+        border-bottom: 1px solid mat-color($primary);
+        line-height: mat-font-size($typography, subheading-2);
+        font-size: mat-font-size($typography, subheading-2);
+
+        .mat-icon {
+          color: mat-color($primary);
+        }
       }
 
       .empty-filter-list {
         color: mat-color($foreground, disabled-text);
       }
-    }
-  }
-
-  .o-dialog-class {
-    .mat-dialog-container {
-      .mat-dialog-title {
-        line-height: mat-font-size($typography, title);
-        font-size: mat-font-size($typography, title);
-      }
 
       .mat-dialog-content {
-        font-size: mat-font-size($typography, input);
+        font-size: mat-font-size($typography, body-1);
 
         .mat-selection-list[dense] {
           outline: none;
@@ -133,19 +119,51 @@
           .mat-list-item {
             .empty-filter-list,
             .mat-list-text > * {
-              font-size: mat-font-size($typography, subheading-1);
+              font-size: mat-font-size($typography, body-1);
             }
 
             .mat-line:nth-child(n+2) {
               font-size: mat-font-size($typography, caption);
             }
+
           }
         }
       }
-    }
 
-    .mat-dialog-actions > button {
-      margin-left: 12px;
+      .mat-dialog-actions {
+        button:not([disabled]) {
+          &.mat-button-base.o-button-primary,
+          &.mat-button-base[ng-reflect-dialog-result="0"],
+          &.mat-button-base[ng-reflect-dialog-result="true"] {
+            color: mat-color($primary, 800);
+            background-color: mat-color($primary, 100);
+            border-color: transparent;
+
+            &:hover,
+            .mat-button-focus-overlay {
+              color: mat-color($primary);
+              background-color: #ffffff;
+              border-color: mat-color($foreground, divider);
+            }
+
+          }
+
+          &.mat-button-base.o-button-default,
+          &.mat-button-base[ng-reflect-dialog-result="1"],
+          &.mat-button-base[ng-reflect-dialog-result="false"] {
+            color: mat-color($primary);
+            background-color: #ffffff;
+
+            &:hover,
+            .mat-button-focus-overlay {
+              color: mat-color($primary,800);
+              background-color: mat-color($primary,100);
+              border-color: transparent;
+            }
+          }
+
+        }
+      }
     }
   }
 
@@ -155,7 +173,7 @@
     display: block;
 
     .mat-list-item-content {
-      font-size: mat-font-size($typography, subheading-2);
+      font-size: mat-font-size($typography, body-1);
       color: mat-color($foreground, text);
       padding: 6px;
       flex-direction: row;
