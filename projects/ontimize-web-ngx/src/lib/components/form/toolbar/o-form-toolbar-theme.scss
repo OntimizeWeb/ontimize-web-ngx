@@ -5,9 +5,5 @@
 
   .o-form-toolbar-header {
     background-color: mat-color($background, app-bar);
-
-    .mat-toolbar-tools .o-form-toolbar-button[disabled] {
-      color: mat-color($background, disabled-button);
-    }
   }
 }

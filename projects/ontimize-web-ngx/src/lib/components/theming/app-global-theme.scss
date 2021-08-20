@@ -86,11 +86,7 @@
     }
   }
 
-  /* DIALOG */
-  .o-dialog-class.o-dialog-class,
-  .o-form-layout-dialog-overlay,
-  .o-list-picker-dialog {
-    }
+  /* MODAL DIALOG IN O-DIALOG, FORM LAYOUT MANAGER AND LIST-PICKER */
 
   .o-dialog-class,
   .o-form-layout-dialog-overlay,
@@ -129,42 +125,8 @@
           }
         }
       }
-
-      .mat-dialog-actions {
-        button:not([disabled]) {
-          &.mat-button-base.o-button-primary,
-          &.mat-button-base[ng-reflect-dialog-result="0"],
-          &.mat-button-base[ng-reflect-dialog-result="true"] {
-            color: mat-color($primary, 800);
-            background-color: mat-color($primary, 100);
-            border-color: transparent;
-
-            &:hover,
-            .mat-button-focus-overlay {
-              color: mat-color($primary);
-              background-color: #ffffff;
-              border-color: mat-color($foreground, divider);
-            }
-
-          }
-
-          &.mat-button-base.o-button-default,
-          &.mat-button-base[ng-reflect-dialog-result="1"],
-          &.mat-button-base[ng-reflect-dialog-result="false"] {
-            color: mat-color($primary);
-            background-color: #ffffff;
-
-            &:hover,
-            .mat-button-focus-overlay {
-              color: mat-color($primary,800);
-              background-color: mat-color($primary,100);
-              border-color: transparent;
-            }
-          }
-
-        }
-      }
     }
+
   }
 
   /*global styles about drag/drop in dialogs table*/
@@ -201,6 +163,76 @@
   .mat-checkbox {
     .mat-checkbox-label {
       color: mat-color($foreground, text);
+    }
+  }
+
+  /*BUTTONS HOVER*/
+  .mat-dialog-actions button,
+  .o-form .o-form-toolbar button,
+  .ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
+    &:not([disabled]) {
+      &.mat-button-base.mat-primary,
+      &.mat-button-base.o-button-primary,
+      &.mat-button-base[ng-reflect-dialog-result="0"],
+      &.mat-button-base[ng-reflect-dialog-result="true"] {
+        color: mat-color($primary, 800);
+        background-color: mat-color($primary, 100);
+        border-color: transparent;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary);
+          background-color: #ffffff;
+          border-color: mat-color($foreground, divider);
+        }
+
+      }
+
+      &.mat-button-base,
+      &.mat-button-base.mat-accent,
+      &.mat-button-base.o-button-default,
+      &.mat-button-base[ng-reflect-dialog-result="1"],
+      &.mat-button-base[ng-reflect-dialog-result="false"] {
+        color: mat-color($primary);
+        background-color: #ffffff;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary,800);
+          background-color: mat-color($primary,100);
+          border-color: transparent;
+        }
+      }
+
+    }
+
+    margin: 0 8px;
+
+  }
+
+  .mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+  }
+}
+
+.o-form .o-form-toolbar button,
+.ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
+  &.mat-stroked-button {
+    padding: 0 6px;
+    line-height: 30px;
+    min-width: 112px;
+
+    .mat-button-wrapper {
+      .mat-icon {
+        margin-right: 4px;
+      }
+
+      span {
+        flex: 1;
+      }
     }
   }
 }

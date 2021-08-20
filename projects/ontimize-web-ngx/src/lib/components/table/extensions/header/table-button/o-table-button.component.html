@@ -1,5 +1,5 @@
 <ng-container *ngIf="table.showButtonsText">
-  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-stroked-button (click)="innerOnClick($event)" color="primary">
+  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-stroked-button (click)="innerOnClick($event)">
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
     <span>{{ olabel | oTranslate }}</span>
@@ -9,7 +9,7 @@
 </ng-container>
 
 <ng-container *ngIf="!table.showButtonsText">
-  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-icon-button (click)="innerOnClick($event)" color="primary">
+  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-icon-button (click)="innerOnClick($event)">
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
     <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
     <mat-icon *ngIf="!isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
