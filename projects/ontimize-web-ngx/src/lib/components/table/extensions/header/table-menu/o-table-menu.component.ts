@@ -10,6 +10,7 @@ import {
   Injector,
   OnDestroy,
   OnInit,
+  Optional,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -17,8 +18,10 @@ import { MatDialog, MatMenu } from '@angular/material';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand.interface';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { DialogService } from '../../../../../services/dialog.service';
+import { O_CHART_ON_DEMAND_SERVICE } from '../../../../../services/factories';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OPermissions } from '../../../../../types/o-permissions.type';
@@ -30,10 +33,14 @@ import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
-import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import {
+  OTableApplyConfigurationDialogComponent
+} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import {
+  OTableStoreConfigurationDialogComponent
+} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
@@ -114,6 +121,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   configurationMenu: MatMenu;
   @ViewChild('columnFilterOption', { static: false })
   columnFilterOption: OTableOptionComponent;
+  @ViewChild('chartMenu', { static: true })
+  chartMenu: MatMenu;
 
   private showColumnsFilterOptionSubject = new BehaviorSubject<boolean>(false);
   public showColumnsFilterOption: Observable<boolean> = this.showColumnsFilterOptionSubject.asObservable();
@@ -127,7 +136,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     protected injector: Injector,
     protected dialog: MatDialog,
     protected cd: ChangeDetectorRef,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent,
+    @Optional() @Inject(O_CHART_ON_DEMAND_SERVICE) public chartOnDemandService: IChartOnDemandService
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
@@ -288,6 +298,10 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
   get showGroupByButton(): boolean {
     return this.showGroupByOption;
+  }
+
+  get showChartOnDemandButton(): boolean {
+    return this.table.chartOnDemand;
   }
 
   onShowsSelects() {
@@ -460,6 +474,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         this.table.reloadPaginatedDataFromStart(false);
       }
     });
+  }
+
+  onChartsOnDemandClicked(): void {
+    if(this.chartOnDemandService) {
+      this.chartOnDemandService.openChartOnDemand(this.table.getDataArray());
+    } else {
+      console.warn("You must have ontimize-web-ngx-charts installed in your app to use charts on demand.")
+    }
   }
 
   public onStoreConfigurationClicked(): void {

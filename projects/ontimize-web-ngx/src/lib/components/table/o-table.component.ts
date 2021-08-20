@@ -88,7 +88,6 @@ import { OTableInsertableRowComponent } from './extensions/header/table-insertab
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableVirtualScrollStrategy } from './extensions/o-table-strategy.service';
-
 import { OTableDao } from './extensions/o-table.dao';
 import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
 import {
@@ -210,7 +209,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'collapseGroupedColumns: collapse-grouped-columns',
 
   //virtual-scroll [yes|no|true|false]: Whether enabled or not the virtual scroll
-  'virtualScroll: virtual-scroll'
+  'virtualScroll: virtual-scroll',
+
+  //chart-on-demand [yes|no|true|false]: Whether enabled or not the chart on demand button in table context menu
+  'chartOnDemand: chart-on-demand'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -405,6 +407,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   collapseGroupedColumns: boolean = false;
   @InputConverter()
   virtualScroll: boolean = true;
+  @InputConverter()
+  chartOnDemand: boolean = false;
 
   protected _enabled: boolean = true;
   get enabled(): boolean {

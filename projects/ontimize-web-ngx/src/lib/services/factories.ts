@@ -1,6 +1,7 @@
 import { InjectionToken, Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
+import { IChartOnDemandService } from '../interfaces/chart-on-demand.interface';
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
@@ -53,6 +54,11 @@ export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication se
 * Injection token that can be used to replace the component state service `DefaultComponentStateService`.
 */
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
+
+/**
+* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
+*/
+export const O_CHART_ON_DEMAND_SERVICE = new InjectionToken<IChartOnDemandService>('Chart on demand service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
