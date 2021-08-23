@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+@mixin o-dual-list-selector-theme($theme) {
+  $foreground: map-get($theme, foreground);
+
+  .o-dual-list-selector {
+    .o-dual-list-selector-destination-wrapper {
+      border-color: transparent;
+      .mat-selection-list.cdk-drop-list-dragging {
+        border-style: dashed;
+        border-color: mat-color($foreground, divider);
+      }
+    }
+
+    .o-dual-list-selector-list {
+      .mat-selection-list.mat-list-base {
+        .mat-list-item.mat-list-item:not(.mat-list-option) {
+          border-bottom: 1px solid mat-color($foreground, divider);
+        }
+      }
+    }
+  }
+}
