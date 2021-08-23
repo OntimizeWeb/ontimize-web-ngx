@@ -278,7 +278,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
       this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
-      if(this.activeVirtualScroll){
+      if (this.activeVirtualScroll) {
         this.updateHeaderAndFooterStickyPositions();
       }
       this.setDatasource();
@@ -416,7 +416,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
-    this._selectAllCheckboxVisible = BooleanConverter(this.state.selectColumnVisible) || BooleanConverter(value);
+    this._selectAllCheckboxVisible = BooleanConverter(value);
+    if (this.state) {
+      this._selectAllCheckboxVisible = BooleanConverter(this.state.selectColumnVisible);
+    }
     this._oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
     this.initializeCheckboxColumn();
   }
@@ -871,7 +874,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.virtualScrollSubscription) {
       this.virtualScrollSubscription.unsubscribe();
     }
-    if(this.scrollStrategy){
+    if (this.scrollStrategy) {
       this.scrollStrategy.destroy();
     }
 

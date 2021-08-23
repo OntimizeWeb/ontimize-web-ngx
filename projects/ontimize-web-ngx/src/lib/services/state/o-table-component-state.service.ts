@@ -99,7 +99,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
         result = this.getPageState();
         break;
       case 'selection':
-        result = this.getSelectionState();
+        result['selection'] = this.getSelectionState();
         break;
       case 'initial-configuration':
         result = this.getInitialConfigurationState();
