@@ -210,29 +210,57 @@
 
   }
 
-  .mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-  }
-}
+  .o-form .o-form-toolbar button,
+  .ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
+    &.mat-stroked-button {
+      padding: 0 6px;
+      line-height: 30px;
+      min-width: 112px;
 
-.o-form .o-form-toolbar button,
-.ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
-  &.mat-stroked-button {
-    padding: 0 6px;
-    line-height: 30px;
-    min-width: 112px;
+      .mat-button-wrapper {
+        .mat-icon {
+          margin-right: 4px;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
 
-    .mat-button-wrapper {
-      .mat-icon {
-        margin-right: 4px;
-      }
+        }
 
-      span {
-        flex: 1;
+        span {
+          flex: 1;
+        }
       }
     }
+  }
+
+  /*MAT PAGINATION*/
+  .mat-paginator {
+    .mat-paginator-range-label {
+      margin: 0 16px;
+    }
+
+    .mat-paginator-page-size-label {
+      margin-right: 16px;
+    }
+
+    button {
+      &:hover {
+        background-color: mat-color($primary,100);
+        border-radius: 50%;
+      }
+
+      &.mat-icon-button {
+        height: 20px;
+        width: 20px;
+        line-height: 20px;
+        margin-left: 8px;
+
+        .mat-paginator-icon {
+          width: 20px;
+        }
+      }
+    }
+
   }
 }
