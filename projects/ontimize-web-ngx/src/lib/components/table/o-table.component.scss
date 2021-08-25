@@ -236,11 +236,6 @@ $o_table_row_padding: 24px;
           white-space: nowrap;
           text-overflow: ellipsis;
 
-          // > div {
-          //   display: flex;
-          //   align-content: center;
-          //   align-items: center;
-          // }
           &:not(.o-column-image):first-of-type {
             padding-left: $o_table_row_padding;
           }

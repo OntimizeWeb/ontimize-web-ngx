@@ -263,4 +263,18 @@
     }
 
   }
+
+
+  /* outline appearance */
+  $border-radius: 2px;
+
+  .mat-form-field.mat-form-field-appearance-outline {
+    .mat-form-field-outline-start {
+      border-radius: $border-radius 0 0 $border-radius;
+    }
+
+    .mat-form-field-outline-end {
+      border-radius: 0 $border-radius $border-radius 0;
+    }
+  }
 }

@@ -1,36 +1,51 @@
 .o-table-quickfilter {
   .quickFilter {
+    .mat-form-field {
+      .mat-form-field-wrapper {
+        margin: 0;
+        padding-bottom: 0;
 
-    .mat-form-field.mat-form-field:not(.mat-form-field-appearance-legacy) {
-      .mat-form-field-flex {
-        align-items: initial;
+        .mat-form-field-flex {
+          align-items: initial;
+          margin-top: 0;
+          height: 32x;
+          line-height: 32px;
 
-        .mat-form-field-prefix {
-          div {
-            border-right: 1px solid #e0e0e0;
-            align-items: center;
-            display: inline-flex;
-            margin: 2px 0;
+          .mat-form-field-infix {
+            padding: 0;
+            border-top: 0;
+          }
 
-            .mat-badge-content {
-              background-color: #3C8500;
-              width: 14px;
-              height: 14px;
-              line-height: 14px;
-              top: -4px;
-              right: -4px;
-            }
+          .mat-form-field-prefix {
+            padding-right: 0.3;
+            padding-bottom: 0;
 
-            .mat-icon,
-            button {
-              margin-right: 6px;
-            }
+            div {
+              border-right: 1px solid #e0e0e0;
+              align-items: center;
+              display: inline-flex;
+              margin: 2px 0;
 
-            button.mat-icon-button {
-              height: 100%;
+              .mat-badge-content {
+                background-color: #3C8500;
+                width: 14px;
+                height: 14px;
+                line-height: 14px;
+                top: -4px;
+                right: -4px;
+              }
 
-              .mat-button-ripple.mat-ripple {
-                display: none;
+              .mat-icon,
+              button {
+                margin-right: 6px;
+              }
+
+              button.mat-icon-button {
+                height: 100%;
+
+                .mat-button-ripple.mat-ripple {
+                  display: none;
+                }
               }
             }
           }
@@ -43,14 +58,6 @@
     cursor: pointer;
   }
 
-// <<<<<<< HEAD
-// =======
-//   .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-icon.search-icon,
-//   .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-icon.search-icon {
-//     line-height: 20px;
-//     width: 20px;
-//   }
-// >>>>>>> 8.x.x
 }
 
 .o-table-quickfilter-menu {
