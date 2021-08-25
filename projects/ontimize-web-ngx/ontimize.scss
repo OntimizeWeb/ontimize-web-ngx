@@ -132,7 +132,11 @@ $steps: 6;
 button {
   &.mat-button,
   &.mat-flat-button,
-  &.mat-stroked-button {
-    min-width: 88px;
+  &.mat-stroked-button,
+  &.mat-raised-button {
+    min-width: 112px;
+    height: 32px;
+    line-height: 32px;
+
   }
 }

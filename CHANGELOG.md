@@ -18,6 +18,7 @@
   * adding the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
 * **o-listpicker**: replace .title-container class with .mat-dialog-title
 * **o-table-visible-columns-dialog**: replace .description class with .mat-subheader
+* **o-button**: set `height=32px`
 
 
 

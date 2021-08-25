@@ -210,12 +210,43 @@
 
   }
 
+  .o-button button.mat-stroked-button {
+    &:not([disabled]) {
+      &.mat-primary {
+        color: mat-color($primary, 800);
+        background-color: mat-color($primary, 100);
+        border-color: transparent;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary);
+          background-color: #ffffff;
+          border-color: mat-color($foreground, divider);
+        }
+
+      }
+
+      &.mat-accent {
+        color: mat-color($accent);
+        background-color: #ffffff;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary,800);
+          background-color: mat-color($primary,100);
+          border-color: transparent;
+        }
+      }
+
+    }
+
+  }
+
   .o-form .o-form-toolbar button,
   .ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
     &.mat-stroked-button {
       padding: 0 6px;
       line-height: 30px;
-      min-width: 112px;
 
       .mat-button-wrapper {
         .mat-icon {
@@ -263,7 +294,6 @@
     }
 
   }
-
 
   /* outline appearance */
   $border-radius: 2px;
