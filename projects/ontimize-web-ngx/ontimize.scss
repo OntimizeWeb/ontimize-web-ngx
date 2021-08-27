@@ -50,10 +50,10 @@
           min-height: 30px;
           height: auto;
           display: flex;
-          min-height: 30px;
 
           .mat-list-item-content {
             width: 100%;
+            padding: 0 8px;
           }
         }
       }
@@ -62,8 +62,11 @@
         overflow: auto;
         outline: none;
         padding-top: 0;
+        min-height: 40px;
 
         .mat-list-item {
+          margin: 6px 0;
+          border-radius: 4px;
           cursor: default;
         }
 
@@ -83,6 +86,8 @@
         margin-left: 16px;
         min-width: 72px;
         line-height: 24px;
+        height: 24px;
+        font-size: 10px;
       }
     }
   }
@@ -132,11 +137,28 @@ $steps: 6;
 button {
   &.mat-button,
   &.mat-flat-button,
-  &.mat-stroked-button,
-  &.mat-raised-button {
+  &.mat-raised-button,
+  &.mat-stroked-button {
     min-width: 112px;
     height: 32px;
     line-height: 32px;
 
+  }
+}
+
+.o-table-apply-configuration-dialog-list.mat-selection-list.mat-list-base[dense] .mat-list-option.mat-list-text,
+.o-table-load-filter-dialog-list.mat-list-base[dense] .mat-list-option.mat-list-text {
+  .o-table-apply-configuration-dialog-list-title,
+  .o-table-load-filter-dialog-list-title {
+    font-weight: bold;
+
+  }
+}
+
+/*MAT MENU*/
+.o-mat-menu.mat-menu-panel {
+  .mat-menu-item {
+    line-height: 32px;
+    height: 32px;
   }
 }

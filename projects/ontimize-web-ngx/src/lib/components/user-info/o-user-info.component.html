@@ -8,7 +8,7 @@
       <span class="o-user-info-username" *ngIf="username"> {{ username }}</span>
       <mat-icon svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
     </div>
-    <mat-menu #menu="matMenu" yPosition="below">
+    <mat-menu #menu="matMenu" yPosition="below" class="o-mat-menu">
       <button type="button" mat-menu-item (click)="onProfileClick()" *ngIf="showProfile">
         <mat-icon>person</mat-icon>
         <span>{{ 'APP_LAYOUT.USER_PROFILE' | oTranslate }}</span>
