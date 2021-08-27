@@ -214,7 +214,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     const isLoading = this.showLoading.getValue();
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) &&
       isLoading && arg.index === this.state.tabsData.length) {
-      // this is only triggered once when all tabs are loaded 
+      // this is only triggered once when all tabs are loaded
       this.tabGroup.selectedIndex = this.state.selectedIndex;
       this.showLoading.next(false);
     }
@@ -267,10 +267,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return this.data.length > 0 ? this.data[this.data.length - 1] : undefined;
   }
 
-  getLastTabId(): string {
-    return this.data.length > 0 ? this.data[this.data.length - 1].id : undefined;
-  }
-
   getRouteOfActiveItem(): any[] {
     const route = [];
     if (this.data.length && this.tabGroup.selectedIndex > 0) {
@@ -284,11 +280,10 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   setModifiedState(modified: boolean) {
-    const id = this.getLastTabId();
-    for (let i = 0, len = this.data.length; i < len; i++) {
-      if (this.data[i].id === id) {
-        this.data[i].modified = modified;
-        break;
+    if (this.tabGroup.selectedIndex > 0) {
+      const id = this.data.length > 0 ? this.data[this.tabGroup.selectedIndex - 1].id : undefined;
+      if (Util.isDefined(id)) {
+        this.data.find(d => d.id === id).modified = modified;
       }
     }
   }
