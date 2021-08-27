@@ -35,6 +35,7 @@
 
         &.mat-accent:not([disabled]) {
           background-color: mat-color($foreground, divider);
+          color: mat-color($foreground, text);
         }
       }
     }
