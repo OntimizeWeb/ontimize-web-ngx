@@ -21,10 +21,11 @@
 @import '../bar-menu/o-bar-menu-theme.scss';
 @import '../grid/o-grid.theme.scss';
 @import '../input/date-range/o-daterange-input-theme.scss';
+@import '../dual-list-selector/o-dual-list-selector-theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
-  @include mat-core($typography);
+   @include mat-core($typography);
   @include angular-material-theme($theme);
   @include app-global-theme($theme, $typography);
   @include o-breadcrumb-theme($theme);
@@ -48,4 +49,5 @@
   @include o-grid-theme($theme);
   @include o-layout-padding-margin();
   @include o-daterange-input-theme($theme);
+  @include o-dual-list-selector-theme($theme);
 }

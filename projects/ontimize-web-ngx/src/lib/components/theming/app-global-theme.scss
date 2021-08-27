@@ -114,7 +114,7 @@
 
           .mat-list-item {
             .empty-filter-list,
-            .mat-list-text > * {
+            .mat-list-item-content > * {
               font-size: mat-font-size($typography, body-1);
             }
 

@@ -3,50 +3,47 @@
 <div class="o-dual-list-selector-wrapper-selector-list">
 
   <div class="o-dual-list-selector-list" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="50%">
-    <span class="title-list">
-      {{ titleListDataSource | oTranslate }}
-    </span>
     <div fxLayout="row" fxFlex class="o-dual-list-selector-source-wrapper">
       <mat-selection-list fxFlex dense cdkDropList id="item-source-list" #itemsList [cdkDropListData]="dataSource"
         [cdkDropListConnectedTo]="['item-destination-list']" (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
 
-        <mat-list-item fxLayoutAlign="space-between center" fxLayoutGap="4px">
+        <mat-list-item>
           <mat-checkbox (change)="$event ? masterToggle(itemsList) : null" [checked]="isAllSelected(itemsList)"
-            [indeterminate]="hasValue(itemsList)  && !isAllSelected(itemsList)">
-            <div fxLayout="column" fxLayoutAlign="start start">
-              <span class="mat-caption">{{ getCheckboxLabel(itemsList) }} </span>
-            </div>
+            [indeterminate]="hasValue(itemsList)  && !isAllSelected(itemsList)" fxFlex>
+            <span fxLayout="row" fxLayoutAlign="space-between center">
+              <span>{{ titleListDataSource | oTranslate }}</span>
+              <span>{{ getCheckboxLabel(itemsList) }} </span>
+            </span>
           </mat-checkbox>
         </mat-list-item>
 
         <mat-list-option checkboxPosition="before" *ngFor="let item of dataSource" [value]="item" cdkDrag class="o-drag-list-item-box">
-          <span matLine>{{ (item[display]) | oTranslate }}</span>
+          <span matLine>{{ (item[display]) | oTranslate }} </span>
         </mat-list-option>
       </mat-selection-list>
 
-      <div fxLayout="column" fxLayoutAlign="center start">
-        <button mat-icon-button (click)="addToGroupedColumns(itemsList)" [disabled]="itemsList.selectedOptions.selected.length===0">
+      <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50px" fxLayoutGap="24px">
+        <button mat-mini-fab (click)="addToGroupedColumns(itemsList)" [disabled]="itemsList.selectedOptions.selected.length===0">
           <mat-icon>chevron_right</mat-icon>
         </button>
-        <button mat-icon-button (click)="removeGroupedColumns(selectedItemsList)" [disabled]="selectedItemsList.selectedOptions.selected.length===0">
+        <button mat-mini-fab (click)="removeGroupedColumns(selectedItemsList)" [disabled]="selectedItemsList.selectedOptions.selected.length===0">
           <mat-icon>chevron_left</mat-icon>
         </button>
       </div>
     </div>
   </div>
 
-
   <div class="o-dual-list-selector-list" fxLayout="column" ºfxLayoutAlign="start stretch" fxFlex="50%">
-    <span class="title-list">
-      {{ titleListDataDestination | oTranslate}}
-    </span>
     <div fxLayout="row" fxFlex class="o-dual-list-selector-destination-wrapper">
       <mat-selection-list fxFlex dense cdkDropList id="item-destination-list" #selectedItemsList [cdkDropListData]="dataDestination"
         [cdkDropListConnectedTo]="['item-source-list']" (cdkDropListDropped)="drop($event)">
         <mat-list-item>
           <mat-checkbox (change)="$event ? masterToggle(selectedItemsList) : null" [checked]="isAllSelected(selectedItemsList)"
-            [indeterminate]="hasValue(selectedItemsList) && !isAllSelected(selectedItemsList)">
-            <span class="mat-caption">{{ getCheckboxLabel(selectedItemsList) }}</span>
+            [indeterminate]="hasValue(selectedItemsList) && !isAllSelected(selectedItemsList)" fxFlex>
+            <span fxLayoutAlign="space-between center">
+              <span>{{ titleListDataDestination | oTranslate}}</span>
+              <span>{{ getCheckboxLabel(selectedItemsList) }}</span>
+            </span>
           </mat-checkbox>
         </mat-list-item>
 
@@ -60,11 +57,11 @@
       </mat-selection-list>
 
 
-      <div fxLayout="column" fxLayoutAlign="center start">
-        <button mat-icon-button [disabled]="isDisabledSortAsc(selectedItemsList)" (click)="sortAscSelectedItems(selectedItemsList)">
+      <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50px" fxLayoutGap="24px">
+        <button mat-mini-fab [disabled]="isDisabledSortAsc(selectedItemsList)" (click)="sortAscSelectedItems(selectedItemsList)">
           <mat-icon>expand_less</mat-icon>
         </button>
-        <button mat-icon-button [disabled]="isDisabledSortDesc(selectedItemsList)" (click)="sortDescSelectedItems(selectedItemsList)">
+        <button mat-mini-fab [disabled]="isDisabledSortDesc(selectedItemsList)" (click)="sortDescSelectedItems(selectedItemsList)">
           <mat-icon>expand_more</mat-icon>
         </button>
       </div>
