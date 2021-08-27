@@ -8,7 +8,7 @@
   * Showing all the available values after the first configuration of a column filter
   * **OColumnValueFilter**: adding `availableValues` to stored filter properties
 * **o-app-layout-sidenav**: implementing multilevel navigation but only construction up to the 3rd level is recommended ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
-* **OTableQuickfilter**: Remove columns with searchable=no from query. ([]()) Closes[#721](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/721)
+* **OTableQuickfilter**: Remove columns with searchable=no from query. ([03fd5d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03fd5d6)) Closes[#721](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/721)
 
 ### Bug fixes
 * **o-table**: fixing bug when select-all-checkbox-visible="yes" Closes [#714](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/714) ([b88be9b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b88be9b))
