@@ -8,6 +8,8 @@
   * Showing all the available values after the first configuration of a column filter
   * **OColumnValueFilter**: adding `availableValues` to stored filter properties
 * **o-app-layout-sidenav**: implementing multilevel navigation but only construction up to the 3rd level is recommended ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
+* **Ux-Design**:
+  * add o-mat-menu class ([e0aa722](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0aa722)
 
 ### Bug fixes
 * **o-table**: fixing bug when select-all-checkbox-visible="yes" Closes [#714](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/714) ([b88be9b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b88be9b))
@@ -18,9 +20,7 @@
   * adding the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
 * **o-listpicker**: replace .title-container class with .mat-dialog-title
 * **o-table-visible-columns-dialog**: replace .description class with .mat-subheader
-* **o-button**: set `height=32px`
-
-
+* **o-button**: set `height=32px` and `min-height=112px` in BASIC, RAISED,STROKED and FLAT types
 
 ## 8.4.1 (2021-08-03)
 ### Features
