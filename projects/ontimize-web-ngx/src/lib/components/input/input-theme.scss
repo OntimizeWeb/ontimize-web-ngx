@@ -7,7 +7,6 @@
     color: $icon-color;
   }
 }
-
 @mixin input-theme($theme) {
   $is-dark-theme: map-get($theme, is-dark);
   $foreground: map-get($theme, foreground);
@@ -16,6 +15,9 @@
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
 
+  /* outline appearance */
+  $border-radius: 2px;
+
   .mat-form-field {
     &.mat-form-field-disabled.accent {
       @include icon-color-mixin(mat-color($accent, 0.42));
@@ -23,14 +25,15 @@
 
     &:not(.mat-form-field-disabled) {
       @include icon-color-mixin(mat-color($foreground, icon));
+
       .placeholder {
         color: mat-color($foreground, icon);
       }
+
       &.accent {
         @include icon-color-mixin(mat-color($accent));
       }
     }
-
 
     .mat-disabled {
       color: mat-color($foreground, disabled-button);
@@ -48,6 +51,17 @@
 
     &.mat-form-field-invalid .mat-input-suffix .mat-icon {
       color: mat-color($warn);
+    }
+
+    /* OUTLINE APPEARANCE */
+    &.mat-form-field-appearance-outline {
+      .mat-form-field-outline-start {
+        border-radius: $border-radius 0 0 $border-radius;
+      }
+
+      .mat-form-field-outline-end {
+        border-radius: 0 $border-radius $border-radius 0;
+      }
     }
   }
 
@@ -74,5 +88,20 @@
     background: mat-color($primary, default-contrast);
     border: 1px solid mat-color($warn);
     color: mat-color($warn);
+  }
+
+  /* CHECKBOX */
+  .mat-checkbox:not(.mat-checkbox-disabled ) {
+    &.mat-accent {
+      .mat-checkbox-frame {
+        border-color: if($is-dark-theme, mat-color($accent,500),mat-color($foreground, secondary-text));
+      }
+    }
+
+    &.mat-primary {
+      .mat-checkbox-frame {
+        border-color: if($is-dark-theme, mat-color($primary,500),mat-color($foreground, secondary-text));
+      }
+    }
   }
 }
