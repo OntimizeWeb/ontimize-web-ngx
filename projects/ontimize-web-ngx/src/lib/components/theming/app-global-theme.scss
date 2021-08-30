@@ -167,10 +167,23 @@
   }
 
   /*BUTTONS HOVER*/
-  .mat-dialog-actions button,
-  .o-form .o-form-toolbar button,
-  .ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
-    &:not([disabled]) {
+  .mat-dialog-actions,
+  .o-form .o-form-toolbar,
+  .ontimize-table.o-table .o-table-container .toolbar .buttons {
+    .o-table-button,
+    button {
+      margin: 0 8px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    button:not([disabled]) {
       &.mat-button-base.mat-primary,
       &.mat-button-base.o-button-primary,
       &.mat-button-base[ng-reflect-dialog-result="0"],
@@ -205,8 +218,6 @@
       }
 
     }
-
-    margin: 0 8px;
 
   }
 
@@ -295,16 +306,4 @@
 
   }
 
-  /* outline appearance */
-  $border-radius: 2px;
-
-  .mat-form-field.mat-form-field-appearance-outline {
-    .mat-form-field-outline-start {
-      border-radius: $border-radius 0 0 $border-radius;
-    }
-
-    .mat-form-field-outline-end {
-      border-radius: 0 $border-radius $border-radius 0;
-    }
-  }
 }
