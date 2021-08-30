@@ -145,4 +145,7 @@
     }
   }
 
+  .o-table-quickfilter .quickFilter .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
+    border-right: 1px solid mat-color($foreground, divider);
+  }
 }

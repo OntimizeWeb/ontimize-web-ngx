@@ -11,17 +11,21 @@
           height: 32x;
           line-height: 32px;
 
+          .mat-form-field-outline,
+          .mat-form-field-prefix,
+          .mat-form-field-suffix {
+            top: 0;
+          }
+
           .mat-form-field-infix {
-            padding: 0;
+            padding: 0 4px;
             border-top: 0;
           }
 
           .mat-form-field-prefix {
-            padding-right: 0.3;
             padding-bottom: 0;
 
             div {
-              border-right: 1px solid #e0e0e0;
               align-items: center;
               display: inline-flex;
               margin: 2px 0;
