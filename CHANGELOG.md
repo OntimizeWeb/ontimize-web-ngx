@@ -12,6 +12,7 @@
 
 ### Bug fixes
 * **o-table**: fixing bug when select-all-checkbox-visible="yes" Closes [#714](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/714) ([b88be9b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b88be9b))
+* **o-form-layout**: show change mark in the tab whose detail is modified. ([1eea210](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1eea210)) Closes [#715](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/715)
 
 ### BREAKING CHANGES
 * **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
