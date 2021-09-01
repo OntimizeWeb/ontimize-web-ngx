@@ -10,9 +10,7 @@
     .o-app-sidenav-menu-group,
     .o-app-sidenav-menu-item {
       &:not([disabled=true]) {
-        a.active,
         a.o-app-sidenav-viewer-sidenav-item-selected,
-        a:focus,
         a:hover {
           color: mat-color($accent, 900);
           background-color: mat-color($primary, 100);
@@ -22,6 +20,7 @@
 
     .o-app-sidenav-sidenav {
       background: mat-color($primary);
+
 
       .sidenav-toggle {
         color: mat-color($primary, default-contrast);

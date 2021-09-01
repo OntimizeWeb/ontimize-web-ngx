@@ -70,11 +70,14 @@ $transition-duration: 500ms;
     .mat-drawer.o-app-sidenav-sidenav {
       box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
       padding-bottom: 36px;
-      padding-top: 5px;
       width: $sidenav-width;
       bottom: 0;
       overflow: auto;
       height: 100%;
+
+      .sidenav-toggle-container {
+        height: 48px;
+      }
 
       nav {
         a {
@@ -133,7 +136,6 @@ $transition-duration: 500ms;
           }
 
           &:not([disabled=true]) {
-            a.active,
             a.o-app-sidenav-viewer-sidenav-item-selected {
               padding: 0 8px;
             }
@@ -149,11 +151,11 @@ $transition-duration: 500ms;
         .o-app-sidenav-image .o-app-sidenav-image-container {
           padding: 0;
           text-align: end;
-          max-height: 48px;
+          max-height: 36px;
 
           .o-app-sidenav-image {
-            max-height: 48px;
-            margin: 8px 8px 0 0;
+            max-height: 36px;
+            margin-right: 8px;
           }
         }
       }

@@ -11,7 +11,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import {Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { MenuGroup } from '../../../interfaces/app-menu.interface';
@@ -58,8 +58,6 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
 
   public onItemClick: EventEmitter<any> = new EventEmitter<any>();
   public onClickEvent: EventEmitter<any> = new EventEmitter<any>();
-  protected activeSubject = new BehaviorSubject<boolean>(false);
-  public active: Observable<boolean> = this.activeSubject.asObservable();
 
   protected translateService: OTranslateService;
   protected permissionsService: PermissionsService;
@@ -90,10 +88,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
     this.permissionsService = this.injector.get(PermissionsService);
-
     this.sidenav = this.injector.get(OAppSidenavComponent);
-
-    this.sidenavSubscription.add(this.appMenuService.onClick.subscribe(x => this.activeSubject.next(false)));
   }
 
   ngOnInit() {
@@ -141,7 +136,6 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
 
     this.menuGroup.opened = !this.menuGroup.opened;
     this.appMenuService.onClick.next();
-    this.activeSubject.next(true);
     this.updateContentExpansion();
   }
 
