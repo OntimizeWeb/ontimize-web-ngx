@@ -7,17 +7,15 @@
 
   .o-card-menu-item {
     height: 45%;
-    margin: 16px 0;
-    max-width: 290px;
-    min-width: 290px;
-
+    margin-bottom: 12px;
+    max-width: 300px;
+    min-width: 300px;
 
     &.compact {
       height: 30%;
       max-height: 250px;
     }
   }
-
   @media screen and (max-width: 960px) {
     top: auto;
     transform: none;

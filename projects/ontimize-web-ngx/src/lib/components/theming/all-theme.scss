@@ -25,7 +25,7 @@
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
-   @include mat-core($typography);
+  @include mat-core($typography);
   @include angular-material-theme($theme);
   @include app-global-theme($theme, $typography);
   @include o-breadcrumb-theme($theme);
@@ -41,7 +41,7 @@
   @include o-app-header-theme($theme);
   @include o-app-sidenav-theme($theme);
   @include o-app-layout-theme($theme);
-  @include o-card-menu-item-theme($theme);
+  @include o-card-menu-item-theme($theme, $typography);
   @include o-hour-input-theme($theme);
   @include o-form-layout-split-pane-theme($theme);
   @include o-form-layout-tabgroup-theme($theme);
