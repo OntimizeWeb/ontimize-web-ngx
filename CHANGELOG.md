@@ -20,7 +20,10 @@
   * adding the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
 * **o-listpicker**: replace .title-container class with .mat-dialog-title
 * **o-table-visible-columns-dialog**: replace .description class with .mat-subheader
+* **o-dual-list-selector**: replace .o-dual-list-selector-description class with .mat-subheader ([ae0c953](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae0c953))
 * **o-button**: set `height=32px` and `min-height=112px` in BASIC, RAISED,STROKED and FLAT types
+* **o-app-sidenav-menu-group**:Removed class .active ([4b28033](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b28033))
+
 
 ## 8.4.1 (2021-08-03)
 ### Features
