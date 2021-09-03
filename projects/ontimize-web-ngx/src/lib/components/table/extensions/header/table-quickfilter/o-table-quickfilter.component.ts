@@ -122,7 +122,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       const expressions: Expression[] = [];
 
-      const searchingCols = this.oTableOptions.columns.filter(oCol => oCol.searching && oCol.visible && this.isFilterableColumn(oCol));
+      const searchingCols = this.oTableOptions.columns.filter(oCol => oCol.searching && oCol.visible && oCol.searchable && this.isFilterableColumn(oCol));
       expressions.push(...this.getColumnsWithoutRendererExpressions(searchingCols));
 
       const renderersExpr = this.getColumnsRendererExpressions(searchingCols);
