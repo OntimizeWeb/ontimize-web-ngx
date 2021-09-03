@@ -16,20 +16,25 @@
     .mat-toolbar-tools {
       width: 100%;
 
+      button.o-form-toolbar-button.mat-icon-button.mat-button-base {
+        padding: 0;
+        margin: 0;
+        background: transparent;
+      }
     }
 
-    .o-breadcrumb {
-      width: 100%;
-      height: 32px;
-      min-height: initial;
-
-      .mat-toolbar {
-        padding: 0;
+      .o-breadcrumb {
+        width: 100%;
+        height: 32px;
         min-height: initial;
-        max-height: initial;
-        height: 100%;
-      }
 
+        .mat-toolbar {
+          padding: 0;
+          min-height: initial;
+          max-height: initial;
+          height: 100%;
+        }
+
+      }
     }
   }
-}

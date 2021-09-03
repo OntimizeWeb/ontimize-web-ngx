@@ -136,9 +136,15 @@ button {
   &.mat-raised-button,
   &.mat-stroked-button {
     min-width: 112px;
+  }
+
+  &.mat-button,
+  &.mat-flat-button,
+  &.mat-icon-button,
+  &.mat-raised-button,
+  &.mat-stroked-button {
     height: 32px;
     line-height: 32px;
-
   }
 }
 

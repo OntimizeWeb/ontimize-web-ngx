@@ -255,9 +255,11 @@
 
   .o-form .o-form-toolbar button,
   .ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
+    line-height: 30px;
+
+
     &.mat-stroked-button {
       padding: 0 6px;
-      line-height: 30px;
 
       .mat-button-wrapper {
         .mat-icon {
