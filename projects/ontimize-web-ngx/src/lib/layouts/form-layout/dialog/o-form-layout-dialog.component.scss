@@ -4,15 +4,6 @@
 
   .title-container {
     cursor: default;
-    height: 64px;
-    padding: 0 16px;
-
-    .mat-dialog-title {
-      width: 100%;
-      padding-left: 24px;
-      text-align: center;
-      margin: 0;
-    }
 
     .mat-icon {
       cursor: pointer;
@@ -20,7 +11,6 @@
   }
 
   .mat-dialog-container {
-    padding: 0 !important;
     overflow: hidden;
 
     .mat-dialog-content.form-layout-dialog-container {

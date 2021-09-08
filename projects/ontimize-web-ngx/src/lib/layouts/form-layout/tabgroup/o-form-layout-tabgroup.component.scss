@@ -1,6 +1,7 @@
 .o-form-layout-tabgroup {
   .mat-tab-group {
     .mat-tab-label {
+
       span.tab-label {
         width: 100%;
         max-width: 120px;
@@ -18,10 +19,10 @@
       }
 
       .mat-icon {
-        height: 16px;
-        width: 16px;
-        font-size: 16px;
-        padding-left: 6px;
+        height: 14px;
+        width: 14px;
+        font-size: 8px;
+        margin-left: 6px;
         vertical-align: middle;
       }
     }

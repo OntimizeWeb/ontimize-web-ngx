@@ -1,9 +1,9 @@
 <ng-container *ngIf="!hidden">
-  <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.active]="menuGroup.opened" fxLayout="column" (click)="onClick()">
+  <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()">
     <div fxLayout="row" fxLayoutAlign="start center" fxFill>
       <ng-container *ngIf="sidenavOpened">
         <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
-        {{ menuGroup.name | oTranslate }}
+        <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
         <span class="fill-remaining"></span>
         <mat-icon class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
       </ng-container>
@@ -21,7 +21,7 @@
           [menu-item-type]="appMenuService.getMenuItemType(menuItem)" (onClick)="onMenuItemClick($event)">
         </o-app-sidenav-menu-item>
         <ng-template #menuGroup>
-          <o-app-sidenav-menu-group [menu-group]="menuItem" [sidenav-opened]="sidenav.isSidenavOpened()" [level]="level + 1"
+          <o-app-sidenav-menu-group [menu-group]="menuItem" [sidenav-opened]="sidenavOpened" [level]="level + 1"
             *ngIf="appMenuService.getMenuItemType(menuItem) === 'group'" (onItemClick)="onMenuItemClick($event)">
           </o-app-sidenav-menu-group>
         </ng-template>
@@ -29,5 +29,3 @@
     </ul>
   </div>
 </ng-container>
-
-

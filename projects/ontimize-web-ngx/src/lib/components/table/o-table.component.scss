@@ -138,9 +138,12 @@ $o_table_row_padding: 24px;
       }
 
       &.small {
-        .column-filter-icon,
-        .mat-sort-header-arrow {
+        .column-filter-icon {
           margin-top: 2px;
+        }
+
+        .mat-sort-header-arrow {
+          margin-top: 4px;
         }
 
         .mat-header-row,
@@ -161,28 +164,24 @@ $o_table_row_padding: 24px;
           .mat-cell,
           .mat-header-cell {
             .image-avatar {
-              width: 22px;
-              height: 22px;
+              width: 24px;
+              height: 24px;
             }
           }
         }
       }
 
       &.medium {
-        .column-filter-icon,
+        .column-filter-icon {
+          margin-top: 2px;
+        }
+
         .mat-sort-header-arrow {
-          margin-top: 6px;
+          margin-top: 5px;
         }
 
         .mat-header-row,
         .mat-row {
-          .mat-cell,
-          .mat-header-cell {
-            .image-avatar {
-              width: 28px;
-              height: 28px;
-            }
-          }
 
           .mat-checkbox-inner-container {
             height: $mat-checkbox-size-medium;
@@ -200,10 +199,14 @@ $o_table_row_padding: 24px;
       }
 
       &.large {
-        .column-filter-icon,
-        .mat-sort-header-arrow {
-          margin-top: 8px;
+        .column-filter-icon {
+          margin-top: 4px;
         }
+
+        .mat-sort-header-arrow {
+          margin-top: 7px;
+        }
+
       }
 
       tr.mat-row.o-table-row-expanded {
@@ -233,11 +236,6 @@ $o_table_row_padding: 24px;
           white-space: nowrap;
           text-overflow: ellipsis;
 
-          // > div {
-          //   display: flex;
-          //   align-content: center;
-          //   align-items: center;
-          // }
           &:not(.o-column-image):first-of-type {
             padding-left: $o_table_row_padding;
           }
@@ -302,8 +300,8 @@ $o_table_row_padding: 24px;
           }
 
           .image-avatar {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             margin: 1px auto;
             overflow: hidden;
             border-radius: 50%;
@@ -428,10 +426,6 @@ $o_table_row_padding: 24px;
         &.end,
         &.end .mat-sort-header-button {
           text-align: right;
-        }
-
-        .mat-sort-header-container {
-          padding-top: 4px;
         }
       }
 

@@ -10,14 +10,32 @@
 * **o-app-layout-sidenav**: implementing multilevel navigation but only construction up to the 3rd level is recommended ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
 * **OTableQuickfilter**: Remove columns with searchable=no from query. ([03fd5d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03fd5d6)) Closes[#721](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/721)
 
+* **New UX Design**: Closes[#623](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/623)
+  * **o-table**:
+    * Added the badge in the quickfilter of the table whose number identifier the number of active columns ([fb80778](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb80778))
+    * Set filter-column-active-by-default = "yes" by default value ([8e97d53](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e97d53))
+  * **o-app-header** : new attribute header-height ([fd06479](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd06479))
+  * add o-mat-menu class ([e0aa722](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0aa722))
+
 ### Bug fixes
-* **o-table**: fixing bug when select-all-checkbox-visible="yes" Closes [#714](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/714) ([b88be9b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b88be9b))
+* **o-table**: fix bug when select-all-checkbox-visible="yes" Closes [#714](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/714) ([b88be9b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b88be9b))
 * **o-form-layout**: show change mark in the tab whose detail is modified. ([1eea210](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1eea210)) Closes [#715](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/715)
 
 ### BREAKING CHANGES
-* **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
-  * removing h3 tag in o-app-sidenav-menu-group component
-  * adding the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
+* **New UX Design**:
+  * **o-app-layout**:
+    * set `show-header = yes` by default ([2557184](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2557184))
+    * **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
+      * remove h3 tag in o-app-sidenav-menu-group component
+      * add the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
+    * **o-app-sidenav-menu-group**: remove class .active ([4b28033](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b28033))
+    *
+  * **o-table**:
+    * **o-table-visible-columns-dialog**: replace .description class with .mat-subheader ([a6fe1e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6fe1e3))
+    * **o-dual-list-selector**: replace .o-dual-list-selector-description class with .mat-subheader ([ae0c953](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae0c953))
+  * **o-listpicker**: replace .title-container class with .mat-dialog-title ([a6fe1e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6fe1e3))
+  * **o-button**: set `height=32px` and `min-height=112px` in BASIC, RAISED,STROKED and FLAT types ([2668232](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2668232))
+  * update `min-width:104px` in dialog buttons ([aeeacd4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aeeacd4))
 
 
 ## 8.4.1 (2021-08-03)

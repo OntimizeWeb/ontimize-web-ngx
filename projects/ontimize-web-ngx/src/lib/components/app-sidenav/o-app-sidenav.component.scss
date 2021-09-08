@@ -1,22 +1,10 @@
 $sidenav-spacing-unit: 8px;
 $sidenav-width: 240px;
-// $sidenav-closed-width: 40px;
 $sidenav-closed-width: 48px;
-// ($sidenav-width - $sidenav-closed-width)
+$margin-left-buttom: 8px;
 $sidenav-diff: -191px;
-$header-height: 56px;
+$header-height: 48px;
 $transition-duration: 500ms;
-
-@mixin sideNaveSubLevels() {
-  $sublevels: 5;
-  @for $sublevel from 1 through $sublevels {
-    .o-app-sidenav-menu-group-level-#{$sublevel} {
-      .o-app-sidenav-menugroup-items-container a {
-        padding-left: $sidenav-spacing-unit *2 + ($sidenav-spacing-unit * $sublevel);
-      }
-    }
-  }
-}
 
 .o-app-sidenav {
   &.header-layout {
@@ -29,6 +17,10 @@ $transition-duration: 500ms;
 
   .o-app-sidenav-menu-group,
   .o-app-sidenav-menu-item {
+    a {
+      margin-left: $margin-left-buttom;
+    }
+
     &[disabled=true] {
       .mat-button-focus-overlay,
       .mat-ripple {
@@ -43,6 +35,14 @@ $transition-duration: 500ms;
         cursor: initial;
       }
     }
+  }
+
+  .o-app-sidenav-menugroup {
+    transition: background-color $transition-duration;
+  }
+
+  .o-app-sidenav-menugroup-items-container {
+    overflow: hidden;
   }
 
   .o-app-sidenav-container {
@@ -70,23 +70,22 @@ $transition-duration: 500ms;
     .mat-drawer.o-app-sidenav-sidenav {
       box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
       padding-bottom: 36px;
-      padding-top: 5px;
       width: $sidenav-width;
       bottom: 0;
       overflow: auto;
       height: 100%;
 
+      .sidenav-toggle-container {
+        height: 48px;
+      }
+
       nav {
         a {
+          border-radius: 0;
           box-sizing: border-box;
           display: block;
+          line-height: 48px;
           font-size: 14px;
-          font-weight: 400;
-          line-height: ($sidenav-spacing-unit * 6) - 1;
-          text-decoration: none;
-          // transition: all .3s;
-          padding: 0 ($sidenav-spacing-unit * 2);
-          position: relative;
         }
       }
 
@@ -104,20 +103,6 @@ $transition-duration: 500ms;
       .sidenav-toggle {
         padding: 4px 12px 8px;
         cursor: pointer;
-      }
-
-      .o-app-sidenav-menugroup {
-        transition: background-color $transition-duration;
-
-        &.active + .o-app-sidenav-menugroup-items-container {
-          .o-app-sidenav-menu-item:last-child li {
-            border-color: transparent;
-          }
-        }
-      }
-
-      .o-app-sidenav-menugroup-items-container {
-        overflow: hidden;
       }
 
       &.mat-drawer-closing {
@@ -138,22 +123,22 @@ $transition-duration: 500ms;
               color: inherit;
             }
           }
+        }
 
-          &.o-app-sidenav-menuitem a {
-            width: $sidenav-closed-width;
-            max-width: $sidenav-closed-width;
-            min-width: $sidenav-closed-width;
-            line-height: $sidenav-closed-width;
-            padding: 0 $sidenav-spacing-unit;
-            height: $sidenav-closed-width;
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+          a {
+            width: $sidenav-closed-width - $margin-left-buttom;
+            max-width: $sidenav-closed-width - $margin-left-buttom;
+            min-width: $sidenav-closed-width - $margin-left-buttom;
+            padding-left: 4px;
+            padding-right: 12px;
           }
 
-          &.o-app-sidenav-menugroup {
-            padding: $sidenav-spacing-unit $sidenav-spacing-unit $sidenav-spacing-unit $sidenav-spacing-unit * 1.5;
-            height: $sidenav-closed-width;
-            -webkit-box-pack: center !important;
-            -ms-flex-pack: center !important;
-            justify-content: center !important;
+          &:not([disabled=true]) {
+            a.o-app-sidenav-viewer-sidenav-item-selected {
+              padding: 0 8px;
+            }
           }
         }
 
@@ -166,41 +151,120 @@ $transition-duration: 500ms;
         .o-app-sidenav-image .o-app-sidenav-image-container {
           padding: 0;
           text-align: end;
-          max-height: 48px;
+          max-height: 36px;
 
           .o-app-sidenav-image {
-            max-height: 48px;
-            margin: 8px 8px 0 0;
+            max-height: 36px;
+            margin-right: 8px;
+          }
+        }
+      }
+
+      /* Side Navigation Level Styles */
+      .o-app-sidenav-menu-group-level-1 a {
+        font-size: 14px;
+        line-height: 48px;
+        height: 48px;
+
+        + .o-app-sidenav-menugroup-items-container {
+          .o-app-sidenav-menu-group,
+          .o-app-sidenav-menu-item {
+            a {
+              font-size: 12px;
+              line-height: 40px;
+              height: 40px;
+            }
+          }
+        }
+      }
+
+      .o-app-sidenav-menu-group-level-2 a {
+        font-size: 12px;
+        line-height: 40px;
+        height: 40px;
+
+        + .o-app-sidenav-menugroup-items-container {
+          .o-app-sidenav-menu-group,
+          .o-app-sidenav-menu-item {
+            a {
+              font-size: 11px;
+              line-height: 40px;
+              height: 40px;
+
+              .mat-icon {
+                font-size: 20px;
+                height: 20px;
+                width: 20px;
+              }
+            }
           }
         }
       }
 
       &:not(.mat-drawer-closed) {
-        .o-app-sidenav-item {
-          border-bottom-width: 0;
-          border-bottom-style: solid;
-        }
-
         .o-app-sidenav-menugroup {
           transition: padding $transition-duration 0s;
 
           .o-app-sidenav-menugroup-arrow {
-            position: absolute;
-            right: ($sidenav-spacing-unit * 2);
             transition: $transition-duration transform cubic-bezier(.25, .8, .25, 1);
           }
 
-          &.active {
+          &.opened {
             .o-app-sidenav-menugroup-arrow {
               transform: rotate(90deg);
             }
           }
         }
-        @include sideNaveSubLevels();
+
+        .o-app-sidenav-menugroup-title,
+        .o-app-sidenav-menuitem-title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .o-app-sidenav-menu-group-level-1 a {
+          + .o-app-sidenav-menugroup-items-container {
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                padding-left: 28px;
+              }
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2 a {
+          + .o-app-sidenav-menugroup-items-container {
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                padding-left: 52px;
+              }
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2,
+        .o-app-sidenav-menu-group-level-3,
+        .o-app-sidenav-menu-group-level-4,
+        .o-app-sidenav-menu-group-level-5 {
+          a {
+            padding-right: 4px;
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-3,
+        .o-app-sidenav-menu-group-level-4,
+        .o-app-sidenav-menu-group-level-5 {
+          a {
+            padding-left: 52px;
+          }
+        }
 
         .o-app-sidenav-menugroup,
         .o-app-sidenav-menuitem {
-          mat-icon {
+          mat-icon:not(.o-app-sidenav-menugroup-arrow) {
             margin-right: ($sidenav-spacing-unit * 2);
           }
         }

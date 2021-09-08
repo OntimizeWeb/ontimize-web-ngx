@@ -1,4 +1,4 @@
-<div class="title-container" *ngIf="filter">
+<div mat-dialog-title *ngIf="filter">
   <o-search-input #searchInput [columns]="menuColumns" show-menu="no" float-label="never"
     (onSearch)="onFilterList($event)" class="o-list-picker-search" appearance="legacy"></o-search-input>
 </div>
@@ -30,6 +30,5 @@
 
 </div>
 <mat-dialog-actions align="end">
-  <button type="button" mat-stroked-button mat-dialog-close class="o-button-default">{{ 'CANCEL' | oTranslate |
-    uppercase }}</button>
+  <button type="button" mat-stroked-button mat-dialog-close class="o-button-default">{{ 'CANCEL' | oTranslate }}</button>
 </mat-dialog-actions>

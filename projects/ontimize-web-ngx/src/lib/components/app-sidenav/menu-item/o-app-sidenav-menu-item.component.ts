@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { InputConverter } from '../../../decorators/input-converter';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo } from '../../../interfaces/app-menu.interface';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
+import { AppMenuService } from '../../../services/app-menu.service';
 import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
 import { OUserInfoService } from '../../../services/o-user-info.service';
@@ -59,6 +60,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected dialogService: DialogService;
   protected permissionsService: PermissionsService;
   protected oUserInfoService: OUserInfoService;
+  protected appMenuService: AppMenuService;
   protected userInfoSubscription: Subscription;
 
   protected sidenav: OAppSidenavComponent;
@@ -71,7 +73,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   @InputConverter()
   disabled: boolean = false;
 
-  protected appSidenavToggleSubscription: Subscription;
+  protected appSidenavToggleSubscription: Subscription = new Subscription();
   protected routerSubscription: Subscription;
   protected oAppLayoutComponent: OAppLayoutComponent;
 
@@ -95,6 +97,8 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.routerSubscription = this.router.events.subscribe(() => {
       this.cd.detectChanges();
     });
+
+    this.appMenuService = this.injector.get(AppMenuService);
   }
 
   ngOnInit() {
@@ -104,12 +108,12 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   ngAfterViewInit() {
     if (this.isUserInfoItem() && this.sidenav) {
       this.setUserInfoImage();
-      this.appSidenavToggleSubscription = this.sidenav.onSidenavOpenedChange.subscribe(() => {
+      this.appSidenavToggleSubscription.add(this.sidenav.onSidenavOpenedChange.subscribe(() => {
         if (this.sidenav.sidenav.opened) {
           this.setUserInfoImage();
           this.setUserInfoImage();
         }
-      });
+      }));
       this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
         if (Util.isDefined(res.avatar) && this.sidenav.sidenav.opened) {
           (this.menuItem as MenuItemUserInfo).avatar = res.avatar;
@@ -209,6 +213,8 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     if (this.disabled) {
       return;
     }
+    this.appMenuService.onClick.next();
+
     switch (this.menuItemType) {
       case 'action':
         this.executeItemAction();

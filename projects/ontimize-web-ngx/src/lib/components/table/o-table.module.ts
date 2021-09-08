@@ -87,7 +87,7 @@ import { OTableGestureConfig } from './config/o-table-gesture-config';
   providers: [
     OTableExportButtonService,
     { provide: MatPaginatorIntl, useClass: OTableMatPaginatorIntl },
-    { provide: HAMMER_GESTURE_CONFIG,  useClass: OTableGestureConfig }
+    { provide: HAMMER_GESTURE_CONFIG, useClass: OTableGestureConfig }
   ]
 })
 export class OTableModule { }

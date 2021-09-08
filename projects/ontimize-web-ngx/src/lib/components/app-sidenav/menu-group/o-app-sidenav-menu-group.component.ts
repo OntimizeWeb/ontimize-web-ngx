@@ -11,7 +11,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import {Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { MenuGroup } from '../../../interfaces/app-menu.interface';
@@ -57,13 +57,14 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
 export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onItemClick: EventEmitter<any> = new EventEmitter<any>();
+  public onClickEvent: EventEmitter<any> = new EventEmitter<any>();
 
   protected translateService: OTranslateService;
   protected permissionsService: PermissionsService;
 
-  appMenuService: AppMenuService;
+  public appMenuService: AppMenuService;
   public sidenav: OAppSidenavComponent;
-  protected sidenavSubscription: Subscription;
+  protected sidenavSubscription: Subscription = new Subscription();
   protected permissions: OPermissions;
   protected mutationObserver: MutationObserver;
 
@@ -87,7 +88,6 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
     this.permissionsService = this.injector.get(PermissionsService);
-
     this.sidenav = this.injector.get(OAppSidenavComponent);
   }
 
@@ -98,11 +98,11 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   ngAfterViewInit() {
     if (this.menuGroup.id === 'user-info' && this.sidenav) {
       const self = this;
-      this.sidenavSubscription = this.sidenav.onSidenavOpenedChange.subscribe((opened) => {
+      this.sidenavSubscription.add(this.sidenav.onSidenavOpenedChange.subscribe((opened) => {
         self.disabled = ((!opened && Util.isDefined(opened)) || (Util.isDefined(self.permissions) && self.permissions && self.permissions.enabled === false));
         self.updateContentExpansion();
         self.cd.markForCheck();
-      });
+      }));
     }
     this.updateContentExpansion();
   }
@@ -133,7 +133,9 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     if (this.disabled) {
       return;
     }
+
     this.menuGroup.opened = !this.menuGroup.opened;
+    this.appMenuService.onClick.next();
     this.updateContentExpansion();
   }
 
@@ -167,10 +169,11 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   }
 
   getClass() {
-    let className = 'o-app-sidenav-menu-group o-app-sidenav-menu-group-level-'+this.level;
+    let className = 'o-app-sidenav-menu-group o-app-sidenav-menu-group-level-' + this.level;
     if (this.menuGroup.class) {
       className += ' ' + this.menuGroup.class;
     }
     return className;
   }
+
 }

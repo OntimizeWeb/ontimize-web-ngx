@@ -1,8 +1,7 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }}: {{ column.title | oTranslate }}</span>
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between stretch" class="dialog-list-container">
   <div fxLayout="column" class="content-wrapper" [class.content-wrapper-fixed-dimension]="getFixedDimensionClass()">
-    <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)"
-      *ngIf="isDefaultFilter | async">
+    <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)" *ngIf="isDefaultFilter | async">
       {{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}
     </mat-slide-toggle>
     <div fxFlex *ngIf="!(isCustomFilter | async);else customFilterTemplate" fxLayout="column">
@@ -13,8 +12,8 @@
       </mat-form-field>
       <div *ngIf="(listData | async).length > 0; else emptyListData" fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="row" fxLayoutAlign="start start">
-          <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()"
-            [indeterminate]="isIndeterminate()" [disabled]="!listData" class="select-all-checkbox">
+          <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"
+            class="select-all-checkbox">
             {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
           </mat-checkbox>
           <span *ngIf="!listData" class="column-filter-empty-list">
@@ -32,10 +31,10 @@
         </span>
       </ng-template>
 
-      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column"
-        class="select-values-list" (selectionChange)="onSelect($event)">
-        <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before"
-          [selected]="record.selected" [value]="record">
+      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list"
+        (selectionChange)="onSelect($event)">
+        <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before" [selected]="record.selected"
+          [value]="record">
           <ng-container *ngIf="!column.renderer">
             {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
           </ng-container>
@@ -51,12 +50,12 @@
 
 <mat-dialog-actions fxLayoutAlign="space-between center">
   <button type="button" mat-stroked-button [mat-dialog-close]="clearAction" class="o-button-info">
-    {{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate | uppercase }} </button>
+    {{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }} </button>
   <span align="end">
     <button type="button" mat-stroked-button [mat-dialog-close]="cancelAction" class="o-button-default">
-      {{ 'CANCEL' | oTranslate | uppercase }} </button>
+      {{ 'CANCEL' | oTranslate }} </button>
     <button type="button" mat-stroked-button [mat-dialog-close]="acceptAction" class="o-button-primary">
-      {{ 'ACCEPT' | oTranslate | uppercase }} </button>
+      {{ 'ACCEPT' | oTranslate }} </button>
   </span>
 </mat-dialog-actions>
 

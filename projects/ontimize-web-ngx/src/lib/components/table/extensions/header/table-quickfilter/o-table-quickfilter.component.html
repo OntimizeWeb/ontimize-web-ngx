@@ -1,9 +1,15 @@
 <div class="quickFilter" fxLayout="row">
-  <mat-form-field floatLabel="never" appearance="legacy">
+
+  <mat-form-field appearance="outline" floatLabel="never">
     <input matInput #filter [formControl]="formControl" (click)="$event.stopPropagation()">
     <mat-placeholder class="placeholder">{{ placeholder | oTranslate}}</mat-placeholder>
-    <mat-icon matPrefix svgIcon="ontimize:search" [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()"
-      class="icon-btn search-icon"></mat-icon>
+    <div matPrefix>
+      <mat-icon svgIcon="ontimize:search" [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="small"></mat-icon>
+      <button mat-icon-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()">
+        <mat-icon class="search-icon">expand_more</mat-icon>
+      </button>
+    </div>
+
     <mat-menu #menu="matMenu" class="o-table-quickfilter-menu">
       <div fxLayout="column" class="checkbox-container">
 
