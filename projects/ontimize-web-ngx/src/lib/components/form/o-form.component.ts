@@ -135,14 +135,16 @@ export const DEFAULT_INPUTS_O_FORM = [
   'ignoreOnExit: ignore-on-exit',
 
   // [function]: function to execute on query error. Default: no value.
-  'queryFallbackFunction: query-fallback-function'
-  // ,
+  'queryFallbackFunction: query-fallback-function',
 
   // 'insertFallbackFunction: insert-fallback-function',
 
   // 'updateFallbackFunction: update-fallback-function',
 
   // 'deleteFallbackFunction: delete-fallback-function'
+
+  // ignore-default-navigation [string][yes|no|true|false]: ignore default navigation when user click the toolbar buttons. Default: no.
+  'ignoreDefaultNavigation: ignore-default-navigation'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -235,6 +237,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   // public insertFallbackFunction: Function;
   // public updateFallbackFunction: Function;
   // public deleteFallbackFunction: Function;
+  @InputConverter()
+  public ignoreDefaultNavigation: boolean = false;
 
   /* end of inputs variables */
 
@@ -562,8 +566,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   executeToolbarAction(action: string, options?: any) {
     switch (action) {
-      case Codes.BACK_ACTION: this.back(); break;
-      case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break;
+      case Codes.BACK_ACTION: this.back(); break; //
+      case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break; //
       case Codes.RELOAD_ACTION: this.reload(true); break;
       case Codes.GO_INSERT_ACTION: this.goInsertMode(options); break;
       case Codes.INSERT_ACTION: this.insert(); break;
@@ -842,7 +846,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Navigate back
    */
   back() {
-    this.formNavigation.navigateBack();
+    const options = { ignoreNavigation: this.ignoreDefaultNavigation };
+    this.formNavigation.navigateBack(options);
   }
 
   /**
@@ -857,6 +862,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Close current detail form
    */
   closeDetail(options?: any) {
+    options = Util.isDefined(options) ? options : {};
+    options.ignoreNavigation = this.ignoreDefaultNavigation;
     this.formNavigation.closeDetailAction(options);
   }
 
