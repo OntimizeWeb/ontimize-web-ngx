@@ -246,11 +246,14 @@ export class OFormNavigationClass {
     }
   }
 
-  navigateBack() {
+  navigateBack(options?: any) {
     if (this.formLayoutManager) {
       this.formLayoutManager.closeDetail();
     } else if (this.navigationService) {
       this.navigationService.removeLastItem();
+      if (options && options.ignoreNavigation) {
+        return;
+      }
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         const extras = {};
@@ -269,6 +272,9 @@ export class OFormNavigationClass {
       if (!this.navigationService.removeLastItemsUntilMain()) {
         // `removeLastItemsUntilMain` didn't find the main navigation item
         this.navigationService.removeLastItem();
+      }
+      if (options && options.ignoreNavigation) {
+        return;
       }
       let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
