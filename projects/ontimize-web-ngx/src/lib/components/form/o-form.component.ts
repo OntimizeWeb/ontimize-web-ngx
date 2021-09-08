@@ -566,8 +566,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   executeToolbarAction(action: string, options?: any) {
     switch (action) {
-      case Codes.BACK_ACTION: this.back(); break; //
-      case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break; //
+      case Codes.BACK_ACTION: this.back(); break;
+      case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break;
       case Codes.RELOAD_ACTION: this.reload(true); break;
       case Codes.GO_INSERT_ACTION: this.goInsertMode(options); break;
       case Codes.INSERT_ACTION: this.insert(); break;
