@@ -368,6 +368,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         }, 0);
       }
     });
+    this.showLoading.next(false);
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
