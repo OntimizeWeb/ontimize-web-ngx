@@ -328,6 +328,9 @@ export class NavigationService implements ILocalStorageComponent {
         return item;
       });
 
+    if (!routeMatches.length) {
+      return void 0;
+    }
     let maxMatches = routeMatches.reduce((a, b) => Math.max(a, b));
     const lastNavItem = this.navigationItems[this.navigationItems.length - 1];
     if (!lastNavItem.isMainNavigationComponent() && !lastNavItem.isMainFormLayoutManagerComponent()) {

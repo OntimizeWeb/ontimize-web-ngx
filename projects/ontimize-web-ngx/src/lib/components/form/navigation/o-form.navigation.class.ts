@@ -459,7 +459,11 @@ export class OFormNavigationClass {
   }
 
   protected storeNavigationFormRoutes(activeMode: string) {
-    const formRoutes = this.navigationService.getPreviousRouteData().formRoutes;
+    const prevRouteData = this.navigationService.getPreviousRouteData();
+    if (!Util.isDefined(prevRouteData)) {
+      return;
+    }
+    const formRoutes = prevRouteData.formRoutes;
     this.navigationService.storeFormRoutes({
       detailFormRoute: formRoutes ? formRoutes.detailFormRoute : Codes.DEFAULT_DETAIL_ROUTE,
       editFormRoute: formRoutes ? formRoutes.editFormRoute : Codes.DEFAULT_EDIT_ROUTE,
