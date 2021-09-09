@@ -26,6 +26,8 @@ We are implementing different modifications in **OntimizeWeb** in order to impro
 * **o-form-layout**:
   * Show change mark in the tab whose detail is modified. ([1eea210](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1eea210)) Closes [#715](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/715)
   * Hide spinner when form layout manager has multiple tabs opened and the page is reloaded. ([6823e10](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6823e10)) Closes [#733](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/733)
+  * Protect navigation when the application navigation history is empty. ([35ae9b8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/35ae9b8)) Closes [#727](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/727)
+  * Show `new` label in form layout tab after reload the application. ([07619df](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/07619df)) Closes [#736](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/736)
 
 ### BREAKING CHANGES
 * OntimizeWeb theme now defines its ows configuration that modifies angular maetrial's typography, if you are using OntimizeWeb material theme you should provide the typograhy defined by OntimizeWeb in the following way:
