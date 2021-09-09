@@ -1724,7 +1724,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected isInsertModePath(path: string): boolean {
     const navData: ONavigationItem = this.navigationService.getLastItem();
-    return Util.isDefined(navData) && path === navData.getInsertFormRoute();
+    // TODO: solve issue #727 when `insert-form-route` is present
+    return Util.isDefined(navData) ? path === navData.getInsertFormRoute() : Codes.DEFAULT_INSERT_ROUTE === path;
   }
 
   protected isUpdateModePath(path: string): boolean {
