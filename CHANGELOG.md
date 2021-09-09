@@ -1,45 +1,50 @@
 ## 8.5.0
+
+### We are restyling **OntimizeWeb**
+We are implementing different modifications in **OntimizeWeb** in order to improve the design of the framework. Closes [#623](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/623)
+* **o-table**:
+  * Added the badge in the quickfilter that indicates the number of filtering columns ([fb80778](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb80778))
+  * Attribute `filter-column-active-by-default` has changed its default value. Now is activated by default ([8e97d53](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e97d53))
+* **o-app-header** : New attribute `header-height` ([fd06479](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd06479))
+* All OntimizeWeb menus now have the CSS class `o-mat-menu` that modifies the menu items height ([e0aa722](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0aa722))
+
 ### Features
-* **o-form-layout-tabgroup-options**: new `max-tabs` input ([9d78d40](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d78d40)) Closes [#694](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/694)
+* **o-form-layout-tabgroup-options**: New attribute `max-tabs` ([9d78d40](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d78d40)) Closes [#694](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/694)
 * **OFormServiceComponent** (**o-combo**, **o-list-picker**, **o-radio**) ([e92a78e5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e92a78e5)) Closes [#706](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/706)
-  * Showing a context menu with the reload data option
   * New `refresh` method
+  * A context menu has been added for showing a reload option
 * **o-table** ([2f5b2bb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2f5b2bb9)) Closes [#620](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/620)
   * Showing all the available values after the first configuration of a column filter
   * **OColumnValueFilter**: adding `availableValues` to stored filter properties
-* **o-app-layout-sidenav**: implementing multilevel navigation but only construction up to the 3rd level is recommended ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
-* **OTableQuickfilter**: Remove columns with searchable=no from query. ([03fd5d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03fd5d6)) Closes[#721](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/721)
+* **o-app-layout-sidenav**: Add multilevel navigation. Building more than 3 levels is **not recommended** ([4daab8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4daab8d)) ([6cbbaa9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6cbbaa9))  Closes [#709](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/709)
 * **o-form**: New attribute `ignore-default-navigation`. ([d59d6ebb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d59d6ebb)) Closes[#732](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/732)
 
-* **New UX Design**: Closes[#623](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/623)
-  * **o-table**:
-    * Added the badge in the quickfilter of the table whose number identifier the number of active columns ([fb80778](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb80778))
-    * Set filter-column-active-by-default = "yes" by default value ([8e97d53](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8e97d53))
-  * **o-app-header** : new attribute header-height ([fd06479](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd06479))
-  * add o-mat-menu class ([e0aa722](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0aa722))
-
 ### Bug fixes
-* **o-table**: fix bug when select-all-checkbox-visible="yes" Closes [#714](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/714) ([b88be9b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b88be9b))
+* **o-table**:
+  * Fix bug when `select-all-checkbox-visible` is active. ([b88be9b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b88be9b)) Closes [#714](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/714)
+  * **OTableQuickfilter**: Remove no searchable columns from query. ([03fd5d6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03fd5d6)) Closes [#721](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/721)
 * **o-form-layout**:
   * Show change mark in the tab whose detail is modified. ([1eea210](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1eea210)) Closes [#715](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/715)
   * Hide spinner when form layout manager has multiple tabs opened and the page is reloaded. ([6823e10](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6823e10)) Closes [#733](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/733)
 
 ### BREAKING CHANGES
-* **New UX Design**:
-  * **o-app-layout**:
-    * set `show-header = yes` by default ([2557184](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2557184))
-    * **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
-      * remove h3 tag in o-app-sidenav-menu-group component
-      * add the classes .o-app-sidenav-menu-group-level-1, .o-app-sidenav-menu-group-level-2, .o-app-sidenav-menu-group-level-3, .o-app-sidenav-menu-group-level-4 and .o-app-sidenav-menu-group-level-5
-    * **o-app-sidenav-menu-group**: remove class .active ([4b28033](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b28033))
-    *
-  * **o-table**:
-    * **o-table-visible-columns-dialog**: replace .description class with .mat-subheader ([a6fe1e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6fe1e3))
-    * **o-dual-list-selector**: replace .o-dual-list-selector-description class with .mat-subheader ([ae0c953](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae0c953))
-  * **o-listpicker**: replace .title-container class with .mat-dialog-title ([a6fe1e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6fe1e3))
-  * **o-button**: set `height=32px` and `min-height=112px` in BASIC, RAISED,STROKED and FLAT types ([2668232](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2668232))
-  * update `min-width:104px` in dialog buttons ([aeeacd4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aeeacd4))
-
+* OntimizeWeb theme now defines its ows configuration that modifies angular maetrial's typography, if you are using OntimizeWeb material theme you should provide the typograhy defined by OntimizeWeb in the following way:
+  ```css
+  @import 'node_modules/ontimize-web-ngx/theme.scss';
+  @include o-material-theme($theme, $default-typography);
+  ```
+* **o-app-layout**:
+    * Default value of attribute `show-header` has been changed to `true` ([2557184](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2557184))
+  * **o-app-layout-sidenav**: ([2fc889e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2fc889e))
+    * h3 tag has been remove in `o-app-sidenav-menu-group` component
+    * Added the CSS classes `o-app-sidenav-menu-group-level-1`, `o-app-sidenav-menu-group-level-2`, `o-app-sidenav-menu-group-level-3`, `o-app-sidenav-menu-group-level-4` and `o-app-sidenav-menu-group-level-5`
+  * **o-app-sidenav-menu-group**: CSS class `active` has been removed ([4b28033](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b28033))
+* **o-table**:
+  * **o-table-visible-columns-dialog**: CSS class `description` has been replaced by `mat-subheader` ([a6fe1e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6fe1e3))
+  * **o-dual-list-selector**: CSS class `o-dual-list-selector-description` has been replaced by `mat-subheader` ([ae0c953](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae0c953))
+* **o-listpicker**: CSS class `title-container` has been replaced by `mat-dialog-title` ([a6fe1e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6fe1e3))
+* **o-button**: Types `BASIC`, `RAISED`, `STROKED` and `FLAT` now have CSS properties `height` set to `32px` and `min-width` set to `112px` ([2668232](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2668232))
+* All dialog buttons now have `min-width` CSS property set to `104px` ([aeeacd4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aeeacd4))
 
 ## 8.4.1 (2021-08-03)
 ### Features
