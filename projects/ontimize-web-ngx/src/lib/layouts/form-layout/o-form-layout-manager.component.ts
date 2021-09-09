@@ -1,16 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Injector,
-  OnDestroy,
-  OnInit,
-  Optional,
-  SkipSelf,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Injector, OnDestroy, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -162,7 +150,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     this._labelColsArray = Util.parseArray(value);
   }
 
-  protected _labelColsArray: string[];
+  protected _labelColsArray: string[] = [];
 
   get labelColsArray(): string[] {
     return this._labelColsArray;
