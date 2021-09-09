@@ -245,7 +245,8 @@ export class OTableContextMenuComponent implements AfterViewInit {
     const columValueFilter: OColumnValueFilter = {
       attr: this.column.attr,
       operator: ColumnValueFilterOperator.IN,
-      values: [this.row[this.column.attr]]
+      values: [this.row[this.column.attr]],
+      availableValues: undefined
     };
     this.table.filterByColumn(columValueFilter);
   }

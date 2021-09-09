@@ -1,14 +1,11 @@
 .application-layout-content-wrapper {
   z-index: 1;
   position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   overflow: auto;
-  padding: 8px;
+  padding: 16px;
 
-  &.header-layout {
-    top: 56px;
-  }
 }

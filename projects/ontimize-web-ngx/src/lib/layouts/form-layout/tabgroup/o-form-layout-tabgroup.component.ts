@@ -160,6 +160,14 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return this.options && this.options.iconPosition === 'left';
   }
 
+  get maxTabs(): number {
+    let maxTabs;
+    if (this.options && this.options.maxTabs) {
+      maxTabs = this.options.maxTabs;
+    }
+    return maxTabs;
+  }
+
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
@@ -206,7 +214,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     const isLoading = this.showLoading.getValue();
     if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) &&
       isLoading && arg.index === this.state.tabsData.length) {
-      // this is only triggered once when all tabs are loaded 
+      // this is only triggered once when all tabs are loaded
       this.tabGroup.selectedIndex = this.state.selectedIndex;
       this.showLoading.next(false);
     }
@@ -259,10 +267,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return this.data.length > 0 ? this.data[this.data.length - 1] : undefined;
   }
 
-  getLastTabId(): string {
-    return this.data.length > 0 ? this.data[this.data.length - 1].id : undefined;
-  }
-
   getRouteOfActiveItem(): any[] {
     const route = [];
     if (this.data.length && this.tabGroup.selectedIndex > 0) {
@@ -276,11 +280,10 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   setModifiedState(modified: boolean) {
-    const id = this.getLastTabId();
-    for (let i = 0, len = this.data.length; i < len; i++) {
-      if (this.data[i].id === id) {
-        this.data[i].modified = modified;
-        break;
+    if (this.tabGroup.selectedIndex > 0) {
+      const id = this.data.length > 0 ? this.data[this.tabGroup.selectedIndex - 1].id : undefined;
+      if (Util.isDefined(id)) {
+        this.data.find(d => d.id === id).modified = modified;
       }
     }
   }
@@ -365,6 +368,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         }, 0);
       }
     });
+    this.showLoading.next(false);
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
@@ -396,5 +400,14 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   closeDetail() {
     this.closeTab(this.tabGroup.selectedIndex - 1);
+  }
+
+  canAddDetailComponent(): boolean {
+    // The max tabs number includes the main tab
+    const maxReached = (this.data.length + 1) >= this.maxTabs;
+    if (maxReached) {
+      this.dialogService.info('INFO', 'LAYOUT_MANANGER.MAX_TABS_NUMBER_REACHED')
+    }
+    return !maxReached;
   }
 }

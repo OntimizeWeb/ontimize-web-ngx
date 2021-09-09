@@ -32,9 +32,8 @@
             color: mat-color($background, disabled-button);
           }
 
-          .column-filter-icon-active,
-          .column-filter-icon.active {
-            color: mix($table-background, rgba($text-color, 1), (1 - $text-opacity) * 100%);
+          .column-filter-icon-active {
+            color: mat-color($primary);
           }
 
           .o-table-header-indicator-numbered {
@@ -118,16 +117,6 @@
       }
     }
 
-    .buttons {
-      button {
-        color: mat-color($foreground, secondary-text);
-
-        &.disabled {
-          color: mat-color($background, disabled-button);
-        }
-      }
-    }
-
     .o-table-body.horizontal-scroll {
       &::-webkit-scrollbar-thumb {
         background-color: mat-color($primary, 200, 0.5);
@@ -156,4 +145,7 @@
     }
   }
 
+  .o-table-quickfilter .quickFilter .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
+    border-right: 1px solid mat-color($foreground, divider);
+  }
 }

@@ -1,7 +1,5 @@
 @import '~@angular/material/theming';
-
-
-@mixin o-card-menu-item-theme($theme) {
+@mixin o-card-menu-item-theme($theme,$typography) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
@@ -10,12 +8,21 @@
 
   .o-card-menu-item {
 
-    background: mat-color($background, background);
+    background: mat-color($background, 'card');
     border: 1px solid mat-color($primary, 0.17);
+
+    .o-card-menu-item-main {
+      background-color: mat-color($background, background, 0.29);
+    }
+
+    .o-card-menu-item-title {
+      color: mat-color($primary);
+      font-size: mat-font-size($typography, title);
+    }
 
     .mat-button {
       color: mat-color($primary);
-      background: mat-color($accent);
+      background: mat-color($accent,100);
     }
 
     .o-card-menu-item-icon,

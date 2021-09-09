@@ -7,7 +7,7 @@
     [class.mat-drawer-closed]="!sidenav.opened" fxLayout="column" fxLayoutAlign="start stretch" (openedChange)="sidenavOpenedChange()"
     (closedStart)="sidenavClosedStart()" (openedStart)="sidenavOpenedStart()">
 
-    <div fxLayout="row" fxLayoutAlign="end" class="sidenav-toggle-container" *ngIf="isDesktopMode()">
+    <div fxLayout="row" fxLayoutAlign="end center" class="sidenav-toggle-container" *ngIf="isDesktopMode()">
       <mat-icon class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
     </div>
 
@@ -23,8 +23,9 @@
         </o-app-sidenav-menu-item>
       </ul>
 
-      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened"
-        *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()">
+      <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
+        *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()"
+        >
       </o-app-sidenav-menu-group>
     </nav>
 

@@ -86,67 +86,47 @@
     }
   }
 
-  $dialog-borders-color: #929292;
+  /* MODAL DIALOG IN O-DIALOG, FORM LAYOUT MANAGER AND LIST-PICKER */
 
+  .o-dialog-class,
   .o-form-layout-dialog-overlay,
   .o-list-picker-dialog {
-    .title-container {
-      border-bottom: 1px solid $dialog-borders-color;
-    }
-  }
-
-  .o-form-layout-dialog-overlay {
-    .title-container {
-      .mat-icon {
-        color: $dialog-borders-color;
-      }
-    }
-  }
-
-  .o-dialog-class {
     .mat-dialog-container {
-      border: 1px solid $dialog-borders-color;
-
       .mat-dialog-title {
-        border-bottom: 1px solid $dialog-borders-color;
+        border-bottom: 1px solid mat-color($primary);
+        line-height: mat-font-size($typography, subheading-2);
+        font-size: mat-font-size($typography, subheading-2);
+
+        .mat-icon {
+          color: mat-color($primary);
+        }
       }
 
       .empty-filter-list {
         color: mat-color($foreground, disabled-text);
       }
-    }
-  }
-
-  .o-dialog-class {
-    .mat-dialog-container {
-      .mat-dialog-title {
-        line-height: mat-font-size($typography, title);
-        font-size: mat-font-size($typography, title);
-      }
 
       .mat-dialog-content {
-        font-size: mat-font-size($typography, input);
+        font-size: mat-font-size($typography, body-1);
 
         .mat-selection-list[dense] {
           outline: none;
 
           .mat-list-item {
             .empty-filter-list,
-            .mat-list-text > * {
-              font-size: mat-font-size($typography, subheading-1);
+            .mat-list-item-content > * {
+              font-size: mat-font-size($typography, body-1);
             }
 
             .mat-line:nth-child(n+2) {
               font-size: mat-font-size($typography, caption);
             }
+
           }
         }
       }
     }
 
-    .mat-dialog-actions > button {
-      margin-left: 12px;
-    }
   }
 
   /*global styles about drag/drop in dialogs table*/
@@ -155,7 +135,7 @@
     display: block;
 
     .mat-list-item-content {
-      font-size: mat-font-size($typography, subheading-2);
+      font-size: mat-font-size($typography, body-1);
       color: mat-color($foreground, text);
       padding: 6px;
       flex-direction: row;
@@ -185,4 +165,147 @@
       color: mat-color($foreground, text);
     }
   }
+
+  /*BUTTONS HOVER*/
+  .mat-dialog-actions,
+  .o-form .o-form-toolbar,
+  .ontimize-table.o-table .o-table-container .toolbar .buttons {
+    .o-table-button,
+    button {
+      margin: 0 8px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    button:not([disabled]) {
+      &.mat-button-base.mat-primary,
+      &.mat-button-base.o-button-primary,
+      &.mat-button-base[ng-reflect-dialog-result="0"],
+      &.mat-button-base[ng-reflect-dialog-result="true"] {
+        color: mat-color($primary, 800);
+        background-color: mat-color($primary, 100);
+        border-color: transparent;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary);
+          background-color: #ffffff;
+          border-color: mat-color($foreground, divider);
+        }
+
+      }
+
+      &.mat-button-base,
+      &.mat-button-base.mat-accent,
+      &.mat-button-base.o-button-default,
+      &.mat-button-base[ng-reflect-dialog-result="1"],
+      &.mat-button-base[ng-reflect-dialog-result="false"] {
+        color: mat-color($primary);
+        background-color: #ffffff;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary,800);
+          background-color: mat-color($primary,100);
+          border-color: transparent;
+        }
+      }
+
+    }
+
+  }
+
+  .o-button button.mat-stroked-button {
+    &:not([disabled]) {
+      &.mat-primary {
+        color: mat-color($primary, 800);
+        background-color: mat-color($primary, 100);
+        border-color: transparent;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary);
+          background-color: #ffffff;
+          border-color: mat-color($foreground, divider);
+        }
+
+      }
+
+      &.mat-accent {
+        color: mat-color($accent);
+        background-color: #ffffff;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary,800);
+          background-color: mat-color($primary,100);
+          border-color: transparent;
+        }
+      }
+
+    }
+
+  }
+
+  .o-form .o-form-toolbar button,
+  .ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
+    line-height: 30px;
+
+
+    &.mat-stroked-button {
+      padding: 0 6px;
+
+      .mat-button-wrapper {
+        .mat-icon {
+          margin-right: 4px;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+
+        }
+
+        span {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  /*MAT PAGINATION*/
+  .mat-paginator {
+    .mat-paginator-range-label {
+      margin: 0 16px;
+    }
+
+    .mat-paginator-page-size-label {
+      margin-right: 16px;
+    }
+
+    button {
+      &:hover {
+        background-color: mat-color($primary,100);
+        border-radius: 50%;
+      }
+
+      &.mat-icon-button {
+        height: 20px;
+        width: 20px;
+        line-height: 20px;
+        margin-left: 8px;
+
+        .mat-paginator-icon {
+          width: 20px;
+        }
+      }
+    }
+
+  }
+
 }

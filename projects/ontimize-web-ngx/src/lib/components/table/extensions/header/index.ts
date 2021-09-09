@@ -8,3 +8,4 @@ export * from './table-menu/o-table-menu.component';
 export * from './table-option/o-table-option.component';
 export * from './table-quickfilter/o-table-quickfilter.component';
 export * from './table-columns-filter/columns/o-table-columns-filter-column.component';
+export * from './table-header/o-table-header.component';

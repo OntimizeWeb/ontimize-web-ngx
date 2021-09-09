@@ -1,12 +1,59 @@
 .o-table-quickfilter {
   .quickFilter {
-    padding-right: 24px;
+    .mat-form-field {
+      .mat-form-field-wrapper {
+        margin: 0;
+        padding-bottom: 0;
 
-    .mat-form-field-flex {
-      align-items: flex-end;
+        .mat-form-field-flex {
+          align-items: initial;
+          margin-top: 0;
+          height: 32x;
+          line-height: 32px;
 
-      .mat-form-field-prefix {
-        padding-bottom: 2px;
+          .mat-form-field-outline,
+          .mat-form-field-prefix,
+          .mat-form-field-suffix {
+            top: 0;
+          }
+
+          .mat-form-field-infix {
+            padding: 0 4px;
+            border-top: 0;
+          }
+
+          .mat-form-field-prefix {
+            padding-bottom: 0;
+
+            div {
+              align-items: center;
+              display: inline-flex;
+              margin: 2px 0;
+
+              .mat-badge-content {
+                background-color: #3C8500;
+                width: 14px;
+                height: 14px;
+                line-height: 14px;
+                top: -4px;
+                right: -4px;
+              }
+
+              .mat-icon,
+              button {
+                margin-right: 6px;
+              }
+
+              button.mat-icon-button {
+                height: 100%;
+
+                .mat-button-ripple.mat-ripple {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -15,11 +62,6 @@
     cursor: pointer;
   }
 
-  .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-icon.search-icon,
-  .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-icon.search-icon {
-    line-height: 20px;
-    width: 20px;
-  }
 }
 
 .o-table-quickfilter-menu {

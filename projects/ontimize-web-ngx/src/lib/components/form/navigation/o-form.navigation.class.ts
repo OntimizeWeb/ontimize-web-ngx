@@ -246,11 +246,14 @@ export class OFormNavigationClass {
     }
   }
 
-  navigateBack() {
+  navigateBack(options?: any) {
     if (this.formLayoutManager) {
       this.formLayoutManager.closeDetail();
     } else if (this.navigationService) {
       this.navigationService.removeLastItem();
+      if (options && options.ignoreNavigation) {
+        return;
+      }
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         const extras = {};
@@ -269,6 +272,9 @@ export class OFormNavigationClass {
       if (!this.navigationService.removeLastItemsUntilMain()) {
         // `removeLastItemsUntilMain` didn't find the main navigation item
         this.navigationService.removeLastItem();
+      }
+      if (options && options.ignoreNavigation) {
+        return;
       }
       let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
@@ -453,7 +459,11 @@ export class OFormNavigationClass {
   }
 
   protected storeNavigationFormRoutes(activeMode: string) {
-    const formRoutes = this.navigationService.getPreviousRouteData().formRoutes;
+    const prevRouteData = this.navigationService.getPreviousRouteData();
+    if (!Util.isDefined(prevRouteData)) {
+      return;
+    }
+    const formRoutes = prevRouteData.formRoutes;
     this.navigationService.storeFormRoutes({
       detailFormRoute: formRoutes ? formRoutes.detailFormRoute : Codes.DEFAULT_DETAIL_ROUTE,
       editFormRoute: formRoutes ? formRoutes.editFormRoute : Codes.DEFAULT_EDIT_ROUTE,

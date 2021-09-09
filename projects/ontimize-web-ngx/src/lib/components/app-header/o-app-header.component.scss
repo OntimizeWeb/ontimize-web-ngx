@@ -1,7 +1,54 @@
 .o-app-header {
   z-index: 2;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
-  height: 56px;
+  box-shadow: 0 2px 6px #00000029;
+
+  &.o-app-header-large {
+    height: 56px;
+    + .header-layout{
+      top:56px;
+    }
+
+    .o-user-info {
+      font-size: 16px;
+
+      .o-user-info-avatar-wrapper {
+        height: 40px;
+        width: 40px;
+      }
+    }
+
+  }
+
+  &.o-app-header-medium {
+    height: 48px;
+    + .header-layout{
+      top:48px;
+    }
+    .o-user-info {
+      font-size: 16px;
+
+      .o-user-info-avatar-wrapper {
+        height: 32px;
+        width: 32px;
+      }
+    }
+  }
+
+  &.o-app-header-small {
+    height: 40px;
+    + .header-layout{
+      top:40px;
+    }
+
+    .o-user-info {
+      font-size: 14px;
+
+      .o-user-info-avatar-wrapper {
+        height: 30px;
+        width: 30px;
+      }
+    }
+  }
 
   nav {
     padding-right: 16px;

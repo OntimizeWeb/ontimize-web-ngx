@@ -1,0 +1,44 @@
+@import '~@angular/material/theming';
+@mixin o-dual-list-selector-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $background: map-get($theme, background);
+  $is-dark-theme: map-get($theme, is-dark);
+
+  .o-dual-list-selector {
+    .o-dual-list-selector-list {
+      .mat-selection-list.mat-list-base {
+        border: 1px solid mat-color($foreground, divider);
+
+        .mat-list-item {
+          &:not(.mat-list-option) {
+            border-bottom: 1px solid mat-color($foreground, divider);
+          }
+
+          &.mat-list-option {
+            background: mat-color($background, 'hover');
+
+            &[aria-selected="true"] {
+              background-color: mat-color($primary, 100);
+              color: if($is-dark-theme,#121212, mat-color($foreground,text));
+            }
+          }
+        }
+
+        &.cdk-drop-list-dragging {
+          border-style: dashed;
+          border-width: 2px;
+        }
+      }
+
+      .mat-mini-fab:not([class*='mat-elevation-z']) {
+        box-shadow: none;
+
+        &.mat-accent:not([disabled]) {
+          background-color: mat-color($foreground, divider);
+          color: mat-color($foreground, text);
+        }
+      }
+    }
+  }
+}
