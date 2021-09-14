@@ -1,10 +1,11 @@
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef, ElementRef, Injectable, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, ComponentRef, ElementRef, Injectable, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
 import { IOContextMenuClickEvent, IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
+import { OContextMenuOverlayService } from './o-context-menu-overlay.service';
 
 @Injectable()
 export class OContextMenuService implements OnDestroy {
@@ -13,16 +14,15 @@ export class OContextMenuService implements OnDestroy {
   public closeContextMenu: Subject<Event> = new Subject();
   public activeMenu: OContextMenuContentComponent;
 
-  protected overlays: OverlayRef[] = [];
   protected fakeElement: ElementRef = new ElementRef({ nativeElement: '' });
   protected subscription: Subscription = new Subscription();
 
   constructor(
     private overlay: Overlay,
-    private scrollStrategy: ScrollStrategyOptions
-  ) {
-    this.subscription.add(this.closeContextMenu.subscribe(() => this.destroyOverlays()));
-  }
+    private scrollStrategy: ScrollStrategyOptions,
+    protected cd: ChangeDetectorRef,
+    private overlayService: OContextMenuOverlayService
+  ) { }
 
   public ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -33,14 +33,8 @@ export class OContextMenuService implements OnDestroy {
     this.createOverlay(context);
   }
 
-  public destroyOverlays(): void {
-    if (this.overlays) {
-      this.overlays.forEach((overlay) => {
-        overlay.detach();
-        overlay.dispose();
-      });
-    }
-    this.overlays = [];
+  protected destroyOverlays(): void {
+    this.overlayService.destroyOverlays();
   }
 
   // Create overlay and attach `o-context-menu-content` to it in order to trigger the menu click, the menu opens in a new overlay
@@ -49,13 +43,16 @@ export class OContextMenuService implements OnDestroy {
     context.event.preventDefault();
     context.event.stopPropagation();
 
-    this.fakeElement.nativeElement.getBoundingClientRect = (): ClientRect => ({
+    this.fakeElement.nativeElement.getBoundingClientRect = (): DOMRect => ({
       bottom: context.event.clientY,
       height: 0,
       left: context.event.clientX,
       right: context.event.clientX,
       top: context.event.clientY,
       width: 0,
+      x: 0,
+      y: 0,
+      toJSON: () => { }
     });
 
     const positionStrategy = this.overlay.position()
@@ -74,9 +71,11 @@ export class OContextMenuService implements OnDestroy {
       scrollStrategy: this.scrollStrategy.close()
     });
 
-    this.overlays = [overlayRef];
+    this.overlayService.addOverlay(overlayRef);
 
-    this.attachContextMenu(this.overlays[0], context);
+    this.attachContextMenu(overlayRef, context);
+
+    this.cd.detectChanges();
   }
 
   protected attachContextMenu(overlay: OverlayRef, context: IOContextMenuContext): void {
@@ -87,6 +86,7 @@ export class OContextMenuService implements OnDestroy {
     contextMenuContent.instance.menuClass = context.class;
     this.subscription.add(contextMenuContent.instance.close.subscribe(() => {
       this.closeContextMenu.next();
+      this.destroyOverlays();
     }));
   }
 
