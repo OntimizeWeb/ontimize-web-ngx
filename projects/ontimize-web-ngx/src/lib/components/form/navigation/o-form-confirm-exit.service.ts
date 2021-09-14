@@ -27,13 +27,18 @@ export class OFormConfirmExitService {
     return subscription;
   }
 
-  restart() {
+  protected restart() {
     this.confirmDialogSubscription = null;
   }
   
   protected getConfirmDialogSubscription(): Promise<boolean> {
     if (!Util.isDefined(this.confirmDialogSubscription)) {
-      this.confirmDialogSubscription = this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST');
+      this.confirmDialogSubscription = new Promise((resolve) => {
+        this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then((res) => {
+          this.restart();
+          resolve(res);
+        })
+      });
     }
     return this.confirmDialogSubscription;
   }

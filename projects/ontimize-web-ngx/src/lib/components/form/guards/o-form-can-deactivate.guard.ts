@@ -42,7 +42,6 @@ export class CanDeactivateFormGuard implements CanDeactivate<CanComponentDeactiv
       return new Promise((resolve) => {
         const arr: Observable<boolean>[] = Object.keys(this.oForms).map((key) => wrapIntoObservable(this.oForms[key].canDeactivate()));
         combineLatest(arr).subscribe(res => {
-          this.oFormConfirmExitService.restart();
           resolve(res.every(value => value));
         });
       });
