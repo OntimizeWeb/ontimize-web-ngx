@@ -170,16 +170,15 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
           this.renderedData = data;
 
-          /* 
+          /*
             when the data is very large, the application crashes so it gets a limited range of data the first time
-            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll 
+            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll
           */
           if (this.table.activeVirtualScroll && !this._paginator) {
             data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
           }
 
           this.aggregateData = this.getAggregatesData(this.renderedData);
-
         }
         return data;
       }));
@@ -559,12 +558,25 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return resultAggregate;
   }
 
+  isParentTableGroupRow(tableRowGroup: any) {
+    return tableRowGroup instanceof OTableGroupedRow && tableRowGroup.level === 1;
+  }
+
   protected sum(column, data): number {
     let value = 0;
     if (data) {
-      value = data.reduce((acumulator, currentValue) => {
-        return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
-      }, value);
+      //If the data is grouped, the values ​​of the subgroups in level 1 are summed
+      if (data[0] instanceof OTableGroupedRow) {
+        data.filter(x => this.isParentTableGroupRow(x)).forEach(x => {
+          value = x.getColumnsData(column).reduce((acumulator, currentValue) => {
+            return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
+          }, value);
+        });
+      } else {
+        value = data.reduce((acumulator, currentValue) => {
+          return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
+        }, value);
+      }
     }
     return +(value).toFixed(2);
   }
@@ -572,25 +584,54 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected count(column, data): number {
     let value = 0;
     if (data) {
-      value = data.reduce((acumulator, currentValue, currentIndex) => {
-        return acumulator + 1;
-      }, 0);
+      //If the data is grouped, the count is calculated by adding the counts for each subgroup in level 1
+      if (data[0] instanceof OTableGroupedRow) {
+        data.filter(x => this.isParentTableGroupRow(x)).forEach(x => {
+          value = x.getColumnsData(column).reduce((acumulator) => {
+            return acumulator + 1;
+          }, value);
+        });
+      } else {
+        value = data.reduce((acumulator) => {
+          return acumulator + 1;
+        }, 0);
+      }
     }
     return value;
   }
 
   protected avg(column, data): number {
-    return +(this.sum(column, data) / this.count(column, data)).toFixed(2);
+    const totalSum = this.sum(column, data);
+    const totalCount = this.count(column, data);
+    return +((totalSum === 0 || totalCount === 0) ? 0 : (totalSum / totalCount)).toFixed(2);
+
   }
 
   protected min(column, data): number {
-    const tempMin = data.map(x => x[column]);
-    return Math.min(...tempMin);
+    let tempMin = [];
+    //If the data is grouped, the minimum is calculated with the minimum of each subgroup in level 1
+    if (data[0] instanceof OTableGroupedRow) {
+      tempMin = data.filter(x => this.isParentTableGroupRow(x)).map(x => {
+        return Math.min(...x.getColumnsData(column).map(x => x[column]));
+      });
+    } else {
+      tempMin = data.map(x => x[column]);
+    }
+
+    return tempMin.length > 0 ? Math.min(...tempMin) : 0;
   }
 
   protected max(column, data): number {
-    const tempMax = data.map(x => x[column]);
-    return Math.max(...tempMax);
+    let tempMax = [];
+    if (data[0] instanceof OTableGroupedRow) {
+      //If the data are grouped, the maximum is calculated with the maximum of each subgroup in level 1
+      tempMax = data.filter(x => this.isParentTableGroupRow(x)).map(x => {
+        return Math.max(...x.getColumnsData(column).map(x => x[column]));
+      });
+    } else {
+      tempMax = data.map(x => x[column]);
+    }
+    return tempMax.length > 0 ? Math.max(...tempMax) : 0;
   }
 
   protected existsAnyCalculatedColumn(): boolean {
