@@ -148,7 +148,7 @@ export class OTableGroupedRow {
     }
   }
 
-  getColumnsData(columnAttr:string) {
-    return this.columnsData[columnAttr].data;
+  getColumnsData(columnAttr: string) {
+    return this.columnsData[columnAttr] ? this.columnsData[columnAttr].data : [];
   }
 }

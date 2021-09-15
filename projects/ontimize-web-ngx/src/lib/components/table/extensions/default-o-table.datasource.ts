@@ -558,16 +558,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return resultAggregate;
   }
 
-  isParentTableGroupRow(tableRowGroup: any) {
-    return tableRowGroup instanceof OTableGroupedRow && tableRowGroup.level === 1;
-  }
-
   protected sum(column, data): number {
     let value = 0;
     if (data) {
       //If the data is grouped, the values ​​of the subgroups in level 1 are summed
       if (data[0] instanceof OTableGroupedRow) {
-        data.filter(x => this.isParentTableGroupRow(x)).forEach(x => {
+        this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
           value = x.getColumnsData(column).reduce((acumulator, currentValue) => {
             return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
           }, value);
@@ -586,7 +582,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     if (data) {
       //If the data is grouped, the count is calculated by adding the counts for each subgroup in level 1
       if (data[0] instanceof OTableGroupedRow) {
-        data.filter(x => this.isParentTableGroupRow(x)).forEach(x => {
+        this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
           value = x.getColumnsData(column).reduce((acumulator) => {
             return acumulator + 1;
           }, value);
@@ -611,7 +607,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     let tempMin = [];
     //If the data is grouped, the minimum is calculated with the minimum of each subgroup in level 1
     if (data[0] instanceof OTableGroupedRow) {
-      tempMin = data.filter(x => this.isParentTableGroupRow(x)).map(x => {
+      tempMin = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
         return Math.min(...x.getColumnsData(column).map(x => x[column]));
       });
     } else {
@@ -625,13 +621,21 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     let tempMax = [];
     if (data[0] instanceof OTableGroupedRow) {
       //If the data are grouped, the maximum is calculated with the maximum of each subgroup in level 1
-      tempMax = data.filter(x => this.isParentTableGroupRow(x)).map(x => {
+      tempMax = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
         return Math.max(...x.getColumnsData(column).map(x => x[column]));
       });
     } else {
       tempMax = data.map(x => x[column]);
     }
     return tempMax.length > 0 ? Math.max(...tempMax) : 0;
+  }
+
+  private isFirstLevelTableGroupRow(tableRowGroupData: any) {
+    return tableRowGroupData instanceof OTableGroupedRow && tableRowGroupData.level === 1;
+  }
+
+  private getDataFromFirstLevelTableGroupRow(data: any) {
+    return data.filter(x => this.isFirstLevelTableGroupRow(x));
   }
 
   protected existsAnyCalculatedColumn(): boolean {
