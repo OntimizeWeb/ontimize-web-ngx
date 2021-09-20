@@ -48,6 +48,9 @@ export class OTableColumnsGroupingColumnComponent {
   }
 
   get aggregate(): string {
+    if (Util.isDefined(this.aggregateFunction) && Util.isDefined(this.aggregateName)) {
+      return this.aggregateName;
+    }
     return this._aggregate;
   }
 

@@ -269,7 +269,7 @@
           {{ group.title }}
         </div>
         <div class="grouping-aggregate" *ngIf="group.hasColumnData(visibleColArray[i])">
-          {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateFunction(visibleColArray[i]) | oTranslate }} : {{
+          {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateTitle(visibleColArray[i]) | oTranslate }} : {{
           group.getColumnAggregateValue(visibleColArray[i]) }}
         </div>
       </td>

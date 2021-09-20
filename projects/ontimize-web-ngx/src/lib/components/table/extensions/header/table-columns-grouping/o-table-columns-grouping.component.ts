@@ -8,9 +8,8 @@ import {
   OnInit,
   QueryList
 } from '@angular/core';
-import { GroupedColumnAggregateConfiguration, OTableColumnsGrouping } from '../../../../../interfaces/o-table-columns-grouping-interface';
-import { SQLTypes } from '../../../../../util';
 
+import { OTableColumnsGrouping } from '../../../../../interfaces/o-table-columns-grouping-interface';
 import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableColumnsGroupingColumnComponent } from './columns/o-table-columns-grouping-column.component';

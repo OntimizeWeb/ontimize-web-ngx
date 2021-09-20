@@ -4,8 +4,6 @@ import { MatPaginator } from '@angular/material';
 import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-
-import { GroupedColumnAggregateConfiguration } from '../../../interfaces/o-table-columns-grouping-interface';
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
@@ -633,8 +631,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   private recalculateColumnAggregate(columnAttr: string, row: OTableGroupedRow) {
-    const aggregateConf = row.getColumnAggregateConfiguration(columnAttr);
-    const value = this.groupingAggregate(aggregateConf, row.getColumnAggregateData(columnAttr));
+    const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
+    const data = row.getColumnAggregateData(columnAttr);
+    const value = this.calculateAggregate(data, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
     row.setColumnAggregateValue(columnAttr, value);
   }
 
@@ -691,8 +690,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           const aggregateData = groupData.map(x => { const obj = {}; obj[columnAttr] = x[columnAttr]; return obj; });
           row.setColumnAggregateData(columnAttr, aggregateData);
 
-          const aggregateConf = row.getColumnAggregateConfiguration(columnAttr);
-          const value = this.groupingAggregate(aggregateConf, aggregateData);
+          const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
+          const value = this.calculateAggregate(aggregateData, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
           row.setColumnAggregateValue(columnAttr, value);
         }
       });
@@ -761,10 +760,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       rowGroup.expanded = !rowGroup.expanded;
       this.groupedRowState.push(rowGroup);
     }
-  }
-
-  private groupingAggregate(aggregateConf: GroupedColumnAggregateConfiguration, data: any[]) {
-    return this.calculateAggregate(data, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
   }
 
   private getTextGroupRow(group: OTableGroupedRow, totalCounts: number) {
