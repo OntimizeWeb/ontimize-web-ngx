@@ -1,3 +1,7 @@
+## 8.5.1
+### Bug fixes
+* **o-table**:
+  * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
 ## 8.5.0
 
 ### We are restyling **OntimizeWeb**

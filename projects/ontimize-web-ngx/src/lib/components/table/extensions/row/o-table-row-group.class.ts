@@ -153,4 +153,8 @@ export class OTableGroupedRow {
       aggregate: this.columnsData[columnAttr].activeAggregate
     }
   }
+
+  getColumnsData(columnAttr: string) {
+    return this.columnsData[columnAttr] ? this.columnsData[columnAttr].data : [];
+  }
 }
