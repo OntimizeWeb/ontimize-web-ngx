@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ElementRef, EventEmitter, forwardRef, Injector, ViewChild } from '@angular/core';
+import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -304,7 +304,10 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     if (route.length > 0) {
       const qParams = Codes.getIsDetailObject();
       const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
-      this.navigateToDetail(route, qParams, relativeTo);
+      const zone = this.injector.get(NgZone);
+      zone.run(() =>
+        this.navigateToDetail(route, qParams, relativeTo)
+      );
     }
   }
 
@@ -318,7 +321,10 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     if (route.length > 0) {
       const qParams = Codes.getIsDetailObject();
       const relativeTo = this.recursiveEdit ? this.actRoute.parent : this.actRoute;
-      this.navigateToDetail(route, qParams, relativeTo);
+      const zone = this.injector.get(NgZone);
+      zone.run(() =>
+        this.navigateToDetail(route, qParams, relativeTo)
+      );
     }
   }
 
