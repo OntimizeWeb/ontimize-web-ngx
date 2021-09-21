@@ -71,7 +71,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     }
 
     if (this.table.activeVirtualScroll) {
-      this.table.scrollStrategy.renderedRangeStream
+      this.table.virtualScrollViewport.renderedRangeStream
         .pipe(distinctUntilChanged())
         .subscribe(
           (value: ListRange) => {
@@ -170,9 +170,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
           this.renderedData = data;
 
-          /* 
+          /*
             when the data is very large, the application crashes so it gets a limited range of data the first time
-            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll 
+            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll
           */
           if (this.table.activeVirtualScroll && !this._paginator) {
             data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
