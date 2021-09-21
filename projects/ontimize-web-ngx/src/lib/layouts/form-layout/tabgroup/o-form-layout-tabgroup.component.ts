@@ -246,7 +246,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       }
     }));
 
-    if (Util.isDefined(tabData) && this.confirmTabDataExit(tabData)) {
+    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
       });
@@ -419,10 +419,4 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return Object.keys(tabData.innerFormsInfo).some(formAttr => tabData.innerFormsInfo[formAttr].modified);
   }
 
-  protected confirmTabDataExit(tabData: FormLayoutDetailComponentData): boolean {
-    return Object.keys(tabData.innerFormsInfo).every(formAttr => {
-      const formData = tabData.innerFormsInfo[formAttr];
-      return formData.confirmOnExit && formData.modified;
-    });
-  }
 }

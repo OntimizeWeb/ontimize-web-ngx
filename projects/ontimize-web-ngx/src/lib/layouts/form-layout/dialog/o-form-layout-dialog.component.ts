@@ -13,6 +13,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 
 @Component({
@@ -34,6 +35,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   data: any;
 
   protected componentFactory: ComponentFactory<any>;
+  protected dialogService: DialogService;
 
   @ViewChild(OFormLayoutManagerContentDirective, { static: false }) contentDirective: OFormLayoutManagerContentDirective;
 
@@ -43,6 +45,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     protected componentFactoryResolver: ComponentFactoryResolver,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
+    this.dialogService = injector.get(DialogService);
     if (data.title) {
       this.title = data.title;
     }
@@ -80,7 +83,15 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    if (this.formLayoutManager.hasToConfirmExit(this.data)) {
+      this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
+        if (res) {
+          this.dialogRef.close();
+        }
+      });
+    } else {
+      this.dialogRef.close();
+    }
   }
 
   getRouteOfActiveItem(): any[] {
@@ -108,7 +119,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   closeDetail() {
-    this.dialogRef.close();
+   this.closeDialog();
   }
 
   getDataToStore(): any {
@@ -116,7 +127,10 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
-
+    this.data.innerFormsInfo[formAttr] = {
+      modified: modified,
+      confirmOnExit: confirmExit
+    };
   }
 
   canAddDetailComponent(): boolean {
