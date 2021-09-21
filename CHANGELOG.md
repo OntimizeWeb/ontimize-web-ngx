@@ -2,6 +2,15 @@
 ### Bug fixes
 * **o-table**:
   * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
+
+### BREAKING CHANGES
+* Changes made to solve [#745](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/745) and [#754](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/754) ([d1829ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1829ef)). This changes will be transparent to user.
+  * **o-form-layout-manager**, **OFormLayoutManagerMode**: `setModifiedState` method arguments updated
+  * **OFormNavigationClass**:
+    * `setModifiedState` method is now protected	
+    * `suscribeToCacheChanges` method has no arguments now
+  * **OFormCacheClass**: `onCacheEmptyStateChanges` emmiter no longer exists  
+
 ## 8.5.0
 
 ### We are restyling **OntimizeWeb**
