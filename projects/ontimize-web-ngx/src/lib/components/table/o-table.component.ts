@@ -268,12 +268,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginator;
-  private virtualScrollViewport: CdkVirtualScrollViewport;
+
   public activeVirtualScroll = true;
 
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
+  public virtualScrollViewport: CdkVirtualScrollViewport;
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
@@ -281,6 +282,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (this.activeVirtualScroll) {
         this.updateHeaderAndFooterStickyPositions();
       }
+      this.checkViewportSizeSubscription = this.checkViewPortSubject.subscribe(x => {
+        if (x) {
+          this.checkViewportSize();
+        }
+      });
       this.setDatasource();
     }
   }
@@ -491,6 +497,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected querySubscription: Subscription;
   protected contextMenuSubscription: Subscription;
   protected virtualScrollSubscription: Subscription;
+  protected checkViewportSizeSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
   public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
@@ -600,6 +607,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }, 0);
     }
     this.refreshColumnsWidth();
+    this.checkViewportSize();
   }
 
   protected _isColumnFiltersActive: boolean = false;
@@ -625,7 +633,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public scrollStrategy: OTableVirtualScrollStrategy
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 
@@ -651,7 +659,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.oTableButtons && this.tableButtons && this.tableButtons.length > 0) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
-
   }
 
   ngAfterViewInit() {
@@ -874,8 +881,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.virtualScrollSubscription) {
       this.virtualScrollSubscription.unsubscribe();
     }
-    if (this.scrollStrategy) {
-      this.scrollStrategy.destroy();
+
+    if (this.checkViewportSizeSubscription) {
+      this.checkViewportSizeSubscription.unsubscribe();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
@@ -1211,6 +1219,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             if (this.pendingQuery) {
               this.queryData(this.pendingQueryFilter);
             }
+            this.checkViewportSize();
           }
         }
       };
@@ -1503,9 +1512,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }, 500);
     this.loadingScrollSubject.next(false);
 
-    this.initViewPort(this.dataSource.renderedData);
+
 
     if (this.previousRendererData !== this.dataSource.renderedData) {
+      this.initViewPort(this.dataSource.renderedData);
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
@@ -2919,4 +2929,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     return this.oTableColumnsGroupingComponent.useColumnAggregate(columnAttr, hasDefaultAggregate);
   }
+
+  protected checkViewportSize() {
+    // Its a temporarily fixed for https://github.com/angular/components/issues/10117
+    // Solve the issue when switching tabs when the virtual scrolling component is used
+    // in a mat - tab component and virtual scroll work abnormally
+    if (this.virtualScrollViewport) {
+      this.virtualScrollViewport.checkViewportSize();
+    };
+  }
+
 }

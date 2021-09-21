@@ -133,6 +133,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected rowHeightSubject: BehaviorSubject<string> = new BehaviorSubject(this._rowHeight);
   public rowHeightObservable: Observable<string> = this.rowHeightSubject.asObservable();
 
+  protected checkViewPortSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public checkViewPortObservable: Observable<boolean> = this.checkViewPortSubject.asObservable();
+
   set rowHeight(value) {
     this._rowHeight = value ? value.toLowerCase() : value;
     if (!Codes.isValidRowHeight(this._rowHeight)) {
@@ -698,6 +701,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
+        this.checkViewPortSubject.next(true)
       });
 
       this.tabsSubscriptions.add(updateComponentStateSubject.subscribe((arg) => {
