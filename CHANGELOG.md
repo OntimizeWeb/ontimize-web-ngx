@@ -1,15 +1,23 @@
 ## 8.5.1
+### Features
+* **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
+* **OFormLayoutManager**: new `hasToConfirmExit` method ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447))
+
 ### Bug fixes
 * **o-table**:
   * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
 
 ### BREAKING CHANGES
-* Changes made to solve [#745](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/745) and [#754](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/754) ([d1829ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1829ef)). This changes will be transparent to user.
+* Changes made to solve [#745](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/745) and [#754](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/754) ([d1829ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1829ef)) ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447)). This changes will be transparent to user.
   * **o-form-layout-manager**, **OFormLayoutManagerMode**: `setModifiedState` method arguments updated
   * **OFormNavigationClass**:
     * `setModifiedState` method is now protected	
     * `suscribeToCacheChanges` method has no arguments now
   * **OFormCacheClass**: `onCacheEmptyStateChanges` emmiter no longer exists  
+  * **OFormLayoutManagerMode**: `canAddDetailComponent` method now can also return an Observable
+  * **OFormLayoutManager**: `canAddDetailComponent` now returns an Observable
+
+
 
 ## 8.5.0
 
