@@ -108,8 +108,11 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     return this.data;
   }
 
-  setModifiedState(modified: boolean) {
-    this.data.modified = modified;
+  setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
+    this.data.innerFormsInfo[formAttr] = {
+      modified: modified,
+      confirmOnExit: confirmExit
+    };
   }
 
   setDetailComponent(compData: FormLayoutDetailComponentData) {

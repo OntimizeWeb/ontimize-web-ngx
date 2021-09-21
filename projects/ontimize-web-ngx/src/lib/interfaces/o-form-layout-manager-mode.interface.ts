@@ -7,7 +7,7 @@ export interface OFormLayoutManagerMode {
   initializeComponentState?: (state: any) => void;
   getDataToStore: () => object;
   getFormCacheData: () => FormLayoutDetailComponentData;
-  setModifiedState: (modified: boolean) => void;
+  setModifiedState: (formAttr: string, modified: boolean, confirmExit: boolean) => void;
   updateNavigation: (data: any, keysValues: any, insertionMode?: boolean) => void;
   updateActiveData: (data: any) => void;
   getRouteOfActiveItem: () => any[];

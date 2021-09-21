@@ -654,7 +654,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formNavigation.subscribeToQueryParams();
     this.formNavigation.subscribeToUrlParams();
     this.formNavigation.subscribeToUrl();
-    this.formNavigation.subscribeToCacheChanges(this.formCache.onCacheEmptyStateChanges);
+    this.formNavigation.subscribeToCacheChanges();
 
     if (this.navigationService) {
       this.navigationService.onVisibleChange(visible => {

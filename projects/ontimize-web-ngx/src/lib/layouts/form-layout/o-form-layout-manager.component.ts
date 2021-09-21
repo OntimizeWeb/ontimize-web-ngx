@@ -373,7 +373,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       url: url,
       id: Math.random().toString(36),
       label: '',
-      modified: false
+      innerFormsInfo: {}
     };
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
@@ -438,10 +438,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return Util.isDefined(compRef) ? compRef.getFormCacheData() : undefined;
   }
 
-  public setModifiedState(modified: boolean): void {
+  public setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean): void {
     const compRef = this.getLayoutModeComponent();
     if (Util.isDefined(compRef)) {
-      compRef.setModifiedState(modified);
+      compRef.setModifiedState(formAttr, modified, confirmExit);
     }
   }
 

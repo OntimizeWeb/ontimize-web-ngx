@@ -5,8 +5,7 @@
   </mat-tab>
   <mat-tab *ngFor="let tabData of data; let i = index">
     <ng-template mat-tab-label>
-
-      <span class="tab-label" [class.modified]="tabData.modified">
+      <span class="tab-label" [class.modified]="isTabDataModified(tabData)">
         <ng-container *ngIf="icon && isIconPositionLeft">
           <mat-icon>{{ icon }}</mat-icon>
         </ng-container>

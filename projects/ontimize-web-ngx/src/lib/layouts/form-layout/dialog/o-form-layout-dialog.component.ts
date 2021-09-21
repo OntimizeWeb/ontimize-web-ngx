@@ -115,7 +115,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     return null;
   }
 
-  setModifiedState(modified: boolean) {
+  setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
 
   }
 
