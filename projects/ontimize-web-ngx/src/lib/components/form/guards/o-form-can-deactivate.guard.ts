@@ -5,24 +5,12 @@ import { combineLatest, from, isObservable, Observable, of } from 'rxjs';
 
 import { BooleanConverter } from '../../../decorators/input-converter';
 import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
 import { OFormConfirmExitService } from '../navigation/o-form-confirm-exit.service';
 import { OFormComponent } from '../o-form.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
-}
-
-export function wrapIntoObservable<T>(value: T | Promise<T> | Observable<T>): Observable<T> {
-  if (isObservable(value)) {
-    return value;
-  }
-
-  if (isPromise(value)) {
-    // Use `Promise.resolve()` to wrap promise-like instances.
-    return from(Promise.resolve(value));
-  }
-
-  return of(value);
 }
 
 @Injectable()
@@ -40,7 +28,7 @@ export class CanDeactivateFormGuard implements CanDeactivate<CanComponentDeactiv
     }
     if (Object.keys(this.oForms).length) {
       return new Promise((resolve) => {
-        const arr: Observable<boolean>[] = Object.keys(this.oForms).map((key) => wrapIntoObservable(this.oForms[key].canDeactivate()));
+        const arr: Observable<boolean>[] = Object.keys(this.oForms).map((key) => Util.wrapIntoObservable(this.oForms[key].canDeactivate()));
         combineLatest(arr).subscribe(res => {
           resolve(res.every(value => value));
         });
