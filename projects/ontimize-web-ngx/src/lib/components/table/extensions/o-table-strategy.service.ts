@@ -11,8 +11,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   public readonly indexChange = new Subject<number>();
   public scrolledIndexChange: Observable<number>;
   public stickyChange = new Subject<number>();
-  buffer: number;
-  bufferMultiplier: number = 1;
+  private bufferMultiplier: number = 1;
 
   constructor() {
     this.scrolledIndexChange = this.indexChange.asObservable().pipe(distinctUntilChanged());
