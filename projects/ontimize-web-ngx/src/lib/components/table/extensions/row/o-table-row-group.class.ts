@@ -1,7 +1,6 @@
 import { Subject } from 'rxjs';
 
 import { GroupedColumnAggregateConfiguration } from '../../../../interfaces/o-table-columns-grouping-interface';
-import { AggregateFunction } from '../../../../types/aggregate-function.type';
 import { Util } from '../../../../util/util';
 import {
   OTableColumnsGroupingColumnComponent
@@ -12,6 +11,13 @@ export type AggregateChangeArg = {
   activeAggregate: string;
   changeAllGroupedRows: boolean;
   row: OTableGroupedRow;
+}
+
+export type AggregateColumnData = {
+  component: OTableColumnsGroupingColumnComponent;
+  activeAggregate: string;
+  value: any;
+  data: any[];
 }
 
 export class OTableGroupedRow {
@@ -25,14 +31,7 @@ export class OTableGroupedRow {
   get visible(): boolean {
     return !this.parent || (this.parent.visible && this.parent.expanded);
   }
-  private columnsData: {
-    [key: string]: {
-      component: OTableColumnsGroupingColumnComponent,
-      activeAggregate: string,
-      value: any,
-      data: any[]
-    }
-  } = {};
+  private columnsData: { [key: string]: AggregateColumnData } = {};
 
   aggregateFunctionChange: Subject<AggregateChangeArg> = new Subject<AggregateChangeArg>();
 
@@ -129,11 +128,6 @@ export class OTableGroupedRow {
     }
   }
 
-  getColumnAggregateFunction(columnAttr: string): AggregateFunction {
-    const groupingComponent = this.getColumnGroupingComponent(this.column);
-    return Util.isDefined(groupingComponent) ? groupingComponent.aggregateFunction : null;
-  }
-
   getActiveColumnAggregateConfiguration(columnAttr: string): GroupedColumnAggregateConfiguration {
     if (!this.hasColumnData(columnAttr)) {
       return {
@@ -154,7 +148,4 @@ export class OTableGroupedRow {
     }
   }
 
-  getColumnsData(columnAttr: string) {
-    return this.columnsData[columnAttr] ? this.columnsData[columnAttr].data : [];
-  }
 }

@@ -562,7 +562,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       //If the data is grouped, the values ​​of the subgroups in level 1 are summed
       if (data[0] instanceof OTableGroupedRow) {
         this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
-          value = x.getColumnsData(column).reduce((acumulator, currentValue) => {
+          value = x.getColumnAggregateData(column).reduce((acumulator, currentValue) => {
             return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
           }, value);
         });
@@ -581,7 +581,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       //If the data is grouped, the count is calculated by adding the counts for each subgroup in level 1
       if (data[0] instanceof OTableGroupedRow) {
         this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
-          value = x.getColumnsData(column).reduce((acumulator) => {
+          value = x.getColumnAggregateData(column).reduce((acumulator) => {
             return acumulator + 1;
           }, value);
         });
@@ -606,7 +606,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     //If the data is grouped, the minimum is calculated with the minimum of each subgroup in level 1
     if (data[0] instanceof OTableGroupedRow) {
       tempMin = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
-        return Math.min(...x.getColumnsData(column).map(x => x[column]));
+        return Math.min(...x.getColumnAggregateData(column).map(x => x[column]));
       });
     } else {
       tempMin = data.map(x => x[column]);
@@ -620,7 +620,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     if (data[0] instanceof OTableGroupedRow) {
       //If the data are grouped, the maximum is calculated with the maximum of each subgroup in level 1
       tempMax = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
-        return Math.max(...x.getColumnsData(column).map(x => x[column]));
+        return Math.max(...x.getColumnAggregateData(column).map(x => x[column]));
       });
     } else {
       tempMax = data.map(x => x[column]);

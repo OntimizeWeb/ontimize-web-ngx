@@ -295,10 +295,15 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   get availableColumnAggregates(): string[] {
     let result = Util.columnAggregates;
-    if (this.row instanceof OTableGroupedRow)  {
-      const customAggregationName = this.row.getColumnCustomAggregateName(this.column.attr);
-      if (Util.isDefined(customAggregationName)){
-        result = result.concat(customAggregationName);
+    if (this.row instanceof OTableGroupedRow) {
+      const groupingComp = this.row.getColumnGroupingComponent(this.column.attr);
+      if (Util.isDefined(groupingComp.aggregateName)) {
+        result = result.slice();
+        if (result.includes(groupingComp.aggregate)) {
+          result.splice(result.indexOf(groupingComp.aggregate), 1, groupingComp.aggregateName);
+        } else {
+          result.push(groupingComp.aggregateName);
+        }
       }
     }
     return result;
@@ -355,7 +360,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   expandRowGroupsSameLevel() {
     this.table.dataSource.setRowGroupLevelExpansion(this._row, true);
-  } 
+  }
 
   collapseRowGroupsSameLevel() {
     this.table.dataSource.setRowGroupLevelExpansion(this._row, false);
