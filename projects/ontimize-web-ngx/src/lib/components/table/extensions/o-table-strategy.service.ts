@@ -36,6 +36,10 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   }
 
   public detach(): void {
+    //no-op
+  }
+
+  public destroy(): void {
     this.indexChange.complete();
     this.stickyChange.complete();
   }
@@ -48,7 +52,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
     // no-op
   }
 
-  public scrollToIndex(index: number, behavior: ScrollBehavior): void {
+  public scrollToIndex(index: number, behavior?: ScrollBehavior): void {
     // no-op
   }
 
@@ -58,9 +62,9 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
 
   public setConfig(rowHeight: number, headerHeight: number, footerHeight: number) {
     if (
-      this.rowHeight === rowHeight
-      && this.headerHeight === headerHeight
-      && this.footerHeight === footerHeight
+      (this.rowHeight === rowHeight
+        && this.headerHeight === headerHeight
+        && this.footerHeight === footerHeight) || rowHeight === 0
     ) {
       return;
     }
@@ -96,7 +100,6 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
 
     this.viewport.setRenderedContentOffset(renderedOffset);
     this.viewport.setRenderedRange({ start, end });
-
     this.indexChange.next(index);
     this.stickyChange.next(renderedOffset);
   }

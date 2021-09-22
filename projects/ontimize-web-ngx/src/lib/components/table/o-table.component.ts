@@ -279,14 +279,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
       this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
-      if (this.activeVirtualScroll) {
-        this.updateHeaderAndFooterStickyPositions();
+      this.updateHeaderAndFooterStickyPositions();
+      if (this.checkViewportSizeSubscription) {
+        this.checkViewportSizeSubscription.unsubscribe();
       }
-      this.checkViewportSizeSubscription = this.checkViewPortSubject.subscribe(x => {
-        if (x) {
-          this.checkViewportSize();
-        }
-      });
+
+      if (this.activeVirtualScroll) {
+        this.checkViewportSizeSubscription = this.checkViewPortSubject.subscribe(x => {
+          if (x) {
+            this.checkViewportSize();
+          }
+        });
+      }
+
       this.setDatasource();
     }
   }
@@ -681,6 +686,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateHeaderAndFooterStickyPositions() {
+    if (this.virtualScrollSubscription) {
+      this.virtualScrollSubscription.unsubscribe();
+    }
 
     if (this.activeVirtualScroll) {
       this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
@@ -696,7 +704,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         });
       });
     }
-
   }
 
   protected createExpandableColumn() {
@@ -884,6 +891,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.checkViewportSizeSubscription) {
       this.checkViewportSizeSubscription.unsubscribe();
+    }
+
+    if (this.scrollStrategy) {
+      this.scrollStrategy.destroy();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
@@ -1481,8 +1492,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const rowHeight = rowElRef ? rowElRef.offsetHeight : OTableComponent.DEFAULT_ROW_HEIGHT;
 
       //set config viewport
-      this.scrollStrategy.setConfig(rowHeight, headerHeight, footerHeight);
+      this.scrollStrategy.setConfig(this.fixedHeader, rowHeight, headerHeight, footerHeight);
       if (this.previousRendererData !== this.dataSource.renderedData) {
+        console.log(' this.scrollStrategy.dataLength ', this.previousRendererData, this.dataSource.renderedData);
         this.scrollStrategy.dataLength = data.length;
       }
     }
@@ -1512,10 +1524,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }, 500);
     this.loadingScrollSubject.next(false);
 
-
+    this.initViewPort(this.dataSource.renderedData);
 
     if (this.previousRendererData !== this.dataSource.renderedData) {
-      this.initViewPort(this.dataSource.renderedData);
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
