@@ -1,7 +1,10 @@
 import { Component, Injector, Input, ViewChild } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 
-import { OComponentMenuItems } from '../../o-content-menu.class';
+import { OContextMenuGroupComponent } from '../../context-menu-group/o-context-menu-group.component';
+import { OContextMenuItemComponent } from '../../context-menu-item/o-context-menu-item.component';
+import { OContextMenuSeparatorComponent } from '../../context-menu-separator/o-context-menu-separator.component';
+import { OComponentMenuBaseItem } from '../../o-content-menu-base-item.class';
 
 export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
   'items',
@@ -19,7 +22,7 @@ export class OWrapperContentMenuComponent {
   public class: string;
 
   @Input()
-  public items: any[];
+  public items: OComponentMenuBaseItem[];
 
   @ViewChild('childMenu', { static: true })
   public childMenu: MatMenu;
@@ -31,32 +34,26 @@ export class OWrapperContentMenuComponent {
     protected injector: Injector
   ) { }
 
-  public onClick(item, event?): void {
-    item.triggerExecute(item.data, event);
+  public onClick(item: OComponentMenuBaseItem, event?): void {
+    if (item instanceof OContextMenuItemComponent) {
+      item.triggerExecute(item.data, event);
+    }
   }
 
-  public isGroup(item): boolean {
-    let isGroup = false;
-    if (item && item.children && item.children.length > 0) {
-      isGroup = true;
-    }
-    return isGroup;
+  public isGroup(item: OComponentMenuBaseItem): boolean {
+    return item instanceof OContextMenuGroupComponent;
   }
 
-  public isSepararor(item): boolean {
-    let isSepararor = false;
-    if (item && item.type && item.type === OComponentMenuItems.TYPE_SEPARATOR_MENU) {
-      isSepararor = true;
-    }
-    return isSepararor;
+  public isSeparator(item: OComponentMenuBaseItem): boolean {
+    return item instanceof OContextMenuSeparatorComponent;
   }
 
-  public isItem(item): boolean {
-    let isItem = false;
-    if (item && item.type && item.type === OComponentMenuItems.TYPE_ITEM_MENU) {
-      isItem = true;
-    }
-    return isItem;
+  public isItem(item: OComponentMenuBaseItem): boolean {
+    return item instanceof OContextMenuItemComponent;
+  }
+
+  public getChildren(item: OComponentMenuBaseItem) {
+    return item instanceof OContextMenuGroupComponent ? item.children : [];
   }
 
 }
