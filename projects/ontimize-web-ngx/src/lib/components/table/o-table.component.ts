@@ -269,8 +269,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public paginator: OTablePaginator;
 
-  public activeVirtualScroll = true;
-
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
@@ -278,13 +276,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
-      this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
       this.updateHeaderAndFooterStickyPositions();
       if (this.checkViewportSizeSubscription) {
         this.checkViewportSizeSubscription.unsubscribe();
       }
 
-      if (this.activeVirtualScroll) {
+      if (this.virtualScrollViewport) {
         this.checkViewportSizeSubscription = this.checkViewPortSubject.subscribe(x => {
           if (x) {
             this.checkViewportSize();
@@ -690,12 +687,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.virtualScrollSubscription.unsubscribe();
     }
 
-    if (this.activeVirtualScroll) {
+    if (this.virtualScrollViewport) {
       this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
         distinctUntilChanged(),
         filter(() => this.fixedHeader || this.hasInsertableRow())
       ).subscribe(x => {
-
+        console.log('scrollStrategy.stickyChange', x);
         this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
           el.style.top = - x + 'px';
         });
@@ -1482,7 +1479,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   initViewPort(data: any[]) {
 
-    if (this.activeVirtualScroll) {
+    if (this.virtualScrollViewport) {
       const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
       const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
       const rowElRef = this.elRef.nativeElement.querySelector(rowSelector);
@@ -1523,9 +1520,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }, 500);
     this.loadingScrollSubject.next(false);
 
-    this.initViewPort(this.dataSource.renderedData);
-
     if (this.previousRendererData !== this.dataSource.renderedData) {
+      this.initViewPort(this.dataSource.renderedData);
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
