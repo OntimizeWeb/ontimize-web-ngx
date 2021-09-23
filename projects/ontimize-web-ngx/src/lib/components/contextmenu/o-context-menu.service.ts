@@ -1,6 +1,6 @@
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ChangeDetectorRef, ComponentRef, ElementRef, Injectable, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, ComponentRef, ElementRef, Injectable, OnDestroy, Renderer2 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
 import { IOContextMenuClickEvent, IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
@@ -12,16 +12,15 @@ export class OContextMenuService implements OnDestroy {
 
   public showContextMenu: Subject<IOContextMenuClickEvent> = new Subject<IOContextMenuClickEvent>();
   public closeContextMenu: Subject<Event> = new Subject();
-  public activeMenu: OContextMenuContentComponent;
-
   protected fakeElement: ElementRef = new ElementRef({ nativeElement: '' });
   protected subscription: Subscription = new Subscription();
 
   constructor(
     private overlay: Overlay,
     private scrollStrategy: ScrollStrategyOptions,
-    protected cd: ChangeDetectorRef,
-    private overlayService: OContextMenuOverlayService
+    private cd: ChangeDetectorRef,
+    private overlayService: OContextMenuOverlayService,
+    private renderer: Renderer2
   ) { }
 
   public ngOnDestroy(): void {
@@ -76,10 +75,20 @@ export class OContextMenuService implements OnDestroy {
     this.attachContextMenu(overlayRef, context);
 
     this.cd.detectChanges();
+
+    setTimeout(() => {
+      // Workaround to delete first level menu trigger
+      overlayRef.hostElement.classList.add('overlay-ref-display-none');
+      const nextSibling = overlayRef.hostElement.nextElementSibling;
+      if (nextSibling) {
+        const top = nextSibling.getBoundingClientRect().top;
+        this.renderer.setStyle(nextSibling, 'top', `${top - 32}px`);
+      }
+    })
   }
 
   protected attachContextMenu(overlay: OverlayRef, context: IOContextMenuContext): void {
-    const contextMenuContent: ComponentRef<any> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
+    const contextMenuContent: ComponentRef<OContextMenuContentComponent> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
     contextMenuContent.instance.overlay = overlay;
     contextMenuContent.instance.menuItems = context.menuItems;
     contextMenuContent.instance.data = context.data;
