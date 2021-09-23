@@ -692,7 +692,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         distinctUntilChanged(),
         filter(() => this.fixedHeader || this.hasInsertableRow())
       ).subscribe(x => {
-        console.log('scrollStrategy.stickyChange', x);
         this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
           el.style.top = - x + 'px';
         });

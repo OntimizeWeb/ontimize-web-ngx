@@ -139,7 +139,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         if (x instanceof OnRangeChangeVirtualScroll) {
           // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
           data = this.getVirtualScrollData(this.renderedData, x);
-          console.log('data ', data);
         } else {
           /*
             it is necessary to first calculate the calculated columns and
