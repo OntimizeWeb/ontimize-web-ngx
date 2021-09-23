@@ -2,6 +2,8 @@
 ### Bug fixes
 * **o-table**:
   * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
+  * Fix bug when open a detail with o-form-layout-manager  ([f5612a4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5612a4)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751),[#752](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/752)
+  * Fixed the bug that the table is displayed blank when navigating the mat tab group and virtual scrolling is enabled([6327825](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6327825)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751)
 ## 8.5.0
 
 ### We are restyling **OntimizeWeb**

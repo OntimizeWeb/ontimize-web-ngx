@@ -71,7 +71,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     }
 
     if (this.table.activeVirtualScroll) {
-      this.table.scrollStrategy.renderedRangeStream
+      this.table.virtualScrollViewport.renderedRangeStream
         .pipe(distinctUntilChanged())
         .subscribe(
           (value: ListRange) => {
