@@ -156,9 +156,15 @@ export class OFormNavigationClass {
     }
   }
 
-  subscribeToCacheChanges(onCacheEmptyStateChanges: EventEmitter<boolean>) {
-    this.cacheStateSubscription = onCacheEmptyStateChanges.asObservable().subscribe(res => {
-      this.setModifiedState(!res);
+  subscribeToCacheChanges() {
+    const formCache = this.form.getFormCache();
+    if (!Util.isDefined(formCache)) {
+      return;
+    }
+    this.cacheStateSubscription = formCache.onCacheStateChanges.subscribe(() => {
+      const initialStateChanged = this.form.isInitialStateChanged();
+      const triggerExitConfirm = this.form.isInitialStateChanged(this.form.ignoreOnExit);
+      this.setModifiedState(initialStateChanged, triggerExitConfirm);
     });
   }
 
@@ -221,9 +227,9 @@ export class OFormNavigationClass {
     return this.urlParams;
   }
 
-  setModifiedState(modified: boolean) {
+  protected setModifiedState(modified: boolean, confirmExit: boolean) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.setModifiedState(modified);
+      this.formLayoutManager.setModifiedState(this.form.oattr, modified, confirmExit);
     }
   }
 

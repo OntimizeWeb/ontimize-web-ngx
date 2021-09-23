@@ -15,7 +15,6 @@ export class OFormCacheClass {
   protected blockCaching: boolean = false;
   protected initializedCache: boolean = false;
 
-  onCacheEmptyStateChanges: EventEmitter<boolean> = new EventEmitter<boolean>();
   onCacheStateChanges: EventEmitter<any> = new EventEmitter<any>();
 
   protected changedFormControls: string[] = [];
@@ -29,31 +28,26 @@ export class OFormCacheClass {
 
   protected addChangeToStack(comp: IFormControlComponent) {
     const currentValue = comp.getFormControl().value;
-    const wasEmpty = this.valueChangesStack.length === 0;
     this.valueChangesStack.push({
       attr: comp.getAttribute(),
       value: currentValue
     });
-    if (wasEmpty) {
-      this.onCacheEmptyStateChanges.emit(false);
-    }
     this.onCacheStateChanges.emit();
   }
 
   protected registerComponentCaching(comp: IFormDataComponent) {
-    const self = this;
     const attr = comp.getAttribute();
     const listenTo = this.form.detectChangesOnBlur ? comp.onValueChange : comp.onChange;
     if (!Util.isDefined(listenTo)) {
       return;
     }
     this._componentsSubscritpions[attr] = listenTo.subscribe(() => {
-      if (self.initializedCache && !self.blockCaching && self.hasComponentChanged(attr, comp)) {
-        if (self.changedFormControls.indexOf(attr) === -1) {
-          self.changedFormControls.push(attr);
+      if (this.initializedCache && !this.blockCaching && this.hasComponentChanged(attr, comp)) {
+        if (this.changedFormControls.indexOf(attr) === -1) {
+          this.changedFormControls.push(attr);
         }
-        self.updateFormDataCache();
-        self.addChangeToStack(comp);
+        this.updateFormDataCache();
+        this.addChangeToStack(comp);
       }
     });
   }
@@ -103,7 +97,7 @@ export class OFormCacheClass {
   initializeCache(val: any) {
     this.initialDataCache = val;
     this.valueChangesStack = [];
-    this.onCacheEmptyStateChanges.emit(true);
+    this.onCacheStateChanges.emit();
     this.initializedCache = true;
     this.changedFormControls = [];
   }
@@ -143,7 +137,6 @@ export class OFormCacheClass {
     this.blockCaching = true;
     const comp = this.form.getFieldReference(attr);
     if (comp) {
-      // (comp as any).oldValue = undefined;
       comp.setValue(val);
     }
     this.blockCaching = false;
@@ -192,7 +185,7 @@ export class OFormCacheClass {
       }
     }
     if (this.valueChangesStack.length === 0) {
-      this.onCacheEmptyStateChanges.emit(true);
+      this.onCacheStateChanges.emit();
     }
   }
 
@@ -206,6 +199,8 @@ export class OFormCacheClass {
     if (this.formDataCache) {
       currentCache = Object.assign({}, this.formDataCache);
       this.removeUndefinedProperties(currentCache);
+    } else {
+      return false;
     }
 
     let initialKeys = Object.keys(initialCache);

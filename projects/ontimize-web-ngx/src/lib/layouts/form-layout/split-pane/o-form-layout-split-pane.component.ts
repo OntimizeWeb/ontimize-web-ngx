@@ -13,11 +13,12 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResizeEvent } from 'angular-resizable-element';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
 import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
@@ -66,6 +67,8 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     }
   }
 
+  protected dialogService: DialogService;
+
   constructor(
     protected injector: Injector,
     protected elementRef: ElementRef,
@@ -74,6 +77,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     @Inject(forwardRef(() => OFormLayoutManagerComponent)) public formLayoutManager: OFormLayoutManagerComponent
   ) {
     this.router = this.injector.get(Router);
+    this.dialogService = injector.get(DialogService);
   }
 
   get state(): OFormLayoutManagerComponentStateClass {
@@ -103,13 +107,15 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     }
   }
 
-
   getFormCacheData(): FormLayoutDetailComponentData {
     return this.data;
   }
 
-  setModifiedState(modified: boolean) {
-    this.data.modified = modified;
+  setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
+    this.data.innerFormsInfo[formAttr] = {
+      modified: modified,
+      confirmOnExit: confirmExit
+    };
   }
 
   setDetailComponent(compData: FormLayoutDetailComponentData) {
@@ -193,7 +199,16 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     // Nothing to do
   }
 
-  canAddDetailComponent(): boolean {
-    return true;
+  canAddDetailComponent(): boolean | Observable<boolean> {
+    if (!Util.isDefined(this.data) || !this.formLayoutManager.hasToConfirmExit(this.data)) {
+      return true;
+    }
+
+    return new Observable(observer => {
+      this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
+        observer.next(res);
+        observer.complete()
+      });
+    });
   }
 }
