@@ -6,6 +6,8 @@
 ### Bug fixes
 * **o-table**:
   * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
+  * Fix bug when open a detail with o-form-layout-manager  ([f5612a4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5612a4)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751),[#752](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/752)
+  * Fixed the bug that the table is displayed blank when navigating the mat tab group and virtual scrolling is enabled([6327825](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6327825)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751)
 
 ### BREAKING CHANGES
 * Changes made to solve [#745](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/745) and [#754](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/754) ([d1829ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1829ef)) ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447)). This changes will be transparent to user.
@@ -16,7 +18,6 @@
   * **OFormCacheClass**: `onCacheEmptyStateChanges` emmiter no longer exists  
   * **OFormLayoutManagerMode**: `canAddDetailComponent` method now can also return an Observable
   * **OFormLayoutManager**: `canAddDetailComponent` now returns an Observable
-
 
 
 ## 8.5.0
