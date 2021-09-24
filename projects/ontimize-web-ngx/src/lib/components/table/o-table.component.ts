@@ -2568,7 +2568,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const oCol = this.getOColumn(column.substr('groupHeader-'.length));
     if (Util.isDefined(oCol)) {
       classNameArray.push(this.getCellAlignClass(oCol));
-      classNameArray.push(oCol.className);
+      classNameArray.push(oCol.className ? oCol.className : '');
     }
     return classNameArray;
   }
