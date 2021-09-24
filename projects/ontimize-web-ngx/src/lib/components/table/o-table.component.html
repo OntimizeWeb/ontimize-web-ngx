@@ -263,7 +263,7 @@
     <!-- Definition column group header -->
     <ng-container *ngFor="let column of groupingHeadersRows; let i = index" [matColumnDef]="column">
       <td mat-cell *matCellDef="let group" class="grouping-row" [oContextMenu]="tableContextMenu"
-        [oContextMenuData]="{ cellName:column, rowValue:group, rowIndex:i}">
+        [oContextMenuData]="{ cellName:column, rowValue:group, rowIndex:i}" [ngClass]="getGroupHeadeCellAlignClass(column)">
         <div *ngIf="i===0" class="grouping-title-wrapper" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
           <mat-icon>{{ group.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           {{ group.title }}
