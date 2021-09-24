@@ -16,6 +16,7 @@ import {
   HostListener,
   Inject,
   Injector,
+  NgZone,
   OnDestroy,
   OnInit,
   Optional,
@@ -688,15 +689,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     if (this.virtualScrollViewport) {
+      const zone = this.injector.get(NgZone);
       this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
         distinctUntilChanged(),
         filter(() => this.fixedHeader || this.hasInsertableRow())
       ).subscribe(x => {
-        this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
-          el.style.top = - x + 'px';
-        });
-        this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
-          el.style.bottom = x + 'px';
+        zone.run(() => {
+          this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
+            el.style.top = - x + 'px';
+          });
+          this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
+            el.style.bottom = x + 'px';
+          });
         });
       });
     }
