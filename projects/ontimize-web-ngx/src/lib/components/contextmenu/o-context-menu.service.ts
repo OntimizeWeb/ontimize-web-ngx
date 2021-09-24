@@ -74,8 +74,6 @@ export class OContextMenuService implements OnDestroy {
 
     this.attachContextMenu(overlayRef, context);
 
-    this.cd.detectChanges();
-
     setTimeout(() => {
       // Workaround to delete first level menu trigger
       overlayRef.hostElement.classList.add('overlay-ref-display-none');
@@ -84,6 +82,8 @@ export class OContextMenuService implements OnDestroy {
         const top = nextSibling.getBoundingClientRect().top;
         this.renderer.setStyle(nextSibling, 'top', `${top - 32}px`);
       }
+
+      this.cd.detectChanges();
     })
   }
 
@@ -91,6 +91,7 @@ export class OContextMenuService implements OnDestroy {
     const contextMenuContent: ComponentRef<OContextMenuContentComponent> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
     contextMenuContent.instance.overlay = overlay;
     contextMenuContent.instance.menuItems = context.menuItems;
+    contextMenuContent.instance.externalMenuItems = context.externalMenuItems;
     contextMenuContent.instance.data = context.data;
     contextMenuContent.instance.menuClass = context.class;
     this.subscription.add(contextMenuContent.instance.close.subscribe(() => {

@@ -17,7 +17,7 @@ export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
   providers: [OContextMenuService]
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
-
+  public externalContextMenuItems: QueryList<OComponentMenuBaseItem>;
   @ContentChildren(OComponentMenuBaseItem)
   public oContextMenuItems: QueryList<OComponentMenuBaseItem>;
 
@@ -50,6 +50,7 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
       return;
     }
     params.menuItems = this.oContextMenuItems;
+    params.externalMenuItems = this.externalContextMenuItems;
     if (params.menuItems.length > 0) {
       this.oContextMenuService.openContextMenu(params);
     }

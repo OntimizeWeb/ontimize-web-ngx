@@ -12,5 +12,6 @@ export interface IOContextMenuClickEvent {
 
 export interface IOContextMenuContext extends IOContextMenuClickEvent {
   menuItems?: QueryList<OComponentMenuBaseItem>;
+  externalMenuItems?: QueryList<OComponentMenuBaseItem>;
   class?: string;
 }
