@@ -2,6 +2,7 @@
 ### Features
 * **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
 * **OFormLayoutManager**: new `hasToConfirmExit` method ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447))
+* **o-table**: new `context-menu` input ([04ffbe69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04ffbe69))
 
 ### Bug fixes
 * **o-table**:
