@@ -74,6 +74,7 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
+import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
 import {
   OTableFilterByColumnDataDialogComponent
@@ -88,7 +89,6 @@ import { OTableInsertableRowComponent } from './extensions/header/table-insertab
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableVirtualScrollStrategy } from './extensions/o-table-strategy.service';
-
 import { OTableDao } from './extensions/o-table.dao';
 import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
 import {
@@ -97,6 +97,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -210,7 +211,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'collapseGroupedColumns: collapse-grouped-columns',
 
   //virtual-scroll [yes|no|true|false]: Whether enabled or not the virtual scroll
-  'virtualScroll: virtual-scroll'
+  'virtualScroll: virtual-scroll',
+
+  //context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
+  'contextMenu: context-menu'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -264,6 +268,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public static FIRST_LAST_CELL_PADDING = 24;
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
   public static AVAILABLE_GROUPING_COLUMNS_RENDERERS = ['currency', 'integer', 'real'];
+
+  public DETAIL_MODE_NONE = Codes.DETAIL_MODE_NONE;
+  public EDIT_MODE_NONE = Codes.EDITION_MODE_NONE;
 
   protected snackBarService: SnackBarService;
 
@@ -382,7 +389,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   fixedHeader: boolean = true;
   @InputConverter()
   showTitle: boolean = false;
-  editionMode: string = Codes.DETAIL_MODE_NONE;
+  editionMode: string = Codes.EDITION_MODE_NONE;
   selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
 
   protected _horizontalScroll = false;
@@ -416,6 +423,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   collapseGroupedColumns: boolean = false;
   @InputConverter()
   virtualScroll: boolean = true;
+  @InputConverter()
+  contextMenu: boolean = true;
 
   protected _enabled: boolean = true;
   get enabled(): boolean {
@@ -629,6 +638,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public oTableColumnsGroupingComponent: OTableColumnsGrouping;
 
+  @ContentChild(OTableContextMenuComponent, { static: true })
+  contextMenuContentChild: OTableContextMenuComponent;
 
   constructor(
     public injector: Injector,
@@ -1008,7 +1019,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected refreshEditionModeWarn() {
-    if (this.editionMode !== Codes.DETAIL_MODE_NONE) {
+    if (this.editionMode !== Codes.EDITION_MODE_NONE) {
       return;
     }
     const editableColumns = this._oTableOptions.columns.filter(col => {
@@ -1705,7 +1716,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (!this.clickPrevent) {
         if (this.oenabled && column.editor
           && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
-          && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
+          && (this.editionMode === Codes.EDITION_MODE_CLICK)) {
           this.activateColumnEdition(column, row, cellRef);
         } else {
           this.doHandleClick(row, column.attr, rowIndex, event);
@@ -2121,9 +2132,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.onFilterByColumnChange.emit();
     this.reloadPaginatedDataFromStart(false);
   }
+
   isColumnFilterable(column: OColumn): boolean {
     return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
   }
+  
   isColumnFilterActive(column: OColumn): boolean {
     return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
   }

@@ -317,3 +317,9 @@
   </table>
 
 </ng-template>
+
+<ng-container *ngIf="!contextMenuContentChild && contextMenu">
+  <o-table-context-menu [insert]="insertButton" [edit]="editionMode !== EDIT_MODE_NONE" [view-detail]="detailMode !== DETAIL_MODE_NONE"
+    [refresh]="refreshButton" [delete]="deleteButton" [filter]="showFilterOption" [group-by-row]="groupable">
+  </o-table-context-menu>
+</ng-container>
