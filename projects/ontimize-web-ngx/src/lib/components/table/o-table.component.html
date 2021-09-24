@@ -269,8 +269,15 @@
           {{ group.title }}
         </div>
         <div class="grouping-aggregate" *ngIf="group.hasColumnData(visibleColArray[i])">
-          {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateFunction(visibleColArray[i]) | oTranslate }} : {{
-          group.getColumnAggregateValue(visibleColArray[i]) }}
+          {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateFunction(visibleColArray[i]) | oTranslate }} :
+          <ng-container *ngIf="!getOColumnFromGroupHeaderColumn(column).renderer">
+            {{ group.getColumnAggregateValue(visibleColArray[i])}}
+          </ng-container>
+          <ng-container *ngIf="getOColumnFromGroupHeaderColumn(column).renderer">
+            <ng-template
+              *ngTemplateOutlet="getOColumnFromGroupHeaderColumn(column).renderer?.templateref; context:{ cellvalue:  group.getColumnAggregateValue(visibleColArray[i]) }">
+            </ng-template>
+          </ng-container>
         </div>
       </td>
     </ng-container>
