@@ -70,7 +70,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       this._paginator = table.matpaginator;
     }
 
-    if (this.table.activeVirtualScroll) {
+    if (this.table.virtualScrollViewport) {
       this.table.virtualScrollViewport.renderedRangeStream
         .pipe(distinctUntilChanged())
         .subscribe(
@@ -121,7 +121,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     }
 
-    if (this.table.activeVirtualScroll) {
+    if (this.table.virtualScrollViewport) {
       displayDataChanges.push(this._virtualPageChange);
     }
 
@@ -174,7 +174,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
             when the data is very large, the application crashes so it gets a limited range of data the first time
             because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll
           */
-          if (this.table.activeVirtualScroll && !this._paginator) {
+          if (this.table.virtualScrollViewport && !this._paginator) {
             data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
           }
 
