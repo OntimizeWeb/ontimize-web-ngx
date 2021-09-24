@@ -34,9 +34,11 @@ export class CanActivateFormLayoutChildGuard implements CanActivateChild {
           return false;
         }
       }
-      if (formLayoutManager.canAddDetailComponent()) {
-        formLayoutManager.addDetailComponent(childRoute, state.url.substring(0, state.url.indexOf('?')));
-      }
+      formLayoutManager.canAddDetailComponent().subscribe(res => {
+        if (res) {
+          formLayoutManager.addDetailComponent(childRoute, state.url.substring(0, state.url.indexOf('?')));
+        }
+      });
       return false;
     }
     return true;

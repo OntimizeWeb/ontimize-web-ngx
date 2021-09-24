@@ -72,6 +72,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   protected previousSelectedIndex: number;
 
   public updateTabComponentsState = new Subject<any>();
+  public tabsModificationsCache: any[] = [];
 
   constructor(
     protected injector: Injector,
@@ -245,7 +246,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       }
     }));
 
-    if (Util.isDefined(tabData) && tabData.modified) {
+    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
       });
@@ -279,11 +280,14 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return route;
   }
 
-  setModifiedState(modified: boolean) {
+  setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
     if (this.tabGroup.selectedIndex > 0) {
-      const id = this.data.length > 0 ? this.data[this.tabGroup.selectedIndex - 1].id : undefined;
-      if (Util.isDefined(id)) {
-        this.data.find(d => d.id === id).modified = modified;
+      const selectedData = this.data[this.tabGroup.selectedIndex - 1];
+      if (Util.isDefined(selectedData)) {
+        selectedData.innerFormsInfo[formAttr] = {
+          modified: modified,
+          confirmOnExit: confirmExit
+        };
       }
     }
   }
@@ -380,7 +384,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       url: paramsObj.url,
       id: Math.random().toString(36),
       label: paramsObj.label,
-      modified: false
+      innerFormsInfo: {}
     };
     return newDetailComp;
   }
@@ -410,4 +414,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
     return !maxReached;
   }
+
+  isTabDataModified(tabData: FormLayoutDetailComponentData): boolean {
+    return Object.keys(tabData.innerFormsInfo).some(formAttr => tabData.innerFormsInfo[formAttr].modified);
+  }
+
 }

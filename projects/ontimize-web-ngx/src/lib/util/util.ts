@@ -1,4 +1,6 @@
+import { isPromise } from '@angular/compiler/src/util';
 import moment from 'moment';
+import { from, isObservable, Observable, of } from 'rxjs';
 
 import { IDataService } from '../interfaces/data-service.interface';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
@@ -398,4 +400,16 @@ export class Util {
     return result;
   }
 
+  static wrapIntoObservable<T>(value: T | Promise<T> | Observable<T>): Observable<T> {
+    if (isObservable(value)) {
+      return value;
+    }
+
+    if (isPromise(value)) {
+      // Use `Promise.resolve()` to wrap promise-like instances.
+      return from(Promise.resolve(value));
+    }
+
+    return of(value);
+  }
 }

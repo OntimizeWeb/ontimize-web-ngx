@@ -1,7 +1,27 @@
 ## 8.5.1
+### Features
+* **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
+* **OFormLayoutManager**: new `hasToConfirmExit` method ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447))
+
 ### Bug fixes
 * **o-table**:
   * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
+  * Fix bug when open a detail with o-form-layout-manager  ([f5612a4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5612a4)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751),[#752](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/752)
+  * Fix the bug that the table is displayed blank when navigating the mat tab group and virtual scrolling is enabled([6327825](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6327825)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751)
+  * Fix the bug that the virtual scrolling works abnormally sometimes ([3b7d0ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b7d0ca)) Closes [#760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/760)
+
+
+### BREAKING CHANGES
+* Changes made to solve [#745](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/745) and [#754](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/754) ([d1829ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1829ef)) ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447)). This changes will be transparent to user.
+  * **o-form-layout-manager**, **OFormLayoutManagerMode**: `setModifiedState` method arguments updated
+  * **OFormNavigationClass**:
+    * `setModifiedState` method is now protected
+    * `suscribeToCacheChanges` method has no arguments now
+  * **OFormCacheClass**: `onCacheEmptyStateChanges` emmiter no longer exists
+  * **OFormLayoutManagerMode**: `canAddDetailComponent` method now can also return an Observable
+  * **OFormLayoutManager**: `canAddDetailComponent` now returns an Observable
+
+
 ## 8.5.0
 
 ### We are restyling **OntimizeWeb**

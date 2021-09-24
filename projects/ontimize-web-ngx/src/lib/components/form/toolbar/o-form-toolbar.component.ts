@@ -354,7 +354,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.insertBtnEnabled = this.insertBtnEnabled && isEditableDetail;
     this.editBtnEnabled = this.editBtnEnabled && !isEditableDetail;
 
-    this._form.getFormCache().onCacheStateChanges.asObservable().subscribe((value: any) => {
+    this.formCacheSubscription = this._form.getFormCache().onCacheStateChanges.subscribe((value: any) => {
       if (this._form.isEditableDetail()) {
         this.changesToSave = this._form.isInitialStateChanged();
       }
