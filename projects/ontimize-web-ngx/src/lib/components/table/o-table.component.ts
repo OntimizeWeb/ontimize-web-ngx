@@ -1482,7 +1482,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   initViewPort(data: any[]) {
 
-    if (this.virtualScrollViewport) {
+    if (this.virtualScrollViewport && data) {
       const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
       const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
       const rowElRef = this.elRef.nativeElement.querySelector(rowSelector);
@@ -1523,8 +1523,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }, 500);
     this.loadingScrollSubject.next(false);
 
+    this.initViewPort(this.dataSource.renderedData);
+
     if (this.previousRendererData !== this.dataSource.renderedData) {
-      this.initViewPort(this.dataSource.renderedData);
       this.previousRendererData = this.dataSource.renderedData;
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
