@@ -2563,7 +2563,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
 
-  public getGroupHeadeCellAlignClass(column: string): string[] {
+  public getGroupHeaderCellAlignClass(column: string): string[] {
     let classNameArray = [];
     const oCol = this.getOColumn(column.substr('groupHeader-'.length));
     if (Util.isDefined(oCol)) {
