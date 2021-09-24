@@ -1,21 +1,19 @@
 import { CdkVirtualScrollViewport, VirtualScrollStrategy } from "@angular/cdk/scrolling";
-import { Observable, Subject } from "rxjs";
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 
+@Injectable()
 export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   private viewport: CdkVirtualScrollViewport;
 
   private rowHeight!: number;
   private headerHeight!: number;
   private footerHeight!: number;
-  public readonly indexChange = new Subject<number>();
-  public scrolledIndexChange: Observable<number>;
-  public stickyChange = new Subject<number>();
+  private readonly indexChange = new Subject<number>();
+  public scrolledIndexChange = this.indexChange.pipe(distinctUntilChanged());
+  public readonly stickyChange = new Subject<number>();
   private bufferMultiplier: number = 1;
-
-  constructor() {
-    this.scrolledIndexChange = this.indexChange.asObservable().pipe(distinctUntilChanged());
-  }
 
   get dataLength(): number {
     return this._dataLength;
@@ -28,7 +26,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
 
   private _dataLength = 0;
 
-  attach(viewport: CdkVirtualScrollViewport): void {
+  public attach(viewport: CdkVirtualScrollViewport): void {
     this.viewport = viewport;
     this.onDataLengthChanged();
     this.updateContent();
@@ -60,10 +58,11 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   }
 
   public setConfig(rowHeight: number, headerHeight: number, footerHeight: number) {
+
     if (
-      (this.rowHeight === rowHeight
-        && this.headerHeight === headerHeight
-        && this.footerHeight === footerHeight) || rowHeight === 0
+      this.rowHeight === rowHeight
+      && this.headerHeight === headerHeight
+      && this.footerHeight === footerHeight
     ) {
       return;
     }
@@ -83,23 +82,30 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   }
 
   private updateContent() {
-    if (!this.viewport || !this.rowHeight) {
+    if (!this.viewport || !this.rowHeight || this.dataLength === 0) {
       return;
     }
     const scrollOffset = this.viewport.measureScrollOffset();
-    const amount = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
-    const offset = Math.max(scrollOffset - this.headerHeight, 0);
-    const buffer = Math.ceil(amount * this.bufferMultiplier);
+    const itemsDisplayed = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
+    const renderedOffset = this.viewport.getOffsetToRenderedContentStart();
+    const start = renderedOffset / this.rowHeight;
+    const bufferItems = Math.ceil(itemsDisplayed * this.bufferMultiplier);
+    const bufferOffset = renderedOffset + bufferItems * this.rowHeight;
 
-    const skip = Math.round(offset / this.rowHeight);
-    const index = Math.max(0, skip);
-    const start = Math.max(0, index - buffer);
-    const end = Math.min(this.dataLength, index + amount + buffer);
-    const renderedOffset = start * this.rowHeight;
+    const relativeScrollOffset = scrollOffset - bufferOffset;// How far the scroll offset is from the lower buffer, which is usually where items start being displayed
+    const rowsScrolled = relativeScrollOffset / this.rowHeight;
 
-    this.viewport.setRenderedContentOffset(renderedOffset);
-    this.viewport.setRenderedRange({ start, end });
-    this.indexChange.next(index);
-    this.stickyChange.next(renderedOffset);
+    const displayed = scrollOffset / this.rowHeight;
+    this.indexChange.next(displayed);
+
+    const rowsToMove = Math.sign(rowsScrolled) * Math.floor(Math.abs(rowsScrolled));
+
+    const adjustedRenderedOffset = Math.max(0, renderedOffset + rowsToMove * this.rowHeight);
+    this.viewport.setRenderedContentOffset(adjustedRenderedOffset);
+
+    const adjustedStart = Math.max(0, start + rowsToMove);
+    const adjustedEnd = adjustedStart + itemsDisplayed + bufferItems;
+    this.viewport.setRenderedRange({ start: adjustedStart, end: adjustedEnd });
+    this.stickyChange.next(adjustedRenderedOffset);
   }
 }

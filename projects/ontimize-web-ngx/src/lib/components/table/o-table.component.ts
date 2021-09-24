@@ -16,6 +16,7 @@ import {
   HostListener,
   Inject,
   Injector,
+  NgZone,
   OnDestroy,
   OnInit,
   Optional,
@@ -269,8 +270,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public paginator: OTablePaginator;
 
-  public activeVirtualScroll = true;
-
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
@@ -278,13 +277,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
-      this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
       this.updateHeaderAndFooterStickyPositions();
       if (this.checkViewportSizeSubscription) {
         this.checkViewportSizeSubscription.unsubscribe();
       }
 
-      if (this.activeVirtualScroll) {
+      if (this.virtualScrollViewport) {
         this.checkViewportSizeSubscription = this.checkViewPortSubject.subscribe(x => {
           if (x) {
             this.checkViewportSize();
@@ -690,17 +688,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.virtualScrollSubscription.unsubscribe();
     }
 
-    if (this.activeVirtualScroll) {
+    if (this.virtualScrollViewport) {
+      const zone = this.injector.get(NgZone);
       this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
         distinctUntilChanged(),
         filter(() => this.fixedHeader || this.hasInsertableRow())
       ).subscribe(x => {
-
-        this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
-          el.style.top = - x + 'px';
-        });
-        this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
-          el.style.bottom = x + 'px';
+        zone.run(() => {
+          this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
+            el.style.top = - x + 'px';
+          });
+          this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
+            el.style.bottom = x + 'px';
+          });
         });
       });
     }
@@ -1482,7 +1482,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   initViewPort(data: any[]) {
 
-    if (this.activeVirtualScroll) {
+    if (this.virtualScrollViewport && data) {
       const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
       const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
       const rowElRef = this.elRef.nativeElement.querySelector(rowSelector);
