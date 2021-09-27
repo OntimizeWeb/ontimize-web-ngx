@@ -2562,6 +2562,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
   }
 
+
+  public getGroupHeaderCellAlignClass(column: string): string[] {
+    let classNameArray = [];
+    const oCol = this.getOColumn(column.substr('groupHeader-'.length));
+    if (Util.isDefined(oCol)) {
+      classNameArray.push(this.getCellAlignClass(oCol));
+      classNameArray.push(oCol.className ? oCol.className : '');
+    }
+    return classNameArray;
+  }
+
   protected addDefaultRowButtons() {
     // check permissions
     if (this.editButtonInRow) {
