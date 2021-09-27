@@ -175,6 +175,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     if (navData && navData.isInsertFormRoute()) {
       const existingData = this.data.find(item => item.insertionMode);
       addNewComp = !existingData;
+    } else if (this.data.find(item => item.insertionMode)) {
+      addNewComp = false;
     }
     const newCompParams = compData.params;
     if (addNewComp) {
@@ -282,7 +284,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
     if (this.tabGroup.selectedIndex > 0) {
-      const selectedData = this.data[this.tabGroup.selectedIndex - 1];
+      const   selectedData = this.data[this.tabGroup.selectedIndex - 1];
       if (Util.isDefined(selectedData)) {
         selectedData.innerFormsInfo[formAttr] = {
           modified: modified,
