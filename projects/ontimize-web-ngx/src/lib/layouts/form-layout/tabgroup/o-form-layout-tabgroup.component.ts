@@ -282,7 +282,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
     if (this.tabGroup.selectedIndex > 0) {
-      const   selectedData = this.data[this.tabGroup.selectedIndex - 1];
+      const selectedData = this.data[this.tabGroup.selectedIndex - 1];
       if (Util.isDefined(selectedData)) {
         selectedData.innerFormsInfo[formAttr] = {
           modified: modified,
