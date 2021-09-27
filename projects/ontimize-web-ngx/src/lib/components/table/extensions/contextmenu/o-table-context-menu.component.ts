@@ -164,20 +164,15 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    const itemsParsed = this.defaultContextMenu.oContextMenuItems.toArray();
-    if (this.contextMenu) {
-      const items = itemsParsed.concat(this.contextMenu.oContextMenuItems.toArray());
-      this.defaultContextMenu.oContextMenuItems.reset(items);
-    } else {
-      this.defaultContextMenu.oContextMenuItems.reset(itemsParsed);
-    }
     if (!Util.isDefined(this.showSelectAll)) {
       this.isVisibleSelectAll.next(this.table.selectAllCheckbox);
     }
     if (!this.table.groupable) {
       this.isVisibleGroupByRow.next(this.table.groupable);
     }
-
+    if (this.contextMenu) {
+      this.defaultContextMenu.externalContextMenuItems = this.contextMenu.oContextMenuItems;
+    }
     this.table.registerContextMenu(this.defaultContextMenu);
     this.registerContextMenuListeners();
   }
@@ -295,9 +290,9 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   get availableColumnAggregates(): string[] {
     let result = Util.columnAggregates;
-    if (this.row instanceof OTableGroupedRow)  {
+    if (this.row instanceof OTableGroupedRow) {
       const customAggregationName = this.row.getColumnCustomAggregateName(this.column.attr);
-      if (Util.isDefined(customAggregationName)){
+      if (Util.isDefined(customAggregationName)) {
         result = result.concat(customAggregationName);
       }
     }
@@ -355,7 +350,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   expandRowGroupsSameLevel() {
     this.table.dataSource.setRowGroupLevelExpansion(this._row, true);
-  } 
+  }
 
   collapseRowGroupsSameLevel() {
     this.table.dataSource.setRowGroupLevelExpansion(this._row, false);

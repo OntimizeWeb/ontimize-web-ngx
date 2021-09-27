@@ -1,6 +1,6 @@
 import { ElementRef, QueryList } from '@angular/core';
 
-import { OComponentMenuItems } from '../components/contextmenu/o-content-menu.class';
+import { OComponentMenuBaseItem } from '../components/contextmenu/o-content-menu-base-item.class';
 import { OContextMenuComponent } from '../components/contextmenu/o-context-menu.component';
 
 export interface IOContextMenuClickEvent {
@@ -11,6 +11,7 @@ export interface IOContextMenuClickEvent {
 }
 
 export interface IOContextMenuContext extends IOContextMenuClickEvent {
-  menuItems?: QueryList<OComponentMenuItems>;
+  menuItems?: QueryList<OComponentMenuBaseItem>;
+  externalMenuItems?: QueryList<OComponentMenuBaseItem>;
   class?: string;
 }
