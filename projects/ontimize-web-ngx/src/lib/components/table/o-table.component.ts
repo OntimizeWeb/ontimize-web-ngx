@@ -2646,6 +2646,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return result;
   }
 
+  getOColumnFromGroupHeaderColumn(attr: string): OColumn {
+    return this.getOColumn(attr.substr('groupHeader-'.length));
+  }
+
   getThWidthFromOColumn(oColumn: OColumn): any {
     let widthColumn: number;
     const thArray = [].slice.call(this.tableHeaderEl.nativeElement.children);
