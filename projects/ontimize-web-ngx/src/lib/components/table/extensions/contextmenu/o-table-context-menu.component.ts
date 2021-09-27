@@ -260,15 +260,15 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   get labelFilterByColumn(): string {
-    return (this.column && this.column.attr) ? this.translateService.get('TABLE_CONTEXT_MENU.FILTER_BY') + ' ' + this.translateService.get(this.column.attr) : '';
+    return (this.column && this.column.title) ? this.translateService.get('TABLE_CONTEXT_MENU.FILTER_BY') + ' ' + this.translateService.get(this.column.title) : '';
   }
 
   get labelGroupByColumn(): string {
-    return (this.column && this.column.attr) ? this.translateService.get('TABLE_CONTEXT_MENU.GROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.attr) : '';
+    return (this.column && this.column.title) ? this.translateService.get('TABLE_CONTEXT_MENU.GROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.title) : '';
   }
 
   get labelUnGroupByColumn(): string {
-    return (this.column && this.column.attr) ? this.translateService.get('TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.attr) : '';
+    return (this.column && this.column.title) ? this.translateService.get('TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.title) : '';
   }
 
   get row(): any {
