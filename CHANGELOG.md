@@ -11,6 +11,8 @@
   * Fix bug when open a detail with o-form-layout-manager  ([f5612a4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5612a4)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751),[#752](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/752)
   * Fix the bug that the table is displayed blank when navigating the mat tab group and virtual scrolling is enabled([6327825](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6327825)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751)
   * Fix the bug that the virtual scrolling works abnormally sometimes ([3b7d0ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b7d0ca)) Closes [#760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/760)
+  ontimize-web-ngx/issues/751)
+  * Fix the bug when `title` attribute is defined in `o-table-column` and it does not show the translated value in o-table-context-menu ([c259570](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c259570)) Closes [#766](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/766)
 
 
 ### BREAKING CHANGES
