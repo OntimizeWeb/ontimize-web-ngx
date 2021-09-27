@@ -108,7 +108,7 @@ export class OTableInsertableRowComponent implements OnInit {
       .filter((col) => this.isColumnInsertable(col)).forEach(col => {
         const columnEditorType = col.editor ? col.editor.type : col.type;
         if (col.definition) {
-          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.definition);
+          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.definition, false);
           this.columnEditors[col.attr] = editor;
           let disabledCol = !this.enabled;
           if (!disabledCol) {
