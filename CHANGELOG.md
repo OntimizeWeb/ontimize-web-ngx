@@ -2,7 +2,9 @@
 ### Features
 * **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
 * **OFormLayoutManager**: new `hasToConfirmExit` method ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447))
-
+* **o-table**:
+  * alignment on aggregate column heading with same default column type alignment ([5bfa41d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bfa41d)) Closes [#740](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/740)
+  * new `context-menu` input ([04ffbe69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04ffbe69))
 ### Bug fixes
 * **o-table**:
   * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)

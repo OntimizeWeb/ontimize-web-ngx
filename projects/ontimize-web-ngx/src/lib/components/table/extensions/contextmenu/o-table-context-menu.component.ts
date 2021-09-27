@@ -164,20 +164,15 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    const itemsParsed = this.defaultContextMenu.oContextMenuItems.toArray();
-    if (this.contextMenu) {
-      const items = itemsParsed.concat(this.contextMenu.oContextMenuItems.toArray());
-      this.defaultContextMenu.oContextMenuItems.reset(items);
-    } else {
-      this.defaultContextMenu.oContextMenuItems.reset(itemsParsed);
-    }
     if (!Util.isDefined(this.showSelectAll)) {
       this.isVisibleSelectAll.next(this.table.selectAllCheckbox);
     }
     if (!this.table.groupable) {
       this.isVisibleGroupByRow.next(this.table.groupable);
     }
-
+    if (this.contextMenu) {
+      this.defaultContextMenu.externalContextMenuItems = this.contextMenu.oContextMenuItems;
+    }
     this.table.registerContextMenu(this.defaultContextMenu);
     this.registerContextMenuListeners();
   }
