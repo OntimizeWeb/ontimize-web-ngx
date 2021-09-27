@@ -164,3 +164,7 @@ button {
     height: 32px;
   }
 }
+
+.overlay-ref-display-none .cdk-overlay-pane.o-context-menu {
+  display:none;
+}

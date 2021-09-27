@@ -263,14 +263,21 @@
     <!-- Definition column group header -->
     <ng-container *ngFor="let column of groupingHeadersRows; let i = index" [matColumnDef]="column">
       <td mat-cell *matCellDef="let group" class="grouping-row" [oContextMenu]="tableContextMenu"
-        [oContextMenuData]="{ cellName:column, rowValue:group, rowIndex:i}">
+        [oContextMenuData]="{ cellName:column, rowValue:group, rowIndex:i}" [ngClass]="getGroupHeaderCellAlignClass(column)">
         <div *ngIf="i===0" class="grouping-title-wrapper" [ngStyle]="{'padding-left': 20*(group.level-1)+'px'}">
           <mat-icon>{{ group.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           {{ group.title }}
         </div>
         <div class="grouping-aggregate" *ngIf="group.hasColumnData(visibleColArray[i])">
-          {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateFunction(visibleColArray[i]) | oTranslate }} : {{
-          group.getColumnAggregateValue(visibleColArray[i]) }}
+          {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateFunction(visibleColArray[i]) | oTranslate }} :
+          <ng-container *ngIf="!getOColumnFromGroupHeaderColumn(column).renderer">
+            {{ group.getColumnAggregateValue(visibleColArray[i])}}
+          </ng-container>
+          <ng-container *ngIf="getOColumnFromGroupHeaderColumn(column).renderer">
+            <ng-template
+              *ngTemplateOutlet="getOColumnFromGroupHeaderColumn(column).renderer?.templateref; context:{ cellvalue:  group.getColumnAggregateValue(visibleColArray[i]) }">
+            </ng-template>
+          </ng-container>
         </div>
       </td>
     </ng-container>
@@ -317,3 +324,9 @@
   </table>
 
 </ng-template>
+
+<ng-container *ngIf="!contextMenuContentChild && contextMenu">
+  <o-table-context-menu [insert]="insertButton" [edit]="editionMode !== EDIT_MODE_NONE" [view-detail]="detailMode !== DETAIL_MODE_NONE"
+    [refresh]="refreshButton" [delete]="deleteButton" [filter]="showFilterOption" [group-by-row]="groupable">
+  </o-table-context-menu>
+</ng-container>
