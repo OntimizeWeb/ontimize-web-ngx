@@ -4,8 +4,6 @@ import { MatPaginator } from '@angular/material';
 import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-
-import { GroupedColumnAggregateConfiguration } from '../../../interfaces/o-table-columns-grouping-interface';
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
@@ -564,7 +562,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       //If the data is grouped, the values ​​of the subgroups in level 1 are summed
       if (data[0] instanceof OTableGroupedRow) {
         this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
-          value = x.getColumnsData(column).reduce((acumulator, currentValue) => {
+          value = x.getColumnAggregateData(column).reduce((acumulator, currentValue) => {
             return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
           }, value);
         });
@@ -583,7 +581,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       //If the data is grouped, the count is calculated by adding the counts for each subgroup in level 1
       if (data[0] instanceof OTableGroupedRow) {
         this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
-          value = x.getColumnsData(column).reduce((acumulator) => {
+          value = x.getColumnAggregateData(column).reduce((acumulator) => {
             return acumulator + 1;
           }, value);
         });
@@ -608,7 +606,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     //If the data is grouped, the minimum is calculated with the minimum of each subgroup in level 1
     if (data[0] instanceof OTableGroupedRow) {
       tempMin = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
-        return Math.min(...x.getColumnsData(column).map(x => x[column]));
+        return Math.min(...x.getColumnAggregateData(column).map(x => x[column]));
       });
     } else {
       tempMin = data.map(x => x[column]);
@@ -622,7 +620,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     if (data[0] instanceof OTableGroupedRow) {
       //If the data are grouped, the maximum is calculated with the maximum of each subgroup in level 1
       tempMax = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
-        return Math.max(...x.getColumnsData(column).map(x => x[column]));
+        return Math.max(...x.getColumnAggregateData(column).map(x => x[column]));
       });
     } else {
       tempMax = data.map(x => x[column]);
@@ -678,8 +676,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   private recalculateColumnAggregate(columnAttr: string, row: OTableGroupedRow) {
-    const aggregateConf = row.getColumnAggregateConfiguration(columnAttr);
-    const value = this.groupingAggregate(aggregateConf, row.getColumnAggregateData(columnAttr));
+    const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
+    const data = row.getColumnAggregateData(columnAttr);
+    const value = this.calculateAggregate(data, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
     row.setColumnAggregateValue(columnAttr, value);
   }
 
@@ -736,8 +735,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           const aggregateData = groupData.map(x => { const obj = {}; obj[columnAttr] = x[columnAttr]; return obj; });
           row.setColumnAggregateData(columnAttr, aggregateData);
 
-          const aggregateConf = row.getColumnAggregateConfiguration(columnAttr);
-          const value = this.groupingAggregate(aggregateConf, aggregateData);
+          const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
+          const value = this.calculateAggregate(aggregateData, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
           row.setColumnAggregateValue(columnAttr, value);
         }
       });
@@ -806,10 +805,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       rowGroup.expanded = !rowGroup.expanded;
       this.groupedRowState.push(rowGroup);
     }
-  }
-
-  private groupingAggregate(aggregateConf: GroupedColumnAggregateConfiguration, data: any[]) {
-    return this.calculateAggregate(data, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
   }
 
   private getTextGroupRow(group: OTableGroupedRow, totalCounts: number) {
