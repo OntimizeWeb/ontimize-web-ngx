@@ -104,12 +104,11 @@ export class OTableInsertableRowComponent implements OnInit {
   }
 
   initializeEditors(): void {
-    const self = this;
-    this.table.oTableOptions.columns.forEach((col, i, array) => {
-      if (self.isColumnInsertable(col)) {
+    this.table.oTableOptions.columns
+      .filter((col) => this.isColumnInsertable(col)).forEach(col => {
         const columnEditorType = col.editor ? col.editor.type : col.type;
         if (col.definition) {
-          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.definition);
+          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.definition, false);
           this.columnEditors[col.attr] = editor;
           let disabledCol = !this.enabled;
           if (!disabledCol) {
@@ -118,19 +117,17 @@ export class OTableInsertableRowComponent implements OnInit {
           }
           editor.enabled = !disabledCol;
           editor.showPlaceHolder = this.showPlaceHolder || editor.showPlaceHolder;
-          editor.table = self.table;
+          editor.table = this.table;
           editor.tableColumn = col.editor ? col.editor.tableColumn : col.definition;
           editor.orequired = this.isColumnRequired(col);
           editor.formControl = this.getControl(col, disabledCol);
+          editor.formGroup.addControl(editor.cellEditorId, editor.formControl);
           editor.controlArgs = { silent: true };
-          editor.rowData = self.rowData;
-          editor.startEdition(self.rowData);
+          editor.rowData = this.rowData;
+          editor.startEdition(this.rowData);
           editor.formControl.markAsUntouched();
-          col.editor = editor;
         }
-      }
-      array[i] = col;
-    });
+      })
   }
 
   useCellEditor(column: OColumn): boolean {
@@ -151,7 +148,7 @@ export class OTableInsertableRowComponent implements OnInit {
 
   resolveValidators(column: OColumn): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
-    if(column.definition && column.definition.angularValidatorsFn) {
+    if (column.definition && column.definition.angularValidatorsFn) {
       column.definition.angularValidatorsFn.forEach((fn: ValidatorFn) => {
         validators.push(fn);
       });
@@ -186,7 +183,6 @@ export class OTableInsertableRowComponent implements OnInit {
   }
 
   insertRecord() {
-    const self = this;
     if (!this.validateFields()) {
       // this.table.showDialogError('TABLE.ROW_VALIDATION_ERROR');
       return;
@@ -195,9 +191,9 @@ export class OTableInsertableRowComponent implements OnInit {
     const insertObservable: Observable<any> = this.table.insertRecord(values);
     if (insertObservable) {
       insertObservable.subscribe(res => {
-        self.onInsertSuccess(res);
+        this.onInsertSuccess(res);
       }, error => {
-        self.table.showDialogError(error, 'MESSAGES.ERROR_INSERT');
+        this.table.showDialogError(error, 'MESSAGES.ERROR_INSERT');
       });
     }
   }
