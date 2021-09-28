@@ -3,7 +3,7 @@
 * **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
 * **OFormLayoutManager**: new `hasToConfirmExit` method ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447))
 * **o-table**:
-  * alignment on aggregate column heading with same default column type alignment ([5bfa41d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bfa41d)) Closes [#740](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/740)
+  * alignment on aggregate column heading with same default column type alignment ([5bfa41d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bfa41d))([4adeb84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4adeb84)) Closes [#740](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/740)
   * new `context-menu` input ([04ffbe69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04ffbe69))
 ### Bug fixes
 * **o-table**:
