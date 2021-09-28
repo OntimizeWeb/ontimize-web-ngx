@@ -15,6 +15,7 @@
   ontimize-web-ngx/issues/751)
   * Fix the bug when `title` attribute is defined in `o-table-column` and it does not show the translated value in o-table-context-menu ([c259570](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c259570)) Closes [#766](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/766)
   * Fixing `expand-groups-same-level` input bug ([edd9e787](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd9e787)) Closes [#746](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/746)
+* **o-form-layout-manager**: Fix layout manager on tab mode after refreshing page ([298fce](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/769/commits/298fce)) Closes [#753](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/753)
 
 
 ### BREAKING CHANGES
