@@ -5,4 +5,14 @@
     height: 48px;
     font-size: 48px;
   }
+
+  .mat-raised-button {
+    height: initial;
+
+    .mat-button-wrapper {
+      > div {
+        line-height: inherit;
+      }
+    }
+  }
 }
