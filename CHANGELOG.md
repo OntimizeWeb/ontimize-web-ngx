@@ -5,6 +5,7 @@
 * **o-table**:
   * alignment on aggregate column heading with same default column type alignment ([5bfa41d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bfa41d))([4adeb84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4adeb84)) Closes [#740](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/740)
   * new `context-menu` input ([04ffbe69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04ffbe69))
+
 ### Bug fixes
 * **o-table**:
   * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
@@ -13,6 +14,7 @@
   * Fix the bug that the virtual scrolling works abnormally sometimes ([3b7d0ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b7d0ca)) Closes [#760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/760)
   ontimize-web-ngx/issues/751)
   * Fix the bug when `title` attribute is defined in `o-table-column` and it does not show the translated value in o-table-context-menu ([c259570](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c259570)) Closes [#766](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/766)
+  * Fixing `expand-groups-same-level` input bug ([edd9e787](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd9e787)) Closes [#746](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/746)
 * **o-form-layout-manager**: Fix layout manager on tab mode after refreshing page ([298fce](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/769/commits/298fce)) Closes [#753](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/753)
 
 

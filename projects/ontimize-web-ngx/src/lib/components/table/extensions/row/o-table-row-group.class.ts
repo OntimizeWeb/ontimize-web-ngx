@@ -48,6 +48,10 @@ export class OTableGroupedRow {
     return Util.isDefined(this.columnsData[columnAttr]);
   }
 
+  hasActiveAggregate(columnAttr: string): boolean {
+    return this.hasColumnData(columnAttr) && Util.isDefined(this.columnsData[columnAttr].activeAggregate);
+  }
+
   getColumnGroupingComponent(columnAttr: string): OTableColumnsGroupingColumnComponent {
     return this.hasColumnData(columnAttr) ? this.columnsData[columnAttr].component : null;
   }
@@ -94,7 +98,7 @@ export class OTableGroupedRow {
     }
     if (emitEvent) {
       let changeAllGroupedRows = true;
-      const groupingComponent = this.getColumnGroupingComponent(this.column);
+      const groupingComponent = this.getColumnGroupingComponent(columnAttr);
       if (Util.isDefined(groupingComponent)) {
         changeAllGroupedRows = groupingComponent.changeAggregateSameLevel;
       }

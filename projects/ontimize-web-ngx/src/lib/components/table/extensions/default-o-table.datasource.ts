@@ -709,17 +709,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           this.recalculateColumnAggregate(arg.columnAttr, arg.row);
         }
       }));
-
-      let expansionState = !parent || !this.table.collapseGroupedColumns;
-      if (row.expandSameLevel(this.table.expandGroupsSameLevel)) {
-        expansionState = this.levelsExpansionState.hasOwnProperty(row.level) ? this.levelsExpansionState[row.level] : expansionState;
-      } else {
-        const rowGroup = this.groupedRowState.find(x => x.keysAsString === row.keysAsString && JSON.stringify(x.parent) === JSON.stringify(row.parent));
-        expansionState = rowGroup ? rowGroup.expanded : expansionState;
-      }
-      row.expanded = expansionState;
-
-
       const affectedIndexes = recordHash[row.keysAsString];
       const groupData = data.filter((row, index) => affectedIndexes.includes(index));
       this.table.visibleColArray.forEach((columnAttr, i) => {
@@ -729,17 +718,22 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         const useColumnAggregate = this.table.useColumnGroupingAggregate(columnAttr);
         if (useColumnAggregate) {
           row.initializeColumnAggregate(columnAttr, this.table.getColumnGroupingComponent(columnAttr));
+
           if (Util.isDefined(this.activeAggregates[columnAttr])) {
             row.setColumnActiveAggregateFunction(columnAttr, this.activeAggregates[columnAttr], false);
           }
-          const aggregateData = groupData.map(x => { const obj = {}; obj[columnAttr] = x[columnAttr]; return obj; });
-          row.setColumnAggregateData(columnAttr, aggregateData);
 
-          const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
-          const value = this.calculateAggregate(aggregateData, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
-          row.setColumnAggregateValue(columnAttr, value);
+          if (row.hasActiveAggregate(columnAttr)) {
+            const aggregateData = groupData.map(x => { const obj = {}; obj[columnAttr] = x[columnAttr]; return obj; });
+            row.setColumnAggregateData(columnAttr, aggregateData);
+
+            const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
+            const value = this.calculateAggregate(aggregateData, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
+            row.setColumnAggregateValue(columnAttr, value);
+          }
         }
       });
+      row.expanded = this.getExpansionState(row);
       const subGroup = this.getSublevel(groupData, level + 1, row);
       subGroup.unshift(row);
       result = result.concat(subGroup);
@@ -821,7 +815,17 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     }
     return (this.table as any).translateService.get(oCol.title) + ': ' + value + ' (' + totalCounts + ')';
+  }
 
+  private getExpansionState(row: OTableGroupedRow): boolean {
+    let expansionState = !parent || !this.table.collapseGroupedColumns;
+    if (row.expandSameLevel(this.table.expandGroupsSameLevel)) {
+      expansionState = this.levelsExpansionState.hasOwnProperty(row.level) ? this.levelsExpansionState[row.level] : expansionState;
+    } else {
+      const rowGroup = this.groupedRowState.find(x => x.keysAsString === row.keysAsString && JSON.stringify(x.parent) === JSON.stringify(row.parent));
+      expansionState = rowGroup ? rowGroup.expanded : expansionState;
+    }
+    return expansionState;
   }
 }
 

@@ -33,7 +33,7 @@ export class OTableColumnsGroupingColumnComponent {
   public attr: string;
   public title: string;
   public aggregateName: string;
-  private _aggregate: string = 'sum';
+  private _aggregate: string;
   public aggregateFunction: AggregateFunction;
   @InputConverter()
   expandGroupsSameLevel: boolean = true;
@@ -41,9 +41,6 @@ export class OTableColumnsGroupingColumnComponent {
   changeAggregateSameLevel: boolean = true;
  
   set aggregate(value: string) {
-    if (!Util.columnAggregates.includes(value)) {
-      value = 'sum';
-    }
     this._aggregate = value;
   }
 
