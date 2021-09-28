@@ -268,7 +268,7 @@
           <mat-icon>{{ group.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           {{ group.title }}
         </div>
-        <div class="grouping-aggregate" *ngIf="group.hasColumnData(visibleColArray[i])">
+        <div class="grouping-aggregate" *ngIf="group.hasActiveAggregate(visibleColArray[i])">
           {{ 'AGGREGATE_FUNCTION.' + group.getColumnActiveAggregateTitle(visibleColArray[i]) | oTranslate }} :
           <ng-container *ngIf="!getOColumnFromGroupHeaderColumn(column).renderer">
             {{ group.getColumnAggregateValue(visibleColArray[i])}}
