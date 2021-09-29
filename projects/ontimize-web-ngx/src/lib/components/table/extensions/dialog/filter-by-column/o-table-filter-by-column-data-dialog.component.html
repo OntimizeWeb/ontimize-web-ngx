@@ -39,7 +39,7 @@
             {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
           </ng-container>
           <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
-            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: getRowValue(record.tableIndex) }">
+            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
           </ng-template>
         </mat-list-option>
       </mat-selection-list>
