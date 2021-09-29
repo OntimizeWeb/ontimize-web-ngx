@@ -90,6 +90,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     let previousFilter: OColumnValueFilter = data.previousFilter || {
       attr: undefined,
       operator: undefined,
+      rowValue: undefined,
       values: undefined,
       availableValues: undefined
     }
@@ -216,6 +217,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
           this.columnData.push({
             renderedValue: renderedValue,
             value: colValues[i],
+            rowValue: this.tableData[i],
             selected: filter.operator === ColumnValueFilterOperator.IN && (filter.values || []).indexOf(colValues[i]) !== -1,
             // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
             // row value of this index
@@ -332,10 +334,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   isDateType(): boolean {
     return 'date' === this.column.type;
-  }
-
-  getRowValue(i: number): any {
-    return this.tableData[i];
   }
 
   getFixedDimensionClass() {

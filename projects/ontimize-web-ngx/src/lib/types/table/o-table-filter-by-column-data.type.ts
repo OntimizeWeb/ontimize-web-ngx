@@ -1,6 +1,7 @@
 export type TableFilterByColumnData = {
   value: any;
   selected: boolean;
+  rowValue: any;
   renderedValue?: any;
   tableIndex?: number;
 };
