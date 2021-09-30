@@ -44,7 +44,7 @@
   <!-- GROUP BY HEADER CELL AGGREGATE FUNCTION -->
   <ng-container *ngIf="isGroupableCell | async">
     <o-context-menu-group label="TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION" icon="format_indent_increase" type="group">
-      <o-context-menu-item *ngFor="let aggregateFn of availableColumnAggregates" label="{{ 'AGGREGATE_FUNCTION.' + aggregateFn }}"
+      <o-context-menu-item *ngFor="let aggregateFn of availableColumnAggregates" label="{{ 'AGGREGATE_NAME.' + aggregateFn }}"
         (execute)="changeAggregateFunction($event, aggregateFn)"></o-context-menu-item>
     </o-context-menu-group>
   </ng-container>

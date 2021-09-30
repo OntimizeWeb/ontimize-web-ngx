@@ -266,11 +266,11 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Column grouping</li>',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION': 'Click on icon to hide/display the column. Use drag and drop to modify the column order.',
     'APP_LAYOUT.SETTINGS': 'Settings',
-    'AGGREGATE_FUNCTION.count': 'Count',
-    'AGGREGATE_FUNCTION.min': 'Min',
-    'AGGREGATE_FUNCTION.max': 'Max',
-    'AGGREGATE_FUNCTION.avg': 'Avg',
-    'AGGREGATE_FUNCTION.sum': 'Sum',
+    'AGGREGATE_NAME.count': 'Count',
+    'AGGREGATE_NAME.min': 'Min',
+    'AGGREGATE_NAME.max': 'Max',
+    'AGGREGATE_NAME.avg': 'Avg',
+    'AGGREGATE_NAME.sum': 'Sum',
     'FORM_SERVICE_COMPONENT.REFRESH': 'Refresh'
   },
 
@@ -533,11 +533,11 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Agrupamento por coluna</li>',
     'TABLE.VISIBLE_COLUMNS.DESCRIPTION': 'Haz click sobre el icono para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
     'APP_LAYOUT.SETTINGS': 'Configuración',
-    'AGGREGATE_FUNCTION.count': 'Count',
-    'AGGREGATE_FUNCTION.min': 'Min',
-    'AGGREGATE_FUNCTION.max': 'Max',
-    'AGGREGATE_FUNCTION.avg': 'Media',
-    'AGGREGATE_FUNCTION.sum': 'Sum',
+    'AGGREGATE_NAME.count': 'Count',
+    'AGGREGATE_NAME.min': 'Min',
+    'AGGREGATE_NAME.max': 'Max',
+    'AGGREGATE_NAME.avg': 'Media',
+    'AGGREGATE_NAME.sum': 'Sum',
     'FORM_SERVICE_COMPONENT.REFRESH': 'Refrescar'
   },
   // Portuguese - BRAZIL
@@ -796,11 +796,11 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.SORT_WARN': '<li>Ordenação de coluna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Column grouping</li>',
     'APP_LAYOUT.SETTINGS': 'Definições',
-    'AGGREGATE_FUNCTION.count': 'Count',
-    'AGGREGATE_FUNCTION.min': 'Min',
-    'AGGREGATE_FUNCTION.max': 'Max',
-    'AGGREGATE_FUNCTION.avg': 'Media',
-    'AGGREGATE_FUNCTION.sum': 'Sum',
+    'AGGREGATE_NAME.count': 'Count',
+    'AGGREGATE_NAME.min': 'Min',
+    'AGGREGATE_NAME.max': 'Max',
+    'AGGREGATE_NAME.avg': 'Media',
+    'AGGREGATE_NAME.sum': 'Sum',
     'FORM_SERVICE_COMPONENT.REFRESH': 'Recarregar'
   }
 };
