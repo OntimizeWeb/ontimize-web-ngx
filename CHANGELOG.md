@@ -1,4 +1,4 @@
-## 8.5.1
+## 8.5.1 (2021-09-30)
 ### Features
 * **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
 * **OFormLayoutManager**: new `hasToConfirmExit` method ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447))
@@ -33,8 +33,7 @@
 * **o-table**:
   * Bundle prefix for `o-table-columns-grouping-column` default title prefix has changed from 'AGGREGATE_FUNCTION' to 'AGGREGATE_TITLE' ([a94d7b6a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a94d7b6a))
 
-## 8.5.0
-
+## 8.5.0 (2021-09-09)
 ### We are restyling **OntimizeWeb**
 We are implementing different modifications in **OntimizeWeb** in order to improve the design of the framework. Closes [#623](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/623)
 * **o-table**:
