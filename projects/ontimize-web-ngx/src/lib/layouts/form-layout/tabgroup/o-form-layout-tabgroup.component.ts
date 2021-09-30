@@ -172,7 +172,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
-    compData.insertionMode = navData && navData.isInsertFormRoute();
+    compData.insertionMode = compData.insertionMode || (navData && navData.isInsertFormRoute());
     const existingData = this.data.find(item => item.insertionMode);
     if (compData.insertionMode || existingData) {
       addNewComp = !existingData;
