@@ -30,7 +30,8 @@
   * **OFormCacheClass**: `onCacheEmptyStateChanges` emmiter no longer exists
   * **OFormLayoutManagerMode**: `canAddDetailComponent` method now can also return an Observable
   * **OFormLayoutManager**: `canAddDetailComponent` now returns an Observable
-
+* **o-table**:
+  * Bundle prefix for `o-table-columns-grouping-column` default title prefix has changed from 'AGGREGATE_FUNCTION' to 'AGGREGATE_TITLE' ([a94d7b6a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a94d7b6a))
 
 ## 8.5.0
 
