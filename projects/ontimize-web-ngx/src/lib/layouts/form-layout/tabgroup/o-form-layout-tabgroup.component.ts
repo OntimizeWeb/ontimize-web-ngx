@@ -213,8 +213,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       this.onMainTabSelected.emit();
     }
     const isLoading = this.showLoading.getValue();
-    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) &&
-      isLoading && arg.index === this.state.tabsData.length) {
+    if (isLoading && Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) &&
+      arg.index === this.state.tabsData.length - 1) {
       // this is only triggered once when all tabs are loaded
       this.tabGroup.selectedIndex = this.state.selectedIndex;
       this.showLoading.next(false);
@@ -364,15 +364,18 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   protected createTabsFromState() {
     const tabComponent = this.data[0].component;
-    this.state.tabsData.forEach((tabData: any, index: number) => {
-      if (index >= 1) {
+    // skipping first element (created in initializeComponentState)
+    const stateTabsData = this.state.tabsData.slice(1);
+    if (stateTabsData.length > 0) {
+      stateTabsData.forEach((tabData: any) => {
         setTimeout(() => {
           const newDetailData = this.createDetailComponent(tabComponent, tabData);
           this.data.push(newDetailData);
         }, 0);
-      }
-    });
-    this.showLoading.next(false);
+      });
+    } else {
+      this.showLoading.next(false);
+    }
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
