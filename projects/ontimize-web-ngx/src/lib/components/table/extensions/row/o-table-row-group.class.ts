@@ -114,7 +114,10 @@ export class OTableGroupedRow {
 
   getColumnActiveAggregateTitle(columnAttr: string) {
     const conf = this.getActiveColumnAggregateConfiguration(columnAttr);
-    return conf.title || conf.aggregateName || conf.aggregate;
+    if (conf.title) {
+      return conf.title;
+    }
+    return `AGGREGATE_NAME.${conf.aggregateName || conf.aggregate}`;
   }
 
   initializeColumnAggregate(columnAttr: string, component: OTableColumnsGroupingColumnComponent) {
