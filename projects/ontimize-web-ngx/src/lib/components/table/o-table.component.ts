@@ -202,7 +202,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   //grouped-columns [string]: grouped columns separated by ';'. Default: no value.
   'groupedColumns: grouped-columns',
 
-  //groupable[boolean]: Indicates whether or not the column can be groupable. By default: false
+  // groupable[boolean]: Indicates whether or not the column can be groupable. By default: true
   'groupable',
 
   //expand-groups-same-level[boolean]: Indicates if click in row expands/collapses all rows on same level. By default: true
@@ -2136,7 +2136,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   isColumnFilterable(column: OColumn): boolean {
     return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
   }
-  
+
   isColumnFilterActive(column: OColumn): boolean {
     return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
   }
