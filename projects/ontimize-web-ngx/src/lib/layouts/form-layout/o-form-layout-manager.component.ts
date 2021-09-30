@@ -385,7 +385,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       url: url,
       id: Math.random().toString(36),
       label: '',
-      innerFormsInfo: {}
+      innerFormsInfo: {},
+      insertionMode: childRoute.queryParams.insertionMode === 'true'
     };
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
