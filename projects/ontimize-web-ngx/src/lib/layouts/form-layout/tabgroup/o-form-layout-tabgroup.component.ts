@@ -327,7 +327,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         queryParams: data.queryParams,
         urlSegments: data.urlSegments,
         url: data.url,
-        label: data.label
+        label: data.label,
+        insertionMode: data.insertionMode
       });
     });
     return {
@@ -349,6 +350,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       this.showLoading.next(true);
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
+      extras[Codes.QUERY_PARAMS].insertionMode = this.state.tabsData[0].insertionMode
       // Triggering first tab navigation
       this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
         if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
