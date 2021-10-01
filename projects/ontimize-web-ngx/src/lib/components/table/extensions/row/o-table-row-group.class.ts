@@ -13,6 +13,13 @@ export type AggregateChangeArg = {
   row: OTableGroupedRow;
 }
 
+export type AggregateColumnData = {
+  component: OTableColumnsGroupingColumnComponent;
+  activeAggregate: string;
+  value: any;
+  data: any[];
+}
+
 export class OTableGroupedRow {
   column: string;
   title: string;
@@ -24,14 +31,7 @@ export class OTableGroupedRow {
   get visible(): boolean {
     return !this.parent || (this.parent.visible && this.parent.expanded);
   }
-  private columnsData: {
-    [key: string]: {
-      component: OTableColumnsGroupingColumnComponent,
-      activeAggregate: string,
-      value: any,
-      data: any[]
-    }
-  } = {};
+  private columnsData: { [key: string]: AggregateColumnData } = {};
 
   aggregateFunctionChange: Subject<AggregateChangeArg> = new Subject<AggregateChangeArg>();
 
@@ -48,6 +48,14 @@ export class OTableGroupedRow {
     return Util.isDefined(this.columnsData[columnAttr]);
   }
 
+  hasActiveAggregate(columnAttr: string): boolean {
+    return this.hasColumnData(columnAttr) && Util.isDefined(this.columnsData[columnAttr].activeAggregate);
+  }
+
+  getColumnGroupingComponent(columnAttr: string): OTableColumnsGroupingColumnComponent {
+    return this.hasColumnData(columnAttr) ? this.columnsData[columnAttr].component : null;
+  }
+
   getColumnAggregateValue(columnAttr: string): any {
     return this.columnsData[columnAttr].value;
   }
@@ -60,25 +68,25 @@ export class OTableGroupedRow {
     if (!this.hasColumnData(this.column)) {
       return defaultValue;
     }
-    if (Util.isDefined(this.columnsData[this.column].component)) {
-      return this.columnsData[this.column].component.expandGroupsSameLevel;
+    const groupingComponent = this.getColumnGroupingComponent(this.column);
+    if (Util.isDefined(groupingComponent)) {
+      return groupingComponent.expandGroupsSameLevel;
     }
     return defaultValue;
   }
 
   setColumnAggregateData(columnAttr: string, value: any[]) {
-    this.columnsData[columnAttr].data = value;
+    if (this.hasColumnData(columnAttr)) {
+      this.columnsData[columnAttr].data = value;
+    }
   }
 
   getColumnAggregateData(columnAttr: string) {
-    if (Util.isDefined(this.columnsData[columnAttr])) {
-      return this.columnsData[columnAttr].data;
-    }
-    return [];
+    return this.hasColumnData(columnAttr) ? this.columnsData[columnAttr].data : [];
   }
 
   setColumnActiveAggregateFunction(columnAttr: string, aggregateFnName: string, emitEvent: boolean = true) {
-    if (Util.isDefined(this.columnsData[columnAttr])) {
+    if (this.hasColumnData(columnAttr)) {
       this.columnsData[columnAttr].activeAggregate = aggregateFnName;
     } else {
       this.columnsData[columnAttr] = {
@@ -90,8 +98,9 @@ export class OTableGroupedRow {
     }
     if (emitEvent) {
       let changeAllGroupedRows = true;
-      if (Util.isDefined(this.columnsData[columnAttr].component)) {
-        changeAllGroupedRows = this.columnsData[columnAttr].component.changeAggregateSameLevel;
+      const groupingComponent = this.getColumnGroupingComponent(columnAttr);
+      if (Util.isDefined(groupingComponent)) {
+        changeAllGroupedRows = groupingComponent.changeAggregateSameLevel;
       }
 
       this.aggregateFunctionChange.next({
@@ -103,11 +112,12 @@ export class OTableGroupedRow {
     }
   }
 
-  getColumnActiveAggregateFunction(columnAttr: string) {
-    if (Util.isDefined(this.columnsData[columnAttr])) {
-      return this.columnsData[columnAttr].activeAggregate;
+  getColumnActiveAggregateTitle(columnAttr: string) {
+    const conf = this.getActiveColumnAggregateConfiguration(columnAttr);
+    if (conf.title) {
+      return conf.title;
     }
-    return null;
+    return `AGGREGATE_NAME.${conf.aggregateName || conf.aggregate}`;
   }
 
   initializeColumnAggregate(columnAttr: string, component: OTableColumnsGroupingColumnComponent) {
@@ -125,26 +135,24 @@ export class OTableGroupedRow {
     }
   }
 
-  getColumnCustomAggregateName(columnAttr: string): string {
-    const columnConf = this.columnsData[columnAttr];
-    if (Util.isDefined(columnConf) &&
-      Util.isDefined(columnConf.component) &&
-      Util.isDefined(columnConf.component.aggregateFunction)) {
-      return columnConf.component.aggregateName;
-    }
-    return null;
-  }
-
-  getColumnAggregateConfiguration(columnAttr: string): GroupedColumnAggregateConfiguration {
-    if (!Util.isDefined(this.columnsData[columnAttr])) {
+  getActiveColumnAggregateConfiguration(columnAttr: string): GroupedColumnAggregateConfiguration {
+    if (!this.hasColumnData(columnAttr)) {
       return {
         attr: columnAttr,
         aggregate: 'sum'
       }
     }
+
+    const activeAggregate = this.columnsData[columnAttr].activeAggregate;
+    const groupingColumnComponent = this.columnsData[columnAttr].component;
+    if (Util.isDefined(groupingColumnComponent) && groupingColumnComponent.aggregate === activeAggregate) {
+      return groupingColumnComponent.getAggregateConfiguration();
+    }
+
     return {
       attr: columnAttr,
       aggregate: this.columnsData[columnAttr].activeAggregate
     }
   }
+
 }

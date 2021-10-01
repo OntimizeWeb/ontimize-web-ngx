@@ -1,110 +1,111 @@
-import { ListRange } from "@angular/cdk/collections";
 import { CdkVirtualScrollViewport, VirtualScrollStrategy } from "@angular/cdk/scrolling";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 
+@Injectable()
 export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
-    private viewport: CdkVirtualScrollViewport;
+  private viewport: CdkVirtualScrollViewport;
 
-    private rowHeight!: number;
-    private headerHeight!: number;
-    private footerHeight!: number;
-    public readonly indexChange = new Subject<number>();
-    public scrolledIndexChange: Observable<number>;
-    public renderedRangeStream = new BehaviorSubject<ListRange>({ start: 0, end: 0 });
-    public stickyChange = new Subject<number>();
-    buffer: number;
-    bufferMultiplier: number = 1;
+  private rowHeight!: number;
+  private headerHeight!: number;
+  private footerHeight!: number;
+  private readonly indexChange = new Subject<number>();
+  public scrolledIndexChange = this.indexChange.pipe(distinctUntilChanged());
+  public readonly stickyChange = new Subject<number>();
+  private bufferMultiplier: number = 1;
 
-    constructor() {
-        this.scrolledIndexChange = this.indexChange.asObservable().pipe(distinctUntilChanged());
+  get dataLength(): number {
+    return this._dataLength;
+  }
+
+  set dataLength(value: number) {
+    this._dataLength = value;
+    this.onDataLengthChanged();
+  }
+
+  private _dataLength = 0;
+
+  public attach(viewport: CdkVirtualScrollViewport): void {
+    this.viewport = viewport;
+    this.onDataLengthChanged();
+    this.updateContent();
+  }
+
+  public detach(): void {
+    //no-op
+  }
+
+  public destroy(): void {
+    this.indexChange.complete();
+    this.stickyChange.complete();
+  }
+
+  public onContentRendered(): void {
+    // no-op
+  }
+
+  public onRenderedOffsetChanged(): void {
+    // no-op
+  }
+
+  public scrollToIndex(index: number, behavior?: ScrollBehavior): void {
+    // no-op
+  }
+
+  public onContentScrolled(): void {
+    this.updateContent();
+  }
+
+  public setConfig(rowHeight: number, headerHeight: number, footerHeight: number) {
+
+    if (
+      this.rowHeight === rowHeight
+      && this.headerHeight === headerHeight
+      && this.footerHeight === footerHeight
+    ) {
+      return;
     }
+    this.rowHeight = rowHeight;
+    this.headerHeight = headerHeight;
+    this.footerHeight = footerHeight;
+    //if change heights, then update content size
+    this.onDataLengthChanged();
+  }
 
-    get dataLength(): number {
-        return this._dataLength;
+  public onDataLengthChanged(): void {
+    if (this.viewport) {
+      this.viewport.setTotalContentSize(this.dataLength * this.rowHeight + this.headerHeight + this.footerHeight);
+      this.viewport.scrollToOffset(0);//set scroll up
+      this.updateContent();
     }
+  }
 
-    set dataLength(value: number) {
-        this._dataLength = value;
-        this.onDataLengthChanged();
+  private updateContent() {
+    if (!this.viewport || !this.rowHeight || this.dataLength === 0) {
+      return;
     }
+    const scrollOffset = this.viewport.measureScrollOffset();
+    const itemsDisplayed = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
+    const renderedOffset = this.viewport.getOffsetToRenderedContentStart();
+    const start = renderedOffset / this.rowHeight;
+    const bufferItems = Math.ceil(itemsDisplayed * this.bufferMultiplier);
+    const bufferOffset = renderedOffset + bufferItems * this.rowHeight;
 
-    private _dataLength = 0;
+    const relativeScrollOffset = scrollOffset - bufferOffset;// How far the scroll offset is from the lower buffer, which is usually where items start being displayed
+    const rowsScrolled = relativeScrollOffset / this.rowHeight;
 
-    attach(viewport: CdkVirtualScrollViewport): void {
-        this.viewport = viewport;
-        this.onDataLengthChanged();
-        this.updateContent();
-    }
+    const displayed = scrollOffset / this.rowHeight;
+    this.indexChange.next(displayed);
 
-    public detach(): void {
-        //no-op
-    }
+    const rowsToMove = Math.sign(rowsScrolled) * Math.floor(Math.abs(rowsScrolled));
 
-    public destroy(): void {
-        this.indexChange.complete();
-        this.stickyChange.complete();
-        this.renderedRangeStream.complete();
-    }
+    const adjustedRenderedOffset = Math.max(0, renderedOffset + rowsToMove * this.rowHeight);
+    this.viewport.setRenderedContentOffset(adjustedRenderedOffset);
 
-    public onContentRendered(): void {
-        // no-op
-    }
-
-    public onRenderedOffsetChanged(): void {
-        // no-op
-    }
-
-    public scrollToIndex(index: number, behavior: ScrollBehavior): void {
-        // no-op
-    }
-
-    public onContentScrolled(): void {
-        this.updateContent();
-    }
-
-    public setConfig(rowHeight: number, headerHeight: number, footerHeight: number) {
-        if (
-            this.rowHeight === rowHeight
-            && this.headerHeight === headerHeight
-            && this.footerHeight === footerHeight
-        ) {
-            return;
-        }
-        this.rowHeight = rowHeight;
-        this.headerHeight = headerHeight;
-        this.footerHeight = footerHeight;
-        //if change heights, then update content size
-        this.onDataLengthChanged();
-    }
-
-    public onDataLengthChanged(): void {
-        if (this.viewport) {
-            this.viewport.setTotalContentSize(this.dataLength * this.rowHeight + this.headerHeight + this.footerHeight);
-            this.viewport.scrollToOffset(0);//set scroll up 
-            this.updateContent();
-        }
-    }
-
-    private updateContent() {
-        if (!this.viewport || !this.rowHeight) {
-            return;
-        }
-        const scrollOffset = this.viewport.measureScrollOffset();
-        const amount = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
-        const offset = Math.max(scrollOffset - this.headerHeight, 0);
-        const buffer = Math.ceil(amount * this.bufferMultiplier);
-
-        const skip = Math.round(offset / this.rowHeight);
-        const index = Math.max(0, skip);
-        const start = Math.max(0, index - buffer);
-        const end = Math.min(this.dataLength, index + amount + buffer);
-        const renderedOffset = start * this.rowHeight;
-
-        this.viewport.setRenderedContentOffset(renderedOffset);
-        this.renderedRangeStream.next({ start, end });
-
-        this.indexChange.next(index);
-        this.stickyChange.next(renderedOffset);
-    }
+    const adjustedStart = Math.max(0, start + rowsToMove);
+    const adjustedEnd = adjustedStart + itemsDisplayed + bufferItems;
+    this.viewport.setRenderedRange({ start: adjustedStart, end: adjustedEnd });
+    this.stickyChange.next(adjustedRenderedOffset);
+  }
 }

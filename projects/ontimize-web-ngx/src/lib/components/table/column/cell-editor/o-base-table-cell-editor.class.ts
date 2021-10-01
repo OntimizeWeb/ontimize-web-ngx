@@ -159,7 +159,9 @@ export class OBaseTableCellEditor implements OnInit {
         disabled: !this.enabled
       };
       this.formControl = new FormControl(cfg, validators);
-      this.formGroup.addControl(Math.random().toString(36), this.formControl);
+    }
+    if (!Util.isDefined(this.formGroup.get(this.cellEditorId))) {
+      this.formGroup.addControl(this.cellEditorId, this.formControl);
     }
   }
 
@@ -287,7 +289,7 @@ export class OBaseTableCellEditor implements OnInit {
    */
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
-    if(this.tableColumn.angularValidatorsFn) {
+    if (this.tableColumn.angularValidatorsFn) {
       this.tableColumn.angularValidatorsFn.forEach((fn: ValidatorFn) => {
         validators.push(fn);
       });
@@ -303,7 +305,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   public getErrorText(oError: any) {
-    if(this.tableColumn.editor.errorsData) {
+    if (this.tableColumn.editor.errorsData) {
       const error = this.tableColumn.editor.errorsData.find((item) => item.name === oError);
       return error ? error.text : '';
     } else {

@@ -7,7 +7,7 @@
   <o-table-option #columnsVisibilityButtonOption *ngIf="showColumnsVisibilityButton"
     (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS"></o-table-option>
 
-  <mat-divider></mat-divider>
+  <mat-divider *ngIf="showSelectAllCheckbox || showExportButton || showColumnsVisibilityButton"></mat-divider>
 
   <o-table-option #columnsGroupByOption *ngIf="showGroupByButton" (onClick)="onGroupByClicked()"
     label="TABLE.BUTTONS.GROUPBY"></o-table-option>

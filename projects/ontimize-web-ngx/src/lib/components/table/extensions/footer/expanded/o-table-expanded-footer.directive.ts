@@ -101,7 +101,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   protected tableHasQuickFilter(): boolean {
-    return Util.isDefined(this.table.quickFilter && this.table.oTableQuickFilterComponent);
+    return this.table.quickFilter && Util.isDefined(this.table.oTableQuickFilterComponent);
   }
 
 }

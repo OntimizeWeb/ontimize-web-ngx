@@ -382,7 +382,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     }
   }
 
-  buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any) {
+  buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any, registerInColumn:boolean = true) {
     let editor;
     const componentRef = editorsMapping[type] || editorsMapping.text;
     if (componentRef === undefined) {
@@ -445,6 +445,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
         editor.olabel = propsOrigin.olabel;
         editor.type = propsOrigin.type;
       }
+      editor.registerInColumn = registerInColumn;
     }
     return editor;
   }

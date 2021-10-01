@@ -1,5 +1,39 @@
-## 8.5.0
+## 8.5.1 (2021-09-30)
+### Features
+* **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
+* **OFormLayoutManager**: new `hasToConfirmExit` method ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447))
+* **o-table**:
+  * alignment on aggregate column heading with same default column type alignment ([5bfa41d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5bfa41d))([4adeb84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4adeb84)) Closes [#740](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/740)
+  * new `context-menu` input ([04ffbe69](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/04ffbe69))
 
+### Bug fixes
+* **o-table**:
+  * Fix bug in row grouping when collapsing row groups makes columns aggregate have a wrong value ([b4920cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4920cd)) Closes [#741](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/741)
+  * Fix bug when open a detail with o-form-layout-manager  ([f5612a4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5612a4)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751),[#752](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/752)
+  * Fix the bug that the table is displayed blank when navigating the mat tab group and virtual scrolling is enabled([6327825](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6327825)) Closes [#751](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/751)
+  * Fix the bug that the virtual scrolling works abnormally sometimes ([3b7d0ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b7d0ca)) Closes [#760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/760)
+  ontimize-web-ngx/issues/751)
+  * Fix the bug when `title` attribute is defined in `o-table-column` and it does not show the translated value in o-table-context-menu ([c259570](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c259570)) Closes [#766](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/766)
+  * Fixing `expand-groups-same-level` input bug ([edd9e787](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/edd9e787)) Closes [#746](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/746)
+  * Fixing the bug in the column filtering modal when using a custom renderer ([4f878d8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/
+4f878d8)) Closes [#777](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/777)
+
+* **o-form-layout-manager**: Fix layout manager on tab mode after refreshing page ([298fce](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/769/commits/298fce)) Closes [#753](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/753)
+
+
+### BREAKING CHANGES
+* Changes made to solve [#745](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/745) and [#754](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/754) ([d1829ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1829ef)) ([7c4dc447](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c4dc447)). This changes will be transparent to user.
+  * **o-form-layout-manager**, **OFormLayoutManagerMode**: `setModifiedState` method arguments updated
+  * **OFormNavigationClass**:
+    * `setModifiedState` method is now protected
+    * `suscribeToCacheChanges` method has no arguments now
+  * **OFormCacheClass**: `onCacheEmptyStateChanges` emmiter no longer exists
+  * **OFormLayoutManagerMode**: `canAddDetailComponent` method now can also return an Observable
+  * **OFormLayoutManager**: `canAddDetailComponent` now returns an Observable
+* **o-table**:
+  * Bundle prefix for `o-table-columns-grouping-column` default title prefix has changed from 'AGGREGATE_FUNCTION' to 'AGGREGATE_TITLE' ([a94d7b6a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a94d7b6a))
+
+## 8.5.0 (2021-09-09)
 ### We are restyling **OntimizeWeb**
 We are implementing different modifications in **OntimizeWeb** in order to improve the design of the framework. Closes [#623](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/623)
 * **o-table**:

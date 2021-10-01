@@ -72,6 +72,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   protected previousSelectedIndex: number;
 
   public updateTabComponentsState = new Subject<any>();
+  public tabsModificationsCache: any[] = [];
 
   constructor(
     protected injector: Injector,
@@ -171,8 +172,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
     const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
-    if (navData && navData.isInsertFormRoute()) {
-      const existingData = this.data.find(item => item.insertionMode);
+    compData.insertionMode = compData.insertionMode || (navData && navData.isInsertFormRoute());
+    const existingData = this.data.find(item => item.insertionMode);
+    if (compData.insertionMode || existingData) {
       addNewComp = !existingData;
     }
     const newCompParams = compData.params;
@@ -212,8 +214,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       this.onMainTabSelected.emit();
     }
     const isLoading = this.showLoading.getValue();
-    if (Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) &&
-      isLoading && arg.index === this.state.tabsData.length) {
+    if (isLoading && Util.isDefined(this.state) && Util.isDefined(this.state.tabsData) &&
+      arg.index === this.state.tabsData.length - 1) {
       // this is only triggered once when all tabs are loaded
       this.tabGroup.selectedIndex = this.state.selectedIndex;
       this.showLoading.next(false);
@@ -245,7 +247,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       }
     }));
 
-    if (Util.isDefined(tabData) && tabData.modified) {
+    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
       });
@@ -279,11 +281,14 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return route;
   }
 
-  setModifiedState(modified: boolean) {
+  setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean) {
     if (this.tabGroup.selectedIndex > 0) {
-      const id = this.data.length > 0 ? this.data[this.tabGroup.selectedIndex - 1].id : undefined;
-      if (Util.isDefined(id)) {
-        this.data.find(d => d.id === id).modified = modified;
+      const selectedData = this.data[this.tabGroup.selectedIndex - 1];
+      if (Util.isDefined(selectedData)) {
+        selectedData.innerFormsInfo[formAttr] = {
+          modified: modified,
+          confirmOnExit: confirmExit
+        };
       }
     }
   }
@@ -322,7 +327,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         queryParams: data.queryParams,
         urlSegments: data.urlSegments,
         url: data.url,
-        label: data.label
+        label: data.label,
+        insertionMode: data.insertionMode
       });
     });
     return {
@@ -344,6 +350,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       this.showLoading.next(true);
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
+      extras[Codes.QUERY_PARAMS].insertionMode = this.state.tabsData[0].insertionMode
       // Triggering first tab navigation
       this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
         if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
@@ -360,15 +367,18 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   protected createTabsFromState() {
     const tabComponent = this.data[0].component;
-    this.state.tabsData.forEach((tabData: any, index: number) => {
-      if (index >= 1) {
+    // skipping first element (created in initializeComponentState)
+    const stateTabsData = this.state.tabsData.slice(1);
+    if (stateTabsData.length > 0) {
+      stateTabsData.forEach((tabData: any) => {
         setTimeout(() => {
           const newDetailData = this.createDetailComponent(tabComponent, tabData);
           this.data.push(newDetailData);
         }, 0);
-      }
-    });
-    this.showLoading.next(false);
+      });
+    } else {
+      this.showLoading.next(false);
+    }
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
@@ -380,7 +390,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       url: paramsObj.url,
       id: Math.random().toString(36),
       label: paramsObj.label,
-      modified: false
+      innerFormsInfo: {}
     };
     return newDetailComp;
   }
@@ -410,4 +420,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
     return !maxReached;
   }
+
+  isTabDataModified(tabData: FormLayoutDetailComponentData): boolean {
+    return Object.keys(tabData.innerFormsInfo).some(formAttr => tabData.innerFormsInfo[formAttr].modified);
+  }
+
 }

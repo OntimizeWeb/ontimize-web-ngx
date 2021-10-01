@@ -146,6 +146,10 @@ button {
     height: 32px;
     line-height: 32px;
   }
+
+  &.mat-icon-button {
+    width: 32px;
+  }
 }
 
 .o-table-apply-configuration-dialog-list.mat-selection-list.mat-list-base[dense] .mat-list-option.mat-list-text,
@@ -163,4 +167,8 @@ button {
     line-height: 32px;
     height: 32px;
   }
+}
+
+.overlay-ref-display-none .cdk-overlay-pane.o-context-menu {
+  display: none;
 }

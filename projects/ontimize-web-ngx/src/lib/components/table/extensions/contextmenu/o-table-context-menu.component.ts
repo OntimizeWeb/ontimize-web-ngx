@@ -164,20 +164,15 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    const itemsParsed = this.defaultContextMenu.oContextMenuItems.toArray();
-    if (this.contextMenu) {
-      const items = itemsParsed.concat(this.contextMenu.oContextMenuItems.toArray());
-      this.defaultContextMenu.oContextMenuItems.reset(items);
-    } else {
-      this.defaultContextMenu.oContextMenuItems.reset(itemsParsed);
-    }
     if (!Util.isDefined(this.showSelectAll)) {
       this.isVisibleSelectAll.next(this.table.selectAllCheckbox);
     }
     if (!this.table.groupable) {
       this.isVisibleGroupByRow.next(this.table.groupable);
     }
-
+    if (this.contextMenu) {
+      this.defaultContextMenu.externalContextMenuItems = this.contextMenu.oContextMenuItems;
+    }
     this.table.registerContextMenu(this.defaultContextMenu);
     this.registerContextMenuListeners();
   }
@@ -265,15 +260,15 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   get labelFilterByColumn(): string {
-    return (this.column && this.column.attr) ? this.translateService.get('TABLE_CONTEXT_MENU.FILTER_BY') + ' ' + this.translateService.get(this.column.attr) : '';
+    return (this.column && this.column.title) ? this.translateService.get('TABLE_CONTEXT_MENU.FILTER_BY') + ' ' + this.translateService.get(this.column.title) : '';
   }
 
   get labelGroupByColumn(): string {
-    return (this.column && this.column.attr) ? this.translateService.get('TABLE_CONTEXT_MENU.GROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.attr) : '';
+    return (this.column && this.column.title) ? this.translateService.get('TABLE_CONTEXT_MENU.GROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.title) : '';
   }
 
   get labelUnGroupByColumn(): string {
-    return (this.column && this.column.attr) ? this.translateService.get('TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.attr) : '';
+    return (this.column && this.column.title) ? this.translateService.get('TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN') + ' ' + this.translateService.get(this.column.title) : '';
   }
 
   get row(): any {
@@ -295,10 +290,15 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   get availableColumnAggregates(): string[] {
     let result = Util.columnAggregates;
-    if (this.row instanceof OTableGroupedRow)  {
-      const customAggregationName = this.row.getColumnCustomAggregateName(this.column.attr);
-      if (Util.isDefined(customAggregationName)){
-        result = result.concat(customAggregationName);
+    if (this.row instanceof OTableGroupedRow) {
+      const groupingComp = this.row.getColumnGroupingComponent(this.column.attr);
+      if (Util.isDefined(groupingComp.aggregateName)) {
+        result = result.slice();
+        if (result.includes(groupingComp.aggregate)) {
+          result.splice(result.indexOf(groupingComp.aggregate), 1, groupingComp.aggregateName);
+        } else {
+          result.push(groupingComp.aggregateName);
+        }
       }
     }
     return result;
@@ -355,7 +355,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   expandRowGroupsSameLevel() {
     this.table.dataSource.setRowGroupLevelExpansion(this._row, true);
-  } 
+  }
 
   collapseRowGroupsSameLevel() {
     this.table.dataSource.setRowGroupLevelExpansion(this._row, false);

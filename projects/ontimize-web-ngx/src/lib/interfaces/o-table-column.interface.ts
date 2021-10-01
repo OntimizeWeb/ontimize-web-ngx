@@ -31,7 +31,7 @@ export interface OTableColumn {
   tooltipFunction: (rowData: any) => any;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
   getSQLType: () => number;
-  buildCellEditor: (type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any) => any;
+  buildCellEditor: (type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any, registerInColumn?:boolean) => any;
   registerEditor: (editor: any) => void;
   registerRenderer: (editor: any) => void;
 }

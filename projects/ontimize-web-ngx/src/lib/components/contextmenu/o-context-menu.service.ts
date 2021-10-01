@@ -1,28 +1,27 @@
 import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef, ElementRef, Injectable, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, ComponentRef, ElementRef, Injectable, OnDestroy, Renderer2 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
 import { IOContextMenuClickEvent, IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OContextMenuContentComponent } from './context-menu/o-context-menu-content.component';
+import { OContextMenuOverlayService } from './o-context-menu-overlay.service';
 
 @Injectable()
 export class OContextMenuService implements OnDestroy {
 
   public showContextMenu: Subject<IOContextMenuClickEvent> = new Subject<IOContextMenuClickEvent>();
   public closeContextMenu: Subject<Event> = new Subject();
-  public activeMenu: OContextMenuContentComponent;
-
-  protected overlays: OverlayRef[] = [];
   protected fakeElement: ElementRef = new ElementRef({ nativeElement: '' });
   protected subscription: Subscription = new Subscription();
 
   constructor(
     private overlay: Overlay,
-    private scrollStrategy: ScrollStrategyOptions
-  ) {
-    this.subscription.add(this.closeContextMenu.subscribe(() => this.destroyOverlays()));
-  }
+    private scrollStrategy: ScrollStrategyOptions,
+    private cd: ChangeDetectorRef,
+    private overlayService: OContextMenuOverlayService,
+    private renderer: Renderer2
+  ) { }
 
   public ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -33,14 +32,8 @@ export class OContextMenuService implements OnDestroy {
     this.createOverlay(context);
   }
 
-  public destroyOverlays(): void {
-    if (this.overlays) {
-      this.overlays.forEach((overlay) => {
-        overlay.detach();
-        overlay.dispose();
-      });
-    }
-    this.overlays = [];
+  protected destroyOverlays(): void {
+    this.overlayService.destroyOverlays();
   }
 
   // Create overlay and attach `o-context-menu-content` to it in order to trigger the menu click, the menu opens in a new overlay
@@ -49,13 +42,16 @@ export class OContextMenuService implements OnDestroy {
     context.event.preventDefault();
     context.event.stopPropagation();
 
-    this.fakeElement.nativeElement.getBoundingClientRect = (): ClientRect => ({
+    this.fakeElement.nativeElement.getBoundingClientRect = (): DOMRect => ({
       bottom: context.event.clientY,
       height: 0,
       left: context.event.clientX,
       right: context.event.clientX,
       top: context.event.clientY,
       width: 0,
+      x: 0,
+      y: 0,
+      toJSON: () => { }
     });
 
     const positionStrategy = this.overlay.position()
@@ -74,19 +70,33 @@ export class OContextMenuService implements OnDestroy {
       scrollStrategy: this.scrollStrategy.close()
     });
 
-    this.overlays = [overlayRef];
+    this.overlayService.addOverlay(overlayRef);
 
-    this.attachContextMenu(this.overlays[0], context);
+    this.attachContextMenu(overlayRef, context);
+
+    setTimeout(() => {
+      // Workaround to delete first level menu trigger
+      overlayRef.hostElement.classList.add('overlay-ref-display-none');
+      const nextSibling = overlayRef.hostElement.nextElementSibling;
+      if (nextSibling) {
+        const top = nextSibling.getBoundingClientRect().top;
+        this.renderer.setStyle(nextSibling, 'top', `${top - 32}px`);
+      }
+
+      this.cd.detectChanges();
+    })
   }
 
   protected attachContextMenu(overlay: OverlayRef, context: IOContextMenuContext): void {
-    const contextMenuContent: ComponentRef<any> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
+    const contextMenuContent: ComponentRef<OContextMenuContentComponent> = overlay.attach(new ComponentPortal(OContextMenuContentComponent));
     contextMenuContent.instance.overlay = overlay;
     contextMenuContent.instance.menuItems = context.menuItems;
+    contextMenuContent.instance.externalMenuItems = context.externalMenuItems;
     contextMenuContent.instance.data = context.data;
     contextMenuContent.instance.menuClass = context.class;
     this.subscription.add(contextMenuContent.instance.close.subscribe(() => {
       this.closeContextMenu.next();
+      this.destroyOverlays();
     }));
   }
 
