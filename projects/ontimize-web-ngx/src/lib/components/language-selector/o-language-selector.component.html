@@ -8,7 +8,7 @@
   </button>
 </div>
 
-<mat-menu #langMenu="matMenu" yPosition="below">
+<mat-menu #langMenu="matMenu" yPosition="below" class="o-mat-menu">
   <button type="button" mat-menu-item *ngFor="let lang of getAvailableLangs()" (click)="configureI18n(lang)">
     <span *ngIf="useFlagIcons" class="flag-icon {{ getFlagClass(lang) }}"></span>
     <span>{{ 'LOCALE_' + lang | oTranslate }}</span>

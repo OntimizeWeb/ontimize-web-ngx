@@ -7,13 +7,15 @@ import { InputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
 import { DialogService } from '../../services/dialog.service';
 import { OModulesInfoService } from '../../services/o-modules-info.service';
+import { Codes } from '../../util';
 import { OUserInfoComponent } from '../user-info/o-user-info.component';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',
   'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons',
-  'color'
+  'color',
+  'headerHeight:header-height'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -28,7 +30,10 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
   styleUrls: ['./o-app-header.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-app-header]': 'true'
+    '[class.o-app-header]': 'true',
+    '[class.o-app-header-small]': "headerHeight==='small'",
+    '[class.o-app-header-medium]': "headerHeight==='medium'",
+    '[class.o-app-header-large]': "headerHeight==='large'"
   }
 })
 export class OAppHeaderComponent implements OnDestroy {
@@ -51,6 +56,19 @@ export class OAppHeaderComponent implements OnDestroy {
   useFlagIcons: boolean = false;
 
   public onSidenavToggle = new EventEmitter<void>();
+  protected _headerHeight = Codes.DEFAULT_ROW_HEIGHT;
+
+
+  set headerHeight(value) {
+    this._headerHeight = value ? value.toLowerCase() : value;
+    if (!Codes.isValidRowHeight(this._headerHeight)) {
+      this._headerHeight = Codes.DEFAULT_ROW_HEIGHT;
+    }
+  }
+
+  get headerHeight(): string {
+    return this._headerHeight;
+  }
 
   private _color: ThemePalette;
 

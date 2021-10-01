@@ -2,7 +2,7 @@ import { Component, ContentChildren, EventEmitter, Injector, OnDestroy, OnInit, 
 import { Subscription } from 'rxjs';
 
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
-import { OComponentMenuItems } from './o-content-menu.class';
+import { OComponentMenuBaseItem } from './o-content-menu-base-item.class';
 import { OContextMenuService } from './o-context-menu.service';
 
 export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
@@ -17,9 +17,9 @@ export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
   providers: [OContextMenuService]
 })
 export class OContextMenuComponent implements OnDestroy, OnInit {
-
-  @ContentChildren(OComponentMenuItems)
-  public oContextMenuItems: QueryList<OComponentMenuItems>;
+  public externalContextMenuItems: QueryList<OComponentMenuBaseItem>;
+  @ContentChildren(OComponentMenuBaseItem)
+  public oContextMenuItems: QueryList<OComponentMenuBaseItem>;
 
   public origin: HTMLElement;
   public onShow: EventEmitter<any> = new EventEmitter();
@@ -50,6 +50,7 @@ export class OContextMenuComponent implements OnDestroy, OnInit {
       return;
     }
     params.menuItems = this.oContextMenuItems;
+    params.externalMenuItems = this.externalContextMenuItems;
     if (params.menuItems.length > 0) {
       this.oContextMenuService.openContextMenu(params);
     }

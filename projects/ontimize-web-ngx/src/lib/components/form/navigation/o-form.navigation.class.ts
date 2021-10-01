@@ -156,9 +156,15 @@ export class OFormNavigationClass {
     }
   }
 
-  subscribeToCacheChanges(onCacheEmptyStateChanges: EventEmitter<boolean>) {
-    this.cacheStateSubscription = onCacheEmptyStateChanges.asObservable().subscribe(res => {
-      this.setModifiedState(!res);
+  subscribeToCacheChanges() {
+    const formCache = this.form.getFormCache();
+    if (!Util.isDefined(formCache)) {
+      return;
+    }
+    this.cacheStateSubscription = formCache.onCacheStateChanges.subscribe(() => {
+      const initialStateChanged = this.form.isInitialStateChanged();
+      const triggerExitConfirm = this.form.isInitialStateChanged(this.form.ignoreOnExit);
+      this.setModifiedState(initialStateChanged, triggerExitConfirm);
     });
   }
 
@@ -221,9 +227,9 @@ export class OFormNavigationClass {
     return this.urlParams;
   }
 
-  setModifiedState(modified: boolean) {
+  protected setModifiedState(modified: boolean, confirmExit: boolean) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.setModifiedState(modified);
+      this.formLayoutManager.setModifiedState(this.form.oattr, modified, confirmExit);
     }
   }
 
@@ -246,11 +252,14 @@ export class OFormNavigationClass {
     }
   }
 
-  navigateBack() {
+  navigateBack(options?: any) {
     if (this.formLayoutManager) {
       this.formLayoutManager.closeDetail();
     } else if (this.navigationService) {
       this.navigationService.removeLastItem();
+      if (options && options.ignoreNavigation) {
+        return;
+      }
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         const extras = {};
@@ -269,6 +278,9 @@ export class OFormNavigationClass {
       if (!this.navigationService.removeLastItemsUntilMain()) {
         // `removeLastItemsUntilMain` didn't find the main navigation item
         this.navigationService.removeLastItem();
+      }
+      if (options && options.ignoreNavigation) {
+        return;
       }
       let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
@@ -453,7 +465,11 @@ export class OFormNavigationClass {
   }
 
   protected storeNavigationFormRoutes(activeMode: string) {
-    const formRoutes = this.navigationService.getPreviousRouteData().formRoutes;
+    const prevRouteData = this.navigationService.getPreviousRouteData();
+    if (!Util.isDefined(prevRouteData)) {
+      return;
+    }
+    const formRoutes = prevRouteData.formRoutes;
     this.navigationService.storeFormRoutes({
       detailFormRoute: formRoutes ? formRoutes.detailFormRoute : Codes.DEFAULT_DETAIL_ROUTE,
       editFormRoute: formRoutes ? formRoutes.editFormRoute : Codes.DEFAULT_EDIT_ROUTE,

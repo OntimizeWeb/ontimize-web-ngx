@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
@@ -162,7 +162,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     this._labelColsArray = Util.parseArray(value);
   }
 
-  protected _labelColsArray: string[];
+  protected _labelColsArray: string[] = [];
 
   get labelColsArray(): string[] {
     return this._labelColsArray;
@@ -385,7 +385,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       url: url,
       id: Math.random().toString(36),
       label: '',
-      modified: false
+      innerFormsInfo: {},
+      insertionMode: childRoute.queryParams.insertionMode === 'true'
     };
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
@@ -450,10 +451,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return Util.isDefined(compRef) ? compRef.getFormCacheData() : undefined;
   }
 
-  public setModifiedState(modified: boolean): void {
+  public setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean): void {
     const compRef = this.getLayoutModeComponent();
     if (Util.isDefined(compRef)) {
-      compRef.setModifiedState(modified);
+      compRef.setModifiedState(formAttr, modified, confirmExit);
     }
   }
 
@@ -595,8 +596,16 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return !this.isTabMode();
   }
 
-  public canAddDetailComponent(): boolean {
+  public canAddDetailComponent(): Observable<boolean> {
     const compRef = this.getLayoutModeComponent();
-    return Util.isDefined(compRef) ? compRef.canAddDetailComponent() : true;
+    return Util.wrapIntoObservable(Util.isDefined(compRef) ? compRef.canAddDetailComponent() : true);
+  }
+
+  public hasToConfirmExit(data: FormLayoutDetailComponentData): boolean {
+    const formsAttr = Object.keys(data.innerFormsInfo);
+    return formsAttr.length > 0 && formsAttr.every(formAttr => {
+      const formData = data.innerFormsInfo[formAttr];
+      return formData.confirmOnExit && formData.modified;
+    });
   }
 }

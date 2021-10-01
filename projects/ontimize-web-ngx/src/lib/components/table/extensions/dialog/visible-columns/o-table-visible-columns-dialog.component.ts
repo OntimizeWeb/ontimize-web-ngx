@@ -13,7 +13,6 @@ export type ColumnVisibilityConfiguration = {
   attr: string;
   title: string;
   visible: boolean;
-  showInList: boolean;
   deleteValueFilter?: boolean;
   deleteSortColummn?: boolean;
   deleteGrupingColumn?: boolean;
@@ -54,12 +53,11 @@ export class OTableVisibleColumnsDialogComponent {
 
       const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
 
-      this.table.oTableOptions.columns.forEach((oCol: OColumn) => {
+      this.table.oTableOptions.columns.filter(oCol => visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined).forEach((oCol: OColumn) => {
         this.columns.push({
           attr: oCol.attr,
           title: oCol.title,
-          visible: oCol.visible,
-          showInList: visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined
+          visible: oCol.visible
         });
       });
 

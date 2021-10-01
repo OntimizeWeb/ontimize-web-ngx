@@ -14,8 +14,8 @@ export const DEFAULT_INPUTS_O_TABLE_OPTION = [
   'oattr: attr',
   'enabled',
   'icon',
-  // show-active-icon [string][yes|no|true|false]: show icon when option is active. Default :no.
-  'showActiveIcon : show-active-icon',
+  //show-checkbox-option [string][yes|no|true|false]: show checkbox option. Default :no.
+  'showCheckboxOption : show-checkbox-option',
   'olabel: label',
   'active'
 ];
@@ -49,7 +49,7 @@ export class OTableOptionComponent {
   icon: string;
   olabel: string;
   @InputConverter()
-  showActiveIcon: boolean = false;
+  showCheckboxOption: boolean = false;
   @InputConverter()
   active: boolean = false;
 
@@ -70,8 +70,8 @@ export class OTableOptionComponent {
     this.setActive(!this.active);
   }
 
-  showActiveOptionIcon() {
-    return this.showActiveIcon && this.active;
+  get activeCheckboxOption() {
+    return this.showCheckboxOption && this.active;
   }
 
   setActive(val: boolean) {

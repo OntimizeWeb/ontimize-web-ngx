@@ -3,11 +3,9 @@
   <mat-tab label="{{ mainTabTitle | oTranslate }}">
     <ng-content></ng-content>
   </mat-tab>
-
   <mat-tab *ngFor="let tabData of data; let i = index">
     <ng-template mat-tab-label>
-
-      <span class="tab-label" [class.modified]="tabData.modified">
+      <span class="tab-label" [class.modified]="isTabDataModified(tabData)">
         <ng-container *ngIf="icon && isIconPositionLeft">
           <mat-icon>{{ icon }}</mat-icon>
         </ng-container>
@@ -21,6 +19,7 @@
         <ng-container *ngIf="icon && !isIconPositionLeft">
           <mat-icon>{{ icon }}</mat-icon>
         </ng-container>
+        <span class="gradient-layer"></span>
       </span>
       <mat-icon (click)="closeTab(i)" svgIcon="ontimize:close"></mat-icon>
     </ng-template>

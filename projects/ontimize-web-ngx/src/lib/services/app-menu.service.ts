@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
 import {
@@ -21,6 +22,7 @@ export class AppMenuService {
   protected _config: AppConfig;
   protected MENU_ROOTS: MenuRootItem[];
   protected ALL_MENU_ITEMS: MenuItem[];
+  public onClick: Subject<any> = new Subject();
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig);
@@ -31,7 +33,6 @@ export class AppMenuService {
       const item: MenuRootItem = this.MENU_ROOTS[i];
       this.ALL_MENU_ITEMS = this.ALL_MENU_ITEMS.concat(this.getMenuItems(item));
     }
-    // this.ALL_MENU_ITEMS = this.MENU_ROOTS.reduce((result, category) => result.concat(category.items), []);
   }
 
   getMenuRoots(): MenuRootItem[] {

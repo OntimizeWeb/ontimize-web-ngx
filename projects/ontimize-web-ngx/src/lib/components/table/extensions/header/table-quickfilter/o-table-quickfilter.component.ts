@@ -122,7 +122,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     if (!Util.isDefined(result) && Util.isDefined(this.value) && this.value.length > 0) {
       const expressions: Expression[] = [];
 
-      const searchingCols = this.oTableOptions.columns.filter(oCol => oCol.searching && oCol.visible && this.isFilterableColumn(oCol));
+      const searchingCols = this.oTableOptions.columns.filter(oCol => oCol.searching && oCol.visible && oCol.searchable && this.isFilterableColumn(oCol));
       expressions.push(...this.getColumnsWithoutRendererExpressions(searchingCols));
 
       const renderersExpr = this.getColumnsRendererExpressions(searchingCols);
@@ -208,6 +208,16 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
 
   public areAllColumnsChecked(): boolean {
     return this.quickFilterColumns.every((col: OColumn) => col.searching);
+  }
+
+  public getCountColumnsChecked(): number {
+    let count = 0;
+    this.quickFilterColumns.forEach((col: OColumn) => {
+      if(col.searching){
+        count++;
+      }
+    });
+    return count;
   }
 
   public onSelectAllChange(event: MatCheckboxChange): void {

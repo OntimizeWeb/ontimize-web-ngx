@@ -1,3 +1,8 @@
+export type FormLayoutInnerFormInfo = {
+  modified: boolean;
+  confirmOnExit: boolean;
+}
+
 export type FormLayoutDetailComponentData = {
   params: any;
   queryParams: any;
@@ -5,7 +10,7 @@ export type FormLayoutDetailComponentData = {
   id: string;
   component: any;
   label: string;
-  modified: boolean;
+  innerFormsInfo: { [formAttr: string]: FormLayoutInnerFormInfo };
   url: string;
   rendered?: boolean;
   insertionMode?: boolean;

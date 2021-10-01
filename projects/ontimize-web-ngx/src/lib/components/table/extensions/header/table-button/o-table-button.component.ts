@@ -32,7 +32,6 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
 @Component({
   selector: 'o-table-button',
   templateUrl: './o-table-button.component.html',
-  styleUrls: ['./o-table-button.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_BUTTON,
   outputs: DEFAULT_OUTPUTS_O_TABLE_BUTTON,
   encapsulation: ViewEncapsulation.None,

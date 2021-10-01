@@ -4,8 +4,8 @@
     padding-top: 0;
     margin-top: 24px;
 
-    .description {
-      padding: 12px 0;
+    .mat-subheader {
+      display: block;
     }
 
     .title_list {
@@ -15,12 +15,11 @@
     }
 
     .cdk-drop-list {
-      border: solid 1px #929292;
-      padding: 0 6px;
+      padding: 0 12px;
     }
 
     .mat-list {
-     //
+      //
       .mat-list-item {
         cursor: pointer;
         height: auto;
@@ -35,6 +34,10 @@
 
           div.mat-list-text {
             padding: 0 8px;
+          }
+
+          .mat-list-icon {
+            display: flex;
           }
         }
       }

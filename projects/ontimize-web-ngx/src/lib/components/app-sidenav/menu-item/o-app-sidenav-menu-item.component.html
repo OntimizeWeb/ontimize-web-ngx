@@ -5,7 +5,7 @@
       [class.o-app-sidenav-viewer-sidenav-item-selected]="isActiveItem()">
       <div fxLayout="row" fxLayoutAlign="start center">
         <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
-        {{ menuItem.name | oTranslate }}
+        <span class="o-app-sidenav-menuitem-title">{{ menuItem.name | oTranslate }}</span>
       </div>
     </a>
 

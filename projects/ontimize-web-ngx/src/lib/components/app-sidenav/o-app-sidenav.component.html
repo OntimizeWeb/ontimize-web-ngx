@@ -7,7 +7,7 @@
     [class.mat-drawer-closed]="!sidenav.opened" fxLayout="column" fxLayoutAlign="start stretch" (openedChange)="sidenavOpenedChange()"
     (closedStart)="sidenavClosedStart()" (openedStart)="sidenavOpenedStart()">
 
-    <div fxLayout="row" fxLayoutAlign="end" class="sidenav-toggle-container" *ngIf="isDesktopMode()">
+    <div fxLayout="row" fxLayoutAlign="end center" class="sidenav-toggle-container" *ngIf="isDesktopMode()">
       <mat-icon class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
     </div>
 

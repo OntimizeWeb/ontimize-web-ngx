@@ -16,6 +16,7 @@ import {
   HostListener,
   Inject,
   Injector,
+  NgZone,
   OnDestroy,
   OnInit,
   Optional,
@@ -74,6 +75,7 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
+import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
 import {
   OTableFilterByColumnDataDialogComponent
@@ -96,6 +98,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -193,13 +196,13 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // row-class [function, (rowData: any, rowIndex: number) => string | string[]]: adds the class or classes returned by the provided function to the table rows.
   'rowClass: row-class',
 
-  // filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table
+  // filter-column-active-by-default [yes|no|true|false]: show icon filter by default in the table. Default:yes
   'filterColumnActiveByDefault:filter-column-active-by-default',
 
   //grouped-columns [string]: grouped columns separated by ';'. Default: no value.
   'groupedColumns: grouped-columns',
 
-  //groupable[boolean]: Indicates whether or not the column can be groupable. By default: false
+  // groupable[boolean]: Indicates whether or not the column can be groupable. By default: true
   'groupable',
 
   //expand-groups-same-level[boolean]: Indicates if click in row expands/collapses all rows on same level. By default: true
@@ -212,7 +215,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'virtualScroll: virtual-scroll',
 
   //chart-on-demand [yes|no|true|false]: Whether enabled or not the chart on demand button in table context menu
-  'chartOnDemand: chart-on-demand'
+  'chartOnDemand: chart-on-demand',
+  
+  //context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
+  'contextMenu: context-menu'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -267,22 +273,33 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
   public static AVAILABLE_GROUPING_COLUMNS_RENDERERS = ['currency', 'integer', 'real'];
 
+  public DETAIL_MODE_NONE = Codes.DETAIL_MODE_NONE;
+  public EDIT_MODE_NONE = Codes.EDITION_MODE_NONE;
+
   protected snackBarService: SnackBarService;
 
   public paginator: OTablePaginator;
-  private virtualScrollViewport: CdkVirtualScrollViewport;
-  public activeVirtualScroll = true;
 
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
+  public virtualScrollViewport: CdkVirtualScrollViewport;
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
-      this.activeVirtualScroll = value instanceof CdkVirtualScrollViewport;
-      if(this.activeVirtualScroll){
-        this.updateHeaderAndFooterStickyPositions();
+      this.updateHeaderAndFooterStickyPositions();
+      if (this.checkViewportSizeSubscription) {
+        this.checkViewportSizeSubscription.unsubscribe();
       }
+
+      if (this.virtualScrollViewport) {
+        this.checkViewportSizeSubscription = this.checkViewPortSubject.subscribe(x => {
+          if (x) {
+            this.checkViewportSize();
+          }
+        });
+      }
+
       this.setDatasource();
     }
   }
@@ -328,7 +345,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   showButtonsText: boolean = true;
   @InputConverter()
-  filterColumnActiveByDefault: boolean = false;
+  filterColumnActiveByDefault: boolean = true;
 
   protected _oTableOptions: OTableOptions;
 
@@ -373,7 +390,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   fixedHeader: boolean = true;
   @InputConverter()
   showTitle: boolean = false;
-  editionMode: string = Codes.DETAIL_MODE_NONE;
+  editionMode: string = Codes.EDITION_MODE_NONE;
   selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
 
   protected _horizontalScroll = false;
@@ -408,7 +425,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   virtualScroll: boolean = true;
   @InputConverter()
+<<<<<<< HEAD
   chartOnDemand: boolean = false;
+=======
+  contextMenu: boolean = true;
+>>>>>>> acdc2815ec8de212af86cc2016d7a58e2e33c3a8
 
   protected _enabled: boolean = true;
   get enabled(): boolean {
@@ -420,7 +441,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
-    this._selectAllCheckboxVisible = BooleanConverter(this.state.selectColumnVisible) || BooleanConverter(value);
+    this._selectAllCheckboxVisible = BooleanConverter(value);
+    if (this.state) {
+      this._selectAllCheckboxVisible = BooleanConverter(this.state.selectColumnVisible);
+    }
     this._oTableOptions.selectColumn.visible = this._selectAllCheckboxVisible;
     this.initializeCheckboxColumn();
   }
@@ -492,6 +516,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected querySubscription: Subscription;
   protected contextMenuSubscription: Subscription;
   protected virtualScrollSubscription: Subscription;
+  protected checkViewportSizeSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
   public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
@@ -601,6 +626,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }, 0);
     }
     this.refreshColumnsWidth();
+    this.checkViewportSize();
   }
 
   protected _isColumnFiltersActive: boolean = false;
@@ -617,6 +643,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public oTableColumnsGroupingComponent: OTableColumnsGrouping;
 
+  @ContentChild(OTableContextMenuComponent, { static: true })
+  contextMenuContentChild: OTableContextMenuComponent;
 
   constructor(
     public injector: Injector,
@@ -626,7 +654,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     private appRef: ApplicationRef,
     private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public scrollStrategy: OTableVirtualScrollStrategy
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
 
@@ -652,7 +680,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.oTableButtons && this.tableButtons && this.tableButtons.length > 0) {
       this.oTableButtons.registerButtons(this.tableButtons.toArray());
     }
-
   }
 
   ngAfterViewInit() {
@@ -675,22 +702,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateHeaderAndFooterStickyPositions() {
+    if (this.virtualScrollSubscription) {
+      this.virtualScrollSubscription.unsubscribe();
+    }
 
-    if (this.activeVirtualScroll) {
+    if (this.virtualScrollViewport) {
+      const zone = this.injector.get(NgZone);
       this.virtualScrollSubscription = this.scrollStrategy.stickyChange.pipe(
         distinctUntilChanged(),
         filter(() => this.fixedHeader || this.hasInsertableRow())
       ).subscribe(x => {
-
-        this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
-          el.style.top = - x + 'px';
-        });
-        this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
-          el.style.bottom = x + 'px';
+        zone.run(() => {
+          this.elRef.nativeElement.querySelectorAll(stickyHeaderSelector).forEach((el: HTMLElement) => {
+            el.style.top = - x + 'px';
+          });
+          this.elRef.nativeElement.querySelectorAll(stickyFooterSelector).forEach((el: HTMLElement) => {
+            el.style.bottom = x + 'px';
+          });
         });
       });
     }
-
   }
 
   protected createExpandableColumn() {
@@ -875,7 +906,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.virtualScrollSubscription) {
       this.virtualScrollSubscription.unsubscribe();
     }
-    if(this.scrollStrategy){
+
+    if (this.checkViewportSizeSubscription) {
+      this.checkViewportSizeSubscription.unsubscribe();
+    }
+
+    if (this.scrollStrategy) {
       this.scrollStrategy.destroy();
     }
 
@@ -990,7 +1026,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected refreshEditionModeWarn() {
-    if (this.editionMode !== Codes.DETAIL_MODE_NONE) {
+    if (this.editionMode !== Codes.EDITION_MODE_NONE) {
       return;
     }
     const editableColumns = this._oTableOptions.columns.filter(col => {
@@ -1212,6 +1248,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             if (this.pendingQuery) {
               this.queryData(this.pendingQueryFilter);
             }
+            this.checkViewportSize();
           }
         }
       };
@@ -1463,7 +1500,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   initViewPort(data: any[]) {
 
-    if (this.activeVirtualScroll) {
+    if (this.virtualScrollViewport && data) {
       const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
       const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
       const rowElRef = this.elRef.nativeElement.querySelector(rowSelector);
@@ -1686,7 +1723,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (!this.clickPrevent) {
         if (this.oenabled && column.editor
           && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
-          && (this.editionMode === Codes.DETAIL_MODE_CLICK)) {
+          && (this.editionMode === Codes.EDITION_MODE_CLICK)) {
           this.activateColumnEdition(column, row, cellRef);
         } else {
           this.doHandleClick(row, column.attr, rowIndex, event);
@@ -2105,10 +2142,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   isColumnFilterable(column: OColumn): boolean {
     return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
-  }
-
-  isModeColumnFilterable(column: OColumn): boolean {
-    return this.isColumnFiltersActive && this.isColumnFilterable(column);
   }
 
   isColumnFilterActive(column: OColumn): boolean {
@@ -2549,6 +2582,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return Util.isDefined(column.definition) && Util.isDefined(column.definition.contentAlign) ? 'o-' + column.definition.contentAlign : '';
   }
 
+
+  public getGroupHeaderCellAlignClass(column: string): string[] {
+    let classNameArray = [];
+    const oCol = this.getOColumn(column.substr('groupHeader-'.length));
+    if (Util.isDefined(oCol)) {
+      classNameArray.push(this.getCellAlignClass(oCol));
+      classNameArray.push(oCol.className ? oCol.className : '');
+    }
+    return classNameArray;
+  }
+
   protected addDefaultRowButtons() {
     // check permissions
     if (this.editButtonInRow) {
@@ -2631,6 +2675,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       result = this.getOColumn(columnClass.substr('mat-column-'.length));
     }
     return result;
+  }
+
+  getOColumnFromGroupHeaderColumn(attr: string): OColumn {
+    return this.getOColumn(attr.substr('groupHeader-'.length));
   }
 
   getThWidthFromOColumn(oColumn: OColumn): any {
@@ -2926,4 +2974,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     return this.oTableColumnsGroupingComponent.useColumnAggregate(columnAttr, hasDefaultAggregate);
   }
+
+  protected checkViewportSize() {
+    // Its a temporarily fixed for https://github.com/angular/components/issues/10117
+    // Solve the issue when switching tabs when the virtual scrolling component is used
+    // in a mat - tab component and virtual scroll work abnormally
+    if (this.virtualScrollViewport) {
+      this.virtualScrollViewport.checkViewportSize();
+    };
+  }
+
 }
