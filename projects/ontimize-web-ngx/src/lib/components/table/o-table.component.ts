@@ -2676,13 +2676,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getThWidthFromOColumn(oColumn: OColumn): any {
     let widthColumn: number;
-    const thArray = [].slice.call(this.tableHeaderEl.nativeElement.children);
-    for (const th of thArray) {
-      const classList: any[] = [].slice.call((th as Element).classList);
-      const columnClass = classList.find((className: string) => (className === 'mat-column-' + oColumn.attr));
-      if (columnClass && columnClass.length > 1) {
-        widthColumn = th.clientWidth;
-        break;
+    const thArray = this.tableHeaderEl.nativeElement.children;
+    for (let i = 0; i < thArray.length && !Util.isDefined(widthColumn); i++) {
+      const th = thArray[i];
+      const classList = th.classList;
+      for (let j = 0; j < classList.length && !Util.isDefined(widthColumn); j++) {
+        if (classList[j] === 'mat-column-' + oColumn.attr) {
+          widthColumn = th.clientWidth;
+        }
       }
     }
     return widthColumn;
