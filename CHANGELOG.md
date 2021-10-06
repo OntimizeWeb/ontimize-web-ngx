@@ -1,3 +1,9 @@
+## 8.5.2 
+
+### Bug fixes
+* **o-table**:
+  * **OBaseTableCellEditor**: fixing insertable row editor bug ([029632b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/029632b0)) Closes [#790](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/790)
+
 ## 8.5.1 (2021-09-30)
 ### Features
 * **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))
