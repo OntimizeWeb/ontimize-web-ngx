@@ -1,7 +1,7 @@
 <nav fxFlex fxLayout="row" fxLayoutAlign="space-between stretch" [ngClass]="color ? 'o-app-header-'+color : ''">
   <div fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
     <ng-content></ng-content>
-    <span *ngIf="showHeaderTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
+    <span *ngIf="headerTitle$ | async; let headerTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
       {{ headerTitle | oTranslate }}
     </span>
     <div fxLayout="row" fxLayoutAlign="end stretch" class="o-app-header-default-actions">
