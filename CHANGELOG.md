@@ -1,8 +1,9 @@
-## 8.5.2 
+## 8.5.2
 
 ### Bug fixes
 * **o-table**:
   * **OBaseTableCellEditor**: fixing insertable row editor bug ([029632b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/029632b0)) Closes [#790](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/790)
+* **o-app-layout**: display app header title after reloading the page ([0d92a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d92a54)) Closes [#784](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/784)
 
 ## 8.5.1 (2021-09-30)
 ### Features
