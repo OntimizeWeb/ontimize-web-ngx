@@ -305,7 +305,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   public getErrorText(oError: any) {
-    if (this.tableColumn.editor.errorsData) {
+    if (this.tableColumn && this.tableColumn.editor && this.tableColumn.editor.errorsData) {
       const error = this.tableColumn.editor.errorsData.find((item) => item.name === oError);
       return error ? error.text : '';
     } else {
