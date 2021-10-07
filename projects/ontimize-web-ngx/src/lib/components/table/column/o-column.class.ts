@@ -33,6 +33,7 @@ export class OColumn {
   tooltip: OColumnTooltip;
   resizable: boolean;
   DOMWidth: number;
+  DOMRenderWidth: string;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
   private multilineSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.multiline);
@@ -177,9 +178,10 @@ export class OColumn {
     return value ? value : undefined;
   }
 
-  getRenderWidth(horizontalScrolled: boolean, clientWidth: number) {
+  setDOMRenderWidth(horizontalScrolled: boolean, clientWidth: number) {
     if (Util.isDefined(this.width)) {
-      return this.width;
+      this.DOMRenderWidth = this.width;
+      return;
     }
     const minValue = Util.extractPixelsValue(this.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH);
     if (Util.isDefined(minValue) && clientWidth > 0 && clientWidth < minValue) {
@@ -192,8 +194,9 @@ export class OColumn {
         this.DOMWidth = maxValue;
       }
     }
+
     const defaultWidth = (horizontalScrolled) ? undefined : 'auto';
-    return Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : defaultWidth;
+    this.DOMRenderWidth = Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : defaultWidth;
   }
 
   set width(val: string) {
@@ -203,6 +206,7 @@ export class OColumn {
       this.DOMWidth = pxVal;
       widthVal = undefined;
     }
+    this.DOMRenderWidth = widthVal;
     this._width = widthVal;
   }
 
@@ -217,6 +221,7 @@ export class OColumn {
 
   setWidth(val: number) {
     this.width = val + 'px';
+    this.DOMRenderWidth = val + 'px';
     this.DOMWidth = val;
   }
 
