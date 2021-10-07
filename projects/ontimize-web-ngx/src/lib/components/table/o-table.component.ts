@@ -2697,24 +2697,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return !this.isSelectionModeNone() && this.selection.isSelected(row);
   }
 
-  protected getColumnsWidthFromDOM() {
-    if (Util.isDefined(this.tableHeaderEl)) {
-      [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
-        const oCol: OColumn = this.getOColumnFromTh(thEl);
-        if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
-          oCol.DOMWidth = thEl.clientWidth;
-        }
-      });
-    }
-  }
-
   refreshColumnsWidth() {
     setTimeout(() => {
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
-        c.getRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
+        c.setDOMRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
       });
       this.cd.detectChanges();
     }, 0);
