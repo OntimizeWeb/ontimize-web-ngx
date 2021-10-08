@@ -70,7 +70,7 @@
 <ng-template #table>
 
   <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
-    [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
+    [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
     [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()">
 
     <!--Checkbox Column -->
