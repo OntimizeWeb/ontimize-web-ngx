@@ -18,6 +18,8 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
+import { IReportOnDemandService } from '../../../../../interfaces/report-on-demand-service.interface';
+import { O_REPORT_ON_DEMAND_SERVICE } from '../../../../../services';
 import { DialogService } from '../../../../../services/dialog.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
@@ -127,7 +129,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     protected injector: Injector,
     protected dialog: MatDialog,
     protected cd: ChangeDetectorRef,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent,
+    @Optional() @Inject(O_REPORT_ON_DEMAND_SERVICE) public reportOnDemandService: IReportOnDemandService
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
@@ -460,6 +463,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         this.table.reloadPaginatedDataFromStart(false);
       }
     });
+  }
+
+  onReportOnDemandClicked(): void {
+    if(this.reportOnDemandService) {
+      this.reportOnDemandService.openReportOnDemand(this.table.visibleColumns, this.table.service, this.table.entity);
+    } else {
+      console.warn("You must have ontimize-web-ngx-report-on-demand installed in your app to use report on demand.")
+    }
   }
 
   public onStoreConfigurationClicked(): void {
