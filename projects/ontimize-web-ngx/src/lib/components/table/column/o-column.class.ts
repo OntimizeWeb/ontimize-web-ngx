@@ -177,8 +177,8 @@ export class OColumn {
     return value ? value : undefined;
   }
 
-  setDOMRenderWidth(horizontalScrolled: boolean, clientWidth: number) {
-    if (Util.isDefined(this.width) ) {
+  setRenderWidth(horizontalScrolled: boolean, clientWidth: number) {
+    if (Util.isDefined(this.width)) {
       return;
     }
 
@@ -187,26 +187,27 @@ export class OColumn {
   }
 
   getDOMWidth(val: any): number {
-    let DOMRendererWidth;
+    let DOMWidth;
     const pxVal = Util.extractPixelsValue(val);
 
     if (Util.isDefined(pxVal)) {
-      DOMRendererWidth = pxVal;
+      DOMWidth = pxVal;
       const minValue = this.getMinWidthValue();
       if (Util.isDefined(minValue) && pxVal > 0 && pxVal < minValue) {
-        DOMRendererWidth = minValue;
+        DOMWidth = minValue;
       }
 
       if (Util.isDefined(this.maxWidth)) {
         const maxValue = Util.extractPixelsValue(this.maxWidth);
         if (Util.isDefined(maxValue) && pxVal > maxValue) {
-          DOMRendererWidth = maxValue;
+          DOMWidth = maxValue;
         }
       }
 
     }
-    return DOMRendererWidth;
+    return DOMWidth;
   }
+
   set width(val: string) {
     let widthVal = val;
     let DOMWidth = this.getDOMWidth(val);

@@ -2699,7 +2699,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
-        c.setDOMRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
+        c.setRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
       });
       this.cd.detectChanges();
     }, 0);
