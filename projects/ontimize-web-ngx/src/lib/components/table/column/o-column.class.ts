@@ -33,7 +33,6 @@ export class OColumn {
   tooltip: OColumnTooltip;
   resizable: boolean;
   DOMWidth: number;
-  DOMRenderWidth: string;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
   private multilineSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.multiline);
@@ -179,34 +178,44 @@ export class OColumn {
   }
 
   setDOMRenderWidth(horizontalScrolled: boolean, clientWidth: number) {
-    if (Util.isDefined(this.width)) {
-      this.DOMRenderWidth = this.width;
+    if (Util.isDefined(this.width) ) {
       return;
-    }
-    const minValue = Util.extractPixelsValue(this.minWidth, Codes.DEFAULT_COLUMN_MIN_WIDTH);
-    if (Util.isDefined(minValue) && clientWidth > 0 && clientWidth < minValue) {
-      this.DOMWidth = minValue;
-    }
-
-    if (Util.isDefined(this.maxWidth)) {
-      const maxValue = Util.extractPixelsValue(this.maxWidth);
-      if (Util.isDefined(maxValue) && clientWidth > maxValue) {
-        this.DOMWidth = maxValue;
-      }
     }
 
     const defaultWidth = (horizontalScrolled) ? undefined : 'auto';
-    this.DOMRenderWidth = Util.isDefined(this.DOMWidth) ? (this.DOMWidth + 'px') : defaultWidth;
+    this.width = Util.isDefined(this.DOMWidth) ? (this.getDOMWidth(clientWidth) + 'px') : defaultWidth;
   }
 
+  getDOMWidth(val: any): number {
+    let DOMRendererWidth;
+    const pxVal = Util.extractPixelsValue(val);
+
+    if (Util.isDefined(pxVal)) {
+      DOMRendererWidth = pxVal;
+      const minValue = this.getMinWidthValue();
+      if (Util.isDefined(minValue) && pxVal > 0 && pxVal < minValue) {
+        DOMRendererWidth = minValue;
+      }
+
+      if (Util.isDefined(this.maxWidth)) {
+        const maxValue = Util.extractPixelsValue(this.maxWidth);
+        if (Util.isDefined(maxValue) && pxVal > maxValue) {
+          DOMRendererWidth = maxValue;
+        }
+      }
+
+    }
+    return DOMRendererWidth;
+  }
   set width(val: string) {
     let widthVal = val;
-    const pxVal = Util.extractPixelsValue(val);
+    let DOMWidth = this.getDOMWidth(val);
+    const pxVal = Util.extractPixelsValue(DOMWidth);
     if (Util.isDefined(pxVal)) {
       this.DOMWidth = pxVal;
-      widthVal = undefined;
+      widthVal = pxVal + 'px';
     }
-    this.DOMRenderWidth = widthVal;
+
     this._width = widthVal;
   }
 
@@ -216,12 +225,11 @@ export class OColumn {
 
 
   getWidthToStore(): any {
-    return this._width || this.DOMWidth;
+    return this._width;
   }
 
   setWidth(val: number) {
     this.width = val + 'px';
-    this.DOMRenderWidth = val + 'px';
     this.DOMWidth = val;
   }
 

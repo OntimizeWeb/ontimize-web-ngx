@@ -103,7 +103,7 @@
       <!--Define header-cell-->
 
       <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [class.resizable]="resizable"
-        [style.width]="column.DOMRenderWidth" [style.min-width]="getMinWidthColumn(column)"
+        [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
         [style.max-width]="column.maxWidth">
 
         <div class="content">
@@ -120,7 +120,7 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}"
-          [style.width]="column.DOMRenderWidth" [style.min-width]="getMinWidthColumn(column)"
+          [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
           [style.max-width]="column.maxWidth">
           <div class="content">
 
@@ -152,7 +152,7 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}"
-          [style.width]="column.DOMRenderWidth" [style.min-width]="getMinWidthColumn(column)"
+          [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
           [style.max-width]="column.maxWidth">
           <div class="content">
 
