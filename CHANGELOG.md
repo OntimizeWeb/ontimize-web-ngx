@@ -1,4 +1,3 @@
-
 ## 8.5.2
 ### Features
   * **o-table**:
@@ -8,6 +7,8 @@
 * **o-table**:
   * **OBaseTableCellEditor**: fixing insertable row editor bug ([029632b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/029632b0)) Closes [#790](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/790)
   * Fix the bug that the column sorting does not work in the table with row grouping ([d150386](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150386)) Closes [#789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/789)
+* **oCurrency, oReal, oInteger, oPercent pipes**: `number.service` parsing bug fixed ([dc0b5094](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0b5094)) Closes [#776](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/776)   
+* **o-app-layout**: display app header title after reloading the page ([0d92a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d92a54)) Closes [#784](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/784)
 
 ## 8.5.1 (2021-09-30)
 ### Features
