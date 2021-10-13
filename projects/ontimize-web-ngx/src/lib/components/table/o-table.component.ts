@@ -1257,10 +1257,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (Util.isDefined(this.sort)) {
       this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
-
-      if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
-        this.sort.setTableInfo(this.sortColArray);
-      }
     }
 
     if (this.sortColumns && this.staticData) {

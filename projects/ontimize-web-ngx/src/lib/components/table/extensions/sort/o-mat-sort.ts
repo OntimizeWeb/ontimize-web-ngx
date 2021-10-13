@@ -13,7 +13,7 @@ export type OMatSortGroupedData = {
 @Directive({
   selector: '[oMatSort]',
   exportAs: 'oMatSort',
-  inputs: ['disabled: oMatSortDisabled']
+  inputs: ['disabled: oMatSortDisabled', 'oMatSortColumns']
 })
 export class OMatSort extends MatSort {
 
@@ -25,6 +25,11 @@ export class OMatSort extends MatSort {
   protected activeSortDirection: string;
 
   @Output('matSortChange') readonly oSortChange: EventEmitter<any> = new EventEmitter<any>();
+
+  set oMatSortColumns(value: SQLOrder[]) {
+    this.restart();
+    this.setTableInfo(value);
+  }
 
   setMultipleSort(val: boolean) {
     this.multipleSort = val;
@@ -51,7 +56,8 @@ export class OMatSort extends MatSort {
     this.directionById = {};
   }
 
-  setTableInfo(sortColArray: Array<SQLOrder>) {
+  protected setTableInfo(sortColArray: Array<SQLOrder>) {
+
     sortColArray.forEach((colData: SQLOrder) => {
       const sortDirection: any = colData.ascendent ? Codes.ASC_SORT : Codes.DESC_SORT;
       this.activeArray.push({
