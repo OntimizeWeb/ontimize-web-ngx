@@ -1,5 +1,8 @@
 
-## 8.5.2 
+## 8.5.2
+### Features
+  * **o-table**:
+    * Improved the perfomance of grouped table when it contain large amounts of data ([b8d0b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8d0b03)) ([38c3d24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/38c3d24)) ([b1a3f7d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1a3f7d)) Closes [#785](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/785)
 
 ### Bug fixes
 * **o-table**:
