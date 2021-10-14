@@ -30,7 +30,7 @@ import {
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
@@ -298,6 +298,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
 
       this.setDatasource();
+      this.registerSortListener();
     }
   }
 
@@ -532,6 +533,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected loadingSorting: Observable<boolean> = this.loadingSortingSubject.asObservable();
   private loadingScrollSubject = new BehaviorSubject<boolean>(false);
   public loadingScroll: Observable<boolean> = this.loadingScrollSubject.asObservable();
+
+  public showLoading: Observable<boolean> = combineLatest([this.loading, this.loadingSorting, this.loadingScroll])
+    .pipe(debounceTime(0), map((res: any[]) => {
+      return (res[0] || res[1] || res[2]);
+    }));
 
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
@@ -1300,11 +1306,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }, 500);
       }
     });
-  }
-
-  get showLoading() {
-    return combineLatest([this.loading, this.loadingSorting, this.loadingScroll])
-      .pipe(map((res: any[]) => (res[0] || res[1] || res[2])));
   }
 
   public getExpandedRowContainerClass(rowIndex: number): string {
