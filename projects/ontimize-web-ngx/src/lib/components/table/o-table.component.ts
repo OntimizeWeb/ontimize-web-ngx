@@ -2672,13 +2672,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getThWidthFromOColumn(oColumn: OColumn): any {
     let widthColumn: number;
-    const thArray = [].slice.call(this.tableHeaderEl.nativeElement.children);
-    for (const th of thArray) {
-      const classList: any[] = [].slice.call((th as Element).classList);
-      const columnClass = classList.find((className: string) => (className === 'mat-column-' + oColumn.attr));
-      if (columnClass && columnClass.length > 1) {
-        widthColumn = th.clientWidth;
-        break;
+    const thArray = this.tableHeaderEl.nativeElement.children;
+    for (let i = 0; i < thArray.length && !Util.isDefined(widthColumn); i++) {
+      const th = thArray[i];
+      const classList = th.classList;
+      for (let j = 0; j < classList.length && !Util.isDefined(widthColumn); j++) {
+        if (classList[j] === 'mat-column-' + oColumn.attr) {
+          widthColumn = th.clientWidth;
+        }
       }
     }
     return widthColumn;
@@ -2692,24 +2693,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return !this.isSelectionModeNone() && this.selection.isSelected(row);
   }
 
-  protected getColumnsWidthFromDOM() {
-    if (Util.isDefined(this.tableHeaderEl)) {
-      [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
-        const oCol: OColumn = this.getOColumnFromTh(thEl);
-        if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
-          oCol.DOMWidth = thEl.clientWidth;
-        }
-      });
-    }
-  }
-
   refreshColumnsWidth() {
     setTimeout(() => {
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
-        c.getRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
+        c.setRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
       });
       this.cd.detectChanges();
     }, 0);

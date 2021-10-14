@@ -762,7 +762,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     for (let index = 0; index < data.length && !match; index++) {
       if (data[index] instanceof OTableGroupedRow) {
         parent = data[index];
-      } else if (JSON.stringify(data[index]) === JSON.stringify(row)) {
+      } else if (Util.isEquivalent(data[index], row)) {
         match = true;
       }
     }
