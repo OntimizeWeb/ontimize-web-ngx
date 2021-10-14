@@ -9,6 +9,8 @@
   * Fix the bug that the column sorting does not work in the table with row grouping ([d150386](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150386)) Closes [#789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/789)
 * **oCurrency, oReal, oInteger, oPercent pipes**: `number.service` parsing bug fixed ([dc0b5094](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0b5094)) Closes [#776](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/776)   
 * **o-app-layout**: display app header title after reloading the page ([0d92a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d92a54)) Closes [#784](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/784)
+* **o-table-column**: adding missing `translate` input ([ad081513](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad081513)) Closes [#768](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/768) 
+* **o-table-cell-renderer-service**: setting translation pipe ([ad081513](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad081513)) Closes [#768](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/768) 
 
 ## 8.5.1 (2021-09-30)
 ### Features
