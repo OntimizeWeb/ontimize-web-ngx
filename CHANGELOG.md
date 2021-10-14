@@ -1,9 +1,14 @@
 ## 8.5.2
+### Features
+  * **o-table**:
+    * Improved the perfomance of grouped table when it contain large amounts of data ([b8d0b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8d0b03)) ([38c3d24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/38c3d24)) ([b1a3f7d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1a3f7d)) Closes [#785](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/785)
 
 ### Bug fixes
 * **o-table**:
   * **OBaseTableCellEditor**: fixing insertable row editor bug ([029632b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/029632b0)) Closes [#790](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/790)
   * Fix the bug that the column sorting does not work in the table with row grouping ([d150386](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150386)) Closes [#789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/789)
+* **o-table-column**: adding missing `translate` input ([ad081513](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad081513)) Closes [#768](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/768) 
+* **o-table-cell-renderer-service**: setting translation pipe ([ad081513](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad081513)) Closes [#768](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/768) 
 * **oCurrency, oReal, oInteger, oPercent pipes**: `number.service` parsing bug fixed ([dc0b5094](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0b5094)) Closes [#776](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/776)
 * **o-app-layout**: display app header title after reloading the page ([0d92a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d92a54)) Closes [#784](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/784)
 * **o-bar-menu**: make locale items change application language ([54e30a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54e30a45)) Closes [#726](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/726)
