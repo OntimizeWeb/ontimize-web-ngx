@@ -102,6 +102,7 @@
     <!-- Generic column definition -->
     <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
       <!--Define header-cell-->
+
       <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [class.resizable]="resizable"
         [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))" [style.min-width]="getMinWidthColumn(column)"
         [style.max-width]="column.maxWidth">
@@ -178,7 +179,7 @@
         </td>
       </ng-template>
       <!--Define mat-footer-cell-->
-      <ng-container *ngIf="(showTotals | async)">
+      <ng-container *ngIf="showTotals | async">
         <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
           <div class="title" *ngIf="column.aggregate && column.aggregate.title">
             {{ column.aggregate.title | oTranslate }}
