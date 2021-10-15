@@ -1280,7 +1280,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       );
     } else {
       this.loadingSortingSubject.next(value);
-      this.cd.detectChanges();
+      if (this.cd && !(this.cd as ViewRef).destroyed) {
+        this.cd.detectChanges();
+      }
     }
   }
 
