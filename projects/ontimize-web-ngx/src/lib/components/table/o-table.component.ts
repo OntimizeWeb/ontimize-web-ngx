@@ -1266,7 +1266,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     if (this.sortColumns && this.staticData) {
-      this.loadingSortingSubject.next(true);
+      this.updateSortingSubject(true);
+    }
+
+  }
+
+  private updateSortingSubject(value: boolean) {
+    /* the loadingSortingSubject not refresh in the template
+    because change detection not working with virtual scrolling */
+    const ngZone = this.injector.get(NgZone);
+    if (ngZone) {
+      ngZone.run(() => this.loadingSortingSubject.next(value)
+      );
+    } else {
+      this.loadingSortingSubject.next(value);
       this.cd.detectChanges();
     }
   }
@@ -1284,8 +1297,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.pageable) {
       this.reloadData();
     } else {
-      this.loadingSortingSubject.next(true);
-      this.cd.detectChanges();
+      this.updateSortingSubject(true);
     }
   }
 
@@ -1299,7 +1311,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.stopEdition();
       if (!this.pageable) {
         setTimeout(() => {
-          this.loadingSortingSubject.next(false);
+          this.updateSortingSubject(false);
           if (this.cd && !(this.cd as ViewRef).destroyed) {
             this.cd.detectChanges();
           }
@@ -1527,7 +1539,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   projectContentChanged() {
     setTimeout(() => {
-      this.loadingSortingSubject.next(false);
+      this.updateSortingSubject(false);
     }, 500);
     this.loadingScrollSubject.next(false);
 
