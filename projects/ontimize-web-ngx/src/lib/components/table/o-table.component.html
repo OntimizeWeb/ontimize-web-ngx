@@ -70,7 +70,7 @@
 <ng-template #table>
 
   <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
-    [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
+    [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
     [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()">
 
     <!--Checkbox Column -->
@@ -83,6 +83,7 @@
         <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)"
           [checked]="selection.isSelected(row)"></mat-checkbox>
       </td>
+      <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
 
     <!--Expandable Column -->
@@ -103,7 +104,7 @@
       <!--Define header-cell-->
 
       <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [class.resizable]="resizable"
-        [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))" [style.min-width]="getMinWidthColumn(column)"
+        [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
         [style.max-width]="column.maxWidth">
 
         <div class="content">
@@ -120,7 +121,7 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}"
-          [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))" [style.min-width]="getMinWidthColumn(column)"
+          [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
           [style.max-width]="column.maxWidth">
           <div class="content">
 
@@ -152,7 +153,7 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}"
-          [style.width]="column.getRenderWidth(horizontalScroll, this.getClientWidthColumn(column))" [style.min-width]="getMinWidthColumn(column)"
+          [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
           [style.max-width]="column.maxWidth">
           <div class="content">
 
