@@ -10,6 +10,7 @@ import {
   Injector,
   OnDestroy,
   OnInit,
+  Optional,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -19,8 +20,9 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportOnDemandService } from '../../../../../interfaces/report-on-demand-service.interface';
-import { O_REPORT_ON_DEMAND_SERVICE } from '../../../../../services';
+
 import { DialogService } from '../../../../../services/dialog.service';
+import { O_REPORT_ON_DEMAND_SERVICE } from '../../../../../services/factories';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OPermissions } from '../../../../../types/o-permissions.type';
