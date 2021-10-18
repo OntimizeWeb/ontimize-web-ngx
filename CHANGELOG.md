@@ -1,3 +1,7 @@
+## 8.5.3
+### Features:
+  * **o-app-layout**, **o-app-header**: new attribute `show-title` ([d865f4d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d865f4d4)) Closes [#813](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/813)
+
 ## 8.5.2 (2021-10-15)
 ### Features
   * **o-table**:
