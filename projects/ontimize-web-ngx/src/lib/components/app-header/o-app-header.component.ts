@@ -14,7 +14,8 @@ export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons',
   'color',
-  'headerHeight:header-height'
+  'headerHeight:header-height',
+  'showTitle: show-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -30,9 +31,9 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-app-header]': 'true',
-    '[class.o-app-header-small]': "headerHeight==='small'",
-    '[class.o-app-header-medium]': "headerHeight==='medium'",
-    '[class.o-app-header-large]': "headerHeight==='large'"
+    '[class.o-app-header-small]': 'headerHeight==="small"',
+    '[class.o-app-header-medium]': 'headerHeight==="medium"',
+    '[class.o-app-header-large]': 'headerHeight==="large"'
   }
 })
 export class OAppHeaderComponent {
@@ -41,6 +42,7 @@ export class OAppHeaderComponent {
   protected modulesInfoService: OModulesInfoService;
   protected authService: AuthService;
 
+  public showTitle = false;
   public headerTitle$: Observable<string>;
 
   @ViewChild('userInfo', { static: false })
