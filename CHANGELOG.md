@@ -1,3 +1,7 @@
+## 8.5.3
+### Bug fixes
+* **o-time**: fix bug when click the clear button the field shows today's date and time ([c843876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c843876)) Closes [#806](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/806)
+
 ## 8.5.2 (2021-10-15)
 ### Features
   * **o-table**:
