@@ -113,11 +113,12 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
 
   public ensureOFormValue(val: any): void {
     if (val instanceof OFormValue) {
-      if (val.value && val.value.bytes !== undefined) {
-        this.value = new OFormValue(val.value.bytes);
-        return;
+      if (val.value) {
+        if (val.value.bytes !== undefined) {
+          this.value = new OFormValue(val.value.bytes);
+        }
+        this.value = new OFormValue(val.value);
       }
-      this.value = new OFormValue(val.value);
     } else if (val && !(val instanceof OFormValue)) {
       if (val.bytes !== undefined) {
         val = val.bytes;
