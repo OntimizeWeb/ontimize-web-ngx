@@ -2428,8 +2428,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
-
-
+      this.onDataLoaded.emit(this.daoTable.data);
     }
   }
 

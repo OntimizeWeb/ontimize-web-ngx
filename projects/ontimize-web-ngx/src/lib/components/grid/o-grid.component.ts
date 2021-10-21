@@ -229,9 +229,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public initialize(): void {
     super.initialize();
 
-    if (this.staticData && this.staticData.length) {
-      this.dataResponseArray = this.staticData;
-    }
     if (!Util.isDefined(this.quickFilterColumns)) {
       this.quickFilterColumns = this.columns;
     }
@@ -364,10 +361,10 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
     if (changes.staticData !== undefined) {
       this.dataResponseArray = changes.staticData.currentValue;
+      this.onDataLoaded.emit(this.dataResponseArray);
       this.filterData();
     }
   }
-
   public destroy(): void {
     super.destroy();
     if (this.subscription) {
