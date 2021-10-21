@@ -375,7 +375,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public registerQuickFilter(arg: any): void {
-    console.log('o-list registerQuickfilter ');
     super.registerQuickFilter(arg);
     if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state.quickFilterActiveColumns)) {
       const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
