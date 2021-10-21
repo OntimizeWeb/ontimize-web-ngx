@@ -6,6 +6,8 @@
 * **o-time**: fix bug when click the clear button the field shows today's date and time ([c843876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c843876)) Closes [#806](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/806)
 * **o-table**: emit event `onDataLoaded` when load static data Closes ([9a7ac9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/
 9a7ac9a)) ([163387c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/163387c)) [#717](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/717)
+* **o-grid, o-list**: fixed bug that the o-grid does not filter when there is a previous value with static data  ([0a676bc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a676bc)) Closes [#819](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/819)
+
 
 ## 8.5.2 (2021-10-15)
 ### Features
