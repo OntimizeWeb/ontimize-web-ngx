@@ -574,7 +574,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
       if ((this.state.quickFilterValue || '').length > 0) {
         this.quickFilterComponent.setValue(this.state.quickFilterValue, {
-          emitEvent: false
+          emitEvent: true
         });
       }
     }
