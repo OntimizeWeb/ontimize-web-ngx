@@ -1656,6 +1656,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
             }, () => {
+              // Ensuring that the deleted items will not longer be part of the selectionModel
+              selectedItems.forEach(item => {
+                this.selection.deselect(item);
+              });
               this.reloadData();
             });
           } else {
