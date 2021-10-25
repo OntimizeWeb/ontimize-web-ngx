@@ -1427,7 +1427,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
         this.sort.setTableInfo(this.sortColArray);
       }
     }
-    if(this.sortColumns && this.staticData) {
+    if (this.sortColumns && this.staticData) {
       this.loadingSortingSubject.next(true);
       this.cd.detectChanges();
     }
@@ -1486,7 +1486,7 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
   }
 
   public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
-    if(event) {
+    if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
@@ -1770,6 +1770,10 @@ export class OTableComponent extends OServiceComponent implements OnInit, OnDest
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
             }, () => {
+              // Ensuring that the deleted items will not longer be part of the selectionModel
+              selectedItems.forEach(item => {
+                this.selection.deselect(item);
+              });
               this.reloadData();
             });
           } else {
