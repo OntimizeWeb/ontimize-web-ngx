@@ -1,4 +1,4 @@
-## 4.2.2
+## 4.2.2 (2021-10-26)
 ### Features
 * **o-combo**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
 * **o-list-picker**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
