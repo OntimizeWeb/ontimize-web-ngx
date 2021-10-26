@@ -61,6 +61,7 @@ export class Codes {
   public static DEFAULT_INSERT_ROUTE = 'new';
 
   public static IGNORE_CAN_DEACTIVATE = 'ignore_can_deactivate';
+  public static INSERTION_MODE = 'insertionMode';
 
   public static ONTIMIZE_SUCCESSFUL_CODE = 0;
   public static ONTIMIZE_FAILED_CODE = 1;
