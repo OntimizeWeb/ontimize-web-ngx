@@ -1,4 +1,4 @@
-## 8.5.3
+## 8.5.3 (2021-10-26)
 ### Features:
   * **o-app-layout**, **o-app-header**: new attribute `show-title` ([d865f4d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d865f4d4)) Closes [#813](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/813)
 
@@ -9,7 +9,6 @@
 * **o-grid, o-list**: fixed bug that the o-grid does not filter when there is a previous value with static data  ([0a676bc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a676bc)) Closes [#819](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/819)
 * **o-table**: fixing selection model bug when removing rows ([2b33ff14](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2b33ff14)) [#697](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/697)
 * **o-form-layout-manager**: fixing navigation bugs ([b87df174](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b87df174)) [#823](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/823)
-
 
 ## 8.5.2 (2021-10-15)
 ### Features
