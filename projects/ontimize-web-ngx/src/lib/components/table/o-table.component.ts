@@ -1656,6 +1656,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
             }, () => {
+              // Ensuring that the deleted items will not longer be part of the selectionModel
+              selectedItems.forEach(item => {
+                this.selection.deselect(item);
+              });
               this.reloadData();
             });
           } else {
@@ -2428,8 +2432,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
-
-
+      this.onDataLoaded.emit(this.daoTable.data);
     }
   }
 
