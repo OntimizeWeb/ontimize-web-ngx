@@ -171,11 +171,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
-    const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
-    compData.insertionMode = compData.insertionMode || (navData && navData.isInsertFormRoute());
-    const existingData = this.data.find(item => item.insertionMode);
-    if (compData.insertionMode || existingData) {
-      addNewComp = !existingData;
+    if (compData.insertionMode) {
+      const alreadyExistingInsertionTab = Util.isDefined(this.data.find(item => item.insertionMode));
+      addNewComp = !alreadyExistingInsertionTab;
     }
     const newCompParams = compData.params;
     if (addNewComp) {
@@ -350,7 +348,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       this.showLoading.next(true);
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
-      extras[Codes.QUERY_PARAMS].insertionMode = this.state.tabsData[0].insertionMode
+      extras[Codes.QUERY_PARAMS][Codes.INSERTION_MODE] = `${this.state.tabsData[0].insertionMode}`
       // Triggering first tab navigation
       this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
         if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {

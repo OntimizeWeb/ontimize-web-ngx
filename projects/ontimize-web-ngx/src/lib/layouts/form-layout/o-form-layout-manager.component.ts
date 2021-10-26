@@ -27,6 +27,7 @@ import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-fo
 import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
+import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
@@ -386,7 +387,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       id: Math.random().toString(36),
       label: '',
       innerFormsInfo: {},
-      insertionMode: childRoute.queryParams.insertionMode === 'true'
+      insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'
     };
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);

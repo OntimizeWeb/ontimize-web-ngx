@@ -1,16 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  forwardRef,
-  HostBinding,
-  Inject,
-  Injector,
-  OnDestroy,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -21,11 +9,7 @@ import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormControl } from '../input/o-form-control.class';
-import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent
-} from '../o-form-data-component.class';
+import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
 import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 
@@ -95,6 +79,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   protected _domSanitizer: DomSanitizer;
   protected dialog: MatDialog;
   public stateCtrl: FormControl;
+  public src = '';
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -128,22 +113,24 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
 
   public ensureOFormValue(val: any): void {
     if (val instanceof OFormValue) {
-      if (val.value && val.value.bytes !== undefined) {
-        this.value = new OFormValue(val.value.bytes);
-        return;
+      if (val.value && val.value.bytes) {
+        val = val.value.bytes;
+      } else {
+        val = val.value;
       }
-      this.value = new OFormValue(val.value);
-    } else if (val && !(val instanceof OFormValue)) {
-      if (val.bytes !== undefined) {
+    } else if (val) {
+      if (val.bytes) {
         val = val.bytes;
       } else if (val.length > 300 && val.substring(0, 4) === 'data') {
         // Removing "data:image/*;base64,"
         val = val.substring(val.indexOf('base64') + 7);
       }
-      this.value = new OFormValue(val);
     } else {
-      this.value = new OFormValue(undefined);
+      val = undefined;
     }
+    this.value = new OFormValue(val);
+
+    this.src = this.getSrcValue();
   }
 
   public isEmpty(): boolean {
@@ -187,7 +174,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     event.target.src = Util.isDefined(this.notfoundimage) ? this.notfoundimage : '';
   }
 
-  public getSrcValue(): any {
+  private getSrcValue(): any {
     if (this.value && this.value.value) {
       if (this.value.value instanceof Object && this.value.value.bytes) {
         let src: string = '';

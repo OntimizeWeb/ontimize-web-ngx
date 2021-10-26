@@ -293,6 +293,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     if (route.length > 0) {
       const relativeTo = this.recursiveInsert ? this.actRoute.parent : this.actRoute;
       const qParams = {};
+      if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+        qParams[Codes.INSERTION_MODE] = 'true';
+      }
       this.navigateToDetail(route, qParams, relativeTo);
     }
   }
@@ -574,7 +577,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
       if ((this.state.quickFilterValue || '').length > 0) {
         this.quickFilterComponent.setValue(this.state.quickFilterValue, {
-          emitEvent: false
+          emitEvent: true
         });
       }
     }
