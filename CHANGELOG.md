@@ -1,3 +1,31 @@
+## 8.5.3 (2021-10-26)
+### Features:
+  * **o-app-layout**, **o-app-header**: new attribute `show-title` ([d865f4d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d865f4d4)) Closes [#813](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/813)
+
+### Bug fixes
+* **o-time**: fix bug when click the clear button the field shows today's date and time ([c843876](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c843876)) Closes [#806](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/806)
+* **o-table**: emit event `onDataLoaded` when load static data Closes ([9a7ac9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/
+9a7ac9a)) ([163387c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/163387c)) [#717](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/717)
+* **o-grid, o-list**: fixed bug that the o-grid does not filter when there is a previous value with static data  ([0a676bc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a676bc)) Closes [#819](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/819)
+* **o-table**: fixing selection model bug when removing rows ([2b33ff14](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2b33ff14)) [#697](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/697)
+* **o-form-layout-manager**: fixing navigation bugs ([b87df174](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b87df174)) [#823](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/823)
+
+## 8.5.2 (2021-10-15)
+### Features
+  * **o-table**:
+    * Improved the perfomance of grouped table when it contain large amounts of data ([b8d0b03](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8d0b03)) ([38c3d24](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/38c3d24)) ([b1a3f7d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b1a3f7d)) Closes [#785](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/785)
+
+### Bug fixes
+* **o-table**:
+  * **OBaseTableCellEditor**: fixing insertable row editor bug ([029632b0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/029632b0)) Closes [#790](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/790)
+  * Fix the bug that the column sorting does not work in the table with row grouping ([d150386](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d150386)) Closes [#789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/789)
+  * Fix the bug when using aggregate column and select-all-checkbox-visible='yes' on o-table  ([9eca7dd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9eca7dd)) Closes [#729](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/729)
+  * **o-table-column**: adding missing `translate` input ([ad081513](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad081513)) Closes [#768](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/768)
+  * **o-table-cell-renderer-service**: setting translation pipe ([ad081513](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ad081513)) Closes [#768](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/768)
+* **oCurrency, oReal, oInteger, oPercent pipes**: `number.service` parsing bug fixed ([dc0b5094](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc0b5094)) Closes [#776](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/776)
+* **o-app-layout**: display app header title after reloading the page ([0d92a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0d92a54)) Closes [#784](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/784)
+* **o-bar-menu**: make locale items change application language ([54e30a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54e30a45)) Closes [#726](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/726)
+
 ## 8.5.1 (2021-09-30)
 ### Features
 * **Util**: adding new `wrapIntoObservable` method ([1c7523c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c7523c2))

@@ -30,7 +30,7 @@ import {
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
@@ -301,6 +301,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
 
       this.setDatasource();
+      this.registerSortListener();
     }
   }
 
@@ -539,6 +540,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected loadingSorting: Observable<boolean> = this.loadingSortingSubject.asObservable();
   private loadingScrollSubject = new BehaviorSubject<boolean>(false);
   public loadingScroll: Observable<boolean> = this.loadingScrollSubject.asObservable();
+
+  public showLoading: Observable<boolean> = combineLatest([this.loading, this.loadingSorting, this.loadingScroll])
+    .pipe(debounceTime(0), map((res: any[]) => {
+      return (res[0] || res[1] || res[2]);
+    }));
 
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
@@ -1264,15 +1270,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (Util.isDefined(this.sort)) {
       this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
-
-      if (Util.isDefined(this._oTableOptions.columns) && (this.sortColArray.length > 0)) {
-        this.sort.setTableInfo(this.sortColArray);
-      }
     }
 
     if (this.sortColumns && this.staticData) {
-      this.loadingSortingSubject.next(true);
-      this.cd.detectChanges();
+      this.updateSortingSubject(true);
+    }
+
+  }
+
+  private updateSortingSubject(value: boolean) {
+    /* the loadingSortingSubject not refresh in the template
+    because change detection not working with virtual scrolling */
+    const ngZone = this.injector.get(NgZone);
+    if (ngZone) {
+      ngZone.run(() => this.loadingSortingSubject.next(value)
+      );
+    } else {
+      this.loadingSortingSubject.next(value);
+      if (this.cd && !(this.cd as ViewRef).destroyed) {
+        this.cd.detectChanges();
+      }
     }
   }
 
@@ -1289,8 +1306,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.pageable) {
       this.reloadData();
     } else {
-      this.loadingSortingSubject.next(true);
-      this.cd.detectChanges();
+      this.updateSortingSubject(true);
     }
   }
 
@@ -1304,18 +1320,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.stopEdition();
       if (!this.pageable) {
         setTimeout(() => {
-          this.loadingSortingSubject.next(false);
+          this.updateSortingSubject(false);
           if (this.cd && !(this.cd as ViewRef).destroyed) {
             this.cd.detectChanges();
           }
         }, 500);
       }
     });
-  }
-
-  get showLoading() {
-    return combineLatest([this.loading, this.loadingSorting, this.loadingScroll])
-      .pipe(map((res: any[]) => (res[0] || res[1] || res[2])));
   }
 
   public getExpandedRowContainerClass(rowIndex: number): string {
@@ -1537,7 +1548,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   projectContentChanged() {
     setTimeout(() => {
-      this.loadingSortingSubject.next(false);
+      this.updateSortingSubject(false);
     }, 500);
     this.loadingScrollSubject.next(false);
 
@@ -1652,6 +1663,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
             }, () => {
+              // Ensuring that the deleted items will not longer be part of the selectionModel
+              selectedItems.forEach(item => {
+                this.selection.deselect(item);
+              });
               this.reloadData();
             });
           } else {
@@ -2424,8 +2439,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.staticData = data;
       this.daoTable.usingStaticData = true;
       this.daoTable.setDataArray(this.staticData);
-
-
+      this.onDataLoaded.emit(this.daoTable.data);
     }
   }
 
@@ -2683,13 +2697,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getThWidthFromOColumn(oColumn: OColumn): any {
     let widthColumn: number;
-    const thArray = [].slice.call(this.tableHeaderEl.nativeElement.children);
-    for (const th of thArray) {
-      const classList: any[] = [].slice.call((th as Element).classList);
-      const columnClass = classList.find((className: string) => (className === 'mat-column-' + oColumn.attr));
-      if (columnClass && columnClass.length > 1) {
-        widthColumn = th.clientWidth;
-        break;
+    const thArray = this.tableHeaderEl.nativeElement.children;
+    for (let i = 0; i < thArray.length && !Util.isDefined(widthColumn); i++) {
+      const th = thArray[i];
+      const classList = th.classList;
+      for (let j = 0; j < classList.length && !Util.isDefined(widthColumn); j++) {
+        if (classList[j] === 'mat-column-' + oColumn.attr) {
+          widthColumn = th.clientWidth;
+        }
       }
     }
     return widthColumn;
@@ -2703,24 +2718,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return !this.isSelectionModeNone() && this.selection.isSelected(row);
   }
 
-  protected getColumnsWidthFromDOM() {
-    if (Util.isDefined(this.tableHeaderEl)) {
-      [].slice.call(this.tableHeaderEl.nativeElement.children).forEach(thEl => {
-        const oCol: OColumn = this.getOColumnFromTh(thEl);
-        if (Util.isDefined(oCol) && thEl.clientWidth > 0 && oCol.DOMWidth !== thEl.clientWidth) {
-          oCol.DOMWidth = thEl.clientWidth;
-        }
-      });
-    }
-  }
-
   refreshColumnsWidth() {
     setTimeout(() => {
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
-        c.getRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
+        c.setRenderWidth(this.horizontalScroll, this.getClientWidthColumn(c));
       });
       this.cd.detectChanges();
     }, 0);

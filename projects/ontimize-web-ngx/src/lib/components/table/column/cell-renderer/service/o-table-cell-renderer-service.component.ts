@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Injector, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { InputConverter } from '../../../../../decorators/input-converter';
 
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
@@ -59,6 +60,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected entity: string;
   protected service: string;
   protected columns: string;
+  @InputConverter()
   protected translate: boolean = false;
   protected valueColumn: string;
   public valueColumnType: string = Codes.TYPE_INT;
@@ -84,6 +86,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     super(injector);
     this.tableColumn.type = 'service';
     this.dialogService = injector.get(DialogService);
+    this.setComponentPipe();
   }
 
   public initialize(): void {
