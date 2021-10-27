@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "4.2.3-SNAPSHOT-0",
+  "version": "4.2.2",
   "description": "Ontimize Web framework using Angular 6",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -111,7 +111,7 @@
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "4.0.2",
     "loader-utils": "1.1.0",
-    "lodash": "4.17.13",
+    "lodash": "4.17.19",
     "lodash.mergewith": "4.6.2",
     "lodash.template": "4.5.0",
     "ngc-webpack": "4.1.2",

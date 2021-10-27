@@ -14,7 +14,6 @@
   * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
   * Fixing selection model bug when removing rows ([59431ae2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59431ae2)) [#697](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/697)
 
-
 ## 4.2.1 (2021-03-01)
 ### Features
 * **o-grid**:
