@@ -426,11 +426,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   virtualScroll: boolean = true;
   @InputConverter()
-<<<<<<< HEAD
   chartOnDemand: boolean = false;
-=======
+  @InputConverter()
   contextMenu: boolean = true;
->>>>>>> acdc2815ec8de212af86cc2016d7a58e2e33c3a8
 
   protected _enabled: boolean = true;
   get enabled(): boolean {
