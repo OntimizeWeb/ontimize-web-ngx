@@ -25,10 +25,10 @@
         .mat-tab-link {
           color: mat-color($foreground, text);
         }
-
       }
 
-      > .o-container-title {
+       > .o-container-title,
+      > .mat-expansion-panel-header .o-container-title {
         span {
           font: {
             size: mat-font-size($typography, input);

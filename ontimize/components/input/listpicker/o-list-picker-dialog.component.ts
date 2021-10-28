@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
+import { OListPickerCustomRenderer } from './listpicker-renderer/o-listpicker-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
   'data',
@@ -25,7 +26,9 @@ export class OListPickerDialogComponent {
 
   public filter: boolean = true;
   public visibleData: any = [];
+  public searchData: any = [];
   public searchVal: string;
+  public renderer: OListPickerCustomRenderer;
 
   @ViewChild('searchInput')
   public searchInput: OSearchInputComponent;
@@ -33,7 +36,6 @@ export class OListPickerDialogComponent {
   protected data: any[] = [];
   protected menuColumns: string;
   protected visibleColsArray: string[];
-
   protected _startIndex: number = 0;
   protected recordsNumber: number = 100;
   protected scrollThreshold: number = 200;
@@ -58,7 +60,17 @@ export class OListPickerDialogComponent {
     if (data.menuColumns) {
       this.menuColumns = data.menuColumns;
     }
+    if (data.renderer) {
+      this.renderer = data.renderer;
+    }
+    if (this.data && Util.isArray(this.data)) {
+      this.data.forEach((element, index) => {
+        this.data[index].value = this.renderer ? this.renderer.getListPickerValue(element.value) : element.value;
+        this.data[index]._parsedVisibleColumnText = this.renderer ? this.renderer.getListPickerValue(element._parsedVisibleColumnText) : element._parsedVisibleColumnText;
+      });
+    }
     this.searchVal = data.searchVal;
+    this.startIndex = 0;
   }
 
   public ngAfterViewInit(): void {
@@ -66,9 +78,9 @@ export class OListPickerDialogComponent {
       this.searchInput.getFormControl().setValue(this.searchVal, {
         emitEvent: false
       });
-      this.onFilterList(this.searchVal);
-    } else {
-      this.startIndex = 0;
+
+      //TODO improve: Added setTimeout for resolving ExpressionChangedAfterItHasBeenCheckedError error because the observables dont work
+      setTimeout(() => this.searchInput.onSearch.emit(this.searchVal));
     }
   }
 
@@ -95,30 +107,26 @@ export class OListPickerDialogComponent {
       if (!isNaN(pendingScroll) && pendingScroll <= this.scrollThreshold) {
         let index = this.visibleData.length;
         const searchVal = this.searchInput.getValue();
+        let appendData = [];
         if (Util.isDefined(searchVal) && searchVal.length > 0) {
-          index = this.visibleData[this.visibleData.length - 1]['_parsedIndex'];
+          appendData = this.searchData.slice(index, index + this.recordsNumber);
+        } else {
+          appendData = this.data.slice(index, index + this.recordsNumber);
         }
-        let appendData = this.data.slice(index, this.visibleData.length + this.recordsNumber);
         if (appendData.length) {
-          appendData = this.transform(appendData, {
-            filtervalue: this.searchInput.getValue(),
-            filtercolumns: this.visibleColsArray
-          });
-          if (appendData.length) {
-            this.visibleData = this.visibleData.concat(appendData);
-          }
+          this.visibleData = this.visibleData.concat(appendData);
         }
       }
     }
   }
 
   public onFilterList(searchVal: any): void {
-    this.visibleData = this.transform(this.data, {
+    this.searchData = this.transform(this.data, {
       filtervalue: searchVal,
       filtercolumns: this.visibleColsArray
     });
     this._startIndex = 0;
-    this.visibleData = this.visibleData.slice(this.startIndex, this.recordsNumber);
+    this.visibleData = this.searchData.slice(this.startIndex, this.recordsNumber);
   }
 
   public isEmptyData(): boolean {
@@ -164,6 +172,10 @@ export class OListPickerDialogComponent {
 
   private _isBlank(value: string): boolean {
     return !Util.isDefined(value) || value.length === 0;
+  }
+
+  public registerRenderer(renderer: any) {
+    this.renderer = renderer;
   }
 
 }

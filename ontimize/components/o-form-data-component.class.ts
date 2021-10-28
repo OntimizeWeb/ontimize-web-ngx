@@ -396,7 +396,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   get showClearButton(): boolean {
-    return this.clearButton && !this.isReadOnly && this.enabled && this.getValue();
+    return this.clearButton && !this.isReadOnly && this.enabled && Util.isDefined(this.getValue());
   }
 
   public onFormControlChange(value: any): void {

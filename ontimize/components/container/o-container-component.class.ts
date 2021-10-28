@@ -1,8 +1,8 @@
 import { AfterViewInit, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
-import { OFormComponent } from '../form/form-components';
 import { Util } from '../../utils';
+import { OFormComponent } from '../form/form-components';
 
 export const DEFAULT_INPUTS_O_CONTAINER = [
   'oattr: attr',
@@ -115,6 +115,22 @@ export class OContainerComponent implements AfterViewInit, OnDestroy {
 
   public hasHeader(): boolean {
     return !!this.title || !!this.icon;
+  }
+
+  public isAppearanceOutlineSetted(): boolean {
+    let isAppearanceSetted = false;
+    if (Util.isDefined(this.appearance)) {
+      isAppearanceSetted = this.appearance === OContainerComponent.APPEARANCE_OUTLINE;
+    }
+    return isAppearanceSetted;
+  }
+
+  public hasHeaderOrAppearanceOutlineSetted(): boolean {
+    return this.isAppearanceOutlineSetted() || this.hasHeader();
+  }
+
+  public hasHeaderAndAppearanceOutline(): boolean {
+    return this.isAppearanceOutline() && this.hasHeader();
   }
 
   public isAppearanceOutline(): boolean {

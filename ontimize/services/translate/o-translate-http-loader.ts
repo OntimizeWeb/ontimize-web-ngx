@@ -1,7 +1,7 @@
-import { Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injector } from '@angular/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
@@ -97,9 +97,11 @@ export class OTranslateHttpLoader extends TranslateHttpLoader {
 
   protected parseBundleResponse(data: any[]): any {
     let result = {};
-    data.forEach((item) => {
-      result[item[OTranslateHttpLoader.BUNDLE_KEY]] = item[OTranslateHttpLoader.BUNDLE_VALUE];
-    });
+    if(data) {
+      data.forEach((item) => {
+        result[item[OTranslateHttpLoader.BUNDLE_KEY]] = item[OTranslateHttpLoader.BUNDLE_VALUE];
+      });
+    }
     return result;
   }
 }

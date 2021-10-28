@@ -1,3 +1,61 @@
+## 4.2.2 (2021-10-26)
+### Features
+* **o-combo**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
+* **o-list-picker**: new custom render ([fe25ac8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe25ac8))
+* **o-table-row-expandable**: new `multiple` input ([685cb7f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/685cb7f)) Closes ([#545](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/545))
+
+### Bug Fixes
+* **o-list**: use `sort-columns` attribute value on the first query ([dacb247](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dacb247)) Closes ([#536](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/536))
+* **o-table**
+  * **o-table-row-expandable**: no expand button in row break ([bda06ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bda06ef)) Closes ([#541](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/541))
+  * Fixed prevent touch vertical and horizontal scrolling in table: ([b534317](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b534317)) Closes ([#576](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/576))
+  * **o-table-row-expandable**: set event as optional in toggleRowExpandable ([2653e9e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2653e9e))
+  * Fix sort-columns with static data [fdaa08d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fdaa08d))
+  * **o-table-cell-editor-email**: new component for email cell editors([6fdf754](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fdf754))
+  * Fixing selection model bug when removing rows ([59431ae2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/59431ae2)) [#697](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/697)
+
+## 4.2.1 (2021-03-01)
+### Features
+* **o-grid**:
+  * added new button ([85c0a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85c0a45))
+  * new `insert-button-position` and `insert-button-floatable` input ([85c0a45](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/85c0a45))
+* **o-percent-input**: new attribute `value-base` ([5a344d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a344d0)) Closes ([#513](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/513))
+
+### Bug Fixes
+* **o-input-file**: fixed `accept-file-type` value parser ([14c5bca8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14c5bca8))
+* **OFormDataComponent**:
+  * Show input value when internal value is zero ([7d48606](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d48606))
+  * Show clear button on inputs when internal value is zero ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
+* **o-column**: Fix appearence outline when no title is displayed. If you are using the *lite theme* of OntimizeWeb, you shold update `ontimize-web-ngx-theming` to version 4.0.3 or higher ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
+* **o-row**: Fix appearence outline when no title is displayed. If you are using the *lite theme* of OntimizeWeb, you shold update `ontimize-web-ngx-theming` to version 4.0.3 or higher ([b40b905](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40b905))
+* **o-app-layout-sidenav**: Update sidenav image when component attributes change. ([323ad94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/323ad94))
+* **OServiceBaseComponent**: Parse `query-rows` attribute as integer ([f1874cac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1874cac))
+* **o-list-picker** : Closes [#503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/503) ([1b06fa5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1b06fa5))
+* **language bundle**: Check if data exist on language bundle ([3b2bd5e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b2bd5e)) Closes [#444](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/444)
+* **o-table, OBaseTableCellEditor**: Ignoring keyboard events from outside a cell being edited. Also stopping active cell edition when table content has changed ([c1590ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1590ef)) Closes ([#523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/523))
+
+## 4.2.0 (2020-11-03)
+### Features
+* **icons**: Added sort_by_alpha, sort_by_alpha_asc and sort_by_alpha_desc icons in Ontimize Web ([19a6e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/19a6e48))
+* **table**:
+  * o-table-filter-by-column: added clear button in customized filters  ([c7fd07e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c7fd07e))
+  * reinitialize method: added new option 'filterColumns' ([b74b3d5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b74b3d5))
+  * new component `o-table-columns-filter-column` ([f395b82](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f395b82))
+  * new attribute `filter-column-active-by-default`([fccc41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fccc41a))
+  * new internal class `column-filter-icon-active` ([e94e465](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e94e465))
+  * new component `o-table-row-expandable` Closes [#443](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/443)([4452ca2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4452ca2))
+  * new component `o-expandable-container` ([3036381](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3036381))
+* **o-form**:
+  * new public methods `back`, `closeDetail`, `reload`, `goInsertMode`, `insert`, `goEditMode`, `update`, `undo`, `delete` and `setData` ([4e38704](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e38704)).
+  * The following methods has been deprecated and will be removed in the future: `_backAction`, `_closeDetailAction`, `_reloadAction`, `_goInsertMode`, `_insertAction`, `_goEditMode`, `_editAction`, `_undoLastChangeAction`, `_deleteAction` and `_setData` ([4e38704](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4e38704)).
+* **button**:
+  * new attribute `enabled` ([760784c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/760784c))
+  * new attribute `color` ([2ad04a9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ad04a9))
+
+### BREAKING CHANGES
+* **table**:
+  * `onClick` event return `onClickTableEvent` type ([1da21eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1da21eb))
+
 ## 4.1.3 (2020-08-18)
 ### Features
 * **o-table**:
@@ -5,12 +63,14 @@
   * new attribute `visible-export-dialog-buttons` ([#320](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/320)). Closes [#316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/316)
   * new attribute `export-service-type` ([0f2db1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0f2db1c))
   * new attribute `row-class` ([b0de94d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b0de94d)). Closes [#367](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/367)
+  * new-attribute `not-found-image` added new parameter(not-found-image) in o-image component to manage not found images. ([2cefbfe](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/397))
 * **App configuration**: new attribute `exportServiceType` allows configuring the service used for exportation in the whole application ([c785371](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c785371))
 * **OFormServiceComponent**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
 * **o-form**: new `query-fallback-function` input ([089338f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/089338f3))
 * Now the application language is stored in the browser and loaded on application startup ([e9b9535](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e9b9535))
 * We have developed a new mechanism for overriding/extending servicies. From now on, you can use one of the following Injection Tokens for indicating the service class you want to use in your application for the different services: `O_DATA_SERVICE`, `O_TRANSLATE_SERVICE`, `O_FILE_SERVICE`, `O_EXPORT_SERVICE`, `O_PERMISSION_SERVICE` ([ade651e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ade651e))
   * Attributes `serviceType`, `exportServiceType`, `permissionsServiceType` from application configuration will be deprecated and removed in future versions.
+* **o-form-container**: new attribute `form` ([5cba909](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5cba909))
 
 ### Bug Fixes
 * **o-time-input**: Fix bad behaviour when there is more than one component in the same form ([fc1dd47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fc1dd47))

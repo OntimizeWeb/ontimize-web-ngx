@@ -5,6 +5,9 @@
   $warn: map-get($theme, warn);
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
+  $table-background: mat-color($background, 'card');
+  $text-color: mat-color($foreground, secondary-text);
+  $text-opacity: opacity($text-color);
 
   .o-table {
     .o-table-column-resizer span {
@@ -21,21 +24,25 @@
 
     .mat-table {
       .mat-header-row {
-
         .mat-header-cell {
           color: mat-color($foreground, text);
 
+          .column-filter-icon {
+            color: mat-color($background, disabled-button);
+          }
+
+          .column-filter-icon-active,
           .column-filter-icon.active {
-            color: mat-color($accent);
+            color: mix($table-background, rgba($text-color, 1), (1 - $text-opacity) * 100%);
           }
 
         }
       }
 
       .mat-row {
-        &:hover {
-          cursor: pointer;
-          background-color: mat-color($foreground, base, 0.18);
+          &:hover {
+            cursor: pointer;
+            background-color: mat-color($foreground, base, 0.18);
         }
 
         &.selected {

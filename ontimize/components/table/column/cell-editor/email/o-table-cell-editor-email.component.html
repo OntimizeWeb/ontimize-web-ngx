@@ -1,0 +1,10 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+  <div [formGroup]="formGroup">
+    <mat-form-field floatLabel="never">
+      <input #input matInput type="email" [email]="true" [placeholder]="getPlaceholder()" [formControl]="formControl"
+        [required]="orequired">
+      <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+      <mat-error *ngIf="hasError('email')" text="{{ 'FORM_VALIDATION.EMAIL_FORMAT' | oTranslate }}"></mat-error>
+    </mat-form-field>
+  </div>
+</ng-template>

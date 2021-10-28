@@ -11,7 +11,7 @@ import {
   OnInit,
   Optional,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material';
@@ -27,6 +27,7 @@ import { OFormComponent } from '../../form/o-form.component';
 import { IFormValueOptions, OFormValue } from '../../form/OFormValue';
 import { OValueChangeEvent } from '../../o-form-data-component.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
+import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
 import { OComboSearchComponent } from './combo-search/o-combo-search.component';
 
 
@@ -66,6 +67,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   public value: OFormValue;
   public searchControl: FormControl = new FormControl();
+  public renderer: OComboCustomRenderer;
 
   /* Inputs */
   @InputConverter()
@@ -360,8 +362,16 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       }
 
       // filter
-      this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);
+      if(this.renderer) {
+        this.filteredDataArray = this.dataArray.filter(item => this.renderer.getComboData(item).toLowerCase().indexOf(search) > -1);
+      } else {
+        this.filteredDataArray = this.dataArray.filter(item => this.getOptionDescriptionValue(item).toLowerCase().indexOf(search) > -1);
+      }
     }
+  }
+
+  public registerRenderer(renderer: any) {
+    this.renderer = renderer;
   }
 
 }

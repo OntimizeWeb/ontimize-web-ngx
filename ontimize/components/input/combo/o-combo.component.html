@@ -18,7 +18,13 @@
       <div class="o-combo-options-container">
         <mat-option *ngIf="hasNullSelection()" [value]="null"></mat-option>
         <mat-option *ngFor="let item of getFilteredDataArray()" [value]="getValueColumn(item)">
-          {{ getOptionDescriptionValue(item) }}
+          <ng-container *ngIf="renderer">
+            <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ value: item }">
+            </ng-template>
+          </ng-container>
+          <ng-container *ngIf="!renderer">
+            {{ getOptionDescriptionValue(item) }}
+          </ng-container>
         </mat-option>
       </div>
     </mat-select>

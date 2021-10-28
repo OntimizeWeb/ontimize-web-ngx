@@ -1,6 +1,6 @@
 <div class="title-container" *ngIf="filter">
   <o-search-input #searchInput [columns]="menuColumns" show-menu="no" float-label="never" (onSearch)="onFilterList($event)"
-    class="o-list-picker-search"></o-search-input>
+    class="o-list-picker-search" appearance="legacy"></o-search-input>
 </div>
 <div mat-dialog-content (scroll)="onScroll($event)" [class.o-list-picker-has-filter]="filter" fxFlex>
   <mat-list>
@@ -11,7 +11,9 @@
       </ng-container>
     </mat-list-item>
     <mat-list-item (click)="onClickListItem($event, item)" *ngFor="let item of visibleData; trackBy: trackByFn">
-      <span>{{ item['_parsedVisibleColumnText'] }}</span>
+      <ng-container>
+        <span>{{ item['_parsedVisibleColumnText'] }}</span>
+      </ng-container>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>

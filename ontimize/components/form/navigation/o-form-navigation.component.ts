@@ -3,9 +3,9 @@ import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { OFormLayoutManagerComponent } from '../../../layouts';
+import { dataServiceFactory } from '../../../services/factories';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize.service';
-import { dataServiceFactory } from '../../../services/factories';
 import { Codes, Util } from '../../../utils';
 import { OFormComponent } from '../o-form.component';
 import { OFormNavigationClass } from './o-form.navigation.class';
@@ -233,19 +233,20 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   private moveWithoutManager(index: number) {
-    let route = this.getRouteOfSelectedRow(this.navigationData[index]);
+    const route = this.getRouteOfSelectedRow(this.navigationData[index]);
     if (route.length > 0) {
-      this.navigationService.removeLastItem();
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
-        let extras: NavigationExtras = {};
-        extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
-        const detailRoute = navData.getDetailFormRoute();
-        if (Util.isDefined(detailRoute)) {
-          route.unshift(detailRoute);
-        }
-        route.unshift(navData.url);
+        this.navigationService.removeLastItem();
         this._form.canDiscardChanges = true;
+
+        const extras: NavigationExtras = {};
+        extras[Codes.QUERY_PARAMS] = Codes.getIsDetailObject();
+
+        const urlArray = navData.url.split(Codes.ROUTE_SEPARATOR);
+        const url = urlArray.splice(0, urlArray.length - route.length).join(Codes.ROUTE_SEPARATOR);
+        route.unshift(url);
+
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
             this.currentIndex = index;

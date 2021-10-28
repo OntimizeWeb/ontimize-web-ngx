@@ -251,8 +251,11 @@ export class OFormNavigationClass {
   }
 
   navigateBack() {
-    if (!this.formLayoutManager && this.navigationService) {
-      const navData: ONavigationItem = this.navigationService.getPreviousRouteData();
+    if (this.formLayoutManager) {
+      this.formLayoutManager.closeDetail(this.id);
+    } else if (this.navigationService) {
+      this.navigationService.removeLastItem();
+      const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         let extras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
@@ -266,7 +269,11 @@ export class OFormNavigationClass {
       this.formLayoutManager.closeDetail(this.id);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
-      this.navigationService.removeLastItemsUntilMain();
+      // `removeLastItemsUntilMain` may not remove all necessary items so current route will be checked below
+      if (!this.navigationService.removeLastItemsUntilMain()) {
+        // `removeLastItemsUntilMain` didn't find the main navigation item
+        this.navigationService.removeLastItem();
+      }
       let navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
         // if navData route is the same as the current route, remove last item
@@ -300,6 +307,9 @@ export class OFormNavigationClass {
       });
       this.form.queryData(insertedKeys);
     } else if (this.navigationService && this.form.keysArray && insertedKeys) {
+      // Remove 'new' navigation item from history
+      this.navigationService.removeLastItem();
+
       let params: any[] = [];
       this.form.keysArray.forEach((current, index) => {
         if (insertedKeys[current]) {
@@ -402,7 +412,7 @@ export class OFormNavigationClass {
         route = ['../', ...params, Codes.DEFAULT_EDIT_ROUTE];
       }
       this.storeNavigationFormRoutes('editFormRoute');
-      this.form.beforeGoEditMode.emit();
+      this.form.beforeUpdateMode.emit();
       this.router.navigate(route, extras).then((val) => {
         if (val && options && options.changeToolbarMode) {
           this.form.getFormToolbar().setEditMode();

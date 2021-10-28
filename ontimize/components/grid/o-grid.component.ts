@@ -1,9 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Inject, Injector, NgModule, OnChanges, OnDestroy, OnInit, Optional, QueryList, SimpleChange, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Injector,
+  NgModule,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  QueryList,
+  SimpleChange,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+
 import { OSearchInputModule } from '../../components';
 import { InputConverter } from '../../decorators';
 import { OntimizeService } from '../../services';
@@ -43,7 +63,11 @@ export const DEFAULT_INPUTS_O_GRID = [
   // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
   'fixedHeader:fixed-header',
   // show-footer:Indicates whether or not to show the footer:Default:true
-  'showFooter:show-footer'
+  'showFooter:show-footer',
+  // insert-button-position [ top | bottom ]: position of the insert button. Default: 'bottom'
+  'insertButtonPosition:insert-button-position',
+  // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
+  'insertButtonFloatable:insert-button-floatable'
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -76,7 +100,6 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
   public static DEFAULT_OUTPUTS_O_GRID = DEFAULT_OUTPUTS_O_GRID;
 
   /* Inputs */
-  @InputConverter()
   public queryRows: number = 32;
 
   @InputConverter()
@@ -98,6 +121,14 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
 
   @InputConverter()
   public paginationControls: boolean = false;
+
+  @InputConverter()
+  insertButton: boolean = false;
+
+  @InputConverter()
+  public insertButtonFloatable: boolean = true;
+
+  public insertButtonPosition: 'top' | 'bottom' = 'bottom';
 
   public gutterSize = '1px';
 
@@ -499,6 +530,10 @@ export class OGridComponent extends OServiceComponent implements AfterViewChecke
     colTextKey = 'GRID.SORT_BY_' + (col.ascendent ? 'ASC' : 'DESC');
     result = this.translateService.get(colTextKey, [(this.translateService.get(col.columnName) || '')]);
     return result;
+  }
+
+  public add():void {
+    super.insertDetail();
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
