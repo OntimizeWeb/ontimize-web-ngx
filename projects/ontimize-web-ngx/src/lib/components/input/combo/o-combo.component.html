@@ -1,12 +1,10 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay" [oContextMenu]="oContextMenu">
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.read-only]="isReadOnly"
-    [class.custom-width]="hasCustomWidth" [hideRequiredMarker]="hideRequiredMarker" fxFill>
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [oContextMenu]="oContextMenu">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth"
+    [hideRequiredMarker]="hideRequiredMarker" fxFill>
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()"
-      [placeholder]="placeHolder" [multiple]="getMultiple()" [required]="isRequired"
-      [panelClass]="{ 'o-combo-panel': true, 'o-combo-panel-search': searchable }"
+    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [multiple]="getMultiple()" [required]="isRequired" [panelClass]="{ 'o-combo-panel': true, 'o-combo-panel-search': searchable }"
       (selectionChange)="onSelectionChange($event)">
       <o-combo-search *ngIf="searchable" [formControl]="searchControl"></o-combo-search>
 
@@ -54,8 +52,7 @@
   </mat-form-field>
 
   <o-context-menu *ngIf="!this.isReadOnly && this.enabled">
-    <o-context-menu-item attr="refresh" label="FORM_SERVICE_COMPONENT.REFRESH" svg-icon="ontimize:autorenew"
-      (execute)="refresh()">
+    <o-context-menu-item attr="refresh" label="FORM_SERVICE_COMPONENT.REFRESH" svg-icon="ontimize:autorenew" (execute)="refresh()">
     </o-context-menu-item>
   </o-context-menu>
 </div>
