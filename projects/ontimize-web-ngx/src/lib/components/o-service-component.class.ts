@@ -681,9 +681,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
         this.filterData();
       }
     }
-    if (this.loaderSubscription) {
-      this.loaderSubscription.unsubscribe();
-    }
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
@@ -710,7 +707,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
-        this.checkViewPortSubject.next(true)
+        this.checkViewPortSubject.next(true);
       });
 
       this.tabsSubscriptions.add(updateComponentStateSubject.subscribe((arg) => {
