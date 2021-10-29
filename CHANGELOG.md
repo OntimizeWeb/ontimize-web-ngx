@@ -1,3 +1,7 @@
+## 8.5.4
+### Bug fixes
+  * **o-combo**: added new atribute `null-selection-label` to add a text to none selection in a combo ([99c2cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99c2cf70)) Closes [#812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/812)
+
 ## 8.5.3 (2021-10-26)
 ### Features:
   * **o-app-layout**, **o-app-header**: new attribute `show-title` ([d865f4d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d865f4d4)) Closes [#813](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/813)
