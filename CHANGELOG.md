@@ -1,3 +1,7 @@
+## 8.5.4
+### Bug fixes
+  * **o-table**: Avoid blinking no results message ([fd13799](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd13799)) Closes [#820](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/820)
+
 ## 8.5.3 (2021-10-26)
 ### Features:
   * **o-app-layout**, **o-app-header**: new attribute `show-title` ([d865f4d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d865f4d4)) Closes [#813](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/813)
