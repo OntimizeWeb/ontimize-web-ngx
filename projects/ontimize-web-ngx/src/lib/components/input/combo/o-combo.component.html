@@ -29,7 +29,7 @@
 
       <div class="o-combo-options-container">
         <mat-option *ngIf="hasNullSelection()" [value]="null">{{translate ?
-          [nullSelectionLabel|oTranslate]: nullSelectionLabel}}
+          (nullSelectionLabel|oTranslate): nullSelectionLabel}}
         </mat-option>
         <mat-option *ngFor="let item of filteredDataArray" [value]="getValueColumn(item)">
           <ng-container *ngIf="renderer">
