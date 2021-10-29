@@ -61,7 +61,10 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   'translate',
 
   // sort [string]: sorting ASC or DESC. Default: no value
-  'sort'
+  'sort',
+
+  // text to none selection in a combo
+  'nullSelectionLabel: null-selection-label'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
@@ -95,8 +98,9 @@ export class OFormServiceComponent extends OFormDataComponent {
   public setValueOnValueChange: string;
   public queryFallbackFunction: (error: any) => void;
 
+  public nullSelectionLabel: string;
   @InputConverter()
-  protected translate: boolean = false;
+  public translate: boolean = false;
   public sort: 'ASC' | 'DESC';
 
   /* Outputs */
