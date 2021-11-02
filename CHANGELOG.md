@@ -1,5 +1,6 @@
 ## 8.5.4
 ### Bug fixes
+  * **o-combo**: added new atribute `null-selection-label` to add a text to none selection in a combo ([99c2cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99c2cf70)) Closes [#812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/812)
   * **o-table**: Avoid blinking no results message ([fd13799](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd13799)) Closes [#820](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/820)
 
 ## 8.5.3 (2021-10-26)
