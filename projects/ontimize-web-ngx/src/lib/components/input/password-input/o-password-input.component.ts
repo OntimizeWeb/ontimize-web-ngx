@@ -8,7 +8,8 @@ import {
 } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_PASSWORD_INPUT = [
-  ...DEFAULT_INPUTS_O_TEXT_INPUT
+  ...DEFAULT_INPUTS_O_TEXT_INPUT,
+  'showPasswordButton : show-password-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
@@ -24,7 +25,8 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
   encapsulation: ViewEncapsulation.None
 })
 export class OPasswordInputComponent extends OTextInputComponent implements OnInit {
-
+  public hide: boolean = true;
+  public showPasswordButton: boolean = false;
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
