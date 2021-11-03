@@ -268,7 +268,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public setSelected(item: any): void {
-    this.selection.toggle(item);
+    if (Util.isDefined(item)) {
+      this.selection.toggle(item);
+    }
   }
 
   protected navigateToDetail(route: any[], qParams: any, relativeTo: ActivatedRoute): void {
