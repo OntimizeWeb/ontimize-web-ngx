@@ -1,5 +1,18 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, TemplateRef, ContentChild, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChild,
+  EventEmitter,
+  forwardRef,
+  Inject,
+  Output,
+  TemplateRef,
+  ViewEncapsulation
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_OUTPUTS_O_TABLE_ROW_EXPANDABLE = [
   'onExpanded',
@@ -36,13 +49,49 @@ export class OTableRowExpandedChange {
 })
 export class OTableRowExpandableComponent {
 
-  constructor() { }
-
   @ContentChild(TemplateRef, { static: false }) templateRef: TemplateRef<any>;
   @Output() onExpanded = new EventEmitter<OTableRowExpandedChange>();
   @Output() onCollapsed = new EventEmitter<OTableRowExpandedChange>();
   private _iconCollapse: string = 'remove';
   private _iconExpand: string = 'add';
+  private sub: Subscription;
+
+  constructor(
+    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+  ) {
+  }
+
+  // ngOnInit() {
+  //   this.sub = this.checkExpandableRow()
+  //   .subscribe(data => {
+  //     if (!data){
+  //       this.iconCollapse = '';
+  //       this.iconExpand = '';
+  //     } else {
+  //       this.iconCollapse = 'remove';
+  //       this.iconExpand = 'add';
+  //     }
+  //   });
+  // }
+
+  // ngOnDestroy() {
+  //   this.sub.unsubscribe();
+  // }
+
+  // checkExpandableRow(): Observable<boolean> {
+  //   const result = new Subject<boolean>();
+  //   if (this.table.expandableCallback instanceof Function) {
+  //     this.table.expandableCallback().subscribe(data => {
+  //       if(data) {
+  //         result.next(true);
+  //       } else {
+  //         result.next(false);
+  //       }
+  //       result.complete();
+  //     });
+  //   }
+  //   return result.asObservable();
+  // }
 
   @InputConverter()
   public expandableColumnVisible: boolean = true;

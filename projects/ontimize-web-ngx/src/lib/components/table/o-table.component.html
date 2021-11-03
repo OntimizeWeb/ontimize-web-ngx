@@ -92,7 +92,7 @@
         {{ oTableOptions.expandableColumn.title }}
       </th>
       <td mat-cell *matCellDef="let row;let rowIndex = dataIndex">
-        <mat-icon (click)="toogleRowExpandable(row, rowIndex, $event)">
+        <mat-icon *ngIf="showIcon(row, rowIndex) | async" (click)="toogleRowExpandable(row, rowIndex, $event)">
           <ng-container *ngIf="isExpanded(row)">{{ tableRowExpandable.iconCollapse }}</ng-container>
           <ng-container *ngIf="!isExpanded(row)">{{ tableRowExpandable.iconExpand }}</ng-container>
         </mat-icon>
