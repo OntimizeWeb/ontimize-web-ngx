@@ -1,4 +1,5 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { InputConverter } from '../../../decorators/input-converter';
 
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -26,6 +27,7 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
 })
 export class OPasswordInputComponent extends OTextInputComponent implements OnInit {
   public hide: boolean = true;
+  @InputConverter()
   public showPasswordButton: boolean = false;
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
