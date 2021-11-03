@@ -34,7 +34,7 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -67,12 +67,9 @@ export const DEFAULT_INPUTS_O_LIST = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
-  'onClick',
-  'onDoubleClick',
+  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT,
   'onInsertButtonClick',
-  'onItemDeleted',
-  'onDataLoaded',
-  'onPaginatedDataLoaded'
+  'onItemDeleted'
 ];
 
 @Component({
@@ -115,8 +112,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public sortColArray: SQLOrder[] = [];
 
-  public onClick: EventEmitter<any> = new EventEmitter();
-  public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
   public onItemDeleted: EventEmitter<any> = new EventEmitter();
 

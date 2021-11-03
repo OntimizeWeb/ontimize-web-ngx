@@ -33,7 +33,7 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
@@ -73,10 +73,7 @@ export const DEFAULT_INPUTS_O_GRID = [
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
-  'onClick',
-  'onDoubleClick',
-  'onDataLoaded',
-  'onPaginatedDataLoaded'
+  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
 ];
 
 const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
@@ -161,9 +158,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   public quickFilterColumns: string;
   /* End Inputs */
-
-  public onClick: EventEmitter<any> = new EventEmitter();
-  public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @ContentChildren(forwardRef(() => OGridItemComponent))
   public inputGridItems: QueryList<OGridItemComponent>;

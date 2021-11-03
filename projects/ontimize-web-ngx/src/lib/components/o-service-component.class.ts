@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
@@ -89,6 +89,13 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'quickFilterPlaceholder: quick-filter-placeholder',
 ];
 
+export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
+  'onClick',
+  'onDoubleClick',
+  'onDataLoaded',
+  'onPaginatedDataLoaded'
+]
+
 export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
   extends AbstractOServiceBaseComponent<T>
   implements IServiceDataComponent {
@@ -174,6 +181,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   /* end of inputs variables */
 
   /* outputs variables */
+  public onClick: EventEmitter<any> = new EventEmitter();
+  public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
   /* end of outputs variables */
@@ -194,6 +203,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected quickFilterColArray: string[];
 
   protected dataResponseArray: any[] = [];
+  protected quickFilterSubscription: Subscription;
 
   constructor(
     injector: Injector,
@@ -244,6 +254,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     }
     if (this.tabsSubscriptions) {
       this.tabsSubscriptions.unsubscribe();
+    }
+    if (this.quickFilterSubscription) {
+      this.quickFilterSubscription.unsubscribe();
     }
   }
 
@@ -575,12 +588,16 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       return;
     }
     this.quickFilterComponent = quickFilter;
-    if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state)) {
-      this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
-      if ((this.state.quickFilterValue || '').length > 0) {
-        this.quickFilterComponent.setValue(this.state.quickFilterValue, {
-          emitEvent: true
-        });
+    if (Util.isDefined(this.quickFilterComponent)) {
+      this.quickFilterSubscription = this.quickFilterComponent.onSearch.subscribe(val => {
+        this.filterData(val);
+      });
+      if (Util.isDefined(this.state)) {
+        if ((this.state.quickFilterValue || '').length > 0) {
+          this.quickFilterComponent.setValue(this.state.quickFilterValue, {
+            emitEvent: true
+          });
+        }
       }
     }
   }
