@@ -217,7 +217,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
   'contextMenu: context-menu',
 
-  // Expandable callback function to check if expandable has data to show or not icon
+  // expandable-callback [function]: Expandable callback function to check if expandable has data to show or not icon
   'expandableCallback: expandable-callback'
 ];
 
