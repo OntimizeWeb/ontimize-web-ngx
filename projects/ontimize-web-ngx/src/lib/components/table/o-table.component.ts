@@ -923,8 +923,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const quickFilter = (arg as OTableQuickfilter);
     // forcing quickFilterComponent to be undefined, table uses oTableQuickFilterComponent
     this.quickFilterComponent = undefined;
-    this.oTableQuickFilterComponent = quickFilter;
-    this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
+    this.oTableQuickFilterComponent = quickFilter;    if (Util.isDefined(this.oTableQuickFilterComponent)) {
+      this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
+      this.quickFilterSubscription = this.oTableQuickFilterComponent.onChange.subscribe(val => {
+        this.onSearch.emit(val);
+      });
+    }
   }
 
   registerPagination(value: OTablePaginator) {

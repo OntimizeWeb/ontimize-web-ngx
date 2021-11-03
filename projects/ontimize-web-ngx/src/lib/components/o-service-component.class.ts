@@ -93,7 +93,8 @@ export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
   'onClick',
   'onDoubleClick',
   'onDataLoaded',
-  'onPaginatedDataLoaded'
+  'onPaginatedDataLoaded',
+  'onSearch'
 ]
 
 export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
@@ -185,6 +186,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onSearch: EventEmitter<any> = new EventEmitter();
   /* end of outputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
@@ -590,6 +592,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     this.quickFilterComponent = quickFilter;
     if (Util.isDefined(this.quickFilterComponent)) {
       this.quickFilterSubscription = this.quickFilterComponent.onSearch.subscribe(val => {
+        this.onSearch.emit(val);
         this.filterData(val);
       });
       if (Util.isDefined(this.state)) {
