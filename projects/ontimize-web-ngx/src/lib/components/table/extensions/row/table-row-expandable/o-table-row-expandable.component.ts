@@ -51,8 +51,6 @@ export class OTableRowExpandableComponent {
   private _iconCollapse: string = 'remove';
   private _iconExpand: string = 'add';
 
-  constructor() {}
-
   @InputConverter()
   public expandableColumnVisible: boolean = true;
 
