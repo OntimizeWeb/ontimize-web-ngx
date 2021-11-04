@@ -70,7 +70,7 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
@@ -212,13 +212,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
-  'onClick',
-  'onDoubleClick',
+  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT,
   'onRowSelected',
   'onRowDeselected',
-  'onRowDeleted',
-  'onDataLoaded',
-  'onPaginatedDataLoaded'
+  'onRowDeleted'
 ];
 
 const stickyHeaderSelector = '.mat-header-row .mat-table-sticky';
@@ -505,8 +502,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected checkViewportSizeSubscription: Subscription;
   protected finishQuerySubscription: boolean = false;
 
-  public onClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
-  public onDoubleClick: EventEmitter<OnClickTableEvent> = new EventEmitter();
   public onRowSelected: EventEmitter<any> = new EventEmitter();
   public onRowDeselected: EventEmitter<any> = new EventEmitter();
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
@@ -928,8 +923,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const quickFilter = (arg as OTableQuickfilter);
     // forcing quickFilterComponent to be undefined, table uses oTableQuickFilterComponent
     this.quickFilterComponent = undefined;
-    this.oTableQuickFilterComponent = quickFilter;
-    this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
+    this.oTableQuickFilterComponent = quickFilter;    if (Util.isDefined(this.oTableQuickFilterComponent)) {
+      this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
+      this.quickFilterSubscription = this.oTableQuickFilterComponent.onChange.subscribe(val => {
+        this.onSearch.emit(val);
+      });
+    }
   }
 
   registerPagination(value: OTablePaginator) {
