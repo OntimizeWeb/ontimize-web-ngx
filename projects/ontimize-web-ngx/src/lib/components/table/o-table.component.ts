@@ -77,18 +77,25 @@ import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import {
+  OTableFilterByColumnDataDialogComponent
+} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
-import { OTableColumnsGroupingColumnComponent } from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
+import {
+  OTableColumnsGroupingColumnComponent
+} from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
 import { OTableVirtualScrollStrategy } from './extensions/o-table-strategy.service';
 import { OTableDao } from './extensions/o-table.dao';
 import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
-import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import {
+  OTableRowExpandableComponent,
+  OTableRowExpandedChange
+} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
@@ -208,7 +215,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'virtualScroll: virtual-scroll',
 
   // context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
-  'contextMenu: context-menu'
+  'contextMenu: context-menu',
+
+  // show-expandable-icon-function [function]: Expandable function to check if expandable has data to show or not icon
+  'showExpandableIconFunction: show-expandable-icon-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -333,6 +343,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   showButtonsText: boolean = true;
   @InputConverter()
   filterColumnActiveByDefault: boolean = true;
+
+  // Expandable input callback function
+  showExpandableIconFunction: (row: any, rowIndex: number)=> boolean | Promise<boolean> | Observable<boolean>;
 
   protected _oTableOptions: OTableOptions;
 
@@ -2973,6 +2986,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.virtualScrollViewport) {
       this.virtualScrollViewport.checkViewportSize();
     }
+  }
+
+  // Show expandable icon or not if has data or not
+  showExpandableIcon(row:any, rowIndex: number): Observable<boolean> {
+    return ( Util.isDefined(this.showExpandableIconFunction) && this.showExpandableIconFunction instanceof Function) ? Util.wrapIntoObservable(this.showExpandableIconFunction(row, rowIndex)) : of(true);
   }
 
 }
