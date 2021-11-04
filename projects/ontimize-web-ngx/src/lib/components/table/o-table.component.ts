@@ -217,8 +217,8 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
   'contextMenu: context-menu',
 
-  // expandable-callback [function]: Expandable callback function to check if expandable has data to show or not icon
-  'expandableCallback: expandable-callback'
+  // show-expandable-icon-function [function]: Expandable function to check if expandable has data to show or not icon
+  'showExpandableIconFunction: show-expandable-icon-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -348,7 +348,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   filterColumnActiveByDefault: boolean = true;
 
   // Expandable input callback function
-  expandableCallback: (row: any, rowIndex: number)=> boolean | Promise<boolean> | Observable<boolean>;
+  showExpandableIconFunction: (row: any, rowIndex: number)=> boolean | Promise<boolean> | Observable<boolean>;
 
   protected _oTableOptions: OTableOptions;
 
@@ -2991,7 +2991,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   // Show expandable icon or not if has data or not
   showExpandableIcon(row:any, rowIndex: number): Observable<boolean> {
-    return ( Util.isDefined(this.expandableCallback) && this.expandableCallback instanceof Function) ? Util.wrapIntoObservable(this.expandableCallback(row, rowIndex)) : of(true);
+    return ( Util.isDefined(this.showExpandableIconFunction) && this.showExpandableIconFunction instanceof Function) ? Util.wrapIntoObservable(this.showExpandableIconFunction(row, rowIndex)) : of(true);
   }
 
 }
