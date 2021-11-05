@@ -70,8 +70,8 @@
 <ng-template #table>
 
   <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
-    [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()" oTableExpandedFooter
-    [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()">
+    [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()"
+    [oTableExpandedFooter]="!(loading | async)" [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()">
 
     <!--Checkbox Column -->
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -92,7 +92,7 @@
         {{ oTableOptions.expandableColumn.title }}
       </th>
       <td mat-cell *matCellDef="let row;let rowIndex = dataIndex">
-        <mat-icon (click)="toogleRowExpandable(row, rowIndex, $event)">
+        <mat-icon *ngIf="showExpandableIcon(row, rowIndex) | async" (click)="toogleRowExpandable(row, rowIndex, $event)">
           <ng-container *ngIf="isExpanded(row)">{{ tableRowExpandable.iconCollapse }}</ng-container>
           <ng-container *ngIf="!isExpanded(row)">{{ tableRowExpandable.iconExpand }}</ng-container>
         </mat-icon>
@@ -103,9 +103,8 @@
     <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name">
       <!--Define header-cell-->
 
-      <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [class.resizable]="resizable"
-        [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
-        [style.max-width]="column.maxWidth">
+      <th mat-header-cell *matHeaderCellDef [ngClass]="getTitleAlignClass(column)" [class.resizable]="resizable" [style.width]="column.width"
+        [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
 
         <div class="content">
           <o-table-header [column]="column"></o-table-header>
@@ -120,9 +119,8 @@
           [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
-          [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}"
-          [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
-          [style.max-width]="column.maxWidth">
+          [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
           <div class="content">
 
             <ng-container [ngSwitch]="true">
@@ -152,9 +150,8 @@
           [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
-          [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}"
-          [style.width]="column.width" [style.min-width]="getMinWidthColumn(column)"
-          [style.max-width]="column.maxWidth">
+          [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
           <div class="content">
 
             <ng-container [ngSwitch]="true">

@@ -1,4 +1,13 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, TemplateRef, ContentChild, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChild,
+  EventEmitter,
+  Output,
+  TemplateRef,
+  ViewEncapsulation
+} from '@angular/core';
+
 import { InputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_OUTPUTS_O_TABLE_ROW_EXPANDABLE = [
@@ -35,8 +44,6 @@ export class OTableRowExpandedChange {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OTableRowExpandableComponent {
-
-  constructor() { }
 
   @ContentChild(TemplateRef, { static: false }) templateRef: TemplateRef<any>;
   @Output() onExpanded = new EventEmitter<OTableRowExpandedChange>();

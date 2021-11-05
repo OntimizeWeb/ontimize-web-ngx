@@ -1,3 +1,10 @@
+## 8.5.4 (2021-11-05)
+### Bug fixes
+  * **o-combo**: added new atribute `null-selection-label` to add a text to none selection in a combo ([99c2cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99c2cf70)) Closes [#812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/812)
+  * **o-table**: Avoid blinking no results message ([fd13799](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd13799)) Closes [#820](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/820)
+  * **o-table**: added new input `show-expandable-icon-function` to make changes on expandable-row ([3225048](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3225048)) Closes [#811](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/811)
+  * **o-list**: Fixing selection model bugs ([1f0eabd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1f0eabd)) Closes [#817](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/817)
+
 ## 8.5.3 (2021-10-26)
 ### Features:
   * **o-app-layout**, **o-app-header**: new attribute `show-title` ([d865f4d4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d865f4d4)) Closes [#813](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/813)

@@ -114,8 +114,8 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     return this.modelData;
   }
 
-  public onCheckboxChange(e?: Event): void {
-    if (this._list.selectable) {
+  public onCheckboxChange(): void {
+    if (this._list.selectable && Util.isDefined(this.modelData)) {
       this._list.setSelected(this.modelData);
     }
   }

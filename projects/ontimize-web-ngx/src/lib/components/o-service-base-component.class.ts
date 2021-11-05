@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injector, NgZone, OnChanges, SimpleChange } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, OnChanges, SimpleChange } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -154,7 +154,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected onRouteChangeStorageSubscription: any;
   protected onFormDataSubscribe: any;
 
-  protected loaderSubscription: Subscription;
   protected querySubscription: Subscription;
   protected dataService: any;
 
@@ -256,9 +255,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         if (this.querySubscription) {
           this.querySubscription.unsubscribe();
         }
-        if (this.loaderSubscription) {
-          this.loaderSubscription.unsubscribe();
-        }
         this.setData([]);
       }
     });
@@ -270,9 +266,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
-    }
-    if (this.loaderSubscription) {
-      this.loaderSubscription.unsubscribe();
     }
     if (this.onRouteChangeStorageSubscription) {
       this.onRouteChangeStorageSubscription.unsubscribe();
@@ -388,10 +381,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
       }
-      if (this.loaderSubscription) {
-        this.loaderSubscription.unsubscribe();
-      }
-      this.loaderSubscription = this.load();
+      this.loadingSubject.next(true);
 
       // ensuring false value
       this.abortQuery.next(false);
@@ -422,10 +412,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
             }
           }
           this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
-          this.loaderSubscription.unsubscribe();
+          this.loadingSubject.next(false);
         }, err => {
           this.setData([], []);
-          this.loaderSubscription.unsubscribe();
+          this.loadingSubject.next(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
           } else if (err && typeof err !== 'object') {
@@ -446,30 +436,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
    */
   reloadPaginatedDataFromStart(): void {
     this.reloadData();
-  }
-
-  load(): any {
-    const self = this;
-    const zone = this.injector.get(NgZone);
-    const loadObservable = new Observable(observer => {
-      const timer = window.setTimeout(() => {
-        observer.next(true);
-      }, 250);
-
-      return () => {
-        window.clearTimeout(timer);
-        zone.run(() => {
-          self.loadingSubject.next(false);
-        });
-      };
-
-    });
-    const subscription = loadObservable.subscribe(val => {
-      zone.run(() => {
-        self.loadingSubject.next(val as boolean);
-      });
-    });
-    return subscription;
   }
 
   /**
