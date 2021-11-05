@@ -34,7 +34,7 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -67,12 +67,9 @@ export const DEFAULT_INPUTS_O_LIST = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
-  'onClick',
-  'onDoubleClick',
+  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT,
   'onInsertButtonClick',
-  'onItemDeleted',
-  'onDataLoaded',
-  'onPaginatedDataLoaded'
+  'onItemDeleted'
 ];
 
 @Component({
@@ -92,7 +89,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 })
 export class OListComponent extends AbstractOServiceComponent<OListComponentStateService> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
-  public listItemComponents: IListItem[] = [];
+  private listItemComponents: IListItem[] = [];
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
@@ -115,8 +112,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public sortColArray: SQLOrder[] = [];
 
-  public onClick: EventEmitter<any> = new EventEmitter();
-  public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
   public onItemDeleted: EventEmitter<any> = new EventEmitter();
 
@@ -255,6 +250,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       this.clearSelection();
       this.state.selectedIndexes = [];
     }
+    this.listItemComponents = [];
     this.queryData(void 0, queryArgs);
   }
 
@@ -310,6 +306,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
             }, error => {
               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
             }, () => {
+              // Ensuring that the deleted items will not longer be part of the selectionModel
+              this.clearSelection();
               this.reloadData();
             }));
           } else {

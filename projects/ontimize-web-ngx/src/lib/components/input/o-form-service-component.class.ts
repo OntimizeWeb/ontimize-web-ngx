@@ -96,7 +96,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   public queryFallbackFunction: (error: any) => void;
 
   @InputConverter()
-  protected translate: boolean = false;
+  public translate: boolean = false;
   public sort: 'ASC' | 'DESC';
 
   /* Outputs */
