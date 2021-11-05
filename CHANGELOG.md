@@ -1,3 +1,7 @@
+## 8.6.0
+### Features:
+  * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
+
 ## 8.5.4 (2021-11-05)
 ### Bug fixes
   * **o-combo**: added new atribute `null-selection-label` to add a text to none selection in a combo ([99c2cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99c2cf70)) Closes [#812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/812)
