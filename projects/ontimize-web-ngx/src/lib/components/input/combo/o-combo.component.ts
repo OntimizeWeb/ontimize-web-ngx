@@ -35,7 +35,9 @@ export const DEFAULT_INPUTS_O_COMBO = [
   'multiple',
   'nullSelection: null-selection',
   'multipleTriggerLabel: multiple-trigger-label',
-  'searchable'
+  'searchable',
+  // text to none selection in a combo
+  'nullSelectionLabel: null-selection-label'
 ];
 
 export const DEFAULT_OUTPUTS_O_COMBO = [
@@ -72,6 +74,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public searchable: boolean = false;
   @InputConverter()
   protected nullSelection: boolean = true;
+  public nullSelectionLabel: string;
   /* End inputs*/
 
   @ViewChild('inputModel', { static: false })
