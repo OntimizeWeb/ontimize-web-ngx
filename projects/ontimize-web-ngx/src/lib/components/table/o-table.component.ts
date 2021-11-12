@@ -39,7 +39,6 @@ import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
 import { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 import { OTableMenu } from '../../interfaces/o-table-menu.interface';
-import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
@@ -70,7 +69,11 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
@@ -1721,7 +1724,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
-    // this.pageScrollVirtual = 1;
     let queryArgs: OQueryDataArgs;
     if (this.pageable) {
       queryArgs = {
