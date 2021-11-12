@@ -1,3 +1,7 @@
+## 8.5.5
+### Bug fixes
+  * **o-list**: Deleted code where the value of query-rows stored in localStorage is checked because this value is not stored ([74af8920](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/74af8920)) Closes [#847](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/847)
+
 ## 8.5.4 (2021-11-05)
 ### Bug fixes
   * **o-combo**: added new atribute `null-selection-label` to add a text to none selection in a combo ([99c2cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99c2cf70)) Closes [#812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/812)
