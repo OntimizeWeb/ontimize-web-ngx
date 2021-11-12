@@ -190,9 +190,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
-    if (Util.isDefined(this.state.queryRows)) {
-      this.queryRows = this.state.queryRows;
-    }
   }
 
   public reinitialize(options: OListInitializationOptions): void {
