@@ -1,6 +1,6 @@
 ## 8.5.5
 ### Bug fixes
-  * **o-list**: Deleted code where the value of query-rows stored in localStorage is checked because this value is not stored ([74af8920](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/74af8920)) Closes [#847](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/847)
+  * **o-list**: Fixed issue preventing query-rows from working properly ([74af8920](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/74af8920)) Closes [#847](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/847)
 
 ## 8.5.4 (2021-11-05)
 ### Bug fixes
