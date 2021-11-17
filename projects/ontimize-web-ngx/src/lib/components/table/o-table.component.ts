@@ -1731,7 +1731,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         length: this.queryRows
       };
     }
-    this.stopEdition();
+    this.stopEdition(false);
     this.queryData(void 0, queryArgs);
   }
 
@@ -2898,10 +2898,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return className;
   }
 
-  private stopEdition() {
+  private stopEdition(clearSelection?:boolean) {
+    clearSelection = clearSelection ? clearSelection : false;
     this.editingCell = undefined;
     this.editingRow = undefined;
-    this.clearSelectionAndEditing(false);
+    this.clearSelectionAndEditing(clearSelection);
   }
 
   storeFilterInState(arg: OTableFiltersStatus) {
@@ -2943,10 +2944,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableQuickFilterChanged() {
     if (this.pageable) {
       this.queryCellRenderers().subscribe(() => {
-        this.reloadPaginatedDataFromStart(false);
+        this.reloadPaginatedDataFromStart();
       });
     } else {
-      this.reloadData(false);
+      this.reloadData();
     }
   }
 
