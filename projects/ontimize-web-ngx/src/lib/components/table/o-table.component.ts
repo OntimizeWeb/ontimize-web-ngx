@@ -2943,10 +2943,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableQuickFilterChanged() {
     if (this.pageable) {
       this.queryCellRenderers().subscribe(() => {
-        this.reloadPaginatedDataFromStart();
+        this.reloadPaginatedDataFromStart(false);
       });
     } else {
-      this.reloadData();
+      this.reloadData(false);
     }
   }
 
