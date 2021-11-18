@@ -16,12 +16,14 @@ export class OErrorService {
     this.errorDialogSubscription = null;
   }
 
-  public getErrorDialogSubscription(): Promise<boolean> {
+  public openErrorDialog(err?:any): Promise<boolean> {
     if (!Util.isDefined(this.errorDialogSubscription)) {
       this.errorDialogSubscription = new Promise((resolve) => {
-        this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-        this.restart();
-
+        const errorMsg = (err && typeof err !== 'object') ? err : 'MESSAGES.ERROR_QUERY';
+        this.dialogService.alert('ERROR', errorMsg).then(res => {
+          this.restart();
+          resolve(res);
+        });
       });
     }
     return this.errorDialogSubscription;

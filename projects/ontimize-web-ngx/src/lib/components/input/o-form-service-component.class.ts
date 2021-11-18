@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { InputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { DialogService } from '../../services/dialog.service';
+import { OErrorService } from '../../services/o-error.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { Codes } from '../../util/codes';
@@ -119,6 +120,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _formDataSubcribe;
   protected _currentIndex;
   protected dialogService: DialogService;
+  protected oErrorService: OErrorService;
 
   protected queryOnEventSubscription: Subscription;
   protected subscriptionDataLoad: Subscription = new Subscription();
@@ -140,6 +142,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     this.form = form;
     this.elRef = elRef;
     this.dialogService = injector.get(DialogService);
+    this.oErrorService = injector.get(OErrorService);
   }
 
   initialize() {
@@ -293,10 +296,8 @@ export class OFormServiceComponent extends OFormDataComponent {
           this.loaderSubscription.unsubscribe();
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
-          } else if (err && !Util.isObject(err)) {
-            this.dialogService.alert('ERROR', err);
           } else {
-            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+            this.oErrorService.openErrorDialog(err);
           }
         });
     }

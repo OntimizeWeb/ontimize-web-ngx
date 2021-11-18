@@ -91,7 +91,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected localStorageService: LocalStorageService;
   componentStateService: T;
   protected dialogService: DialogService;
-  protected oErrorService: OErrorService
+  protected oErrorService: OErrorService;
 
   /* inputs variables */
   oattr: string;
@@ -421,14 +421,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
           this.loadingSubject.next(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
-          } else if (err && typeof err !== 'object') {
-            //this.dialogService.alert('ERROR', err);
-            console.log("estoy aquiiii");
-            this.oErrorService.getErrorDialogSubscription();
           } else {
-            //this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
-            console.log("Tambien estoy por aqui")
-            this.oErrorService.getErrorDialogSubscription();
+            this.oErrorService.openErrorDialog(err);
           }
         });
     }
