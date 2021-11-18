@@ -7,6 +7,7 @@ import { IPermissionsService } from '../interfaces/permissions-service.interface
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { OntimizeAuthService } from './o-auth.service';
+import { OErrorService } from './o-error.service';
 import { OntimizeEEService } from './ontimize/ontimize-ee.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
@@ -53,6 +54,8 @@ export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication se
 * Injection token that can be used to replace the component state service `DefaultComponentStateService`.
 */
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
+
+export const O_ERROR_SERVICE = new InjectionToken<OErrorService>('Error service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
