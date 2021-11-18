@@ -2289,6 +2289,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       .forEach(oColumn => {
         oColumn.editing = false;
       });
+      
+    if(this.state.selection.length > 0) {
+      this.state.selection.forEach(selectedItem => {
+        // finding selected item data in the table rendered data
+        const foundItem = this.dataSource.renderedData.find(data => {
+          let result = true;
+          Object.keys(selectedItem).forEach(key => {
+            result = result && (data[key] === selectedItem[key]);
+          });
+          return result;
+        });
+        if (foundItem) {
+          this.selection.select(foundItem);
+        }
+      });
+    }
   }
 
   useDetailButton(column: OColumn): boolean {
