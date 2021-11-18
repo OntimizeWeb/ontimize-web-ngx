@@ -6,7 +6,7 @@ import { DialogService } from './dialog.service';
 @Injectable({
   providedIn: 'root'
 })
-export class OErrorService {
+export class OErrorDialogManager {
 
   protected errorDialogSubscription: Promise<boolean>;
 
