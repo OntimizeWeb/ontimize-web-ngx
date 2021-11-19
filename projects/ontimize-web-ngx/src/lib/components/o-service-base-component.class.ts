@@ -5,7 +5,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { InputConverter } from '../decorators/input-converter';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
-import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { OErrorDialogManager } from '../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
@@ -90,8 +89,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   protected localStorageService: LocalStorageService;
   componentStateService: T;
-  protected dialogService: DialogService;
-  protected oErrorService: OErrorDialogManager;
+  protected oErrorDialogManager: OErrorDialogManager;
 
   /* inputs variables */
   oattr: string;
@@ -180,8 +178,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   constructor(
     protected injector: Injector
   ) {
-    this.dialogService = this.injector.get(DialogService);
-    this.oErrorService = this.injector.get(OErrorDialogManager);
+    this.oErrorDialogManager = this.injector.get(OErrorDialogManager);
     this.localStorageService = this.injector.get(LocalStorageService);
     this.componentStateService = this.injector.get(AbstractComponentStateService);
     this.router = this.injector.get(Router);
@@ -422,7 +419,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
           } else {
-            this.oErrorService.openErrorDialog(err);
+            this.oErrorDialogManager.openErrorDialog(err);
             console.error(err);
           }
         });

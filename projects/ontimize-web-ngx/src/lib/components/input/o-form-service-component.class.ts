@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { DialogService } from '../../services/dialog.service';
 import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
@@ -119,8 +118,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _setValueOnValueChangeEquiv = {};
   protected _formDataSubcribe;
   protected _currentIndex;
-  protected dialogService: DialogService;
-  protected oErrorService: OErrorDialogManager;
+  protected oErrorDialogManager: OErrorDialogManager;
 
   protected queryOnEventSubscription: Subscription;
   protected subscriptionDataLoad: Subscription = new Subscription();
@@ -141,8 +139,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     super(form, elRef, injector);
     this.form = form;
     this.elRef = elRef;
-    this.dialogService = injector.get(DialogService);
-    this.oErrorService = injector.get(OErrorDialogManager);
+    this.oErrorDialogManager = injector.get(OErrorDialogManager);
   }
 
   initialize() {
@@ -297,7 +294,7 @@ export class OFormServiceComponent extends OFormDataComponent {
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
           } else {
-            this.oErrorService.openErrorDialog(err);
+            this.oErrorDialogManager.openErrorDialog(err);
             console.error(err);
           }
         });

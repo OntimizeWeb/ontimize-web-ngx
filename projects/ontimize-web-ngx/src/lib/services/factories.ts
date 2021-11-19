@@ -55,7 +55,7 @@ export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication se
 */
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
 
-export const O_ERROR_SERVICE = new InjectionToken<OErrorDialogManager>('Error service');
+export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
