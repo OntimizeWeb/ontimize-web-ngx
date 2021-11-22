@@ -34,7 +34,11 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -138,7 +142,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngOnInit(): void {
     this.initialize();
-    this.subscription.add(this.selection.changed.subscribe(() => this.enabledDeleteButton = !this.selection.isEmpty()));
+    this.subscription.add(this.selection.changed.subscribe(() => this.enabledDeleteButton = !this.selection.isEmpty() ));
   }
 
   public ngAfterViewInit(): void {
@@ -190,6 +194,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
+    this.state.selectedIndexes = [];
   }
 
   public reinitialize(options: OListInitializationOptions): void {
@@ -242,10 +247,14 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-    if (this.selectable) {
-      // this.selectedItems = [];
+    if (this.selectable && !this.selection.hasValue()) {
       this.clearSelection();
-      this.state.selectedIndexes = [];
+    } else if(this.selectable) {
+      this.dataResponseArray.forEach(element => {
+        if(this.state.selectedIndexes.indexOf(element)!==-1) {
+          this.selection.select(element);
+        }
+      });
     }
     this.listItemComponents = [];
     this.queryData(void 0, queryArgs);
@@ -267,10 +276,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public updateSelectedState(item: object, isSelected: boolean): void {
     const selectedIndexes = this.state.selectedIndexes || [];
     const itemIndex = this.dataResponseArray.indexOf(item);
-    if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
-      selectedIndexes.push(itemIndex);
+    if (isSelected && selectedIndexes.indexOf(this.dataResponseArray[itemIndex]) === -1) {
+      selectedIndexes.push(this.dataResponseArray[itemIndex]);
     } else if (!isSelected) {
-      selectedIndexes.splice(selectedIndexes.indexOf(itemIndex), 1);
+      selectedIndexes.splice(selectedIndexes.indexOf(this.dataResponseArray[itemIndex]), 1);
     }
     this.state.selectedIndexes = selectedIndexes;
   }
