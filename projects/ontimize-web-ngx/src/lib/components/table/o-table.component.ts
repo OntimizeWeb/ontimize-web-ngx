@@ -2289,7 +2289,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       .forEach(oColumn => {
         oColumn.editing = false;
       });
-      
+
     if(this.state.selection.length > 0) {
       this.state.selection.forEach(selectedItem => {
         // finding selected item data in the table rendered data
@@ -2960,10 +2960,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableQuickFilterChanged() {
     if (this.pageable) {
       this.queryCellRenderers().subscribe(() => {
-        this.reloadPaginatedDataFromStart();
+        this.reloadPaginatedDataFromStart(false);
       });
     } else {
-      this.reloadData();
+      this.reloadData(false);
     }
   }
 
