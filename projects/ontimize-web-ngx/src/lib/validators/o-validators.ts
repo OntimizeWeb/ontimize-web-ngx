@@ -44,7 +44,13 @@ export class OValidators {
     }
     return {};
   }
+  /**
+     * Phone validator
+     */
+  public static phoneValidator(control: FormControl): ValidationErrors {
 
+    return {};
+  }
   /**
    * NIF validator
    */
