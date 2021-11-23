@@ -2289,7 +2289,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       .forEach(oColumn => {
         oColumn.editing = false;
       });
-      
+
     if(this.state.selection.length > 0) {
       this.state.selection.forEach(selectedItem => {
         // finding selected item data in the table rendered data
