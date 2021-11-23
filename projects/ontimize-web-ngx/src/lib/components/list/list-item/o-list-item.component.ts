@@ -105,7 +105,7 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
   }
 
   public setItemData(data: any): void {
-    if (!this.modelData) {
+    if (!Util.isDefined(this.modelData)) {
       this.modelData = data;
     }
   }
@@ -121,12 +121,11 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     }
   }
 
-  public isSelected(): boolean {
+  get isSelected(): boolean {
     if(Util.isDefined(this.modelData)) {
       return this._list.selection.isSelected(this.modelData) || (Util.isDefined(this._list.state.selectedIndexes) && this._list.state.selectedIndexes.indexOf(this.modelData)!==-1);
     } else {
       return false;
     }
   }
-
 }

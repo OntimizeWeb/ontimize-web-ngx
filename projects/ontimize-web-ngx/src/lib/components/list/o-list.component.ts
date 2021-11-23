@@ -253,6 +253,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       this.dataResponseArray.forEach(element => {
         if(this.state.selectedIndexes.indexOf(element)!==-1) {
           this.selection.select(element);
+        } else {
+          this.selection.deselect(element);
         }
       });
     }
@@ -347,16 +349,26 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   registerItem(item: IListItem): void {
     this.listItemComponents.push(item);
     if (this.dataResponseArray.length > 0) {
+      console.log(this.dataResponseArray[this.listItemComponents.length - 1]);
       item.setItemData(this.dataResponseArray[this.listItemComponents.length - 1]);
     }
   }
 
   protected setListItemDirectivesData(): void {
     this.listItemDirectives.forEach((element: OListItemDirective, index) => {
+      console.log(this.dataResponseArray[index]);
       element.setItemData(this.dataResponseArray[index]);
       element.setListComponent(this);
       this.registerListItemDirective(element);
     });
+  }
+
+  public filterData(value?: string, loadMore?: boolean): void {
+
+    this.listItemComponents = [];
+
+    super.filterData(value, loadMore);
+
   }
 
   protected saveDataNavigationInLocalStorage(): void {
