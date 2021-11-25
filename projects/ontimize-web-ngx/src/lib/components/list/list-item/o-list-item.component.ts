@@ -105,7 +105,7 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
   }
 
   public setItemData(data: any): void {
-    if (!Util.isDefined(this.modelData)) {
+    if (!this.modelData) {
       this.modelData = data;
     }
   }

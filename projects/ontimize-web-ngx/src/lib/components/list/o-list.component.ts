@@ -353,11 +353,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     });
   }
 
-  public filterData(value?: string, loadMore?: boolean): void {
-    this.listItemComponents = [];
-    super.filterData(value, loadMore);
-  }
-
   protected saveDataNavigationInLocalStorage(): void {
     super.saveDataNavigationInLocalStorage();
     this.storePaginationState = true;
