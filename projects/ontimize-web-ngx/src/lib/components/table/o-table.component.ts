@@ -2283,7 +2283,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  checkSelectedItemData() {
+  protected checkSelectedItemData() {
     this.state.selection.forEach(selectedItem => {
       // finding selected item data in the table rendered data
       const foundItem = this.dataSource.renderedData.find(data => {
