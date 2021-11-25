@@ -142,7 +142,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngOnInit(): void {
     this.initialize();
-    this.subscription.add(this.selection.changed.subscribe(() => this.enabledDeleteButton = !this.selection.isEmpty() ));
+    this.subscription.add(this.selection.changed.subscribe(() => this.enabledDeleteButton = !this.selection.isEmpty()));
   }
 
   public ngAfterViewInit(): void {
@@ -159,7 +159,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngAfterContentInit(): void {
     this.setListItemDirectivesData();
-    this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData());
+    this.subscription.add(this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData()));
   }
 
   public ngOnDestroy(): void {
@@ -194,7 +194,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
-    this.state.selectedIndexes = [];
   }
 
   public reinitialize(options: OListInitializationOptions): void {
@@ -247,16 +246,9 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-    if (this.selectable && !this.selection.hasValue()) {
+    if (this.selectable) {
       this.clearSelection();
-    } else if(this.selectable) {
-      this.dataResponseArray.forEach(element => {
-        if(this.state.selectedIndexes.indexOf(element)!==-1) {
-          this.selection.select(element);
-        } else {
-          this.selection.deselect(element);
-        }
-      });
+      this.state.selectedIndexes = [];
     }
     this.listItemComponents = [];
     this.queryData(void 0, queryArgs);
@@ -278,10 +270,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public updateSelectedState(item: object, isSelected: boolean): void {
     const selectedIndexes = this.state.selectedIndexes || [];
     const itemIndex = this.dataResponseArray.indexOf(item);
-    if (isSelected && selectedIndexes.indexOf(this.dataResponseArray[itemIndex]) === -1) {
-      selectedIndexes.push(this.dataResponseArray[itemIndex]);
+    if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
+      selectedIndexes.push(itemIndex);
     } else if (!isSelected) {
-      selectedIndexes.splice(selectedIndexes.indexOf(this.dataResponseArray[itemIndex]), 1);
+      selectedIndexes.splice(selectedIndexes.indexOf(itemIndex), 1);
     }
     this.state.selectedIndexes = selectedIndexes;
   }
@@ -349,14 +341,12 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   registerItem(item: IListItem): void {
     this.listItemComponents.push(item);
     if (this.dataResponseArray.length > 0) {
-      console.log(this.dataResponseArray[this.listItemComponents.length - 1]);
       item.setItemData(this.dataResponseArray[this.listItemComponents.length - 1]);
     }
   }
 
   protected setListItemDirectivesData(): void {
     this.listItemDirectives.forEach((element: OListItemDirective, index) => {
-      console.log(this.dataResponseArray[index]);
       element.setItemData(this.dataResponseArray[index]);
       element.setListComponent(this);
       this.registerListItemDirective(element);
@@ -364,11 +354,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public filterData(value?: string, loadMore?: boolean): void {
-
     this.listItemComponents = [];
-
     super.filterData(value, loadMore);
-
   }
 
   protected saveDataNavigationInLocalStorage(): void {

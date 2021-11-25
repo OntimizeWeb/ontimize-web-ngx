@@ -114,18 +114,14 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     return this.modelData;
   }
 
-  public onCheckboxChange(event) {
-    if(this.modelData) {
+  public onCheckboxChange(): void {
+    if (this._list.selectable && Util.isDefined(this.modelData)) {
       this._list.setSelected(this.modelData);
-      this._list.updateSelectedState(this.modelData, event.checked);
     }
   }
 
   get isSelected(): boolean {
-    if(Util.isDefined(this.modelData)) {
-      return this._list.selection.isSelected(this.modelData) || (Util.isDefined(this._list.state.selectedIndexes) && this._list.state.selectedIndexes.indexOf(this.modelData)!==-1);
-    } else {
-      return false;
-    }
+    return this._list.selection.isSelected(this.modelData);
   }
+
 }
