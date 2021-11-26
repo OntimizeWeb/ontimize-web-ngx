@@ -39,7 +39,6 @@ import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
 import { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
 import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 import { OTableMenu } from '../../interfaces/o-table-menu.interface';
-import { OnClickTableEvent } from '../../interfaces/o-table-onclick.interface';
 import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
@@ -70,7 +69,11 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
@@ -1561,19 +1564,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
-      this.state.selection.forEach(selectedItem => {
-        // finding selected item data in the table rendered data
-        const foundItem = this.dataSource.renderedData.find(data => {
-          let result = true;
-          Object.keys(selectedItem).forEach(key => {
-            result = result && (data[key] === selectedItem[key]);
-          });
-          return result;
-        });
-        if (foundItem) {
-          this.selection.select(foundItem);
-        }
-      });
+      this.checkSelectedItemData();
     }
   }
 
@@ -1721,7 +1712,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.finishQuerySubscription = false;
     this.pendingQuery = true;
-    // this.pageScrollVirtual = 1;
     let queryArgs: OQueryDataArgs;
     if (this.pageable) {
       queryArgs = {
@@ -1729,7 +1719,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         length: this.queryRows
       };
     }
-    this.stopEdition();
+    this.stopEdition(false);
     this.queryData(void 0, queryArgs);
   }
 
@@ -2287,6 +2277,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       .forEach(oColumn => {
         oColumn.editing = false;
       });
+
+    if(this.state.selection.length > 0) {
+      this.checkSelectedItemData();
+    }
+  }
+
+  protected checkSelectedItemData() {
+    this.state.selection.forEach(selectedItem => {
+      // finding selected item data in the table rendered data
+      const foundItem = this.dataSource.renderedData.find(data => {
+        let result = true;
+        Object.keys(selectedItem).forEach(key => {
+          result = result && (data[key] === selectedItem[key]);
+        });
+        return result;
+      });
+      if (foundItem) {
+        this.selection.select(foundItem);
+      }
+    });
   }
 
   useDetailButton(column: OColumn): boolean {
@@ -2896,10 +2906,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return className;
   }
 
-  private stopEdition() {
+  private stopEdition(clearSelection?:boolean) {
+    clearSelection = clearSelection ? clearSelection : false;
     this.editingCell = undefined;
     this.editingRow = undefined;
-    this.clearSelectionAndEditing(false);
+    this.clearSelectionAndEditing(clearSelection);
   }
 
   storeFilterInState(arg: OTableFiltersStatus) {
@@ -2941,10 +2952,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableQuickFilterChanged() {
     if (this.pageable) {
       this.queryCellRenderers().subscribe(() => {
-        this.reloadPaginatedDataFromStart();
+        this.reloadPaginatedDataFromStart(false);
       });
     } else {
-      this.reloadData();
+      this.reloadData(false);
     }
   }
 

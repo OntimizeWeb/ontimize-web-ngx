@@ -34,7 +34,11 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -155,7 +159,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngAfterContentInit(): void {
     this.setListItemDirectivesData();
-    this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData());
+    this.subscription.add(this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData()));
   }
 
   public ngOnDestroy(): void {
@@ -243,7 +247,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       };
     }
     if (this.selectable) {
-      // this.selectedItems = [];
       this.clearSelection();
       this.state.selectedIndexes = [];
     }
