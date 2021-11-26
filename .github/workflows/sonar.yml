@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-     - name: 'Cache node modules'
+      - name: 'Cache node modules'
         uses: actions/cache@v1
         with:
           path: ~/.npm
