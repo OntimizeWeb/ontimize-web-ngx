@@ -1,30 +1,23 @@
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FormGroup, FormControl } from '@angular/forms';
-import { OFormComponent } from './../../form/o-form.component';
-import { OPermissionsModule } from './../../../services/permissions/o-permissions.module';
-import { AppConfig } from './../../../config/app-config';
-import { Config } from './../../../types/config.type';
 import { HttpClientModule } from '@angular/common/http';
-import { INTERNAL_ONTIMIZE_MODULES } from './../../../config/o-modules';
-import { TranslateService } from '@ngx-translate/core';
 import { Injector } from '@angular/core';
-import { OTextInputModule } from './o-text-input.module';
-import { OTextInputComponent } from './o-text-input.component';
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormGroup } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateService } from '@ngx-translate/core';
+
 import { APP_CONFIG } from '../../../config/app-config';
 import { appConfigFactory } from '../../../services';
+import { AppConfig } from './../../../config/app-config';
+import { OPermissionsModule } from './../../../services/permissions/o-permissions.module';
+import { InputTestUtil } from './../test/input-test-utils';
+import { OTextInputComponent } from './o-text-input.component';
+import { OTextInputModule } from './o-text-input.module';
 
 describe('OTextInput', () => {
   let component: OTextInputComponent;
   let fixture: ComponentFixture<OTextInputComponent>;
 
   let formGroup: FormGroup;
-
-  const config: Config = {
-    uuid: 'com.ontimize.web.test',
-    title: 'Ontimize Web Testing',
-    locale: 'en'
-  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -40,7 +33,7 @@ describe('OTextInput', () => {
           useClass: TranslateService,
           deps: [Injector]
         },
-        { provide: APP_CONFIG, useValue: config },
+        { provide: APP_CONFIG, useValue: InputTestUtil.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
         // ...INTERNAL_ONTIMIZE_MODULES
       ]
@@ -49,22 +42,12 @@ describe('OTextInput', () => {
     fixture = TestBed.createComponent(OTextInputComponent);
     component = fixture.componentInstance;
     spyOn(component, 'getAttribute').and.returnValue('my-comp');
-
-    formGroup = new FormGroup({});
-    const control: FormControl = component.getControl();
-    if (control) {
-      formGroup.registerControl(component.getAttribute(), control);
-    }
-
+    formGroup = InputTestUtil.mockFormGroup(component);
     spyOn(component, 'getFormGroup').and.returnValue(formGroup);
     fixture.detectChanges();
   }));
 
   it('should create the component', async(() => {
-    // const fixture = TestBed.createComponent(OTextInputComponent);
-    // console.log(fixture);
-    // // debugger;
-    // const app = fixture.debugElement.componentInstance;
     expect(component).toBeTruthy();
   }));
 
@@ -82,17 +65,11 @@ describe('OTextInput', () => {
 
   }));
 
-  // it(`should have as label 'my-label'`, async(() => {
-  //   component.olabel = 'my-label';
-  //   fixture.detectChanges();
-  //   const compiled = fixture.debugElement.nativeElement;
-  //   expect(compiled.querySelector('mat-label').textContent).toBe('my-label');
-  // }));
+  it(`should render label: 'my-label'`, async(() => {
+    component.olabel = 'my-label';
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('mat-label').textContent).toBe('my-label');
+  }));
 
-  // it('should render title in a h1 tag', async(() => {
-  //   const fixture = TestBed.createComponent(OTableComponent);
-  //   fixture.detectChanges();
-  //   const compiled = fixture.debugElement.nativeElement;
-  //   expect(compiled.querySelector('h1').textContent).toContain('app works!');
-  // }));
 });
