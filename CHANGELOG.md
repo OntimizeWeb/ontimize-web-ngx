@@ -1,4 +1,4 @@
-## 8.5.6
+## 8.6.0
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
 ## 8.5.5 (2021-11-26)
