@@ -1,3 +1,9 @@
+## 8.5.5 (2021-11-26)
+### Bug fixes
+  * **o-list**: Fixed issue preventing query-rows from working properly ([74af8920](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/74af8920)) Closes [#847](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/847)
+  * **o-error-dialog-manager.service**: added new service that handles error messages dialogs to solve the problem of opening multiple error dialogs([45c9dcbe74505f371a2d47cb0d786ee97c79b20a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/45c9dcbe74505f371a2d47cb0d786ee97c79b20a)) Closes [#845](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/845)
+  * **o-table**: fix error of selectable rows not beeing marked on filter data([770002e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/770002e)) Closes [#846](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/846)
+
 ## 8.5.4 (2021-11-05)
 ### Bug fixes
   * **o-combo**: added new atribute `null-selection-label` to add a text to none selection in a combo ([99c2cf70](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99c2cf70)) Closes [#812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/812)
