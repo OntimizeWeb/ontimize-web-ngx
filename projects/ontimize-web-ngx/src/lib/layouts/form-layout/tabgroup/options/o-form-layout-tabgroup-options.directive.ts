@@ -59,7 +59,7 @@ export class OFormLayoutTabGroupOptionsDirective {
   @ContentChild(TemplateRef, { static: false })
   templateMatTabLabel: TemplateRef<any>;
 
-  getOptions() {
+  getOptions(): Object {
     const result = {
       backgroundColor: this.backgroundColor,
       color: this.color,
