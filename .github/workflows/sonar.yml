@@ -16,6 +16,31 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
+     - name: 'Cache node modules'
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Node 12.x
+        if: github.base_ref == '8.x.x'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.10.0
+
+      - name: Node 10.x
+        if: github.base_ref == '4.x.x'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.23.0
+
+      - name: npm install and npm run build
+        run: |
+          npm i
+          npm run test-ci
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
