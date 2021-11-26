@@ -27,19 +27,23 @@ describe('IconService', () => {
     expect(service.iconPosition).toBe(IconService.DEFAULT_ICON_POSITION);
   });
 
-  // it('#getObservableValue should return value from observable',
-  //   (done: DoneFn) => {
-  //     service.getObservableValue().subscribe(value => {
-  //       expect(value).toBe('observable value');
-  //       done();
-  //     });
-  //   });
+  it('#getIconPosition should return default "right"', () => {
+    service = TestBed.get(IconService);
+    service.iconPosition = 'right';
+    expect(service.iconPosition).toBe('right');
+  });
 
-  // it('#getPromiseValue should return value from a promise',
-  //   (done: DoneFn) => {
-  //     service.getPromiseValue().then(value => {
-  //       expect(value).toBe('promise value');
-  //       done();
-  //     });
-  //   });
+  it('#getIconValue should return xxxx', () => {
+    service = TestBed.get(IconService);
+    const domSanitizer: DomSanitizer = TestBed.get(DomSanitizer);
+    const text = "my-value<mat-icon class='mat-24 mat-icon notranslate material-icons mat-icon-no-color' role='img' aria-hidden='true'>sportIcon</mat-icon>"
+    const expected = domSanitizer.bypassSecurityTrustHtml(text);
+
+    const args = {
+      iconPosition: 'right',
+      icon: 'sportIcon'
+    };
+    expect(service.getIconValue('my-value', args)).toEqual(expected);
+  });
+
 });

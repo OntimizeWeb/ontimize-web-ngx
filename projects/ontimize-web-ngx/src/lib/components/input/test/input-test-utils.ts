@@ -10,7 +10,7 @@ export class InputTestUtil {
       title: 'Ontimize Web Testing',
       locale: 'en'
     }
-  };
+  }
 
   static mockFormGroup(component: any): FormGroup {
 
