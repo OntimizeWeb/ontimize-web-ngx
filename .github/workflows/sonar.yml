@@ -45,6 +45,13 @@ jobs:
         run: |
           sed -i 's+/home/runner/work/ontimize-web-ngx/ontimize-web-ngx+/github/workspace+g' coverage/ontimize-web-ngx/lcov.info
 
+      # Uploads coverage .lcov file
+      - name: upload repository file
+        uses: actions/upload-artifact@v2
+        with:
+          name: lcov.info
+          path: coverage/ontimize-web-ngx/lcov.info
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
