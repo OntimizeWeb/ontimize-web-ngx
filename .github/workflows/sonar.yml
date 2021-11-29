@@ -41,10 +41,12 @@ jobs:
           npm i
           npm run test-ci
 
+      - name: npm install and npm run build
+        run: |
+          sed -i 's+/${{ github.workspace  }}/projects/ontimize-web-ngx+projects/ontimize-web-ngx+g' coverage/ontimize-web-ngx/lcov.info
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: projects/ontimize-web-ngx
