@@ -348,7 +348,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   filterColumnActiveByDefault: boolean = true;
 
   // Expandable input callback function
-  showExpandableIconFunction: (row: any, rowIndex: number)=> boolean | Promise<boolean> | Observable<boolean>;
+  showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
 
   protected _oTableOptions: OTableOptions;
 
@@ -939,7 +939,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const quickFilter = (arg as OTableQuickfilter);
     // forcing quickFilterComponent to be undefined, table uses oTableQuickFilterComponent
     this.quickFilterComponent = undefined;
-    this.oTableQuickFilterComponent = quickFilter;    if (Util.isDefined(this.oTableQuickFilterComponent)) {
+    this.oTableQuickFilterComponent = quickFilter; if (Util.isDefined(this.oTableQuickFilterComponent)) {
       this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
       this.quickFilterSubscription = this.oTableQuickFilterComponent.onChange.subscribe(val => {
         this.onSearch.emit(val);
@@ -1032,6 +1032,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     } else {
       this._oTableOptions.columns.push(colDef);
     }
+    this.ensureColumnsOrder();
     this.refreshEditionModeWarn();
   }
 
@@ -1174,27 +1175,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.visibleColumns = this.columns;
     }
 
-    if (this.colArray.length) {
-      this.colArray.forEach((x: string) => this.registerColumn(x));
-
-      let columnsOrder = [];
-      if (this.state.columnsDisplay) {
-        columnsOrder = this.state.columnsDisplay.map(item => item.attr);
-      } else {
-        columnsOrder = this.colArray.filter(attr => this.visibleColArray.indexOf(attr) === -1);
-        columnsOrder.push(...this.visibleColArray);
-      }
-
-      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
-        if (columnsOrder.indexOf(a.attr) === -1) {
-          // if it is not in local storage because it is new, keep order
-          return 0;
-        } else {
-          return columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr);
-        }
-      });
-
-    }
+    this.ensureColumnsOrder();
 
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
@@ -1235,6 +1216,29 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         && this.state.initialConfiguration.queryRows === this.originalQueryRows) {
         this.queryRows = this.state.queryRows;
       }
+    }
+  }
+  ensureColumnsOrder() {
+    if (this.colArray.length) {
+      this.colArray.forEach((x: string) => this.registerColumn(x));
+
+      let columnsOrder = [];
+      if (this.state.columnsDisplay) {
+        columnsOrder = this.state.columnsDisplay.map(item => item.attr);
+      } else {
+        columnsOrder = this.colArray.filter(attr => this.visibleColArray.indexOf(attr) === -1);
+        columnsOrder.push(...this.visibleColArray);
+      }
+
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
+        if (columnsOrder.indexOf(a.attr) === -1) {
+          // if it is not in local storage because it is new, keep order
+          return 0;
+        } else {
+          return columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr);
+        }
+      });
+
     }
   }
   updateStateExpandedColumn() {
@@ -2281,7 +2285,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected checkSelectedItemData() {
-    if(Util.isDefined(this.state.selection) && this.state.selection.length > 0) {
+    if (Util.isDefined(this.state.selection) && this.state.selection.length > 0) {
       this.state.selection.forEach(selectedItem => {
         // finding selected item data in the table rendered data
         const foundItem = this.dataSource.renderedData.find(data => {
@@ -2905,7 +2909,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return className;
   }
 
-  private stopEdition(clearSelection?:boolean) {
+  private stopEdition(clearSelection?: boolean) {
     clearSelection = clearSelection ? clearSelection : false;
     this.editingCell = undefined;
     this.editingRow = undefined;
@@ -2999,8 +3003,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   // Show expandable icon or not if has data or not
-  showExpandableIcon(row:any, rowIndex: number): Observable<boolean> {
-    return ( Util.isDefined(this.showExpandableIconFunction) && this.showExpandableIconFunction instanceof Function) ? Util.wrapIntoObservable(this.showExpandableIconFunction(row, rowIndex)) : of(true);
+  showExpandableIcon(row: any, rowIndex: number): Observable<boolean> {
+    return (Util.isDefined(this.showExpandableIconFunction) && this.showExpandableIconFunction instanceof Function) ? Util.wrapIntoObservable(this.showExpandableIconFunction(row, rowIndex)) : of(true);
   }
 
 }
