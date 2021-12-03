@@ -25,13 +25,13 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Node 12.x
-        if: github.base_ref == '8.x.x'
+        if: github.base_ref == '8.x.x' || (github.ref == 'refs/heads/8.x.x')
         uses: actions/setup-node@v1
         with:
           node-version: 12.10.0
 
       - name: Node 10.x
-        if: github.base_ref == '4.x.x'
+        if: github.base_ref == '4.x.x' || (github.ref == 'refs/heads/4.x.x')
         uses: actions/setup-node@v1
         with:
           node-version: 10.23.0
@@ -40,6 +40,10 @@ jobs:
         run: |
           npm i
           npm run test-ci
+
+      - name: coverage .lcov workaround
+        run: |
+          sed -i 's+/home/runner/work/ontimize-web-ngx/ontimize-web-ngx+/github/workspace+g' coverage/ontimize-web-ngx/lcov.info
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
