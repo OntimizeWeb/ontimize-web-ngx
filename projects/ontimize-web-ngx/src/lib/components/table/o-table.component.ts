@@ -1169,28 +1169,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  ensureColumnsOrder() {
-    if (this.colArray.length) {
-      this.colArray.forEach((x: string) => this.registerColumn(x));
+  protected ensureColumnsOrder() {
 
-      let columnsOrder = [];
-      if (this.state.columnsDisplay) {
-        columnsOrder = this.state.columnsDisplay.map(item => item.attr);
-      } else {
-        columnsOrder = this.colArray.filter(attr => this.visibleColArray.indexOf(attr) === -1);
-        columnsOrder.push(...this.visibleColArray);
-      }
-
-      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
-        if (columnsOrder.indexOf(a.attr) === -1) {
-          // if it is not in local storage because it is new, keep order
-          return 0;
-        } else {
-          return columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr);
-        }
-      });
-
+    let columnsOrder = [];
+    if (this.state.columnsDisplay) {
+      columnsOrder = this.state.columnsDisplay.map(item => item.attr);
+    } else {
+      columnsOrder = this.colArray.filter(attr => this.visibleColArray.indexOf(attr) === -1);
+      columnsOrder.push(...this.visibleColArray);
     }
+
+    this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
+      if (columnsOrder.indexOf(a.attr) === -1) {
+        // if it is not in local storage because it is new, keep order
+        return 0;
+      } else {
+        return columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr);
+      }
+    });
+
+
   }
 
   initializeParams(): void {
@@ -1198,9 +1196,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
     }
-
-    this.ensureColumnsOrder();
-
+    if (this.colArray.length) {
+      this.colArray.forEach((x: string) => this.registerColumn(x));
+      this.ensureColumnsOrder();
+    }
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
 
