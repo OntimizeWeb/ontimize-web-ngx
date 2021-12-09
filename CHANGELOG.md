@@ -1,3 +1,7 @@
+## 8.5.6
+### Bug fixes
+  * **o-table**: Fixed error of not maintained column order changes after the application is reloaded ([30c1b332](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/30c1b332)) Closes [#860](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/860)
+
 ## 8.5.5 (2021-11-26)
 ### Bug fixes
   * **o-list**: Fixed issue preventing query-rows from working properly ([74af8920](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/74af8920)) Closes [#847](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/847)
