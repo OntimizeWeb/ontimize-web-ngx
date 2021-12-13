@@ -29,7 +29,7 @@ export class OListComponentStateService extends AbstractComponentStateService<OL
       dataToStore['quickFilterActiveColumns'] = this.component.quickFilterComponent.getActiveColumns().join(Codes.ARRAY_INPUT_SEPARATOR);
     }
     dataToStore['filter-case-sensitive'] = this.component.isFilterCaseSensitive();
-    dataToStore.selection = this.getSelectionState();
+    dataToStore.selection = this.state.selection;
     return dataToStore;
   }
 
