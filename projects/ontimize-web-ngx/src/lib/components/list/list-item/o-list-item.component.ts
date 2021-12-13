@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   ContentChildren,
@@ -32,7 +33,6 @@ import { OListComponent } from '../o-list.component';
 export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
 
   public modelData: any;
-  protected _isSelected: boolean = false;
 
   @ContentChildren(MatLine)
   protected _lines: QueryList<MatLine>;
@@ -56,6 +56,7 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     public elRef: ElementRef,
     protected _renderer: Renderer2,
     protected _injector: Injector,
+    protected cd: ChangeDetectorRef,
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) { }
 
@@ -78,18 +79,6 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     };
   }
 
-  public onClick(e?: Event): void {
-    if (!this._list.detailButtonInRow) {
-      this._list.onItemDetailClick(this);
-    }
-  }
-
-  public onDoubleClick(e?: Event): void {
-    if (!this._list.detailButtonInRow) {
-      this._list.onItemDetailDoubleClick(this);
-    }
-  }
-
   public onDetailIconClicked(e?: Event): void {
     if (Util.isDefined(e)) {
       e.stopPropagation();
@@ -105,8 +94,9 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
   }
 
   public setItemData(data: any): void {
-    if (!this.modelData) {
+    if (!Util.isDefined(this.modelData)) {
       this.modelData = data;
+      this.cd.detectChanges();
     }
   }
 
@@ -120,8 +110,13 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     }
   }
 
+  public onCheckboxClicked(event:Event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
   get isSelected(): boolean {
-    return this._list.selection.isSelected(this.modelData);
+    return this._list.isItemSelected(this.modelData);
   }
 
 }
