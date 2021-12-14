@@ -1,7 +1,10 @@
 ## 8.5.6
+### Features
+  * **o-button**: Added a new output for click (onClick) ([dbb97ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb97ec)) Closes [#864](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/864)
+
 ### Bug fixes
   * **o-table**: Fixed error of not maintained column order changes after the application is reloaded ([30c1b332](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/30c1b332)) Closes [#860](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/860)
-  * **o-button**: Added two new outputs to disable button click if is disabled and for click (onClick) ([dbb97ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb97ec)) Closes [#864](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/864)
+  * **o-button**: Fixed the problem that prevents button click event propagation when it was disabled ([dbb97ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb97ec)) Closes [#863](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/863)
 
 ## 8.5.5 (2021-11-26)
 ### Bug fixes
