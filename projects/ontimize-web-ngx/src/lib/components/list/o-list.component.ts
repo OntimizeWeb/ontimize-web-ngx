@@ -350,11 +350,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     }
   }
 
-  public filterData(value?: string, loadMore?: boolean): void {
-    this.clearSelection();
-    super.filterData(value, loadMore);
-  }
-
   setDataArray(data: any): void {
     super.setDataArray(data);
     this.updateSelectedItems();
