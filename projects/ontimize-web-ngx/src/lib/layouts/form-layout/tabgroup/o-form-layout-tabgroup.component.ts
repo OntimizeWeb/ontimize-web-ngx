@@ -228,7 +228,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.previousSelectedIndex = this.tabGroup.selectedIndex;
   }
 
-  closeTab(index: number) {
+  closeTab(index: number, options?: any) {
     if (!this.formLayoutManager) {
       return;
     }
@@ -244,8 +244,10 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         });
       }
     }));
-
-    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
+    if (Util.isDefined(options) && Util.isDefined(options.exitWithoutConfirmation) && options.exitWithoutConfirmation) {
+      onCloseTabAccepted.emit(true);
+    }
+    else if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
       });
@@ -406,8 +408,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.addTab(detail);
   }
 
-  closeDetail() {
-    this.closeTab(this.tabGroup.selectedIndex - 1);
+  closeDetail(options?: any) {
+    this.closeTab(this.tabGroup.selectedIndex - 1, options);
   }
 
   canAddDetailComponent(): boolean {

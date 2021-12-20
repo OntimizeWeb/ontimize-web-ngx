@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
 import { InputConverter } from '../../decorators/input-converter';
-
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -18,10 +17,14 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   // color: Theme color palette for the component.
   'color'
 ];
-
+export const DEFAULT_OUTPUTS_O_BUTTON = [
+  'onClick',
+  'click'
+];
 @Component({
   selector: 'o-button',
   inputs: DEFAULT_INPUTS_O_BUTTON,
+  outputs: DEFAULT_OUTPUTS_O_BUTTON,
   templateUrl: './o-button.component.html',
   styleUrls: ['./o-button.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -43,6 +46,10 @@ export class OButtonComponent implements OnInit {
   @InputConverter() enabled: boolean = true;
   public color: ThemePalette;
 
+  /* Outputs */
+  public onClick: EventEmitter<Event> = new EventEmitter<Event>();
+  public click: EventEmitter<Event> = new EventEmitter<Event>();
+
   constructor() {
     this.otype = OButtonComponent.DEFAULT_TYPE;
   }
@@ -50,6 +57,14 @@ export class OButtonComponent implements OnInit {
   ngOnInit(): void {
     if (this.otype) {
       this.otype = this.otype.toUpperCase();
+    }
+  }
+
+  onButtonClick(event: MouseEvent): void {
+    event.stopPropagation();
+    if (this.enabled) {
+      this.click.emit(event);
+      this.onClick.emit(event);
     }
   }
 

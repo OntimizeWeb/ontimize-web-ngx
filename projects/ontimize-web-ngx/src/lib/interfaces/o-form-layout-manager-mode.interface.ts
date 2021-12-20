@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+
 import { FormLayoutDetailComponentData } from '../types/form-layout-detail-component-data.type';
 import { ILayoutManagerComponent } from './layout-manager-component.interface';
 
@@ -14,6 +15,6 @@ export interface OFormLayoutManagerMode {
   getRouteOfActiveItem: () => any[];
   isMainComponent: (comp: ILayoutManagerComponent) => boolean;
   openDetail?: (detail: FormLayoutDetailComponentData) => void;
-  closeDetail: () => void;
+  closeDetail: (options?: any) => void;
   canAddDetailComponent: () => boolean | Observable<boolean>;
 }
