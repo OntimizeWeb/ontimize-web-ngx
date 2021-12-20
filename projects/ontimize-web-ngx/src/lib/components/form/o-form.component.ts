@@ -912,7 +912,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   _clearAndCloseFormAfterInsert() {
-    const exitWithoutConfirmation: {} = { 'exitWithoutConfirmation': true, 'confirmExit': this.confirmExit };
+    const exitWithoutConfirmation: {} = { 'exitWithoutConfirmation': true };
     this.closeDetail(exitWithoutConfirmation);
   }
 
