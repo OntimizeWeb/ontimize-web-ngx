@@ -399,10 +399,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
   }
 
-  public closeDetail(): void {
+  public closeDetail(options?: any): void {
     const compRef = this.getLayoutModeComponent();
     if (Util.isDefined(compRef)) {
-      compRef.closeDetail();
+      compRef.closeDetail(options);
     }
   }
 
