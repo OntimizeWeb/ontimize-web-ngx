@@ -1,4 +1,4 @@
-## 8.5.6
+## 8.5.6 (2021-12-20)
 ### Features
   * **o-button**: Added a new output for click (onClick) ([dbb97ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb97ec)) Closes [#864](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/864)
 
