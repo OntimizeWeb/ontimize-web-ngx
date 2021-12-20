@@ -604,9 +604,15 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   public hasToConfirmExit(data: FormLayoutDetailComponentData): boolean {
     const formsAttr = Object.keys(data.innerFormsInfo);
-    return formsAttr.length > 0 && formsAttr.every(formAttr => {
-      const formData = data.innerFormsInfo[formAttr];
-      return formData.confirmOnExit && formData.modified;
-    });
+    let result: boolean = false;
+    if(formsAttr.length > 0) {
+      formsAttr.forEach(formAttr => {
+        if(!result) {
+          const formData = data.innerFormsInfo[formAttr];
+          result = formData.confirmOnExit && formData.modified;
+        }
+      });
+    }
+    return result;
   }
 }
