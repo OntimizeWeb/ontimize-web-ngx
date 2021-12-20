@@ -6,6 +6,7 @@
   * **o-table**: Fixed error of not maintained column order changes after the application is reloaded ([30c1b332](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/30c1b332)) Closes [#860](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/860)
   * **o-button**: Fixed the problem that prevents button click event propagation when it was disabled ([dbb97ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dbb97ec)) Closes [#863](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/863)
   * **o-form-layout-manager**: Fixed the problem that shows a dialog after insert new data ([2ea7a448](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2ea7a448)) Closes [#859](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/859)
+  * **o-list**: o-list selected items bug fixed ([7c453f39](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c453f39)) ([41721730](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/41721730)) ([c5297fa7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c5297fa7)) ([5403eff7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5403eff7)) ([ddc43a3d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ddc43a3d)) ([6c43b934](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c43b934)) ([5e3dc3eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5e3dc3eb)) Closes [#851](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/851)
 
 ## 8.5.5 (2021-11-26)
 ### Bug fixes
