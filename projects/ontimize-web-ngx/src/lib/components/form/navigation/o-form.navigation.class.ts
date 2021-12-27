@@ -301,7 +301,8 @@ export class OFormNavigationClass {
   }
 
   stayInRecordAfterInsert(insertedKeys: object) {
-    if (this.formLayoutManager) {
+    if (this.formLayoutManager && this.form.afterInsertMode!=='detail') {
+      if(this.form.afterInsertMode)
       this.form.setInitialMode();
       const subscription = this.form.onDataLoaded.subscribe(() => {
         const keys = this.form.getKeysValues();
