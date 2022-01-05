@@ -26,7 +26,7 @@ import { OCurrencyInputModule } from '../components/input/currency-input/o-curre
 import { ODateInputModule } from '../components/input/date-input/o-date-input.module';
 import { ODateRangeInputModule } from '../components/input/date-range/o-daterange-input.module';
 import { OEmailInputModule } from '../components/input/email-input/o-email-input.module';
-import { OPhoneInputModule } from '../components/input/phone-input/o-phone-input.module';
+import { OPhoneInputModule} from '../components/input/phone-input/o-phone-input.module';
 import { OFileInputModule } from '../components/input/file-input/o-file-input.module';
 import { OHourInputModule } from '../components/input/hour-input/o-hour-input.module';
 import { OHTMLInputModule } from '../components/input/html-input/o-html-input.module';

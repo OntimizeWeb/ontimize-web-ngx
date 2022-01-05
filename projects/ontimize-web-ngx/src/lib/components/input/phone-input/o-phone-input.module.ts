@@ -1,14 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
 
+
+
+
+import { CommonModule } from '@angular/common';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OSharedModule } from '../../../shared/shared.module';
-import { OTextInputModule } from '../text-input/o-text-input.module';
+
+import { NativeElementInjectorDirective } from './directives/native-element-injector.directive';
 import { OPhoneInputComponent } from './o-phone-input.component';
 
+
 @NgModule({
-  declarations: [OPhoneInputComponent],
-  imports: [OSharedModule, CommonModule, OTextInputModule],
-  exports: [OPhoneInputComponent]
+	declarations: [OPhoneInputComponent, NativeElementInjectorDirective],
+	imports: [
+		CommonModule,
+		FormsModule,
+    ReactiveFormsModule,
+    OSharedModule
+  ],
+	exports: [OPhoneInputComponent, NativeElementInjectorDirective],
 })
 export class OPhoneInputModule {
+
 }
