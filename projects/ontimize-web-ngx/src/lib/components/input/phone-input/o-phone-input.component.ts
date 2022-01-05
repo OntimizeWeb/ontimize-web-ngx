@@ -4,9 +4,12 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
+  Inject,
+  Injector,
   Input,
   OnChanges,
   OnInit,
+  Optional,
   Output,
   SimpleChanges,
   ViewChild,
@@ -21,12 +24,27 @@ import { ChangeData } from './interfaces/change-data';
 import { Country } from './model/country.model';
 import { phoneNumberValidator } from './o-phone-input.validator';
 import { PhoneNumberFormat } from './enums/phone-number-format.enum';
+import { OFormComponent } from '../../form/o-form.component';
+import {
+  DEFAULT_INPUTS_O_TEXT_INPUT,
+  DEFAULT_OUTPUTS_O_TEXT_INPUT,
+  OTextInputComponent,
+} from '../text-input/o-text-input.component';
 
+export const DEFAULT_INPUTS_O_PHONE_INPUT = [
+  ...DEFAULT_INPUTS_O_TEXT_INPUT
+];
+
+export const DEFAULT_OUTPUTS_O_PHONE_INPUT = [
+  ...DEFAULT_OUTPUTS_O_TEXT_INPUT
+];
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'o-phone-input',
   templateUrl: './o-phone-input.component.html',
   styleUrls: ['./o-phone-input.component.scss'],
+  inputs: DEFAULT_INPUTS_O_PHONE_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_PHONE_INPUT,
   providers: [
     CountryCode,
     {
@@ -42,8 +60,8 @@ import { PhoneNumberFormat } from './enums/phone-number-format.enum';
     },
   ],
 })
-export class OPhoneInputComponent implements OnInit, OnChanges {
-  @Input() value = '';
+export class OPhoneInputComponent extends OTextInputComponent implements OnInit, OnChanges {
+  @Input() value;
   @Input() preferredCountries: Array<string> = [];
   @Input() enablePlaceholder = true;
   @Input() customPlaceholder: string;
@@ -51,10 +69,7 @@ export class OPhoneInputComponent implements OnInit, OnChanges {
   @Input() cssClass = 'form-control';
   @Input() onlyCountries: Array<string> = [];
   @Input() enableAutoCountrySelect = true;
-  @Input() searchCountryFlag = false;
   @Input() searchCountryField: SearchCountryField[] = [SearchCountryField.All];
-  @Input() searchCountryPlaceholder = 'Search Country';
-  @Input() maxLength = '';
   @Input() selectFirstCountry = true;
   @Input() selectedCountryISO: CountryISO;
   @Input() phoneValidation = true;
@@ -89,11 +104,13 @@ export class OPhoneInputComponent implements OnInit, OnChanges {
   onTouched = () => { };
   propagateChange = (_: ChangeData) => { };
   selectedStates = this.states;
-  constructor(private countryCodeData: CountryCode) {
-    // If this is not set, ngx-bootstrap will try to use the bs3 CSS (which is not what we've embedded) and will
-    // Add the wrong classes and such
-    console.log(this.allCountries);
+  constructor(private countryCodeData: CountryCode,
+    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
+    elRef: ElementRef,
+    injector: Injector) {
+    super(form, elRef, injector);
   }
+
 
   ngOnInit() {
     this.init();

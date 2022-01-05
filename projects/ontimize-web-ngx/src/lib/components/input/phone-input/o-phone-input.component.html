@@ -1,10 +1,22 @@
-<div fxLayout="row" fxLayoutAlign="start center">
-  <mat-form-field>
-    <mat-label>Select an option</mat-label>
+<div [formGroup]="getFormGroup()">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
+    [class.icon-field]="showClearButton" fxFlexFill>
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <mat-select [(value)]="selectedCountry">
-      <mat-option *ngFor="let state of allCountries" [value]="state">{{state.name}}</mat-option>
+      <mat-option *ngFor="let country of allCountries" [value]="country">{{country.name}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <input matInput type="tel" [id]="inputId" [(ngModel)]="phoneNumber" [placeholder]="resolvePlaceholder()" [attr.maxLength]="maxLength"
-    [attr.validation]="phoneValidation" #focusable>
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
+    [class.icon-field]="showClearButton" fxFlexFill>
+    <input matInput type="tel" [id]="inputId" [(ngModel)]="phoneNumber" [placeholder]="resolvePlaceholder()" [attr.maxLength]="maxLength"
+      [attr.validation]="phoneValidation" #focusable>
+    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+    <mat-error *ngIf="hasError('minlength')"
+      text="{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}">
+    </mat-error>
+    <mat-error *ngIf="hasError('maxlength')"
+      text="{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}">
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+  </mat-form-field>
 </div>
