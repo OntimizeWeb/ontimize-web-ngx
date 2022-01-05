@@ -1,14 +1,5 @@
 import * as lpn from 'google-libphonenumber';
 
-/*
-We use "control: any" instead of "control: FormControl" to silence:
-"Property 'nativeElement' does not exist on type 'FormControl'".
-This happens because I've expanded control with nativeElement via
-'NativeElementInjectorDirective' to get an access to the element.
-More about this approach and reasons for this:
-https://github.com/angular/angular/issues/18025
-https://stackoverflow.com/a/54075119/1617590
-*/
 export const phoneNumberValidator = (control: any) => {
 	if (!control.value) {
 		return null;
