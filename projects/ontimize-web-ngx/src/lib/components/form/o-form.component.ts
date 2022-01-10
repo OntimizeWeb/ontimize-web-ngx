@@ -27,6 +27,7 @@ import { NavigationService, ONavigationItem } from '../../services/navigation.se
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
@@ -912,8 +913,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   _clearAndCloseFormAfterInsert() {
-    const exitWithoutConfirmation: {} = { 'exitWithoutConfirmation': true };
-    this.closeDetail(exitWithoutConfirmation);
+    const closeOpts: FormLayoutCloseDetailOptions = { exitWithoutConfirmation: true };
+    this.closeDetail(closeOpts);
   }
 
   /**
