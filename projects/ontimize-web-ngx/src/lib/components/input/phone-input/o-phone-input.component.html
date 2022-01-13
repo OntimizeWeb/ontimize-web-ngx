@@ -1,15 +1,14 @@
-<div [formGroup]="getFormGroup()">
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
-    [class.icon-field]="showClearButton" fxFlexFill>
-    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+<mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+<div [formGroup]="getFormGroup()" class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row">
+  <mat-form-field class="mat-form-phone">
     <mat-select [(value)]="selectedCountry">
-      <mat-option *ngFor="let country of allCountries" [value]="country">{{country.name}}</mat-option>
+      <mat-option *ngFor="let country of allCountries" [value]="country"> {{country.name}} +{{country.dialCode}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
-    [class.icon-field]="showClearButton" fxFlexFill>
-    <input matInput type="tel" [id]="inputId" [(ngModel)]="phoneNumber" [placeholder]="resolvePlaceholder()" [attr.maxLength]="maxLength"
+  <mat-form-field class="mat-form-phone-input" [appearance]="appearance">
+    <input matInput type="tel" [id]="inputId"  [formControlName]="getAttribute()" [(ngModel)]="phoneNumber" [placeholder]="resolvePlaceholder()" [attr.maxLength]="maxLength"
       [attr.validation]="phoneValidation" #focusable>
+    <mat-icon matSuffix [class.mat-disabled]="!enabled" svgIcon="ontimize:phone_outline"></mat-icon>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     <mat-error *ngIf="hasError('minlength')"
       text="{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}">

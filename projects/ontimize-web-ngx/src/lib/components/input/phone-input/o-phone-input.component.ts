@@ -13,8 +13,9 @@ import {
   Output,
   SimpleChanges,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn } from '@angular/forms';
 
 
 import { CountryCode } from './data/country-code';
@@ -30,6 +31,8 @@ import {
   DEFAULT_OUTPUTS_O_TEXT_INPUT,
   OTextInputComponent,
 } from '../text-input/o-text-input.component';
+import LocaleCode from '../../../util/locale';
+import { OValidators } from '../../../validators/o-validators';
 
 export const DEFAULT_INPUTS_O_PHONE_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT
@@ -45,6 +48,7 @@ export const DEFAULT_OUTPUTS_O_PHONE_INPUT = [
   styleUrls: ['./o-phone-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_PHONE_INPUT,
   outputs: DEFAULT_OUTPUTS_O_PHONE_INPUT,
+  encapsulation: ViewEncapsulation.None,
   providers: [
     CountryCode,
     {
@@ -52,12 +56,7 @@ export const DEFAULT_OUTPUTS_O_PHONE_INPUT = [
       // tslint:disable-next-line:no-forward-ref
       useExisting: forwardRef(() => OPhoneInputComponent),
       multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useValue: phoneNumberValidator,
-      multi: true,
-    },
+    }
   ],
 })
 export class OPhoneInputComponent extends OTextInputComponent implements OnInit, OnChanges {
@@ -76,7 +75,6 @@ export class OPhoneInputComponent extends OTextInputComponent implements OnInit,
   @Input() inputId = 'phone';
   @Input() separateDialCode = false;
   separateDialCodeClass: string;
-
   @Output() readonly countryChange = new EventEmitter<Country>();
 
   selectedCountry: Country = {
@@ -89,7 +87,7 @@ export class OPhoneInputComponent extends OTextInputComponent implements OnInit,
     placeHolder: '',
     priority: 0,
   };
-  selectOption :String="option";
+  selectOption: String = "option";
   phoneNumber = '';
   allCountries: Array<Country> = [];
   preferredCountriesInDropDown: Array<Country> = [];
@@ -129,7 +127,12 @@ export class OPhoneInputComponent extends OTextInputComponent implements OnInit,
     }
     this.checkSeparateDialCodeStyle();
   }
-
+  resolveValidators(): ValidatorFn[] {
+    const validators: ValidatorFn[] = super.resolveValidators();
+    // Inject email validator
+    validators.push(OValidators.phoneValidator);
+    return validators;
+  }
   /*
     This is a wrapper method to avoid calling this.ngOnInit() in writeValue().
     Ref: http://codelyzer.com/rules/no-life-cycle-call/
@@ -385,6 +388,11 @@ export class OPhoneInputComponent extends OTextInputComponent implements OnInit,
       }
     }
     return placeholder;
+  }
+  getFlagClass(lang: string) {
+    let flagName = LocaleCode.getCountryCode(lang);
+    flagName = (flagName !== 'en') ? flagName : 'gb';
+    return 'flag-icon-' + flagName;
   }
 
   /* --------------------------------- Helpers -------------------------------- */
