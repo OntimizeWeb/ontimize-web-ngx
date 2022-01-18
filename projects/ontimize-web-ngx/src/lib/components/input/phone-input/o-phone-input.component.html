@@ -5,10 +5,15 @@
       <mat-option *ngFor="let country of allCountries" [value]="country"> {{country.name}} +{{country.dialCode}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field class="mat-form-phone-input" [appearance]="appearance">
-    <input matInput type="tel" [id]="inputId"  [formControlName]="getAttribute()" [(ngModel)]="phoneNumber" [placeholder]="resolvePlaceholder()" [attr.maxLength]="maxLength"
-      [attr.validation]="phoneValidation" #focusable>
-    <mat-icon matSuffix [class.mat-disabled]="!enabled" svgIcon="ontimize:phone_outline"></mat-icon>
+  <mat-form-field [hideRequiredMarker]="hideRequiredMarker"
+    [class.custom-width]="hasCustomWidth" class="icon-field" [appearance]="appearance">
+    <input matInput type="tel" [id]="inputId" [formControlName]="getAttribute()" [(ngModel)]="phoneNumber" [placeholder]="resolvePlaceholder()"
+      (focus)=" innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)"
+      [attr.maxLength]=" maxLength" [attr.validation]="phoneValidation" [required]="isRequired" #focusable>
+    <mat-icon matSuffix [class.mat-disabled]="!enabled" class="svg-icon" svgIcon="ontimize:phone_outline"></mat-icon>
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     <mat-error *ngIf="hasError('minlength')"
       text="{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}">

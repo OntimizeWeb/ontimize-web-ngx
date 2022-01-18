@@ -1,9 +1,5 @@
-
-
-
-
 import { CommonModule } from '@angular/common';
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OSharedModule } from '../../../shared/shared.module';
 

@@ -15,15 +15,12 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn } from '@angular/forms';
-
-
+import { NG_VALUE_ACCESSOR, ValidatorFn } from '@angular/forms';
 import { CountryCode } from './data/country-code';
 import { CountryISO } from './enums/country-iso.enum';
 import { SearchCountryField } from './enums/search-country-field.enum';
 import { ChangeData } from './interfaces/change-data';
 import { Country } from './model/country.model';
-import { phoneNumberValidator } from './o-phone-input.validator';
 import { PhoneNumberFormat } from './enums/phone-number-format.enum';
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -129,7 +126,7 @@ export class OPhoneInputComponent extends OTextInputComponent implements OnInit,
   }
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
-    // Inject email validator
+    // Inject phone validator
     validators.push(OValidators.phoneValidator);
     return validators;
   }
