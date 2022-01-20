@@ -271,7 +271,7 @@ export class OFormNavigationClass {
 
   closeDetailAction(options?: any) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.closeDetail();
+      this.formLayoutManager.closeDetail(options);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
       // `removeLastItemsUntilMain` may not remove all necessary items so current route will be checked below

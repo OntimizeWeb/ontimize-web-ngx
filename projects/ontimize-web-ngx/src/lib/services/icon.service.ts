@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { Util } from '../util/util';
 
@@ -23,7 +23,7 @@ export class IconService {
     this._iconPosition = value;
   }
 
-  getIconValue(value: any, args: any) {
+  getIconValue(value: any, args: any): SafeHtml {
     let iconPosition = args ? args.iconPosition : undefined;
     if (!Util.isDefined(iconPosition)) {
       iconPosition = this._iconPosition;

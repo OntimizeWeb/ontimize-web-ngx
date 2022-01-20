@@ -34,7 +34,11 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -155,7 +159,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngAfterContentInit(): void {
     this.setListItemDirectivesData();
-    this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData());
+    this.subscription.add(this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData()));
   }
 
   public ngOnDestroy(): void {
@@ -190,20 +194,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
-    if (Util.isDefined(this.state.queryRows)) {
-      this.queryRows = this.state.queryRows;
-    }
   }
 
   public reinitialize(options: OListInitializationOptions): void {
     super.reinitialize(options);
-  }
-
-  public registerListItemDirective(item: OListItemDirective): void {
-    if (item) {
-      item.onClick(directiveItem => this.onItemDetailClick(directiveItem));
-      item.onDoubleClick(directiveItem => this.onItemDetailDoubleClick(directiveItem));
-    }
   }
 
   public getDense(): boolean {
@@ -236,7 +230,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     return this.componentStateService.getDataToStore();
   }
 
-  public reloadData(): void {
+  public reloadData(clearSelectedItems: boolean = true): void {
+    this.componentStateService.refreshSelection();
+    if (clearSelectedItems && this.selectable) {
+      this.clearSelection();
+    }
     let queryArgs: OQueryDataArgs = {};
     if (this.pageable) {
       this.state.queryRecordOffset = 0;
@@ -245,18 +243,15 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-    if (this.selectable) {
-      // this.selectedItems = [];
-      this.clearSelection();
-      this.state.selectedIndexes = [];
-    }
     this.listItemComponents = [];
     this.queryData(void 0, queryArgs);
   }
 
-  public reloadPaginatedDataFromStart(): void {
-    this.dataResponseArray = [];
-    this.reloadData();
+  public reloadPaginatedDataFromStart(clearSelectedItems: boolean = true): void {
+    if (this.pageable) {
+      this.dataResponseArray = [];
+      this.reloadData(clearSelectedItems);
+    }
   }
 
   protected getSortedDataFromArray(dataArray: any[]): any[] {
@@ -264,18 +259,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public isItemSelected(item: any): boolean {
-    return this.selection.isSelected(item);
-  }
-
-  public updateSelectedState(item: object, isSelected: boolean): void {
-    const selectedIndexes = this.state.selectedIndexes || [];
-    const itemIndex = this.dataResponseArray.indexOf(item);
-    if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
-      selectedIndexes.push(itemIndex);
-    } else if (!isSelected) {
-      selectedIndexes.splice(selectedIndexes.indexOf(itemIndex), 1);
-    }
-    this.state.selectedIndexes = selectedIndexes;
+    return this.selectable && this.selection.isSelected(item);
   }
 
   public onScroll(e: Event): void {
@@ -338,18 +322,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     return queryArguments;
   }
 
-  registerItem(item: IListItem): void {
-    this.listItemComponents.push(item);
-    if (this.dataResponseArray.length > 0) {
-      item.setItemData(this.dataResponseArray[this.listItemComponents.length - 1]);
-    }
-  }
-
   protected setListItemDirectivesData(): void {
     this.listItemDirectives.forEach((element: OListItemDirective, index) => {
-      element.setItemData(this.dataResponseArray[index]);
+      element.setItemData(this.dataArray[index]);
       element.setListComponent(this);
-      this.registerListItemDirective(element);
     });
   }
 
@@ -363,12 +339,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (this.pageable && !replace) {
       result = (this.dataResponseArray || []).concat(data);
     }
-    const selectedIndexes = this.state.selectedIndexes || [];
-    for (const selIndex of selectedIndexes) {
-      if (selIndex < this.dataResponseArray.length) {
-        this.selection.select(this.dataResponseArray[selIndex]);
-      }
-    }
     return result;
   }
 
@@ -379,4 +349,29 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       this.quickFilterComponent.setActiveColumns(parsedArr);
     }
   }
+
+  setDataArray(data: any): void {
+    super.setDataArray(data);
+    this.updateSelectedItems();
+    this.cd.detectChanges();
+  }
+
+  public setSelected(item: any): void {
+    super.setSelected(item);
+    this.componentStateService.refreshSelection();
+  }
+
+  public updateSelectedItems() {
+    if (!this.selectable || !Util.isDefined(this.state.selection) || this.getSelectedItems().length > 0) {
+      return;
+    }
+    this.state.selection.forEach(selectedItem => {
+      const itemKeys = Object.keys(selectedItem);
+      const foundItem = this.dataArray.find(data => itemKeys.every(key => data[key] === selectedItem[key]));
+      if (Util.isDefined(foundItem)) {
+        this.selection.select(foundItem);
+      }
+    });
+  }
+
 }

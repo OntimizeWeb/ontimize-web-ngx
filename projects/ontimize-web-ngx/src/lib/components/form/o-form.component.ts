@@ -198,7 +198,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   service: string;
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;
-  afterInsertMode: 'new' | 'detail' = null;
+  afterInsertMode: 'new' | 'detail' | 'close' = 'close';
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -911,6 +911,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this._setComponentsEditable(true);
   }
 
+  _clearAndCloseFormAfterInsert() {
+    const exitWithoutConfirmation: {} = { 'exitWithoutConfirmation': true };
+    this.closeDetail(exitWithoutConfirmation);
+  }
+
   /**
    * Performs insert action.
    * @deprecated Use `insert()` instead
@@ -944,6 +949,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self._stayInRecordAfterInsert(resp);
       } else if (self.afterInsertMode === 'new') {
         this._clearFormAfterInsert();
+      }else if (self.afterInsertMode === 'close') {
+        this._clearAndCloseFormAfterInsert();
       } else {
         self.closeDetail();
       }

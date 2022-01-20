@@ -7,6 +7,7 @@ import { ILocalStorageComponent } from '../interfaces/local-storage-component.in
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
+import { OErrorDialogManager } from '../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
@@ -90,6 +91,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected localStorageService: LocalStorageService;
   componentStateService: T;
   protected dialogService: DialogService;
+  protected oErrorDialogManager: OErrorDialogManager;
 
   /* inputs variables */
   oattr: string;
@@ -179,6 +181,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     protected injector: Injector
   ) {
     this.dialogService = this.injector.get(DialogService);
+    this.oErrorDialogManager = this.injector.get(OErrorDialogManager);
     this.localStorageService = this.injector.get(LocalStorageService);
     this.componentStateService = this.injector.get(AbstractComponentStateService);
     this.router = this.injector.get(Router);
@@ -418,10 +421,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
           this.loadingSubject.next(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
-          } else if (err && typeof err !== 'object') {
-            this.dialogService.alert('ERROR', err);
           } else {
-            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+            this.oErrorDialogManager.openErrorDialog(err);
+            console.error(err);
           }
         });
     }
