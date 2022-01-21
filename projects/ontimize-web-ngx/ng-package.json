@@ -9,7 +9,8 @@
       "@ngx-translate/http-loader": "@ngx-translate/http-loader",
       "angular-resizable-element": "angularResizableElement",
       "moment": "moment",
-      "ngx-material-timepicker": "ngx-material-timepicker"
+      "ngx-material-timepicker": "ngx-material-timepicker",
+      "google-libphonenumber": "google-libphonenumber"
     }
   },
   "whitelistedNonPeerDependencies": [
@@ -19,6 +20,7 @@
     "moment",
     "ngx-material-timepicker",
     "reflect-metadata",
-    "tslib"
+    "tslib",
+    "google-libphonenumber"
   ]
 }
