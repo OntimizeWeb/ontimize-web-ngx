@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { appInitializerFactory } from '../../../../../config/o-providers';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
@@ -55,7 +56,9 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu
   'showFilterOption: show-filter-option',
   // show-group-by-option [yes|no|true|false]: show group by menu option in the header menu
-  'showGroupByOption: show-group-by-option'
+  'showGroupByOption: show-group-by-option',
+ // show-reset-width-button [yes|no|true|false]: show reset width menu option in the header menu
+  'showResetWidthButton: show-reset-width-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -87,6 +90,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   columnsVisibilityButton: boolean = true;
   @InputConverter()
   showGroupByOption: boolean = true;
+  @InputConverter()
+  showResetWidthButton: boolean = true;
 
   public onVisibleFilterOptionChange: EventEmitter<any> = new EventEmitter();
   /* End of inputs */
@@ -460,6 +465,10 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         this.table.reloadPaginatedDataFromStart(false);
       }
     });
+  }
+
+  onResetWidthClicked() {
+    console.log("reset");
   }
 
   public onStoreConfigurationClicked(): void {
