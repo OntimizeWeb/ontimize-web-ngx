@@ -12,7 +12,6 @@
     </div>
 
     <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg"> </o-app-sidenav-image>
-
     <ng-content select="o-app-layout-sidenav-projection-start"></ng-content>
 
     <nav *ngFor="let menuRootItem of menuRootArray">
@@ -24,13 +23,13 @@
       </ul>
 
       <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
-        *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()"
-        >
+        *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()">
       </o-app-sidenav-menu-group>
+
     </nav>
-
-    <ng-content select="o-app-layout-sidenav-projection-end"></ng-content>
-
+    <div class="layout-sidenav-projection-end">
+      <ng-content select="o-app-layout-sidenav-projection-end"></ng-content>
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content class="o-app-sidenav-content">
