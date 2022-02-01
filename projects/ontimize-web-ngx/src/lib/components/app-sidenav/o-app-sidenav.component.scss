@@ -21,6 +21,11 @@ $transition-duration: 500ms;
     bottom: 0;
   }
 
+  .navMenu {
+    overflow: scroll;
+    max-height:70%
+  }
+
   .o-app-sidenav-menu-group,
   .o-app-sidenav-menu-item {
     a {
