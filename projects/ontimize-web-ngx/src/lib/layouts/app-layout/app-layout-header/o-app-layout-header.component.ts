@@ -7,5 +7,5 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT_HEADER = [
   templateUrl: './o-app-layout-header.component.html',
 })
 export class OAppLayoutHeaderComponent {
-  position: 'start' | 'end' = 'end';
+  position: 'start' | 'end' = 'start';
 }
