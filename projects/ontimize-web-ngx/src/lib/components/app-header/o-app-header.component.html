@@ -5,7 +5,9 @@
       {{ headerTitle$ | async | oTranslate }}
     </span>
     <div fxLayout="row" fxLayoutAlign="end stretch" class="o-app-header-default-actions">
-      <ng-content select="o-app-layout-header-projection-end"></ng-content>
+      <div class="layout-header-projection-end">
+        <ng-content select="o-app-layout-header-projection-end"></ng-content>
+      </div>
       <o-user-info #userInfo *ngIf="showUserInfo"></o-user-info>
       <o-language-selector *ngIf="showLanguageSelector" [use-flag-icons]="useFlagIcons"></o-language-selector>
     </div>

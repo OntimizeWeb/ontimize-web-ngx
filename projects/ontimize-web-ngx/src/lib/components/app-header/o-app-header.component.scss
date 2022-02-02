@@ -70,7 +70,12 @@
 
     .o-app-header-default-actions {
       margin-left: auto;
+
+      .layout-header-projection-end {
+        margin-right: 16px;
+      }
     }
+
   }
 
 }
