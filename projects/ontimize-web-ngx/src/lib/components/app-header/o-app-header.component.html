@@ -2,7 +2,12 @@
   <div fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
     <ng-content></ng-content>
     <span *ngIf="showTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
-      {{ headerTitle$ | async | oTranslate }}
+      <div *ngIf="title===''">
+        {{ headerTitle$ | async | oTranslate }}
+      </div>
+      <div *ngIf="title!==''">
+        {{ title | oTranslate }}
+      </div>
     </span>
     <div fxLayout="row" fxLayoutAlign="end stretch" class="o-app-header-default-actions">
       <o-user-info #userInfo *ngIf="showUserInfo"></o-user-info>

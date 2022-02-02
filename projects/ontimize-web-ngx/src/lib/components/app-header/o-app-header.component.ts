@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -41,7 +42,7 @@ export class OAppHeaderComponent {
   protected dialogService: DialogService;
   protected modulesInfoService: OModulesInfoService;
   protected authService: AuthService;
-
+  public title: string = '';
   public showTitle = false;
   public headerTitle$: Observable<string>;
 
@@ -73,12 +74,21 @@ export class OAppHeaderComponent {
 
   constructor(
     protected injector: Injector,
+    private route: ActivatedRoute,
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.modulesInfoService = this.injector.get(OModulesInfoService);
     this.authService = this.injector.get(AuthService);
 
     this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable();
+    this.route.data.subscribe(data => {
+      if (data.oAppHeaderTitle.length!=0) {
+        this.title = data.oAppHeaderTitle
+      }
+      else {
+        this.title = ''
+      }
+    })
   }
 
   onLogoutClick() {
