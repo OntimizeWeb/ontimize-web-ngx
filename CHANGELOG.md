@@ -1,6 +1,7 @@
 ## 8.5.7
 ### Features
-  * **o-app-layout-header**: Added a position attribute for `o-app-layout-header` custom elements ([ecd9848](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecd9848)) Closes [#879](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/879)
+  * **o-app-layout-header**: added a position attribute for `o-app-layout-header` custom elements ([ecd9848](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecd9848)) Closes [#879](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/879)
+  * **o-app-sidenav**: modified the position of the `o-app-layout-sidenav-projection-end` to appear in the footer ([42ce709](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42ce709)) Closes [#878](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/878)
 
 ### Bug fixes
   * **o-form**: navigation problem inside a `o-form-layout-manager` in tab mode when `after-insert-mode="detail"` ([f1d84030](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1d84030)) Closes [#800](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/800)
