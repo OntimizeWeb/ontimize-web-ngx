@@ -37,7 +37,7 @@ export class OModulesInfoService {
           this.subject.next(title);
         }
         else {
-          this.subject.next(this.router.url)
+          this.subject.next("")
         }
       })
 
