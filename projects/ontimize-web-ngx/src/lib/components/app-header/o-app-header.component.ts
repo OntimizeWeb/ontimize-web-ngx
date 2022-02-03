@@ -18,7 +18,8 @@ export const DEFAULT_INPUTS_O_APP_HEADER = [
   'color',
   'headerHeight:header-height',
   'showTitle: show-title',
-  'staticTitle: static-title'
+  'staticTitle: static-title',
+  'showStaticTitle: show-static-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -44,9 +45,9 @@ export class OAppHeaderComponent {
   protected dialogService: DialogService;
   protected modulesInfoService: OModulesInfoService;
   protected authService: AuthService;
-  public title: string = '';
   public showTitle = false;
-  public staticTitle = false;
+  public showStaticTitle = false;
+  public staticTitle: string;
   public headerTitle$: Observable<string>;
 
   @ViewChild('userInfo', { static: false })
@@ -83,7 +84,9 @@ export class OAppHeaderComponent {
     this.authService = this.injector.get(AuthService);
   }
   ngOnInit() {
-    this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable(this.staticTitle);
+    if (!this.showStaticTitle) {
+      this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable();
+    }
   }
   onLogoutClick() {
     this.authService.logoutWithConfirmation();
