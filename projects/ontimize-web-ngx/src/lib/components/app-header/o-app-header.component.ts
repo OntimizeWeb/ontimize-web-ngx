@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
@@ -74,23 +75,35 @@ export class OAppHeaderComponent {
 
   constructor(
     protected injector: Injector,
-    private route: ActivatedRoute,
+    protected router: Router,
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.modulesInfoService = this.injector.get(OModulesInfoService);
     this.authService = this.injector.get(AuthService);
-
+    this.router = this.injector.get(Router);
     this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable();
-    this.route.data.subscribe(data => {
-      if (data.oAppHeaderTitle.length!=0) {
-        this.title = data.oAppHeaderTitle
-      }
-      else {
-        this.title = ''
-      }
-    })
   }
-
+  ngOnInit() {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd),
+      map(() => {
+        let route: ActivatedRoute = this.router.routerState.root;
+        let routeTitle = '';
+        while (route!.firstChild) {
+          route = route.firstChild;
+        }
+        if (route.snapshot.data['oAppHeaderTitle']) {
+          routeTitle = route!.snapshot.data['oAppHeaderTitle'];
+        }
+        return routeTitle;
+      })).subscribe((title: string) => {
+        if (title) {
+          this.title = title;
+        }
+        else {
+          this.title = '';
+        }
+      })
+  }
   onLogoutClick() {
     this.authService.logoutWithConfirmation();
   }
