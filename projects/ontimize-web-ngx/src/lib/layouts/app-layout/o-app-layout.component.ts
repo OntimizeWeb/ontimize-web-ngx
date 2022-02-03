@@ -21,7 +21,8 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'closedSidenavImg: closed-sidenav-image',
   'headerColor: header-color',
   'headerHeight: header-height',
-  'showTitle: show-title'
+  'showTitle: show-title',
+  'staticTitle: static-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -54,6 +55,8 @@ export class OAppLayoutComponent implements AfterViewInit {
   protected _showHeader: boolean = true;
   @InputConverter()
   public showTitle: boolean = false;
+  @InputConverter()
+  public staticTitle: boolean = false;
 
   public headerColor: ThemePalette;
   public headerHeight = Codes.DEFAULT_ROW_HEIGHT;

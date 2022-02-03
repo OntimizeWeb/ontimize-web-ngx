@@ -17,7 +17,8 @@ export const DEFAULT_INPUTS_O_APP_HEADER = [
   'useFlagIcons: use-flag-icons',
   'color',
   'headerHeight:header-height',
-  'showTitle: show-title'
+  'showTitle: show-title',
+  'staticTitle: static-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -45,6 +46,7 @@ export class OAppHeaderComponent {
   protected authService: AuthService;
   public title: string = '';
   public showTitle = false;
+  public staticTitle = false;
   public headerTitle$: Observable<string>;
 
   @ViewChild('userInfo', { static: false })
@@ -75,39 +77,17 @@ export class OAppHeaderComponent {
 
   constructor(
     protected injector: Injector,
-    protected router: Router,
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.modulesInfoService = this.injector.get(OModulesInfoService);
     this.authService = this.injector.get(AuthService);
-    this.router = this.injector.get(Router);
-    this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable();
   }
   ngOnInit() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd),
-      map(() => {
-        let route: ActivatedRoute = this.router.routerState.root;
-        let routeTitle = '';
-        while (route!.firstChild) {
-          route = route.firstChild;
-        }
-        if (route.snapshot.data['oAppHeaderTitle']) {
-          routeTitle = route!.snapshot.data['oAppHeaderTitle'];
-        }
-        return routeTitle;
-      })).subscribe((title: string) => {
-        if (title) {
-          this.title = title;
-        }
-        else {
-          this.title = '';
-        }
-      })
+    this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable(this.staticTitle);
   }
   onLogoutClick() {
     this.authService.logoutWithConfirmation();
   }
-
   set color(newValue: ThemePalette) {
     this._color = newValue;
   }
