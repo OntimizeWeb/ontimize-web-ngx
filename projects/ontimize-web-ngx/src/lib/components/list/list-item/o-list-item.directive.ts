@@ -12,7 +12,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { IListItem } from '../../../interfaces/o-list-item.interface';
+import { IListItem, instanceOfIListItem } from '../../../interfaces/o-list-item.interface';
 import { IList } from '../../../interfaces/o-list.interface';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
@@ -32,7 +32,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @Input('o-list-item')
-  public modelData: object;
+  public modelData: any;
 
   @Input()
   public selectable: boolean = false;
@@ -50,8 +50,8 @@ export class OListItemDirective implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     const hostComponent = this._viewContainerRef["_data"].componentView.component;
-    if (hostComponent.hasOwnProperty('_list')) {
-      this.listItem = hostComponent as IListItem
+    if (instanceOfIListItem(hostComponent)) {
+      this.listItem = hostComponent
     }
     this.subscription.add(this.actRoute.params.subscribe(params => this.updateActiveState(params)));
   }
@@ -62,7 +62,7 @@ export class OListItemDirective implements OnInit, OnDestroy {
 
   @HostListener('mouseenter')
   public onMouseEnter(): void {
-    if (!this.selectable && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
+    if (!this.selectable && this._list && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
       this.renderer.setStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
   }
@@ -94,21 +94,21 @@ export class OListItemDirective implements OnInit, OnDestroy {
   }
 
   public onItemClicked(e?: Event): void {
-    if (!this.selectable) {
+    if (!this.selectable && this._list) {
       this._list.onItemDetailClick(this);
       this.onClick.emit(this.getItemData())
     }
   }
 
   public onItemDoubleClicked(e?: Event): void {
-    if (!this.selectable) {
+    if (!this.selectable && this._list) {
       this._list.onItemDetailDoubleClick(this);
       this.onDoubleClick.emit(this.getItemData())
     }
   }
 
   public isSelected(): boolean {
-    return this._list.isItemSelected(this.modelData);
+    return this._list && this._list.isItemSelected(this.modelData);
   }
 
   public setListComponent(list: IList): void {
@@ -116,11 +116,11 @@ export class OListItemDirective implements OnInit, OnDestroy {
   }
 
   public setItemData(data: any): void {
-    if (!Util.isDefined(this.modelData)) {
+    if (!Util.isDefined(this.modelData) || this.modelData !== 'object') {
       this.modelData = data;
     }
     if (Util.isDefined(this.listItem)) {
-      this.listItem .setItemData(this.modelData);
+      this.listItem.setItemData(this.modelData);
     }
   }
 
