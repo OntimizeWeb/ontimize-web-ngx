@@ -21,9 +21,11 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
-import { ONavigationItem } from '../../../services/navigation.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
-import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
+import {
+  FormLayoutCloseDetailOptions,
+  FormLayoutDetailComponentData
+} from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
@@ -228,7 +230,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.previousSelectedIndex = this.tabGroup.selectedIndex;
   }
 
-  closeTab(index: number, options?: any) {
+  closeTab(index: number, options?: FormLayoutCloseDetailOptions) {
     if (!this.formLayoutManager) {
       return;
     }
@@ -244,10 +246,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         });
       }
     }));
-    if (Util.isDefined(options) && Util.isDefined(options.exitWithoutConfirmation) && options.exitWithoutConfirmation) {
-      onCloseTabAccepted.emit(true);
-    }
-    else if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
+
+    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData, options)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
       });
@@ -408,7 +408,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.addTab(detail);
   }
 
-  closeDetail(options?: any) {
+  closeDetail(options?: FormLayoutCloseDetailOptions) {
     this.closeTab(this.tabGroup.selectedIndex - 1, options);
   }
 

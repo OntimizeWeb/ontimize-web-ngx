@@ -15,6 +15,22 @@ $transition-duration: 500ms;
     }
   }
 
+  .layout-sidenav-projection-end {
+    width: 100%;
+    position: absolute;
+    bottom: 12px;
+  }
+
+  .navMenu {
+    overflow: auto;
+    max-height: 70%;
+  }
+  @-moz-document url-prefix() {
+    .navMenu {
+      height: 100%;
+    }
+  }
+
   .o-app-sidenav-menu-group,
   .o-app-sidenav-menu-item {
     a {
@@ -53,6 +69,7 @@ $transition-duration: 500ms;
       .o-app-sidenav-sidenav.mat-drawer-closed {
         visibility: visible !important;
         transform: translate3d($sidenav-diff, 0, 0);
+        -moz-transform: translate3d($sidenav-diff+10, 0, 0);
       }
 
       .o-app-sidenav-content.mat-drawer-content {
