@@ -81,7 +81,7 @@
       </th>
       <td mat-cell *matCellDef="let row">
         <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)"
-          [checked]="selection.isSelected(row)"></mat-checkbox>
+          [checked]="isRowSelected(row)"></mat-checkbox>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
@@ -124,11 +124,11 @@
           <div class="content">
 
             <ng-container [ngSwitch]="true">
-              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !selection.isSelected(row))">
+              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !isRowSelected(row))">
                 <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
                 </ng-template>
               </ng-container>
-              <ng-container *ngSwitchCase="selection.isSelected(row) && column.editing">
+              <ng-container *ngSwitchCase="isRowSelected(row) && column.editing">
                 <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
                 </ng-template>
               </ng-container>
@@ -155,11 +155,11 @@
           <div class="content">
 
             <ng-container [ngSwitch]="true">
-              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !selection.isSelected(row))">
+              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !isRowSelected(row))">
                 <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
                 </ng-template>
               </ng-container>
-              <ng-container *ngSwitchCase="selection.isSelected(row) && column.editing">
+              <ng-container *ngSwitchCase="isRowSelected(row) && column.editing">
                 <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
                 </ng-template>
               </ng-container>
