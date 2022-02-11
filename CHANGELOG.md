@@ -1,3 +1,5 @@
+## 8.5.8
+
 ## 8.5.7 (2022-02-11)
 ### Features
   * **o-app-layout**, **o-app-header**: new attribute `static-title` ([f693bdb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f693bdb)) Closes [#880](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/880)
