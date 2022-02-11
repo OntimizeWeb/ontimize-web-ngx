@@ -7,6 +7,7 @@
 ### Bug fixes
   * **o-form**: navigation problem inside a `o-form-layout-manager` in tab mode when `after-insert-mode="detail"` ([f1d84030](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f1d84030)) Closes [#800](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/800)
   * **o-list**: Fixed error that prevents the correct operation of the detail of a list ([c49b186](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c49b186)) Closes [#877](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/877)
+   * **o-table**: Fixed error of not keeping selected rows ([92e530a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/92e530a)) Closes [#881](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/881)
 
 ## 8.5.6 (2021-12-20)
 ### Features
