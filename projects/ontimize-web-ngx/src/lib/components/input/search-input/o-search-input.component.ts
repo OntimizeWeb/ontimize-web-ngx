@@ -196,6 +196,15 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     return result;
   }
 
+  public getCountColumnsChecked(): number {
+    let count = 0;
+    this.colArray.forEach((col: ColumnObject) => {
+      if (col.checked) {
+        count++;
+      }
+    });
+    return count;
+  }
   public onFilterCaseSensitiveChange(event: MatCheckboxChange): void {
     this.filterCaseSensitive = event.checked;
     // triggerOnSearch if we want to trigger search on each change
