@@ -1,5 +1,7 @@
 ## 8.5.8
-
+### Bug fixes
+  * **o-date-input**: fixing `min` and `max` inputs bug ([a0b6d55c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0b6d55c)) Closes [#891](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/891)
+  
 ## 8.5.7 (2022-02-11)
 ### Features
   * **o-app-layout**, **o-app-header**: new attribute `static-title` ([f693bdb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f693bdb)) Closes [#880](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/880)
