@@ -1,6 +1,6 @@
 import { CdkVirtualScrollViewport, VirtualScrollStrategy } from "@angular/cdk/scrolling";
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 
 @Injectable()
@@ -11,7 +11,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   private headerHeight!: number;
   private footerHeight!: number;
   private readonly indexChange = new Subject<number>();
-  public scrolledIndexChange = this.indexChange.pipe(distinctUntilChanged());
+  public scrolledIndexChange: Observable<number> = this.indexChange.pipe(distinctUntilChanged());
   public readonly stickyChange = new Subject<number>();
   private bufferMultiplier: number = 1;
 
