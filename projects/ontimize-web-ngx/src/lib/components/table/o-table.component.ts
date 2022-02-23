@@ -1957,8 +1957,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public clearSelection(): void {
-    this.selection.clear();
-    this.state.selection = [];
+    if (Util.isDefined(this.selection)) {
+      this.selection.clear();
+    }
+    if (Util.isDefined(this.state)) {
+      this.state.selection = [];
+    }
   }
 
   public setSelected(item: any): void {
