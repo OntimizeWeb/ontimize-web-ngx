@@ -1,4 +1,8 @@
 ## 8.5.8
+### Features
+  * **o-search-input**: changed style to match `o-table-quickfilter` style ([96fd895](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96fd895)) Closes [#890](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/890)
+  * **o-list**, **o-grid**: new attribute `quick-filter-appearance` ([96fd895](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96fd895)) Closes [#890](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/890)
+
 ### Bug fixes
   * **o-table**: protecting code ([00db7717](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/00db7717)) Closes [#892](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/892)
 
