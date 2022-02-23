@@ -26,7 +26,10 @@ import { AbstractComponentStateService } from '../../services/state/o-component-
 import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-form-layout-manager-component-state.class';
 import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import { FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
+import {
+  FormLayoutCloseDetailOptions,
+  FormLayoutDetailComponentData
+} from '../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
@@ -399,7 +402,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
   }
 
-  public closeDetail(options?: any): void {
+  public closeDetail(options?: FormLayoutCloseDetailOptions): void {
     const compRef = this.getLayoutModeComponent();
     if (Util.isDefined(compRef)) {
       compRef.closeDetail(options);
@@ -602,7 +605,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return Util.wrapIntoObservable(Util.isDefined(compRef) ? compRef.canAddDetailComponent() : true);
   }
 
-  public hasToConfirmExit(data: FormLayoutDetailComponentData): boolean {
+  public hasToConfirmExit(data: FormLayoutDetailComponentData, options?: FormLayoutCloseDetailOptions): boolean {
+    if (Util.isDefined(options) && options.exitWithoutConfirmation) {
+      return false;
+    }
     const formsAttr = Object.keys(data.innerFormsInfo);
     let result: boolean = false;
     if(formsAttr.length > 0) {

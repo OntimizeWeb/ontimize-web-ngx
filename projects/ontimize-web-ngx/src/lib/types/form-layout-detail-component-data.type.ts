@@ -16,3 +16,7 @@ export type FormLayoutDetailComponentData = {
   insertionMode?: boolean;
   formDataByLabelColumns?: any;
 };
+
+export type FormLayoutCloseDetailOptions = {
+  exitWithoutConfirmation?: boolean;
+}

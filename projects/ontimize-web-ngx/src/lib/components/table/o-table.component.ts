@@ -652,6 +652,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild(OTableContextMenuComponent, { static: true })
   contextMenuContentChild: OTableContextMenuComponent;
 
+  protected triggerSelectionEvents: boolean = true;
+
   constructor(
     public injector: Injector,
     elRef: ElementRef,
@@ -957,7 +959,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.tableContextMenu = value;
     this.contextMenuSubscription = this.tableContextMenu.onShow.subscribe((params: IOContextMenuContext) => {
       params.class = 'o-table-context-menu ' + this.rowHeight;
-      if (params.data && !this.selection.isSelected(params.data.rowValue)) {
+      if (params.data && !this.isRowSelected(params.data.rowValue)) {
         this.clearSelection();
         this.selectedRow(params.data.rowValue);
       }
@@ -1327,6 +1329,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected registerDataSourceListeners() {
     this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
       this.stopEdition();
+      this.checkSelectedItemData();
       if (!this.pageable) {
         setTimeout(() => {
           this.updateSortingSubject(false);
@@ -1751,7 +1754,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
       this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
       this.saveDataNavigationInLocalStorage();
-      this.selection.clear();
+      this.clearSelection();
       this.selectedRow(row);
       this.viewDetail(row);
       return;
@@ -1764,7 +1767,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.handleMultipleSelection(row);
     } else if (!this.isSelectionModeNone()) {
       const selectedItems = this.getSelectedItems();
-      if (this.selection.isSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
+      if (this.isRowSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
         return;
       } else {
         this.clearSelectionAndEditing();
@@ -1900,11 +1903,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     // Initializing row selection listener
     if (!this.selectionChangeSubscription && this._oTableOptions.selectColumn.visible) {
       this.selectionChangeSubscription = this.selection.changed.subscribe((selectionData: SelectionChange<any>) => {
-        if (selectionData && selectionData.added.length > 0) {
-          ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
-        }
-        if (selectionData && selectionData.removed.length > 0) {
-          ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
+        if (this.triggerSelectionEvents && selectionData) {
+          if (selectionData.added.length > 0) {
+            ObservableWrapper.callEmit(this.onRowSelected, selectionData.added);
+          }
+          if (selectionData.removed.length > 0) {
+            ObservableWrapper.callEmit(this.onRowDeselected, selectionData.removed);
+          }
         }
       });
     }
@@ -1936,19 +1941,34 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public selectAll(): void {
-    this.dataSource.renderedData.forEach(row => this.selection.select(row));
+    this.dataSource.renderedData.forEach(row => this.setSelected(row));
   }
 
   public selectionCheckboxToggle(event: MatCheckboxChange, row: any): void {
     if (this.isSelectionModeSingle()) {
       this.clearSelection();
     }
-    this.selectedRow(row);
+    event.checked ? this.selectedRow(row) : this.selection.deselect(row);
   }
 
   public selectedRow(row: any): void {
     this.setSelected(row);
     this.cd.detectChanges();
+  }
+
+  public clearSelection(): void {
+    if (Util.isDefined(this.selection)) {
+      this.selection.clear();
+    }
+    if (Util.isDefined(this.state)) {
+      this.state.selection = [];
+    }
+  }
+
+  public setSelected(item: any): void {
+    if (Util.isDefined(item) && !this.isRowSelected(item)) {
+      this.selection.select(item);
+    }
   }
 
   get showDeleteButton(): boolean {
@@ -2275,32 +2295,30 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   clearSelectionAndEditing(clearSelection: boolean = true) {
     if (clearSelection) {
-      this.selection.clear();
+      this.clearSelection();
     }
     this._oTableOptions.columns
       .filter(oColumn => oColumn.editing)
       .forEach(oColumn => {
         oColumn.editing = false;
       });
-    this.checkSelectedItemData();
   }
 
   protected checkSelectedItemData() {
+    this.triggerSelectionEvents = false;
     if (Util.isDefined(this.state.selection) && this.state.selection.length > 0) {
       this.state.selection.forEach(selectedItem => {
+        const selectedItemKeys = Object.keys(selectedItem);
         // finding selected item data in the table rendered data
-        const foundItem = this.dataSource.renderedData.find(data => {
-          let result = true;
-          Object.keys(selectedItem).forEach(key => {
-            result = result && (data[key] === selectedItem[key]);
-          });
-          return result;
-        });
-        if (foundItem) {
-          this.selection.select(foundItem);
+        const foundItem = this.dataSource.renderedData.find(data =>
+          selectedItemKeys.every(key => data[key] === selectedItem[key])
+        );
+        if (foundItem && !this.isRowSelected(foundItem)) {
+          this.setSelected(foundItem);
         }
       });
     }
+    this.triggerSelectionEvents = true;
   }
 
   useDetailButton(column: OColumn): boolean {
@@ -2334,11 +2352,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   usePlainRender(column: OColumn, row: any): boolean {
-    return !this.useDetailButton(column) && !column.renderer && (!column.editor || (!column.editing || !this.selection.isSelected(row)));
+    return !this.useDetailButton(column) && !column.renderer && (!column.editor || (!column.editing || !this.isRowSelected(row)));
   }
 
   useCellRenderer(column: OColumn, row: any): boolean {
-    return column.renderer && (!column.editing || column.editing && !this.selection.isSelected(row));
+    return column.renderer && (!column.editing || column.editing && !this.isRowSelected(row));
   }
 
   useCellEditor(column: OColumn, row: any): boolean {
@@ -2346,7 +2364,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (column.editor && column.editor.autoCommit) {
       return false;
     }
-    return column.editor && column.editing && this.selection.isSelected(row);
+    return column.editor && column.editing && this.isRowSelected(row);
   }
 
   isSelectionModeMultiple(): boolean {
@@ -2729,7 +2747,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   isRowSelected(row: any): boolean {
-    return !this.isSelectionModeNone() && this.selection.isSelected(row);
+    const keys = Object.keys(row);
+    return !this.isSelectionModeNone() && this.selection.selected.some((element: any) => keys.every(key => row[key] === element[key]));
   }
 
   refreshColumnsWidth() {
