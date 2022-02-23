@@ -17,6 +17,7 @@ import {
   SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
+import { MatFormFieldAppearance } from '@angular/material';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -67,7 +68,9 @@ export const DEFAULT_INPUTS_O_LIST = [
   'insertButtonPosition:insert-button-position',
 
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
-  'insertButtonFloatable:insert-button-floatable'
+  'insertButtonFloatable:insert-button-floatable',
+
+  'quickFilterAppearance:quick-filter-appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -124,6 +127,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
+  protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
 
   protected oMatSort: OMatSort;
 
@@ -373,5 +377,15 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       }
     });
   }
+  get quickFilterAppearance(): MatFormFieldAppearance {
+    return this._quickFilterAppearance;
+  }
 
+  set quickFilterAppearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      value = undefined;
+    }
+    this._quickFilterAppearance = value;
+  }
 }
