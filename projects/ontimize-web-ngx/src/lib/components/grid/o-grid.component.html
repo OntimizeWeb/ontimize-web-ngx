@@ -28,7 +28,8 @@
       <div class="o-grid-sort" *ngIf="showSort && sortableColumns.length > 0">
         <mat-form-field class="o-grid-select-sort" floatLabel="never">
           <mat-icon matPrefix>sort</mat-icon>
-          <mat-select #sortSelect [value]="currentOrderColumn" (selectionChange)="sortColumnChanged($event)" placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
+          <mat-select #sortSelect [value]="currentOrderColumn" (selectionChange)="sortColumnChanged($event)"
+            placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
             <mat-option *ngFor="let column of sortableColumns; let i = index" [value]="i">
               {{ getSortOptionText(column) }}
             </mat-option>
@@ -40,7 +41,8 @@
         <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
       </div>
       <o-search-input *ngIf="quickFilter" [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive"
-        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [placeholder]="quickFilterPlaceholder" appearance="legacy" float-label="never"></o-search-input>
+        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance"
+        float-label="never"></o-search-input>
     </div>
   </mat-toolbar>
 
