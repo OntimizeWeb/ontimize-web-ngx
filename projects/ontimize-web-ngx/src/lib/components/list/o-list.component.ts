@@ -384,7 +384,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   set quickFilterAppearance(value: MatFormFieldAppearance) {
     const values = ['legacy', 'standard', 'fill', 'outline'];
     if (values.indexOf(value) === -1) {
-      console.warn('The quickFilterAppearance attribute is undefined');
+      console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
       value = 'outline';
     }
     this._quickFilterAppearance = value;
