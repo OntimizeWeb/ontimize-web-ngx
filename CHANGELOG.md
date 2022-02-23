@@ -1,3 +1,5 @@
+## 8.5.9
+
 ## 8.5.8 (2022-02-23)
 ### Features
   * **o-search-input**: changed style to match `o-table-quickfilter` style ([96fd895](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96fd895)) Closes [#890](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/890)
