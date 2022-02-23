@@ -1,4 +1,6 @@
 ## 8.5.8
+### Bug fixes
+  * **o-table**: protecting code ([00db7717](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/00db7717)) Closes [#892](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/892)
 
 ## 8.5.7 (2022-02-11)
 ### Features
