@@ -17,7 +17,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatPaginator, MatSelectChange, PageEvent } from '@angular/material';
+import { MatFormFieldAppearance, MatPaginator, MatSelectChange, PageEvent } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -69,7 +69,8 @@ export const DEFAULT_INPUTS_O_GRID = [
   // insert-button-position [ top | bottom ]: position of the insert button. Default: 'bottom'
   'insertButtonPosition:insert-button-position',
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
-  'insertButtonFloatable:insert-button-floatable'
+  'insertButtonFloatable:insert-button-floatable',
+  'quickfilterAppearance:quickfilter-appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -127,7 +128,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
 
   public gutterSize = '1px';
-
+  protected _quickfilterAppearance: MatFormFieldAppearance = 'outline';
   get cols(): number {
     return this._cols || this._colsDefault;
   }
@@ -530,5 +531,17 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
       const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
       this.quickFilterComponent.setActiveColumns(parsedArr);
     }
+  }
+  get quickfilterAppearance(): MatFormFieldAppearance {
+    return this._quickfilterAppearance;
+  }
+
+  set quickfilterAppearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      console.warn('The quickfilterAppearance attribute is undefined');
+      value = 'outline';
+    }
+    this._quickfilterAppearance = value;
   }
 }

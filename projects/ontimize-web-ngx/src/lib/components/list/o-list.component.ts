@@ -70,7 +70,7 @@ export const DEFAULT_INPUTS_O_LIST = [
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
   'insertButtonFloatable:insert-button-floatable',
 
-  'quickFilterAppearance:quick-filter-appearance'
+  'quickfilterAppearance:quickfilter-appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -127,7 +127,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
-  protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
+  protected _quickfilterAppearance: MatFormFieldAppearance = 'outline';
 
   protected oMatSort: OMatSort;
 
@@ -377,15 +377,16 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       }
     });
   }
-  get quickFilterAppearance(): MatFormFieldAppearance {
-    return this._quickFilterAppearance;
+  get quickfilterAppearance(): MatFormFieldAppearance {
+    return this._quickfilterAppearance;
   }
 
-  set quickFilterAppearance(value: MatFormFieldAppearance) {
+  set quickfilterAppearance(value: MatFormFieldAppearance) {
     const values = ['legacy', 'standard', 'fill', 'outline'];
     if (values.indexOf(value) === -1) {
-      value = undefined;
+      console.warn('The quickfilterAppearance attribute is undefined');
+      value = 'outline';
     }
-    this._quickFilterAppearance = value;
+    this._quickfilterAppearance = value;
   }
 }
