@@ -1966,8 +1966,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public setSelected(item: any): void {
-    if (Util.isDefined(item)) {
-      this.isRowSelected(item) ? null : this.selection.select(item);
+    if (Util.isDefined(item) && !this.isRowSelected(item)) {
+      this.selection.select(item);
     }
   }
 
