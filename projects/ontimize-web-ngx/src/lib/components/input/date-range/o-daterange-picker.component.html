@@ -17,7 +17,7 @@
   </div>
   <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}" *ngIf="showCalInRanges">
     <div class="calendar-table">
-      <table class="table-condensed" *ngIf="calendarVariables">
+      <table class="table-condensed" *ngIf="calendarVariables" aria-describedby="calendar days table">
         <thead>
           <tr>
             <th scope="col" *ngIf="showWeekNumbers || showISOWeekNumbers"></th>
@@ -130,7 +130,7 @@
   </div>
   <div class="calendar right" *ngIf="showCalInRanges && !singleDatePicker">
     <div class="calendar-table">
-      <table class="table-condensed" *ngIf="calendarVariables">
+      <table class="table-condensed" *ngIf="calendarVariables" aria-describedby="calendar days table">
         <thead>
           <tr>
             <th scope="col" *ngIf="showWeekNumbers || showISOWeekNumbers"></th>

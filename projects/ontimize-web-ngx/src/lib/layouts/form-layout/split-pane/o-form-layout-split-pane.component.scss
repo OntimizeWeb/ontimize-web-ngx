@@ -29,7 +29,7 @@
       width: 50%;
     }
   }
-  mwlResizable {
+  .mwlResizable {
     box-sizing: border-box; // required for the enableGhostResize option to work
   }
   .o-split-pane-secondary-content {

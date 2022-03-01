@@ -2,12 +2,12 @@
   [class.medium]="compareListHeight('medium')" [class.large]="compareListHeight('large')">
 
   <mat-card-header *ngIf="avatar !== undefined">
-    <img matCardAvatar src="{{ avatar }}">
+    <img matCardAvatar src="{{ avatar }}" alt="avatar image" >
     <mat-card-title *ngIf="title !== undefined"> {{ title }}</mat-card-title>
     <mat-card-subtitle *ngIf="subtitle !== undefined"> {{ subtitle }}</mat-card-subtitle>
   </mat-card-header>
 
-  <img *ngIf="image !== undefined" matCardImage src="{{ image }}" [class.exists-action-button]="icon !== undefined">
+  <img *ngIf="image !== undefined" matCardImage src="{{ image }}" [class.exists-action-button]="icon !== undefined" alt="card image" >
 
   <button type="button" *ngIf="icon !== undefined && compareListHeight('small')" mat-mini-fab (click)="onActionIconClick($event)" class="action-button">
     <mat-icon>{{ icon }}</mat-icon>
