@@ -1,6 +1,6 @@
 <nav fxFlex fxLayout="row" fxLayoutAlign="space-between stretch" [ngClass]="color ? 'o-app-header-'+color : ''">
-  <div fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
-
+  <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+    <ng-content></ng-content>
     <ng-content select="o-app-layout-header-projection-start"></ng-content>
     <span *ngIf="showTitle && !showStaticTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
       {{ headerTitle$ | async | oTranslate }}
