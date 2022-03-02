@@ -1,4 +1,6 @@
 ## 8.5.9
+### Bug fixes
+  * **o-app-header**: fixed bug that the menu icon disappearin mobile mode ([55648e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/55648e3)) Closes [#899](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/899)
 
 ## 8.5.8 (2022-02-23)
 ### Features
