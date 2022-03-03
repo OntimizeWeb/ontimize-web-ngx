@@ -1,6 +1,11 @@
 ## 8.5.9
 ### Bug fixes
-  * **o-app-header**: fixed bug that the menu icon disappearin mobile mode ([55648e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/55648e3)) Closes [#899](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/899)
+  * **o-app-header**: fixed bug that the menu icon disappeared in mobile mode ([55648e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/55648e3)) Closes [#899](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/899)
+
+  * Fixed reported bugs by Sonar ([24211d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/24211d7))
+    ** `alt` attribute of images
+    ** css duplicated entries
+    ** table `aria-describedby` attribute
 
 ## 8.5.8 (2022-02-23)
 ### Features
