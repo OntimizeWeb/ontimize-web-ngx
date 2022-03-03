@@ -2515,9 +2515,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       filterCaseSensitive will be the value in local storage
     */
     if (storage.initialConfiguration.filterCaseSensitive !== this.filterCaseSensitive) {
-      this.filterCaseSensitive = this.filterCaseSensitive;
+      this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
     } else {
-      this.filterCaseSensitive = storage.hasOwnProperty('filter-case-sensitive') ? storage['filter-case-sensitive'] : this.filterCaseSensitive;
+      this._oTableOptions.filterCaseSensitive = storage.hasOwnProperty('filter-case-sensitive') ? storage['filter-case-sensitive'] : this.filterCaseSensitive;
     }
 
     if (storage.initialConfiguration.filterColumnActiveByDefault !== this.filterColumnActiveByDefault) {
