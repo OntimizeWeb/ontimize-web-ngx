@@ -1,4 +1,6 @@
 ## 8.5.9
+### Bug fixes
+  * **o-table**: fixing `filter-case-sensitive` input parsing and state storage bug ([3f320e49](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3f320e49)) Closes [#903](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/903)
 
 ## 8.5.8 (2022-02-23)
 ### Features
