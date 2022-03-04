@@ -70,7 +70,8 @@
 
   <!-- GRID FOOTER -->
   <div *ngIf="!paginationControls && showFooter" fxLayout="row" fxLayoutAlign="center center" class="o-grid-footer">
-    <button type="button" mat-button *ngIf="getDataArray().length < totalRecords" (click)="loadMore()" class="mat-raised-button">
+    <button type="button" mat-button *ngIf="getDataArray().length < totalRecords && getDataArray().length>0" (click)="loadMore()"
+      class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
     <span fxFlex></span>
