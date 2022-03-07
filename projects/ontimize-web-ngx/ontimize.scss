@@ -3,6 +3,10 @@
 @import "src/lib/components/container/o-container-collapsible.component.scss";
 @import "src/lib/components/input/input.scss";
 
+$mat-button-line-height: 32px;
+$mat-menu-item-height: 32px;
+$mat-stroked-button-line-height: $mat-button-line-height - 2;
+
 .relative {
   position: relative;
 }
@@ -141,14 +145,13 @@ button {
   &.mat-button,
   &.mat-flat-button,
   &.mat-icon-button,
-  &.mat-raised-button,
-  &.mat-stroked-button {
-    height: 32px;
-    line-height: 32px;
+  &.mat-raised-button {
+    height: $mat-button-line-height;
+    line-height: $mat-button-line-height;
   }
 
   &.mat-icon-button {
-    width: 32px;
+    width: $mat-button-line-height;
   }
 }
 
@@ -164,8 +167,8 @@ button {
 /*MAT MENU*/
 .o-mat-menu.mat-menu-panel {
   .mat-menu-item {
-    line-height: 32px;
-    height: 32px;
+    line-height: $mat-menu-item-height;
+    height: $mat-menu-item-height;
   }
 }
 
