@@ -1,15 +1,15 @@
 .o-button {
   display: inline-block;
   pointer-events: none;
-  
+
   button {
     pointer-events: auto;
-
-    * { 
-      pointer-events: none; 
+    width: 100%;
+    * {
+      pointer-events: none;
     }
   }
-  
+
   .mat-icon-button .mat-button-ripple.mat-ripple {
     border-radius: 50%;
   }
