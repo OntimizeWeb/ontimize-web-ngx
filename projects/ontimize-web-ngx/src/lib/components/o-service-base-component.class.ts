@@ -276,7 +276,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
     }
-    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {

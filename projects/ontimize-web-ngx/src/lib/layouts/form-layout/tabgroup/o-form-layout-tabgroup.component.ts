@@ -346,7 +346,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       return;
     }
 
-    if (this.state.tabsData.length >= 1) {
+    if (this.state.tabsData.length >= 1 && (this.state.tabsData[0].url || '').length > 0) {
       this.showLoading.next(true);
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
