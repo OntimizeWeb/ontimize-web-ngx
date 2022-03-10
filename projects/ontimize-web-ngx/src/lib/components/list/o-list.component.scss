@@ -25,8 +25,12 @@
   position: relative;
   flex-direction: column;
 
-  .mat-toolbar.dense {
-    height: 48px;
+  .mat-toolbar {
+    padding:0 4px;
+
+    &.dense {
+      height: 48px;
+    }
   }
 
   .o-list-content {
