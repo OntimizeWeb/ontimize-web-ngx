@@ -150,6 +150,11 @@ button {
     line-height: $mat-button-line-height;
   }
 
+  &.mat-stroked-button {
+    height: $mat-button-line-height;
+    line-height: $mat-stroked-button-line-height;
+  }
+
   &.mat-icon-button {
     width: $mat-button-line-height;
   }
