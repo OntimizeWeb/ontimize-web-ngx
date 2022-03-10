@@ -1,5 +1,9 @@
 ## 8.5.9
 
+### Bug fixes
+  * **o-form-layout-manager**: protecting tabgroup initialization code ([b8cd35ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8cd35ca)) Closes [#884](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/884)
+   * **OServiceBaseComponent**, **o-form-layout-manager**: no longer saving component state in component `onDestroy` method ([b8cd35ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8cd35ca)) Closes [#884](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/884)
+
 ## 8.5.8 (2022-02-23)
 ### Features
   * **o-search-input**: changed style to match `o-table-quickfilter` style ([96fd895](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96fd895)) Closes [#890](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/890)
