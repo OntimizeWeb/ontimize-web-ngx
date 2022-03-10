@@ -70,7 +70,10 @@ export const DEFAULT_INPUTS_O_LIST = [
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
   'insertButtonFloatable:insert-button-floatable',
 
-  'quickFilterAppearance:quick-filter-appearance'
+  'quickFilterAppearance:quick-filter-appearance',
+
+  // show-buttons-text [yes|no|true|false]: show text of buttons. Default: no.
+  'showButtonsText: show-buttons-text'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -112,6 +115,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public deleteButton: boolean = true;
   @InputConverter()
   public insertButtonFloatable: boolean = true;
+  @InputConverter()
+  showButtonsText: boolean = false;
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
