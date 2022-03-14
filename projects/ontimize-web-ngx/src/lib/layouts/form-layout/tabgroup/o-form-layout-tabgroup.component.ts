@@ -320,17 +320,17 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   getDataToStore(): any {
-    const tabsData = [];
-    this.data.forEach((data: FormLayoutDetailComponentData) => {
-      tabsData.push({
+    // Issue #884 avoid storing insertionMode tabs
+    const tabsData = this.data
+      .filter((data: FormLayoutDetailComponentData) => !data.insertionMode)
+      .map((data: FormLayoutDetailComponentData) => ({
         params: data.params,
         queryParams: data.queryParams,
         urlSegments: data.urlSegments,
         url: data.url,
         label: data.label,
         insertionMode: data.insertionMode
-      });
-    });
+      }));
     return {
       tabsData: tabsData,
       selectedIndex: this.tabGroup.selectedIndex
@@ -345,6 +345,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     if (!Util.isDefined(this.state) || !Util.isDefined(this.state.tabsData)) {
       return;
     }
+
+    // Issue #884 ensuring that a insertion mode tab that might be previously stored wont be created
+    this.state.tabsData = this.state.tabsData.filter(tabData=> !tabData.insertionMode)
 
     if (this.state.tabsData.length >= 1 && (this.state.tabsData[0].url || '').length > 0) {
       this.showLoading.next(true);
