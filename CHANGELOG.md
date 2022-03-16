@@ -1,4 +1,4 @@
-## 8.5.9
+## 8.5.9 (2022-03-16)
 ### Feature
 * **o-grid**, **o-list**: new attribute `show-buttons-text` ([c1d2336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1d2336))
 * **o-form**:  Added the CSS class `fill-form` ([8d0461d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d0461d))
