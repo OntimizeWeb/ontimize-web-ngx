@@ -23,8 +23,7 @@ import { merge, Subscription } from 'rxjs';
 import { InputConverter } from '../../decorators/input-converter';
 import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
-import { OntimizeServiceProvider } from '../../services/factories';
-import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
@@ -86,7 +85,8 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   selector: 'o-list',
   providers: [
     OntimizeServiceProvider,
-    { provide: AbstractComponentStateService, useClass: OListComponentStateService, deps: [Injector] }
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OListComponentStateService },
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,

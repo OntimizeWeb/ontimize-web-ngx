@@ -131,9 +131,8 @@ export function authServiceFactory(injector: Injector): AuthService {
   return Util.isDefined(service) ? service : new OntimizeAuthService(injector);
 }
 
-export function componentStateFactory(injector: Injector): AuthService {
-  const serviceClass = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+export function componentStateFactory(injector: Injector): AbstractComponentStateService<any,any> {
+  const service = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
   return Util.isDefined(service) ? service : new DefaultComponentStateService(injector);
 }
 

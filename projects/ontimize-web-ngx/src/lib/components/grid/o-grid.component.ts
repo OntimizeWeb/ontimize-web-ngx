@@ -3,7 +3,6 @@ import {
   Component,
   ContentChildren,
   ElementRef,
-  EventEmitter,
   forwardRef,
   Inject,
   Injector,
@@ -22,8 +21,7 @@ import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
-import { OntimizeServiceProvider } from '../../services/factories';
-import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -33,7 +31,11 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
@@ -85,7 +87,8 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   selector: 'o-grid',
   providers: [
     OntimizeServiceProvider,
-    { provide: AbstractComponentStateService, useClass: OGridComponentStateService, deps: [Injector] }
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OGridComponentStateService },
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
   outputs: DEFAULT_OUTPUTS_O_GRID,

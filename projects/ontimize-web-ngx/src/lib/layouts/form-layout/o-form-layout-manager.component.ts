@@ -9,6 +9,7 @@ import {
   OnInit,
   Optional,
   SkipSelf,
+  Type,
   ViewChild
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
@@ -19,6 +20,7 @@ import { InputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
@@ -74,7 +76,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   templateUrl: './o-form-layout-manager.component.html',
   styleUrls: ['./o-form-layout-manager.component.scss'],
   providers: [
-    { provide: AbstractComponentStateService, useClass: OFormLayoutManagerComponentStateService, deps: [Injector] }
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OFormLayoutManagerComponentStateService },
   ],
   host: {
     '[class.o-form-layout-manager]': 'true'
@@ -246,7 +249,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     this.localStorageService = this.injector.get(LocalStorageService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
-    this.componentStateService = this.injector.get(OFormLayoutManagerComponentStateService);
+    this.componentStateService = this.injector.get<OFormLayoutManagerComponentStateService>(AbstractComponentStateService as Type<OFormLayoutManagerComponentStateService>);
     if (this.storeState) {
       this.subscription.add(this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
@@ -610,9 +613,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     const formsAttr = Object.keys(data.innerFormsInfo);
     let result: boolean = false;
-    if(formsAttr.length > 0) {
+    if (formsAttr.length > 0) {
       formsAttr.forEach(formAttr => {
-        if(!result) {
+        if (!result) {
           const formData = data.innerFormsInfo[formAttr];
           result = formData.confirmOnExit && formData.modified;
         }
