@@ -4,7 +4,7 @@
 * **o-form**:  Added the CSS class `fill-form` ([8d0461d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d0461d))
 
 ### Bug fixes
-  * **o-app-header**: fixed bug that the menu icon disappeared in mobile mode ([55648e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/55648e3)) Closes [#899](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/899)
+* **o-app-header**: fixed bug that the menu icon disappeared in mobile mode ([55648e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/55648e3)) Closes [#899](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/899)
   * Fixed reported bugs by Sonar ([24211d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/24211d7))
     ** `alt` attribute of images
     ** css duplicated entries
@@ -16,7 +16,7 @@
   * **o-app-layout**: Fixed arrow icon position in the menu ([61d5568](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/61d5568))
   * **o-form-toolbar-button**: Setting margin to 8px in the content ([045cb86](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/045cb86))
   * **o-button**: Fixed line-height in stroked button([005e9ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/005e9ae))
-
+* **o-form-layout-manager o-table o-list o-grid AbstractOServiceBaseComponent**: Fixing state service injection ([05b16f2c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/05b16f2c)) Closes [#908](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/908)
 
 ## 8.5.8 (2022-02-23)
 ### Features
