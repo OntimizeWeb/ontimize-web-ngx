@@ -43,9 +43,8 @@ import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
-import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
 import { Expression } from '../../types/expression.type';
@@ -243,8 +242,9 @@ const footerSelector = '.mat-footer-row';
   styleUrls: ['./o-table.component.scss'],
   providers: [
     OntimizeServiceProvider,
+    ComponentStateServiceProvider,
     OTableDataSourceService,
-    { provide: AbstractComponentStateService, useClass: OTableComponentStateService, deps: [Injector] },
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy }
   ],
   animations: [
@@ -1966,8 +1966,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public setSelected(item: any): void {
-    if (Util.isDefined(item)) {
-      this.isRowSelected(item) ? null : this.selection.select(item);
+    if (Util.isDefined(item) && !this.isRowSelected(item)) {
+      this.selection.select(item);
     }
   }
 
@@ -2515,9 +2515,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       filterCaseSensitive will be the value in local storage
     */
     if (storage.initialConfiguration.filterCaseSensitive !== this.filterCaseSensitive) {
-      this.filterCaseSensitive = this.filterCaseSensitive;
+      this._oTableOptions.filterCaseSensitive = this.filterCaseSensitive;
     } else {
-      this.filterCaseSensitive = storage.hasOwnProperty('filter-case-sensitive') ? storage['filter-case-sensitive'] : this.filterCaseSensitive;
+      this._oTableOptions.filterCaseSensitive = storage.hasOwnProperty('filter-case-sensitive') ? storage['filter-case-sensitive'] : this.filterCaseSensitive;
     }
 
     if (storage.initialConfiguration.filterColumnActiveByDefault !== this.filterColumnActiveByDefault) {

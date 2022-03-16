@@ -218,6 +218,10 @@ $transition-duration: 500ms;
         }
       }
 
+      .o-app-sidenav-menugroup-arrow{
+        display: flex;
+      }
+
       &:not(.mat-drawer-closed) {
         .o-app-sidenav-menugroup {
           transition: padding $transition-duration 0s;

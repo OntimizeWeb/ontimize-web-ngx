@@ -3,7 +3,7 @@
     <div class="o-user-info-wrapper" fxLayout="row" fxLayoutAlign="center center" [matMenuTriggerFor]="menu"
       fxLayoutGap="16px">
       <div fxLayout="row" fxLayoutAlign="center center" class="o-user-info-avatar-wrapper">
-        <img [src]="avatar" *ngIf="avatar" />
+        <img [src]="avatar" *ngIf="avatar" alt="avatar image"/>
       </div>
       <span class="o-user-info-username" *ngIf="username"> {{ username }}</span>
       <mat-icon svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
