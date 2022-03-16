@@ -6,7 +6,7 @@
         <mat-icon class="material-icons"> {{ renderTrueValue }}</mat-icon>
       </ng-container>
       <ng-container *ngSwitchCase="'image'">
-        <img [src]="renderTrueValue" />
+        <img [src]="renderTrueValue" alt="image for true value"/>
       </ng-container>
       <span *ngSwitchDefault>{{ renderTrueValue | oTranslate }}</span>
     </ng-container>
@@ -18,7 +18,7 @@
         <mat-icon class="material-icons"> {{ renderFalseValue }}</mat-icon>
       </ng-container>
       <ng-container *ngSwitchCase="'image'">
-        <img [src]="renderFalseValue" />
+        <img [src]="renderFalseValue" alt="image for false value" />
       </ng-container>
       <ng-container *ngSwitchDefault>{{ renderFalseValue | oTranslate}}</ng-container>
     </ng-container>

@@ -1,7 +1,29 @@
 ## 8.6.0
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
-  * 
+
+## 8.5.9 (2022-03-16)
+### Feature
+  * **o-grid**, **o-list**: new attribute `show-buttons-text` ([c1d2336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1d2336))
+  * **o-form**:  Added the CSS class `fill-form` ([8d0461d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8d0461d))
+
+### Bug fixes
+  * **o-app-header**: fixed bug that the menu icon disappeared in mobile mode ([55648e3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/55648e3)) Closes [#899](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/899)
+    * Fixed reported bugs by Sonar ([24211d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/24211d7))
+    ** `alt` attribute of images
+    ** css duplicated entries
+    ** table `aria-describedby` attribute
+    * **o-table**: fixing `filter-case-sensitive` input parsing and state storage bug ([3f320e49](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3f320e49)) Closes [#903](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/903)
+  * **o-grid**: Fixed that displays 'show more' button when the data length is 0 ([e35422b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e35422b))
+  * **UX modifications**
+    * **o-mat-menu**: Reseted min-height propertie in class o-mat-menu  ([4cfe8c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cfe8c5))
+    * **o-app-layout**: Fixed arrow icon position in the menu ([61d5568](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/61d5568))
+    * **o-form-toolbar-button**: Setting margin to 8px in the content ([045cb86](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/045cb86))
+    * **o-button**: Fixed line-height in stroked button([005e9ae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/005e9ae))
+  * **o-form-layout-manager o-table o-list o-grid AbstractOServiceBaseComponent**: Fixing state service injection ([05b16f2c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/05b16f2c)) Closes [#908](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/908)
+  * **o-form-layout-manager**: protecting tabgroup initialization code ([b8cd35ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8cd35ca)) Closes [#884](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/884)
+   * **OServiceBaseComponent**, **o-form-layout-manager**: no longer saving component state in component `onDestroy` method ([b8cd35ca](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8cd35ca)) Closes [#884](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/884)
+
 ## 8.5.8 (2022-02-23)
 ### Features
   * **o-search-input**: changed style to match `o-table-quickfilter` style ([96fd895](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96fd895)) Closes [#890](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/890)

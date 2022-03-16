@@ -10,7 +10,7 @@
   <div class="o-card-menu-item-main" fxFlex="{{ showSecondaryContainer ? '45' : '80' }}" [fxLayout]="mainContainerLayout"
     fxLayoutAlign="space-between center">
     <div *ngIf="useImage() || useIcon()" fxFlex="80" fxLayout="column" fxLayoutAlign="center center" class="o-card-menu-item-image-container">
-      <img *ngIf="useImage()" [src]="image" />
+      <img *ngIf="useImage()" [src]="image" alt="card image"/>
       <mat-icon *ngIf="useIcon()" class="o-card-menu-item-icon" fxLayoutAlign="center center">{{ icon }}</mat-icon>
     </div>
 
