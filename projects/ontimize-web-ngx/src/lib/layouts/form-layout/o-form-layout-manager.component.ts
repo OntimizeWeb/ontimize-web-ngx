@@ -282,7 +282,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.updateStateStorage();
     this.oFormLayoutManagerService.removeFormLayoutManager(this);
     this.destroyActivateChildGuard();
   }
