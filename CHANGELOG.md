@@ -1,3 +1,7 @@
+## 8.5.10
+* **o-button**: `o-button` type `BASIC`,`FLAT`, `FAB` and `MINI-FAB` have incorrect width ([b6675a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b6675a5))  Closes [#915](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/915)
+### Bug fixes
+
 ## 8.5.9 (2022-03-16)
 ### Feature
   * **o-grid**, **o-list**: new attribute `show-buttons-text` ([c1d2336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1d2336))
