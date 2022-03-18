@@ -4,7 +4,13 @@
 
   button {
     pointer-events: auto;
-    width: 100%;
+
+    &.mat-button,
+    &.mat-raised-button,
+    &.mat-stroked-button,
+    &.mat-flat-button {
+      width: 100%;
+    }
 
     * {
       pointer-events: none;
