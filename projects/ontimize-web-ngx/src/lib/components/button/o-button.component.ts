@@ -45,7 +45,7 @@ export class OButtonComponent implements OnInit {
   protected otype: string;
   public icon: string;
   public svgIcon: string;
-  public iconPosition: string = Codes.ICON_POSITION_LEFT; // left (default), top, TODO: right, bottom?
+  public iconPosition: string = Codes.ICON_POSITION_LEFT; // left (default)
   public image: string;
   @InputConverter() enabled: boolean = true;
   public color: ThemePalette;
