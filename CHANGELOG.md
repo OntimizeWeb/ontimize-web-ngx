@@ -1,5 +1,4 @@
 ## 8.5.10
-## 8.5.9 (2022-03-16)
 ### Feature
   * **app-menu-config**: new `pathMatch` attribute in `MenuItemRoute` ([c51fb374](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c51fb374)) Closes [#919](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/919)
 ### Bug fixes
