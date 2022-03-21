@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
@@ -9,7 +10,7 @@ import {
   MenuItemLocale,
   MenuItemLogout,
   MenuItemRoute,
-  MenuItemUserInfo,
+  MenuItemUserInfo
 } from '../interfaces/app-menu.interface';
 import { MenuRootItem } from '../types/menu-root-item.type';
 import { Codes } from '../util/codes';
@@ -19,14 +20,23 @@ import { Codes } from '../util/codes';
 })
 export class AppMenuService {
 
+  protected router: Router;
   protected _config: AppConfig;
   protected MENU_ROOTS: MenuRootItem[];
   protected ALL_MENU_ITEMS: MenuItem[];
+  protected activeItem: MenuItemRoute;
+
   public onClick: Subject<any> = new Subject();
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig);
     this.MENU_ROOTS = this._config.getMenuConfiguration();
+    this.router = this.injector.get(Router);
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.setActiveItem();
+      }
+    });
 
     this.ALL_MENU_ITEMS = [];
     for (let i = 0, len = this.MENU_ROOTS.length; i < len; i++) {
@@ -83,11 +93,26 @@ export class AppMenuService {
     return this.getMenuItemType(item) === 'group';
   }
 
+  isItemActive(item: MenuItemRoute): boolean {
+    return this.activeItem && this.activeItem.route === item.route;
+  }
+
   private getMenuItems(item: MenuRootItem): MenuItem[] {
     if ((item as MenuGroup).items !== undefined) {
       return (item as MenuGroup).items;
     }
     return [item];
+  }
+
+  private setActiveItem(): void {
+    const routeItems: MenuItemRoute[] = this.ALL_MENU_ITEMS.filter(item => this.getMenuItemType(item) === 'route') as MenuItemRoute[];
+    const pathMatchFullItems = routeItems.filter(item => item.pathMatch === 'full');
+    if (pathMatchFullItems.length > 0) {
+      this.activeItem = pathMatchFullItems.find(item => item.route === this.router.url);
+    } 
+    if (!this.activeItem) {
+      this.activeItem = routeItems.find(item => this.router.url.startsWith(item.route));
+    }
   }
 
 }

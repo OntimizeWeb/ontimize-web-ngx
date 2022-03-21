@@ -10,11 +10,17 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo } from '../../../interfaces/app-menu.interface';
+import {
+  MenuItemAction,
+  MenuItemLocale,
+  MenuItemLogout,
+  MenuItemRoute,
+  MenuItemUserInfo
+} from '../../../interfaces/app-menu.interface';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { AuthService } from '../../../services/auth.service';
@@ -81,6 +87,8 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected mutationObserver: MutationObserver;
 
   hidden: boolean;
+  active: boolean;
+
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,
@@ -94,15 +102,19 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.sidenav = this.injector.get(OAppSidenavComponent);
     this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
     this.router = this.injector.get(Router);
-    this.routerSubscription = this.router.events.subscribe(() => {
-      this.cd.detectChanges();
-    });
-
     this.appMenuService = this.injector.get(AppMenuService);
+
+    this.routerSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && this.isRouteItem()) {
+        this.active = this.appMenuService.isItemActive(this.menuItem as MenuItemRoute);
+        this.cd.detectChanges();
+      }
+    });
   }
 
   ngOnInit() {
     this.parsePermissions();
+    this.active = this.appMenuService.isItemActive(this.menuItem as MenuItemRoute);
   }
 
   ngAfterViewInit() {
@@ -260,14 +272,6 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
   get useFlagIcons(): boolean {
     return this.oAppLayoutComponent && this.oAppLayoutComponent.useFlagIcons;
-  }
-
-  isActiveItem(): boolean {
-    if (!this.isRouteItem()) {
-      return false;
-    }
-    const route = (this.menuItem as MenuItemRoute).route;
-    return this.router.url === route || this.router.url.startsWith(route + '/');
   }
 
   get tooltip(): string {
