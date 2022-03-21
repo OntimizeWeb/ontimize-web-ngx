@@ -22,6 +22,7 @@ export interface MenuItem {
 
 export interface MenuItemRoute extends MenuItem {
   route: string;
+  pathMatch: 'full' | 'prefix'
 }
 
 export interface MenuItemAction extends MenuItem {
