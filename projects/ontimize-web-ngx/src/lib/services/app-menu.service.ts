@@ -105,14 +105,16 @@ export class AppMenuService {
   }
 
   private setActiveItem(): void {
+    let activeItem: MenuItemRoute;
     const routeItems: MenuItemRoute[] = this.ALL_MENU_ITEMS.filter(item => this.getMenuItemType(item) === 'route') as MenuItemRoute[];
     const pathMatchFullItems = routeItems.filter(item => item.pathMatch === 'full');
     if (pathMatchFullItems.length > 0) {
-      this.activeItem = pathMatchFullItems.find(item => item.route === this.router.url);
+      activeItem = pathMatchFullItems.find(item => item.route === this.router.url);
     } 
-    if (!this.activeItem) {
-      this.activeItem = routeItems.find(item => this.router.url.startsWith(item.route));
+    if (!activeItem) {
+      activeItem = routeItems.find(item => this.router.url.startsWith(item.route));
     }
+    this.activeItem = activeItem;
   }
 
 }
