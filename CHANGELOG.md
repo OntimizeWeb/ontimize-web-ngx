@@ -2,6 +2,14 @@
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
 
+## 8.5.10 (2022-03-21)
+### Feature
+  * **app-menu-config**: new `pathMatch` attribute in `MenuItemRoute` ([c51fb374](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c51fb374)) Closes [#919](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/919)
+### Bug fixes
+* **o-button**:
+  * `o-button` type `BASIC`,`FLAT`, `FAB` and `MINI-FAB` have incorrect width ([b6675a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b6675a5)) Closes [#915](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/915)
+  * Fixed bug that `icon-position` does not work ([3b31292](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b31292))  Closes [#917](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/917)
+
 ## 8.5.9 (2022-03-16)
 ### Feature
   * **o-grid**, **o-list**: new attribute `show-buttons-text` ([c1d2336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1d2336))

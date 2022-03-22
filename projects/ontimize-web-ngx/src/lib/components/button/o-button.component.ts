@@ -1,6 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
 import { InputConverter } from '../../decorators/input-converter';
+import { Codes } from '../../util';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -29,7 +30,10 @@ export const DEFAULT_OUTPUTS_O_BUTTON = [
   styleUrls: ['./o-button.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-button]': 'true'
+    '[class.o-button]': 'true',
+    '[class.o-button-icon-position-top]':'iconPosition==="top"',
+    '[class.o-button-icon-position-bottom]': 'iconPosition==="bottom"'
+
   }
 })
 export class OButtonComponent implements OnInit {
@@ -41,7 +45,7 @@ export class OButtonComponent implements OnInit {
   protected otype: string;
   public icon: string;
   public svgIcon: string;
-  public iconPosition: string; // left (default), top, TODO: right, bottom?
+  public iconPosition: string = Codes.ICON_POSITION_LEFT; // left (default)
   public image: string;
   @InputConverter() enabled: boolean = true;
   public color: ThemePalette;
