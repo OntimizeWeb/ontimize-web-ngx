@@ -17,7 +17,7 @@ import {
   SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
-import { MatFormFieldAppearance } from '@angular/material';
+import { MatFormFieldAppearance, PageEvent } from '@angular/material';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -80,7 +80,6 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onInsertButtonClick',
   'onItemDeleted'
 ];
-
 @Component({
   selector: 'o-list',
   providers: [
@@ -99,8 +98,6 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 })
 export class OListComponent extends AbstractOServiceComponent<OListComponentStateService> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
-  private listItemComponents: IListItem[] = [];
-
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
 
@@ -117,6 +114,9 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public insertButtonFloatable: boolean = true;
   @InputConverter()
   showButtonsText: boolean = false;
+
+  paginationControls: boolean = false;
+
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
@@ -252,7 +252,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-    this.listItemComponents = [];
+
     this.queryData(void 0, queryArgs);
   }
 

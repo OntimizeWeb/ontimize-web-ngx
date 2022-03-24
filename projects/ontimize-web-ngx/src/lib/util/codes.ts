@@ -9,6 +9,7 @@ export class Codes {
   public static QUERY_METHOD = 'query';
 
   public static DEFAULT_QUERY_ROWS = 10;
+  public static PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
   public static DETAIL_ICON = 'chevron_right';
   public static EDIT_ICON = 'mode_edit';

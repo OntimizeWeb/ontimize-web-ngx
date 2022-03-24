@@ -44,8 +44,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
   // cols: Amount of columns in the grid list. Default in extra small and small screen is 1, in medium screen is 2, in large screen is 3 and extra large screen is 4.
   'cols',
-  // page-size-options [string]: Page size options separated by ';'.
-  'pageSizeOptions: page-size-options',
   // show-page-size:Whether to hide the page size selection UI from the user.
   'showPageSize: show-page-size',
   // show-sort:whether or not the sort select is shown in the toolbar
@@ -60,8 +58,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   'gridItemHeight: grid-item-height',
   // refresh-button [no|yes]: show refresh button. Default: yes.
   'refreshButton: refresh-button',
-  // pagination-controls [yes|no|true|false]: show pagination controls. Default: no.
-  'paginationControls: pagination-controls',
   // gutterSize: Size of the grid list's gutter in pixels.
   'gutterSize:gutter-size',
   // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
@@ -122,9 +118,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public refreshButton: boolean = true;
 
   @InputConverter()
-  public paginationControls: boolean = false;
-
-  @InputConverter()
   insertButton: boolean = false;
 
   @InputConverter()
@@ -134,7 +127,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   showButtonsText: boolean = false;
 
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
-
+  paginationControls = false;
   public gutterSize = '1px';
   protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
   get cols(): number {
@@ -142,16 +135,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
   set cols(value: number) {
     this._cols = value;
-  }
-
-  get pageSizeOptions(): number[] {
-    return this._pageSizeOptions;
-  }
-  set pageSizeOptions(val: number[]) {
-    if (!(val instanceof Array)) {
-      val = Util.parseArray(String(val)).map(a => parseInt(a, 10));
-    }
-    this._pageSizeOptions = val;
   }
 
   get sortableColumns(): SQLOrder[] {
@@ -182,7 +165,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   protected _cols;
   protected _colsDefault = 1;
-  protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
+  _pageSizeOptions = PAGE_SIZE_OPTIONS;
   protected sortColumn: string;
   public storePaginationState: boolean = false;
 

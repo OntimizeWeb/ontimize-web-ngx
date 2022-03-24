@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -87,6 +88,12 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // quick-filter-placeholder: quick filter placeholder
   'quickFilterPlaceholder: quick-filter-placeholder',
+
+  // pagination-controls [yes|no|true|false]: show pagination controls. Default: no.
+  'paginationControls: pagination-controls',
+
+  // page-size-options [string]: Page size options separated by ';'.
+  'pageSizeOptions: page-size-options'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -137,6 +144,20 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   editButtonInRowIcon: string = Codes.EDIT_ICON;
   @InputConverter()
   insertButton: boolean;
+  @InputConverter()
+  paginationControls: boolean = true;
+
+  get pageSizeOptions(): number[] {
+    return this._pageSizeOptions;
+  }
+
+  set pageSizeOptions(val: number[]) {
+    if (!(val instanceof Array)) {
+      val = Util.parseArray(String(val)).map(a => parseInt(a, 10));
+    }
+    this._pageSizeOptions = val;
+  }
+
   protected _rowHeight = Codes.DEFAULT_ROW_HEIGHT;
   protected rowHeightSubject: BehaviorSubject<string> = new BehaviorSubject(this._rowHeight);
   public rowHeightObservable: Observable<string> = this.rowHeightSubject.asObservable();
@@ -206,6 +227,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
   protected dataResponseArray: any[] = [];
   protected quickFilterSubscription: Subscription;
+  _pageSizeOptions = Codes.PAGE_SIZE_OPTIONS;
 
   constructor(
     injector: Injector,
@@ -688,10 +710,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     return dataArray;
   }
 
-  protected getPaginationDataFromArray(dataArray: any[]): any[] {
-    return dataArray;
-  }
-
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
     if (!Util.isArray(data)) {
       this.setDataArray([]);
@@ -750,6 +768,70 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   applyDefaultConfiguration() {
 
   }
+
+  public onChangePage(e: PageEvent): void {
+    if (!this.pageable) {
+      this.currentPage = e.pageIndex;
+      this.queryRows = e.pageSize;
+      this.filterData();
+      return;
+    }
+    const goingBack = e.pageIndex < this.currentPage;
+    this.currentPage = e.pageIndex;
+    const pageSize = e.pageSize;
+
+    const oldQueryRows = this.queryRows;
+    const changingPageSize = (oldQueryRows !== pageSize);
+    this.queryRows = pageSize;
+
+    let newStartRecord;
+    let queryLength;
+
+    if (goingBack || changingPageSize) {
+      newStartRecord = (this.currentPage * this.queryRows);
+      queryLength = this.queryRows;
+    } else {
+      newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
+      const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
+      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+    }
+
+    const queryArgs: OQueryDataArgs = {
+      offset: newStartRecord,
+      length: queryLength,
+      replace: true
+    };
+    this.queryData(void 0, queryArgs);
+  }
+
+  set currentPage(val: number) {
+    this._currentPage = val;
+  }
+
+  get currentPage(): number {
+    return this._currentPage;
+  }
+
+  protected _currentPage: number = 0;
+
+
+  get totalRecords(): number {
+    if (this.pageable) {
+      return this.getTotalRecordsNumber();
+    }
+    return this.dataResponseArray.length;
+  }
+
+  protected getPaginationDataFromArray(dataArray: any[]): any[] {
+    let result = dataArray;
+    if (this.paginationControls) {
+      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
+    } else {
+      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
+    }
+    return result;
+  }
+
 }
 
 /*This class is definied to mantain bacwards compatibility */

@@ -388,8 +388,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   deleteButton: boolean = true;
   @InputConverter()
-  paginationControls: boolean = true;
-  @InputConverter()
   fixedHeader: boolean = true;
   @InputConverter()
   showTitle: boolean = false;
