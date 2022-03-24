@@ -89,7 +89,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   // quick-filter-placeholder: quick filter placeholder
   'quickFilterPlaceholder: quick-filter-placeholder',
 
-  // pagination-controls [yes|no|true|false]: show pagination controls. Default: no.
+  // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
   'paginationControls: pagination-controls',
 
   // page-size-options [string]: Page size options separated by ';'.
