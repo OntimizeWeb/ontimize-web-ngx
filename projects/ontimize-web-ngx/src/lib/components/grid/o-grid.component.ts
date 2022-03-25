@@ -16,7 +16,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatFormFieldAppearance, MatPaginator, MatSelectChange, PageEvent } from '@angular/material';
+import { MatFormFieldAppearance, MatPaginator, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
