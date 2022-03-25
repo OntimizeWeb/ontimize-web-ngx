@@ -179,16 +179,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   protected _gridItems: IGridItem[] = [];
 
-  set currentPage(val: number) {
-    this._currentPage = val;
-  }
-
-  get currentPage(): number {
-    return this._currentPage;
-  }
-
-  protected _currentPage: number = 0;
-
   protected subscription: Subscription = new Subscription();
   protected media: MediaObserver;
 
@@ -367,12 +357,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     }
   }
 
-  get totalRecords(): number {
-    if (this.pageable) {
-      return this.getTotalRecordsNumber();
-    }
-    return this.dataResponseArray.length;
-  }
 
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
@@ -406,40 +390,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     return this.sortableColumns
       .findIndex(item => item.columnName === sortableColumn.columnName
         && item.ascendent === sortableColumn.ascendent);
-  }
-
-  public onChangePage(e: PageEvent): void {
-    if (!this.pageable) {
-      this.currentPage = e.pageIndex;
-      this.queryRows = e.pageSize;
-      this.filterData();
-      return;
-    }
-    const goingBack = e.pageIndex < this.currentPage;
-    this.currentPage = e.pageIndex;
-    const pageSize = e.pageSize;
-
-    const oldQueryRows = this.queryRows;
-    const changingPageSize = (oldQueryRows !== pageSize);
-    this.queryRows = pageSize;
-
-    let newStartRecord;
-    let queryLength;
-
-    if (goingBack || changingPageSize) {
-      newStartRecord = (this.currentPage * this.queryRows);
-      queryLength = this.queryRows;
-    } else {
-      newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
-      const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
-      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
-    }
-
-    const queryArgs: OQueryDataArgs = {
-      offset: newStartRecord,
-      length: queryLength
-    };
-    this.queryData(void 0, queryArgs);
   }
 
   public getDataToStore(): any {

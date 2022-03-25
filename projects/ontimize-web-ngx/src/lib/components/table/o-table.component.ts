@@ -555,8 +555,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public editingCell: any;
   protected editingRow: any;
 
-  protected _currentPage: number = 0;
-
   set currentPage(val: number) {
     this._currentPage = val;
     if (this.paginator) {
@@ -565,10 +563,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.matpaginator.pageIndex = val;
       }
     }
-  }
-
-  get currentPage(): number {
-    return this._currentPage;
   }
 
   public oTableQuickFilterComponent: OTableQuickfilter;
