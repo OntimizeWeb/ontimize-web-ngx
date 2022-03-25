@@ -272,6 +272,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public onScroll(e: Event): void {
+    if (this.matpaginator) return;
     if (this.pageable) {
       const pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
       if (!this.loadingSubject.value && pendingRegistries) {

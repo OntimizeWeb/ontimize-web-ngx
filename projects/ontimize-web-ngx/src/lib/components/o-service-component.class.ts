@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material';
+import { MatPaginator, PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -107,6 +107,7 @@ export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
 export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
   extends AbstractOServiceBaseComponent<T>
   implements IServiceDataComponent {
+  @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
 
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
