@@ -1,8 +1,9 @@
 ## 8.6.0
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
-  * **o-list**: added pagination ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
+  * **o-list**: added *paginator* that provides navigation, similar to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
 
+ provides navigation for paged information, typically used with a table.
 ## 8.5.10 (2022-03-21)
 ### Feature
   * **app-menu-config**: new `pathMatch` attribute in `MenuItemRoute` ([c51fb374](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c51fb374)) Closes [#919](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/919)
