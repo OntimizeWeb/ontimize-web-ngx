@@ -303,16 +303,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     return dataArray;
   }
 
-  protected getPaginationDataFromArray(dataArray: any[]): any[] {
-    let result = dataArray;
-    if (this.paginationControls) {
-      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
-    } else {
-      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
-    }
-    return result;
-  }
-
   public registerGridItemDirective(item: OGridItemDirective): void {
     if (item) {
       if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
