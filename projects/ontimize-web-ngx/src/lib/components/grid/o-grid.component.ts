@@ -16,7 +16,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatFormFieldAppearance, MatPaginator, MatSelectChange, PageEvent } from '@angular/material';
+import { MatFormFieldAppearance, MatPaginator, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -44,8 +44,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
   // cols: Amount of columns in the grid list. Default in extra small and small screen is 1, in medium screen is 2, in large screen is 3 and extra large screen is 4.
   'cols',
-  // page-size-options [string]: Page size options separated by ';'.
-  'pageSizeOptions: page-size-options',
   // show-page-size:Whether to hide the page size selection UI from the user.
   'showPageSize: show-page-size',
   // show-sort:whether or not the sort select is shown in the toolbar
@@ -60,8 +58,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   'gridItemHeight: grid-item-height',
   // refresh-button [no|yes]: show refresh button. Default: yes.
   'refreshButton: refresh-button',
-  // pagination-controls [yes|no|true|false]: show pagination controls. Default: no.
-  'paginationControls: pagination-controls',
   // gutterSize: Size of the grid list's gutter in pixels.
   'gutterSize:gutter-size',
   // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
@@ -122,9 +118,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public refreshButton: boolean = true;
 
   @InputConverter()
-  public paginationControls: boolean = false;
-
-  @InputConverter()
   insertButton: boolean = false;
 
   @InputConverter()
@@ -134,7 +127,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   showButtonsText: boolean = false;
 
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
-
+  paginationControls = false;
   public gutterSize = '1px';
   protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
   get cols(): number {
@@ -142,16 +135,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
   set cols(value: number) {
     this._cols = value;
-  }
-
-  get pageSizeOptions(): number[] {
-    return this._pageSizeOptions;
-  }
-  set pageSizeOptions(val: number[]) {
-    if (!(val instanceof Array)) {
-      val = Util.parseArray(String(val)).map(a => parseInt(a, 10));
-    }
-    this._pageSizeOptions = val;
   }
 
   get sortableColumns(): SQLOrder[] {
@@ -182,7 +165,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   protected _cols;
   protected _colsDefault = 1;
-  protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
+  _pageSizeOptions = PAGE_SIZE_OPTIONS;
   protected sortColumn: string;
   public storePaginationState: boolean = false;
 
@@ -195,16 +178,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
   protected _gridItems: IGridItem[] = [];
-
-  set currentPage(val: number) {
-    this._currentPage = val;
-  }
-
-  get currentPage(): number {
-    return this._currentPage;
-  }
-
-  protected _currentPage: number = 0;
 
   protected subscription: Subscription = new Subscription();
   protected media: MediaObserver;
@@ -320,16 +293,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     return dataArray;
   }
 
-  protected getPaginationDataFromArray(dataArray: any[]): any[] {
-    let result = dataArray;
-    if (this.paginationControls) {
-      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
-    } else {
-      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
-    }
-    return result;
-  }
-
   public registerGridItemDirective(item: OGridItemDirective): void {
     if (item) {
       if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
@@ -394,12 +357,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     }
   }
 
-  get totalRecords(): number {
-    if (this.pageable) {
-      return this.getTotalRecordsNumber();
-    }
-    return this.dataResponseArray.length;
-  }
 
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
@@ -433,40 +390,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     return this.sortableColumns
       .findIndex(item => item.columnName === sortableColumn.columnName
         && item.ascendent === sortableColumn.ascendent);
-  }
-
-  public onChangePage(e: PageEvent): void {
-    if (!this.pageable) {
-      this.currentPage = e.pageIndex;
-      this.queryRows = e.pageSize;
-      this.filterData();
-      return;
-    }
-    const goingBack = e.pageIndex < this.currentPage;
-    this.currentPage = e.pageIndex;
-    const pageSize = e.pageSize;
-
-    const oldQueryRows = this.queryRows;
-    const changingPageSize = (oldQueryRows !== pageSize);
-    this.queryRows = pageSize;
-
-    let newStartRecord;
-    let queryLength;
-
-    if (goingBack || changingPageSize) {
-      newStartRecord = (this.currentPage * this.queryRows);
-      queryLength = this.queryRows;
-    } else {
-      newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
-      const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
-      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
-    }
-
-    const queryArgs: OQueryDataArgs = {
-      offset: newStartRecord,
-      length: queryLength
-    };
-    this.queryData(void 0, queryArgs);
   }
 
   public getDataToStore(): any {

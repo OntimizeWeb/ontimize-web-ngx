@@ -28,8 +28,8 @@ import {
   ViewEncapsulation,
   ViewRef
 } from '@angular/core';
-import { MatCheckboxChange, MatDialog, MatMenu, MatPaginator, MatTab, MatTabGroup, PageEvent } from '@angular/material';
-import { BehaviorSubject, combineLatest, interval, Observable, of, Subscription } from 'rxjs';
+import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
@@ -279,7 +279,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public paginator: OTablePaginator;
 
-  @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
@@ -387,8 +386,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   refreshButton: boolean = true;
   @InputConverter()
   deleteButton: boolean = true;
-  @InputConverter()
-  paginationControls: boolean = true;
   @InputConverter()
   fixedHeader: boolean = true;
   @InputConverter()
@@ -557,8 +554,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public editingCell: any;
   protected editingRow: any;
 
-  protected _currentPage: number = 0;
-
   set currentPage(val: number) {
     this._currentPage = val;
     if (this.paginator) {
@@ -567,10 +562,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.matpaginator.pageIndex = val;
       }
     }
-  }
-
-  get currentPage(): number {
-    return this._currentPage;
   }
 
   public oTableQuickFilterComponent: OTableQuickfilter;
