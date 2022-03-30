@@ -2,7 +2,7 @@ import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDes
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { InputConverter } from '../../decorators/input-converter';
-import { OSafePipe } from '../../pipes';
+import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { FormValueOptions } from '../../types';
 import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
