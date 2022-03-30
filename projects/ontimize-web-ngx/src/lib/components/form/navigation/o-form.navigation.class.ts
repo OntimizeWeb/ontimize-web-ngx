@@ -166,7 +166,7 @@ export class OFormNavigationClass {
     }
     this.cacheStateSubscription = formCache.onCacheStateChanges.subscribe(() => {
       const initialStateChanged = this.form.isInitialStateChanged();
-      const triggerExitConfirm = this.form.isInitialStateChanged(this.form.ignoreOnExit);
+      const triggerExitConfirm = this.form.confirmExit ? this.form.isInitialStateChanged(this.form.ignoreOnExit) : this.form.confirmExit;
       this.setModifiedState(initialStateChanged, triggerExitConfirm);
     });
   }
