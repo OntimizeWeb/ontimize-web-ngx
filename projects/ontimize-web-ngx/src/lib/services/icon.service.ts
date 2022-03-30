@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
+import { SafeHtml } from '@angular/platform-browser';
+import { OSafePipe } from '../pipes/o-safe.pipe';
 import { Util } from '../util/util';
 
 @Injectable({
@@ -10,9 +10,11 @@ export class IconService {
   public static DEFAULT_ICON_POSITION = 'left';
 
   protected _iconPosition: string;
+  protected oSafePipe: OSafePipe;
 
-  constructor(protected injector: Injector, private _sanitizer: DomSanitizer) {
+  constructor(protected injector: Injector) {
     this._iconPosition = IconService.DEFAULT_ICON_POSITION;
+    this.oSafePipe = new OSafePipe(this.injector)
   }
 
   get iconPosition(): string {
@@ -38,7 +40,7 @@ export class IconService {
         iconValue = iconValue + icon;
         break;
     }
-    return this._sanitizer.bypassSecurityTrustHtml(iconValue);
+    return this.oSafePipe.transform(iconValue, 'html');
   }
 
 }

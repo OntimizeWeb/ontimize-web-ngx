@@ -1,9 +1,8 @@
 import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
-
 import { InputConverter } from '../../decorators/input-converter';
+import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { FormValueOptions } from '../../types';
 import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
@@ -76,7 +75,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   protected fileInput: ElementRef;
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;
-  protected _domSanitizer: DomSanitizer;
+  protected oSafe: OSafePipe;
   protected dialog: MatDialog;
   public stateCtrl: FormControl;
   public src = '';
@@ -87,7 +86,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     injector: Injector
   ) {
     super(form, elRef, injector);
-    this._domSanitizer = this.injector.get(DomSanitizer);
+    this.oSafe = new OSafePipe(injector);
     this._defaultSQLTypeKey = 'BASE64';
     this.dialog = this.injector.get(MatDialog);
   }
@@ -183,7 +182,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
         } else {
           src = 'data:image/*;base64,' + this.value.value.bytes;
         }
-        return this._domSanitizer.bypassSecurityTrustUrl(src);
+        return this.oSafe.transform(src, 'url');
       } else if (typeof this.value.value === 'string' &&
         this.value.value.length > 300) {
         let src: string = '';
@@ -192,7 +191,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
         } else {
           src = 'data:image/*;base64,' + this.value.value;
         }
-        return this._domSanitizer.bypassSecurityTrustUrl(src);
+        return this.oSafe.transform(src, 'url');
       }
       if (this.value.value) {
         return this.value.value;
