@@ -121,7 +121,7 @@ export class OFormCacheClass {
     this.initializeCache(this.getDataCache());
   }
 
-  undoLastChange(options: any = {}) {
+  undoLastChange() {
     const lastElement = this.valueChangesStack[this.valueChangesStack.length - 1];
     if (lastElement) {
       const lastCacheValue = this.getCacheLastValue(lastElement.attr);

@@ -1446,9 +1446,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   undoKeyboardPressed() {
-    this.formCache.undoLastChange({
-      keyboardEvent: true
-    });
+    this.formCache.undoLastChange();
   }
 
   getFormToolbar(): OFormToolbarComponent {
