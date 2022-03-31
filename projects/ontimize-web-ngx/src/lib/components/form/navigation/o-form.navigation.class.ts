@@ -314,7 +314,7 @@ export class OFormNavigationClass {
         this.navigationService.removeLastItem();
       }
       let params: any[] = [];
-      this.form.keysArray.forEach((current, index) => {
+      this.form.keysArray.forEach((current) => {
         if (insertedKeys[current]) {
           params.push(insertedKeys[current]);
         }
