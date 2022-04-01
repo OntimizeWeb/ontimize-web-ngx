@@ -121,7 +121,7 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
-          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth" [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
           <div class="content">
 
             <ng-container [ngSwitch]="true">
@@ -152,7 +152,7 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
-          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth" [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
           <div class="content">
 
             <ng-container [ngSwitch]="true">
