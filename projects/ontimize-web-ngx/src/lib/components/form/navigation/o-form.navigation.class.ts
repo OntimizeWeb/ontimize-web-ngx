@@ -166,7 +166,7 @@ export class OFormNavigationClass {
     }
     this.cacheStateSubscription = formCache.onCacheStateChanges.subscribe(() => {
       const initialStateChanged = this.form.isInitialStateChanged();
-      const triggerExitConfirm = this.form.isInitialStateChanged(this.form.ignoreOnExit);
+      const triggerExitConfirm = this.form.confirmExit && this.form.isInitialStateChanged(this.form.ignoreOnExit);
       this.setModifiedState(initialStateChanged, triggerExitConfirm);
     });
   }
@@ -314,7 +314,7 @@ export class OFormNavigationClass {
         this.navigationService.removeLastItem();
       }
       let params: any[] = [];
-      this.form.keysArray.forEach((current, index) => {
+      this.form.keysArray.forEach((current) => {
         if (insertedKeys[current]) {
           params.push(insertedKeys[current]);
         }

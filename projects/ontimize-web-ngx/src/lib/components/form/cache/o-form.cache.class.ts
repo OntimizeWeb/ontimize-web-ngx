@@ -121,7 +121,7 @@ export class OFormCacheClass {
     this.initializeCache(this.getDataCache());
   }
 
-  undoLastChange(options: any = {}) {
+  undoLastChange() {
     const lastElement = this.valueChangesStack[this.valueChangesStack.length - 1];
     if (lastElement) {
       const lastCacheValue = this.getCacheLastValue(lastElement.attr);
@@ -204,7 +204,19 @@ export class OFormCacheClass {
     }
 
     let initialKeys = Object.keys(initialCache);
-    const currentKeys = currentCache ? Object.keys(currentCache) : initialKeys;
+    let currentKeys = currentCache ? Object.keys(currentCache) : initialKeys;
+
+    // Remove ignored fields from temporary initial cache data
+    if (ignoreAttrs.length) {
+      initialKeys = initialKeys.filter(key => !ignoreAttrs.includes(key));
+      currentKeys = currentKeys.filter(key => !ignoreAttrs.includes(key));
+      ignoreAttrs.forEach(key => delete initialCache[key]);
+    }
+
+    if (currentKeys.length === 0) {
+      return false;
+    }
+
     if (initialKeys.length !== currentKeys.length) {
       return true;
     }
