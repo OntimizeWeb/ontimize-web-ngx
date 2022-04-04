@@ -296,7 +296,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
       if (this._fControl && readOnly) {
         this._fControl.disable();
       } else if (this._fControl) {
-        this._fControl.enable();
+        this._fControl.enable({ emitEvent: false });
       }
     }
   }
