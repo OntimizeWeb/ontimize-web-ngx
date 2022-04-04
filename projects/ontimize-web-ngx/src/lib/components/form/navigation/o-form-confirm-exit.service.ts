@@ -15,7 +15,7 @@ export class OFormConfirmExitService {
 
   subscribeToDiscardChanges(form: OFormComponent, ignoreAttrs: string[] = []): Promise<boolean> {
     let subscription: Promise<boolean>;
-    if (form.isInitialStateChanged(ignoreAttrs) && !form.isInInsertMode()) {
+    if (form.isInitialStateChanged(ignoreAttrs) && this.mustShowConfirmationInForm(form)) {
       subscription = this.getConfirmDialogSubscription();
     } else {
       const observable = new Observable<boolean>(observer => {
@@ -27,10 +27,14 @@ export class OFormConfirmExitService {
     return subscription;
   }
 
+  protected mustShowConfirmationInForm(form: OFormComponent): boolean {
+    return form.isInInsertMode() || form.isInUpdateMode();
+  }
+
   protected restart() {
     this.confirmDialogSubscription = null;
   }
-  
+
   protected getConfirmDialogSubscription(): Promise<boolean> {
     if (!Util.isDefined(this.confirmDialogSubscription)) {
       this.confirmDialogSubscription = new Promise((resolve) => {

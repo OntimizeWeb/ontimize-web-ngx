@@ -5,11 +5,24 @@
     height: 100%;
 
     .mat-dialog-title {
-      margin-top: -24px;
+      margin-top: -16px;
 
       .o-search-input mat-form-field {
         .mat-form-field-wrapper {
           padding-bottom: 0;
+
+          .mat-form-field-prefix {
+            border: 0;
+
+            .mat-icon {
+              vertical-align: middle;
+            }
+          }
+
+          .mat-form-field-label {
+            position: static;
+            padding: 0 4px;
+          }
 
           .mat-form-field-underline {
             display: none;
@@ -19,7 +32,6 @@
     }
 
     .mat-dialog-content {
-
       .cdk-virtual-scroll-viewport {
         height: 100%;
 
