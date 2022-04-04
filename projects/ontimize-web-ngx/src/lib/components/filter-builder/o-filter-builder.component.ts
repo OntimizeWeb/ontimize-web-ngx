@@ -30,7 +30,7 @@ export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   'queryOnChangeDelay: query-on-change-delay',
 
   //query-on-change-event: [change| onValueChange] Type of event that emit when query-on-change=`yes`
-  'queryOnChangeEventType: query-on-change-event-type '
+  'queryOnChangeEventType: query-on-change-event-type'
 ]
 
 export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
