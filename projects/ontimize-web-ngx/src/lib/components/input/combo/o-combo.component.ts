@@ -294,9 +294,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     const readOnly = Util.isDefined(this.readOnly) ? this.readOnly : value;
     if (this.enabled) {
       if (this._fControl && readOnly) {
-        this._fControl.disable();
+        this._fControl.disable({ emitEvent: false });
       } else if (this._fControl) {
-        this._fControl.enable();
+        this._fControl.enable({ emitEvent: false });
       }
     }
   }

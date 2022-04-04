@@ -1,5 +1,7 @@
 export type OAppLayoutMode = 'mobile' | 'desktop';
 export type OSidenavMode = 'over' | 'push' | 'side';
+export type CHANGE_EVENTS = 'onValueChange' | 'onChange';
+
 export class Codes {
 
   public static PAGINATED_QUERY_METHOD = 'advancedQuery';
@@ -117,6 +119,7 @@ export class Codes {
   public static APP_LAYOUT_MODE_DESKTOP: OAppLayoutMode = 'desktop';
   public static APP_LAYOUT_MODE_MOBILE: OAppLayoutMode = 'mobile';
 
+  public static DEFAULT_CHANGE_EVENT: CHANGE_EVENTS = 'onValueChange';
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
