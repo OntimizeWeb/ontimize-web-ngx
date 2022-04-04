@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -113,9 +113,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
           this.subscriptions.add(
             this.getEventFromFormComponent(formComponent)
               .pipe(debounceTime(this.queryOnChangeDelay))
-              .subscribe(a => {
-                this.triggerReload();
-              }));
+              .subscribe(() => this.triggerReload()));
         }
       });
     }
