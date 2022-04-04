@@ -6,8 +6,11 @@
 ### Bug fixes
 * **o-combo**: Fixed that the height is larger than other input component ([b8bbe88](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8bbe88)) Closes [#924](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/924)
 * Solve security hotspots reported by Sonar ([e313003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e313003)) Closes [#923](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/923)
+* **o-real-input, o-percent-input**: Fixing decimal digits validation problem ([8f10f064](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f10f064)) Closes [#925](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/925)
+* **o-list-picker**: Fixed that the search input in dialog does not show correctly ([413a0bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/413a0bf)) Closes [#933](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/933)
 * **o-form**: Fixed that the method `closeDetail` showing the confirm message when the attribute `confirm-exit="no"`([482fb60](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/482fb60))([1d236a0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d236a0))([e6c18ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e6c18ba)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
 * **o-real-input, o-percent-input**: Fixing decimal digits validation problem ([8f10f064]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f10f064])) Closes [#925](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/925)
+
 
 ### BREAKING CHANGES
 * **o-form**: now the method `goEditMode` has not argument ([fe77e48]](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe77e48]))
