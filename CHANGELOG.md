@@ -12,7 +12,7 @@
   * new attribute `query-on-change-event-type` ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))
 
 ### BREAKING CHANGES
-* **o-filter-build**: now when `query-on-change = "yes"` the filter query is fired when the form components fire the event `OnValueChanged` instead of `onChange` ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))
+* **o-filter-build**: now when `query-on-change = "yes"` the filter query is fired when the form components fire the event `OnValueChanged` instead of `onChange` since with the onChange event unwanted queries were launched ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))
 ## 8.5.10 (2022-03-21)
 ### Feature
   * **app-menu-config**: new `pathMatch` attribute in `MenuItemRoute` ([c51fb374](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c51fb374)) Closes [#919](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/919)
