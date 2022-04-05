@@ -9,7 +9,6 @@
 * **o-real-input, o-percent-input**: Fixing decimal digits validation problem ([8f10f064](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f10f064)) Closes [#925](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/925)
 * **o-list-picker**: Fixed that the search input in dialog does not show correctly ([413a0bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/413a0bf)) Closes [#933](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/933)
 * **o-form**: Fixed that the method `closeDetail` showing the confirm message when the attribute `confirm-exit="no"`([482fb60](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/482fb60))([1d236a0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d236a0))([e6c18ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e6c18ba)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
-* **o-real-input, o-percent-input**: Fixing decimal digits validation problem ([8f10f064](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f10f064)) Closes [#925](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/925)
 * **o-filter-build**:
   * Fixed that launches as many queries as there are combos and `query-on-change = "yes"`([3050498](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3050498])) Closes [#788](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/788)
   * new attribute `query-on-change-event-type` ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))
