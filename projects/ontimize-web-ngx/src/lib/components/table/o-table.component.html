@@ -81,8 +81,8 @@
           [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row">
-        <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)"
-          [checked]="isRowSelected(row)"></mat-checkbox>
+        <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
+        </mat-checkbox>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
@@ -121,7 +121,8 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
-          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth" [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth"
+          [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
           <div class="content">
 
             <ng-container [ngSwitch]="true">
@@ -152,7 +153,8 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
-          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth" [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth"
+          [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
           <div class="content">
 
             <ng-container [ngSwitch]="true">
@@ -212,7 +214,8 @@
 
         <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
           <ng-container *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
-            <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatLabel="never">
+            <mat-form-field class="insertable-form-field o-table-cell-editor-text o-table-cell-editor" [hideRequiredMarker]="false"
+              floatLabel="never">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
                 [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)">
               <mat-error *ngIf="oTableInsertableRowComponent.columnHasError(column, 'required')">
