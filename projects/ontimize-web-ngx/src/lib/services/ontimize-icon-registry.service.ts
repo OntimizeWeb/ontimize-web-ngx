@@ -1,29 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Observer } from 'rxjs';
+import { OSafePipe } from '../pipes/o-safe.pipe';
 
 @Injectable()
 export class OntimizeMatIconRegistry {
 
   public static ONTIMIZE_ICON_SET_PATH = 'assets/svg/ontimize-icon-set.svg';
   public static ONTIMIZE_NAMESPACE = 'ontimize';
-
+  protected oSafePipe: OSafePipe;
   constructor(
-    protected domSanitizer: DomSanitizer,
-    protected matIconRegistry: MatIconRegistry
+    protected matIconRegistry: MatIconRegistry,
+    protected injector: Injector
   ) {
-
+    this.oSafePipe = new OSafePipe(injector);
   }
 
   initialize() {
     this.matIconRegistry.addSvgIconSetInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(OntimizeMatIconRegistry.ONTIMIZE_ICON_SET_PATH));
+      this.oSafePipe.transform(OntimizeMatIconRegistry.ONTIMIZE_ICON_SET_PATH, 'resourceUrl'));
   }
 
   addOntimizeSvgIcon(iconName: string, url: string): MatIconRegistry {
     this.matIconRegistry.addSvgIconInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE, iconName,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(url));
+      this.oSafePipe.transform(url, 'resourceUrl'));
     return this.matIconRegistry;
   }
 

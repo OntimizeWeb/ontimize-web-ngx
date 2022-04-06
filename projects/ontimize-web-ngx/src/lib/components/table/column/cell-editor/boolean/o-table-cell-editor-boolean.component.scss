@@ -1,6 +1,11 @@
 .o-table-cell-editor-boolean {
-  .mat-checkbox.hidden-checkbox,
-  .mat-checkbox-ripple {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .mat-checkbox-ripple,
+  .mat-checkbox.hidden-checkbox {
     display: none;
   }
 }

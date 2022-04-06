@@ -4,7 +4,7 @@
     <mat-progress-spinner strokeWidth="3" mode="indeterminate"></mat-progress-spinner>
   </div>
 
-  <mat-toolbar *ngIf="hasControls()" [class.dense]="odense">
+  <mat-toolbar *ngIf="hasControls()" [class.dense]="odense" fxFlex="0 1 auto">
     <div class="mat-toolbar-tools" fxLayout="row" fxFill fxLayoutAlign="start center">
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
         <button *ngIf="insertButton && !insertButtonFloatable" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
@@ -46,8 +46,7 @@
     </div>
   </mat-toolbar>
 
-  <div fxLayout="column" class="o-list-content" [class.o-list-content-toolbar]="hasControls() && !odense"
-    [class.o-list-content-toolbar-dense]="hasControls() && odense">
+  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%" [class.o-list-content-toolbar-dense]="hasControls() && odense">
 
     <!--MAT-LIST-->
     <mat-list [attr.dense]="odense || undefined" (scroll)="onScroll($event)" [class.selectable]="selectable"
@@ -63,15 +62,18 @@
       </mat-list-item>
       <ng-content></ng-content>
     </mat-list>
-
-    <!--INSERT BUTTONcd -->
-    <button type="button" *ngIf="insertButton && insertButtonFloatable && odense" mat-mini-fab (click)="add($event)" class="add-button"
-      [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
-      <mat-icon svgIcon="ontimize:add"></mat-icon>
-    </button>
-    <button type="button" *ngIf="insertButton && insertButtonFloatable && !odense" mat-fab (click)="add($event)" class="add-button add-button-bottom"
-      [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
-      <mat-icon svgIcon="ontimize:add"></mat-icon>
-    </button>
   </div>
+  <mat-paginator fxFlex="0 1 auto" class="o-mat-paginator" #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows"
+    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
+
+  <!--INSERT BUTTON -->
+  <button type="button" *ngIf="insertButton && insertButtonFloatable && odense" mat-mini-fab (click)="add($event)" class="add-button"
+    [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
+    <mat-icon svgIcon="ontimize:add"></mat-icon>
+  </button>
+  <button type="button" *ngIf="insertButton && insertButtonFloatable && !odense" mat-fab (click)="add($event)" class="add-button add-button-bottom"
+    [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
+    <mat-icon svgIcon="ontimize:add"></mat-icon>
+  </button>
+
 </div>

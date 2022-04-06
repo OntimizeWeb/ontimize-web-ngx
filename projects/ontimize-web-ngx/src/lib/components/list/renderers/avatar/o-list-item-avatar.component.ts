@@ -10,7 +10,6 @@ import {
   Renderer2,
   ViewEncapsulation,
 } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { OListItemComponent } from '../../list-item/o-list-item.component';
 import {
@@ -45,17 +44,17 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
 })
 export class OListItemAvatarComponent extends OListItemTextRenderer implements AfterViewInit, OnInit {
 
+  public avatarSrc: string;
   protected avatar: string;
   protected avatarType: string;
   protected emptyAvatar: string;
-  protected _avatarSrc: SafeResourceUrl;
+
 
   constructor(
     elRef: ElementRef,
     _renderer: Renderer2,
     _injector: Injector,
-    @Optional() @Inject(forwardRef(() => OListItemComponent)) protected _listItem: OListItemComponent,
-    public sanitizer: DomSanitizer
+    @Optional() @Inject(forwardRef(() => OListItemComponent)) protected _listItem: OListItemComponent
   ) {
     super(elRef, _renderer, _injector, _listItem);
   }
@@ -79,15 +78,7 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements A
           break;
       }
     }
-    this.avatarSrc = this.sanitizer.bypassSecurityTrustResourceUrl(avatarValue);
-  }
-
-  get avatarSrc(): SafeResourceUrl {
-    return this._avatarSrc;
-  }
-
-  set avatarSrc(val: SafeResourceUrl) {
-    this._avatarSrc = val;
+    this.avatarSrc = avatarValue;
   }
 
 }
