@@ -1,4 +1,4 @@
-## 8.6.0
+## 8.6.0 (2022-04-06)
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
   * **o-list**: added *paginator* that provides navigation, typically used with to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
