@@ -2,6 +2,7 @@
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
   * **o-list**: added *paginator* that provides navigation, typically used with to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
+  * **o-table**:  new CSS class `o-table-editing-cell`, `o-table-editing-row` and `o-table-cell-editor` ([ab2ca6e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab2ca6e)) ([e179c63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e179c63)) Closes [#936](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/936) Closes [#940](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/940)
 
 ### Bug fixes
 * **o-combo**: Fixed that the height is larger than other input component ([b8bbe88](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8bbe88)) Closes [#924](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/924)
