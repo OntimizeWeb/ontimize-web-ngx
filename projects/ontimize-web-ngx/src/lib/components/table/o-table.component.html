@@ -123,27 +123,7 @@
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
           [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth"
           [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
-          <div class="content">
-
-            <ng-container [ngSwitch]="true">
-              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !isRowSelected(row))">
-                <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="isRowSelected(row) && column.editing">
-                <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="column.type === 'editButtonInRow' || column.type === 'detailButtonInRow'">
-                <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
-                  <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
-                </div>
-              </ng-container>
-              <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
-            </ng-container>
-
-          </div>
+          <ng-container *ngTemplateOutlet="cellRenderer;context:{column:column,row:row}"></ng-container>
         </td>
       </ng-container>
       <ng-template #cellTemplateMultiTemplateDataRows>
@@ -155,27 +135,8 @@
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
           [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth"
           [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
-          <div class="content">
+          <ng-container *ngTemplateOutlet="cellRenderer;context:{column:column,row:row}"></ng-container>
 
-            <ng-container [ngSwitch]="true">
-              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !isRowSelected(row))">
-                <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="isRowSelected(row) && column.editing">
-                <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="column.type === 'editButtonInRow' || column.type === 'detailButtonInRow'">
-                <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
-                  <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
-                </div>
-              </ng-container>
-              <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
-            </ng-container>
-
-          </div>
         </td>
       </ng-template>
       <!--Define mat-footer-cell-->
@@ -332,3 +293,27 @@
     [refresh]="refreshButton" [delete]="deleteButton" [filter]="showFilterOption" [group-by-row]="groupable">
   </o-table-context-menu>
 </ng-container>
+
+<ng-template #cellRenderer let-row="row" let-column="column">
+  <div class="content">
+
+    <ng-container [ngSwitch]="true">
+      <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !isRowSelected(row))">
+        <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
+        </ng-template>
+      </ng-container>
+      <ng-container *ngSwitchCase="isRowSelected(row) && column.editing">
+        <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
+        </ng-template>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="column.type === 'editButtonInRow' || column.type === 'detailButtonInRow'">
+        <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
+          <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
+    </ng-container>
+
+  </div>
+</ng-template>
