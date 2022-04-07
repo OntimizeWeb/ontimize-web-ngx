@@ -77,7 +77,7 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
     }
   }
 
-  public onMenuClosed(e: Event): void {
+  public onMenuClosed(): void {
     this.closeContent();
   }
 

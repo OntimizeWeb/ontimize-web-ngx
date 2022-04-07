@@ -49,7 +49,7 @@ export class OBarMenuItemComponent extends OBaseMenuItemClass implements OnInit 
     super.ngOnInit();
   }
 
-  collapseMenu(evt: Event) {
+  collapseMenu() {
     if (this.menu) {
       this.menu.collapseAll();
     }
