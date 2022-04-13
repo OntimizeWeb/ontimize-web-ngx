@@ -1,11 +1,11 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { InputConverter } from '../../../decorators/input-converter';
 
+import { InputConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT,
-  OTextInputComponent,
+  OTextInputComponent
 } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_PASSWORD_INPUT = [
@@ -20,7 +20,6 @@ export const DEFAULT_OUTPUTS_O_PASSWORD_INPUT = [
 @Component({
   selector: 'o-password-input',
   templateUrl: './o-password-input.component.html',
-  styleUrls: ['./o-password-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_PASSWORD_INPUT,
   outputs: DEFAULT_OUTPUTS_O_PASSWORD_INPUT,
   encapsulation: ViewEncapsulation.None

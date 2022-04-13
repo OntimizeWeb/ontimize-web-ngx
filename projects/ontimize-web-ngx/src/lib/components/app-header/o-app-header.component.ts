@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';

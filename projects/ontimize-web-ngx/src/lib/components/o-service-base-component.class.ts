@@ -239,15 +239,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
-    // if (typeof this.insertFallbackFunction !== 'function') {
-    //   this.insertFallbackFunction = undefined;
-    // }
-    // if (typeof this.updateFallbackFunction !== 'function') {
-    //   this.updateFallbackFunction = undefined;
-    // }
-    // if (typeof this.deleteFallbackFunction !== 'function') {
-    //   this.deleteFallbackFunction = undefined;
-    // }
   }
 
   afterViewInit() {
