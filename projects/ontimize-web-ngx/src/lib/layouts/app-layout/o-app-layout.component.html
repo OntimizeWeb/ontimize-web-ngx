@@ -8,10 +8,15 @@
   </ng-content>
   <ng-content select="o-app-layout-sidenav" ngProjectAs="o-app-layout-sidenav-projection-end"></ng-content>
 
-  <o-app-header #appHeader *ngIf="showHeader" [show-user-info]="showUserInfo" [show-language-selector]="showLanguageSelector"
-    [use-flag-icons]="useFlagIcons" (onSidenavToggle)="appSidenav.toggleSidenav()" [color]="headerColor" [header-height]="headerHeight">
+  <o-app-header #appHeader *ngIf="showHeader" [show-title]="showTitle" [show-static-title]="showStaticTitle" [static-title]="staticTitle"
+    [show-user-info]="showUserInfo" [show-language-selector]="showLanguageSelector" [use-flag-icons]="useFlagIcons"
+    (onSidenavToggle)="appSidenav.toggleSidenav()" [color]="headerColor" [header-height]="headerHeight">
     <mat-icon class="sidenav-toggle" svgIcon="ontimize:menu" (click)="appSidenav.toggleSidenav()" *ngIf="appSidenav.isMobileMode()"></mat-icon>
-    <ng-content select="o-app-layout-header"></ng-content>
+    <ng-content select="o-app-layout-header[position=start]" ngProjectAs="o-app-layout-header-projection-start">
+    </ng-content>
+    <ng-content select="o-app-layout-header[position=end]" ngProjectAs="o-app-layout-header-projection-end">
+    </ng-content>
+    <ng-content select="o-app-layout-header" ngProjectAs="o-app-layout-header-projection-start"></ng-content>
   </o-app-header>
 
   <div class="application-layout-content-wrapper" [class.header-layout]="showHeader">

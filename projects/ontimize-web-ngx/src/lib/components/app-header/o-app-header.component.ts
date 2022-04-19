@@ -1,7 +1,6 @@
-import { Component, ElementRef, EventEmitter, Injector, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
@@ -15,7 +14,10 @@ export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showLanguageSelector: show-language-selector',
   'useFlagIcons: use-flag-icons',
   'color',
-  'headerHeight:header-height'
+  'headerHeight:header-height',
+  'showTitle: show-title',
+  'staticTitle: static-title',
+  'showStaticTitle: show-static-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -31,19 +33,20 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-app-header]': 'true',
-    '[class.o-app-header-small]': "headerHeight==='small'",
-    '[class.o-app-header-medium]': "headerHeight==='medium'",
-    '[class.o-app-header-large]': "headerHeight==='large'"
+    '[class.o-app-header-small]': 'headerHeight==="small"',
+    '[class.o-app-header-medium]': 'headerHeight==="medium"',
+    '[class.o-app-header-large]': 'headerHeight==="large"'
   }
 })
-export class OAppHeaderComponent implements OnDestroy {
+export class OAppHeaderComponent {
 
   protected dialogService: DialogService;
   protected modulesInfoService: OModulesInfoService;
   protected authService: AuthService;
-  protected _headerTitle = '';
-
-  protected modulesInfoSubscription: Subscription;
+  public showTitle = false;
+  public showStaticTitle = false;
+  public staticTitle: string;
+  public headerTitle$: Observable<string>;
 
   @ViewChild('userInfo', { static: false })
   public userInfo: OUserInfoComponent;
@@ -57,7 +60,6 @@ export class OAppHeaderComponent implements OnDestroy {
 
   public onSidenavToggle = new EventEmitter<void>();
   protected _headerHeight = Codes.DEFAULT_ROW_HEIGHT;
-
 
   set headerHeight(value) {
     this._headerHeight = value ? value.toLowerCase() : value;
@@ -73,39 +75,20 @@ export class OAppHeaderComponent implements OnDestroy {
   private _color: ThemePalette;
 
   constructor(
-    protected router: Router,
     protected injector: Injector,
-    protected elRef: ElementRef
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.modulesInfoService = this.injector.get(OModulesInfoService);
     this.authService = this.injector.get(AuthService);
-
-    this.modulesInfoSubscription = this.modulesInfoService.getModuleChangeObservable().subscribe(res => {
-      this.headerTitle = res.name;
-    });
   }
-
-  ngOnDestroy() {
-    this.modulesInfoSubscription.unsubscribe();
+  ngOnInit() {
+    if (!this.showStaticTitle) {
+      this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable();
+    }
   }
-
   onLogoutClick() {
     this.authService.logoutWithConfirmation();
   }
-
-  get headerTitle(): string {
-    return this._headerTitle;
-  }
-
-  set headerTitle(value: string) {
-    this._headerTitle = value;
-  }
-
-  get showHeaderTitle(): boolean {
-    return this._headerTitle.length > 0;
-  }
-
   set color(newValue: ThemePalette) {
     this._color = newValue;
   }

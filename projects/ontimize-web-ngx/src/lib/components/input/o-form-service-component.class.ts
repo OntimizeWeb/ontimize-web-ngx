@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { DialogService } from '../../services/dialog.service';
+import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { Codes } from '../../util/codes';
@@ -96,7 +96,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   public queryFallbackFunction: (error: any) => void;
 
   @InputConverter()
-  protected translate: boolean = false;
+  public translate: boolean = false;
   public sort: 'ASC' | 'DESC';
 
   /* Outputs */
@@ -118,7 +118,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _setValueOnValueChangeEquiv = {};
   protected _formDataSubcribe;
   protected _currentIndex;
-  protected dialogService: DialogService;
+  protected oErrorDialogManager: OErrorDialogManager;
 
   protected queryOnEventSubscription: Subscription;
   protected subscriptionDataLoad: Subscription = new Subscription();
@@ -139,7 +139,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     super(form, elRef, injector);
     this.form = form;
     this.elRef = elRef;
-    this.dialogService = injector.get(DialogService);
+    this.oErrorDialogManager = injector.get(OErrorDialogManager);
   }
 
   initialize() {
@@ -293,10 +293,9 @@ export class OFormServiceComponent extends OFormDataComponent {
           this.loaderSubscription.unsubscribe();
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
-          } else if (err && !Util.isObject(err)) {
-            this.dialogService.alert('ERROR', err);
           } else {
-            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+            this.oErrorDialogManager.openErrorDialog(err);
+            console.error(err);
           }
         });
     }

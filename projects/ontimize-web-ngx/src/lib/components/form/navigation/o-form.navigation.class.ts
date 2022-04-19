@@ -5,7 +5,10 @@ import { combineLatest, Observable, Subscription } from 'rxjs';
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
-import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
+import {
+  FormLayoutCloseDetailOptions,
+  FormLayoutDetailComponentData
+} from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
@@ -163,7 +166,7 @@ export class OFormNavigationClass {
     }
     this.cacheStateSubscription = formCache.onCacheStateChanges.subscribe(() => {
       const initialStateChanged = this.form.isInitialStateChanged();
-      const triggerExitConfirm = this.form.isInitialStateChanged(this.form.ignoreOnExit);
+      const triggerExitConfirm = this.form.confirmExit && this.form.isInitialStateChanged(this.form.ignoreOnExit);
       this.setModifiedState(initialStateChanged, triggerExitConfirm);
     });
   }
@@ -271,7 +274,7 @@ export class OFormNavigationClass {
 
   closeDetailAction(options?: any) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.closeDetail();
+      this.formLayoutManager.closeDetail(options);
     } else if (this.navigationService) {
       this.form.beforeCloseDetail.emit();
       // `removeLastItemsUntilMain` may not remove all necessary items so current route will be checked below
@@ -301,24 +304,17 @@ export class OFormNavigationClass {
   }
 
   stayInRecordAfterInsert(insertedKeys: object) {
-    if (this.formLayoutManager) {
-      this.form.setInitialMode();
-      const subscription = this.form.onDataLoaded.subscribe(() => {
-        const keys = this.form.getKeysValues();
-        this.formLayoutManager.updateActiveData({ params: keys });
-        const cacheData: FormLayoutDetailComponentData = this.formLayoutManager.getFormCacheData();
-        if (Util.isDefined(cacheData)) {
-          this.urlParams = cacheData.params;
-        }
-        subscription.unsubscribe();
-      });
-      this.form.queryData(insertedKeys);
-    } else if (this.navigationService && this.form.keysArray && insertedKeys) {
-      // Remove 'new' navigation item from history
-      this.navigationService.removeLastItem();
-
+    if (this.navigationService && this.form.keysArray && insertedKeys) {
+      if (this.formLayoutManager) {
+        const closeOpts: FormLayoutCloseDetailOptions = { exitWithoutConfirmation: true };
+        this.formLayoutManager.closeDetail(closeOpts);
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      } else {
+        // Remove 'new' navigation item from history
+        this.navigationService.removeLastItem();
+      }
       let params: any[] = [];
-      this.form.keysArray.forEach((current, index) => {
+      this.form.keysArray.forEach((current) => {
         if (insertedKeys[current]) {
           params.push(insertedKeys[current]);
         }
@@ -374,6 +370,10 @@ export class OFormNavigationClass {
       } else {
         extras.relativeTo = this.actRoute;
         route = ['../' + Codes.DEFAULT_INSERT_ROUTE];
+        if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+          extras.queryParams = {};
+          extras.queryParams[Codes.INSERTION_MODE] = 'true';
+        }
       }
       this.storeNavigationFormRoutes('insertFormRoute');
       this.router.navigate(route, extras).then((val) => {

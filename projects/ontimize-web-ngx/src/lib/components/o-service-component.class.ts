@@ -1,7 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
+import { MatPaginator, PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
@@ -87,11 +88,26 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // quick-filter-placeholder: quick filter placeholder
   'quickFilterPlaceholder: quick-filter-placeholder',
+
+  // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
+  'paginationControls: pagination-controls',
+
+  // page-size-options [string]: Page size options separated by ';'.
+  'pageSizeOptions: page-size-options'
 ];
+
+export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
+  'onClick',
+  'onDoubleClick',
+  'onDataLoaded',
+  'onPaginatedDataLoaded',
+  'onSearch'
+]
 
 export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
   extends AbstractOServiceBaseComponent<T>
   implements IServiceDataComponent {
+  @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
 
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
@@ -129,6 +145,20 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   editButtonInRowIcon: string = Codes.EDIT_ICON;
   @InputConverter()
   insertButton: boolean;
+  @InputConverter()
+  paginationControls: boolean = true;
+
+  get pageSizeOptions(): number[] {
+    return this._pageSizeOptions;
+  }
+
+  set pageSizeOptions(val: number[]) {
+    if (!(val instanceof Array)) {
+      val = Util.parseArray(String(val)).map(a => parseInt(a, 10));
+    }
+    this._pageSizeOptions = val;
+  }
+
   protected _rowHeight = Codes.DEFAULT_ROW_HEIGHT;
   protected rowHeightSubject: BehaviorSubject<string> = new BehaviorSubject(this._rowHeight);
   public rowHeightObservable: Observable<string> = this.rowHeightSubject.asObservable();
@@ -174,8 +204,11 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   /* end of inputs variables */
 
   /* outputs variables */
+  public onClick: EventEmitter<any> = new EventEmitter();
+  public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
+  public onSearch: EventEmitter<any> = new EventEmitter();
   /* end of outputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
@@ -194,6 +227,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected quickFilterColArray: string[];
 
   protected dataResponseArray: any[] = [];
+  protected quickFilterSubscription: Subscription;
+  _pageSizeOptions = Codes.PAGE_SIZE_OPTIONS;
 
   constructor(
     injector: Injector,
@@ -245,6 +280,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     if (this.tabsSubscriptions) {
       this.tabsSubscriptions.unsubscribe();
     }
+    if (this.quickFilterSubscription) {
+      this.quickFilterSubscription.unsubscribe();
+    }
   }
 
   public isVisible(): boolean {
@@ -268,7 +306,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public setSelected(item: any): void {
-    this.selection.toggle(item);
+    if (Util.isDefined(item)) {
+      this.selection.toggle(item);
+    }
   }
 
   protected navigateToDetail(route: any[], qParams: any, relativeTo: ActivatedRoute): void {
@@ -293,6 +333,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     if (route.length > 0) {
       const relativeTo = this.recursiveInsert ? this.actRoute.parent : this.actRoute;
       const qParams = {};
+      if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
+        qParams[Codes.INSERTION_MODE] = 'true';
+      }
       this.navigateToDetail(route, qParams, relativeTo);
     }
   }
@@ -570,12 +613,17 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       return;
     }
     this.quickFilterComponent = quickFilter;
-    if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state)) {
-      this.quickFilterComponent.onSearch.subscribe(val => this.filterData(val));
-      if ((this.state.quickFilterValue || '').length > 0) {
-        this.quickFilterComponent.setValue(this.state.quickFilterValue, {
-          emitEvent: false
-        });
+    if (Util.isDefined(this.quickFilterComponent)) {
+      this.quickFilterSubscription = this.quickFilterComponent.onSearch.subscribe(val => {
+        this.onSearch.emit(val);
+        this.filterData(val);
+      });
+      if (Util.isDefined(this.state)) {
+        if ((this.state.quickFilterValue || '').length > 0) {
+          this.quickFilterComponent.setValue(this.state.quickFilterValue, {
+            emitEvent: true
+          });
+        }
       }
     }
   }
@@ -663,10 +711,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     return dataArray;
   }
 
-  protected getPaginationDataFromArray(dataArray: any[]): any[] {
-    return dataArray;
-  }
-
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
     if (!Util.isArray(data)) {
       this.setDataArray([]);
@@ -677,9 +721,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       } else {
         this.filterData();
       }
-    }
-    if (this.loaderSubscription) {
-      this.loaderSubscription.unsubscribe();
     }
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
@@ -707,7 +748,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
-        this.checkViewPortSubject.next(true)
+        this.checkViewPortSubject.next(true);
       });
 
       this.tabsSubscriptions.add(updateComponentStateSubject.subscribe((arg) => {
@@ -728,6 +769,70 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   applyDefaultConfiguration() {
 
   }
+
+  public onChangePage(e: PageEvent): void {
+    if (!this.pageable) {
+      this.currentPage = e.pageIndex;
+      this.queryRows = e.pageSize;
+      this.filterData();
+      return;
+    }
+    const goingBack = e.pageIndex < this.currentPage;
+    this.currentPage = e.pageIndex;
+    const pageSize = e.pageSize;
+
+    const oldQueryRows = this.queryRows;
+    const changingPageSize = (oldQueryRows !== pageSize);
+    this.queryRows = pageSize;
+
+    let newStartRecord;
+    let queryLength;
+
+    if (goingBack || changingPageSize) {
+      newStartRecord = (this.currentPage * this.queryRows);
+      queryLength = this.queryRows;
+    } else {
+      newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
+      const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
+      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+    }
+
+    const queryArgs: OQueryDataArgs = {
+      offset: newStartRecord,
+      length: queryLength,
+      replace: true
+    };
+    this.queryData(void 0, queryArgs);
+  }
+
+  set currentPage(val: number) {
+    this._currentPage = val;
+  }
+
+  get currentPage(): number {
+    return this._currentPage;
+  }
+
+  protected _currentPage: number = 0;
+
+
+  get totalRecords(): number {
+    if (this.pageable) {
+      return this.getTotalRecordsNumber();
+    }
+    return this.dataResponseArray.length;
+  }
+
+  protected getPaginationDataFromArray(dataArray: any[]): any[] {
+    let result: any[];
+    if (this.paginationControls) {
+      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
+    } else {
+      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
+    }
+    return result;
+  }
+
 }
 
 /*This class is definied to mantain bacwards compatibility */

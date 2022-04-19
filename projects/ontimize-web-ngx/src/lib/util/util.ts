@@ -375,6 +375,10 @@ export class Util {
   }
 
   static parseByValueType(value: any, valueType: ODateValueType, format: string) {
+    if (!Util.isDefined(value)) {
+      return void 0;
+    }
+
     let result = value;
     const m = moment(value);
     if (!m.isValid()) {

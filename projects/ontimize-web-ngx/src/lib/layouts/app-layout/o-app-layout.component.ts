@@ -1,13 +1,13 @@
-import { Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
+import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
 
-
+import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
 import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
 import { InputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
+
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -20,7 +20,11 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'openedSidenavImg: opened-sidenav-image',
   'closedSidenavImg: closed-sidenav-image',
   'headerColor: header-color',
-  'headerHeight: header-height'
+  'headerHeight: header-height',
+  'showTitle: show-title',
+  'staticTitle: static-title',
+  'showStaticTitle: show-static-title'
+
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -39,7 +43,7 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
   encapsulation: ViewEncapsulation.None
 })
 
-export class OAppLayoutComponent {
+export class OAppLayoutComponent implements AfterViewInit {
 
   @InputConverter()
   sidenavOpened: boolean = true;
@@ -51,6 +55,12 @@ export class OAppLayoutComponent {
   useFlagIcons: boolean = false;
   @InputConverter()
   protected _showHeader: boolean = true;
+  @InputConverter()
+  public showTitle: boolean = false;
+  @InputConverter()
+  public staticTitle: string;
+  @InputConverter()
+  public showStaticTitle: boolean = false;
 
   public headerColor: ThemePalette;
   public headerHeight = Codes.DEFAULT_ROW_HEIGHT;

@@ -7,8 +7,7 @@ import { OTableConfiguration } from '../../../../../types/table/o-table-configur
 
 @Component({
   selector: 'o-table-apply-configuration-dialog',
-  templateUrl: './o-table-apply-configuration-dialog.component.html',
-  styleUrls: ['./o-table-apply-configuration-dialog.component.scss']
+  templateUrl: './o-table-apply-configuration-dialog.component.html'
 })
 export class OTableApplyConfigurationDialogComponent implements OnInit {
 

@@ -1,12 +1,16 @@
 <ng-container *ngFor="let item of items">
-  <!--menu-group-->
-  <o-bar-menu-group *ngIf="isMenuGroup(item)" [title]="getValueOfAttr(item, 'name')" [attr]="getValueOfAttr(item,'id')"
-    [tooltip]="getValueOfAttr(item, 'tooltip')" [icon]="getValueOfAttr(item,'icon')" [ngClass]="item.class">
-    <o-bar-menu-nested [items]="item.items"> </o-bar-menu-nested>
-  </o-bar-menu-group>
-  <!--menu-item-->
-  <o-bar-menu-item *ngIf="!isMenuGroup(item)" [title]="getValueOfAttr(item,'name')" [attr]="getValueOfAttr(item,'id')"
-    [tooltip]="getValueOfAttr(item, 'tooltip') " [icon]="getValueOfAttr(item, 'icon') "
-    [route]="getValueOfAttr(item, 'route') " [ngClass]="item.class">
-  </o-bar-menu-item>
+  <ng-container [ngSwitch]="appMenuService.getMenuItemType(item)">
+
+    <o-bar-menu-group *ngSwitchCase="'group'" [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [ngClass]="item.class">
+      <o-bar-menu-nested [items]="item.items"> </o-bar-menu-nested>
+    </o-bar-menu-group>
+
+    <o-locale-bar-menu-item *ngSwitchCase="'locale'" [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon"
+      [locale]="item.locale" [ngClass]="item.class">
+    </o-locale-bar-menu-item>
+
+    <o-bar-menu-item *ngSwitchDefault [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [route]="item.route"
+      [ngClass]="item.class"></o-bar-menu-item>
+
+  </ng-container>
 </ng-container>

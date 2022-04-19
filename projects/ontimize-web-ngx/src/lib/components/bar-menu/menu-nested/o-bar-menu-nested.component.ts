@@ -1,4 +1,4 @@
-import { Component, Injector, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 
 import { AppMenuService } from '../../../services/app-menu.service';
 import { MenuRootItem } from '../../../types/menu-root-item.type';
@@ -11,27 +11,17 @@ export const DEFAULT_INPUTS_O_BAR_MENU_NESTED = [
   selector: 'o-bar-menu-nested',
   templateUrl: './o-bar-menu-nested.component.html',
   inputs: DEFAULT_INPUTS_O_BAR_MENU_NESTED,
-  encapsulation: ViewEncapsulation.None
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OBarMenuNestedComponent {
 
-  private appMenuService: AppMenuService;
+  public appMenuService: AppMenuService;
   public items: MenuRootItem[];
 
   constructor(
-    protected injector: Injector) {
+    protected injector: Injector
+  ) {
     this.appMenuService = this.injector.get(AppMenuService);
   }
 
-  getValueOfAttr(menu: object, attr: string) {
-    let valAttr = '';
-    if (menu.hasOwnProperty(attr)) {
-      valAttr = menu[attr];
-    }
-    return valAttr;
-  }
-
-  isMenuGroup(item: any): boolean {
-    return this.appMenuService.getMenuItemType(item) === 'group';
-  }
 }

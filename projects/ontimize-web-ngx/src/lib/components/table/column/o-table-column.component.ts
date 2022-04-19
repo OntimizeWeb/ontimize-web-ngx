@@ -192,7 +192,9 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
-
+  @InputConverter()
+  protected translate: boolean = false;
+  
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
   /* input time */
@@ -371,6 +373,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
               newRenderer.parentKeys = this.parentKeys;
               newRenderer.queryMethod = this.queryMethod;
               newRenderer.serviceType = this.serviceType;
+              newRenderer.translate = this.translate;
               break;
             case 'translate':
               newRenderer.translateArgsFn = this.translateArgsFn;

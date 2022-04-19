@@ -11,10 +11,9 @@ export class NumberService {
 
   public static DEFAULT_DECIMAL_DIGITS = 2;
 
-  protected _grouping: boolean;
-  protected _minDecimalDigits: number;
-  protected _maxDecimalDigits: number;
-  protected _locale: string;
+  protected minDecimalDigits: number;
+  protected maxDecimalDigits: number;
+  protected locale: string;
 
   protected translateService: OTranslateService;
 
@@ -22,48 +21,13 @@ export class NumberService {
 
     this.translateService = this.injector.get(OTranslateService);
     // TODO: initialize from config
-    this._minDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
-    this._maxDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
+    this.minDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
+    this.maxDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
 
-    this._grouping = true;
-
-    const self = this;
-    this._locale = this.translateService.getCurrentLang()
+    this.locale = this.translateService.getCurrentLang()
     this.translateService.onLanguageChanged.subscribe(() =>
-      self._locale = self.translateService.getCurrentLang()
+      this.locale = this.translateService.getCurrentLang()
     );
-  }
-
-  get grouping(): boolean {
-    return this._grouping;
-  }
-
-  set grouping(value: boolean) {
-    this._grouping = value;
-  }
-
-  get minDecimalDigits(): number {
-    return this._minDecimalDigits;
-  }
-
-  set minDecimalDigits(value: number) {
-    this._minDecimalDigits = value;
-  }
-
-  get maxDecimalDigits(): number {
-    return this._maxDecimalDigits;
-  }
-
-  set maxDecimalDigits(value: number) {
-    this._maxDecimalDigits = value;
-  }
-
-  get locale(): string {
-    return this._locale;
-  }
-
-  set locale(value: string) {
-    this._locale = value;
   }
 
   getIntegerValue(value: any, args: any) {
@@ -80,10 +44,8 @@ export class NumberService {
     }
     // Format value
     let formattedIntValue;
-    if (Util.isDefined(locale)) {
-      formattedIntValue = new Intl.NumberFormat(locale).format(intValue);
-    } else if (!Util.isDefined(thousandSeparator)) {
-      formattedIntValue = new Intl.NumberFormat(this._locale).format(intValue);
+    if (Util.isDefined(locale) || !Util.isDefined(thousandSeparator)) {
+      formattedIntValue = new Intl.NumberFormat(Util.isDefined(locale) ? locale : this.locale).format(intValue);
     } else {
       formattedIntValue = String(intValue).toString().replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
     }
@@ -91,7 +53,6 @@ export class NumberService {
   }
 
   getRealValue(value: any, args: IRealPipeArgument) {
-    const grouping = args ? args.grouping : false;
     if (!Util.isDefined(value)) {
       return value;
     }
@@ -99,47 +60,25 @@ export class NumberService {
     const locale = args ? args.locale : undefined;
     const thousandSeparator = args ? args.thousandSeparator : undefined;
     const decimalSeparator = args ? args.decimalSeparator : undefined;
+    const grouping = args ? args.grouping : false;
 
-    let minDecimalDigits = args ? args.minDecimalDigits : undefined;
-    let maxDecimalDigits = args ? args.maxDecimalDigits : undefined;
-
-    if (!Util.isDefined(minDecimalDigits)) {
-      minDecimalDigits = this._minDecimalDigits;
-    }
-    if (!Util.isDefined(maxDecimalDigits)) {
-      maxDecimalDigits = this._maxDecimalDigits;
-    }
+    const minDecimalDigits = args ? args.minDecimalDigits : this.minDecimalDigits;
+    const maxDecimalDigits = args ? args.maxDecimalDigits : this.maxDecimalDigits;
 
     let formattedRealValue = value;
-    const significantDigits = this.calculateSignificantDigits(value, minDecimalDigits, maxDecimalDigits, args.truncate, decimalSeparator);
-    const formatterArgs = {
-      minimumFractionDigits: minDecimalDigits,
-      maximumFractionDigits: maxDecimalDigits,
-      minimumSignificantDigits: significantDigits,
-      maximumSignificantDigits: significantDigits,
-      useGrouping: grouping
-    };
-
-    if (Util.isDefined(locale)) {
-      formattedRealValue = new Intl.NumberFormat(locale, formatterArgs).format(value);
-    } else if (!Util.isDefined(thousandSeparator) || !Util.isDefined(decimalSeparator)) {
-      formattedRealValue = new Intl.NumberFormat(this._locale, formatterArgs).format(value);
-    } else {
-      const realValue = parseFloat(value);
-      if (!isNaN(realValue)) {
-        formattedRealValue = String(realValue);
-        let tmpStr = realValue.toFixed(maxDecimalDigits);
-        tmpStr = tmpStr.replace('.', decimalSeparator);
-        if (grouping) {
-          const parts = tmpStr.split(decimalSeparator);
-          if (parts.length > 0) {
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
-            formattedRealValue = parts.join(decimalSeparator);
-          }
-        } else {
-          formattedRealValue = tmpStr;
-        }
+    const useIntlNumberFormat: boolean = Util.isDefined(locale) || (!Util.isDefined(thousandSeparator) || !Util.isDefined(decimalSeparator));
+    if (useIntlNumberFormat) {
+      formattedRealValue = args.truncate ? this.truncate(value, maxDecimalDigits) : null;
+      if (!Util.isDefined(formattedRealValue)) {
+        let formatterArgs: any = {
+          minimumFractionDigits: minDecimalDigits,
+          maximumFractionDigits: maxDecimalDigits,
+          useGrouping: grouping
+        };
+        formattedRealValue = new Intl.NumberFormat(Util.isDefined(locale) ? locale : this.locale, formatterArgs).format(value);
       }
+    } else {
+      formattedRealValue = this.parseRealValue(value, maxDecimalDigits, thousandSeparator, decimalSeparator, grouping);
     }
     return formattedRealValue;
   }
@@ -159,20 +98,33 @@ export class NumberService {
     return formattedPercentValue;
   }
 
-  private calculateSignificantDigits(value: number, minDecimals: number, maxDecimals: number, truncate = true, decimalSeparator?: string): number {
-    const valueStr = String(value);
-    const splittedValue = Util.isDefined(decimalSeparator) ? valueStr.split(decimalSeparator) : valueStr.split('.');
-    const sigIntDigits = splittedValue[0].length;
-    if (!Util.isDefined(splittedValue[1])) {
-      return sigIntDigits;
+  private truncate(value: number, maxDecimals: number): string {
+    const stringValue = String(value);
+    const splittedValue = stringValue.split('.');
+    const decimalsLength = Util.isDefined(splittedValue[1]) ? splittedValue[1].length : null;
+    if (decimalsLength > maxDecimals) {
+      return stringValue.slice(0, splittedValue[0].length + 1 + maxDecimals);
     }
-    let sigDecDigits = 0;
-    if (truncate) {
-      sigDecDigits = splittedValue[1].length > maxDecimals ? maxDecimals : splittedValue[1].length;
-    } else {
-      sigDecDigits = splittedValue[1].length > minDecimals ? splittedValue[1].length : minDecimals;
-    }
-    return sigIntDigits + sigDecDigits;
+    return null;
   }
 
+  private parseRealValue(value: any, maxDecimalDigits: number, thousandSeparator: string, decimalSeparator: string, grouping: boolean): string {
+    let result = value;
+    const realValue = parseFloat(value);
+    if (!isNaN(realValue)) {
+      result = String(realValue);
+      let tmpStr = realValue.toFixed(maxDecimalDigits);
+      tmpStr = tmpStr.replace('.', decimalSeparator);
+      if (grouping) {
+        const parts = tmpStr.split(decimalSeparator);
+        if (parts.length > 0) {
+          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+          result = parts.join(decimalSeparator);
+        }
+      } else {
+        result = tmpStr;
+      }
+    }
+    return result;
+  }
 }

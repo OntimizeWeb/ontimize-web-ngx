@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   ContentChildren,
@@ -7,7 +8,6 @@ import {
   forwardRef,
   Inject,
   Injector,
-  OnInit,
   Optional,
   QueryList,
   Renderer2,
@@ -29,10 +29,9 @@ import { OListComponent } from '../o-list.component';
     '[class.o-list-item]': 'true'
   }
 })
-export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
+export class OListItemComponent implements IListItem, AfterContentInit {
 
   public modelData: any;
-  protected _isSelected: boolean = false;
 
   @ContentChildren(MatLine)
   protected _lines: QueryList<MatLine>;
@@ -56,12 +55,9 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     public elRef: ElementRef,
     protected _renderer: Renderer2,
     protected _injector: Injector,
+    protected cd: ChangeDetectorRef,
     @Optional() @Inject(forwardRef(() => OListComponent)) public _list: OListComponent
   ) { }
-
-  public ngOnInit() {
-    this._list.registerItem(this);
-  }
 
   public ngAfterContentInit(): void {
     const matLinesRef = this._lines;
@@ -76,18 +72,6 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
       this._lines = matLinesRef;
       ngAfterContentInitOriginal.apply(this);
     };
-  }
-
-  public onClick(e?: Event): void {
-    if (!this._list.detailButtonInRow) {
-      this._list.onItemDetailClick(this);
-    }
-  }
-
-  public onDoubleClick(e?: Event): void {
-    if (!this._list.detailButtonInRow) {
-      this._list.onItemDetailDoubleClick(this);
-    }
   }
 
   public onDetailIconClicked(e?: Event): void {
@@ -105,8 +89,9 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
   }
 
   public setItemData(data: any): void {
-    if (!this.modelData) {
+    if (!Util.isDefined(this.modelData)) {
       this.modelData = data;
+      this.cd.detectChanges();
     }
   }
 
@@ -114,14 +99,18 @@ export class OListItemComponent implements OnInit, IListItem, AfterContentInit {
     return this.modelData;
   }
 
-  public onCheckboxChange(e?: Event): void {
-    if (this._list.selectable) {
+  public onCheckboxChange(): void {
+    if (this._list.selectable && Util.isDefined(this.modelData)) {
       this._list.setSelected(this.modelData);
     }
   }
 
+  public onCheckboxClicked(event: Event) {
+    event.stopPropagation();
+  }
+
   get isSelected(): boolean {
-    return this._list.selection.isSelected(this.modelData);
+    return this._list.isItemSelected(this.modelData);
   }
 
 }

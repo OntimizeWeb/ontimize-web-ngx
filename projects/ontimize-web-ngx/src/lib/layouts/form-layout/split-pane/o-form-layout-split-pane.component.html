@@ -4,7 +4,7 @@
       <ng-content></ng-content>
     </div>
 
-    <div #detailWrapper class="o-split-pane-content-wrapper" mwlResizable [enableGhostResize]="true"
+    <div #detailWrapper class="o-split-pane-content-wrapper mwlResizable" mwlResizable [enableGhostResize]="true"
       (resizeEnd)="onResizeEnd('width', $event, detailWrapper)">
 
       <div class="o-split-pane-resize-handle" mwlResizeHandle [resizeEdges]="{ left: true }">

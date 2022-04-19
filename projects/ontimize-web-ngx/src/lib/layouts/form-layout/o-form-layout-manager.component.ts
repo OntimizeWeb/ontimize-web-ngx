@@ -9,6 +9,7 @@ import {
   OnInit,
   Optional,
   SkipSelf,
+  Type,
   ViewChild
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
@@ -19,6 +20,7 @@ import { InputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
@@ -26,7 +28,11 @@ import { AbstractComponentStateService } from '../../services/state/o-component-
 import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-form-layout-manager-component-state.class';
 import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import { FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
+import {
+  FormLayoutCloseDetailOptions,
+  FormLayoutDetailComponentData
+} from '../../types/form-layout-detail-component-data.type';
+import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
@@ -70,7 +76,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   templateUrl: './o-form-layout-manager.component.html',
   styleUrls: ['./o-form-layout-manager.component.scss'],
   providers: [
-    { provide: AbstractComponentStateService, useClass: OFormLayoutManagerComponentStateService, deps: [Injector] }
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OFormLayoutManagerComponentStateService },
   ],
   host: {
     '[class.o-form-layout-manager]': 'true'
@@ -242,7 +249,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     this.localStorageService = this.injector.get(LocalStorageService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
-    this.componentStateService = this.injector.get(OFormLayoutManagerComponentStateService);
+    this.componentStateService = this.injector.get<OFormLayoutManagerComponentStateService>(AbstractComponentStateService as Type<OFormLayoutManagerComponentStateService>);
     if (this.storeState) {
       this.subscription.add(this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
@@ -278,7 +285,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.updateStateStorage();
     this.oFormLayoutManagerService.removeFormLayoutManager(this);
     this.destroyActivateChildGuard();
   }
@@ -386,7 +392,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       id: Math.random().toString(36),
       label: '',
       innerFormsInfo: {},
-      insertionMode: childRoute.queryParams.insertionMode === 'true'
+      insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'
     };
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
@@ -398,10 +404,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
   }
 
-  public closeDetail(): void {
+  public closeDetail(options?: FormLayoutCloseDetailOptions): void {
     const compRef = this.getLayoutModeComponent();
     if (Util.isDefined(compRef)) {
-      compRef.closeDetail();
+      compRef.closeDetail(options);
     }
   }
 
@@ -601,11 +607,20 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return Util.wrapIntoObservable(Util.isDefined(compRef) ? compRef.canAddDetailComponent() : true);
   }
 
-  public hasToConfirmExit(data: FormLayoutDetailComponentData): boolean {
+  public hasToConfirmExit(data: FormLayoutDetailComponentData, options?: FormLayoutCloseDetailOptions): boolean {
+    if (Util.isDefined(options) && options.exitWithoutConfirmation) {
+      return false;
+    }
     const formsAttr = Object.keys(data.innerFormsInfo);
-    return formsAttr.length > 0 && formsAttr.every(formAttr => {
-      const formData = data.innerFormsInfo[formAttr];
-      return formData.confirmOnExit && formData.modified;
-    });
+    let result: boolean = false;
+    if (formsAttr.length > 0) {
+      formsAttr.forEach(formAttr => {
+        if (!result) {
+          const formData = data.innerFormsInfo[formAttr];
+          result = formData.confirmOnExit && formData.modified;
+        }
+      });
+    }
+    return result;
   }
 }

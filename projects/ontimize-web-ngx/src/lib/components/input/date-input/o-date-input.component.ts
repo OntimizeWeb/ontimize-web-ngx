@@ -1,4 +1,15 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -18,6 +29,7 @@ import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
+import { OFormControl } from '../o-form-control.class';
 import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 
 export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
@@ -58,8 +70,24 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   protected olocale: string;
   protected updateLocaleOnChange: boolean = false;
   protected oStartView: 'month' | 'year' = 'month';
-  protected oMinDate: string;
-  protected oMaxDate: string;
+  set oMinDate(value: string) {
+    if (value) {
+      const momentD = this.getValueAsMoment(value)
+      if (Util.isDefined(momentD)) {
+        this.datepickerInput.min = momentD.toDate();
+        this.minDateString = momentD.format(this.oformat);
+      }
+    }
+  }
+  set oMaxDate(value: string) {
+    if (value) {
+      const momentD = this.getValueAsMoment(value)
+      if (Util.isDefined(momentD)) {
+        this.datepickerInput.max = momentD.toDate();
+        this.maxDateString = momentD.format(this.oformat);
+      }
+    }
+  }
   @InputConverter()
   protected oTouchUi: boolean;
   protected oStartAt: string;
@@ -120,24 +148,6 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
     if (this.oStartAt) {
       this.datepicker.startAt = new Date(this.oStartAt);
-    }
-
-    if (this.oMinDate) {
-      const date = new Date(this.oMinDate);
-      const momentD = moment(date);
-      if (momentD.isValid()) {
-        this.datepickerInput.min = date;
-        this.minDateString = momentD.format(this.oformat);
-      }
-    }
-
-    if (this.oMaxDate) {
-      const date = new Date(this.oMaxDate);
-      const momentD = moment(date);
-      if (momentD.isValid()) {
-        this.datepickerInput.max = date;
-        this.maxDateString = momentD.format(this.oformat);
-      }
     }
 
     if (this.updateLocaleOnChange) {
@@ -329,6 +339,42 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
   get valueType(): any {
     return this._valueType;
+  }
+
+  public createFormControl(cfg, validators): OFormControl {
+    this._fControl = super.createFormControl(cfg, validators);
+    if (!this.isEmpty() && !this.form.isInInsertMode()) {
+      this._fControl.markAsTouched();
+    }
+    return this._fControl;
+  }
+
+  protected getValueAsMoment(val: any): any {
+    if (!Util.isDefined(val)) {
+      return val;
+    }
+    let result;
+    switch (true) {
+      case this.valueType === 'string' && typeof val === 'string':
+        result = moment(val, this.oformat);
+        break;
+      case this.valueType === 'date' && val instanceof Date:
+      case this.valueType === 'timestamp' && typeof val === 'number':
+      case this.valueType === 'iso-8601' && typeof val === 'string':
+        result = moment(val)
+        break;
+      case this.valueType === 'iso-8601':
+        if (typeof val !== 'string') {
+          const acceptTimestamp = typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
+          if (acceptTimestamp) {
+            result = moment(val)
+          }
+        }
+        break;
+      default:
+        break;
+    }
+    return Util.isDefined(result) && result.isValid() ? result : undefined
   }
 
 }

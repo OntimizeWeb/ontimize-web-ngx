@@ -6,7 +6,7 @@ import { OFormComponent } from '../../form/o-form.component';
 import {
   DEFAULT_INPUTS_O_TEXT_INPUT,
   DEFAULT_OUTPUTS_O_TEXT_INPUT,
-  OTextInputComponent,
+  OTextInputComponent
 } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_NIF_INPUT = [
@@ -20,7 +20,6 @@ export const DEFAULT_OUTPUTS_O_NIF_INPUT = [
 @Component({
   selector: 'o-nif-input',
   templateUrl: './o-nif-input.component.html',
-  styleUrls: ['./o-nif-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_NIF_INPUT,
   outputs: DEFAULT_OUTPUTS_O_NIF_INPUT,
   encapsulation: ViewEncapsulation.None

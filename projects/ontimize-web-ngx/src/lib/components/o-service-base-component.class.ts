@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injector, NgZone, OnChanges, SimpleChange } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, OnChanges, SimpleChange, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -7,6 +7,7 @@ import { ILocalStorageComponent } from '../interfaces/local-storage-component.in
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
+import { OErrorDialogManager } from '../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
@@ -90,6 +91,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected localStorageService: LocalStorageService;
   componentStateService: T;
   protected dialogService: DialogService;
+  protected oErrorDialogManager: OErrorDialogManager;
 
   /* inputs variables */
   oattr: string;
@@ -154,7 +156,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected onRouteChangeStorageSubscription: any;
   protected onFormDataSubscribe: any;
 
-  protected loaderSubscription: Subscription;
   protected querySubscription: Subscription;
   protected dataService: any;
 
@@ -180,8 +181,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     protected injector: Injector
   ) {
     this.dialogService = this.injector.get(DialogService);
+    this.oErrorDialogManager = this.injector.get(OErrorDialogManager);
     this.localStorageService = this.injector.get(LocalStorageService);
-    this.componentStateService = this.injector.get(AbstractComponentStateService);
+    this.componentStateService = this.injector.get<T>(AbstractComponentStateService as Type<T>);
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
     try {
@@ -237,15 +239,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
-    // if (typeof this.insertFallbackFunction !== 'function') {
-    //   this.insertFallbackFunction = undefined;
-    // }
-    // if (typeof this.updateFallbackFunction !== 'function') {
-    //   this.updateFallbackFunction = undefined;
-    // }
-    // if (typeof this.deleteFallbackFunction !== 'function') {
-    //   this.deleteFallbackFunction = undefined;
-    // }
   }
 
   afterViewInit() {
@@ -255,9 +248,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       if (value) {
         if (this.querySubscription) {
           this.querySubscription.unsubscribe();
-        }
-        if (this.loaderSubscription) {
-          this.loaderSubscription.unsubscribe();
         }
         this.setData([]);
       }
@@ -271,16 +261,12 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
     }
-    if (this.loaderSubscription) {
-      this.loaderSubscription.unsubscribe();
-    }
     if (this.onRouteChangeStorageSubscription) {
       this.onRouteChangeStorageSubscription.unsubscribe();
     }
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
     }
-    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
@@ -388,10 +374,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       if (this.querySubscription) {
         this.querySubscription.unsubscribe();
       }
-      if (this.loaderSubscription) {
-        this.loaderSubscription.unsubscribe();
-      }
-      this.loaderSubscription = this.load();
+      this.loadingSubject.next(true);
 
       // ensuring false value
       this.abortQuery.next(false);
@@ -422,16 +405,15 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
             }
           }
           this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
-          this.loaderSubscription.unsubscribe();
+          this.loadingSubject.next(false);
         }, err => {
           this.setData([], []);
-          this.loaderSubscription.unsubscribe();
+          this.loadingSubject.next(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
-          } else if (err && typeof err !== 'object') {
-            this.dialogService.alert('ERROR', err);
           } else {
-            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+            this.oErrorDialogManager.openErrorDialog(err);
+            console.error(err);
           }
         });
     }
@@ -446,30 +428,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
    */
   reloadPaginatedDataFromStart(): void {
     this.reloadData();
-  }
-
-  load(): any {
-    const self = this;
-    const zone = this.injector.get(NgZone);
-    const loadObservable = new Observable(observer => {
-      const timer = window.setTimeout(() => {
-        observer.next(true);
-      }, 250);
-
-      return () => {
-        window.clearTimeout(timer);
-        zone.run(() => {
-          self.loadingSubject.next(false);
-        });
-      };
-
-    });
-    const subscription = loadObservable.subscribe(val => {
-      zone.run(() => {
-        self.loadingSubject.next(val as boolean);
-      });
-    });
-    return subscription;
   }
 
   /**

@@ -17,6 +17,11 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private tdTableWithMessage: any;
   private subscription = new Subscription();
 
+  @Input('oTableExpandedFooter')
+  set display(val: boolean) {
+    this.showMessage(val);
+  }
+
   @Input('oTableExpandedFooterColspan')
   set colspan(value: number) {
     this._colspan = value;
@@ -54,36 +59,35 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     tr.appendChild(this.tdTableWithMessage);
     this.renderer.appendChild(this.tableBody, tr);
 
-    this.subscription.add(this.table.onContentChange
-      .pipe(distinctUntilChanged((prev, curr) => prev.length === curr.length))
-      .subscribe((data: any[]) => this.showMessage(data)));
+    this.subscription.add(this.table.onContentChange.pipe(
+      distinctUntilChanged((prev, curr) => prev.length === curr.length),
+      filter(() => !!this.table.staticData)
+    ).subscribe(() => this.showMessage(true)));
     if (this.table.oTableQuickFilterComponent) {
       this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessage()));
     }
   }
 
-  public showMessage(tableData: any[]): void {
+  public showMessage(display: boolean): void {
     // reset span message
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
 
-    if (tableData.length === 0) {
+    if (display && this.table && this.table.dataSource && this.table.dataSource.renderedData.length === 0) {
       // generate new message
-      const message = this.buildMessage();
-
-      this.spanMessageNotResults = this.renderer.createElement('span');
-      const messageNotResults = this.renderer.createText(message);
-      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
-      this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
-      this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
+      this.createMessageSpan();
     }
   }
 
   public updateMessage(): void {
-    if (this.spanMessageNotResults) {
+    if (this.table && this.table.staticData && this.table.dataSource && this.table.dataSource.renderedData.length === 0 && !this.spanMessageNotResults) {
+      this.createMessageSpan();
+    } else {
       const message = this.buildMessage();
-      this.spanMessageNotResults.innerHTML = message;
+      if(Util.isDefined(this.spanMessageNotResults)) {
+        this.spanMessageNotResults.innerHTML = message;
+      }
     }
   }
 
@@ -102,6 +106,17 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
 
   protected tableHasQuickFilter(): boolean {
     return this.table.quickFilter && Util.isDefined(this.table.oTableQuickFilterComponent);
+  }
+
+  protected createMessageSpan() {
+    const message = this.buildMessage();
+    this.spanMessageNotResults = this.renderer.createElement('span');
+    const messageNotResults = this.renderer.createText(message);
+    if (this.tdTableWithMessage) {
+      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
+      this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
+      this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
+    }
   }
 
 }

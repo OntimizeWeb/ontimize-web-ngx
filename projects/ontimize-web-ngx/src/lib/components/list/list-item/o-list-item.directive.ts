@@ -1,9 +1,21 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewContainerRef
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
+import { IListItem, instanceOfIListItem } from '../../../interfaces/o-list-item.interface';
 import { IList } from '../../../interfaces/o-list.interface';
-import { ObservableWrapper } from '../../../util/async';
 import { Codes } from '../../../util/codes';
+import { Util } from '../../../util/util';
 
 @Directive({
   selector: 'o-list-item, mat-list-item[o-list-item], mat-card[o-list-item]',
@@ -16,37 +28,41 @@ import { Codes } from '../../../util/codes';
 })
 export class OListItemDirective implements OnInit, OnDestroy {
 
-  public mdClick: EventEmitter<any> = new EventEmitter();
-  public mdDoubleClick: EventEmitter<any> = new EventEmitter();
+  public onClick: EventEmitter<any> = new EventEmitter();
+  public onDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @Input('o-list-item')
-  public modelData: object;
+  public modelData: any;
 
   @Input()
   public selectable: boolean = false;
 
   protected _list: IList;
-  protected subcription: any;
+  protected listItem: IListItem;
+  protected subscription: Subscription = new Subscription();
 
   constructor(
+    private _viewContainerRef: ViewContainerRef,
     public _el: ElementRef,
     private renderer: Renderer2,
     public actRoute: ActivatedRoute
   ) { }
 
   public ngOnInit(): void {
-    this.subcription = this.actRoute.params.subscribe(params => this.updateActiveState(params));
+    const hostComponent = this._viewContainerRef["_data"].componentView.component;
+    if (instanceOfIListItem(hostComponent)) {
+      this.listItem = hostComponent
+    }
+    this.subscription.add(this.actRoute.params.subscribe(params => this.updateActiveState(params)));
   }
 
   public ngOnDestroy(): void {
-    if (this.subcription) {
-      this.subcription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
   }
 
   @HostListener('mouseenter')
   public onMouseEnter(): void {
-    if (!this.selectable && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
+    if (!this.selectable && this._list && this._list.detailMode !== Codes.DETAIL_MODE_NONE) {
       this.renderer.setStyle(this._el.nativeElement, 'cursor', 'pointer');
     }
   }
@@ -78,31 +94,21 @@ export class OListItemDirective implements OnInit, OnDestroy {
   }
 
   public onItemClicked(e?: Event): void {
-    if (!this.selectable) {
-      ObservableWrapper.callEmit(this.mdClick, this);
+    if (!this.selectable && this._list) {
+      this._list.onItemDetailClick(this);
+      this.onClick.emit(this.getItemData())
     }
-  }
-
-  public onClick(onNext: (item: OListItemDirective) => void): object {
-    return ObservableWrapper.subscribe(this.mdClick, onNext);
   }
 
   public onItemDoubleClicked(e?: Event): void {
-    if (!this.selectable) {
-      ObservableWrapper.callEmit(this.mdDoubleClick, this);
+    if (!this.selectable && this._list) {
+      this._list.onItemDetailDoubleClick(this);
+      this.onDoubleClick.emit(this.getItemData())
     }
   }
 
-  public onDoubleClick(onNext: (item: OListItemDirective) => void): object {
-    return ObservableWrapper.subscribe(this.mdDoubleClick, onNext);
-  }
-
   public isSelected(): boolean {
-    return this._list.isItemSelected(this.modelData);
-  }
-
-  public onSelect(): void {
-    this._list.setSelected(this.modelData);
+    return this._list && this._list.isItemSelected(this.modelData);
   }
 
   public setListComponent(list: IList): void {
@@ -110,8 +116,11 @@ export class OListItemDirective implements OnInit, OnDestroy {
   }
 
   public setItemData(data: any): void {
-    if (!this.modelData) {
+    if (!Util.isDefined(this.modelData) || this.modelData !== 'object') {
       this.modelData = data;
+    }
+    if (Util.isDefined(this.listItem)) {
+      this.listItem.setItemData(this.modelData);
     }
   }
 

@@ -14,6 +14,7 @@ export * from './moment.service';
 export * from './navigation.service';
 export * from './number.service';
 export * from './o-auth.service';
+export * from './o-error-dialog-manager.service';
 export * from './o-breadcrumb.service';
 export * from './o-form-layout-manager.service';
 export * from './o-modules-info.service';

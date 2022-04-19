@@ -5,7 +5,7 @@
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [multiple]="getMultiple()" [required]="isRequired" [panelClass]="{ 'o-combo-panel': true, 'o-combo-panel-search': searchable }"
-      (selectionChange)="onSelectionChange($event)">
+      (selectionChange)="onSelectionChange($event)" (closed)="innerOnBlur($event)">
       <o-combo-search *ngIf="searchable" [formControl]="searchControl"></o-combo-search>
 
       <mat-select-trigger *ngIf="multiple && multipleTriggerLabel">
@@ -28,7 +28,9 @@
       </mat-select-trigger>
 
       <div class="o-combo-options-container">
-        <mat-option *ngIf="hasNullSelection()" [value]="null"></mat-option>
+        <mat-option *ngIf="hasNullSelection()" [value]="null">{{translate ?
+          (nullSelectionLabel|oTranslate): nullSelectionLabel}}
+        </mat-option>
         <mat-option *ngFor="let item of filteredDataArray" [value]="getValueColumn(item)">
           <ng-container *ngIf="renderer">
             <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ value: item }">

@@ -21,9 +21,11 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
-import { ONavigationItem } from '../../../services/navigation.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
-import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
+import {
+  FormLayoutCloseDetailOptions,
+  FormLayoutDetailComponentData
+} from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
@@ -171,11 +173,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   addTab(compData: FormLayoutDetailComponentData) {
     let addNewComp = true;
-    const navData: ONavigationItem = this.formLayoutManager.navigationService.getLastItem();
-    compData.insertionMode = compData.insertionMode || (navData && navData.isInsertFormRoute());
-    const existingData = this.data.find(item => item.insertionMode);
-    if (compData.insertionMode || existingData) {
-      addNewComp = !existingData;
+    if (compData.insertionMode) {
+      const alreadyExistingInsertionTab = Util.isDefined(this.data.find(item => item.insertionMode));
+      addNewComp = !alreadyExistingInsertionTab;
     }
     const newCompParams = compData.params;
     if (addNewComp) {
@@ -230,7 +230,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.previousSelectedIndex = this.tabGroup.selectedIndex;
   }
 
-  closeTab(index: number) {
+  closeTab(index: number, options?: FormLayoutCloseDetailOptions) {
     if (!this.formLayoutManager) {
       return;
     }
@@ -247,7 +247,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       }
     }));
 
-    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
+    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData, options)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
       });
@@ -320,17 +320,17 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   getDataToStore(): any {
-    const tabsData = [];
-    this.data.forEach((data: FormLayoutDetailComponentData) => {
-      tabsData.push({
+    // Issue #884 avoid storing insertionMode tabs
+    const tabsData = this.data
+      .filter((data: FormLayoutDetailComponentData) => !data.insertionMode)
+      .map((data: FormLayoutDetailComponentData) => ({
         params: data.params,
         queryParams: data.queryParams,
         urlSegments: data.urlSegments,
         url: data.url,
         label: data.label,
         insertionMode: data.insertionMode
-      });
-    });
+      }));
     return {
       tabsData: tabsData,
       selectedIndex: this.tabGroup.selectedIndex
@@ -346,11 +346,14 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       return;
     }
 
-    if (this.state.tabsData.length >= 1) {
+    // Issue #884 ensuring that a insertion mode tab that might be previously stored wont be created
+    this.state.tabsData = this.state.tabsData.filter(tabData=> !tabData.insertionMode)
+
+    if (this.state.tabsData.length >= 1 && (this.state.tabsData[0].url || '').length > 0) {
       this.showLoading.next(true);
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
-      extras[Codes.QUERY_PARAMS].insertionMode = this.state.tabsData[0].insertionMode
+      extras[Codes.QUERY_PARAMS][Codes.INSERTION_MODE] = `${this.state.tabsData[0].insertionMode}`
       // Triggering first tab navigation
       this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
         if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
@@ -408,8 +411,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.addTab(detail);
   }
 
-  closeDetail() {
-    this.closeTab(this.tabGroup.selectedIndex - 1);
+  closeDetail(options?: FormLayoutCloseDetailOptions) {
+    this.closeTab(this.tabGroup.selectedIndex - 1, options);
   }
 
   canAddDetailComponent(): boolean {

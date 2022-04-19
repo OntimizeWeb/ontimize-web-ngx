@@ -1,4 +1,13 @@
-import { ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, ViewChild } from '@angular/core';
+import {
+  ContentChildren,
+  EventEmitter,
+  HostListener,
+  Injector,
+  OnInit,
+  QueryList,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -77,6 +86,7 @@ export class OBaseTableCellEditor implements OnInit {
   protected validatorsSubscription: Subscription;
   @ContentChildren(OValidatorComponent)
   protected validatorChildren: QueryList<OValidatorComponent>;
+  protected renderer: Renderer2;
 
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
@@ -88,6 +98,7 @@ export class OBaseTableCellEditor implements OnInit {
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
     this.cellEditorId = Math.random().toString(36);
+    this.renderer = this.injector.get(Renderer2);
   }
 
   ngOnInit(): void {
@@ -202,9 +213,8 @@ export class OBaseTableCellEditor implements OnInit {
     if (inputEl) {
       (inputEl as HTMLInputElement).select();
     }
+    this.setEditingRowClass(true)
   }
-
-
 
   /**
    * Ends edition with the ability to skip or save changes
@@ -305,7 +315,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   public getErrorText(oError: any) {
-    if (this.tableColumn.editor.errorsData) {
+    if (this.tableColumn && this.tableColumn.editor && this.tableColumn.editor.errorsData) {
       const error = this.tableColumn.editor.errorsData.find((item) => item.name === oError);
       return error ? error.text : '';
     } else {
@@ -403,4 +413,17 @@ export class OBaseTableCellEditor implements OnInit {
   getFormControl() {
     return this.formControl;
   }
+
+  setEditingRowClass(addClass: boolean) {
+    const inputEl = document.getElementById(this.cellEditorId);
+    if (inputEl) {
+      const tableRowEl = inputEl.closest('tr');
+      if (tableRowEl) {
+        addClass ? this.renderer.addClass(tableRowEl, 'o-table-editing-row') :
+          this.renderer.removeClass(tableRowEl, 'o-table-editing-row')
+          this.table.cd.detectChanges()
+      }
+    }
+  }
+
 }

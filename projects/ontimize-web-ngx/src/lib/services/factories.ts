@@ -8,6 +8,7 @@ import { IReportOnDemandService } from '../interfaces/report-on-demand-service.i
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { OntimizeAuthService } from './o-auth.service';
+import { OErrorDialogManager } from './o-error-dialog-manager.service';
 import { OntimizeEEService } from './ontimize/ontimize-ee.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
@@ -55,10 +56,11 @@ export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication se
 */
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
 
-/**
-* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
-*/
 export const O_REPORT_ON_DEMAND_SERVICE = new InjectionToken<IReportOnDemandService>('Report on demand service');
+
+export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
+
+
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
  * ---------------------------------------------------------------------------------------------------- */
@@ -133,9 +135,8 @@ export function authServiceFactory(injector: Injector): AuthService {
   return Util.isDefined(service) ? service : new OntimizeAuthService(injector);
 }
 
-export function componentStateFactory(injector: Injector): AuthService {
-  const serviceClass = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+export function componentStateFactory(injector: Injector): AbstractComponentStateService<any,any> {
+  const service = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
   return Util.isDefined(service) ? service : new DefaultComponentStateService(injector);
 }
 

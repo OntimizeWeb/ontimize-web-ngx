@@ -1,55 +1,46 @@
 import { Injectable, Injector } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-
-import { OTranslateService } from '../services/translate/o-translate.service';
-
-export interface ModuleInfo {
-  name?: string;
-  route?: string;
-}
+import { Observable, ReplaySubject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OModulesInfoService {
-  protected storedInfo: ModuleInfo;
-  protected actRoute: ActivatedRoute;
-  protected router: Router;
-  protected translateService: OTranslateService;
 
-  private subject = new Subject<any>();
-
+  private subject = new ReplaySubject<string>();
   constructor(
-    protected injector: Injector
+    protected injector: Injector,
+    protected router: Router,
   ) {
     this.router = this.injector.get(Router);
-    this.actRoute = this.injector.get(ActivatedRoute);
-    this.translateService = this.injector.get(OTranslateService);
 
-    this.router.events.subscribe(ev => {
-      if (ev instanceof NavigationEnd) {
-        const translation = this.translateService.get(ev.url);
-        if (translation !== ev.url) {
-          this.setModuleInfo({
-            name: translation
-          });
+  }
+
+  getModuleChangeObservable(): Observable<string> {
+
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd),
+        map(() => {
+          let route: ActivatedRoute = this.router.routerState.root;
+          let routeTitle = '';
+          while (route!.firstChild) {
+            route = route.firstChild;
+          }
+          if (route.snapshot.data['oAppHeaderTitle']) {
+            routeTitle = route!.snapshot.data['oAppHeaderTitle'];
+          }
+          return routeTitle;
+        }))
+      .subscribe((title: string) => {
+        if (title) {
+          this.subject.next(title);
         }
-      }
-    });
-  }
+        else {
+          this.subject.next("")
+        }
+      })
 
-  setModuleInfo(info: ModuleInfo) {
-    this.storedInfo = info;
-    this.subject.next(info);
-  }
-
-  getModuleInfo(): ModuleInfo {
-    return this.storedInfo;
-  }
-
-  getModuleChangeObservable(): Observable<any> {
     return this.subject.asObservable();
   }
-
 }
