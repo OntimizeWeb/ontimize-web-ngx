@@ -94,10 +94,12 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   constructor(protected injector: Injector) {
+    var randomArray = new Uint32Array(10);
+    window.crypto.getRandomValues(randomArray);
     this.snackBarService = this.injector.get(SnackBarService);
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
-    this.cellEditorId = Math.random().toString(36);
+    this.cellEditorId = randomArray[0].toString(36);
     this.renderer = this.injector.get(Renderer2);
   }
 

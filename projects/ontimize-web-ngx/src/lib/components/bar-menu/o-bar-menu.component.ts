@@ -36,7 +36,9 @@ export class OBarMenuComponent implements OnInit {
   constructor(
     protected elRef: ElementRef,
     protected injector: Injector) {
-    this.id = 'm_' + String((new Date()).getTime() + Math.random());
+    var randomArray = new Uint32Array(10);
+    window.crypto.getRandomValues(randomArray);
+    this.id = 'm_' + String((new Date()).getTime() + randomArray[0].toString());
     this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);

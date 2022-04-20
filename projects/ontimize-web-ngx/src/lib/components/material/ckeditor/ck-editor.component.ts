@@ -8,7 +8,7 @@ import {
   NgZone,
   OnDestroy,
   Output,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -77,7 +77,9 @@ export class CKEditorComponent implements AfterViewInit, OnDestroy, ControlValue
   ) { }
 
   protected static getRandomIdentifier(id: string = '') {
-    return 'editor-' + (id !== '' ? id : Math.round(Math.random() * 100000000));
+    var randomArray = new Uint32Array(10);
+    window.crypto.getRandomValues(randomArray);
+    return 'editor-' + (id !== '' ? id : Math.round(randomArray[0] * 100000000));
   }
 
   ngOnDestroy() {

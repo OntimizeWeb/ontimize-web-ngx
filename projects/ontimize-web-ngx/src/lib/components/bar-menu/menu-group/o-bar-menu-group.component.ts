@@ -28,6 +28,9 @@ export class OBarMenuGroupComponent extends OBaseMenuItemClass {
     protected injector: Injector
   ) {
     super(menu, elRef, injector);
-    this.id = 'm_' + String((new Date()).getTime() + Math.random());
+    var randomArray = new Uint32Array(10);
+    window.crypto.getRandomValues(randomArray);
+    this.id = 'm_' + String((new Date()).getTime() + randomArray[0].toString());
   }
+  
 }
