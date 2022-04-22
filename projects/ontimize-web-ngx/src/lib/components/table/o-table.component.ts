@@ -220,7 +220,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'contextMenu: context-menu',
 
   // show-expandable-icon-function [function]: Expandable function to check if expandable has data to show or not icon
-  'showExpandableIconFunction: show-expandable-icon-function'
+  'showExpandableIconFunction: show-expandable-icon-function',
+
+  // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the table menu. Default: yes.
+  'showReportOnDemandOption: show-report-on-demand-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -341,6 +344,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   columnsVisibilityButton: boolean = true;
   @InputConverter()
   showFilterOption: boolean = true;
+  @InputConverter()
+  showReportOnDemandOption: boolean = true;
   @InputConverter()
   showButtonsText: boolean = true;
   @InputConverter()

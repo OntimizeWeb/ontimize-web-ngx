@@ -58,8 +58,12 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu
   'showFilterOption: show-filter-option',
+
   // show-group-by-option [yes|no|true|false]: show group by menu option in the header menu
-  'showGroupByOption: show-group-by-option'
+  'showGroupByOption: show-group-by-option',
+
+   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the header menu
+  'showReportOnDemandOption: show-report-on-demand-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -91,6 +95,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   columnsVisibilityButton: boolean = true;
   @InputConverter()
   showGroupByOption: boolean = true;
+  @InputConverter()
+  showReportOnDemandOption: boolean = true;
 
   public onVisibleFilterOptionChange: EventEmitter<any> = new EventEmitter();
   /* End of inputs */
@@ -263,6 +269,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       return false;
     }
     const perm: OPermissions = this.getPermissionByAttr('show-hide-columns');
+    return !(perm && perm.visible === false);
+  }
+
+  get showReportOnDemandButton(): boolean {
+    if (!this.showReportOnDemandOption) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('show-report-on-demand');
     return !(perm && perm.visible === false);
   }
 
@@ -468,7 +482,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onReportOnDemandClicked(): void {
-    if(this.reportOnDemandService) {
+    if (this.reportOnDemandService) {
       this.reportOnDemandService.openReportOnDemand(this.table.visibleColumns, this.table.service, this.table.entity);
     } else {
       console.warn("You must have ontimize-web-ngx-report-on-demand installed in your app to use report on demand.")
