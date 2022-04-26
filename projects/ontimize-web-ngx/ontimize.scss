@@ -5,6 +5,7 @@
 
 $mat-button-line-height: 32px;
 $mat-menu-item-height: 32px;
+$mat-calendar-prev-next-icon-margin: 11.5px;
 $mat-stroked-button-line-height: $mat-button-line-height - 2;
 
 .relative {
@@ -179,4 +180,14 @@ button {
 
 .overlay-ref-display-none .cdk-overlay-pane.o-context-menu {
   display: none;
+}
+
+/* DATE PICKER */
+.mat-calendar-controls {
+  button.mat-calendar-next-button,
+  button.mat-calendar-previous-button {
+    &::after {
+      margin: $mat-calendar-prev-next-icon-margin;
+    }
+  }
 }
