@@ -4,7 +4,7 @@ on:
     branches:
       - master
       - 8.x.x
-      - 4.x.x
+      - hotfix/8.*
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -25,16 +25,9 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Node 12.x
-        if: github.base_ref == '8.x.x' || startsWith(github.base_ref, 'hotfix/8.') || (github.ref == 'refs/heads/8.x.x')
         uses: actions/setup-node@v1
         with:
-          node-version: 12.10.0
-
-      - name: Node 10.x
-        if: github.base_ref == '4.x.x' || startsWith(github.base_ref, 'hotfix/4.') || (github.ref == 'refs/heads/4.x.x')
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.23.0
+          node-version: 12.13.0
 
       - name: npm install and npm run build
         run: |
