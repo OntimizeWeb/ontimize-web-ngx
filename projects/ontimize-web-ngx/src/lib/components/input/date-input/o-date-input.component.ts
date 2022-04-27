@@ -54,7 +54,6 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 @Component({
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
-  styleUrls: ['./o-date-input.component.scss'],
   outputs: DEFAULT_OUTPUTS_O_DATE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   encapsulation: ViewEncapsulation.None,
