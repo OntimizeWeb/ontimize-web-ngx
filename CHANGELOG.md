@@ -1,4 +1,8 @@
-## 8.6.0 (2022-04-06)
+## 8.7.0
+### Bug fixes
+* **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
+* **o-table**: Fixed the arrow icon not showing in the calendar popup in `o-table-cell-editor-date` and `o-table-cell-editor-time` ([869a914](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/869a914)) Closes[#949](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/949)
+
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
   * **o-list**: added *paginator* that provides navigation, typically used with to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
