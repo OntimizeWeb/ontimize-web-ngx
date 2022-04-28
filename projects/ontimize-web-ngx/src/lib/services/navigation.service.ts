@@ -197,6 +197,9 @@ export class NavigationService implements ILocalStorageComponent {
 
       this.navigationItems.push(navigationItem);
       this.setNavigationItems(this.navigationItems);
+    } else {
+      //if lastStored.url == url, it is because the page is reloaded
+      this.navigationItems = storedNavigation;
     }
   }
 
