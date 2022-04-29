@@ -383,15 +383,13 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   }
 
   public addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string): void {
-    var randomArray = new Uint32Array(10);
-    window.crypto.getRandomValues(randomArray);
     const newDetailComp: FormLayoutDetailComponentData = {
       params: childRoute.params,
       queryParams: childRoute.queryParams,
       urlSegments: childRoute.url,
       component: childRoute.routeConfig.component,
       url: url,
-      id: randomArray[0].toString(),
+      id: Util.randomNumber().toString(),
       label: '',
       innerFormsInfo: {},
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'

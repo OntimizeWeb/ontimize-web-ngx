@@ -4,6 +4,7 @@ import { AppMenuService } from '../../services/app-menu.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { MenuRootItem } from '../../types/menu-root-item.type';
+import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -36,9 +37,7 @@ export class OBarMenuComponent implements OnInit {
   constructor(
     protected elRef: ElementRef,
     protected injector: Injector) {
-    var randomArray = new Uint32Array(10);
-    window.crypto.getRandomValues(randomArray);
-    this.id = 'm_' + String((new Date()).getTime() + randomArray[0].toString());
+    this.id = 'm_' + String((new Date()).getTime() + Util.randomNumber().toString());
     this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);

@@ -77,9 +77,7 @@ export class CKEditorComponent implements AfterViewInit, OnDestroy, ControlValue
   ) { }
 
   protected static getRandomIdentifier(id: string = '') {
-    var randomArray = new Uint32Array(10);
-    window.crypto.getRandomValues(randomArray);
-    return 'editor-' + (id !== '' ? id : Math.round(randomArray[0] * 100000000));
+    return 'editor-' + (id !== '' ? id : Math.round(Util.randomNumber() * 100000000));
   }
 
   ngOnDestroy() {

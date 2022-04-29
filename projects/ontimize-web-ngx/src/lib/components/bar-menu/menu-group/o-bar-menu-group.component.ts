@@ -1,5 +1,6 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
 
+import { Util } from '../../../util/util';
 import { OBarMenuComponent } from '../o-bar-menu.component';
 import { DEFAULT_INPUTS_O_BASE_MENU_ITEM, OBaseMenuItemClass } from '../o-base-menu-item.class';
 
@@ -28,9 +29,7 @@ export class OBarMenuGroupComponent extends OBaseMenuItemClass {
     protected injector: Injector
   ) {
     super(menu, elRef, injector);
-    var randomArray = new Uint32Array(10);
-    window.crypto.getRandomValues(randomArray);
-    this.id = 'm_' + String((new Date()).getTime() + randomArray[0].toString());
+    this.id = 'm_' + String((new Date()).getTime() + Util.randomNumber().toString());
   }
   
 }

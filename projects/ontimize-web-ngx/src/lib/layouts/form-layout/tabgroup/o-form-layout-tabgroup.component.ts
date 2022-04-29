@@ -385,15 +385,13 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   protected createDetailComponent(component: any, paramsObj: any) {
-    var randomArray = new Uint32Array(10);
-    window.crypto.getRandomValues(randomArray);
     const newDetailComp: FormLayoutDetailComponentData = {
       params: paramsObj.params,
       queryParams: paramsObj.queryParams,
       urlSegments: paramsObj.urlSegments,
       component: component,
       url: paramsObj.url,
-      id: randomArray[0].toString(),
+      id: Util.randomNumber().toString(),
       label: paramsObj.label,
       innerFormsInfo: {}
     };
