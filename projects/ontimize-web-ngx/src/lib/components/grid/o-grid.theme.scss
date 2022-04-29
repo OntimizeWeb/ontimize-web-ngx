@@ -8,8 +8,10 @@
 
   .o-grid {
     .mat-toolbar {
+      padding: 0 4px;
       background: transparent;
     }
+
     .o-grid-container {
       .o-loading-blocker .o-spinner-container {
         background-color: mat-color($background, background);

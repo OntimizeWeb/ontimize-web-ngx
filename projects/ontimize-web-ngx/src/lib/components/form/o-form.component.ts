@@ -27,6 +27,7 @@ import { NavigationService, ONavigationItem } from '../../services/navigation.se
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
@@ -571,7 +572,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       case Codes.RELOAD_ACTION: this.reload(true); break;
       case Codes.GO_INSERT_ACTION: this.goInsertMode(options); break;
       case Codes.INSERT_ACTION: this.insert(); break;
-      case Codes.GO_EDIT_ACTION: this.goEditMode(options); break;
+      case Codes.GO_EDIT_ACTION: this.goEditMode(); break;
       case Codes.EDIT_ACTION: this.update(); break;
       case Codes.UNDO_LAST_CHANGE_ACTION: this.undo(); break;
       case Codes.DELETE_ACTION: return this.delete();
@@ -912,8 +913,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   _clearAndCloseFormAfterInsert() {
-    const exitWithoutConfirmation: {} = { 'exitWithoutConfirmation': true };
-    this.closeDetail(exitWithoutConfirmation);
+    const closeOpts: FormLayoutCloseDetailOptions = { exitWithoutConfirmation: true };
+    this.closeDetail(closeOpts);
   }
 
   /**
@@ -961,17 +962,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Navigates to 'edit' mode
-   * @deprecated Use `goEditMode(options?: any)` instead
+   * @deprecated Use `goEditMode()` instead
    */
-  _goEditMode(options?: any) {
+  _goEditMode() {
     console.warn('Method `OFormComponent._goEditMode` is deprecated and will be removed in the furute. Use `goEditMode` instead');
-    this.goEditMode(options);
+    this.goEditMode();
   }
 
   /**
    * Navigates to 'edit' mode
    */
-  goEditMode(options?: any) {
+  goEditMode() {
     this.formNavigation.goEditMode();
   }
 
@@ -1445,9 +1446,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   undoKeyboardPressed() {
-    this.formCache.undoLastChange({
-      keyboardEvent: true
-    });
+    this.formCache.undoLastChange();
   }
 
   getFormToolbar(): OFormToolbarComponent {
@@ -1576,7 +1575,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getFieldReferences(attrs: string[]): IFormDataComponentHash {
     const arr: IFormDataComponentHash = {};
     const self = this;
-    attrs.forEach((key, index) => {
+    attrs.forEach((key) => {
       arr[key] = self.getFieldReference(key);
     });
     return arr;

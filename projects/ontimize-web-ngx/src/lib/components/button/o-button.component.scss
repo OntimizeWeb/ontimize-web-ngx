@@ -1,15 +1,36 @@
 .o-button {
   display: inline-block;
   pointer-events: none;
-  
+
+  &.o-button-icon-position-bottom,
+  &.o-button-icon-position-top {
+    .mat-button,
+    .mat-flat-button,
+    .mat-raised-button,
+    .mat-stroked-button {
+      height: auto;
+      line-height: normal;
+    }
+  }
+
   button {
     pointer-events: auto;
 
-    * { 
-      pointer-events: none; 
+    &.mat-button,
+    &.mat-flat-button,
+    &.mat-raised-button,
+    &.mat-stroked-button {
+      width: 100%;
+    }
+
+    * {
+      pointer-events: none;
+    }
+    .o-button-image{
+      max-height: 24px;
     }
   }
-  
+
   .mat-icon-button .mat-button-ripple.mat-ripple {
     border-radius: 50%;
   }

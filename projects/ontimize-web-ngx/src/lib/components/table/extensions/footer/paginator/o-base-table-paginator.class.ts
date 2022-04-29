@@ -1,11 +1,11 @@
 import { OTablePaginator } from '../../../../../interfaces/o-table-paginator.interface';
-import { Util } from '../../../../../util';
+import { Codes, Util } from '../../../../../util';
 
 export class OBaseTablePaginator implements OTablePaginator {
 
   protected _pageIndex: number = 0;
   protected _pageSize: number = 10;
-  protected _pageSizeOptions: number[] = [10, 25, 50, 100];
+  protected _pageSizeOptions: number[] = Codes.PAGE_SIZE_OPTIONS;
   showFirstLastButtons: boolean = true;
 
   get pageLenght(): number {

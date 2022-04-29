@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injector, OnChanges, SimpleChange } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, OnChanges, SimpleChange, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -183,7 +183,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     this.dialogService = this.injector.get(DialogService);
     this.oErrorDialogManager = this.injector.get(OErrorDialogManager);
     this.localStorageService = this.injector.get(LocalStorageService);
-    this.componentStateService = this.injector.get(AbstractComponentStateService);
+    this.componentStateService = this.injector.get<T>(AbstractComponentStateService as Type<T>);
     this.router = this.injector.get(Router);
     this.actRoute = this.injector.get(ActivatedRoute);
     try {
@@ -239,15 +239,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
-    // if (typeof this.insertFallbackFunction !== 'function') {
-    //   this.insertFallbackFunction = undefined;
-    // }
-    // if (typeof this.updateFallbackFunction !== 'function') {
-    //   this.updateFallbackFunction = undefined;
-    // }
-    // if (typeof this.deleteFallbackFunction !== 'function') {
-    //   this.deleteFallbackFunction = undefined;
-    // }
   }
 
   afterViewInit() {
@@ -276,7 +267,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
     }
-    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {

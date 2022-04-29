@@ -17,13 +17,13 @@ import {
   SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
+import { MatFormFieldAppearance } from '@angular/material';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
-import { OntimizeServiceProvider } from '../../services/factories';
-import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
@@ -67,7 +67,12 @@ export const DEFAULT_INPUTS_O_LIST = [
   'insertButtonPosition:insert-button-position',
 
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
-  'insertButtonFloatable:insert-button-floatable'
+  'insertButtonFloatable:insert-button-floatable',
+
+  'quickFilterAppearance:quick-filter-appearance',
+
+  // show-buttons-text [yes|no|true|false]: show text of buttons. Default: no.
+  'showButtonsText: show-buttons-text'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -75,12 +80,12 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onInsertButtonClick',
   'onItemDeleted'
 ];
-
 @Component({
   selector: 'o-list',
   providers: [
     OntimizeServiceProvider,
-    { provide: AbstractComponentStateService, useClass: OListComponentStateService, deps: [Injector] }
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OListComponentStateService },
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,
@@ -92,8 +97,6 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   }
 })
 export class OListComponent extends AbstractOServiceComponent<OListComponentStateService> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
-
-  private listItemComponents: IListItem[] = [];
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
@@ -109,6 +112,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public deleteButton: boolean = true;
   @InputConverter()
   public insertButtonFloatable: boolean = true;
+  @InputConverter()
+  showButtonsText: boolean = false;
+
+  paginationControls: boolean = false;
+
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
@@ -124,6 +132,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
+  protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
 
   protected oMatSort: OMatSort;
 
@@ -243,7 +252,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-    this.listItemComponents = [];
+
     this.queryData(void 0, queryArgs);
   }
 
@@ -263,6 +272,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public onScroll(e: Event): void {
+    if (this.matpaginator) return;
     if (this.pageable) {
       const pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
       if (!this.loadingSubject.value && pendingRegistries) {
@@ -373,5 +383,16 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       }
     });
   }
+  get quickFilterAppearance(): MatFormFieldAppearance {
+    return this._quickFilterAppearance;
+  }
 
+  set quickFilterAppearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
+      value = 'outline';
+    }
+    this._quickFilterAppearance = value;
+  }
 }

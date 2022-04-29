@@ -3,7 +3,6 @@ import {
   Component,
   ContentChildren,
   ElementRef,
-  EventEmitter,
   forwardRef,
   Inject,
   Injector,
@@ -17,13 +16,12 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatPaginator, MatSelectChange, PageEvent } from '@angular/material';
+import { MatFormFieldAppearance, MatPaginator, MatSelectChange } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
-import { OntimizeServiceProvider } from '../../services/factories';
-import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -33,7 +31,11 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
@@ -42,8 +44,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
   // cols: Amount of columns in the grid list. Default in extra small and small screen is 1, in medium screen is 2, in large screen is 3 and extra large screen is 4.
   'cols',
-  // page-size-options [string]: Page size options separated by ';'.
-  'pageSizeOptions: page-size-options',
   // show-page-size:Whether to hide the page size selection UI from the user.
   'showPageSize: show-page-size',
   // show-sort:whether or not the sort select is shown in the toolbar
@@ -58,8 +58,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   'gridItemHeight: grid-item-height',
   // refresh-button [no|yes]: show refresh button. Default: yes.
   'refreshButton: refresh-button',
-  // pagination-controls [yes|no|true|false]: show pagination controls. Default: no.
-  'paginationControls: pagination-controls',
   // gutterSize: Size of the grid list's gutter in pixels.
   'gutterSize:gutter-size',
   // fix-header [yes|no|true|false]: fixed footer when the content is greather than its own height. Default: no.
@@ -69,7 +67,10 @@ export const DEFAULT_INPUTS_O_GRID = [
   // insert-button-position [ top | bottom ]: position of the insert button. Default: 'bottom'
   'insertButtonPosition:insert-button-position',
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
-  'insertButtonFloatable:insert-button-floatable'
+  'insertButtonFloatable:insert-button-floatable',
+  'quickFilterAppearance:quick-filter-appearance',
+  // show-buttons-text [yes|no|true|false]: show text of buttons. Default: no.
+  'showButtonsText: show-buttons-text'
 ];
 
 export const DEFAULT_OUTPUTS_O_GRID = [
@@ -82,7 +83,8 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   selector: 'o-grid',
   providers: [
     OntimizeServiceProvider,
-    { provide: AbstractComponentStateService, useClass: OGridComponentStateService, deps: [Injector] }
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OGridComponentStateService },
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
   outputs: DEFAULT_OUTPUTS_O_GRID,
@@ -116,33 +118,23 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public refreshButton: boolean = true;
 
   @InputConverter()
-  public paginationControls: boolean = false;
-
-  @InputConverter()
   insertButton: boolean = false;
 
   @InputConverter()
   public insertButtonFloatable: boolean = true;
 
+  @InputConverter()
+  showButtonsText: boolean = false;
+
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
-
+  paginationControls = false;
   public gutterSize = '1px';
-
+  protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
   get cols(): number {
     return this._cols || this._colsDefault;
   }
   set cols(value: number) {
     this._cols = value;
-  }
-
-  get pageSizeOptions(): number[] {
-    return this._pageSizeOptions;
-  }
-  set pageSizeOptions(val: number[]) {
-    if (!(val instanceof Array)) {
-      val = Util.parseArray(String(val)).map(a => parseInt(a, 10));
-    }
-    this._pageSizeOptions = val;
   }
 
   get sortableColumns(): SQLOrder[] {
@@ -173,7 +165,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   protected _cols;
   protected _colsDefault = 1;
-  protected _pageSizeOptions = PAGE_SIZE_OPTIONS;
+  _pageSizeOptions = PAGE_SIZE_OPTIONS;
   protected sortColumn: string;
   public storePaginationState: boolean = false;
 
@@ -186,16 +178,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
   protected _gridItems: IGridItem[] = [];
-
-  set currentPage(val: number) {
-    this._currentPage = val;
-  }
-
-  get currentPage(): number {
-    return this._currentPage;
-  }
-
-  protected _currentPage: number = 0;
 
   protected subscription: Subscription = new Subscription();
   protected media: MediaObserver;
@@ -311,16 +293,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     return dataArray;
   }
 
-  protected getPaginationDataFromArray(dataArray: any[]): any[] {
-    let result = dataArray;
-    if (this.paginationControls) {
-      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
-    } else {
-      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
-    }
-    return result;
-  }
-
   public registerGridItemDirective(item: OGridItemDirective): void {
     if (item) {
       if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
@@ -385,12 +357,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     }
   }
 
-  get totalRecords(): number {
-    if (this.pageable) {
-      return this.getTotalRecordsNumber();
-    }
-    return this.dataResponseArray.length;
-  }
 
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
@@ -424,40 +390,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     return this.sortableColumns
       .findIndex(item => item.columnName === sortableColumn.columnName
         && item.ascendent === sortableColumn.ascendent);
-  }
-
-  public onChangePage(e: PageEvent): void {
-    if (!this.pageable) {
-      this.currentPage = e.pageIndex;
-      this.queryRows = e.pageSize;
-      this.filterData();
-      return;
-    }
-    const goingBack = e.pageIndex < this.currentPage;
-    this.currentPage = e.pageIndex;
-    const pageSize = e.pageSize;
-
-    const oldQueryRows = this.queryRows;
-    const changingPageSize = (oldQueryRows !== pageSize);
-    this.queryRows = pageSize;
-
-    let newStartRecord;
-    let queryLength;
-
-    if (goingBack || changingPageSize) {
-      newStartRecord = (this.currentPage * this.queryRows);
-      queryLength = this.queryRows;
-    } else {
-      newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
-      const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
-      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
-    }
-
-    const queryArgs: OQueryDataArgs = {
-      offset: newStartRecord,
-      length: queryLength
-    };
-    this.queryData(void 0, queryArgs);
   }
 
   public getDataToStore(): any {
@@ -530,5 +462,17 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
       const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
       this.quickFilterComponent.setActiveColumns(parsedArr);
     }
+  }
+  get quickFilterAppearance(): MatFormFieldAppearance {
+    return this._quickFilterAppearance;
+  }
+
+  set quickFilterAppearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
+      value = 'outline';
+    }
+    this._quickFilterAppearance = value;
   }
 }

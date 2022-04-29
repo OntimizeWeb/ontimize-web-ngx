@@ -1,5 +1,5 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-text" [formGroup]="formGroup">
+  <div class="o-table-cell-editor-text o-table-cell-editor" [formGroup]="formGroup">
     <mat-form-field floatLabel="never" cdkFocusInitial>
       <input #input matInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId"
         [required]="orequired">

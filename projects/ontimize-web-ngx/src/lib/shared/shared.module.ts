@@ -11,6 +11,7 @@ import { OIntegerPipe } from '../pipes/o-integer.pipe';
 import { OMomentPipe } from '../pipes/o-moment.pipe';
 import { OPercentPipe } from '../pipes/o-percentage.pipe';
 import { ORealPipe } from '../pipes/o-real.pipe';
+import { OSafePipe } from '../pipes/o-safe.pipe';
 import { OTranslateModule } from '../pipes/o-translate.pipe';
 import { OrderByPipe } from '../pipes/order-by.pipe';
 import { ODialogComponent } from './components/dialog/o-dialog.component';
@@ -38,6 +39,7 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
     OCurrencyPipe,
     OPercentPipe,
     OIconPipe,
+    OSafePipe,
     ONTIMIZE_DIRECTIVES,
     Error403Component,
     ODialogComponent,
@@ -59,6 +61,7 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
     OCurrencyPipe,
     OPercentPipe,
     OIconPipe,
+    OSafePipe,
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule,
     Error403Component,

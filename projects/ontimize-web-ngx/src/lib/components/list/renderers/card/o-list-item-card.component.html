@@ -1,7 +1,7 @@
 <mat-card fxLayout="column" fxLayoutAlign="center center">
   <mat-card-title-group>
     <img *ngIf="showImage" src="{{ image }}" [class.mat-card-sm-image]="compareListHeight('small')" [class.mat-card-md-image]="compareListHeight('medium')"
-      [class.mat-card-lg-image]="compareListHeight('large')">
+      [class.mat-card-lg-image]="compareListHeight('large')" alt="card title image">
     <mat-card-title *ngIf="title !== undefined"> {{ title }}</mat-card-title>
     <mat-card-subtitle *ngIf="subtitle !== undefined"> {{ subtitle }}</mat-card-subtitle>
   </mat-card-title-group>

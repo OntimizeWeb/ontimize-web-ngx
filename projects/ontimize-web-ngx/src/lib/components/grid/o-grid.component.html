@@ -2,16 +2,35 @@
   <!--TOOLBAR-->
   <mat-toolbar *ngIf="hasControls()" class="o-grid-toolbar">
     <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" fxFill>
-      <!-- button new-->
-      <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-icon-button aria-label="Insert"
-        (click)="add()">
-        <mat-icon svgIcon="ontimize:add"></mat-icon>
-      </button>
+      <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
+        <!-- button new-->
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-stroked-button aria-label="Insert"
+          (click)="add()">
+          <mat-icon svgIcon="ontimize:add"></mat-icon>
+          <span>{{ 'INSERT' | oTranslate }}</span>
+        </button>
 
-      <!--button refresh-->
-      <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
-        <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
-      </button>
+        <!--button refresh-->
+        <button type="button" mat-stroked-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+          <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+          <span>{{ 'REFRESH' | oTranslate }}</span>
+        </button>
+      </ng-container>
+
+      <ng-template #showButtonsWithoutText>
+
+        <!-- button new-->
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-icon-button aria-label="Insert"
+          (click)="add()">
+          <mat-icon svgIcon="ontimize:add"></mat-icon>
+        </button>
+
+        <!--button refresh-->
+        <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+          <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+        </button>
+      </ng-template>
+
       <!--O-GRID-PAGINATOR-->
       <div class="o-grid-paginator" *ngIf="showPageSize">
         <div class="o-grid-page-size-label">{{ 'GRID.ITEMS_PER_PAGE' | oTranslate }}:</div>
@@ -28,7 +47,8 @@
       <div class="o-grid-sort" *ngIf="showSort && sortableColumns.length > 0">
         <mat-form-field class="o-grid-select-sort" floatLabel="never">
           <mat-icon matPrefix>sort</mat-icon>
-          <mat-select #sortSelect [value]="currentOrderColumn" (selectionChange)="sortColumnChanged($event)" placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
+          <mat-select #sortSelect [value]="currentOrderColumn" (selectionChange)="sortColumnChanged($event)"
+            placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">
             <mat-option *ngFor="let column of sortableColumns; let i = index" [value]="i">
               {{ getSortOptionText(column) }}
             </mat-option>
@@ -40,7 +60,8 @@
         <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
       </div>
       <o-search-input *ngIf="quickFilter" [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive"
-        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [placeholder]="quickFilterPlaceholder" appearance="legacy" float-label="never"></o-search-input>
+        [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance"
+        float-label="never"></o-search-input>
     </div>
   </mat-toolbar>
 
@@ -68,7 +89,8 @@
 
   <!-- GRID FOOTER -->
   <div *ngIf="!paginationControls && showFooter" fxLayout="row" fxLayoutAlign="center center" class="o-grid-footer">
-    <button type="button" mat-button *ngIf="getDataArray().length < totalRecords" (click)="loadMore()" class="mat-raised-button">
+    <button type="button" mat-button *ngIf="getDataArray().length < totalRecords && getDataArray().length>0" (click)="loadMore()"
+      class="mat-raised-button">
       {{ 'GRID.BUTTON_NEXT' | oTranslate }}
     </button>
     <span fxFlex></span>
