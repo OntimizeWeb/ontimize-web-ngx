@@ -97,7 +97,7 @@ export class OBaseTableCellEditor implements OnInit {
     this.snackBarService = this.injector.get(SnackBarService);
     this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get(OTranslateService);
-    this.cellEditorId = Math.random().toString(36);
+    this.cellEditorId = Util.randomNumber().toString(36);
     this.renderer = this.injector.get(Renderer2);
   }
 
