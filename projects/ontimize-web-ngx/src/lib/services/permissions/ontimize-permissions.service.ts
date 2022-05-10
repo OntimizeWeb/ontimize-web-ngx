@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
@@ -27,14 +27,14 @@ export class OntimizePermissionsService implements IPermissionsService {
   protected authService: AuthService;
 
   constructor(protected injector: Injector) {
-    this.httpClient = this.injector.get(HttpClient);
-    this._config = this.injector.get(AppConfig);
+    this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
+    this._config = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>);
     this._appConfig = this._config.getConfiguration();
-    this.authService = this.injector.get(AuthService);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
   }
 
   getDefaultServiceConfiguration(): any {
-    const authService = this.injector.get(AuthService);
+    const authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     const servConfig = {};
     servConfig[Codes.SESSION_KEY] = authService.getSessionInfo();
     return servConfig;
