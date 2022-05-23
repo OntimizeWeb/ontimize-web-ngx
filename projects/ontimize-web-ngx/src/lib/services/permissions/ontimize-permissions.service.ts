@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
@@ -18,6 +18,10 @@ export class OntimizePermissionsService extends OntimizeBasePermissionsService i
 
   protected _user: string;
   protected _urlBase: string;
+
+  constructor(protected injector: Injector) {
+    super(injector);
+  }
 
   getDefaultServiceConfiguration(): any {
     const authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);

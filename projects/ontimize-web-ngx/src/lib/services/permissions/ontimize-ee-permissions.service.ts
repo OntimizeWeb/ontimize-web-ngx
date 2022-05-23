@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
@@ -20,6 +20,10 @@ export class OntimizeEEPermissionsService extends OntimizeBasePermissionsService
 
   protected _user: string;
   protected _urlBase: string;
+
+  constructor(protected injector: Injector) {
+    super(injector);
+  }
 
   getDefaultServiceConfiguration(permissionsConfig: OntimizeEEPermissionsConfig): any {
     const serviceName: string = permissionsConfig ? permissionsConfig.service : undefined;
