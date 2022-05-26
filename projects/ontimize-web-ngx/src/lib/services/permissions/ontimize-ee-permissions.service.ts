@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Injectable, Injector, Type } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
@@ -7,7 +7,6 @@ import { IPermissionsService } from '../../interfaces/permissions-service.interf
 import { OntimizeEEPermissionsConfig } from '../../types/ontimize-ee-permissions-config.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { AuthService } from '../auth.service';
 import { OntimizeBasePermissionsService } from './ontimize-base-permissions-service.class';
 
 @Injectable()
@@ -28,7 +27,7 @@ export class OntimizeEEPermissionsService extends OntimizeBasePermissionsService
   getDefaultServiceConfiguration(permissionsConfig: OntimizeEEPermissionsConfig): any {
     const serviceName: string = permissionsConfig ? permissionsConfig.service : undefined;
 
-    const authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
+    const authService = this.authService;
     const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};
