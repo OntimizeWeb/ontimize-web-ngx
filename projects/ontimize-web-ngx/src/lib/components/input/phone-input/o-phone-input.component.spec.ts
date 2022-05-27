@@ -2,13 +2,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateService } from '@ngx-translate/core';
+
 import { APP_CONFIG, AppConfig } from '../../../config/app-config';
 import { appConfigFactory, OPermissionsModule } from '../../../services';
 import { InputTestUtil } from './../test/input-test-utils';
 import { OPhoneInputComponent } from './o-phone-input.component';
 import { OPhoneInputModule } from './o-phone-input.module';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('OPhoneInputComponent', () => {
   let component: OPhoneInputComponent;

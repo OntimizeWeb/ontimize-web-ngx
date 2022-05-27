@@ -1,25 +1,19 @@
 <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
 <div [formGroup]="getFormGroup()" class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row">
   <mat-form-field class="mat-form-phone">
-    <mat-select [(value)]="selectedCountry">
+    <mat-select [value]="selectedCountry" (selectionChange)="onCountrySelect($event)">
       <mat-option *ngFor="let country of allCountries" [value]="country"> {{country.name}} +{{country.dialCode}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field [hideRequiredMarker]="hideRequiredMarker"
-    [class.custom-width]="hasCustomWidth" class="icon-field" [appearance]="appearance">
-    <input matInput type="tel" [id]="inputId" [formControlName]="getAttribute()" [(ngModel)]="phoneNumber" [placeholder]="resolvePlaceholder()"
-      (focus)=" innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)"
-      [attr.maxLength]=" maxLength" [attr.validation]="phoneValidation" [required]="isRequired" #focusable>
+  <mat-form-field [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth" class="icon-field" [appearance]="appearance">
+    <input matInput type="tel" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)=" innerOnFocus($event)"
+      (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired">
     <mat-icon matSuffix [class.mat-disabled]="!enabled" class="svg-icon" svgIcon="ontimize:phone_outline"></mat-icon>
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-    <mat-error *ngIf="hasError('minlength')"
-      text="{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}">
-    </mat-error>
-    <mat-error *ngIf="hasError('maxlength')"
-      text="{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}">
+    <mat-error *ngIf="hasError('validatePhoneNumber')" text="{{ 'FORM_VALIDATION.DATERANGE_MIN' | oTranslate }}">
     </mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
