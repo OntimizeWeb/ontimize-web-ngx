@@ -88,6 +88,7 @@ export const MAP = {
     'FORM_VALIDATION.FILE_MAXSIZE': 'Maximum file size',
     'FORM_VALIDATION.FILE_MAXNUM': 'Max. files',
     'FORM_VALIDATION.HOUR_FORMAT': 'Format not valid format',
+    'FORM_VALIDATION.PHONE_FORMAT': 'Invalid format',
     'MESSAGES.FORM_VALIDATION_ERROR': 'Form values are not valid!',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': 'There are no values to update!',
     'MESSAGES.FORM_CHANGES_WILL_BE_LOST': 'Are you sure you want to continue? All unsaved changes will be lost',
@@ -362,7 +363,7 @@ export const MAP = {
     'FORM_VALIDATION.FILE_MAXSIZE': 'Tamaño de fichero máximo',
     'FORM_VALIDATION.FILE_MAXNUM': 'Número máximo de ficheros',
     'FORM_VALIDATION.HOUR_FORMAT': 'Formato no válido',
-
+    'FORM_VALIDATION.PHONE_FORMAT': 'Formato no válido',
     'MESSAGES.FORM_VALIDATION_ERROR': 'El formulario contiene campos con valores no válidos',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': '¡No existen valores para actualizar!',
     'MESSAGES.FORM_CHANGES_WILL_BE_LOST': '¿Está seguro de que quiere continuar? Perderá los cambios realizados',
@@ -626,7 +627,7 @@ export const MAP = {
     'FORM_VALIDATION.FILE_MAXSIZE': 'Tamanho de arquivo máximo',
     'FORM_VALIDATION.FILE_MAXNUM': 'Número máximo de arquivos',
     'FORM_VALIDATION.HOUR_FORMAT': 'Formato inválido',
-
+    'FORM_VALIDATION.PHONE_FORMAT': 'Formato inválido',
     'MESSAGES.FORM_VALIDATION_ERROR': 'O formulário apresenta campos com valores inválidos',
     'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO': 'Não existem valores a serem atualizados!',
     'MESSAGES.FORM_CHANGES_WILL_BE_LOST': 'Tem certeza que quer continuar? Perderá todas as alterações realizadas',
