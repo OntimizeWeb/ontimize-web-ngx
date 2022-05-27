@@ -360,7 +360,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    // queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable && Util.isDefined(this.sortColumn)) {
       queryArguments[6] = this.sortColumnOrder ? [this.sortColumnOrder] : this.sortColumnOrder;
     }
@@ -415,10 +414,8 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected parseResponseArray(data: any[], replace?: boolean) {
     let result = data;
     if (this.pageable && !replace) {
-      // dataArray = this.paginationControls ? data : (this.dataArray || []).concat(data);
       result = this.paginationControls ? data : (this.dataResponseArray || []).concat(data);
     } else if (!this.pageable) {
-      // dataArray = data.slice(this.paginationControls ? ((this.queryRows * (this.currentPage + 1)) - this.queryRows) : 0, this.queryRows * (this.currentPage + 1));
       result = data;
     }
     return result;
