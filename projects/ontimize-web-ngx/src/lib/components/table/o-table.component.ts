@@ -175,9 +175,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'resizable',
 
-  // enabled [yes|no|true|false]: enables de table. Default: yes
-  'enabled',
-
   'keepSelectedItems: keep-selected-items',
 
   // export-mode ['visible'|'local'|'all']: sets the mode to export data. Default: 'visible'
@@ -431,14 +428,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   virtualScroll: boolean = true;
   @InputConverter()
   contextMenu: boolean = true;
-
-  protected _enabled: boolean = true;
+  // Maintaining this getter to allow component extensions (avoiding a breaking change)
   get enabled(): boolean {
-    return this._enabled;
-  }
-  set enabled(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._enabled = val;
+    return this.oenabled;
   }
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {
