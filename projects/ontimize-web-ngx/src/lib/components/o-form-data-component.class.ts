@@ -516,7 +516,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(val, options);
+      this._fControl.setValue(this.value.value, options);
       if (setDirty) {
         this._fControl.markAsDirty();
       }
