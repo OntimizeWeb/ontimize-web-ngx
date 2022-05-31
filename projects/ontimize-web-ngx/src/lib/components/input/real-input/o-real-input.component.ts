@@ -4,7 +4,6 @@ import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { InputConverter } from '../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
 import { NumberService } from '../../../services/number.service';
-import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -90,19 +89,6 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
         this._fControl.setValue(this.value.value, { emitEvent: false, emitModelToViewChange: false });
       }
     }
-  }
-
-  setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
-    this.ensureOFormValue(val);
-    if (this._fControl) {
-      if (setDirty) {
-        this._fControl.markAsDirty();
-      }
-      if (this._fControl.invalid && !this.form.isInInsertMode()) {
-        this._fControl.markAsTouched();
-      }
-    }
-    this.oldValue = this.value.value;
   }
 
   protected maxDecimalDigitsValidator(control: FormControl): ValidationErrors {

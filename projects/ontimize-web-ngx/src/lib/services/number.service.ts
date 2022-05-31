@@ -76,6 +76,7 @@ export class NumberService {
           useGrouping: grouping
         };
         formattedRealValue = new Intl.NumberFormat(Util.isDefined(locale) ? locale : this.locale, formatterArgs).format(value);
+        formattedRealValue = Number.isNaN(formattedRealValue) ? value : formattedRealValue;
       }
     } else {
       formattedRealValue = this.parseRealValue(value, maxDecimalDigits, thousandSeparator, decimalSeparator, grouping);
