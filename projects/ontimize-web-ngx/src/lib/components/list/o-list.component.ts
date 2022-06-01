@@ -218,21 +218,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public onItemDetailClick(item: OListItemDirective | IListItem): void {
-    const data = item.getItemData();
-    if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(data);
-    }
-    ObservableWrapper.callEmit(this.onClick, data);
+    this.handleItemClick(item);
   }
 
   public onItemDetailDoubleClick(item: OListItemDirective | IListItem): void {
-    const data = item.getItemData();
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(data);
-    }
-    ObservableWrapper.callEmit(this.onDoubleClick, data);
+    this.handleItemDblClick(item);
   }
 
   getDataToStore() {
