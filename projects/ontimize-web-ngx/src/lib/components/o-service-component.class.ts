@@ -863,6 +863,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   handleItemDblClick(item: ItemClick): void {
+    clearTimeout(this.clickTimer);
+    this.clickPrevent = true;
     this.itemDblClickDone(item);
   }
 
