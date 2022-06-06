@@ -40,7 +40,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'ovisible: visible',
 
   // enabled [no|yes]: editability. Default: yes.
-  'enabled',
+  'oenabled: enabled',
 
   // controls [string][yes|no|true|false]:
   'controls',
