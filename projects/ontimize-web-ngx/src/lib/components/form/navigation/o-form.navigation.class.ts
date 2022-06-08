@@ -257,7 +257,7 @@ export class OFormNavigationClass {
 
   navigateBack(options?: any) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.closeDetail();
+      this.formLayoutManager.closeDetail(options);
     } else if (this.navigationService) {
       this.navigationService.removeLastItem();
       if (options && options.ignoreNavigation) {
