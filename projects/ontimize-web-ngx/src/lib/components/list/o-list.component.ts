@@ -30,7 +30,6 @@ import { OListInitializationOptions } from '../../types/o-list-initialization-op
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
-import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
@@ -218,21 +217,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public onItemDetailClick(item: OListItemDirective | IListItem): void {
-    const data = item.getItemData();
-    if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(data);
-    }
-    ObservableWrapper.callEmit(this.onClick, data);
+    this.handleItemClick(item);
   }
 
   public onItemDetailDoubleClick(item: OListItemDirective | IListItem): void {
-    const data = item.getItemData();
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(data);
-    }
-    ObservableWrapper.callEmit(this.onDoubleClick, data);
+    this.handleItemDblClick(item);
   }
 
   getDataToStore() {
