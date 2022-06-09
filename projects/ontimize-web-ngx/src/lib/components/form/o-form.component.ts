@@ -567,7 +567,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   executeToolbarAction(action: string, options?: any) {
     switch (action) {
-      case Codes.BACK_ACTION: this.back(); break;
+      case Codes.BACK_ACTION: this.back(options); break;
       case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break;
       case Codes.RELOAD_ACTION: this.reload(true); break;
       case Codes.GO_INSERT_ACTION: this.goInsertMode(options); break;
@@ -846,9 +846,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /**
    * Navigate back
    */
-  back() {
-    const options = { ignoreNavigation: this.ignoreDefaultNavigation };
-    this.formNavigation.navigateBack(options);
+  back(options?: any) {
+    const allOptions = Object.assign(options || {}, { ignoreNavigation: this.ignoreDefaultNavigation });
+    this.formNavigation.navigateBack(allOptions);
   }
 
   /**
@@ -950,7 +950,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self._stayInRecordAfterInsert(resp);
       } else if (self.afterInsertMode === 'new') {
         this._clearFormAfterInsert();
-      }else if (self.afterInsertMode === 'close') {
+      } else if (self.afterInsertMode === 'close') {
         this._clearAndCloseFormAfterInsert();
       } else {
         self.closeDetail();

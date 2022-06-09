@@ -187,14 +187,14 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.editMode = true;
   }
 
-  public onCloseDetail(): void {
-    this._form.executeToolbarAction(Codes.CLOSE_DETAIL_ACTION, {
+  public onCloseDetail(options?: any): void {
+    this._form.executeToolbarAction(Codes.CLOSE_DETAIL_ACTION, Object.assign(options || {}, {
       changeToolbarMode: true
-    });
+    }));
   }
 
-  public onBack(): void {
-    this._form.executeToolbarAction(Codes.BACK_ACTION);
+  public onBack(options?: any): void {
+    this._form.executeToolbarAction(Codes.BACK_ACTION, options);
   }
 
   public onReload(): void {
@@ -203,7 +203,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this._form.showConfirmDiscardChanges().then(val => {
       if (val) {
-        this._form.executeToolbarAction(Codes.RELOAD_ACTION);
+        this._form.executeToolbarAction(Codes.RELOAD_ACTION, { exitWithoutConfirmation: true });
       }
     });
   }
@@ -250,10 +250,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
         // ensuring editMode to false to avoid o-form canDeactivate function triggering
         this.editMode = false;
         this.onCancel.emit();
+        const closeOptions = { exitWithoutConfirmation: true };
         if (this.isDetail) {
-          this.onCloseDetail();
+          this.onCloseDetail(closeOptions);
         } else if (this.insertMode) {
-          this.onBack();
+          this.onBack(closeOptions);
         } else {
           this.onReload();
           this._form.setInitialMode();
@@ -289,7 +290,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
       if (res === true) {
         this._form.executeToolbarAction(Codes.DELETE_ACTION).subscribe(resp => {
           this._form.onDelete.emit(resp);
-          this.onCloseDetail();
+          this.onCloseDetail({ exitWithoutConfirmation: true });
         }, err => {
           console.error('OFormToolbar.delete error', err);
         });
