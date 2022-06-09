@@ -11,11 +11,10 @@ import {
   OnInit,
   QueryList,
   SimpleChange,
-  ViewChild,
   ViewChildren
 } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { FloatLabelType, MatFormFieldAppearance, MatInput, MatSuffix } from '@angular/material';
+import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { O_INPUTS_OPTIONS } from '../config/app-config';
 import { BooleanConverter, InputConverter } from '../decorators/input-converter';
@@ -104,9 +103,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.width;
   }
   @HostListener('click', ['$event'])
-  handleClick(event: Event) {
-    console.log('click this.handleClick', event);
-    if (this.enabled && !this.isReadOnly && this.inputElement && this.selectAllOnClick) {
+  handleClick(): void {
+    if (this.enabled && !this.isReadOnly && this.selectAllOnClick) {
       this.selectValue();
     }
   }
@@ -143,10 +141,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected oMatErrorChildren: QueryList<OMatErrorComponent>;
 
   protected oInputsOptions: OInputsOptions;
-
-
-  @ViewChild(MatInput, { static: true })
-  protected inputElement: MatInput;
 
   constructor(
     form: OFormComponent,
