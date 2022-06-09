@@ -1,3 +1,8 @@
+## 8.6.1
+### Features
+***OFormDataComponent**: New attribute `select-all-on-click` ([4ea3a1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4ea3a1c)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#969](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/969)
+* **O_INPUTS_OPTIONS**: New attribute `selectAllOnClick` in O_INPUTS_OPTIONS InjectionToken ([42d0ed2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42d0ed2))
+
 ## 8.6.0 (2022-04-06)
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
