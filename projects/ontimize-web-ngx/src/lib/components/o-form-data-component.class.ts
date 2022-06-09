@@ -102,9 +102,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   get hostWidth(): string {
     return this.width;
   }
-  @HostListener('click', ['$event'])
+
+  @HostListener('click', [])
   handleClick(): void {
-    if (this.enabled && !this.isReadOnly && this.selectAllOnClick) {
+    if (this.selectAllOnClick) {
       this.selectValue();
     }
   }
@@ -517,6 +518,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   public selectValue() {
+    if (!this.enabled || this.isReadOnly) {
+      return;
+    }
     const inputEl = document.getElementById(this.oattr);
     if (inputEl) {
       (inputEl as HTMLInputElement).select();
