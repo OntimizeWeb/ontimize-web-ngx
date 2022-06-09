@@ -5,7 +5,6 @@ import {
   EventEmitter,
   HostBinding,
   HostListener,
-  InjectionToken,
   Injector,
   OnChanges,
   OnDestroy,
@@ -73,7 +72,6 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
   'onBlur'
 ];
 
-export const O_SELECT_VALUE_ON_CLICK = new InjectionToken<OSelectValueOnClick>('o-selected-value-on-click');
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -105,10 +103,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   get hostWidth(): string {
     return this.width;
   }
-  @HostListener('click')
-  handleClick() {
-    console.log('click this.handleClick');
-    if (this.enabled && !this.readOnly && this.inputElement && this.selectAllOnClick) {
+  @HostListener('click', ['$event'])
+  handleClick(event: Event) {
+    console.log('click this.handleClick', event);
+    if (this.enabled && !this.isReadOnly && this.inputElement && this.selectAllOnClick) {
       this.selectValue();
     }
   }
@@ -146,7 +144,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   protected oInputsOptions: OInputsOptions;
 
-  protected emitFocusEvent: boolean = true;
 
   @ViewChild(MatInput, { static: true })
   protected inputElement: MatInput;
@@ -164,6 +161,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       this.errorOptions = this.injector.get(O_MAT_ERROR_OPTIONS) || {};
     } catch (e) {
       this.errorOptions = {};
+    }
+    try {
+      this.selectAllOnClick = this.injector.get(O_INPUTS_OPTIONS).selectAllOnClick;
+    } catch (e) {
+      this.selectAllOnClick = false;
     }
   }
 
@@ -481,10 +483,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   public innerOnFocus(event: FocusEvent): void {
-    if (!this.emitFocusEvent) {
-      this.emitFocusEvent = true;
-      return;
-    }
 
     if (!this.isReadOnly && this.enabled) {
       this.onFocus.emit(event);
@@ -527,7 +525,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   public selectValue() {
     const inputEl = document.getElementById(this.oattr);
     if (inputEl) {
-      this.emitFocusEvent = false;
+      ;
       (inputEl as HTMLInputElement).select();
     }
   }

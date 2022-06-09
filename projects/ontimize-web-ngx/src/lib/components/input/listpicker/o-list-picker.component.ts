@@ -301,9 +301,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   public selectValue() {
     const inputEl = document.getElementById('desc_' + this.oattr);
     if (inputEl) {
-      this.emitFocusEvent = false;
       (inputEl as HTMLInputElement).select();
-      this.emitFocusEvent = true;
     }
   }
 
