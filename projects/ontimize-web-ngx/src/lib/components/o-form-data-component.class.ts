@@ -525,7 +525,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   public selectValue() {
     const inputEl = document.getElementById(this.oattr);
     if (inputEl) {
-      ;
       (inputEl as HTMLInputElement).select();
     }
   }
