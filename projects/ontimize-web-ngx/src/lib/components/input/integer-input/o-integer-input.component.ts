@@ -80,8 +80,6 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     this.setComponentPipe();
   }
 
-  handleClick(): void { }
-
   initialize(): void {
     super.initialize();
     this.initializeStep();
