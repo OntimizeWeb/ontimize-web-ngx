@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  HostListener,
   Injector,
   OnChanges,
   OnDestroy,
@@ -15,7 +16,6 @@ import {
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs';
-
 import { O_INPUTS_OPTIONS } from '../config/app-config';
 import { BooleanConverter, InputConverter } from '../decorators/input-converter';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
@@ -60,7 +60,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'angularValidatorsFn: validators',
   'appearance',
   'hideRequiredMarker:hide-required-marker',
-  'labelVisible:label-visible'
+  'labelVisible:label-visible',
+  'selectAllOnClick:select-all-on-click'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -69,6 +70,7 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
   'onFocus',
   'onBlur'
 ];
+
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -87,6 +89,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   public hideRequiredMarker: boolean = false;
   @InputConverter()
   public labelVisible: boolean = true;
+  @InputConverter()
+  public selectAllOnClick: boolean = false;
 
   /* Outputs */
   public onChange: EventEmitter<object> = new EventEmitter<object>();
@@ -97,6 +101,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @HostBinding('style.width')
   get hostWidth(): string {
     return this.width;
+  }
+
+  @HostListener('click', [])
+  handleClick(): void {
+    if (this.selectAllOnClick) {
+      this.selectValue();
+    }
   }
 
   /* Internal variables */
@@ -146,6 +157,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     } catch (e) {
       this.errorOptions = {};
     }
+    try {
+      this.selectAllOnClick = this.injector.get(O_INPUTS_OPTIONS).selectAllOnClick;
+    } catch (e) {
+      this.selectAllOnClick = false;
+    }
   }
 
   public ngOnInit(): void {
@@ -169,6 +185,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
         this.updateValidators();
       }
     }
+
     if (!this.enabled) {
       this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.getMutationObserverTarget(), {
         callback: this.disableFormControl.bind(this)
@@ -460,7 +477,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
   }
 
-  public innerOnFocus(event: any): void {
+  public innerOnFocus(event: FocusEvent): void {
+
     if (!this.isReadOnly && this.enabled) {
       this.onFocus.emit(event);
     }
@@ -497,6 +515,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       value = 'auto';
     }
     this._floatLabel = value;
+  }
+
+  public selectValue() {
+    if (!this.enabled || this.isReadOnly) {
+      return;
+    }
+    const inputEl = document.getElementById(this.oattr);
+    if (inputEl) {
+      (inputEl as HTMLInputElement).select();
+    }
   }
 
   protected registerOnFormControlChange(): void {
