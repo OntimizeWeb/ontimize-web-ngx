@@ -5,7 +5,7 @@
 * **O_INPUTS_OPTIONS**: New attribute `selectAllOnClick` in O_INPUTS_OPTIONS InjectionToken ([42d0ed2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42d0ed2))
 
 ### Bug fixes
-  * **o-form, o-form-toolbar, o-form-layout-tabgroup**: solving multiple confirmation dialog bug ([825c09e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/825c09e0)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/966)
+  * **o-form, o-form-toolbar, o-form-layout-tabgroup**: solving multiple confirmation dialog bug ([825c09e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/825c09e0)) Closes [#966](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/966)
 
 
 ## 8.6.0 (2022-04-06)
