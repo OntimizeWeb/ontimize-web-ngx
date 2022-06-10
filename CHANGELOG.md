@@ -1,7 +1,12 @@
 ## 8.6.1
 
+### Features
+* **OFormDataComponent**: New attribute `select-all-on-click` ([4ea3a1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4ea3a1c)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#969](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/969)
+* **O_INPUTS_OPTIONS**: New attribute `selectAllOnClick` in O_INPUTS_OPTIONS InjectionToken ([42d0ed2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42d0ed2))
+
 ### Bug fixes
   * **o-form, o-form-toolbar, o-form-layout-tabgroup**: solving multiple confirmation dialog bug ([825c09e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/825c09e0)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/966)
+
 
 ## 8.6.0 (2022-04-06)
 ### Features:
