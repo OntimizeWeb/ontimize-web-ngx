@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Injector } from '@angular/core';
+import { EventEmitter, Injectable, Injector, Type } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
 import { AppConfig } from '../config/app-config';
@@ -25,9 +25,9 @@ export class LocalStorageService {
   private authService: AuthService;
 
   constructor(protected injector: Injector) {
-    this._config = this.injector.get(AppConfig).getConfiguration();
-    this._router = this.injector.get(Router);
-    this.authService = this.injector.get(AuthService);
+    this._config = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>).getConfiguration();
+    this._router = this.injector.get<Router>(Router as Type<Router>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
 
     const self = this;
     this._router.events.subscribe(event => {

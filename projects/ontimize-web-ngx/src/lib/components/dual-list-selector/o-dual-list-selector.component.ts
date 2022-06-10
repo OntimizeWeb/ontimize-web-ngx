@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 
 export const DEFAULT_DUAL_LIST_SELECTOR = [
@@ -36,8 +36,6 @@ export class ODualListSelectorComponent {
   public description = '';
   public key = '';
   public display = '';
-  constructor() { }
-
 
 
   drop(event: CdkDragDrop<string[]>) {

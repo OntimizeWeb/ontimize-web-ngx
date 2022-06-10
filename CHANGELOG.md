@@ -1,5 +1,11 @@
-## 8.6.1 (2022-06-10)
+## 8.7.0
+### Bug fixes
+* **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
+* **o-table**: Fixed the arrow icon not showing in the calendar popup in `o-table-cell-editor-date` and `o-table-cell-editor-time` ([869a914](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/869a914)) Closes[#949](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/949)
+* **o-table**: Fixing `onClick` and `onDoubleClick` bugs in `AbstractOServiceBaseComponent` ([378b8d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/378b8d7)) Closes[#958](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/958)
+* **AbstractOServiceBaseComponent**: Fixing `enabled` input bug ([061bef9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/061bef9c)) Closes [#959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/959)
 
+## 8.6.1 (2022-06-10)
 ### Features
 * **OFormDataComponent**: New attribute `select-all-on-click` ([4ea3a1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4ea3a1c)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#969](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/969)
 * **O_INPUTS_OPTIONS**: New attribute `selectAllOnClick` in O_INPUTS_OPTIONS InjectionToken ([42d0ed2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42d0ed2))

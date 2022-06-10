@@ -180,20 +180,20 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   constructor(
     protected injector: Injector
   ) {
-    this.dialogService = this.injector.get(DialogService);
-    this.oErrorDialogManager = this.injector.get(OErrorDialogManager);
-    this.localStorageService = this.injector.get(LocalStorageService);
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.oErrorDialogManager = this.injector.get<OErrorDialogManager>(OErrorDialogManager as Type<OErrorDialogManager>);
+    this.localStorageService = this.injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
     this.componentStateService = this.injector.get<T>(AbstractComponentStateService as Type<T>);
-    this.router = this.injector.get(Router);
-    this.actRoute = this.injector.get(ActivatedRoute);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.actRoute = this.injector.get<ActivatedRoute>(ActivatedRoute as Type<ActivatedRoute>);
     try {
-      this.cd = this.injector.get(ChangeDetectorRef);
-      this.form = this.injector.get(OFormComponent);
+      this.cd = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
+      this.form = this.injector.get<OFormComponent>(OFormComponent as Type<OFormComponent>);
     } catch (e) {
       // no parent form
     }
     try {
-      this.expandableContainer = this.injector.get(OExpandableContainerComponent);
+      this.expandableContainer = this.injector.get<OExpandableContainerComponent>(OExpandableContainerComponent as Type<OExpandableContainerComponent>);
     } catch (e) {
       // No parent OExpandableContainerComponent
     }
@@ -239,15 +239,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
-    // if (typeof this.insertFallbackFunction !== 'function') {
-    //   this.insertFallbackFunction = undefined;
-    // }
-    // if (typeof this.updateFallbackFunction !== 'function') {
-    //   this.updateFallbackFunction = undefined;
-    // }
-    // if (typeof this.deleteFallbackFunction !== 'function') {
-    //   this.deleteFallbackFunction = undefined;
-    // }
   }
 
   afterViewInit() {

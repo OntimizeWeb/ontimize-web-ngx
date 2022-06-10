@@ -1,42 +1,30 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { AppConfig } from '../../config/app-config';
 import { IPermissionsService } from '../../interfaces/permissions-service.interface';
-import { Config } from '../../types/config.type';
 import { OntimizePermissionsConfig } from '../../types/ontimize-permissions-config.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { AuthService } from '../auth.service';
+import { OntimizeBasePermissionsService } from './ontimize-base-permissions-service.class';
 
 @Injectable()
-export class OntimizePermissionsService implements IPermissionsService {
+export class OntimizePermissionsService extends OntimizeBasePermissionsService implements IPermissionsService {
 
   public entity: string = '';
   public keyColumn: string;
   public valueColumn: string;
 
-  protected httpClient: HttpClient;
   protected _user: string;
   protected _urlBase: string;
-  protected _appConfig: Config;
-  protected _config: AppConfig;
-
-  protected authService: AuthService;
 
   constructor(protected injector: Injector) {
-    this.httpClient = this.injector.get(HttpClient);
-    this._config = this.injector.get(AppConfig);
-    this._appConfig = this._config.getConfiguration();
-    this.authService = this.injector.get(AuthService);
+    super(injector);
   }
 
   getDefaultServiceConfiguration(): any {
-    const authService = this.injector.get(AuthService);
     const servConfig = {};
-    servConfig[Codes.SESSION_KEY] = authService.getSessionInfo();
+    servConfig[Codes.SESSION_KEY] = this.authService.getSessionInfo();
     return servConfig;
   }
 
@@ -97,13 +85,6 @@ export class OntimizePermissionsService implements IPermissionsService {
       }, () => _innerObserver.complete());
     });
     return dataObservable.pipe(share());
-  }
-
-  protected buildHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json;charset=UTF-8'
-    });
   }
 
 }

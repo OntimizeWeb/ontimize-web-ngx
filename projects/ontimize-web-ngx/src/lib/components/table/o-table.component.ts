@@ -175,9 +175,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'resizable',
 
-  // enabled [yes|no|true|false]: enables de table. Default: yes
-  'enabled',
-
   'keepSelectedItems: keep-selected-items',
 
   // export-mode ['visible'|'local'|'all']: sets the mode to export data. Default: 'visible'
@@ -220,7 +217,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'contextMenu: context-menu',
 
   // show-expandable-icon-function [function]: Expandable function to check if expandable has data to show or not icon
-  'showExpandableIconFunction: show-expandable-icon-function'
+  'showExpandableIconFunction: show-expandable-icon-function',
+
+  // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the table menu. Default: yes.
+  'showReportOnDemandOption: show-report-on-demand-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -342,6 +342,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   showFilterOption: boolean = true;
   @InputConverter()
+  showReportOnDemandOption: boolean = true;
+  @InputConverter()
   showButtonsText: boolean = true;
   @InputConverter()
   filterColumnActiveByDefault: boolean = true;
@@ -426,14 +428,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   virtualScroll: boolean = true;
   @InputConverter()
   contextMenu: boolean = true;
-
-  protected _enabled: boolean = true;
+  // Maintaining this getter to allow component extensions (avoiding a breaking change)
   get enabled(): boolean {
-    return this._enabled;
-  }
-  set enabled(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._enabled = val;
+    return this.oenabled;
   }
   protected _selectAllCheckboxVisible: boolean;
   set selectAllCheckboxVisible(value: boolean) {

@@ -8,6 +8,7 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  Type,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -333,10 +334,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formCache = new OFormCacheClass(this);
     this.formNavigation = new OFormNavigationClass(this.injector, this, this.router, this.actRoute);
 
-    this.dialogService = injector.get(DialogService);
-    this.navigationService = injector.get(NavigationService);
-    this.snackBarService = injector.get(SnackBarService);
-    this.permissionsService = this.injector.get(PermissionsService);
+    this.dialogService = injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.navigationService = injector.get<NavigationService>(NavigationService as Type<NavigationService>);
+    this.snackBarService = injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
 
     const self = this;
     this.reloadStream = combineLatest([

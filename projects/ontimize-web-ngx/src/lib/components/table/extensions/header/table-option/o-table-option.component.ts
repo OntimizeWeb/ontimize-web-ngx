@@ -5,7 +5,8 @@ import {
   ElementRef,
   EventEmitter,
   Injector,
-  ViewEncapsulation,
+  Type,
+  ViewEncapsulation
 } from '@angular/core';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
@@ -60,7 +61,7 @@ export class OTableOptionComponent {
     public elRef: ElementRef
   ) {
     try {
-      this.cd = this.injector.get(ChangeDetectorRef);
+      this.cd = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
     } catch (e) {
     }
   }

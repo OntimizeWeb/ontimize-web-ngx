@@ -1,8 +1,21 @@
-import { AfterViewInit, Component, ComponentFactory, ComponentFactoryResolver, ContentChildren, EventEmitter, forwardRef, OnInit, QueryList, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  ContentChildren,
+  EventEmitter,
+  forwardRef,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material';
 
-import { Util } from '../../../util/util';
 import { InputConverter } from '../../../decorators/input-converter';
+import { Util } from '../../../util/util';
 import { OButtonToggleComponent } from '../o-button-toggle.component';
 
 export const DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP = [
@@ -21,7 +34,6 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP = [
 @Component({
   selector: 'o-button-toggle-group',
   templateUrl: './o-button-toggle-group.component.html',
-  styleUrls: ['./o-button-toggle-group.component.scss'],
   inputs: DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP,
   outputs: DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP,
   encapsulation: ViewEncapsulation.None,

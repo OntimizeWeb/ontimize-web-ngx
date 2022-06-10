@@ -7,6 +7,7 @@ import {
   Inject,
   Injector,
   OnInit,
+  Type,
   ViewChild
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
@@ -37,9 +38,9 @@ export class OTableLoadFilterDialogComponent implements OnInit {
     protected injector: Injector
   ) {
     this.loadFilters(data);
-    this.dialogService = this.injector.get(DialogService);
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
     try {
-      this.cd = this.injector.get(ChangeDetectorRef);
+      this.cd = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
     } catch (e) {
       // no parent form
     }
