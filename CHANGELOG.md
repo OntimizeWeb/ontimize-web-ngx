@@ -5,6 +5,16 @@
 * **o-table**: Fixing `onClick` and `onDoubleClick` bugs in `AbstractOServiceBaseComponent` ([378b8d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/378b8d7)) Closes[#958](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/958)
 * **AbstractOServiceBaseComponent**: Fixing `enabled` input bug ([061bef9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/061bef9c)) Closes [#959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/959)
 
+## 8.6.1 (2022-06-10)
+### Features
+* **OFormDataComponent**: New attribute `select-all-on-click` ([4ea3a1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4ea3a1c)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#969](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/969)
+* **O_INPUTS_OPTIONS**: New attribute `selectAllOnClick` in O_INPUTS_OPTIONS InjectionToken ([42d0ed2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42d0ed2))
+
+### Bug fixes
+  * **o-form, o-form-toolbar, o-form-layout-tabgroup**: solving multiple confirmation dialog bug ([825c09e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/825c09e0)) Closes [#966](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/966)
+
+
+## 8.6.0 (2022-04-06)
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
   * **o-list**: added *paginator* that provides navigation, typically used with to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
