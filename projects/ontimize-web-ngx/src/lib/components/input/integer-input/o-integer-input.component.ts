@@ -119,14 +119,17 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     this.setPipeValue();
   }
 
-  innerOnFocus(event: any) {
+  innerOnFocus(event: FocusEvent) {
     event.preventDefault();
     event.stopPropagation();
     if (this.isReadOnly) {
       return;
     }
-    this.setNumberDOMValue(this.getValue());
     super.innerOnFocus(event);
+    this.setNumberDOMValue(this.getValue());
+    if (this.selectAllOnClick) {
+      this.selectValue();
+    }
   }
 
   innerOnBlur(event?: any) {

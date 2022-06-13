@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Injector, ModuleWithProviders, NgModule, OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Injector,
+  ModuleWithProviders,
+  NgModule,
+  OnDestroy,
+  Pipe,
+  PipeTransform,
+  Type
+} from '@angular/core';
 
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Util } from '../util/util';
@@ -23,8 +32,8 @@ export class OTranslatePipe implements PipeTransform, OnDestroy {
   protected _ref: ChangeDetectorRef;
 
   constructor(protected injector: Injector) {
-    this._ref = this.injector.get(ChangeDetectorRef);
-    this.oTranslateService = this.injector.get(OTranslateService);
+    this._ref = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
+    this.oTranslateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
   }
 
   public ngOnDestroy(): void {

@@ -8,6 +8,7 @@ import {
   Injector,
   OnDestroy,
   OnInit,
+  Type,
   ViewEncapsulation
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
@@ -94,15 +95,15 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     protected elRef: ElementRef,
     protected cd: ChangeDetectorRef
   ) {
-    this.translateService = this.injector.get(OTranslateService);
-    this.authService = this.injector.get(AuthService);
-    this.dialogService = this.injector.get(DialogService);
-    this.permissionsService = this.injector.get(PermissionsService);
-    this.oUserInfoService = this.injector.get(OUserInfoService);
-    this.sidenav = this.injector.get(OAppSidenavComponent);
-    this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
-    this.router = this.injector.get(Router);
-    this.appMenuService = this.injector.get(AppMenuService);
+    this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
+    this.oUserInfoService = this.injector.get<OUserInfoService>(OUserInfoService as Type<OUserInfoService>);
+    this.sidenav = this.injector.get<OAppSidenavComponent>(OAppSidenavComponent as Type<OAppSidenavComponent>);
+    this.oAppLayoutComponent = this.injector.get<OAppLayoutComponent>(OAppLayoutComponent as Type<OAppLayoutComponent>);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.appMenuService = this.injector.get<AppMenuService>(AppMenuService as Type<AppMenuService>);
 
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd && this.isRouteItem()) {

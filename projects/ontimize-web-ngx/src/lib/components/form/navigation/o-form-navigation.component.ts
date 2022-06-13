@@ -1,4 +1,4 @@
-import { Component, forwardRef, Inject, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, forwardRef, Inject, Injector, OnDestroy, Type, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -53,7 +53,7 @@ export class OFormNavigationComponent implements OnDestroy {
     private router: Router
   ) {
     this.formNavigation = this._form.getFormNavigation();
-    this.navigationService = this.injector.get(NavigationService);
+    this.navigationService = this.injector.get<NavigationService>(NavigationService as Type<NavigationService>);
 
     this.formLayoutManager = this._form.getFormManager();
 

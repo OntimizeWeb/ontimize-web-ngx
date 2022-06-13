@@ -6,6 +6,7 @@ import {
   OnInit,
   QueryList,
   Renderer2,
+  Type,
   ViewChild
 } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
@@ -94,11 +95,11 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   constructor(protected injector: Injector) {
-    this.snackBarService = this.injector.get(SnackBarService);
-    this.tableColumn = this.injector.get(OTableColumnComponent);
-    this.translateService = this.injector.get(OTranslateService);
-    this.cellEditorId = Math.random().toString(36);
-    this.renderer = this.injector.get(Renderer2);
+    this.snackBarService = this.injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
+    this.tableColumn = this.injector.get<OTableColumnComponent>(OTableColumnComponent as Type<OTableColumnComponent>);
+    this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
+    this.cellEditorId = Util.randomNumber().toString(36);
+    this.renderer = this.injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
   }
 
   ngOnInit(): void {

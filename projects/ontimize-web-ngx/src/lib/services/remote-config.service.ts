@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HostListener, Injectable, Injector } from '@angular/core';
+import { HostListener, Injectable, Injector, Type } from '@angular/core';
 import { Observable, Subscriber, Subscription, timer } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
@@ -45,12 +45,12 @@ export class ORemoteConfigurationService {
   }
 
   constructor(protected injector: Injector) {
-    this.httpClient = this.injector.get(HttpClient);
-    this._appConfig = this.injector.get(AppConfig);
-    this.authService = this.injector.get(AuthService);
-    this.localStorageService = this.injector.get(LocalStorageService);
+    this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
+    this._appConfig = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
+    this.localStorageService = this.injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
 
-    this.httpClient = this.injector.get(HttpClient);
+    this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
     this._uuid = this._appConfig.getConfiguration().uuid;
 
     if (this._appConfig.useRemoteConfiguration()) {

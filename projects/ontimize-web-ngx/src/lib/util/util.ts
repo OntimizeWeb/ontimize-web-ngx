@@ -223,6 +223,16 @@ export class Util {
   }
 
   /**
+   * Returns the a random number
+  */
+  static randomNumber() {
+    const randomArray = new Uint32Array(1);
+    window.crypto.getRandomValues(randomArray);
+    return randomArray[0];
+  }
+
+
+  /**
    * Returns the provided string in lowercase and without accent marks.
    * @param value the text to normalize
    */

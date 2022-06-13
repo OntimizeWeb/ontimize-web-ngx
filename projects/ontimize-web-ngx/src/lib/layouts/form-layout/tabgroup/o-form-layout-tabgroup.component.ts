@@ -391,7 +391,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       urlSegments: paramsObj.urlSegments,
       component: component,
       url: paramsObj.url,
-      id: Math.random().toString(36),
+      id: Util.randomNumber().toString(),
       label: paramsObj.label,
       innerFormsInfo: {}
     };

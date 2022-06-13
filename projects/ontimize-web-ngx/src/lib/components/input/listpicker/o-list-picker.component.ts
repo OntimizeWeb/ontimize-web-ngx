@@ -297,4 +297,12 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     }
     this.stateCtrl.setValue(descriptionValue);
   }
+
+  public selectValue() {
+    const inputEl = document.getElementById('desc_' + this.oattr);
+    if (inputEl) {
+      (inputEl as HTMLInputElement).select();
+    }
+  }
+
 }
