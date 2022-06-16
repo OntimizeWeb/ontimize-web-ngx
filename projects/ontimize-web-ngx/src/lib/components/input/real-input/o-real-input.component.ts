@@ -84,9 +84,14 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   ensureOFormValue(arg: any): void {
     super.ensureOFormValue(arg);
     if (!this.isEmpty() && Util.isDefined(this.pipeArguments)) {
-      this.value.value = this.numberService.getRealValue(this.value.value, this.pipeArguments);
-      if (Util.isDefined(this._fControl)) {
-        this._fControl.setValue(this.value.value, { emitEvent: false, emitModelToViewChange: false });
+      // this.value.value = this.numberService.getRealValue(this.value.value, this.pipeArguments);
+      // if(Util.isDefined(this._fControl)) {
+      //   this._fControl.setValue(this.value.value, { emitEvent: false, emitModelToViewChange: false });
+      // }
+
+      const formattedValue = this.numberService.getRealValue(this.value.value, this.pipeArguments);
+      if(!isNaN(Number(formattedValue))) {
+        this.value.value = formattedValue;
       }
     }
   }
