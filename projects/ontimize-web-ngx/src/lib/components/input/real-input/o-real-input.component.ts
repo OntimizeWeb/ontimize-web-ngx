@@ -11,6 +11,7 @@ import {
   DEFAULT_OUTPUTS_O_INTEGER_INPUT,
   OIntegerInputComponent
 } from '../integer-input/o-integer-input.component';
+import { OFormControl } from '../o-form-control.class';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
@@ -60,6 +61,18 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
   setComponentPipe(): void {
     this.componentPipe = new ORealPipe(this.injector);
+  }
+
+  initialize() {
+    super.initialize();
+    // Override FormControl getValue in order to return the appropriate formatted value
+    (this.getFormControl() as OFormControl).getValue = function () {
+      const formattedValue = this.numberService.getRealValue(this.value.value, this.pipeArguments);
+      if(!isNaN(Number(formattedValue))) {
+        this.value.value = formattedValue;
+      }
+      return this.value.value;
+    };
   }
 
   ngOnInit(): void {
