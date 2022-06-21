@@ -58,7 +58,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
   @ViewChild('countryList', { static: false }) countryList: ElementRef;
   @ViewChild('matInputRef', { read: ElementRef, static: true }) private matInputRef!: ElementRef;
 
-  selectedCountry: Country = {
+  _selectedCountry: Country = {
     areaCodes: undefined,
     dialCode: '',
     htmlId: '',
@@ -68,6 +68,15 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
     placeHolder: '',
     priority: 0,
   };
+
+  set selectedCountry(value: Country) {
+    this._selectedCountry = value;
+    this.placeHolder = this.resolvePlaceholder();
+  }
+
+  get selectedCountry(): Country {
+    return this._selectedCountry;
+  }
 
   allCountries: Array<Country> = [];
 
@@ -86,11 +95,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
     injector: Injector
   ) {
     super(form, elRef, injector);
-  }
-
-  ngOnInit() {
-    this.initialize();
-    this.initializePhoneData();
+    this.initializeCountryData();
   }
 
   initialize(): void {
@@ -99,7 +104,10 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
     if (formControl) {
       const self = this;
       formControl.getValue = function () {
-        return `+${self.selectedCountry.dialCode} ${this.value}`;
+        if (this.value && this.value.length > 0 && self.selectedCountry && self.selectedCountry.dialCode) {
+          return `+${self.selectedCountry.dialCode} ${this.value}`;
+        }
+        return undefined;
       };
     }
   }
@@ -107,7 +115,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
     const createPhoneValidator = (() => {
-      return OValidators.phoneValidator(this.getFormControl(), this.selectedCountry.iso2);
+      return OValidators.phoneValidator(this.getFormControl(), this.getSelectedCountryIso2());
     });
     validators.push(createPhoneValidator);
     return validators;
@@ -118,14 +126,20 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
       this.value = new OFormValue();
     }
     this.ensureOFormValue(value);
-    this.onPhoneNumberChange(value);
+    this.ensurePhoneValue(value);
     this.onChange.emit(value);
   }
 
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
-    const { country, number } = this.getSeparatedValues(val);
+    let { countryDialCode, number } = this.getSeparatedValues(val);
+    let country = this.getCountryByDialCode(countryDialCode);
+    const parsed = this.getParsedNumber(number, country ? country.iso2 : undefined);
+    if (!Util.isDefined(parsed)) {
+      number = undefined;
+      country = undefined;
+    }
+    this.selectedCountry = country;
     this.ensureOFormValue(number);
-    this.autoSelectCountry(country);
     if (this._fControl) {
       this._fControl.setValue(this.value.value, options);
       if (setDirty) {
@@ -143,7 +157,6 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
     this.countryChange.emit(country);
     this.setValue(undefined);
     this.selectedCountry = country;
-    this.placeHolder = this.resolvePlaceholder();
     if (this.matInputRef && this.matInputRef.nativeElement) {
       setTimeout(() => {
         this.matInputRef.nativeElement.focus();
@@ -158,11 +171,11 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
-  /*
-    This is a wrapper method to avoid calling this.ngOnInit() in writeValue().
-    Ref: http://codelyzer.com/rules/no-life-cycle-call/
-  */
-  protected initializePhoneData() {
+  protected getSelectedCountryIso2(): string {
+    return this.selectedCountry ? this.selectedCountry.iso2 : undefined;
+  }
+
+  protected initializeCountryData() {
     this.fetchCountryData();
 
     if (this.countries.length) {
@@ -170,8 +183,8 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
-  protected onPhoneNumberChange(value: any): void {
-    const number = this.getParsedNumber(value, this.selectedCountry.iso2);
+  protected ensurePhoneValue(value: any): void {
+    const number = this.getParsedNumber(value, this.getSelectedCountryIso2());
     if (number) {
       const intlNo = number
         ? this.phoneUtil.format(number, lpn.PhoneNumberFormat.INTERNATIONAL)
@@ -183,33 +196,31 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
-  protected autoSelectCountry(countryDialCode: any): void {
-    if (countryDialCode && countryDialCode !== this.selectedCountry.dialCode) {
-      const newCountry = this.allCountries
+  protected getCountryByDialCode(countryDialCode: any): Country {
+    if (countryDialCode) {
+      return this.allCountries
         .sort((a, b) => {
           return a.priority - b.priority;
         })
         .find((c) => c.dialCode === countryDialCode);
-      if (newCountry) {
-        this.selectedCountry = newCountry;
-        this.placeHolder = this.resolvePlaceholder();
-      }
     }
+    return undefined;
   }
 
-  protected getSeparatedValues(value: any): { country: string, number: string } {
-    let country = ''
+  protected getSeparatedValues(value: any): { countryDialCode: string, number: string } {
+    let countryDialCode = ''
     let number = (value instanceof OFormValue ? value.value : value) || undefined
     if (Util.isDefined(number) && number.startsWith('+')) {
-      country = number.substr(1, number.indexOf(' ') - 1);
-      number = number.substr(country.length + 2);
+      countryDialCode = number.substr(1, number.indexOf(' ') - 1);
+      number = number.substr(countryDialCode.length + 2);
     }
-    return { country, number }
+    return { countryDialCode, number }
   }
 
   protected emitPhoneInputData(intlNo?: string, number?: string): void {
     let phoneInputData: OPhoneInputData = undefined;
-    if (intlNo && number) {
+    const iso2 = this.getSelectedCountryIso2();
+    if (intlNo && number && iso2) {
       phoneInputData = {
         number: this.value.value,
         internationalNumber: intlNo,
@@ -219,7 +230,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
         e164Number: number
           ? this.phoneUtil.format(number, lpn.PhoneNumberFormat.E164)
           : '',
-        countryCode: this.selectedCountry.iso2.toUpperCase(),
+        countryCode: iso2.toUpperCase(),
         dialCode: '+' + this.selectedCountry.dialCode,
       }
     }
@@ -248,7 +259,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
    * @param phoneNumber string
    */
   private removeDialCode(phoneNumber: string): string {
-    const number = this.getParsedNumber(phoneNumber, this.selectedCountry.iso2);
+    const number = this.getParsedNumber(phoneNumber, this.getSelectedCountryIso2());
     phoneNumber = this.phoneUtil.format(
       number,
       lpn.PhoneNumberFormat[this.numberFormat]
