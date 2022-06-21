@@ -1,6 +1,3 @@
-## 8.7.0
-
-
 ## 8.7.0-rc.0 (2022-06-21)
 ### Bug fixes
 * **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
