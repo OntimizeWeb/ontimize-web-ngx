@@ -1,4 +1,4 @@
-export interface ChangeData {
+export interface OPhoneInputData {
 	number?: string;
 	internationalNumber?: string;
 	nationalNumber?: string;
