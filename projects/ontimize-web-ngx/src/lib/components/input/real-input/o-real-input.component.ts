@@ -68,9 +68,9 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     // Override FormControl getValue in order to return the appropriate formatted value
     (this.getFormControl() as OFormControl).getValue = function () {
       if(!isNaN(Number(this.value))) {
-        return Number(this.value.value);
+        return Number(this.value);
       } else {
-        return this.getValue();
+        return this.value;
       }
     };
   }
