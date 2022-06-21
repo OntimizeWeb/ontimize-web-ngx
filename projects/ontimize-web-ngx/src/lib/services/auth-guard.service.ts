@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
 import { OUserInfoService } from '../services/o-user-info.service';
@@ -17,10 +17,10 @@ export class AuthGuardService implements CanActivate {
   protected permissionsService: PermissionsService;
 
   constructor(protected injector: Injector) {
-    this.router = this.injector.get(Router);
-    this.authService = this.injector.get(AuthService);
-    this.oUserInfoService = this.injector.get(OUserInfoService);
-    this.permissionsService = this.injector.get(PermissionsService);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
+    this.oUserInfoService = this.injector.get<OUserInfoService>(OUserInfoService as Type<OUserInfoService>);
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {

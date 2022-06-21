@@ -1,43 +1,33 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-import { AppConfig } from '../../config/app-config';
 import { IPermissionsService } from '../../interfaces/permissions-service.interface';
-import { Config } from '../../types/config.type';
 import { OntimizeEEPermissionsConfig } from '../../types/ontimize-ee-permissions-config.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { AuthService } from '../auth.service';
+import { OntimizeBasePermissionsService } from './ontimize-base-permissions-service.class';
 
 @Injectable()
-export class OntimizeEEPermissionsService implements IPermissionsService {
+export class OntimizeEEPermissionsService extends OntimizeBasePermissionsService implements IPermissionsService {
 
   public static DEFAULT_PERMISSIONS_PATH = '/loadPermissions';
   public static PERMISSIONS_KEY = 'permission';
 
   public path: string = '';
 
-  protected httpClient: HttpClient;
   protected _user: string;
   protected _urlBase: string;
-  protected _appConfig: Config;
-  protected _config: AppConfig;
-
-  protected authService: AuthService;
 
   constructor(protected injector: Injector) {
-    this.httpClient = this.injector.get(HttpClient);
-    this._config = this.injector.get(AppConfig);
-    this._appConfig = this._config.getConfiguration();
-    this.authService = this.injector.get(AuthService);
+    super(injector);
   }
 
   getDefaultServiceConfiguration(permissionsConfig: OntimizeEEPermissionsConfig): any {
     const serviceName: string = permissionsConfig ? permissionsConfig.service : undefined;
 
-    const authService = this.injector.get(AuthService);
+    const authService = this.authService;
     const configuration = this._config.getServiceConfiguration();
 
     let servConfig = {};

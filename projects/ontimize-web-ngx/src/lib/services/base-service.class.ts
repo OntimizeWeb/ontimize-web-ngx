@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injector } from '@angular/core';
+import { Injector, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
 import { map, share } from 'rxjs/operators';
@@ -29,12 +29,12 @@ export class BaseService {
   protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
 
   constructor(protected injector: Injector) {
-    this.httpClient = this.injector.get(HttpClient);
-    this.router = this.injector.get(Router);
-    this._config = this.injector.get(AppConfig);
+    this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this._config = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>);
     this._appConfig = this._config.getConfiguration();
-    this.responseParser = this.injector.get(OntimizeServiceResponseParser);
-    this.authService = this.injector.get(AuthService);
+    this.responseParser = this.injector.get<OntimizeServiceResponseParser>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     this.configureAdapter();
   }
 

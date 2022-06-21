@@ -26,7 +26,6 @@ import { OGridComponentStateClass } from '../../services/state/o-grid-component-
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
-import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
@@ -305,19 +304,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
   public onItemDetailClick(item: OGridItemDirective): void {
-    if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.onClick, item);
-    }
+    this.handleItemClick(item);
   }
 
   public onItemDetailDblClick(item: OGridItemDirective): void {
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.onDoubleClick, item);
-    }
+    this.handleItemDblClick(item);
   }
 
   public ngOnDestroy(): void {
@@ -360,7 +351,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    // queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
     if (this.pageable && Util.isDefined(this.sortColumn)) {
       queryArguments[6] = this.sortColumnOrder ? [this.sortColumnOrder] : this.sortColumnOrder;
     }
@@ -415,10 +405,8 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected parseResponseArray(data: any[], replace?: boolean) {
     let result = data;
     if (this.pageable && !replace) {
-      // dataArray = this.paginationControls ? data : (this.dataArray || []).concat(data);
       result = this.paginationControls ? data : (this.dataResponseArray || []).concat(data);
     } else if (!this.pageable) {
-      // dataArray = data.slice(this.paginationControls ? ((this.queryRows * (this.currentPage + 1)) - this.queryRows) : 0, this.queryRows * (this.currentPage + 1));
       result = data;
     }
     return result;

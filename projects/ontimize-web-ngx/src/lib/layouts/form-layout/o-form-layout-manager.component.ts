@@ -389,7 +389,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       urlSegments: childRoute.url,
       component: childRoute.routeConfig.component,
       url: url,
-      id: Math.random().toString(36),
+      id: Util.randomNumber().toString(),
       label: '',
       innerFormsInfo: {},
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'

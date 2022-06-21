@@ -1,8 +1,6 @@
-import { Component, EventEmitter, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
@@ -79,9 +77,9 @@ export class OAppHeaderComponent {
   constructor(
     protected injector: Injector,
   ) {
-    this.dialogService = this.injector.get(DialogService);
-    this.modulesInfoService = this.injector.get(OModulesInfoService);
-    this.authService = this.injector.get(AuthService);
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.modulesInfoService = this.injector.get<OModulesInfoService>(OModulesInfoService as Type<OModulesInfoService>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
   }
   ngOnInit() {
     if (!this.showStaticTitle) {

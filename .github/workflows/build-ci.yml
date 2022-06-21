@@ -3,11 +3,12 @@ name: Build CI
 on:
   pull_request:
     types: [closed]
-    branches: [8.x.x, 4.x.x]
+    branches: [8.x.x, hotfix/8.*]
     paths: ['projects/ontimize-web-ngx/**']
 
 jobs:
   build:
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -23,16 +24,9 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Node 12.x
-        if: github.base_ref == '8.x.x'
         uses: actions/setup-node@v1
         with:
-          node-version: 12.10.0
-
-      - name: Node 10.x
-        if: github.base_ref == '4.x.x'
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.23.0
+          node-version: 12.13.0
 
       - name: npm install and npm run build
         run: |
