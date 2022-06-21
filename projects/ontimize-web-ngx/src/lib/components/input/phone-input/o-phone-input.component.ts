@@ -6,11 +6,9 @@ import {
   Inject,
   Injector,
   Input,
-  OnChanges,
   OnInit,
   Optional,
   Output,
-  SimpleChanges,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -18,17 +16,21 @@ import { ValidatorFn } from '@angular/forms';
 import { MatSelectChange } from '@angular/material';
 import * as lpn from 'google-libphonenumber';
 
+import { FormValueOptions } from '../../../types/form-value-options.type';
+import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
+import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent
 } from '../../o-form-data-component.class';
+import { OFormControl } from '../o-form-control.class';
 import { CountryCode } from './data/country-code';
 import { CountryISO } from './enums/country-iso.enum';
 import { PhoneNumberFormat } from './enums/phone-number-format.enum';
-import { ChangeData } from './interfaces/change-data';
+import { OPhoneInputData } from './interfaces/change-data';
 import { Country } from './model/country.model';
 
 export const DEFAULT_INPUTS_O_PHONE_INPUT = [
@@ -48,12 +50,13 @@ export const DEFAULT_OUTPUTS_O_PHONE_INPUT = [
   encapsulation: ViewEncapsulation.None,
   providers: [CountryCode]
 })
-export class OPhoneInputComponent extends OFormDataComponent implements OnInit, OnChanges {
+export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
   @Input() countries: Array<string> = [];
-
   @Output() readonly countryChange = new EventEmitter<Country>();
+  @Output() readonly onPhoneDataChange = new EventEmitter<OPhoneInputData>();
 
   @ViewChild('countryList', { static: false }) countryList: ElementRef;
+  @ViewChild('matInputRef', { read: ElementRef, static: true }) private matInputRef!: ElementRef;
 
   selectedCountry: Country = {
     areaCodes: undefined,
@@ -69,15 +72,12 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
   allCountries: Array<Country> = [];
 
   states = CountryISO;
-  propagateChange = (_: ChangeData) => { };
   selectedStates = this.states;
 
   // Has to be 'any' to prevent a need to install @types/google-libphonenumber by the package user...
   protected phoneUtil: any = lpn.PhoneNumberUtil.getInstance();
-  protected phoneNumber = '';
   protected separateDialCode = true;
   protected numberFormat: PhoneNumberFormat = PhoneNumberFormat.International;
-  protected enableAutoCountrySelect = true;
 
   constructor(
     private countryCodeData: CountryCode,
@@ -88,33 +88,74 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
     super(form, elRef, injector);
   }
 
-  get placeHolder(): string {
-    return this.resolvePlaceholder();
-  }
-
-  set placeHolder(value: string) {
-    this.oplaceholder = value;
-  }
-
   ngOnInit() {
-    super.initialize();
+    this.initialize();
     this.initializePhoneData();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  initialize(): void {
+    super.initialize();
+    const formControl = this.getFormControl() as OFormControl;
+    if (formControl) {
+      const self = this;
+      formControl.getValue = function () {
+        return `+${self.selectedCountry.dialCode} ${this.value}`;
+      };
+    }
   }
 
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
-    // Inject phone validator
-
     const createPhoneValidator = (() => {
-      const result = OValidators.phoneValidator(this.getFormControl(), this.selectedCountry)
-      return result
-    })
-
+      return OValidators.phoneValidator(this.getFormControl(), this.selectedCountry.iso2);
+    });
     validators.push(createPhoneValidator);
     return validators;
+  }
+
+  onFormControlChange(value: any): void {
+    if (!this.value) {
+      this.value = new OFormValue();
+    }
+    this.ensureOFormValue(value);
+    this.onPhoneNumberChange(value);
+    this.onChange.emit(value);
+  }
+
+  protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
+    const { country, number } = this.getSeparatedValues(val);
+    this.ensureOFormValue(number);
+    this.autoSelectCountry(country);
+    if (this._fControl) {
+      this._fControl.setValue(this.value.value, options);
+      if (setDirty) {
+        this._fControl.markAsDirty();
+      }
+      if (this._fControl.invalid && !this.form.isInInsertMode()) {
+        this._fControl.markAsTouched();
+      }
+    }
+    this.oldValue = this.value.value;
+  }
+
+  onCountrySelect(value: MatSelectChange) {
+    const country: Country = value.value
+    this.countryChange.emit(country);
+    this.setValue(undefined);
+    this.selectedCountry = country;
+    this.placeHolder = this.resolvePlaceholder();
+    if (this.matInputRef && this.matInputRef.nativeElement) {
+      setTimeout(() => {
+        this.matInputRef.nativeElement.focus();
+      }, 0)
+    }
+  }
+
+  public innerOnBlur(event: any): void {
+    super.innerOnBlur(event);
+    if (this._fControl) {
+      this._fControl.updateValueAndValidity();
+    }
   }
 
   /*
@@ -129,88 +170,47 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
     }
   }
 
-  protected setSelectedCountry(country: Country) {
-    this.selectedCountry = country;
-    this.countryChange.emit(country);
-  }
-
-  public onPhoneNumberChange(): void {
-    let countryCode: string | undefined;
-    // Handle the case where the user sets the value programatically based on a persisted ChangeData obj.
-    if (this.phoneNumber && typeof this.phoneNumber === 'object') {
-      const numberObj: ChangeData = this.phoneNumber;
-      this.phoneNumber = numberObj.number;
-      countryCode = numberObj.countryCode;
-    }
-    countryCode = countryCode || this.selectedCountry.iso2;
-    const number = this.getParsedNumber(this.phoneNumber, countryCode);
-
-    // auto select country based on the extension (and areaCode if needed) (e.g select Canada if number starts with +1 416)
-    if (this.enableAutoCountrySelect) {
-      countryCode =
-        number && number.getCountryCode()
-          ? this.getCountryIsoCode(number.getCountryCode(), number)
-          : this.selectedCountry.iso2;
-      if (countryCode && countryCode !== this.selectedCountry.iso2) {
-        const newCountry = this.allCountries
-          .sort((a, b) => {
-            return a.priority - b.priority;
-          })
-          .find((c) => c.iso2 === countryCode);
-        if (newCountry) {
-          this.selectedCountry = newCountry;
-        }
-      }
-    }
-    countryCode = countryCode ? countryCode : this.selectedCountry.iso2;
-
-    if (!this.value) {
-      // Reason: avoid https://stackoverflow.com/a/54358133/1617590
-      // tslint:disable-next-line: no-null-keyword
-      this.propagateChange(null);
-    } else {
+  protected onPhoneNumberChange(value: any): void {
+    const number = this.getParsedNumber(value, this.selectedCountry.iso2);
+    if (number) {
       const intlNo = number
         ? this.phoneUtil.format(number, lpn.PhoneNumberFormat.INTERNATIONAL)
         : '';
-
-      // parse phoneNumber if separate dial code is needed
-      if (this.separateDialCode && intlNo) {
+      if (intlNo) {
         this.value.value = this.removeDialCode(intlNo);
+        this.emitPhoneInputData(intlNo, number);
       }
-
-      this.propagateChange({
-        number: this.value.value,
-        internationalNumber: intlNo,
-        nationalNumber: number
-          ? this.phoneUtil.format(number, lpn.PhoneNumberFormat.NATIONAL)
-          : '',
-        e164Number: number
-          ? this.phoneUtil.format(number, lpn.PhoneNumberFormat.E164)
-          : '',
-        countryCode: countryCode.toUpperCase(),
-        dialCode: '+' + this.selectedCountry.dialCode,
-      });
     }
   }
 
-  public onCountrySelect(change: MatSelectChange): void {
-    this.setSelectedCountry(change.value);
-
-    if (this.phoneNumber && this.phoneNumber.length > 0) {
-
-      const number = this.getParsedNumber(
-        this.phoneNumber,
-        this.selectedCountry.iso2
-      );
-      const intlNo = number
-        ? this.phoneUtil.format(number, lpn.PhoneNumberFormat.INTERNATIONAL)
-        : '';
-      // parse phoneNumber if separate dial code is needed
-      if (this.separateDialCode && intlNo) {
-        this.value.value = this.removeDialCode(intlNo);
+  protected autoSelectCountry(countryDialCode: any): void {
+    if (countryDialCode && countryDialCode !== this.selectedCountry.dialCode) {
+      const newCountry = this.allCountries
+        .sort((a, b) => {
+          return a.priority - b.priority;
+        })
+        .find((c) => c.dialCode === countryDialCode);
+      if (newCountry) {
+        this.selectedCountry = newCountry;
+        this.placeHolder = this.resolvePlaceholder();
       }
+    }
+  }
 
-      this.propagateChange({
+  protected getSeparatedValues(value: any): { country: string, number: string } {
+    let country = ''
+    let number = (value instanceof OFormValue ? value.value : value) || undefined
+    if (Util.isDefined(number) && number.startsWith('+')) {
+      country = number.substr(1, number.indexOf(' ') - 1);
+      number = number.substr(country.length + 2);
+    }
+    return { country, number }
+  }
+
+  protected emitPhoneInputData(intlNo?: string, number?: string): void {
+    let phoneInputData: OPhoneInputData = undefined;
+    if (intlNo && number) {
+      phoneInputData = {
         number: this.value.value,
         internationalNumber: intlNo,
         nationalNumber: number
@@ -221,60 +221,10 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
           : '',
         countryCode: this.selectedCountry.iso2.toUpperCase(),
         dialCode: '+' + this.selectedCountry.dialCode,
-      });
-    } else {
-      // Reason: avoid https://stackoverflow.com/a/54358133/1617590
-      // tslint:disable-next-line: no-null-keyword
-      this.propagateChange(null);
+      }
     }
-
-    // el.focus();
+    this.onPhoneDataChange.emit(phoneInputData);
   }
-
-  public onInputKeyPress(event: KeyboardEvent): void {
-    const allowedChars = /[0-9\+\-\(\)\ ]/;
-    const allowedCtrlChars = /[axcv]/; // Allows copy-pasting
-    const allowedOtherKeys = [
-      'ArrowLeft',
-      'ArrowUp',
-      'ArrowRight',
-      'ArrowDown',
-      'Home',
-      'End',
-      'Insert',
-      'Delete',
-      'Backspace',
-    ];
-
-    if (
-      !allowedChars.test(event.key) &&
-      !(event.ctrlKey && allowedCtrlChars.test(event.key)) &&
-      !allowedOtherKeys.includes(event.key)
-    ) {
-      event.preventDefault();
-    }
-  }
-
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
-  }
-
-  ensureOFormValue(obj: any): void {
-    super.ensureOFormValue(obj);
-    if (obj === undefined) {
-      this.initializePhoneData();
-    }
-    this.phoneNumber = obj;
-    setTimeout(() => {
-      this.onPhoneNumberChange();
-    }, 1);
-  }
-
-  // getFlagClass(lang: string) {
-  //   let flagName = LocaleCode.getCountryCode(lang);
-  //   flagName = (flagName !== 'en') ? flagName : 'gb';
-  //   return 'flag-icon-' + flagName;
-  // }
 
   /* --------------------------------- Helpers -------------------------------- */
   /**
@@ -390,9 +340,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
   private resolvePlaceholder(): string {
     // If the user defined its own placeholder using that input it will override any country placeholder
     let placeholder = '';
-    if (this.oplaceholder) {
-      placeholder = this.oplaceholder;
-    } else if (this.selectedCountry.placeHolder.length) {
+    if (this.selectedCountry && this.selectedCountry.placeHolder && this.selectedCountry.placeHolder.length > 0) {
       placeholder = this.selectedCountry.placeHolder;
       if (this.separateDialCode) {
         placeholder = this.removeDialCode(placeholder);

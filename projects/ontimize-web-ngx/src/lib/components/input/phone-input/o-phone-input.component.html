@@ -6,7 +6,7 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth" class="icon-field" [appearance]="appearance">
-    <input matInput type="tel" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)=" innerOnFocus($event)"
+    <input #matInputRef matInput type="tel" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired">
     <mat-icon matSuffix [class.mat-disabled]="!enabled" class="svg-icon" svgIcon="ontimize:phone_outline"></mat-icon>
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
