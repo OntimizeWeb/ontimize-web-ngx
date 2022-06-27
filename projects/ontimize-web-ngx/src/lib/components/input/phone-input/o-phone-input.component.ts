@@ -41,6 +41,8 @@ export const DEFAULT_OUTPUTS_O_PHONE_INPUT = [
   ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
+const PHONE_PREFIX = '+'
+
 @Component({
   selector: 'o-phone-input',
   templateUrl: './o-phone-input.component.html',
@@ -110,6 +112,14 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
         return undefined;
       };
     }
+  }
+
+  public getValue(): any {
+    const formControl = this.getFormControl() as OFormControl;
+    if (formControl) {
+      return formControl.getValue();
+    }
+    return super.getValue();
   }
 
   resolveValidators(): ValidatorFn[] {
@@ -210,7 +220,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
   protected getSeparatedValues(value: any): { countryDialCode: string, number: string } {
     let countryDialCode = ''
     let number = (value instanceof OFormValue ? value.value : value) || undefined
-    if (Util.isDefined(number) && number.startsWith('+')) {
+    if (Util.isDefined(number) && number.startsWith(PHONE_PREFIX)) {
       countryDialCode = number.substr(1, number.indexOf(' ') - 1);
       number = number.substr(countryDialCode.length + 2);
     }
@@ -231,7 +241,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
           ? this.phoneUtil.format(number, lpn.PhoneNumberFormat.E164)
           : '',
         countryCode: iso2.toUpperCase(),
-        dialCode: '+' + this.selectedCountry.dialCode,
+        dialCode: PHONE_PREFIX + this.selectedCountry.dialCode,
       }
     }
     this.onPhoneDataChange.emit(phoneInputData);
@@ -264,7 +274,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
       number,
       lpn.PhoneNumberFormat[this.numberFormat]
     );
-    if (phoneNumber.startsWith('+') && this.separateDialCode) {
+    if (phoneNumber.startsWith(PHONE_PREFIX) && this.separateDialCode) {
       phoneNumber = phoneNumber.substr(phoneNumber.indexOf(' ') + 1);
     }
     return phoneNumber;
