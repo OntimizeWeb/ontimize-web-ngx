@@ -1,3 +1,5 @@
+import { OTableComponent } from "../components";
+
 export interface IReportOnDemandService {
-  openReportOnDemand(data: any, service: any, entity: any);
+  openReportOnDemand(table: OTableComponent);
 }

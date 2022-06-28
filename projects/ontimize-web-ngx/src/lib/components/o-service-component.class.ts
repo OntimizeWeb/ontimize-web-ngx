@@ -27,6 +27,10 @@ import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
 
+interface ItemClick {
+  getItemData(): any
+}
+
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
 
@@ -229,6 +233,10 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected dataResponseArray: any[] = [];
   protected quickFilterSubscription: Subscription;
   _pageSizeOptions = Codes.PAGE_SIZE_OPTIONS;
+
+  protected clickTimer;
+  protected clickDelay = 200;
+  protected clickPrevent = false;
 
   constructor(
     injector: Injector,
@@ -831,6 +839,45 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
     }
     return result;
+  }
+
+  handleItemClick(item: ItemClick): void {
+    this.clickTimer = setTimeout(() => {
+      if (!this.clickPrevent) {
+        this.itemClickDone(item);
+      }
+      this.clickPrevent = false;
+    }, this.clickDelay);
+  }
+
+  protected itemClickDone(item: ItemClick): void {
+    if (!this.oenabled) {
+      return;
+    }
+    const data = item.getItemData();
+    if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
+      this.saveDataNavigationInLocalStorage();
+      this.viewDetail(data);
+    }
+    this.onClick.emit(data);
+  }
+
+  handleItemDblClick(item: ItemClick): void {
+    clearTimeout(this.clickTimer);
+    this.clickPrevent = true;
+    this.itemDblClickDone(item);
+  }
+
+  protected itemDblClickDone(item: ItemClick): void {
+    if (!this.oenabled) {
+      return;
+    }
+    const data = item.getItemData();
+    if (Codes.isDoubleClickMode(this.detailMode)) {
+      this.saveDataNavigationInLocalStorage();
+      this.viewDetail(data);
+    }
+    this.onDoubleClick.emit(data);
   }
 
 }

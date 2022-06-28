@@ -26,7 +26,6 @@ import { OGridComponentStateClass } from '../../services/state/o-grid-component-
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
-import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
@@ -305,19 +304,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
   public onItemDetailClick(item: OGridItemDirective): void {
-    if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.onClick, item);
-    }
+    this.handleItemClick(item);
   }
 
   public onItemDetailDblClick(item: OGridItemDirective): void {
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(item.getItemData());
-      ObservableWrapper.callEmit(this.onDoubleClick, item);
-    }
+    this.handleItemDblClick(item);
   }
 
   public ngOnDestroy(): void {

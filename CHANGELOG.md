@@ -1,4 +1,30 @@
 ## 8.7.0
+## Bug fixes
+* **o-integer-input, o-real-input, o-currency-input, o-percent-input**: Fixed bug where setting a new value causes the onchange event to fire twice ([9e2eb672])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e2eb672) Closes[#980](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/980)
+* **o-currency-input**: Fixed the input shows NaN ([e84c4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e84c4ef)) Closes [#957](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/957)
+
+## 8.7.0-rc.0 (2022-06-21)
+### Bug fixes
+* **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
+* **o-table**: Fixed the arrow icon not showing in the calendar popup in `o-table-cell-editor-date` and `o-table-cell-editor-time` ([869a914](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/869a914)) Closes[#949](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/949)
+* **o-table**: Fixing `onClick` and `onDoubleClick` bugs in `AbstractOServiceBaseComponent` ([378b8d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/378b8d7)) Closes[#958](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/958)
+* **AbstractOServiceBaseComponent**: Fixing `enabled` input bug ([061bef9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/061bef9c)) Closes [#959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/959)
+
+## 8.6.1 (2022-06-10)
+### Features
+* **OFormDataComponent**: New attribute `select-all-on-click` ([4ea3a1c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4ea3a1c)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#969](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/969)
+* **O_INPUTS_OPTIONS**: New attribute `selectAllOnClick` in O_INPUTS_OPTIONS InjectionToken ([42d0ed2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42d0ed2))
+
+### Bug fixes
+  * **o-form, o-form-toolbar, o-form-layout-tabgroup**: solving multiple confirmation dialog bug ([825c09e0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/825c09e0)) Closes [#966](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/966)
+
+
+## 8.6.0 (2022-04-06)
+### Features:
+  * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
+  * **o-list**: added *paginator* that provides navigation, typically used with to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
+  * **o-table**:  new CSS class `o-table-editing-cell`, `o-table-editing-row` and `o-table-cell-editor` ([ab2ca6e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab2ca6e)) ([e179c63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e179c63)) Closes [#936](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/936) Closes [#940](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/940)
+
 ### Bug fixes
 * **o-combo**: Fixed that the height is larger than other input component ([b8bbe88](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8bbe88)) Closes [#924](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/924)
 * Solve security hotspots reported by Sonar ([e313003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e313003)) Closes [#923](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/923)
@@ -11,13 +37,12 @@
 * **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
 * **o-table**: Fixed the arrow icon not showing in the calendar popup in `o-table-cell-editor-date` and `o-table-cell-editor-time` ([869a914](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/869a914)) Closes[#949](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/949)
 * **AbstractOServiceBaseComponent**: Fixing `enabled` input bug ([061bef9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/061bef9c)) Closes [#959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/959)
-* **o-currency-input**: Fixed the input shows NaN ([e84c4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e84c4ef)) Closes [#957](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/957)
 
 ### Features:
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
   * **o-list**: added *paginator* that provides navigation, typically used with to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
   * **o-table**:  new CSS class `o-table-editing-cell`, `o-table-editing-row` and `o-table-cell-editor` ([ab2ca6e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab2ca6e)) ([e179c63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e179c63)) Closes [#936](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/936) Closes [#940](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/940)
-  
+
 ### BREAKING CHANGES
 * **o-form**: now the method `goEditMode` has not argument ([fe77e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe77e48))
 * **o-filter-build**: now when `query-on-change = "yes"` the filter query is fired when the form components fire the event `OnValueChanged` instead of `onChange` since with the onChange event unwanted queries were launched ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))

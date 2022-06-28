@@ -483,7 +483,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
   onReportOnDemandClicked(): void {
     if (this.reportOnDemandService) {
-      this.reportOnDemandService.openReportOnDemand(this.table.visibleColumns, this.table.service, this.table.entity);
+      this.reportOnDemandService.openReportOnDemand(this.table);
     } else {
       console.warn("You must have ontimize-web-ngx-report-on-demand installed in your app to use report on demand.")
     }
