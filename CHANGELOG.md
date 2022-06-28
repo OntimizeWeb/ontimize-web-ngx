@@ -1,6 +1,6 @@
 ## 8.7.0
 ## Bug fixes
-* **o-integer-input**: Fixed bug where setting a new value causes the onchange event to fire twice ([9e2eb672])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e2eb672) Closes[#980](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/980)
+* **o-integer-input, o-real-input, o-currency-input, o-percent-input**: Fixed bug where setting a new value causes the onchange event to fire twice ([9e2eb672])(https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e2eb672) Closes[#980](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/980)
 
 ## 8.7.0-rc.0 (2022-06-21)
 ### Bug fixes
