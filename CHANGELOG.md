@@ -1,5 +1,13 @@
 ## 8.7.0
 ### Bug fixes
+* **o-combo**: Fixed that the height is larger than other input component ([b8bbe88](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8bbe88)) Closes [#924](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/924)
+* Solve security hotspots reported by Sonar ([e313003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e313003)) Closes [#923](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/923)
+* **o-real-input, o-percent-input**: Fixing decimal digits validation problem ([8f10f064](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f10f064)) Closes [#925](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/925)
+* **o-list-picker**: Fixed that the search input in dialog does not show correctly ([413a0bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/413a0bf)) Closes [#933](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/933)
+* **o-form**: Fixed that the method `closeDetail` showing the confirm message when the attribute `confirm-exit="no"`([482fb60](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/482fb60))([1d236a0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d236a0))([e6c18ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e6c18ba)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
+* **o-filter-build**:
+  * Fixed that launches as many queries as there are combos and `query-on-change = "yes"`([3050498](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3050498])) Closes [#788](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/788)
+  * new attribute `query-on-change-event-type` ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))
 * **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
 * **o-table**: Fixed the arrow icon not showing in the calendar popup in `o-table-cell-editor-date` and `o-table-cell-editor-time` ([869a914](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/869a914)) Closes[#949](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/949)
 * **AbstractOServiceBaseComponent**: Fixing `enabled` input bug ([061bef9c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/061bef9c)) Closes [#959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/959)
@@ -9,17 +17,7 @@
   * **o-password-input**: added a new atribute `show-password-button` to add the option to show the plain text instead of dots ([d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d4b1cb81ee3cf197dc771bd5229be31e95d7f0fa)) Closes [#798](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/798)
   * **o-list**: added *paginator* that provides navigation, typically used with to `o-table` and `o-grid` component  ([4cdb80c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4cdb80c)) Closes [#861](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/861)
   * **o-table**:  new CSS class `o-table-editing-cell`, `o-table-editing-row` and `o-table-cell-editor` ([ab2ca6e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab2ca6e)) ([e179c63](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e179c63)) Closes [#936](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/936) Closes [#940](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/940)
-
-### Bug fixes
-* **o-combo**: Fixed that the height is larger than other input component ([b8bbe88](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8bbe88)) Closes [#924](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/924)
-* Solve security hotspots reported by Sonar ([e313003](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e313003)) Closes [#923](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/923)
-* **o-real-input, o-percent-input**: Fixing decimal digits validation problem ([8f10f064](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f10f064)) Closes [#925](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/925)
-* **o-list-picker**: Fixed that the search input in dialog does not show correctly ([413a0bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/413a0bf)) Closes [#933](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/933)
-* **o-form**: Fixed that the method `closeDetail` showing the confirm message when the attribute `confirm-exit="no"`([482fb60](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/482fb60))([1d236a0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d236a0))([e6c18ba](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e6c18ba)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
-* **o-filter-build**:
-  * Fixed that launches as many queries as there are combos and `query-on-change = "yes"`([3050498](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3050498])) Closes [#788](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/788)
-  * new attribute `query-on-change-event-type` ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))
-
+  
 ### BREAKING CHANGES
 * **o-form**: now the method `goEditMode` has not argument ([fe77e48](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe77e48))
 * **o-filter-build**: now when `query-on-change = "yes"` the filter query is fired when the form components fire the event `OnValueChanged` instead of `onChange` since with the onChange event unwanted queries were launched ([b779d94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b779d94]))
