@@ -177,7 +177,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
   public innerOnBlur(event: any): void {
     super.innerOnBlur(event);
     if (this._fControl) {
-      this._fControl.updateValueAndValidity();
+      this._fControl.updateValueAndValidity({ emitEvent: false });
     }
   }
 
