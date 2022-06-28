@@ -2,7 +2,10 @@ import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEnca
 import { ThemePalette } from '@angular/material';
 
 import { OFormComponent } from '../../form/o-form.component';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT } from '../../o-form-data-component.class';
+import {
+  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
+} from '../../o-form-data-component.class';
 import { DEFAULT_INPUTS_O_BOOLEAN_FORM_DATA, OBooleanFormDataComponent } from '../o-boolean-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
 
