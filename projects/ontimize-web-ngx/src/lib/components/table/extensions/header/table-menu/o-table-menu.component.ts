@@ -19,10 +19,10 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
-import { IReportOnDemandService } from '../../../../../interfaces/report-on-demand-service.interface';
+import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
 
 import { DialogService } from '../../../../../services/dialog.service';
-import { O_REPORT_ON_DEMAND_SERVICE } from '../../../../../services/factories';
+import { O_REPORT_SERVICE } from '../../../../../services/factories';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OPermissions } from '../../../../../types/o-permissions.type';
@@ -138,7 +138,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     protected dialog: MatDialog,
     protected cd: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent,
-    @Optional() @Inject(O_REPORT_ON_DEMAND_SERVICE) public reportOnDemandService: IReportOnDemandService
+    @Optional() @Inject(O_REPORT_SERVICE) public reportService: IReportService
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
@@ -482,8 +482,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onReportOnDemandClicked(): void {
-    if (this.reportOnDemandService) {
-      this.reportOnDemandService.openReportOnDemand(this.table);
+    if (this.reportService) {
+      this.reportService.openReportOnDemand(this.table);
     } else {
       console.warn("You must have ontimize-web-ngx-report-on-demand installed in your app to use report on demand.")
     }
