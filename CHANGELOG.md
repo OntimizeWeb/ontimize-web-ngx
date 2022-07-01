@@ -1,4 +1,7 @@
 ## 8.7.0
+### Features:
+* New component `o-phone-input` ([c242a8b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c242a8b)) Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
+
 ### Bug fixes
 * **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
 * **o-table**: Fixed the arrow icon not showing in the calendar popup in `o-table-cell-editor-date` and `o-table-cell-editor-time` ([869a914](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/869a914)) Closes[#949](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/949)
