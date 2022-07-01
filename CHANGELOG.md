@@ -2,6 +2,7 @@
 ## Bug fixes
 * **o-integer-input, o-real-input, o-currency-input, o-percent-input**: Fixed bug where setting a new value causes the onchange event to fire twice ([9e2eb672](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e2eb672)) Closes [#980](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/980)
 * **o-currency-input**: Fixed the input shows NaN ([e84c4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e84c4ef)) Closes [#957](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/957)
+* **o-card-menu-layout**: Fixed the card menu items are displayed incorrectly when wrap row ([aa878a7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa878a7)) Closes [#982](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/982)
 
 ## 8.7.0-rc.0 (2022-06-21)
 ### Bug fixes
