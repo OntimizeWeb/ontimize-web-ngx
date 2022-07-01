@@ -11,6 +11,7 @@ import {
   DEFAULT_OUTPUTS_O_INTEGER_INPUT,
   OIntegerInputComponent
 } from '../integer-input/o-integer-input.component';
+import { OFormControl } from '../o-form-control.class';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
@@ -62,6 +63,18 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     this.componentPipe = new ORealPipe(this.injector);
   }
 
+  initialize() {
+    super.initialize();
+    // Override FormControl getValue in order to return the appropriate formatted value
+    (this.getFormControl() as OFormControl).getValue = function () {
+      if(!isNaN(Number(this.value))) {
+        return Number(this.value);
+      } else {
+        return this.value;
+      }
+    };
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.pipeArguments.decimalSeparator = this.decimalSeparator;
@@ -84,9 +97,9 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   ensureOFormValue(arg: any): void {
     super.ensureOFormValue(arg);
     if (!this.isEmpty() && Util.isDefined(this.pipeArguments)) {
-      this.value.value = this.numberService.getRealValue(this.value.value, this.pipeArguments);
-      if (Util.isDefined(this._fControl)) {
-        this._fControl.setValue(this.value.value, { emitEvent: false, emitModelToViewChange: false });
+      const formattedValue = this.numberService.getRealValue(this.value.value, this.pipeArguments);
+      if(!isNaN(Number(formattedValue))) {
+        this.value.value = formattedValue;
       }
     }
   }

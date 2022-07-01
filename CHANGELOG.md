@@ -1,7 +1,13 @@
 ## 8.7.0
 ### Features:
-* New component `o-phone-input` ([c242a8b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c242a8b)) Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
+* New component `o-phone-input` Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
 
+## Bug fixes
+* **o-integer-input, o-real-input, o-currency-input, o-percent-input**: Fixed bug where setting a new value causes the onchange event to fire twice ([9e2eb672](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e2eb672)) Closes [#980](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/980)
+* **o-currency-input**: Fixed the input shows NaN ([e84c4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e84c4ef)) Closes [#957](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/957)
+* **o-card-menu-layout**: Fixed the card menu items are displayed incorrectly when wrap row ([aa878a7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa878a7)) Closes [#982](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/982)
+
+## 8.7.0-rc.0 (2022-06-21)
 ### Bug fixes
 * **o-form**: Fixed the navigation buttons disappear when reloading the page ([439a131](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/439a131)) Closes[#730](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/730)
 * **o-table**: Fixed the arrow icon not showing in the calendar popup in `o-table-cell-editor-date` and `o-table-cell-editor-time` ([869a914](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/869a914)) Closes[#949](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/949)
