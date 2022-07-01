@@ -1,4 +1,4 @@
-## 8.7.0
+## 8.7.0 (2022-07-01)
 ### Features:
 * New component `o-phone-input` Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
 
