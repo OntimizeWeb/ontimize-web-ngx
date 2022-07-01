@@ -1,4 +1,7 @@
 ## 8.7.0
+### Features:
+* New component `o-phone-input` Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
+
 ## Bug fixes
 * **o-integer-input, o-real-input, o-currency-input, o-percent-input**: Fixed bug where setting a new value causes the onchange event to fire twice ([9e2eb672](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e2eb672)) Closes [#980](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/980)
 * **o-currency-input**: Fixed the input shows NaN ([e84c4ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e84c4ef)) Closes [#957](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/957)

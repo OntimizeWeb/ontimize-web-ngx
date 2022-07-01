@@ -15,6 +15,8 @@ export * from './date-range/o-daterange-picker.component';
 export * from './date-range/o-daterange-picker.config';
 export * from './email-input/o-email-input.component';
 export * from './email-input/o-email-input.module';
+export * from './phone-input/o-phone-input.component';
+export * from './phone-input/o-phone-input.module';
 export * from './file-input/index';
 export * from './hour-input/o-hour-input.component';
 export * from './hour-input/o-hour-input.module';
