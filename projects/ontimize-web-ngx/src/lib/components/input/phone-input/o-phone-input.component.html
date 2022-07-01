@@ -13,7 +13,7 @@
     </button>
     <mat-icon matSuffix [class.mat-disabled]="!enabled" class="svg-icon" svgIcon="ontimize:phone_outline"></mat-icon>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-    <mat-error *ngIf="hasError('validatePhoneNumber')" text="{{ 'FORM_VALIDATION.DATERANGE_MIN' | oTranslate }}">
+    <mat-error *ngIf="hasError('validatePhoneNumber')" text="{{ 'FORM_VALIDATION.PHONE_FORMAT' | oTranslate }}">
     </mat-error>
     <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
   </mat-form-field>
