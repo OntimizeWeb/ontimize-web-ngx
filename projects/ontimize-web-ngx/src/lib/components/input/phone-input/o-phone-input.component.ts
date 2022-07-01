@@ -236,15 +236,16 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
 
   protected getCountryByDialCode(countryDialCode: any): Country {
     if (countryDialCode) {
-      return this.allCountries
-        .sort((a, b) => {
-          return a.priority - b.priority;
-        })
-        .find((c) => c.dialCode === countryDialCode);
+      return this.sortCountries().find((c) => c.dialCode === countryDialCode);
     }
     return undefined;
   }
-
+  protected sortCountries(): Country[] {
+    return this.allCountries
+      .sort((a, b) => {
+        return a.priority - b.priority;
+      })
+  }
   protected getSeparatedValues(value: any): { countryDialCode: string, number: string } {
     let countryDialCode = ''
     let number = (value instanceof OFormValue ? value.value : value) || undefined
@@ -303,7 +304,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
       lpn.PhoneNumberFormat[this.numberFormat]
     );
     if (phoneNumber.startsWith(PHONE_PREFIX) && this.separateDialCode) {
-      phoneNumber = phoneNumber.substr(phoneNumber.indexOf(' ') + 1);
+      phoneNumber = phoneNumber.substring(phoneNumber.indexOf(' ') + 1);
     }
     return phoneNumber;
   }
