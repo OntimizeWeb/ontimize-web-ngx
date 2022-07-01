@@ -1,4 +1,19 @@
-.mat-form-phone {
-  padding-right: 5px;
-  padding-top: 2px;
+.o-phone-input {
+  .mat-form-phone {
+    padding-right: 5px;
+  }
+
+  .read-only  {
+    pointer-events: none;
+    .mat-select-arrow-wrapper {
+      visibility: hidden;
+    }
+    .mat-form-field-underline {
+      background-image: none;
+    }
+  }
+
+  .mat-form-field.icon-field {
+    height: 100%;
+  }
 }

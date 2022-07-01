@@ -1,17 +1,17 @@
-<mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-<div [formGroup]="getFormGroup()" class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row">
-  <mat-form-field class="mat-form-phone">
-    <mat-select [value]="selectedCountry" (selectionChange)="onCountrySelect($event)">
+<div [formGroup]="getFormGroup()" fxLayout="row">
+  <mat-form-field class="mat-form-phone" [floatLabel]="floatLabel" [appearance]="appearance" [class.read-only]="isReadOnly">
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+    <mat-select [value]="selectedCountry" (selectionChange)="onCountrySelect($event)" [disabled]="!enabled">
       <mat-option *ngFor="let country of allCountries" [value]="country"> {{country.name}} +{{country.dialCode}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth" class="icon-field" [appearance]="appearance">
-    <input #matInputRef matInput type="tel" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)="innerOnFocus($event)"
-      (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired">
-    <mat-icon matSuffix [class.mat-disabled]="!enabled" class="svg-icon" svgIcon="ontimize:phone_outline"></mat-icon>
+    <input #matInputRef matInput type="tel" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired">
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
+    <mat-icon matSuffix [class.mat-disabled]="!enabled" class="svg-icon" svgIcon="ontimize:phone_outline"></mat-icon>
     <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
     <mat-error *ngIf="hasError('validatePhoneNumber')" text="{{ 'FORM_VALIDATION.DATERANGE_MIN' | oTranslate }}">
     </mat-error>

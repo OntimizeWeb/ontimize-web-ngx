@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -17,6 +18,7 @@ import { MatSelectChange } from '@angular/material';
 import * as lpn from 'google-libphonenumber';
 
 import { FormValueOptions } from '../../../types/form-value-options.type';
+import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
@@ -50,9 +52,12 @@ const PHONE_PREFIX = '+'
   inputs: DEFAULT_INPUTS_O_PHONE_INPUT,
   outputs: DEFAULT_OUTPUTS_O_PHONE_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [CountryCode]
+  providers: [CountryCode],
+  host: {
+    '[class.o-phone-input]': 'true'
+  }
 })
-export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
+export class OPhoneInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
   @Input() countries: Array<string> = [];
   @Output() readonly countryChange = new EventEmitter<Country>();
   @Output() readonly onPhoneDataChange = new EventEmitter<OPhoneInputData>();
@@ -111,6 +116,29 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit {
         }
         return undefined;
       };
+    }
+  }
+
+  public ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    if (this.oInputsOptions.iconColor === Codes.O_INPUTS_OPTIONS_COLOR_ACCENT) {
+      const matFormFieldEL = this.elRef.nativeElement.getElementsByTagName('mat-form-field')[1];
+      if (Util.isDefined(matFormFieldEL)) {
+        matFormFieldEL.classList.add('accent');
+      }
+    }
+  }
+
+  protected addOntimizeCustomAppearanceClass(): void {
+    try {
+      if (this.elRef) {
+        const matFormFieldEl = this.elRef.nativeElement.getElementsByTagName('mat-form-field');
+        if (matFormFieldEl && matFormFieldEl.item(1)) {
+          matFormFieldEl.item(1).classList.add('mat-form-field-appearance-ontimize');
+        }
+      }
+    } catch (e) {
+      //
     }
   }
 
