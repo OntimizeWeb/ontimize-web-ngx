@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx",
-  "version": "8.7.0-rc.0",
+  "version": "8.7.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -65,6 +65,7 @@
     "ts-node": "~7.0.0",
     "tsickle": "~0.37.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.5.3"
+    "typescript": "~3.5.3",
+    "google-libphonenumber": "^3.2.3"
   }
 }

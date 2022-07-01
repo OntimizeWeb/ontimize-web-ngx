@@ -4,7 +4,7 @@ import { AppConfig } from '../config/app-config';
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
-import { IReportOnDemandService } from '../interfaces/report-on-demand-service.interface';
+import { IReportService } from '../interfaces/report-on-demand-service.interface';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { OntimizeAuthService } from './o-auth.service';
@@ -56,7 +56,7 @@ export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication se
 */
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
 
-export const O_REPORT_ON_DEMAND_SERVICE = new InjectionToken<IReportOnDemandService>('Report on demand service');
+export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report service');
 
 export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
 

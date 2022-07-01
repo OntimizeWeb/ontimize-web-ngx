@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "8.7.0-rc.0",
+  "version": "8.7.0",
   "description": "Ontimize Web framework using Angular 8",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -49,7 +49,8 @@
     "hammerjs": "~2.0.8",
     "rxjs": "~6.4.0",
     "tslib": "~1.10.0",
-    "zone.js": "0.9.1"
+    "zone.js": "0.9.1",
+    "google-libphonenumber": "^3.2.3"
   },
   "dependencies": {
     "@ngx-translate/core": "~12.1.2",
@@ -57,6 +58,7 @@
     "angular-resizable-element": "3.3.4",
     "moment": "2.24.0",
     "ngx-material-timepicker": "5.4.3",
-    "reflect-metadata": "0.1.13"
+    "reflect-metadata": "0.1.13",
+    "google-libphonenumber": "^3.2.3"
   }
 }

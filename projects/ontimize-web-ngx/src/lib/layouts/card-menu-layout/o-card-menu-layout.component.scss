@@ -1,9 +1,13 @@
 .o-menu-layout {
-  display: block;
-  top: 50%;
-  transform: translateY(-50%);
   position: relative;
   width: 100%;
+
+  .scrolling {
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    overflow-y: scroll;
+  }
 
   .o-card-menu-item {
     height: 45%;
@@ -16,8 +20,5 @@
       max-height: 250px;
     }
   }
-  @media screen and (max-width: 960px) {
-    top: auto;
-    transform: none;
-  }
+
 }

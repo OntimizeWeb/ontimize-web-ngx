@@ -143,7 +143,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     this.setPipeValue();
     const formControl: FormControl = this.getControl();
     if (formControl) {
-      formControl.updateValueAndValidity();
+      formControl.updateValueAndValidity({ emitEvent: false });
     }
     super.innerOnBlur(event);
   }
