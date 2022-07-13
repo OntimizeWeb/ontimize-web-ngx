@@ -2,6 +2,6 @@ import { Observable } from 'rxjs';
 
 export interface IExportService {
   getDefaultServiceConfiguration(serviceName?: string): any;
-  configureService(config: any, modeAll?: boolean): void;
+  configureService(config: any): void;
   exportData(data: any, format: string): Observable<any>;
 }

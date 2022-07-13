@@ -10,7 +10,6 @@ import { OntimizeExportService } from '../../../../../services/ontimize/ontimize
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OTableExportData } from '../../../../../types/table/o-table-export-data.type';
-import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
@@ -73,7 +72,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     }
     this.exportService = this.injector.get(loadingService);
     const serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
-    this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
+    this.exportService.configureService(serviceCfg);
   }
 
   export(exportType: string, button?: any): void {
