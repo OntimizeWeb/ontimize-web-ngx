@@ -20,7 +20,7 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
     this.exportPath = this.injector.get<AppConfig>(AppConfig).getExportPath();
   }
 
-  public configureService(config: any, modeAll = false): void {
+  public configureService(config: any): void {
     super.configureService(config);
   }
 

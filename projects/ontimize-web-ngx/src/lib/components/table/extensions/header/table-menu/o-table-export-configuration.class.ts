@@ -4,10 +4,11 @@ export class OTableExportConfiguration {
   sqlTypes: { [columnId: string]: number; };
   service: string;
   serviceType: string;
-  data?: any[];
   filter?: object;
-  mode: string;
   entity: string;
   visibleButtons: string;
   options?: any;
+  advQuery: boolean = false;
+  offset?: number = -1;
+  pageSize?: number = 25;
 }

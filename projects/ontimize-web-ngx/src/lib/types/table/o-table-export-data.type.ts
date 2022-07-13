@@ -7,7 +7,7 @@ export type OTableExportData = {
   advQuery: boolean;
   excelColumns: { [columnId: string]: string; };
   columnTitles: { [columnId: string]: string; };
-  columnTypes?: Map<string, object>;
+  columnTypes?: { cellNumber?: string, styleId?: string };
   styles: { styleId?: string, style?: OTableExportColumnStyle };
   columnStyles: { columnId?: string, styleId?: string };
   rowStyles?: { rowId?: string, styleId?: string };

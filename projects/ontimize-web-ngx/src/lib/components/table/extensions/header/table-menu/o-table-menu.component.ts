@@ -325,20 +325,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     colsNotIncluded.push(Codes.NAME_COLUMN_EXPANDABLE);
 
     // Table data/filters
-    switch (this.table.exportMode) {
-      case Codes.EXPORT_MODE_ALL:
-        exportCnfg.filter = this.table.getComponentFilter();
-        break;
-      case Codes.EXPORT_MODE_LOCAL:
-        exportCnfg.data = this.table.getAllRenderedValues();
-        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
-        break;
-      default:
-        exportCnfg.data = this.table.getRenderedValue();
-        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
-        break;
-    }
-    exportCnfg.mode = this.table.exportMode;
+    exportCnfg.filter = this.table.getComponentFilter();
+
     exportCnfg.entity = this.table.entity;
 
     // Table columns
@@ -357,6 +345,12 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     exportCnfg.serviceType = this.table.exportServiceType;
     exportCnfg.visibleButtons = this.table.visibleExportDialogButtons;
     exportCnfg.options = this.table.exportOptsTemplate;
+    if (this.table.pageable) {
+      const currentPage = Util.isDefined(this.table.currentPage) ? this.table.currentPage : 0;
+      exportCnfg.advQuery = true;
+      exportCnfg.offset = currentPage * this.table.queryRows;
+      exportCnfg.pageSize = this.table.queryRows;
+    }
 
     this.dialog.open(OTableExportDialogComponent, {
       data: exportCnfg,
