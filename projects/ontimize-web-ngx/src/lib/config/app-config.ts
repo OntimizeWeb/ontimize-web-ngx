@@ -97,4 +97,19 @@ export class AppConfig {
     return result;
   }
 
+  public useExportConfiguration(): boolean {
+    return Util.isDefined(this._config.exportConfiguration);
+  }
+
+  public getExportPath() {
+    let result: string;
+    const existsRemoteConf = this.useExportConfiguration();
+    if (existsRemoteConf && Util.isDefined(this._config.exportConfiguration.path)) {
+      result = this._config.exportConfiguration.path;
+    } else {
+      result = this._config.apiEndpoint + '/export';
+    }
+    return result;
+  }
+
 }

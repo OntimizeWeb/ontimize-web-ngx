@@ -1,3 +1,4 @@
+import { OExportConfiguration } from './export-configuration.type';
 import { MenuRootItem } from './menu-root-item.type';
 import { OntimizeEEPermissionsConfig } from './ontimize-ee-permissions-config.type';
 import { OntimizePermissionsConfig } from './ontimize-permissions-config.type';
@@ -60,4 +61,6 @@ export type Config = {
 
   // permissionsServiceType [ undefined | '' | class ]: The permissions service type used (Ontimize REST standart 'OntimizePermissions', Ontimize REST JEE 'OntimizeEEPermissions' or custom implementation) in the whole application. By default 'OntimizePermissions'.
   permissionsServiceType?: any;
+
+  exportConfiguration?: OExportConfiguration
 };
