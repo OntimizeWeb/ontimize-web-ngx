@@ -9,8 +9,8 @@ import { OntimizeExportServiceProvider } from '../../../../../services/factories
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { OTableExportData } from '../../../../../types/table/o-table-export-data.type';
 import { Codes } from '../../../../../util/codes';
-import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
@@ -77,20 +77,29 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   }
 
   export(exportType: string, button?: any): void {
+
     if (button) {
       button.disabled = true;
     }
-    const exportData = {
-      data: this.config.data,
-      columns: this.config.columns,
-      columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes,
-      filter: this.config.filter
+
+    const exportData: OTableExportData = {
+      queryParam: {
+        columns: this.config.columns,
+        sqltypes: this.config.sqlTypes
+      },
+      service: 'CustomerService',
+      dao: this.config.entity,
+      advQuery: false,
+      excelColumns: this.parseExcelColumns(this.config.columns),
+      columnTitles: this.config.columnNames,
+      styles: {},
+      columnStyles: {},
+      rowStyles: {},
+      cellStyles: {}
     };
 
-    this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.dialogRef.close(true);
-    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe(
+    this.exportService.exportData(exportData, exportType).subscribe(
       res => {
         this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
       },
@@ -100,19 +109,12 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  proccessExportData(data: object[], sqlTypes: object): void {
-    // Parse boolean
-    Object.keys(sqlTypes).forEach(key => {
-      if (SQLTypes.BOOLEAN === sqlTypes[key]) {
-        const yes = this.translateService.get('YES');
-        const no = this.translateService.get('NO');
-        data.forEach(row => {
-          if (row[key]) {
-            row[key] = Util.parseBoolean(row[key]) ? yes : no;
-          }
-        });
-      }
+  parseExcelColumns(columns: any[]): { [key: string]: string } {
+    let obj = {};
+    columns.forEach((column: string) => {
+      obj[column] = {};
     });
+    return obj
   }
 
   isButtonVisible(btn: string): boolean {
