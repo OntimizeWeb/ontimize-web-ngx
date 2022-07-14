@@ -1,7 +1,18 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Injector, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Injector,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  Type,
+  ViewChild
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { InputConverter } from '../../../../../decorators/input-converter';
 
+import { InputConverter } from '../../../../../decorators/input-converter';
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { DialogService } from '../../../../../services/dialog.service';
@@ -85,7 +96,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'service';
-    this.dialogService = injector.get(DialogService);
+    this.dialogService = injector.get<DialogService>(DialogService as Type<DialogService>);
     this.setComponentPipe();
   }
 

@@ -6,11 +6,16 @@
   <o-table-option #columnsVisibilityButtonOption *ngIf="showColumnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()"
     label="TABLE.BUTTONS.COLVIS"></o-table-option>
 
-  <mat-divider *ngIf="showSelectAllCheckbox || showExportButton || showColumnsVisibilityButton"></mat-divider>
+  <o-table-option (onClick)="onReportOnDemandClicked()" label="TABLE.BUTTONS.REPORT_ON_DEMAND" *ngIf="showReportOnDemandButton"></o-table-option>
+
+
+  <mat-divider *ngIf="showSelectAllCheckbox || showExportButton || showColumnsVisibilityButton || showReportOnDemandButton"></mat-divider>
 
   <o-table-option #columnsGroupByOption *ngIf="showGroupByButton" (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
 
+
   <o-table-option #ResetWidthOption *ngIf="showResetWidthButton" (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
+
 
   <button type="button" #filterMenuButton *ngIf="showFilterMenu" mat-menu-item [matMenuTriggerFor]="filterMenu">{{
     'TABLE.BUTTONS.FILTER' | oTranslate }}</button>

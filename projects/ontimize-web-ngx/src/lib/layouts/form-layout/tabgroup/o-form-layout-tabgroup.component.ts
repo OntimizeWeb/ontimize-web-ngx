@@ -21,9 +21,11 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
-import { ONavigationItem } from '../../../services/navigation.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
-import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
+import {
+  FormLayoutCloseDetailOptions,
+  FormLayoutDetailComponentData
+} from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
@@ -228,7 +230,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.previousSelectedIndex = this.tabGroup.selectedIndex;
   }
 
-  closeTab(index: number, options?: any) {
+  closeTab(index: number, options?: FormLayoutCloseDetailOptions) {
     if (!this.formLayoutManager) {
       return;
     }
@@ -244,10 +246,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         });
       }
     }));
-    if (Util.isDefined(options) && Util.isDefined(options.exitWithoutConfirmation) && options.exitWithoutConfirmation) {
-      onCloseTabAccepted.emit(true);
-    }
-    else if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData)) {
+
+    if (Util.isDefined(tabData) && this.formLayoutManager.hasToConfirmExit(tabData, options)) {
       this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
         onCloseTabAccepted.emit(res);
       });
@@ -320,17 +320,17 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   getDataToStore(): any {
-    const tabsData = [];
-    this.data.forEach((data: FormLayoutDetailComponentData) => {
-      tabsData.push({
+    // Issue #884 avoid storing insertionMode tabs
+    const tabsData = this.data
+      .filter((data: FormLayoutDetailComponentData) => !data.insertionMode)
+      .map((data: FormLayoutDetailComponentData) => ({
         params: data.params,
         queryParams: data.queryParams,
         urlSegments: data.urlSegments,
         url: data.url,
         label: data.label,
         insertionMode: data.insertionMode
-      });
-    });
+      }));
     return {
       tabsData: tabsData,
       selectedIndex: this.tabGroup.selectedIndex
@@ -346,7 +346,10 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       return;
     }
 
-    if (this.state.tabsData.length >= 1) {
+    // Issue #884 ensuring that a insertion mode tab that might be previously stored wont be created
+    this.state.tabsData = this.state.tabsData.filter(tabData=> !tabData.insertionMode)
+
+    if (this.state.tabsData.length >= 1 && (this.state.tabsData[0].url || '').length > 0) {
       this.showLoading.next(true);
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
@@ -388,7 +391,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       urlSegments: paramsObj.urlSegments,
       component: component,
       url: paramsObj.url,
-      id: Math.random().toString(36),
+      id: Util.randomNumber().toString(),
       label: paramsObj.label,
       innerFormsInfo: {}
     };
@@ -408,7 +411,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     this.addTab(detail);
   }
 
-  closeDetail(options?: any) {
+  closeDetail(options?: FormLayoutCloseDetailOptions) {
     this.closeTab(this.tabGroup.selectedIndex - 1, options);
   }
 

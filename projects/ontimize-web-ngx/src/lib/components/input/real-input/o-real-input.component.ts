@@ -3,9 +3,15 @@ import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
+import { NumberService } from '../../../services/number.service';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { DEFAULT_INPUTS_O_INTEGER_INPUT, DEFAULT_OUTPUTS_O_INTEGER_INPUT, OIntegerInputComponent } from '../integer-input/o-integer-input.component';
+import {
+  DEFAULT_INPUTS_O_INTEGER_INPUT,
+  DEFAULT_OUTPUTS_O_INTEGER_INPUT,
+  OIntegerInputComponent
+} from '../integer-input/o-integer-input.component';
+import { OFormControl } from '../o-form-control.class';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
@@ -21,7 +27,6 @@ export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
 @Component({
   selector: 'o-real-input',
   templateUrl: './o-real-input.component.html',
-  styleUrls: ['./o-real-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_REAL_INPUT,
   outputs: DEFAULT_OUTPUTS_O_REAL_INPUT,
   encapsulation: ViewEncapsulation.None
@@ -42,6 +47,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
 
   protected decimalSeparator: string;
   protected pipeArguments: IRealPipeArgument;
+  protected numberService: NumberService;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -50,10 +56,23 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   ) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'FLOAT';
+    this.numberService = this.injector.get(NumberService);
   }
 
   setComponentPipe(): void {
     this.componentPipe = new ORealPipe(this.injector);
+  }
+
+  initialize() {
+    super.initialize();
+    // Override FormControl getValue in order to return the appropriate formatted value
+    (this.getFormControl() as OFormControl).getValue = function () {
+      if(!isNaN(Number(this.value))) {
+        return Number(this.value);
+      } else {
+        return this.value;
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -62,6 +81,9 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     this.pipeArguments.minDecimalDigits = this.minDecimalDigits;
     this.pipeArguments.maxDecimalDigits = this.maxDecimalDigits;
     this.pipeArguments.truncate = false;
+    if (!this.isEmpty()) {
+      this.ensureOFormValue(this.value);
+    }
   }
 
   resolveValidators(): ValidatorFn[] {
@@ -70,6 +92,16 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
       validators.push(this.maxDecimalDigitsValidator.bind(this));
     }
     return validators;
+  }
+
+  ensureOFormValue(arg: any): void {
+    super.ensureOFormValue(arg);
+    if (!this.isEmpty() && Util.isDefined(this.pipeArguments)) {
+      const formattedValue = this.numberService.getRealValue(this.value.value, this.pipeArguments);
+      if(!isNaN(Number(formattedValue))) {
+        this.value.value = formattedValue;
+      }
+    }
   }
 
   protected maxDecimalDigitsValidator(control: FormControl): ValidationErrors {

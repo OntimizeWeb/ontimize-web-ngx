@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+
 import { InputConverter } from '../../../decorators/input-converter';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../pipes/o-percentage.pipe';
 import { Util } from '../../../util/util';
@@ -21,7 +22,6 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
 @Component({
   selector: 'o-percent-input',
   templateUrl: './o-percent-input.component.html',
-  styleUrls: ['./o-percent-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_PERCENT_INPUT,
   outputs: DEFAULT_OUTPUTS_O_PERCENT_INPUT,
   encapsulation: ViewEncapsulation.None

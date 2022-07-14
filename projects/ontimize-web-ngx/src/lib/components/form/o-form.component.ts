@@ -8,6 +8,7 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  Type,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -27,6 +28,7 @@ import { NavigationService, ONavigationItem } from '../../services/navigation.se
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
@@ -332,10 +334,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formCache = new OFormCacheClass(this);
     this.formNavigation = new OFormNavigationClass(this.injector, this, this.router, this.actRoute);
 
-    this.dialogService = injector.get(DialogService);
-    this.navigationService = injector.get(NavigationService);
-    this.snackBarService = injector.get(SnackBarService);
-    this.permissionsService = this.injector.get(PermissionsService);
+    this.dialogService = injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.navigationService = injector.get<NavigationService>(NavigationService as Type<NavigationService>);
+    this.snackBarService = injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
 
     const self = this;
     this.reloadStream = combineLatest([
@@ -566,12 +568,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   executeToolbarAction(action: string, options?: any) {
     switch (action) {
-      case Codes.BACK_ACTION: this.back(); break;
+      case Codes.BACK_ACTION: this.back(options); break;
       case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break;
       case Codes.RELOAD_ACTION: this.reload(true); break;
       case Codes.GO_INSERT_ACTION: this.goInsertMode(options); break;
       case Codes.INSERT_ACTION: this.insert(); break;
-      case Codes.GO_EDIT_ACTION: this.goEditMode(options); break;
+      case Codes.GO_EDIT_ACTION: this.goEditMode(); break;
       case Codes.EDIT_ACTION: this.update(); break;
       case Codes.UNDO_LAST_CHANGE_ACTION: this.undo(); break;
       case Codes.DELETE_ACTION: return this.delete();
@@ -845,9 +847,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /**
    * Navigate back
    */
-  back() {
-    const options = { ignoreNavigation: this.ignoreDefaultNavigation };
-    this.formNavigation.navigateBack(options);
+  back(options?: any) {
+    const allOptions = Object.assign(options || {}, { ignoreNavigation: this.ignoreDefaultNavigation });
+    this.formNavigation.navigateBack(allOptions);
   }
 
   /**
@@ -912,8 +914,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   _clearAndCloseFormAfterInsert() {
-    const exitWithoutConfirmation: {} = { 'exitWithoutConfirmation': true };
-    this.closeDetail(exitWithoutConfirmation);
+    const closeOpts: FormLayoutCloseDetailOptions = { exitWithoutConfirmation: true };
+    this.closeDetail(closeOpts);
   }
 
   /**
@@ -949,7 +951,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self._stayInRecordAfterInsert(resp);
       } else if (self.afterInsertMode === 'new') {
         this._clearFormAfterInsert();
-      }else if (self.afterInsertMode === 'close') {
+      } else if (self.afterInsertMode === 'close') {
         this._clearAndCloseFormAfterInsert();
       } else {
         self.closeDetail();
@@ -961,17 +963,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Navigates to 'edit' mode
-   * @deprecated Use `goEditMode(options?: any)` instead
+   * @deprecated Use `goEditMode()` instead
    */
-  _goEditMode(options?: any) {
+  _goEditMode() {
     console.warn('Method `OFormComponent._goEditMode` is deprecated and will be removed in the furute. Use `goEditMode` instead');
-    this.goEditMode(options);
+    this.goEditMode();
   }
 
   /**
    * Navigates to 'edit' mode
    */
-  goEditMode(options?: any) {
+  goEditMode() {
     this.formNavigation.goEditMode();
   }
 
@@ -1445,9 +1447,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   undoKeyboardPressed() {
-    this.formCache.undoLastChange({
-      keyboardEvent: true
-    });
+    this.formCache.undoLastChange();
   }
 
   getFormToolbar(): OFormToolbarComponent {
@@ -1576,7 +1576,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getFieldReferences(attrs: string[]): IFormDataComponentHash {
     const arr: IFormDataComponentHash = {};
     const self = this;
-    attrs.forEach((key, index) => {
+    attrs.forEach((key) => {
       arr[key] = self.getFieldReference(key);
     });
     return arr;

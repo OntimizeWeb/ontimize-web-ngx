@@ -7,8 +7,8 @@ div.icon-btn {
   }
 }
 
-$suffix-size: 24;
-$width24: $suffix-size * 1px;
+$suffix-size: 20px;
+$width24: 24px;
 
 .o-tooltip.mat-tooltip {
   &.after,
@@ -68,16 +68,14 @@ $width24: $suffix-size * 1px;
         display: inherit;
 
         .mat-icon {
-          width: 20px;
-          height: 20px;
-          line-height: 20px;
+          height: $suffix-size;
+          line-height: $suffix-size;
         }
 
         .mat-icon-button {
-          line-height: $width24;
+          line-height: $suffix-size;
           display: block;
-          width: $width24;
-          height: $width24;
+          height: $suffix-size;
         }
       }
     }
@@ -107,8 +105,7 @@ $width24: $suffix-size * 1px;
       .icon-btn,
       .mat-icon-button,
       .mat-icon:not([svgicon]) {
-        width: $width24;
-        height: $width24;
+        height: $suffix-size;
       }
 
       .svg-icon > svg {

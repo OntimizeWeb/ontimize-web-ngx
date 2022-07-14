@@ -1,5 +1,5 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-boolean" [formGroup]="formGroup">
+  <div class="o-table-cell-editor-boolean o-table-cell-editor" [formGroup]="formGroup">
     <mat-checkbox #checkbox (click)="$event.stopPropagation()" (change)="onChange($event)" [indeterminate]="indeterminate"
       [formControl]="formControl" [class.hidden-checkbox]="autoCommit">
     </mat-checkbox>
