@@ -1,0 +1,18 @@
+<button mat-button class="mat-stroked-button" [matMenuTriggerFor]="filterMenu">
+  {{'FILTER' | oTranslate}}
+  <mat-icon>expand_more</mat-icon>
+</button>
+<mat-menu #filterMenu="matMenu">
+  <button type="button" mat-menu-item (click)="onFilterClicked()" oFilterBuilderQuery>
+    {{ 'FILTERBUILDER.BUTTONS.FILTER' | oTranslate }}
+  </button>
+  <button type="button" mat-menu-item (click)="onStoreFilterClicked()">
+    {{ 'FILTERBUILDER.BUTTONS.FILTER_SAVE' | oTranslate }}
+  </button>
+  <button type="button" mat-menu-item (click)="onLoadFilterClicked()">
+    {{ 'FILTERBUILDER.BUTTONS.FILTER_LOAD' | oTranslate}}
+  </button>
+  <button type="button" mat-menu-item (click)="onClearFilterClicked()">
+    {{ 'FILTERBUILDER.BUTTONS.FILTER_CLEAR' | oTranslate}}
+  </button>
+</mat-menu>
