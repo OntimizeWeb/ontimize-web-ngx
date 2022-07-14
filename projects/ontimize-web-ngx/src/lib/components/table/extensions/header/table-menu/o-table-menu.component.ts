@@ -16,12 +16,9 @@ import {
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { appInitializerFactory } from '../../../../../config/o-providers';
-
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
-
 import { DialogService } from '../../../../../services/dialog.service';
 import { O_REPORT_SERVICE } from '../../../../../services/factories';
 import { SnackBarService } from '../../../../../services/snackbar.service';
@@ -43,6 +40,8 @@ import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-ta
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 import { OTableExportConfiguration } from './o-table-export-configuration.class';
+
+
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
