@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -7,11 +7,13 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IFilterBuilderCmpTarget } from '../../interfaces/filter-builder-component-target.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
+import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
+import { AbstractOServiceComponent } from '../o-service-component.class';
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.
@@ -50,7 +52,7 @@ export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
 /**
  * The OFilterBuilderComponent.
  */
-export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit {
+export class OFilterBuilderComponent extends AbstractOServiceComponent<OFilterBuilderComponentStateService> implements AfterViewInit, OnDestroy, OnInit {
 
   public onFilter: EventEmitter<any> = new EventEmitter<any>();
   public onClear: EventEmitter<any> = new EventEmitter<any>();
@@ -70,8 +72,11 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   protected subscriptions: Subscription = new Subscription();
 
   constructor(
+    injector: Injector, elRef: ElementRef<any>,
     @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent
-  ) { }
+  ) {
+    super(injector, elRef, form)
+  }
 
   ngOnInit(): void {
     this.initialize();
