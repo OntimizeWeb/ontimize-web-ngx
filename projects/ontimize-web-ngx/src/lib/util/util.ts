@@ -96,7 +96,7 @@ export class Util {
     return false;
   }
 
-  static isObjectEmtpy(obj: object): boolean {
+  static isObjectEmpty(obj: object): boolean {
     return typeof obj === 'object' && Object.keys(obj).length === 0;
   }
 
