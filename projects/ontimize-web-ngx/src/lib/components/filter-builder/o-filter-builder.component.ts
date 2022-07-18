@@ -9,6 +9,7 @@ import { IFormDataComponent } from '../../interfaces/form-data-component.interfa
 import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
+import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
@@ -198,6 +199,22 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
       formComponents[attr].setValue(void 0);
     });
     this.onClear.emit();
+  }
+
+  getFilterAttrsWithValue() {
+    return this.filterComponents.
+      filter((elem: IFilterBuilderCmpTarget) => Util.isDefined(this.form.getComponents()[elem.formComponentAttr].getValue())).
+      map(
+        (elem: IFilterBuilderCmpTarget) => {
+          return { attr: elem.formComponentAttr, value: this.form.getComponents()[elem.formComponentAttr].getValue() };
+        }
+      );
+  }
+
+  setFilterValues(filterBuilderValues: OFilterBuilderValues[]) {
+    filterBuilderValues.forEach((filterBuilderValue: OFilterBuilderValues) => {
+      this.form.getComponents()[filterBuilderValue.attr].setValue(filterBuilderValue.value)
+    })
   }
 
   /**

@@ -8,6 +8,7 @@ import { OColumnValueFilter } from '../../types/table/o-column-value-filter.type
 import { DefaultComponentStateClass } from './o-component-state.class';
 import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
+import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 
 export class OTableComponentStateClass extends DefaultComponentStateClass {
   // sort
@@ -36,6 +37,15 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   // stored filters and configurations
   protected 'user-stored-filters': OTableFiltersStatus[];
   protected 'user-stored-configurations': OTableConfiguration[];
+  // stored filters builder values
+  protected 'filter-builder-values': OFilterBuilderValues[];
+
+  public get filterBuilderValues(): OFilterBuilderValues[] {
+    return this['filter-builder-values'];
+  }
+  public set filterBuilderValues(value: OFilterBuilderValues[]) {
+    this['filter-builder-values'] = value;
+  }
 
   get selectColumnVisible(): boolean {
     return this['select-column-visible'];
@@ -139,6 +149,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
       this.columnValueFilters = filter['column-value-filters'];
       this.quickFilterValue = filter['filter'];
       this.filterCaseSensitive = filter['filter-case-sensitive'];
+      this.filterBuilderValues = filter['filter-builder-values'];
       this.oColumns = filter['oColumns'];
     }
   }

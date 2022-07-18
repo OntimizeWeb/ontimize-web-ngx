@@ -2529,6 +2529,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }
       });
     }
+
+    if (this.filterBuilder && Util.isDefined(storage.filterBuilderValues)) {
+      this.filterBuilder.setFilterValues(storage.filterBuilderValues);
+      this.filterBuilder.triggerReload();
+    }
   }
 
   onStoreConfigurationClicked() {
