@@ -81,12 +81,18 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
       button.disabled = true;
     }
 
+    let pathService = '';
+    const serviceConfiguration =  this.exportService.getDefaultServiceConfiguration(this.config.service);
+    if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
+      pathService = serviceConfiguration.path;
+    }
     const exportData: OTableExportData = {
       queryParam: {
         columns: this.config.columns,
         sqltypes: this.config.sqlTypes
       },
-      service: 'CustomerService',
+      path: pathService,
+      service: this.config.service,
       dao: this.config.entity,
       advQuery: this.config.advQuery,
       offset: this.config.offset,

@@ -1,6 +1,7 @@
 export type OTableExportData = {
   queryParam: OTableExportQueryParam;
   service: string;
+  path: string;
   dao: string;
   offset?: number;
   pageSize?: number;
