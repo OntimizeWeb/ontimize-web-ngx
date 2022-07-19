@@ -55,9 +55,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
     Object.assign(storedFilter, this.getColumnFiltersState());
     Object.assign(storedFilter, this.getColumnsQuickFilterState());
     Object.assign(storedFilter, this.getFilterBuilderState());
-    console.log('storeFilter ', storedFilter);
     newFilter['stored-filter'] = storedFilter as OTableStoredFilter;
-
     this.state.addStoredFilter(newFilter);
   }
 
@@ -165,7 +163,6 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
     if (!Util.isObjectEmpty(filterBuilder)) {
       result['filter-builder-values'] = filterBuilder;
     }
-    console.log('filter builder  ', result);
     return result;
   }
 
