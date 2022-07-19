@@ -221,6 +221,9 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
           // }
           this.queryRows = configuration['queryRows'];
           break;
+        case 'filter-builder':
+          this.filterBuilderValues = configuration['filter-builder'];
+          break;
       }
     });
   }
