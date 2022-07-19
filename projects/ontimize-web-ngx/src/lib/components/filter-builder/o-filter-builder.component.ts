@@ -136,11 +136,13 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     const params: Array<{ attr, value }> = [];
     this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
       const formComponent: IFormDataComponent = formComponents[filterComponent.formComponentAttr];
-      const value = formComponent.getValue();
-      params.push({
-        attr: filterComponent.targetAttr,
-        value: value
-      });
+      if (formComponent) {
+        const value = formComponent.getValue();
+        params.push({
+          attr: filterComponent.targetAttr,
+          value: value
+        });
+      }
     });
 
     // Trigger the function provided by the user
