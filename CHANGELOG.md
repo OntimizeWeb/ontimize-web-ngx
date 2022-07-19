@@ -1,3 +1,6 @@
+## 8.8.0
+### Features:
+* **o-table**: `Save/load/clear filter` and `Save/load configuration` have in consider the filter builder ([b47963b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b47963b)) ([209b297](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/209b297)) Closes[#994](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/994)
 ## 8.7.0 (2022-07-01)
 ### Features:
 * New component `o-phone-input` Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
