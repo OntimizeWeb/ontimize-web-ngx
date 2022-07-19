@@ -159,9 +159,11 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
 
   protected getFilterBuilderState(): any {
     const result = {};
-    let filterBuilder = this.component.filterBuilder.getFilterAttrsWithValue();
-    if (!Util.isObjectEmpty(filterBuilder)) {
-      result['filter-builder-values'] = filterBuilder;
+    if (this.component.filterBuilder) {
+      let filterBuilder = this.component.filterBuilder.getFilterAttrsWithValue();
+      if (!Util.isObjectEmpty(filterBuilder)) {
+        result['filter-builder-values'] = filterBuilder;
+      }
     }
     return result;
   }
