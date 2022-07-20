@@ -121,6 +121,11 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
       case 'user-stored-configurations':
         result['user-stored-configurations'] = this.state.storedConfigurations;
         break;
+      case 'filter-builder':
+        if (this.component.filterBuilder) {
+          result['filter-builder'] = this.component.filterBuilder.getFilterValues();
+        }
+        break;
     }
     return result;
   }
@@ -160,7 +165,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
   protected getFilterBuilderState(): any {
     const result = {};
     if (this.component.filterBuilder) {
-      let filterBuilder = this.component.filterBuilder.getFilterAttrsWithValue();
+      let filterBuilder = this.component.filterBuilder.getFilterValues();
       if (!Util.isObjectEmpty(filterBuilder)) {
         result['filter-builder-values'] = filterBuilder;
       }
