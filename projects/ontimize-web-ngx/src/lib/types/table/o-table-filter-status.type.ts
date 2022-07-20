@@ -1,3 +1,4 @@
+import { OFilterBuilderValues } from '../o-filter-builder-values.type';
 import { OColumnSearchable } from './o-column-searchable.type';
 import { OColumnValueFilter } from './o-column-value-filter.type';
 
@@ -12,6 +13,7 @@ export type OTableStoredFilter = {
   'oColumns': OColumnSearchable[];
   'filter-case-sensitive': boolean;
   'filter': string;
+  'filter-builder-values': OFilterBuilderValues[];
 }
 
 export type OTableConfigurationStatus = {

@@ -2126,10 +2126,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   /**
-   * Clear all filters(column filter and quickfilter) and reload data
+   * Clear all filters(column filter, quickfilter and filter builder) and reload data
    * @param [triggerDatasourceUpdate]
    */
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
+
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.isColumnFiltersActive);
@@ -2138,6 +2139,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
     }
+
+    if (this.filterBuilder) {
+      this.filterBuilder.clearFilter();
+      this.filterBuilder.triggerReload();
+    }
+
   }
 
   clearColumnFilter(attr: string, triggerDatasourceUpdate: boolean = true): void {
@@ -2529,6 +2536,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }
       });
     }
+
+    if (this.filterBuilder && Util.isDefined(storage.filterBuilderValues)) {
+      this.filterBuilder.setFilterValues(storage.filterBuilderValues);
+      this.filterBuilder.triggerReload();
+    }
   }
 
   onStoreConfigurationClicked() {
@@ -2569,6 +2581,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             break;
           case 'quick-filter':
           case 'columns-filter':
+          case 'filter-builder':
             this.setFiltersConfiguration();
             break;
           case 'grouped-columns':
