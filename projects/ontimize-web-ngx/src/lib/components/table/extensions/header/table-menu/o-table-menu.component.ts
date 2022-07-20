@@ -486,7 +486,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onResetWidthClicked() {
-    console.log("reset");
+    this.table.resetColumnsWidth();
   }
   onReportOnDemandClicked(): void {
     if (this.reportService) {
