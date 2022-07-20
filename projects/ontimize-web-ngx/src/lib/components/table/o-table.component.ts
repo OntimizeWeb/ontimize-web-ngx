@@ -2130,9 +2130,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @param [triggerDatasourceUpdate]
    */
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
-    if (this.filterBuilder) {
-      this.filterBuilder.clearFilter();
-    }
+
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.isColumnFiltersActive);
@@ -2141,6 +2139,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
     }
+
+    if (this.filterBuilder) {
+      this.filterBuilder.clearFilter();
+      this.filterBuilder.triggerReload();
+    }
+
   }
 
   clearColumnFilter(attr: string, triggerDatasourceUpdate: boolean = true): void {
