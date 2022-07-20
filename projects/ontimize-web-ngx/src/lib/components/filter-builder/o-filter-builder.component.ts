@@ -203,6 +203,10 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     this.onClear.emit();
   }
 
+  /**
+   * Gets filter values
+   * @returns filter values
+   */
   getFilterValues(): OFilterBuilderValues[] {
     const result: OFilterBuilderValues[] = [];
 
@@ -215,9 +219,12 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
 
     return result;
 
-
   }
 
+  /**
+   * Sets filter values
+   * @param filterBuilderValues
+   */
   setFilterValues(filterBuilderValues: OFilterBuilderValues[]) {
     filterBuilderValues.forEach((filterBuilderValue: OFilterBuilderValues) => {
       if (this.form.getComponents()[filterBuilderValue.attr]) {
