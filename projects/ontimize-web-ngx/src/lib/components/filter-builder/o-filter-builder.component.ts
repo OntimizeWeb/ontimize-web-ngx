@@ -203,19 +203,28 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     this.onClear.emit();
   }
 
-  getFilterAttrsWithValue() {
-    return this.filterComponents.
-      filter((elem: IFilterBuilderCmpTarget) => Util.isDefined(this.form.getComponents()[elem.formComponentAttr].getValue())).
-      map(
-        (elem: IFilterBuilderCmpTarget) => {
-          return { attr: elem.formComponentAttr, value: this.form.getComponents()[elem.formComponentAttr].getValue() };
+  getFilterValues(): OFilterBuilderValues[] {
+    const result: OFilterBuilderValues[] = [];
+
+    this.filterComponents.
+      forEach((filterComponent: IFilterBuilderCmpTarget) => {
+        if (Util.isDefined(this.form.getComponents()[filterComponent.formComponentAttr])) {
+          result.push({ attr: filterComponent.formComponentAttr, value: this.form.getComponents()[filterComponent.formComponentAttr].getValue() });
         }
-      );
+      });
+
+    return result;
+
+
   }
 
   setFilterValues(filterBuilderValues: OFilterBuilderValues[]) {
     filterBuilderValues.forEach((filterBuilderValue: OFilterBuilderValues) => {
-      this.form.getComponents()[filterBuilderValue.attr].setValue(filterBuilderValue.value)
+      if (this.form.getComponents()[filterBuilderValue.attr]) {
+        this.form.getComponents()[filterBuilderValue.attr].setValue(filterBuilderValue.value)
+      } else {
+        console.warn('The filter with attr ' + filterBuilderValue.attr + ' cannot be set ' + filterBuilderValue.value + ' because it does not exist .');
+      }
     })
   }
 
