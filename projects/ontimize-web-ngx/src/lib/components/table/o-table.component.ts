@@ -984,9 +984,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // a o-table-column definition trying to replace an already existing o-table-column definition
       return;
     }
+
     const colDef: OColumn = this.createOColumn(column.attr, this, column);
     let columnWidth = column.width;
-
     const storedData = this.state.getColumnDisplay(colDef);
     if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
       // check that the width of the columns saved in the initial configuration
@@ -3015,4 +3015,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return (Util.isDefined(this.showExpandableIconFunction) && this.showExpandableIconFunction instanceof Function) ? Util.wrapIntoObservable(this.showExpandableIconFunction(row, rowIndex)) : of(true);
   }
 
+  resetColumnsWidth() {
+    setTimeout(() => {
+      this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
+        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.originalWidth)) {
+          c.width = c.definition.originalWidth;
+        }
+      });
+      this.cd.detectChanges();
+    }, 0);
+
+
+  }
 }
