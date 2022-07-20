@@ -1,3 +1,7 @@
+## 8.8.0
+### Bug fixes
+* **o-email-input**: Fixed bug that incorrectly validated email inputs ([4eedf04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4eedf04)) Closes [#999](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/999)
+
 ## 8.7.0 (2022-07-01)
 ### Features:
 * New component `o-phone-input` Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
