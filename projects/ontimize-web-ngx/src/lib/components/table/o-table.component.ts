@@ -1158,6 +1158,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.sortColArray.splice(i, 1);
       }
     }
+
   }
 
   protected ensureColumnsOrder() {
@@ -2559,7 +2560,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.initializeParams();
     this.parseVisibleColumns();
     this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
-    this.reinitializeSortColumns();
+    const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state.initialConfiguration.sortColumns);
+    this.reinitializeSortColumns(initialConfigSortColumnsArray);
     this.onReinitialize.emit(null);
     this.clearFilters(false);
     this.reloadData();
