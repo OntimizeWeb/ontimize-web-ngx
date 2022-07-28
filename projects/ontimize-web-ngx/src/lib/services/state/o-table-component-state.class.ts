@@ -219,7 +219,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
           this.totalQueryRecordsNumber = configuration['totalQueryRecordsNumber'];
           this.queryRecordOffset = configuration['queryRecordOffset'];
           // }
-          this.queryRows = configuration['queryRows'];
+          this.queryRows = configuration['query-rows'];
           break;
         case 'filter-builder':
           this.filterBuilderValues = configuration['filter-builder'];
