@@ -992,11 +992,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // check that the width of the columns saved in the initial configuration
       // in the local storage is different from the original value
       if (this.state.initialConfiguration.columnsDisplay) {
-        this.state.initialConfiguration.columnsDisplay.forEach(element => {
-          if (colDef.attr === element.attr && element.width === colDef.definition.originalWidth) {
-            columnWidth = storedData.width;
-          }
-        });
+        const initialStoredData = this.state.initialConfiguration.getColumnDisplay(colDef);
+        if (initialStoredData && initialStoredData.width === colDef.definition.originalWidth) {
+          columnWidth = storedData.width;
+        }
       } else {
         columnWidth = storedData.width;
       }
@@ -3016,15 +3015,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   resetColumnsWidth() {
-    setTimeout(() => {
-      this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
-        if (Util.isDefined(c.definition) && Util.isDefined(c.definition.originalWidth)) {
-          c.width = c.definition.originalWidth;
-        }
+    this._oTableOptions.columns
+      .filter(c => c.visible && Util.isDefined(c.definition))
+      .forEach(c => {
+        c.width = c.definition.originalWidth;
       });
-      this.cd.detectChanges();
-    }, 0);
-
-
+    this.cd.detectChanges();
   }
 }
