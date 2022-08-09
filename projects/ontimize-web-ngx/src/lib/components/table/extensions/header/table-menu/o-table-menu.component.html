@@ -13,9 +13,7 @@
 
   <o-table-option #columnsGroupByOption *ngIf="showGroupByButton" (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
 
-
-  <o-table-option #ResetWidthOption *ngIf="showResetWidthButton" (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
-
+  <o-table-option *ngIf="showResetWidthButton" (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
 
   <button type="button" #filterMenuButton *ngIf="showFilterMenu" mat-menu-item [matMenuTriggerFor]="filterMenu">{{
     'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
