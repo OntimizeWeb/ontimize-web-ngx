@@ -215,10 +215,8 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
           break;
         case 'page':
           this.currentPage = configuration['currentPage'];
-          // if (this.pageable) {
           this.totalQueryRecordsNumber = configuration['totalQueryRecordsNumber'];
           this.queryRecordOffset = configuration['queryRecordOffset'];
-          // }
           this.queryRows = configuration['query-rows'];
           break;
         case 'filter-builder':

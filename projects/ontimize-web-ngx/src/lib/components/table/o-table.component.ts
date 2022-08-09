@@ -865,7 +865,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected initTableAfterViewInit() {
-    this.parseVisibleColumns();
+    this.parseVisibleColumns(false);
     this.setDatasource();
     this.registerDataSourceListeners();
     this.parseGroupedColumns();
@@ -1050,7 +1050,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  parseVisibleColumns() {
+  parseVisibleColumns(defaultConfiguration: boolean) {
     if (this.state.columnsDisplay) {
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols = [];
@@ -1062,8 +1062,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
           console.warn('Unable to load the column ' + oCol.attr + ' from the localstorage');
         }
       });
-      stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
+      if (!defaultConfiguration) {
+        stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
+      }
+      else {
+        stateCols = this.state.initialConfiguration.columnsDisplay;
+      }
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
+
     } else {
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
@@ -2558,7 +2564,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   applyDefaultConfiguration() {
     this.initializeParams();
-    this.parseVisibleColumns();
+    this.parseVisibleColumns(true);
+    this.reinitializateQuickFilterColumns();
     this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state.initialConfiguration.sortColumns);
     this.reinitializeSortColumns(initialConfigSortColumnsArray);
@@ -2578,7 +2585,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             this.reinitializeSortColumns();
             break;
           case 'oColumns-display':
-            this.parseVisibleColumns();
+            this.parseVisibleColumns(false);
             this.initializeCheckboxColumn();
             break;
           case 'quick-filter':
@@ -2942,7 +2949,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   storeFilterInState(arg: OTableFiltersStatus) {
     this.componentStateService.storeFilter(arg);
   }
+  reinitializateQuickFilterColumns() {
+    this._oTableOptions.columns.forEach(column => {
+      if (column.searchable && column.visible) {
+        column.searching = true;
+      }
 
+    })
+  }
   reinitializeSortColumns(sortColumns?: SQLOrder[]) {
     if (Util.isDefined(sortColumns)) {
       this.sortColArray = sortColumns;
