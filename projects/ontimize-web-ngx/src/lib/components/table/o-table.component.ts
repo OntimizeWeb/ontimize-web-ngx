@@ -3017,7 +3017,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   resetColumnsWidth() {
     this._oTableOptions.columns
       .forEach(c => {
-        c.width = Util.isDefined(c.definition) ? c.definition.originalWidth : undefined
+        if (Util.isDefined(c.definition)) {
+          if (c.definition.width != undefined) {
+            c.width = c.definition.width;
+          }
+          else { c.width = c.definition.originalWidth; }
+        }
+        else { c.width = undefined; }
+
       });
     this.cd.detectChanges();
   }
