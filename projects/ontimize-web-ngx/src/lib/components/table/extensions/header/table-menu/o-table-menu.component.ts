@@ -491,7 +491,11 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onResetWidthClicked() {
-    this.table.resetColumnsWidth();
+    this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_RESET_WIDTH').then(result => {
+      if (result) {
+        this.table.resetColumnsWidth();
+      }
+    });
   }
 
   onReportOnDemandClicked(): void {
