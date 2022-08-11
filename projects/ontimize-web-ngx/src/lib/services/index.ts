@@ -28,3 +28,5 @@ export * from './share-can-activate-child.service';
 export * from './snackbar.service';
 export * from './state/index';
 export * from './translate/index';
+export * from './ontimize-export-data-provider-3x.service';
+export * from './ontimize-export-data-provider.service';
