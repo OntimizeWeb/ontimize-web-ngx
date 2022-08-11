@@ -3015,4 +3015,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return (Util.isDefined(this.showExpandableIconFunction) && this.showExpandableIconFunction instanceof Function) ? Util.wrapIntoObservable(this.showExpandableIconFunction(row, rowIndex)) : of(true);
   }
 
+  getColumnsNotIncluded(): string[] {
+    let colsNotIncluded = [];
+    colsNotIncluded = this.oTableOptions.columns.filter(c => void 0 !== c.renderer && c.type==='image').map(c => c.attr);
+    colsNotIncluded.push(Codes.NAME_COLUMN_SELECT);
+    colsNotIncluded.push(Codes.NAME_COLUMN_EXPANDABLE);
+    return colsNotIncluded;
+  }
+
+  getColumnNames(columns: string[]) :{ [columnId: string]: string; } {
+    const tableColumnNames = {};
+    columns.forEach(c => {
+      const oColumn = this._oTableOptions.columns.find(oc => oc.attr === c);
+      tableColumnNames[c] = this.translateService.get(oColumn.title ? oColumn.title : oColumn.attr);
+    });
+    return tableColumnNames;
+  }
 }

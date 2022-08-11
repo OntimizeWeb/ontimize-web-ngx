@@ -9,7 +9,6 @@ import { OntimizeExportServiceProvider } from '../../../../../services/factories
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
-import { OTableExportData } from '../../../../../types/table/o-table-export-data.type';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
@@ -81,32 +80,8 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
       button.disabled = true;
     }
 
-    let pathService = '';
-    const serviceConfiguration =  this.exportService.getDefaultServiceConfiguration(this.config.service);
-    if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
-      pathService = serviceConfiguration.path;
-    }
-    const exportData: OTableExportData = {
-      queryParam: {
-        columns: this.config.columns,
-        sqltypes: this.config.sqlTypes
-      },
-      path: pathService,
-      service: this.config.service,
-      dao: this.config.entity,
-      advQuery: this.config.advQuery,
-      offset: this.config.offset,
-      pageSize: this.config.pageSize,
-      excelColumns: this.parseExcelColumns(this.config.columns),
-      columnTitles: this.config.columnNames,
-      styles: {},
-      columnStyles: {},
-      rowStyles: {},
-      cellStyles: {}
-    };
-
     this.dialogRef.close(true);
-    this.exportService.exportData(exportData, exportType).subscribe(
+    this.exportService.exportData(exportType).subscribe(
       res => {
         this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
       },
