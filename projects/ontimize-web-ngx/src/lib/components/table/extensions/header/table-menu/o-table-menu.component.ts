@@ -66,8 +66,8 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
 
   // show-group-by-option [yes|no|true|false]: show group by menu option in the header menu
   'showGroupByOption: show-group-by-option',
-  // show-reset-width-button [yes|no|true|false]: show reset width menu option in the header menu
-  'showResetWidthButton: show-reset-width-button',
+  // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
+  'showResetWidthOption: show-reset-width-option',
   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the header menu
   'showReportOnDemandOption: show-report-on-demand-option'
 ];
@@ -102,7 +102,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   @InputConverter()
   showGroupByOption: boolean = true;
   @InputConverter()
-  showResetWidthButton: boolean = true;
+  showResetWidthOption: boolean = true;
   @InputConverter()
   showReportOnDemandOption: boolean = true;
 
