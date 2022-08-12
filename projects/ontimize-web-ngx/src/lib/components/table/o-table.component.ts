@@ -2567,13 +2567,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.parseVisibleColumns(true);
     this.reinitializateQuickFilterColumns();
     this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
+    this.resetQueryRows();
     const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state.initialConfiguration.sortColumns);
     this.reinitializeSortColumns(initialConfigSortColumnsArray);
     this.onReinitialize.emit(null);
     this.clearFilters(false);
     this.reloadData();
   }
-
+  resetQueryRows() {
+    if (Util.isDefined(this.state.initialConfiguration.queryRows)) {
+      this.queryRows = this.state.initialConfiguration.queryRows;
+    }
+  }
   applyConfiguration(configurationName: string) {
     const storedConfiguration = this.state.getStoredConfiguration(configurationName);
     if (storedConfiguration) {
