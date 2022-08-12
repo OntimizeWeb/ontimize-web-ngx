@@ -1,7 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { OTableComponent } from "../components/table/o-table.component";
-import { OTableExportConfiguration } from "../components/table/extensions/header/table-menu/o-table-export-configuration.class";
 
 @Injectable()
 export class OntimizeExportDataBaseProviderService {
