@@ -1,18 +1,18 @@
 import { Injectable, Injector } from "@angular/core";
+import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { OTableExportData } from "../types/table/o-table-export-data.type";
 import { Codes } from "../util/codes";
 
 import { OntimizeExportDataBaseProviderService } from "./ontimize-export-data-base-provider.service";
 
 @Injectable()
-export class OntimizeExportDataProviderService extends OntimizeExportDataBaseProviderService {
+export class OntimizeExportDataProviderService extends OntimizeExportDataBaseProviderService implements IExportDataProvider {
 
   constructor(protected injector: Injector) {
     super(injector);
   }
 
-  getExportConfiguration(pathService?:string): any {
-
+  getExportConfiguration(): any {
 
     let data = [];
     let filter = {};

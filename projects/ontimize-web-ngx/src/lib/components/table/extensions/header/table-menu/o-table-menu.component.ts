@@ -18,7 +18,6 @@ import { MatDialog, MatMenu } from '@angular/material';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import { IExportDataProvider } from '../../../../../interfaces';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
 
@@ -129,7 +128,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
   protected permissions: OTableMenuPermissions;
   protected mutationObservers: MutationObserver[] = [];
-  protected exportDataProvider: IExportDataProvider;
+  protected exportDataProvider: OntimizeExportDataProviderService;
 
   private subscription: Subscription;
 

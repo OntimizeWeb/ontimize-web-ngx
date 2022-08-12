@@ -47,7 +47,6 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
   }
 
   public exportData(format: string): Observable<any> {
-    const exportData = this.exportDataProvider.getExportConfiguration();
     const entity = this.exportDataProvider.entity;
     const url = `${this.urlBase}${this.exportPath ? this.exportPath : ''}${this.servicePath}/${entity}/${format}`;
 
@@ -56,6 +55,7 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
       observe: 'response'
     };
 
+    const exportData = this.exportDataProvider.getExportConfiguration();
     const body = JSON.stringify(exportData);
     // TODO: try multipart
     const dataObservable: Observable<ServiceResponse> = new Observable((observer: Subscriber<ServiceResponse>) => {

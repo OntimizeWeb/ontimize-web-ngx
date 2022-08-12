@@ -4,7 +4,7 @@ import { OTableComponent } from "../components/table/o-table.component";
 import { OTableExportConfiguration } from "../components/table/extensions/header/table-menu/o-table-export-configuration.class";
 
 @Injectable()
-export class OntimizeExportDataBaseProviderService implements IExportDataProvider {
+export class OntimizeExportDataBaseProviderService {
 
   table: OTableComponent;
   columns: any;
@@ -35,9 +35,5 @@ export class OntimizeExportDataBaseProviderService implements IExportDataProvide
     this.service = this.table.service;
   }
 
-  getExportConfiguration(pathService?: string): OTableExportConfiguration {
-    const exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
 
-    return exportCnfg;
-  }
 }

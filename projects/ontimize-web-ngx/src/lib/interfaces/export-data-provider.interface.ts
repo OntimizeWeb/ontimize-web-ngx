@@ -4,5 +4,5 @@ export interface IExportDataProvider {
   table: OTableComponent;
   entity: string;
   initializeProvider(table: OTableComponent): void;
-  getExportConfiguration(pathService?:string): any;
+  getExportConfiguration(): any;
 }

@@ -5,6 +5,7 @@ import { share } from 'rxjs/operators';
 import { AppConfig } from '../../config/app-config';
 import { IExportService } from '../../interfaces/export-service.interface';
 import { HttpRequestOptions } from '../../types';
+import { OTableExportData3X } from '../../types/table/o-table-export-data.type';
 import { Util } from '../../util';
 import { OntimizeExportDataProviderService } from '../ontimize-export-data-provider.service';
 import { OntimizeBaseService } from './ontimize-base-service.class';
@@ -28,7 +29,7 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
   }
 
   protected buildHeaders(): HttpHeaders {
-    let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
+    let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'X-Requested-With,content-type' });
     const sessionId = this.authService.getSessionInfo().id;
     if (Util.isDefined(sessionId)) {
       headers = headers.append('Authorization', 'Bearer ' + sessionId);
@@ -46,8 +47,10 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
       responseType: 'blob'
     };
 
+    let exportData: OTableExportData3X = this.exportDataProvider.getExportConfiguration();
+    exportData.path = this.servicePath;
 
-    const body = JSON.stringify(this.exportDataProvider.getExportConfiguration(this.servicePath));
+    const body = JSON.stringify(exportData);
 
     const dataObservable = new Observable(observer => {
       this.httpClient.post(url, body, options).subscribe(

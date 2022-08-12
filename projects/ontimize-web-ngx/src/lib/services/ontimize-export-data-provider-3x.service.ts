@@ -1,10 +1,11 @@
 import { Injectable, Injector } from "@angular/core";
+import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { OTableExportData3X } from "../types/table/o-table-export-data.type";
 import { Util } from "../util/util";
 import { OntimizeExportDataBaseProviderService } from "./ontimize-export-data-base-provider.service";
 
 @Injectable()
-export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseProviderService {
+export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseProviderService implements IExportDataProvider {
 
   protected pathService: string;
 
@@ -12,7 +13,7 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
     super(injector);
   }
 
-  getExportConfiguration(pathService: string): any {
+  getExportConfiguration(): any {
 
     // Table data/filters
     let currentPage = 0;
@@ -28,7 +29,7 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
 
       },
       advQuery: (this.table.pageable ? true : false),
-      path: pathService,
+      path: this.pathService,
       dao: this.entity,
       excelColumns: this.parseExcelColumns(this.columns),
       columnTitles: this.columnNames,
