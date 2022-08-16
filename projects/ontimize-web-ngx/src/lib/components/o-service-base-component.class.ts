@@ -387,6 +387,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.state.totalQueryRecordsNumber = 0;
         // Set empty data (order is important)
         this.setData([]);
+        this.loadingSubject.next(false);
         return;
       }
       this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
