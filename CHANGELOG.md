@@ -1,7 +1,16 @@
+## 8.8.0
+### Features:
+* **o-table**:
+  * `Save/load/clear filter` and `Save/load configuration` operations have in consider the filter builder component([b47963b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b47963b)) ([209b297](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/209b297)) Closes [#994](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/994)
+  * Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
+
+### Bug fixes
+* **o-email-input**: Fixed bug that incorrectly validated email inputs ([46c6e78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/46c6e78)) Closes [#999](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/999)
+
+
 ## 8.7.0 (2022-07-01)
 ### Features:
 * New component `o-phone-input` Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)
-* **o-table**: Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
 
 ### Bug fixes
 * **o-integer-input, o-real-input, o-currency-input, o-percent-input**: Fixed bug where setting a new value causes the onchange event to fire twice ([9e2eb672](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e2eb672)) Closes [#980](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/980)
