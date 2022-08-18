@@ -3,7 +3,10 @@
 * **o-table**: `Save/load/clear filter` and `Save/load configuration` operations have in consider the filter builder component([b47963b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b47963b)) ([209b297](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/209b297)) Closes [#994](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/994)
 
 ### Bug fixes
-* **o-table**: Fixed bug that prevents saving filters and settings the first time ([207f0856](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/207f0856)) Closes [#1003](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1003)
+
+* **o-table**: 
+  * Fixed bug that incorrectly set the default configuration ([1808d599](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1808d599)) Closes [#1006](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1006)
+  * Fixed bug that prevents saving filters and settings the first time ([207f0856](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/207f0856)) Closes [#1003](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1003)
 * **o-email-input**: Fixed bug that incorrectly validated email inputs ([46c6e78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/46c6e78)) Closes [#999](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/999)
 
 
