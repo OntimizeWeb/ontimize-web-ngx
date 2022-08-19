@@ -13,9 +13,9 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
     super(injector);
   }
 
-  getExportConfiguration(): any {
+  getExportConfiguration(): OTableExportData3X {
 
-    // Table data/filters
+    // Table data/filters/queryParam
     let currentPage = 0;
     if (this.table.pageable && Util.isDefined(this.table.currentPage)) {
       currentPage = this.table.currentPage;

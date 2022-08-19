@@ -1,8 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { OTableExportData } from "../types/table/o-table-export-data.type";
-import { Codes } from "../util/codes";
-
 import { OntimizeExportDataBaseProviderService } from "./ontimize-export-data-base-provider.service";
 
 @Injectable()
@@ -12,12 +10,14 @@ export class OntimizeExportDataProviderService extends OntimizeExportDataBasePro
     super(injector);
   }
 
-  getExportConfiguration(): any {
+  getExportConfiguration(): OTableExportData {
 
+     // Table data/filters
     let data = [];
-    let filter = {};
+    let filter = this.table.getComponentFilter();
 
-    // Table data/filters
+   /*
+    TODO: PENDING THAT THIS FUNCTIONALITY IS COMPATIBLE WITH ONTIMIZE BACK
     switch (this.table.exportMode) {
       case Codes.EXPORT_MODE_ALL:
         filter = this.table.getComponentFilter();
@@ -31,6 +31,7 @@ export class OntimizeExportDataProviderService extends OntimizeExportDataBasePro
         this.colsNotIncluded.forEach(attr => data.forEach(row => delete row[attr]));
         break;
     }
+    */
 
 
     const exportData: OTableExportData = {

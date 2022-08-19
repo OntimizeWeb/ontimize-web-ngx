@@ -47,7 +47,7 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
       responseType: 'blob'
     };
 
-    let exportData: OTableExportData3X = this.exportDataProvider.getExportConfiguration();
+    let exportData: any = this.exportDataProvider.getExportConfiguration();
     exportData.path = this.servicePath;
 
     const body = JSON.stringify(exportData);
