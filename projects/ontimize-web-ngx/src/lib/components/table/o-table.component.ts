@@ -3054,8 +3054,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(c.definition)) {
         c.width = Util.isDefined(c.definition.width) ? c.definition.width : c.definition.originalWidth
       } else {
-        c.width = undefined;
+        c.width = "auto";
       }
+      this.updateColumnsDOMWidth();
+    });
+    this.updateColumnsDOMWidth();
+    this.cd.detectChanges();
+  }
+  updateColumnsDOMWidth() {
+    this._oTableOptions.columns.forEach(c => {
+      c.DOMWidth = this.getThWidthFromOColumn(c);
     });
     this.cd.detectChanges();
   }
