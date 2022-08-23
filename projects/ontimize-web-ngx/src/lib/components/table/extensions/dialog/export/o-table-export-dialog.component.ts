@@ -3,12 +3,14 @@ import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { AppConfig } from '../../../../../config/app-config';
 
 import { IExportService } from '../../../../../interfaces/export-service.interface';
 import { OntimizeExportServiceProvider } from '../../../../../services/factories';
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
@@ -34,6 +36,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   protected oTableExportButtonService: OTableExportButtonService;
   protected visibleButtons: string[];
   private subscription: Subscription = new Subscription();
+  private appConfig: AppConfig;
 
   constructor(
     public dialogRef: MatDialogRef<OTableExportDialogComponent>,
@@ -43,6 +46,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     this.snackBarService = injector.get(SnackBarService);
     this.translateService = this.injector.get(OTranslateService);
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
+    this.appConfig = this.injector.get(AppConfig)
 
     if (config && Util.isDefined(config.visibleButtons)) {
       this.visibleButtons = Util.parseArray(config.visibleButtons.toLowerCase(), true);
@@ -100,7 +104,20 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   }
 
   isButtonVisible(btn: string): boolean {
-    return !this.visibleButtons || (this.visibleButtons.indexOf(btn) !== -1);
+
+    const useExportConfiguration3X = this.appConfig.useExportConfiguration();
+    let isVisible = true;
+    if (this.visibleButtons) {
+      isVisible = (this.visibleButtons.indexOf(btn) !== -1)
+    } else {
+      if (useExportConfiguration3X) {
+        isVisible = Codes.VISIBLE_EXPORT_BUTTONS3X.indexOf(btn) !== -1;
+      } else {
+        isVisible = Codes.VISIBLE_EXPORT_BUTTONS.indexOf(btn) !== -1
+      }
+    }
+
+    return isVisible;
   }
 
   protected handleError(err): void {

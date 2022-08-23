@@ -8,6 +8,8 @@
       (onClick)="export('html', htmlButton)" class="html-button"></o-table-export-button>
     <o-table-export-button #pdfButton *ngIf="isButtonVisible('pdf')" svg-icon="ontimize:PDF" label="TABLE.BUTTONS.PDF" export-type="pdf"
       (onClick)="export('pdf', pdfButton)" class="pdf-button"></o-table-export-button>
+    <o-table-export-button #csvButton *ngIf="isButtonVisible('csv')" svg-icon="ontimize:CSV" label="TABLE.BUTTONS.CSV" export-type="pdf"
+      (onClick)="export('csv', csvButton)" class="pdf-button"></o-table-export-button>
     <ng-container *ngTemplateOutlet="config.options"></ng-container>
   </div>
 </mat-dialog-content>
