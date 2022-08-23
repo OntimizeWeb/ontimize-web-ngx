@@ -9,6 +9,7 @@ import { DefaultComponentStateClass } from './o-component-state.class';
 import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
+import { Util } from '../../util';
 
 export class OTableComponentStateClass extends DefaultComponentStateClass {
   // sort
@@ -124,6 +125,9 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   }
 
   addStoredFilter(filter: OTableFiltersStatus) {
+    if (!Util.isDefined(this['user-stored-filters'])) {
+      this['user-stored-filters'] = [];
+    }
     this.storedFilters.push(filter);
   }
 
@@ -159,6 +163,9 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   }
 
   addStoredConfiguration(configuration: OTableConfiguration) {
+    if (!Util.isDefined(this['user-stored-configurations'])) {
+      this['user-stored-configurations'] = [];
+    }
     this.storedConfigurations.push(configuration);
   }
 
@@ -215,11 +222,9 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
           break;
         case 'page':
           this.currentPage = configuration['currentPage'];
-          // if (this.pageable) {
           this.totalQueryRecordsNumber = configuration['totalQueryRecordsNumber'];
           this.queryRecordOffset = configuration['queryRecordOffset'];
-          // }
-          this.queryRows = configuration['queryRows'];
+          this.queryRows = configuration['query-rows'];
           break;
         case 'filter-builder':
           this.filterBuilderValues = configuration['filter-builder'];
