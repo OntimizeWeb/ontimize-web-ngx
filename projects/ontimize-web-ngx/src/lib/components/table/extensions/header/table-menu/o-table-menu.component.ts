@@ -323,7 +323,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       data: {
         visibleButtons: this.table.visibleExportDialogButtons,
         service: this.table.service,
-        serviceType: this.table.serviceType,
+        serviceType: this.table.exportServiceType,
         options: this.table.exportOptsTemplate
       },
       disableClose: true,
