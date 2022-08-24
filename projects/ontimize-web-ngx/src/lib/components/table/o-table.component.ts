@@ -221,7 +221,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'showExpandableIconFunction: show-expandable-icon-function',
 
   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the table menu. Default: yes.
-  'showReportOnDemandOption: show-report-on-demand-option'
+  'showReportOnDemandOption: show-report-on-demand-option',
+
+  // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
+  'showResetWidthOption: show-reset-width-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -348,6 +351,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   showButtonsText: boolean = true;
   @InputConverter()
   filterColumnActiveByDefault: boolean = true;
+  @InputConverter()
+  showResetWidthOption: boolean = true;
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
