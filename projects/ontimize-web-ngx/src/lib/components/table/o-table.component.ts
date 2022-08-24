@@ -3061,10 +3061,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       } else {
         c.width = "auto";
       }
-      this.updateColumnsDOMWidth();
+      this.cd.detectChanges();
     });
     this.updateColumnsDOMWidth();
-    this.cd.detectChanges();
   }
   updateColumnsDOMWidth() {
     this._oTableOptions.columns.forEach(c => {
