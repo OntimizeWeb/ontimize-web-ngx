@@ -20,7 +20,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
-
 import { DialogService } from '../../../../../services/dialog.service';
 import { O_REPORT_SERVICE } from '../../../../../services/factories';
 import { SnackBarService } from '../../../../../services/snackbar.service';
@@ -34,14 +33,20 @@ import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
-import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import {
+  OTableApplyConfigurationDialogComponent
+} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
-import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import {
+  OTableStoreConfigurationDialogComponent
+} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 import { OTableExportConfiguration } from './o-table-export-configuration.class';
+
+
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -61,8 +66,9 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
 
   // show-group-by-option [yes|no|true|false]: show group by menu option in the header menu
   'showGroupByOption: show-group-by-option',
-
-   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the header menu
+  // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
+  'showResetWidthOption: show-reset-width-option',
+  // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the header menu
   'showReportOnDemandOption: show-report-on-demand-option'
 ];
 
@@ -96,7 +102,10 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   @InputConverter()
   showGroupByOption: boolean = true;
   @InputConverter()
+  showResetWidthOption: boolean = true;
+  @InputConverter()
   showReportOnDemandOption: boolean = true;
+
 
   public onVisibleFilterOptionChange: EventEmitter<any> = new EventEmitter();
   /* End of inputs */
@@ -477,6 +486,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       if (result) {
         this.table.clearFilters();
         this.table.reloadPaginatedDataFromStart(false);
+      }
+    });
+  }
+
+  onResetWidthClicked() {
+    this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_RESET_WIDTH').then(result => {
+      if (result) {
+        this.table.resetColumnsWidth();
       }
     });
   }
