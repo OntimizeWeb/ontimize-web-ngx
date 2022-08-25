@@ -221,7 +221,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'showExpandableIconFunction: show-expandable-icon-function',
 
   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the table menu. Default: yes.
-  'showReportOnDemandOption: show-report-on-demand-option'
+  'showReportOnDemandOption: show-report-on-demand-option',
+
+  // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
+  'showResetWidthOption: show-reset-width-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -348,6 +351,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   showButtonsText: boolean = true;
   @InputConverter()
   filterColumnActiveByDefault: boolean = true;
+  @InputConverter()
+  showResetWidthOption: boolean = true;
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
@@ -985,19 +990,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // a o-table-column definition trying to replace an already existing o-table-column definition
       return;
     }
+
     const colDef: OColumn = this.createOColumn(column.attr, this, column);
     let columnWidth = column.width;
-
     const storedData = this.state.getColumnDisplay(colDef);
     if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
       // check that the width of the columns saved in the initial configuration
       // in the local storage is different from the original value
       if (this.state.initialConfiguration.columnsDisplay) {
-        this.state.initialConfiguration.columnsDisplay.forEach(element => {
-          if (colDef.attr === element.attr && element.width === colDef.definition.originalWidth) {
-            columnWidth = storedData.width;
-          }
-        });
+        const initialStoredData = this.state.initialConfiguration.getColumnDisplay(colDef);
+        if (initialStoredData && initialStoredData.width === colDef.definition.originalWidth) {
+          columnWidth = storedData.width;
+        }
       } else {
         columnWidth = storedData.width;
       }
@@ -3050,4 +3054,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return (Util.isDefined(this.showExpandableIconFunction) && this.showExpandableIconFunction instanceof Function) ? Util.wrapIntoObservable(this.showExpandableIconFunction(row, rowIndex)) : of(true);
   }
 
+  resetColumnsWidth() {
+    this._oTableOptions.columns.forEach(c => {
+      if (Util.isDefined(c.definition)) {
+        c.width = Util.isDefined(c.definition.width) ? c.definition.width : c.definition.originalWidth
+      } else {
+        c.width = "auto";
+      }
+    });
+    this.cd.detectChanges();
+    this.updateColumnsDOMWidth();
+  }
+  updateColumnsDOMWidth() {
+    this._oTableOptions.columns.forEach(c => {
+      c.DOMWidth = this.getThWidthFromOColumn(c);
+    });
+  }
 }
