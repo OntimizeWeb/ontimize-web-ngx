@@ -461,6 +461,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
+  public searcheableColumns: string;
   public defaultVisibleColumns: string;
   public groupedColumns: string;
 
@@ -872,6 +873,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected initTableAfterViewInit() {
     this.parseVisibleColumns();
+    this.parseSearcheableColumns();
     this.setDatasource();
     this.registerDataSourceListeners();
     this.parseGroupedColumns();
@@ -886,7 +888,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.queryData();
     }
   }
-
+  parseSearcheableColumns() {
+    let searcheableArray = [];
+    this.visibleColArray.forEach(col => {
+      if (this.getOColumn(col).searchable)
+        searcheableArray.push(col);
+    })
+    this.searcheableColumns = searcheableArray.join(";");
+  }
   destroy() {
     super.destroy();
     if (this.tabGroupChangeSubscription) {
