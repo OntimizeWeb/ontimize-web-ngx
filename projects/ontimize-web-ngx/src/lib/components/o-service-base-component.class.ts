@@ -381,6 +381,14 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
       this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
 
+      if (this.abortQuery.value) {
+        this.state.queryRecordOffset = 0;
+        this.state.totalQueryRecordsNumber = 0;
+        this.setData([], []);
+        this.loadingSubject.next(false);
+        return;
+      }
+
       this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
         .subscribe((res: ServiceResponse) => {
           let data;
@@ -396,14 +404,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
               this.updatePaginationInfo(res);
             }
           }
-          if (this.abortQuery.value) {
-            this.state.queryRecordOffset = 0;
-            this.state.totalQueryRecordsNumber = 0;
-            this.setData([], this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
-          }
-          else {
-            this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
-          }
+
+          this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
           this.loadingSubject.next(false);
         }, err => {
           this.setData([], []);
