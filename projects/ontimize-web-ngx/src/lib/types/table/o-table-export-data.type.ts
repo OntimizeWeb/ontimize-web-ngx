@@ -26,6 +26,7 @@ export type OTableExportQueryParam = {
   sqltypes: { [key: string]: number; };
   offset?: number;
   pageSize?: number;
+  filter: { key: string, expression: object }
 }
 
 export type OTableExportColumnStyle = {
