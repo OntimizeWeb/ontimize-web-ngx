@@ -11,6 +11,7 @@ export class OntimizeExportDataBaseProviderService {
   sqlTypes: any;
   entity: string;
   service: string;
+  filter: any;
 
   constructor(protected injector: Injector) { }
 
@@ -28,9 +29,15 @@ export class OntimizeExportDataBaseProviderService {
 
     // Table column sqlTypes
     this.sqlTypes = this.table.getSqlTypes();
+
+    // Table entity
     this.entity = this.table.entity;
 
+    // Table service
     this.service = this.table.service;
+
+    // Table filter
+    this.filter = this.table.getComponentFilter();
   }
 
 

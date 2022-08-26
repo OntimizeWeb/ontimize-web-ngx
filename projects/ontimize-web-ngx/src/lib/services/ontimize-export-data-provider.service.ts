@@ -14,7 +14,6 @@ export class OntimizeExportDataProviderService extends OntimizeExportDataBasePro
 
      // Table data/filters
     let data = [];
-    let filter = this.table.getComponentFilter();
 
    /*
     TODO: PENDING THAT THIS FUNCTIONALITY IS COMPATIBLE WITH ONTIMIZE BACK
@@ -39,7 +38,7 @@ export class OntimizeExportDataProviderService extends OntimizeExportDataBasePro
       columns: this.columns,
       columnNames: this.columnNames,
       sqlTypes: this.sqlTypes,
-      filter: filter
+      filter: this.filter
     }
     return exportData;
   }

@@ -25,7 +25,8 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
         columns: this.columns,
         sqltypes: this.sqlTypes,
         offset: this.table.pageable ? currentPage * this.table.queryRows : -1,
-        pageSize: this.table.queryRows
+        pageSize: this.table.queryRows,
+        filter: this.filter
 
       },
       advQuery: (this.table.pageable ? true : false),
@@ -37,7 +38,8 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
       rowStyles: {},
       columnStyles: {},
       columnTypes: {},
-      cellStyles: {}
+      cellStyles: {},
+
 
     };
 
