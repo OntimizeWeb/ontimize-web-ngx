@@ -1,3 +1,7 @@
+## 8.7.1 (2022-08-29)
+### Bug fixes
+* **o-table**: Fixed the error that when you change the page all the data was shown ([dad503c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dad503c)) Closes [#1019](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1019)
+
 ## 8.7.0 (2022-07-01)
 ### Features:
 * New component `o-phone-input` Closes[#840](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/840)

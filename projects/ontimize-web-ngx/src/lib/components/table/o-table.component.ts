@@ -561,6 +561,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
+  get currentPage(): number {
+    return this._currentPage;
+  }
+
   public oTableQuickFilterComponent: OTableQuickfilter;
   protected sortSubscription: Subscription;
   protected onRenderedDataChange: Subscription;
