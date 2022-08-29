@@ -3066,13 +3066,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return colsNotIncluded;
   }
 
-  getColumnNames(columns: string[]) :{ [columnId: string]: string; } {
+  getColumnNames(columns: string[]): { [columnId: string]: string; } {
     const tableColumnNames = {};
     columns.forEach(c => {
       const oColumn = this._oTableOptions.columns.find(oc => oc.attr === c);
       tableColumnNames[c] = this.translateService.get(oColumn.title ? oColumn.title : oColumn.attr);
     });
     return tableColumnNames;
+  }
 
   resetColumnsWidth() {
     this._oTableOptions.columns.forEach(c => {
@@ -3085,7 +3086,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.cd.detectChanges();
     this.updateColumnsDOMWidth();
   }
-  
+
   updateColumnsDOMWidth() {
     this._oTableOptions.columns.forEach(c => {
       c.DOMWidth = this.getThWidthFromOColumn(c);
