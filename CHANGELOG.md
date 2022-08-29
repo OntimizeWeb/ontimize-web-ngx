@@ -1,3 +1,16 @@
+## 8.8.0
+### Features:
+* **o-table**:
+  * `Save/load/clear filter` and `Save/load configuration` operations have in consider the filter builder component([b47963b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b47963b)) ([209b297](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/209b297)) Closes [#994](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/994)
+  * Modified the order of the table menu options ([54dad824](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54dad824))
+  * Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
+
+### Bug fixes
+* **o-table**:
+  * Fixed bug that incorrectly set the default configuration ([1808d599](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1808d599)) Closes [#1006](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1006)
+  * Fixed bug that prevents saving filters and settings the first time ([207f0856](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/207f0856)) Closes [#1003](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1003)
+* **o-email-input**: Fixed bug that incorrectly validated email inputs ([46c6e78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/46c6e78)) Closes [#999](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/999)
+
 ## 8.7.1 (2022-08-29)
 ### Bug fixes
 * **o-table**: Fixed the error that when you change the page all the data was shown ([dad503c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dad503c)) Closes [#1019](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1019)

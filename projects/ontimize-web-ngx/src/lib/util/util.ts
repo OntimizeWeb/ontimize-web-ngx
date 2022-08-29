@@ -96,6 +96,10 @@ export class Util {
     return false;
   }
 
+  static isObjectEmpty(obj: object): boolean {
+    return typeof obj === 'object' && Object.keys(obj).length === 0;
+  }
+
   /**
    * Checks wether specified service as argument implements 'IDataService' interface
    * @param arg The service instance for checking.
