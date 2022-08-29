@@ -1,26 +1,24 @@
 import { Injectable, Injector } from "@angular/core";
 import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
-import { OTableExportData3X } from "../types/table/o-table-export-data.type";
 import { Util } from "../util/util";
 import { OntimizeExportDataBaseProviderService } from "./ontimize-export-data-base-provider.service";
 
 @Injectable()
 export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseProviderService implements IExportDataProvider {
 
-  protected pathService: string;
-
   constructor(protected injector: Injector) {
     super(injector);
   }
 
-  getExportConfiguration(): OTableExportData3X {
+  getExportConfiguration(param: any): any {
 
     // Table data/filters/queryParam
     let currentPage = 0;
     if (this.table.pageable && Util.isDefined(this.table.currentPage)) {
       currentPage = this.table.currentPage;
     }
-    let exportData: OTableExportData3X = {
+    let exportData: any = {
+      type: param.format,
       queryParam: {
         columns: this.columns,
         sqltypes: this.sqlTypes,
@@ -30,18 +28,22 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
 
       },
       advQuery: (this.table.pageable ? true : false),
-      path: this.pathService,
-      dao: this.entity,
-      excelColumns: this.parseExcelColumns(this.columns),
-      columnTitles: this.columnNames,
-      styles: {},
-      rowStyles: {},
-      columnStyles: {},
-      columnTypes: {},
-      cellStyles: {},
-
-
+      path: param.path,
+      dao: this.entity
     };
+
+    switch (param.format) {
+      case 'xlsx':
+        exportData.excelColumns = this.parseExcelColumns(this.columns);
+        exportData.columnTitles = this.columnNames;
+        exportData.styles = {};
+        exportData.rowStyles = {};
+        exportData.columnStyles = {};
+        exportData.columnTypes = {};
+        exportData.cellStyles = {};
+
+        break;
+    }
 
     return exportData;
 

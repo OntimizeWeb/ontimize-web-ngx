@@ -3,9 +3,9 @@ import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { AppConfig } from '../../config/app-config';
+import { IExportDataProvider } from '../../interfaces/export-data-provider.interface';
 import { IExportService } from '../../interfaces/export-service.interface';
 import { HttpRequestOptions } from '../../types';
-import { OTableExportData3X } from '../../types/table/o-table-export-data.type';
 import { Util } from '../../util';
 import { OntimizeExportDataProviderService } from '../ontimize-export-data-provider.service';
 import { OntimizeBaseService } from './ontimize-base-service.class';
@@ -15,7 +15,7 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
 
   public exportPath: string;
   public servicePath: string;
-  protected exportDataProvider: OntimizeExportDataProviderService;
+  protected exportDataProvider: IExportDataProvider;
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -47,8 +47,13 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
       responseType: 'blob'
     };
 
-    let exportData: any = this.exportDataProvider.getExportConfiguration();
-    exportData.path = this.servicePath;
+    let paramExport = {
+      format: format,
+      path: this.servicePath
+    }
+    
+    let exportData: any = this.exportDataProvider.getExportConfiguration(paramExport);
+
 
     const body = JSON.stringify(exportData);
 

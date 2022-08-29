@@ -1,17 +1,21 @@
-export type OTableExportData = {
+export interface OTableExportData {
   data: any;
-  columns: string[],
-  columnNames: object,
+  columns: string[];
+  columnNames: object;
   sqlTypes: { [columnId: string]: string; };
-  filter: object;
+  filter: object
 }
 
-export type OTableExportData3X = {
+export interface OTableExportData3X {
+  type: string;
   queryParam: OTableExportQueryParam;
   service?: string;
   path: string;
   dao: string;
-  advQuery: boolean;
+  advQuery: boolean
+}
+
+export interface OTableExcelExportData3X extends OTableExportData3X {
   excelColumns: { [columnId: string]: string; };
   columnTitles: { [columnId: string]: string; };
   columnTypes: { cellNumber?: string, styleId?: string };
@@ -21,19 +25,18 @@ export type OTableExportData3X = {
   cellStyles: { cellNumber?: string, styleId?: string };
 }
 
-export type OTableExportQueryParam = {
-  columns: string[],
+export interface OTableExportQueryParam {
+  columns: string[];
   sqltypes: { [key: string]: number; };
   offset?: number;
   pageSize?: number;
   filter: { key: string, expression: object }
 }
 
-export type OTableExportColumnStyle = {
+export interface OTableExportColumnStyle {
   dataFormatString?: string;
   alignment?: string;
   verticalAlignment?: string;
   fillBackgroundColor?: string;
   width?: number;
-
 }
