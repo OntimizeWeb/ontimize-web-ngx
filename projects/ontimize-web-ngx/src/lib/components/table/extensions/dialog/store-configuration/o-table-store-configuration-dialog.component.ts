@@ -32,6 +32,10 @@ export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogCla
     name: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER',
     info: 'TABLE.DIALOG.PROPERTIES.COLUMNS_FILTER.INFO'
   }, {
+    property: 'filter-builder',
+    name: 'TABLE.DIALOG.PROPERTIES.FILTER_BUILDER',
+    info: 'TABLE.DIALOG.PROPERTIES.FILTER_BUILDER.INFO'
+  }, {
     property: 'page',
     name: 'TABLE.DIALOG.PROPERTIES.PAGE',
     info: 'TABLE.DIALOG.PROPERTIES.PAGE.INFO'
