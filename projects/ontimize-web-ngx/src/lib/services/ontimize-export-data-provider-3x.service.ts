@@ -24,7 +24,8 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
         sqltypes: this.sqlTypes,
         offset: this.table.pageable ? currentPage * this.table.queryRows : -1,
         pageSize: this.table.queryRows,
-        filter: this.filter
+        filter: this.filter,
+        orderBy:this.table.sortColArray
 
       },
       advQuery: (this.table.pageable ? true : false),
@@ -32,17 +33,14 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
       dao: this.entity
     };
 
-    switch (param.format) {
-      case 'xlsx':
-        exportData.excelColumns = this.parseExcelColumns(this.columns);
-        exportData.columnTitles = this.columnNames;
-        exportData.styles = {};
-        exportData.rowStyles = {};
-        exportData.columnStyles = {};
-        exportData.columnTypes = {};
-        exportData.cellStyles = {};
-
-        break;
+    if (param.format === 'xlsx') {
+      exportData.excelColumns = this.parseExcelColumns(this.columns);
+      exportData.columnTitles = this.columnNames;
+      exportData.styles = {};
+      exportData.rowStyles = {};
+      exportData.columnStyles = {};
+      exportData.columnTypes = {};
+      exportData.cellStyles = {};
     }
 
     return exportData;
