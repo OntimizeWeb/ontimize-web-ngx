@@ -52,10 +52,6 @@
       </cdk-virtual-scroll-viewport>
     </ng-template>
   </div>
-  <ng-container>
-    <o-table-columns-filter [columns]="searcheableColumns">
-    </o-table-columns-filter>
-  </ng-container>
   <!--TABLE PAGINATOR-->
   <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
     [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons">
