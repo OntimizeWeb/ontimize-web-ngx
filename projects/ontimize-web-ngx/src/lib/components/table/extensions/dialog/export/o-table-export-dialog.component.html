@@ -2,7 +2,7 @@
 <mat-dialog-content>
   <div mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</div>
   <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxLayoutGap="8px">
-    <o-table-export-button #excelButton *ngIf="isButtonVisible('excel')" svg-icon="ontimize:EXCEL" label="TABLE.BUTTONS.EXCEL" export-type="xlsx"
+    <o-table-export-button #excelButton *ngIf="isButtonVisible('xlsx')" svg-icon="ontimize:EXCEL" label="TABLE.BUTTONS.EXCEL" export-type="xlsx"
       (onClick)="export('xlsx', excelButton)" class="excel-button"></o-table-export-button>
     <o-table-export-button #htmlButton *ngIf="isButtonVisible('html')" svg-icon="ontimize:HTML" label="TABLE.BUTTONS.HTML" export-type="html"
       (onClick)="export('html', htmlButton)" class="html-button"></o-table-export-button>
