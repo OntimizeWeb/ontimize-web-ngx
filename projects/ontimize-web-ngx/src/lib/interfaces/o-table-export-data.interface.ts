@@ -1,3 +1,5 @@
+import { QueryParameter } from "../types/query-parameter.type";
+
 export interface OTableExportData {
   data: any;
   columns: string[];
@@ -8,7 +10,7 @@ export interface OTableExportData {
 
 export interface OTableExportData3X {
   type: string;
-  queryParam: OTableExportQueryParam;
+  queryParam: QueryParameter;
   service?: string;
   path: string;
   dao: string;
@@ -25,13 +27,6 @@ export interface OTableExcelExportData3X extends OTableExportData3X {
   cellStyles: { cellNumber?: string, styleId?: string };
 }
 
-export interface OTableExportQueryParam {
-  columns: string[];
-  sqltypes: { [key: string]: number; };
-  offset?: number;
-  pageSize?: number;
-  filter: { key: string, expression: object }
-}
 
 export interface OTableExportColumnStyle {
   dataFormatString?: string;
