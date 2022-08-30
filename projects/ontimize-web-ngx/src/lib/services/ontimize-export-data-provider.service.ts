@@ -16,7 +16,7 @@ export class OntimizeExportDataProviderService extends OntimizeExportDataBasePro
     let data = [];
 
     /*
-     TODO: PENDING THAT THIS FUNCTIONALITY IS COMPATIBLE WITH ONTIMIZE BACK
+     PENDING THAT THIS FUNCTIONALITY IS COMPATIBLE WITH ONTIMIZE BACK
      switch (this.table.exportMode) {
        case Codes.EXPORT_MODE_ALL:
          filter = this.table.getComponentFilter();
