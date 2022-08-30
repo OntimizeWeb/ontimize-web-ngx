@@ -385,6 +385,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.state.queryRecordOffset = 0;
         this.state.totalQueryRecordsNumber = 0;
         this.setData([], []);
+        /**  this.cd.detectChanges() is used to update loadingSubject value (this.loadingSubject.next(true); in line 377)
+         *  before using the next line and so update the oTableExpandedFooter directive and display the message
+         * that there are no results when the query is aborted*/
+        this.cd.detectChanges();
         this.loadingSubject.next(false);
         return;
       }
