@@ -896,10 +896,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
   parseSearcheableColumns() {
-    this.visibleColArray.forEach(col => {
-      if (this.getOColumn(col).searchable)
-        this.searcheableColumns.push(col);
+    this.searcheableColumns = this.visibleColArray.filter(col => {
+      const oCol = this.getOColumn(col);
+      return oCol && oCol.searchable;
     })
+
   }
   destroy() {
     super.destroy();
@@ -2193,10 +2194,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   isColumnFilterable(column: OColumn): boolean {
-    if (this.oTableColumnsFilterComponent) {
-      return (this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
-    }
-    else { return this.isSearcheableColumn(column); }
+    return Util.isDefined(this.oTableColumnsFilterComponent) ? this.oTableColumnsFilterComponent.isColumnFilterable(column.attr) : this.isSearcheableColumn(column);
   }
   isSearcheableColumn(column: OColumn): boolean {
     return this.searcheableColumns.includes(column.attr);
