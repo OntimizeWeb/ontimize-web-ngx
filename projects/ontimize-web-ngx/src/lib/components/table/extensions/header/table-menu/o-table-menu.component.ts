@@ -15,8 +15,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-
+import { Observable } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
@@ -45,6 +44,7 @@ import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-ta
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 import { OTableExportConfiguration } from './o-table-export-configuration.class';
+
 
 
 
@@ -134,13 +134,9 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   @ViewChild('columnFilterOption', { static: false })
   columnFilterOption: OTableOptionComponent;
 
-  private showColumnsFilterOptionSubject = new BehaviorSubject<boolean>(false);
-  public showColumnsFilterOption: Observable<boolean> = this.showColumnsFilterOptionSubject.asObservable();
-
   protected permissions: OTableMenuPermissions;
   protected mutationObservers: MutationObserver[] = [];
 
-  private subscription: Subscription;
 
   constructor(
     protected injector: Injector,
@@ -152,9 +148,6 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     this.dialogService = this.injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
     this.snackBarService = this.injector.get(SnackBarService);
-    const self = this;
-
-    this.subscription = this.onVisibleFilterOptionChange.subscribe((x: boolean) => self.showColumnsFilterOptionSubject.next(x));
   }
 
   ngOnInit() {
@@ -166,8 +159,6 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   ngAfterViewInit() {
-
-    this.showColumnsFilterOptionSubject.next(this.table.oTableColumnsFilterComponent !== undefined);
 
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
@@ -210,7 +201,6 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         m.disconnect();
       });
     }
-    this.subscription.unsubscribe();
   }
 
   registerOptions(oTableOptions: OTableOptionComponent[]) {

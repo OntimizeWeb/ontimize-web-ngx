@@ -461,6 +461,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public daoTable: OTableDao | null;
   public dataSource: OTableDataSource | null;
   public visibleColumns: string;
+  public searcheableColumns: string[] = [];
   public defaultVisibleColumns: string;
   public groupedColumns: string;
 
@@ -862,8 +863,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         if (!this.oTableColumnsFilterComponent) {
           this.oTableColumnsFilterComponent = new OTableColumnsFilterComponent(this.injector, this);
           this.oTableMenu.onVisibleFilterOptionChange.next(this.filterColumnActiveByDefault);
+          this.oTableColumnsFilterComponent.columns = clonedOpts.filterColumns;
         }
-        this.oTableColumnsFilterComponent.columns = clonedOpts.filterColumns;
+        else {
+          this.oTableColumnsFilterComponent.columns = this.searcheableColumns.join(";");
+        }
       }
     }
 
@@ -876,6 +880,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected initTableAfterViewInit() {
     this.parseVisibleColumns();
+    this.parseSearcheableColumns();
     this.setDatasource();
     this.registerDataSourceListeners();
     this.parseGroupedColumns();
@@ -890,7 +895,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.queryData();
     }
   }
+  parseSearcheableColumns() {
+    this.searcheableColumns = this.visibleColArray.filter(col => {
+      const oCol = this.getOColumn(col);
+      return oCol && oCol.searchable;
+    })
 
+  }
   destroy() {
     super.destroy();
     if (this.tabGroupChangeSubscription) {
@@ -2183,9 +2194,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   isColumnFilterable(column: OColumn): boolean {
-    return (this.oTableColumnsFilterComponent && this.oTableColumnsFilterComponent.isColumnFilterable(column.attr));
+    return Util.isDefined(this.oTableColumnsFilterComponent) ? this.oTableColumnsFilterComponent.isColumnFilterable(column.attr) : this.isSearcheableColumn(column);
   }
-
+  isSearcheableColumn(column: OColumn): boolean {
+    return this.searcheableColumns.includes(column.attr);
+  }
   isColumnFilterActive(column: OColumn): boolean {
     return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
   }
@@ -2199,8 +2212,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         column: column,
         activeSortDirection: this.getSortFilterColumn(column),
         tableData: this.dataSource.getCurrentData(),
-        preloadValues: this.oTableColumnsFilterComponent.preloadValues,
-        mode: this.oTableColumnsFilterComponent.mode,
+        preloadValues: this.oTableColumnsFilterComponent ? this.oTableColumnsFilterComponent.preloadValues : true,
+        mode: this.oTableColumnsFilterComponent ? this.oTableColumnsFilterComponent.mode : 'default',
         startView: this.getStartViewFilterColumn(column)
       },
       minWidth: '380px',
