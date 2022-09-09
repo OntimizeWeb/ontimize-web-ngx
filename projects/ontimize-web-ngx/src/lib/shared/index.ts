@@ -1,6 +1,4 @@
 export * from './material/custom.material.module';
-export * from './material/o-mat-error/o-mat-error';
-export * from './material/o-mat-error/o-mat-error.module';
 export * from './material/date/mat-date-formats.factory';
 export * from './material/date/ontimize-moment-date-adapter';
 export * from './components/dialog/o-dialog.component';

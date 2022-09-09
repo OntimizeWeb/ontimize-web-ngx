@@ -20,15 +20,13 @@ import { OSnackBarComponent } from './components/snackbar/o-snackbar.component';
 import { OErrorComponent } from './components/validation/o-error.component';
 import { OValidatorComponent } from './components/validation/o-validator.component';
 import { OCustomMaterialModule } from './material/custom.material.module';
-import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
 
 @NgModule({
   imports: [
     CommonModule,
     OTranslateModule,
     FlexLayoutModule,
-    OCustomMaterialModule,
-    OMatErrorModule
+    OCustomMaterialModule
   ],
   declarations: [
     ColumnsFilterPipe,
@@ -49,7 +47,6 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
   ],
   exports: [
     FlexLayoutModule,
-    OMatErrorModule,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,
