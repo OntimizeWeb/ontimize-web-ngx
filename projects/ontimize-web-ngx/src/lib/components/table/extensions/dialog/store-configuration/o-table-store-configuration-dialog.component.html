@@ -6,7 +6,9 @@
     <mat-form-field>
       <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}"
         formControlName="name" required>
-      <mat-error *ngIf="formGroup.controls['name'].hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+      <mat-error *oMatError="formGroup.controls['name'].hasError('required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <textarea matInput placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4"

@@ -179,7 +179,7 @@
               floatLabel="never">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
                 [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)">
-              <mat-error *ngIf="oTableInsertableRowComponent.columnHasError(column, 'required')">
+              <mat-error *oMatError="oTableInsertableRowComponent.columnHasError(column, 'required')">
                 {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
               </mat-error>
             </mat-form-field>
@@ -207,7 +207,7 @@
             <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatLabel="never">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
                 [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)">
-              <mat-error *ngIf="oTableInsertableRowComponent.columnHasError(column, 'required')">
+              <mat-error *oMatError="oTableInsertableRowComponent.columnHasError(column, 'required')">
                 {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
               </mat-error>
             </mat-form-field>

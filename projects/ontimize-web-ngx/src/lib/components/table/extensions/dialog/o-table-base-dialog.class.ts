@@ -1,7 +1,8 @@
 import { Injector, QueryList, ViewChildren } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import { O_MAT_ERROR_OPTIONS, OMatErrorComponent } from '../../../../shared/material/o-mat-error/o-mat-error';
+import { OMatErrorDirective } from '../../../../directives/o-mat-error.directive';
+import { O_MAT_ERROR_OPTIONS } from '../../../../services/factories';
 import { OMatErrorOptions } from '../../../../types/o-mat-error.type';
 import { Codes } from '../../../../util/codes';
 import { Util } from '../../../../util/util';
@@ -9,8 +10,8 @@ import { Util } from '../../../../util/util';
 export class OTableBaseDialogClass {
 
   protected errorOptions: OMatErrorOptions;
-  @ViewChildren(OMatErrorComponent)
-  protected oMatErrorChildren: QueryList<OMatErrorComponent>;
+  @ViewChildren(OMatErrorDirective)
+  protected oMatErrorChildren: QueryList<OMatErrorDirective>;
   protected formControl: AbstractControl;
 
   constructor(
@@ -40,10 +41,10 @@ export class OTableBaseDialogClass {
     let result: string;
     const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
     if (liteError && this.formControlHasErrors() && this.oMatErrorChildren && this.oMatErrorChildren.length > 0) {
-      result = '';
-      this.oMatErrorChildren.forEach((oMatError: OMatErrorComponent) => {
-        result += `${oMatError.text}\n`;
-      });
+      result = this.oMatErrorChildren
+        .filter((oMatError: OMatErrorDirective) => Util.isDefined(oMatError.text))
+        .map((oMatError: OMatErrorDirective) => oMatError.text)
+        .join('\n');
     }
     return result;
   }
