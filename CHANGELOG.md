@@ -6,6 +6,7 @@
   * Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
 
 ### Bug fixes
+* **o-real-input**: New attribute `strict` ([e466768f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e466768f)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#1022](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1022)
 * **o-table**:
   * Fixed bug that incorrectly set the default configuration ([1808d599](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1808d599)) Closes [#1006](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1006)
   * Fixed bug that prevents saving filters and settings the first time ([207f0856](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/207f0856)) Closes [#1003](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1003)
