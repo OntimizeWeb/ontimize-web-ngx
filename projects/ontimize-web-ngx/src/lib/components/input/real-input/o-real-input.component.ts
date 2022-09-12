@@ -17,7 +17,8 @@ export const DEFAULT_INPUTS_O_REAL_INPUT = [
   ...DEFAULT_INPUTS_O_INTEGER_INPUT,
   'minDecimalDigits: min-decimal-digits',
   'maxDecimalDigits: max-decimal-digits',
-  'decimalSeparator : decimal-separator'
+  'decimalSeparator : decimal-separator',
+  'strict : strict'
 ];
 
 export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
@@ -45,6 +46,9 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   @InputConverter()
   grouping: boolean = true;
 
+  @InputConverter()
+  strict: boolean = false;
+
   protected decimalSeparator: string;
   protected pipeArguments: IRealPipeArgument;
   protected numberService: NumberService;
@@ -67,7 +71,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     super.initialize();
     // Override FormControl getValue in order to return the appropriate formatted value
     (this.getFormControl() as OFormControl).getValue = function () {
-      if(!isNaN(Number(this.value))) {
+      if (!isNaN(Number(this.value))) {
         return Number(this.value);
       } else {
         return this.value;
@@ -98,7 +102,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     super.ensureOFormValue(arg);
     if (!this.isEmpty() && Util.isDefined(this.pipeArguments)) {
       const formattedValue = this.numberService.getRealValue(this.value.value, this.pipeArguments);
-      if(!isNaN(Number(formattedValue))) {
+      if (!isNaN(Number(formattedValue))) {
         this.value.value = formattedValue;
       }
     }
@@ -109,7 +113,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     if (typeof control.value === 'number') {
       ctrlValue = ctrlValue.toString();
     }
-    if (ctrlValue && ctrlValue.length) {
+    if (this.strict && ctrlValue && ctrlValue.length) {
       const valArray = ctrlValue.split(this.decimalSeparator ? this.decimalSeparator : '.');
       if (Util.isDefined(this.maxDecimalDigits) && (this.maxDecimalDigits > 0) && Util.isDefined(valArray[1]) && (valArray[1].length > this.maxDecimalDigits)) {
         return {
