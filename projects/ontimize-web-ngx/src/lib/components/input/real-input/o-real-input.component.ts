@@ -18,7 +18,7 @@ export const DEFAULT_INPUTS_O_REAL_INPUT = [
   'minDecimalDigits: min-decimal-digits',
   'maxDecimalDigits: max-decimal-digits',
   'decimalSeparator : decimal-separator',
-  'strict : strict'
+  'strict'
 ];
 
 export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
