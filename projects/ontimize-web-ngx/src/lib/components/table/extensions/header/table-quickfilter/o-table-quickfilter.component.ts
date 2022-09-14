@@ -173,11 +173,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
 
       // if exists filter value in storage then filter result table
       const filterValue = this.value || this.filter.nativeElement.value;
-      // this.filter.nativeElement.value = filterValue;
       this.formControl.setValue(filterValue);
-      // if (this.table.dataSource && filterValue && filterValue.length) {
-      //   this.table.dataSource.quickFilter = filterValue;
-      // }
     }
   }
 

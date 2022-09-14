@@ -3016,14 +3016,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return of(null);
   }
 
-  tableQuickFilterChanged(value:string) {
+  tableQuickFilterChanged(value: string) {
     if (this.pageable) {
       this.queryCellRenderers().subscribe(() => {
         this.reloadPaginatedDataFromStart(false);
       });
     } else {
-      if (value && value.length )
-      this.dataSource.quickFilter = value;
+      if (value && value.length) {
+        this.dataSource.quickFilter = value;
+      }
     }
   }
 
