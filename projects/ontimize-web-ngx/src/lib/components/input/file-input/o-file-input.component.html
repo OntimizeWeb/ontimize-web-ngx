@@ -11,14 +11,21 @@
     <button type="button" *ngIf="getValue()" [disabled]="!isValid || uploader.isUploading" matSuffix mat-icon-button (click)="onClickUpload($event)">
       <mat-icon>file_upload</mat-icon>
     </button>
-    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-    <mat-error *ngIf="hasError('fileType')" text="{{ 'FORM_VALIDATION.FILE_TYPE' | oTranslate}} ({{ getErrorValue('fileType','allowedFileTypes') }})">
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
     </mat-error>
-    <mat-error *ngIf="hasError('fileSize')"
-      text="{{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes"></mat-error>
-    <mat-error *ngIf="hasError('numFile')" text="{{ 'FORM_VALIDATION.FILE_MAXNUM' | oTranslate }}: {{ getErrorValue('numFile', 'maxFiles') }}">
+    <mat-error *oMatError="hasError('fileType')">
+      {{ 'FORM_VALIDATION.FILE_TYPE' | oTranslate}} ({{ getErrorValue('fileType','allowedFileTypes') }})
     </mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+    <mat-error *oMatError="hasError('fileSize')">
+      {{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes
+    </mat-error>
+    <mat-error *oMatError="hasError('numFile')">
+      {{ 'FORM_VALIDATION.FILE_MAXNUM' | oTranslate }}: {{ getErrorValue('numFile', 'maxFiles') }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
   </mat-form-field>
   <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}"
     [attr.accept]="acceptFileType ? acceptFileType.replace(arraySeparatorRegExp, ',') : null" (change)="fileSelected($event)" hidden="true"

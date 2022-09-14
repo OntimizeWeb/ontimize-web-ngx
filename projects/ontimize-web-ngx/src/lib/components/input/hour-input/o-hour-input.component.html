@@ -13,9 +13,15 @@
       <mat-icon ngxMaterialTimepickerToggleIcon svgIcon="ontimize:clock"></mat-icon>
     </button>
 
-    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }} "></mat-error>
-    <mat-error *ngIf="hasError('invalidFormatHour')" text="{{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}"></mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *oMatError="hasError('invalidFormatHour')">
+      {{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
   </mat-form-field>
 </div>
 
