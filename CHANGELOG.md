@@ -1,3 +1,7 @@
+## 8.7.2 (2022-09-15)
+### Bug fixes
+* **o-table**: Fixed bug that incorrectly detected o-table-button components ([8aa098f4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8aa098f4)) Closes [#1026](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1026)
+
 ## 8.7.1 (2022-08-29)
 ### Bug fixes
 * **o-table**: Fixed the error that when you change the page all the data was shown ([dad503c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dad503c)) Closes [#1019](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1019)
