@@ -5,6 +5,7 @@ import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { IReportService } from '../interfaces/report-on-demand-service.interface';
+import { OMatErrorOptions } from '../types/o-mat-error.type';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { OntimizeAuthService } from './o-auth.service';
@@ -60,6 +61,7 @@ export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report servi
 
 export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
 
+export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
