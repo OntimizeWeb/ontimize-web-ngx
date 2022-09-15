@@ -14,9 +14,13 @@
   * `o-table-columns-filter`: active by default. However, you can configure it unavailable in table header with `filter-column-active-by-default= 'no'`. ([6ceaefe5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ceaefe5)) Closes [#1007](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1007)
 * **o-email-input**: Fixed bug that incorrectly validated email inputs ([46c6e78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/46c6e78)) Closes [#999](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/999)
 * **mat-error**: Bug [#1013](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1013) fixed. OntimizeWeb form component `mat-error` definition no longer interferes the Angular Material default definition.
-  *NOTES*: 
+  *NOTES*:
     * `OMatErrorModule` no longer exists. This shouldn't affect users because its importation wasn't needed.
     * There is a new `oMatError` directive that user must use instead `ngIf` for having the `O_MAT_ERROR_OPTIONS` features available in the Angular Material `mat-error` component. See documentation for more info.
+
+## 8.7.2 (2022-09-15)
+### Bug fixes
+* **o-table**: Fixed bug that incorrectly detected o-table-button components ([8aa098f4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8aa098f4)) Closes [#1026](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1026)
 
 ## 8.7.1 (2022-08-29)
 ### Bug fixes
