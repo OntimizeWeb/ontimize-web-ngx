@@ -52,4 +52,8 @@ export class OTableBaseDialogClass {
   protected formControlHasErrors(): boolean {
     return Util.isDefined(this.formControl) && this.formControl.touched && Util.isDefined(this.formControl.errors);
   }
+
+  public hasError(fControl: AbstractControl, error: string): boolean {
+    return fControl && fControl.touched && fControl.hasError(error);
+  }
 }

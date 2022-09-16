@@ -5,8 +5,8 @@
   <form #form [formGroup]="formGroup" fxLayout="column">
     <mat-form-field>
       <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}"
-        formControlName="name" required>
-      <mat-error *oMatError="formGroup.controls['name'].hasError('required')">
+        formControlName="name" required />
+      <mat-error *oMatError="hasError(formGroup.controls['name'], 'required')">
         {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>
     </mat-form-field>

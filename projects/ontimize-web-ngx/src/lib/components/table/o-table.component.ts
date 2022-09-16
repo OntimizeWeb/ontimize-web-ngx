@@ -84,6 +84,7 @@ import {
   OTableFilterByColumnDataDialogComponent
 } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
+import { OTableButtonComponent } from './extensions/header/table-button/o-table-button.component';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import {
@@ -607,7 +608,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   oTableButtons: OTableButtons;
 
-  @ContentChildren('o-table-button')
+  @ContentChildren(OTableButtonComponent)
   tableButtons: QueryList<OTableButton>;
 
   @ContentChild('o-table-quickfilter', { static: true })
