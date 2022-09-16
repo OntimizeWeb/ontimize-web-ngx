@@ -6,10 +6,10 @@
     <mat-form-field>
       <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.FILTER_NAME' | oTranslate }}"
         formControlName="name" required>
-      <mat-error *oMatError="formGroup.controls['name'].hasError('filterNameAlreadyExists')">
+      <mat-error *oMatError="hasError(formGroup.controls['name'], 'filterNameAlreadyExists')">
         {{ 'TABLE.DIALOG.FILTER_NAME_ALREADY_EXISTS' | oTranslate }}
       </mat-error>
-      <mat-error *oMatError="formGroup.controls['name'].hasError('required')">
+      <mat-error *oMatError="hasError(formGroup.controls['name'], 'required')">
         {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>
     </mat-form-field>
