@@ -6,6 +6,7 @@ import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
+import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
@@ -233,23 +234,10 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   /* Utility methods */
   configureService() {
-    let loadingService: any = OntimizeService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get<any>(loadingService);
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseDataService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.dataService = Util.configureService(configureServiceArgs);
 
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+
   }
 
   getAttributesValuesToQuery(columns?: Array<any>) {

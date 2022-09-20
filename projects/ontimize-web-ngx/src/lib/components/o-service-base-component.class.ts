@@ -12,6 +12,7 @@ import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
 import { OQueryDataArgs } from '../types/query-data-args.type';
+import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
@@ -307,22 +308,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   configureService() {
-    let loadingService: any = OntimizeService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get<any>(loadingService);
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseDataService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.dataService = Util.configureService(configureServiceArgs);
   }
 
   getDataArray() {

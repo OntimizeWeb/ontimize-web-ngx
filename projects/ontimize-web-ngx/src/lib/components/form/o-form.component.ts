@@ -33,6 +33,7 @@ import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
+import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
@@ -701,22 +702,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   configureService() {
-    let loadingService: any = OntimizeService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get(loadingService);
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseDataService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.dataService = Util.configureService(configureServiceArgs);
   }
 
   ngOnDestroy() {

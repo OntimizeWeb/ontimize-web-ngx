@@ -1,4 +1,5 @@
 import { isPromise } from '@angular/compiler/src/util';
+import { Injector } from '@angular/core';
 import moment from 'moment';
 import { from, isObservable, Observable, of } from 'rxjs';
 
@@ -6,6 +7,7 @@ import { IDataService } from '../interfaces/data-service.interface';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { ODateValueType } from '../types/o-date-value.type';
+import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
 
@@ -429,5 +431,48 @@ export class Util {
     }
 
     return of(value);
+  }
+
+
+  static configureService(configureServiceArgs: OConfigureServiceArgs): any {
+    let dataService = configureServiceArgs.baseDataService;
+    const entity = configureServiceArgs.service;
+    const service = configureServiceArgs.service;
+    const serviceType = configureServiceArgs.serviceType;
+    const injector = configureServiceArgs.injector;
+
+    if (serviceType) {
+      dataService = serviceType;
+    }
+    try {
+      dataService = injector.get<any>(dataService);
+      if (serviceType) {
+        dataService = Util._createServiceInstance(dataService, injector)
+      }
+      if (Util.isDataService(dataService)) {
+        const serviceCfg = dataService.getDefaultServiceConfiguration(service);
+        if (entity) {
+          serviceCfg.entity = entity;
+        }
+        dataService.configureService(serviceCfg);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return dataService;
+  }
+
+  /**
+ * Returns an instance of the provided service class
+ * @param clazz the class reference
+ * @param injector the injector
+ */
+  static _createServiceInstance(clazz: any, injector: Injector) {
+    if (!Util.isDefined(clazz)) {
+      return;
+    }
+    const newInstance = Object.create(clazz.prototype);
+    clazz.apply(newInstance, [injector]);
+    return newInstance;
   }
 }
