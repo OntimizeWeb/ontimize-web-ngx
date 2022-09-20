@@ -18,11 +18,11 @@
   *NOTES*:
     * `OMatErrorModule` no longer exists. This shouldn't affect users because its importation wasn't needed.
     * There is a new `oMatError` directive that user must use instead `ngIf` for having the `O_MAT_ERROR_OPTIONS` features available in the Angular Material `mat-error` component. See documentation for more info.
-* **service-type**: Fixes bug when multiple components use the same service-type ([380fda3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/380fda3)) Closes[#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015)
+* **service-type**: Fixes bug when multiple components use the same service-type ([380fda3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/380fda3)) Closes [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015)
 
 ### BREAKING CHANGES
 
-To set the service type attribute on the component, the provider defined in the module cannot set `useFactory` instead of using `useValue` because Ontimize Web is responsible for creating each instance for this service.
+To set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
 
 ```ts
 @NgModule({
