@@ -21,8 +21,7 @@
 * **service-type**: Fixes bug when multiple components use the same service-type ([380fda3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/380fda3)) Closes [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015)
 
 ### BREAKING CHANGES
-
-To set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
+Due to the fix of the issue [#1015], to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
 
 ```ts
 @NgModule({
