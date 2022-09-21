@@ -165,7 +165,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   }
 
   public configureService(): void {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseDataService: OntimizeFileService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeFileService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     this.fileService = Util.configureService(configureServiceArgs);
 
   }

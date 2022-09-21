@@ -2,7 +2,7 @@ import { Injector } from "@angular/core";
 
 export type OConfigureServiceArgs = {
   injector:Injector;
-  baseDataService: any;
+  baseService: any;
   entity: string;
   service: string;
   serviceType: string;

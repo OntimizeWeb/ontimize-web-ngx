@@ -17,7 +17,7 @@ import {_getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
  */
 export function translateServiceFactory(injector: Injector): any {
   const serviceClass = _getInjectionTokenValue(O_TRANSLATE_SERVICE, injector);
-  const service = Util._createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   return Util.isDefined(service) ? service : new OTranslateService(injector);
 }
 

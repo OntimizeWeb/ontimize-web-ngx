@@ -168,7 +168,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   public configureService(): void {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseDataService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     this.dataService = Util.configureService(configureServiceArgs);
   }
 

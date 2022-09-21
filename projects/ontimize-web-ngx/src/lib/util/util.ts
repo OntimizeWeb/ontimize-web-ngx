@@ -435,7 +435,7 @@ export class Util {
 
 
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
-    let dataService = configureServiceArgs.baseDataService;
+    let dataService = configureServiceArgs.baseService;
     const entity = configureServiceArgs.service;
     const service = configureServiceArgs.service;
     const serviceType = configureServiceArgs.serviceType;
@@ -447,7 +447,7 @@ export class Util {
     try {
       dataService = injector.get<any>(dataService);
       if (serviceType) {
-        dataService = Util._createServiceInstance(dataService, injector)
+        dataService = Util.createServiceInstance(dataService, injector)
       }
       if (Util.isDataService(dataService)) {
         const serviceCfg = dataService.getDefaultServiceConfiguration(service);
@@ -467,7 +467,7 @@ export class Util {
  * @param clazz the class reference
  * @param injector the injector
  */
-  static _createServiceInstance(clazz: any, injector: Injector) {
+  static createServiceInstance(clazz: any, injector: Injector) {
     if (!Util.isDefined(clazz)) {
       return;
     }
