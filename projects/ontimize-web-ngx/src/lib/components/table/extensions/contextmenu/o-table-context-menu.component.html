@@ -31,10 +31,22 @@
     <!-- GROUP BY -->
     <o-context-menu-separator [visible]="isVisibleGroupByRow | async"></o-context-menu-separator>
     <o-context-menu-group label="TABLE_CONTEXT_MENU.GROUP_BY" icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async">
-      <o-context-menu-item icon="format_indent_increase" [label]="labelGroupByColumn" (execute)="groupByColumn()"
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_YEAR" (execute)="groupByColumn('YEAR')"
+        icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_MONTH" (execute)="groupByColumn('MONTH')"
+        icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH" icon="format_indent_increase" type="group"
+        (execute)="groupByColumn('YEAR_MONTH')" [visible]="isVisibleGroupByRow | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH_DAY" icon="format_indent_increase" type="group"
+        (execute)="groupByColumn()" [visible]="isVisibleGroupByRow | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="!(isDateColumn | async)" icon="format_indent_increase" [label]="labelGroupByColumn" (execute)="groupByColumn()"
         [enabled]="isEnabledGroupByColumn | async"></o-context-menu-item>
-      <o-context-menu-item icon="format_indent_decrease" [label]="labelUnGroupByColumn" (execute)="unGroupByColumn()"
-        [enabled]="isEnabledUnGroupByColumn | async"></o-context-menu-item>
+      <o-context-menu-item *ngIf="isEnabledUnGroupByColumn | async" icon="format_indent_decrease" [label]="labelUnGroupByColumn"
+        (execute)="unGroupByColumn()" [enabled]="isEnabledUnGroupByColumn | async"></o-context-menu-item>
       <o-context-menu-item icon="format_line_spacing" label="TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS" (execute)="unGroupAll()"
         [enabled]="isEnabledUnGroupAllColumn | async">
       </o-context-menu-item>
@@ -51,7 +63,8 @@
 
   <ng-container *ngIf="isTableGroupedRow | async">
     <o-context-menu-item icon="unfold_more" label="TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS" (execute)="expandRowGroupsSameLevel()"></o-context-menu-item>
-    <o-context-menu-item icon="unfold_less" label="TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS" (execute)="collapseRowGroupsSameLevel()"></o-context-menu-item>
+    <o-context-menu-item icon="unfold_less" label="TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS" (execute)="collapseRowGroupsSameLevel()">
+    </o-context-menu-item>
   </ng-container>
 
 </o-context-menu>
