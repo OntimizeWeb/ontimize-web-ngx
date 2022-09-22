@@ -29,6 +29,7 @@ import {
   ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
@@ -75,6 +76,7 @@ import {
   DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
 } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
+import { OTableCellRendererDateComponent } from './column/cell-renderer/date/o-table-cell-renderer-date.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -2865,8 +2867,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Groups by column
    * @param column
    */
-  groupByColumn(column: OColumn) {
-    this.checkGroupByColumn(column.attr, true);
+  groupByColumn(column: OColumn, dateType?: string) {
+    dateType ? this.checkGroupByColumn(column.attr + '-' + dateType, true) : this.checkGroupByColumn(column.attr, true);
     this.dataSource.updateGroupedColumns();
   }
 
@@ -2894,7 +2896,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   checkGroupByColumn(field: string, add: boolean) {
     let found = null;
     for (const column of this.groupedColumnsArray) {
-      if (column === field) {
+      if (column.split("-")[0] === field) {
         found = this.groupedColumnsArray.indexOf(column, 0);
       }
     }
@@ -2952,12 +2954,28 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns column data by attr
    */
   getColumnDataByAttr(attr, row: any): any {
+    let operation: string = "";
+    if (attr.split('-')) {
+      operation = attr.split('-')[1];
+      attr = attr.split('-')[0];
+    }
     const oCol = this.getOColumn(attr);
     if (!Util.isDefined(oCol)) {
       return row[attr];
     }
     const useRenderer = oCol.renderer && oCol.renderer.getCellData;
-    return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+    if (operation == undefined) {
+      return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+    }
+    else {
+      const date = moment(row[oCol.attr]);
+      const language = this.translateService.getCurrentLang();
+      switch (operation) {
+        case "YEAR": return date.year();
+        case "MONTH": moment().locale(language).month(date.month()).format("MMMM");
+        case "YEAR_MONTH": return moment().locale(language).month(date.month()).year(date.year()).format("MMMM, YYYY");
+      }
+    }
   }
 
   getClassNameGroupHeader(row: OTableGroupedRow): string {

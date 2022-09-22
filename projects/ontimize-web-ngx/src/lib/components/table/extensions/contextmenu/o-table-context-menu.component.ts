@@ -249,6 +249,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   public groupByColumn(dateType?: string): void {
     this.table.groupByColumn(this.column, dateType);
+    this.isEnabledGroupByColumn.next(false);
   }
 
   public unGroupByColumn(): void {
