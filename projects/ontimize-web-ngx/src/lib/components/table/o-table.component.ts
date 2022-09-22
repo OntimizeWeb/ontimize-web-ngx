@@ -32,7 +32,6 @@ import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, PageEvent }
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
@@ -44,7 +43,7 @@ import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, OntimizeServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
@@ -76,7 +75,6 @@ import {
   DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
 } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
-import { OTableCellRendererDateComponent } from './column/cell-renderer/date/o-table-cell-renderer-date.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
@@ -104,6 +102,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+
 
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -2972,7 +2971,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const language = this.translateService.getCurrentLang();
       switch (operation) {
         case "YEAR": return date.year();
-        case "MONTH": moment().locale(language).month(date.month()).format("MMMM");
+        case "MONTH": return moment().locale(language).month(date.month()).format("MMMM");
         case "YEAR_MONTH": return moment().locale(language).month(date.month()).year(date.year()).format("MMMM, YYYY");
       }
     }
