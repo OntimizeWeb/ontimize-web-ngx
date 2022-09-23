@@ -67,7 +67,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   'insertButtonPosition:insert-button-position',
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
   'insertButtonFloatable:insert-button-floatable',
-  'quickFilterAppearance:quick-filter-appearance',
   // show-buttons-text [yes|no|true|false]: show text of buttons. Default: no.
   'showButtonsText: show-buttons-text'
 ];
@@ -444,23 +443,4 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     }
   }
 
-  public registerQuickFilter(arg: any): void {
-    super.registerQuickFilter(arg);
-    if (Util.isDefined(this.quickFilterComponent) && Util.isDefined(this.state.quickFilterActiveColumns)) {
-      const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
-      this.quickFilterComponent.setActiveColumns(parsedArr);
-    }
-  }
-  get quickFilterAppearance(): MatFormFieldAppearance {
-    return this._quickFilterAppearance;
-  }
-
-  set quickFilterAppearance(value: MatFormFieldAppearance) {
-    const values = ['legacy', 'standard', 'fill', 'outline'];
-    if (values.indexOf(value) === -1) {
-      console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
-      value = 'outline';
-    }
-    this._quickFilterAppearance = value;
-  }
 }
