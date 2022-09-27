@@ -130,7 +130,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
       const notNullExpressions = renderersExpr.filter(expr => Util.isDefined(expr));
       if (expressions.length === 0 && notNullExpressions.length === 0) {
         // All filters in the renderer are empty and there are no other filters configured,
-        // so we already know that the table should not have any information but 
+        // so we already know that the table should not have any information but
         // it would make a query with empty filters and retrieve information not consistent with the configured quickfilter value,
         // so we force to stop the query and set an empty array on the table
         this.table.abortQuery.next(true);
@@ -173,11 +173,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
 
       // if exists filter value in storage then filter result table
       const filterValue = this.value || this.filter.nativeElement.value;
-      // this.filter.nativeElement.value = filterValue;
       this.formControl.setValue(filterValue);
-      if (this.table.dataSource && filterValue && filterValue.length) {
-        this.table.dataSource.quickFilter = filterValue;
-      }
     }
   }
 

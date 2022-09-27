@@ -5,6 +5,8 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { IFileService } from '../../../interfaces/file-service.interface';
 import { fileServiceFactory } from '../../../services/factories';
 import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.service';
+import { OConfigureServiceArgs } from '../../../types/configure-service-args.type';
+import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
@@ -163,22 +165,9 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   }
 
   public configureService(): void {
-    let loadingService: any = OntimizeFileService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.fileService = this.injector.get<OntimizeFileService>(loadingService);
-      if (this.fileService) {
-        const serviceCfg: any = this.fileService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.fileService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeFileService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.fileService = Util.configureService(configureServiceArgs);
+
   }
 
   public resolveValidators(): ValidatorFn[] {

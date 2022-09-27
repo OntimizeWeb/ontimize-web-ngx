@@ -23,8 +23,8 @@
 </mat-menu>
 
 <mat-menu #filterMenu="matMenu" [class]="(rowHeightObservable| async) +' o-table-menu'">
-  <o-table-option #columnFilterOption *ngIf="showColumnsFilterOption | async" show-checkbox-option="true" [active]="isColumnFilterOptionActive"
-    (onClick)="onFilterByColumnClicked()" label="TABLE.BUTTONS.FILTER_BY_COLUMN">
+  <o-table-option #columnFilterOption show-checkbox-option="true" [active]="isColumnFilterOptionActive" (onClick)="onFilterByColumnClicked()"
+    label="TABLE.BUTTONS.FILTER_BY_COLUMN">
   </o-table-option>
   <button type="button" mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate
     }}</button>

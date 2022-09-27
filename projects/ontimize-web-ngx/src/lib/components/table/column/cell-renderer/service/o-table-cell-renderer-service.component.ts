@@ -18,6 +18,7 @@ import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-t
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeServiceProvider } from '../../../../../services/factories';
 import { OntimizeService } from '../../../../../services/ontimize/ontimize.service';
+import { OConfigureServiceArgs } from '../../../../../types/configure-service-args.type';
 import { Expression } from '../../../../../types/expression.type';
 import { Codes } from '../../../../../util/codes';
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
@@ -167,22 +168,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   public configureService(): void {
-    let loadingService: any = OntimizeService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get(loadingService);
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.dataService = Util.configureService(configureServiceArgs);
   }
 
   public getCellData(cellvalue: any, rowvalue?: any): string {

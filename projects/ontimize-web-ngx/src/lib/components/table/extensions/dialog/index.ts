@@ -6,3 +6,4 @@ export * from './store-configuration/o-table-store-configuration-dialog.componen
 export * from './store-filter/o-table-store-filter-dialog.component';
 export * from './visible-columns/o-table-visible-columns-dialog.component';
 export * from './group-by-columns/o-table-group-by-columns-dialog.component';
+export * from './o-table-base-dialog.class';

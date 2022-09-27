@@ -5,12 +5,18 @@
       <input #input matInput type="number" [placeholder]="getPlaceholder()" [formControl]="formControl"
         [required]="orequired" [min]="min" [max]="max" [step]="step" [id]="cellEditorId"> 
 
-      <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-      <mat-error *ngIf="hasError('min')" text="{{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}:
-        {{ getErrorValue('min', 'requiredMin') }}"></mat-error>
-      <mat-error *ngIf="hasError('max')" text="{{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}:
-        {{ getErrorValue('max', 'requiredMax') }}"></mat-error>
-      <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ getErrorText(oError) }}"></mat-error>
+      <mat-error *oMatError="hasError('required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+      </mat-error>
+      <mat-error *oMatError="hasError('min')">
+        {{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}
+      </mat-error>
+      <mat-error *oMatError="hasError('max')">
+        {{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}
+      </mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()">
+        {{ getErrorText(oError) }}
+      </mat-error>
     </mat-form-field>
   </div>
 </ng-template>
