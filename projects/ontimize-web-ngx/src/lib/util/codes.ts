@@ -119,7 +119,7 @@ export class Codes {
   public static APP_LAYOUT_MODE_DESKTOP: OAppLayoutMode = 'desktop';
   public static APP_LAYOUT_MODE_MOBILE: OAppLayoutMode = 'mobile';
   public static VISIBLE_EXPORT_BUTTONS: string[] = ['xlsx', 'pdf', 'html'];
-  public static VISIBLE_EXPORT_BUTTONS3X: string[] = ['xlsx', 'csv'];
+  public static VISIBLE_EXPORT_BUTTONS3X: string[] = ['xlsx', 'pdf', 'csv'];
 
   public static DEFAULT_CHANGE_EVENT: CHANGE_EVENTS = 'onValueChange';
 
