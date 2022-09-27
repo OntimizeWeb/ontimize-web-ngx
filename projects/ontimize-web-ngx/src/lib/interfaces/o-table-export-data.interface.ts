@@ -18,7 +18,7 @@ export interface OTableExportData3X {
 }
 
 export interface OTableExcelExportData3X extends OTableExportData3X {
-  excelColumns: { [columnId: string]: string; };
+  columns: { [columnId: string]: string; };
   columnTitles: { [columnId: string]: string; };
   columnTypes: { cellNumber?: string, styleId?: string };
   styles: { styleId?: string, style?: OTableExportColumnStyle };

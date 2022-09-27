@@ -34,7 +34,7 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
     };
 
     if (param.format === 'xlsx') {
-      exportData.excelColumns = this.parseExcelColumns(this.columns);
+      exportData.columns = this.parseColumns(this.columns);
       exportData.columnTitles = this.columnNames;
       exportData.styles = {};
       exportData.rowStyles = {};
@@ -48,7 +48,7 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
 
   }
 
-  private parseExcelColumns(columns: any[]): { [key: string]: string } {
+  private parseColumns(columns: any[]): { [key: string]: string } {
     let obj = {};
     columns.forEach((column: string) => {
       obj[column] = {};
