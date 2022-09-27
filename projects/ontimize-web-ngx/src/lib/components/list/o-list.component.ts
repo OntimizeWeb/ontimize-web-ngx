@@ -157,6 +157,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       this.state.filterCaseSensitive :
       this.filterCaseSensitive;
     this.parseSortColumns();
+    this.registerQuickFilter(this.searchInputComponent);
     if (this.queryOnInit) {
       this.queryData();
     }
