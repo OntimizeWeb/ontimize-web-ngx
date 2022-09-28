@@ -216,7 +216,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     if (Util.isDefined(val) && this.valueType === 'timestamp') {
       // because of the ngx-material-timepicker especification, its stored value must be always a string
       let value = val instanceof OFormValue ? val.value : val;
-      // this.timestampValue = value;
       stringValue = this.getValueAsString(value);
     }
     this.ensureOFormValue(val);
