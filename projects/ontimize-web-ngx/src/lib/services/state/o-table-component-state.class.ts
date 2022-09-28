@@ -41,6 +41,8 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   // stored filters builder values
   protected 'filter-builder-values': OFilterBuilderValues[];
 
+  protected 'grouped-date-columns': Map<string, string>;
+
   public get filterBuilderValues(): OFilterBuilderValues[] {
     return this['filter-builder-values'];
   }
@@ -91,7 +93,12 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   set sortColumns(value: string) {
     this['sort-columns'] = value;
   }
-
+  get groupedDateColumns(): Map<string, string> {
+    return this['grouped-date-columns'];
+  }
+  set groupedDateColumns(value: Map<string, string>) {
+    this['grouped-date-columns'] = value;
+  }
   get filterColumns(): OFilterColumn[] {
     return this['filter-columns'];
   }

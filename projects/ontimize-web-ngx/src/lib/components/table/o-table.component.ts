@@ -468,6 +468,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public groupedColumns: string;
 
   public sortColumns: string;
+  public groupedDateColumns: Map<string, string> = new Map<string, string>();
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
@@ -886,6 +887,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.setDatasource();
     this.registerDataSourceListeners();
     this.parseGroupedColumns();
+    this.parseGroupedDateColumns();
     this.parseSortColumns();
     this.registerSortListener();
     this.setFiltersConfiguration();
@@ -2861,13 +2863,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.setGroupColumns(result);
   }
-
+  parseGroupedDateColumns() {
+    if (this.state.groupedDateColumns) {
+      this.groupedDateColumns = this.state.groupedDateColumns;
+    }
+  }
   /**
    * Groups by column
    * @param column
    */
   groupByColumn(column: OColumn, dateType?: string) {
-    dateType ? this.checkGroupByColumn(column.attr + '-' + dateType, true) : this.checkGroupByColumn(column.attr, true);
+    this.checkGroupByColumn(column.attr, true);
+    if (dateType) {
+      this.updateDateGroupColumns(column.attr, true, dateType);
+    }
     this.dataSource.updateGroupedColumns();
   }
 
@@ -2877,6 +2886,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, false);
+    this.updateDateGroupColumns(column.attr, false);
     this.dataSource.updateGroupedColumns();
   }
 
@@ -2885,17 +2895,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByAllColumns() {
     this.setGroupColumns([]);
+    this.resetDateGroupColumns();
   }
 
-  setGroupColumns(value: string[]) {
+  setGroupColumns(value: any[]) {
     this.groupedColumnsArray = value;
     this.dataSource.updateGroupedColumns();
   }
 
-  checkGroupByColumn(field: string, add: boolean) {
+  checkGroupByColumn(field: string, add: boolean, operation?: string) {
     let found = null;
     for (const column of this.groupedColumnsArray) {
-      if (column.split("-")[0] === field) {
+      if (column === field) {
         found = this.groupedColumnsArray.indexOf(column, 0);
       }
     }
@@ -2953,17 +2964,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns column data by attr
    */
   getColumnDataByAttr(attr, row: any): any {
-    let operation: string = "";
-    if (attr.split('-')) {
-      operation = attr.split('-')[1];
-      attr = attr.split('-')[0];
+    let operation = null;
+    if (this.groupedDateColumns.size != 0) {
+      operation = this.groupedDateColumns.get(attr);
     }
     const oCol = this.getOColumn(attr);
     if (!Util.isDefined(oCol)) {
       return row[attr];
     }
     const useRenderer = oCol.renderer && oCol.renderer.getCellData;
-    if (operation == undefined) {
+    if (operation == null) {
       return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
     }
     else {
@@ -2976,7 +2986,23 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
     }
   }
+  updateDateGroupColumns(attr: string, add: boolean, operation?: string) {
 
+    if (this.groupedDateColumns.has(attr)) {
+      if (!add) {
+        this.groupedDateColumns.delete(attr);
+      }
+    }
+    else {
+      if (add) {
+        this.groupedDateColumns.set(attr, operation);
+      }
+    }
+    this.state.groupedDateColumns = this.groupedDateColumns;
+  }
+  resetDateGroupColumns() {
+    this.groupedDateColumns.clear();
+  }
   getClassNameGroupHeader(row: OTableGroupedRow): string {
     let className = '';
     if (row.level <= 10) {
