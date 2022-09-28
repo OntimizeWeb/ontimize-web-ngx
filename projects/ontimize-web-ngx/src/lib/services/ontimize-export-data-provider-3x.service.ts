@@ -25,7 +25,7 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
         offset: this.table.pageable ? currentPage * this.table.queryRows : -1,
         pageSize: this.table.queryRows,
         filter: this.filter,
-        orderBy:this.table.sortColArray
+        orderBy: this.table.sortColArray
 
       },
       advQuery: (this.table.pageable ? true : false),
@@ -33,7 +33,7 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
       dao: this.entity
     };
 
-    if (param.format === 'xlsx') {
+    if (param.format === 'xlsx' || 'pdf') {
       exportData.columns = this.parseColumns(this.columns);
       exportData.columnTitles = this.columnNames;
       exportData.styles = {};
