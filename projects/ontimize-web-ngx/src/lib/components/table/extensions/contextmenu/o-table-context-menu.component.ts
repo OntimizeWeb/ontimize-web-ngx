@@ -340,7 +340,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
   public foundColumnInGroupedColumns(column): boolean {
     let found: boolean = false;
-    this.table.groupedColumnsArray.forEach(groupedColumn => { if (groupedColumn.split('-')[0] == column.attr) { found = true } });
+    this.table.groupedColumnsArray.forEach(groupedColumn => { if (groupedColumn == column.attr) { found = true } });
     return found;
   }
 
