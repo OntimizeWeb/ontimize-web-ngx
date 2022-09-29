@@ -100,7 +100,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     const useExportConfiguration3X = this.appConfig.useExportConfiguration();
     let isVisible = true;
     if (this.visibleButtons) {
-      isVisible = this.visibleButtons.indexOf(btn) !== -1
+      isVisible = this.visibleButtons.indexOf(btn) !== -1;
     } else {
       if (useExportConfiguration3X) {
         isVisible = Codes.VISIBLE_EXPORT_BUTTONS3X.indexOf(btn) !== -1;
