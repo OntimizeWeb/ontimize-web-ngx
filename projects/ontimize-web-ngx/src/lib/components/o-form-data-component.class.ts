@@ -340,10 +340,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       return;
     }
     if (this.oldValue !== val) {
+      const previousValue = this.oldValue;
       this.setFormValue(val, options, setDirty);
       if (options && options.emitModelToViewValueChange !== false) {
         const changeType: number = (options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
-        this.emitOnValueChange(changeType, val, this.oldValue);
+        this.emitOnValueChange(changeType, val, previousValue);
       }
     }
   }
