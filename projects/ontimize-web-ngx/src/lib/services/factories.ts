@@ -77,10 +77,10 @@ export function dataServiceFactory(injector: Injector): any {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (typeof (config.serviceType) === 'undefined') {
-    return new OntimizeService(injector);
-  } else if ('OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
     return new OntimizeEEService(injector);
+  } else if ('Ontimize' === config.serviceType) {
+    return new OntimizeService(injector);
   }
   return Util.createServiceInstance(config.serviceType, injector);
 }
@@ -104,7 +104,7 @@ export function exportServiceFactory(injector: Injector): IExportService {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (typeof (config.exportServiceType) === 'undefined') {
+  if (!Util.isDefined(config.exportServiceType)) {
     return new OntimizeExportService(injector);
   }
   return Util.createServiceInstance(config.exportServiceType, injector);
@@ -120,10 +120,11 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizePermissions' === config.permissionsServiceType) {
-    return new OntimizePermissionsService(injector);
-  } else if ('OntimizeEEPermissions' === config.permissionsServiceType) {
+
+  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizeEEPermissions' === config.permissionsServiceType) {
     return new OntimizeEEPermissionsService(injector);
+  } else if ('OntimizePermissions' === config.permissionsServiceType) {
+    return new OntimizePermissionsService(injector);
   }
   return Util.createServiceInstance(config.permissionsServiceType, injector);
 }
@@ -137,7 +138,7 @@ export function authServiceFactory(injector: Injector): AuthService {
   return Util.isDefined(service) ? service : new OntimizeAuthService(injector);
 }
 
-export function componentStateFactory(injector: Injector): AbstractComponentStateService<any,any> {
+export function componentStateFactory(injector: Injector): AbstractComponentStateService<any, any> {
   const service = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
   return Util.isDefined(service) ? service : new DefaultComponentStateService(injector);
 }

@@ -23,7 +23,12 @@
 * **o-hour-input**: Fixing wrong `value-type="timestamp"` value saving ([f3d6f39c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3d6f39c)) ([5b9abf17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b9abf17)) Closes [#960](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/960) 
 
 ### BREAKING CHANGES
-Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
+* Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
+
+* **Application configuration file `app.config,ts`**
+
+The default value of `serviceType` has been changed to `OntimizeEE` and the default value of `permissionsServiceType` has been changed to `OntimizeEEPermissions`([25cc5c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/25cc5c8))  Closes [#967](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/967)
+
 
 ```ts
 @NgModule({
