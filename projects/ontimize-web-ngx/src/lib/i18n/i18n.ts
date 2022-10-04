@@ -281,7 +281,11 @@ export const MAP = {
     'AGGREGATE_NAME.max': 'Max',
     'AGGREGATE_NAME.avg': 'Avg',
     'AGGREGATE_NAME.sum': 'Sum',
-    'FORM_SERVICE_COMPONENT.REFRESH': 'Refresh'
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Refresh',
+    'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'month',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'month and year',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'year',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'day, month and year'
   },
 
   // Spanish
@@ -557,7 +561,11 @@ export const MAP = {
     'AGGREGATE_NAME.max': 'Max',
     'AGGREGATE_NAME.avg': 'Media',
     'AGGREGATE_NAME.sum': 'Sum',
-    'FORM_SERVICE_COMPONENT.REFRESH': 'Refrescar'
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Refrescar',
+    'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'mes',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mes y año',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'año',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'día, mes y año'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -820,6 +828,10 @@ export const MAP = {
     'AGGREGATE_NAME.max': 'Max',
     'AGGREGATE_NAME.avg': 'Media',
     'AGGREGATE_NAME.sum': 'Sum',
-    'FORM_SERVICE_COMPONENT.REFRESH': 'Recarregar'
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Recarregar',
+    'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'mês',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mês e ano',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'ano',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'dia, mês e ano',
   }
 };

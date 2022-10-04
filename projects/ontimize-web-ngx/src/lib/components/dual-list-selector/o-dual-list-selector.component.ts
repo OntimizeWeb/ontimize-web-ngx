@@ -39,10 +39,10 @@ export class ODualListSelectorComponent {
   public display = '';
   public dateColumns: Array<any> = [];
   public dateTypes = [
-    { value: 'MONTH', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_MONTH' },
-    { value: 'YEAR_MONTH', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH' },
-    { value: 'YEAR', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_YEAR' },
-    { value: 'day-month-year', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH_DAY' }
+    { value: 'MONTH', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_MONTH' },
+    { value: 'YEAR_MONTH', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH' },
+    { value: 'YEAR', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR' },
+    { value: 'day-month-year', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY' }
   ];
   public groupedDateColumns: Map<string, string> = new Map<string, string>();
   ngOnInit() {
@@ -191,5 +191,15 @@ export class ODualListSelectorComponent {
   }
   getSelectValue(itemSelected): string {
     return this.groupedDateColumns.has(itemSelected.attr) ? this.groupedDateColumns.get(itemSelected.attr) : 'day-month-year'
+  }
+  getViewValue(itemSelected): string {
+    let value = this.getSelectValue(itemSelected);
+    let viewValue = 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY';
+    this.dateTypes.forEach(type => {
+      if (type.value == value) {
+        viewValue = type.viewValue;
+      }
+    })
+    return viewValue;
   }
 }

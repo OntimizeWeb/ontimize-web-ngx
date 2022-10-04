@@ -52,8 +52,11 @@
           <span *ngIf="!dateColumns.includes(itemSelected)" matLine>{{ itemSelected[display] | oTranslate }} </span>
           <span *ngIf="dateColumns.includes(itemSelected)">
             <mat-select [value]="getSelectValue(itemSelected)" (selectionChange)="onSelectionChange($event,itemSelected)" required>
+              <mat-select-trigger>
+                {{itemSelected.attr | oTranslate}} ({{getViewValue(itemSelected) | oTranslate}})
+              </mat-select-trigger>
               <mat-option *ngFor="let type of dateTypes" [value]="type.value">
-                {{itemSelected.attr | oTranslate}}({{type.viewValue | oTranslate}})
+                {{type.viewValue | oTranslate}}
               </mat-option>
             </mat-select>
           </span>
