@@ -10,6 +10,7 @@ import { OTableConfiguration } from '../../types/table/o-table-configuration.typ
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { Util } from '../../util';
+import { OGroupedDateColumns } from '../../types';
 
 export class OTableComponentStateClass extends DefaultComponentStateClass {
   // sort
@@ -41,7 +42,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   // stored filters builder values
   protected 'filter-builder-values': OFilterBuilderValues[];
 
-  protected 'grouped-date-columns': Map<string, string>;
+  protected 'grouped-date-columns': OGroupedDateColumns[];
 
   public get filterBuilderValues(): OFilterBuilderValues[] {
     return this['filter-builder-values'];
@@ -93,10 +94,10 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   set sortColumns(value: string) {
     this['sort-columns'] = value;
   }
-  get groupedDateColumns(): Map<string, string> {
+  get groupedDateColumns(): OGroupedDateColumns[] {
     return this['grouped-date-columns'];
   }
-  set groupedDateColumns(value: Map<string, string>) {
+  set groupedDateColumns(value: OGroupedDateColumns[]) {
     this['grouped-date-columns'] = value;
   }
   get filterColumns(): OFilterColumn[] {

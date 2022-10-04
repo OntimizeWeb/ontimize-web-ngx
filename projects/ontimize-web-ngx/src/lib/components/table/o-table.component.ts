@@ -47,7 +47,7 @@ import { ComponentStateServiceProvider, OntimizeServiceProvider, O_COMPONENT_STA
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OColumnDisplay } from '../../types';
+import { OColumnDisplay, OGroupedDateColumns } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -2864,9 +2864,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.setGroupColumns(result);
   }
   parseGroupedDateColumns() {
-    if (this.state.groupedDateColumns) {
-      this.groupedDateColumns = this.state.groupedDateColumns;
+    let groupedColumns = new Map<string, string>();
+    if (this.state.groupedDateColumns.length > 0) {
+      this.state.groupedDateColumns.forEach(column => groupedColumns.set(column.attr, column.type));
     }
+    this.groupedDateColumns = groupedColumns;
   }
   /**
    * Groups by column
@@ -2989,7 +2991,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
   updateDateGroupColumns(attr: string, add: boolean, operation?: string) {
-
+    let groupedColumns: OGroupedDateColumns[] = [];
     if (this.groupedDateColumns.has(attr)) {
       if (!add) {
         this.groupedDateColumns.delete(attr);
@@ -3000,7 +3002,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.groupedDateColumns.set(attr, operation);
       }
     }
-    this.state.groupedDateColumns = this.groupedDateColumns;
+    this.groupedDateColumns.forEach(column => groupedColumns.push({ "attr": column, "type": (this.groupedDateColumns.get(column)) }))
+    this.state.groupedDateColumns = groupedColumns;
   }
   resetDateGroupColumns() {
     this.groupedDateColumns.clear();
