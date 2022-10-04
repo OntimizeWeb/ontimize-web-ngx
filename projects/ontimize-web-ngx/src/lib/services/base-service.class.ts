@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injector, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
@@ -10,9 +10,11 @@ import { ServiceResponse } from '../interfaces/service-response.interface';
 import { HttpRequestOptions } from '../types';
 import { Config } from '../types/config.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
+import { Util } from '../util';
 import { Codes } from '../util/codes';
 import { AuthService } from './auth.service';
 import { BaseServiceResponse } from './base-service-response.class';
+import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 
@@ -27,6 +29,7 @@ export class BaseService {
   protected responseParser: OntimizeServiceResponseParser;
   protected authService: AuthService;
   protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
+  protected loginStorageService: LoginStorageService;
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
@@ -35,6 +38,7 @@ export class BaseService {
     this._appConfig = this._config.getConfiguration();
     this.responseParser = this.injector.get<OntimizeServiceResponseParser>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser>);
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
+    this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService)
     this.configureAdapter();
   }
 
@@ -94,7 +98,10 @@ export class BaseService {
       }
 
       requestObs.pipe(
-        map((data: any) => this.adapter.adapt(data))
+        map((data: any) => {
+          this.refreshAuthToken(data);
+          return this.adapter.adapt(data);
+        })
       ).subscribe(resp => {
         (param.successCallback || this.parseSuccessfulResponse).bind(this)(resp, observer);
       }, error => {
@@ -173,6 +180,15 @@ export class BaseService {
 
   protected parseUnsuccessfulDeleteResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
     this.parseUnsuccessfulResponse(resp, observer);
+  }
+
+  protected refreshAuthToken(res: HttpResponse<any>) {
+    const authToken = res.headers.get('X-Auth-Token');
+    if (Util.isDefined(authToken)) {
+      let session = this.loginStorageService.getSessionInfo();
+      session.id = authToken;
+      this.loginStorageService.storeSessionInfo(session);
+    }
   }
 
 }
