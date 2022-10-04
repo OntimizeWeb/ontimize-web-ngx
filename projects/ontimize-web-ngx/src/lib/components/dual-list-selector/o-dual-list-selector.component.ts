@@ -13,6 +13,7 @@ export const DEFAULT_DUAL_LIST_SELECTOR = [
   'dataDestination: data-destination',
   'titleListDataSource: title-list-data-source',
   'titleListDataDestination: title-list-data-destination',
+  'groupedDateColumns:grouped-date-columns',
   'description'
 ];
 
@@ -36,8 +37,26 @@ export class ODualListSelectorComponent {
   public description = '';
   public key = '';
   public display = '';
-
-
+  public dateColumns: Array<any> = [];
+  public dateTypes = [
+    { value: 'MONTH', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_MONTH' },
+    { value: 'YEAR_MONTH', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH' },
+    { value: 'YEAR', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_YEAR' },
+    { value: 'day-month-year', viewValue: 'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH_DAY' }
+  ];
+  public groupedDateColumns: Map<string, string> = new Map<string, string>();
+  ngOnInit() {
+    this.dataSource.forEach(column => {
+      if (column.type == 'date' || this.groupedDateColumns.has(column.attr)) {
+        this.dateColumns.push(column);
+      }
+    })
+    this.dataDestination.forEach(column => {
+      if (column.type == 'date' || this.groupedDateColumns.has(column.attr)) {
+        this.dateColumns.push(column);
+      }
+    })
+  }
   drop(event: CdkDragDrop<string[]>) {
 
     if (event.previousContainer === event.container) {
@@ -159,5 +178,18 @@ export class ODualListSelectorComponent {
   setSelectedItems(items: Array<any>) {
     this.dataDestination = items;
   }
-
+  onSelectionChange(event, itemSelected) {
+    let value = event.value;
+    let attr = itemSelected.attr;
+    if (this.groupedDateColumns.get(attr) != null) {
+      this.groupedDateColumns.delete(attr);
+    }
+    this.groupedDateColumns.set(attr, value)
+  }
+  getSelectedDateColumns(): Map<string, string> {
+    return this.groupedDateColumns;
+  }
+  getSelectValue(itemSelected): string {
+    return this.groupedDateColumns.has(itemSelected.attr) ? this.groupedDateColumns.get(itemSelected.attr) : 'day-month-year'
+  }
 }

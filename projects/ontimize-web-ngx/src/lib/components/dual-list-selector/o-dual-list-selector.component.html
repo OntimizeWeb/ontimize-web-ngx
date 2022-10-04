@@ -49,8 +49,16 @@
 
         <mat-list-option checkboxPosition="before" *ngFor="let itemSelected of dataDestination" [value]="itemSelected" cdkDrag
           class="o-drag-list-item-box">
-          <span matLine>{{ itemSelected[display] | oTranslate }} </span>
+          <span *ngIf="!dateColumns.includes(itemSelected)" matLine>{{ itemSelected[display] | oTranslate }} </span>
+          <span *ngIf="dateColumns.includes(itemSelected)">
+            <mat-select [value]="getSelectValue(itemSelected)" (selectionChange)="onSelectionChange($event,itemSelected)" required>
+              <mat-option *ngFor="let type of dateTypes" [value]="type.value">
+                {{itemSelected.attr | oTranslate}}({{type.viewValue | oTranslate}})
+              </mat-option>
+            </mat-select>
+          </span>
         </mat-list-option>
+
         <div class="mat-caption drop-empty-message" *ngIf="dataDestination.length===0">
           {{ 'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE' | oTranslate }}
         </div>

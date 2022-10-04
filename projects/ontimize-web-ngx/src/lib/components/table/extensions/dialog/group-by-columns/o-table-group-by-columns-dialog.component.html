@@ -1,9 +1,10 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.GROUPBY' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <o-dual-list-selector #dualListSelector [data-source]="columns" [data-destination]="groupedColumns" key="attr" display="title"
-    title-list-data-source="TABLE_GROUP_BY_COLUMNS_DIALOG.ALL_COLUMNS" title-list-data-destination="TABLE_GROUP_BY_COLUMNS_DIALOG.GROUPED_COLUMNS"
-    description="TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION" fxFlexFill></o-dual-list-selector>
+  <o-dual-list-selector #dualListSelector [data-source]="columns" [data-destination]="groupedColumns" [grouped-date-columns]="groupedDateColumns"
+    key="attr" display="title" title-list-data-source="TABLE_GROUP_BY_COLUMNS_DIALOG.ALL_COLUMNS"
+    title-list-data-destination="TABLE_GROUP_BY_COLUMNS_DIALOG.GROUPED_COLUMNS" description="TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION" fxFlexFill>
+  </o-dual-list-selector>
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayoutAlign="end center">

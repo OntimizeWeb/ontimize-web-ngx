@@ -18,6 +18,7 @@ export class OTableGroupByColumnsDialogComponent {
 
   public columns: Array<OColumn> = [];
   public groupedColumns: Array<OColumn> = [];
+  public groupedDateColumns: Map<string, string> = new Map<string, string>();
 
   @ViewChild('dualListSelector', { static: false }) dualListSelector: ODualListSelectorComponent;
 
@@ -40,11 +41,15 @@ export class OTableGroupByColumnsDialogComponent {
       this.columns = data.columnsData.filter((oCol: OColumn) => oCol.visible && oCol.groupable && self.groupedColumns.findIndex(x => x.attr === oCol.attr) === -1);
 
     }
-
+    if (Util.isDefined(data.groupedDateColumns)) {
+      this.groupedDateColumns = data.groupedDateColumns;
+    }
   }
 
   getGroupedColumns(): Array<string> {
     return this.dualListSelector.getSelectedItems().map((oCol: OColumn) => oCol.attr);
   }
-
+  getMapDateColumns(): Map<string, string> {
+    return this.dualListSelector.getSelectedDateColumns();
+  }
 }

@@ -2902,7 +2902,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.groupedColumnsArray = value;
     this.dataSource.updateGroupedColumns();
   }
-
+  setGroupedDateColumns(value: Map<string, string>) {
+    this.groupedDateColumns = value;
+  }
   checkGroupByColumn(field: string, add: boolean, operation?: string) {
     let found = null;
     for (const column of this.groupedColumnsArray) {
