@@ -1,3 +1,5 @@
+## 8.7.3
+
 ## 8.7.2 (2022-09-15)
 ### Bug fixes
 * **o-table**: Fixed bug that incorrectly detected o-table-button components ([8aa098f4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8aa098f4)) Closes [#1026](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1026)
