@@ -340,12 +340,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       return;
     }
     if (this.oldValue !== val) {
-      const newValue = val;
       const previousValue = this.oldValue;
       this.setFormValue(val, options, setDirty);
       if (options && options.emitModelToViewValueChange !== false) {
         const changeType: number = (options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
-        this.emitOnValueChange(changeType, newValue, previousValue);
+        this.emitOnValueChange(changeType, val, previousValue);
       }
     }
   }
@@ -410,7 +409,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }, null);
   }
 
-  public getControl(): FormControl {
+  public getControl(): OFormControl {
     if (!this._fControl) {
       const validators: ValidatorFn[] = this.resolveValidators();
       const cfg = {
@@ -534,10 +533,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   protected registerOnFormControlChange(): void {
-    const self = this;
     if (this._fControl) {
       this._fControlSubscription = this._fControl.valueChanges.subscribe(value => {
-        self.onFormControlChange(value);
+        this.onFormControlChange(value);
       });
     }
   }
@@ -550,15 +548,19 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(this.value.value, options);
+      this.updateOFormControlValue(this.value.value, options, setDirty);
+    }
+    this.oldValue = this.value.value;
+  }
+
+  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false) : void {
+    this._fControl.setValue(value, options);
       if (setDirty) {
         this._fControl.markAsDirty();
       }
       if (this._fControl.invalid && !this.form.isInInsertMode()) {
         this._fControl.markAsTouched();
       }
-    }
-    this.oldValue = this.value.value;
   }
 
   protected updateValidators(): void {
