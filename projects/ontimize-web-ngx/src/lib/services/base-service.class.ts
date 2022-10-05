@@ -185,9 +185,7 @@ export class BaseService {
   protected refreshAuthToken(res: HttpResponse<any>) {
     const authToken = res.headers.get('X-Auth-Token');
     if (Util.isDefined(authToken)) {
-      let session = this.loginStorageService.getSessionInfo();
-      session.id = authToken;
-      this.loginStorageService.storeSessionInfo(session);
+      this.loginStorageService.updateSessionId(authToken);
     }
   }
 

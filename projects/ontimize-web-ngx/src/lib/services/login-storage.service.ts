@@ -43,6 +43,14 @@ export class LoginStorageService {
     }
   }
 
+  public updateSessionId(id: string | number) {
+    let session = this.getSessionInfo();
+    if (session.id !== id) {
+      session.id = id;
+      this.storeSessionInfo(session);
+    }
+  }
+
   public sessionExpired(): void {
     const sessionInfo = this.getSessionInfo();
     delete sessionInfo.id;
