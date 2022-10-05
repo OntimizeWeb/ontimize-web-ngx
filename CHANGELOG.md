@@ -1,4 +1,25 @@
-## 8.7.3
+## 8.7.3 (2022-10-06)
+### Features
+* **o-table**: New `O_TABLE_GLOBAL_CONFIG` InjectionToken ([73e9be8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73e9be8))
+### BREAKING CHANGES
+* **o-table**: Set `auto-adjust=true` by default ([47e252e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47e252e)) Closes [#1045](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1045)
+
+To resolve this breaking change, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
+
+```ts
+@NgModule({
+  declarations: [
+  ...
+  ],
+  ...
+  providers: [
+    ...
+    { provide: O_TABLE_GLOBAL_CONFIG, useValue: { autoAdjust: false } },
+    ...
+  ],
+  ...
+})
+```
 
 ## 8.7.2 (2022-09-15)
 ### Bug fixes
