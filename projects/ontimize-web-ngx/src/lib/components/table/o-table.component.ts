@@ -21,7 +21,6 @@ import {
   OnInit,
   Optional,
   QueryList,
-  SimpleChange,
   TemplateRef,
   ViewChild,
   ViewChildren,
@@ -1106,26 +1105,24 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
       if (colToAddInVisibleCol.length > 0) {
-        colToAddInVisibleCol.forEach((colAdd, index) => {
+        colToAddInVisibleCol.forEach((colAdd) => {
           if (stateCols.filter(col => col.attr === colAdd).length > 0) {
-            stateCols = stateCols.map(col => {
-              if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
+            stateCols = stateCols.filter(col => colToAddInVisibleCol.indexOf(col.attr) > -1)
+              .map(col => {
                 col.visible = true;
-              }
-              return col;
-            });
+                return col;
+              });
           } else {
-            this.colArray.forEach((element, i) => {
-              if (element === colAdd) {
+            this.colArray.filter(col => col === colAdd)
+              .forEach((element, i) => {
                 stateCols.splice(i + 1, 0,
                   {
                     attr: colAdd,
                     visible: true,
                     width: undefined
                   });
-              }
 
-            });
+              });
           }
         });
       }
@@ -1134,10 +1131,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in this case you have to delete this column to this.visibleColArray
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
-        stateCols = stateCols.map(col => {
-          if (colToDeleteInVisibleCol.indexOf(col.attr) > -1) {
-            col.visible = false;
-          }
+        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) > -1).map(col => {
+          col.visible = false;
           return col;
         });
       }
