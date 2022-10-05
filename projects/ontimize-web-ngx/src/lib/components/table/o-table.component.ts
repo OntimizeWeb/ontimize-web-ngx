@@ -21,6 +21,7 @@ import {
   OnInit,
   Optional,
   QueryList,
+  SimpleChange,
   TemplateRef,
   ViewChild,
   ViewChildren,
@@ -56,6 +57,7 @@ import { OColumnAggregate } from '../../types/table/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/table/o-column-value-filter.type';
 import { TableFilterByColumnDialogResult } from '../../types/table/o-table-filter-by-column-data.type';
 import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.type';
+import { OTableGlobalConfig } from '../../types/table/o-table-global-config.type';
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
@@ -101,6 +103,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
 
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -283,6 +286,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
+
+  public oTableGlobalConfig: OTableGlobalConfig;
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
@@ -417,8 +422,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   orderable: boolean = true;
   @InputConverter()
   resizable: boolean = true;
+  private _autoAdjust: boolean;
   @InputConverter()
-  autoAdjust: boolean = true;
+  set autoAdjust(value: boolean) {
+    this._autoAdjust = BooleanConverter(value);
+  }
+  get autoAdjust(): boolean {
+    if (!Util.isDefined(this._autoAdjust) && Util.isDefined(this.oTableGlobalConfig)) {
+      return this.oTableGlobalConfig.autoAdjust;
+    }
+    return this._autoAdjust;
+  }
+
   @InputConverter()
   groupable: boolean = true;
   @InputConverter()
@@ -670,8 +685,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     this.snackBarService = this.injector.get(SnackBarService);
-  }
+    try {
+      this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
 
+    } catch (error) {
+      // Do nothing because is optional
+    }
+  }
   get state(): OTableComponentStateClass {
     return this.componentStateService.state;
   }
