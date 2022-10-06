@@ -1,4 +1,6 @@
 ## 8.7.3
+### Features:
+JWT token refresh has been implemented to be compatible with [Ontimize Boot](https://ontimize.github.io/ontimize-boot/basics/autoconfigurators/#security) ([280a422](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/280a422)) Closes [#1041](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1041)
 
 ## 8.7.2 (2022-09-15)
 ### Bug fixes
