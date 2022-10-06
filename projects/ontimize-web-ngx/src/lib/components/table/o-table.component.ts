@@ -424,7 +424,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   resizable: boolean = true;
   @InputConverter()
   autoAdjust: boolean = true;
-
   @InputConverter()
   groupable: boolean = true;
   @InputConverter()

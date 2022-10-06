@@ -1,6 +1,7 @@
 ## 8.7.3 (2022-10-06)
 ### Features
 * **o-table**: New `O_TABLE_GLOBAL_CONFIG` InjectionToken ([73e9be8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73e9be8))
+
 ### BREAKING CHANGES
 * **o-table**: Set `auto-adjust=true` by default ([47e252e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47e252e)) Closes [#1045](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1045)
 
