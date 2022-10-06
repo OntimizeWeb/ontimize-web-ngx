@@ -8,7 +8,11 @@
       [placeholder]="placeHolder" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
       [class.no-resize]="!isResizable()" [rows]="rows" [cols]="columns" [required]="isRequired"
       (change)="onChangeEvent($event)"></textarea>
-    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
   </mat-form-field>
 </div>

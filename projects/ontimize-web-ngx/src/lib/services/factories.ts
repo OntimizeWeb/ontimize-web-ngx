@@ -5,6 +5,7 @@ import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { IReportService } from '../interfaces/report-on-demand-service.interface';
+import { OMatErrorOptions } from '../types/o-mat-error.type';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { OntimizeAuthService } from './o-auth.service';
@@ -60,6 +61,7 @@ export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report servi
 
 export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
 
+export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
@@ -70,17 +72,17 @@ export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('E
  */
 export function dataServiceFactory(injector: Injector): any {
   const serviceClass = _getInjectionTokenValue(O_DATA_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   if (Util.isDefined(service)) {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (typeof (config.serviceType) === 'undefined') {
-    return new OntimizeService(injector);
-  } else if ('OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
     return new OntimizeEEService(injector);
+  } else if ('Ontimize' === config.serviceType) {
+    return new OntimizeService(injector);
   }
-  return _createServiceInstance(config.serviceType, injector);
+  return Util.createServiceInstance(config.serviceType, injector);
 }
 
 /**
@@ -88,7 +90,7 @@ export function dataServiceFactory(injector: Injector): any {
  */
 export function fileServiceFactory(injector: Injector): IFileService {
   const serviceClass = _getInjectionTokenValue(O_FILE_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   return Util.isDefined(service) ? service : new OntimizeFileService(injector);
 }
 
@@ -97,15 +99,15 @@ export function fileServiceFactory(injector: Injector): IFileService {
  */
 export function exportServiceFactory(injector: Injector): IExportService {
   const serviceClass = _getInjectionTokenValue(O_EXPORT_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   if (Util.isDefined(service)) {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (typeof (config.exportServiceType) === 'undefined') {
+  if (!Util.isDefined(config.exportServiceType)) {
     return new OntimizeExportService(injector);
   }
-  return _createServiceInstance(config.exportServiceType, injector);
+  return Util.createServiceInstance(config.exportServiceType, injector);
 }
 
 /**
@@ -113,17 +115,18 @@ export function exportServiceFactory(injector: Injector): IExportService {
  */
 export function permissionsServiceFactory(injector: Injector): IPermissionsService {
   const serviceClass = _getInjectionTokenValue(O_PERMISSION_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   if (Util.isDefined(service)) {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizePermissions' === config.permissionsServiceType) {
-    return new OntimizePermissionsService(injector);
-  } else if ('OntimizeEEPermissions' === config.permissionsServiceType) {
+
+  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizeEEPermissions' === config.permissionsServiceType) {
     return new OntimizeEEPermissionsService(injector);
+  } else if ('OntimizePermissions' === config.permissionsServiceType) {
+    return new OntimizePermissionsService(injector);
   }
-  return _createServiceInstance(config.permissionsServiceType, injector);
+  return Util.createServiceInstance(config.permissionsServiceType, injector);
 }
 
 /**
@@ -131,11 +134,11 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
  */
 export function authServiceFactory(injector: Injector): AuthService {
   const serviceClass = _getInjectionTokenValue(O_AUTH_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   return Util.isDefined(service) ? service : new OntimizeAuthService(injector);
 }
 
-export function componentStateFactory(injector: Injector): AbstractComponentStateService<any,any> {
+export function componentStateFactory(injector: Injector): AbstractComponentStateService<any, any> {
   const service = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
   return Util.isDefined(service) ? service : new DefaultComponentStateService(injector);
 }
@@ -174,16 +177,4 @@ export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: I
   return service;
 }
 
-/**
- * Returns an instance of the provided service class
- * @param clazz the class reference
- * @param injector the injector
- */
-export function _createServiceInstance(clazz: any, injector: Injector) {
-  if (!Util.isDefined(clazz)) {
-    return;
-  }
-  const newInstance = Object.create(clazz.prototype);
-  clazz.apply(newInstance, [injector]);
-  return newInstance;
-}
+

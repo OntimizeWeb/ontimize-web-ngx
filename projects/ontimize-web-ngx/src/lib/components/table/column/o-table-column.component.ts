@@ -194,7 +194,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected serviceType: string;
   @InputConverter()
   protected translate: boolean = false;
-  
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
   /* input time */
@@ -297,7 +296,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
 
   get originalWidth() {
     let originalWidth = this.width;
-    const pxVal = Util.extractPixelsValue(this.width);
+    const pxVal = Util.extractPixelsValue(originalWidth);
     if (Util.isDefined(pxVal)) {
       originalWidth = pxVal + '';
 
@@ -385,7 +384,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     }
   }
 
-  buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any, registerInColumn:boolean = true) {
+  buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any, registerInColumn: boolean = true) {
     let editor;
     const componentRef = editorsMapping[type] || editorsMapping.text;
     if (componentRef === undefined) {
