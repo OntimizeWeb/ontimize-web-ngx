@@ -21,6 +21,7 @@ import {
   OnInit,
   Optional,
   QueryList,
+  SimpleChange,
   TemplateRef,
   ViewChild,
   ViewChildren,
@@ -57,6 +58,7 @@ import { OColumnAggregate } from '../../types/table/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/table/o-column-value-filter.type';
 import { TableFilterByColumnDialogResult } from '../../types/table/o-table-filter-by-column-data.type';
 import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.type';
+import { OTableGlobalConfig } from '../../types/table/o-table-global-config.type';
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
@@ -102,6 +104,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
 
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -185,7 +188,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // exportServiceType [ string ]: The service used by the table for exporting it's data, it must implement 'IExportService' interface. Default: 'OntimizeExportService'
   'exportServiceType: export-service-type',
 
-  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: false
+  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: true
   'autoAdjust: auto-adjust',
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
@@ -287,6 +290,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
+
+  public oTableGlobalConfig: OTableGlobalConfig;
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
@@ -424,7 +429,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   resizable: boolean = true;
   @InputConverter()
-  autoAdjust: boolean = false;
+  autoAdjust: boolean = true;
   @InputConverter()
   groupable: boolean = true;
   @InputConverter()
@@ -677,6 +682,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     this.snackBarService = this.injector.get(SnackBarService);
+    this.getGlobalConfig();
+  }
+
+  private getGlobalConfig() {
+    try {
+      this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
+      this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
+    } catch (error) {
+      // Do nothing because is optional
+    }
   }
 
   get state(): OTableComponentStateClass {
@@ -707,6 +722,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   ngAfterViewChecked() {
     this.cd.detectChanges();
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
+    if (Util.isDefined(changes.autoAdjust) && changes.autoAdjust.currentValue !== changes.autoAdjust.previousValue) {
+      this.autoAdjust = changes.autoAdjust.currentValue;
+    }
   }
 
   updateHeaderAndFooterStickyPositions() {
@@ -1107,17 +1128,34 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
       if (colToAddInVisibleCol.length > 0) {
-        this.changeColumnsVisibility(colToAddInVisibleCol, stateCols);
+        colToAddInVisibleCol.forEach((colAdd) => {
+          if (stateCols.filter(col => col.attr === colAdd).length > 0) {
+            stateCols = stateCols.filter(col => colToAddInVisibleCol.indexOf(col.attr) > -1)
+              .map(col => {
+                col.visible = true;
+                return col;
+              });
+          } else {
+            this.colArray.filter(col => col === colAdd)
+              .forEach((element, i) => {
+                stateCols.splice(i + 1, 0,
+                  {
+                    attr: colAdd,
+                    visible: true,
+                    width: undefined
+                  });
+
+              });
+          }
+        });
       }
 
       // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
       // in this case you have to delete this column to this.visibleColArray
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
-        stateCols = stateCols.map(col => {
-          if (colToDeleteInVisibleCol.indexOf(col.attr) > -1) {
-            col.visible = false;
-          }
+        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) > -1).map(col => {
+          col.visible = false;
           return col;
         });
       }

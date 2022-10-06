@@ -1,3 +1,4 @@
+
 ## 8.8.0
 ### Features:
 * **o-table**:
@@ -20,7 +21,7 @@
     * `OMatErrorModule` no longer exists. This shouldn't affect users because its importation wasn't needed.
     * There is a new `oMatError` directive that user must use instead `ngIf` for having the `O_MAT_ERROR_OPTIONS` features available in the Angular Material `mat-error` component. See documentation for more info.
 * **service-type**: Fixes bug when multiple components use the same service-type ([380fda3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/380fda3)) Closes [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015)
-* **o-hour-input**: Fixing wrong `value-type="timestamp"` value saving ([f3d6f39c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3d6f39c)) ([5b9abf17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b9abf17)) Closes [#960](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/960) 
+* **o-hour-input**: Fixing wrong `value-type="timestamp"` value saving ([f3d6f39c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3d6f39c)) ([5b9abf17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b9abf17)) Closes [#960](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/960)
 
 ### BREAKING CHANGES
 * Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
@@ -43,6 +44,29 @@ The default value of `serviceType` has been changed to `OntimizeEE` and the defa
 export class MyModule { }
 ```
 
+## 8.7.3 (2022-10-06)
+### Features
+* JWT token refresh has been implemented to be compatible with [Ontimize Boot](https://ontimize.github.io/ontimize-boot/basics/autoconfigurators/#security) ([280a422](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/280a422)) Closes [#1041](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1041)
+* **o-table**: New `O_TABLE_GLOBAL_CONFIG` InjectionToken ([73e9be8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73e9be8))
+
+### BREAKING CHANGES
+* **o-table**: Set `auto-adjust=true` by default ([47e252e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47e252e)) Closes [#1045](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1045)
+
+To resolve this breaking change, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
+
+```ts
+@NgModule({
+  declarations: [
+  ...
+  ],
+  ...
+  providers: [
+    ...
+    { provide: O_TABLE_GLOBAL_CONFIG, useValue: { autoAdjust: false } },
+    ...
+  ],
+  ...
+})
 
 ## 8.7.2 (2022-09-15)
 ### Bug fixes
