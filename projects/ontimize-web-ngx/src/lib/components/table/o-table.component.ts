@@ -21,6 +21,7 @@ import {
   OnInit,
   Optional,
   QueryList,
+  SimpleChange,
   TemplateRef,
   ViewChild,
   ViewChildren,
@@ -186,7 +187,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // exportServiceType [ string ]: The service used by the table for exporting it's data, it must implement 'IExportService' interface. Default: 'OntimizeExportService'
   'exportServiceType: export-service-type',
 
-  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: false
+  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: true
   'autoAdjust: auto-adjust',
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
@@ -421,17 +422,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   orderable: boolean = true;
   @InputConverter()
   resizable: boolean = true;
-  private _autoAdjust: boolean;
   @InputConverter()
-  set autoAdjust(value: boolean) {
-    this._autoAdjust = BooleanConverter(value);
-  }
-  get autoAdjust(): boolean {
-    if (!Util.isDefined(this._autoAdjust) && Util.isDefined(this.oTableGlobalConfig)) {
-      return this.oTableGlobalConfig.autoAdjust;
-    }
-    return this._autoAdjust;
-  }
+  autoAdjust: boolean = true;
 
   @InputConverter()
   groupable: boolean = true;
@@ -684,13 +676,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     this.snackBarService = this.injector.get(SnackBarService);
+    this.getGlobalConfig();
+  }
+
+  private getGlobalConfig() {
     try {
       this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
-
+      this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
     } catch (error) {
       // Do nothing because is optional
     }
   }
+
   get state(): OTableComponentStateClass {
     return this.componentStateService.state;
   }
@@ -719,6 +716,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   ngAfterViewChecked() {
     this.cd.detectChanges();
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
+    if (Util.isDefined(changes.autoAdjust) && changes.autoAdjust.currentValue !== changes.autoAdjust.previousValue) {
+      this.autoAdjust = changes.autoAdjust.currentValue;
+    }
   }
 
   updateHeaderAndFooterStickyPositions() {
