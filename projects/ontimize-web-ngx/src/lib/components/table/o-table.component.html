@@ -1,17 +1,19 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
   [class.block-events]="showLoading | async">
-  <div #tableToolbar *ngIf="hasControls()" class="toolbar">
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+
+  <o-data-toolbar #tableToolbar *ngIf="hasControls()" [title]="title" [show-title]="showTitle" class="toolbar">
+    <ng-container o-data-toolbar-projection-start>
       <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
         <ng-content select="o-table-button"></ng-content>
       </o-table-buttons>
-
-      <ng-content select="[o-table-custom-toolbar]"></ng-content>
-
-      <div fxLayout fxFlex>
-        <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
-      </div>
-
+    </ng-container>
+    <ng-content select="[o-table-toolbar][position=start]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-content select="[o-table-toolbar][position=end]" ngProjectAs="[o-data-toolbar-custom-projection-end]">
+    </ng-content>
+    <ng-content select="[o-table-toolbar]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-container o-data-toolbar-projection-end>
       <ng-container *ngIf="quickfilterContentChild; else defaultQuickFilter">
         <ng-content select="o-table-quickfilter"></ng-content>
       </ng-container>
@@ -21,8 +23,6 @@
           </o-table-quickfilter>
         </ng-container>
       </ng-template>
-
-
       <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="tableMenu.matMenu"
         (click)="$event.stopPropagation()">
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
@@ -36,9 +36,11 @@
       <ng-template #exportOptsTemplate>
         <ng-content select="o-table-export-button"></ng-content>
       </ng-template>
-    </div>
-  </div>
+    </ng-container>
 
+    <!-- <ng-container select="o-table-custom-toolbar[position=end], o-grid-custom-toolbar[position=end], o-grid-custom-toolbar[position=end]"></ng-container> -->
+
+  </o-data-toolbar>
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
     <ng-container *ngIf="!enabledVirtualScroll; else tableWithVirtualScroll">

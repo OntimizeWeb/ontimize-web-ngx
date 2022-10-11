@@ -3,9 +3,8 @@
     class="spinner-container">
     <mat-progress-spinner strokeWidth="3" mode="indeterminate"></mat-progress-spinner>
   </div>
-
-  <mat-toolbar *ngIf="hasControls()" [class.dense]="odense" fxFlex="0 1 auto">
-    <div class="mat-toolbar-tools" fxLayout="row" fxFill fxLayoutAlign="start center">
+  <o-data-toolbar *ngIf="hasControls()" [class.dense]="odense" fxFlex="0 1 auto" [title]="title" [show-title]="hasTitle()" class="toolbar">
+    <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
         <button *ngIf="insertButton && !insertButtonFloatable" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
@@ -37,15 +36,19 @@
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
         </button>
       </ng-template>
-      <div fxLayoutAlign="center center" fxFlex>
-        <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
-      </div>
+    </ng-container>
+    <ng-content select="[o-list-toolbar][position=start]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-content select="[o-list-toolbar][position=end]" ngProjectAs="[o-data-toolbar-custom-projection-end]">
+    </ng-content>
+    <ng-content select="[o-list-toolbar]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-container o-data-toolbar-projection-end>
       <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
         [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance" float-label="never">
       </o-search-input>
-    </div>
-  </mat-toolbar>
-
+    </ng-container>
+  </o-data-toolbar>
   <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%" [class.o-list-content-toolbar-dense]="hasControls() && odense">
 
     <!--MAT-LIST-->
