@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { InputConverter } from '../../decorators/input-converter';
 
 
@@ -12,18 +12,19 @@ export const DEFAULT_INPUTS_O_DATA_TOOLBAR = [
 
 @Component({
   selector: 'o-data-toolbar',
-  templateUrl:'./o-data-toolbar.component.html',
+  templateUrl: './o-data-toolbar.component.html',
+  styleUrls: ['./o-data-toolbar.component.scss'],
   inputs: DEFAULT_INPUTS_O_DATA_TOOLBAR,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host:
+    { class: 'o-data-toolbar' }
+
 })
 export class ODataToolbarComponent {
   @InputConverter()
   showTitle: boolean = false;
 
   public title: string;
-
-  constructor() { }
-
-
 
 }
