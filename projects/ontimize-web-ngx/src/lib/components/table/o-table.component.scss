@@ -50,8 +50,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
-      > .o-table-body .mat-header-row {
+       > .o-table-body .mat-header-row,
+      > .o-table-toolbar {
         opacity: .75;
       }
     }
@@ -59,7 +59,7 @@ $o_table_row_padding: 24px;
     position: relative;
     padding: 0 .5%;
 
-    .toolbar {
+    .o-table-toolbar {
       height: 40px;
 
       > div {
@@ -69,7 +69,6 @@ $o_table_row_padding: 24px;
       .buttons {
         margin: 0 10px 0 4px;
       }
-
 
     }
 
