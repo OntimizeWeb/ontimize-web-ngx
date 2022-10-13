@@ -42,7 +42,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   // stored filters builder values
   protected 'filter-builder-values': OFilterBuilderValues[];
 
-  protected 'grouped-date-columns': OGroupedDateColumns[];
+  protected 'grouped-date-columns': OGroupedDateColumns[] = [];
 
   public get filterBuilderValues(): OFilterBuilderValues[] {
     return this['filter-builder-values'];

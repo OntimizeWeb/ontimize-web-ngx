@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
+import { OGroupedDateColumns } from '../../types';
 
 export const DEFAULT_DUAL_LIST_SELECTOR = [
   //key: The unique identifier field of each object in the data source and data destination arrays
@@ -44,15 +45,15 @@ export class ODualListSelectorComponent {
     { value: 'YEAR', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR' },
     { value: 'day-month-year', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY' }
   ];
-  public groupedDateColumns: Map<string, string> = new Map<string, string>();
+  public groupedDateColumns: OGroupedDateColumns[] = [];
   ngOnInit() {
     this.dataSource.forEach(column => {
-      if (column.type == 'date' || this.groupedDateColumns.has(column.attr)) {
+      if (column.type == 'date' || this.findInGroupedDateColumns(column.attr) != null) {
         this.dateColumns.push(column);
       }
     })
     this.dataDestination.forEach(column => {
-      if (column.type == 'date' || this.groupedDateColumns.has(column.attr)) {
+      if (column.type == 'date' || this.findInGroupedDateColumns(column.attr) != null) {
         this.dateColumns.push(column);
       }
     })
@@ -68,7 +69,16 @@ export class ODualListSelectorComponent {
         event.currentIndex);
     }
   }
+  findInGroupedDateColumns(attr): number {
+    let index = null;
+    if (this.groupedDateColumns.length != 0) {
+      if (this.groupedDateColumns.find(column => column.attr == attr)) {
+        index = this.groupedDateColumns.findIndex(column => column.attr == attr)
+      }
+    }
+    return index;
 
+  }
   addToGroupedColumns(columnsToGrouped: MatSelectionList) {
     const self = this;
     columnsToGrouped.selectedOptions.selected.forEach(x => {
@@ -181,16 +191,18 @@ export class ODualListSelectorComponent {
   onSelectionChange(event, itemSelected) {
     let value = event.value;
     let attr = itemSelected.attr;
-    if (this.groupedDateColumns.get(attr) != null) {
-      this.groupedDateColumns.delete(attr);
+    let index = this.findInGroupedDateColumns(attr);
+    if (index != null) {
+      this.groupedDateColumns.splice(index, 1);
     }
-    this.groupedDateColumns.set(attr, value)
+    this.groupedDateColumns.push({ "attr": attr, "type": value })
   }
-  getSelectedDateColumns(): Map<string, string> {
+  getSelectedDateColumns(): OGroupedDateColumns[] {
     return this.groupedDateColumns;
   }
   getSelectValue(itemSelected): string {
-    return this.groupedDateColumns.has(itemSelected.attr) ? this.groupedDateColumns.get(itemSelected.attr) : 'day-month-year'
+    let index = this.findInGroupedDateColumns(itemSelected.attr);
+    return index != null ? this.groupedDateColumns[index].type : 'day-month-year'
   }
   getViewValue(itemSelected): string {
     let value = this.getSelectValue(itemSelected);

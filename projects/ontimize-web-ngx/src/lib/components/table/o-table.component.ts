@@ -468,7 +468,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public groupedColumns: string;
 
   public sortColumns: string;
-  public groupedDateColumns: Map<string, string> = new Map<string, string>();
+  public groupedDateColumns: OGroupedDateColumns[] = [];
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
@@ -2864,11 +2864,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.setGroupColumns(result);
   }
   parseGroupedDateColumns() {
-    let groupedColumns = new Map<string, string>();
-    if (this.state.groupedDateColumns.length > 0) {
-      this.state.groupedDateColumns.forEach(column => groupedColumns.set(column.attr, column.type));
-    }
-    this.groupedDateColumns = groupedColumns;
+    this.groupedDateColumns = this.state.groupedDateColumns;
   }
   /**
    * Groups by column
@@ -2904,7 +2900,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.groupedColumnsArray = value;
     this.dataSource.updateGroupedColumns();
   }
-  setGroupedDateColumns(value: Map<string, string>) {
+  setGroupedDateColumns(value: OGroupedDateColumns[]) {
     this.groupedDateColumns = value;
   }
   checkGroupByColumn(field: string, add: boolean, operation?: string) {
@@ -2969,8 +2965,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   getColumnDataByAttr(attr, row: any): any {
     let operation = null;
-    if (this.groupedDateColumns.size != 0) {
-      operation = this.groupedDateColumns.get(attr);
+    if (this.groupedDateColumns.length != 0) {
+      operation = this.groupedDateColumns[this.findInGroupedDateColumns(attr)].type;
     }
     const oCol = this.getOColumn(attr);
     if (!Util.isDefined(oCol)) {
@@ -2992,21 +2988,31 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
   updateDateGroupColumns(attr: string, add: boolean, operation?: string) {
     let groupedColumns: OGroupedDateColumns[] = [];
-    if (this.groupedDateColumns.has(attr)) {
+    let index = this.findInGroupedDateColumns(attr);
+    if (index != null) {
       if (!add) {
-        this.groupedDateColumns.delete(attr);
+        this.groupedDateColumns.slice(index, 1);
       }
     }
     else {
       if (add) {
-        this.groupedDateColumns.set(attr, operation);
+        this.groupedDateColumns.push({ "attr": attr, "type": operation });
       }
     }
-    this.groupedDateColumns.forEach(column => groupedColumns.push({ "attr": column, "type": (this.groupedDateColumns.get(column)) }))
     this.state.groupedDateColumns = groupedColumns;
   }
   resetDateGroupColumns() {
-    this.groupedDateColumns.clear();
+    this.groupedDateColumns = [];
+  }
+  findInGroupedDateColumns(attr): number {
+    let index = null;
+    if (Util.isDefined(this.groupedDateColumns)) {
+      if (this.groupedDateColumns.find(column => column.attr == attr)) {
+        index = this.groupedDateColumns.findIndex(column => column.attr == attr)
+      }
+    }
+    return index;
+
   }
   getClassNameGroupHeader(row: OTableGroupedRow): string {
     let className = '';

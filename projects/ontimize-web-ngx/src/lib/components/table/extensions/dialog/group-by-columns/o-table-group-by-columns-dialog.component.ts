@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { OGroupedDateColumns } from '../../../../../types';
 import { Util } from '../../../../../util/util';
 import { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';
 import { OColumn } from '../../../column/o-column.class';
@@ -18,7 +19,7 @@ export class OTableGroupByColumnsDialogComponent {
 
   public columns: Array<OColumn> = [];
   public groupedColumns: Array<OColumn> = [];
-  public groupedDateColumns: Map<string, string> = new Map<string, string>();
+  public groupedDateColumns: OGroupedDateColumns[] = [];
 
   @ViewChild('dualListSelector', { static: false }) dualListSelector: ODualListSelectorComponent;
 
@@ -49,7 +50,7 @@ export class OTableGroupByColumnsDialogComponent {
   getGroupedColumns(): Array<string> {
     return this.dualListSelector.getSelectedItems().map((oCol: OColumn) => oCol.attr);
   }
-  getMapDateColumns(): Map<string, string> {
+  getMapDateColumns(): OGroupedDateColumns[] {
     return this.dualListSelector.getSelectedDateColumns();
   }
 }
