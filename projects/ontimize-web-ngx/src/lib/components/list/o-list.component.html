@@ -3,7 +3,7 @@
     class="spinner-container">
     <mat-progress-spinner strokeWidth="3" mode="indeterminate"></mat-progress-spinner>
   </div>
-  <o-data-toolbar *ngIf="hasControls()" [class.dense]="odense" fxFlex="0 1 auto" [title]="title" [show-title]="hasTitle()" class="toolbar">
+  <o-data-toolbar *ngIf="hasControls()" [class.dense]="odense" [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
     <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
         <button *ngIf="insertButton && !insertButtonFloatable" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
