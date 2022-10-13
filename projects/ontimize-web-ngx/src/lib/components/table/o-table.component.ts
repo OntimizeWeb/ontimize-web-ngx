@@ -2903,7 +2903,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   setGroupedDateColumns(value: OGroupedDateColumns[]) {
     this.groupedDateColumns = value;
   }
-  checkGroupByColumn(field: string, add: boolean, operation?: string) {
+  checkGroupByColumn(field: string, add: boolean) {
     let found = null;
     for (const column of this.groupedColumnsArray) {
       if (column === field) {
@@ -2991,7 +2991,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     let index = this.findInGroupedDateColumns(attr);
     if (index != null) {
       if (!add) {
-        this.groupedDateColumns.slice(index, 1);
+        this.groupedDateColumns.splice(index, 1);
       }
     }
     else {
