@@ -1,7 +1,7 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
   [class.block-events]="showLoading | async">
 
-  <o-data-toolbar #tableToolbar *ngIf="hasControls()" [title]="title" [show-title]="showTitle" class="toolbar">
+  <o-data-toolbar #tableToolbar *ngIf="hasControls()" [title]="title" [show-title]="showTitle" class="o-table-toolbar">
     <ng-container o-data-toolbar-projection-start>
       <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
         <ng-content select="o-table-button"></ng-content>
@@ -37,9 +37,6 @@
         <ng-content select="o-table-export-button"></ng-content>
       </ng-template>
     </ng-container>
-
-    <!-- <ng-container select="o-table-custom-toolbar[position=end], o-grid-custom-toolbar[position=end], o-grid-custom-toolbar[position=end]"></ng-container> -->
-
   </o-data-toolbar>
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
