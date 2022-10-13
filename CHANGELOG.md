@@ -22,10 +22,14 @@
     * There is a new `oMatError` directive that user must use instead `ngIf` for having the `O_MAT_ERROR_OPTIONS` features available in the Angular Material `mat-error` component. See documentation for more info.
 * **service-type**: Fixes bug when multiple components use the same service-type ([380fda3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/380fda3)) Closes [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015)
 * **o-hour-input**: Fixing wrong `value-type="timestamp"` value saving ([f3d6f39c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3d6f39c)) ([5b9abf17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b9abf17)) Closes [#960](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/960)
+* **o-table, o-grid, o-list**: Added directive `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar` ([1778a61](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1778a61)) Closes [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044)
 
 ### BREAKING CHANGES
 * Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
-
+* Due to the fix of the issue [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044)
+  * Renamed CSS class `table-title` to `title`
+  * Unified the styles of the titles of the `o-table`, `o-list`, `o-grid` with new CSS class to `title`
+  * New CSS class `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar`
 * **Application configuration file `app.config,ts`**
 
 The default value of `serviceType` has been changed to `OntimizeEE` and the default value of `permissionsServiceType` has been changed to `OntimizeEEPermissions`([25cc5c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/25cc5c8))  Closes [#967](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/967)
