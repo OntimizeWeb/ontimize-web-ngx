@@ -50,8 +50,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .o-table-toolbar {
+       > .o-table-toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
