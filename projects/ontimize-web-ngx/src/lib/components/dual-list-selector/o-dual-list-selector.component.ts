@@ -188,30 +188,8 @@ export class ODualListSelectorComponent {
   setSelectedItems(items: Array<any>) {
     this.dataDestination = items;
   }
-  onSelectionChange(event, itemSelected) {
-    let value = event.value;
-    let attr = itemSelected.attr;
-    let index = this.findInGroupedDateColumns(attr);
-    if (index != null) {
-      this.groupedDateColumns.splice(index, 1);
-    }
-    this.groupedDateColumns.push({ "attr": attr, "type": value })
-  }
   getSelectedDateColumns(): OGroupedDateColumns[] {
     return this.groupedDateColumns;
   }
-  getSelectValue(itemSelected): string {
-    let index = this.findInGroupedDateColumns(itemSelected.attr);
-    return index != null ? this.groupedDateColumns[index].type : 'day-month-year'
-  }
-  getViewValue(itemSelected): string {
-    let value = this.getSelectValue(itemSelected);
-    let viewValue = 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY';
-    this.dateTypes.forEach(type => {
-      if (type.value == value) {
-        viewValue = type.viewValue;
-      }
-    })
-    return viewValue;
-  }
+
 }

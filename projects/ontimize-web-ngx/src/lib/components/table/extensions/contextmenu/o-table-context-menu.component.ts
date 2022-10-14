@@ -370,7 +370,6 @@ export class OTableContextMenuComponent implements AfterViewInit {
 
   }
   isColumnDate() {
-
     this.isDateColumn.next(this.column.type == 'date');
   }
 }
