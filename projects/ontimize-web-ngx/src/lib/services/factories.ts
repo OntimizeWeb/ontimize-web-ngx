@@ -1,4 +1,5 @@
 import { InjectionToken, Injector } from '@angular/core';
+import { OFormMessageService } from '../components/form/services/o-form-message.service';
 
 import { AppConfig } from '../config/app-config';
 import { IExportService } from '../interfaces/export-service.interface';
@@ -62,6 +63,8 @@ export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report servi
 export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
 
 export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
+
+export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
@@ -143,6 +146,15 @@ export function componentStateFactory(injector: Injector): AbstractComponentStat
   return Util.isDefined(service) ? service : new DefaultComponentStateService(injector);
 }
 
+/**
+ * Creates a new instance of the data service.
+ */
+export function oFormMessageServiceFactory(injector: Injector): any {
+  const serviceClass = _getInjectionTokenValue(O_FORM_MESSAGE_SERVICE, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
+  return service || new OFormMessageService();
+}
+
 /* ----------------------------------------------------------------------------------------------------
  * -------------------------------------------- PROVIDERS ---------------------------------------------
  * ----------------------------------------------------------------------------------------------------
@@ -157,6 +169,8 @@ export const OntimizeExportServiceProvider = { provide: OntimizeExportService, u
 export const OntimizeAuthServiceProvider = { provide: AuthService, useFactory: authServiceFactory, deps: [Injector] };
 
 export const ComponentStateServiceProvider = { provide: AbstractComponentStateService, useFactory: componentStateFactory, deps: [Injector] };
+
+export const OFormMessageServiceProvider = { provide: OFormMessageService, useFactory: oFormMessageServiceFactory, deps: [Injector] };
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------

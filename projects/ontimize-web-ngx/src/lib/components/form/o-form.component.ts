@@ -44,6 +44,8 @@ import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormValue } from './o-form-value';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
+import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
+import { OFormMessageService } from './services/o-form-message.service';
 
 interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -147,7 +149,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // 'deleteFallbackFunction: delete-fallback-function'
 
   // ignore-default-navigation [string][yes|no|true|false]: ignore default navigation when user click the toolbar buttons. Default: no.
-  'ignoreDefaultNavigation: ignore-default-navigation'
+  'ignoreDefaultNavigation: ignore-default-navigation',
+
+  'messageServiceType : message-service-type',
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -242,7 +246,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   // public deleteFallbackFunction: Function;
   @InputConverter()
   public ignoreDefaultNavigation: boolean = false;
-
+  messageServiceType: string;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -252,6 +256,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   dataService: any;
   _pKeysEquiv = {};
   keysSqlTypesArray: Array<string> = [];
+  messageService: OFormMessageService;
   /* end of parsed inputs variables */
 
   formGroup: FormGroup;
@@ -702,6 +707,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   configureService() {
+    const msgConfigureServiceArgs: OConfigureMessageServiceArgs = { injector: this.injector, baseService: OFormMessageService, serviceType: this.messageServiceType }
+    this.messageService = Util.configureMessageService(msgConfigureServiceArgs);
+
     const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     this.dataService = Util.configureService(configureServiceArgs);
   }
@@ -923,7 +931,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     });
 
     if (!this.formGroup.valid) {
-      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      this.dialogService.alert(this.messageService.getValidationErrorDialogTitle(), this.messageService.getValidationError());
       return;
     }
 
@@ -984,7 +992,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     );
 
     if (!this.formGroup.valid) {
-      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      this.dialogService.alert('ERROR', this.messageService.getValidationError());
       return;
     }
 
@@ -998,7 +1006,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     if (Object.keys(values).length === 0) {
       // Nothing to update
-      this.dialogService.alert('INFO', 'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO');
+      this.dialogService.alert('INFO', this.messageService.getNothingToUpdateMessage());
       return;
     }
 
@@ -1064,7 +1072,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           this.setData(resp.data);
         } else {
           this._updateFormData({});
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          this.dialogService.alert('ERROR', this.messageService.getQueryErrorMessage());
           console.error('ERROR: ' + resp.message);
         }
         this.loaderSubscription.unsubscribe();
@@ -1076,7 +1084,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         } else if (err && err.statusText) {
           this.dialogService.alert('ERROR', err.statusText);
         } else {
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          this.dialogService.alert('ERROR', this.messageService.getQueryErrorMessage());
         }
         this.loaderSubscription.unsubscribe();
       });
@@ -1657,7 +1665,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postCorrectInsert(result: any): void {
-    this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
+    this.snackBarService.open(this.messageService.getInsertSuccessMessage(), { icon: 'check_circle' });
     this.onInsert.emit(result);
   }
 
@@ -1674,12 +1682,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postCorrectUpdate(result: any): void {
-    this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
+    this.snackBarService.open(this.messageService.getUpdateSuccessMessage(), { icon: 'check_circle' });
     this.onUpdate.emit(result);
   }
 
   protected postCorrectDelete(result: any): void {
-    this.snackBarService.open('MESSAGES.DELETED', { icon: 'check_circle' });
+    this.snackBarService.open(this.messageService.getDeleteSuccessMessage(), { icon: 'check_circle' });
     this.onDelete.emit(result);
   }
 
@@ -1731,13 +1739,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (result && typeof result !== 'object') {
       this.dialogService.alert('ERROR', result);
     } else {
-      let message = 'MESSAGES.ERROR_DELETE';
+      let message = ''
       switch (operation) {
         case 'update':
-          message = 'MESSAGES.ERROR_UPDATE';
+          message = this.messageService.getUpdateErrorMessage()
           break;
         case 'insert':
-          message = 'MESSAGES.ERROR_INSERT';
+          message = this.messageService.getInsertErrorMessage()
+          break;
+        case 'delete':
+          message = this.messageService.getDeleteErrorMessage()
           break;
       }
       this.dialogService.alert('ERROR', message);
