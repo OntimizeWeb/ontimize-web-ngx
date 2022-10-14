@@ -6,6 +6,8 @@
   * Modified the order of the table menu options ([54dad824](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54dad824))
   * Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
 * **o-grid,o-list**: Moved `quick-filter-appearance` to AbstractOServiceComponent ([0bc6c49](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0bc6c49))
+* **o-form**: new `message-service-type` input ([a490775e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a490775e)) Closes [#954](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/954) 
+
 
 ### Bug fixes
 * **o-real-input**: New attribute `strict` ([e466768f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e466768f)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#1022](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1022)
