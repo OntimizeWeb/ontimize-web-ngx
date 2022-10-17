@@ -50,7 +50,8 @@ export class OTableGroupByColumnsDialogComponent {
   getGroupedColumns(): Array<string> {
     return this.dualListSelector.getSelectedItems().map((oCol: OColumn) => oCol.attr);
   }
-  getMapDateColumns(): OGroupedColumnTypes[] {
-    return this.dualListSelector.getSelectedDateColumns();
+
+  getGroupedColumnTypes(): OGroupedColumnTypes[] {
+    return this.dualListSelector.getGroupedColumnTypes();
   }
 }

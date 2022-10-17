@@ -161,7 +161,8 @@ export class ODualListSelectorComponent {
   setSelectedItems(items: Array<any>) {
     this.dataDestination = items;
   }
-  getSelectedDateColumns(): OGroupedColumnTypes[] {
+
+  getGroupedColumnTypes(): OGroupedColumnTypes[] {
     return this.groupedColumnTypes;
   }
 

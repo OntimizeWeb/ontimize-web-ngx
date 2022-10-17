@@ -2866,14 +2866,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   parseGroupedColumnTypes() {
     this.groupedColumnTypes = this.state.groupedColumnTypes;
   }
+
   /**
    * Groups by column
    * @param column
    */
-  groupByColumn(column: OColumn, dateType?: string) {
+  groupByColumn(column: OColumn, type?: string) {
     this.checkGroupByColumn(column.attr, true);
-    if (dateType) {
-      this.updateDateGroupColumns(column.attr, true, dateType);
+    if (type) {
+      this.updateGroupedColumnTypes(column.attr, true, type);
     }
     this.dataSource.updateGroupedColumns();
   }
@@ -2884,7 +2885,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, false);
-    this.updateDateGroupColumns(column.attr, false);
+    this.updateGroupedColumnTypes(column.attr, false);
     this.dataSource.updateGroupedColumns();
   }
 
@@ -2893,7 +2894,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByAllColumns() {
     this.setGroupColumns([]);
-    this.resetDateGroupColumns();
+    this.groupedColumnTypes = [];
   }
 
   setGroupColumns(value: any[]) {
@@ -2987,7 +2988,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
     }
   }
-  updateDateGroupColumns(attr: string, add: boolean, operation?: string) {
+  updateGroupedColumnTypes(attr: string, add: boolean, operation?: string) {
     let groupedColumns: OGroupedColumnTypes[] = [];
     let index = this.groupedColumnTypes.findIndex(column => column.attr == attr);
     if (index != -1) {
@@ -3001,9 +3002,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
     }
     this.state.groupedColumnTypes = groupedColumns;
-  }
-  resetDateGroupColumns() {
-    this.groupedColumnTypes = [];
   }
 
   getClassNameGroupHeader(row: OTableGroupedRow): string {
