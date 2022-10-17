@@ -51,7 +51,7 @@
           class="o-drag-list-item-box">
 
           <ng-container *ngIf="itemSelected.type === 'date'; else defaultRenderer">
-            <o-dual-list-selector-date-item [item]=itemSelected.attr [initial-grouped-date-columns]="groupedDateColumns"></o-dual-list-selector-date-item>
+            <o-dual-list-selector-date-item [item]=itemSelected.attr [initial-grouped-date-columns]="groupedColumnTypes"></o-dual-list-selector-date-item>
           </ng-container>
 
           <ng-template #defaultRenderer>

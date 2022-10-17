@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { OGroupedDateColumns } from "../../../../types/o-grouped-date-columns.type";
+import { OGroupedColumnTypes } from "../../../../types/o-grouped-column-types.type";
 export const DEFAULT_DUAL_LIST_SELECTOR_DATE_ITEM = [
   'item',
   'initialGroupedDateColumns:initial-grouped-date-columns',
@@ -18,8 +18,8 @@ export class ODualListSelectorDateItemComponent {
     { value: 'YEAR_MONTH_DAY', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY' }
   ];
   public item: string = "";
-  public initialGroupedDateColumns: OGroupedDateColumns[];
-  public groupedDateColumns: OGroupedDateColumns[];
+  public initialGroupedDateColumns: OGroupedColumnTypes[];
+  public groupedDateColumns: OGroupedColumnTypes[];
 
   ngOnInit() {
     this.groupedDateColumns = this.initialGroupedDateColumns;

@@ -47,7 +47,7 @@ import { ComponentStateServiceProvider, OntimizeServiceProvider, O_COMPONENT_STA
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OColumnDisplay, OGroupedDateColumns } from '../../types';
+import { OColumnDisplay, OGroupedColumnTypes } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -468,7 +468,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public groupedColumns: string;
 
   public sortColumns: string;
-  public groupedDateColumns: OGroupedDateColumns[] = [];
+  public groupedColumnTypes: OGroupedColumnTypes[] = [];
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
@@ -887,7 +887,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.setDatasource();
     this.registerDataSourceListeners();
     this.parseGroupedColumns();
-    this.parseGroupedDateColumns();
+    this.parseGroupedColumnTypes();
     this.parseSortColumns();
     this.registerSortListener();
     this.setFiltersConfiguration();
@@ -2863,8 +2863,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.setGroupColumns(result);
   }
-  parseGroupedDateColumns() {
-    this.groupedDateColumns = this.state.groupedDateColumns;
+  parseGroupedColumnTypes() {
+    this.groupedColumnTypes = this.state.groupedColumnTypes;
   }
   /**
    * Groups by column
@@ -2900,8 +2900,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.groupedColumnsArray = value;
     this.dataSource.updateGroupedColumns();
   }
-  setGroupedDateColumns(value: OGroupedDateColumns[]) {
-    this.groupedDateColumns = value;
+  setGroupedColumnTypes(value: OGroupedColumnTypes[]) {
+    this.groupedColumnTypes = value;
   }
   checkGroupByColumn(field: string, add: boolean) {
     let found = null;
@@ -2965,8 +2965,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   getColumnDataByAttr(attr, row: any): any {
     let operation = null;
-    if (this.groupedDateColumns.length != 0 && this.groupedDateColumns.findIndex(column => column.attr == attr) != -1) {
-      operation = this.groupedDateColumns[this.groupedDateColumns.findIndex(column => column.attr == attr)].type;
+    if (this.groupedColumnTypes.length != 0 && this.groupedColumnTypes.findIndex(column => column.attr == attr) != -1) {
+      operation = this.groupedColumnTypes[this.groupedColumnTypes.findIndex(column => column.attr == attr)].type;
     }
     const oCol = this.getOColumn(attr);
     if (!Util.isDefined(oCol)) {
@@ -2988,22 +2988,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
   updateDateGroupColumns(attr: string, add: boolean, operation?: string) {
-    let groupedColumns: OGroupedDateColumns[] = [];
-    let index = this.groupedDateColumns.findIndex(column => column.attr == attr);
+    let groupedColumns: OGroupedColumnTypes[] = [];
+    let index = this.groupedColumnTypes.findIndex(column => column.attr == attr);
     if (index != -1) {
       if (!add) {
-        this.groupedDateColumns.splice(index, 1);
+        this.groupedColumnTypes.splice(index, 1);
       }
     }
     else {
       if (add) {
-        this.groupedDateColumns.push({ "attr": attr, "type": operation });
+        this.groupedColumnTypes.push({ "attr": attr, "type": operation });
       }
     }
-    this.state.groupedDateColumns = groupedColumns;
+    this.state.groupedColumnTypes = groupedColumns;
   }
   resetDateGroupColumns() {
-    this.groupedDateColumns = [];
+    this.groupedColumnTypes = [];
   }
 
   getClassNameGroupHeader(row: OTableGroupedRow): string {
