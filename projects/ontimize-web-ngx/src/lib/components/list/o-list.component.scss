@@ -25,14 +25,6 @@
   position: relative;
   flex-direction: column;
 
-  .mat-toolbar {
-    padding: 0 4px;
-
-    &.dense {
-      height: 48px;
-    }
-  }
-
   .o-list-content {
     &.o-list-content-toolbar-dense {
       .add-button {
@@ -41,10 +33,6 @@
         }
       }
     }
-  }
-
-  .o-list-title {
-    font-size: 1.5em;
   }
 
   .spinner-container {

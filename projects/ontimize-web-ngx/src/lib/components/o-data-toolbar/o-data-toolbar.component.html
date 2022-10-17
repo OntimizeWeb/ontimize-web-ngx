@@ -1,0 +1,7 @@
+<ng-content select="[o-data-toolbar-projection-start]"></ng-content>
+<ng-content select="[o-data-toolbar-custom-projection-start]"></ng-content>
+<div fxFlex>
+  <span fxLayoutAlign="center center" *ngIf="showTitle" class="title">{{ title | oTranslate }}</span>
+</div>
+<ng-content select="[o-data-toolbar-custom-projection-end]"></ng-content>
+<ng-content select="[o-data-toolbar-projection-end]"></ng-content>
