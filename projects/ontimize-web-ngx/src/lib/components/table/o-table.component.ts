@@ -2983,6 +2983,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         case "YEAR": return date.year();
         case "MONTH": return moment().locale(language).month(date.month()).format("MMMM");
         case "YEAR_MONTH": return moment().locale(language).month(date.month()).year(date.year()).format("MMMM, YYYY");
+        case "YEAR_MONTH_DAY": return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
       }
     }
   }

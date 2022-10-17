@@ -41,7 +41,7 @@
         (execute)="groupByColumn('YEAR_MONTH')" [visible]="isVisibleGroupByRow | async" [enabled]="isEnabledGroupByColumn | async">
       </o-context-menu-item>
       <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH_DAY" icon="format_indent_increase" type="group"
-        (execute)="groupByColumn()" [visible]="isVisibleGroupByRow | async" [enabled]="isEnabledGroupByColumn | async">
+        (execute)="groupByColumn('YEAR_MONTH_DAY')" [visible]="isVisibleGroupByRow | async" [enabled]="isEnabledGroupByColumn | async">
       </o-context-menu-item>
       <o-context-menu-item *ngIf="!(isDateColumn | async)" icon="format_indent_increase" [label]="labelGroupByColumn" (execute)="groupByColumn()"
         [enabled]="isEnabledGroupByColumn | async"></o-context-menu-item>

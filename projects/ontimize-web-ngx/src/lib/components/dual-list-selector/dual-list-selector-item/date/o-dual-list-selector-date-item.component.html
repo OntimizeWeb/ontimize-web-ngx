@@ -1,7 +1,7 @@
 <span>
-  <mat-select [value]="getSelectValue(item)" (selectionChange)="onSelectionChange($event,item)" required>
+  <mat-select [value]="getSelectValue()" (selectionChange)="onSelectionChange($event,item)" required>
     <mat-select-trigger>
-      {{item | oTranslate}} ({{getViewValue(item) | oTranslate}})
+      {{item | oTranslate}} ({{getViewValue() | oTranslate}})
     </mat-select-trigger>
     <mat-option *ngFor="let type of dateTypes" [value]="type.value">
       {{type.viewValue | oTranslate}}

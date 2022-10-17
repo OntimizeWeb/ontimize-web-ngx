@@ -38,25 +38,8 @@ export class ODualListSelectorComponent {
   public description = '';
   public key = '';
   public display = '';
-  public dateColumns: Array<any> = [];
-  public dateTypes = [
-    { value: 'MONTH', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_MONTH' },
-    { value: 'YEAR_MONTH', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH' },
-    { value: 'YEAR', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR' },
-    { value: 'day-month-year', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY' }
-  ];
   public groupedDateColumns: OGroupedDateColumns[] = [];
   ngOnInit() {
-    this.dataSource.forEach(column => {
-      if (column.type == 'date' || this.findInGroupedDateColumns(column.attr) != null) {
-        this.dateColumns.push(column);
-      }
-    })
-    this.dataDestination.forEach(column => {
-      if (column.type == 'date' || this.findInGroupedDateColumns(column.attr) != null) {
-        this.dateColumns.push(column);
-      }
-    })
   }
   drop(event: CdkDragDrop<string[]>) {
 
@@ -69,16 +52,7 @@ export class ODualListSelectorComponent {
         event.currentIndex);
     }
   }
-  findInGroupedDateColumns(attr): number {
-    let index = null;
-    if (this.groupedDateColumns.length != 0) {
-      if (this.groupedDateColumns.find(column => column.attr == attr)) {
-        index = this.groupedDateColumns.findIndex(column => column.attr == attr)
-      }
-    }
-    return index;
 
-  }
   addToGroupedColumns(columnsToGrouped: MatSelectionList) {
     const self = this;
     columnsToGrouped.selectedOptions.selected.forEach(x => {
