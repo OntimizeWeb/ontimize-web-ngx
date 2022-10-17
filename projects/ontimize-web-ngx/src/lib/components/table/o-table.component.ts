@@ -2965,8 +2965,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   getColumnDataByAttr(attr, row: any): any {
     let operation = null;
-    if (this.groupedDateColumns.length != 0) {
-      operation = this.groupedDateColumns[this.findInGroupedDateColumns(attr)].type;
+    if (this.groupedDateColumns.length != 0 && this.groupedDateColumns.findIndex(column => column.attr == attr) != -1) {
+      operation = this.groupedDateColumns[this.groupedDateColumns.findIndex(column => column.attr == attr)].type;
     }
     const oCol = this.getOColumn(attr);
     if (!Util.isDefined(oCol)) {
@@ -2989,8 +2989,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
   updateDateGroupColumns(attr: string, add: boolean, operation?: string) {
     let groupedColumns: OGroupedDateColumns[] = [];
-    let index = this.findInGroupedDateColumns(attr);
-    if (index != null) {
+    let index = this.groupedDateColumns.findIndex(column => column.attr == attr);
+    if (index != -1) {
       if (!add) {
         this.groupedDateColumns.splice(index, 1);
       }
@@ -3005,16 +3005,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   resetDateGroupColumns() {
     this.groupedDateColumns = [];
   }
-  findInGroupedDateColumns(attr): number {
-    let index = null;
-    if (Util.isDefined(this.groupedDateColumns)) {
-      if (this.groupedDateColumns.find(column => column.attr == attr)) {
-        index = this.groupedDateColumns.findIndex(column => column.attr == attr)
-      }
-    }
-    return index;
 
-  }
   getClassNameGroupHeader(row: OTableGroupedRow): string {
     let className = '';
     if (row.level <= 10) {
