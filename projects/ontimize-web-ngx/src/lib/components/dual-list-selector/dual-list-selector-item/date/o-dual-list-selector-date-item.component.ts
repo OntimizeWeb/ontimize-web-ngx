@@ -39,13 +39,8 @@ export class ODualListSelectorDateItemComponent {
 
   getViewValue(): string {
     let value = this.getSelectValue();
-    let viewValue = 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY';
-    this.dateTypes.forEach(type => {
-      if (type.value == value) {
-        viewValue = type.viewValue;
-      }
-    })
-    return viewValue;
+    const indexFindValue = this.dateTypes.findIndex(type => type.value == value);
+    return indexFindValue > -1 ? this.dateTypes[indexFindValue].viewValue : 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY';
   }
 
 }
