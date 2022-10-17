@@ -39,8 +39,7 @@ export class ODualListSelectorComponent {
   public key = '';
   public display = '';
   public groupedDateColumns: OGroupedDateColumns[] = [];
-  ngOnInit() {
-  }
+
   drop(event: CdkDragDrop<string[]>) {
 
     if (event.previousContainer === event.container) {
