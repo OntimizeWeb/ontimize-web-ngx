@@ -120,6 +120,7 @@ export class Codes {
   public static APP_LAYOUT_MODE_MOBILE: OAppLayoutMode = 'mobile';
 
   public static DEFAULT_CHANGE_EVENT: CHANGE_EVENTS = 'onValueChange';
+  public static TYPES_DATE_GROUPS = ["YEAR", "MONTH", "YEAR_MONTH", "YEAR_MONTH_DAY"];
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
