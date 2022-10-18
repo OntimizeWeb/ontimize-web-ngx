@@ -34,4 +34,5 @@ export * from './quick-filter-function.type';
 export * from './remote-configuration.type';
 export * from './service-request-param.type';
 export * from './session-info.type';
+export * from './sql-order.type';
 export * from './o-grouped-column-types.type'
