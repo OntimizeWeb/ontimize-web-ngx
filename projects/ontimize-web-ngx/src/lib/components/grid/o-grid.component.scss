@@ -6,17 +6,12 @@
     height: 100%;
     display: flex;
 
-    .o-grid-toolbar {
-      flex: 0 0 auto;
-    }
-
     .o-grid-no-results {
       padding: 16px;
     }
 
     .o-grid-paginator,
     .o-grid-sort {
-      font-size: .8em;
       margin-right: 1em;
     }
 

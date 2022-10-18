@@ -1,3 +1,4 @@
+
 ## 8.8.0
 ### Features:
 * **o-table**:
@@ -6,6 +7,7 @@
   * Modified the order of the table menu options ([54dad824](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54dad824))
   * Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
 * **o-grid,o-list**: Moved `quick-filter-appearance` to AbstractOServiceComponent ([0bc6c49](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0bc6c49))
+* **o-table, o-grid, o-list**: Added directive `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar` to add custom content in position start or end of the toolbars ([1778a61](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1778a61)) Closes [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044)
 
 ### Bug fixes
 * **o-real-input**: New attribute `strict` ([e466768f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e466768f)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#1022](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1022)
@@ -21,10 +23,15 @@
     * `OMatErrorModule` no longer exists. This shouldn't affect users because its importation wasn't needed.
     * There is a new `oMatError` directive that user must use instead `ngIf` for having the `O_MAT_ERROR_OPTIONS` features available in the Angular Material `mat-error` component. See documentation for more info.
 * **service-type**: Fixes bug when multiple components use the same service-type ([380fda3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/380fda3)) Closes [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015)
-* **o-hour-input**: Fixing wrong `value-type="timestamp"` value saving ([f3d6f39c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3d6f39c)) ([5b9abf17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b9abf17)) Closes [#960](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/960) 
+* **o-hour-input**: Fixing wrong `value-type="timestamp"` value saving ([f3d6f39c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3d6f39c)) ([5b9abf17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b9abf17)) Closes [#960](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/960)
+* **o-grid, o-table, o-list**: Fixes for the arrow button inside the quick filter being too far away from the magnifying glass button ([cdaf3db](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cdaf3db)) Closes [#1056](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1056)
 
 ### BREAKING CHANGES
 * Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
+* Due to the improvement of the issue [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044) the `o-table`, `o-list`, `o-grid` toolbars have been factored and this causes the following changes.
+  * The css selectors related to the mat-toolbar will stop working in `o-table`, `o-list`, `o-grid` components.
+  * New CSS class `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar`
+  * Unified the styles of the titles of the `o-table`, `o-list`, `o-grid` with new CSS class to `title` and therefore removed CSS class `table-title` and `o-list-title`
 
 * **Application configuration file `app.config,ts`**
 
@@ -44,6 +51,29 @@ The default value of `serviceType` has been changed to `OntimizeEE` and the defa
 export class MyModule { }
 ```
 
+## 8.7.3 (2022-10-06)
+### Features
+* JWT token refresh has been implemented to be compatible with [Ontimize Boot](https://ontimize.github.io/ontimize-boot/basics/autoconfigurators/#security) ([280a422](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/280a422)) Closes [#1041](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1041)
+* **o-table**: New `O_TABLE_GLOBAL_CONFIG` InjectionToken ([73e9be8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/73e9be8))
+
+### BREAKING CHANGES
+* **o-table**: Set `auto-adjust=true` by default ([47e252e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47e252e)) Closes [#1045](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1045)
+
+To resolve this breaking change, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
+
+```ts
+@NgModule({
+  declarations: [
+  ...
+  ],
+  ...
+  providers: [
+    ...
+    { provide: O_TABLE_GLOBAL_CONFIG, useValue: { autoAdjust: false } },
+    ...
+  ],
+  ...
+})
 
 ## 8.7.2 (2022-09-15)
 ### Bug fixes
