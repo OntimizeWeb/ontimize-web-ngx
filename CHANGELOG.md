@@ -7,7 +7,7 @@
   * Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
 * **o-grid,o-list**: Moved `quick-filter-appearance` to AbstractOServiceComponent ([0bc6c49](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0bc6c49))
 * **o-form**: new `message-service-type` input that allows to override the default `o-form` CRUD operations success/error messages ([a490775e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a490775e)) Closes [#954](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/954). User can define this provider in the same way as in the `service-type` input.
-
+* **o-table, o-grid, o-list**: Added directive `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar` to add custom content in position start or end of the toolbars ([1778a61](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1778a61)) Closes [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044)
 
 ### Bug fixes
 * **o-real-input**: New attribute `strict` ([e466768f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e466768f)) ([e264a54](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e264a54)) Closes [#1022](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1022)
@@ -24,9 +24,14 @@
     * There is a new `oMatError` directive that user must use instead `ngIf` for having the `O_MAT_ERROR_OPTIONS` features available in the Angular Material `mat-error` component. See documentation for more info.
 * **service-type**: Fixes bug when multiple components use the same service-type ([380fda3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/380fda3)) Closes [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015)
 * **o-hour-input**: Fixing wrong `value-type="timestamp"` value saving ([f3d6f39c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3d6f39c)) ([5b9abf17](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b9abf17)) Closes [#960](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/960)
+* **o-grid, o-table, o-list**: Fixes for the arrow button inside the quick filter being too far away from the magnifying glass button ([cdaf3db](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cdaf3db)) Closes [#1056](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1056)
 
 ### BREAKING CHANGES
 * Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
+* Due to the improvement of the issue [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044) the `o-table`, `o-list`, `o-grid` toolbars have been factored and this causes the following changes.
+  * The css selectors related to the mat-toolbar will stop working in `o-table`, `o-list`, `o-grid` components.
+  * New CSS class `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar`
+  * Unified the styles of the titles of the `o-table`, `o-list`, `o-grid` with new CSS class to `title` and therefore removed CSS class `table-title` and `o-list-title`
 
 * **Application configuration file `app.config,ts`**
 

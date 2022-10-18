@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { OSharedModule } from '../../shared/shared.module';
 import { OSearchInputModule } from '../input/search-input/o-search-input.module';
+import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
 import { OListItemComponent } from './list-item/o-list-item.component';
 import { OListComponent } from './o-list.component';
 import { OListItemAvatarComponent } from './renderers/avatar/o-list-item-avatar.component';
@@ -21,7 +22,7 @@ import { OListItemTextComponent } from './renderers/text/o-list-item-text.compon
     OListItemCardComponent,
     OListItemTextComponent
   ],
-  imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule],
+  imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule],
   exports: [
     OListComponent,
     OListItemComponent,
