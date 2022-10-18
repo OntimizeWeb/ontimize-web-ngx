@@ -1,7 +1,8 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
-import { OGroupedDateColumns } from '../../types';
+import { OGroupedColumnTypes } from '../../types';
+import { Codes } from '../../util';
 
 export const DEFAULT_DUAL_LIST_SELECTOR = [
   //key: The unique identifier field of each object in the data source and data destination arrays
@@ -14,7 +15,7 @@ export const DEFAULT_DUAL_LIST_SELECTOR = [
   'dataDestination: data-destination',
   'titleListDataSource: title-list-data-source',
   'titleListDataDestination: title-list-data-destination',
-  'groupedDateColumns:grouped-date-columns',
+  'groupedColumnTypes:grouped-column-types',
   'description'
 ];
 
@@ -38,7 +39,7 @@ export class ODualListSelectorComponent {
   public description = '';
   public key = '';
   public display = '';
-  public groupedDateColumns: OGroupedDateColumns[] = [];
+  public groupedColumnTypes: OGroupedColumnTypes[] = [];
 
   drop(event: CdkDragDrop<string[]>) {
 
@@ -161,8 +162,11 @@ export class ODualListSelectorComponent {
   setSelectedItems(items: Array<any>) {
     this.dataDestination = items;
   }
-  getSelectedDateColumns(): OGroupedDateColumns[] {
-    return this.groupedDateColumns;
-  }
 
+  getGroupedColumnTypes(): OGroupedColumnTypes[] {
+    return this.groupedColumnTypes;
+  }
+  get groupedDateColumns(): OGroupedColumnTypes[] {
+    return this.groupedColumnTypes.filter(groupedColumn => Codes.TYPES_DATE_GROUPS.findIndex(type => type === groupedColumn.type) > -1)
+  }
 }

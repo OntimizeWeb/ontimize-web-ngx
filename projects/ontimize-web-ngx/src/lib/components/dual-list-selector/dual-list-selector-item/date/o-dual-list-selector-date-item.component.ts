@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { OGroupedDateColumns } from "../../../../types/o-grouped-date-columns.type";
+import { MatSelectChange } from "@angular/material";
+import { OGroupedColumnTypes } from "../../../../types/o-grouped-column-types.type";
 export const DEFAULT_DUAL_LIST_SELECTOR_DATE_ITEM = [
   'item',
-  'initialGroupedDateColumns:initial-grouped-date-columns',
+  'groupedDateColumns: grouped-date-columns',
 ];
 @Component({
   selector: 'o-dual-list-selector-date-item',
@@ -18,14 +19,10 @@ export class ODualListSelectorDateItemComponent {
     { value: 'YEAR_MONTH_DAY', viewValue: 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY' }
   ];
   public item: string = "";
-  public initialGroupedDateColumns: OGroupedDateColumns[];
-  public groupedDateColumns: OGroupedDateColumns[];
+  public groupedDateColumns: OGroupedColumnTypes[];
 
-  ngOnInit() {
-    this.groupedDateColumns = this.initialGroupedDateColumns;
-  }
 
-  onSelectionChange(event, itemSelected) {
+  onSelectionChange(event: MatSelectChange, itemSelected: any) {
     let value = event.value;
     let attr = itemSelected;
     let index = this.groupedDateColumns.findIndex(column => column.attr == attr);
@@ -34,19 +31,16 @@ export class ODualListSelectorDateItemComponent {
     }
     this.groupedDateColumns.push({ "attr": attr, "type": value })
   }
+
   getSelectValue(): string {
     let index = this.groupedDateColumns.findIndex(column => column.attr == this.item);
     return index != -1 ? this.groupedDateColumns[index].type : 'YEAR_MONTH_DAY'
   }
+
   getViewValue(): string {
     let value = this.getSelectValue();
-    let viewValue = 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY';
-    this.dateTypes.forEach(type => {
-      if (type.value == value) {
-        viewValue = type.viewValue;
-      }
-    })
-    return viewValue;
+    const indexFindValue = this.dateTypes.findIndex(type => type.value == value);
+    return indexFindValue > -1 ? this.dateTypes[indexFindValue].viewValue : 'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY';
   }
 
 }

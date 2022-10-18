@@ -404,7 +404,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         groupedColumns: this.table.groupedColumnsArray,
         columnsData: this.table.oTableOptions.columns,
         rowHeight: this.table.rowHeight,
-        groupedDateColumns: this.table.groupedDateColumns
+        groupedColumnTypes: this.table.groupedColumnTypes
       },
       height: '75vh',
       width: '50vw',
@@ -414,7 +414,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.table.setGroupedDateColumns(dialogRef.componentInstance.getMapDateColumns());
+        this.table.setGroupedColumnTypes(dialogRef.componentInstance.getGroupedColumnTypes());
         this.table.setGroupColumns(dialogRef.componentInstance.getGroupedColumns());
       }
     });
