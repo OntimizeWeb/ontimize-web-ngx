@@ -2,7 +2,7 @@
 ## 8.8.0
 ### Features:
 * **o-table**:
-  * Improved row grouping by date ([ba5f1723](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba5f1723)) Closes [#719](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/719)
+  * Improved row grouping by date adding the option to group by month, year, year and month or by the full date ([ba5f1723](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba5f1723)) Closes [#719](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/719)
   * `Save/load/clear filter` and `Save/load configuration` operations have in consider the filter builder component([b47963b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b47963b)) ([209b297](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/209b297)) Closes [#994](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/994)
   * Modified the order of the table menu options ([54dad824](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54dad824))
   * Added a new menu option to reset the columns width ([f5d1f74a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5d1f74a)) Closes [#799](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/799)
