@@ -43,6 +43,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
       'filter-columns',
       'filter-column-active',
       'grouped-columns',
+      'grouped-column-types',
       'user-stored-filters',
       'user-stored-configurations'
     ];
@@ -114,6 +115,9 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
         break;
       case 'grouped-columns':
         result['grouped-columns'] = this.component.groupedColumnsArray;
+        break;
+      case 'grouped-column-types':
+        result['grouped-column-types'] = this.component.groupedColumnTypes;
         break;
       case 'user-stored-filters':
         result['user-stored-filters'] = this.state.storedFilters;
