@@ -174,7 +174,8 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 @Component({
   selector: 'o-form',
   providers: [
-    OntimizeServiceProvider
+    OntimizeServiceProvider,
+    OFormMessageService
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],
