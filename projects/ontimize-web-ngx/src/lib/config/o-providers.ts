@@ -6,7 +6,7 @@ import { combineLatest } from 'rxjs';
 
 import { AppConfig, O_INPUTS_OPTIONS } from '../config/app-config';
 import { appConfigFactory } from '../services/app-config.provider';
-import { ComponentStateServiceProvider, OntimizeAuthServiceProvider, OntimizeServiceProvider, O_MAT_ERROR_OPTIONS } from '../services/factories';
+import { ComponentStateServiceProvider, OntimizeAuthServiceProvider,  OntimizeServiceProvider, O_MAT_ERROR_OPTIONS } from '../services/factories';
 import { LocalStorageService } from '../services/local-storage.service';
 import { NavigationService } from '../services/navigation.service';
 import { OntimizeMatIconRegistry } from '../services/ontimize-icon-registry.service';

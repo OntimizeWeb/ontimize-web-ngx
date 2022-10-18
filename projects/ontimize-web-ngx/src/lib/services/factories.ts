@@ -63,6 +63,8 @@ export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('E
 
 export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 
+export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
+
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
  * ---------------------------------------------------------------------------------------------------- */

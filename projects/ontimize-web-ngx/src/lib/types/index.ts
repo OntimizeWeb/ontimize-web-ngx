@@ -1,6 +1,9 @@
+export * from './table/index';
 export * from './aggregate-function.type';
 export * from './basic-expression.type';
 export * from './config.type';
+export * from './configure-message-service-args.type'
+export * from './configure-service-args.type'
 export * from './date-custom-class.type';
 export * from './date-filter-function.type';
 export * from './error-data.type';
@@ -10,10 +13,10 @@ export * from './form-layout-detail-component-data.type';
 export * from './form-value-options.type';
 export * from './http-request-options.type';
 export * from './menu-root-item.type';
-export * from './table/index';
 export * from './o-breadcrumb-item.type';
 export * from './o-component-permissions.type';
 export * from './o-date-value.type';
+export * from './o-filter-builder-values.type'
 export * from './o-form-initialization-options.type';
 export * from './o-form-permissions.type';
 export * from './o-inputs-options.type';
@@ -31,5 +34,4 @@ export * from './quick-filter-function.type';
 export * from './remote-configuration.type';
 export * from './service-request-param.type';
 export * from './session-info.type';
-export * from './sql-order.type';
 export * from './o-grouped-column-types.type'
