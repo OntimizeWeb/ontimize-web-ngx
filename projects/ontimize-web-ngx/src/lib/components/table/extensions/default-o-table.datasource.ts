@@ -804,6 +804,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   private getTextGroupRow(group: OTableGroupedRow, totalCounts: number) {
     const field = this.table.groupedColumnsArray[group.level - 1];
     let value = JSON.parse(group.keysAsString)[this.table.groupedColumnsArray[group.level - 1]];
+
     const oCol = this.table.getOColumn(field);
 
     if (!value && Util.isDefined(oCol.renderer) && (this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)) {
