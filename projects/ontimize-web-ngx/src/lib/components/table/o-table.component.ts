@@ -2597,7 +2597,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     if (Util.isDefined(storage.columnValueFilters)) {
-      this.state.initialConfiguration
       this.dataSource.initializeColumnsFilters(this.state.columnValueFilters);
       this.onFilterByColumnChange.emit();
     }
