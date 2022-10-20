@@ -106,9 +106,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
         result = this.getInitialConfigurationState();
         break;
       case 'filter-column-active':
-        if (this.component.oTableColumnsFilterComponent) {
           result['filter-column-active'] = this.component.isColumnFiltersActive;
-        }
         break;
       case 'filter-columns':
         result['filter-columns'] = this.component.filterColumns;
@@ -180,7 +178,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
 
   protected getColumnFiltersState() {
     const result = {};
-    if (this.component.oTableColumnsFilterComponent && this.component.dataSource) {
+    if (this.component.dataSource) {
       const columnValueFilters = this.component.dataSource.getColumnValueFilters();
       if (columnValueFilters.length > 0) {
         result['column-value-filters'] = columnValueFilters;
