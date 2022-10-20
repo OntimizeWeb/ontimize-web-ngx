@@ -123,9 +123,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       displayDataChanges.push(this._virtualPageChange);
     }
 
-    if (this.table.oTableColumnsFilterComponent) {
-      displayDataChanges.push(this._columnValueFilterChange);
-    }
+    displayDataChanges.push(this._columnValueFilterChange);
 
     if (this.table.groupable) {
       displayDataChanges.push(this.groupByColumnChange);
