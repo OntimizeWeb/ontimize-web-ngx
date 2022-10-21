@@ -256,9 +256,13 @@ export const MAP = {
     'DATERANGE.APPLYLABEL': 'Select dates',
     'DATERANGE.W': 'W',
     'TABLE_CONTEXT_MENU.GROUP_BY': 'Group by',
+    'TABLE_CONTEXT_MENU.GROUP_BY_YEAR': 'Group by year',
+    'TABLE_CONTEXT_MENU.GROUP_BY_MONTH': 'Group by month',
+    'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH': 'Group by year and month',
+    'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH_DAY': 'Group by year, month and day',
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Group by {0}',
-    'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'UnGroup by {0}',
-    'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'UnGroup all',
+    'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Ungroup by {0}',
+    'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Ungroup all',
     'TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION': 'Aggregate function',
     'TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS': 'Expand all',
     'TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS': 'Collapse all',
@@ -278,7 +282,11 @@ export const MAP = {
     'AGGREGATE_NAME.max': 'Max',
     'AGGREGATE_NAME.avg': 'Avg',
     'AGGREGATE_NAME.sum': 'Sum',
-    'FORM_SERVICE_COMPONENT.REFRESH': 'Refresh'
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Refresh',
+    'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'month',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'month and year',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'year',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'day, month and year'
   },
 
   // Spanish
@@ -528,6 +536,10 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
     'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor',
     'TABLE_CONTEXT_MENU.GROUP_BY': 'Agrupar por',
+    'TABLE_CONTEXT_MENU.GROUP_BY_YEAR': 'Agrupar por año',
+    'TABLE_CONTEXT_MENU.GROUP_BY_MONTH': 'Agrupar por mes',
+    'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH': 'Agrupar por año y mes',
+    'TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH_DAY': 'Agrupar por año, mes y día',
     'TABLE_CONTEXT_MENU.GROUP_BY_COLUMN': 'Agrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_BY_COLUMN': 'Desagrupar por {0}',
     'TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS': 'Desagrupar todas las columnas',
@@ -551,7 +563,11 @@ export const MAP = {
     'AGGREGATE_NAME.max': 'Max',
     'AGGREGATE_NAME.avg': 'Media',
     'AGGREGATE_NAME.sum': 'Sum',
-    'FORM_SERVICE_COMPONENT.REFRESH': 'Refrescar'
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Refrescar',
+    'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'mes',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mes y año',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'año',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'día, mes y año'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -814,6 +830,10 @@ export const MAP = {
     'AGGREGATE_NAME.max': 'Max',
     'AGGREGATE_NAME.avg': 'Media',
     'AGGREGATE_NAME.sum': 'Sum',
-    'FORM_SERVICE_COMPONENT.REFRESH': 'Recarregar'
+    'FORM_SERVICE_COMPONENT.REFRESH': 'Recarregar',
+    'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'mês',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mês e ano',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'ano',
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'dia, mês e ano',
   }
 };

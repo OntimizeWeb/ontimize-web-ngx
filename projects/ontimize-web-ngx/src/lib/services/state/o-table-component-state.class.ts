@@ -10,6 +10,7 @@ import { OTableConfiguration } from '../../types/table/o-table-configuration.typ
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { Util } from '../../util';
+import { OGroupedColumnTypes } from '../../types';
 
 export class OTableComponentStateClass extends DefaultComponentStateClass {
   // sort
@@ -40,6 +41,8 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   protected 'user-stored-configurations': OTableConfiguration[];
   // stored filters builder values
   protected 'filter-builder-values': OFilterBuilderValues[];
+
+  protected 'grouped-column-types': OGroupedColumnTypes[] = [];
 
   public get filterBuilderValues(): OFilterBuilderValues[] {
     return this['filter-builder-values'];
@@ -91,7 +94,12 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   set sortColumns(value: string) {
     this['sort-columns'] = value;
   }
-
+  get groupedColumnTypes(): OGroupedColumnTypes[] {
+    return this['grouped-column-types'];
+  }
+  set groupedColumnTypes(value: OGroupedColumnTypes[]) {
+    this['grouped-column-types'] = value;
+  }
   get filterColumns(): OFilterColumn[] {
     return this['filter-columns'];
   }

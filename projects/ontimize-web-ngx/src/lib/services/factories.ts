@@ -69,6 +69,8 @@ export const O_EXPORT_DATA_SERVICE = new InjectionToken<IExportDataProvider>('Ex
 
 export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 
+export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
+
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
  * ---------------------------------------------------------------------------------------------------- */
@@ -83,10 +85,10 @@ export function dataServiceFactory(injector: Injector): any {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (typeof (config.serviceType) === 'undefined') {
-    return new OntimizeService(injector);
-  } else if ('OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
     return new OntimizeEEService(injector);
+  } else if ('Ontimize' === config.serviceType) {
+    return new OntimizeService(injector);
   }
   return Util.createServiceInstance(config.serviceType, injector);
 }
@@ -110,6 +112,7 @@ export function exportServiceFactory(injector: Injector): IExportService {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
+
   if (typeof (config.exportServiceType) === 'undefined') {
     if (config.exportConfiguration) {
       return new OntimizeExportService3X(injector);
@@ -146,10 +149,11 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizePermissions' === config.permissionsServiceType) {
-    return new OntimizePermissionsService(injector);
-  } else if ('OntimizeEEPermissions' === config.permissionsServiceType) {
+
+  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizeEEPermissions' === config.permissionsServiceType) {
     return new OntimizeEEPermissionsService(injector);
+  } else if ('OntimizePermissions' === config.permissionsServiceType) {
+    return new OntimizePermissionsService(injector);
   }
   return Util.createServiceInstance(config.permissionsServiceType, injector);
 }

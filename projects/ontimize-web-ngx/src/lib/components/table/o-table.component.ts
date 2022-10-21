@@ -21,6 +21,7 @@ import {
   OnInit,
   Optional,
   QueryList,
+  SimpleChange,
   TemplateRef,
   ViewChild,
   ViewChildren,
@@ -29,9 +30,9 @@ import {
   ViewRef
 } from '@angular/core';
 import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-
 import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
@@ -43,11 +44,11 @@ import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, OntimizeServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OColumnDisplay } from '../../types';
+import { OColumnDisplay, OGroupedColumnTypes } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -57,6 +58,7 @@ import { OColumnAggregate } from '../../types/table/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/table/o-column-value-filter.type';
 import { TableFilterByColumnDialogResult } from '../../types/table/o-table-filter-by-column-data.type';
 import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.type';
+import { OTableGlobalConfig } from '../../types/table/o-table-global-config.type';
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
@@ -102,6 +104,8 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
+import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
+
 
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -185,7 +189,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // exportServiceType [ string ]: The service used by the table for exporting it's data, it must implement 'IExportService' interface. Default: 'OntimizeExportService'
   'exportServiceType: export-service-type',
 
-  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: false
+  // auto-adjust [true|false]: Auto adjust column width to fit its content. Default: true
   'autoAdjust: auto-adjust',
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu. Default: yes.
@@ -287,6 +291,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
+
+  public oTableGlobalConfig: OTableGlobalConfig;
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
@@ -424,7 +430,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   resizable: boolean = true;
   @InputConverter()
-  autoAdjust: boolean = false;
+  autoAdjust: boolean = true;
   @InputConverter()
   groupable: boolean = true;
   @InputConverter()
@@ -467,6 +473,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public groupedColumns: string;
 
   public sortColumns: string;
+  public groupedColumnTypes: OGroupedColumnTypes[] = [];
   public rowClass: (rowData: any, rowIndex: number) => string | string[];
 
   /*parsed inputs variables */
@@ -677,6 +684,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     this.snackBarService = this.injector.get(SnackBarService);
+    this.getGlobalConfig();
+  }
+
+  private getGlobalConfig() {
+    try {
+      this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
+      this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
+    } catch (error) {
+      // Do nothing because is optional
+    }
   }
 
   get state(): OTableComponentStateClass {
@@ -707,6 +724,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   ngAfterViewChecked() {
     this.cd.detectChanges();
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
+    if (Util.isDefined(changes.autoAdjust) && changes.autoAdjust.currentValue !== changes.autoAdjust.previousValue) {
+      this.autoAdjust = changes.autoAdjust.currentValue;
+    }
   }
 
   updateHeaderAndFooterStickyPositions() {
@@ -885,6 +908,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.setDatasource();
     this.registerDataSourceListeners();
     this.parseGroupedColumns();
+    this.parseGroupedColumnTypes();
     this.parseSortColumns();
     this.registerSortListener();
     this.setFiltersConfiguration();
@@ -1107,17 +1131,34 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
       if (colToAddInVisibleCol.length > 0) {
-        this.changeColumnsVisibility(colToAddInVisibleCol, stateCols);
+        colToAddInVisibleCol.forEach((colAdd) => {
+          if (stateCols.filter(col => col.attr === colAdd).length > 0) {
+            stateCols = stateCols.filter(col => colToAddInVisibleCol.indexOf(col.attr) > -1)
+              .map(col => {
+                col.visible = true;
+                return col;
+              });
+          } else {
+            this.colArray.filter(col => col === colAdd)
+              .forEach((element, i) => {
+                stateCols.splice(i + 1, 0,
+                  {
+                    attr: colAdd,
+                    visible: true,
+                    width: undefined
+                  });
+
+              });
+          }
+        });
       }
 
       // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
       // in this case you have to delete this column to this.visibleColArray
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
-        stateCols = stateCols.map(col => {
-          if (colToDeleteInVisibleCol.indexOf(col.attr) > -1) {
-            col.visible = false;
-          }
+        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) > -1).map(col => {
+          col.visible = false;
           return col;
         });
       }
@@ -2185,7 +2226,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   filterByColumn(columnValueFilter: OColumnValueFilter) {
     this.dataSource.addColumnFilter(columnValueFilter);
     this.onFilterByColumnChange.emit();
-    this.reloadPaginatedDataFromStart(false);
+    if (this.pageable) {
+      this.reloadPaginatedDataFromStart(false);
+    }
   }
 
   clearColumnFilters(triggerDatasourceUpdate: boolean = true, columnsAttr?: string[]): void {
@@ -2553,7 +2596,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.isColumnFiltersActive = confFilterColumnActiveByDefault || this.state.columnValueFilters.length > 0;
     }
 
-    if (this.oTableColumnsFilterComponent) {
+    if (Util.isDefined(storage.columnValueFilters)) {
       this.dataSource.initializeColumnsFilters(this.state.columnValueFilters);
       this.onFilterByColumnChange.emit();
     }
@@ -2860,13 +2903,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.setGroupColumns(result);
   }
+  parseGroupedColumnTypes() {
+    this.groupedColumnTypes = this.state.groupedColumnTypes;
+  }
 
   /**
    * Groups by column
    * @param column
    */
-  groupByColumn(column: OColumn) {
+  groupByColumn(column: OColumn, type?: string) {
     this.checkGroupByColumn(column.attr, true);
+    if (type) {
+      this.updateGroupedColumnTypes(column.attr, true, type);
+    }
     this.dataSource.updateGroupedColumns();
   }
 
@@ -2876,6 +2925,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByColumn(column: OColumn) {
     this.checkGroupByColumn(column.attr, false);
+    this.updateGroupedColumnTypes(column.attr, false);
     this.dataSource.updateGroupedColumns();
   }
 
@@ -2884,13 +2934,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   unGroupByAllColumns() {
     this.setGroupColumns([]);
+    this.groupedColumnTypes = [];
   }
 
-  setGroupColumns(value: string[]) {
+  setGroupColumns(value: any[]) {
     this.groupedColumnsArray = value;
     this.dataSource.updateGroupedColumns();
   }
-
+  setGroupedColumnTypes(value: OGroupedColumnTypes[]) {
+    this.groupedColumnTypes = value;
+  }
   checkGroupByColumn(field: string, add: boolean) {
     let found = null;
     for (const column of this.groupedColumnsArray) {
@@ -2952,12 +3005,43 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns column data by attr
    */
   getColumnDataByAttr(attr, row: any): any {
+    let operation = null;
+    if (this.groupedColumnTypes.length != 0 && this.groupedColumnTypes.findIndex(column => column.attr == attr) != -1) {
+      operation = this.groupedColumnTypes[this.groupedColumnTypes.findIndex(column => column.attr == attr)].type;
+    }
     const oCol = this.getOColumn(attr);
     if (!Util.isDefined(oCol)) {
       return row[attr];
     }
     const useRenderer = oCol.renderer && oCol.renderer.getCellData;
-    return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+    if (operation == null) {
+      return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+    }
+    else {
+      const date = moment(row[oCol.attr]);
+      const language = this.translateService.getCurrentLang();
+      switch (operation) {
+        case "YEAR": return date.year();
+        case "MONTH": return moment().locale(language).month(date.month()).format("MMMM");
+        case "YEAR_MONTH": return moment().locale(language).month(date.month()).year(date.year()).format("MMMM, YYYY");
+        case "YEAR_MONTH_DAY": return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+      }
+    }
+  }
+  updateGroupedColumnTypes(attr: string, add: boolean, operation?: string) {
+    let groupedColumns: OGroupedColumnTypes[] = [];
+    let index = this.groupedColumnTypes.findIndex(column => column.attr == attr);
+    if (index != -1) {
+      if (!add) {
+        this.groupedColumnTypes.splice(index, 1);
+      }
+    }
+    else {
+      if (add) {
+        this.groupedColumnTypes.push({ "attr": attr, "type": operation });
+      }
+    }
+    this.state.groupedColumnTypes = groupedColumns;
   }
 
   getClassNameGroupHeader(row: OTableGroupedRow): string {

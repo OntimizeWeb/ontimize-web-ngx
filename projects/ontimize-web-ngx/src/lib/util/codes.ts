@@ -122,6 +122,7 @@ export class Codes {
   public static VISIBLE_EXPORT_BUTTONS3X: string[] = ['xlsx', 'pdf', 'csv'];
 
   public static DEFAULT_CHANGE_EVENT: CHANGE_EVENTS = 'onValueChange';
+  public static TYPES_DATE_GROUPS = ["YEAR", "MONTH", "YEAR_MONTH", "YEAR_MONTH_DAY"];
 
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;

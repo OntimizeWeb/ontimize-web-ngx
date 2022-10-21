@@ -10,6 +10,7 @@ import { ODateValueType } from '../types/o-date-value.type';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
+import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
 
 export class Util {
 
@@ -474,5 +475,24 @@ export class Util {
     const newInstance = Object.create(clazz.prototype);
     clazz.apply(newInstance, [injector]);
     return newInstance;
+  }
+
+  static configureMessageService(configureServiceArgs: OConfigureMessageServiceArgs): any {
+    let messageService = configureServiceArgs.baseService;
+    const serviceType = configureServiceArgs.serviceType;
+    const injector = configureServiceArgs.injector;
+
+    if (serviceType) {
+      messageService = serviceType;
+    }
+    try {
+      messageService = injector.get<any>(messageService);
+      if (serviceType) {
+        messageService = Util.createServiceInstance(messageService, injector)
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return messageService;
   }
 }

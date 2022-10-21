@@ -50,7 +50,7 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .toolbar,
+       > .o-table-toolbar,
       > .o-table-body .mat-header-row {
         opacity: .75;
       }
@@ -59,7 +59,7 @@ $o_table_row_padding: 24px;
     position: relative;
     padding: 0 .5%;
 
-    .toolbar {
+    .o-table-toolbar {
       height: 40px;
 
       > div {
@@ -70,20 +70,9 @@ $o_table_row_padding: 24px;
         margin: 0 10px 0 4px;
       }
 
-      .table-title {
-        font-size: 18px;
-        font-weight: 400;
-        text-align: center;
-      }
     }
 
     .o-table-body {
-      .table-title {
-        font-size: 18px;
-        font-weight: 400;
-        text-align: center;
-      }
-      // display: block;
       max-width: 100%;
       height: 100%;
       overflow: hidden;

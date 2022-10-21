@@ -123,9 +123,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       displayDataChanges.push(this._virtualPageChange);
     }
 
-    if (this.table.oTableColumnsFilterComponent) {
-      displayDataChanges.push(this._columnValueFilterChange);
-    }
+    displayDataChanges.push(this._columnValueFilterChange);
 
     if (this.table.groupable) {
       displayDataChanges.push(this.groupByColumnChange);
@@ -804,6 +802,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   private getTextGroupRow(group: OTableGroupedRow, totalCounts: number) {
     const field = this.table.groupedColumnsArray[group.level - 1];
     let value = JSON.parse(group.keysAsString)[this.table.groupedColumnsArray[group.level - 1]];
+
     const oCol = this.table.getOColumn(field);
 
     if (!value && Util.isDefined(oCol.renderer) && (this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)) {

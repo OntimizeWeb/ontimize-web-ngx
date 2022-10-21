@@ -43,6 +43,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
       'filter-columns',
       'filter-column-active',
       'grouped-columns',
+      'grouped-column-types',
       'user-stored-filters',
       'user-stored-configurations'
     ];
@@ -105,15 +106,16 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
         result = this.getInitialConfigurationState();
         break;
       case 'filter-column-active':
-        if (this.component.oTableColumnsFilterComponent) {
           result['filter-column-active'] = this.component.isColumnFiltersActive;
-        }
         break;
       case 'filter-columns':
         result['filter-columns'] = this.component.filterColumns;
         break;
       case 'grouped-columns':
         result['grouped-columns'] = this.component.groupedColumnsArray;
+        break;
+      case 'grouped-column-types':
+        result['grouped-column-types'] = this.component.groupedColumnTypes;
         break;
       case 'user-stored-filters':
         result['user-stored-filters'] = this.state.storedFilters;
@@ -176,7 +178,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
 
   protected getColumnFiltersState() {
     const result = {};
-    if (this.component.oTableColumnsFilterComponent && this.component.dataSource) {
+    if (this.component.dataSource) {
       const columnValueFilters = this.component.dataSource.getColumnValueFilters();
       if (columnValueFilters.length > 0) {
         result['column-value-filters'] = columnValueFilters;
