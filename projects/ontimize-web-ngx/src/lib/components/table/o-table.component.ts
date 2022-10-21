@@ -2226,7 +2226,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   filterByColumn(columnValueFilter: OColumnValueFilter) {
     this.dataSource.addColumnFilter(columnValueFilter);
     this.onFilterByColumnChange.emit();
-    this.reloadPaginatedDataFromStart(false);
+    if (this.pageable) {
+      this.reloadPaginatedDataFromStart(false);
+    }
   }
 
   clearColumnFilters(triggerDatasourceUpdate: boolean = true, columnsAttr?: string[]): void {
@@ -2594,7 +2596,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.isColumnFiltersActive = confFilterColumnActiveByDefault || this.state.columnValueFilters.length > 0;
     }
 
-    if (this.oTableColumnsFilterComponent) {
+    if (Util.isDefined(storage.columnValueFilters)) {
       this.dataSource.initializeColumnsFilters(this.state.columnValueFilters);
       this.onFilterByColumnChange.emit();
     }
