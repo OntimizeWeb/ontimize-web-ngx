@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
 import { OColumn } from "../../../column";
 import { OTableComponent } from "../../../o-table.component";
+import { OMatSortHeader } from "../../sort/o-mat-sort-header";
 import { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
 
 export const DEFAULT_INPUTS_O_TABLE_HEADER = [
@@ -26,8 +27,9 @@ export class OTableHeaderComponent {
 
   @ViewChild('columnFilterIcon', { static: false }) set columnFilterIcon(value: OTableHeaderColumnFilterIconComponent) {
     this._columnFilterIcon = value;
-
   }
+
+  @ViewChild(OMatSortHeader, { static: false }) matSortHeader: OMatSortHeader;
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
