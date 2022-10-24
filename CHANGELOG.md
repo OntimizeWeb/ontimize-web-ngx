@@ -29,15 +29,6 @@
 
 ### BREAKING CHANGES
 * Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
-* Due to the improvement of the issue [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044) the `o-table`, `o-list`, `o-grid` toolbars have been factored and this causes the following changes.
-  * The css selectors related to the mat-toolbar will stop working in `o-table`, `o-list`, `o-grid` components.
-  * New CSS class `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar`
-  * Unified the styles of the titles of the `o-table`, `o-list`, `o-grid` with new CSS class to `title` and therefore removed CSS class `table-title` and `o-list-title`
-
-* **Application configuration file `app.config,ts`**
-
-The default value of `serviceType` has been changed to `OntimizeEE` and the default value of `permissionsServiceType` has been changed to `OntimizeEEPermissions`([25cc5c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/25cc5c8))  Closes [#967](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/967)
-
 
 ```ts
 @NgModule({
@@ -51,6 +42,16 @@ The default value of `serviceType` has been changed to `OntimizeEE` and the defa
 })
 export class MyModule { }
 ```
+
+* Due to the improvement of the issue [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044) the `o-table`, `o-list`, `o-grid` toolbars have been factored and this causes the following changes.
+  * The css selectors related to the mat-toolbar will stop working in `o-table`, `o-list`, `o-grid` components.
+  * New CSS class `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar`
+  * Unified the styles of the titles of the `o-table`, `o-list`, `o-grid` with new CSS class to `title` and therefore removed CSS class `table-title` and `o-list-title`
+
+* **Application configuration file `app.config,ts`**
+
+The default value of `serviceType` has been changed to `OntimizeEE` and the default value of `permissionsServiceType` has been changed to `OntimizeEEPermissions`([25cc5c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/25cc5c8))  Closes [#967](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/967)
+
 
 ## 8.7.3 (2022-10-06)
 ### Features
