@@ -35,3 +35,4 @@ export * from './service-response-adapter.interface';
 export * from './service-response.interface';
 export * from './export-data-provider.interface';
 export * from './o-table-export-data.interface'
+export * from './query-parameter.interface';

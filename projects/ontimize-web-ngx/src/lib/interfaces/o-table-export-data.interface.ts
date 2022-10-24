@@ -1,4 +1,4 @@
-import { QueryParameter } from "../types/query-parameter.type";
+import { AdvancedQueryParameter, QueryParameter } from "./query-parameter.interface";
 
 export interface OTableExportData {
   data: any;
@@ -10,14 +10,14 @@ export interface OTableExportData {
 
 export interface OTableExportData3X {
   type: string;
-  queryParam: QueryParameter;
+  queryParam: QueryParameter | AdvancedQueryParameter;
   service?: string;
   path: string;
   dao: string;
   advQuery: boolean
 }
 
-export interface OTableExcelExportData3X extends OTableExportData3X {
+export interface OTableFormattedExportData3X extends OTableExportData3X {
   columns: { [columnId: string]: string; };
   columnTitles: { [columnId: string]: string; };
   columnTypes: { cellNumber?: string, styleId?: string };
