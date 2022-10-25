@@ -21,8 +21,7 @@
   * Fixed bug in `AbstractOServiceBaseComponent` when searching for a column of type service render ([47a60682](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/47a60682)) Closes[#1010](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1010)
   * `o-table-columns-filter`: active by default. However, you can configure it unavailable in table header with `filter-column-active-by-default= 'no'`. ([6ceaefe5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6ceaefe5)) Closes [#1007](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1007)
   * Fix bug that filtering a value in the quick filter launchs the query to the backend when `pageable=no` ([367f3d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/367f3d7)) Closes [#1011](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1011)
-  * Fixed table data export stopped working with new versions of Ontimize Boot
-  * Fixed compatibility of Ontimize Boot 3.x.x exports
+  * Fixed compatibility of Ontimize Boot 3.x.x exports ([7d741f8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7d741f8))
 * **o-email-input**: Fixed bug that incorrectly validated email inputs ([46c6e78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/46c6e78)) Closes [#999](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/999)
 * **mat-error**: Bug [#1013](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1013) fixed. OntimizeWeb form component `mat-error` definition no longer interferes the Angular Material default definition.
   *NOTES*:
@@ -36,13 +35,6 @@
 
 ### BREAKING CHANGES
 * Due to the fix of the issue [#1015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1015), to set the `service-type` attribute on the component, the provider defined in the module cannot set `useFactory`, instead use `useValue` because Ontimize Web is responsible for creating each instance for this service.
-* Due to the improvement of the issue [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044) the `o-table`, `o-list`, `o-grid` toolbars have been factored and this causes the following changes.
-  * The css selectors related to the mat-toolbar will stop working in `o-table`, `o-list`, `o-grid` components.
-  * New CSS class `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar`
-  * Unified the styles of the titles of the `o-table`, `o-list`, `o-grid` with new CSS class to `title` and therefore removed CSS class `table-title` and `o-list-title`
-
-* **Application configuration file `app.config.ts`**
-The default value of `serviceType` has been changed to `OntimizeEE` and the default value of `permissionsServiceType` has been changed to `OntimizeEEPermissions`([25cc5c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/25cc5c8))  Closes [#967](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/967)
 
 ```ts
 @NgModule({
@@ -66,6 +58,23 @@ export class MyModule { }
 | Ontimize Boot 3.9.0 or higher |  `OntimizeExportService3X` |
 
 * Now the `configureService` method has only one `config` parameter and the `exportData` has only one parameter `format` in the `IExportService` interface since exportData is available through the provider defined with injection token `O_EXPORT_DATA_SERVICE`, check this [link](https://ontimizeweb.github.io/docs/v8/components/table/export) for more information ([2eaa9c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2eaa9c7)) ([591d3c6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/591d3c6))
+`
+// before
+  configureService(config: any, modeAll?: boolean): void;
+  exportData(data: any, format: string, entity?: string): Observable<any>;
+
+// after
+configureService(config: any): void;
+exportData(format: string): Observable<any>;
+`
+* Due to the improvement of the issue [#1044](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1044) the `o-table`, `o-list`, `o-grid` toolbars have been factored and this causes the following changes.
+  * The css selectors related to the mat-toolbar will stop working in `o-table`, `o-list`, `o-grid` components.
+  * New CSS class `o-table-toolbar`, `o-list-toolbar`, `o-grid-toolbar`
+  * Unified the styles of the titles of the `o-table`, `o-list`, `o-grid` with new CSS class to `title` and therefore removed CSS class `table-title` and `o-list-title`
+
+* **Application configuration file `app.config,ts`**
+The default value of `serviceType` has been changed to `OntimizeEE` and the default value of `permissionsServiceType` has been changed to `OntimizeEEPermissions`([25cc5c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/25cc5c8))  Closes [#967](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/967)
+
 
 ## 8.7.3 (2022-10-06)
 ### Features
