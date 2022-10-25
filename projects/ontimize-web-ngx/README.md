@@ -75,5 +75,6 @@ The script `build` executes the following commands:
     - cd dist/ontimize-web-ngx && npm pack (From the distribution folder we create a .tgz file to import in our project)
 
 
-## Versions and dependencies
+## :eyes: Versions and dependencies
+
 Each version of the Addons is compatible with a version of the framework, you can check the dependencies between Angular, Ontimize web and Addons [here](https://ontimizeweb.github.io/docs/v8/versions/).
