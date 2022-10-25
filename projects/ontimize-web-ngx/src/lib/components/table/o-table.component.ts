@@ -313,7 +313,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   // only for insideTabBugWorkaround
-  @ViewChildren(OTableHeaderComponent) protected tableHeaders: QueryList<OTableHeaderComponent>;
+  protected tableHeaders: Array<OTableHeaderComponent> = [];
 
   @ViewChild('spinnerContainer', { read: ElementRef, static: false })
   spinnerContainer: ElementRef;
@@ -1090,6 +1090,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (alreadyExisting !== undefined) {
       const replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
       this._oTableOptions.columns[replacingIndex].aggregate = column;
+    }
+  }
+
+  registerTableHeaders(tableHeader: OTableHeaderComponent) {
+    if (this.tableHeaders.findIndex(header => header.column.attr === tableHeader.column.attr) === -1) {
+      this.tableHeaders.push(tableHeader);
     }
   }
 
@@ -3069,6 +3075,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   reinitializeSortColumns(sortColumns?: SQLOrder[]) {
+    this.tableHeaders = [];
     if (Util.isDefined(sortColumns)) {
       this.sortColArray = sortColumns;
     } else {

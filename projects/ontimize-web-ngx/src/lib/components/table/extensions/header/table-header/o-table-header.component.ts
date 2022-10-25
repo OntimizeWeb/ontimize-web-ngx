@@ -48,4 +48,8 @@ export class OTableHeaderComponent {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.table.registerTableHeaders(this);
+  }
+
 }
