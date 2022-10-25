@@ -11,10 +11,10 @@
 
 <p align="center">
   <a href="#-introduction">Introduction</a> •
-  <a href="#-getting-started">Getting started</a> •
+  <a href="#zap-getting-started">Getting started</a> •
   <a href="#-ideas">Ideas</a> •
-  <a href="#-development">Development</a> •
-  <a href="#-versions-and-dependencies">Versions and dependencies</a>
+  <a href="#gear-development">Development</a> •
+  <a href="#eyes-versions-and-dependencies">Versions and dependencies</a>
 </p>
 
 ## 📜 Introduction
