@@ -1,6 +1,7 @@
 import { InjectionToken, Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
+import { IExportDataProvider } from '../interfaces/export-data-provider.interface';
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
@@ -10,7 +11,10 @@ import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { OntimizeAuthService } from './o-auth.service';
 import { OErrorDialogManager } from './o-error-dialog-manager.service';
+import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
+import { OntimizeExportDataProviderService } from './ontimize-export-data-provider.service';
 import { OntimizeEEService } from './ontimize/ontimize-ee.service';
+import { OntimizeExportService3X } from './ontimize/ontimize-export-3xx.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
 import { OntimizeService } from './ontimize/ontimize.service';
@@ -61,6 +65,8 @@ export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report servi
 
 export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
 
+export const O_EXPORT_DATA_SERVICE = new InjectionToken<IExportDataProvider>('Export data provider');
+
 export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 
 export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
@@ -106,10 +112,31 @@ export function exportServiceFactory(injector: Injector): IExportService {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.exportServiceType)) {
-    return new OntimizeExportService(injector);
+
+  if (typeof (config.exportServiceType) === 'undefined') {
+    if (config.exportConfiguration) {
+      return new OntimizeExportService3X(injector);
+    } else {
+      return new OntimizeExportService(injector);
+    }
   }
   return Util.createServiceInstance(config.exportServiceType, injector);
+}
+
+export function exportDataFactory(injector: Injector): IExportDataProvider {
+  const provider = _getInjectionTokenValue(O_EXPORT_DATA_SERVICE, injector);
+  const service = Util.createServiceInstance(provider, injector);
+  if (Util.isDefined(service)) {
+    return service;
+  } else {
+    const config = injector.get(AppConfig).getConfiguration();
+    if (typeof (config.exportConfiguration) === 'undefined') {
+      return new OntimizeExportDataProviderService(injector);
+    } else {
+      return new OntimizeExportDataProviderService3X(injector);
+    }
+  }
+
 }
 
 /**
@@ -159,6 +186,8 @@ export const OntimizeExportServiceProvider = { provide: OntimizeExportService, u
 export const OntimizeAuthServiceProvider = { provide: AuthService, useFactory: authServiceFactory, deps: [Injector] };
 
 export const ComponentStateServiceProvider = { provide: AbstractComponentStateService, useFactory: componentStateFactory, deps: [Injector] };
+
+export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
