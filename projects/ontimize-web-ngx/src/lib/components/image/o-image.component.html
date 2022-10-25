@@ -17,9 +17,12 @@
     <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-    <mat-error *ngIf="hasError('fileSize')"
-      text="{{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes"></mat-error>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *oMatError="hasError('fileSize')">
+      {{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes
+    </mat-error>
   </mat-form-field>
 
   <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow" class="o-image-display-container">

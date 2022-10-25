@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material';
+import { MatFormFieldAppearance, MatPaginator, PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -97,7 +97,10 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'paginationControls: pagination-controls',
 
   // page-size-options [string]: Page size options separated by ';'.
-  'pageSizeOptions: page-size-options'
+  'pageSizeOptions: page-size-options',
+
+  //quickFilterAppearance[legacy|standard|fill|outline] Indicates which of the mat-form-field different appearance variants will be used. Default: outline
+  'quickFilterAppearance:quick-filter-appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -226,8 +229,10 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected tabsSubscriptions: any;
 
   public quickFilterComponent: OSearchInputComponent;
+
   @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
   public searchInputComponent: OSearchInputComponent;
+
   protected quickFilterColArray: string[];
 
   protected dataResponseArray: any[] = [];
@@ -237,6 +242,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected clickTimer;
   protected clickDelay = 200;
   protected clickPrevent = false;
+  protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
 
   constructor(
     injector: Injector,
@@ -878,6 +884,19 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       this.viewDetail(data);
     }
     this.onDoubleClick.emit(data);
+  }
+
+  get quickFilterAppearance(): MatFormFieldAppearance {
+    return this._quickFilterAppearance;
+  }
+
+  set quickFilterAppearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
+      value = 'outline';
+    }
+    this._quickFilterAppearance = value;
   }
 
 }

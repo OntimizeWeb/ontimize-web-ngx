@@ -4,8 +4,12 @@
   <mat-checkbox [id]="getAttribute()" [formControlName]="getAttribute()" (change)="onChangeEvent($event)"
     [labelPosition]="labelPosition" [color]="color">
     {{ olabel | oTranslate }}
-    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
   </mat-checkbox>
   <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
 </div>

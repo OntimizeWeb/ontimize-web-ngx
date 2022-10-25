@@ -1,0 +1,80 @@
+---
+name: Build Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+    paths: ['projects/ontimize-web-ngx/**']
+  workflow_dispatch:
+    inputs:
+      BASELINE:
+        description: 'Release branch'
+        required: true
+        default: 'master'
+
+env:
+  NPM_REGISTRY: https://registry.npmjs.org/
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && contains(join(github.event.pull_request.labels.*.name, ', '), 'release'))
+
+    steps:
+      - name: Get input parameters
+        run: |
+          echo "BASELINE_BRANCH=${{ github.event.inputs.BASELINE || github.ref }}" >> $GITHUB_ENV
+
+      - name: Checkout merge commit
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.BASELINE_BRANCH }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: 'Cache node modules'
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Node 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.13.0
+          registry-url: ${{ env.NPM_REGISTRY }}
+
+      - name: obtain package.json version
+        id: project
+        run: |
+          echo ::set-output name=version::$(node -pe "require('./package.json')['version']")
+
+      - name: abort if SNAPSHOT
+        if: "contains(steps.project.outputs.version, 'SNAPSHOT')"
+        run: |
+          echo "Version ${{ steps.project.outputs.version }} is not a properly named for RELEASE"
+          exit 1
+
+      - name: npm install and npm run build
+        run: |
+          npm i
+          npm run build
+
+      - name: Publish
+        run: |
+          cd dist
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.OWEB_NPM_AUTOMATION_TOKEN }}" >> .npmrc
+          npm publish
+
+      - name: GitHub Release / Create release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.project.outputs.version }}
+          release_name: ${{ steps.project.outputs.version }}
+          body: |
+            Check out the [changelog](CHANGELOG.md) for version ${{ steps.project.outputs.version }}

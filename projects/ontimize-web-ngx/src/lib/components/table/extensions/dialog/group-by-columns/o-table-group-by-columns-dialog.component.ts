@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { OGroupedColumnTypes } from '../../../../../types';
 import { Util } from '../../../../../util/util';
 import { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';
 import { OColumn } from '../../../column/o-column.class';
@@ -18,6 +19,7 @@ export class OTableGroupByColumnsDialogComponent {
 
   public columns: Array<OColumn> = [];
   public groupedColumns: Array<OColumn> = [];
+  public groupedColumnTypes: OGroupedColumnTypes[] = [];
 
   @ViewChild('dualListSelector', { static: false }) dualListSelector: ODualListSelectorComponent;
 
@@ -40,11 +42,16 @@ export class OTableGroupByColumnsDialogComponent {
       this.columns = data.columnsData.filter((oCol: OColumn) => oCol.visible && oCol.groupable && self.groupedColumns.findIndex(x => x.attr === oCol.attr) === -1);
 
     }
-
+    if (Util.isDefined(data.groupedColumnTypes)) {
+      this.groupedColumnTypes = data.groupedColumnTypes;
+    }
   }
 
   getGroupedColumns(): Array<string> {
     return this.dualListSelector.getSelectedItems().map((oCol: OColumn) => oCol.attr);
   }
 
+  getGroupedColumnTypes(): OGroupedColumnTypes[] {
+    return this.dualListSelector.getGroupedColumnTypes();
+  }
 }

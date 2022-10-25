@@ -10,13 +10,17 @@
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-    <mat-error *ngIf="hasError('minlength')"
-      text="{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}">
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
     </mat-error>
-    <mat-error *ngIf="hasError('maxlength')"
-      text="{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}">
+    <mat-error *oMatError="hasError('minlength')">
+      {{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}
     </mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+    <mat-error *oMatError="hasError('maxlength')">
+      {{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
   </mat-form-field>
 </div>

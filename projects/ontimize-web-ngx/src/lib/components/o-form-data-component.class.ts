@@ -14,19 +14,21 @@ import {
   ViewChildren
 } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { FloatLabelType, MatFormFieldAppearance, MatSuffix } from '@angular/material';
+import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs';
+
 import { O_INPUTS_OPTIONS } from '../config/app-config';
 import { BooleanConverter, InputConverter } from '../decorators/input-converter';
+import { OMatErrorDirective } from '../directives/o-mat-error.directive';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../interfaces/form-data-type-component.interface';
+import { O_MAT_ERROR_OPTIONS } from '../services/factories';
 import { PermissionsService } from '../services/permissions/permissions.service';
 import { OValidatorComponent } from '../shared/components/validation/o-validator.component';
-import { O_MAT_ERROR_OPTIONS, OMatErrorComponent } from '../shared/material/o-mat-error/o-mat-error';
 import { ErrorData } from '../types/error-data.type';
 import { FormValueOptions } from '../types/form-value-options.type';
 import { OInputsOptions } from '../types/o-inputs-options.type';
-import { OMatErrorOptions } from '../types/o-mat-error.type';
+import { OMatErrorOptions, OMatErrorType } from '../types/o-mat-error.type';
 import { OPermissions } from '../types/o-permissions.type';
 import { Codes } from '../util/codes';
 import { PermissionsUtils } from '../util/permissions';
@@ -74,7 +76,6 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
 
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, AfterViewInit, OnDestroy, OnChanges {
-
   /* Inputs */
   public sqlType: string;
   @InputConverter()
@@ -138,8 +139,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected mutationObserver: MutationObserver;
 
   protected errorOptions: OMatErrorOptions;
-  @ViewChildren(OMatErrorComponent)
-  protected oMatErrorChildren: QueryList<OMatErrorComponent>;
+  @ViewChildren(OMatErrorDirective)
+  protected oMatErrorChildren: QueryList<OMatErrorDirective>;
+  @ContentChildren(MatError) protected _errorChildren: QueryList<MatError>;
 
   protected oInputsOptions: OInputsOptions;
 
@@ -157,6 +159,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     } catch (e) {
       this.errorOptions = {};
     }
+    if (!Util.isDefined(this.errorOptions.type)) {
+      this.errorOptions.type = Codes.O_MAT_ERROR_STANDARD as OMatErrorType;
+    }
     try {
       this.selectAllOnClick = this.injector.get(O_INPUTS_OPTIONS).selectAllOnClick;
     } catch (e) {
@@ -169,17 +174,16 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   public ngAfterViewInit(): void {
-    const self = this;
     if (this._matSuffixList) {
       this.setSuffixClass(this._matSuffixList.length);
       this.matSuffixSubscription = this._matSuffixList.changes.subscribe(() => {
-        self.setSuffixClass(self._matSuffixList.length);
+        this.setSuffixClass(this._matSuffixList.length);
       });
     }
 
     if (this.validatorChildren) {
       this.validatorsSubscription = this.validatorChildren.changes.subscribe(() => {
-        self.updateValidators();
+        this.updateValidators();
       });
       if (this.validatorChildren.length > 0) {
         this.updateValidators();
@@ -246,7 +250,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   public getActiveOErrors(): ErrorData[] {
-    return this.errorsData.filter((item: ErrorData) => this.hasError(item.name));
+    return this.errorOptions.type === Codes.O_MAT_ERROR_STANDARD
+      ? this.errorsData.filter((item: ErrorData) => this.hasError(item.name))
+      : [];
   }
 
   public initialize(): void {
@@ -334,12 +340,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       return;
     }
     if (this.oldValue !== val) {
-      const newValue = val;
       const previousValue = this.oldValue;
       this.setFormValue(val, options, setDirty);
       if (options && options.emitModelToViewValueChange !== false) {
         const changeType: number = (options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
-        this.emitOnValueChange(changeType, newValue, previousValue);
+        this.emitOnValueChange(changeType, val, previousValue);
       }
     }
   }
@@ -404,7 +409,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }, null);
   }
 
-  public getControl(): FormControl {
+  public getControl(): OFormControl {
     if (!this._fControl) {
       const validators: ValidatorFn[] = this.resolveValidators();
       const cfg = {
@@ -528,10 +533,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   protected registerOnFormControlChange(): void {
-    const self = this;
     if (this._fControl) {
       this._fControlSubscription = this._fControl.valueChanges.subscribe(value => {
-        self.onFormControlChange(value);
+        this.onFormControlChange(value);
       });
     }
   }
@@ -544,22 +548,25 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
     this.ensureOFormValue(val);
     if (this._fControl) {
-      this._fControl.setValue(this.value.value, options);
+      this.updateOFormControlValue(this.value.value, options, setDirty);
+    }
+    this.oldValue = this.value.value;
+  }
+
+  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false) : void {
+    this._fControl.setValue(value, options);
       if (setDirty) {
         this._fControl.markAsDirty();
       }
       if (this._fControl.invalid && !this.form.isInInsertMode()) {
         this._fControl.markAsTouched();
       }
-    }
-    this.oldValue = this.value.value;
   }
 
   protected updateValidators(): void {
     if (!this._fControl) {
       return;
     }
-    const self = this;
     this._fControl.clearValidators();
     this.errorsData = [];
     const validators = this.resolveValidators();
@@ -570,7 +577,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
           validators.push(validatorFunction);
         }
         const errorsData: ErrorData[] = oValidator.getErrorsData();
-        self.errorsData.push(...errorsData);
+        this.errorsData.push(...errorsData);
       });
     }
     this._fControl.setValidators(validators);
@@ -600,12 +607,19 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   protected getTooltipText(): string {
     const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
-    if (liteError && Util.isDefined(this._fControl.errors) && this.oMatErrorChildren && this.oMatErrorChildren.length > 0) {
-      let result: string = '';
-      this.oMatErrorChildren.forEach((oMatError: OMatErrorComponent) => {
-        result += `${oMatError.text}\n`;
-      });
-      return result;
+    if (liteError && Util.isDefined(this._fControl.errors)) {
+      let errorsText = [];
+      if (this.oMatErrorChildren && this.oMatErrorChildren.length > 0) {
+        errorsText.push(...this.oMatErrorChildren
+          .filter((oMatError: OMatErrorDirective) => Util.isDefined(oMatError.text))
+          .map((oMatError: OMatErrorDirective) => oMatError.text));
+      }
+      if (this.errorsData && this.errorsData.length > 0) {
+        errorsText.push(...this.errorsData
+          .filter((item: ErrorData) => this.hasError(item.name))
+          .map((item: ErrorData) => item.text));
+      }
+      return errorsText.join('\n');
     }
     return super.getTooltipText();
   }

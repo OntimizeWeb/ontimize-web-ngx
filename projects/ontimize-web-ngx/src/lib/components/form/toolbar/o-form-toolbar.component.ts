@@ -286,17 +286,19 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public showConfirmDelete(): void {
-    this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
-      if (res === true) {
-        this._form.executeToolbarAction(Codes.DELETE_ACTION).subscribe(resp => {
-          this._form.onDelete.emit(resp);
-          this.onCloseDetail({ exitWithoutConfirmation: true });
-        }, err => {
-          console.error('OFormToolbar.delete error', err);
-        });
+    this._dialogService.confirm(
+      this._form.messageService.getDeleteConfirmationDialogTitle(),
+      this._form.messageService.getDeleteConfirmationMessage()).then(res => {
+        if (res) {
+          this._form.executeToolbarAction(Codes.DELETE_ACTION).subscribe(resp => {
+            this._form.onDelete.emit(resp);
+            this.onCloseDetail({ exitWithoutConfirmation: true });
+          }, err => {
+            console.error('OFormToolbar.delete error', err);
+          });
+        }
       }
-    }
-    );
+      );
   }
 
   get showNavigation(): boolean {
@@ -405,7 +407,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
     const enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
+      this.snackBarService.open(this._form.messageService.getActionPermissionNotEnabledMessage());
     }
     return enabledPermision;
   }

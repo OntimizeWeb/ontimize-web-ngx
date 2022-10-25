@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { AppConfig } from '../../../../../config/app-config';
 
 import { IExportService } from '../../../../../interfaces/export-service.interface';
 import { OntimizeExportServiceProvider } from '../../../../../services/factories';
@@ -10,7 +11,6 @@ import { OntimizeExportService } from '../../../../../services/ontimize/ontimize
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';
-import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
@@ -36,6 +36,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   protected oTableExportButtonService: OTableExportButtonService;
   protected visibleButtons: string[];
   private subscription: Subscription = new Subscription();
+  private appConfig: AppConfig;
 
   constructor(
     public dialogRef: MatDialogRef<OTableExportDialogComponent>,
@@ -45,6 +46,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     this.snackBarService = injector.get(SnackBarService);
     this.translateService = this.injector.get(OTranslateService);
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
+    this.appConfig = this.injector.get(AppConfig)
 
     if (config && Util.isDefined(config.visibleButtons)) {
       this.visibleButtons = Util.parseArray(config.visibleButtons.toLowerCase(), true);
@@ -73,24 +75,17 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     }
     this.exportService = this.injector.get(loadingService);
     const serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
-    this.exportService.configureService(serviceCfg, Codes.EXPORT_MODE_ALL === this.config.mode);
+    this.exportService.configureService(serviceCfg);
   }
 
   export(exportType: string, button?: any): void {
+
     if (button) {
       button.disabled = true;
     }
-    const exportData = {
-      data: this.config.data,
-      columns: this.config.columns,
-      columnNames: this.config.columnNames,
-      sqlTypes: this.config.sqlTypes,
-      filter: this.config.filter
-    };
 
-    this.proccessExportData(exportData.data, exportData.sqlTypes);
     this.dialogRef.close(true);
-    this.exportService.exportData(exportData, exportType, this.config.entity).subscribe(
+    this.exportService.exportData(exportType).subscribe(
       res => {
         this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
       },
@@ -100,23 +95,21 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  proccessExportData(data: object[], sqlTypes: object): void {
-    // Parse boolean
-    Object.keys(sqlTypes).forEach(key => {
-      if (SQLTypes.BOOLEAN === sqlTypes[key]) {
-        const yes = this.translateService.get('YES');
-        const no = this.translateService.get('NO');
-        data.forEach(row => {
-          if (row[key]) {
-            row[key] = Util.parseBoolean(row[key]) ? yes : no;
-          }
-        });
-      }
-    });
-  }
-
   isButtonVisible(btn: string): boolean {
-    return !this.visibleButtons || (this.visibleButtons.indexOf(btn) !== -1);
+
+    const useExportConfiguration3X = this.appConfig.useExportConfiguration();
+    let isVisible = true;
+    if (this.visibleButtons) {
+      isVisible = this.visibleButtons.indexOf(btn) !== -1;
+    } else {
+      if (useExportConfiguration3X) {
+        isVisible = Codes.VISIBLE_EXPORT_BUTTONS3X.indexOf(btn) !== -1;
+      } else {
+        isVisible = Codes.VISIBLE_EXPORT_BUTTONS.indexOf(btn) !== -1
+      }
+    }
+
+    return isVisible;
   }
 
   protected handleError(err): void {

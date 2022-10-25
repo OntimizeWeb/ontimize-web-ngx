@@ -27,6 +27,7 @@ import {
   OFormDataComponent
 } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
+import { OFormControl } from '../o-form-control.class';
 
 export type OHourValueType = 'string' | 'timestamp';
 
@@ -74,6 +75,17 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   ) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'TIMESTAMP';
+  }
+
+  initialize(): void {
+    super.initialize();
+    const formControl = this.getFormControl() as OFormControl;
+    if (formControl) {
+      const self = this;
+      formControl.getValue = function () {
+        return self.getValue();
+      };
+    }
   }
 
   public ngAfterViewInit(): void {
@@ -138,13 +150,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     return validators;
   }
 
-  public onFormControlChange(value: any): void {
-    if (this.oldValue === value) {
-      return;
-    }
-    super.onFormControlChange(value);
-  }
-
   set format(val: number) {
     const old = this._format;
     let parsedVal = NumberConverter(val);
@@ -183,7 +188,13 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   public onTimepickerChange(event: string): void {
-    const value = this.getValueAsString(event);
+    let value: any = event;
+    if (Util.isDefined(value) && this.valueType === 'timestamp') {
+      const valueTimestamp = moment(value, this.formatString).valueOf();
+      if (!isNaN(valueTimestamp)) {
+        value = valueTimestamp;
+      }
+    }
     /** emitModelToViewChange: false  because onChange event is trigger in ngModelChange */
     this.setValue(value, {
       changeType: OValueChangeEvent.USER_CHANGE,
@@ -200,19 +211,22 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     }
   }
 
-  public ensureOFormValue(arg: any): void {
-
-    if (arg != null) {
-      if (this.valueType === 'timestamp') {
-        // because of the ngx-material-timepicker especification, its stored value must be always a string
-        if (arg instanceof OFormValue) {
-          arg.value = this.getValueAsString(arg.value);
-        } else {
-          arg = this.getValueAsString(arg);
-        }
-      }
+  protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
+    let stringValue = val;
+    if (Util.isDefined(val) && this.valueType === 'timestamp') {
+      // because of the ngx-material-timepicker especification, its stored value must be always a string
+      let value = val instanceof OFormValue ? val.value : val;
+      stringValue = this.getValueAsString(value);
     }
-    super.ensureOFormValue(arg);
+    this.ensureOFormValue(val);
+    if (!this._fControl) {
+      // ensuring _fControl creation
+      this._fControl = this.getControl();
+    }
+    if (this._fControl) {
+      this.updateOFormControlValue(stringValue, options, setDirty);
+    }
+    this.oldValue = this.value.value;
   }
 
   protected updateValeOnInputChange(blurEvent: any): void {
@@ -251,17 +265,6 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected emitOnValueChange(type, newValue, oldValue): void {
     this.onChange.emit(newValue);
     super.emitOnValueChange(type, newValue, oldValue);
-  }
-
-  public getValue(): any {
-    let value = super.getValue();
-    if (this.valueType === 'timestamp') {
-      const valueTimestamp = moment(value, this.formatString).valueOf();
-      if (!isNaN(valueTimestamp)) {
-        value = valueTimestamp;
-      }
-    }
-    return value;
   }
 
   protected getValueAsString(val: any): string {
