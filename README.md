@@ -27,7 +27,7 @@ Ontimize Web is based on the [8.x version of Angular](https://v8.angular.io/docs
 
 Check out our [documentation site](https://ontimizeweb.github.io/docs/) to know more details.
 
-## ⚡️ Getting started
+## :zap: Getting started
 
 Follow the [Getting Started](https://ontimizeweb.github.io/docs/v8/doc-overview/) documentation section to get started quickly.
 There is a practical [Quickstart Application](https://github.com/OntimizeWeb/ontimize-web-ngx-quickstart), a perfect starting point for building your own Ontimize Web app.
@@ -41,7 +41,7 @@ View all the examples in action at [Ontimize Web](https://try.imatia.com/ontimiz
 We would love any feedback you have or to know when you encounter issues, by filing an issue report on this repo.
 
 
-## ⚙️ Development
+## :gear: Development
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
