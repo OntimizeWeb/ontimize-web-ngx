@@ -24,7 +24,6 @@ import {
   SimpleChange,
   TemplateRef,
   ViewChild,
-  ViewChildren,
   ViewContainerRef,
   ViewEncapsulation,
   ViewRef
