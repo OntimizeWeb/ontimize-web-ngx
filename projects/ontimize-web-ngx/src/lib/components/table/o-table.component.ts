@@ -24,7 +24,6 @@ import {
   SimpleChange,
   TemplateRef,
   ViewChild,
-  ViewChildren,
   ViewContainerRef,
   ViewEncapsulation,
   ViewRef
@@ -92,6 +91,7 @@ import { OTableColumnsFilterComponent } from './extensions/header/table-columns-
 import {
   OTableColumnsGroupingColumnComponent
 } from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
+import { OTableHeaderComponent } from './extensions/header/table-header/o-table-header.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
 import { OTableDataSourceService } from './extensions/o-table-datasource.service';
@@ -103,10 +103,7 @@ import {
   OTableRowExpandedChange
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
-import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
-
-
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -315,7 +312,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   // only for insideTabBugWorkaround
-  @ViewChildren(OMatSortHeader) protected sortHeaders: QueryList<OMatSortHeader>;
+  protected tableHeaders: Array<OTableHeaderComponent> = [];
 
   @ViewChild('spinnerContainer', { read: ElementRef, static: false })
   spinnerContainer: ElementRef;
@@ -1092,6 +1089,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (alreadyExisting !== undefined) {
       const replacingIndex = this._oTableOptions.columns.indexOf(alreadyExisting);
       this._oTableOptions.columns[replacingIndex].aggregate = column;
+    }
+  }
+
+  registerTableHeaders(tableHeader: OTableHeaderComponent) {
+    if (this.tableHeaders.findIndex(header => header.column.attr === tableHeader.column.attr) === -1) {
+      this.tableHeaders.push(tableHeader);
     }
   }
 
@@ -2240,6 +2243,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   isColumnFilterable(column: OColumn): boolean {
     return Util.isDefined(this.oTableColumnsFilterComponent) ? this.oTableColumnsFilterComponent.isColumnFilterable(column.attr) : this.isSearcheableColumn(column);
   }
+
   isSearcheableColumn(column: OColumn): boolean {
     return this.searcheableColumns.includes(column.attr);
   }
@@ -3070,6 +3074,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   reinitializeSortColumns(sortColumns?: SQLOrder[]) {
+    this.tableHeaders = [];
     if (Util.isDefined(sortColumns)) {
       this.sortColArray = sortColumns;
     } else {
@@ -3080,7 +3085,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected refreshSortHeaders() {
-    this.sortHeaders.forEach(sortH => sortH.refresh());
+    this.tableHeaders.filter(header => Util.isDefined(header.matSortHeader)).forEach(header => header.matSortHeader.refresh());
   }
 
   getQuickFilterValue(): string {
