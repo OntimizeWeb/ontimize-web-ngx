@@ -1,4 +1,3 @@
-
 ## 8.8.0 (2022-10-25)
 ### Features:
 * **o-table**:
@@ -99,6 +98,7 @@ To resolve this breaking change, you can use the new `O_TABLE_GLOBAL_CONFIG` Inj
   ],
   ...
 })
+```
 
 ## 8.7.2 (2022-09-15)
 ### Bug fixes
