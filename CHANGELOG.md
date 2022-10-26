@@ -1,5 +1,6 @@
+## 8.9.0
 
-## 8.8.0
+## 8.8.0 (2022-10-25)
 ### Features:
 * **o-table**:
   * Improved row grouping by date adding the option to group by month, year, year and month or by the full date ([ba5f1723](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ba5f1723)) Closes [#719](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/719)
@@ -99,6 +100,7 @@ To resolve this breaking change, you can use the new `O_TABLE_GLOBAL_CONFIG` Inj
   ],
   ...
 })
+```
 
 ## 8.7.2 (2022-09-15)
 ### Bug fixes
