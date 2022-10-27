@@ -49,8 +49,17 @@
 
         <mat-list-option checkboxPosition="before" *ngFor="let itemSelected of dataDestination" [value]="itemSelected" cdkDrag
           class="o-drag-list-item-box">
-          <span matLine>{{ itemSelected[display] | oTranslate }} </span>
+
+          <ng-container *ngIf="itemSelected.type === 'date'; else defaultRenderer">
+            <o-dual-list-selector-date-item [item]=itemSelected.attr [grouped-date-columns]="groupedColumnTypes"></o-dual-list-selector-date-item>
+          </ng-container>
+
+          <ng-template #defaultRenderer>
+            <span matLine>{{ itemSelected[display] | oTranslate }} </span>
+          </ng-template>
+
         </mat-list-option>
+
         <div class="mat-caption drop-empty-message" *ngIf="dataDestination.length===0">
           {{ 'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE' | oTranslate }}
         </div>

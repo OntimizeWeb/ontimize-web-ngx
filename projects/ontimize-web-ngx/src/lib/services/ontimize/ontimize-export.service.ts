@@ -2,11 +2,13 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
 import { map, share } from 'rxjs/operators';
+import { IExportDataProvider } from '../../interfaces/export-data-provider.interface';
 
 import { IExportService } from '../../interfaces/export-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { HttpRequestOptions } from '../../types';
 import { Util } from '../../util';
+import { OntimizeExportDataProviderService } from '../ontimize-export-data-provider.service';
 import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable()
@@ -15,16 +17,15 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
   public exportPath: string;
   public downloadPath: string;
   public servicePath: string;
-
-  protected exportAll: boolean = false;
+  public exportDataProvider: IExportDataProvider;
 
   constructor(protected injector: Injector) {
     super(injector);
+    this.exportDataProvider = this.injector.get<OntimizeExportDataProviderService>(OntimizeExportDataProviderService);
   }
 
-  public configureService(config: any, modeAll = false): void {
+  public configureService(config: any): void {
     super.configureService(config);
-    this.exportAll = modeAll;
     if (config.exportPath) {
       this.exportPath = config.exportPath;
     }
@@ -45,7 +46,8 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
     return headers;
   }
 
-  public exportData(data: any, format: string, entity?: string): Observable<any> {
+  public exportData(format: string): Observable<any> {
+    const entity = this.exportDataProvider.entity;
     const url = `${this.urlBase}${this.exportPath ? this.exportPath : ''}${this.servicePath}/${entity}/${format}`;
 
     const options: HttpRequestOptions = {
@@ -53,7 +55,8 @@ export class OntimizeExportService extends OntimizeBaseService implements IExpor
       observe: 'response'
     };
 
-    const body = JSON.stringify(data);
+    const exportData = this.exportDataProvider.getExportConfiguration();
+    const body = JSON.stringify(exportData);
     // TODO: try multipart
     const dataObservable: Observable<ServiceResponse> = new Observable((observer: Subscriber<ServiceResponse>) => {
       this.httpClient.post<ServiceResponse>(url, body, options).pipe(

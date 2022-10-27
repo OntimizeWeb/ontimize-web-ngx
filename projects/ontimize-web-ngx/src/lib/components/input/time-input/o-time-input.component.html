@@ -21,5 +21,7 @@
     </button>
   </div>
 
-  <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+  <mat-error *ngFor="let oError of getActiveOErrors()">
+    {{ oError.text | oTranslate }}
+  </mat-error>
 </div>

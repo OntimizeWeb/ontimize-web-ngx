@@ -2,7 +2,7 @@ import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Util } from '../util';
 import * as lpn from 'google-libphonenumber';
 
-const EMAIL_REGEXP = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
+const EMAIL_REGEXP = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
 
 // NIF Regular Expressions
 const DNI_PATTERN = '^(([0-9]{8})([-]?)([a-zA-Z]{1}))$';

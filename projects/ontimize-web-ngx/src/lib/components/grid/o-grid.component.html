@@ -1,7 +1,8 @@
 <div [style.display]="isVisible()? '' : 'none'" class="o-grid-container" fxLayout="column" fxLayoutAlign="start stretch">
+
   <!--TOOLBAR-->
-  <mat-toolbar *ngIf="hasControls()" class="o-grid-toolbar">
-    <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" fxFill>
+  <o-data-toolbar *ngIf="hasControls()" class="o-grid-toolbar" [title]="title" [show-title]="hasTitle()">
+    <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
         <!-- button new-->
         <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-stroked-button aria-label="Insert"
@@ -18,7 +19,6 @@
       </ng-container>
 
       <ng-template #showButtonsWithoutText>
-
         <!-- button new-->
         <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-icon-button aria-label="Insert"
           (click)="add()">
@@ -56,14 +56,19 @@
         </mat-form-field>
       </div>
 
-      <div fxLayoutAlign="center center" fxFlex>
-        <span *ngIf="hasTitle()" fxLayoutAlign="center center">{{ title | oTranslate }}</span>
-      </div>
+    </ng-container>
+    <ng-content select="[o-grid-toolbar][position=start]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-content select="[o-grid-toolbar][position=end]" ngProjectAs="[o-data-toolbar-custom-projection-end]">
+    </ng-content>
+    <ng-content select="[o-grid-toolbar]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-container o-data-toolbar-projection-end>
       <o-search-input *ngIf="quickFilter" [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive"
         [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance"
         float-label="never"></o-search-input>
-    </div>
-  </mat-toolbar>
+    </ng-container>
+  </o-data-toolbar>
 
   <!--no results-->
   <div class="o-grid-no-results fill-remaining" *ngIf="gridItems.length === 0" fxLayoutAlign="center start" layout-padding>

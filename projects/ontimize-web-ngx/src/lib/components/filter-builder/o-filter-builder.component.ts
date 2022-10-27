@@ -10,6 +10,7 @@ import { IServiceDataComponent } from '../../interfaces/service-data-component.i
 import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
+import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
@@ -140,11 +141,13 @@ export class OFilterBuilderComponent extends AbstractOServiceComponent<OFilterBu
     const params: Array<{ attr, value }> = [];
     this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
       const formComponent: IFormDataComponent = formComponents[filterComponent.formComponentAttr];
-      const value = formComponent.getValue();
-      params.push({
-        attr: filterComponent.targetAttr,
-        value: value
-      });
+      if (formComponent) {
+        const value = formComponent.getValue();
+        params.push({
+          attr: filterComponent.targetAttr,
+          value: value
+        });
+      }
     });
 
     // Trigger the function provided by the user
@@ -203,6 +206,38 @@ export class OFilterBuilderComponent extends AbstractOServiceComponent<OFilterBu
       formComponents[attr].setValue(void 0);
     });
     this.onClear.emit();
+  }
+
+  /**
+   * Gets filter values
+   * @returns filter values
+   */
+  getFilterValues(): OFilterBuilderValues[] {
+    const result: OFilterBuilderValues[] = [];
+
+    this.filterComponents.
+      forEach((filterComponent: IFilterBuilderCmpTarget) => {
+        if (Util.isDefined(this.form.getComponents()[filterComponent.formComponentAttr])) {
+          result.push({ attr: filterComponent.formComponentAttr, value: this.form.getComponents()[filterComponent.formComponentAttr].getValue() });
+        }
+      });
+
+    return result;
+
+  }
+
+  /**
+   * Sets filter values
+   * @param filterBuilderValues
+   */
+  setFilterValues(filterBuilderValues: OFilterBuilderValues[]) {
+    filterBuilderValues.forEach((filterBuilderValue: OFilterBuilderValues) => {
+      if (this.form.getComponents()[filterBuilderValue.attr]) {
+        this.form.getComponents()[filterBuilderValue.attr].setValue(filterBuilderValue.value)
+      } else {
+        console.warn('The filter with attr ' + filterBuilderValue.attr + ' cannot be set ' + filterBuilderValue.value + ' because it does not exist .');
+      }
+    })
   }
 
   /**

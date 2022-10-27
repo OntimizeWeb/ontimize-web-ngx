@@ -8,6 +8,9 @@ import { OColumnValueFilter } from '../../types/table/o-column-value-filter.type
 import { DefaultComponentStateClass } from './o-component-state.class';
 import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
+import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
+import { Util } from '../../util';
+import { OGroupedColumnTypes } from '../../types';
 
 export class OTableComponentStateClass extends DefaultComponentStateClass {
   // sort
@@ -36,6 +39,17 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   // stored filters and configurations
   protected 'user-stored-filters': OTableFiltersStatus[];
   protected 'user-stored-configurations': OTableConfiguration[];
+  // stored filters builder values
+  protected 'filter-builder-values': OFilterBuilderValues[];
+
+  protected 'grouped-column-types': OGroupedColumnTypes[] = [];
+
+  public get filterBuilderValues(): OFilterBuilderValues[] {
+    return this['filter-builder-values'];
+  }
+  public set filterBuilderValues(value: OFilterBuilderValues[]) {
+    this['filter-builder-values'] = value;
+  }
 
   get selectColumnVisible(): boolean {
     return this['select-column-visible'];
@@ -80,7 +94,12 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   set sortColumns(value: string) {
     this['sort-columns'] = value;
   }
-
+  get groupedColumnTypes(): OGroupedColumnTypes[] {
+    return this['grouped-column-types'];
+  }
+  set groupedColumnTypes(value: OGroupedColumnTypes[]) {
+    this['grouped-column-types'] = value;
+  }
   get filterColumns(): OFilterColumn[] {
     return this['filter-columns'];
   }
@@ -114,6 +133,9 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   }
 
   addStoredFilter(filter: OTableFiltersStatus) {
+    if (!Util.isDefined(this['user-stored-filters'])) {
+      this['user-stored-filters'] = [];
+    }
     this.storedFilters.push(filter);
   }
 
@@ -139,6 +161,7 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
       this.columnValueFilters = filter['column-value-filters'];
       this.quickFilterValue = filter['filter'];
       this.filterCaseSensitive = filter['filter-case-sensitive'];
+      this.filterBuilderValues = filter['filter-builder-values'];
       this.oColumns = filter['oColumns'];
     }
   }
@@ -148,6 +171,9 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
   }
 
   addStoredConfiguration(configuration: OTableConfiguration) {
+    if (!Util.isDefined(this['user-stored-configurations'])) {
+      this['user-stored-configurations'] = [];
+    }
     this.storedConfigurations.push(configuration);
   }
 
@@ -204,11 +230,12 @@ export class OTableComponentStateClass extends DefaultComponentStateClass {
           break;
         case 'page':
           this.currentPage = configuration['currentPage'];
-          // if (this.pageable) {
           this.totalQueryRecordsNumber = configuration['totalQueryRecordsNumber'];
           this.queryRecordOffset = configuration['queryRecordOffset'];
-          // }
-          this.queryRows = configuration['queryRows'];
+          this.queryRows = configuration['query-rows'];
+          break;
+        case 'filter-builder':
+          this.filterBuilderValues = configuration['filter-builder'];
           break;
       }
     });
