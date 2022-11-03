@@ -286,7 +286,11 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'month',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'month and year',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'year',
-    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'day, month and year'
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'day, month and year',
+    'FILTERBUILDER.BUTTONS.FILTER': 'Filter',
+    'FILTERBUILDER.BUTTONS.SAVE_FILTER': 'Save filter',
+    'FILTERBUILDER.BUTTONS.LOAD_FILTER': 'Load filter',
+    'FILTERBUILDER.BUTTONS.CLEAR_FILTER': 'Clear filter'
   },
 
   // Spanish
@@ -567,7 +571,11 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'mes',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mes y año',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'año',
-    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'día, mes y año'
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'día, mes y año',
+    'FILTERBUILDER.BUTTONS.FILTER': 'Filtrar',
+    'FILTERBUILDER.BUTTONS.SAVE_FILTER': 'Guardar filtro',
+    'FILTERBUILDER.BUTTONS.LOAD_FILTER': 'Cargar filtro',
+    'FILTERBUILDER.BUTTONS.CLEAR_FILTER': 'Limpiar filtro'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -835,5 +843,9 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mês e ano',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'ano',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'dia, mês e ano',
+    'FILTERBUILDER.BUTTONS.FILTER': 'Filtro',
+    'FILTERBUILDER.BUTTONS.SAVE_FILTER': 'Salvar filtro',
+    'FILTERBUILDER.BUTTONS.LOAD_FILTER': 'Filtro de carga',
+    'FILTERBUILDER.BUTTONS.CLEAR_FILTER': 'Filtro limpo'
   }
 };
