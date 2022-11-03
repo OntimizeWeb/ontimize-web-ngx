@@ -14,7 +14,6 @@ import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
-import { AbstractOServiceComponent } from '../o-service-component.class';
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.
@@ -33,7 +32,10 @@ export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   'queryOnChangeDelay: query-on-change-delay',
 
   //query-on-change-event: [change| onValueChange] Type of event that emit when query-on-change=`yes`
-  'queryOnChangeEventType: query-on-change-event-type'
+  'queryOnChangeEventType: query-on-change-event-type',
+
+  // attr [string]: filter builder identifier. It is mandatory if data are provided through the data attribute. Default: target (if set).
+  'oattr: attr',
 ]
 
 export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
@@ -53,7 +55,8 @@ export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
 /**
  * The OFilterBuilderComponent.
  */
-export class OFilterBuilderComponent extends AbstractOServiceComponent<OFilterBuilderComponentStateService> implements AfterViewInit, OnDestroy, OnInit {
+
+export class OFilterBuilderComponent extends OFilterBuilderComponentStateService implements AfterViewInit, OnDestroy, OnInit {
 
   public onFilter: EventEmitter<any> = new EventEmitter<any>();
   public onClear: EventEmitter<any> = new EventEmitter<any>();
@@ -71,12 +74,13 @@ export class OFilterBuilderComponent extends AbstractOServiceComponent<OFilterBu
   protected filterComponents: Array<IFilterBuilderCmpTarget> = [];
 
   protected subscriptions: Subscription = new Subscription();
-
+  public oattr: string;
+  protected componentStateService: OFilterBuilderComponentStateService;
   constructor(
     injector: Injector, elRef: ElementRef<any>,
     @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent
   ) {
-    super(injector, elRef, form)
+    super(injector)
   }
 
   ngOnInit(): void {
@@ -94,6 +98,7 @@ export class OFilterBuilderComponent extends AbstractOServiceComponent<OFilterBu
   }
 
   initialize(): void {
+    this.componentStateService.initialize(this);
     // Parse filters
     if (this.filters) {
       const filterArray: Array<string> = Util.parseArray(this.filters);
@@ -246,5 +251,26 @@ export class OFilterBuilderComponent extends AbstractOServiceComponent<OFilterBu
   protected getFilterAttrs(): Array<string> {
     return this.filterComponents.map((elem: IFilterBuilderCmpTarget) => elem.formComponentAttr);
   }
+
+  /**
+  * Method update store localstorage, call of the ILocalStorage
+  */
+  getDataToStore() {
+    return this.componentStateService.state;
+  }
+
+  getComponentKey(): string {
+    return 'OFilterBuilderComponent_' + this.oattr;
+  }
+
+
+  storeFilterBuilder() {
+    //this.componentStateService.storeFilterBuilder();
+  }
+
+  loadFilterBuilder() {
+
+  }
+
 
 }

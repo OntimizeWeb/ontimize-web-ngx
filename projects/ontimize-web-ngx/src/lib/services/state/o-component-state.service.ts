@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { Util } from '../../util';
 import { LocalStorageService } from '../local-storage.service';
-import { AbstractComponentStateClass, DefaultComponentStateClass } from './o-component-state.class';
+import { AbstractComponentStateClass, DefaultComponentStateClass, DefaultServiceComponentStateClass } from './o-component-state.class';
 
 @Injectable()
 export abstract class AbstractComponentStateService<S extends AbstractComponentStateClass, C extends ILocalStorageComponent = any>{
@@ -36,6 +36,15 @@ export class DefaultComponentStateService extends AbstractComponentStateService<
 
   initialize(comp: ILocalStorageComponent) {
     this.state = new DefaultComponentStateClass();
+    super.initialize(comp);
+  }
+}
+
+@Injectable()
+export class DefaultServiceComponentStateService extends AbstractComponentStateService<DefaultServiceComponentStateClass, ILocalStorageComponent> {
+
+  initialize(comp: ILocalStorageComponent) {
+    this.state = new DefaultServiceComponentStateClass();
     super.initialize(comp);
   }
 }

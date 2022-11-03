@@ -15,11 +15,6 @@ export class OFilterBuilderComponentStateService extends AbstractComponentStateS
     super.initializeState(state);
   }
 
-  getDataToStore(): any {
-    let dataToStore = Object.assign({}, this.state);
-
-    return dataToStore;
-  }
 
 }
 

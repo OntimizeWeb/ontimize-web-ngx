@@ -13,8 +13,8 @@ import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layou
 import { OFormLayoutTabGroupComponent } from '../layouts/form-layout/tabgroup/o-form-layout-tabgroup.component';
 import { NavigationService } from '../services/navigation.service';
 import { PermissionsService } from '../services/permissions/permissions.service';
-import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
-import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
+import { AbstractServiceComponentStateClass } from '../services/state/o-component-state.class';
+import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Expression } from '../types/expression.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
@@ -111,7 +111,7 @@ export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
   'onSearch'
 ]
 
-export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
+export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractServiceComponentStateClass>>
   extends AbstractOServiceBaseComponent<T>
   implements IServiceDataComponent {
   @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
@@ -902,6 +902,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 }
 
 /*This class is definied to mantain bacwards compatibility */
-export class OServiceComponent extends AbstractOServiceComponent<DefaultComponentStateService> {
+export class OServiceComponent extends AbstractOServiceComponent<DefaultServiceComponentStateService> {
 
 }
