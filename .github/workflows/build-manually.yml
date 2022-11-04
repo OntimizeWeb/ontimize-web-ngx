@@ -22,7 +22,7 @@ jobs:
       - name: Node 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: 12.10.0
+          node-version: 12.13.0
 
       - name: npm install and npm run build
         run: |

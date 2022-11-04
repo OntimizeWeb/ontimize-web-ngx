@@ -9,7 +9,7 @@ import { MomentService } from '../../services/moment.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { Codes, Util } from '../../util';
 import { ObservableWrapper } from '../../util/async';
-import { _createServiceInstance, _getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
+import {_getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
 
 /**
  * `OTranslateService` factory.
@@ -17,7 +17,7 @@ import { _createServiceInstance, _getInjectionTokenValue, O_TRANSLATE_SERVICE } 
  */
 export function translateServiceFactory(injector: Injector): any {
   const serviceClass = _getInjectionTokenValue(O_TRANSLATE_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   return Util.isDefined(service) ? service : new OTranslateService(injector);
 }
 

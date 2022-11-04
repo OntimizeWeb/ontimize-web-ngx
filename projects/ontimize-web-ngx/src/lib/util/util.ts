@@ -1,4 +1,5 @@
 import { isPromise } from '@angular/compiler/src/util';
+import { Injector } from '@angular/core';
 import moment from 'moment';
 import { from, isObservable, Observable, of } from 'rxjs';
 
@@ -6,8 +7,10 @@ import { IDataService } from '../interfaces/data-service.interface';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { ODateValueType } from '../types/o-date-value.type';
+import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
+import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
 
 export class Util {
 
@@ -94,6 +97,10 @@ export class Util {
       return true;
     }
     return false;
+  }
+
+  static isObjectEmpty(obj: object): boolean {
+    return typeof obj === 'object' && Object.keys(obj).length === 0;
   }
 
   /**
@@ -221,6 +228,16 @@ export class Util {
   static isDefined(value: any): boolean {
     return typeof value !== 'undefined' && value !== null;
   }
+
+  /**
+   * Returns the a random number
+  */
+  static randomNumber() {
+    const randomArray = new Uint32Array(1);
+    window.crypto.getRandomValues(randomArray);
+    return randomArray[0];
+  }
+
 
   /**
    * Returns the provided string in lowercase and without accent marks.
@@ -415,5 +432,67 @@ export class Util {
     }
 
     return of(value);
+  }
+
+
+  static configureService(configureServiceArgs: OConfigureServiceArgs): any {
+    let dataService = configureServiceArgs.baseService;
+    const entity = configureServiceArgs.service;
+    const service = configureServiceArgs.service;
+    const serviceType = configureServiceArgs.serviceType;
+    const injector = configureServiceArgs.injector;
+
+    if (serviceType) {
+      dataService = serviceType;
+    }
+    try {
+      dataService = injector.get<any>(dataService);
+      if (serviceType) {
+        dataService = Util.createServiceInstance(dataService, injector)
+      }
+      if (Util.isDataService(dataService)) {
+        const serviceCfg = dataService.getDefaultServiceConfiguration(service);
+        if (entity) {
+          serviceCfg.entity = entity;
+        }
+        dataService.configureService(serviceCfg);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return dataService;
+  }
+
+  /**
+ * Returns an instance of the provided service class
+ * @param clazz the class reference
+ * @param injector the injector
+ */
+  static createServiceInstance(clazz: any, injector: Injector) {
+    if (!Util.isDefined(clazz)) {
+      return;
+    }
+    const newInstance = Object.create(clazz.prototype);
+    clazz.apply(newInstance, [injector]);
+    return newInstance;
+  }
+
+  static configureMessageService(configureServiceArgs: OConfigureMessageServiceArgs): any {
+    let messageService = configureServiceArgs.baseService;
+    const serviceType = configureServiceArgs.serviceType;
+    const injector = configureServiceArgs.injector;
+
+    if (serviceType) {
+      messageService = serviceType;
+    }
+    try {
+      messageService = injector.get<any>(messageService);
+      if (serviceType) {
+        messageService = Util.createServiceInstance(messageService, injector)
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return messageService;
   }
 }

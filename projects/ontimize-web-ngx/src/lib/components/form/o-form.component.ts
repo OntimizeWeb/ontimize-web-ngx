@@ -8,6 +8,7 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  Type,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -27,10 +28,12 @@ import { NavigationService, ONavigationItem } from '../../services/navigation.se
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
+import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
@@ -41,6 +44,8 @@ import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormValue } from './o-form-value';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
+import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
+import { OFormMessageService } from './services/o-form-message.service';
 
 interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -144,7 +149,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   // 'deleteFallbackFunction: delete-fallback-function'
 
   // ignore-default-navigation [string][yes|no|true|false]: ignore default navigation when user click the toolbar buttons. Default: no.
-  'ignoreDefaultNavigation: ignore-default-navigation'
+  'ignoreDefaultNavigation: ignore-default-navigation',
+
+  'messageServiceType : message-service-type',
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -167,7 +174,8 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 @Component({
   selector: 'o-form',
   providers: [
-    OntimizeServiceProvider
+    OntimizeServiceProvider,
+    OFormMessageService
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],
@@ -198,7 +206,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   service: string;
   @InputConverter()
   stayInRecordAfterEdit: boolean = false;
-  afterInsertMode: 'new' | 'detail' = null;
+  afterInsertMode: 'new' | 'detail' | 'close' = 'close';
   serviceType: string;
   @InputConverter()
   protected queryOnInit: boolean = true;
@@ -239,7 +247,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   // public deleteFallbackFunction: Function;
   @InputConverter()
   public ignoreDefaultNavigation: boolean = false;
-
+  messageServiceType: string;
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -249,6 +257,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   dataService: any;
   _pKeysEquiv = {};
   keysSqlTypesArray: Array<string> = [];
+  messageService: OFormMessageService;
   /* end of parsed inputs variables */
 
   formGroup: FormGroup;
@@ -332,10 +341,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formCache = new OFormCacheClass(this);
     this.formNavigation = new OFormNavigationClass(this.injector, this, this.router, this.actRoute);
 
-    this.dialogService = injector.get(DialogService);
-    this.navigationService = injector.get(NavigationService);
-    this.snackBarService = injector.get(SnackBarService);
-    this.permissionsService = this.injector.get(PermissionsService);
+    this.dialogService = injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.navigationService = injector.get<NavigationService>(NavigationService as Type<NavigationService>);
+    this.snackBarService = injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
 
     const self = this;
     this.reloadStream = combineLatest([
@@ -566,12 +575,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   executeToolbarAction(action: string, options?: any) {
     switch (action) {
-      case Codes.BACK_ACTION: this.back(); break;
+      case Codes.BACK_ACTION: this.back(options); break;
       case Codes.CLOSE_DETAIL_ACTION: this.closeDetail(options); break;
       case Codes.RELOAD_ACTION: this.reload(true); break;
       case Codes.GO_INSERT_ACTION: this.goInsertMode(options); break;
       case Codes.INSERT_ACTION: this.insert(); break;
-      case Codes.GO_EDIT_ACTION: this.goEditMode(options); break;
+      case Codes.GO_EDIT_ACTION: this.goEditMode(); break;
       case Codes.EDIT_ACTION: this.update(); break;
       case Codes.UNDO_LAST_CHANGE_ACTION: this.undo(); break;
       case Codes.DELETE_ACTION: return this.delete();
@@ -699,22 +708,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   configureService() {
-    let loadingService: any = OntimizeService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get(loadingService);
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const msgConfigureServiceArgs: OConfigureMessageServiceArgs = { injector: this.injector, baseService: OFormMessageService, serviceType: this.messageServiceType }
+    this.messageService = Util.configureMessageService(msgConfigureServiceArgs);
+
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.dataService = Util.configureService(configureServiceArgs);
   }
 
   ngOnDestroy() {
@@ -845,9 +843,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   /**
    * Navigate back
    */
-  back() {
-    const options = { ignoreNavigation: this.ignoreDefaultNavigation };
-    this.formNavigation.navigateBack(options);
+  back(options?: any) {
+    const allOptions = Object.assign(options || {}, { ignoreNavigation: this.ignoreDefaultNavigation });
+    this.formNavigation.navigateBack(allOptions);
   }
 
   /**
@@ -911,6 +909,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this._setComponentsEditable(true);
   }
 
+  _clearAndCloseFormAfterInsert() {
+    const closeOpts: FormLayoutCloseDetailOptions = { exitWithoutConfirmation: true };
+    this.closeDetail(closeOpts);
+  }
+
   /**
    * Performs insert action.
    * @deprecated Use `insert()` instead
@@ -929,7 +932,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     });
 
     if (!this.formGroup.valid) {
-      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      this.dialogService.alert(this.messageService.getValidationErrorDialogTitle(), this.messageService.getValidationError());
       return;
     }
 
@@ -944,6 +947,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         self._stayInRecordAfterInsert(resp);
       } else if (self.afterInsertMode === 'new') {
         this._clearFormAfterInsert();
+      } else if (self.afterInsertMode === 'close') {
+        this._clearAndCloseFormAfterInsert();
       } else {
         self.closeDetail();
       }
@@ -954,17 +959,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Navigates to 'edit' mode
-   * @deprecated Use `goEditMode(options?: any)` instead
+   * @deprecated Use `goEditMode()` instead
    */
-  _goEditMode(options?: any) {
+  _goEditMode() {
     console.warn('Method `OFormComponent._goEditMode` is deprecated and will be removed in the furute. Use `goEditMode` instead');
-    this.goEditMode(options);
+    this.goEditMode();
   }
 
   /**
    * Navigates to 'edit' mode
    */
-  goEditMode(options?: any) {
+  goEditMode() {
     this.formNavigation.goEditMode();
   }
 
@@ -988,7 +993,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     );
 
     if (!this.formGroup.valid) {
-      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      this.dialogService.alert('ERROR', this.messageService.getValidationError());
       return;
     }
 
@@ -1002,7 +1007,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     if (Object.keys(values).length === 0) {
       // Nothing to update
-      this.dialogService.alert('INFO', 'MESSAGES.FORM_NOTHING_TO_UPDATE_INFO');
+      this.dialogService.alert('INFO', this.messageService.getNothingToUpdateMessage());
       return;
     }
 
@@ -1068,7 +1073,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
           this.setData(resp.data);
         } else {
           this._updateFormData({});
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          this.dialogService.alert('ERROR', this.messageService.getQueryErrorMessage());
           console.error('ERROR: ' + resp.message);
         }
         this.loaderSubscription.unsubscribe();
@@ -1080,7 +1085,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
         } else if (err && err.statusText) {
           this.dialogService.alert('ERROR', err.statusText);
         } else {
-          this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+          this.dialogService.alert('ERROR', this.messageService.getQueryErrorMessage());
         }
         this.loaderSubscription.unsubscribe();
       });
@@ -1438,9 +1443,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   undoKeyboardPressed() {
-    this.formCache.undoLastChange({
-      keyboardEvent: true
-    });
+    this.formCache.undoLastChange();
   }
 
   getFormToolbar(): OFormToolbarComponent {
@@ -1569,7 +1572,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getFieldReferences(attrs: string[]): IFormDataComponentHash {
     const arr: IFormDataComponentHash = {};
     const self = this;
-    attrs.forEach((key, index) => {
+    attrs.forEach((key) => {
       arr[key] = self.getFieldReference(key);
     });
     return arr;
@@ -1663,7 +1666,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postCorrectInsert(result: any): void {
-    this.snackBarService.open('MESSAGES.INSERTED', { icon: 'check_circle' });
+    this.snackBarService.open(this.messageService.getInsertSuccessMessage(), { icon: 'check_circle' });
     this.onInsert.emit(result);
   }
 
@@ -1680,12 +1683,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postCorrectUpdate(result: any): void {
-    this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
+    this.snackBarService.open(this.messageService.getUpdateSuccessMessage(), { icon: 'check_circle' });
     this.onUpdate.emit(result);
   }
 
   protected postCorrectDelete(result: any): void {
-    this.snackBarService.open('MESSAGES.DELETED', { icon: 'check_circle' });
+    this.snackBarService.open(this.messageService.getDeleteSuccessMessage(), { icon: 'check_circle' });
     this.onDelete.emit(result);
   }
 
@@ -1737,13 +1740,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (result && typeof result !== 'object') {
       this.dialogService.alert('ERROR', result);
     } else {
-      let message = 'MESSAGES.ERROR_DELETE';
+      let message = ''
       switch (operation) {
         case 'update':
-          message = 'MESSAGES.ERROR_UPDATE';
+          message = this.messageService.getUpdateErrorMessage()
           break;
         case 'insert':
-          message = 'MESSAGES.ERROR_INSERT';
+          message = this.messageService.getInsertErrorMessage()
+          break;
+        case 'delete':
+          message = this.messageService.getDeleteErrorMessage()
           break;
       }
       this.dialogService.alert('ERROR', message);

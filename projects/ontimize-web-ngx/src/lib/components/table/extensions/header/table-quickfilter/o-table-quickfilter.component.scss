@@ -8,7 +8,7 @@
         .mat-form-field-flex {
           align-items: initial;
           margin-top: 0;
-          height: 32x;
+          height: 32px;
           line-height: 32px;
 
           .mat-form-field-outline,
@@ -46,6 +46,7 @@
 
               button.mat-icon-button {
                 height: 100%;
+                width: auto;
 
                 .mat-button-ripple.mat-ripple {
                   display: none;

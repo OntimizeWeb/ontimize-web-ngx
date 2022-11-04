@@ -11,6 +11,7 @@ import { OIntegerPipe } from '../pipes/o-integer.pipe';
 import { OMomentPipe } from '../pipes/o-moment.pipe';
 import { OPercentPipe } from '../pipes/o-percentage.pipe';
 import { ORealPipe } from '../pipes/o-real.pipe';
+import { OSafePipe } from '../pipes/o-safe.pipe';
 import { OTranslateModule } from '../pipes/o-translate.pipe';
 import { OrderByPipe } from '../pipes/order-by.pipe';
 import { ODialogComponent } from './components/dialog/o-dialog.component';
@@ -19,15 +20,13 @@ import { OSnackBarComponent } from './components/snackbar/o-snackbar.component';
 import { OErrorComponent } from './components/validation/o-error.component';
 import { OValidatorComponent } from './components/validation/o-validator.component';
 import { OCustomMaterialModule } from './material/custom.material.module';
-import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
 
 @NgModule({
   imports: [
     CommonModule,
     OTranslateModule,
     FlexLayoutModule,
-    OCustomMaterialModule,
-    OMatErrorModule
+    OCustomMaterialModule
   ],
   declarations: [
     ColumnsFilterPipe,
@@ -38,6 +37,7 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
     OCurrencyPipe,
     OPercentPipe,
     OIconPipe,
+    OSafePipe,
     ONTIMIZE_DIRECTIVES,
     Error403Component,
     ODialogComponent,
@@ -47,7 +47,6 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
   ],
   exports: [
     FlexLayoutModule,
-    OMatErrorModule,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,
@@ -59,6 +58,7 @@ import { OMatErrorModule } from './material/o-mat-error/o-mat-error.module';
     OCurrencyPipe,
     OPercentPipe,
     OIconPipe,
+    OSafePipe,
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule,
     Error403Component,

@@ -11,6 +11,13 @@
     flex-direction: column;
   }
 
+  &.fill-form {
+    form {
+      &.inner-form {
+        height: 100%;
+      }
+    }
+  }
 
   form {
     &.inner-form {

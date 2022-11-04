@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
+import { MatFormFieldAppearance, MatPaginator, PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -26,6 +27,10 @@ import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
 
+interface ItemClick {
+  getItemData(): any
+}
+
 export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   ...DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT,
 
@@ -35,7 +40,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'ovisible: visible',
 
   // enabled [no|yes]: editability. Default: yes.
-  'enabled',
+  'oenabled: enabled',
 
   // controls [string][yes|no|true|false]:
   'controls',
@@ -87,6 +92,15 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   // quick-filter-placeholder: quick filter placeholder
   'quickFilterPlaceholder: quick-filter-placeholder',
+
+  // pagination-controls [yes|no|true|false]: show pagination controls. Default: yes.
+  'paginationControls: pagination-controls',
+
+  // page-size-options [string]: Page size options separated by ';'.
+  'pageSizeOptions: page-size-options',
+
+  //quickFilterAppearance[legacy|standard|fill|outline] Indicates which of the mat-form-field different appearance variants will be used. Default: outline
+  'quickFilterAppearance:quick-filter-appearance'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -100,6 +114,7 @@ export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
 export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>
   extends AbstractOServiceBaseComponent<T>
   implements IServiceDataComponent {
+  @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
 
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
@@ -137,6 +152,20 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   editButtonInRowIcon: string = Codes.EDIT_ICON;
   @InputConverter()
   insertButton: boolean;
+  @InputConverter()
+  paginationControls: boolean = true;
+
+  get pageSizeOptions(): number[] {
+    return this._pageSizeOptions;
+  }
+
+  set pageSizeOptions(val: number[]) {
+    if (!(val instanceof Array)) {
+      val = Util.parseArray(String(val)).map(a => parseInt(a, 10));
+    }
+    this._pageSizeOptions = val;
+  }
+
   protected _rowHeight = Codes.DEFAULT_ROW_HEIGHT;
   protected rowHeightSubject: BehaviorSubject<string> = new BehaviorSubject(this._rowHeight);
   public rowHeightObservable: Observable<string> = this.rowHeightSubject.asObservable();
@@ -200,12 +229,20 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected tabsSubscriptions: any;
 
   public quickFilterComponent: OSearchInputComponent;
+
   @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
   public searchInputComponent: OSearchInputComponent;
+
   protected quickFilterColArray: string[];
 
   protected dataResponseArray: any[] = [];
   protected quickFilterSubscription: Subscription;
+  _pageSizeOptions = Codes.PAGE_SIZE_OPTIONS;
+
+  protected clickTimer;
+  protected clickDelay = 200;
+  protected clickPrevent = false;
+  protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
 
   constructor(
     injector: Injector,
@@ -688,10 +725,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     return dataArray;
   }
 
-  protected getPaginationDataFromArray(dataArray: any[]): any[] {
-    return dataArray;
-  }
-
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
     if (!Util.isArray(data)) {
       this.setDataArray([]);
@@ -750,6 +783,122 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   applyDefaultConfiguration() {
 
   }
+
+  public onChangePage(e: PageEvent): void {
+    if (!this.pageable) {
+      this.currentPage = e.pageIndex;
+      this.queryRows = e.pageSize;
+      this.filterData();
+      return;
+    }
+    const goingBack = e.pageIndex < this.currentPage;
+    this.currentPage = e.pageIndex;
+    const pageSize = e.pageSize;
+
+    const oldQueryRows = this.queryRows;
+    const changingPageSize = (oldQueryRows !== pageSize);
+    this.queryRows = pageSize;
+
+    let newStartRecord;
+    let queryLength;
+
+    if (goingBack || changingPageSize) {
+      newStartRecord = (this.currentPage * this.queryRows);
+      queryLength = this.queryRows;
+    } else {
+      newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
+      const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
+      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+    }
+
+    const queryArgs: OQueryDataArgs = {
+      offset: newStartRecord,
+      length: queryLength,
+      replace: true
+    };
+    this.queryData(void 0, queryArgs);
+  }
+
+  set currentPage(val: number) {
+    this._currentPage = val;
+  }
+
+  get currentPage(): number {
+    return this._currentPage;
+  }
+
+  protected _currentPage: number = 0;
+
+
+  get totalRecords(): number {
+    if (this.pageable) {
+      return this.getTotalRecordsNumber();
+    }
+    return this.dataResponseArray.length;
+  }
+
+  protected getPaginationDataFromArray(dataArray: any[]): any[] {
+    let result: any[];
+    if (this.paginationControls) {
+      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
+    } else {
+      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
+    }
+    return result;
+  }
+
+  handleItemClick(item: ItemClick): void {
+    this.clickTimer = setTimeout(() => {
+      if (!this.clickPrevent) {
+        this.itemClickDone(item);
+      }
+      this.clickPrevent = false;
+    }, this.clickDelay);
+  }
+
+  protected itemClickDone(item: ItemClick): void {
+    if (!this.oenabled) {
+      return;
+    }
+    const data = item.getItemData();
+    if (this.detailMode === Codes.DETAIL_MODE_CLICK) {
+      this.saveDataNavigationInLocalStorage();
+      this.viewDetail(data);
+    }
+    this.onClick.emit(data);
+  }
+
+  handleItemDblClick(item: ItemClick): void {
+    clearTimeout(this.clickTimer);
+    this.clickPrevent = true;
+    this.itemDblClickDone(item);
+  }
+
+  protected itemDblClickDone(item: ItemClick): void {
+    if (!this.oenabled) {
+      return;
+    }
+    const data = item.getItemData();
+    if (Codes.isDoubleClickMode(this.detailMode)) {
+      this.saveDataNavigationInLocalStorage();
+      this.viewDetail(data);
+    }
+    this.onDoubleClick.emit(data);
+  }
+
+  get quickFilterAppearance(): MatFormFieldAppearance {
+    return this._quickFilterAppearance;
+  }
+
+  set quickFilterAppearance(value: MatFormFieldAppearance) {
+    const values = ['legacy', 'standard', 'fill', 'outline'];
+    if (values.indexOf(value) === -1) {
+      console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
+      value = 'outline';
+    }
+    this._quickFilterAppearance = value;
+  }
+
 }
 
 /*This class is definied to mantain bacwards compatibility */

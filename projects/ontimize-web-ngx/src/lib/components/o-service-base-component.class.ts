@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injector, OnChanges, SimpleChange } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, OnChanges, SimpleChange, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -7,10 +7,12 @@ import { ILocalStorageComponent } from '../interfaces/local-storage-component.in
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
+import { OErrorDialogManager } from '../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
 import { OQueryDataArgs } from '../types/query-data-args.type';
+import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
@@ -90,6 +92,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected localStorageService: LocalStorageService;
   componentStateService: T;
   protected dialogService: DialogService;
+  protected oErrorDialogManager: OErrorDialogManager;
 
   /* inputs variables */
   oattr: string;
@@ -178,19 +181,20 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   constructor(
     protected injector: Injector
   ) {
-    this.dialogService = this.injector.get(DialogService);
-    this.localStorageService = this.injector.get(LocalStorageService);
-    this.componentStateService = this.injector.get(AbstractComponentStateService);
-    this.router = this.injector.get(Router);
-    this.actRoute = this.injector.get(ActivatedRoute);
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.oErrorDialogManager = this.injector.get<OErrorDialogManager>(OErrorDialogManager as Type<OErrorDialogManager>);
+    this.localStorageService = this.injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
+    this.componentStateService = this.injector.get<T>(AbstractComponentStateService as Type<T>);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.actRoute = this.injector.get<ActivatedRoute>(ActivatedRoute as Type<ActivatedRoute>);
     try {
-      this.cd = this.injector.get(ChangeDetectorRef);
-      this.form = this.injector.get(OFormComponent);
+      this.cd = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
+      this.form = this.injector.get<OFormComponent>(OFormComponent as Type<OFormComponent>);
     } catch (e) {
       // no parent form
     }
     try {
-      this.expandableContainer = this.injector.get(OExpandableContainerComponent);
+      this.expandableContainer = this.injector.get<OExpandableContainerComponent>(OExpandableContainerComponent as Type<OExpandableContainerComponent>);
     } catch (e) {
       // No parent OExpandableContainerComponent
     }
@@ -236,15 +240,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
-    // if (typeof this.insertFallbackFunction !== 'function') {
-    //   this.insertFallbackFunction = undefined;
-    // }
-    // if (typeof this.updateFallbackFunction !== 'function') {
-    //   this.updateFallbackFunction = undefined;
-    // }
-    // if (typeof this.deleteFallbackFunction !== 'function') {
-    //   this.deleteFallbackFunction = undefined;
-    // }
   }
 
   afterViewInit() {
@@ -273,7 +268,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (this.queryOnEventSubscription) {
       this.queryOnEventSubscription.unsubscribe();
     }
-    this.updateStateStorage();
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
@@ -314,22 +308,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   configureService() {
-    let loadingService: any = OntimizeService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get<any>(loadingService);
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.dataService = Util.configureService(configureServiceArgs);
   }
 
   getDataArray() {
@@ -389,13 +369,17 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
 
       if (this.abortQuery.value) {
-        // Update pagination info
         this.state.queryRecordOffset = 0;
         this.state.totalQueryRecordsNumber = 0;
-        // Set empty data (order is important)
-        this.setData([]);
+        this.setData([], []);
+        /**  this.cd.detectChanges() is used to update loadingSubject value (this.loadingSubject.next(true); in line 377)
+         *  before using the next line and so update the oTableExpandedFooter directive and display the message
+         * that there are no results when the query is aborted*/
+        this.cd.detectChanges();
+        this.loadingSubject.next(false);
         return;
       }
+
       this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
         .subscribe((res: ServiceResponse) => {
           let data;
@@ -411,6 +395,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
               this.updatePaginationInfo(res);
             }
           }
+
           this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
           this.loadingSubject.next(false);
         }, err => {
@@ -418,10 +403,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
           this.loadingSubject.next(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
-          } else if (err && typeof err !== 'object') {
-            this.dialogService.alert('ERROR', err);
           } else {
-            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+            this.oErrorDialogManager.openErrorDialog(err);
+            console.error(err);
           }
         });
     }

@@ -41,4 +41,7 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer impl
       format: this.format
     };
   }
+  getFormat(): string {
+    return this.format;
+  }
 }

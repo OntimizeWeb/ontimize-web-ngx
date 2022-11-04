@@ -1,5 +1,13 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  Injector,
+  Type,
+  ViewEncapsulation
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { DialogService } from '../../../../../services/dialog.service';
@@ -44,9 +52,9 @@ export class OTableVisibleColumnsDialogComponent {
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
-    this.dialogService = this.injector.get(DialogService);
-    this.cd = this.injector.get(ChangeDetectorRef);
-    this.translateService = this.injector.get<OTranslateService>(OTranslateService);
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.cd = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
+    this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
 
     if (Util.isDefined(data.table)) {
       this.table = data.table;

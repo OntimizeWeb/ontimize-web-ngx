@@ -15,21 +15,22 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { MatDialog, MatMenu } from '@angular/material';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-
+import { Observable } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand.interface';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
+import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
 import { DialogService } from '../../../../../services/dialog.service';
+
 import { O_CHART_ON_DEMAND_SERVICE } from '../../../../../services/factories';
+import { O_REPORT_SERVICE } from '../../../../../services/factories';
+import { OntimizeExportDataProviderService } from '../../../../../services/ontimize-export-data-provider.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OPermissions } from '../../../../../types/o-permissions.type';
 import { OTableMenuPermissions } from '../../../../../types/table/o-table-menu-permissions.type';
-import { Codes } from '../../../../../util/codes';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
-import { OTableCellRendererImageComponent } from '../../../column/cell-renderer/image/o-table-cell-renderer-image.component';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
@@ -44,7 +45,9 @@ import {
 import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
-import { OTableExportConfiguration } from './o-table-export-configuration.class';
+
+
+
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
   // select-all-checkbox [yes|no|true|false]: show selection check boxes. Default: no.
@@ -61,8 +64,18 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
 
   // show-filter-option [yes|no|true|false]: show filter menu option in the header menu
   'showFilterOption: show-filter-option',
+
   // show-group-by-option [yes|no|true|false]: show group by menu option in the header menu
-  'showGroupByOption: show-group-by-option'
+  'showGroupByOption: show-group-by-option',
+
+  // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
+  'showResetWidthOption: show-reset-width-option',
+
+  // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the header menu
+  'showReportOnDemandOption: show-report-on-demand-option',
+
+  // show-charts-on-demand-option [yes|no|true|false]: show charts on demand option in the header menu
+  'showChartsOnDemandOption: show-charts-on-demand-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -94,6 +107,13 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   columnsVisibilityButton: boolean = true;
   @InputConverter()
   showGroupByOption: boolean = true;
+  @InputConverter()
+  showResetWidthOption: boolean = true;
+  @InputConverter()
+  showReportOnDemandOption: boolean = true;
+  @InputConverter()
+  showChartsOnDemandOption: boolean = true;
+
 
   public onVisibleFilterOptionChange: EventEmitter<any> = new EventEmitter();
   /* End of inputs */
@@ -124,27 +144,26 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   @ViewChild('chartMenu', { static: true })
   chartMenu: MatMenu;
 
-  private showColumnsFilterOptionSubject = new BehaviorSubject<boolean>(false);
-  public showColumnsFilterOption: Observable<boolean> = this.showColumnsFilterOptionSubject.asObservable();
-
   protected permissions: OTableMenuPermissions;
   protected mutationObservers: MutationObserver[] = [];
+  protected exportDataProvider: OntimizeExportDataProviderService;
 
-  private subscription: Subscription;
 
   constructor(
     protected injector: Injector,
     protected dialog: MatDialog,
     protected cd: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent,
-    @Optional() @Inject(O_CHART_ON_DEMAND_SERVICE) public chartOnDemandService: IChartOnDemandService
+
+    @Optional() @Inject(O_CHART_ON_DEMAND_SERVICE) public chartOnDemandService: IChartOnDemandService,
+
+    @Optional() @Inject(O_REPORT_SERVICE) public reportService: IReportService
+
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
     this.snackBarService = this.injector.get(SnackBarService);
-    const self = this;
-
-    this.subscription = this.onVisibleFilterOptionChange.subscribe((x: boolean) => self.showColumnsFilterOptionSubject.next(x));
+    this.exportDataProvider = this.injector.get(OntimizeExportDataProviderService)
   }
 
   ngOnInit() {
@@ -156,8 +175,6 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   ngAfterViewInit() {
-
-    this.showColumnsFilterOptionSubject.next(this.table.oTableColumnsFilterComponent !== undefined);
 
     if (!this.permissions.items || this.permissions.items.length === 0) {
       return;
@@ -200,7 +217,6 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         m.disconnect();
       });
     }
-    this.subscription.unsubscribe();
   }
 
   registerOptions(oTableOptions: OTableOptionComponent[]) {
@@ -271,6 +287,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     return !(perm && perm.visible === false);
   }
 
+  get showReportOnDemandButton(): boolean {
+    if (!this.showReportOnDemandOption) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('show-report-on-demand');
+    return !(perm && perm.visible === false);
+  }
+
   get enabledColumnsVisibilityButton(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('show-hide-columns');
     return !(perm && perm.enabled === false);
@@ -300,8 +324,13 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     return this.showGroupByOption;
   }
 
-  get showChartOnDemandButton(): boolean {
-    return this.table.chartOnDemand;
+  get showChartsOnDemandButton(): boolean {
+    if (!this.showChartsOnDemandOption) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('show-chart-on-demand');
+    return !(perm && perm.visible === false);
+
   }
 
   onShowsSelects() {
@@ -311,50 +340,15 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onExportButtonClicked() {
-    const tableOptions = this.table.oTableOptions;
-    const exportCnfg: OTableExportConfiguration = new OTableExportConfiguration();
-
-    // get column's attr whose renderer is OTableCellRendererImageComponent
-    const colsNotIncluded: string[] = tableOptions.columns.filter(c => void 0 !== c.renderer && c.renderer instanceof OTableCellRendererImageComponent).map(c => c.attr);
-    colsNotIncluded.push(Codes.NAME_COLUMN_SELECT);
-    colsNotIncluded.push(Codes.NAME_COLUMN_EXPANDABLE);
-
-    // Table data/filters
-    switch (this.table.exportMode) {
-      case Codes.EXPORT_MODE_ALL:
-        exportCnfg.filter = this.table.getComponentFilter();
-        break;
-      case Codes.EXPORT_MODE_LOCAL:
-        exportCnfg.data = this.table.getAllRenderedValues();
-        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
-        break;
-      default:
-        exportCnfg.data = this.table.getRenderedValue();
-        colsNotIncluded.forEach(attr => exportCnfg.data.forEach(row => delete row[attr]));
-        break;
-    }
-    exportCnfg.mode = this.table.exportMode;
-    exportCnfg.entity = this.table.entity;
-
-    // Table columns
-    exportCnfg.columns = tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1);
-    // Table column names
-    const tableColumnNames = {};
-    tableOptions.visibleColumns.filter(c => colsNotIncluded.indexOf(c) === -1).forEach(c => {
-      const oColumn = tableOptions.columns.find(oc => oc.attr === c);
-      tableColumnNames[c] = this.translateService.get(oColumn.title ? oColumn.title : oColumn.attr);
-    });
-    exportCnfg.columnNames = tableColumnNames;
-    // Table column sqlTypes
-    exportCnfg.sqlTypes = this.table.getSqlTypes();
-    // Table service, needed for configuring ontimize export service with table service configuration
-    exportCnfg.service = this.table.service;
-    exportCnfg.serviceType = this.table.exportServiceType;
-    exportCnfg.visibleButtons = this.table.visibleExportDialogButtons;
-    exportCnfg.options = this.table.exportOptsTemplate;
+    this.exportDataProvider.initializeProvider(this.table);
 
     this.dialog.open(OTableExportDialogComponent, {
-      data: exportCnfg,
+      data: {
+        visibleButtons: this.table.visibleExportDialogButtons,
+        service: this.table.service,
+        serviceType: this.table.exportServiceType,
+        options: this.table.exportOptsTemplate
+      },
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
@@ -399,7 +393,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       data: {
         groupedColumns: this.table.groupedColumnsArray,
         columnsData: this.table.oTableOptions.columns,
-        rowHeight: this.table.rowHeight
+        rowHeight: this.table.rowHeight,
+        groupedColumnTypes: this.table.groupedColumnTypes
       },
       height: '75vh',
       width: '50vw',
@@ -409,6 +404,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.table.setGroupedColumnTypes(dialogRef.componentInstance.getGroupedColumnTypes());
         this.table.setGroupColumns(dialogRef.componentInstance.getGroupedColumns());
       }
     });
@@ -476,11 +472,27 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     });
   }
 
+
   onChartsOnDemandClicked(): void {
-    if(this.chartOnDemandService) {
+    if (this.chartOnDemandService) {
       this.chartOnDemandService.openChartOnDemand(this.table.getDataArray(), this.table.service, this.table.entity);
     } else {
       console.warn("You must have ontimize-web-ngx-charts installed in your app to use charts on demand.")
+    }
+  }
+  onResetWidthClicked() {
+    this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_RESET_WIDTH').then(result => {
+      if (result) {
+        this.table.resetColumnsWidth();
+      }
+    });
+  }
+
+  onReportOnDemandClicked(): void {
+    if (this.reportService) {
+      this.reportService.openReportOnDemand(this.table);
+    } else {
+      console.warn("You must have ontimize-web-ngx-report-on-demand installed in your app to use report on demand.")
     }
   }
 

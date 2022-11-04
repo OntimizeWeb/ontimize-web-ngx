@@ -187,14 +187,14 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.editMode = true;
   }
 
-  public onCloseDetail(): void {
-    this._form.executeToolbarAction(Codes.CLOSE_DETAIL_ACTION, {
+  public onCloseDetail(options?: any): void {
+    this._form.executeToolbarAction(Codes.CLOSE_DETAIL_ACTION, Object.assign(options || {}, {
       changeToolbarMode: true
-    });
+    }));
   }
 
-  public onBack(): void {
-    this._form.executeToolbarAction(Codes.BACK_ACTION);
+  public onBack(options?: any): void {
+    this._form.executeToolbarAction(Codes.BACK_ACTION, options);
   }
 
   public onReload(): void {
@@ -203,7 +203,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this._form.showConfirmDiscardChanges().then(val => {
       if (val) {
-        this._form.executeToolbarAction(Codes.RELOAD_ACTION);
+        this._form.executeToolbarAction(Codes.RELOAD_ACTION, { exitWithoutConfirmation: true });
       }
     });
   }
@@ -250,10 +250,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
         // ensuring editMode to false to avoid o-form canDeactivate function triggering
         this.editMode = false;
         this.onCancel.emit();
+        const closeOptions = { exitWithoutConfirmation: true };
         if (this.isDetail) {
-          this.onCloseDetail();
+          this.onCloseDetail(closeOptions);
         } else if (this.insertMode) {
-          this.onBack();
+          this.onBack(closeOptions);
         } else {
           this.onReload();
           this._form.setInitialMode();
@@ -285,17 +286,19 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public showConfirmDelete(): void {
-    this._dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
-      if (res === true) {
-        this._form.executeToolbarAction(Codes.DELETE_ACTION).subscribe(resp => {
-          this._form.onDelete.emit(resp);
-          this.onCloseDetail();
-        }, err => {
-          console.error('OFormToolbar.delete error', err);
-        });
+    this._dialogService.confirm(
+      this._form.messageService.getDeleteConfirmationDialogTitle(),
+      this._form.messageService.getDeleteConfirmationMessage()).then(res => {
+        if (res) {
+          this._form.executeToolbarAction(Codes.DELETE_ACTION).subscribe(resp => {
+            this._form.onDelete.emit(resp);
+            this.onCloseDetail({ exitWithoutConfirmation: true });
+          }, err => {
+            console.error('OFormToolbar.delete error', err);
+          });
+        }
       }
-    }
-    );
+      );
   }
 
   get showNavigation(): boolean {
@@ -404,7 +407,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     const permissions: OPermissions = (this.actionsPermissions || []).find(p => p.attr === attr);
     const enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
+      this.snackBarService.open(this._form.messageService.getActionPermissionNotEnabledMessage());
     }
     return enabledPermision;
   }

@@ -155,7 +155,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   protected column: OColumn;
   protected translateService: OTranslateService;
   protected contextMenuSubscription: Subscription = new Subscription();
-
+  public isDateColumn: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor(
     protected injector: Injector,
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
@@ -247,8 +247,9 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
 
-  public groupByColumn(): void {
-    this.table.groupByColumn(this.column);
+  public groupByColumn(dateType?: string): void {
+    this.table.groupByColumn(this.column, dateType);
+    this.isEnabledGroupByColumn.next(false);
   }
 
   public unGroupByColumn(): void {
@@ -283,6 +284,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
       columnName = columnName.substring('groupHeader-'.length);
     }
     this.column = this.table.getOColumn(columnName);
+    this.isColumnDate();
     this.isDataCell.next(!isTableGroupedRow);
     this.isTableGroupedRow.next(isTableGroupedRow);
     this.isGroupableCell.next(isTableGroupedRow && (this._row as OTableGroupedRow).hasColumnData(this.column.attr));
@@ -326,7 +328,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
     this.isEnabledUnGroupByColumn.next(false);
     this.isEnabledUnGroupAllColumn.next(false);
     let grouped = false;
-    if (this.column.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && this.table.groupedColumnsArray.includes(this.column.attr)) {
+    if (this.column.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && this.foundColumnInGroupedColumns(this.column)) {
       this.isEnabledUnGroupByColumn.next(true);
       grouped = true;
     }
@@ -336,6 +338,12 @@ export class OTableContextMenuComponent implements AfterViewInit {
       this.isEnabledUnGroupAllColumn.next(true);
     }
   }
+  public foundColumnInGroupedColumns(column): boolean {
+    let found: boolean = false;
+    this.table.groupedColumnsArray.forEach(groupedColumn => { if (groupedColumn == column.attr) { found = true } });
+    return found;
+  }
+
 
   public changeAggregateFunction(arg: any, aggregateFnName: string): void {
     if (arg.data.rowValue instanceof OTableGroupedRow) {
@@ -360,5 +368,8 @@ export class OTableContextMenuComponent implements AfterViewInit {
   collapseRowGroupsSameLevel() {
     this.table.dataSource.setRowGroupLevelExpansion(this._row, false);
 
+  }
+  isColumnDate() {
+    this.isDateColumn.next(this.column.type == 'date');
   }
 }

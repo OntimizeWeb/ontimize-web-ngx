@@ -8,13 +8,20 @@ import {
   Injector,
   OnDestroy,
   OnInit,
+  Type,
   ViewEncapsulation
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo } from '../../../interfaces/app-menu.interface';
+import {
+  MenuItemAction,
+  MenuItemLocale,
+  MenuItemLogout,
+  MenuItemRoute,
+  MenuItemUserInfo
+} from '../../../interfaces/app-menu.interface';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { AuthService } from '../../../services/auth.service';
@@ -81,28 +88,34 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected mutationObserver: MutationObserver;
 
   hidden: boolean;
+  active: boolean;
+
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,
     protected cd: ChangeDetectorRef
   ) {
-    this.translateService = this.injector.get(OTranslateService);
-    this.authService = this.injector.get(AuthService);
-    this.dialogService = this.injector.get(DialogService);
-    this.permissionsService = this.injector.get(PermissionsService);
-    this.oUserInfoService = this.injector.get(OUserInfoService);
-    this.sidenav = this.injector.get(OAppSidenavComponent);
-    this.oAppLayoutComponent = this.injector.get(OAppLayoutComponent);
-    this.router = this.injector.get(Router);
-    this.routerSubscription = this.router.events.subscribe(() => {
-      this.cd.detectChanges();
-    });
+    this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
+    this.oUserInfoService = this.injector.get<OUserInfoService>(OUserInfoService as Type<OUserInfoService>);
+    this.sidenav = this.injector.get<OAppSidenavComponent>(OAppSidenavComponent as Type<OAppSidenavComponent>);
+    this.oAppLayoutComponent = this.injector.get<OAppLayoutComponent>(OAppLayoutComponent as Type<OAppLayoutComponent>);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.appMenuService = this.injector.get<AppMenuService>(AppMenuService as Type<AppMenuService>);
 
-    this.appMenuService = this.injector.get(AppMenuService);
+    this.routerSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && this.isRouteItem()) {
+        this.active = this.appMenuService.isItemActive(this.menuItem as MenuItemRoute);
+        this.cd.detectChanges();
+      }
+    });
   }
 
   ngOnInit() {
     this.parsePermissions();
+    this.active = this.appMenuService.isItemActive(this.menuItem as MenuItemRoute);
   }
 
   ngAfterViewInit() {
@@ -260,14 +273,6 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
   get useFlagIcons(): boolean {
     return this.oAppLayoutComponent && this.oAppLayoutComponent.useFlagIcons;
-  }
-
-  isActiveItem(): boolean {
-    if (!this.isRouteItem()) {
-      return false;
-    }
-    const route = (this.menuItem as MenuItemRoute).route;
-    return this.router.url === route || this.router.url.startsWith(route + '/');
   }
 
   get tooltip(): string {

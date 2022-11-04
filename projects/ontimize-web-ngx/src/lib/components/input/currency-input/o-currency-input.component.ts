@@ -3,7 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {
   DEFAULT_INPUTS_O_REAL_INPUT,
   DEFAULT_OUTPUTS_O_REAL_INPUT,
-  ORealInputComponent,
+  ORealInputComponent
 } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
@@ -25,6 +25,7 @@ export const DEFAULT_OUTPUTS_O_CURRENCY_INPUT = [
   encapsulation: ViewEncapsulation.None
 })
 export class OCurrencyInputComponent extends ORealInputComponent implements OnInit {
+  
 
   static currency_icons = ['USD', 'EUR', 'GBP', 'ILS', 'INR', 'JPY', 'KRW', 'BTC'];
 

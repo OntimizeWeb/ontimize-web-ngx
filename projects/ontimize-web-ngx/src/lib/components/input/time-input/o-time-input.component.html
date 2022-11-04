@@ -1,29 +1,27 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay">
-  <div class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row" fxLayoutAlign="space-between center"
-    fxLayoutGap="8px">
-    <o-date-input #dateInput fxFlex [attr]="dateAttr" [read-only]="readOnly" [enabled]="enabled" [required]="isRequired"
-      [label]="olabel" clear-button="no" automatic-registering="no" automatic-binding="no"
-      (onFocus)="innerOnFocus($event)" (onBlur)="innerOnBlur($event)" [format]="oDateFormat" [locale]="oDateLocale"
-      [start-view]="oDateStartView" [min]="oDateMinDate" [max]="oDateMaxDate" [touch-ui]="oDateTouchUi"
-      [start-at]="oDateStartAt" [filter-date]="oDateFilterDate" [text-input-enabled]="oDateTextInputEnabled"
-      [placeholder]="oDatePlaceholder" [label-visible]="labelVisible" [hide-required-marker]="hideRequiredMarker">
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+  <div class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+    <o-date-input #dateInput fxFlex [attr]="dateAttr" [read-only]="readOnly" [enabled]="enabled" [required]="isRequired" [label]="olabel"
+      clear-button="no" automatic-registering="no" automatic-binding="no" (onFocus)="innerOnFocus($event)" (onBlur)="innerOnBlur($event)"
+      [format]="oDateFormat" [locale]="oDateLocale" [start-view]="oDateStartView" [min]="oDateMinDate" [max]="oDateMaxDate" [touch-ui]="oDateTouchUi"
+      [start-at]="oDateStartAt" [filter-date]="oDateFilterDate" [text-input-enabled]="oDateTextInputEnabled" [placeholder]="oDatePlaceholder"
+      [label-visible]="labelVisible" [hide-required-marker]="hideRequiredMarker" [select-all-on-click]="selectAllOnClick">
     </o-date-input>
 
     <span class="separator">&ndash;</span>
 
-    <o-hour-input #hourInput fxFlex [attr]="hourAttr" [read-only]="readOnly" [enabled]="enabled" [required]="isRequired"
-      clear-button="no" automatic-registering="no" automatic-binding="no" (onFocus)="innerOnFocus($event)"
-      (onBlur)="innerOnBlur($event)" [format]="oHourFormat" [text-input-enabled]="oHourTextInputEnabled"
-      [min]="oHourMin" [max]="oHourMax" hide-required-marker="yes" label-visible="no" [placeholder]="oHourPlaceholder">
+    <o-hour-input #hourInput fxFlex [attr]="hourAttr" [read-only]="readOnly" [enabled]="enabled" [required]="isRequired" clear-button="no"
+      automatic-registering="no" automatic-binding="no" (onFocus)="innerOnFocus($event)" (onBlur)="innerOnBlur($event)" [format]="oHourFormat"
+      [text-input-enabled]="oHourTextInputEnabled" [min]="oHourMin" [max]="oHourMax" hide-required-marker="yes" label-visible="no"
+      [placeholder]="oHourPlaceholder" [select-all-on-click]="selectAllOnClick">
     </o-hour-input>
 
-    <button class="mat-form-field-suffix" type="button" *ngIf="showClearButton" matSuffix mat-icon-button
-      (click)="onClickClearValue($event)">
+    <button class="mat-form-field-suffix" type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
   </div>
 
-  <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+  <mat-error *ngFor="let oError of getActiveOErrors()">
+    {{ oError.text | oTranslate }}
+  </mat-error>
 </div>

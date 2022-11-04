@@ -1,16 +1,20 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-text" [formGroup]="formGroup">
+  <div class="o-table-cell-editor-text o-table-cell-editor" [formGroup]="formGroup">
     <mat-form-field floatLabel="never" cdkFocusInitial>
       <input #input matInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId"
         [required]="orequired">
-      <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-      <mat-error *ngIf="hasError('minlength')"
-      text="{{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}">
+      <mat-error *oMatError="hasError('required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>
-      <mat-error *ngIf="hasError('maxlength')"
-        text="{{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}">
+      <mat-error *oMatError="hasError('minlength')">
+        {{ 'FORM_VALIDATION.MIN_LENGTH' | oTranslate }}: {{ getErrorValue('minlength', 'requiredLength') }}
       </mat-error>
-      <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ getErrorText(oError) }}"></mat-error>
+      <mat-error *oMatError="hasError('maxlength')">
+        {{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}
+      </mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()">
+        {{ getErrorText(oError) }}
+      </mat-error>
     </mat-form-field>
   </div>
 </ng-template>

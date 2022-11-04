@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnInit, Type, ViewChild } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material';
 
@@ -65,10 +65,10 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, A
     super(form, elRef, injector);
     this.form = form;
     this.elRef = elRef;
-    this._changeDetectorRef = this.injector.get(ChangeDetectorRef);
+    this._changeDetectorRef = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
     try {
-      this.tabGroupContainer = this.injector.get(MatTabGroup);
-      this.tabContainer = this.injector.get(MatTab);
+      this.tabGroupContainer = this.injector.get<MatTabGroup>(MatTabGroup as Type<MatTabGroup>);
+      this.tabContainer = this.injector.get<MatTab>(MatTab as Type<MatTab>);
     } catch (error) {
       // Do nothing due to not always is contained on tab.
     }

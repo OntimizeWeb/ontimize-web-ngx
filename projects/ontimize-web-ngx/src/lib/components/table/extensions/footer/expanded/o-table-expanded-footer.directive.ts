@@ -85,7 +85,9 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
       this.createMessageSpan();
     } else {
       const message = this.buildMessage();
-      this.spanMessageNotResults.innerHTML = message;
+      if(Util.isDefined(this.spanMessageNotResults)) {
+        this.spanMessageNotResults.innerHTML = message;
+      }
     }
   }
 

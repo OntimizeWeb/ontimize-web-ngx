@@ -1,11 +1,17 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-text" [formGroup]="formGroup">
+  <div class="o-table-cell-editor-email o-table-cell-editor" [formGroup]="formGroup">
     <mat-form-field floatLabel="never" cdkFocusInitial>
       <input #input matInput type="email" [email]="true" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId"
         [required]="orequired">
-      <mat-error *ngIf="hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-      <mat-error *ngIf="hasError('email')" text="{{ 'FORM_VALIDATION.EMAIL_FORMAT' | oTranslate }}"></mat-error>
-      <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ getErrorText(oError) }}"></mat-error>
+      <mat-error *oMatError="hasError('required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+      </mat-error>
+      <mat-error *oMatError="hasError('email')">
+        {{ 'FORM_VALIDATION.EMAIL_FORMAT' | oTranslate }}
+      </mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()">
+        {{ getErrorText(oError) }}
+      </mat-error>
     </mat-form-field>
   </div>
 </ng-template>

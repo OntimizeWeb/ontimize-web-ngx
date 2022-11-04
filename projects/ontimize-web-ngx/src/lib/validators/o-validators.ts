@@ -1,7 +1,8 @@
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Util } from '../util';
+import * as lpn from 'google-libphonenumber';
 
-const EMAIL_REGEXP = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
+const EMAIL_REGEXP = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
 
 // NIF Regular Expressions
 const DNI_PATTERN = '^(([0-9]{8})([-]?)([a-zA-Z]{1}))$';
@@ -41,6 +42,38 @@ export class OValidators {
   public static emailValidator(control: FormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && !EMAIL_REGEXP.test(control.value)) {
       return { invalidEmailAddress: true };
+    }
+    return {};
+  }
+
+  /**
+   * Phone validator
+   */
+  public static phoneValidator(control: FormControl, countryCode?: any): ValidationErrors {
+    if (!control || !control.value) {
+      return {};
+    }
+    const phoneNumberUtilInstance = lpn.PhoneNumberUtil.getInstance();
+    const error = { validatePhoneNumber: { valid: false } };
+
+    let number: lpn.PhoneNumber;
+    let isValidForRegion: boolean = false
+    try {
+      number = phoneNumberUtilInstance.parse(
+        control.value,
+        countryCode
+      );
+      if (number) {
+        isValidForRegion = phoneNumberUtilInstance.isValidNumberForRegion(
+          number,
+          countryCode
+        )
+      }
+    } catch (e) {
+      return error;
+    }
+    if (control.value && (!number || !isValidForRegion)) {
+      return error
     }
     return {};
   }

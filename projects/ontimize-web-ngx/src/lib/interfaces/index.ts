@@ -1,6 +1,7 @@
 export * from './app-menu.interface';
 export * from './auth-service.interface';
 export * from './chart-on-demand.interface';
+export * from './report-on-demand-service.interface';
 export * from './component.interface';
 export * from './data-service.interface';
 export * from './export-service.interface';
@@ -33,3 +34,6 @@ export * from './permissions-service.interface';
 export * from './service-data-component.interface';
 export * from './service-response-adapter.interface';
 export * from './service-response.interface';
+export * from './export-data-provider.interface';
+export * from './o-table-export-data.interface'
+export * from './query-parameter.interface';

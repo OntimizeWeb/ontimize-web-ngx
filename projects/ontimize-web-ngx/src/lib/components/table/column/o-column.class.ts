@@ -48,6 +48,7 @@ export class OColumn {
       this._editing = false;
     }
     this._editing = this.editor != null && val;
+    this.editor.setEditingRowClass(this._editing)
   }
 
   setDefaultProperties(args: any) {

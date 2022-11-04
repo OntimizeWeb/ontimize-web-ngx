@@ -1,43 +1,43 @@
 <div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
   [class.block-events]="showLoading | async">
-  <div #tableToolbar *ngIf="hasControls()" class="toolbar">
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+
+  <o-data-toolbar #tableToolbar *ngIf="hasControls()" [title]="title" [show-title]="showTitle" class="o-table-toolbar">
+    <ng-container o-data-toolbar-projection-start>
       <o-table-buttons #tableButtons [insert-button]="insertButton" [refresh-button]="refreshButton" [delete-button]="showDeleteButton">
         <ng-content select="o-table-button"></ng-content>
       </o-table-buttons>
-
-      <ng-content select="[o-table-custom-toolbar]"></ng-content>
-
-      <div fxLayout fxFlex>
-        <span *ngIf="showTitle" class="table-title" fxFlex>{{ title | oTranslate }}</span>
-      </div>
-
+    </ng-container>
+    <ng-content select="[o-table-toolbar][position=start]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-content select="[o-table-toolbar][position=end]" ngProjectAs="[o-data-toolbar-custom-projection-end]">
+    </ng-content>
+    <ng-content select="[o-table-toolbar]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-container o-data-toolbar-projection-end>
       <ng-container *ngIf="quickfilterContentChild; else defaultQuickFilter">
         <ng-content select="o-table-quickfilter"></ng-content>
       </ng-container>
       <ng-template #defaultQuickFilter>
         <ng-container *ngIf="quickFilter">
-          <o-table-quickfilter (onChange)="tableQuickFilterChanged()">
+          <o-table-quickfilter (onChange)="tableQuickFilterChanged($event)">
           </o-table-quickfilter>
         </ng-container>
       </ng-template>
-
-
       <button type="button" *ngIf="showTableMenuButton" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="tableMenu.matMenu"
         (click)="$event.stopPropagation()">
         <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
       </button>
       <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox" [export-button]="exportButton"
         [columns-visibility-button]="columnsVisibilityButton" [show-configuration-option]="showConfigurationOption"
-        [show-filter-option]="showFilterOption" [show-group-by-option]="groupable">
+        [show-filter-option]="showFilterOption" [show-report-on-demand-option]="showReportOnDemandOption" [show-charts-on-demand-option]="showChartsOnDemandOption"
+        [show-reset-width-option]="showResetWidthOption" [show-group-by-option]="groupable">
         <ng-content select="o-table-option"></ng-content>
       </o-table-menu>
       <ng-template #exportOptsTemplate>
         <ng-content select="o-table-export-button"></ng-content>
       </ng-template>
-    </div>
-  </div>
-
+    </ng-container>
+  </o-data-toolbar>
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled">
     <ng-container *ngIf="!enabledVirtualScroll; else tableWithVirtualScroll">
@@ -51,7 +51,6 @@
       </cdk-virtual-scroll-viewport>
     </ng-template>
   </div>
-
   <!--TABLE PAGINATOR-->
   <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
     [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons">
@@ -71,7 +70,8 @@
 
   <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
     [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()"
-    [oTableExpandedFooter]="!(loading | async)" [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()">
+    [oTableExpandedFooter]="!(loading | async)" [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()"
+    aria-describedby="ontimize-web table">
 
     <!--Checkbox Column -->
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
@@ -80,8 +80,8 @@
           [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row">
-        <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)"
-          [checked]="selection.isSelected(row)"></mat-checkbox>
+        <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
+        </mat-checkbox>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
@@ -120,28 +120,9 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
-          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
-          <div class="content">
-
-            <ng-container [ngSwitch]="true">
-              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !selection.isSelected(row))">
-                <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="selection.isSelected(row) && column.editing">
-                <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="column.type === 'editButtonInRow' || column.type === 'detailButtonInRow'">
-                <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
-                  <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
-                </div>
-              </ng-container>
-              <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
-            </ng-container>
-
-          </div>
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth"
+          [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
+          <ng-container *ngTemplateOutlet="cellRenderer;context:{column:column,row:row}"></ng-container>
         </td>
       </ng-container>
       <ng-template #cellTemplateMultiTemplateDataRows>
@@ -151,28 +132,10 @@
           matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
           [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
           [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
-          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
-          <div class="content">
+          [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth"
+          [class.o-table-editing-cell]="isRowSelected(row) && column.editing">
+          <ng-container *ngTemplateOutlet="cellRenderer;context:{column:column,row:row}"></ng-container>
 
-            <ng-container [ngSwitch]="true">
-              <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !selection.isSelected(row))">
-                <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="selection.isSelected(row) && column.editing">
-                <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
-                </ng-template>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="column.type === 'editButtonInRow' || column.type === 'detailButtonInRow'">
-                <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
-                  <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
-                </div>
-              </ng-container>
-              <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
-            </ng-container>
-
-          </div>
         </td>
       </ng-template>
       <!--Define mat-footer-cell-->
@@ -211,10 +174,11 @@
 
         <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
           <ng-container *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
-            <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatLabel="never">
+            <mat-form-field class="insertable-form-field o-table-cell-editor-text o-table-cell-editor" [hideRequiredMarker]="false"
+              floatLabel="never">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
                 [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)">
-              <mat-error *ngIf="oTableInsertableRowComponent.columnHasError(column, 'required')">
+              <mat-error *oMatError="oTableInsertableRowComponent.columnHasError(column, 'required')">
                 {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
               </mat-error>
             </mat-form-field>
@@ -242,7 +206,7 @@
             <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false" floatLabel="never">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
                 [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)">
-              <mat-error *ngIf="oTableInsertableRowComponent.columnHasError(column, 'required')">
+              <mat-error *oMatError="oTableInsertableRowComponent.columnHasError(column, 'required')">
                 {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
               </mat-error>
             </mat-form-field>
@@ -328,3 +292,27 @@
     [refresh]="refreshButton" [delete]="deleteButton" [filter]="showFilterOption" [group-by-row]="groupable">
   </o-table-context-menu>
 </ng-container>
+
+<ng-template #cellRenderer let-row="row" let-column="column">
+  <div class="content">
+
+    <ng-container [ngSwitch]="true">
+      <ng-container *ngSwitchCase="column.renderer != null && (!column.editing || column.editing && !isRowSelected(row))">
+        <ng-template *ngTemplateOutlet="column.renderer?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
+        </ng-template>
+      </ng-container>
+      <ng-container *ngSwitchCase="isRowSelected(row) && column.editing">
+        <ng-template *ngTemplateOutlet="column.editor?.templateref; context:{ cellvalue: row[column.name], rowvalue:row }">
+        </ng-template>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="column.type === 'editButtonInRow' || column.type === 'detailButtonInRow'">
+        <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
+          <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchDefault>{{ row[column.name] }}</ng-container>
+    </ng-container>
+
+  </div>
+</ng-template>

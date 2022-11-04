@@ -25,30 +25,14 @@
   position: relative;
   flex-direction: column;
 
-  .mat-toolbar.dense {
-    height: 48px;
-  }
-
   .o-list-content {
-    height: 100%;
-
-    &.o-list-content-toolbar {
-      height: calc(100% - 64px); // total height - toolbar height
-    }
-
     &.o-list-content-toolbar-dense {
-      height: calc(100% - 48px); // total height - toolbar height
-
       .add-button {
         &.add-button-top {
           top: 60px;
         }
       }
     }
-  }
-
-  .o-list-title {
-    font-size: 1.5em;
   }
 
   .spinner-container {
@@ -112,6 +96,7 @@
 
     &.add-button-bottom {
       bottom: 12px;
+
     }
 
     &.add-button-top {
@@ -119,4 +104,7 @@
     }
   }
 
+  .o-mat-paginator~.add-button.add-button-bottom {
+    bottom: 68px;
+  }
 }

@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { OFormComponent } from '../../components/form/o-form.component';
@@ -9,7 +9,8 @@ import { IFormDataComponent } from '../../interfaces/form-data-component.interfa
 import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
-import { Codes } from '../../util/codes';
+import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
+import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
 
@@ -27,8 +28,11 @@ export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   'queryOnChange: query-on-change',
 
   // query-on-change-delay [number]: Delay time in milliseconds `query-on-change` method is triggered. Default: 0.
-  'queryOnChangeDelay: query-on-change-delay'
-];
+  'queryOnChangeDelay: query-on-change-delay',
+
+  //query-on-change-event: [change| onValueChange] Type of event that emit when query-on-change=`yes`
+  'queryOnChangeEventType: query-on-change-event-type'
+]
 
 export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
   // Event triggered when the filter action is executed.
@@ -59,14 +63,15 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   public queryOnChange: boolean = false;
   @InputConverter()
   public queryOnChangeDelay: number = 0;
+  @InputConverter()
+  public queryOnChangeEventType: CHANGE_EVENTS = Codes.DEFAULT_CHANGE_EVENT;
 
   protected filterComponents: Array<IFilterBuilderCmpTarget> = [];
 
   protected subscriptions: Subscription = new Subscription();
 
   constructor(
-    @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent,
-    injector: Injector
+    @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent
   ) { }
 
   ngOnInit(): void {
@@ -107,12 +112,18 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
         const formComponent: IFormDataComponent = this.form.getComponents()[filterComponent.formComponentAttr];
         if (formComponent) {
           this.subscriptions.add(
-            formComponent.getFormControl().valueChanges
+            this.getEventFromFormComponent(formComponent)
               .pipe(debounceTime(this.queryOnChangeDelay))
-              .subscribe(a => this.triggerReload()));
+              .subscribe(() => this.triggerReload()));
         }
       });
     }
+  }
+
+  private getEventFromFormComponent(formComponent: any): Observable<any> {
+    return this.queryOnChangeEventType === Codes.DEFAULT_CHANGE_EVENT ?
+      formComponent.onValueChange :
+      formComponent.getFormControl().valueChanges;
   }
 
   /**
@@ -125,11 +136,13 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     const params: Array<{ attr, value }> = [];
     this.filterComponents.forEach((filterComponent: IFilterBuilderCmpTarget) => {
       const formComponent: IFormDataComponent = formComponents[filterComponent.formComponentAttr];
-      const value = formComponent.getValue();
-      params.push({
-        attr: filterComponent.targetAttr,
-        value: value
-      });
+      if (formComponent) {
+        const value = formComponent.getValue();
+        params.push({
+          attr: filterComponent.targetAttr,
+          value: value
+        });
+      }
     });
 
     // Trigger the function provided by the user
@@ -188,6 +201,38 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
       formComponents[attr].setValue(void 0);
     });
     this.onClear.emit();
+  }
+
+  /**
+   * Gets filter values
+   * @returns filter values
+   */
+  getFilterValues(): OFilterBuilderValues[] {
+    const result: OFilterBuilderValues[] = [];
+
+    this.filterComponents.
+      forEach((filterComponent: IFilterBuilderCmpTarget) => {
+        if (Util.isDefined(this.form.getComponents()[filterComponent.formComponentAttr])) {
+          result.push({ attr: filterComponent.formComponentAttr, value: this.form.getComponents()[filterComponent.formComponentAttr].getValue() });
+        }
+      });
+
+    return result;
+
+  }
+
+  /**
+   * Sets filter values
+   * @param filterBuilderValues
+   */
+  setFilterValues(filterBuilderValues: OFilterBuilderValues[]) {
+    filterBuilderValues.forEach((filterBuilderValue: OFilterBuilderValues) => {
+      if (this.form.getComponents()[filterBuilderValue.attr]) {
+        this.form.getComponents()[filterBuilderValue.attr].setValue(filterBuilderValue.value)
+      } else {
+        console.warn('The filter with attr ' + filterBuilderValue.attr + ' cannot be set ' + filterBuilderValue.value + ' because it does not exist .');
+      }
+    })
   }
 
   /**

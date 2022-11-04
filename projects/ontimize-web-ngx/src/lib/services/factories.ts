@@ -2,13 +2,20 @@ import { InjectionToken, Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
 import { IChartOnDemandService } from '../interfaces/chart-on-demand.interface';
+import { IExportDataProvider } from '../interfaces/export-data-provider.interface';
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
+import { IReportService } from '../interfaces/report-on-demand-service.interface';
+import { OMatErrorOptions } from '../types/o-mat-error.type';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { OntimizeAuthService } from './o-auth.service';
+import { OErrorDialogManager } from './o-error-dialog-manager.service';
+import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
+import { OntimizeExportDataProviderService } from './ontimize-export-data-provider.service';
 import { OntimizeEEService } from './ontimize/ontimize-ee.service';
+import { OntimizeExportService3X } from './ontimize/ontimize-export-3xx.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
 import { OntimizeService } from './ontimize/ontimize.service';
@@ -55,10 +62,21 @@ export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication se
 */
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
 
+
 /**
 * Injection token that can be used to replace the component state service `DefaultComponentStateService`.
 */
 export const O_CHART_ON_DEMAND_SERVICE = new InjectionToken<IChartOnDemandService>('Chart on demand service');
+
+export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report service');
+
+export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
+
+export const O_EXPORT_DATA_SERVICE = new InjectionToken<IExportDataProvider>('Export data provider');
+
+export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
+
+export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
@@ -69,17 +87,17 @@ export const O_CHART_ON_DEMAND_SERVICE = new InjectionToken<IChartOnDemandServic
  */
 export function dataServiceFactory(injector: Injector): any {
   const serviceClass = _getInjectionTokenValue(O_DATA_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   if (Util.isDefined(service)) {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (typeof (config.serviceType) === 'undefined') {
-    return new OntimizeService(injector);
-  } else if ('OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
     return new OntimizeEEService(injector);
+  } else if ('Ontimize' === config.serviceType) {
+    return new OntimizeService(injector);
   }
-  return _createServiceInstance(config.serviceType, injector);
+  return Util.createServiceInstance(config.serviceType, injector);
 }
 
 /**
@@ -87,7 +105,7 @@ export function dataServiceFactory(injector: Injector): any {
  */
 export function fileServiceFactory(injector: Injector): IFileService {
   const serviceClass = _getInjectionTokenValue(O_FILE_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   return Util.isDefined(service) ? service : new OntimizeFileService(injector);
 }
 
@@ -96,15 +114,36 @@ export function fileServiceFactory(injector: Injector): IFileService {
  */
 export function exportServiceFactory(injector: Injector): IExportService {
   const serviceClass = _getInjectionTokenValue(O_EXPORT_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   if (Util.isDefined(service)) {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
+
   if (typeof (config.exportServiceType) === 'undefined') {
-    return new OntimizeExportService(injector);
+    if (config.exportConfiguration) {
+      return new OntimizeExportService3X(injector);
+    } else {
+      return new OntimizeExportService(injector);
+    }
   }
-  return _createServiceInstance(config.exportServiceType, injector);
+  return Util.createServiceInstance(config.exportServiceType, injector);
+}
+
+export function exportDataFactory(injector: Injector): IExportDataProvider {
+  const provider = _getInjectionTokenValue(O_EXPORT_DATA_SERVICE, injector);
+  const service = Util.createServiceInstance(provider, injector);
+  if (Util.isDefined(service)) {
+    return service;
+  } else {
+    const config = injector.get(AppConfig).getConfiguration();
+    if (typeof (config.exportConfiguration) === 'undefined') {
+      return new OntimizeExportDataProviderService(injector);
+    } else {
+      return new OntimizeExportDataProviderService3X(injector);
+    }
+  }
+
 }
 
 /**
@@ -112,17 +151,18 @@ export function exportServiceFactory(injector: Injector): IExportService {
  */
 export function permissionsServiceFactory(injector: Injector): IPermissionsService {
   const serviceClass = _getInjectionTokenValue(O_PERMISSION_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   if (Util.isDefined(service)) {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizePermissions' === config.permissionsServiceType) {
-    return new OntimizePermissionsService(injector);
-  } else if ('OntimizeEEPermissions' === config.permissionsServiceType) {
+
+  if (!Util.isDefined(config.permissionsServiceType) || 'OntimizeEEPermissions' === config.permissionsServiceType) {
     return new OntimizeEEPermissionsService(injector);
+  } else if ('OntimizePermissions' === config.permissionsServiceType) {
+    return new OntimizePermissionsService(injector);
   }
-  return _createServiceInstance(config.permissionsServiceType, injector);
+  return Util.createServiceInstance(config.permissionsServiceType, injector);
 }
 
 /**
@@ -130,13 +170,12 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
  */
 export function authServiceFactory(injector: Injector): AuthService {
   const serviceClass = _getInjectionTokenValue(O_AUTH_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
   return Util.isDefined(service) ? service : new OntimizeAuthService(injector);
 }
 
-export function componentStateFactory(injector: Injector): AuthService {
-  const serviceClass = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
-  const service = _createServiceInstance(serviceClass, injector);
+export function componentStateFactory(injector: Injector): AbstractComponentStateService<any, any> {
+  const service = _getInjectionTokenValue(O_COMPONENT_STATE_SERVICE, injector);
   return Util.isDefined(service) ? service : new DefaultComponentStateService(injector);
 }
 
@@ -154,6 +193,8 @@ export const OntimizeExportServiceProvider = { provide: OntimizeExportService, u
 export const OntimizeAuthServiceProvider = { provide: AuthService, useFactory: authServiceFactory, deps: [Injector] };
 
 export const ComponentStateServiceProvider = { provide: AbstractComponentStateService, useFactory: componentStateFactory, deps: [Injector] };
+
+export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
@@ -174,16 +215,4 @@ export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: I
   return service;
 }
 
-/**
- * Returns an instance of the provided service class
- * @param clazz the class reference
- * @param injector the injector
- */
-export function _createServiceInstance(clazz: any, injector: Injector) {
-  if (!Util.isDefined(clazz)) {
-    return;
-  }
-  const newInstance = Object.create(clazz.prototype);
-  clazz.apply(newInstance, [injector]);
-  return newInstance;
-}
+

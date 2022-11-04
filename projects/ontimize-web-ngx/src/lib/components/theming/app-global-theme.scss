@@ -152,6 +152,7 @@
 
       .mat-list-text {
         padding-left: 16px;
+        width: 100%;
       }
     }
   }
@@ -169,7 +170,7 @@
   /*BUTTONS HOVER*/
   .mat-dialog-actions,
   .o-form .o-form-toolbar,
-  .ontimize-table.o-table .o-table-container .toolbar .buttons {
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons {
     .o-table-button,
     button {
       margin: 0 8px;
@@ -221,6 +222,16 @@
 
   }
 
+  .o-form .o-form-toolbar [o-form-toolbar-buttons] > * {
+
+    margin: 0 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+  }
+
   .o-button button.mat-stroked-button {
     &:not([disabled]) {
       &.mat-primary {
@@ -254,10 +265,7 @@
   }
 
   .o-form .o-form-toolbar button,
-  .ontimize-table.o-table .o-table-container .toolbar .buttons .o-table-button button {
-    line-height: 30px;
-
-
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
     &.mat-stroked-button {
       padding: 0 6px;
 
@@ -308,4 +316,8 @@
 
   }
 
+  /*MAT MENU*/
+  .o-mat-menu.mat-menu-panel {
+    min-height: auto;
+  }
 }

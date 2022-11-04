@@ -17,24 +17,27 @@ import {
   SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
+import { MatFormFieldAppearance } from '@angular/material';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { IListItem } from '../../interfaces/o-list-item.interface';
 import { IList } from '../../interfaces/o-list.interface';
-import { OntimizeServiceProvider } from '../../services/factories';
-import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
-import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
+import {
+  AbstractOServiceComponent,
+  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+} from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
@@ -63,7 +66,10 @@ export const DEFAULT_INPUTS_O_LIST = [
   'insertButtonPosition:insert-button-position',
 
   // insert-button-floatable [no|yes]: Indicates whether or not to position of the insert button is floating . Default: 'yes'
-  'insertButtonFloatable:insert-button-floatable'
+  'insertButtonFloatable:insert-button-floatable',
+
+  // show-buttons-text [yes|no|true|false]: show text of buttons. Default: no.
+  'showButtonsText: show-buttons-text'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -71,12 +77,12 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onInsertButtonClick',
   'onItemDeleted'
 ];
-
 @Component({
   selector: 'o-list',
   providers: [
     OntimizeServiceProvider,
-    { provide: AbstractComponentStateService, useClass: OListComponentStateService, deps: [Injector] }
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OListComponentStateService },
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,
@@ -88,8 +94,6 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   }
 })
 export class OListComponent extends AbstractOServiceComponent<OListComponentStateService> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
-
-  private listItemComponents: IListItem[] = [];
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
@@ -105,6 +109,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public deleteButton: boolean = true;
   @InputConverter()
   public insertButtonFloatable: boolean = true;
+  @InputConverter()
+  showButtonsText: boolean = false;
+
+  paginationControls: boolean = false;
+
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
@@ -120,6 +129,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
+  protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
 
   protected oMatSort: OMatSort;
 
@@ -155,7 +165,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngAfterContentInit(): void {
     this.setListItemDirectivesData();
-    this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData());
+    this.subscription.add(this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData()));
   }
 
   public ngOnDestroy(): void {
@@ -190,20 +200,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
-    if (Util.isDefined(this.state.queryRows)) {
-      this.queryRows = this.state.queryRows;
-    }
   }
 
   public reinitialize(options: OListInitializationOptions): void {
     super.reinitialize(options);
-  }
-
-  public registerListItemDirective(item: OListItemDirective): void {
-    if (item) {
-      item.onClick(directiveItem => this.onItemDetailClick(directiveItem));
-      item.onDoubleClick(directiveItem => this.onItemDetailDoubleClick(directiveItem));
-    }
   }
 
   public getDense(): boolean {
@@ -215,28 +215,22 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public onItemDetailClick(item: OListItemDirective | IListItem): void {
-    const data = item.getItemData();
-    if (this.oenabled && this.detailMode === Codes.DETAIL_MODE_CLICK) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(data);
-    }
-    ObservableWrapper.callEmit(this.onClick, data);
+    this.handleItemClick(item);
   }
 
   public onItemDetailDoubleClick(item: OListItemDirective | IListItem): void {
-    const data = item.getItemData();
-    if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-      this.saveDataNavigationInLocalStorage();
-      this.viewDetail(data);
-    }
-    ObservableWrapper.callEmit(this.onDoubleClick, data);
+    this.handleItemDblClick(item);
   }
 
   getDataToStore() {
     return this.componentStateService.getDataToStore();
   }
 
-  public reloadData(): void {
+  public reloadData(clearSelectedItems: boolean = true): void {
+    this.componentStateService.refreshSelection();
+    if (clearSelectedItems && this.selectable) {
+      this.clearSelection();
+    }
     let queryArgs: OQueryDataArgs = {};
     if (this.pageable) {
       this.state.queryRecordOffset = 0;
@@ -245,18 +239,15 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-    if (this.selectable) {
-      // this.selectedItems = [];
-      this.clearSelection();
-      this.state.selectedIndexes = [];
-    }
-    this.listItemComponents = [];
+
     this.queryData(void 0, queryArgs);
   }
 
-  public reloadPaginatedDataFromStart(): void {
-    this.dataResponseArray = [];
-    this.reloadData();
+  public reloadPaginatedDataFromStart(clearSelectedItems: boolean = true): void {
+    if (this.pageable) {
+      this.dataResponseArray = [];
+      this.reloadData(clearSelectedItems);
+    }
   }
 
   protected getSortedDataFromArray(dataArray: any[]): any[] {
@@ -264,21 +255,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public isItemSelected(item: any): boolean {
-    return this.selection.isSelected(item);
-  }
-
-  public updateSelectedState(item: object, isSelected: boolean): void {
-    const selectedIndexes = this.state.selectedIndexes || [];
-    const itemIndex = this.dataResponseArray.indexOf(item);
-    if (isSelected && selectedIndexes.indexOf(itemIndex) === -1) {
-      selectedIndexes.push(itemIndex);
-    } else if (!isSelected) {
-      selectedIndexes.splice(selectedIndexes.indexOf(itemIndex), 1);
-    }
-    this.state.selectedIndexes = selectedIndexes;
+    return this.selectable && this.selection.isSelected(item);
   }
 
   public onScroll(e: Event): void {
+    if (this.matpaginator) return;
     if (this.pageable) {
       const pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
       if (!this.loadingSubject.value && pendingRegistries) {
@@ -338,18 +319,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     return queryArguments;
   }
 
-  registerItem(item: IListItem): void {
-    this.listItemComponents.push(item);
-    if (this.dataResponseArray.length > 0) {
-      item.setItemData(this.dataResponseArray[this.listItemComponents.length - 1]);
-    }
-  }
-
   protected setListItemDirectivesData(): void {
     this.listItemDirectives.forEach((element: OListItemDirective, index) => {
-      element.setItemData(this.dataResponseArray[index]);
+      element.setItemData(this.dataArray[index]);
       element.setListComponent(this);
-      this.registerListItemDirective(element);
     });
   }
 
@@ -363,12 +336,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (this.pageable && !replace) {
       result = (this.dataResponseArray || []).concat(data);
     }
-    const selectedIndexes = this.state.selectedIndexes || [];
-    for (const selIndex of selectedIndexes) {
-      if (selIndex < this.dataResponseArray.length) {
-        this.selection.select(this.dataResponseArray[selIndex]);
-      }
-    }
     return result;
   }
 
@@ -378,5 +345,29 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       const parsedArr = Util.parseArray(this.state.quickFilterActiveColumns, true);
       this.quickFilterComponent.setActiveColumns(parsedArr);
     }
+  }
+
+  setDataArray(data: any): void {
+    super.setDataArray(data);
+    this.updateSelectedItems();
+    this.cd.detectChanges();
+  }
+
+  public setSelected(item: any): void {
+    super.setSelected(item);
+    this.componentStateService.refreshSelection();
+  }
+
+  public updateSelectedItems() {
+    if (!this.selectable || !Util.isDefined(this.state.selection) || this.getSelectedItems().length > 0) {
+      return;
+    }
+    this.state.selection.forEach(selectedItem => {
+      const itemKeys = Object.keys(selectedItem);
+      const foundItem = this.dataArray.find(data => itemKeys.every(key => data[key] === selectedItem[key]));
+      if (Util.isDefined(foundItem)) {
+        this.selection.select(foundItem);
+      }
+    });
   }
 }

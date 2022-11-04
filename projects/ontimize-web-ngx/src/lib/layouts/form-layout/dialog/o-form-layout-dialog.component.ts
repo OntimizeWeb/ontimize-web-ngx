@@ -14,6 +14,7 @@ import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-comp
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService } from '../../../services/dialog.service';
+import { Util } from '../../../util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 
 @Component({
@@ -82,15 +83,19 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     this.data = Object.assign(this.data, data);
   }
 
-  closeDialog() {
-    if (this.formLayoutManager.hasToConfirmExit(this.data)) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
-        if (res) {
-          this.dialogRef.close();
-        }
-      });
-    } else {
+  closeDialog(options?: any) {
+    if(Util.isDefined(options) && Util.isDefined(options.exitWithoutConfirmation) && options.exitWithoutConfirmation) {
       this.dialogRef.close();
+    } else {
+      if (this.formLayoutManager.hasToConfirmExit(this.data)) {
+        this.dialogService.confirm('CONFIRM', 'MESSAGES.FORM_CHANGES_WILL_BE_LOST').then(res => {
+          if (res) {
+            this.dialogRef.close();
+          }
+        });
+      } else {
+        this.dialogRef.close();
+      }
     }
   }
 
@@ -118,8 +123,8 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     return !comp.oFormLayoutDialog;
   }
 
-  closeDetail() {
-   this.closeDialog();
+  closeDetail(options) {
+   this.closeDialog(options);
   }
 
   getDataToStore(): any {

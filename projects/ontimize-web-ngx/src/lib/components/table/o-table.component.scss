@@ -50,8 +50,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-body .mat-header-row,
-      > .toolbar {
+       > .o-table-toolbar,
+      > .o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -59,7 +59,7 @@ $o_table_row_padding: 24px;
     position: relative;
     padding: 0 .5%;
 
-    .toolbar {
+    .o-table-toolbar {
       height: 40px;
 
       > div {
@@ -70,20 +70,9 @@ $o_table_row_padding: 24px;
         margin: 0 10px 0 4px;
       }
 
-      .table-title {
-        font-size: 18px;
-        font-weight: 400;
-        text-align: center;
-      }
     }
 
     .o-table-body {
-      .table-title {
-        font-size: 18px;
-        font-weight: 400;
-        text-align: center;
-      }
-      // display: block;
       max-width: 100%;
       height: 100%;
       overflow: hidden;
@@ -182,7 +171,6 @@ $o_table_row_padding: 24px;
 
         .mat-header-row,
         .mat-row {
-
           .mat-checkbox-inner-container {
             height: $mat-checkbox-size-medium;
             width: $mat-checkbox-size-medium;
@@ -211,6 +199,10 @@ $o_table_row_padding: 24px;
 
       tr.mat-row.o-table-row-expanded {
         height: 0;
+      }
+
+      tr.o-table-insertable td {
+        height: 1px;
       }
 
       .mat-row {
@@ -247,13 +239,15 @@ $o_table_row_padding: 24px;
           &.grouping-row {
             padding-top: 30px;
             cursor: pointer;
+
             .grouping-title-wrapper {
-              position:absolute;
-              width:100%;
-              left:0;
-              top:0;
+              position: absolute;
+              width: 100%;
+              left: 0;
+              top: 0;
               text-align: left;
             }
+
             .grouping-aggregate {
               font-weight: bold;
               font-size: 14px;
@@ -356,7 +350,6 @@ $o_table_row_padding: 24px;
         .o-table-header-indicator-numbered {
           font-size: 8px;
           position: absolute;
-          right: -8px;
           text-align: center;
           display: inline-block;
           width: 18px;

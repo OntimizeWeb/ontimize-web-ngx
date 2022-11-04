@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="center center">
-  <img matListAvatar class="avatar" [src]="avatarSrc" [alt]="title">
+  <img matListAvatar class="avatar" [src]="avatarSrc | oSafe:'resourceUrl'" [alt]="title">
   <div class="mat-list-text">
     <h3 matLine class="primary-text"> {{ title }} </h3>
     <h4 *ngIf="primaryText !== undefined" matLine class="primary-text">{{ primaryText }}</h4>

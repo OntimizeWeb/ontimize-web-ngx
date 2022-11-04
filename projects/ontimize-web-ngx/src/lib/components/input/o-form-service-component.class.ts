@@ -3,9 +3,10 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { DialogService } from '../../services/dialog.service';
+import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { FormValueOptions } from '../../types/form-value-options.type';
+import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
@@ -118,7 +119,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected _setValueOnValueChangeEquiv = {};
   protected _formDataSubcribe;
   protected _currentIndex;
-  protected dialogService: DialogService;
+  protected oErrorDialogManager: OErrorDialogManager;
 
   protected queryOnEventSubscription: Subscription;
   protected subscriptionDataLoad: Subscription = new Subscription();
@@ -139,7 +140,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     super(form, elRef, injector);
     this.form = form;
     this.elRef = elRef;
-    this.dialogService = injector.get(DialogService);
+    this.oErrorDialogManager = injector.get(OErrorDialogManager);
   }
 
   initialize() {
@@ -233,23 +234,10 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   /* Utility methods */
   configureService() {
-    let loadingService: any = OntimizeService;
-    if (this.serviceType) {
-      loadingService = this.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get<any>(loadingService);
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    this.dataService = Util.configureService(configureServiceArgs);
 
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.service);
-        if (this.entity) {
-          serviceCfg.entity = this.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+
   }
 
   getAttributesValuesToQuery(columns?: Array<any>) {
@@ -293,10 +281,9 @@ export class OFormServiceComponent extends OFormDataComponent {
           this.loaderSubscription.unsubscribe();
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
-          } else if (err && !Util.isObject(err)) {
-            this.dialogService.alert('ERROR', err);
           } else {
-            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
+            this.oErrorDialogManager.openErrorDialog(err);
+            console.error(err);
           }
         });
     }

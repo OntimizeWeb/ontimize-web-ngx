@@ -1,5 +1,5 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div [formGroup]="formGroup" class="o-table-cell-editor-time" fxLayout="row" fxLayoutAlign="space-between center"
+  <div [formGroup]="formGroup" class="o-table-cell-editor-time o-table-cell-editor" fxLayout="row" fxLayoutAlign="space-between center"
     fxLayoutGap="8px">
     <mat-form-field floatLabel="never">
 
@@ -15,19 +15,24 @@
         <mat-icon svgIcon="ontimize:today"></mat-icon>
       </span>
 
-      <mat-error *ngIf="hasErrorDate('required') || hasErrorHour('required')"
-        text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
-      <mat-error *ngIf="hasErrorDate('matDatepickerParse')"
-        text="{{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oHourFormat }}"></mat-error>
-
-      <mat-error *ngIf="hasErrorDate('matDatepickerFilter')" text="{{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}">
+      <mat-error *oMatError="hasErrorDate('required') || hasErrorHour('required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>
-      <mat-error *ngIf="hasErrorDate('matDatepickerMin')"
-        text="{{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}"></mat-error>
-
-      <mat-error *ngIf="hasErrorDate('matDatepickerMax')"
-        text="{{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}"></mat-error>
-      <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ getErrorText(oError) }}"></mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerParse')">
+        {{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oHourFormat }}
+      </mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerFilter')">
+        {{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}
+      </mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerMin')">
+        {{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}
+      </mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerMax')">
+        {{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}
+      </mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()">
+        {{ getErrorText(oError) }}
+      </mat-error>
 
     </mat-form-field>
 
@@ -44,9 +49,12 @@
         <mat-icon ngxMaterialTimepickerToggleIcon svgIcon="ontimize:clock"></mat-icon>
       </button>
 
-      <mat-error *ngIf="hasErrorHour('invalidFormatHour')"
-        text="{{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}"></mat-error>
-      <mat-error *ngFor="let oError of getActiveOErrors()" text="{{ oError.text | oTranslate }}"></mat-error>
+      <mat-error *oMatError="hasErrorHour('invalidFormatHour')">
+        {{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}
+      </mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()">
+        {{ oError.text | oTranslate }}
+      </mat-error>
 
     </mat-form-field>
 

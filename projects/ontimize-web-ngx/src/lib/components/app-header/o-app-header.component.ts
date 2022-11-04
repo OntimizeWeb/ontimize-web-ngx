@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
 import { Observable } from 'rxjs';
 
@@ -15,7 +15,9 @@ export const DEFAULT_INPUTS_O_APP_HEADER = [
   'useFlagIcons: use-flag-icons',
   'color',
   'headerHeight:header-height',
-  'showTitle: show-title'
+  'showTitle: show-title',
+  'staticTitle: static-title',
+  'showStaticTitle: show-static-title'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_HEADER = [
@@ -41,8 +43,9 @@ export class OAppHeaderComponent {
   protected dialogService: DialogService;
   protected modulesInfoService: OModulesInfoService;
   protected authService: AuthService;
-
   public showTitle = false;
+  public showStaticTitle = false;
+  public staticTitle: string;
   public headerTitle$: Observable<string>;
 
   @ViewChild('userInfo', { static: false })
@@ -74,17 +77,18 @@ export class OAppHeaderComponent {
   constructor(
     protected injector: Injector,
   ) {
-    this.dialogService = this.injector.get(DialogService);
-    this.modulesInfoService = this.injector.get(OModulesInfoService);
-    this.authService = this.injector.get(AuthService);
-
-    this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable();
+    this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
+    this.modulesInfoService = this.injector.get<OModulesInfoService>(OModulesInfoService as Type<OModulesInfoService>);
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
   }
-
+  ngOnInit() {
+    if (!this.showStaticTitle) {
+      this.headerTitle$ = this.modulesInfoService.getModuleChangeObservable();
+    }
+  }
   onLogoutClick() {
     this.authService.logoutWithConfirmation();
   }
-
   set color(newValue: ThemePalette) {
     this._color = newValue;
   }

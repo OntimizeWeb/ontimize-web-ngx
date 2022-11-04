@@ -43,6 +43,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
       'filter-columns',
       'filter-column-active',
       'grouped-columns',
+      'grouped-column-types',
       'user-stored-filters',
       'user-stored-configurations'
     ];
@@ -54,8 +55,8 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
     const storedFilter = {}
     Object.assign(storedFilter, this.getColumnFiltersState());
     Object.assign(storedFilter, this.getColumnsQuickFilterState());
+    Object.assign(storedFilter, this.getFilterBuilderState());
     newFilter['stored-filter'] = storedFilter as OTableStoredFilter;
-
     this.state.addStoredFilter(newFilter);
   }
 
@@ -105,9 +106,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
         result = this.getInitialConfigurationState();
         break;
       case 'filter-column-active':
-        if (this.component.oTableColumnsFilterComponent) {
           result['filter-column-active'] = this.component.isColumnFiltersActive;
-        }
         break;
       case 'filter-columns':
         result['filter-columns'] = this.component.filterColumns;
@@ -115,11 +114,19 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
       case 'grouped-columns':
         result['grouped-columns'] = this.component.groupedColumnsArray;
         break;
+      case 'grouped-column-types':
+        result['grouped-column-types'] = this.component.groupedColumnTypes;
+        break;
       case 'user-stored-filters':
         result['user-stored-filters'] = this.state.storedFilters;
         break;
       case 'user-stored-configurations':
         result['user-stored-configurations'] = this.state.storedConfigurations;
+        break;
+      case 'filter-builder':
+        if (this.component.filterBuilder) {
+          result['filter-builder'] = this.component.filterBuilder.getFilterValues();
+        }
         break;
     }
     return result;
@@ -157,9 +164,21 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
     };
   }
 
+  protected getFilterBuilderState(): any {
+    const result = {};
+    if (this.component.filterBuilder) {
+      let filterBuilder = this.component.filterBuilder.getFilterValues();
+      if (!Util.isObjectEmpty(filterBuilder)) {
+        result['filter-builder-values'] = filterBuilder;
+      }
+    }
+    return result;
+  }
+
+
   protected getColumnFiltersState() {
     const result = {};
-    if (this.component.oTableColumnsFilterComponent && this.component.dataSource) {
+    if (this.component.dataSource) {
       const columnValueFilters = this.component.dataSource.getColumnValueFilters();
       if (columnValueFilters.length > 0) {
         result['column-value-filters'] = columnValueFilters;
