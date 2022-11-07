@@ -24,6 +24,8 @@ import { O_REPORT_SERVICE } from '../../../../../services/factories';
 import { OntimizeExportDataProviderService } from '../../../../../services/ontimize-export-data-provider.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
+import { OLoadFilterDialogComponent } from '../../../../../shared/components/filter/load-filter/o-load-filter-dialog.component';
+import { OStoreFilterDialogComponent } from '../../../../../shared/components/filter/store-filter/o-store-filter-dialog.component';
 import { OPermissions } from '../../../../../types/o-permissions.type';
 import { OTableMenuPermissions } from '../../../../../types/table/o-table-menu-permissions.type';
 import { PermissionsUtils } from '../../../../../util/permissions';
@@ -35,15 +37,11 @@ import {
   OTableApplyConfigurationDialogComponent
 } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
-import { OTableLoadFilterDialogComponent } from '../../dialog/load-filter/o-table-load-filter-dialog.component';
 import {
   OTableStoreConfigurationDialogComponent
 } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
-import { OTableStoreFilterDialogComponent } from '../../dialog/store-filter/o-table-store-filter-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
-
-
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
@@ -401,7 +399,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   public onStoreFilterClicked(): void {
-    const dialogRef = this.dialog.open(OTableStoreFilterDialogComponent, {
+    const dialogRef = this.dialog.open(OStoreFilterDialogComponent, {
       data: this.table.state.storedFilters.map(filter => filter.name),
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
@@ -418,7 +416,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   public onLoadFilterClicked(): void {
-    const dialogRef = this.dialog.open(OTableLoadFilterDialogComponent, {
+    const dialogRef = this.dialog.open(OLoadFilterDialogComponent, {
       data: this.table.state.storedFilters,
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
