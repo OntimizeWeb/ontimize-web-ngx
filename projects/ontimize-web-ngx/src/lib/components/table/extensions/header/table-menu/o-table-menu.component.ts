@@ -22,8 +22,7 @@ import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
 import { DialogService } from '../../../../../services/dialog.service';
 
-import { O_CHART_ON_DEMAND_SERVICE } from '../../../../../services/factories';
-import { O_REPORT_SERVICE } from '../../../../../services/factories';
+import { O_CHART_ON_DEMAND_SERVICE, O_REPORT_SERVICE } from '../../../../../services/factories';
 import { OntimizeExportDataProviderService } from '../../../../../services/ontimize-export-data-provider.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
