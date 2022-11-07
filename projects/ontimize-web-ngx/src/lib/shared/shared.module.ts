@@ -74,7 +74,7 @@ import { OCustomMaterialModule } from './material/custom.material.module';
     OLoadFilterDialogComponent,
     OStoreFilterDialogComponent
   ],
-  entryComponents: [Error403Component]
+  entryComponents: [Error403Component, OStoreFilterDialogComponent, OLoadFilterDialogComponent]
 })
 export class OSharedModule {
 }
