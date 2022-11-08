@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OFilterBuilderComponent } from '../../components';
+import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { AbstractComponentStateService } from './o-component-state.service';
 import { OFilterBuilderComponentStateClass } from './o-filter-builder-component-state.class';
 
@@ -15,6 +16,12 @@ export class OFilterBuilderComponentStateService extends AbstractComponentStateS
     super.initializeState(state);
   }
 
+  storeFilter(newFilter: OTableFiltersStatus) {
+    const storedFilter = {}
+    Object.assign(storedFilter, this.component.getFilterValues());
+    newFilter['filter-builder-values'] = storedFilter as OTableStoredFilter;
+    this.state.addStoredFilter(newFilter);
+  }
 
 }
 

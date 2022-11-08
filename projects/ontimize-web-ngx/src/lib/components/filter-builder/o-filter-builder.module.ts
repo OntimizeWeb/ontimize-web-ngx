@@ -5,7 +5,8 @@ import { OSharedModule } from '../../shared/shared.module';
 import { OFilterBuilderClearDirective } from './o-filter-builder-clear.directive';
 import { OFilterBuilderQueryDirective } from './o-filter-builder-query.directive';
 import { OFilterBuilderComponent } from './o-filter-builder.component';
-import { OFilterBuilderQueryButtonComponent } from './filter-builder-query-button/filter-builder-query-button.component';
+import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
+import { OFilterBuilderMenuComponent } from './filter-builder-menu/filter-builder-menu.component';
 
 @NgModule({
   imports: [
@@ -16,13 +17,16 @@ import { OFilterBuilderQueryButtonComponent } from './filter-builder-query-butto
     OFilterBuilderComponent,
     OFilterBuilderClearDirective,
     OFilterBuilderQueryDirective,
-    OFilterBuilderQueryButtonComponent
+    OFilterBuilderMenuComponent
   ],
   exports: [
     OFilterBuilderComponent,
     OFilterBuilderClearDirective,
     OFilterBuilderQueryDirective,
-    OFilterBuilderQueryButtonComponent
+    OFilterBuilderMenuComponent
+  ],
+  providers: [
+    OFilterBuilderComponentStateService
   ]
 })
 export class OFilterBuilderModule { }

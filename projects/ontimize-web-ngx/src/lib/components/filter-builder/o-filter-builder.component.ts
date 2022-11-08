@@ -7,10 +7,12 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IFilterBuilderCmpTarget } from '../../interfaces/filter-builder-component-target.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
+import { OFilterBuilderComponentStateClass } from '../../services/state/o-filter-builder-component-state.class';
 import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
+import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
@@ -77,10 +79,11 @@ export class OFilterBuilderComponent extends OFilterBuilderComponentStateService
   public oattr: string;
   protected componentStateService: OFilterBuilderComponentStateService;
   constructor(
-    injector: Injector, elRef: ElementRef<any>,
+    injector: Injector,
     @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent
   ) {
     super(injector)
+    this.componentStateService = this.injector.get<OFilterBuilderComponentStateService>(OFilterBuilderComponentStateService);
   }
 
   ngOnInit(): void {
@@ -252,6 +255,7 @@ export class OFilterBuilderComponent extends OFilterBuilderComponentStateService
     return this.filterComponents.map((elem: IFilterBuilderCmpTarget) => elem.formComponentAttr);
   }
 
+
   /**
   * Method update store localstorage, call of the ILocalStorage
   */
@@ -259,18 +263,29 @@ export class OFilterBuilderComponent extends OFilterBuilderComponentStateService
     return this.componentStateService.state;
   }
 
+  // get state(): OFilterBuilderComponentStateClass {
+  //   return this.componentStateService.state;
+  // }
+
   getComponentKey(): string {
     return 'OFilterBuilderComponent_' + this.oattr;
   }
 
-
-  storeFilterBuilder() {
-    //this.componentStateService.storeFilterBuilder();
+  storeFilterInState(arg: OTableFiltersStatus) {
+    this.componentStateService.storeFilter(arg);
+    this.updateStateStorage();
   }
 
-  loadFilterBuilder() {
-
+  protected updateStateStorage(): void {
+    if (this.localStorageService) {
+      console.log('updateStateStorage filter builder: ', this, this.getRouteKey())
+      this.localStorageService.updateComponentStorage(this, this.getRouteKey());
+    }
   }
 
-
+  setFiltersConfiguration(storage: OFilterBuilderComponentStateClass = this.state) {
+    if (Util.isDefined(storage.filterBuilderValues)) {
+      this.setFilterValues(storage.filterBuilderValues);
+    }
+  }
 }

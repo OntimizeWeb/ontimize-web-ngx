@@ -1,4 +1,5 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { Util } from '../../util';
@@ -12,22 +13,40 @@ export abstract class AbstractComponentStateService<S extends AbstractComponentS
 
   protected component: C;
   public state: S;
+  protected router: Router;
+  protected actRoute: ActivatedRoute;
 
   constructor(protected injector: Injector) {
-    this.localStorageService = injector.get(LocalStorageService);
+    this.localStorageService = injector.get<LocalStorageService>(LocalStorageService);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.actRoute = this.injector.get<ActivatedRoute>(ActivatedRoute as Type<ActivatedRoute>);
   }
 
-  initialize(comp: C) {
+  public initialize(comp: C) {
     this.component = comp;
     if (Util.isDefined(this.state)) {
       this.initializeState(this.state);
     }
   }
 
-  initializeState(state: S) {
-    if (Util.isDefined(this.state) && this.component.storeState) {
+  public initializeState(state: S) {
+    if (Util.isDefined(this.state) &&
+      ((Util.isDefined(this.component.storeState) && this.component.storeState
+        ||
+        !Util.isDefined(this.component.storeState)))
+    ) {
       state.setData(this.localStorageService.getComponentStorage(this.component, this.component.getRouteKey()));
     }
+  }
+
+  public getRouteKey(): string {
+    let route = this.router.url;
+    this.actRoute.params.subscribe(params => {
+      Object.keys(params).forEach(key => {
+        route = route.replace(params[key], key);
+      });
+    });
+    return route;
   }
 }
 
