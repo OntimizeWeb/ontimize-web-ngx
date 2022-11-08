@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OFilterBuilderQueryButtonComponent } from './filter-builder-query-button.component';
+import { OFilterBuilderMenuComponent } from './filter-builder-menu.component';
 
 describe('FilterBuilderQueryButtonComponent', () => {
-  let component: OFilterBuilderQueryButtonComponent;
-  let fixture: ComponentFixture<OFilterBuilderQueryButtonComponent>;
+  let component: OFilterBuilderMenuComponent;
+  let fixture: ComponentFixture<OFilterBuilderMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OFilterBuilderQueryButtonComponent ]
+      declarations: [OFilterBuilderMenuComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OFilterBuilderQueryButtonComponent);
+    fixture = TestBed.createComponent(OFilterBuilderMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

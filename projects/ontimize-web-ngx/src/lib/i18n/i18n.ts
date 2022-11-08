@@ -287,10 +287,12 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'month and year',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'year',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'day, month and year',
-    'FILTERBUILDER.BUTTONS.FILTER': 'Filter',
-    'FILTERBUILDER.BUTTONS.SAVE_FILTER': 'Save filter',
-    'FILTERBUILDER.BUTTONS.LOAD_FILTER': 'Load filter',
-    'FILTERBUILDER.BUTTONS.CLEAR_FILTER': 'Clear filter'
+    'FILTERBUILDERMENU.BUTTONS.ARIALBUTTON': 'Filter menu',
+    'FILTERBUILDERMENU.BUTTONS.FILTER': 'Filter',
+    'FILTERBUILDERMENU.BUTTONS.SAVE_FILTER': 'Save filter',
+    'FILTERBUILDERMENU.BUTTONS.LOAD_FILTER': 'Load filter',
+    'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Clear filter',
+    'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'This action will clear every filter on this section. Are you sure you want to continue?'
   },
 
   // Spanish
@@ -572,10 +574,12 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mes y año',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'año',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'día, mes y año',
-    'FILTERBUILDER.BUTTONS.FILTER': 'Filtrar',
-    'FILTERBUILDER.BUTTONS.SAVE_FILTER': 'Guardar filtro',
-    'FILTERBUILDER.BUTTONS.LOAD_FILTER': 'Cargar filtro',
-    'FILTERBUILDER.BUTTONS.CLEAR_FILTER': 'Limpiar filtro'
+    'FILTERBUILDERMENU.BUTTONS.ARIALBUTTON': 'Menú de filtro',
+    'FILTERBUILDERMENU.BUTTONS.FILTER': 'Filtrar',
+    'FILTERBUILDERMENU.BUTTONS.SAVE_FILTER': 'Guardar filtro',
+    'FILTERBUILDERMENU.BUTTONS.LOAD_FILTER': 'Cargar filtro',
+    'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Limpiar filtro',
+    'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros de esta sección. ¿Desea continuar?',
   },
   // Portuguese - BRAZIL
   pt: {
@@ -843,9 +847,11 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mês e ano',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'ano',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'dia, mês e ano',
-    'FILTERBUILDER.BUTTONS.FILTER': 'Filtro',
-    'FILTERBUILDER.BUTTONS.SAVE_FILTER': 'Salvar filtro',
-    'FILTERBUILDER.BUTTONS.LOAD_FILTER': 'Filtro de carga',
-    'FILTERBUILDER.BUTTONS.CLEAR_FILTER': 'Filtro limpo'
+    'FILTERBUILDERMENU.BUTTONS.ARIALBUTTON': 'Menu de filtro',
+    'FILTERBUILDERMENU.BUTTONS.FILTER': 'Filtro',
+    'FILTERBUILDERMENU.BUTTONS.SAVE_FILTER': 'Salvar filtro',
+    'FILTERBUILDERMENU.BUTTONS.LOAD_FILTER': 'Filtro de carga',
+    'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Filtro limpo',
+    'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta ação limpará todos os filtros nesta seção. Você tem certeza que quer continuar?',
   }
-};
+}
