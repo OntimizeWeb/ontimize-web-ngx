@@ -43,7 +43,7 @@ export class OFilterBuilderMenuComponent {
 
   public onStoreFilterClicked(): void {
     const dialogRef = this.dialog.open(OStoreFilterDialogComponent, {
-      data: this._filterBuilder.getDataToStore().storedFilters.map(filter => filter.name),
+      data: this._filterBuilder.state.storedFilterBuilders.map(filter => filter.name),
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
       minWidth: '30vw',
@@ -61,7 +61,7 @@ export class OFilterBuilderMenuComponent {
 
   public onLoadFilterClicked(): void {
     const dialogRef = this.dialog.open(OLoadFilterDialogComponent, {
-      data: this._filterBuilder.getDataToStore().storedFilters,
+      data: this._filterBuilder.state.storedFilterBuilders,
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
       minWidth: '30vw',
@@ -74,8 +74,8 @@ export class OFilterBuilderMenuComponent {
       if (result) {
         const selectedFilterName: string = dialogRef.componentInstance.getSelectedFilterName();
         if (selectedFilterName) {
-          this._filterBuilder.getDataToStore().applyFilter(selectedFilterName);
-          this._filterBuilder.setFiltersConfiguration();
+          this._filterBuilder.state.applyFilter(selectedFilterName);
+          this._filterBuilder.setFilterValues(this._filterBuilder.state.filterBuilderValues)
           this._filterBuilder.triggerReload();
         }
       }
@@ -94,7 +94,4 @@ export class OFilterBuilderMenuComponent {
       this._filterBuilder.triggerReload();
     }
   }
-
-
-
 }

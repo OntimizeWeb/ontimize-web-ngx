@@ -11,8 +11,7 @@ import { OFilterBuilderComponentStateClass } from '../../services/state/o-filter
 import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
-import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
-import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.type';
+import { OFilterBuilderStatus, OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
@@ -229,7 +228,6 @@ export class OFilterBuilderComponent extends OFilterBuilderComponentStateService
           result.push({ attr: filterComponent.formComponentAttr, value: this.form.getComponents()[filterComponent.formComponentAttr].getValue() });
         }
       });
-
     return result;
 
   }
@@ -254,38 +252,37 @@ export class OFilterBuilderComponent extends OFilterBuilderComponentStateService
   protected getFilterAttrs(): Array<string> {
     return this.filterComponents.map((elem: IFilterBuilderCmpTarget) => elem.formComponentAttr);
   }
-
-
   /**
-  * Method update store localstorage, call of the ILocalStorage
-  */
-  getDataToStore() {
+   * Gets state
+   */
+  get state(): OFilterBuilderComponentStateClass {
     return this.componentStateService.state;
   }
 
-  // get state(): OFilterBuilderComponentStateClass {
-  //   return this.componentStateService.state;
-  // }
+
+  getDataToStore() {
+    return this.componentStateService.state;
+  }
 
   getComponentKey(): string {
     return 'OFilterBuilderComponent_' + this.oattr;
   }
 
-  storeFilterInState(arg: OTableFiltersStatus) {
+  /**
+   * Stores filter in state
+   * @param arg
+   */
+  storeFilterInState(arg: OFilterBuilderStatus) {
     this.componentStateService.storeFilter(arg);
     this.updateStateStorage();
   }
-
+  /**
+   * Method update store localstorage, call of the ILocalStorage
+   */
   protected updateStateStorage(): void {
     if (this.localStorageService) {
-      console.log('updateStateStorage filter builder: ', this, this.getRouteKey())
       this.localStorageService.updateComponentStorage(this, this.getRouteKey());
     }
   }
 
-  setFiltersConfiguration(storage: OFilterBuilderComponentStateClass = this.state) {
-    if (Util.isDefined(storage.filterBuilderValues)) {
-      this.setFilterValues(storage.filterBuilderValues);
-    }
-  }
 }
