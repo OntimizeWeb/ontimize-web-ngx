@@ -1,5 +1,4 @@
-import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
-import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
+import { OFilterBuilderStatus, OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { Util } from '../../util';
 import { DefaultComponentStateClass } from './o-component-state.class';
 
@@ -8,39 +7,39 @@ export class OFilterBuilderComponentStateClass extends DefaultComponentStateClas
   // stored filters builder values
   filterBuilderValues: OFilterBuilderValues[];
 
-  get storedFilters(): OTableFiltersStatus[] {
-    return this['stored-filters'] || [];
+  get storedFilterBuilders(): OFilterBuilderStatus[] {
+    return this['stored-filter-builders'] || [];
   }
 
-  set storedFilters(value: OTableFiltersStatus[]) {
-    this['stored-filters'] = value;
+  set storedFilterBuilders(value: OFilterBuilderStatus[]) {
+    this['stored-filter-builders'] = value;
   }
 
-  addStoredFilter(filter: OTableFiltersStatus) {
-    if (!Util.isDefined(this['stored-filters'])) {
-      this['stored-filters'] = [];
+  addStoredFilter(filter: OFilterBuilderStatus) {
+    if (!Util.isDefined(this['stored-filter-builders'])) {
+      this['stored-filter-builders'] = [];
     }
-    this.storedFilters.push(filter);
+    this.storedFilterBuilders.push(filter);
   }
 
   deleteStoredFilter(filterName: string) {
-    const index = this.storedFilters.findIndex((item: OTableFiltersStatus) => item.name === filterName);
+    const index = this.storedFilterBuilders.findIndex((item: OFilterBuilderStatus) => item.name === filterName);
     if (index >= 0) {
-      this.storedFilters.splice(index, 1);
+      this.storedFilterBuilders.splice(index, 1);
     }
   }
   applyFilter(filterName: string) {
     const filter = this.getStoredFilter(filterName);
     if (filter) {
-      this.filterBuilderValues = filter['filter-builder-values'];
+      this.filterBuilderValues = filter;
     }
   }
 
-  getStoredFilter(filterName: string): OTableStoredFilter {
-    let result: OTableStoredFilter;
-    const filter = this.storedFilters.find((item: OTableFiltersStatus) => item.name === filterName);
-    if (filter) {
-      result = filter['stored-filter'];
+  getStoredFilter(filterName: string): OFilterBuilderValues[] {
+    let result = [];
+    const filter = this.storedFilterBuilders.find((item: OFilterBuilderStatus) => item.name === filterName);
+    if (Util.isDefined(filter)) {
+      result = filter['filter-builder-values'];
     }
     return result;
   }
