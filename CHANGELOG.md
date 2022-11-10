@@ -1,7 +1,7 @@
 ## 8.9.0
 ### Features:
 * **o-filter-builder**:
-  * New component `o-filter-builder-menu` that allows *Load/Save/Clear* filter builder configuration Closes[#1001](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1001) ([0abf043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0abf043))
+  * New component `o-filter-builder-menu` that allows *Load/Save/Clear* filter builder configuration Closes[#1005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1005) ([0abf043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0abf043))
   * new `OFilterBuilderStatus` type ([5a9618d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a9618d))
   * **o-filter-builder**: now `attr` is required for setting filter builder status in the localstorage. ([63bd1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63bd1fc))
 
