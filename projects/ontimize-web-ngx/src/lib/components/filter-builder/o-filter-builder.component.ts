@@ -273,6 +273,11 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   getComponentKey(): string {
+    if (!Util.isDefined(this.oattr)) {
+      console.error('Your o-filter-builder component must have an \'attr\'. Otherwise, your filter builder state will not set in localstorage.');
+      return 'OFilterBuilderComponent_';
+    }
+
     return 'OFilterBuilderComponent_' + this.oattr;
   }
 
