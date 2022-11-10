@@ -7,7 +7,6 @@ import { OTableBaseDialogClass } from '../../../../components/table/extensions/d
 @Component({
   selector: 'o-store-filter-dialog',
   templateUrl: './o-store-filter-dialog.component.html',
-  styleUrls: ['./o-store-filter-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OStoreFilterDialogComponent extends OTableBaseDialogClass {

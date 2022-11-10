@@ -18,7 +18,6 @@ import { OTableFiltersStatus } from '../../../../types/table/o-table-filter-stat
 @Component({
   selector: 'o-load-filter-dialog',
   templateUrl: './o-load-filter-dialog.component.html',
-  styleUrls: ['./o-load-filter-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OLoadFilterDialogComponent implements OnInit {
