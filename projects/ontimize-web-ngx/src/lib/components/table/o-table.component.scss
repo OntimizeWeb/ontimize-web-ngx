@@ -38,7 +38,7 @@ $o_table_row_padding: 24px;
 
       &.horizontal-scroll {
         .o-table-overflow {
-          overflow-x: visible;
+          overflow-x: auto;
         }
       }
 
