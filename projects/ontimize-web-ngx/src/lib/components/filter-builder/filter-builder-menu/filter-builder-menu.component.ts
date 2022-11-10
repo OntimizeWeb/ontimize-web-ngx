@@ -86,6 +86,7 @@ export class OFilterBuilderMenuComponent {
     this.dialogService.confirm('CONFIRM', 'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER').then(result => {
       if (result) {
         this._filterBuilder.clearFilter();
+        this._filterBuilder.triggerReload();
       }
     });
   }
