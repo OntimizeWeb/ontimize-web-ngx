@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -7,6 +8,7 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IFilterBuilderCmpTarget } from '../../interfaces/filter-builder-component-target.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
+import { LocalStorageService } from '../../services/local-storage.service';
 import { OFilterBuilderComponentStateClass } from '../../services/state/o-filter-builder-component-state.class';
 import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
 import { BasicExpression } from '../../types/basic-expression.type';
@@ -53,11 +55,12 @@ export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
   inputs: DEFAULT_INPUTS_O_FILTER_BUILDER,
   outputs: DEFAULT_OUTPUTS_O_FILTER_BUILDER
 })
+
 /**
  * The OFilterBuilderComponent.
  */
 
-export class OFilterBuilderComponent extends OFilterBuilderComponentStateService implements AfterViewInit, OnDestroy, OnInit {
+export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public onFilter: EventEmitter<any> = new EventEmitter<any>();
   public onClear: EventEmitter<any> = new EventEmitter<any>();
@@ -77,12 +80,17 @@ export class OFilterBuilderComponent extends OFilterBuilderComponentStateService
   protected subscriptions: Subscription = new Subscription();
   public oattr: string;
   protected componentStateService: OFilterBuilderComponentStateService;
+  protected localStorageService: LocalStorageService;
+  protected router: Router;
+  protected actRoute: ActivatedRoute;
   constructor(
-    injector: Injector,
+    protected injector: Injector,
     @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent
   ) {
-    super(injector)
+    this.localStorageService = this.injector.get(LocalStorageService);
     this.componentStateService = this.injector.get<OFilterBuilderComponentStateService>(OFilterBuilderComponentStateService);
+    this.router = this.injector.get<Router>(Router);
+    this.actRoute = this.injector.get<ActivatedRoute>(ActivatedRoute);
   }
 
   ngOnInit(): void {
@@ -285,4 +293,13 @@ export class OFilterBuilderComponent extends OFilterBuilderComponentStateService
     }
   }
 
+  public getRouteKey(): string {
+    let route = this.router.url;
+    this.actRoute.params.subscribe(params => {
+      Object.keys(params).forEach(key => {
+        route = route.replace(params[key], key);
+      });
+    });
+    return route;
+  }
 }

@@ -1,5 +1,4 @@
-import { Injectable, Injector, Type } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Injectable, Injector } from '@angular/core';
 
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { Util } from '../../util';
@@ -13,13 +12,9 @@ export abstract class AbstractComponentStateService<S extends AbstractComponentS
 
   protected component: C;
   public state: S;
-  protected router: Router;
-  protected actRoute: ActivatedRoute;
 
   constructor(protected injector: Injector) {
     this.localStorageService = injector.get<LocalStorageService>(LocalStorageService);
-    this.router = this.injector.get<Router>(Router as Type<Router>);
-    this.actRoute = this.injector.get<ActivatedRoute>(ActivatedRoute as Type<ActivatedRoute>);
   }
 
   public initialize(comp: C) {
@@ -37,16 +32,6 @@ export abstract class AbstractComponentStateService<S extends AbstractComponentS
     ) {
       state.setData(this.localStorageService.getComponentStorage(this.component, this.component.getRouteKey()));
     }
-  }
-
-  public getRouteKey(): string {
-    let route = this.router.url;
-    this.actRoute.params.subscribe(params => {
-      Object.keys(params).forEach(key => {
-        route = route.replace(params[key], key);
-      });
-    });
-    return route;
   }
 }
 
