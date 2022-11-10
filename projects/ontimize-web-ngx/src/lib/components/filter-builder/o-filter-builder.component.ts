@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
