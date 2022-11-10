@@ -8,9 +8,11 @@ import { OFilterBuilderComponent } from '../o-filter-builder.component';
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER_MENU = [
   '_filterBuilder: oFilterBuilder',
+  // icon [string]: Name of google icon (see https://design.google.com/icons/)
   'icon',
+  // Name of svg icon
   'svgIcon : svg-icon',
-  //show-clear-filter-option [yes|no|true|false]: show clear filter option in the filter builder menu
+  // show-clear-filter-option [yes|no|true|false]: show clear filter option in the filter builder menu
   'showClearFilterOption: show-clear-filter-option',
   // show-filter-option [yes|no|true|false]: show filter option in the filter builder menu
   'showFilterOption: show-filter-option'
@@ -54,7 +56,6 @@ export class OFilterBuilderMenuComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this._filterBuilder.storeFilterInState(dialogRef.componentInstance.getFilterAttributes());
-
       }
     });
   }
@@ -90,6 +91,7 @@ export class OFilterBuilderMenuComponent {
       }
     });
   }
+
   onFilterClicked() {
     if (this._filterBuilder) {
       this._filterBuilder.triggerReload();
