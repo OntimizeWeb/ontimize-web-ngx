@@ -216,7 +216,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // virtual-scroll [yes|no|true|false]: Whether enabled or not the virtual scroll
   'virtualScroll: virtual-scroll',
 
-  // context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
+  //context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
   'contextMenu: context-menu',
 
   // show-expandable-icon-function [function]: Expandable function to check if expandable has data to show or not icon
@@ -224,6 +224,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the table menu. Default: yes.
   'showReportOnDemandOption: show-report-on-demand-option',
+
+  // show-charts-on-demand-option [yes|no|true|false]: show charts on demand option in the header menu
+  'showChartsOnDemandOption: show-charts-on-demand-option',
 
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
   'showResetWidthOption: show-reset-width-option'
@@ -351,6 +354,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   showFilterOption: boolean = true;
   @InputConverter()
   showReportOnDemandOption: boolean = true;
+  @InputConverter()
+  showChartsOnDemandOption: boolean = true;
   @InputConverter()
   showButtonsText: boolean = true;
   @InputConverter()

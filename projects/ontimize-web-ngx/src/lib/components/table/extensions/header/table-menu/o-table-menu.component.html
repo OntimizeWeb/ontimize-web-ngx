@@ -10,8 +10,8 @@
 
   <o-table-option #exportButtonOption *ngIf="showExportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"></o-table-option>
   <o-table-option (onClick)="onReportOnDemandClicked()" label="TABLE.BUTTONS.REPORT_ON_DEMAND" *ngIf="showReportOnDemandButton"></o-table-option>
-
-  <mat-divider *ngIf=" showExportButton || showReportOnDemandButton"></mat-divider>
+  <o-table-option *ngIf="showChartsOnDemandButton" (onClick)="onChartsOnDemandClicked()" label="TABLE.BUTTONS.CHART_ON_DEMAND"></o-table-option>
+  <mat-divider *ngIf=" showExportButton || showReportOnDemandButton || showChartsOnDemandButton"></mat-divider>
 
   <o-table-option #columnsGroupByOption *ngIf="showGroupByButton" (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
 
