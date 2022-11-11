@@ -5,6 +5,6 @@ export type OFilterBuilderValues = {
 
 export type OFilterBuilderStatus = {
   name: string;
-  description: string;
-  'stored-filter': OFilterBuilderValues[];
+  description?: string;
+  'stored-filter'?: OFilterBuilderValues[];
 }

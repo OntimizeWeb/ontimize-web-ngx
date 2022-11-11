@@ -16,7 +16,8 @@ export class OFilterBuilderComponentStateService extends AbstractComponentStateS
     super.initializeState(state);
   }
 
-  storeFilter(newFilter: OFilterBuilderStatus) {
+  storeFilter(filter: OFilterBuilderStatus) {
+    let newFilter: OFilterBuilderStatus = { name: filter.name, description: filter.description };
     const storedFilter = [...this.component.getFilterValues()];
     newFilter['filter-builder-values'] = storedFilter;
     this.state.addStoredFilter(newFilter);

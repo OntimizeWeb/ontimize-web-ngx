@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { OTableBaseDialogClass } from '../../../../components/table/extensions/dialog/o-table-base-dialog.class';
+import { OFilterDefinition } from '../../../../types/o-filter-definition.type';
 
 @Component({
   selector: 'o-store-filter-dialog',
@@ -34,7 +35,7 @@ export class OStoreFilterDialogComponent extends OTableBaseDialogClass {
     this.filterNames = filterNames;
   }
 
-  getFilterAttributes(): any {
+  getFilterAttributes(): OFilterDefinition {
     return this.formGroup.value;
   }
 

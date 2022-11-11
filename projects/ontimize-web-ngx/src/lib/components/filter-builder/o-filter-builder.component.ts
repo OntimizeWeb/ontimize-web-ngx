@@ -11,9 +11,10 @@ import { IServiceDataComponent } from '../../interfaces/service-data-component.i
 import { LocalStorageService } from '../../services/local-storage.service';
 import { OFilterBuilderComponentStateClass } from '../../services/state/o-filter-builder-component-state.class';
 import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
+import { OFilterDefinition } from '../../types';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
-import { OFilterBuilderStatus, OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
+import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
@@ -285,7 +286,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
    * Stores filter in state
    * @param arg
    */
-  storeFilterInState(arg: OFilterBuilderStatus) {
+  storeFilterInState(arg: OFilterDefinition) {
     this.componentStateService.storeFilter(arg);
     this.updateStateStorage();
   }
