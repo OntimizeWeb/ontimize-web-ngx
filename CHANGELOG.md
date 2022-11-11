@@ -1,4 +1,6 @@
 ## 8.8.1
+***o-button-toggle**: Fixed `o-button-toggle` labels inside `o-button-toggle-group` not being translated ([13c131e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/13c131e)) Closes[#1073](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1073)
+
 ## 8.8.0 (2022-10-25)
 ### Features:
 * **o-table**:
