@@ -18,13 +18,13 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout merge commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Node 12.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 12.13.0
           registry-url: ${{ env.NPM_REGISTRY }}

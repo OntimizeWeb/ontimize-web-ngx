@@ -17,10 +17,12 @@ import {
 import { MatDialog, MatMenu } from '@angular/material';
 import { Observable } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
+import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand.interface';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
 import { DialogService } from '../../../../../services/dialog.service';
-import { O_REPORT_SERVICE } from '../../../../../services/factories';
+
+import { O_CHART_ON_DEMAND_SERVICE, O_REPORT_SERVICE } from '../../../../../services/factories';
 import { OntimizeExportDataProviderService } from '../../../../../services/ontimize-export-data-provider.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
@@ -67,7 +69,10 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'showResetWidthOption: show-reset-width-option',
 
   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the header menu
-  'showReportOnDemandOption: show-report-on-demand-option'
+  'showReportOnDemandOption: show-report-on-demand-option',
+
+  // show-charts-on-demand-option [yes|no|true|false]: show charts on demand option in the header menu
+  'showChartsOnDemandOption: show-charts-on-demand-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -103,6 +108,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   showResetWidthOption: boolean = true;
   @InputConverter()
   showReportOnDemandOption: boolean = true;
+  @InputConverter()
+  showChartsOnDemandOption: boolean = true;
 
 
   public onVisibleFilterOptionChange: EventEmitter<any> = new EventEmitter();
@@ -131,6 +138,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   configurationMenu: MatMenu;
   @ViewChild('columnFilterOption', { static: false })
   columnFilterOption: OTableOptionComponent;
+  @ViewChild('chartMenu', { static: true })
+  chartMenu: MatMenu;
 
   protected permissions: OTableMenuPermissions;
   protected mutationObservers: MutationObserver[] = [];
@@ -142,7 +151,11 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     protected dialog: MatDialog,
     protected cd: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent,
+
+    @Optional() @Inject(O_CHART_ON_DEMAND_SERVICE) public chartOnDemandService: IChartOnDemandService,
+
     @Optional() @Inject(O_REPORT_SERVICE) public reportService: IReportService
+
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.translateService = this.injector.get(OTranslateService);
@@ -308,6 +321,15 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     return this.showGroupByOption;
   }
 
+  get showChartsOnDemandButton(): boolean {
+    if (!this.showChartsOnDemandOption) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('show-chart-on-demand');
+    return !(perm && perm.visible === false);
+
+  }
+
   onShowsSelects() {
     const tableOptions = this.table.oTableOptions;
     tableOptions.selectColumn.visible = !tableOptions.selectColumn.visible;
@@ -447,6 +469,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     });
   }
 
+
+  onChartsOnDemandClicked(): void {
+    if (this.chartOnDemandService) {
+      this.chartOnDemandService.openChartOnDemand(this.table.getDataArray(), this.table.service, this.table.entity);
+    } else {
+      console.warn("You must have ontimize-web-ngx-charts installed in your app to use charts on demand.")
+    }
+  }
   onResetWidthClicked() {
     this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_RESET_WIDTH').then(result => {
       if (result) {

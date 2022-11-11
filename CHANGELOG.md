@@ -1,5 +1,6 @@
 ## 8.9.0
 ### Features:
+* **o-table**: new `show-charts-on-demand-option` input that allows to show the charts on demand option in the menu table ([daf9d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/daf9d2d)) Closes[#705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/705)
 * **o-filter-builder**:
   * New component `o-filter-builder-menu` that allows *Load/Save/Clear* filter builder configuration Closes[#1005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1005) ([0abf043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0abf043))
   * new `OFilterBuilderStatus` type ([5a9618d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a9618d))
@@ -11,7 +12,6 @@
   * `OServiceComponent` extends `AbstractOServiceComponent<DefaultServiceComponentStateService>`
   * `OGridComponentStateClass, OListComponentStateClass, OTableComponentStateClass` extends `DefaultServiceComponentStateClass`
 * Renamed the components  `OTableLoadFilterDialogComponent, OStoreFilterDialogComponent` to `OLoadFilterDialogComponent, OTableStoreFilterDialogComponent` and moved to `OShareModule`
-
 
 ## 8.8.0 (2022-10-25)
 ### Features:
