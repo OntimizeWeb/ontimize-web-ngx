@@ -181,9 +181,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     if (addNewComp) {
       this.data.forEach(comp => {
         const currParams = comp.params || {};
-        Object.keys(currParams).forEach(key => {
-          addNewComp = addNewComp && (currParams[key] !== newCompParams[key]);
-        });
+        const someDiffParams =  Object.keys(currParams).some(key => currParams[key] !== newCompParams[key]);
+        addNewComp = addNewComp && someDiffParams;
       });
     }
     if (addNewComp) {
@@ -347,7 +346,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
 
     // Issue #884 ensuring that a insertion mode tab that might be previously stored wont be created
-    this.state.tabsData = this.state.tabsData.filter(tabData=> !tabData.insertionMode)
+    this.state.tabsData = this.state.tabsData.filter(tabData => !tabData.insertionMode)
 
     if (this.state.tabsData.length >= 1 && (this.state.tabsData[0].url || '').length > 0) {
       this.showLoading.next(true);
