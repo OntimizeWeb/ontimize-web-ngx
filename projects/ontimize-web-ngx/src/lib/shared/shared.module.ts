@@ -16,6 +16,8 @@ import { OTranslateModule } from '../pipes/o-translate.pipe';
 import { OrderByPipe } from '../pipes/order-by.pipe';
 import { ODialogComponent } from './components/dialog/o-dialog.component';
 import { Error403Component } from './components/error403/o-error-403.component';
+import { OLoadFilterDialogComponent } from './components/filter/load-filter/o-load-filter-dialog.component';
+import { OStoreFilterDialogComponent } from './components/filter/store-filter/o-store-filter-dialog.component';
 import { OSnackBarComponent } from './components/snackbar/o-snackbar.component';
 import { OErrorComponent } from './components/validation/o-error.component';
 import { OValidatorComponent } from './components/validation/o-validator.component';
@@ -26,7 +28,9 @@ import { OCustomMaterialModule } from './material/custom.material.module';
     CommonModule,
     OTranslateModule,
     FlexLayoutModule,
-    OCustomMaterialModule
+    OCustomMaterialModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ColumnsFilterPipe,
@@ -43,7 +47,9 @@ import { OCustomMaterialModule } from './material/custom.material.module';
     ODialogComponent,
     OErrorComponent,
     OValidatorComponent,
-    OSnackBarComponent
+    OSnackBarComponent,
+    OLoadFilterDialogComponent,
+    OStoreFilterDialogComponent
   ],
   exports: [
     FlexLayoutModule,
@@ -64,9 +70,11 @@ import { OCustomMaterialModule } from './material/custom.material.module';
     Error403Component,
     OErrorComponent,
     OValidatorComponent,
-    OSnackBarComponent
+    OSnackBarComponent,
+    OLoadFilterDialogComponent,
+    OStoreFilterDialogComponent
   ],
-  entryComponents: [Error403Component]
+  entryComponents: [Error403Component, OStoreFilterDialogComponent, OLoadFilterDialogComponent]
 })
 export class OSharedModule {
 }

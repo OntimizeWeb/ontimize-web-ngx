@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -7,6 +8,10 @@ import { InputConverter } from '../../decorators/input-converter';
 import { IFilterBuilderCmpTarget } from '../../interfaces/filter-builder-component-target.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { OFilterBuilderComponentStateClass } from '../../services/state/o-filter-builder-component-state.class';
+import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
+import { OFilterDefinition } from '../../types';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
@@ -31,7 +36,10 @@ export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   'queryOnChangeDelay: query-on-change-delay',
 
   //query-on-change-event: [change| onValueChange] Type of event that emit when query-on-change=`yes`
-  'queryOnChangeEventType: query-on-change-event-type'
+  'queryOnChangeEventType: query-on-change-event-type',
+
+  // attr [string]: filter builder identifier. It is mandatory if data are provided through the data attribute. Default: target (if set).
+  'oattr: attr',
 ]
 
 export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
@@ -48,9 +56,11 @@ export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
   inputs: DEFAULT_INPUTS_O_FILTER_BUILDER,
   outputs: DEFAULT_OUTPUTS_O_FILTER_BUILDER
 })
+
 /**
  * The OFilterBuilderComponent.
  */
+
 export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public onFilter: EventEmitter<any> = new EventEmitter<any>();
@@ -69,10 +79,20 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   protected filterComponents: Array<IFilterBuilderCmpTarget> = [];
 
   protected subscriptions: Subscription = new Subscription();
-
+  public oattr: string;
+  protected componentStateService: OFilterBuilderComponentStateService;
+  protected localStorageService: LocalStorageService;
+  protected router: Router;
+  protected actRoute: ActivatedRoute;
   constructor(
+    protected injector: Injector,
     @Inject(forwardRef(() => OFormComponent)) public form: OFormComponent
-  ) { }
+  ) {
+    this.localStorageService = this.injector.get(LocalStorageService);
+    this.componentStateService = this.injector.get<OFilterBuilderComponentStateService>(OFilterBuilderComponentStateService);
+    this.router = this.injector.get<Router>(Router);
+    this.actRoute = this.injector.get<ActivatedRoute>(ActivatedRoute);
+  }
 
   ngOnInit(): void {
     this.initialize();
@@ -89,6 +109,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   initialize(): void {
+    this.componentStateService.initialize(this);
     // Parse filters
     if (this.filters) {
       const filterArray: Array<string> = Util.parseArray(this.filters);
@@ -216,7 +237,6 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
           result.push({ attr: filterComponent.formComponentAttr, value: this.form.getComponents()[filterComponent.formComponentAttr].getValue() });
         }
       });
-
     return result;
 
   }
@@ -241,5 +261,51 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   protected getFilterAttrs(): Array<string> {
     return this.filterComponents.map((elem: IFilterBuilderCmpTarget) => elem.formComponentAttr);
   }
+  /**
+   * Gets state
+   */
+  get state(): OFilterBuilderComponentStateClass {
+    return this.componentStateService.state;
+  }
 
+
+  getDataToStore() {
+    return this.componentStateService.state;
+  }
+
+  getComponentKey(): string {
+    if (!Util.isDefined(this.oattr)) {
+      console.error('Your o-filter-builder component must have an \'attr\'. Otherwise, your filter builder state will not set in localstorage.');
+      return 'OFilterBuilderComponent_';
+    }
+
+    return 'OFilterBuilderComponent_' + this.oattr;
+  }
+
+  /**
+   * Stores filter in state
+   * @param arg
+   */
+  storeFilterInState(arg: OFilterDefinition) {
+    this.componentStateService.storeFilter(arg);
+    this.updateStateStorage();
+  }
+  /**
+   * Method update store localstorage, call of the ILocalStorage
+   */
+  protected updateStateStorage(): void {
+    if (this.localStorageService) {
+      this.localStorageService.updateComponentStorage(this, this.getRouteKey());
+    }
+  }
+
+  public getRouteKey(): string {
+    let route = this.router.url;
+    this.actRoute.params.subscribe(params => {
+      Object.keys(params).forEach(key => {
+        route = route.replace(params[key], key);
+      });
+    });
+    return route;
+  }
 }

@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { APP_CONFIG } from '../../../config/app-config';
 import { appConfigFactory } from '../../../services';
+import { TestUtils } from '../test/test-utils';
 import { AppConfig } from './../../../config/app-config';
 import { OPermissionsModule } from './../../../services/permissions/o-permissions.module';
 import { InputTestUtil } from './../test/input-test-utils';
@@ -33,7 +34,7 @@ describe('OTextInput', () => {
           useClass: TranslateService,
           deps: [Injector]
         },
-        { provide: APP_CONFIG, useValue: InputTestUtil.mockConfiguration() },
+        { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
         // ...INTERNAL_ONTIMIZE_MODULES
       ]

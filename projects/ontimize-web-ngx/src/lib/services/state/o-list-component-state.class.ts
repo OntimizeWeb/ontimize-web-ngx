@@ -1,6 +1,6 @@
-import { DefaultComponentStateClass } from './o-component-state.class';
+import { DefaultServiceComponentStateClass } from './o-component-state.class';
 
-export class OListComponentStateClass extends DefaultComponentStateClass {
+export class OListComponentStateClass extends DefaultServiceComponentStateClass {
   protected 'sort-columns': string;
   'quickFilterActiveColumns': string;
   selection: any[];

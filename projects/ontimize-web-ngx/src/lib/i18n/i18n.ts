@@ -190,7 +190,7 @@ export const MAP = {
     'TABLE.DIALOG.SAVE_FILTER': 'Select a name for the filter.',
     'TABLE.DIALOG.FILTER_NAME': 'Name',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Description',
-    'TABLE.DIALOG.LOAD_FILTER': 'Select a filter to apply to the table',
+    'TABLE.DIALOG.LOAD_FILTER': 'Select a filter to apply to the data',
     'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'This action will clear every filter on the table. Are you sure you want to continue?',
     'TABLE.DIALOG.CONFIRM_RESET_WIDTH': 'This action will reset the width of all the table columns. Are you sure you want to continue?',
     'TABLE.DIALOG.CONFIRM_REMOVE_FILTER': 'Are you sure you want to delete the selected filter?',
@@ -287,7 +287,13 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'month',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'month and year',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'year',
-    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'day, month and year'
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'day, month and year',
+    'FILTERBUILDERMENU.BUTTONS.ARIALBUTTON': 'Filter menu',
+    'FILTERBUILDERMENU.BUTTONS.FILTER': 'Filter',
+    'FILTERBUILDERMENU.BUTTONS.SAVE_FILTER': 'Save filter',
+    'FILTERBUILDERMENU.BUTTONS.LOAD_FILTER': 'Load filter',
+    'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Clear filter',
+    'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'This action will clear every filter on this section. Are you sure you want to continue?'
   },
 
   // Spanish
@@ -480,7 +486,7 @@ export const MAP = {
     'TABLE.DIALOG.SAVE_FILTER': 'Seleccione un nombre para el filtro.',
     'TABLE.DIALOG.FILTER_NAME': 'Nombre',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Descripción',
-    'TABLE.DIALOG.LOAD_FILTER': 'Seleccione un filtro para aplicar a la tabla',
+    'TABLE.DIALOG.LOAD_FILTER': 'Seleccione un filtro para aplicar a los datos',
     'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros aplicados a la tabla. ¿Desea continuar?',
     'TABLE.DIALOG.CONFIRM_RESET_WIDTH' : 'Esta acción reseteará el ancho de todas las columnas de la tabla. ¿Desea continuar?',
     'TABLE.DIALOG.CONFIRM_REMOVE_FILTER': '¿Está seguro de que quiere eliminar el filtro seleccionado?',
@@ -569,7 +575,13 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_MONTH': 'mes',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mes y año',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'año',
-    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'día, mes y año'
+    'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'día, mes y año',
+    'FILTERBUILDERMENU.BUTTONS.ARIALBUTTON': 'Menú de filtro',
+    'FILTERBUILDERMENU.BUTTONS.FILTER': 'Filtrar',
+    'FILTERBUILDERMENU.BUTTONS.SAVE_FILTER': 'Guardar filtro',
+    'FILTERBUILDERMENU.BUTTONS.LOAD_FILTER': 'Cargar filtro',
+    'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Limpiar filtro',
+    'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros de esta sección. ¿Desea continuar?',
   },
   // Portuguese - BRAZIL
   pt: {
@@ -756,7 +768,7 @@ export const MAP = {
     'TABLE.DIALOG.SAVE_FILTER': 'Selecione um nome para o filtro.',
     'TABLE.DIALOG.FILTER_NAME': 'Nome',
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Descrição',
-    'TABLE.DIALOG.LOAD_FILTER': 'Selecione um filtro para aplicar à tabela',
+    'TABLE.DIALOG.LOAD_FILTER': 'Selecione um filtro para aplicar aos dados',
     'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta ação limpará todos os filtros aplicados à tabela. Deseja continuar?',
     'TABLE.DIALOG.CONFIRM_REMOVE_FILTER': 'Tem certeza que quer eliminar o filtro selecionado?',
     'TABLE.DIALOG.EMPTY_FILTER_LIST': 'Não existem filtros armazenados',
@@ -838,5 +850,11 @@ export const MAP = {
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH': 'mês e ano',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR': 'ano',
     'DUAL_LIST_SELECTOR.GROUP_BY_YEAR_MONTH_DAY': 'dia, mês e ano',
+    'FILTERBUILDERMENU.BUTTONS.ARIALBUTTON': 'Menu de filtro',
+    'FILTERBUILDERMENU.BUTTONS.FILTER': 'Filtro',
+    'FILTERBUILDERMENU.BUTTONS.SAVE_FILTER': 'Salvar filtro',
+    'FILTERBUILDERMENU.BUTTONS.LOAD_FILTER': 'Filtro de carga',
+    'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Filtro limpo',
+    'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta ação limpará todos os filtros nesta seção. Você tem certeza que quer continuar?',
   }
-};
+}
