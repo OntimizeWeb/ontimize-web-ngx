@@ -64,6 +64,21 @@
       }
     }
 
+    &.mat-form-field-appearance-legacy {
+      .mat-form-field-label-wrapper {
+
+        display: flex;
+        align-items: baseline;
+
+        .mat-form-field-label {
+          padding-left: 4px;
+          align-self: center;
+          position: initial;
+        }
+
+      }
+    }
+
     &.mat-form-field-appearance-outline .mat-form-field-wrapper {
       margin: 0;
 
