@@ -7,6 +7,7 @@
         .mat-form-field-flex {
           padding-top: 0;
           height: 32px;
+          line-height: 32px;
 
           .mat-form-field-infix {
             border-top: 0;
@@ -15,8 +16,8 @@
           }
 
           .mat-form-field-prefix {
-            display: flex;
             align-self: center;
+            display: flex;
 
             div {
               align-items: center;
@@ -68,7 +69,6 @@
 
       &.mat-form-field-appearance-legacy {
         .mat-form-field-label-wrapper {
-
           display: flex;
           align-items: baseline;
 
