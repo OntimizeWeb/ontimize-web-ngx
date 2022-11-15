@@ -1,5 +1,8 @@
 ## 8.8.1
+### Bug fixes
 * **o-button-toggle**: Fixed `o-button-toggle` labels inside `o-button-toggle-group` not being translated ([13c131e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/13c131e)) Closes [#1073](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1073)
+* **o-list,o-grid**: Fixed `o-list` or `o-grid` quick filter styles not displaying correctly ([2727b84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2727b84)) Closes [#1038](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1038)
+
 
 ## 8.8.0 (2022-10-25)
 ### Features:
