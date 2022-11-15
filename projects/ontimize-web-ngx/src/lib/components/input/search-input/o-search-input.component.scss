@@ -1,97 +1,102 @@
 .o-search-input {
-  .mat-form-field {
-    .mat-form-field-wrapper {
-      padding-bottom: 0;
+  .quickFilter {
+    .mat-form-field {
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
 
-      .mat-form-field-flex {
-        height: 32px;
+        .mat-form-field-flex {
+          padding-top: 0;
+          height: 32px;
 
-        .mat-form-field-infix {
-          border-top: 0;
-          padding: 0 4px;
-          align-self: center;
-        }
+          .mat-form-field-infix {
+            border-top: 0;
+            padding: 0 4px;
+            align-self: center;
+          }
 
-        .mat-form-field-prefix {
-          display: flex;
-          align-self: center;
+          .mat-form-field-prefix {
+            display: flex;
+            align-self: center;
 
-          div {
-            align-items: center;
-            display: inline-flex;
-            margin: 2px 0;
+            div {
+              align-items: center;
+              display: inline-flex;
+              margin: 2px 0;
 
-            .mat-badge-content {
-              background-color: #3C8500;
-              width: 14px;
-              height: 14px;
-              line-height: 14px;
-              top: -4px;
-              right: -4px;
-            }
+              .mat-badge-content {
+                background-color: #3C8500;
+                width: 14px;
+                height: 14px;
+                line-height: 14px;
+                top: -4px;
+                right: -4px;
+              }
 
-            .mat-icon,
-            button {
-              margin-right: 6px;
-            }
+              .mat-icon,
+              button {
+                margin-right: 6px;
+              }
 
-            button.mat-icon-button {
-              height: 100%;
-              width: auto;
+              button.mat-icon-button {
+                height: 100%;
+                width: auto;
 
-              .mat-button-ripple.mat-ripple {
-                display: none;
+                .mat-button-ripple.mat-ripple {
+                  display: none;
+                }
               }
             }
           }
-        }
 
-        .mat-form-field-subscript-wrapper {
-          display: none;
+          .mat-form-field-subscript-wrapper {
+            display: none;
+          }
         }
       }
-    }
 
-    &.mat-form-field-appearance-fill,
-    &.mat-form-field-appearance-legacy,
-    &.mat-form-field-appearance-standard {
-      .mat-form-field-flex {
-        padding-top: 0;
-      }
-
-      .mat-form-field-underline {
-        bottom: 0;
-      }
-    }
-
-    &.mat-form-field-appearance-legacy {
-      .mat-form-field-label-wrapper {
-
-        display: flex;
-        align-items: baseline;
-
-        .mat-form-field-label {
-          padding-left: 4px;
-          align-self: center;
-          position: initial;
+      &.mat-form-field-appearance-fill,
+      &.mat-form-field-appearance-legacy,
+      &.mat-form-field-appearance-standard {
+        .mat-form-field-flex {
+          padding-top: 0;
         }
 
-      }
-    }
-
-    &.mat-form-field-appearance-outline .mat-form-field-wrapper {
-      margin: 0;
-
-      .mat-form-field-flex {
-        margin: 0;
-
-        .mat-form-field-outline,
-        .mat-form-field-prefix {
-          top: 0;
+        .mat-form-field-underline {
+          bottom: 0;
         }
+      }
 
-        .mat-form-field-prefix {
-          border-right: 1px solid rgba(0, 0, 0, 0.12);
+      &.mat-form-field-appearance-legacy {
+        .mat-form-field-label-wrapper {
+
+          display: flex;
+          align-items: baseline;
+
+          .mat-form-field-label {
+            padding-left: 4px;
+            align-self: center;
+            position: initial;
+          }
+
+        }
+      }
+
+      &.mat-form-field-appearance-outline {
+        .mat-form-field-wrapper {
+          margin: 0;
+
+          .mat-form-field-flex {
+            margin: 0;
+
+            .mat-form-field-outline,
+            .mat-form-field-prefix {
+              top: 0;
+            }
+
+            .mat-form-field-prefix {
+              border-right: 1px solid rgba(0, 0, 0, 0.12);
+            }
+          }
         }
       }
     }
