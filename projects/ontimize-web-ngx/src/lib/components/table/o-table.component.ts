@@ -1136,11 +1136,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (colToAddInVisibleCol.length > 0) {
         colToAddInVisibleCol.forEach((colAdd) => {
           if (stateCols.filter(col => col.attr === colAdd).length > 0) {
-            stateCols = stateCols.filter(col => colToAddInVisibleCol.indexOf(col.attr) > -1)
-              .map(col => {
+            stateCols = stateCols.map(col => {
+              if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
                 col.visible = true;
-                return col;
-              });
+              }
+              return col;
+            });
           } else {
             this.colArray.filter(col => col === colAdd)
               .forEach((element, i) => {
@@ -1160,8 +1161,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in this case you have to delete this column to this.visibleColArray
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
-        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) > -1).map(col => {
-          col.visible = false;
+        stateCols = stateCols.map(col => {
+          if (colToDeleteInVisibleCol.indexOf(col.attr) > -1) {
+            col.visible = false;
+          }
           return col;
         });
       }
@@ -3165,7 +3168,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getColumnsNotIncluded(): string[] {
     let colsNotIncluded = [];
-    colsNotIncluded = this.oTableOptions.columns.filter(c => void 0 !== c.renderer && c.type==='image').map(c => c.attr);
+    colsNotIncluded = this.oTableOptions.columns.filter(c => void 0 !== c.renderer && c.type === 'image').map(c => c.attr);
     colsNotIncluded.push(Codes.NAME_COLUMN_SELECT);
     colsNotIncluded.push(Codes.NAME_COLUMN_EXPANDABLE);
     return colsNotIncluded;
