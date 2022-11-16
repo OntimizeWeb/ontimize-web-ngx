@@ -1137,9 +1137,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         colToAddInVisibleCol.forEach((colAdd) => {
           if (stateCols.filter(col => col.attr === colAdd).length > 0) {
             stateCols = stateCols.map(col => {
-              if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
-                col.visible = true;
-              }
+              col.visible = colToAddInVisibleCol.indexOf(col.attr) > -1 ? true : col.visible;
               return col;
             });
           } else {
@@ -1162,11 +1160,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
         stateCols = stateCols.map(col => {
-          if (colToDeleteInVisibleCol.indexOf(col.attr) > -1) {
-            col.visible = false;
-          }
+          col.visible = colToDeleteInVisibleCol.indexOf(col.attr) > -1 ? false : col.visible;
           return col;
-        });
+        }
+        );
       }
     }
     return stateCols;
