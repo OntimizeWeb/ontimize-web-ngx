@@ -1133,27 +1133,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // Find values in visible-columns that they arent in original-visible-columns in localstorage
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
-      if (colToAddInVisibleCol.length > 0) {
-        colToAddInVisibleCol.forEach((colAdd) => {
-          if (stateCols.filter(col => col.attr === colAdd).length > 0) {
-            stateCols = stateCols.map(col => {
-              col.visible = colToAddInVisibleCol.indexOf(col.attr) > -1 ? true : col.visible;
-              return col;
-            });
-          } else {
-            this.colArray.filter(col => col === colAdd)
-              .forEach((element, i) => {
-                stateCols.splice(i + 1, 0,
-                  {
-                    attr: colAdd,
-                    visible: true,
-                    width: undefined
-                  });
+      colToAddInVisibleCol.forEach((colAdd) => {
+        if (stateCols.filter(col => col.attr === colAdd).length > 0) {
+          stateCols = stateCols.map(col => {
+            col.visible = colToAddInVisibleCol.indexOf(col.attr) > -1 ? true : col.visible;
+            return col;
+          });
+        } else {
+          this.colArray.filter(col => col === colAdd)
+            .forEach((element, i) => {
+              stateCols.splice(i + 1, 0,
+                {
+                  attr: colAdd,
+                  visible: true,
+                  width: undefined
+                });
 
-              });
-          }
-        });
-      }
+            });
+        }
+      });
+
 
       // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
       // in this case you have to delete this column to this.visibleColArray
@@ -1168,30 +1167,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     return stateCols;
   }
-  changeColumnsVisibility(colToAddInVisibleCol, stateCols) {
-    colToAddInVisibleCol.forEach((colAdd, index) => {
-      if (stateCols.filter(col => col.attr === colAdd).length > 0) {
-        stateCols = stateCols.map(col => {
-          if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
-            col.visible = true;
-          }
-          return col;
-        });
-      } else {
-        this.colArray.forEach((element, i) => {
-          if (element === colAdd) {
-            stateCols.splice(i + 1, 0,
-              {
-                attr: colAdd,
-                visible: true,
-                width: undefined
-              });
-          }
 
-        });
-      }
-    });
-  }
   parseSortColumns() {
     const sortColumnsParam = this.state.sortColumns || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
