@@ -68,6 +68,7 @@ import { PermissionsUtils } from '../../util/permissions';
 import { ServiceUtils } from '../../util/service.utils';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
+import { OColumnCollapsibleComponent } from '../container';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import {
@@ -1134,11 +1135,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
       colToAddInVisibleCol.forEach((colAdd) => {
-        if (stateCols.filter(col => col.attr === colAdd).length > 0) {
-          stateCols = stateCols.map(col => {
-            col.visible = colToAddInVisibleCol.indexOf(col.attr) > -1 ? true : col.visible;
-            return col;
-          });
+        let indexCol = stateCols.findIndex(col => col.attr === colAdd);
+        if (indexCol > -1) {
+          stateCols[indexCol].visible = true;
         } else {
           this.colArray.filter(col => col === colAdd)
             .forEach((element, i) => {
@@ -1158,11 +1157,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in this case you have to delete this column to this.visibleColArray
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
-        stateCols = stateCols.map(col => {
-          col.visible = colToDeleteInVisibleCol.indexOf(col.attr) > -1 ? false : col.visible;
-          return col;
-        }
-        );
+        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) === -1);
       }
     }
     return stateCols;
