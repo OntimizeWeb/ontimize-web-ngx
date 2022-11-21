@@ -472,7 +472,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
   onChartsOnDemandClicked(): void {
     if (this.chartOnDemandService) {
-      this.chartOnDemandService.openChartOnDemand(this.table.getDataArray(), this.table.service, this.table.entity);
+      this.chartOnDemandService.openChartOnDemand(this.table);
     } else {
       console.warn("You must have ontimize-web-ngx-charts installed in your app to use charts on demand.")
     }
