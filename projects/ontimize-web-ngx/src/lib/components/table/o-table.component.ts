@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
@@ -68,7 +69,6 @@ import { PermissionsUtils } from '../../util/permissions';
 import { ServiceUtils } from '../../util/service.utils';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
-import { OColumnCollapsibleComponent } from '../container';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import {
@@ -1104,7 +1104,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols: OColumnDisplay[] = [];
       this.state.columnsDisplay.forEach((oCol, index) => {
-        const isVisibleColInColumns = this._oTableOptions.columns.find(col => col.attr === oCol.attr) !== undefined;
+        const visibleColumns = Util.parseArray(this.visibleColumns, true);
+        const isVisibleColInColumns = visibleColumns.find(col => col === oCol.attr) !== undefined;
+
         if (isVisibleColInColumns) {
           stateCols.push(oCol);
         } else {
@@ -1117,7 +1119,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
       }
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
-
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     } else {
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
@@ -1138,18 +1140,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         let indexCol = stateCols.findIndex(col => col.attr === colAdd);
         if (indexCol > -1) {
           stateCols[indexCol].visible = true;
-        } else {
-          this.colArray.filter(col => col === colAdd)
-            .forEach((element, i) => {
-              stateCols.splice(i + 1, 0,
-                {
-                  attr: colAdd,
-                  visible: true,
-                  width: undefined
-                });
 
-            });
         }
+        stateCols.sort((a: OColumn, b: OColumn) => visibleColArray.indexOf(a.attr) - visibleColArray.indexOf(b.attr));
       });
 
 
@@ -1158,6 +1151,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
         stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) === -1);
+      }
+
+      //If the columns in originalVisibleColArray has changed the sorting
+      const changeSortVisibleColumns = JSON.stringify(visibleColArray) !== JSON.stringify(originalVisibleColArray);
+      if (changeSortVisibleColumns && visibleColArray.length === originalVisibleColArray.length) {
+        visibleColArray.forEach((col, toIndex) => {
+          const fromIndexToChange = stateCols.findIndex(stateCol => stateCol.attr === col);
+          moveItemInArray(stateCols, fromIndexToChange, toIndex);
+        });
+
       }
     }
     return stateCols;
