@@ -1104,8 +1104,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols: OColumnDisplay[] = [];
       this.state.columnsDisplay.forEach((oCol, index) => {
-        const visibleColumns = Util.parseArray(this.visibleColumns, true);
-        const isVisibleColInColumns = visibleColumns.find(col => col === oCol.attr) !== undefined;
+        const isVisibleColInColumns = this._oTableOptions.columns.find(col => col.attr === oCol.attr) !== undefined;
 
         if (isVisibleColInColumns) {
           stateCols.push(oCol);
@@ -1118,8 +1117,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       } else {
         stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
       }
+
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
+        const indexA = stateCols.findIndex(col => col.attr === a.attr);
+        const indexB = stateCols.findIndex(col => col.attr === b.attr);
+        return indexA - indexB;
+      });
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
-      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     } else {
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
@@ -1140,7 +1144,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         let indexCol = stateCols.findIndex(col => col.attr === colAdd);
         if (indexCol > -1) {
           stateCols[indexCol].visible = true;
-
         }
         stateCols.sort((a: OColumn, b: OColumn) => visibleColArray.indexOf(a.attr) - visibleColArray.indexOf(b.attr));
       });
@@ -2611,7 +2614,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.initializeParams();
     this.parseVisibleColumns(true);
     this.reinitializateQuickFilterColumns();
-    this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     this.resetQueryRows();
     const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state.initialConfiguration.sortColumns);
     this.reinitializeSortColumns(initialConfigSortColumnsArray);
