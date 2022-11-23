@@ -2,30 +2,22 @@
   .quickFilter {
     .mat-form-field {
       .mat-form-field-wrapper {
-        margin: 0;
         padding-bottom: 0;
 
         .mat-form-field-flex {
-          align-items: initial;
-          margin-top: 0;
+          padding-top: 0;
           height: 32px;
           line-height: 32px;
 
-          .mat-form-field-outline,
-          .mat-form-field-prefix,
-          .mat-form-field-suffix {
-            top: 0;
-          }
-
           .mat-form-field-infix {
-            padding: 0 4px;
             border-top: 0;
+            padding: 0 4px;
+            align-self: center;
           }
 
           .mat-form-field-prefix {
-            padding-bottom: 0;
-            align-items: center;
-            border-right: 1px solid rgba(0, 0, 0, 0.12);
+            align-self: center;
+            display: flex;
 
             div {
               align-items: center;
@@ -56,20 +48,56 @@
               }
             }
           }
+
+          .mat-form-field-subscript-wrapper {
+            display: none;
+          }
         }
       }
 
-      .mat-icon {
-        vertical-align: bottom;
-        cursor: default;
+      &.mat-form-field-appearance-fill,
+      &.mat-form-field-appearance-legacy,
+      &.mat-form-field-appearance-standard {
+        .mat-form-field-flex {
+          padding-top: 0;
+        }
 
-        &.menu-trigger {
-          cursor: pointer;
+        .mat-form-field-underline {
+          bottom: 0;
         }
       }
 
-      .mat-input-element {
-        font-size: initial;
+      &.mat-form-field-appearance-legacy {
+        .mat-form-field-label-wrapper {
+          display: flex;
+          align-items: baseline;
+
+          .mat-form-field-label {
+            padding-left: 4px;
+            align-self: center;
+            position: initial;
+          }
+
+        }
+      }
+
+      &.mat-form-field-appearance-outline {
+        .mat-form-field-wrapper {
+          margin: 0;
+
+          .mat-form-field-flex {
+            margin: 0;
+
+            .mat-form-field-outline,
+            .mat-form-field-prefix {
+              top: 0;
+            }
+
+            .mat-form-field-prefix {
+              border-right: 1px solid rgba(0, 0, 0, 0.12);
+            }
+          }
+        }
       }
     }
   }

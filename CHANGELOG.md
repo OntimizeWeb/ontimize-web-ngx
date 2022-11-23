@@ -1,3 +1,10 @@
+## 8.8.1 (2022-11-23)
+### Bug fixes
+* **o-button-toggle**: Fixed `o-button-toggle` labels inside `o-button-toggle-group` not being translated ([13c131e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/13c131e)) Closes [#1073](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1073)
+* **o-filter-builder**:  Fixed `oFilterBuilderClear` directive not clearing the value of the `o-combo` multiple ([b97410c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b97410c))Closes [#1081](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1081)
+* **o-list,o-grid**: Fixed `o-list` or `o-grid` quick filter styles not displaying correctly setting `quick-filter-appearance` ([2727b84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2727b84)) Closes [#1038](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1038)
+* **o-table**: Fixed  in table when changing `visible-columns` and the columns would disappear ([596060d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/596060d))([d3d4464](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d3d4464))([abf353c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/abf353c)) Closes [#1084](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1084)
+
 ## 8.8.0 (2022-10-25)
 ### Features:
 * **o-table**:

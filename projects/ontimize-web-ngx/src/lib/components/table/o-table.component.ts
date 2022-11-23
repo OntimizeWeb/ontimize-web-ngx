@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
@@ -1104,6 +1105,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       let stateCols: OColumnDisplay[] = [];
       this.state.columnsDisplay.forEach((oCol, index) => {
         const isVisibleColInColumns = this._oTableOptions.columns.find(col => col.attr === oCol.attr) !== undefined;
+
         if (isVisibleColInColumns) {
           stateCols.push(oCol);
         } else {
@@ -1115,8 +1117,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       } else {
         stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
       }
-      this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
 
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
+        const indexA = stateCols.findIndex(col => col.attr === a.attr);
+        const indexB = stateCols.findIndex(col => col.attr === b.attr);
+        return indexA - indexB;
+      });
+      this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
@@ -1133,65 +1140,35 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // Find values in visible-columns that they arent in original-visible-columns in localstorage
       // in this case you have to add this column to this.visibleColArray
       const colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
-      if (colToAddInVisibleCol.length > 0) {
-        colToAddInVisibleCol.forEach((colAdd) => {
-          if (stateCols.filter(col => col.attr === colAdd).length > 0) {
-            stateCols = stateCols.filter(col => colToAddInVisibleCol.indexOf(col.attr) > -1)
-              .map(col => {
-                col.visible = true;
-                return col;
-              });
-          } else {
-            this.colArray.filter(col => col === colAdd)
-              .forEach((element, i) => {
-                stateCols.splice(i + 1, 0,
-                  {
-                    attr: colAdd,
-                    visible: true,
-                    width: undefined
-                  });
+      colToAddInVisibleCol.forEach((colAdd) => {
+        let indexCol = stateCols.findIndex(col => col.attr === colAdd);
+        if (indexCol > -1) {
+          stateCols[indexCol].visible = true;
+        }
+        stateCols.sort((a: OColumn, b: OColumn) => visibleColArray.indexOf(a.attr) - visibleColArray.indexOf(b.attr));
+      });
 
-              });
-          }
-        });
-      }
 
       // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
       // in this case you have to delete this column to this.visibleColArray
       const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
       if (colToDeleteInVisibleCol.length > 0) {
-        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) > -1).map(col => {
-          col.visible = false;
-          return col;
+        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) === -1);
+      }
+
+      //If the columns in originalVisibleColArray has changed the sorting
+      const changeSortVisibleColumns = JSON.stringify(visibleColArray) !== JSON.stringify(originalVisibleColArray);
+      if (changeSortVisibleColumns && visibleColArray.length === originalVisibleColArray.length) {
+        visibleColArray.forEach((col, toIndex) => {
+          const fromIndexToChange = stateCols.findIndex(stateCol => stateCol.attr === col);
+          moveItemInArray(stateCols, fromIndexToChange, toIndex);
         });
+
       }
     }
     return stateCols;
   }
-  changeColumnsVisibility(colToAddInVisibleCol, stateCols) {
-    colToAddInVisibleCol.forEach((colAdd, index) => {
-      if (stateCols.filter(col => col.attr === colAdd).length > 0) {
-        stateCols = stateCols.map(col => {
-          if (colToAddInVisibleCol.indexOf(col.attr) > -1) {
-            col.visible = true;
-          }
-          return col;
-        });
-      } else {
-        this.colArray.forEach((element, i) => {
-          if (element === colAdd) {
-            stateCols.splice(i + 1, 0,
-              {
-                attr: colAdd,
-                visible: true,
-                width: undefined
-              });
-          }
 
-        });
-      }
-    });
-  }
   parseSortColumns() {
     const sortColumnsParam = this.state.sortColumns || this.sortColumns;
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
@@ -2637,7 +2614,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.initializeParams();
     this.parseVisibleColumns(true);
     this.reinitializateQuickFilterColumns();
-    this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     this.resetQueryRows();
     const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state.initialConfiguration.sortColumns);
     this.reinitializeSortColumns(initialConfigSortColumnsArray);
@@ -3165,7 +3141,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getColumnsNotIncluded(): string[] {
     let colsNotIncluded = [];
-    colsNotIncluded = this.oTableOptions.columns.filter(c => void 0 !== c.renderer && c.type==='image').map(c => c.attr);
+    colsNotIncluded = this.oTableOptions.columns.filter(c => void 0 !== c.renderer && c.type === 'image').map(c => c.attr);
     colsNotIncluded.push(Codes.NAME_COLUMN_SELECT);
     colsNotIncluded.push(Codes.NAME_COLUMN_EXPANDABLE);
     return colsNotIncluded;
