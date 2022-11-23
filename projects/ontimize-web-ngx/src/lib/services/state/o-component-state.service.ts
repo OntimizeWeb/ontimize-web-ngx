@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { Util } from '../../util';
 import { LocalStorageService } from '../local-storage.service';
-import { AbstractComponentStateClass, DefaultComponentStateClass } from './o-component-state.class';
+import { AbstractComponentStateClass, DefaultComponentStateClass, DefaultServiceComponentStateClass } from './o-component-state.class';
 
 @Injectable()
 export abstract class AbstractComponentStateService<S extends AbstractComponentStateClass, C extends ILocalStorageComponent = any>{
@@ -14,18 +14,22 @@ export abstract class AbstractComponentStateService<S extends AbstractComponentS
   public state: S;
 
   constructor(protected injector: Injector) {
-    this.localStorageService = injector.get(LocalStorageService);
+    this.localStorageService = injector.get<LocalStorageService>(LocalStorageService);
   }
 
-  initialize(comp: C) {
+  public initialize(comp: C) {
     this.component = comp;
     if (Util.isDefined(this.state)) {
       this.initializeState(this.state);
     }
   }
 
-  initializeState(state: S) {
-    if (Util.isDefined(this.state) && this.component.storeState) {
+  public initializeState(state: S) {
+    if (Util.isDefined(this.state) &&
+      ((Util.isDefined(this.component.storeState) && this.component.storeState
+        ||
+        !Util.isDefined(this.component.storeState)))
+    ) {
       state.setData(this.localStorageService.getComponentStorage(this.component, this.component.getRouteKey()));
     }
   }
@@ -36,6 +40,15 @@ export class DefaultComponentStateService extends AbstractComponentStateService<
 
   initialize(comp: ILocalStorageComponent) {
     this.state = new DefaultComponentStateClass();
+    super.initialize(comp);
+  }
+}
+
+@Injectable()
+export class DefaultServiceComponentStateService extends AbstractComponentStateService<DefaultServiceComponentStateClass, ILocalStorageComponent> {
+
+  initialize(comp: ILocalStorageComponent) {
+    this.state = new DefaultServiceComponentStateClass();
     super.initialize(comp);
   }
 }

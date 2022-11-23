@@ -5,14 +5,14 @@ import {
 import { OColumnDisplay } from '../../types/table/o-column-display.type';
 import { OColumnSearchable } from '../../types/table/o-column-searchable.type';
 import { OColumnValueFilter } from '../../types/table/o-column-value-filter.type';
-import { DefaultComponentStateClass } from './o-component-state.class';
+import { DefaultServiceComponentStateClass } from './o-component-state.class';
 import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { Util } from '../../util';
 import { OGroupedColumnTypes } from '../../types';
 
-export class OTableComponentStateClass extends DefaultComponentStateClass {
+export class OTableComponentStateClass extends DefaultServiceComponentStateClass {
   // sort
   protected 'sort-columns': string;
   // columns-display

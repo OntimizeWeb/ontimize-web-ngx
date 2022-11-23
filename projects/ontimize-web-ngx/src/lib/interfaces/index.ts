@@ -1,5 +1,6 @@
 export * from './app-menu.interface';
 export * from './auth-service.interface';
+export * from './chart-on-demand.interface';
 export * from './report-on-demand-service.interface';
 export * from './component.interface';
 export * from './data-service.interface';
