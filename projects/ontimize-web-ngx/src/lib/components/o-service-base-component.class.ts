@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injector, OnChanges, SimpleChange, Type } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, isDevMode, OnChanges, SimpleChange, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -210,7 +210,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       this.oattrFromEntity = true;
     }
     this.keysArray = Util.parseArray(this.keys);
-    this.colArray = Util.parseArray(this.columns, true);
+    this.checkColumns();
     const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray, Codes.COLUMNS_ALIAS_SEPARATOR);
 
@@ -239,6 +239,17 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
+    }
+  }
+
+  checkColumns() {
+    this.colArray = Util.parseArray(this.columns, true);
+    if (isDevMode()) {
+      this.keysArray.forEach(key => {
+        if (this.columns.indexOf(key) === -1) {
+          console.warn(`In the component '${this.oattr}', the key '${key}' is not included in the columns definition and some functionalities may not work correctly`);
+        }
+      })
     }
   }
 

@@ -219,7 +219,7 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   clearFilter(): void {
     const formComponents = this.form.getComponents();
     this.getFilterAttrs().forEach((attr: string) => {
-      formComponents[attr].setValue(void 0);
+      formComponents[attr].clearValue();
     });
     this.onClear.emit();
   }
