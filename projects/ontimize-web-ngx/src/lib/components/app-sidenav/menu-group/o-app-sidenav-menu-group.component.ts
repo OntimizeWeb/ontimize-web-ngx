@@ -9,12 +9,14 @@ import {
   Injector,
   OnDestroy,
   OnInit,
+  Type,
   ViewEncapsulation,
 } from '@angular/core';
-import {Subscription } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { MenuGroup } from '../../../interfaces/app-menu.interface';
+import { MenuGroup, MenuItemRoute } from '../../../interfaces/app-menu.interface';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { PermissionsService } from '../../../services/permissions/permissions.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
@@ -79,6 +81,9 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   hidden: boolean;
   disabled: boolean;
   protected _contentExpansion;
+  protected router: Router;
+  routerSubscription: Subscription;
+  active: boolean;
 
   constructor(
     protected injector: Injector,
@@ -89,6 +94,13 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.appMenuService = this.injector.get(AppMenuService);
     this.permissionsService = this.injector.get(PermissionsService);
     this.sidenav = this.injector.get(OAppSidenavComponent);
+    this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.routerSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && this.appMenuService.isRouteItem(this.menuGroup)) {
+        this.active = this.appMenuService.isItemActive(this.menuGroup as MenuItemRoute);
+        this.cd.detectChanges();
+      }
+    });
   }
 
   ngOnInit() {
@@ -110,6 +122,10 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   ngOnDestroy() {
     if (this.sidenavSubscription) {
       this.sidenavSubscription.unsubscribe();
+    }
+
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 
@@ -133,10 +149,31 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     if (this.disabled) {
       return;
     }
+    if (!Util.isDefined(this.menuGroup.route)
+      ||
+      Util.isDefined(this.menuGroup.route) && (!this.menuGroup.opened)) {
+      this.toggle();
+    }
+    this.navigate();
+  }
 
+  toggle(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     this.menuGroup.opened = !this.menuGroup.opened;
     this.appMenuService.onClick.next();
     this.updateContentExpansion();
+  }
+
+  navigate() {
+    if (Util.isDefined(this.menuGroup.route)) {
+      const route = (this.menuGroup as MenuItemRoute).route;
+      if (this.router.url !== route) {
+        this.router.navigate([route]);
+      }
+    }
   }
 
   updateContentExpansion() {

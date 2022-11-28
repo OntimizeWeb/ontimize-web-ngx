@@ -106,7 +106,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.appMenuService = this.injector.get<AppMenuService>(AppMenuService as Type<AppMenuService>);
 
     this.routerSubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd && this.isRouteItem()) {
+      if (event instanceof NavigationEnd && this.appMenuService.isRouteItem(this.menuItem)) {
         this.active = this.appMenuService.isItemActive(this.menuItem as MenuItemRoute);
         this.cd.detectChanges();
       }
@@ -238,18 +238,16 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
       case 'logout':
         this.logout();
         break;
-      case 'route':
-        this.navigate();
-        break;
       default:
+        if (this.appMenuService.isRouteItem(this.menuItem)) {
+          this.navigate();
+        }
         break;
     }
     this.onClick.emit(e);
   }
 
-  isRouteItem(): boolean {
-    return this.menuItemType === 'route';
-  }
+
 
   isActionItem(): boolean {
     return this.menuItemType === 'action';
