@@ -16,7 +16,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { MenuGroup, MenuItemRoute } from '../../../interfaces/app-menu.interface';
+import { MenuGroup, MenuGroupRoute, MenuItemRoute } from '../../../interfaces/app-menu.interface';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { PermissionsService } from '../../../services/permissions/permissions.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
@@ -70,7 +70,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   protected permissions: OPermissions;
   protected mutationObserver: MutationObserver;
 
-  public menuGroup: MenuGroup;
+  public menuGroup: (MenuGroup | MenuGroupRoute);
 
   @InputConverter()
   sidenavOpened: boolean = true;
@@ -149,9 +149,8 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     if (this.disabled) {
       return;
     }
-    if (!Util.isDefined(this.menuGroup.route)
-      ||
-      Util.isDefined(this.menuGroup.route) && (!this.menuGroup.opened)) {
+    if (this.appMenuService.isMenuGroup(this.menuGroup) ||
+      this.appMenuService.isMenuGroupRoute(this.menuGroup) && (!this.menuGroup.opened)) {
       this.toggle();
     }
     this.navigate();
@@ -168,8 +167,8 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   }
 
   navigate() {
-    if (Util.isDefined(this.menuGroup.route)) {
-      const route = (this.menuGroup as MenuItemRoute).route;
+    if (this.appMenuService.isMenuGroupRoute(this.menuGroup)) {
+      const route = (this.menuGroup as MenuGroupRoute).route;
       if (this.router.url !== route) {
         this.router.navigate([route]);
       }

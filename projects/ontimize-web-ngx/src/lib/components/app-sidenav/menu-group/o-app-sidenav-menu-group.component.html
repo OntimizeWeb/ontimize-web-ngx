@@ -6,7 +6,7 @@
         <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
         <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
         <span class="fill-remaining"></span>
-        <ng-container *ngIf="menuGroup.route!==undefined && menuGroup.opened; else arrowMenuGroupTemplate">
+        <ng-container *ngIf="appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened; else arrowMenuGroupTemplate">
           <mat-icon class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right" (click)="toggle($event)"></mat-icon>
         </ng-container>
         <ng-template #arrowMenuGroupTemplate>
