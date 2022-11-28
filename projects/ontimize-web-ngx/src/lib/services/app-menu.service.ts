@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { AppConfig } from '../config/app-config';
 import {
   MenuGroup,
-  MenuGroupRoute,
   MenuItem,
   MenuItemAction,
   MenuItemLocale,
@@ -118,7 +117,7 @@ export class AppMenuService {
 
   private setActiveItem(): void {
     let activeItem: MenuItemRoute;
-    const routeItems: MenuItemRoute[] = this.ALL_MENU_ITEMS.filter(item => item as MenuRootItem || item as MenuGroupRoute) as MenuItemRoute[];
+    const routeItems: MenuItemRoute[] = this.ALL_MENU_ITEMS.filter(item => this.isRouteItem(item)) as MenuItemRoute[];
     const pathMatchFullItems = routeItems.filter(item => item.pathMatch === 'full');
     if (pathMatchFullItems.length > 0) {
       activeItem = pathMatchFullItems.find(item => item.route === this.router.url);

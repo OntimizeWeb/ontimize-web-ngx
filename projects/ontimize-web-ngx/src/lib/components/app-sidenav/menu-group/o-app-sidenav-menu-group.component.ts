@@ -16,7 +16,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
-import { MenuGroup, MenuGroupRoute, MenuItemRoute } from '../../../interfaces/app-menu.interface';
+import { MenuGroup, MenuGroupRoute } from '../../../interfaces/app-menu.interface';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { PermissionsService } from '../../../services/permissions/permissions.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
@@ -97,7 +97,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.router = this.injector.get<Router>(Router as Type<Router>);
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd && this.appMenuService.isRouteItem(this.menuGroup)) {
-        this.active = this.appMenuService.isItemActive(this.menuGroup as MenuItemRoute);
+        this.active = this.appMenuService.isItemActive(this.menuGroup as MenuGroupRoute);
         this.cd.detectChanges();
       }
     });
