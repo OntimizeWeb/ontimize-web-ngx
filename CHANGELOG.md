@@ -1,3 +1,19 @@
+## 8.9.0
+### Features:
+* **o-table**: new `show-charts-on-demand-option` input that allows to show the charts on demand option in the menu table ([daf9d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/daf9d2d)) Closes[#705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/705)
+* **o-filter-builder**:
+  * New component `o-filter-builder-menu` that allows *Load/Save/Clear* filter builder configuration Closes[#1005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1005) ([0abf043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0abf043))
+  * new `OFilterBuilderStatus` type ([5a9618d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a9618d))
+  * **o-filter-builder**: now `attr` is required for setting filter builder status in the localstorage. ([63bd1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63bd1fc))
+* **MenuGroup**: new `route` attribute ([5760dec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5760dec)) Closes[#1083](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1083)
+
+### BREAKING CHANGES
+* Now the definition abstract class `AbstractOServiceComponent` is  `AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>`
+* Now class
+  * `OServiceComponent` extends `AbstractOServiceComponent<DefaultServiceComponentStateService>`
+  * `OGridComponentStateClass, OListComponentStateClass, OTableComponentStateClass` extends `DefaultServiceComponentStateClass`
+* Renamed the components  `OTableLoadFilterDialogComponent, OStoreFilterDialogComponent` to `OLoadFilterDialogComponent, OTableStoreFilterDialogComponent` and moved to `OShareModule`
+
 ## 8.8.2 (2022-12-02)
 ### Bug fixes
 * **o-form-layout-tabgroup**: Fixed multi-column primary keys bug ([f995412](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f995412)) ([d9b962a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9b962a)) Closes [#1053](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1053)

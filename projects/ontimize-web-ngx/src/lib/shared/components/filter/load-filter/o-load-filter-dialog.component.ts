@@ -12,16 +12,15 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
 
-import { DialogService } from '../../../../../services/dialog.service';
-import { OTableFiltersStatus } from '../../../../../types/table/o-table-filter-status.type';
+import { DialogService } from '../../../../services/dialog.service';
+import { OTableFiltersStatus } from '../../../../types/table/o-table-filter-status.type';
 
 @Component({
-  selector: 'o-table-load-filter-dialog',
-  templateUrl: './o-table-load-filter-dialog.component.html',
-  styleUrls: ['./o-table-load-filter-dialog.component.scss'],
+  selector: 'o-load-filter-dialog',
+  templateUrl: './o-load-filter-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OTableLoadFilterDialogComponent implements OnInit {
+export class OLoadFilterDialogComponent implements OnInit {
 
   @ViewChild(MatSelectionList, { static: true }) filterList: MatSelectionList;
 
@@ -33,7 +32,7 @@ export class OTableLoadFilterDialogComponent implements OnInit {
   protected cd: ChangeDetectorRef;
 
   constructor(
-    public dialogRef: MatDialogRef<OTableLoadFilterDialogComponent>,
+    public dialogRef: MatDialogRef<OLoadFilterDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: OTableFiltersStatus[],
     protected injector: Injector
   ) {

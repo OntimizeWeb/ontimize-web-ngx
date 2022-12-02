@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { OColumn } from '../../components/table/column/o-column.class';
 import { OTableComponent } from '../../components/table/o-table.component';
+import { OFilterDefinition } from '../../types/o-filter-definition.type';
 import { OColumnDisplay } from '../../types/table/o-column-display.type';
 import { OColumnSearchable } from '../../types/table/o-column-searchable.type';
 import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
@@ -51,7 +52,8 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
     return dataToStore;
   }
 
-  storeFilter(newFilter: OTableFiltersStatus) {
+  storeFilter(filter: OFilterDefinition) {
+    let newFilter: OTableFiltersStatus = { name: filter.name, description: filter.description };
     const storedFilter = {}
     Object.assign(storedFilter, this.getColumnFiltersState());
     Object.assign(storedFilter, this.getColumnsQuickFilterState());
@@ -106,7 +108,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
         result = this.getInitialConfigurationState();
         break;
       case 'filter-column-active':
-          result['filter-column-active'] = this.component.isColumnFiltersActive;
+        result['filter-column-active'] = this.component.isColumnFiltersActive;
         break;
       case 'filter-columns':
         result['filter-columns'] = this.component.filterColumns;

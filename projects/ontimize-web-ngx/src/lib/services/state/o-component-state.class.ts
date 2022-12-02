@@ -1,12 +1,21 @@
+
 export abstract class AbstractComponentStateClass {
   abstract setData(data: any);
+}
+export abstract class AbstractServiceComponentStateClass extends AbstractComponentStateClass {
   abstract queryRows: number;
   abstract totalQueryRecordsNumber: number;
   abstract queryRecordOffset: number;
   abstract quickFilterValue: string;
+
+}
+export class DefaultComponentStateClass extends AbstractComponentStateClass {
+  setData(data: any) {
+    Object.assign(this, data);
+  }
 }
 
-export class DefaultComponentStateClass extends AbstractComponentStateClass {
+export class DefaultServiceComponentStateClass extends AbstractServiceComponentStateClass {
 
   // quick-filter
   protected 'filter-case-sensitive': boolean;
@@ -47,4 +56,6 @@ export class DefaultComponentStateClass extends AbstractComponentStateClass {
   setData(data: any) {
     Object.assign(this, data);
   }
+
+
 }
