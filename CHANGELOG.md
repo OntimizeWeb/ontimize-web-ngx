@@ -1,4 +1,4 @@
-## 8.8.1 (2022-12-02)
+## 8.8.2 (2022-12-02)
 ### Bug fixes
 * **o-form-layout-tabgroup**: Fixed multi-column primary keys bug ([f995412](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f995412)) ([d9b962a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9b962a)) Closes [#1053](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1053)
 
