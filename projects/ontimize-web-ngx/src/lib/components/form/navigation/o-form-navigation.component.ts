@@ -237,7 +237,6 @@ export class OFormNavigationComponent implements OnDestroy {
     if (route.length > 0) {
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
-        this.navigationService.removeLastItem();
         this._form.canDiscardChanges = true;
 
         const extras: NavigationExtras = {};
@@ -250,6 +249,7 @@ export class OFormNavigationComponent implements OnDestroy {
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
             this.currentIndex = index;
+            this.navigationService.removeLastItem();
           }
         });
       }
@@ -257,6 +257,7 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   private moveInFormLayoutManager(index: number) {
+    console.log('***** move in form layout manager');
     this._form.setUrlParamsAndReload(this.navigationData[index]);
   }
 
