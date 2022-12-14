@@ -257,7 +257,6 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   private moveInFormLayoutManager(index: number) {
-    console.log('***** move in form layout manager');
     this._form.setUrlParamsAndReload(this.navigationData[index]);
   }
 
