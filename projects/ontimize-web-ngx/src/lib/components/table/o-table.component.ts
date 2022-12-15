@@ -1973,10 +1973,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.updateStateExpandedColumn();
   }
 
+  getCurrentData
+
+  public getNumRowSelectedInCurrentData(): number {
+    return this.dataSource ? this.dataSource.renderedData.filter(x => !this.isDisableCheckbox(x) && this.isRowSelected(x)).length : 0;
+  }
+
   public isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource ? this.dataSource.renderedData.filter(x=>!this.isDisableCheckbox(x)).length : undefined;
+    const numRows = this.getNumRowSelectedInCurrentData();
     return numSelected > 0 && numSelected === numRows;
+  }
+
+  public isIndeterminate(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.getNumRowSelectedInCurrentData();
+    return numSelected > 0 && numRows > 0 && numSelected !== numRows;
   }
 
   public masterToggle(event: MatCheckboxChange): void {
