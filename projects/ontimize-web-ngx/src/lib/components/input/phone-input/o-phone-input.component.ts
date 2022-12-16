@@ -135,9 +135,9 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
   protected addOntimizeCustomAppearanceClass(): void {
     try {
       if (this.elRef) {
-        const matFormFieldEl: NodeList[] = this.elRef.nativeElement.querySelectorAll('mat-form-field');
+        const matFormFieldEl = this.elRef.nativeElement.querySelectorAll('mat-form-field');
         matFormFieldEl.forEach(matForm => {
-          (matForm as any).classList.add('mat-form-field-appearance-ontimize');
+          matForm.classList.add('mat-form-field-appearance-ontimize');
         });
       }
     } catch (e) {
