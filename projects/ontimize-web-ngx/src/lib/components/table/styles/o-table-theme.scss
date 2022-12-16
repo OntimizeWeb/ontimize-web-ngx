@@ -24,6 +24,10 @@
     }
 
     .mat-table {
+      .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
+        border-color: mat-color($foreground, secondary-text, 0.18);
+      }
+
       .mat-header-row {
         .mat-header-cell {
           color: mat-color($foreground, text);

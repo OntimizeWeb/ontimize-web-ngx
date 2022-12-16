@@ -227,7 +227,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'showReportOnDemandOption: show-report-on-demand-option',
 
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
-  'showResetWidthOption: show-reset-width-option'
+  'showResetWidthOption: show-reset-width-option',
+
+  'disableSelectionFunction: disable-selection-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -242,6 +244,8 @@ const stickyFooterSelector = '.mat-footer-row .mat-table-sticky';
 const rowSelector = '.mat-row';
 const headerSelector = '.mat-header-row';
 const footerSelector = '.mat-footer-row';
+
+type DisableSelectionFunction = (item: any) => boolean;
 
 @Component({
   selector: 'o-table',
@@ -584,6 +588,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected previousRendererData;
 
   quickFilterCallback: QuickFilterFunction;
+  disableSelectionFunction: DisableSelectionFunction;
 
   @ViewChild('tableBody', { static: false })
   protected tableBodyEl: ElementRef;
@@ -1968,10 +1973,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.updateStateExpandedColumn();
   }
 
+  getCurrentData
+
+  public getNumRowSelectedInCurrentData(): number {
+    return this.dataSource ? this.dataSource.renderedData.filter(x => !this.isDisableCheckbox(x) && this.isRowSelected(x)).length : 0;
+  }
+
   public isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource ? this.dataSource.renderedData.length : undefined;
+    const numRows = this.getNumRowSelectedInCurrentData();
     return numSelected > 0 && numSelected === numRows;
+  }
+
+  public isIndeterminate(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.getNumRowSelectedInCurrentData();
+    return numSelected > 0 && numRows > 0 && numSelected !== numRows;
   }
 
   public masterToggle(event: MatCheckboxChange): void {
@@ -2004,6 +2021,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public setSelected(item: any): void {
+    if (this.isDisableCheckbox(item)) {
+      return;
+    }
     if (Util.isDefined(item) && !this.isRowSelected(item)) {
       this.selection.select(item);
     }
@@ -3172,6 +3192,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this._oTableOptions.columns.forEach(c => {
       c.DOMWidth = this.getThWidthFromOColumn(c);
     });
+
+  }
+
+  public isDisableCheckbox(item: any): boolean {
+    let disable = false;
+    if (Util.isDefined(this.disableSelectionFunction)) {
+      return this.disableSelectionFunction(item);
+    }
+    return disable;
 
   }
 }
