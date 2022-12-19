@@ -1,4 +1,6 @@
 .o-phone-input {
+  overflow: hidden;
+
   .read-only {
     pointer-events: none;
     .mat-select-arrow-wrapper {
