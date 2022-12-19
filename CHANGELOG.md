@@ -14,6 +14,13 @@
   * `OGridComponentStateClass, OListComponentStateClass, OTableComponentStateClass` extends `DefaultServiceComponentStateClass`
 * Renamed the components  `OTableLoadFilterDialogComponent, OStoreFilterDialogComponent` to `OLoadFilterDialogComponent, OTableStoreFilterDialogComponent` and moved to `OShareModule`
 
+## 8.8.3 (2022-12-19)
+* **o-phone-input**:
+  * Add new input `gap` ([9d8e602](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d8e602))
+  * Fixed styles ([bbb7976](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bbb7976)) Closes [#1079](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1079)
+  * Responsive design ([238e880](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238e880)) Closes [#1099](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1099)
+* **o-table**: new `disable-selection-function` input ([dc69ec4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc69ec4)) Closes [#1106](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1106)
+
 ## 8.8.2 (2022-12-02)
 ### Bug fixes
 * **o-form-layout-tabgroup**: Fixed multi-column primary keys bug ([f995412](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f995412)) ([d9b962a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d9b962a)) Closes [#1053](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1053)
