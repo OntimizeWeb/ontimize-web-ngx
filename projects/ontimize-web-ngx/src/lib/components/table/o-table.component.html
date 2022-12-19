@@ -77,10 +77,11 @@
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (click)="$event.stopPropagation()" (change)="masterToggle($event)" [checked]="isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+          [indeterminate]="isIndeterminate()"></mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row">
-        <mat-checkbox name="id[]" (click)="$event.stopPropagation()" (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
+        <mat-checkbox name="id[]" (click)="$event.stopPropagation()" [disabled]="isDisableCheckbox(row)"
+          (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
         </mat-checkbox>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>

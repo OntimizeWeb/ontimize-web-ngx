@@ -36,7 +36,9 @@ import { OPhoneInputData } from './interfaces/change-data';
 import { Country } from './model/country.model';
 
 export const DEFAULT_INPUTS_O_PHONE_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
+  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  //gap: Specify gap between fields in px
+  'gap'
 ];
 
 export const DEFAULT_OUTPUTS_O_PHONE_INPUT = [
@@ -64,6 +66,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
 
   @ViewChild('countryList', { static: false }) countryList: ElementRef;
   @ViewChild('matInputRef', { read: ElementRef, static: true }) private matInputRef!: ElementRef;
+  public gap = '14px';
 
   _selectedCountry: Country = {
     areaCodes: undefined,
@@ -132,10 +135,10 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
   protected addOntimizeCustomAppearanceClass(): void {
     try {
       if (this.elRef) {
-        const matFormFieldEl = this.elRef.nativeElement.getElementsByTagName('mat-form-field');
-        if (matFormFieldEl && matFormFieldEl.item(1)) {
-          matFormFieldEl.item(1).classList.add('mat-form-field-appearance-ontimize');
-        }
+        const matFormFieldEl = this.elRef.nativeElement.querySelectorAll('mat-form-field');
+        matFormFieldEl.forEach(matForm => {
+          matForm.classList.add('mat-form-field-appearance-ontimize');
+        });
       }
     } catch (e) {
       //
