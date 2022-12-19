@@ -27,14 +27,14 @@ jobs:
           echo "BASELINE_BRANCH=${{ github.event.inputs.BASELINE || github.ref }}" >> $GITHUB_ENV
 
       - name: Checkout merge commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ env.BASELINE_BRANCH }}
           fetch-depth: 0
           persist-credentials: false
 
       - name: 'Cache node modules'
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Node 12.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 12.13.0
           registry-url: ${{ env.NPM_REGISTRY }}
@@ -70,11 +70,10 @@ jobs:
           npm publish
 
       - name: GitHub Release / Create release
-        uses: actions/create-release@v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@2792aea87063cfd0d27953ac38e3ab45afacc154
         with:
-          tag_name: ${{ steps.project.outputs.version }}
-          release_name: ${{ steps.project.outputs.version }}
+          tag: ${{ steps.project.outputs.version }}
+          name: ${{ steps.project.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             Check out the [changelog](CHANGELOG.md) for version ${{ steps.project.outputs.version }}

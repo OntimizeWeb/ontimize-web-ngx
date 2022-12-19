@@ -9,8 +9,8 @@ import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { OErrorDialogManager } from '../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../services/ontimize/ontimize.service';
-import { AbstractComponentStateClass } from '../services/state/o-component-state.class';
-import { AbstractComponentStateService, DefaultComponentStateService } from '../services/state/o-component-state.service';
+import { AbstractServiceComponentStateClass } from '../services/state/o-component-state.class';
+import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Codes } from '../util/codes';
@@ -87,7 +87,7 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
-export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>> implements ILocalStorageComponent, OnChanges {
+export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractServiceComponentStateClass>> implements ILocalStorageComponent, OnChanges {
 
   protected localStorageService: LocalStorageService;
   componentStateService: T;
@@ -200,7 +200,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
   }
 
-  get state(): AbstractComponentStateClass {
+  get state(): AbstractServiceComponentStateClass {
     return this.componentStateService.state;
   }
 
@@ -529,11 +529,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 }
 
-export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService> {
+export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultServiceComponentStateService> {
 
 }
 
 /* This class is being defined to mantain the backwards compatibility with previous versions, use DefaultOServiceBaseComponent*/
-export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultComponentStateService> {
+export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultServiceComponentStateService> {
 
 }

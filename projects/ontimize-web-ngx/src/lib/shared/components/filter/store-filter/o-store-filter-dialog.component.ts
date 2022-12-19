@@ -2,16 +2,15 @@ import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/c
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { OTableFiltersStatus } from '../../../../../types/table/o-table-filter-status.type';
-import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
+import { OTableBaseDialogClass } from '../../../../components/table/extensions/dialog/o-table-base-dialog.class';
+import { OFilterDefinition } from '../../../../types/o-filter-definition.type';
 
 @Component({
-  selector: 'o-table-store-filter-dialog',
-  templateUrl: './o-table-store-filter-dialog.component.html',
-  styleUrls: ['./o-table-store-filter-dialog.component.scss'],
+  selector: 'o-store-filter-dialog',
+  templateUrl: './o-store-filter-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OTableStoreFilterDialogComponent extends OTableBaseDialogClass {
+export class OStoreFilterDialogComponent extends OTableBaseDialogClass {
 
   filterNames: Array<string> = [];
   formGroup: FormGroup = new FormGroup({
@@ -23,7 +22,7 @@ export class OTableStoreFilterDialogComponent extends OTableBaseDialogClass {
   });
 
   constructor(
-    public dialogRef: MatDialogRef<OTableStoreFilterDialogComponent>,
+    public dialogRef: MatDialogRef<OStoreFilterDialogComponent>,
     protected injector: Injector,
     @Inject(MAT_DIALOG_DATA) data: Array<string>
   ) {
@@ -36,7 +35,7 @@ export class OTableStoreFilterDialogComponent extends OTableBaseDialogClass {
     this.filterNames = filterNames;
   }
 
-  getFilterAttributes(): OTableFiltersStatus {
+  getFilterAttributes(): OFilterDefinition {
     return this.formGroup.value;
   }
 

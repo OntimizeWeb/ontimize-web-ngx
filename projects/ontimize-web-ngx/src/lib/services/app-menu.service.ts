@@ -14,6 +14,7 @@ import {
 } from '../interfaces/app-menu.interface';
 import { MenuRootItem } from '../types/menu-root-item.type';
 import { Codes } from '../util/codes';
+import { Util } from '../util/util';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class AppMenuService {
   protected router: Router;
   protected _config: AppConfig;
   protected MENU_ROOTS: MenuRootItem[];
-  protected ALL_MENU_ITEMS: MenuItem[];
+  protected ALL_MENU_ITEMS: MenuRootItem[];
   protected activeItem: MenuItemRoute;
 
   public onClick: Subject<any> = new Subject();
@@ -53,11 +54,11 @@ export class AppMenuService {
     return this.MENU_ROOTS.find(c => c.id === id);
   }
 
-  getAllMenuItems(): MenuItem[] {
+  getAllMenuItems(): MenuRootItem[] {
     return this.ALL_MENU_ITEMS;
   }
 
-  getMenuItemById(id: string): MenuItem {
+  getMenuItemById(id: string): MenuItem | MenuGroup {
     return this.ALL_MENU_ITEMS.find(i => i.id === id);
   }
 
@@ -66,9 +67,6 @@ export class AppMenuService {
     switch (true) {
       case ((item as MenuItemLogout).route === Codes.LOGIN_ROUTE):
         type = 'logout';
-        break;
-      case ((item as MenuItemRoute).route !== undefined):
-        type = 'route';
         break;
       case ((item as MenuItemAction).action !== undefined):
         type = 'action';
@@ -93,24 +91,37 @@ export class AppMenuService {
     return this.getMenuItemType(item) === 'group';
   }
 
+  isMenuGroupRoute(item: MenuRootItem): boolean {
+    return this.getMenuItemType(item) === 'group' && item.hasOwnProperty('route');
+  }
+
   isItemActive(item: MenuItemRoute): boolean {
     return this.activeItem && this.activeItem.route === item.route;
   }
 
-  private getMenuItems(item: MenuRootItem): MenuItem[] {
-    if ((item as MenuGroup).items !== undefined) {
-      return (item as MenuGroup).items;
+  isRouteItem(item: MenuItemRoute): boolean {
+    return Util.isDefined(item.route);
+  }
+
+  private getMenuItems(item: MenuRootItem): MenuRootItem[] {
+    const menuGroup = item as MenuGroup;
+    const items = menuGroup.items;
+    if (items !== undefined) {
+      if (this.isMenuGroupRoute(menuGroup)) {
+        return [item].concat(items)
+      }
+      return items;
     }
     return [item];
   }
 
   private setActiveItem(): void {
     let activeItem: MenuItemRoute;
-    const routeItems: MenuItemRoute[] = this.ALL_MENU_ITEMS.filter(item => this.getMenuItemType(item) === 'route') as MenuItemRoute[];
+    const routeItems: MenuItemRoute[] = this.ALL_MENU_ITEMS.filter(item => this.isRouteItem(item)) as MenuItemRoute[];
     const pathMatchFullItems = routeItems.filter(item => item.pathMatch === 'full');
     if (pathMatchFullItems.length > 0) {
       activeItem = pathMatchFullItems.find(item => item.route === this.router.url);
-    } 
+    }
     if (!activeItem) {
       activeItem = routeItems.find(item => this.router.url.startsWith(item.route));
     }

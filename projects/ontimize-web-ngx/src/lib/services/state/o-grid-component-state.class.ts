@@ -1,6 +1,6 @@
-import { DefaultComponentStateClass } from './o-component-state.class';
+import { DefaultServiceComponentStateClass } from './o-component-state.class';
 
-export class OGridComponentStateClass extends DefaultComponentStateClass {
+export class OGridComponentStateClass extends DefaultServiceComponentStateClass {
   protected 'sort-column': string;
   currentPage: number;
   'quickFilterActiveColumns': string;
