@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatExpansionPanel } from '@angular/material';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +15,7 @@ export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
 export const DEFAULT_OUTPUTS_O_CONTAINER_COLLAPSIBLE = [
   //onClosed: Event emitted every time the component collapsible is closed.
   'onClosed',
-   //onOpened: Event emitted every time the component collapsible is opened.
+  //onOpened: Event emitted every time the component collapsible is opened.
   'onOpened',
   //onAfterCollapse: An event emitted after the body's collapse animation happens.
   'onAfterCollapse',
