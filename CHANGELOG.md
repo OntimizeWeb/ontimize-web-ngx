@@ -6,6 +6,7 @@
   * new `OFilterBuilderStatus` type ([5a9618d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a9618d))
   * **o-filter-builder**: now `attr` is required for setting filter builder status in the localstorage. ([63bd1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63bd1fc))
 * **MenuGroup**: new `route` attribute ([5760dec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5760dec)) Closes[#1083](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1083)
+* **o-row-collapsible**, **o-column-collapsible**:  new output `onClosed, onOpened, onAfterCollapse, onAfterExpand`([90d640f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/90d640f)) Closes[#1074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1074)
 
 ### BREAKING CHANGES
 * Now the definition abstract class `AbstractOServiceComponent` is  `AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>`
