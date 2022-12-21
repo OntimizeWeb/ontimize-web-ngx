@@ -359,6 +359,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     if (!this.addingGuard) {
       return;
     }
+    this.oFormLayoutManagerService.activeFormLayoutManager = undefined;
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
       for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {

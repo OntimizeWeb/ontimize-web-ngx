@@ -8,6 +8,10 @@
 * **MenuGroup**: new `route` attribute ([5760dec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5760dec)) Closes[#1083](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1083)
 * **o-row-collapsible**, **o-column-collapsible**:  new outputS `onClosed, onOpened, onAfterCollapse, onAfterExpand`([90d640f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/90d640f)) Closes[#1074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1074)
 
+### Bug fixes
+* **o-form-navigation**: Fixed form navigation not loading data when there was previously an active form layout manager([5730970](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5730970)) Closes[#1071](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1071)
+
+
 ### BREAKING CHANGES
 * Now the definition abstract class `AbstractOServiceComponent` is  `AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>`
 * Now class
