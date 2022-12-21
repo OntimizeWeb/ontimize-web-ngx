@@ -1,4 +1,7 @@
-## 8.8.4
+## 8.8.4 (2022-12-21)
+### Bug fixes
+* **o-form-layout-tabgroup**: Fixed not opening the detail tab if you had previously opened a new tab again ([0e75eb8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e75eb8)) Closes [#1115](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1115)
+
 ## 8.8.3 (2022-12-19)
 * **o-phone-input**:
   * Add new input `gap` ([9d8e602](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d8e602))
