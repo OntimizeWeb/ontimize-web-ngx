@@ -1973,8 +1973,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.updateStateExpandedColumn();
   }
 
-  getCurrentData
-
   public getNumRowSelectedInCurrentData(): number {
     return this.dataSource ? this.dataSource.renderedData.filter(x => !this.isDisableCheckbox(x) && this.isRowSelected(x)).length : 0;
   }
