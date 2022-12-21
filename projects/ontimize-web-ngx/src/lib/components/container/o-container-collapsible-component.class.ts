@@ -1,5 +1,6 @@
-import { AfterViewInit, ElementRef, Inject, Injector, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatExpansionPanel } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { DEFAULT_INPUTS_O_CONTAINER, OContainerComponent } from './o-container-component.class';
@@ -8,11 +9,21 @@ export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
   ...DEFAULT_INPUTS_O_CONTAINER,
   'expanded',
   'description',
-  'collapsedHeight:collapsed-height',
-  'expandedHeight:expanded-height'
+  'collapsedHeight: collapsed-height',
+  'expandedHeight: expanded-height'
 ];
+export const DEFAULT_OUTPUTS_O_CONTAINER_COLLAPSIBLE = [
+  //onClosed: Event emitted every time the component collapsible is closed.
+  'onClosed',
+  //onOpened: Event emitted every time the component collapsible is opened.
+  'onOpened',
+  //onAfterCollapse: An event emitted after the body's collapse animation happens.
+  'onAfterCollapse',
+  //onAfterExpand: An event emitted after the body's expansion animation happens.
+  'onAfterExpand'
+]
 
-export class OContainerCollapsibleComponent extends OContainerComponent implements AfterViewInit {
+export class OContainerCollapsibleComponent extends OContainerComponent implements AfterViewInit, OnDestroy {
 
   @InputConverter()
   public expanded: boolean = true;
@@ -20,9 +31,17 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
   public expandedHeight = '37px';
   public description: string;
 
+  onClosed = new EventEmitter<void>();
+  onOpened = new EventEmitter<void>();
+  onAfterCollapse = new EventEmitter<void>();
+  onAfterExpand = new EventEmitter<void>();
+
   @ViewChild('expPanel', { static: false }) expPanel: MatExpansionPanel; // Used in subcomponents
   @ViewChild('containerContent', { static: true }) protected containerContent: ElementRef;
   @ViewChild('oContainerOutline', { static: false }) protected oContainerOutline: ElementRef;
+
+
+  protected expPanelSubscriptions: Subscription = new Subscription();
 
   constructor(
     protected elRef: ElementRef,
@@ -35,6 +54,14 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
     this.updateOutlineGap();
+    this.subscribeEventsExpPanel();
+  }
+
+  subscribeEventsExpPanel() {
+    this.expPanelSubscriptions.add(this.expPanel.afterCollapse.subscribe(() => this.onAfterCollapse.emit()));
+    this.expPanelSubscriptions.add(this.expPanel.afterExpand.subscribe(() => this.onAfterExpand.emit()));
+    this.expPanelSubscriptions.add(this.expPanel.closed.subscribe(() => this.onClosed.emit()));
+    this.expPanelSubscriptions.add(this.expPanel.opened.subscribe(() => this.onOpened.emit()));
   }
 
   protected updateOutlineGap(): void {
@@ -97,6 +124,9 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
     if (this.oContainerOutline) {
       this.oContainerOutline.nativeElement.style.height = height;
     }
+  }
+  ngOnDestroy(): void {
+    this.expPanelSubscriptions.unsubscribe();
   }
 
 }

@@ -181,7 +181,10 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     if (addNewComp) {
       this.data.forEach(comp => {
         const currParams = comp.params || {};
-        const someDiffParams =  Object.keys(currParams).some(key => currParams[key] != newCompParams[key]);
+        let someDiffParams = true;
+        if (Object.keys(currParams).length > 0) {
+          someDiffParams = Object.keys(currParams).some(key => currParams[key] != newCompParams[key]);
+        }
         addNewComp = addNewComp && someDiffParams;
       });
     }

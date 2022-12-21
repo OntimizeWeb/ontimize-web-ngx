@@ -1,9 +1,7 @@
 .o-phone-input {
-  .mat-form-phone {
-    padding-right: 5px;
-  }
+  overflow: hidden;
 
-  .read-only  {
+  .read-only {
     pointer-events: none;
     .mat-select-arrow-wrapper {
       visibility: hidden;

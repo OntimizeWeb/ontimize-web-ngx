@@ -6,6 +6,7 @@
   * new `OFilterBuilderStatus` type ([5a9618d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a9618d))
   * **o-filter-builder**: now `attr` is required for setting filter builder status in the localstorage. ([63bd1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63bd1fc))
 * **MenuGroup**: new `route` attribute ([5760dec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5760dec)) Closes[#1083](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1083)
+* **o-row-collapsible**, **o-column-collapsible**:  new outputS `onClosed, onOpened, onAfterCollapse, onAfterExpand`([90d640f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/90d640f)) Closes[#1074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1074)
 
 ### Bug fixes
 * **o-form-navigation**: Fixed form navigation not loading data when there was previously an active form layout manager([5730970](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5730970)) Closes[#1071](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1071)
@@ -17,6 +18,17 @@
   * `OServiceComponent` extends `AbstractOServiceComponent<DefaultServiceComponentStateService>`
   * `OGridComponentStateClass, OListComponentStateClass, OTableComponentStateClass` extends `DefaultServiceComponentStateClass`
 * Renamed the components  `OTableLoadFilterDialogComponent, OStoreFilterDialogComponent` to `OLoadFilterDialogComponent, OTableStoreFilterDialogComponent` and moved to `OShareModule`
+
+## 8.8.4 (2022-12-21)
+### Bug fixes
+* **o-form-layout-tabgroup**: Fixed not opening the detail tab if you had previously opened a new tab again ([0e75eb8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e75eb8)) Closes [#1115](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1115)
+
+## 8.8.3 (2022-12-19)
+* **o-phone-input**:
+  * Add new input `gap` ([9d8e602](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d8e602))
+  * Fixed styles ([bbb7976](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bbb7976)) Closes [#1079](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1079)
+  * Responsive design ([238e880](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/238e880)) Closes [#1099](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1099)
+* **o-table**: new `disable-selection-function` input ([dc69ec4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc69ec4)) Closes [#1106](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1106)
 
 ## 8.8.2 (2022-12-02)
 ### Bug fixes
