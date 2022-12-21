@@ -4,8 +4,8 @@ import { OColumnValueFilter } from './o-column-value-filter.type';
 
 export type OTableFiltersStatus = {
   name: string;
-  description: string;
-  'stored-filter': OTableStoredFilter;
+  description?: string;
+  'stored-filter'?: OTableStoredFilter;
 };
 
 export type OTableStoredFilter = {

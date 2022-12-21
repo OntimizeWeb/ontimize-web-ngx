@@ -48,7 +48,7 @@ import { ComponentStateServiceProvider, OntimizeServiceProvider, O_COMPONENT_STA
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OColumnDisplay, OGroupedColumnTypes } from '../../types';
+import { OColumnDisplay, OFilterDefinition, OGroupedColumnTypes } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -57,7 +57,6 @@ import { SQLOrder } from '../../types/sql-order.type';
 import { OColumnAggregate } from '../../types/table/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/table/o-column-value-filter.type';
 import { TableFilterByColumnDialogResult } from '../../types/table/o-table-filter-by-column-data.type';
-import { OTableFiltersStatus } from '../../types/table/o-table-filter-status.type';
 import { OTableGlobalConfig } from '../../types/table/o-table-global-config.type';
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
@@ -217,7 +216,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // virtual-scroll [yes|no|true|false]: Whether enabled or not the virtual scroll
   'virtualScroll: virtual-scroll',
 
-  // context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
+  //context-menu [yes|no|true|false]: Indicates whether or not to include the table context menu
   'contextMenu: context-menu',
 
   // show-expandable-icon-function [function]: Expandable function to check if expandable has data to show or not icon
@@ -225,6 +224,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   // show-report-on-demand-option [yes|no|true|false]: show report on demand option in the table menu. Default: yes.
   'showReportOnDemandOption: show-report-on-demand-option',
+
+  // show-charts-on-demand-option [yes|no|true|false]: show charts on demand option in the header menu
+  'showChartsOnDemandOption: show-charts-on-demand-option',
 
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
   'showResetWidthOption: show-reset-width-option',
@@ -356,6 +358,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   showFilterOption: boolean = true;
   @InputConverter()
   showReportOnDemandOption: boolean = true;
+  @InputConverter()
+  showChartsOnDemandOption: boolean = true;
   @InputConverter()
   showButtonsText: boolean = true;
   @InputConverter()
@@ -3057,7 +3061,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.clearSelectionAndEditing(clearSelection);
   }
 
-  storeFilterInState(arg: OTableFiltersStatus) {
+  storeFilterInState(arg: OFilterDefinition) {
     this.componentStateService.storeFilter(arg);
   }
 
