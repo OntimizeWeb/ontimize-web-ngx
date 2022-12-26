@@ -6,10 +6,11 @@
   * new `OFilterBuilderStatus` type ([5a9618d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a9618d))
   * **o-filter-builder**: now `attr` is required for setting filter builder status in the localstorage. ([63bd1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63bd1fc))
 * **MenuGroup**: new `route` attribute ([5760dec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5760dec)) Closes[#1083](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1083)
-* **o-row-collapsible**, **o-column-collapsible**:  new outputS `onClosed, onOpened, onAfterCollapse, onAfterExpand`([90d640f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/90d640f)) Closes[#1074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1074)
+* **o-row-collapsible**, **o-column-collapsible**:  new outputS `onClosed, onOpened, onAfterCollapse, onAfterExpand`([90d640f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/90d640f)) Closes[#1122](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1122)
 
 ### Bug fixes
 * **o-form-navigation**: Fixed form navigation not loading data when there was previously an active form layout manager([5730970](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5730970)) Closes[#1071](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1071)
+* **o-button**: Fixed that border was displayed on buttons that had svg-icon configured ([605356d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/605356d)) Closes[#1071](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1071)
 
 
 ### BREAKING CHANGES
