@@ -320,4 +320,9 @@
   .o-mat-menu.mat-menu-panel {
     min-height: auto;
   }
+
+  /* CHART FONT */
+  o-chart .nvd3 text {
+    font: mat-font-weight($typography, caption) mat-font-size($typography, caption) mat-font-family($typography);
+  }
 }
