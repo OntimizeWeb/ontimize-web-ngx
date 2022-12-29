@@ -1,4 +1,4 @@
-## 8.9.0
+## 8.9.0 (2022-12-29)
 ### Features:
 * **o-table**: new `show-charts-on-demand-option` input that allows to show the charts on demand option in the menu table ([daf9d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/daf9d2d)) Closes[#705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/705)
 * **o-filter-builder**:
