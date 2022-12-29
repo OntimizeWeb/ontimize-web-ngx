@@ -3,7 +3,6 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
-  $is-dark-theme: map-get($theme, is-dark);
   @if $typography == null {
     $typography: mat-typography-config();
   }
