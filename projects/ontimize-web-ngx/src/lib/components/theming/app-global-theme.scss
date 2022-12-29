@@ -3,6 +3,7 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
+  $is-dark-theme: map-get($theme, is-dark);
   @if $typography == null {
     $typography: mat-typography-config();
   }
@@ -322,7 +323,19 @@
   }
 
   /* CHART FONT */
-  o-chart .nvd3 text {
-    font: mat-font-weight($typography, caption) mat-font-size($typography, caption) mat-font-family($typography);
+  o-chart .nvd3 {
+    text {
+      font: mat-font-weight($typography, caption) mat-font-size($typography, caption) mat-font-family($typography);
+      fill: mat-color($foreground,text);
+    }
+
+    .nv-discretebar .nv-groups text,
+    .nv-multibarHorizontal .nv-groups text {
+      fill: mat-color($foreground,text);
+    }
+
+    .nv-axis path {
+      stroke: mat-color($foreground,text);
+    }
   }
 }
