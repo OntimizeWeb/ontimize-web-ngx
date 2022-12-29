@@ -1,3 +1,26 @@
+## 8.9.0 (2022-12-29)
+### Features:
+* **o-table**: new `show-charts-on-demand-option` input that allows to show the charts on demand option in the menu table ([daf9d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/daf9d2d)) Closes[#705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/705)
+* **o-filter-builder**:
+  * New component `o-filter-builder-menu` that allows *Load/Save/Clear* filter builder configuration Closes[#1005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1005) ([0abf043](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0abf043))
+  * new `OFilterBuilderStatus` type ([5a9618d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a9618d))
+  * **o-filter-builder**: now `attr` is required for setting filter builder status in the localstorage. ([63bd1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/63bd1fc))
+* **MenuGroup**: new `route` attribute ([5760dec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5760dec)) Closes[#1083](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1083)
+* **o-row-collapsible**, **o-column-collapsible**:  new outputS `onClosed, onOpened, onAfterCollapse, onAfterExpand`([90d640f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/90d640f)) Closes[#1122](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1122)
+* Charts compatibility with dark mode ([f018915](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f018915))
+
+### Bug fixes
+* **o-form-navigation**: Fixed form navigation not loading data when there was previously an active form layout manager([5730970](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5730970)) Closes[#1071](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1071)
+* **o-button**: Fixed that border was displayed on buttons that had svg-icon configured ([605356d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/605356d)) Closes[#1071](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1071)
+
+
+### BREAKING CHANGES
+* Now the definition abstract class `AbstractOServiceComponent` is  `AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractComponentStateClass>>`
+* Now class
+  * `OServiceComponent` extends `AbstractOServiceComponent<DefaultServiceComponentStateService>`
+  * `OGridComponentStateClass, OListComponentStateClass, OTableComponentStateClass` extends `DefaultServiceComponentStateClass`
+* Renamed the components  `OTableLoadFilterDialogComponent, OStoreFilterDialogComponent` to `OLoadFilterDialogComponent, OTableStoreFilterDialogComponent` and moved to `OShareModule`
+
 ## 8.8.4 (2022-12-21)
 ### Bug fixes
 * **o-form-layout-tabgroup**: Fixed not opening the detail tab if you had previously opened a new tab again ([0e75eb8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0e75eb8)) Closes [#1115](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1115)

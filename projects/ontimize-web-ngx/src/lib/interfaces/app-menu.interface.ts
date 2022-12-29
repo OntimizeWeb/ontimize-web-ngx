@@ -1,28 +1,31 @@
-export interface MenuGroup {
+export interface MenuCommonRoute {
+  route?: string;
+  pathMatch?: 'full' | 'prefix'
+}
+
+export interface MenuCommonItem {
   id: string;
   name: string;
-  icon?: string;
-  items: (MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuGroup | MenuItem)[];
-  opened?: boolean;
   tooltip?: string;
+  icon?: string;
   class?: string;
 }
 
-export interface MenuItem {
-  id: string;
-  name: string;
-  tooltip?: string;
-  icon?: string;
+export interface MenuGroup extends MenuCommonItem {
+  items: (MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuGroup | MenuItem | MenuItemRoute)[];
+  opened?: boolean;
+}
+
+export interface MenuGroupRoute extends MenuGroup, MenuCommonRoute {
+}
+
+export interface MenuItem extends MenuCommonItem {
   image?: string;
   component?: any;
-  class?: string;
   'component-inputs'?: object;
   'show-in-card-menu'?: boolean;
 }
-
-export interface MenuItemRoute extends MenuItem {
-  route: string;
-  pathMatch: 'full' | 'prefix'
+export interface MenuItemRoute extends MenuItem, MenuCommonRoute {
 }
 
 export interface MenuItemAction extends MenuItem {

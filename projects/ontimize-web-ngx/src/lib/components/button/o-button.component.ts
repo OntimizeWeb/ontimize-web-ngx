@@ -74,7 +74,7 @@ export class OButtonComponent implements OnInit {
   }
 
   get needsIconButtonClass(): boolean {
-    return this.icon !== undefined && (this.olabel === undefined || this.olabel === '');
+    return (this.icon !== undefined || this.svgIcon !== undefined) && (this.olabel === undefined || this.olabel === '');
   }
 
   isFab(): boolean {
