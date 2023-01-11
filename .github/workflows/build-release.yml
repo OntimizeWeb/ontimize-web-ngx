@@ -15,11 +15,14 @@ on:
 
 env:
   NPM_REGISTRY: https://registry.npmjs.org/
+  CI_EMAIL: ontimize-web@imatia.com
+  CI_USERNAME: ontimize-web
+  DEVELOP_BRANCH: 8.x.x
 
 jobs:
   build:
     runs-on: ubuntu-20.04
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && contains(join(github.event.pull_request.labels.*.name, ', '), 'release'))
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release'))
 
     steps:
       - name: Get input parameters
@@ -31,7 +34,6 @@ jobs:
         with:
           ref: ${{ env.BASELINE_BRANCH }}
           fetch-depth: 0
-          persist-credentials: false
 
       - name: 'Cache node modules'
         uses: actions/cache@v3
@@ -74,6 +76,27 @@ jobs:
         with:
           tag: ${{ steps.project.outputs.version }}
           name: ${{ steps.project.outputs.version }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
           body: |
             Check out the [changelog](CHANGELOG.md) for version ${{ steps.project.outputs.version }}
+            
+      - name: Prepare git information
+        run: |
+          git config user.name "$CI_USERNAME"
+          git config user.email "$CI_EMAIL"
+
+      - name: Create sync branch
+        run: |
+          version=${{ steps.project.outputs.version }}
+          git checkout -b sync/release-$version-to-develop
+          npm version $(npm version minor --no-git-tag-version)-SNAPSHOT-0 --no-git-tag-version
+          git add .
+          git commit --allow-empty -m "Prepare next development iteration"
+          git push origin sync/release-$version-to-develop
+
+      - name: Create pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
+        run: |
+          version=${{ steps.project.outputs.version }}
+          gh pr create -B ${{ env.DEVELOP_BRANCH }} -H sync/release-$version-to-develop --title "Sync release $version to develop" --body "Automated pull request for synchronizing released version into develop branch"
