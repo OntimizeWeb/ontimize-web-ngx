@@ -23,11 +23,66 @@
     }
 
     .o-image-display-container {
-      width: 100%;
+      margin: 16px;
+      text-align: center;
+      padding: 1px;
+      border-color: transparent;
+      height: calc(100% - 32px);
+
+      &.o-file-drag {
+        padding: 40px;
+      }
+
+      .o-image-float-button-remove {
+        opacity: 0;
+        transition: opacity .5s linear;
+        -moz-transition: opacity .5s linear;
+        -webkit-transition: opacity .5s linear;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      &:hover {
+        .o-image-float-button-remove {
+          opacity: 1;
+          transition: opacity 2s linear;
+          -moz-transition: opacity 2s linear;
+          -webkit-transition: opacity 2s linear;
+        }
+      }
+
+      .empty-icon.mat-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 42px;
+        display: flex;
+        align-items: center;
+        place-content: center;
+      }
+
+      .o-image-float-button-remove {
+        opacity: 0;
+        transition: opacity .5s linear;
+        -moz-transition: opacity .5s linear;
+        -webkit-transition: opacity .5s linear;
+
+        &:hover {
+          opacity: 1;
+          transition: opacity 2s linear;
+          -moz-transition: opacity 2s linear;
+          -webkit-transition: opacity 2s linear;
+        }
+      }
 
       > img {
         height: 100%;
         width: 100%;
+
+        &.o-image-cursor {
+          cursor: pointer;
+        }
+
       }
     }
 

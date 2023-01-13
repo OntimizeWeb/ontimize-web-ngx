@@ -161,9 +161,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
       if (input.files[0]) {
         reader.readAsDataURL(input.files[0]);
       }
-      // if (this.titleLabel) {
-      //   this.titleLabel.nativeElement.textContent = input.files[0].name;
-      // }
+
       this.currentFileName = input.files[0].name;
       this.stateCtrl.setValue(this.currentFileName);
     }
@@ -211,9 +209,6 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     if (!this.isReadOnly && this.enabled) {
       super.onClickClearValue(e);
       this.fileInput.nativeElement.value = '';
-      // if (this.titleLabel) {
-      //   this.titleLabel.nativeElement.textContent = '';
-      // }
       this.stateCtrl.reset();
       this.currentFileName = '';
     }
@@ -298,6 +293,32 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
       }
     }
     return {};
+  }
+
+  onFileChange(pFileList: File[]) {
+    const files = Object.keys(pFileList).map(key => pFileList[key]);
+    const fileList = this.createFileListItems(files)
+
+    this.fileInput.nativeElement.files = fileList;
+    this.fileChange(this.fileInput.nativeElement);
+  }
+
+  createFileListItems(files) {
+    var b = new ClipboardEvent("").clipboardData || new DataTransfer()
+    for (var i = 0, len = files.length; i < len; i++) b.items.add(files[i])
+    return b.files
+  }
+
+  getFileName(): string {
+    return this.currentFileName;
+  }
+
+  getImageFile(): File {
+    if (this.fileInput && this.fileInput.nativeElement.files.length > 0) {
+      return this.fileInput.nativeElement.files[0];
+    } else {
+      return void (0);
+    }
   }
 
 }
