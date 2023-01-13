@@ -1,4 +1,7 @@
 ## 8.10.0
+### Features:
+* **o-image**: Added drag&drop functionality ([2518809](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2518809)) Closes[#1112](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1112)
+* New directive **oFileDragAndDrop** ([cecd41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cecd41a))
 
 ## 8.9.0 (2022-12-29)
 ### Features:
