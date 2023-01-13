@@ -33,16 +33,6 @@
         padding: 40px;
       }
 
-      .o-image-float-button-remove {
-        opacity: 0;
-        transition: opacity .5s linear;
-        -moz-transition: opacity .5s linear;
-        -webkit-transition: opacity .5s linear;
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
-
       &:hover {
         .o-image-float-button-remove {
           opacity: 1;

@@ -8,8 +8,6 @@ export class OFileDragAndDropDirective {
   @Output() private onFileDropped: EventEmitter<File[]> = new EventEmitter();
   @HostBinding('class.o-file-dragging') fileDragging: boolean;
 
-  constructor() { }
-
   @HostListener('dragover', ['$event']) public onDragOver(evt) {
     evt.preventDefault();
     evt.stopPropagation();
