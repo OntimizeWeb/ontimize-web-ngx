@@ -27,11 +27,11 @@
   </mat-form-field>
 
   <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container"
-    [ngClass]="{'o-file-drag': isEmpty(),'o-file-container-remove': !isEmpty() && !hasControls()  && !isReadOnly}" fxLayoutGap="15px" oFileDragAndDrop
+    [ngClass]="{'o-file-drag': isEmpty()}" fxLayoutGap="15px" oFileDragAndDrop
     (onFileDropped)="onFileChange($event)">
 
-    <button mat-icon-button *ngIf="!isEmpty() && !hasControls()" (click)="onClickClearValue($event)"
-      class="o-image-float-button-remove"><mat-icon>close</mat-icon></button>
+    <button mat-icon-button *ngIf="!isEmpty() && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
+      class="o-image-button-remove"><mat-icon>close</mat-icon></button>
 
     <img *ngIf="!(isEmpty())" [src]="src" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"
       [ngClass]="{'o-image-cursor': !isReadOnly}" />

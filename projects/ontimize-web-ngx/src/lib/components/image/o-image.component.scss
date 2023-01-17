@@ -33,12 +33,20 @@
         padding: 40px;
       }
 
-      &:hover {
-        .o-image-float-button-remove {
-          opacity: 1;
-          transition: opacity 2s linear;
-          -moz-transition: opacity 2s linear;
-          -webkit-transition: opacity 2s linear;
+      .o-image-button-remove {
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+
+        .mat-icon {
+          width: 14px;
+          height: 14px;
+          line-height: 14px;
+          font-size: 14px;
         }
       }
 
@@ -49,20 +57,6 @@
         display: flex;
         align-items: center;
         place-content: center;
-      }
-
-      .o-image-float-button-remove {
-        opacity: 0;
-        transition: opacity .5s linear;
-        -moz-transition: opacity .5s linear;
-        -webkit-transition: opacity .5s linear;
-
-        &:hover {
-          opacity: 1;
-          transition: opacity 2s linear;
-          -moz-transition: opacity 2s linear;
-          -webkit-transition: opacity 2s linear;
-        }
       }
 
       > img {
