@@ -26,9 +26,8 @@
     </mat-error>
   </mat-form-field>
 
-  <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container"
-    [ngClass]="{'o-file-drag': isEmpty()}" fxLayoutGap="15px" oFileDragAndDrop
-    (onFileDropped)="onFileChange($event)">
+  <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container" [ngClass]="{'o-file-drag': isEmpty()}" fxLayoutGap="15px"
+    oFileDragAndDrop (onFileDropped)="onFileChange($event)">
 
     <button mat-icon-button *ngIf="!isEmpty() && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
       class="o-image-button-remove"><mat-icon>close</mat-icon></button>
