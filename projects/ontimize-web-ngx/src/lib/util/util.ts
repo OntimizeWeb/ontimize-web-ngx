@@ -495,4 +495,13 @@ export class Util {
     }
     return messageService;
   }
+
+  static isUrl(fileSource: string): boolean {
+    const regExpData = /^\s*data:/i;
+    let base64ContentArray = fileSource.split(",")
+    if (base64ContentArray[0].match(regExpData) != null) {
+      return false;
+    }
+    else { return true }
+  }
 }

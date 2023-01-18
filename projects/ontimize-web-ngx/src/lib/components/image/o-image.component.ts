@@ -182,7 +182,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
         }
         return this.oSafe.transform(src, 'url');
       } else if (typeof this.value.value === 'string' &&
-        this.value.value.length > 300) {
+        this.value.value.length > 300 && !Util.isUrl(this.value.value)) {
         let src: string = '';
         if (this.value.value.substring(0, 4) === 'data') {
           src = 'data:image/*;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
