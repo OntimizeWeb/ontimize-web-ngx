@@ -2006,6 +2006,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.clearSelection();
     }
     event.checked ? this.selectedRow(row) : this.selection.deselect(row);
+    this.state.selection = this.selection.selected;
   }
 
   public selectedRow(row: any): void {
