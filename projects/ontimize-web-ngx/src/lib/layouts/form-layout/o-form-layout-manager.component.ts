@@ -87,7 +87,6 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   // declaring this property to have acces to static members in the template
   OFormLayoutManagerComponent = OFormLayoutManagerComponent;
 
-  public static guardClassName = 'CanActivateFormLayoutChildGuard';
 
   public static DIALOG_MODE = 'dialog';
   public static TAB_MODE = 'tab';
@@ -342,7 +341,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       const canActivateChildArray = (routeConfig.canActivateChild || []);
       let previouslyAdded = false;
       for (let i = 0, len = canActivateChildArray.length; i < len; i++) {
-        previouslyAdded = (canActivateChildArray[i].name === OFormLayoutManagerComponent.guardClassName);
+        const guardChild = this.injector.get(CanActivateFormLayoutChildGuard);
+        previouslyAdded = (canActivateChildArray[i] === guardChild.constructor);
         if (previouslyAdded) {
           break;
         }
@@ -363,7 +363,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
       for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
-        if (routeConfig.canActivateChild[i].name === OFormLayoutManagerComponent.guardClassName) {
+        const guardChild = this.injector.get(CanActivateFormLayoutChildGuard);
+        if (routeConfig.canActivateChild[i] === guardChild.constructor) {
           routeConfig.canActivateChild.splice(i, 1);
           break;
         }
