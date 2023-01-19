@@ -6,6 +6,7 @@ import { IFileService } from '../../../interfaces/file-service.interface';
 import { fileServiceFactory } from '../../../services/factories';
 import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.service';
 import { OConfigureServiceArgs } from '../../../types/configure-service-args.type';
+import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
@@ -211,22 +212,12 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   }
 
   /**
-   * Override super.onClickClearValue();
-   * super.clearValue() vs super.onClickClearValue()
-   *  * super.clearValue() emit OValueChangeEvent.PROGRAMMATIC_CHANGE
-   *  * super.onClickClearValue() emit OValueChangeEvent.USER_CHANGE
-   */
-  public onClickClearValue(e: Event): void {
-    super.onClickClearValue(e);
-    this.uploader.clear();
-  }
-
-  /**
    * Override super.clearValue();
    */
-  public clearValue(): void {
-    super.clearValue();
+  public clearValue(options?: FormValueOptions, setDirty: boolean = false): void {
+    super.clearValue(options, setDirty);
     this.uploader.clear();
+    this.inputFile.nativeElement.value = '';
   }
 
   public onClickUpload(e: Event): void {
