@@ -1,3 +1,7 @@
+## 8.9.0 (2023-01-19)
+### Bug fixes
+***o-form-layout-manager**: Fixed navigation between transactions failing in production mode, when layout is in tab mode  ([44e4b38](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44e4b38)) Closes[#1143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1143)
+
 ## 8.9.0 (2022-12-29)
 ### Features:
 * **o-table**: new `show-charts-on-demand-option` input that allows to show the charts on demand option in the menu table ([daf9d2d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/daf9d2d)) Closes[#705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/705)
