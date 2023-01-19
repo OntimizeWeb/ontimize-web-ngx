@@ -1,4 +1,4 @@
-## 8.9.0 (2023-01-19)
+## 8.9.1 (2023-01-19)
 ### Bug fixes
 * **o-form-layout-manager**: Fixed navigation between transactions failing in production mode, when layout is in tab mode  ([44e4b38](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44e4b38)) Closes[#1143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1143)
 
