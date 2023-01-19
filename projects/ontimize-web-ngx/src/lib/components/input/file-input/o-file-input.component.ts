@@ -211,22 +211,12 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   }
 
   /**
-   * Override super.onClickClearValue();
-   * super.clearValue() vs super.onClickClearValue()
-   *  * super.clearValue() emit OValueChangeEvent.PROGRAMMATIC_CHANGE
-   *  * super.onClickClearValue() emit OValueChangeEvent.USER_CHANGE
-   */
-  public onClickClearValue(e: Event): void {
-    super.onClickClearValue(e);
-    this.uploader.clear();
-  }
-
-  /**
    * Override super.clearValue();
    */
   public clearValue(): void {
     super.clearValue();
     this.uploader.clear();
+    this.inputFile.nativeElement.value = '';
   }
 
   public onClickUpload(e: Event): void {
