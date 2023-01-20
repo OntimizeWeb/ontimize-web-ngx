@@ -497,11 +497,18 @@ export class Util {
   }
 
   static isUrl(fileSource: string): boolean {
-    const regExpData = /^\s*data:/i;
-    let base64ContentArray = fileSource.split(",")
-    if (base64ContentArray[0].match(regExpData) != null) {
-      return false;
+    let url: URL;
+    if (Util.isUrlAbsolute(fileSource)) {
+      url = new URL(fileSource);
+    } else {
+      url = new URL(fileSource, document.baseURI);
     }
-    else { return true }
+    return url !== undefined;
+
   }
+
+  static isUrlAbsolute(url: string): boolean {
+    return url.search(/^(http|https)\:\/\//) > -1;
+  }
+
 }
