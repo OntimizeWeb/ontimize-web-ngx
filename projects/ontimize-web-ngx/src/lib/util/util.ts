@@ -497,14 +497,14 @@ export class Util {
   }
 
   static isUrl(fileSource: string): boolean {
-    let url: URL;
-    if (Util.isUrlAbsolute(fileSource)) {
-      url = new URL(fileSource);
-    } else {
-      url = new URL(fileSource, document.baseURI);
-    }
-    return url !== undefined;
 
+    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    return pattern.test(fileSource);
   }
 
   static isUrlAbsolute(url: string): boolean {
