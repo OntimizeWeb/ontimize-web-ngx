@@ -496,18 +496,13 @@ export class Util {
     return messageService;
   }
 
-  static isUrl(fileSource: string): boolean {
-    const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-    return pattern.test(fileSource);
-  }
+  static isBase64(file: string) {
+    const pattern = new RegExp(/^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$/g)
 
-  static isUrlAbsolute(url: string): boolean {
-    return url.search(/^(http|https)\:\/\//) > -1;
-  }
+    if (file.substring(0, 4) === 'data') {
+      file = file.substring(file.indexOf('base64') + 7);
+    }
+    return pattern.test(file.replace(/\s+/g, ''));
 
+  }
 }

@@ -29,7 +29,12 @@
       border-color: transparent;
       height: calc(100% - 32px);
 
-      &.o-file-drag {
+      &.o-image-drag-and-drop-required {
+        border-style: solid;
+        border-width: 1px;
+      }
+
+      &.o-image-drag-and-drop {
         padding: 40px;
       }
 

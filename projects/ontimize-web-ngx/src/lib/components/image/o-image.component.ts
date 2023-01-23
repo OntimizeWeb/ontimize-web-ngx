@@ -120,7 +120,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     } else if (val) {
       if (val.bytes) {
         val = val.bytes;
-      } else if (val.length > 300 && val.substring(0, 4) === 'data') {
+      } else if (Util.isBase64(val) && val.substring(0, 4) === 'data') {
         // Removing "data:image/*;base64,"
         val = val.substring(val.indexOf('base64') + 7);
       }
@@ -148,7 +148,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
       const reader = new FileReader();
       reader.addEventListener('load', event => {
         let result = event.target['result'];
-        if (result && typeof (result) === 'string' && result.length > 300 && result.substring(0, 4) === 'data') {
+        if (result && typeof (result) === 'string' && Util.isBase64(result)) {
           // Removing "data:image/*;base64,"
           result = result.substring(result.indexOf('base64') + 7);
         }
@@ -172,6 +172,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   }
 
   private getSrcValue(): any {
+
     if (this.value && this.value.value) {
       if (this.value.value instanceof Object && this.value.value.bytes) {
         let src: string = '';
@@ -181,8 +182,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
           src = 'data:image/*;base64,' + this.value.value.bytes;
         }
         return this.oSafe.transform(src, 'url');
-      } else if (typeof this.value.value === 'string' &&
-        this.value.value.length > 300 && !Util.isUrl(this.value.value)) {
+      } else if (typeof this.value.value === 'string' && Util.isBase64(this.value.value)) {
         let src: string = '';
         if (this.value.value.substring(0, 4) === 'data') {
           src = 'data:image/*;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
@@ -319,6 +319,11 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     } else {
       return void (0);
     }
+  }
+
+  hasErrorInDragAndDrop() {
+    return this.getFormControl() && this.getFormControl().touched && !this.hasControls() && this.enabled && !this.isReadOnly;
+
   }
 
 }
