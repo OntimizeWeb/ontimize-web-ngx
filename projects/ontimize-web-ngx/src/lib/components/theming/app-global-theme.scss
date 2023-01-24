@@ -167,10 +167,26 @@
     }
   }
 
-  /*BUTTONS HOVER*/
+
+  o-data-toolbar {
+    &.o-grid-toolbar button.o-grid-button,
+    &.o-list-toolbar button,
+    &.o-table-toolbar .buttons .o-table-button,
+    &.o-table-toolbar .buttons button {
+      margin: 0 4px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
   .mat-dialog-actions,
-  .o-form .o-form-toolbar,
-  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons {
+  .o-form .o-form-toolbar {
     .o-table-button,
     button {
       margin: 0 8px;
@@ -183,7 +199,13 @@
         margin-right: 0;
       }
     }
-
+  }
+  /*BUTTONS HOVER*/
+  .mat-dialog-actions,
+  .o-form .o-form-toolbar,
+  .o-grid .o-grid-toolbar,
+  .o-list .o-list-toolbar,
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons {
     button:not([disabled]) {
       &.mat-button-base.mat-primary,
       &.mat-button-base.o-button-primary,
