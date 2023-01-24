@@ -38,6 +38,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-button]': 'true',
+    '[class.text]': 'table.showButtonsText',
+    '[class.no-text]': '!table.showButtonsText',
   }
 })
 export class OTableButtonComponent implements OTableButton, OnInit {
