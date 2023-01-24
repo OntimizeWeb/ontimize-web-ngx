@@ -1,7 +1,10 @@
 ## 8.10.0
 ### Features:
-* **o-image**: Added drag&drop functionality ([2518809](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2518809)) Closes[#1112](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1112)
+* **o-image**: Added drag&drop functionality ([2518809](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2518809)) Closes [#1112](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1112)
 * New directive **oFileDragAndDrop** ([cecd41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cecd41a))
+
+### Bug fixes
+* **o-table**: Fixed the bug that when hovering over the icons, the unselected item was reselected in the o-table ([5220a4e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5220a4e)) Closes [#1120](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1120)
 
 ## 8.9.0 (2022-12-29)
 ### Features:
