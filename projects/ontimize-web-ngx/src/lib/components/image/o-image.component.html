@@ -26,7 +26,9 @@
     (onFileDropped)="onFileChange($event)">
 
     <button mat-icon-button *ngIf="!isEmpty() && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
-      class="o-image-button-remove"><mat-icon>close</mat-icon></button>
+      class="o-image-button-remove">
+      <mat-icon>close</mat-icon>
+    </button>
 
     <img *ngIf="!(isEmpty())" [src]="src" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"
       [ngClass]="{'o-image-cursor': !isReadOnly}" />
@@ -38,9 +40,11 @@
     <img [src]="src" alt="empty image" *ngIf="useEmptyImage()" />
 
     <span class="mat-body-1" *ngIf="isEmpty()">{{ 'OIMAGE.TEXT.DROP&DRAG' | oTranslate }}</span>
+
     <button mat-button color="primary" (click)="openFileSelector()" *ngIf="!hasControls() && isEmpty()">
       {{ 'OIMAGE.BUTTON.BROWSEFILE' | oTranslate }}
     </button>
+
     <ng-container *ngIf="!hasControls() && enabled && !isReadOnly">
       <ng-container *ngTemplateOutlet="errorsTemplate"> </ng-container>
     </ng-container>
