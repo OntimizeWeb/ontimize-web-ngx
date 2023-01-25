@@ -43,3 +43,4 @@ export * from './user-info/o-user-info.component';
 export * from './user-info/o-user-info.module';
 export * from './dual-list-selector/o-dual-list-selector.component';
 export * from './dual-list-selector/o-dual-list-selector.module';
+export * from './o-data-toolbar/index';

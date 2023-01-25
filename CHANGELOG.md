@@ -1,9 +1,11 @@
 ## 8.10.0
 ### Features
+* Exported `ODataToolbarModule` module
 * New CSS class `o-list-button`, `o-grid-button` ([487371a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/487371a)) ([48de2db](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48de2db))
 * New CSS class `text`, `no-text` depending on whether `o-list`,`o-table` or `o-grid` enabled `show-buttons-text` input or not ([533c45b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/533c45b))
 ### Bug fixes
 * **o-grid, o-list, o-table**: Button styles were unified. ([61f54b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/61f54b4)) Closes[#1142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1142)
+* **o-table**: Removed the maximum height limitation in the o-table tooltip ([bea3a62](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bea3a62)) Closes[#1134](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1134)
 
 ## 8.9.1 (2023-01-19)
 ### Bug fixes
