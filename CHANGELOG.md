@@ -1,6 +1,10 @@
 ## 8.10.0
+### Feature
+* Exported `ODataToolbarModule` module
+
 ### Bug fixes
 * **o-table**: Removed the maximum height limitation in the o-table tooltip ([bea3a62](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bea3a62)) Closes[#1134](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1134)
+
 ## 8.9.1 (2023-01-19)
 ### Bug fixes
 * **o-form-layout-manager**: Fixed navigation between transactions failing in production mode, when layout is in tab mode  ([44e4b38](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44e4b38)) Closes[#1143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1143)
