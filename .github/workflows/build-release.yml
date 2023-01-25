@@ -15,11 +15,15 @@ on:
 
 env:
   NPM_REGISTRY: https://registry.npmjs.org/
+  CI_EMAIL: ontimize-web@imatia.com
+  CI_USERNAME: ontimize-web
+  DEVELOP_BRANCH: 8.x.x
+  LIBRARY_PATH: projects/ontimize-web-ngx
 
 jobs:
   build:
     runs-on: ubuntu-20.04
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && contains(join(github.event.pull_request.labels.*.name, ', '), 'release'))
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release'))
 
     steps:
       - name: Get input parameters
@@ -31,7 +35,6 @@ jobs:
         with:
           ref: ${{ env.BASELINE_BRANCH }}
           fetch-depth: 0
-          persist-credentials: false
 
       - name: 'Cache node modules'
         uses: actions/cache@v3
@@ -50,7 +53,7 @@ jobs:
       - name: obtain package.json version
         id: project
         run: |
-          echo ::set-output name=version::$(node -pe "require('./package.json')['version']")
+          echo "version=$(node -pe "require('./package.json')['version']")" >> $GITHUB_OUTPUT
 
       - name: abort if SNAPSHOT
         if: "contains(steps.project.outputs.version, 'SNAPSHOT')"
@@ -74,6 +77,41 @@ jobs:
         with:
           tag: ${{ steps.project.outputs.version }}
           name: ${{ steps.project.outputs.version }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
           body: |
             Check out the [changelog](CHANGELOG.md) for version ${{ steps.project.outputs.version }}
+
+      - name: Prepare git information
+        run: |
+          git config user.name "$CI_USERNAME"
+          git config user.email "$CI_EMAIL"
+
+      - name: bumping version in package.json
+        run: |
+          npm version $(npm version minor --no-git-tag-version)-SNAPSHOT-0 --no-git-tag-version
+
+      - name: bumping version in internal package.json
+        working-directory: ${{ env.LIBRARY_PATH }}
+        run: |
+          npm version $(npm version minor --no-git-tag-version)-SNAPSHOT-0 --no-git-tag-version
+
+      - name: Create sync branch
+        run: |
+          version=${{ steps.project.outputs.version }}
+          git checkout -b sync/release-$version-to-develop
+
+          git add .
+          git commit -m "Prepare next development iteration"
+          git push origin sync/release-$version-to-develop
+
+      - name: Create pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
+        run: |
+          version=${{ steps.project.outputs.version }}
+          MESSAGE="
+          Automated pull request for synchronizing released version ($version) into develop branch
+
+          ### 💡 Merge Strategy: Create a merge commit
+          "
+          gh pr create -B ${{ env.DEVELOP_BRANCH }} -H sync/release-$version-to-develop --title "Sync release $version to develop" --body "$(echo -e "$MESSAGE")"
