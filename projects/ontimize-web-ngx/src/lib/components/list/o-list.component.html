@@ -6,32 +6,32 @@
   <o-data-toolbar *ngIf="hasControls()" [class.dense]="odense" [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
     <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
-        <button *ngIf="insertButton && !insertButtonFloatable" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
+        <button *ngIf="insertButton && !insertButtonFloatable" class="o-list-button text" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
           <span>{{ 'ADD' | oTranslate }}</span>
         </button>
 
-        <button type="button" mat-stroked-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+        <button type="button" mat-stroked-button class="o-list-button text" aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
           <span>{{ 'REFRESH' | oTranslate }}</span>
         </button>
 
-        <button *ngIf="deleteButton" type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
+        <button *ngIf="deleteButton" type="button" class="o-list-button text" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
           [class.disabled]="!enabledDeleteButton" (click)="remove()">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
           <span>{{ 'DELETE' | oTranslate }}</span>
         </button>
       </ng-container>
       <ng-template #showButtonsWithoutText>
-        <button *ngIf="insertButton && !insertButtonFloatable" type="button" mat-icon-button aria-label="Insert" (click)="add($event)">
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-list-button no-text" mat-icon-button aria-label="Insert" (click)="add($event)">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
         </button>
 
-        <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+        <button type="button" mat-icon-button aria-label="Refresh" class="o-list-button no-text" (click)="reloadData()" *ngIf="refreshButton">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
         </button>
 
-        <button *ngIf="deleteButton" type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
+        <button *ngIf="deleteButton" type="button" class="o-list-button no-text" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
           [class.disabled]="!enabledDeleteButton" (click)="remove()">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
         </button>

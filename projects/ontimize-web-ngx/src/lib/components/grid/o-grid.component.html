@@ -5,14 +5,14 @@
     <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
         <!-- button new-->
-        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-stroked-button aria-label="Insert"
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button o-grid-button text"  mat-stroked-button aria-label="Insert"
           (click)="add()">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
           <span>{{ 'INSERT' | oTranslate }}</span>
         </button>
 
         <!--button refresh-->
-        <button type="button" mat-stroked-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+        <button type="button" mat-stroked-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton" class="o-grid-button text">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
           <span>{{ 'REFRESH' | oTranslate }}</span>
         </button>
@@ -20,13 +20,13 @@
 
       <ng-template #showButtonsWithoutText>
         <!-- button new-->
-        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button" mat-icon-button aria-label="Insert"
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-button o-grid-add-button no-text" mat-icon-button aria-label="Insert"
           (click)="add()">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
         </button>
 
         <!--button refresh-->
-        <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+        <button type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton" class="o-grid-button no-text">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
         </button>
       </ng-template>
