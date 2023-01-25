@@ -297,10 +297,15 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
 
   onFileChange(pFileList: File[]) {
     const files = Object.keys(pFileList).map(key => pFileList[key]);
-    const fileList = this.createFileListItems(files)
+    const fileList = this.createFileListItems(files);
 
-    this.fileInput.nativeElement.files = fileList;
-    this.fileChange(this.fileInput.nativeElement);
+
+    const valid = this.acceptFileType.replace(/\s/g, '').split(',').filter(accept => new RegExp(accept.replace(/\*/g, '.\*').replace(/\,/g, '|')).test(fileList[0].type)).length > 0
+
+    if (valid) {
+      this.fileInput.nativeElement.files = fileList;
+      this.fileChange(this.fileInput.nativeElement);
+    }
   }
 
   createFileListItems(files) {
