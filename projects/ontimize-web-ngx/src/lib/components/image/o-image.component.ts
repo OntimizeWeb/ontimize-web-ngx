@@ -327,7 +327,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   }
 
   hasErrorInDragAndDrop() {
-    return this.getFormControl() && this.getFormControl().touched && !this.hasControls() && this.enabled && !this.isReadOnly;
+    return this.getFormControl() && this.getFormControl().touched && this.getFormControl().invalid && !this.hasControls() && this.enabled && !this.isReadOnly;
 
   }
 
