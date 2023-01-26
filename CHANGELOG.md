@@ -1,7 +1,22 @@
+## 8.10.0 (2023-01-26)
+### Features:
+* **o-image**: Added drag&drop functionality ([2518809](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2518809)) Closes [#1112](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1112)
+* New directive **oFileDragAndDrop** ([cecd41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cecd41a))
+* Exported `ODataToolbarModule` module
+* New CSS class `o-list-button`, `o-grid-button` ([487371a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/487371a)) ([48de2db](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/48de2db))
+* New CSS class `text`, `no-text` depending on whether `o-list`,`o-table` or `o-grid` enabled `show-buttons-text` input or not ([533c45b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/533c45b))
+
+### Bug fixes
+* **o-grid, o-list, o-table**: Button styles were unified. ([61f54b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/61f54b4)) Closes[#1142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1142)
+* **o-table**:
+  * Removed the maximum height limitation in the o-table tooltip ([bea3a62](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bea3a62)) Closes[#1134](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1134)
+  * Fixed the bug that when hovering over the icons, the unselected item was reselected in the o-table ([5220a4e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5220a4e)) Closes [#1120](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1120)
+
 ## 8.9.1 (2023-01-19)
 ### Bug fixes
 * **o-form-layout-manager**: Fixed navigation between transactions failing in production mode, when layout is in tab mode  ([44e4b38](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44e4b38)) Closes[#1143](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1143)
 * **o-file-input**: Fixed that when you clear a file, you can not reimport any other ([6606f0e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6606f0e)) Closes[#1140](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1140)
+
 
 ## 8.9.0 (2022-12-29)
 ### Features:

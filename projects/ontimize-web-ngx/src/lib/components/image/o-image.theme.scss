@@ -1,0 +1,34 @@
+@import '~@angular/material/theming';
+@mixin o-image-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $warn: map-get($theme, warn);
+  $borderColor: mat-color($foreground, secondary-text);
+
+  .o-image {
+    .o-image-content {
+      .o-image-display-container {
+        &.o-image-drag-and-drop:not(.o-image-drag-and-drop-required) {
+          background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='"+$borderColor+"' stroke-width='1' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+        }
+
+        &.o-image-drag-and-drop.o-file-dragging {
+          background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='"+$borderColor+"' stroke-width='2' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+          background-color: mat-color($background);
+        }
+
+        &.o-image-drag-and-drop-required:not(.o-file-dragging) {
+          border-color: mat-color($warn);
+        }
+
+        .o-image-button-remove {
+          background-color: mat-color($background, background);
+
+          &:hover {
+            background-color: mat-color($foreground, disabled-button);
+          }
+        }
+      }
+    }
+  }
+}

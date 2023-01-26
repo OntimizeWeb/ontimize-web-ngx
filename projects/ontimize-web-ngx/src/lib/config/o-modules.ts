@@ -60,6 +60,7 @@ import { Util } from '../util/util';
 import { appInitializerFactory } from './o-providers';
 import { OExpandableContainerModule } from '../components/expandable-container/o-expandable-container.module';
 import { ODualListSelectorModule } from '../components/dual-list-selector/o-dual-list-selector.module';
+import { ODataToolbarModule } from '../components/o-data-toolbar/o-data-toolbar.module';
 
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   // Standard modules
@@ -113,7 +114,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OSliderModule,
   ODateRangeInputModule,
   OExpandableContainerModule,
-  ODualListSelectorModule
+  ODualListSelectorModule,
+  ODataToolbarModule
 ];
 
 // AoT requires an exported function for factories
