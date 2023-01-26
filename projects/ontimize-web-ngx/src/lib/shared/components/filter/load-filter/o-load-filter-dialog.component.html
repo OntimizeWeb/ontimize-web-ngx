@@ -1,0 +1,24 @@
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</span>
+<mat-dialog-content fxLayout="column">
+  <div mat-subheader>{{ 'TABLE.DIALOG.LOAD_FILTER' | oTranslate }}</div>
+  <mat-selection-list #filterList dense class="o-table-load-filter-dialog-list">
+    <mat-list-option *ngFor="let filter of filters " [value]="filter.name" checkboxPosition="before">
+      <span matLine class="o-table-load-filter-dialog-list-title">{{ filter.name }}</span>
+      <span matLine>{{ filter.description }}</span>
+    </mat-list-option>
+    <mat-list-item *ngIf="filters.length === 0">
+      <span class="empty-filter-list">{{ 'TABLE.DIALOG.EMPTY_FILTER_LIST' | oTranslate }}</span>
+    </mat-list-item>
+  </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button [disabled]="filterList.selectedOptions.selected.length!==1"
+    (click)="removeFilter(filterList.selectedOptions.selected[0].value)" class="o-button-danger">{{ 'DELETE' | oTranslate }}</button>
+  <span fxFlex></span>
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="true" [disabled]="filterList.selectedOptions.selected.length!==1"
+    class="o-button-primary">
+    {{'TABLE.BUTTONS.APPLY' | oTranslate }}
+  </button>
+</mat-dialog-actions>

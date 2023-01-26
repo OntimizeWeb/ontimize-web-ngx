@@ -1,0 +1,15 @@
+.o-image-fullscreen-dialog-cdk-overlay .mat-dialog-container {
+  padding: 0;
+
+  .o-fullscreen-dialog {
+    height: 100%;
+    display: block;
+
+    .mat-dialog-content.o-fullscreen-dialog-content {
+      margin: 12px;
+      height: 100%;
+      // height - toolbar - margins
+      max-height: calc(100% - 64px - 24px);
+    }
+  }
+}

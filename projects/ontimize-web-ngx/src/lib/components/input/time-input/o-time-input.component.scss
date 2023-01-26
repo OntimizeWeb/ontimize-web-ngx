@@ -1,0 +1,9 @@
+.o-time-input {
+  .separator {
+    cursor: default;
+  }
+
+  .mat-form-field.icon-field:not(.custom-width).icon-field-1-suffix .mat-form-field-infix {
+    width: auto;
+  }
+}

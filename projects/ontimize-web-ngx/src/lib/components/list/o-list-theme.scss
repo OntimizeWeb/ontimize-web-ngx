@@ -1,0 +1,21 @@
+@import '~@angular/material/theming';
+
+@mixin o-list-theme($theme) {
+  $foreground: map-get($theme, foreground);
+
+  .o-list-container {
+
+    .primary-text {
+      color: mat-color($foreground, text);
+    }
+
+    .secondary-text {
+      color: mat-color($foreground, secondary-text);
+    }
+
+    .o-list-row-action .mat-checkbox-inner-container,
+    .o-list-item-icon {
+      color: mat-color($foreground, icon);
+    }
+  }
+}

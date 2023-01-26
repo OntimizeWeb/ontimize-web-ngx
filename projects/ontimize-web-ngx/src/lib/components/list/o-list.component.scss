@@ -1,0 +1,110 @@
+/* WebKit, Blink, Edge */
+::-webkit-input-placeholder {
+  color: #8E0C39;
+}
+/* Mozilla Firefox 4 to 18 */
+:-moz-placeholder {
+  color: #8E0C39;
+  opacity: 1;
+}
+/* Mozilla Firefox 19+ */
+::-moz-placeholder {
+  color: #8E0C39;
+  opacity: 1;
+}
+/* Internet Explorer 10-11 */
+:-ms-input-placeholder {
+  color: #8E0C39;
+}
+/* Standard (https://drafts.scsswg.org/selectors-4/#placeholder) */
+:placeholder-shown {
+  color: #8E0C39;
+}
+
+.o-list-container {
+  position: relative;
+  flex-direction: column;
+
+  .o-list-content {
+    &.o-list-content-toolbar-dense {
+      .add-button {
+        &.add-button-top {
+          top: 60px;
+        }
+      }
+    }
+  }
+
+  .spinner-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+
+    &:not(.pageable-loading) {
+      top: 0;
+      background: rgba(255,255,255, 1);
+    }
+
+    &.pageable-loading {
+      background: rgba(255,255,255,0.5);
+    }
+
+    path {
+      stroke-width: 5px!important;
+    }
+  }
+
+  .mat-list {
+    overflow: auto;
+
+    .mat-3-line .o-custom-list-item {
+      position: relative;
+    }
+
+    .o-custom-list-item {
+      max-width: 100%;
+      width: 100%;
+
+      .o-list-item-icon {
+        cursor: pointer;
+        padding-right: 6px;
+      }
+    }
+
+    &.o-list-item-has-buttons {
+      .o-list-item .mat-list-item-content {
+        padding-right: 72px;
+      }
+
+      &[dense] .o-list-item .mat-list-item-content {
+        padding-right: 56px;
+      }
+    }
+
+    .o-list-item.mat-card,
+    .o-list-item.mat-list-item {
+      margin: 6px 0;
+    }
+  }
+
+  .add-button {
+    right: 12px;
+    position: absolute;
+
+    &.add-button-bottom {
+      bottom: 12px;
+
+    }
+
+    &.add-button-top {
+      top: 88px;
+    }
+  }
+
+  .o-mat-paginator~.add-button.add-button-bottom {
+    bottom: 68px;
+  }
+}

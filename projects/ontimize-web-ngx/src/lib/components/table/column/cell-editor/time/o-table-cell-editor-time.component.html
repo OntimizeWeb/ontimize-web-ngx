@@ -1,0 +1,71 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+  <div [formGroup]="formGroup" class="o-table-cell-editor-time o-table-cell-editor" fxLayout="row" fxLayoutAlign="space-between center"
+    fxLayoutGap="8px">
+    <mat-form-field floatLabel="never">
+
+      <input #dateInput matInput [placeholder]="getPlaceholderDate()" [formControl]="formControlDate"
+        [required]="orequired" [matDatepicker]="d" (dateChange)="onDateChange($event)" [min]="minDate" [max]="maxDate"
+        (focus)="enabledCommitOnTabPress = false">
+
+      <mat-datepicker #d [startView]="oStartView" [startAt]="oDateStartAt" [touchUi]="oDateTouchUi"
+        (closed)="onDatepickerClosed()">
+      </mat-datepicker>
+
+      <span class="icon-btn" (click)="openDatepicker(d)" matSuffix>
+        <mat-icon svgIcon="ontimize:today"></mat-icon>
+      </span>
+
+      <mat-error *oMatError="hasErrorDate('required') || hasErrorHour('required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+      </mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerParse')">
+        {{ 'FORM_VALIDATION.DATE_PARSE' | oTranslate }} {{ oHourFormat }}
+      </mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerFilter')">
+        {{ 'FORM_VALIDATION.DATE_FILTER' | oTranslate }}
+      </mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerMin')">
+        {{ 'FORM_VALIDATION.DATE_MIN' | oTranslate }} {{ minDateString }}
+      </mat-error>
+      <mat-error *oMatError="hasErrorDate('matDatepickerMax')">
+        {{ 'FORM_VALIDATION.DATE_MAX' | oTranslate }} {{ maxDateString }}
+      </mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()">
+        {{ getErrorText(oError) }}
+      </mat-error>
+
+    </mat-form-field>
+
+    <span class="separator">&ndash;</span>
+
+    <mat-form-field floatLabel="never">
+
+      <input #hourInput matInput [ngxTimepicker]="picker" [placeholder]="getPlaceholderHour()"
+        [formControl]="formControlHour" [required]="orequired" (change)="onHourChange($event)" [min]="oHourMin"
+        [max]="oHourMax" (keydown)="onKeyDown($event)" [disableClick]="true" [format]="oHourFormat"
+        (blur)="enabledCommitOnTabPress = true">
+
+      <button type="button" matSuffix mat-icon-button (click)="open($event)">
+        <mat-icon ngxMaterialTimepickerToggleIcon svgIcon="ontimize:clock"></mat-icon>
+      </button>
+
+      <mat-error *oMatError="hasErrorHour('invalidFormatHour')">
+        {{ 'FORM_VALIDATION.HOUR_FORMAT' | oTranslate }} {{ formatString }}
+      </mat-error>
+      <mat-error *ngFor="let oError of getActiveOErrors()">
+        {{ oError.text | oTranslate }}
+      </mat-error>
+
+    </mat-form-field>
+
+    <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn"
+      [cancelBtnTmpl]="cancelBtn" (closed)="onTimepickerClosed()"></ngx-material-timepicker>
+    <ng-template #confirmBtn>
+      <button mat-stroked-button type="button"><span>{{'OK' | oTranslate}}</span></button>
+    </ng-template>
+    <ng-template #cancelBtn>
+      <button mat-stroked-button type="button"><span>{{'CANCEL' | oTranslate}}</span></button>
+    </ng-template>
+  </div>
+
+</ng-template>

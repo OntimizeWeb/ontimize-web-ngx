@@ -1,0 +1,20 @@
+.o-combo {
+  .read-only .mat-select-arrow-wrapper {
+    visibility: hidden;
+  }
+
+  .read-only .mat-form-field-underline {
+    background-image: none;
+  }
+
+}
+
+.o-combo-panel.o-combo-panel-search {
+  height: 100%;
+
+  .o-combo-options-container {
+    height: calc(100% - 3em);
+    overflow: auto;
+
+  }
+}

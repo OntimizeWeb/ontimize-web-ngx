@@ -1,0 +1,29 @@
+<div class="o-card-menu-item-content" (click)="onClick()" fxLayout="column" fxFill fxLayoutAlign="space-between center">
+
+  <div *ngIf="showSecondaryContainer" class="o-card-menu-item-secondary" fxFlex="50" [fxLayout]="secondaryContainerLayout"
+    fxLayoutAlign="space-around center">
+    <ng-content select=".secondary-container"></ng-content>
+    <ng-container #menuCardContent *ngIf="detailComponent">
+    </ng-container>
+  </div>
+
+  <div class="o-card-menu-item-main" fxFlex="{{ showSecondaryContainer ? '45' : '80' }}" [fxLayout]="mainContainerLayout"
+    fxLayoutAlign="space-between center">
+    <div *ngIf="useImage() || useIcon()" fxFlex="80" fxLayout="column" fxLayoutAlign="center center" class="o-card-menu-item-image-container">
+      <img *ngIf="useImage()" [src]="image" alt="card image"/>
+      <mat-icon *ngIf="useIcon()" class="o-card-menu-item-icon" fxLayoutAlign="center center">{{ icon }}</mat-icon>
+    </div>
+
+    <div class="o-card-menu-item-title" fxFlex="20" fxLayout="column" fxLayoutAlign="center center" *ngIf="title !== undefined">{{
+      title | oTranslate }}</div>
+
+    <mat-icon class="o-card-menu-item-info" matTooltip="{{ tooltip | oTranslate }}" *ngIf="tooltip" svgIcon="ontimize:info_outline"></mat-icon>
+
+    <ng-content select=".main-container"></ng-content>
+
+    <button type="button" *ngIf="buttonText !== undefined" [disabled]="disabledButton" (click)="onButtonClick()" mat-button>
+      {{ buttonText | oTranslate }}</button>
+  </div>
+
+
+</div>

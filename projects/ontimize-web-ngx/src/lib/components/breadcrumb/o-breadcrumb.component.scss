@@ -1,0 +1,33 @@
+.o-breadcrumb {
+  display: flex;
+  height: 50px;
+  min-height: 50px;
+  padding-bottom: 8px;
+
+  .mat-toolbar {
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.24);
+    background: #ffffff;
+    border-radius: 6px;
+    min-height: 50px;
+    max-height: 50px;
+
+    .mat-toolbar-row {
+      height: 50px;
+    }
+
+    a {
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    span {
+      cursor: default;
+    }
+
+    a,
+    span {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}

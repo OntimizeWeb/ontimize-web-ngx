@@ -1,0 +1,19 @@
+@import '~@angular/material/theming';
+@mixin o-list-picker-theme($theme) {
+  .o-list-picker-dialog mat-toolbar .o-list-picker-search {
+    font-size: 16px;
+
+    &.o-list-picker-search .mat-input-placeholder,
+    .mat-icon {
+      color: mat-color($primary, default-contrast);
+    }
+
+    &.o-list-picker-search .mat-input-underline {
+      border-color: mat-color($primary, default-contrast, 0.78);
+
+      .mat-input-ripple {
+        background-color: mat-color($primary, default-contrast);
+      }
+    }
+  }
+}

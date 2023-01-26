@@ -1,0 +1,119 @@
+div.icon-btn {
+  cursor: default;
+  display: inline-block;
+
+  i {
+    padding-top: 4px;
+  }
+}
+
+$suffix-size: 20px;
+$width24: 24px;
+
+.o-tooltip.mat-tooltip {
+  &.after,
+  &.right {
+    margin-left: 5px;
+  }
+
+  &.before,
+  &.left {
+    margin-right: 5px;
+  }
+
+  &.above {
+    margin-bottom: -15px;
+  }
+
+  &.below {
+    margin-top: -15px;
+  }
+
+  &.o-mat-error {
+    white-space: pre-line;
+  }
+}
+
+.mat-form-field {
+  &.mat-form-field-appearance-ontimize {
+    .mat-select-arrow-wrapper {
+      transform: initial;
+    }
+
+  }
+
+  &.mat-form-field-appearance-legacy {
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+    }
+
+    .mat-form-field-prefix,
+    .mat-form-field-suffix {
+      .mat-icon-button {
+        vertical-align: bottom;
+
+        .mat-icon {
+          font-size: 150%;
+        }
+      }
+    }
+  }
+
+  &:not(.mat-form-field-appearance-legacy) {
+    .mat-form-field-wrapper {
+      .mat-form-field-prefix,
+      .mat-form-field-suffix {
+        display: inherit;
+
+        .mat-icon {
+          height: $suffix-size;
+          line-height: $suffix-size;
+          width: $suffix-size;
+        }
+
+        .mat-icon-button {
+          line-height: $suffix-size;
+          display: block;
+          height: $suffix-size;
+        }
+      }
+    }
+  }
+
+  input:read-only {
+    cursor: default;
+  }
+
+  &.custom-width .mat-form-field-infix {
+    width: auto;
+  }
+
+  &.icon-field {
+    height: $width24;
+
+    .mat-form-field-suffix {
+      cursor: default;
+      text-align: center;
+
+      .icon-btn,
+      .mat-icon,
+      .mat-icon-button .mat-icon {
+        vertical-align: bottom;
+      }
+
+      .icon-btn,
+      .mat-icon-button,
+      .mat-icon:not([svgicon]) {
+        height: $suffix-size;
+      }
+
+      .svg-icon > svg {
+        padding: 3px 0;
+        box-sizing: border-box;
+      }
+
+    }
+  }
+}

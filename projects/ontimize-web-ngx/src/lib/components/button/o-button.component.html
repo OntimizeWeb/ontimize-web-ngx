@@ -1,0 +1,57 @@
+<button type="button" (click)="onButtonClick($event)" *ngIf="isBasic()" mat-button [class.mat-icon-button]="needsIconButtonClass"
+  [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+<button type="button" (click)="onButtonClick($event)" *ngIf="isRaised()" mat-raised-button class="mat-raised-button"
+  [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+<button type="button" (click)="onButtonClick($event)" *ngIf="isStroked()" mat-stroked-button [class.mat-icon-button]="needsIconButtonClass"
+  [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+<button type="button" (click)="onButtonClick($event)" *ngIf="isFlat()" mat-flat-button [class.mat-icon-button]="needsIconButtonClass"
+  [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+<button type="button" (click)="onButtonClick($event)" *ngIf="isIconButton()" mat-icon-button [class.mat-icon-button]="needsIconButtonClass"
+  [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+<button type="button" (click)="onButtonClick($event)" *ngIf="isFab()" mat-fab [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+<button type="button" (click)="onButtonClick($event)" *ngIf="isMiniFab()" mat-mini-fab [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+
+<ng-template #iconTemplate>
+  <img src="{{ image }}" class="o-button-image" *ngIf="image!=undefined" alt="button image" />
+  <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}
+  </mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle" [svgIcon]="svgIcon"></mat-icon>
+</ng-template>
+
+<ng-template #buttonTemplate>
+
+  <ng-container *ngIf="iconPosition==='left' || iconPosition==='top' ">
+    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
+  </ng-container>
+
+  <br *ngIf="iconPosition==='top'" />
+
+  {{ olabel | oTranslate }}
+
+  <br *ngIf="iconPosition==='bottom'" />
+
+  <ng-container *ngIf="iconPosition==='right' || iconPosition==='bottom'">
+    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
+  </ng-container>
+</ng-template>

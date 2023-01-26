@@ -1,0 +1,35 @@
+name: Build CI
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [8.x.x, hotfix/8.*]
+    paths: ['projects/ontimize-web-ngx/**']
+
+jobs:
+  build:
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+
+      - name: 'Cache node modules'
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Node 12.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.13.0
+
+      - name: npm install and npm run build
+        run: |
+          npm i
+          npm run build
+

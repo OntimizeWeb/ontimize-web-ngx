@@ -1,0 +1,20 @@
+.o-data-toolbar {
+  padding: 0 4px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  align-content: space-between;
+  width: 100%;
+  flex-direction: row;
+  white-space: nowrap;
+
+  &.dense {
+    height: 48px;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+  }
+}

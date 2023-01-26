@@ -1,0 +1,19 @@
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
+<mat-dialog-content>
+  <div mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</div>
+  <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxLayoutGap="8px">
+    <o-table-export-button #excelButton *ngIf="isButtonVisible('xlsx')" svg-icon="ontimize:EXCEL" label="TABLE.BUTTONS.EXCEL" export-type="xlsx"
+      (onClick)="export('xlsx', excelButton)" class="excel-button"></o-table-export-button>
+    <o-table-export-button #htmlButton *ngIf="isButtonVisible('html')" svg-icon="ontimize:HTML" label="TABLE.BUTTONS.HTML" export-type="html"
+      (onClick)="export('html', htmlButton)" class="html-button"></o-table-export-button>
+    <o-table-export-button #pdfButton *ngIf="isButtonVisible('pdf')" svg-icon="ontimize:PDF" label="TABLE.BUTTONS.PDF" export-type="pdf"
+      (onClick)="export('pdf', pdfButton)" class="pdf-button"></o-table-export-button>
+    <o-table-export-button #csvButton *ngIf="isButtonVisible('csv')" svg-icon="ontimize:CSV" label="TABLE.BUTTONS.CSV" export-type="pdf"
+      (onClick)="export('csv', csvButton)" class="pdf-button"></o-table-export-button>
+    <ng-container *ngTemplateOutlet="config.options"></ng-container>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center">
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default">{{ 'CANCEL' | oTranslate }}</button>
+</mat-dialog-actions>

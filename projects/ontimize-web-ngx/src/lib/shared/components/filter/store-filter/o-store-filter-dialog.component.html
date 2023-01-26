@@ -1,0 +1,28 @@
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.SAVE_FILTER' | oTranslate }}</span>
+
+<mat-dialog-content>
+  <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_FILTER' | oTranslate }}</div>
+  <form #form [formGroup]="formGroup" fxLayout="column">
+    <mat-form-field>
+      <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.FILTER_NAME' | oTranslate }}"
+        formControlName="name" required>
+      <mat-error *oMatError="hasError(formGroup.controls['name'], 'filterNameAlreadyExists')">
+        {{ 'TABLE.DIALOG.FILTER_NAME_ALREADY_EXISTS' | oTranslate }}
+      </mat-error>
+      <mat-error *oMatError="hasError(formGroup.controls['name'], 'required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="{{ 'TABLE.DIALOG.FILTER_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4"
+        cols="50"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="true" [disabled]="!formGroup.valid" class="o-button-primary">
+    {{'SAVE' | oTranslate }}
+  </button>
+</mat-dialog-actions>

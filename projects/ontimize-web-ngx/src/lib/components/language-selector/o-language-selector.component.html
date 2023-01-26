@@ -1,0 +1,16 @@
+<div fxLayout fxLayoutAlign="center center" fxFill>
+  <button type="button" *ngIf="useFlagIcons" class="menu-button" mat-icon-button [matMenuTriggerFor]="langMenu">
+    <span class="flag-icon {{ getFlagClass(getCurrentCountry()) }}"></span>
+  </button>
+
+  <button type="button" *ngIf="!useFlagIcons" class="menu-button o-language-selector-text" mat-button [matMenuTriggerFor]="langMenu">
+    <span>{{ 'LOCALE_' + getCurrentLang() | oTranslate }}</span>
+  </button>
+</div>
+
+<mat-menu #langMenu="matMenu" yPosition="below" class="o-mat-menu">
+  <button type="button" mat-menu-item *ngFor="let lang of getAvailableLangs()" (click)="configureI18n(lang)">
+    <span *ngIf="useFlagIcons" class="flag-icon {{ getFlagClass(lang) }}"></span>
+    <span>{{ 'LOCALE_' + lang | oTranslate }}</span>
+  </button>
+</mat-menu>

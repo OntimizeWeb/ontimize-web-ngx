@@ -1,0 +1,73 @@
+@import '~@angular/material/theming';
+@mixin o-app-sidenav-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .o-app-sidenav {
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      &:not([disabled=true]) {
+        a.o-app-sidenav-viewer-sidenav-item-selected,
+        a:hover {
+          color: mat-color($accent, 900);
+          background-color: mat-color($primary, 100);
+        }
+      }
+    }
+
+    .o-app-sidenav-sidenav {
+      background: mat-color($primary);
+
+
+      .sidenav-toggle {
+        color: mat-color($primary, default-contrast);
+      }
+
+      .o-app-sidenav-item {
+        color: mat-color($primary, default-contrast);
+
+        &.o-user-info {
+          &:focus,
+          &:hover {
+            color: inherit;
+          }
+          color: inherit;
+
+          .o-user-info-menu-item .o-user-info-item {
+            background: mat-color($primary, default-contrast, 0.74);
+          }
+        }
+      }
+
+      /* Side Navigation Level Styles */
+      .o-app-sidenav-menu-group-level-1 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            + .o-app-sidenav-menugroup-items-container ul {
+              background: mat-color($primary, 800 );
+            }
+          }
+        }
+      }
+
+      .o-app-sidenav-menu-group-level-2,
+      .o-app-sidenav-menu-group-level-3,
+      .o-app-sidenav-menu-group-level-4 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            + .o-app-sidenav-menugroup-items-container ul {
+              background: mat-color($primary, 900 );
+            }
+          }
+        }
+      }
+
+      li a {
+        color: inherit;
+      }
+    }
+  }
+}

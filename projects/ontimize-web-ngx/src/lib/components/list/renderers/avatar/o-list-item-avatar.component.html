@@ -1,0 +1,11 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+  <img matListAvatar class="avatar" [src]="avatarSrc | oSafe:'resourceUrl'" [alt]="title">
+  <div class="mat-list-text">
+    <h3 matLine class="primary-text"> {{ title }} </h3>
+    <h4 *ngIf="primaryText !== undefined" matLine class="primary-text">{{ primaryText }}</h4>
+    <p *ngIf="secondaryText !== undefined" matLine class="secondary-text">{{ secondaryText }}</p>
+  </div>
+  <mat-icon *ngIf="icon !== undefined" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{ icon
+    }}
+  </mat-icon>
+</div>

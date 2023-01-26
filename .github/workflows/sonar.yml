@@ -1,0 +1,45 @@
+name: Sonar
+on:
+  push:
+    branches:
+      - master
+      - 8.x.x
+      - hotfix/8.*
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: 'Cache node modules'
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Node 12.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.13.0
+
+      - name: npm install and npm run build
+        run: |
+          npm i
+          npm run test-ci
+
+      - name: coverage .lcov workaround
+        run: |
+          sed -i 's+/home/runner/work/ontimize-web-ngx/ontimize-web-ngx+/github/workspace+g' coverage/ontimize-web-ngx/lcov.info
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

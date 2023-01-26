@@ -1,0 +1,55 @@
+@import '~@angular/material/theming';
+@import './app-global-theme.scss';
+@import './layout-margin-padding.scss';
+@import '../breadcrumb/o-breadcrumb-theme.scss';
+@import '../container/o-container-theme.scss';
+@import '../form/toolbar/o-form-toolbar-theme.scss';
+@import '../input/input-theme.scss';
+@import '../input/date-input/o-date-input-theme.scss';
+@import '../../shared/components/dialog/o-dialog-theme.scss';
+@import '../table/styles/o-table-theme.scss';
+@import '../table/styles/o-table-typography.scss';
+@import '../list/o-list-theme.scss';
+@import '../input/listpicker/o-list-picker-theme.scss';
+@import '../app-header/o-app-header-theme.scss';
+@import '../app-sidenav/o-app-sidenav-theme.scss';
+@import '../../layouts/app-layout/o-app-layout-theme.scss';
+@import '../card-menu-item/o-card-menu-item.component.theme.scss';
+@import '../input/hour-input/o-hour-input-theme.scss';
+@import '../../layouts/form-layout/split-pane/o-form-layout-split-pane-theme.scss';
+@import '../../layouts/form-layout/tabgroup/o-form-layout-tabgroup-theme.scss';
+@import '../bar-menu/o-bar-menu-theme.scss';
+@import '../grid/o-grid.theme.scss';
+@import '../input/date-range/o-daterange-input-theme.scss';
+@import '../dual-list-selector/o-dual-list-selector-theme.scss';
+@import '../image/o-image.theme.scss';
+
+// Create a theme.
+@mixin o-material-theme($theme, $typography: null) {
+  @include mat-core($typography);
+  @include angular-material-theme($theme);
+  @include app-global-theme($theme, $typography);
+  @include o-breadcrumb-theme($theme);
+  @include o-container-theme($theme, $typography);
+  @include o-form-toolbar-theme($theme);
+  @include input-theme($theme);
+  @include o-date-input-theme($theme);
+  @include o-dialog-theme($theme);
+  @include o-table-theme($theme);
+  @include o-table-typography($typography);
+  @include o-list-theme($theme);
+  @include o-list-picker-theme($theme);
+  @include o-app-header-theme($theme);
+  @include o-app-sidenav-theme($theme);
+  @include o-app-layout-theme($theme);
+  @include o-card-menu-item-theme($theme, $typography);
+  @include o-hour-input-theme($theme);
+  @include o-form-layout-split-pane-theme($theme);
+  @include o-form-layout-tabgroup-theme($theme);
+  @include o-bar-menu-theme($theme);
+  @include o-grid-theme($theme);
+  @include o-layout-padding-margin();
+  @include o-daterange-input-theme($theme);
+  @include o-dual-list-selector-theme($theme);
+  @include o-image-theme($theme);
+}

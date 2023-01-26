@@ -1,0 +1,24 @@
+<ng-container [ngSwitch]="mode">
+  <ng-container *ngSwitchCase="OFormLayoutManagerComponent.TAB_MODE">
+    <o-form-layout-tabgroup #tabGroup [title]="title" (onMainTabSelected)="onMainTabSelected.emit($event)"
+      (onSelectedTabChange)="onSelectedTabChange.emit($event)" (onCloseTab)="onCloseTab.emit($event)"
+      [options]="tabGroupOptions">
+      <ng-content *ngTemplateOutlet="contentBlock"></ng-content>
+    </o-form-layout-tabgroup>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="OFormLayoutManagerComponent.SPLIT_PANE_MODE">
+    <o-form-layout-split-pane #splitPane [options]="splitPaneOptions">
+      <ng-content *ngTemplateOutlet="contentBlock"></ng-content>
+    </o-form-layout-split-pane>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="OFormLayoutManagerComponent.DIALOG_MODE">
+    <ng-content *ngTemplateOutlet="contentBlock"></ng-content>
+  </ng-container>
+</ng-container>
+
+
+<ng-template #contentBlock>
+  <ng-content></ng-content>
+</ng-template>

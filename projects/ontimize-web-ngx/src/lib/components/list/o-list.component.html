@@ -1,0 +1,82 @@
+<div class="o-list-container" [style.display]="isVisible()? '' : 'none'" fxFill>
+  <div *ngIf="loading | async" fxLayoutAlign="center center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0"
+    class="spinner-container">
+    <mat-progress-spinner strokeWidth="3" mode="indeterminate"></mat-progress-spinner>
+  </div>
+  <o-data-toolbar *ngIf="hasControls()" [class.dense]="odense" [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
+    <ng-container o-data-toolbar-projection-start>
+      <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
+        <button *ngIf="insertButton && !insertButtonFloatable" class="o-list-button text" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
+          <mat-icon svgIcon="ontimize:add"></mat-icon>
+          <span>{{ 'ADD' | oTranslate }}</span>
+        </button>
+
+        <button type="button" mat-stroked-button class="o-list-button text" aria-label="Refresh" (click)="reloadData()" *ngIf="refreshButton">
+          <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+          <span>{{ 'REFRESH' | oTranslate }}</span>
+        </button>
+
+        <button *ngIf="deleteButton" type="button" class="o-list-button text" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
+          [class.disabled]="!enabledDeleteButton" (click)="remove()">
+          <mat-icon svgIcon="ontimize:delete"></mat-icon>
+          <span>{{ 'DELETE' | oTranslate }}</span>
+        </button>
+      </ng-container>
+      <ng-template #showButtonsWithoutText>
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-list-button no-text" mat-icon-button aria-label="Insert" (click)="add($event)">
+          <mat-icon svgIcon="ontimize:add"></mat-icon>
+        </button>
+
+        <button type="button" mat-icon-button aria-label="Refresh" class="o-list-button no-text" (click)="reloadData()" *ngIf="refreshButton">
+          <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+        </button>
+
+        <button *ngIf="deleteButton" type="button" class="o-list-button no-text" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
+          [class.disabled]="!enabledDeleteButton" (click)="remove()">
+          <mat-icon svgIcon="ontimize:delete"></mat-icon>
+        </button>
+      </ng-template>
+    </ng-container>
+    <ng-content select="[o-list-toolbar][position=start]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-content select="[o-list-toolbar][position=end]" ngProjectAs="[o-data-toolbar-custom-projection-end]">
+    </ng-content>
+    <ng-content select="[o-list-toolbar]" ngProjectAs="[o-data-toolbar-custom-projection-start]">
+    </ng-content>
+    <ng-container o-data-toolbar-projection-end>
+      <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
+        [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance" float-label="never">
+      </o-search-input>
+    </ng-container>
+  </o-data-toolbar>
+  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%" [class.o-list-content-toolbar-dense]="hasControls() && odense">
+
+    <!--MAT-LIST-->
+    <mat-list [attr.dense]="odense || undefined" (scroll)="onScroll($event)" [class.selectable]="selectable"
+      [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)">
+
+      <mat-list-item *ngIf="!getDataArray().length" fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
+        <h3 matLine>
+          {{ 'TABLE.EMPTY' | oTranslate }}
+          <ng-container *ngIf="getQuickFilterValue().length > 0">
+            {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : {values: [getQuickFilterValue()]} }}
+          </ng-container>
+        </h3>
+      </mat-list-item>
+      <ng-content></ng-content>
+    </mat-list>
+  </div>
+  <mat-paginator fxFlex="0 1 auto" class="o-mat-paginator" #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows"
+    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
+
+  <!--INSERT BUTTON -->
+  <button type="button" *ngIf="insertButton && insertButtonFloatable && odense" mat-mini-fab (click)="add($event)" class="add-button"
+    [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
+    <mat-icon svgIcon="ontimize:add"></mat-icon>
+  </button>
+  <button type="button" *ngIf="insertButton && insertButtonFloatable && !odense" mat-fab (click)="add($event)" class="add-button add-button-bottom"
+    [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
+    <mat-icon svgIcon="ontimize:add"></mat-icon>
+  </button>
+
+</div>

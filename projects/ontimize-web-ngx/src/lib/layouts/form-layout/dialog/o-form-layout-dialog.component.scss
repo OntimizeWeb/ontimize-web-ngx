@@ -1,0 +1,37 @@
+.o-form-layout-dialog-overlay {
+  width: 65%;
+  height: 90%;
+
+  .title-container {
+    cursor: default;
+
+    .mat-icon {
+      cursor: pointer;
+    }
+  }
+
+  .mat-dialog-container {
+    overflow: hidden;
+
+    .mat-dialog-content.form-layout-dialog-container {
+      display: block;
+      padding-top: 16px;
+      margin: 0;
+      max-height: calc(100% - 78px);
+      height: 100%;
+    }
+
+    .o-form-layout-dialog {
+      o-form-toolbar .mat-toolbar {
+        padding: 0;
+      }
+
+      .o-form {
+        form.inner-form {
+          position: relative;
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}

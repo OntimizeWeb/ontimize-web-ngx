@@ -1,0 +1,42 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "es2015",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "noImplicitReturns": true,
+    "listFiles": true,
+    "pretty": true,
+    "stripInternal": true,
+    "outDir": "dist",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "types": [
+      "moment"
+    ],
+    "typeRoots": [
+      "node_modules/moment"
+    ],
+    "lib": [
+      "dom",
+      "es2015",
+      "es2017"
+    ],
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "src/lib/ontimize-web-ngx.module.ts"
+  ],
+  "angularCompilerOptions": {
+    "skipMetadataEmit": false,
+    "strictMetadataEmit": true
+  }
+}

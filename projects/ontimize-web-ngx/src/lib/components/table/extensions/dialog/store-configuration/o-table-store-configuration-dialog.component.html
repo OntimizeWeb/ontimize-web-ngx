@@ -1,0 +1,40 @@
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' | oTranslate }}</span>
+
+<mat-dialog-content>
+  <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_CONFIGURATION' | oTranslate }}</div>
+  <form #form [formGroup]="formGroup" fxLayout="column">
+    <mat-form-field>
+      <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}"
+        formControlName="name" required />
+      <mat-error *oMatError="hasError(formGroup.controls['name'], 'required')">
+        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4"
+        cols="50"></textarea>
+    </mat-form-field>
+    <div class="inner-subheader" mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</div>
+    <div fxLayout="column">
+      <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" class="select-all-checkbox">
+        {{ 'SELECT_ALL' | oTranslate }}
+      </mat-checkbox>
+
+      <mat-selection-list #propertiesList dense class="o-table-save-configuration-dialog-list o-scroll">
+        <mat-list-option checkboxPosition="before" *ngFor="let property of properties" [value]="property.property">
+          <div fxLayout="row" fxLayoutAlign="center center" fxFlex>
+            <span matLine fxFlex>{{ property.name | oTranslate }}</span>
+            <mat-icon *ngIf="property.info" matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
+          </div>
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
+    {{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true"
+    [disabled]="!formGroup.valid || propertiesList.selectedOptions.selected.length===0" class="o-button-primary">{{ 'SAVE' | oTranslate }}</button>
+</mat-dialog-actions>

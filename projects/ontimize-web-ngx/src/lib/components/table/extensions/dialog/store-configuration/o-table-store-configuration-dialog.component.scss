@@ -1,0 +1,16 @@
+.select-all-checkbox {
+  padding: 6px 0;
+}
+
+.o-table-save-configuration-dialog-list {
+  max-height: 120px;
+  overflow-y: scroll;
+
+  .mat-list-item {
+    height: 30px;
+
+    .o-tscd-list-tooltip.mat-icon {
+      opacity: .25;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  [matTooltipHideDelay]="tooltipHideDelay">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
+    [class.custom-width]="hasCustomWidth" fxFlexFill>
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+    <textarea matInput class="mat-textarea" type="text" [id]="getAttribute()" [formControlName]="getAttribute()"
+      [placeholder]="placeHolder" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
+      [class.no-resize]="!isResizable()" [rows]="rows" [cols]="columns" [required]="isRequired"
+      (change)="onChangeEvent($event)"></textarea>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
+  </mat-form-field>
+</div>

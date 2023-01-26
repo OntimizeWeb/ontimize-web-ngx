@@ -1,0 +1,18 @@
+<mat-list-item #innerListItem>
+  <div class="o-list-row-action o-list-item-selection-check" *ngIf="_list && _list.selectable">
+    <mat-checkbox [checked]="isSelected" (change)="onCheckboxChange()" (click)="onCheckboxClicked($event)"></mat-checkbox>
+  </div>
+  <ng-content select="[o-list-item-avatar], [matListAvatar], [matListIcon]"> </ng-content>
+  <div class="mat-list-text">
+    <ng-content select="[matLine]"></ng-content>
+  </div>
+  <ng-content></ng-content>
+  <div fxLayout="row" class="row-buttons-container">
+    <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.editButtonInRow" (click)="onEditIconClicked($event)">
+      <mat-icon class="material-icons">{{ _list.editButtonInRowIcon }}</mat-icon>
+    </div>
+    <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.detailButtonInRow" (click)="onDetailIconClicked($event)">
+      <mat-icon class="material-icons">{{ _list.detailButtonInRowIcon }}</mat-icon>
+    </div>
+  </div>
+</mat-list-item>

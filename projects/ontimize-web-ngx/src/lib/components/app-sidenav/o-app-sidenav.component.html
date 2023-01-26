@@ -1,0 +1,39 @@
+<mat-sidenav-container class="o-app-sidenav-container" [class.opened]="sidenav.opened"
+  [class.o-app-sidenav-mode-desktop]="(layoutMode || 'desktop') === 'desktop'"
+  [class.o-app-sidenav-mode-mobile]="(layoutMode || 'desktop') !== 'desktop'">
+
+  <mat-sidenav #sidenav class="o-app-sidenav-sidenav o-scroll" [opened]="isSidenavOpened()"
+    [mode]="(sidenavMode || ((layoutMode || 'desktop') === 'desktop' ? 'side' : 'over'))" [class.mat-drawer-opened]="sidenav.opened"
+    [class.mat-drawer-closed]="!sidenav.opened" fxLayout="column" fxLayoutAlign="start stretch" (openedChange)="sidenavOpenedChange()"
+    (closedStart)="sidenavClosedStart()" (openedStart)="sidenavOpenedStart()">
+
+    <div fxLayout="row" fxLayoutAlign="end center" class="sidenav-toggle-container" *ngIf="isDesktopMode()">
+      <mat-icon class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
+    </div>
+
+    <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg"> </o-app-sidenav-image>
+    <ng-content select="o-app-layout-sidenav-projection-start"></ng-content>
+    <div class="navMenu">
+      <nav *ngFor="let menuRootItem of menuRootArray">
+
+        <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group'">
+          <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
+            [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
+          </o-app-sidenav-menu-item>
+        </ul>
+
+        <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
+          *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()">
+        </o-app-sidenav-menu-group>
+
+      </nav>
+    </div>
+    <div class="layout-sidenav-projection-end">
+      <ng-content select="o-app-layout-sidenav-projection-end"></ng-content>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="o-app-sidenav-content">
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

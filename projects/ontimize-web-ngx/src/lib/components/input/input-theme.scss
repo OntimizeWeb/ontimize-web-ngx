@@ -1,0 +1,107 @@
+@import '~@angular/material/theming';
+@mixin icon-color-mixin($icon-color) {
+  .icon-btn,
+  .mat-icon,
+  .read-only .mat-icon,
+  .svg-icon {
+    color: $icon-color;
+  }
+}
+@mixin input-theme($theme) {
+  $is-dark-theme: map-get($theme, is-dark);
+  $foreground: map-get($theme, foreground);
+  $warn: map-get($theme, warn);
+  $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
+  /* outline appearance */
+  $border-radius: 2px;
+
+  .mat-form-field {
+    &.mat-form-field-disabled.accent {
+      @include icon-color-mixin(mat-color($accent, 0.42));
+    }
+
+    &:not(.mat-form-field-disabled) {
+      @include icon-color-mixin(mat-color($foreground, icon));
+
+      .placeholder {
+        color: mat-color($foreground, icon);
+      }
+
+      &.accent {
+        @include icon-color-mixin(mat-color($accent));
+      }
+    }
+
+    .mat-disabled {
+      color: mat-color($foreground, disabled-button);
+    }
+
+    &.mat-form-field-appearance-ontimize.read-only {
+      .mat-select-disabled .mat-select-value {
+        color: inherit;
+      }
+
+      .mat-form-field-underline {
+        background-color: $underline-color;
+      }
+    }
+
+    &.mat-form-field-invalid .mat-input-suffix .mat-icon {
+      color: mat-color($warn);
+    }
+
+    /* OUTLINE APPEARANCE */
+    &.mat-form-field-appearance-outline {
+      .mat-form-field-outline-start {
+        border-radius: $border-radius 0 0 $border-radius;
+      }
+
+      .mat-form-field-outline-end {
+        border-radius: 0 $border-radius $border-radius 0;
+      }
+    }
+  }
+
+  input:not([type]):disabled,
+  input[type="color"]:disabled,
+  input[type="date"]:disabled,
+  input[type="datetime"]:disabled,
+  input[type="datetime-local"]:disabled,
+  input[type="email"]:disabled,
+  input[type="month"]:disabled,
+  input[type="number"]:disabled,
+  input[type="password"]:disabled,
+  input[type="search"]:disabled,
+  input[type="tel"]:disabled,
+  input[type="text"]:disabled,
+  input[type="time"]:disabled,
+  input[type="url"]:disabled,
+  input[type="week"]:disabled,
+  textarea:disabled {
+    color: mat-color($foreground, disabled-text);
+  }
+
+  .o-tooltip.o-mat-error {
+    background: mat-color($primary, default-contrast);
+    border: 1px solid mat-color($warn);
+    color: mat-color($warn);
+  }
+
+  /* CHECKBOX */
+  .mat-checkbox:not(.mat-checkbox-disabled ) {
+    &.mat-accent {
+      .mat-checkbox-frame {
+        border-color: if($is-dark-theme, mat-color($accent,500),mat-color($foreground, secondary-text));
+      }
+    }
+
+    &.mat-primary {
+      .mat-checkbox-frame {
+        border-color: if($is-dark-theme, mat-color($primary,500),mat-color($foreground, secondary-text));
+      }
+    }
+  }
+}

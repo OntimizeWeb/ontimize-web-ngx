@@ -1,0 +1,40 @@
+<form [formGroup]="getFormGroup()">
+  <div class="quickFilter" fxLayout="row">
+    <mat-form-field [appearance]="appearance" floatLabel="never">
+      <mat-icon *ngIf="!showFilterMenu" svgIcon="ontimize:search" matPrefix></mat-icon>
+      <input #term matInput id="term" type="search" formControlName="term">
+      <mat-placeholder class="placeholder">{{ placeholder | oTranslate}}</mat-placeholder>
+      <div *ngIf="showFilterMenu" fxLayout="row" matPrefix>
+        <mat-icon svgIcon="ontimize:search" [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="small"></mat-icon>
+        <button mat-icon-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()">
+          <mat-icon class="search-icon">expand_more</mat-icon>
+        </button>
+      </div>
+
+
+      <mat-menu #menu="matMenu" class="o-search-input-menu">
+        <div fxLayout="column" class="checkbox-container">
+
+          <ng-container *ngIf="colArray.length > 1">
+            <mat-checkbox (click)="$event.stopPropagation()" [checked]="areAllColumnsChecked()" (change)="onSelectAllChange($event)">
+              {{ 'SELECT_ALL' | oTranslate }}</mat-checkbox>
+            <mat-divider></mat-divider>
+          </ng-container>
+
+          <ng-container *ngFor="let item of colArray">
+            <mat-checkbox (click)="$event.stopPropagation()" [checked]="isChecked(item)" (change)="onCheckboxChange(item, $event)">
+              {{ item.column | oTranslate }}
+            </mat-checkbox>
+          </ng-container>
+
+          <ng-container *ngIf="showCaseSensitiveCheckbox">
+            <mat-divider></mat-divider>
+            <mat-checkbox (click)="$event.stopPropagation()" [checked]="filterCaseSensitive" (change)="onFilterCaseSensitiveChange($event)">
+              {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate }}
+            </mat-checkbox>
+          </ng-container>
+        </div>
+      </mat-menu>
+    </mat-form-field>
+  </div>
+</form>

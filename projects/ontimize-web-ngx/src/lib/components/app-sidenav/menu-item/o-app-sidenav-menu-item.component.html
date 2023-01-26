@@ -1,0 +1,37 @@
+<ng-container *ngIf="sidenavOpened">
+  <li *ngIf="!hidden" class="o-app-sidenav-menuitem o-app-sidenav-item" [class.o-user-info]="isUserInfoItem()">
+
+    <a mat-button *ngIf="!isUserInfoItem() && !isLocaleItem()" (click)="triggerClick($event)"
+      [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
+        <span class="o-app-sidenav-menuitem-title">{{ menuItem.name | oTranslate }}</span>
+      </div>
+    </a>
+
+    <a mat-button *ngIf="isLocaleItem()" (click)="triggerClick($event)">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
+        {{ menuItem.name | oTranslate }}
+        <mat-icon *ngIf="isConfiguredLang()" class="configured-lang">check_circle</mat-icon>
+      </div>
+    </a>
+
+    <div *ngIf="isUserInfoItem()" fxLayout="column" fxLayoutAlign="center center" class="o-user-info-menu-item">
+      <div class="o-user-info-image" fxFlexFill></div>
+      <div class="o-user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+        <div class="o-user-info-name">{{ menuItem.user }} </div>
+        <o-language-selector [use-flag-icons]="useFlagIcons"></o-language-selector>
+      </div>
+    </div>
+  </li>
+</ng-container>
+
+<ng-container *ngIf="!sidenavOpened">
+  <li *ngIf="!hidden" class="o-app-sidenav-menuitem o-app-sidenav-item">
+    <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="triggerClick($event)"
+      [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
+    </a>
+  </li>
+</ng-container>

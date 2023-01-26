@@ -1,0 +1,25 @@
+.o-checkbox {
+  mat-checkbox {
+    z-index: 1;
+  }
+
+  .mat-checkbox-disabled {
+    .mat-checkbox-layout .mat-checkbox-label {
+      color: rgba(0, 0, 0, 0.36);
+    }
+  }
+
+  .custom-width {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .read-only-blocker {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}

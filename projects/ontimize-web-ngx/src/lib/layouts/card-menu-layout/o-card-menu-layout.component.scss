@@ -1,0 +1,24 @@
+.o-menu-layout {
+  position: relative;
+  width: 100%;
+
+  .scrolling {
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    overflow-y: scroll;
+  }
+
+  .o-card-menu-item {
+    height: 45%;
+    margin-bottom: 12px;
+    max-width: 300px;
+    min-width: 300px;
+
+    &.compact {
+      height: 30%;
+      max-height: 250px;
+    }
+  }
+
+}

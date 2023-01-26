@@ -1,0 +1,25 @@
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel"  [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
+    [class.icon-field]="showClearButton" fxFlexFill>
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+    <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" (change)="onChangeEvent($event)" [readonly]="isReadOnly"
+      [min]="min" [max]="max" [step]="step" [required]="isRequired">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *oMatError="hasError('min')">
+      {{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}
+    </mat-error>
+    <mat-error *oMatError="hasError('max')">
+      {{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
+  </mat-form-field>
+</div>

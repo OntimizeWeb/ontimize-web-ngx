@@ -1,0 +1,357 @@
+@import '~@angular/material/theming';
+@mixin app-global-theme($theme, $typography: null) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  @if $typography == null {
+    $typography: mat-typography-config();
+  }
+
+  body,
+  html {
+    background-color: mat-color($background, background);
+  }
+
+  button,
+  html,
+  input,
+  select,
+  span,
+  textarea {
+    font-family: mat-font-family($typography);
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: transparent;
+    opacity: 1.0;
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    background-color: mat-color($primary, 200);
+    opacity: 1.0;
+  }
+
+  .o-loading {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    z-index: 999;
+
+    div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      margin: 6px;
+      border: 3px solid;
+      border-radius: 50%;
+      left: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: mat-color($primary) transparent transparent transparent;
+    }
+
+    div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* MODAL DIALOG IN O-DIALOG, FORM LAYOUT MANAGER AND LIST-PICKER */
+
+  .o-dialog-class,
+  .o-form-layout-dialog-overlay,
+  .o-list-picker-dialog {
+    .mat-dialog-container {
+      .mat-dialog-title {
+        border-bottom: 1px solid mat-color($primary);
+        line-height: mat-font-size($typography, subheading-2);
+        font-size: mat-font-size($typography, subheading-2);
+
+        .mat-icon {
+          color: mat-color($primary);
+        }
+      }
+
+      .empty-filter-list {
+        color: mat-color($foreground, disabled-text);
+      }
+
+      .mat-dialog-content {
+        font-size: mat-font-size($typography, body-1);
+
+        .mat-selection-list[dense] {
+          outline: none;
+
+          .mat-list-item {
+            .empty-filter-list,
+            .mat-list-item-content > * {
+              font-size: mat-font-size($typography, body-1);
+            }
+
+            .mat-line:nth-child(n+2) {
+              font-size: mat-font-size($typography, caption);
+            }
+
+          }
+        }
+      }
+    }
+
+  }
+
+  /*global styles about drag/drop in dialogs table*/
+  .cdk-drag-preview {
+    width: 100%;
+    display: block;
+
+    .mat-list-item-content {
+      font-size: mat-font-size($typography, body-1);
+      color: mat-color($foreground, text);
+      padding: 6px;
+      flex-direction: row;
+      align-items: center;
+      background-color: mat-color($background, background);
+      display: flex;
+      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+      box-sizing: border-box;
+      border-radius: 2px;
+
+      .mat-list-icon {
+        padding: 4px;
+      }
+
+      .mat-list-text {
+        padding-left: 16px;
+        width: 100%;
+      }
+    }
+  }
+
+  .cdk-drop-list-dragging .o-drag-list-item-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .mat-checkbox {
+    .mat-checkbox-label {
+      color: mat-color($foreground, text);
+    }
+  }
+
+  o-data-toolbar {
+    &.o-grid-toolbar button.o-grid-button,
+    &.o-list-toolbar button.o-list-button,
+    &.o-table-toolbar .buttons .o-table-button,
+    &.o-table-toolbar .buttons button {
+      margin: 0 4px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .mat-dialog-actions,
+  .o-form .o-form-toolbar {
+    button {
+      margin: 0 8px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+  /*BUTTONS HOVER*/
+  .mat-dialog-actions button:not([disabled]),
+  .o-form .o-form-toolbar button:not([disabled]),
+  .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
+  .o-list .o-list-toolbar button.o-list-button:not([disabled]),
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
+    &.mat-button-base.mat-primary,
+    &.mat-button-base.o-button-primary,
+    &.mat-button-base[ng-reflect-dialog-result="0"],
+    &.mat-button-base[ng-reflect-dialog-result="true"] {
+      color: mat-color($primary, 800);
+      background-color: mat-color($primary, 100);
+      border-color: transparent;
+
+      &:hover,
+      .mat-button-focus-overlay {
+        color: mat-color($primary);
+        background-color: #ffffff;
+        border-color: mat-color($foreground, divider);
+      }
+
+    }
+
+    &.mat-button-base,
+    &.mat-button-base.mat-accent,
+    &.mat-button-base.o-button-default,
+    &.mat-button-base[ng-reflect-dialog-result="1"],
+    &.mat-button-base[ng-reflect-dialog-result="false"] {
+      color: mat-color($primary);
+      background-color: #ffffff;
+
+      &:hover,
+      .mat-button-focus-overlay {
+        color: mat-color($primary,800);
+        background-color: mat-color($primary,100);
+        border-color: transparent;
+      }
+    }
+
+  }
+
+  .o-form .o-form-toolbar [o-form-toolbar-buttons] > * {
+
+    margin: 0 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+  }
+
+  .o-button button.mat-stroked-button {
+    &:not([disabled]) {
+      &.mat-primary {
+        color: mat-color($primary, 800);
+        background-color: mat-color($primary, 100);
+        border-color: transparent;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary);
+          background-color: #ffffff;
+          border-color: mat-color($foreground, divider);
+        }
+
+      }
+
+      &.mat-accent {
+        color: mat-color($accent);
+        background-color: #ffffff;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat-color($primary,800);
+          background-color: mat-color($primary,100);
+          border-color: transparent;
+        }
+      }
+
+    }
+
+  }
+
+  .o-form .o-form-toolbar button,
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
+    &.mat-stroked-button {
+      padding: 0 6px;
+
+      .mat-button-wrapper {
+        .mat-icon {
+          margin-right: 4px;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+
+        }
+
+        span {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  /*MAT PAGINATION*/
+  .mat-paginator {
+    .mat-paginator-range-label {
+      margin: 0 16px;
+    }
+
+    .mat-paginator-page-size-label {
+      margin-right: 16px;
+    }
+
+    button {
+      &:hover {
+        background-color: mat-color($primary,100);
+        border-radius: 50%;
+      }
+
+      &.mat-icon-button {
+        height: 20px;
+        width: 20px;
+        line-height: 20px;
+        margin-left: 8px;
+
+        .mat-paginator-icon {
+          width: 20px;
+        }
+      }
+    }
+
+  }
+
+  /*MAT MENU*/
+  .o-mat-menu.mat-menu-panel {
+    min-height: auto;
+  }
+
+  /* CHART FONT */
+  o-chart .nvd3 {
+    text {
+      font: mat-font-weight($typography, caption) mat-font-size($typography, caption) mat-font-family($typography);
+      fill: mat-color($foreground,text);
+    }
+
+    .nv-discretebar .nv-groups text,
+    .nv-multibarHorizontal .nv-groups text {
+      fill: mat-color($foreground,text);
+    }
+
+    .nv-axis path {
+      stroke: mat-color($foreground,text);
+    }
+  }
+}
