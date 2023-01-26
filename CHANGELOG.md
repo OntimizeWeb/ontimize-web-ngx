@@ -1,4 +1,4 @@
-## 8.10.0 (2023-01-25)
+## 8.10.0 (2023-01-26)
 ### Features:
 * **o-image**: Added drag&drop functionality ([2518809](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2518809)) Closes [#1112](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1112)
 * New directive **oFileDragAndDrop** ([cecd41a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cecd41a))
@@ -8,7 +8,7 @@
 
 ### Bug fixes
 * **o-grid, o-list, o-table**: Button styles were unified. ([61f54b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/61f54b4)) Closes[#1142](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1142)
-* **o-table**: 
+* **o-table**:
   * Removed the maximum height limitation in the o-table tooltip ([bea3a62](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bea3a62)) Closes[#1134](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1134)
   * Fixed the bug that when hovering over the icons, the unselected item was reselected in the o-table ([5220a4e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5220a4e)) Closes [#1120](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1120)
 
