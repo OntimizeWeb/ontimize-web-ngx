@@ -495,4 +495,14 @@ export class Util {
     }
     return messageService;
   }
+
+  static isBase64(file: string) {
+    const pattern = new RegExp(/^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$/g)
+
+    if (file.substring(0, 4) === 'data') {
+      file = file.substring(file.indexOf('base64') + 7);
+    }
+    return pattern.test(file.replace(/\s+/g, ''));
+
+  }
 }

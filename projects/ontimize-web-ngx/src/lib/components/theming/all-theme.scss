@@ -22,6 +22,7 @@
 @import '../grid/o-grid.theme.scss';
 @import '../input/date-range/o-daterange-input-theme.scss';
 @import '../dual-list-selector/o-dual-list-selector-theme.scss';
+@import '../image/o-image.theme.scss';
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
@@ -50,4 +51,5 @@
   @include o-layout-padding-margin();
   @include o-daterange-input-theme($theme);
   @include o-dual-list-selector-theme($theme);
+  @include o-image-theme($theme);
 }

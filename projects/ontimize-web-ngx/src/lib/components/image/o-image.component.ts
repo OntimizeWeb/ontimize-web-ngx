@@ -120,7 +120,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     } else if (val) {
       if (val.bytes) {
         val = val.bytes;
-      } else if (val.length > 300 && val.substring(0, 4) === 'data') {
+      } else if (Util.isBase64(val) && val.substring(0, 4) === 'data') {
         // Removing "data:image/*;base64,"
         val = val.substring(val.indexOf('base64') + 7);
       }
@@ -148,7 +148,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
       const reader = new FileReader();
       reader.addEventListener('load', event => {
         let result = event.target['result'];
-        if (result && typeof (result) === 'string' && result.length > 300 && result.substring(0, 4) === 'data') {
+        if (result && typeof (result) === 'string' && Util.isBase64(result)) {
           // Removing "data:image/*;base64,"
           result = result.substring(result.indexOf('base64') + 7);
         }
@@ -161,9 +161,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
       if (input.files[0]) {
         reader.readAsDataURL(input.files[0]);
       }
-      // if (this.titleLabel) {
-      //   this.titleLabel.nativeElement.textContent = input.files[0].name;
-      // }
+
       this.currentFileName = input.files[0].name;
       this.stateCtrl.setValue(this.currentFileName);
     }
@@ -174,6 +172,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   }
 
   private getSrcValue(): any {
+
     if (this.value && this.value.value) {
       if (this.value.value instanceof Object && this.value.value.bytes) {
         let src: string = '';
@@ -183,8 +182,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
           src = 'data:image/*;base64,' + this.value.value.bytes;
         }
         return this.oSafe.transform(src, 'url');
-      } else if (typeof this.value.value === 'string' &&
-        this.value.value.length > 300) {
+      } else if (typeof this.value.value === 'string' && Util.isBase64(this.value.value)) {
         let src: string = '';
         if (this.value.value.substring(0, 4) === 'data') {
           src = 'data:image/*;base64,' + this.value.value.substring(this.value.value.indexOf('base64') + 7);
@@ -211,9 +209,6 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     if (!this.isReadOnly && this.enabled) {
       super.onClickClearValue(e);
       this.fileInput.nativeElement.value = '';
-      // if (this.titleLabel) {
-      //   this.titleLabel.nativeElement.textContent = '';
-      // }
       this.stateCtrl.reset();
       this.currentFileName = '';
     }
@@ -298,6 +293,43 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
       }
     }
     return {};
+  }
+
+  /* This method be triggered when a image is dropped on our host DOM element .*/
+  onFileDropped(pFileList: File[]) {
+    const files = Object.keys(pFileList).map(key => pFileList[key]);
+    const fileList = this.createFileListItems(files);
+
+
+    const valid = this.acceptFileType.replace(/\s/g, '').split(',').filter(accept => new RegExp(accept.replace(/\*/g, '.\*').replace(/\,/g, '|')).test(fileList[0].type)).length > 0
+
+    if (valid) {
+      this.fileInput.nativeElement.files = fileList;
+      this.fileChange(this.fileInput.nativeElement);
+    }
+  }
+
+  createFileListItems(files) {
+    const b = new ClipboardEvent("").clipboardData || new DataTransfer()
+    for (let i = 0, len = files.length; i < len; i++) b.items.add(files[i])
+    return b.files
+  }
+
+  getFileName(): string {
+    return this.currentFileName;
+  }
+
+  getImageFile(): File {
+    if (this.fileInput && this.fileInput.nativeElement.files.length > 0) {
+      return this.fileInput.nativeElement.files[0];
+    } else {
+      return void (0);
+    }
+  }
+
+  hasErrorInDragAndDrop() {
+    return this.getFormControl() && this.getFormControl().touched && this.getFormControl().invalid && !this.hasControls() && this.enabled && !this.isReadOnly;
+
   }
 
 }

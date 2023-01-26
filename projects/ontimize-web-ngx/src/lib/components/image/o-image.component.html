@@ -1,5 +1,6 @@
 <div fxLayout="column" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [class.o-image-auto-fit]="autoFit" class="o-image-content" fxFill>
+
   <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'" readonly
     (change)="fileChange(input)" class="o-image-form-field-hidden" />
 
@@ -17,19 +18,45 @@
     <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <mat-error *oMatError="hasError('required')">
-      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
-    </mat-error>
-    <mat-error *oMatError="hasError('fileSize')">
-      {{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes
-    </mat-error>
+    <ng-container *ngTemplateOutlet="errorsTemplate"></ng-container>
   </mat-form-field>
 
-  <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow" class="o-image-display-container">
-    <img *ngIf="!(isEmpty())" [src]="src" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)" />
-    <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()" (click)="openFileSelector()">
-      {{ emptyicon }}</mat-icon>
-    <img [src]="src" alt="empty image" *ngIf="useEmptyImage()" (click)="openFileSelector()" />
+  <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container"
+    [ngClass]="{'o-image-drag-and-drop': isEmpty() , 'o-image-drag-and-drop-required': hasErrorInDragAndDrop() }" fxLayoutGap="15px" oFileDragAndDrop
+    (onFileDropped)="onFileDropped($event)">
+
+    <button mat-icon-button *ngIf="!isEmpty() && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
+      class="o-image-button-remove">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <img *ngIf="!(isEmpty())" [src]="src" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"
+      [ngClass]="{'o-image-cursor': !isReadOnly}" />
+
+    <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()">
+      {{ emptyicon }}
+    </mat-icon>
+
+    <img [src]="src" alt="empty image" *ngIf="useEmptyImage()" />
+
+    <span class="mat-body-1" *ngIf="isEmpty()">{{ 'OIMAGE.TEXT.DROP&DRAG' | oTranslate }}</span>
+
+    <button mat-button color="primary" (click)="openFileSelector()" *ngIf="!hasControls() && isEmpty()">
+      {{ 'OIMAGE.BUTTON.BROWSEFILE' | oTranslate }}
+    </button>
+
+    <ng-container *ngIf="!hasControls() && enabled && !isReadOnly">
+      <ng-container *ngTemplateOutlet="errorsTemplate"> </ng-container>
+    </ng-container>
   </div>
   <div *ngIf="isReadOnly" fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
 </div>
+
+<ng-template #errorsTemplate>
+  <mat-error *oMatError="hasError('required')">
+    {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+  </mat-error>
+  <mat-error *oMatError="hasError('fileSize')">
+    {{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes
+  </mat-error>
+</ng-template>
