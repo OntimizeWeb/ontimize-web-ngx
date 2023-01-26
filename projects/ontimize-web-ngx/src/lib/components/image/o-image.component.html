@@ -23,7 +23,7 @@
 
   <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container"
     [ngClass]="{'o-image-drag-and-drop': isEmpty() , 'o-image-drag-and-drop-required': hasErrorInDragAndDrop() }" fxLayoutGap="15px" oFileDragAndDrop
-    (onFileDropped)="onFileChange($event)">
+    (onFileDropped)="onFileDropped($event)">
 
     <button mat-icon-button *ngIf="!isEmpty() && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
       class="o-image-button-remove">

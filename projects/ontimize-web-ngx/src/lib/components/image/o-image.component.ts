@@ -295,7 +295,8 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     return {};
   }
 
-  onFileChange(pFileList: File[]) {
+  /* This method be triggered when a image is dropped on our host DOM element .*/
+  onFileDropped(pFileList: File[]) {
     const files = Object.keys(pFileList).map(key => pFileList[key]);
     const fileList = this.createFileListItems(files);
 
