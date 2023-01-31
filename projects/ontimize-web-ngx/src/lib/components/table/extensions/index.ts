@@ -15,3 +15,4 @@ export * from './sort/o-mat-sort-module';
 export * from './row/table-row-expandable/o-table-row-expandable.component';
 export * from './o-table-datasource.service';
 export * from './o-table-strategy.service';
+export * from './pipes/o-table-row-class.pipe';

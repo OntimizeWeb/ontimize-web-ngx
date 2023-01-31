@@ -5,3 +5,4 @@ export * from './boolean/o-combo-renderer-boolean.component';
 export * from './date/o-combo-renderer-date.component';
 export * from './percentage/o-combo-renderer-percentage.component';
 export * from './icon/o-combo-renderer-icon.component';
+export * from './o-combo-renderer.class';

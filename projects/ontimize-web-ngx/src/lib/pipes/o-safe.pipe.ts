@@ -7,7 +7,7 @@ import { DomSanitizer, SafeHtml, SafeUrl, SafeResourceUrl } from '@angular/platf
 export class OSafePipe implements PipeTransform {
   protected sanitizer: DomSanitizer;
   constructor(protected injector: Injector) {
-    this.sanitizer = this.injector.get<DomSanitizer>(DomSanitizer as Type<DomSanitizer>);
+    this.sanitizer = this.injector.get<DomSanitizer>(DomSanitizer);
   }
 
   public transform(value: any, type: string): SafeHtml | SafeUrl | SafeResourceUrl {

@@ -31,3 +31,16 @@ export const O_TABLE_HEADER_COMPONENTS = [
   OTableColumnsGroupingComponent,
   OTableColumnsGroupingColumnComponent
 ];
+
+export const O_TABLE_HEADER_COMPONENTS_EXPORTED = [
+  OTableButtonComponent,
+  OTableButtonsComponent,
+  OTableColumnResizerComponent,
+  OTableColumnsFilterComponent,
+  OTableMenuComponent,
+  OTableOptionComponent,
+  OTableInsertableRowComponent,
+  OTableQuickfilterComponent,
+  OTableColumnsFilterColumnComponent,
+  OTableHeaderComponent
+];

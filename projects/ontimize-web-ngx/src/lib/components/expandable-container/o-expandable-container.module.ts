@@ -8,7 +8,7 @@ import { OExpandableContainerComponent } from './o-expandable-container.componen
   imports: [CommonModule, OSharedModule],
   exports: [OExpandableContainerComponent],
   declarations: [
-   OExpandableContainerComponent
+    OExpandableContainerComponent
   ],
 
 })
