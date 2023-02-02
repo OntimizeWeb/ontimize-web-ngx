@@ -41,7 +41,7 @@
     "@angular-devkit/build-angular": "~0.803.22",
     "@angular-devkit/build-ng-packagr": "~0.803.22",
     "@angular-devkit/build-optimizer": "~0.803.23",
-    "@angular/cli": "~8.3.21",
+    "@angular/cli": "~15.1.4",
     "@angular/compiler-cli": "~8.2.14",
     "@angular/language-service": "~8.2.14",
     "@types/hammerjs": "~2.0.36",
