@@ -5,6 +5,9 @@
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
   $is-dark-theme: map-get($theme, is-dark);
+  $background-hover-primary: if($is-dark-theme, trasparent, #ffffff);
+  $background-accent: if($is-dark-theme, trasparent, #ffffff);
+  $background-hover-stroked: if($is-dark-theme, trasparent, #ffffff);
 
   @if $typography==null {
     $typography: mat-typography-config();
@@ -223,15 +226,7 @@
       &:hover,
       .mat-button-focus-overlay {
         color: mat-color($primary);
-
-        @if $is-dark-theme {
-          background-color: transparent;
-        }
-
-        @else {
-          background-color: #ffffff;
-        }
-
+        background-color: $background-hover-primary;
         border-color: mat-color($foreground, divider);
       }
 
@@ -243,14 +238,7 @@
     &.mat-button-base[ng-reflect-dialog-result="1"],
     &.mat-button-base[ng-reflect-dialog-result="false"] {
       color: mat-color($primary);
-
-      @if $is-dark-theme {
-        background-color: transparent;
-      }
-
-      @else {
-        background-color: #ffffff;
-      }
+      background-color: $background-accent;
 
       &:hover,
       .mat-button-focus-overlay {
@@ -282,15 +270,7 @@
         &:hover,
         .mat-button-focus-overlay {
           color: mat-color($primary);
-
-          @if $is-dark-theme {
-            background-color: transparent;
-          }
-
-          @else {
-            background-color: #ffffff;
-          }
-
+          background-color: $background-hover-stroked;
           border-color: mat-color($foreground, divider);
         }
 
@@ -298,14 +278,7 @@
 
       &.mat-accent {
         color: mat-color($accent);
-
-        @if $is-dark-theme {
-          background-color: transparent;
-        }
-
-        @else {
-          background-color: #ffffff;
-        }
+        background-color: $background-accent;
 
         &:hover,
         .mat-button-focus-overlay {
