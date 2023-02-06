@@ -282,7 +282,7 @@
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($primary, 800);
+          color: mat-color($accent, 800);
           background-color: mat-color($primary, 100);
           border-color: transparent;
         }
