@@ -219,7 +219,7 @@
     &.mat-button-base.o-button-primary,
     &.mat-button-base[ng-reflect-dialog-result="0"],
     &.mat-button-base[ng-reflect-dialog-result="true"] {
-      color: mat-color($primary, 500);
+      color: mat-color($primary, 800);
       background-color: $background-primary-button;
       border-color: mat-color($foreground, divider);
 
@@ -242,7 +242,7 @@
 
       &:hover,
       .mat-button-focus-overlay {
-        color: mat-color($primary, 500);
+        color: mat-color($primary, 800);
         background-color: mat-color($primary, 500, 0.04);
         border-color: transparent;
       }
@@ -263,9 +263,9 @@
   .o-button button.mat-stroked-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: mat-color($primary, 500);
+        color: mat-color($primary, 800);
         background-color: $background-primary-button;
-        border-color: mat-color($foreground, divider);
+        border-color: transparent;
 
         &:hover,
         .mat-button-focus-overlay {
@@ -282,7 +282,7 @@
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($accent, 500);
+          color: mat-color($accent, 800);
           background-color: mat-color($accent, 500, 0.04);
         }
       }
