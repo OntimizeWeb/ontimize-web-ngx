@@ -9,7 +9,7 @@ import { MomentService } from '../../services/moment.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { Codes, Util } from '../../util';
 import { ObservableWrapper } from '../../util/async';
-import {_getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
+import { _getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
 
 /**
  * `OTranslateService` factory.
@@ -103,8 +103,8 @@ export class OTranslateService {
     let textTranslated;
     try {
       const bundle = this.ngxTranslateService.get(text, values);
-      if (bundle && bundle['value']) {
-        textTranslated = bundle['value'];
+      if (bundle) {
+        bundle.subscribe(x => textTranslated = x);
       }
       textTranslated = textTranslated === text ? undefined : textTranslated;
     } catch (e) {
