@@ -6,9 +6,8 @@
   $primary: map-get($theme, primary);
   $is-dark-theme: map-get($theme, is-dark);
   $background-primary-button: if($is-dark-theme, trasparent, #ffffff);
-  $background-hover-primary-button: if($is-dark-theme, trasparent, #ffffff);
   $background-accent-button: if($is-dark-theme, trasparent, #ffffff);
-  $background-hover-stroked-button: if($is-dark-theme, trasparent, #ffffff);
+
 
   @if $typography==null {
     $typography: mat-typography-config();
@@ -227,7 +226,7 @@
       &:hover,
       .mat-button-focus-overlay {
         color: mat-color($primary);
-        background-color: $background-hover-primary-button;
+        background-color: mat-color($primary, 500, 0.04);
         border-color: mat-color($foreground, divider);
       }
 
@@ -243,8 +242,8 @@
 
       &:hover,
       .mat-button-focus-overlay {
-        color: mat-color($primary, 800);
-        background-color: mat-color($primary, 100);
+        color: mat-color($primary, 500);
+        background-color: mat-color($primary, 500, 0.04);
         border-color: transparent;
       }
     }
@@ -271,7 +270,7 @@
         &:hover,
         .mat-button-focus-overlay {
           color: mat-color($primary);
-          background-color: $background-hover-stroked-button;
+          background-color: mat-color($primary, 500, 0.04);
           border-color: mat-color($foreground, divider);
         }
 
@@ -283,9 +282,8 @@
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($accent, 800);
-          background-color: mat-color($primary, 100);
-          border-color: transparent;
+          color: mat-color($accent, 500);
+          background-color: mat-color($accent, 500, 0.04);
         }
       }
 
