@@ -5,6 +5,7 @@
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
   $is-dark-theme: map-get($theme, is-dark);
+  $background-primary-button: if($is-dark-theme, trasparent, #ffffff);
   $background-hover-primary-button: if($is-dark-theme, trasparent, #ffffff);
   $background-accent-button: if($is-dark-theme, trasparent, #ffffff);
   $background-hover-stroked-button: if($is-dark-theme, trasparent, #ffffff);
@@ -219,9 +220,9 @@
     &.mat-button-base.o-button-primary,
     &.mat-button-base[ng-reflect-dialog-result="0"],
     &.mat-button-base[ng-reflect-dialog-result="true"] {
-      color: mat-color($primary, 800);
-      background-color: mat-color($primary, 100);
-      border-color: transparent;
+      color: mat-color($primary, 500);
+      background-color: $background-primary-button;
+      border-color: mat-color($foreground, divider);
 
       &:hover,
       .mat-button-focus-overlay {
@@ -263,9 +264,9 @@
   .o-button button.mat-stroked-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: mat-color($primary, 800);
-        background-color: mat-color($primary, 100);
-        border-color: transparent;
+        color: mat-color($primary, 500);
+        background-color: $background-primary-button;
+        border-color: mat-color($foreground, divider);
 
         &:hover,
         .mat-button-focus-overlay {
