@@ -22,8 +22,8 @@
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 8px;
+    height: 8px;
     background-color: transparent;
     opacity: 1.0;
   }
@@ -31,7 +31,7 @@
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: none;
     border-radius: 0;
-    background-color: transparent;
+    background-color: #c7c7c7;
   }
 
   ::-webkit-scrollbar-thumb {
