@@ -4,10 +4,15 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
   $is-dark-theme: map-get($theme, is-dark);
-  $background-primary-button: if($is-dark-theme, trasparent, #ffffff);
-  $background-accent-button: if($is-dark-theme, trasparent, #ffffff);
-
+  $background-primary-button: if($is-dark-theme, transparent, mat-color($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, mat-color($primary, 500, 0.04), #ffffff);
+  $border-color-primary-button: if($is-dark-theme, mat-color($foreground, divider), transparent);
+  $font-color-primary-button: if($is-dark-theme, mat-color($primary, 500), mat-color($primary, 800));
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme, mat-color($accent, 500, 0.04), mat-color($accent, 100));
+  $font-color-hover-accent-button: if($is-dark-theme, mat-color($accent, 500), mat-color($accent, 800));
 
   @if $typography==null {
     $typography: mat-typography-config();
@@ -221,12 +226,12 @@
     &.mat-button-base[ng-reflect-dialog-result="true"] {
       color: mat-color($primary, 800);
       background-color: $background-primary-button;
-      border-color: mat-color($foreground, divider);
+      border-color: $border-color-primary-button;
 
       &:hover,
       .mat-button-focus-overlay {
         color: mat-color($primary);
-        background-color: mat-color($primary, 500, 0.04);
+        background-color: $background-hover-primary-button;
         border-color: mat-color($foreground, divider);
       }
 
@@ -237,13 +242,13 @@
     &.mat-button-base.o-button-default,
     &.mat-button-base[ng-reflect-dialog-result="1"],
     &.mat-button-base[ng-reflect-dialog-result="false"] {
-      color: mat-color($primary);
+      color: mat-color($accent);
       background-color: $background-accent-button;
 
       &:hover,
       .mat-button-focus-overlay {
-        color: mat-color($primary, 800);
-        background-color: mat-color($primary, 500, 0.04);
+        color: mat-color($accent, 800);
+        background-color: $background-hover-accent-button;
         border-color: transparent;
       }
     }
@@ -263,27 +268,27 @@
   .o-button button.mat-stroked-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: mat-color($primary, 800);
+        color: $font-color-primary-button;
         background-color: $background-primary-button;
-        border-color: transparent;
+        border-color: $border-color-primary-button;
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($primary);
-          background-color: mat-color($primary, 500, 0.04);
+          color: mat-color($primary, 500);
+          background-color: $background-hover-primary-button;
           border-color: mat-color($foreground, divider);
         }
 
       }
 
       &.mat-accent {
-        color: mat-color($accent);
+        color: mat-color($accent, 500);
         background-color: $background-accent-button;
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($accent, 800);
-          background-color: mat-color($accent, 500, 0.04);
+          color: $font-color-hover-accent-button;
+          background-color: $background-hover-accent-button;
         }
       }
 
