@@ -36,6 +36,8 @@ export const O_TABLE_HEADER_COMPONENTS_EXPORTED = [
   OTableButtonComponent,
   OTableButtonsComponent,
   OTableColumnResizerComponent,
+  OTableColumnsGroupingComponent,
+  OTableColumnsGroupingColumnComponent,
   OTableColumnsFilterComponent,
   OTableMenuComponent,
   OTableOptionComponent,
