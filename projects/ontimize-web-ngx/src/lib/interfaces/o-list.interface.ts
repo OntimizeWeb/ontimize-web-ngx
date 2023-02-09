@@ -1,5 +1,5 @@
-import { OListItemDirective } from './o-list-item.directive';
-import { ListItem } from '../../../interfaces/o-list-item.interface';
+import { OListItemDirective } from '../components/list/list-item/o-list-item.directive';
+import { ListItem } from '../components/list/list-item/o-list-item';
 
 export interface IList {
   detailMode: string;

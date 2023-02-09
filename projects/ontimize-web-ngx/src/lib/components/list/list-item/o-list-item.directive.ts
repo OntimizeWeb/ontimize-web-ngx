@@ -13,11 +13,11 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ListItem } from '../../../interfaces';
 
-import { IList } from './o-list';
+import { IList } from '../../../interfaces/o-list.interface';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { ListItem } from './o-list-item';
 
 @Directive({
   selector: 'o-list-item, mat-list-item[o-list-item], mat-card[o-list-item]',

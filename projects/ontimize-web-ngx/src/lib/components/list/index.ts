@@ -1,4 +1,4 @@
-export * from './list-item/o-list';
+export * from './list-item/o-list-item';
 export * from './list-item/o-list-item.component';
 export * from './list-item/o-list-item.directive';
 export * from './o-list.component';
