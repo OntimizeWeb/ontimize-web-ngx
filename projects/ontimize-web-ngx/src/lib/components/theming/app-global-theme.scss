@@ -13,6 +13,7 @@
   $background-accent-button: if($is-dark-theme, transparent, #ffffff);
   $background-hover-accent-button: if($is-dark-theme, mat-color($accent, 500, 0.04), mat-color($accent, 100));
   $font-color-hover-accent-button: if($is-dark-theme, mat-color($accent, 500), mat-color($accent, 800));
+  $scrollbar-color: $if($is-dark-theme, mat-color($primary, 500), mat-color($primary, 200));
 
   @if $typography==null {
     $typography: mat-typography-config();
@@ -48,7 +49,7 @@
   ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
-    background-color: mat-color($primary, 200);
+    background-color: $scrollbar-color;
     opacity: 1.0;
   }
 
