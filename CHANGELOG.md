@@ -1,3 +1,10 @@
+## 8.11.0
+### Features:
+* Changed srollbar style ([e0348e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0348e1)) Closes [#1155](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1155)
+
+### Bug fixes
+* Fixed strocked buttons colors on dark mode. Fixed strocked warn and strocked accent colors on light mode. ([5786312](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5786312)) Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
+
 ## 8.10.0 (2023-01-26)
 ### Features:
 * **o-image**: Added drag&drop functionality ([2518809](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2518809)) Closes [#1112](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1112)
