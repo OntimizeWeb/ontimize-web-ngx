@@ -1,4 +1,4 @@
-<mat-button-toggle #bt [id]="oattr" [name]="name" [checked]="checked" [disabled]="!enabled" [value]="value" (change)="onChange.emit($event)">
+<mat-button-toggle #bt [id]="oattr" [name]="name" [checked]="_checked" [disabled]="!_enabled" [value]="_value" (change)="onChange.emit($event)">
   <mat-icon *ngIf="icon && iconPosition==='before'">{{ icon }}</mat-icon>
   {{ label | oTranslate }}
   <mat-icon *ngIf="icon && iconPosition==='after'">{{ icon }}</mat-icon>
