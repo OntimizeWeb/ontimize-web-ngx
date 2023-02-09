@@ -16,8 +16,7 @@ import {
 } from '@angular/core';
 import { MatLine } from '@angular/material/core';
 import { MatListAvatarCssMatStyler, MatListItem } from '@angular/material/list';
-
-import { IListItem } from '../../../interfaces/o-list-item.interface';
+import { ListItem } from '../../../interfaces';
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
 
@@ -30,7 +29,7 @@ import { OListComponent } from '../o-list.component';
     '[class.o-list-item]': 'true'
   }
 })
-export class OListItemComponent implements IListItem, AfterContentInit {
+export class OListItemComponent implements ListItem, AfterContentInit {
 
   public modelData: any;
 

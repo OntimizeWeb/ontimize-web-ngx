@@ -1,9 +1,5 @@
 
-export interface IListItem {
-  getItemData(): any;
-  setItemData(data: any): void;
-}
-
-export function instanceOfIListItem(object: any): object is IListItem {
-  return 'setItemData' in object;
-}
+export abstract class ListItem{
+  public abstract getItemData(): any;
+  public abstract setItemData(data: any): void;
+ }

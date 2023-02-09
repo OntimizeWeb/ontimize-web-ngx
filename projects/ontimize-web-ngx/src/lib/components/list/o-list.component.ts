@@ -21,8 +21,8 @@ import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
-import { IListItem } from '../../interfaces/o-list-item.interface';
-import { IList } from '../../interfaces/o-list.interface';
+import { ListItem } from '../../interfaces/o-list-item.interface';
+import { IList } from './list-item/o-list';
 import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
@@ -214,11 +214,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     return ObservableWrapper.subscribe(this.onClick, onNext);
   }
 
-  public onItemDetailClick(item: OListItemDirective | IListItem): void {
+  public onItemDetailClick(item: OListItemDirective | ListItem): void {
     this.handleItemClick(item);
   }
 
-  public onItemDetailDoubleClick(item: OListItemDirective | IListItem): void {
+  public onItemDetailDoubleClick(item: OListItemDirective | ListItem): void {
     this.handleItemDblClick(item);
   }
 

@@ -17,7 +17,6 @@ export * from './o-context-menu.interface';
 export * from './o-form-layout-manager-mode.interface';
 export * from './o-grid-item.interface';
 export * from './o-list-item.interface';
-export * from './o-list.interface';
 export * from './o-table-button.interface';
 export * from './o-table-buttons.interface';
 export * from './o-table-column-calculated.interface';
