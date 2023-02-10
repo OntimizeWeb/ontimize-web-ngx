@@ -13,7 +13,8 @@
   $background-accent-button: if($is-dark-theme, transparent, #ffffff);
   $background-hover-accent-button: if($is-dark-theme, mat-color($accent, 500, 0.04), mat-color($accent, 100));
   $font-color-hover-accent-button: if($is-dark-theme, mat-color($accent, 500), mat-color($accent, 800));
-  $scrollbar-color: $if($is-dark-theme, mat-color($primary, 500), mat-color($primary, 200));
+  $border-color-accent-button: if($is-dark-theme, mat-color($foreground, divider), transparent);
+  $scrollbar-color: if($is-dark-theme, mat-color($primary, 500), mat-color($primary, 200));
 
   @if $typography==null {
     $typography: mat-typography-config();
@@ -250,7 +251,7 @@
       .mat-button-focus-overlay {
         color: mat-color($accent, 800);
         background-color: $background-hover-accent-button;
-        border-color: transparent;
+        border-color: $border-color-accent-button;
       }
     }
 
