@@ -3,7 +3,7 @@
 * Changed scrollbar style ([e0348e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0348e1)) Closes [#1155](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1155)
 
 ### Bug fixes
-* Fixed strocked button colors on dark mode. Fixed strocked warn and strocked accent button colors on light mode. ([5786312](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5786312)) Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
+* Fixed strocked button colors on dark mode. Fixed strocked warn and strocked accent button colors on light mode. ([5786312](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5786312)[8f862b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f862b4)) Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
 
 ## 8.10.0 (2023-01-26)
 ### Features:
