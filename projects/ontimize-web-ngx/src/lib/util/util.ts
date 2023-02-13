@@ -426,12 +426,16 @@ export class Util {
       return value;
     }
 
-    if (isPromise(value)) {
+    if (Util.isPromise(value)) {
       // Use `Promise.resolve()` to wrap promise-like instances.
       return from(Promise.resolve(value));
     }
 
     return of(value);
+  }
+
+ static isPromise<T = any>(obj: any): obj is Promise<T> {
+    return !!obj && typeof obj.then === 'function';
   }
 
 
@@ -472,8 +476,8 @@ export class Util {
     if (!Util.isDefined(clazz)) {
       return;
     }
-    const newInstance = Object.create(clazz.prototype);
-    clazz.apply(newInstance, [injector]);
+
+    const newInstance = new clazz(injector);
     return newInstance;
   }
 
