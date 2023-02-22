@@ -1,9 +1,13 @@
 ## 8.11.0
 ### Features:
-* Changed scrollbar style ([e0348e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0348e1)) Closes [#1155](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1155)
+* New scrollbar style ([e0348e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0348e1)) Closes [#1155](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1155)
 
 ### Bug fixes
-* Fixed stroked button colors on dark mode. Fixed stroked warn and stroked accent button colors on light mode. ([5786312](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5786312))([8f862b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f862b4)) Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
+* Stroked buttons
+  * Fixed color of texts and background on dark mode ([5786312](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5786312))
+  * Fixed warn and accent button colors on light mode ([8f862b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f862b4))
+Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
+* **o-table**: Fixed align text right when dragging in window show/hide columns
 
 ## 8.10.0 (2023-01-26)
 ### Features:
