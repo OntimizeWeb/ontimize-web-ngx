@@ -5,9 +5,10 @@
 ### Bug fixes
 * Stroked buttons
   * Fixed color of texts and background on dark mode ([5786312](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5786312))
-  * Fixed warn and accent button colors on light mode ([8f862b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f862b4))
-Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
+  * Fixed warn and accent button colors on light mode ([8f862b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f862b4))Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
 * **o-table**: Fixed align text right when dragging in window show/hide columns
+* **o-app-layout**: Fixed menu section growing on available space
+
 
 ## 8.10.0 (2023-01-26)
 ### Features:
