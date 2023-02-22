@@ -5,15 +5,13 @@
   <div class="mat-subheader">{{'TABLE.VISIBLE_COLUMNS.DESCRIPTION' | oTranslate}}</div>
 
   <div [ngClass]="rowHeight">
-    <mat-list cdkDropList (cdkDropListDropped)="drop($event)">
+    <mat-list cdkDropList (cdkDropListDropped)="drop($event)" dense>
       <mat-list-item *ngFor="let column of columns" cdkDrag (click)="onClickColumn(column)" [ngClass]="{'column-hidden':!column.visible}"
         class="o-drag-list-item-box">
-        <div fxLayout="row" fxFlex fxLayoutAlign="start center">
-          <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
-          <span mat-line fxFlex>{{ (column.title || column.attr) | oTranslate }}</span>
-          <mat-icon *ngIf="column.visible" svgIcon="ontimize:visibility" color="primary"></mat-icon>
-          <mat-icon *ngIf="!column.visible" svgIcon="ontimize:visibility_off"></mat-icon>
-        </div>
+        <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+        <span mat-line>{{ (column.title || column.attr) | oTranslate }}</span>
+        <mat-icon *ngIf="column.visible" svgIcon="ontimize:visibility" color="primary"></mat-icon>
+        <mat-icon *ngIf="!column.visible" svgIcon="ontimize:visibility_off"></mat-icon>
         <mat-divider></mat-divider>
       </mat-list-item>
     </mat-list>

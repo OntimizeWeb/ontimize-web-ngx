@@ -123,7 +123,8 @@
       .mat-dialog-content {
         font-size: mat-font-size($typography, body-1);
 
-        .mat-selection-list[dense] {
+        .mat-selection-list[dense],
+        .mat-list[dense] {
           outline: none;
 
           .mat-list-item {
