@@ -97,6 +97,133 @@ $transition-duration: 500ms;
       overflow: auto;
       height: 100%;
 
+      &:not(.mat-drawer-closed) {
+        .o-app-sidenav-menugroup {
+          transition: padding $transition-duration 0s;
+
+          .o-app-sidenav-menugroup-arrow {
+            transition: $transition-duration transform cubic-bezier(.25, .8, .25, 1);
+          }
+
+          &.opened {
+            .o-app-sidenav-menugroup-arrow {
+              transform: rotate(90deg);
+            }
+          }
+        }
+
+        .o-app-sidenav-menugroup-title,
+        .o-app-sidenav-menuitem-title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .o-app-sidenav-menu-group-level-1 a {
+          +.o-app-sidenav-menugroup-items-container {
+
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                padding-left: 28px;
+              }
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2 a {
+          +.o-app-sidenav-menugroup-items-container {
+
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                padding-left: 52px;
+              }
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2,
+        .o-app-sidenav-menu-group-level-3,
+        .o-app-sidenav-menu-group-level-4,
+        .o-app-sidenav-menu-group-level-5 {
+          a {
+            padding-right: 4px;
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-3,
+        .o-app-sidenav-menu-group-level-4,
+        .o-app-sidenav-menu-group-level-5 {
+          a {
+            padding-left: 52px;
+          }
+        }
+
+        .o-app-sidenav-menugroup,
+        .o-app-sidenav-menuitem {
+          mat-icon:not(.o-app-sidenav-menugroup-arrow) {
+            margin-right: ($sidenav-spacing-unit * 2);
+          }
+        }
+      }
+
+      &.mat-drawer-closing {
+        transform: translate3d($sidenav-diff, 0, 0);
+      }
+
+      &.mat-drawer-closed {
+        text-align: center;
+
+        .o-app-sidenav-item {
+          &:not(.o-user-info) {
+            cursor: pointer;
+          }
+
+          &.o-user-info {
+
+            &:focus,
+            &:hover {
+              color: inherit;
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+          a {
+            width: $sidenav-closed-width - $margin-left-buttom;
+            max-width: $sidenav-closed-width - $margin-left-buttom;
+            min-width: $sidenav-closed-width - $margin-left-buttom;
+            padding-left: 4px;
+            padding-right: 12px;
+          }
+
+          &:not([disabled=true]) {
+            a.o-app-sidenav-viewer-sidenav-item-selected {
+              padding: 0 8px;
+            }
+          }
+        }
+
+        nav {
+          width: $sidenav-closed-width;
+          min-width: $sidenav-closed-width;
+          margin-left: auto;
+        }
+
+        .o-app-sidenav-image .o-app-sidenav-image-container {
+          padding: 0;
+          text-align: end;
+          max-height: 36px;
+
+          .o-app-sidenav-image {
+            max-height: 36px;
+            margin-right: 8px;
+          }
+        }
+      }
+
       .mat-drawer-inner-container {
         padding-bottom: 16px;
 
@@ -128,62 +255,6 @@ $transition-duration: 500ms;
         .sidenav-toggle {
           padding: 4px 12px 8px;
           cursor: pointer;
-        }
-
-        &.mat-drawer-closing {
-          transform: translate3d($sidenav-diff, 0, 0);
-        }
-
-        &.mat-drawer-closed {
-          text-align: center;
-
-          .o-app-sidenav-item {
-            &:not(.o-user-info) {
-              cursor: pointer;
-            }
-
-            &.o-user-info {
-
-              &:focus,
-              &:hover {
-                color: inherit;
-              }
-            }
-          }
-
-          .o-app-sidenav-menu-group,
-          .o-app-sidenav-menu-item {
-            a {
-              width: $sidenav-closed-width - $margin-left-buttom;
-              max-width: $sidenav-closed-width - $margin-left-buttom;
-              min-width: $sidenav-closed-width - $margin-left-buttom;
-              padding-left: 4px;
-              padding-right: 12px;
-            }
-
-            &:not([disabled=true]) {
-              a.o-app-sidenav-viewer-sidenav-item-selected {
-                padding: 0 8px;
-              }
-            }
-          }
-
-          nav {
-            width: $sidenav-closed-width;
-            min-width: $sidenav-closed-width;
-            margin-left: auto;
-          }
-
-          .o-app-sidenav-image .o-app-sidenav-image-container {
-            padding: 0;
-            text-align: end;
-            max-height: 36px;
-
-            .o-app-sidenav-image {
-              max-height: 36px;
-              margin-right: 8px;
-            }
-          }
         }
 
         /* Side Navigation Level Styles */
@@ -232,78 +303,9 @@ $transition-duration: 500ms;
         .o-app-sidenav-menugroup-arrow {
           display: flex;
         }
-
-        &:not(.mat-drawer-closed) {
-          .o-app-sidenav-menugroup {
-            transition: padding $transition-duration 0s;
-
-            .o-app-sidenav-menugroup-arrow {
-              transition: $transition-duration transform cubic-bezier(.25, .8, .25, 1);
-            }
-
-            &.opened {
-              .o-app-sidenav-menugroup-arrow {
-                transform: rotate(90deg);
-              }
-            }
-          }
-
-          .o-app-sidenav-menugroup-title,
-          .o-app-sidenav-menuitem-title {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-
-          .o-app-sidenav-menu-group-level-1 a {
-            +.o-app-sidenav-menugroup-items-container {
-
-              .o-app-sidenav-menu-group,
-              .o-app-sidenav-menu-item {
-                a {
-                  padding-left: 28px;
-                }
-              }
-            }
-          }
-
-          .o-app-sidenav-menu-group-level-2 a {
-            +.o-app-sidenav-menugroup-items-container {
-
-              .o-app-sidenav-menu-group,
-              .o-app-sidenav-menu-item {
-                a {
-                  padding-left: 52px;
-                }
-              }
-            }
-          }
-
-          .o-app-sidenav-menu-group-level-2,
-          .o-app-sidenav-menu-group-level-3,
-          .o-app-sidenav-menu-group-level-4,
-          .o-app-sidenav-menu-group-level-5 {
-            a {
-              padding-right: 4px;
-            }
-          }
-
-          .o-app-sidenav-menu-group-level-3,
-          .o-app-sidenav-menu-group-level-4,
-          .o-app-sidenav-menu-group-level-5 {
-            a {
-              padding-left: 52px;
-            }
-          }
-
-          .o-app-sidenav-menugroup,
-          .o-app-sidenav-menuitem {
-            mat-icon:not(.o-app-sidenav-menugroup-arrow) {
-              margin-right: ($sidenav-spacing-unit * 2);
-            }
-          }
-        }
       }
+
+
     }
   }
 
