@@ -8,7 +8,7 @@
   * Fixed warn and accent button colors on light mode ([8f862b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f862b4))Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
 * **o-table**: Fixed align text right when dragging in window show/hide columns([5ceb428](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5ceb428)) Closes [#1163](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/#1163)
 * **o-app-layout**: Fixed menu section growing on available space ([1d0d03a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d0d03a)) Closes [#1169](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/#1163)
-
+* Removed unnecesary scroll from `o-card-menu-layout` ([44ce1ed](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44ce1ed)) Closes [1165](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1165)
 
 ## 8.10.0 (2023-01-26)
 ### Features:
