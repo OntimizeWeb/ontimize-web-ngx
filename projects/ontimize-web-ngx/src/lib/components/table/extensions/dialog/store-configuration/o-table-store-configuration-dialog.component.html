@@ -33,7 +33,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default cancel">
     {{ 'CANCEL' | oTranslate }}</button>
   <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true"
     [disabled]="!formGroup.valid || propertiesList.selectedOptions.selected.length===0" class="o-button-primary">{{ 'SAVE' | oTranslate }}</button>
