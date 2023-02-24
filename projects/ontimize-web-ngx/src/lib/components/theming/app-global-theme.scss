@@ -242,7 +242,6 @@
 
     &.mat-button-base,
     &.mat-button-base.mat-accent,
-    &.mat-button-base.o-button-default,
     &.mat-button-base[ng-reflect-dialog-result="1"],
     &.mat-button-base[ng-reflect-dialog-result="false"] {
       color: mat-color($accent);
