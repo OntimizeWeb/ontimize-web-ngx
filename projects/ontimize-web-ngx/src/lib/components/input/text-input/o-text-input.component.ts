@@ -1,7 +1,5 @@
-import { ChangeDetectorRef, Component, ContentChildren, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, QueryList, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChildren, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, QueryList, ViewEncapsulation } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
-import { MatPrefix, MatSuffix } from '@angular/material';
-import { merge } from 'rxjs';
 
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
@@ -10,6 +8,8 @@ import {
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent
 } from '../../o-form-data-component.class';
+import { OMatPrefix } from '../../../directives/o-mat-prefix.directive';
+import { OMatSuffix } from '../../../directives/o-mat-suffix.directive';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
@@ -32,9 +32,8 @@ export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
 
 export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
-  @ContentChildren(MatPrefix) _prefixChildren: QueryList<MatPrefix>;
-  @ContentChildren(MatSuffix) _suffixChildren: QueryList<MatSuffix>;
-  private _changeDetectorRef: ChangeDetectorRef
+  @ContentChildren(OMatPrefix) _prefixChildren: QueryList<OMatPrefix>;
+  @ContentChildren(OMatSuffix) _suffixChildren: QueryList<OMatSuffix>;
 
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
@@ -43,22 +42,12 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
-   ) {
+  ) {
     super(form, elRef, injector);
-    this._changeDetectorRef = this.injector.get(ChangeDetectorRef);
   }
 
   ngOnInit() {
     super.ngOnInit();
-  }
-
-  ngAfterContentInit() {
-
-
-    // Run change detection and update the outline if the suffix or prefix changes.
-    merge(this._prefixChildren.changes, this._suffixChildren.changes).subscribe(() => {
-      this._changeDetectorRef.markForCheck();
-    });
   }
 
   resolveValidators(): ValidatorFn[] {

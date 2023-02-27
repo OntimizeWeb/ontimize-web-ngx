@@ -2,7 +2,9 @@
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
     [class.icon-field]="showClearButton" fxFlexFill>
-    <ng-content select="[matPrefix]" *ngIf="_prefixChildren.length"></ng-content>
+    <span matPrefix *ngIf="_prefixChildren.length>0">
+      <ng-content select="[oMatPrefix]"></ng-content>
+    </span>
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired" />
@@ -21,6 +23,8 @@
     <mat-error *ngFor="let oError of getActiveOErrors()">
       {{ oError.text | oTranslate }}
     </mat-error>
-    <ng-content select="[matSuffix]"  *ngIf="_suffixChildren.length"></ng-content>
+    <span matSuffix *ngIf="_suffixChildren.length>0">
+      <ng-content select="[oMatSuffix]"></ng-content>
+    </span>
   </mat-form-field>
 </div>
