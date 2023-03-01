@@ -224,9 +224,7 @@
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
 
     &.mat-button-base.mat-primary,
-    &.mat-button-base.o-button-primary,
-    &.mat-button-base[ng-reflect-dialog-result="0"],
-    &.mat-button-base[ng-reflect-dialog-result="true"] {
+    &.mat-button-base.o-button-primary {
       color: mat-color($primary, 800);
       background-color: $background-primary-button;
       border-color: $border-color-primary-button;
@@ -241,9 +239,7 @@
     }
 
     &.mat-button-base,
-    &.mat-button-base.mat-accent,
-    &.mat-button-base[ng-reflect-dialog-result="1"],
-    &.mat-button-base[ng-reflect-dialog-result="false"] {
+    &.mat-button-base.mat-accent {
       color: mat-color($accent);
       background-color: $background-accent-button;
 
