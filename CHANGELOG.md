@@ -1,4 +1,4 @@
-## 8.11.0
+## 8.11.0 (2023-03-02)
 ### Features:
 * New scrollbar style ([e0348e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0348e1)) Closes [#1155](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1155)
 * `o-text-input`:  new `o-mat-prefix` and `o-mat-suffix` directive to add prefix and suffix  ([3972dc1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3972dc1)) ([7f9d973](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7f9d973)) Closes [#1141](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1141)
