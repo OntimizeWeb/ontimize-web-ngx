@@ -15,15 +15,11 @@ $transition-duration: 500ms;
     }
   }
 
-  .layout-sidenav-projection-end {
-    width: 100%;
-    position: absolute;
-    bottom: 12px;
-  }
-
   .navMenu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     overflow: auto;
-    max-height: 70%;
   }
 
   @-moz-document url-prefix() {
@@ -96,145 +92,10 @@ $transition-duration: 500ms;
 
     .mat-drawer.o-app-sidenav-sidenav {
       box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
-      padding-bottom: 36px;
       width: $sidenav-width;
       bottom: 0;
       overflow: auto;
       height: 100%;
-
-      .sidenav-toggle-container {
-        height: 48px;
-      }
-
-      nav {
-        a {
-          border-radius: 0;
-          box-sizing: border-box;
-          display: block;
-          line-height: 48px;
-          font-size: 14px;
-          height: 48px;
-        }
-      }
-
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-
-        li {
-          margin: 0;
-          padding: 0;
-        }
-      }
-
-      .sidenav-toggle {
-        padding: 4px 12px 8px;
-        cursor: pointer;
-      }
-
-      &.mat-drawer-closing {
-        transform: translate3d($sidenav-diff, 0, 0);
-      }
-
-      &.mat-drawer-closed {
-        text-align: center;
-
-        .o-app-sidenav-item {
-          &:not(.o-user-info) {
-            cursor: pointer;
-          }
-
-          &.o-user-info {
-
-            &:focus,
-            &:hover {
-              color: inherit;
-            }
-          }
-        }
-
-        .o-app-sidenav-menu-group,
-        .o-app-sidenav-menu-item {
-          a {
-            width: $sidenav-closed-width - $margin-left-buttom;
-            max-width: $sidenav-closed-width - $margin-left-buttom;
-            min-width: $sidenav-closed-width - $margin-left-buttom;
-            padding-left: 4px;
-            padding-right: 12px;
-          }
-
-          &:not([disabled=true]) {
-            a.o-app-sidenav-viewer-sidenav-item-selected {
-              padding: 0 8px;
-            }
-          }
-        }
-
-        nav {
-          width: $sidenav-closed-width;
-          min-width: $sidenav-closed-width;
-          margin-left: auto;
-        }
-
-        .o-app-sidenav-image .o-app-sidenav-image-container {
-          padding: 0;
-          text-align: end;
-          max-height: 36px;
-
-          .o-app-sidenav-image {
-            max-height: 36px;
-            margin-right: 8px;
-          }
-        }
-      }
-
-      /* Side Navigation Level Styles */
-      .o-app-sidenav-menu-group-level-1 a {
-        font-size: 14px;
-        line-height: 48px;
-        height: 48px;
-
-        +.o-app-sidenav-menugroup-items-container {
-
-          .o-app-sidenav-menu-group,
-          .o-app-sidenav-menu-item {
-            a {
-              font-size: 12px;
-              line-height: 40px;
-              height: 40px;
-            }
-          }
-        }
-      }
-
-      .o-app-sidenav-menu-group-level-2 a {
-        font-size: 12px;
-        line-height: 40px;
-        height: 40px;
-
-        +.o-app-sidenav-menugroup-items-container {
-
-          .o-app-sidenav-menu-group,
-          .o-app-sidenav-menu-item {
-            a {
-              font-size: 11px;
-              line-height: 40px;
-              height: 40px;
-
-              .mat-icon {
-                font-size: 20px;
-                height: 20px;
-                width: 20px;
-              }
-            }
-          }
-        }
-      }
-
-      .o-app-sidenav-menugroup-arrow {
-        display: flex;
-      }
 
       &:not(.mat-drawer-closed) {
         .o-app-sidenav-menugroup {
@@ -306,6 +167,145 @@ $transition-duration: 500ms;
           }
         }
       }
+
+      &.mat-drawer-closing {
+        transform: translate3d($sidenav-diff, 0, 0);
+      }
+
+      &.mat-drawer-closed {
+        text-align: center;
+
+        .o-app-sidenav-item {
+          &:not(.o-user-info) {
+            cursor: pointer;
+          }
+
+          &.o-user-info {
+
+            &:focus,
+            &:hover {
+              color: inherit;
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+          a {
+            width: $sidenav-closed-width - $margin-left-buttom;
+            max-width: $sidenav-closed-width - $margin-left-buttom;
+            min-width: $sidenav-closed-width - $margin-left-buttom;
+            padding-left: 4px;
+            padding-right: 12px;
+          }
+
+          &:not([disabled=true]) {
+            a.o-app-sidenav-viewer-sidenav-item-selected {
+              padding: 0 8px;
+            }
+          }
+        }
+
+        nav {
+          width: $sidenav-closed-width;
+          min-width: $sidenav-closed-width;
+          margin-left: auto;
+        }
+
+        .o-app-sidenav-image .o-app-sidenav-image-container {
+          padding: 0;
+          text-align: end;
+          max-height: 36px;
+
+          .o-app-sidenav-image {
+            max-height: 36px;
+            margin-right: 8px;
+          }
+        }
+      }
+
+      .mat-drawer-inner-container {
+        padding-bottom: 16px;
+
+        .sidenav-toggle-container {
+          height: 48px;
+        }
+
+        nav {
+          a {
+            border-radius: 0;
+            box-sizing: border-box;
+            display: block;
+            line-height: 48px;
+            font-size: 14px;
+          }
+        }
+
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+
+          li {
+            margin: 0;
+            padding: 0;
+          }
+        }
+
+        .sidenav-toggle {
+          padding: 4px 12px 8px;
+          cursor: pointer;
+        }
+
+        /* Side Navigation Level Styles */
+        .o-app-sidenav-menu-group-level-1 a {
+          font-size: 14px;
+          line-height: 48px;
+          height: 48px;
+
+          +.o-app-sidenav-menugroup-items-container {
+
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                font-size: 12px;
+                line-height: 40px;
+                height: 40px;
+              }
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2 a {
+          font-size: 12px;
+          line-height: 40px;
+          height: 40px;
+
+          +.o-app-sidenav-menugroup-items-container {
+
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                font-size: 11px;
+                line-height: 40px;
+                height: 40px;
+
+                .mat-icon {
+                  font-size: 20px;
+                  height: 20px;
+                  width: 20px;
+                }
+              }
+            }
+          }
+        }
+
+        .o-app-sidenav-menugroup-arrow {
+          display: flex;
+        }
+      }
+
+
     }
   }
 

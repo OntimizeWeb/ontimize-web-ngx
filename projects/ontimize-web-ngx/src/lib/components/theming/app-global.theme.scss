@@ -1,10 +1,24 @@
-@mixin app-global-theme($theme-or-color-config) {
+@mixin app-global-theme($theme-or-color-config, $typography: null) {
   $theme: map.get($theme-or-color-config, color);
-  $typography: map.get($theme-or-color-config, typography);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
+  $accent: map.get($theme, accent);
   $primary: map.get($theme, primary);
-  $accent: map.get($theme, primary);
+  $foreground: map.get($theme, foreground);
+  $background: map.get($theme, background);
+  $is-dark-theme: map.get($theme, is-dark);
+  $background-primary-button: if($is-dark-theme, transparent, mat.get-color-from-palette($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500, 0.04), #ffffff);
+  $border-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
+  $font-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 800));
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500, 0.04), mat.get-color-from-palette($accent, 100));
+  $font-color-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 800));
+  $border-color-accent-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
+  $scrollbar-color: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 200));
+
+  @if $typography==null {
+    $typography: map.get($theme-or-color-config, 'typography');
+
+  }
 
   body,
   html {
@@ -21,8 +35,8 @@
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 8px;
+    height: 8px;
     background-color: transparent;
     opacity: 1.0;
   }
@@ -30,13 +44,13 @@
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: none;
     border-radius: 0;
-    background-color: transparent;
+    background-color: #c7c7c7;
   }
 
   ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
-    background-color: mat.get-color-from-palette($primary, 200);
+    background-color: $scrollbar-color;
     opacity: 1.0;
   }
 
@@ -111,10 +125,11 @@
         .mat-mdc-subheader.mdc-list-group__subheader {
           font-weight: inherit;
           font-size: inherit;
-          margin:0;
+          margin: 0;
 
         }
 
+        .mat-list[dense],
         .mat-mdc-selection-list[dense] {
           outline: none;
 
@@ -227,36 +242,27 @@
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
 
     &.mat-mdc-button-base.mat-primary,
-    &.mat-mdc-button-base.o-button-primary,
-    &.mat-button-base[ng-reflect-dialog-result="0"],
-    &.mat-button-base[ng-reflect-dialog-result="true"] {
+    &.mat-mdc-button-base.o-button-primary {
       color: mat.get-color-from-palette($primary, 800);
-      background-color: mat.get-color-from-palette($primary, 100);
-      border-color: transparent;
+      background-color: $background-primary-button;
+      border-color: $border-color-primary-button;
 
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       &:hover,
-      .mat-button-focus-overlay {
+      .mat-mdc-button-touch-target {
         color: mat.get-color-from-palette($primary);
-        background-color: #ffffff;
+        background-color: $background-hover-primary-button;
         border-color: mat.get-color-from-palette($foreground, divider);
       }
 
     }
 
     &.mat-mdc-button-base,
-    &.mat-mdc-button-base.mat-accent,
-    &.mat-button-base.o-button-default,
-    &.mat-button-base[ng-reflect-dialog-result="1"],
-    &.mat-button-base[ng-reflect-dialog-result="false"] {
-      color: mat.get-color-from-palette($primary);
-      background-color: #ffffff;
+    &.mat-button-base.mat-accent {
+      color: mat.get-color-from-palette($accent);
+      background-color: $background-accent-button;
 
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       &:hover,
-      .mat-button-focus-overlay {
+      .mat-mdc-button-touch-target {
         color: mat.get-color-from-palette($primary, 800);
         background-color: mat.get-color-from-palette($primary, 100);
         border-color: transparent;
@@ -278,32 +284,27 @@
   .o-button button.mat-mdc-outlined-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: mat.get-color-from-palette($primary, 800);
-        background-color: mat.get-color-from-palette($primary, 100);
-        border-color: transparent;
+        color: $font-color-primary-button;
+        background-color: $background-primary-button;
+        border-color: $border-color-primary-button;
 
-        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         &:hover,
-        .mat-button-focus-overlay {
-          color: mat.get-color-from-palette($primary);
-          background-color: #ffffff;
+        .mat-mdc-button-touch-target {
+          color: mat.get-color-from-palette($primary, 500);
+          background-color: $background-hover-primary-button;
           border-color: mat.get-color-from-palette($foreground, divider);
         }
 
       }
 
       &.mat-accent {
-        color: mat.get-color-from-palette($accent);
-        background-color: #ffffff;
+        color: mat.get-color-from-palette($accent, 500);
+        background-color: $background-accent-button;
 
-        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         &:hover,
-        .mat-button-focus-overlay {
-          color: mat.get-color-from-palette($primary, 800);
-          background-color: mat.get-color-from-palette($primary, 100);
-          border-color: transparent;
+        .mat-mdc-button-touch-target {
+          color: $font-color-hover-accent-button;
+          background-color: $background-hover-accent-button;
         }
       }
 

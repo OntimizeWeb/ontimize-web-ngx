@@ -9,7 +9,7 @@
 </div>
 <mat-dialog-actions align="end">
   <span fxFlex></span>
-  <button type="button" *ngIf="twoOptions" mat-stroked-button mat-dialog-close class="o-button-default">
+  <button type="button" *ngIf="twoOptions" mat-stroked-button mat-dialog-close class="o-button-default cancel">
     {{ cancelButtonText | oTranslate }}
   </button>
   <button type="button" mat-stroked-button class="o-button-primary" (click)="onOkClick()">{{ okButtonText | oTranslate }}</button>
