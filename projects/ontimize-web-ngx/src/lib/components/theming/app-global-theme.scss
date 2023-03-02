@@ -1,9 +1,22 @@
 @import '~@angular/material/theming';
+
 @mixin app-global-theme($theme, $typography: null) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
-  @if $typography == null {
+  $accent: map-get($theme, accent);
+  $is-dark-theme: map-get($theme, is-dark);
+  $background-primary-button: if($is-dark-theme, transparent, mat-color($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, mat-color($primary, 500, 0.04), #ffffff);
+  $border-color-primary-button: if($is-dark-theme, mat-color($foreground, divider), transparent);
+  $font-color-primary-button: if($is-dark-theme, mat-color($primary, 500), mat-color($primary, 800));
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme, mat-color($accent, 500, 0.04), mat-color($accent, 100));
+  $font-color-hover-accent-button: if($is-dark-theme, mat-color($accent, 500), mat-color($accent, 800));
+  $border-color-accent-button: if($is-dark-theme, mat-color($foreground, divider), transparent);
+  $scrollbar-color: if($is-dark-theme, mat-color($primary, 500), mat-color($primary, 200));
+
+  @if $typography==null {
     $typography: mat-typography-config();
   }
 
@@ -22,8 +35,8 @@
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 8px;
+    height: 8px;
     background-color: transparent;
     opacity: 1.0;
   }
@@ -31,13 +44,13 @@
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: none;
     border-radius: 0;
-    background-color: transparent;
+    background-color: #c7c7c7;
   }
 
   ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
-    background-color: mat-color($primary, 200);
+    background-color: $scrollbar-color;
     opacity: 1.0;
   }
 
@@ -76,6 +89,7 @@
     }
 
   }
+
   @keyframes lds-ring {
     0% {
       transform: rotate(0deg);
@@ -109,12 +123,14 @@
       .mat-dialog-content {
         font-size: mat-font-size($typography, body-1);
 
-        .mat-selection-list[dense] {
+        .mat-selection-list[dense],
+        .mat-list[dense] {
           outline: none;
 
           .mat-list-item {
+
             .empty-filter-list,
-            .mat-list-item-content > * {
+            .mat-list-item-content>* {
               font-size: mat-font-size($typography, body-1);
             }
 
@@ -168,6 +184,7 @@
   }
 
   o-data-toolbar {
+
     &.o-grid-toolbar button.o-grid-button,
     &.o-list-toolbar button.o-list-button,
     &.o-table-toolbar .buttons .o-table-button,
@@ -198,48 +215,45 @@
       }
     }
   }
+
   /*BUTTONS HOVER*/
   .mat-dialog-actions button:not([disabled]),
   .o-form .o-form-toolbar button:not([disabled]),
   .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
   .o-list .o-list-toolbar button.o-list-button:not([disabled]),
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
+
     &.mat-button-base.mat-primary,
-    &.mat-button-base.o-button-primary,
-    &.mat-button-base[ng-reflect-dialog-result="0"],
-    &.mat-button-base[ng-reflect-dialog-result="true"] {
+    &.mat-button-base.o-button-primary {
       color: mat-color($primary, 800);
-      background-color: mat-color($primary, 100);
-      border-color: transparent;
+      background-color: $background-primary-button;
+      border-color: $border-color-primary-button;
 
       &:hover,
       .mat-button-focus-overlay {
         color: mat-color($primary);
-        background-color: #ffffff;
+        background-color: $background-hover-primary-button;
         border-color: mat-color($foreground, divider);
       }
 
     }
 
     &.mat-button-base,
-    &.mat-button-base.mat-accent,
-    &.mat-button-base.o-button-default,
-    &.mat-button-base[ng-reflect-dialog-result="1"],
-    &.mat-button-base[ng-reflect-dialog-result="false"] {
-      color: mat-color($primary);
-      background-color: #ffffff;
+    &.mat-button-base.mat-accent {
+      color: mat-color($accent);
+      background-color: $background-accent-button;
 
       &:hover,
       .mat-button-focus-overlay {
-        color: mat-color($primary,800);
-        background-color: mat-color($primary,100);
-        border-color: transparent;
+        color: mat-color($accent, 800);
+        background-color: $background-hover-accent-button;
+        border-color: $border-color-accent-button;
       }
     }
 
   }
 
-  .o-form .o-form-toolbar [o-form-toolbar-buttons] > * {
+  .o-form .o-form-toolbar [o-form-toolbar-buttons]>* {
 
     margin: 0 8px;
 
@@ -252,28 +266,27 @@
   .o-button button.mat-stroked-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: mat-color($primary, 800);
-        background-color: mat-color($primary, 100);
-        border-color: transparent;
+        color: $font-color-primary-button;
+        background-color: $background-primary-button;
+        border-color: $border-color-primary-button;
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($primary);
-          background-color: #ffffff;
+          color: mat-color($primary, 500);
+          background-color: $background-hover-primary-button;
           border-color: mat-color($foreground, divider);
         }
 
       }
 
       &.mat-accent {
-        color: mat-color($accent);
-        background-color: #ffffff;
+        color: mat-color($accent, 500);
+        background-color: $background-accent-button;
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($primary,800);
-          background-color: mat-color($primary,100);
-          border-color: transparent;
+          color: $font-color-hover-accent-button;
+          background-color: $background-hover-accent-button;
         }
       }
 
@@ -315,7 +328,7 @@
 
     button {
       &:hover {
-        background-color: mat-color($primary,100);
+        background-color: mat-color($primary, 100);
         border-radius: 50%;
       }
 
@@ -342,16 +355,16 @@
   o-chart .nvd3 {
     text {
       font: mat-font-weight($typography, caption) mat-font-size($typography, caption) mat-font-family($typography);
-      fill: mat-color($foreground,text);
+      fill: mat-color($foreground, text);
     }
 
     .nv-discretebar .nv-groups text,
     .nv-multibarHorizontal .nv-groups text {
-      fill: mat-color($foreground,text);
+      fill: mat-color($foreground, text);
     }
 
     .nv-axis path {
-      stroke: mat-color($foreground,text);
+      stroke: mat-color($foreground, text);
     }
   }
 }
