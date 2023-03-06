@@ -39,7 +39,7 @@ export class OListItemComponent implements IListItem, AfterContentInit {
   @ViewChild('innerListItem', { static: true })
   protected _innerListItem: MatListItem;
 
-  @ContentChild(MatListAvatarCssMatStyler, { static: false })
+  @ContentChild(MatListAvatarCssMatStyler)
   set _hasAvatar(avatar: MatListAvatarCssMatStyler) {
     const listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
     if (listItemNativeEl && listItemNativeEl.length === 1) {

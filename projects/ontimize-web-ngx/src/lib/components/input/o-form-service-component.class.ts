@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injector, NgZone, ViewChild } from '@angular/core';
+import { ElementRef, EventEmitter, Injector, NgZone, ViewChild, Directive } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -71,6 +71,7 @@ export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
   'onDataLoaded'
 ];
 
+@Directive()
 export class OFormServiceComponent extends OFormDataComponent {
 
   /* Inputs */
@@ -127,7 +128,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   public loadingSubject = new BehaviorSubject<boolean>(false);
 
   public oContextMenu: OContextMenuComponent;
-  @ViewChild(OContextMenuComponent, { static: false })
+  @ViewChild(OContextMenuComponent)
   set oContextMenuRef(value: OContextMenuComponent) {
     this.oContextMenu = value;
   }

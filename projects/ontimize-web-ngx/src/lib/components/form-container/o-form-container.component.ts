@@ -26,7 +26,7 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
 })
 export class OFormContainerComponent implements AfterViewInit {
 
-  @ViewChild('breadcrumb', { read: ViewContainerRef, static: false }) breadContainer: ViewContainerRef;
+  @ViewChild('breadcrumb', { read: ViewContainerRef }) breadContainer: ViewContainerRef;
 
   @InputConverter()
   breadcrumb: boolean = false;

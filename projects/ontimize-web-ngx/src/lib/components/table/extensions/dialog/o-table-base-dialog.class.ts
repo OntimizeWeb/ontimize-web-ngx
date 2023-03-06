@@ -1,4 +1,4 @@
-import { Injector, QueryList, ViewChildren } from '@angular/core';
+import { Injector, QueryList, ViewChildren, Directive } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { OMatErrorDirective } from '../../../../directives/o-mat-error.directive';
@@ -7,6 +7,7 @@ import { OMatErrorOptions } from '../../../../types/o-mat-error.type';
 import { Codes } from '../../../../util/codes';
 import { Util } from '../../../../util/util';
 
+@Directive()
 export class OTableBaseDialogClass {
 
   protected errorOptions: OMatErrorOptions;

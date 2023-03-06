@@ -12,7 +12,7 @@ import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 })
 export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogClass implements AfterViewInit {
 
-  @ViewChild('propertiesList', { static: false })
+  @ViewChild('propertiesList')
   public propertiesList: MatSelectionList;
 
   public properties: any[] = [{

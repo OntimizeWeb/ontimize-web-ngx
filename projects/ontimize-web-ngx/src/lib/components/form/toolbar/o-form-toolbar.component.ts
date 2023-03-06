@@ -57,7 +57,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   public insertBtnEnabled: boolean = false;
   public deleteBtnEnabled: boolean = false;
 
-  @ViewChild('breadcrumb', { read: ViewContainerRef, static: false })
+  @ViewChild('breadcrumb', { read: ViewContainerRef })
   public breadContainer: ViewContainerRef;
 
   public onCancel: EventEmitter<null> = new EventEmitter();

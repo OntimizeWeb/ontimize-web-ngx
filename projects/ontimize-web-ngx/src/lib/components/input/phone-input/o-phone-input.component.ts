@@ -64,7 +64,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
   @Output() readonly countryChange = new EventEmitter<Country>();
   @Output() readonly onPhoneDataChange = new EventEmitter<OPhoneInputData>();
 
-  @ViewChild('countryList', { static: false }) countryList: ElementRef;
+  @ViewChild('countryList') countryList: ElementRef;
   @ViewChild('matInputRef', { read: ElementRef, static: true }) private matInputRef!: ElementRef;
   public gap = '14px';
 

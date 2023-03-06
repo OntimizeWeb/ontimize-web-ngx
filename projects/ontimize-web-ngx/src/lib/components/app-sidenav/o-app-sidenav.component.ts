@@ -57,7 +57,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 })
 export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild(MatSidenav, { static: false })
+  @ViewChild(MatSidenav)
   sidenav: MatSidenav;
 
   protected routerSubscription: Subscription;

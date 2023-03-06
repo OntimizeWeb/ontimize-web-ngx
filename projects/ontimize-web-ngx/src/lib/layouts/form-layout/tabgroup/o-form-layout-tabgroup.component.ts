@@ -60,7 +60,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
 
-  @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
+  @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
   protected subscriptions: Subscription = new Subscription();

@@ -64,18 +64,18 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
-  @ViewChild('dateInput', { static: false })
+  @ViewChild('dateInput')
   protected dateInput: ElementRef;
 
-  @ViewChild('hourInput', { static: false })
+  @ViewChild('hourInput')
   protected hourInput: ElementRef;
 
-  @ViewChild('picker', { static: false })
+  @ViewChild('picker')
   public picker: NgxMaterialTimepickerComponent;
 
   oStartView: 'month' | 'year' = 'month';
 
-  @ViewChild(MatDatepickerInput, { static: false })
+  @ViewChild(MatDatepickerInput)
   public datepickerInput: MatDatepickerInput<Date>;
 
   formControlHour: FormControl;

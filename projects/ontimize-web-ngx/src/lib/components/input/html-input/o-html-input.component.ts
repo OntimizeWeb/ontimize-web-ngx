@@ -47,7 +47,7 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, A
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 
-  @ViewChild('ckEditor', { static: false }) ckEditor: CKEditorComponent;
+  @ViewChild('ckEditor') ckEditor: CKEditorComponent;
 
   protected tabGroupContainer: MatTabGroup;
   protected tabContainer: MatTab;

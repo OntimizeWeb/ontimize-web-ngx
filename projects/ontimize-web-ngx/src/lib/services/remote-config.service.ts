@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HostListener, Injectable, Injector, Type } from '@angular/core';
+import { HostListener, Injectable, Injector, Type, Directive } from '@angular/core';
 import { Observable, Subscriber, Subscription, timer } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
@@ -11,6 +11,7 @@ import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { LocalStorageService } from './local-storage.service';
 
+@Directive()
 @Injectable({
   providedIn: 'root'
 })

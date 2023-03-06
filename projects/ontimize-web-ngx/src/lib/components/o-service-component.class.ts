@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
+import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild, Directive } from '@angular/core';
 import { MatFormFieldAppearance, MatPaginator, PageEvent } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -111,10 +111,11 @@ export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
   'onSearch'
 ]
 
+@Directive()
 export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractServiceComponentStateClass>>
   extends AbstractOServiceBaseComponent<T>
   implements IServiceDataComponent {
-  @ViewChild(MatPaginator, { static: false }) matpaginator: MatPaginator;
+  @ViewChild(MatPaginator) matpaginator: MatPaginator;
 
   protected permissionsService: PermissionsService;
   protected translateService: OTranslateService;
@@ -230,7 +231,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
   public quickFilterComponent: OSearchInputComponent;
 
-  @ViewChild((forwardRef(() => OSearchInputComponent)), { static: false })
+  @ViewChild((forwardRef(() => OSearchInputComponent)))
   public searchInputComponent: OSearchInputComponent;
 
   protected quickFilterColArray: string[];
@@ -902,6 +903,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 }
 
 /*This class is definied to mantain bacwards compatibility */
+@Directive()
 export class OServiceComponent extends AbstractOServiceComponent<DefaultServiceComponentStateService> {
 
 }

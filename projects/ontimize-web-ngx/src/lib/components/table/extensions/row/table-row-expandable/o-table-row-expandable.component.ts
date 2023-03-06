@@ -45,7 +45,7 @@ export class OTableRowExpandedChange {
 })
 export class OTableRowExpandableComponent {
 
-  @ContentChild(TemplateRef, { static: false }) templateRef: TemplateRef<any>;
+  @ContentChild(TemplateRef) templateRef: TemplateRef<any>;
   @Output() onExpanded = new EventEmitter<OTableRowExpandedChange>();
   @Output() onCollapsed = new EventEmitter<OTableRowExpandedChange>();
   private _iconCollapse: string = 'remove';

@@ -153,7 +153,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public inputGridItems: QueryList<OGridItemComponent>;
   @ViewChildren(OGridItemDirective)
   public gridItemDirectives: QueryList<OGridItemDirective>;
-  @ViewChild(MatPaginator, { static: false })
+  @ViewChild(MatPaginator)
   public matpaginator: MatPaginator;
 
   /* Parsed Inputs */

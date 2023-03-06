@@ -90,8 +90,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected matDialog: MatDialog;
   protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
 
-  @ViewChild('inputModel', { static: false }) protected inputModel: MatInput;
-  @ViewChild('visibleInput', { static: false }) protected visibleInput: ElementRef;
+  @ViewChild('inputModel') protected inputModel: MatInput;
+  @ViewChild('visibleInput') protected visibleInput: ElementRef;
   protected visibleInputValue: any;
 
   protected blurTimer;

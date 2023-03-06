@@ -32,7 +32,7 @@ export class OGridItemComponent implements IGridItem {
   mdClick: EventEmitter<any> = new EventEmitter();
   mdDoubleClick: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild(TemplateRef, { static: false }) public template: TemplateRef<any>;
+  @ViewChild(TemplateRef) public template: TemplateRef<any>;
   @InputConverter()
   colspan: number = 1;
   @InputConverter()

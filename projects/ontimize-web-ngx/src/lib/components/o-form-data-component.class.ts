@@ -1,18 +1,4 @@
-import {
-  AfterViewInit,
-  ContentChildren,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  HostListener,
-  Injector,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  SimpleChange,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren, Directive } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -74,6 +60,7 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
 ];
 
 
+@Directive()
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, AfterViewInit, OnDestroy, OnChanges {
   /* Inputs */

@@ -65,7 +65,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected onKeyboardInputDone = false;
   protected _valueType: OHourValueType = 'timestamp';
 
-  @ViewChild('picker', { static: false })
+  @ViewChild('picker')
   public picker: NgxMaterialTimepickerComponent;
 
   constructor(

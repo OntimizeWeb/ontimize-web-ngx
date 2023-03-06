@@ -1,4 +1,4 @@
-import { AfterContentChecked, AfterViewInit, ElementRef, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ElementRef, Inject, Injector, OnDestroy, Optional, ViewChild, Directive } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
 
 import { Util } from '../../util/util';
@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'layoutGap: layout-gap'
 ];
 
+@Directive()
 export class OContainerComponent implements AfterViewInit, OnDestroy, AfterContentChecked {
 
   public static APPEARANCE_OUTLINE = 'outline';
@@ -31,7 +32,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   protected titleObserver = new MutationObserver(() => this.updateOutlineGap());
 
   protected _titleEl: ElementRef;
-  @ViewChild('containerTitle', { static: false }) set containerTitle(elem: ElementRef) {
+  @ViewChild('containerTitle') set containerTitle(elem: ElementRef) {
     this._titleEl = elem;
     if (this._titleEl) {
       this.registerObserver();

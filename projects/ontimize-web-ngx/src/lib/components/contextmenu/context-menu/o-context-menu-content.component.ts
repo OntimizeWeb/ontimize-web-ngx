@@ -37,7 +37,7 @@ export class OContextMenuContentComponent implements AfterViewInit, OnInit {
   public menuClass: string;
   public execute: EventEmitter<{ event: Event, data: any, menuItem: OContextMenuItemComponent }> = new EventEmitter();
   public close: EventEmitter<any> = new EventEmitter();
-  @ViewChild(MatMenuTrigger, { static: false })
+  @ViewChild(MatMenuTrigger)
   public trigger: MatMenuTrigger;
   public allMenuItems: OComponentMenuBaseItem[];
 

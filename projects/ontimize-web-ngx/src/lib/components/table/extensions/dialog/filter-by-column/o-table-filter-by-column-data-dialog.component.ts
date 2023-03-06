@@ -69,8 +69,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private listDataSubject = new BehaviorSubject<TableFilterByColumnData[]>([]);
   protected _listData: Observable<TableFilterByColumnData[]> = this.listDataSubject.asObservable();
 
-  @ViewChild('filter', { static: false }) filter: ElementRef;
-  @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
+  @ViewChild('filter') filter: ElementRef;
+  @ViewChild('filterValueList') filterValueList: MatSelectionList;
   public activeSortDirection: 'asc' | 'desc' | '' = '';
 
   constructor(

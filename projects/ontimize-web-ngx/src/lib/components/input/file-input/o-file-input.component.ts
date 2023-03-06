@@ -89,7 +89,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   public arraySeparatorRegExp = new RegExp(/\;/gi);
   public uploader: OFileUploader;
   public fileService: IFileService;
-  @ViewChild('inputFile', { static: false })
+  @ViewChild('inputFile')
   public inputFile: ElementRef;
 
   public autoBinding: boolean = false;

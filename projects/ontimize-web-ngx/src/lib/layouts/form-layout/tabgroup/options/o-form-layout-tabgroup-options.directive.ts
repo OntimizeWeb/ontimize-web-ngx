@@ -56,7 +56,7 @@ export class OFormLayoutTabGroupOptionsDirective {
     this._maxTabs = NumberConverter(value);
   }
 
-  @ContentChild(TemplateRef, { static: false })
+  @ContentChild(TemplateRef)
   templateMatTabLabel: TemplateRef<any>;
 
   getOptions(): Object {

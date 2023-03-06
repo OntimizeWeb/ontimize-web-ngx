@@ -1,9 +1,10 @@
-import { Injector } from '@angular/core';
+import { Injector, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { BaseService } from '../base-service.class';
 
+@Injectable()
 export class OntimizeBaseService extends BaseService implements IAuthService {
 
   protected _startSessionPath: string;

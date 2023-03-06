@@ -48,7 +48,7 @@ export class OAppHeaderComponent {
   public staticTitle: string;
   public headerTitle$: Observable<string>;
 
-  @ViewChild('userInfo', { static: false })
+  @ViewChild('userInfo')
   public userInfo: OUserInfoComponent;
 
   @InputConverter()

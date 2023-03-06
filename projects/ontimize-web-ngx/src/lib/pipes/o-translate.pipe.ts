@@ -98,7 +98,7 @@ export class OTranslatePipe implements PipeTransform, OnDestroy {
   exports: [OTranslatePipe]
 })
 export class OTranslateModule {
-  public static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders<OTranslateModule> {
     return {
       ngModule: OTranslateModule,
       providers: []

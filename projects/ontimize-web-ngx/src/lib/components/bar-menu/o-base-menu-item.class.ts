@@ -1,4 +1,4 @@
-import { ElementRef, HostListener, Injector, OnDestroy, OnInit } from '@angular/core';
+import { ElementRef, HostListener, Injector, OnDestroy, OnInit, Directive } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { OTranslateService } from '../../services/translate/o-translate.service';
@@ -20,6 +20,7 @@ export const DEFAULT_INPUTS_O_BASE_MENU_ITEM = [
   'attr'
 ];
 
+@Directive()
 export class OBaseMenuItemClass implements OnInit, OnDestroy {
 
   protected translateService: OTranslateService;

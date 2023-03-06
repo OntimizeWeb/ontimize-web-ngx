@@ -38,7 +38,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   protected componentFactory: ComponentFactory<any>;
   protected dialogService: DialogService;
 
-  @ViewChild(OFormLayoutManagerContentDirective, { static: false }) contentDirective: OFormLayoutManagerContentDirective;
+  @ViewChild(OFormLayoutManagerContentDirective) contentDirective: OFormLayoutManagerContentDirective;
 
   constructor(
     public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,

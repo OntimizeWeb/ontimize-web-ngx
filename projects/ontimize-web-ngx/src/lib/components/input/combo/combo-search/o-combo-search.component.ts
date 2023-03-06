@@ -47,7 +47,7 @@ export class OComboSearchComponent implements OnInit, OnDestroy {
   protected previousSelectedValues: any[];
 
   /** Reference to the search input field */
-  @ViewChild('searchSelectInput', { read: ElementRef, static: false })
+  @ViewChild('searchSelectInput', { read: ElementRef })
   protected searchSelectInput: ElementRef;
 
   /** Event that emits when the current value changes */

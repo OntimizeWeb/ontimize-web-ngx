@@ -144,10 +144,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   public dialogMaxHeight: string;
   public dialogClass: string = '';
 
-  @ViewChild('tabGroup', { static: false })
+  @ViewChild('tabGroup')
   public oTabGroup: OFormLayoutManagerMode;
   public dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
-  @ViewChild('splitPane', { static: false })
+  @ViewChild('splitPane')
   public oSplitPane: OFormLayoutManagerMode;
 
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();

@@ -71,7 +71,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   }
   protected _fullScreenButton = false;
 
-  @ViewChild('input', { static: false })
+  @ViewChild('input')
   protected fileInput: ElementRef;
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;

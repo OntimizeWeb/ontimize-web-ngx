@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, ViewChild, Directive } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatExpansionPanel } from '@angular/material';
 import { Subscription } from 'rxjs';
 
@@ -23,6 +23,7 @@ export const DEFAULT_OUTPUTS_O_CONTAINER_COLLAPSIBLE = [
   'onAfterExpand'
 ]
 
+@Directive()
 export class OContainerCollapsibleComponent extends OContainerComponent implements AfterViewInit, OnDestroy {
 
   @InputConverter()
@@ -36,9 +37,9 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
   onAfterCollapse = new EventEmitter<void>();
   onAfterExpand = new EventEmitter<void>();
 
-  @ViewChild('expPanel', { static: false }) expPanel: MatExpansionPanel; // Used in subcomponents
+  @ViewChild('expPanel') expPanel: MatExpansionPanel; // Used in subcomponents
   @ViewChild('containerContent', { static: true }) protected containerContent: ElementRef;
-  @ViewChild('oContainerOutline', { static: false }) protected oContainerOutline: ElementRef;
+  @ViewChild('oContainerOutline') protected oContainerOutline: ElementRef;
 
 
   protected expPanelSubscriptions: Subscription = new Subscription();

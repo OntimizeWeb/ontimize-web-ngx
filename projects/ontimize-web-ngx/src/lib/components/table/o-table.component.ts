@@ -292,12 +292,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public paginator: OTablePaginator;
 
-  @ViewChild(OMatSort, { static: false }) sort: OMatSort;
+  @ViewChild(OMatSort) sort: OMatSort;
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
 
   public oTableGlobalConfig: OTableGlobalConfig;
-  @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
+  @ViewChild('virtualScrollViewPort') set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
       this.updateHeaderAndFooterStickyPositions();
@@ -321,10 +321,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   // only for insideTabBugWorkaround
   protected tableHeaders: Array<OTableHeaderComponent> = [];
 
-  @ViewChild('spinnerContainer', { read: ElementRef, static: false })
+  @ViewChild('spinnerContainer', { read: ElementRef })
   spinnerContainer: ElementRef;
 
-  @ContentChild(OTableRowExpandableComponent, { static: false })
+  @ContentChild(OTableRowExpandableComponent)
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
@@ -594,11 +594,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   quickFilterCallback: QuickFilterFunction;
   disableSelectionFunction: DisableSelectionFunction;
 
-  @ViewChild('tableBody', { static: false })
+  @ViewChild('tableBody')
   protected tableBodyEl: ElementRef;
-  @ViewChild('tableHeader', { read: ElementRef, static: false })
+  @ViewChild('tableHeader', { read: ElementRef })
   tableHeaderEl: ElementRef;
-  @ViewChild('tableToolbar', { read: ElementRef, static: false })
+  @ViewChild('tableToolbar', { read: ElementRef })
   tableToolbarEl: ElementRef;
 
   horizontalScrolled: boolean;
@@ -614,7 +614,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
-  @ViewChild('tableMenu', { static: false })
+  @ViewChild('tableMenu')
   oTableMenu: OTableMenu;
 
   @ContentChildren(OTableOptionComponent)
@@ -628,7 +628,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild('o-table-quickfilter', { static: true })
   quickfilterContentChild: OTableQuickfilter;
 
-  @ViewChild('exportOptsTemplate', { static: false })
+  @ViewChild('exportOptsTemplate')
   exportOptsTemplate: TemplateRef<any>;
 
   public groupedColumnsArray: string[] = [];

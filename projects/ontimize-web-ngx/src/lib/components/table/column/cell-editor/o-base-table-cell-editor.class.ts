@@ -1,14 +1,4 @@
-import {
-  ContentChildren,
-  EventEmitter,
-  HostListener,
-  Injector,
-  OnInit,
-  QueryList,
-  Renderer2,
-  Type,
-  ViewChild
-} from '@angular/core';
+import { ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, Type, ViewChild, Directive } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -40,6 +30,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
   'onPostUpdateRecord'
 ];
 
+@Directive()
 export class OBaseTableCellEditor implements OnInit {
 
   protected translateService: OTranslateService;
@@ -73,7 +64,7 @@ export class OBaseTableCellEditor implements OnInit {
 
   public editorCreated: EventEmitter<object> = new EventEmitter<object>();
 
-  @ViewChild('input', { static: false })
+  @ViewChild('input')
   protected inputRef: any;
 
   protected type: string;

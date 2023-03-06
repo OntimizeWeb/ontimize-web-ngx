@@ -1,4 +1,4 @@
-import { ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
+import { ElementRef, forwardRef, Inject, Injector, Optional, Directive } from '@angular/core';
 
 import { Util } from '../../util';
 import { OFormValue } from '../form/o-form-value';
@@ -15,6 +15,7 @@ export const DEFAULT_INPUTS_O_BOOLEAN_FORM_DATA = [
   'booleanType: boolean-type'
 ];
 
+@Directive()
 export class OBooleanFormDataComponent extends OFormDataComponent {
 
   public trueValue: any = true;

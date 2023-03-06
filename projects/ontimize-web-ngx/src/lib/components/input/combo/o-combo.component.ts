@@ -77,10 +77,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public nullSelectionLabel: string;
   /* End inputs*/
 
-  @ViewChild('inputModel', { static: false })
+  @ViewChild('inputModel')
   protected inputModel: ElementRef;
 
-  @ViewChild('selectModel', { static: false })
+  @ViewChild('selectModel')
   protected selectModel: MatSelect;
 
   protected _filteredDataArray: any[] = [];

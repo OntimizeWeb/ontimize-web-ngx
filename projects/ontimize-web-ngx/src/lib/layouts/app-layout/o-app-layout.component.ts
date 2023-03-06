@@ -65,13 +65,13 @@ export class OAppLayoutComponent implements AfterViewInit {
   public headerColor: ThemePalette;
   public headerHeight = Codes.DEFAULT_ROW_HEIGHT;
 
-  @ViewChild('appSidenav', { static: false })
+  @ViewChild('appSidenav')
   public appSidenav: OAppSidenavComponent;
 
-  @ViewChild('appHeader', { static: false })
+  @ViewChild('appHeader')
   public appHeader: OAppHeaderComponent;
 
-  @ContentChild(OUserInfoConfigurationDirective, { static: false })
+  @ContentChild(OUserInfoConfigurationDirective)
   public userInfoConfiguration: OUserInfoConfigurationDirective;
 
   protected _mode: OAppLayoutMode;

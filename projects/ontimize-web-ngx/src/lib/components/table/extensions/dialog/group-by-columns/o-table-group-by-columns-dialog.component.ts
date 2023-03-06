@@ -21,7 +21,7 @@ export class OTableGroupByColumnsDialogComponent {
   public groupedColumns: Array<OColumn> = [];
   public groupedColumnTypes: OGroupedColumnTypes[] = [];
 
-  @ViewChild('dualListSelector', { static: false }) dualListSelector: ODualListSelectorComponent;
+  @ViewChild('dualListSelector') dualListSelector: ODualListSelectorComponent;
 
   constructor(
     public dialogRef: MatDialogRef<OTableGroupByColumnsDialogComponent>,

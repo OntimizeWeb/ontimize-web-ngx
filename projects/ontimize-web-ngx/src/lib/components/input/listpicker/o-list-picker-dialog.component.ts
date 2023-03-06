@@ -29,7 +29,7 @@ export class OListPickerDialogComponent implements AfterViewInit {
   public itemSize: number = 30;
   public renderer: OListPickerCustomRenderer;
 
-  @ViewChild('searchInput', { static: false })
+  @ViewChild('searchInput')
   public searchInput: OSearchInputComponent;
 
   protected data: any[] = [];

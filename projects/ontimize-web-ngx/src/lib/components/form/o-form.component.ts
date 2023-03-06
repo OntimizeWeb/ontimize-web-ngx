@@ -314,7 +314,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected permissionsService: PermissionsService;
   protected permissions: OFormPermissions;
 
-  @ViewChild('innerForm', { static: false }) innerFormEl: ElementRef;
+  @ViewChild('innerForm') innerFormEl: ElementRef;
 
   ignoreFormCacheKeys: Array<any> = [];
   canDiscardChanges: boolean;

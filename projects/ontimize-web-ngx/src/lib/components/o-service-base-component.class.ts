@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injector, isDevMode, OnChanges, SimpleChange, Type } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injector, isDevMode, OnChanges, SimpleChange, Type, Directive } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
@@ -87,6 +87,7 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
+@Directive()
 export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractServiceComponentStateClass>> implements ILocalStorageComponent, OnChanges {
 
   protected localStorageService: LocalStorageService;
@@ -529,11 +530,13 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 }
 
+@Directive()
 export class DefaultOServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultServiceComponentStateService> {
 
 }
 
 /* This class is being defined to mantain the backwards compatibility with previous versions, use DefaultOServiceBaseComponent*/
+@Directive()
 export class OServiceBaseComponent extends AbstractOServiceBaseComponent<DefaultServiceComponentStateService> {
 
 }
