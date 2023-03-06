@@ -541,14 +541,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.oldValue = this.value.value;
   }
 
-  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false) : void {
+  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false): void {
     this._fControl.setValue(value, options);
-      if (setDirty) {
-        this._fControl.markAsDirty();
-      }
-      if (this._fControl.invalid && !this.form.isInInsertMode()) {
-        this._fControl.markAsTouched();
-      }
+    if (setDirty) {
+      this._fControl.markAsDirty();
+    }
+    if (this._fControl.invalid && !this.form.isInInsertMode()) {
+      this._fControl.markAsTouched();
+    }
   }
 
   protected updateValidators(): void {
@@ -648,7 +648,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected setSuffixClass(count: number): void {
     const iconFieldEl = this.elRef.nativeElement.getElementsByClassName('icon-field');
     if (iconFieldEl.length === 1) {
-      const classList = [].slice.call(iconFieldEl[0].classList);
+      const classList: Array<string> = Array.from(iconFieldEl[0].classList || []);
       classList.forEach(className => {
         if (className.startsWith('icon-field-')) {
           iconFieldEl[0].classList.remove(className);

@@ -2804,7 +2804,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getOColumnFromTh(th: any): OColumn {
     let result: OColumn;
-    const classList: any[] = [].slice.call((th as Element).classList);
+    const classList: any[] = Array.from((th as Element).classList || []);
     const columnClass = classList.find((className: string) => (className.startsWith('mat-column-')));
     if (Util.isDefined(columnClass)) {
       result = this.getOColumn(columnClass.substr('mat-column-'.length));

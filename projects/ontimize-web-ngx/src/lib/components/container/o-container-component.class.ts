@@ -151,7 +151,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   }
 
   protected cleanElevationCSSclasses(): void {
-    const classList = [].slice.call(this.elRef.nativeElement.classList);
+    const classList = Array.from(this.elRef.nativeElement.classList || []);
     if (classList && classList.length) {
       classList.forEach((item: string) => {
         if (item.startsWith('mat-elevation')) {
