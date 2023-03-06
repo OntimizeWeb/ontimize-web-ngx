@@ -62,7 +62,19 @@ import { OExpandableContainerModule } from '../components/expandable-container/o
 import { ODualListSelectorModule } from '../components/dual-list-selector/o-dual-list-selector.module';
 import { ODataToolbarModule } from '../components/o-data-toolbar/o-data-toolbar.module';
 
+@NgModule({
+  providers: [{
+    provide: APP_INITIALIZER,
+    useFactory: appInitializerFactory,
+    deps: [Injector, APP_CONFIG, OTranslateService],
+    multi: true
+  }]
+})
+export class OntimizeWebTranslateModule { }
+
 export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
+  OntimizeWebTranslateModule,
+  OPermissionsModule,
   // Standard modules
   HttpClientModule,
   OSharedModule,
@@ -208,16 +220,6 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OExpandableContainerModule,
   ODualListSelectorModule
 ];
-
-@NgModule({
-  providers: [{
-    provide: APP_INITIALIZER,
-    useFactory: appInitializerFactory,
-    deps: [Injector, APP_CONFIG, OTranslateService],
-    multi: true
-  }]
-})
-export class OntimizeWebTranslateModule { }
 
 export const ONTIMIZE_MODULES: any = [
   BrowserModule,

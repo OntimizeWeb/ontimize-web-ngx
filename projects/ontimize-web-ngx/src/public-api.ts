@@ -4,7 +4,7 @@
 
 export * from './lib/ontimize-web-ngx.module';
 
-export { ONTIMIZE_MODULES } from './lib/config/o-modules';
+export { ONTIMIZE_MODULES, OntimizeWebTranslateModule } from './lib/config/o-modules';
 export { ONTIMIZE_PROVIDERS } from './lib/config/o-providers';
 
 export * from './lib/config/app-config';
