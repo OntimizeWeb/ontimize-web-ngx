@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
-import { ThemePalette } from '@angular/material';
+import { ThemePalette } from '@angular/material/core';
 
 import { InputConverter } from '../../decorators/input-converter';
 import { Codes } from '../../util';

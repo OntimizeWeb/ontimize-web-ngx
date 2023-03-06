@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, Output } from '@angular/core';
-import { MatSort, MatSortable } from '@angular/material';
+import { MatSort, MatSortable } from '@angular/material/sort';
 
 import { SQLOrder } from '../../../../types/sql-order.type';
 import { Codes } from '../../../../util/codes';

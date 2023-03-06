@@ -11,7 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatOption, MatSelect } from '@angular/material';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 

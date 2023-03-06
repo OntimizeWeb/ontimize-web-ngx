@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { MatSelectionList } from '@angular/material';
+import { MatSelectionList } from '@angular/material/list';
 import { OGroupedColumnTypes } from '../../types';
 import { Codes } from '../../util';
 

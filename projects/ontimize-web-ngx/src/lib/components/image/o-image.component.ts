@@ -1,6 +1,6 @@
 import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { InputConverter } from '../../decorators/input-converter';
 import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { FormValueOptions } from '../../types';

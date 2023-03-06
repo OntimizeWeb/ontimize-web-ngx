@@ -11,7 +11,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, ValidatorFn } from '@angular/forms';
-import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';

@@ -1,6 +1,6 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 import { AfterViewInit, Component, EventEmitter, HostListener, Injector, OnInit, QueryList, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 import { OContextMenuGroupComponent } from '../context-menu-group/o-context-menu-group.component';
 import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';

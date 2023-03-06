@@ -11,7 +11,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { Subscription } from 'rxjs';

@@ -8,7 +8,8 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE, MatDatepicker, MatDatepickerInputEvent } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import moment from 'moment';
 
 import { InputConverter } from '../../../../../decorators/input-converter';

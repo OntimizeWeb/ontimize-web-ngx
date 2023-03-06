@@ -14,7 +14,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import * as lpn from 'google-libphonenumber';
 
 import { FormValueOptions } from '../../../types/form-value-options.type';

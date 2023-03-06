@@ -3,7 +3,7 @@ import { Overlay, OverlayConfig, OverlayRef, PositionStrategy, ScrollStrategyOpt
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, EventEmitter, forwardRef, Input, KeyValueDiffer, KeyValueDiffers, NgZone, Output, ViewContainerRef, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as _moment from 'moment';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';

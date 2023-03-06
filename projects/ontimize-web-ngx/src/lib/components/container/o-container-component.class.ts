@@ -1,5 +1,5 @@
 import { AfterContentChecked, AfterViewInit, ElementRef, Inject, Injector, OnDestroy, Optional, ViewChild, Directive } from '@angular/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 import { Util } from '../../util/util';
 

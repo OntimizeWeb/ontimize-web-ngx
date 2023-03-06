@@ -12,7 +12,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material';
+import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { Util } from '../../../util/util';

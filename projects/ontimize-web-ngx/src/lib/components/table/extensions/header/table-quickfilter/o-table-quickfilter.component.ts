@@ -13,7 +13,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatCheckboxChange, MatMenu } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatMenu } from '@angular/material/menu';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 

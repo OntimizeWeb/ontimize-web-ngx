@@ -14,7 +14,8 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
+import { MatLine } from '@angular/material/core';
+import { MatListAvatarCssMatStyler, MatListItem } from '@angular/material/list';
 
 import { IListItem } from '../../../interfaces/o-list-item.interface';
 import { Util } from '../../../util/util';

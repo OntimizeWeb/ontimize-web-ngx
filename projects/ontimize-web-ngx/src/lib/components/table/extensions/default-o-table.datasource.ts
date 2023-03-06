@@ -1,6 +1,6 @@
 import { DataSource, ListRange } from '@angular/cdk/collections';
 import { EventEmitter } from '@angular/core';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 

@@ -29,7 +29,11 @@ import {
   ViewEncapsulation,
   ViewRef
 } from '@angular/core';
-import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenu } from '@angular/material/menu';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';

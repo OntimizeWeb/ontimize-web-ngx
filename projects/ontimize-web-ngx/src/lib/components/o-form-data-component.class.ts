@@ -1,6 +1,7 @@
 import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren, Directive } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix } from '@angular/material';
+import { FloatLabelType } from '@angular/material/core';
+import { MatError, MatFormFieldAppearance, MatSuffix } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
 import { O_INPUTS_OPTIONS } from '../config/app-config';

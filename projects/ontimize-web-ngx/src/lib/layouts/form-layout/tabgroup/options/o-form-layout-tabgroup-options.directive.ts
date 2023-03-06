@@ -1,5 +1,6 @@
 import { ContentChild, Directive, Input, TemplateRef } from '@angular/core';
-import { MatTabHeaderPosition, ThemePalette } from '@angular/material';
+import { ThemePalette } from '@angular/material/core';
+import { MatTabHeaderPosition } from '@angular/material/tabs';
 
 import { BooleanConverter, NumberConverter } from '../../../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';

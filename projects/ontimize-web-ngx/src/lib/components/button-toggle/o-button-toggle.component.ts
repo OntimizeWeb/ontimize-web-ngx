@@ -1,5 +1,5 @@
 import { Component, EventEmitter, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { MatButtonToggle, MatButtonToggleChange } from '@angular/material';
+import { MatButtonToggle, MatButtonToggleChange } from '@angular/material/button-toggle';
 
 import { Util } from '../../util/util';
 

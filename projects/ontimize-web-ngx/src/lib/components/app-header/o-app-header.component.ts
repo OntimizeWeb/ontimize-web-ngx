@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ThemePalette } from '@angular/material';
+import { ThemePalette } from '@angular/material/core';
 import { Observable } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';

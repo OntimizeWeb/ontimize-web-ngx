@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ThemePalette } from '@angular/material';
+import { ThemePalette } from '@angular/material/core';
 
 import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
