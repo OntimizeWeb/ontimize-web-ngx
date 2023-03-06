@@ -15,7 +15,6 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.1.13",
-    "@angular/cdk": "~9.2.4",
     "@angular/common": "~9.1.13",
     "@angular/compiler": "~9.1.13",
     "@angular/core": "~9.1.13",
@@ -29,7 +28,6 @@
     "@ngx-translate/core": "~12.1.2",
     "@ngx-translate/http-loader": "~5.0.0",
     "angular-resizable-element": "3.3.4",
-    "hammerjs": "~2.0.8",
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
     "reflect-metadata": "0.1.13",
