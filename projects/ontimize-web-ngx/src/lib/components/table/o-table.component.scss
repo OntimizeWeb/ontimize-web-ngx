@@ -1,8 +1,8 @@
 $mat-checkbox-size-medium: 18px !default;
-$_mat-checkbox-mark-stroke-size-medim: 2 / 15 * $mat-checkbox-size-medium !default;
+$_mat-checkbox-mark-stroke-size-medim: math.div(2, 15) * $mat-checkbox-size-medium !default;
 
 $mat-checkbox-size-small: 16px !default;
-$_mat-checkbox-mark-stroke-size-small: 2 / 15 * $mat-checkbox-size-small !default;
+$_mat-checkbox-mark-stroke-size-small: math.div(2, 15) * $mat-checkbox-size-small !default;
 
 $o_table_row_padding: 24px;
 
@@ -50,8 +50,8 @@ $o_table_row_padding: 24px;
     &.block-events {
       pointer-events: none;
 
-       > .o-table-toolbar,
-      > .o-table-body .mat-header-row {
+      >.o-table-toolbar,
+      >.o-table-body .mat-header-row {
         opacity: .75;
       }
     }
@@ -62,7 +62,7 @@ $o_table_row_padding: 24px;
     .o-table-toolbar {
       height: 40px;
 
-      > div {
+      >div {
         max-height: 100%;
       }
 
