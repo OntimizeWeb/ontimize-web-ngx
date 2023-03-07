@@ -15,6 +15,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.1.13",
+    "@angular/cdk": "~9.2.4",
     "@angular/common": "~9.1.13",
     "@angular/compiler": "~9.1.13",
     "@angular/core": "~9.1.13",
@@ -42,7 +43,6 @@
     "@angular/cli": "~9.1.15",
     "@angular/compiler-cli": "~9.1.13",
     "@angular/language-service": "~9.1.13",
-    "@types/hammerjs": "~2.0.36",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
