@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injector, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injector, Renderer2 } from '@angular/core';
 
 import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
@@ -17,6 +17,10 @@ export const DEFAULT_OUTPUTS_O_CARD_RENDERER = [
   'onAction2Click: action-2'
 ];
 
+@Directive({
+  inputs: DEFAULT_INPUTS_O_CARD_RENDERER,
+  outputs: DEFAULT_OUTPUTS_O_CARD_RENDERER
+})
 export class OListItemCardRenderer {
 
   /* inputs variables */

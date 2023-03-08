@@ -24,8 +24,6 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
 import {
-  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   OFormServiceComponent
 } from '../o-form-service-component.class';
 import { OListPickerCustomRenderer } from './listpicker-renderer/o-list-picker-renderer.class';
