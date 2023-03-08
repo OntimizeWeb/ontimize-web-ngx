@@ -1,5 +1,6 @@
 import { Injector, Pipe, PipeTransform } from '@angular/core';
 import { CurrencyService } from '../services/currency.service';
+import { ORealPipe } from './o-real.pipe';
 
 export interface ICurrencyPipeArgument {
   currencySimbol?: string;
@@ -15,11 +16,12 @@ export interface ICurrencyPipeArgument {
   name: 'oCurrency',
   pure: false
 })
-export class OCurrencyPipe implements PipeTransform {
+export class OCurrencyPipe extends ORealPipe implements PipeTransform {
 
   protected currencyService: CurrencyService;
 
   constructor(protected injector: Injector) {
+    super(injector);
     this.currencyService = this.injector.get(CurrencyService);
   }
 

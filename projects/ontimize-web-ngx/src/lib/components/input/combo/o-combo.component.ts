@@ -24,24 +24,17 @@ import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import {
-  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   OFormServiceComponent
 } from '../o-form-service-component.class';
 import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
-  ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'multiple',
   'nullSelection: null-selection',
   'multipleTriggerLabel: multiple-trigger-label',
   'searchable',
   // text to none selection in a combo
   'nullSelectionLabel: null-selection-label'
-];
-
-export const DEFAULT_OUTPUTS_O_COMBO = [
-  ...DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 ];
 
 @Component({
@@ -51,7 +44,6 @@ export const DEFAULT_OUTPUTS_O_COMBO = [
     { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) }
   ],
   inputs: DEFAULT_INPUTS_O_COMBO,
-  outputs: DEFAULT_OUTPUTS_O_COMBO,
   templateUrl: './o-combo.component.html',
   styleUrls: ['./o-combo.component.scss'],
   encapsulation: ViewEncapsulation.None,

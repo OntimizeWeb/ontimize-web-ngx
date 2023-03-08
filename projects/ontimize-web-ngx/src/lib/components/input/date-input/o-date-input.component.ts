@@ -28,14 +28,9 @@ import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
-import { DEFAULT_INPUTS_O_TEXT_INPUT, DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
-
-export const DEFAULT_OUTPUTS_O_DATE_INPUT = [
-  ...DEFAULT_OUTPUTS_O_TEXT_INPUT
-];
+import { OTextInputComponent } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'valueType: value-type',
@@ -49,20 +44,18 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'filterDate: filter-date',
   'textInputEnabled: text-input-enabled',
   'dateClass: date-class',
-  ...DEFAULT_INPUTS_O_TEXT_INPUT
 ];
 
 @Component({
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
-  outputs: DEFAULT_OUTPUTS_O_DATE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   encapsulation: ViewEncapsulation.None,
   providers: [
     { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
-export class ODateInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
+export class ODateInputComponent extends OTextInputComponent implements OnDestroy, OnInit {
 
   @InputConverter()
   public textInputEnabled: boolean = true;

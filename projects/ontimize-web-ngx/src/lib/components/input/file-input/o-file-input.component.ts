@@ -59,7 +59,6 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   'onBeforeUpload',
   'onBeforeUploadFile',
   'onProgress',

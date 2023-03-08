@@ -13,13 +13,10 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent
 } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   // static-data [Array<any>] : way to populate with static data. Default: no value.
   'staticData: static-data',
   'entity',
@@ -66,12 +63,14 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   'onSetValueOnValueChange',
   'onDataLoaded'
 ];
 
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  outputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT
+})
 export class OFormServiceComponent extends OFormDataComponent {
 
   /* Inputs */

@@ -24,8 +24,6 @@ import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent
 } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
@@ -36,7 +34,6 @@ import { OFormControl } from '../o-form-control.class';
 export const DEFAULT_INPUTS_O_TIME_INPUT = [
   'valueType: value-type',
   'oformat: value-format',
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'oDateFormat: date-format',
   'oDateLocale: date-locale',
   'oDateStartView: date-start-view',
@@ -54,16 +51,11 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
   'oDatePlaceholder: date-placeholder'
 ];
 
-export const DEFAULT_OUTPUTS_O_TIME_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
-];
-
 @Component({
   selector: 'o-time-input',
   templateUrl: './o-time-input.component.html',
   styleUrls: ['./o-time-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_TIME_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_TIME_INPUT,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-time-input]': 'true'

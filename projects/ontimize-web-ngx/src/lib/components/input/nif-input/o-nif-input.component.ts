@@ -9,19 +9,9 @@ import {
   OTextInputComponent
 } from '../text-input/o-text-input.component';
 
-export const DEFAULT_INPUTS_O_NIF_INPUT = [
-  ...DEFAULT_INPUTS_O_TEXT_INPUT
-];
-
-export const DEFAULT_OUTPUTS_O_NIF_INPUT = [
-  ...DEFAULT_OUTPUTS_O_TEXT_INPUT
-];
-
 @Component({
   selector: 'o-nif-input',
   templateUrl: './o-nif-input.component.html',
-  inputs: DEFAULT_INPUTS_O_NIF_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_NIF_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class ONIFInputComponent extends OTextInputComponent implements OnInit {

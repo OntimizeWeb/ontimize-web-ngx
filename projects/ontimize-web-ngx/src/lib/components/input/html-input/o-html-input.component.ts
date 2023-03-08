@@ -6,7 +6,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import { CKEditorComponent } from '../../material/ckeditor/ck-editor.component';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -21,7 +21,6 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'onFocus',
   'onBlur'
 ];

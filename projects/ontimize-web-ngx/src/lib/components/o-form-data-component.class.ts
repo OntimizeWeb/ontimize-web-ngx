@@ -60,8 +60,10 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
   'onBlur'
 ];
 
-
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
+  outputs: DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
+})
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   OnInit, AfterViewInit, OnDestroy, OnChanges {
   /* Inputs */

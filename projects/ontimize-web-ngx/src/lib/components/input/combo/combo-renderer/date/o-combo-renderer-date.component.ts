@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
-import { DEFAULT_INPUTS_O_COMBO_RENDERER, OComboCustomRenderer } from '../o-combo-renderer.class';
+import { OComboCustomRenderer } from '../o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER_DATE = [
-  ...DEFAULT_INPUTS_O_COMBO_RENDERER,
   // format [string]: date format. See MomentJS (http://momentjs.com/).
   'format'
 ];

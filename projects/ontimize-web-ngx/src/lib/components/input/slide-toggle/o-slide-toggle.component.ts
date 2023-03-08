@@ -20,18 +20,13 @@ export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
   // color: Theme color palette for the component.
   'color',
   // label-position: Whether the label should appear after or before the slide-toggle. Defaults to 'after'
-  'labelPosition: label-position',
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
+  'labelPosition: label-position'
 ];
 
-export const DEFAULT_OUTPUTS_O_SLIDETOGGLE = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
-];
 
 @Component({
   selector: 'o-slide-toggle',
   inputs: DEFAULT_INPUTS_O_SLIDETOGGLE,
-  outputs: DEFAULT_OUTPUTS_O_SLIDETOGGLE,
   templateUrl: './o-slide-toggle.component.html',
   styleUrls: ['./o-slide-toggle.component.scss'],
   encapsulation: ViewEncapsulation.None,

@@ -7,29 +7,22 @@ import { NumberService } from '../../../services/number.service';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_INTEGER_INPUT,
-  DEFAULT_OUTPUTS_O_INTEGER_INPUT,
   OIntegerInputComponent
 } from '../integer-input/o-integer-input.component';
 import { OFormControl } from '../o-form-control.class';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
-  ...DEFAULT_INPUTS_O_INTEGER_INPUT,
   'minDecimalDigits: min-decimal-digits',
   'maxDecimalDigits: max-decimal-digits',
   'decimalSeparator : decimal-separator',
   'strict'
 ];
 
-export const DEFAULT_OUTPUTS_O_REAL_INPUT = [
-  ...DEFAULT_OUTPUTS_O_INTEGER_INPUT
-];
 
 @Component({
   selector: 'o-real-input',
   templateUrl: './o-real-input.component.html',
   inputs: DEFAULT_INPUTS_O_REAL_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_REAL_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class ORealInputComponent extends OIntegerInputComponent implements OnInit {
