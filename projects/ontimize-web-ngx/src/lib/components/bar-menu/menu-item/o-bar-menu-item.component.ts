@@ -3,10 +3,9 @@ import { Router } from '@angular/router';
 
 import { Util } from '../../../util/util';
 import { OBarMenuComponent } from '../o-bar-menu.component';
-import { DEFAULT_INPUTS_O_BASE_MENU_ITEM, OBaseMenuItemClass } from '../o-base-menu-item.class';
+import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
-  ...DEFAULT_INPUTS_O_BASE_MENU_ITEM,
   // route [string]: name of the state to navigate. Default: no value.
   'route',
 

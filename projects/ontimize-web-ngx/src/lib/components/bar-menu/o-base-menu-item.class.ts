@@ -20,7 +20,9 @@ export const DEFAULT_INPUTS_O_BASE_MENU_ITEM = [
   'attr'
 ];
 
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_BASE_MENU_ITEM
+})
 export class OBaseMenuItemClass implements OnInit, OnDestroy {
 
   protected translateService: OTranslateService;

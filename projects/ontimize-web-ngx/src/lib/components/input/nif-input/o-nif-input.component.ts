@@ -4,8 +4,6 @@ import { ValidatorFn } from '@angular/forms';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT,
   OTextInputComponent
 } from '../text-input/o-text-input.component';
 

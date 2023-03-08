@@ -4,10 +4,9 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
-import { DEFAULT_INPUTS_O_CONTAINER, OContainerComponent } from './o-container-component.class';
+import { OContainerComponent } from './o-container-component.class';
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
-  ...DEFAULT_INPUTS_O_CONTAINER,
   'expanded',
   'description',
   'collapsedHeight: collapsed-height',
@@ -24,7 +23,10 @@ export const DEFAULT_OUTPUTS_O_CONTAINER_COLLAPSIBLE = [
   'onAfterExpand'
 ]
 
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE,
+  outputs: DEFAULT_OUTPUTS_O_CONTAINER_COLLAPSIBLE
+})
 export class OContainerCollapsibleComponent extends OContainerComponent implements AfterViewInit, OnDestroy {
 
   @InputConverter()

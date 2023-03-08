@@ -13,7 +13,9 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'layoutGap: layout-gap'
 ];
 
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_CONTAINER
+})
 export class OContainerComponent implements AfterViewInit, OnDestroy, AfterContentChecked {
 
   public static APPEARANCE_OUTLINE = 'outline';
