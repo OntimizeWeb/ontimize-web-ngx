@@ -1,4 +1,3 @@
-import { isPromise } from '@angular/compiler/src/util';
 import { Injector } from '@angular/core';
 import moment from 'moment';
 import { from, isObservable, Observable, of } from 'rxjs';
@@ -259,7 +258,18 @@ export class Util {
    * @param array the array to flat
    */
   static flatten(array: Array<any>): Array<any> {
-    return [].concat(...array);
+    let flattened = [];
+    for (let i = 0; i < array.length; i++) {
+      const current = array[i];
+      if (!Array.isArray(current)) {
+        flattened.push(current);
+        continue;
+      }
+      for (let j = 0; j < current.length; j++) {
+        flattened.push(current[j])
+      }
+    }
+    return flattened
   }
 
   /**
@@ -434,7 +444,7 @@ export class Util {
     return of(value);
   }
 
- static isPromise<T = any>(obj: any): obj is Promise<T> {
+  static isPromise<T = any>(obj: any): obj is Promise<T> {
     return !!obj && typeof obj.then === 'function';
   }
 
