@@ -3,12 +3,10 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
 import { NumberService } from '../../../../../services/number.service';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
-  OTableCellRendererRealComponent,
+  OTableCellRendererRealComponent
 } from '../real/o-table-cell-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
   'valueBase: value-base'
 ];
 

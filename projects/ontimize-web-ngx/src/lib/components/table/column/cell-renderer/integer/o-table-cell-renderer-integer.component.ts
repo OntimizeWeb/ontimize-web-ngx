@@ -10,10 +10,9 @@ import {
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
-import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
-  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   // grouping [no|yes]: grouping thousands. Default: yes.
   'grouping',
   // thousand-separator [string]: thousands separator when grouping. Default: comma (,).

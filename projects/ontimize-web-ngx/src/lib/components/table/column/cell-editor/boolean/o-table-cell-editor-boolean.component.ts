@@ -12,13 +12,10 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
-  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
   OBaseTableCellEditor,
 } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'indeterminateOnNull: indeterminate-on-null',
   // true-value: true value. Default: true.
   'trueValue: true-value',
@@ -29,16 +26,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   'autoCommit: auto-commit'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
-  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
-];
-
 @Component({
   selector: 'o-table-cell-editor-boolean',
   templateUrl: './o-table-cell-editor-boolean.component.html',
   styleUrls: ['./o-table-cell-editor-boolean.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })

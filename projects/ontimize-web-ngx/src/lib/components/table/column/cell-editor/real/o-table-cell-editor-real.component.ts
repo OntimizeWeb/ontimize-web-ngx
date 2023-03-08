@@ -3,28 +3,16 @@ import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER,
-  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER,
+  OTableCellEditorIntegerComponent,
 } from '../integer/o-table-cell-editor-integer.component';
-import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
-
-export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER
-];
-
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL = [
-  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER
-];
 
 @Component({
   selector: 'o-table-cell-editor-real',
   templateUrl: './o-table-cell-editor-real.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_REAL
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class OTableCellEditorRealComponent extends OBaseTableCellEditor {
+export class OTableCellEditorRealComponent extends OTableCellEditorIntegerComponent {
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
@@ -41,7 +29,7 @@ export class OTableCellEditorRealComponent extends OBaseTableCellEditor {
 
   getCellData() {
     const cellData = super.getCellData();
-    const floatValue = parseFloat(cellData);
+    const floatValue = parseFloat(cellData.toString());
     return isNaN(floatValue) ? undefined : floatValue;
   }
 

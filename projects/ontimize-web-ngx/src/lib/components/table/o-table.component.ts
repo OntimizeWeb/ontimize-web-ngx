@@ -75,9 +75,7 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import {
-  AbstractOServiceComponent,
-  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+  AbstractOServiceComponent
 } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
@@ -110,8 +108,6 @@ import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
 
 export const DEFAULT_INPUTS_O_TABLE = [
-  ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
 
@@ -239,7 +235,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
-  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT,
   'onRowSelected',
   'onRowDeselected',
   'onRowDeleted'

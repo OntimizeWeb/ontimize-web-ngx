@@ -3,12 +3,9 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
-import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
-import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL } from '../real/o-table-cell-renderer-real.component';
+import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
-
   // currency-symbol [string]: currency symbol. Default: dollar ($).
   'currencySymbol: currency-symbol',
 
@@ -22,7 +19,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
 })
-export class OTableCellRendererCurrencyComponent extends OBaseTableCellRenderer implements OnInit {
+export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealComponent implements OnInit {
 
   @InputConverter()
   minDecimalDigits: number = 2;

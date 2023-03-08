@@ -23,13 +23,10 @@ import { FormValueOptions } from '../../../../../types/form-value-options.type';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
-  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
   OBaseTableCellEditor,
 } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'oDateFormat: date-format',
   'oDateLocale: date-locale',
   'oDateStartView: date-start-view',
@@ -44,16 +41,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
   'oDatePlaceholder: date-placeholder'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME = [
-  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
-];
-
 @Component({
   selector: 'o-table-cell-editor-time',
   templateUrl: './o-table-cell-editor-time.component.html',
   styleUrls: ['./o-table-cell-editor-time.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TIME,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [

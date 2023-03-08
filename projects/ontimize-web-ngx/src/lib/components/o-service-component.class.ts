@@ -112,7 +112,10 @@ export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
   'onSearch'
 ]
 
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_SERVICE_COMPONENT,
+  outputs: DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+})
 export abstract class AbstractOServiceComponent<T extends AbstractComponentStateService<AbstractServiceComponentStateClass>>
   extends AbstractOServiceBaseComponent<T>
   implements IServiceDataComponent {

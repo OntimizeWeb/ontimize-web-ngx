@@ -3,28 +3,20 @@ import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
-  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
   OBaseTableCellEditor,
 } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'min',
   'max',
   'step'
-];
-
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
-  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 @Component({
   selector: 'o-table-cell-editor-integer',
   templateUrl: './o-table-cell-editor-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_INTEGER
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER
 })
 
 export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {

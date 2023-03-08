@@ -3,10 +3,9 @@ import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, forwardRe
 import { OTableColumnCalculated } from '../../../../interfaces/o-table-column-calculated.interface';
 import { OperatorFunction } from '../../../../types/operation-function.type';
 import { OTableComponent } from '../../o-table.component';
-import { DEFAULT_INPUTS_O_TABLE_COLUMN, OTableColumnComponent } from '../o-table-column.component';
+import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
-  ...DEFAULT_INPUTS_O_TABLE_COLUMN,
   // operation [string]: operation .
   'operation',
   // operation-function [funtion]: callback title. Default: no value.

@@ -30,7 +30,10 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
   'onPostUpdateRecord'
 ];
 
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
+})
 export class OBaseTableCellEditor implements OnInit {
 
   protected translateService: OTranslateService;

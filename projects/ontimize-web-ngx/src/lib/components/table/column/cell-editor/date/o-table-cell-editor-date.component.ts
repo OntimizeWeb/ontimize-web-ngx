@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   Injector,
   OnInit,
   TemplateRef,
@@ -19,13 +18,10 @@ import { DateFilterFunction } from '../../../../../types/date-filter-function.ty
 import { ODateValueType } from '../../../../../types/o-date-value.type';
 import { Util } from '../../../../../util/util';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
-  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR,
   OBaseTableCellEditor,
 } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   'format',
   'locale',
   'oStartView: start-view',
@@ -40,16 +36,12 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
   'dateValueType: date-value-type'
 ];
 
-export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE = [
-  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
-];
 
 @Component({
   selector: 'o-table-cell-editor-date',
   templateUrl: './o-table-cell-editor-date.component.html',
   styleUrls: ['./o-table-cell-editor-date.component.scss'],
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_DATE,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
