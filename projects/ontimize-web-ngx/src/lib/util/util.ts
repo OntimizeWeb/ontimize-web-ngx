@@ -259,14 +259,13 @@ export class Util {
    */
   static flatten(array: Array<any>): Array<any> {
     let flattened = [];
-    for (let i = 0; i < array.length; i++) {
-      const current = array[i];
+    for (const current of array) {
       if (!Array.isArray(current)) {
         flattened.push(current);
         continue;
       }
-      for (let j = 0; j < current.length; j++) {
-        flattened.push(current[j])
+      for (const childCurrent of current) {
+        flattened.push(childCurrent)
       }
     }
     return flattened
