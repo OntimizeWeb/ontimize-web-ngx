@@ -7,14 +7,9 @@ export const DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS = [
   'execute'
 ];
 
-export const DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM = [
-  ...DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS
-];
-
 @Component({
   selector: 'o-context-menu-item',
   template: ' ',
-  inputs: DEFAULT_INPUTS_O_CONTEXT_MENU_ITEM,
   outputs: DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS,
   providers: [{ provide: OComponentMenuBaseItem, useExisting: forwardRef(() => OContextMenuItemComponent) }]
 })

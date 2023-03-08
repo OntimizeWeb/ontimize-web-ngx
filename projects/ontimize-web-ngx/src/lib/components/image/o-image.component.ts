@@ -8,12 +8,11 @@ import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormControl } from '../input/o-form-control.class';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../o-form-data-component.class';
+import { OFormDataComponent } from '../o-form-data-component.class';
 import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 
 export const DEFAULT_INPUTS_O_IMAGE = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'emptyimage: empty-image',
   // not-found-image [string]: Default image for 404 error.
   'notfoundimage: not-found-image',
@@ -33,16 +32,11 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   'maxFileSize: max-file-size'
 ];
 
-export const DEFAULT_OUTPUTS_O_IMAGE = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
-];
-
 @Component({
   selector: 'o-image',
   templateUrl: './o-image.component.html',
   styleUrls: ['./o-image.component.scss'],
   inputs: DEFAULT_INPUTS_O_IMAGE,
-  outputs: DEFAULT_OUTPUTS_O_IMAGE,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-image]': 'true'
