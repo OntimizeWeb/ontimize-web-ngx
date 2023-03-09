@@ -19,7 +19,11 @@ import {
 } from '../o-list-item-card-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE = [
-  'avatar'
+  'content',
+  'avatar',
+  'icon',
+  'collapsible',
+  'collapsed'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
