@@ -249,7 +249,9 @@ export class OFormNavigationComponent implements OnDestroy {
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
             this.currentIndex = index;
-            this.navigationService.removeLastItem();
+            if (index === 0) {
+              this.navigationService.removeLastItem();
+            }
           }
         });
       }
