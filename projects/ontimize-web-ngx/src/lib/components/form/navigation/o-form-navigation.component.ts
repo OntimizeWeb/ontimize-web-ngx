@@ -1,3 +1,4 @@
+import { PlatformLocation } from '@angular/common';
 import { Component, forwardRef, Inject, Injector, OnDestroy, Type, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -249,7 +250,8 @@ export class OFormNavigationComponent implements OnDestroy {
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
             this.currentIndex = index;
-            if (index !== 0) {
+            const url = this.router.routerState.snapshot.url.split('?')[0];
+            if (url !== navData.url) {
               this.navigationService.removeLastItem();
             }
           }
