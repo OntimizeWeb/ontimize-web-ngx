@@ -1,3 +1,7 @@
+## 8.11.1 (2023-03-15)
+### Bug fixes
+* **o-form-navigation**: Fixed form navigation between details ([95d7512](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/95d7512)) Closes [#1180](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1180)
+
 ## 8.11.0 (2023-03-02)
 ### Features:
 * New scrollbar style ([e0348e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0348e1)) Closes [#1155](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1155)
