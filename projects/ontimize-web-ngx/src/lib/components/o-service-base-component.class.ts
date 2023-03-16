@@ -87,7 +87,9 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // 'deleteFallbackFunction: delete-fallback-function'
 ];
 
-@Directive()
+@Directive({
+  inputs: DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT
+})
 export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentStateService<AbstractServiceComponentStateClass>> implements ILocalStorageComponent, OnChanges {
 
   protected localStorageService: LocalStorageService;
