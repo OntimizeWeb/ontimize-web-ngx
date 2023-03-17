@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GestureConfig, HammerManager } from '@angular/material/core';
+import { HammerManager } from '@angular/material/core';
 
 @Injectable()
 export class OTableGestureConfig extends GestureConfig {
