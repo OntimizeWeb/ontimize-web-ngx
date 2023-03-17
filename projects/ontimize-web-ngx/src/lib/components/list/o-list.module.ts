@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatCheckbox } from '@angular/material';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { RouterModule } from '@angular/router';
 
 import { OSharedModule } from '../../shared/shared.module';

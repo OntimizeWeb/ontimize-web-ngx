@@ -13,21 +13,14 @@ import {
 
 import { OListItemComponent } from '../../list-item/o-list-item.component';
 import {
-  DEFAULT_INPUTS_O_TEXT_RENDERER,
-  DEFAULT_OUTPUTS_O_TEXT_RENDERER,
-  OListItemTextRenderer,
+  OListItemTextRenderer
 } from '../o-list-item-text-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_AVATAR = [
-  ...DEFAULT_INPUTS_O_TEXT_RENDERER,
   'avatar',
   'emptyAvatar: empty-avatar',
   // avatar-type [base64|url]: avatar type (extern url or base64). Default: no value.
   'avatarType: avatar-type'
-];
-
-export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
-  ...DEFAULT_OUTPUTS_O_TEXT_RENDERER
 ];
 
 @Component({
@@ -35,7 +28,6 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR = [
   templateUrl: './o-list-item-avatar.component.html',
   styleUrls: ['./o-list-item-avatar.component.scss'],
   inputs: DEFAULT_INPUTS_O_LIST_ITEM_AVATAR,
-  outputs: DEFAULT_OUTPUTS_O_LIST_ITEM_AVATAR,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-custom-list-item]': 'true',

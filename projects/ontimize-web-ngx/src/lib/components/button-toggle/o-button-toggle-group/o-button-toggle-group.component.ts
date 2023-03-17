@@ -12,7 +12,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material';
+import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { Util } from '../../../util/util';
@@ -73,9 +73,9 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   public onChange: EventEmitter<MatButtonToggleChange> = new EventEmitter();
   /* End outputs */
 
-  @ViewChild(MatButtonToggleGroup, { static: false })
+  @ViewChild(MatButtonToggleGroup)
   protected _innerButtonToggleGroup: MatButtonToggleGroup;
-  @ViewChild('childContainer', { read: ViewContainerRef, static: false })
+  @ViewChild('childContainer', { read: ViewContainerRef })
   protected _viewContainerRef: ViewContainerRef;
   @ContentChildren(forwardRef(() => OButtonToggleComponent))
   protected _children: QueryList<OButtonToggleComponent>;

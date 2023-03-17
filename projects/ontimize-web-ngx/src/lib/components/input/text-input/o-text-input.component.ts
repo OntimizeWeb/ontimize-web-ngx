@@ -4,27 +4,20 @@ import { ValidatorFn, Validators } from '@angular/forms';
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent
 } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'minLength: min-length',
   'maxLength: max-length'
 ];
 
-export const DEFAULT_OUTPUTS_O_TEXT_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
-];
 
 @Component({
   selector: 'o-text-input',
   templateUrl: './o-text-input.component.html',
   styleUrls: ['./o-text-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_TEXT_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_TEXT_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 

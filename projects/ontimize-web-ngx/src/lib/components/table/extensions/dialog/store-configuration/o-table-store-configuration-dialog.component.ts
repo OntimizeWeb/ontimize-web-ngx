@@ -1,6 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Injector, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatCheckboxChange, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
 
 import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
@@ -12,7 +14,7 @@ import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 })
 export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogClass implements AfterViewInit {
 
-  @ViewChild('propertiesList', { static: false })
+  @ViewChild('propertiesList')
   public propertiesList: MatSelectionList;
 
   public properties: any[] = [{

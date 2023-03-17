@@ -59,7 +59,6 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   'onBeforeUpload',
   'onBeforeUploadFile',
   'onProgress',
@@ -89,7 +88,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   public arraySeparatorRegExp = new RegExp(/\;/gi);
   public uploader: OFileUploader;
   public fileService: IFileService;
-  @ViewChild('inputFile', { static: false })
+  @ViewChild('inputFile')
   public inputFile: ElementRef;
 
   public autoBinding: boolean = false;

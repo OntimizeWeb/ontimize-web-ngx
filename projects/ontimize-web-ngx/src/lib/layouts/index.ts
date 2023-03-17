@@ -12,4 +12,5 @@ export * from './form-layout/o-form-layout-manager.component';
 export * from './form-layout/o-form-layout-manager.module';
 export * from './form-layout/tabgroup/o-form-layout-tabgroup.component';
 export * from './form-layout/tabgroup/options/o-form-layout-tabgroup-options.directive';
-
+export * from './form-layout/split-pane/o-form-layout-split-pane.component';
+export * from './form-layout/split-pane/options/o-form-layout-split-pane-options.directive';

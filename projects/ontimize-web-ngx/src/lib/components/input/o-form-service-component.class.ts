@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injector, NgZone, ViewChild } from '@angular/core';
+import { ElementRef, EventEmitter, Injector, NgZone, ViewChild, Directive } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -13,13 +13,10 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent
 } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   // static-data [Array<any>] : way to populate with static data. Default: no value.
   'staticData: static-data',
   'entity',
@@ -66,11 +63,14 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   'onSetValueOnValueChange',
   'onDataLoaded'
 ];
 
+@Directive({
+  inputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
+  outputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT
+})
 export class OFormServiceComponent extends OFormDataComponent {
 
   /* Inputs */
@@ -127,7 +127,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   public loadingSubject = new BehaviorSubject<boolean>(false);
 
   public oContextMenu: OContextMenuComponent;
-  @ViewChild(OContextMenuComponent, { static: false })
+  @ViewChild(OContextMenuComponent)
   set oContextMenuRef(value: OContextMenuComponent) {
     this.oContextMenu = value;
   }

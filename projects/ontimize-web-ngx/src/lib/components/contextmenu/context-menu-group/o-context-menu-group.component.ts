@@ -1,16 +1,11 @@
 import { AfterContentInit, Component, ContentChildren, forwardRef, OnDestroy, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS, OComponentMenuBaseItem } from '../o-content-menu-base-item.class';
-
-export const DEFAULT_CONTEXT_MENU_GROUP_INPUTS = [
-  ...DEFAULT_INPUTS_O_CONTEXT_MENU_ITEMS
-];
+import { OComponentMenuBaseItem } from '../o-content-menu-base-item.class';
 
 @Component({
   selector: 'o-context-menu-group',
   template: ' ',
-  inputs: DEFAULT_CONTEXT_MENU_GROUP_INPUTS,
   providers: [{ provide: OComponentMenuBaseItem, useExisting: forwardRef(() => OContextMenuGroupComponent) }]
 })
 export class OContextMenuGroupComponent extends OComponentMenuBaseItem implements AfterContentInit, OnDestroy {

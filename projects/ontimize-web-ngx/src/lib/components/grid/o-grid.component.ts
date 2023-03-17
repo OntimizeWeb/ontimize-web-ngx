@@ -16,7 +16,9 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatFormFieldAppearance, MatPaginator, MatSelectChange } from '@angular/material';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelectChange } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
@@ -31,16 +33,13 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import {
-  AbstractOServiceComponent,
-  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+  AbstractOServiceComponent
 } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 
 export const DEFAULT_INPUTS_O_GRID = [
-  ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
   // cols: Amount of columns in the grid list. Default in extra small and small screen is 1, in medium screen is 2, in large screen is 3 and extra large screen is 4.
   'cols',
   // show-page-size:Whether to hide the page size selection UI from the user.
@@ -71,9 +70,6 @@ export const DEFAULT_INPUTS_O_GRID = [
   'showButtonsText: show-buttons-text'
 ];
 
-export const DEFAULT_OUTPUTS_O_GRID = [
-  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
-];
 
 const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 
@@ -85,7 +81,6 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OGridComponentStateService },
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
-  outputs: DEFAULT_OUTPUTS_O_GRID,
   templateUrl: './o-grid.component.html',
   styleUrls: ['./o-grid.component.scss'],
   host: {
@@ -153,7 +148,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public inputGridItems: QueryList<OGridItemComponent>;
   @ViewChildren(OGridItemDirective)
   public gridItemDirectives: QueryList<OGridItemDirective>;
-  @ViewChild(MatPaginator, { static: false })
+  @ViewChild(MatPaginator)
   public matpaginator: MatPaginator;
 
   /* Parsed Inputs */

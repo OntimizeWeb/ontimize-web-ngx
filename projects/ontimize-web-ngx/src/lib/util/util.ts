@@ -1,4 +1,3 @@
-import { isPromise } from '@angular/compiler/src/util';
 import { Injector } from '@angular/core';
 import moment from 'moment';
 import { from, isObservable, Observable, of } from 'rxjs';
@@ -259,7 +258,17 @@ export class Util {
    * @param array the array to flat
    */
   static flatten(array: Array<any>): Array<any> {
-    return [].concat(...array);
+    let flattened = [];
+    for (const current of array) {
+      if (!Array.isArray(current)) {
+        flattened.push(current);
+        continue;
+      }
+      for (const childCurrent of current) {
+        flattened.push(childCurrent)
+      }
+    }
+    return flattened
   }
 
   /**
@@ -426,12 +435,16 @@ export class Util {
       return value;
     }
 
-    if (isPromise(value)) {
+    if (Util.isPromise(value)) {
       // Use `Promise.resolve()` to wrap promise-like instances.
       return from(Promise.resolve(value));
     }
 
     return of(value);
+  }
+
+  static isPromise<T = any>(obj: any): obj is Promise<T> {
+    return !!obj && typeof obj.then === 'function';
   }
 
 
@@ -472,8 +485,8 @@ export class Util {
     if (!Util.isDefined(clazz)) {
       return;
     }
-    const newInstance = Object.create(clazz.prototype);
-    clazz.apply(newInstance, [injector]);
+
+    const newInstance = new clazz(injector);
     return newInstance;
   }
 

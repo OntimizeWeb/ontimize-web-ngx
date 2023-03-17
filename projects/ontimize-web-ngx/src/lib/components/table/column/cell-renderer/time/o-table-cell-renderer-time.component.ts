@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
 import { Util } from '../../../../../util/util';
-import { DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER, OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
+import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
-  ...DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER,
   'format'
 ];
 

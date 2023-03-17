@@ -50,13 +50,13 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
 
   protected router: Router;
 
-  @ViewChild(OFormLayoutManagerContentDirective, { static: false })
+  @ViewChild(OFormLayoutManagerContentDirective)
   contentDirective: OFormLayoutManagerContentDirective;
 
-  @ViewChild('mainWrapper', { read: ElementRef, static: false })
+  @ViewChild('mainWrapper', { read: ElementRef })
   protected mainWrapper: ElementRef;
 
-  @ViewChild('detailWrapper', { read: ElementRef, static: false })
+  @ViewChild('detailWrapper', { read: ElementRef })
   protected detailWrapper: ElementRef;
 
   protected _options: any;

@@ -15,36 +15,27 @@ import { InputConverter } from '../../../../decorators/input-converter';
 import { Util } from '../../../../util/util';
 import { OListItemComponent } from '../../list-item/o-list-item.component';
 import {
-  DEFAULT_INPUTS_O_CARD_RENDERER,
-  DEFAULT_OUTPUTS_O_CARD_RENDERER,
   OListItemCardRenderer,
 } from '../o-list-item-card-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE = [
-  ...DEFAULT_INPUTS_O_CARD_RENDERER,
-  'avatar'
+  'content',
+  'avatar',
+  'icon',
+  'collapsible',
+  'collapsed'
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
-  ...DEFAULT_OUTPUTS_O_CARD_RENDERER
+  'onIconClick : icon-action'
 ];
 
 @Component({
   selector: 'o-list-item-card-image',
   templateUrl: './o-list-item-card-image.component.html',
   styleUrls: ['./o-list-item-card-image.component.scss'],
-  inputs: [
-    ...DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE,
-    'content',
-    'avatar',
-    'icon',
-    'collapsible',
-    'collapsed'
-  ],
-  outputs: [
-    ...DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE,
-    'onIconClick : icon-action'
-  ],
+  inputs: DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE,
+  outputs: DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-custom-list-item]': 'true',

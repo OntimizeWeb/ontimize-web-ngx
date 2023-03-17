@@ -9,14 +9,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatCheckboxChange,
-  MatDialogRef,
-  MatSelectionList,
-  MatSelectionListChange,
-  MatSlideToggleChange
-} from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -69,8 +65,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private listDataSubject = new BehaviorSubject<TableFilterByColumnData[]>([]);
   protected _listData: Observable<TableFilterByColumnData[]> = this.listDataSubject.asObservable();
 
-  @ViewChild('filter', { static: false }) filter: ElementRef;
-  @ViewChild('filterValueList', { static: false }) filterValueList: MatSelectionList;
+  @ViewChild('filter') filter: ElementRef;
+  @ViewChild('filterValueList') filterValueList: MatSelectionList;
   public activeSortDirection: 'asc' | 'desc' | '' = '';
 
   constructor(

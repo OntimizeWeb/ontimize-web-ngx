@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
 import { NumberService } from '../../../../../services/number.service';
-import { DEFAULT_INPUTS_O_COMBO_RENDERER_REAL, OComboRendererRealComponent } from '../real/o-combo-renderer-real.component';
+import { OComboRendererRealComponent } from '../real/o-combo-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE = [
-  ...DEFAULT_INPUTS_O_COMBO_RENDERER_REAL,
   'valueBase: value-base'
 ];
 

@@ -29,7 +29,11 @@ import {
   ViewEncapsulation,
   ViewRef
 } from '@angular/core';
-import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenu } from '@angular/material/menu';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -71,9 +75,7 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import {
-  AbstractOServiceComponent,
-  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+  AbstractOServiceComponent
 } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
@@ -106,8 +108,6 @@ import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
 
 export const DEFAULT_INPUTS_O_TABLE = [
-  ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
 
@@ -235,7 +235,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
-  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT,
   'onRowSelected',
   'onRowDeselected',
   'onRowDeleted'
@@ -292,12 +291,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public paginator: OTablePaginator;
 
-  @ViewChild(OMatSort, { static: false }) sort: OMatSort;
+  @ViewChild(OMatSort) sort: OMatSort;
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
 
   public oTableGlobalConfig: OTableGlobalConfig;
-  @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
+  @ViewChild('virtualScrollViewPort') set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
       this.updateHeaderAndFooterStickyPositions();
@@ -321,10 +320,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   // only for insideTabBugWorkaround
   protected tableHeaders: Array<OTableHeaderComponent> = [];
 
-  @ViewChild('spinnerContainer', { read: ElementRef, static: false })
+  @ViewChild('spinnerContainer', { read: ElementRef })
   spinnerContainer: ElementRef;
 
-  @ContentChild(OTableRowExpandableComponent, { static: false })
+  @ContentChild(OTableRowExpandableComponent)
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
@@ -594,11 +593,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   quickFilterCallback: QuickFilterFunction;
   disableSelectionFunction: DisableSelectionFunction;
 
-  @ViewChild('tableBody', { static: false })
+  @ViewChild('tableBody')
   protected tableBodyEl: ElementRef;
-  @ViewChild('tableHeader', { read: ElementRef, static: false })
+  @ViewChild('tableHeader', { read: ElementRef })
   tableHeaderEl: ElementRef;
-  @ViewChild('tableToolbar', { read: ElementRef, static: false })
+  @ViewChild('tableToolbar', { read: ElementRef })
   tableToolbarEl: ElementRef;
 
   horizontalScrolled: boolean;
@@ -614,7 +613,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected permissions: OTablePermissions;
   matMenu: MatMenu;
 
-  @ViewChild('tableMenu', { static: false })
+  @ViewChild('tableMenu')
   oTableMenu: OTableMenu;
 
   @ContentChildren(OTableOptionComponent)
@@ -628,7 +627,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild('o-table-quickfilter', { static: true })
   quickfilterContentChild: OTableQuickfilter;
 
-  @ViewChild('exportOptsTemplate', { static: false })
+  @ViewChild('exportOptsTemplate')
   exportOptsTemplate: TemplateRef<any>;
 
   public groupedColumnsArray: string[] = [];
@@ -2800,7 +2799,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getOColumnFromTh(th: any): OColumn {
     let result: OColumn;
-    const classList: any[] = [].slice.call((th as Element).classList);
+    const classList: any[] = Array.from((th as Element).classList || []);
     const columnClass = classList.find((className: string) => (className.startsWith('mat-column-')));
     if (Util.isDefined(columnClass)) {
       result = this.getOColumn(columnClass.substr('mat-column-'.length));

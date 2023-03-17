@@ -1,5 +1,5 @@
 import { Component, Injector, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { InputConverter } from '../../../decorators/input-converter';
 import { DialogService } from '../../../services/dialog.service';
 import { OLoadFilterDialogComponent } from '../../../shared/components/filter/load-filter/o-load-filter-dialog.component';

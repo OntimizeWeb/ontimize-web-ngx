@@ -1,5 +1,5 @@
-import { AfterContentChecked, AfterViewInit, ElementRef, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import { AfterContentChecked, AfterViewInit, ElementRef, Inject, Injector, OnDestroy, Optional, ViewChild, Directive } from '@angular/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 import { Util } from '../../util/util';
 
@@ -13,6 +13,9 @@ export const DEFAULT_INPUTS_O_CONTAINER = [
   'layoutGap: layout-gap'
 ];
 
+@Directive({
+  inputs: DEFAULT_INPUTS_O_CONTAINER
+})
 export class OContainerComponent implements AfterViewInit, OnDestroy, AfterContentChecked {
 
   public static APPEARANCE_OUTLINE = 'outline';
@@ -31,7 +34,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   protected titleObserver = new MutationObserver(() => this.updateOutlineGap());
 
   protected _titleEl: ElementRef;
-  @ViewChild('containerTitle', { static: false }) set containerTitle(elem: ElementRef) {
+  @ViewChild('containerTitle') set containerTitle(elem: ElementRef) {
     this._titleEl = elem;
     if (this._titleEl) {
       this.registerObserver();
@@ -150,7 +153,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   }
 
   protected cleanElevationCSSclasses(): void {
-    const classList = [].slice.call(this.elRef.nativeElement.classList);
+    const classList = Array.from(this.elRef.nativeElement.classList || []);
     if (classList && classList.length) {
       classList.forEach((item: string) => {
         if (item.startsWith('mat-elevation')) {

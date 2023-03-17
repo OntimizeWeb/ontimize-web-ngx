@@ -13,7 +13,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatDialogRef, MatInput } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatInput } from '@angular/material/input';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';
@@ -23,15 +24,12 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
 import {
-  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   OFormServiceComponent
 } from '../o-form-service-component.class';
 import { OListPickerCustomRenderer } from './listpicker-renderer/o-list-picker-renderer.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
 export const DEFAULT_INPUTS_O_LIST_PICKER = [
-  ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'filter',
   'dialogWidth : dialog-width',
   'dialogHeight : dialog-height',
@@ -42,7 +40,6 @@ export const DEFAULT_INPUTS_O_LIST_PICKER = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
-  ...DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   'onDialogAccept',
   'onDialogCancel'
 ];
@@ -90,8 +87,8 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected matDialog: MatDialog;
   protected dialogRef: MatDialogRef<OListPickerDialogComponent>;
 
-  @ViewChild('inputModel', { static: false }) protected inputModel: MatInput;
-  @ViewChild('visibleInput', { static: false }) protected visibleInput: ElementRef;
+  @ViewChild('inputModel') protected inputModel: MatInput;
+  @ViewChild('visibleInput') protected visibleInput: ElementRef;
   protected visibleInputValue: any;
 
   protected blurTimer;

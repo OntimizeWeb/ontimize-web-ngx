@@ -1,10 +1,9 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
 
 import { OBarMenuComponent } from '../o-bar-menu.component';
-import { DEFAULT_INPUTS_O_BASE_MENU_ITEM, OBaseMenuItemClass } from '../o-base-menu-item.class';
+import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 
 export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
-  ...DEFAULT_INPUTS_O_BASE_MENU_ITEM,
   // locale [string]: language. For example: es
   'locale'
 ];

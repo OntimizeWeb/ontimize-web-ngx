@@ -4,12 +4,10 @@ import { InputConverter } from '../../../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { NumberService } from '../../../../../services/number.service';
 import {
-  DEFAULT_INPUTS_O_COMBO_RENDERER_INTEGER,
   OComboRendererIntegerComponent
 } from '../integer/o-combo-renderer-integer.component';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER_REAL = [
-  ...DEFAULT_INPUTS_O_COMBO_RENDERER_INTEGER,
   // decimal-separator [string]: decimal separator. Default: dot (.).
   'decimalSeparator: decimal-separator',
   'minDecimalDigits: min-decimal-digits',

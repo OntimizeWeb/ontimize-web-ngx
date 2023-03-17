@@ -1,6 +1,6 @@
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { Injector, Provider } from '@angular/core';
-import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
+import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 

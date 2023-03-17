@@ -1,6 +1,5 @@
-import { Component, EventEmitter, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { MatButtonToggle, MatButtonToggleChange } from '@angular/material';
-
+import { Component, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatButtonToggle, MatButtonToggleChange } from '@angular/material/button-toggle';
 import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_BUTTON_TOGGLE = [
@@ -41,8 +40,6 @@ export class OButtonToggleComponent {
   public icon: string;
   public iconPosition: 'before' | 'after' = 'before';
 
-  protected _checked: boolean = false;
-  protected _enabled: boolean = true;
   public name: string;
   /* End inputs */
 
@@ -52,15 +49,17 @@ export class OButtonToggleComponent {
 
   @ViewChild('bt', { static: true }) public _innerButtonToggle: MatButtonToggle;
 
-  constructor(public viewContainerRef: ViewContainerRef) { }
+  public _checked: boolean = false;;
+  public _enabled: boolean = true;
+  public _value: any;
+
 
   get checked(): boolean {
     return this._innerButtonToggle.checked;
   }
 
   set checked(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._innerButtonToggle.checked = val;
+    this._checked = Util.parseBoolean(String(val));
   }
 
   get enabled(): boolean {
@@ -68,8 +67,7 @@ export class OButtonToggleComponent {
   }
 
   set enabled(val: boolean) {
-    val = Util.parseBoolean(String(val));
-    this._innerButtonToggle.disabled = !val;
+    this._enabled = Util.parseBoolean(String(val));
   }
 
   get value(): any {
@@ -77,6 +75,6 @@ export class OButtonToggleComponent {
   }
 
   set value(val: any) {
-    this._innerButtonToggle.value = val;
+    this._value = val;
   }
 }

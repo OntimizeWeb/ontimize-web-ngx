@@ -25,11 +25,11 @@ export class OTableHeaderComponent {
   public resizable: boolean;
   protected _columnFilterIcon: OTableHeaderColumnFilterIconComponent;
 
-  @ViewChild('columnFilterIcon', { static: false }) set columnFilterIcon(value: OTableHeaderColumnFilterIconComponent) {
+  @ViewChild('columnFilterIcon') set columnFilterIcon(value: OTableHeaderColumnFilterIconComponent) {
     this._columnFilterIcon = value;
   }
 
-  @ViewChild(OMatSortHeader, { static: false }) matSortHeader: OMatSortHeader;
+  @ViewChild(OMatSortHeader) matSortHeader: OMatSortHeader;
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent

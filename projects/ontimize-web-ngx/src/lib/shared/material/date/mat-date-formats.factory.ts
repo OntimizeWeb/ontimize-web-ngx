@@ -1,4 +1,4 @@
-import { MatDateFormats } from '@angular/material';
+import { MatDateFormats } from '@angular/material/core';
 
 export class OntimizeMatDateFormats {
 

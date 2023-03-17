@@ -4,19 +4,15 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../pipes/o-percentage.pipe';
 import { Util } from '../../../util/util';
 import {
-  DEFAULT_INPUTS_O_REAL_INPUT,
-  DEFAULT_OUTPUTS_O_REAL_INPUT,
   ORealInputComponent
 } from '../real-input/o-real-input.component';
 
 
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [
-  ...DEFAULT_INPUTS_O_REAL_INPUT,
   'valueBase: value-base'
 ];
 
 export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
-  ...DEFAULT_OUTPUTS_O_REAL_INPUT
 ];
 
 @Component({

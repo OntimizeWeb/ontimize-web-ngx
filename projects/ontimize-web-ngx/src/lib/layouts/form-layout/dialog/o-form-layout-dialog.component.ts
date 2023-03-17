@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
@@ -38,7 +38,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   protected componentFactory: ComponentFactory<any>;
   protected dialogService: DialogService;
 
-  @ViewChild(OFormLayoutManagerContentDirective, { static: false }) contentDirective: OFormLayoutManagerContentDirective;
+  @ViewChild(OFormLayoutManagerContentDirective) contentDirective: OFormLayoutManagerContentDirective;
 
   constructor(
     public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,

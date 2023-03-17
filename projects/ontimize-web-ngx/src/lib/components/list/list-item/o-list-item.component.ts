@@ -14,11 +14,11 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MatLine, MatListAvatarCssMatStyler, MatListItem } from '@angular/material';
-
-import { IListItem } from '../../../interfaces/o-list-item.interface';
+import { MatLine } from '@angular/material/core';
+import { MatListAvatarCssMatStyler, MatListItem } from '@angular/material/list';
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
+import { ListItem } from './o-list-item';
 
 @Component({
   selector: 'o-list-item',
@@ -29,7 +29,7 @@ import { OListComponent } from '../o-list.component';
     '[class.o-list-item]': 'true'
   }
 })
-export class OListItemComponent implements IListItem, AfterContentInit {
+export class OListItemComponent implements ListItem, AfterContentInit {
 
   public modelData: any;
 
@@ -39,7 +39,7 @@ export class OListItemComponent implements IListItem, AfterContentInit {
   @ViewChild('innerListItem', { static: true })
   protected _innerListItem: MatListItem;
 
-  @ContentChild(MatListAvatarCssMatStyler, { static: false })
+  @ContentChild(MatListAvatarCssMatStyler)
   set _hasAvatar(avatar: MatListAvatarCssMatStyler) {
     const listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
     if (listItemNativeEl && listItemNativeEl.length === 1) {

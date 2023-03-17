@@ -3,7 +3,7 @@ import { ObserversModule } from '@angular/cdk/observers';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatPaginatorIntl } from '@angular/material';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { OSharedModule } from '../../shared/shared.module';
@@ -20,7 +20,7 @@ import { OTableColumnAggregateComponent } from './extensions/footer/aggregate/o-
 import { OTableExpandedFooterDirective } from './extensions/footer/expanded/o-table-expanded-footer.directive';
 import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
 import { OTableMatPaginatorIntl } from './extensions/footer/paginator/o-table-mat-paginator-intl';
-import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
+import { O_TABLE_HEADER_COMPONENTS, O_TABLE_HEADER_COMPONENTS_EXPORTED } from './extensions/header/o-table-header-components';
 import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
@@ -73,7 +73,7 @@ import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
     OMatSortModule,
     OTableExportButtonComponent,
     OTableRowClassPipe,
-    ...O_TABLE_HEADER_COMPONENTS,
+    ...O_TABLE_HEADER_COMPONENTS_EXPORTED,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_FOOTER_COMPONENTS,

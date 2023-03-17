@@ -13,7 +13,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -57,7 +57,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 })
 export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild(MatSidenav, { static: false })
+  @ViewChild(MatSidenav)
   sidenav: MatSidenav;
 
   protected routerSubscription: Subscription;

@@ -18,7 +18,7 @@ import { Config } from './types/config.type';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OntimizeWebModule {
-  static forRoot(config: Config): ModuleWithProviders {
+  static forRoot(config: Config): ModuleWithProviders<OntimizeWebModule> {
     return {
       ngModule: OntimizeWebModule,
       providers: [

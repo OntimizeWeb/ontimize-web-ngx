@@ -14,7 +14,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 
@@ -60,7 +60,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
 
-  @ViewChild('tabGroup', { static: false }) tabGroup: MatTabGroup;
+  @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
   protected subscriptions: Subscription = new Subscription();

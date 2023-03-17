@@ -14,7 +14,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import * as lpn from 'google-libphonenumber';
 
 import { FormValueOptions } from '../../../types/form-value-options.type';
@@ -36,13 +36,8 @@ import { OPhoneInputData } from './interfaces/change-data';
 import { Country } from './model/country.model';
 
 export const DEFAULT_INPUTS_O_PHONE_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   //gap: Specify gap between fields in px
   'gap'
-];
-
-export const DEFAULT_OUTPUTS_O_PHONE_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 const PHONE_PREFIX = '+'
@@ -52,7 +47,6 @@ const PHONE_PREFIX = '+'
   templateUrl: './o-phone-input.component.html',
   styleUrls: ['./o-phone-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_PHONE_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_PHONE_INPUT,
   encapsulation: ViewEncapsulation.None,
   providers: [CountryCode],
   host: {
@@ -64,7 +58,7 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
   @Output() readonly countryChange = new EventEmitter<Country>();
   @Output() readonly onPhoneDataChange = new EventEmitter<OPhoneInputData>();
 
-  @ViewChild('countryList', { static: false }) countryList: ElementRef;
+  @ViewChild('countryList') countryList: ElementRef;
   @ViewChild('matInputRef', { read: ElementRef, static: true }) private matInputRef!: ElementRef;
   public gap = '14px';
 

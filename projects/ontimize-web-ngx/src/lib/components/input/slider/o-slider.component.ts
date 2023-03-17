@@ -3,13 +3,10 @@ import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEnca
 import { OFormComponent } from '../../../components/form/o-form.component';
 import { InputConverter } from '../../../decorators/input-converter';
 import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
-  OFormDataComponent,
+  OFormDataComponent
 } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'color',
   'invert',
   'max',
@@ -21,9 +18,6 @@ export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   'oDisplayWith:display-with'
 ];
 
-export const DEFAULT_OUTPUTS_O_SLIDER_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
-];
 
 export type SliderDisplayFunction = (value: number | null) => string | number;
 
@@ -35,7 +29,6 @@ export type SliderDisplayFunction = (value: number | null) => string | number;
   templateUrl: 'o-slider.component.html',
   styleUrls: ['./o-slider.component.scss'],
   inputs: DEFAULT_INPUTS_O_SLIDER_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_SLIDER_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OSliderComponent extends OFormDataComponent {

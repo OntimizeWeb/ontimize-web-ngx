@@ -3,19 +3,12 @@ import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEnca
 import { InputConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT,
-  OTextInputComponent,
+  OTextInputComponent
 } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_TEXTAREA_INPUT = [
-  ...DEFAULT_INPUTS_O_TEXT_INPUT,
   'columns',
   'rows'
-];
-
-export const DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = [
-  ...DEFAULT_OUTPUTS_O_TEXT_INPUT
 ];
 
 @Component({
@@ -23,7 +16,6 @@ export const DEFAULT_OUTPUTS_O_TEXTAREA_INPUT = [
   templateUrl: './o-textarea-input.component.html',
   styleUrls: ['./o-textarea-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_TEXTAREA_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_TEXTAREA_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OTextareaInputComponent extends OTextInputComponent {

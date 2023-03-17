@@ -1,17 +1,13 @@
 import { Component, ElementRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
-import { DEFAULT_INPUTS_O_CONTAINER, OContainerComponent } from '../o-container-component.class';
+import { OContainerComponent } from '../o-container-component.class';
 
-export const DEFAULT_INPUTS_O_COLUMN = [
-  ...DEFAULT_INPUTS_O_CONTAINER
-];
 
 @Component({
   selector: 'o-column',
   templateUrl: './o-column.component.html',
   styleUrls: ['./o-column.component.scss'],
-  inputs: DEFAULT_INPUTS_O_COLUMN,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-column]': 'true',

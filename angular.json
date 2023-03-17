@@ -10,7 +10,7 @@
       "prefix": "lib",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "architect": {
@@ -19,6 +19,11 @@
           "options": {
             "tsConfig": "projects/ontimize-web-ngx/tsconfig.lib.json",
             "project": "projects/ontimize-web-ngx/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ontimize-web-ngx/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {

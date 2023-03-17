@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injector, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injector, Renderer2 } from '@angular/core';
 
 import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
@@ -14,6 +14,10 @@ export const DEFAULT_OUTPUTS_O_TEXT_RENDERER = [
   'onIconClick : icon-action'
 ];
 
+@Directive({
+  inputs: DEFAULT_INPUTS_O_TEXT_RENDERER,
+  outputs: DEFAULT_OUTPUTS_O_TEXT_RENDERER
+})
 export class OListItemTextRenderer {
 
   /* inputs variables */

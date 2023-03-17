@@ -13,7 +13,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatCheckboxChange, MatMenu } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatMenu } from '@angular/material/menu';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -61,7 +62,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     }
   }
 
-  @ViewChild('filter', { static: false })
+  @ViewChild('filter')
   public filter: ElementRef;
 
   @ViewChild('menu', { static: true })

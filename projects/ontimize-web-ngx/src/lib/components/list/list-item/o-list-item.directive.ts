@@ -2,20 +2,22 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  Host,
   HostListener,
   Input,
   OnDestroy,
   OnInit,
+  Optional,
   Renderer2,
-  ViewContainerRef
+  Self
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { IListItem, instanceOfIListItem } from '../../../interfaces/o-list-item.interface';
 import { IList } from '../../../interfaces/o-list.interface';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { ListItem } from './o-list-item';
 
 @Directive({
   selector: 'o-list-item, mat-list-item[o-list-item], mat-card[o-list-item]',
@@ -38,21 +40,16 @@ export class OListItemDirective implements OnInit, OnDestroy {
   public selectable: boolean = false;
 
   protected _list: IList;
-  protected listItem: IListItem;
   protected subscription: Subscription = new Subscription();
 
   constructor(
-    private _viewContainerRef: ViewContainerRef,
+    @Host() @Self() @Optional() public listItem: ListItem,
     public _el: ElementRef,
     private renderer: Renderer2,
     public actRoute: ActivatedRoute
   ) { }
 
   public ngOnInit(): void {
-    const hostComponent = this._viewContainerRef["_data"].componentView.component;
-    if (instanceOfIListItem(hostComponent)) {
-      this.listItem = hostComponent
-    }
     this.subscription.add(this.actRoute.params.subscribe(params => this.updateActiveState(params)));
   }
 

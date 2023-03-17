@@ -149,7 +149,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
 
-  @ViewChild('defaultContextMenu', { static: false })
+  @ViewChild('defaultContextMenu')
   protected defaultContextMenu: OContextMenuComponent;
   protected _row: any;
   protected column: OColumn;

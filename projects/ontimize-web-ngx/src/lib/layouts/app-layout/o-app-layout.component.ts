@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ThemePalette } from '@angular/material';
+import { ThemePalette } from '@angular/material/core';
 
 import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
@@ -65,13 +65,13 @@ export class OAppLayoutComponent implements AfterViewInit {
   public headerColor: ThemePalette;
   public headerHeight = Codes.DEFAULT_ROW_HEIGHT;
 
-  @ViewChild('appSidenav', { static: false })
+  @ViewChild('appSidenav')
   public appSidenav: OAppSidenavComponent;
 
-  @ViewChild('appHeader', { static: false })
+  @ViewChild('appHeader')
   public appHeader: OAppHeaderComponent;
 
-  @ContentChild(OUserInfoConfigurationDirective, { static: false })
+  @ContentChild(OUserInfoConfigurationDirective)
   public userInfoConfiguration: OUserInfoConfigurationDirective;
 
   protected _mode: OAppLayoutMode;

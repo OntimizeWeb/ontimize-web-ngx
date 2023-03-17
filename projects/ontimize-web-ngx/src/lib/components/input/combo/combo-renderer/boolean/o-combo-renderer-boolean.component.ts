@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, View
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Util } from '../../../../../util/util';
-import { DEFAULT_INPUTS_O_COMBO_RENDERER, OComboCustomRenderer } from '../o-combo-renderer.class';
+import { OComboCustomRenderer } from '../o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER_BOOLEAN = [
-  ...DEFAULT_INPUTS_O_COMBO_RENDERER,
   // true-value [string]: true value. Default: no value.
   'trueValue: true-value',
   // false-value [string]: false value. Default: no value.

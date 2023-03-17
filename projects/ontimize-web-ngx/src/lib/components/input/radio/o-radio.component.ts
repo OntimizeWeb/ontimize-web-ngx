@@ -8,7 +8,7 @@ import {
   Optional,
   ViewEncapsulation
 } from '@angular/core';
-import { MatRadioChange } from '@angular/material';
+import { MatRadioChange } from '@angular/material/radio';
 
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
@@ -16,27 +16,20 @@ import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import {
-  DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT,
   OFormServiceComponent
 } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_RADIO = [
-  ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   'layout',
   'labelPosition: label-position'
 ];
 
-export const DEFAULT_OUTPUTS_O_RADIO = [
-  ...DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
-];
 
 @Component({
   selector: 'o-radio',
   templateUrl: './o-radio.component.html',
   styleUrls: ['./o-radio.component.scss'],
   inputs: DEFAULT_INPUTS_O_RADIO,
-  outputs: DEFAULT_OUTPUTS_O_RADIO,
   providers: [
     OntimizeServiceProvider
   ],

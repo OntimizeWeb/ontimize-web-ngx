@@ -17,11 +17,11 @@ import {
   SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
-import { MatFormFieldAppearance } from '@angular/material';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
-import { IListItem } from '../../interfaces/o-list-item.interface';
+import { ListItem } from './list-item/o-list-item';
 import { IList } from '../../interfaces/o-list.interface';
 import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
@@ -34,16 +34,12 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import {
-  AbstractOServiceComponent,
-  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
+  AbstractOServiceComponent
 } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 
 export const DEFAULT_INPUTS_O_LIST = [
-  ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
   'quickFilterColumns: quick-filter-columns',
 
@@ -73,7 +69,6 @@ export const DEFAULT_INPUTS_O_LIST = [
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
-  ...DEFAULT_OUTPUTS_O_SERVICE_COMPONENT,
   'onInsertButtonClick',
   'onItemDeleted'
 ];
@@ -214,11 +209,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     return ObservableWrapper.subscribe(this.onClick, onNext);
   }
 
-  public onItemDetailClick(item: OListItemDirective | IListItem): void {
+  public onItemDetailClick(item: OListItemDirective | ListItem): void {
     this.handleItemClick(item);
   }
 
-  public onItemDetailDoubleClick(item: OListItemDirective | IListItem): void {
+  public onItemDetailDoubleClick(item: OListItemDirective | ListItem): void {
     this.handleItemDblClick(item);
   }
 

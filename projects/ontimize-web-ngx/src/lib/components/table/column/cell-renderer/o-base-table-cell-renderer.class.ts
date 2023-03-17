@@ -1,4 +1,4 @@
-import { AfterContentInit, Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
+import { AfterContentInit, Directive, Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
 
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { Expression } from '../../../../types/expression.type';
@@ -11,6 +11,10 @@ export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
   'filterSource: filter-source',
   'filterFunction: filter-function'
 ];
+
+@Directive({
+  inputs: DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER
+})
 
 export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { OTableBaseDialogClass } from '../../../../components/table/extensions/dialog/o-table-base-dialog.class';
 import { OFilterDefinition } from '../../../../types/o-filter-definition.type';

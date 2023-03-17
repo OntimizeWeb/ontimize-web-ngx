@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material/icon';
 import { Observable, Observer } from 'rxjs';
 import { OSafePipe } from '../pipes/o-safe.pipe';
 

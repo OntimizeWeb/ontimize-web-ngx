@@ -18,13 +18,10 @@ import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_TEXT_INPUT,
-  DEFAULT_OUTPUTS_O_TEXT_INPUT,
   OTextInputComponent
 } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
-  ...DEFAULT_INPUTS_O_TEXT_INPUT,
   'min',
   'max',
   'step',
@@ -33,16 +30,12 @@ export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   'olocale : locale'
 ];
 
-export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
-  ...DEFAULT_OUTPUTS_O_TEXT_INPUT
-];
 
 @Component({
   selector: 'o-integer-input',
   templateUrl: './o-integer-input.component.html',
   styleUrls: ['./o-integer-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_INTEGER_INPUT,
-  outputs: DEFAULT_OUTPUTS_O_INTEGER_INPUT,
   encapsulation: ViewEncapsulation.None
 })
 export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {

@@ -22,8 +22,6 @@ import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import {
-  DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
   OFormDataComponent
 } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
@@ -36,12 +34,7 @@ export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   'textInputEnabled: text-input-enabled',
   'min',
   'max',
-  'valueType: value-type',
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT
-];
-
-export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
-  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
+  'valueType: value-type'
 ];
 
 @Component({
@@ -49,7 +42,6 @@ export const DEFAULT_OUTPUTS_O_HOUR_INPUT = [
   templateUrl: './o-hour-input.component.html',
   styleUrls: ['./o-hour-input.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  outputs: DEFAULT_OUTPUTS_O_HOUR_INPUT,
   inputs: DEFAULT_INPUTS_O_HOUR_INPUT,
   host: {
     '[class.o-hour-input]': 'true'
@@ -65,7 +57,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected onKeyboardInputDone = false;
   protected _valueType: OHourValueType = 'timestamp';
 
-  @ViewChild('picker', { static: false })
+  @ViewChild('picker')
   public picker: NgxMaterialTimepickerComponent;
 
   constructor(

@@ -69,7 +69,7 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
 
   protected _detailComponentContainer: ViewContainerRef;
 
-  @ViewChild('menuCardContent', { read: ViewContainerRef, static: false })
+  @ViewChild('menuCardContent', { read: ViewContainerRef })
   set detailComponentContainer(content: ViewContainerRef) {
     this._detailComponentContainer = content;
   }

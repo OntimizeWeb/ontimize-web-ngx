@@ -11,15 +11,14 @@ import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { OFormDataComponent } from '../../o-form-data-component.class';
+import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_DATE_INPUT } from '../date-input/o-date-input.component';
-import { DEFAULT_OUTPUTS_O_TEXT_INPUT } from '../text-input/o-text-input.component';
 import { ODaterangepickerDirective } from './o-daterange-input.directive';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
 
 export const DEFAULT_OUTPUTS_O_DATERANGE_INPUT = [
-  ...DEFAULT_OUTPUTS_O_TEXT_INPUT
+  ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
 export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [

@@ -10,6 +10,6 @@ import { OUserInfoConfigurationDirective } from './user-info-configuration/o-use
 @NgModule({
   declarations: [OUserInfoComponent, OUserInfoConfigurationDirective, OUserInfoConfigurationItemDirective],
   imports: [CommonModule, OSharedModule, RouterModule],
-  exports: [OUserInfoComponent, OUserInfoConfigurationDirective, OUserInfoConfigurationItemDirective]
+  exports: [OUserInfoComponent]
 })
 export class OUserInfoModule { }

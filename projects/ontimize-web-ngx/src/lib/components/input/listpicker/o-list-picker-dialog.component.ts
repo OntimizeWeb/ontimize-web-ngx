@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
@@ -29,7 +29,7 @@ export class OListPickerDialogComponent implements AfterViewInit {
   public itemSize: number = 30;
   public renderer: OListPickerCustomRenderer;
 
-  @ViewChild('searchInput', { static: false })
+  @ViewChild('searchInput')
   public searchInput: OSearchInputComponent;
 
   protected data: any[] = [];

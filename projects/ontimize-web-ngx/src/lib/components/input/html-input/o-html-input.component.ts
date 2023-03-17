@@ -1,12 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnInit, Type, ViewChild } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
-import { MatTab, MatTabGroup } from '@angular/material';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
 import { CKEditorComponent } from '../../material/ckeditor/ck-editor.component';
-import { DEFAULT_INPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_HTML_INPUT = [
   'oattr: attr',
@@ -21,7 +21,6 @@ export const DEFAULT_INPUTS_O_HTML_INPUT = [
 ];
 
 export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
-  ...DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   'onFocus',
   'onBlur'
 ];
@@ -47,7 +46,7 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, A
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 
-  @ViewChild('ckEditor', { static: false }) ckEditor: CKEditorComponent;
+  @ViewChild('ckEditor') ckEditor: CKEditorComponent;
 
   protected tabGroupContainer: MatTabGroup;
   protected tabContainer: MatTab;

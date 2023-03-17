@@ -70,7 +70,7 @@ export class CKEditorComponent implements AfterViewInit, OnDestroy, ControlValue
   @Output() blur = new EventEmitter();
   @Output() focus = new EventEmitter();
 
-  @ViewChild('ck', { static: false }) public ck: ElementRef;
+  @ViewChild('ck') public ck: ElementRef;
 
   constructor(
     protected ngZone: NgZone

@@ -14,7 +14,8 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MatDialog, MatMenu } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenu } from '@angular/material/menu';
 import { Observable } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand.interface';
@@ -121,22 +122,22 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
 
   @ViewChild('menu', { static: true })
   matMenu: MatMenu;
-  @ViewChild('selectAllCheckboxOption', { static: false })
+  @ViewChild('selectAllCheckboxOption')
   selectAllCheckboxOption: OTableOptionComponent;
-  @ViewChild('exportButtonOption', { static: false })
+  @ViewChild('exportButtonOption')
   exportButtonOption: OTableOptionComponent;
-  @ViewChild('columnsVisibilityButtonOption', { static: false })
+  @ViewChild('columnsVisibilityButtonOption')
   columnsVisibilityButtonOption: OTableOptionComponent;
-  @ViewChild('filterMenuButton', { read: ElementRef, static: false })
+  @ViewChild('filterMenuButton', { read: ElementRef })
   filterMenuButton: ElementRef;
-  @ViewChild('configurationMenuButton', { read: ElementRef, static: false })
+  @ViewChild('configurationMenuButton', { read: ElementRef })
   configurationMenuButton: ElementRef;
 
-  @ViewChild('filterMenu', { static: false })
+  @ViewChild('filterMenu')
   filterMenu: MatMenu;
-  @ViewChild('configurationMenu', { static: false })
+  @ViewChild('configurationMenu')
   configurationMenu: MatMenu;
-  @ViewChild('columnFilterOption', { static: false })
+  @ViewChild('columnFilterOption')
   columnFilterOption: OTableOptionComponent;
   @ViewChild('chartMenu', { static: true })
   chartMenu: MatMenu;

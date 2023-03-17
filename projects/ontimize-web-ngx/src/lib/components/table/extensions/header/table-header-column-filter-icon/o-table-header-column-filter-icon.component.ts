@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { AnimationDurations } from '@angular/material';
+import { AnimationDurations } from '@angular/material/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';

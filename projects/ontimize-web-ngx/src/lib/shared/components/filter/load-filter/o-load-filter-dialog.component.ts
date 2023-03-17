@@ -10,7 +10,8 @@ import {
   Type,
   ViewChild
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatListOption, MatSelectionList } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
 
 import { DialogService } from '../../../../services/dialog.service';
 import { OTableFiltersStatus } from '../../../../types/table/o-table-filter-status.type';

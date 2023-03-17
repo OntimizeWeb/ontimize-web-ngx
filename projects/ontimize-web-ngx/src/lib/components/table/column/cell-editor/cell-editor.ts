@@ -1,5 +1,4 @@
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
   OTableCellEditorBooleanComponent
 } from './boolean/o-table-cell-editor-boolean.component';
 import {
@@ -7,18 +6,14 @@ import {
   OTableCellEditorDateComponent
 } from './date/o-table-cell-editor-date.component';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_EMAIL,
-  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_EMAIL,
   OTableCellEditorEmailComponent
 } from './email/o-table-cell-editor-email.component';
-import { OTableCellEditorIntegerComponent } from './integer/o-table-cell-editor-integer.component';
+import { DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER, OTableCellEditorIntegerComponent } from './integer/o-table-cell-editor-integer.component';
+import { DEFAULT_INPUTS_O_TABLE_CELL_EDITOR, DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR } from './o-base-table-cell-editor.class';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL,
   OTableCellEditorRealComponent
 } from './real/o-table-cell-editor-real.component';
 import {
-  DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
-  DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT,
   OTableCellEditorTextComponent
 } from './text/o-table-cell-editor-text.component';
 import {
@@ -37,17 +32,14 @@ export const O_TABLE_CELL_EDITORS = [
 ];
 
 export const O_TABLE_CELL_EDITORS_INPUTS = [
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN,
+  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
+  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER,
   ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE,
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_REAL, // includes Integer
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TEXT,
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_EMAIL,
-  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME,
+  ...DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME
 ];
 
 export const O_TABLE_CELL_EDITORS_OUTPUTS = [
-  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_TEXT,
-  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR_EMAIL
+  ...DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 ];
 
 export const editorsMapping = {
