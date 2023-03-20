@@ -88,8 +88,7 @@ import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
   ],
   providers: [
     OTableExportButtonService,
-    { provide: MatPaginatorIntl, useClass: OTableMatPaginatorIntl },
-    { provide: HAMMER_GESTURE_CONFIG, useClass: OTableGestureConfig }
+    { provide: MatPaginatorIntl, useClass: OTableMatPaginatorIntl }
   ]
 })
 export class OTableModule { }
