@@ -28,7 +28,7 @@ export class OContextMenuGroupComponent extends OComponentMenuBaseItem implement
   }
 
   protected updateChildren() {
-    this.children = this.oContextMenuItems.toArray().slice(1, this.oContextMenuItems.toArray().length);
+    this.children = this.oContextMenuItems.toArray();
   }
 
 }
