@@ -28,8 +28,6 @@ import { OTableComponent } from './o-table.component';
 import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { PortalModule } from '@angular/cdk/portal';
 import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selector.module';
-import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { OTableGestureConfig } from './config/o-table-gesture-config';
 import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
 
 @NgModule({
