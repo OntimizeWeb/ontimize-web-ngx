@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <div class="o-dual-list-selector-list" fxLayout="column" ºfxLayoutAlign="start stretch" fxFlex="50%">
+  <div class="o-dual-list-selector-list" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="50%">
     <div fxLayout="row" fxFlex class="o-dual-list-selector-destination-wrapper">
       <mat-selection-list fxFlex dense cdkDropList id="item-destination-list" #selectedItemsList [cdkDropListData]="dataDestination"
         [cdkDropListConnectedTo]="['item-source-list']" (cdkDropListDropped)="drop($event)">
