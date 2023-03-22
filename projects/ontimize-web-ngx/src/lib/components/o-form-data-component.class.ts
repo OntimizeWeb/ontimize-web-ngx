@@ -190,7 +190,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       }
     }
 
-    if (!this.enabled) {
+    if (!this.hasEnabledPermission) {
       this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.getMutationObserverTarget(), {
         callback: this.disableFormControl.bind(this)
       });
@@ -677,6 +677,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
    * Do not allow the disabled attribute to change by code or by inspector
    */
   private disableFormControl(): void {
+    console.log('disableFormControl ', this.enabled);
     const control = this.getFormControl();
     control.disable({
       onlySelf: true,
