@@ -553,14 +553,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.oldValue = this.value.value;
   }
 
-  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false) : void {
+  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false): void {
     this._fControl.setValue(value, options);
-      if (setDirty) {
-        this._fControl.markAsDirty();
-      }
-      if (this._fControl.invalid && !this.form.isInInsertMode()) {
-        this._fControl.markAsTouched();
-      }
+    if (setDirty) {
+      this._fControl.markAsDirty();
+    }
+    if (this._fControl.invalid && !this.form.isInInsertMode()) {
+      this._fControl.markAsTouched();
+    }
   }
 
   protected updateValidators(): void {
@@ -677,7 +677,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
    * Do not allow the disabled attribute to change by code or by inspector
    */
   private disableFormControl(): void {
-    console.log('disableFormControl ', this.enabled);
     const control = this.getFormControl();
     control.disable({
       onlySelf: true,
