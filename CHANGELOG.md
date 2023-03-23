@@ -1,3 +1,8 @@
+## 8.11.2 (2023-03-23)
+### Bug fixes
+* **o-form-data-component**: Fixed ontimize inputs remain disabled if initialized with `enable=false` even after enable is set to true ([618444a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/618444a)) Closes [#1188](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1188)
+
+
 ## 8.11.1 (2023-03-15)
 ### Bug fixes
 * **o-form-navigation**: Fixed form navigation between details ([95d7512](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/95d7512)) Closes [#1180](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1180)
