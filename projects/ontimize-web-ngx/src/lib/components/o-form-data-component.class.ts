@@ -190,7 +190,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       }
     }
 
-    if (!this.enabled) {
+    if (!this.hasEnabledPermission) {
       this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.getMutationObserverTarget(), {
         callback: this.disableFormControl.bind(this)
       });
@@ -553,14 +553,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.oldValue = this.value.value;
   }
 
-  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false) : void {
+  protected updateOFormControlValue(value: any, options?: FormValueOptions, setDirty: boolean = false): void {
     this._fControl.setValue(value, options);
-      if (setDirty) {
-        this._fControl.markAsDirty();
-      }
-      if (this._fControl.invalid && !this.form.isInInsertMode()) {
-        this._fControl.markAsTouched();
-      }
+    if (setDirty) {
+      this._fControl.markAsDirty();
+    }
+    if (this._fControl.invalid && !this.form.isInInsertMode()) {
+      this._fControl.markAsTouched();
+    }
   }
 
   protected updateValidators(): void {
