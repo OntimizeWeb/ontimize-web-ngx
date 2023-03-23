@@ -189,7 +189,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       }
     }
 
-    if (!this.enabled) {
+    if (!this.hasEnabledPermission) {
       this.mutationObserver = PermissionsUtils.registerDisabledChangesInDom(this.getMutationObserverTarget(), {
         callback: this.disableFormControl.bind(this)
       });
