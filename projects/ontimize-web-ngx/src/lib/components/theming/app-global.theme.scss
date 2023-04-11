@@ -236,7 +236,7 @@
 
   /*BUTTONS HOVER*/
   .mat-mdc-dialog-actions button:not([disabled]),
-  .o-form .o-form-toolbar button:not([disabled]),
+  .o-form .o-form-toolbar button:not([disabled]).o-form-toolbar-button,
   .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
   .o-list .o-list-toolbar button.o-list-button:not([disabled]),
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
@@ -286,7 +286,7 @@
         background-color: $background-primary-button;
         border-color: $border-color-primary-button;
 
-        &:hover{
+        &:hover {
           color: mat.get-color-from-palette($primary, 500);
           background-color: $background-hover-primary-button;
           border-color: mat.get-color-from-palette($foreground, divider);
