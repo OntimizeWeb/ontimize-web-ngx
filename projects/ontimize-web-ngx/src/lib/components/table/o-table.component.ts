@@ -1638,7 +1638,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
+    Object.assign(queryArguments[3], this.getSqlTypesForFilter(queryArguments[1]));
     Object.assign(queryArguments[3], ovrrArgs ? ovrrArgs.sqltypes || {} : {});
     if (this.pageable) {
       queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
@@ -1648,17 +1648,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   getSqlTypesForFilter(filter): object {
-    const allSqlTypes = {};
+    const allSqlTypes = this.getSqlTypes();
     this._oTableOptions.columns.forEach((col: OColumn) => {
       if (col.sqlType) {
         allSqlTypes[col.attr] = col.sqlType;
       }
     });
-    Object.assign(allSqlTypes, this.getSqlTypes());
-    const filterCols = Util.getValuesFromObject(filter);
     const sqlTypes = {};
     Object.keys(allSqlTypes).forEach(key => {
-      if (filterCols.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
+      if (filter.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
         sqlTypes[key] = allSqlTypes[key];
       }
     });
@@ -1705,7 +1703,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
             const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            this.daoTable.removeQuery(filters).subscribe(() => {
+            const filterColumns = Object.keys(filters[0]));
+            const sqlTypes = this.form ? this.form.getAttributesSQLTypes() : {};
+            Object.assign(sqlTypes, this.getSqlTypesForFilter(filterColumns);
+            this.daoTable.removeQuery(filters, sqlTypes).subscribe(() => {
               ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
             }, error => {
               this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
