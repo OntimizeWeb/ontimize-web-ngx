@@ -1,7 +1,7 @@
 
 import { CdkColumnDef } from '@angular/cdk/table';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Optional, ViewEncapsulation } from '@angular/core';
-import { ArrowViewStateTransition, MatSort, matSortAnimations, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
+import { ArrowViewStateTransition, matSortAnimations, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { OMatSort } from './o-mat-sort';
 

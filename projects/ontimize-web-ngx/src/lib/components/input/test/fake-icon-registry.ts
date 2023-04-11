@@ -78,7 +78,9 @@ export class FakeMatIconRegistry implements PublicApi<MatIconRegistry>, OnDestro
     return this;
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    /** */
+  }
 
   private _generateEmptySvg(): SVGElement {
     const emptySvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
