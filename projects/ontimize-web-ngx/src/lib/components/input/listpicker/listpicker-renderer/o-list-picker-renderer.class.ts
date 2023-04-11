@@ -1,9 +1,10 @@
-import { Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
+import { Injector, OnInit, PipeTransform, TemplateRef, Directive } from '@angular/core';
 
 import { Util } from '../../../../util';
 import { OListPickerComponent } from '../o-list-picker.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER = [];
+@Directive()
 export class OListPickerCustomRenderer implements OnInit {
 
   public templateref: TemplateRef<any>;

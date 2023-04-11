@@ -1,7 +1,8 @@
-import { CdkColumnDef } from '@angular/cdk/table';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Optional, ViewEncapsulation } from '@angular/core';
-import { ArrowViewStateTransition, matSortAnimations, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
 
+import { CdkColumnDef } from '@angular/cdk/table';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Optional, ViewEncapsulation } from '@angular/core';
+import { ArrowViewStateTransition, matSortAnimations, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { OMatSort } from './o-mat-sort';
 
 @Component({
@@ -35,9 +36,12 @@ export class OMatSortHeader extends MatSortHeader {
   constructor(public _intl: MatSortHeaderIntl,
     changeDetectorRef: ChangeDetectorRef,
     @Optional() public _sort: OMatSort,
-    @Optional() public _cdkColumnDef: CdkColumnDef) {
+    @Inject('MAT_SORT_HEADER_COLUMN_DEF') @Optional()
+    public _cdkColumnDef: CdkColumnDef,
+    _focusMonitor: FocusMonitor,
+    _elementRef: ElementRef<HTMLElement>){
 
-    super(_intl, changeDetectorRef, _sort, _cdkColumnDef);
+    super(_intl, changeDetectorRef, _sort, _cdkColumnDef, _focusMonitor, _elementRef);
   }
 
   _handleClick() {

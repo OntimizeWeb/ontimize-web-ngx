@@ -11,6 +11,8 @@ import { TestUtils } from '../test/test-utils';
 import { InputTestUtil } from './../test/input-test-utils';
 import { OPhoneInputComponent } from './o-phone-input.component';
 import { OPhoneInputModule } from './o-phone-input.module';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { FakeMatIconRegistry } from '../test/fake-icon-registry';
 
 describe('OPhoneInputComponent', () => {
   let component: OPhoneInputComponent;
@@ -22,7 +24,8 @@ describe('OPhoneInputComponent', () => {
         OPhoneInputModule,
         HttpClientModule,
         OPermissionsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MatIconModule
       ],
       providers: [
         {
@@ -31,7 +34,8 @@ describe('OPhoneInputComponent', () => {
           deps: [Injector]
         },
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
-        { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
+        { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
+        { provide: MatIconRegistry, useClass: FakeMatIconRegistry }
         // ...INTERNAL_ONTIMIZE_MODULES
       ]
     })

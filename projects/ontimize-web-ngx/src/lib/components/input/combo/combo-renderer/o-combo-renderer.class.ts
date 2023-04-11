@@ -1,9 +1,10 @@
-import { Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
+import { Injector, OnInit, PipeTransform, TemplateRef, Directive } from '@angular/core';
 
 import { Util } from '../../../../util';
 import { OComboComponent } from '../o-combo.component';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER = [];
+@Directive()
 export class OComboCustomRenderer implements OnInit {
 
   public templateref: TemplateRef<any>;
