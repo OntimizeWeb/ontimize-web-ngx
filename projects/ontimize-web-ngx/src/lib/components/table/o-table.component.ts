@@ -1703,9 +1703,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
             const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            const filterColumns = Object.keys(filters[0]));
+            const filterColumns = Object.keys(filters[0]);
             const sqlTypes = this.form ? this.form.getAttributesSQLTypes() : {};
-            Object.assign(sqlTypes, this.getSqlTypesForFilter(filterColumns);
+            Object.assign(sqlTypes, this.getSqlTypesForFilter(filterColumns));
             this.daoTable.removeQuery(filters, sqlTypes).subscribe(() => {
               ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
             }, error => {
