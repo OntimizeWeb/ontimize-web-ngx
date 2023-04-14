@@ -40,6 +40,7 @@ import {
 } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
+import { SQLTypes } from '../../util/sqltypes';
 
 export const DEFAULT_INPUTS_O_LIST = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -69,7 +70,9 @@ export const DEFAULT_INPUTS_O_LIST = [
   'insertButtonFloatable:insert-button-floatable',
 
   // show-buttons-text [yes|no|true|false]: show text of buttons. Default: no.
-  'showButtonsText: show-buttons-text'
+  'showButtonsText: show-buttons-text',
+  // keys-sql-types [string]: entity keys types, separated by ';'. Default: no value.
+  'keysSqlTypes: keys-sql-types',
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -130,6 +133,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
   protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
+  protected keysSqlTypes: string;
+  keysSqlTypesArray: Array<string> = [];
 
   protected oMatSort: OMatSort;
 
@@ -192,6 +197,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public initialize(): void {
     super.initialize();
+    this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
     if (!Util.isDefined(this.quickFilterColumns)) {
       this.quickFilterColumns = this.columns;
     }
@@ -282,7 +288,14 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         if (res === true) {
           if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
             const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(() => {
+            const sqlTypes = this.getSqlTypes();
+            const sqlTypesArg = {};
+            if (Util.isDefined(sqlTypes)) {
+              this.keysArray.forEach(key => {
+                sqlTypesArg[key] = sqlTypes[key];
+              });
+            }
+            merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity, sqlTypesArg)))).subscribe(obs => obs.subscribe(() => {
               ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
             }, error => {
               this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
@@ -369,5 +382,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         this.selection.select(foundItem);
       }
     });
+  }
+
+  public getSqlTypes() {
+    const sqlTypes = this.sqlTypes;
+    this.keysSqlTypesArray.forEach((kst, i) => sqlTypes[this.keysArray[i]] = SQLTypes.getSQLTypeValue(kst));
+    return sqlTypes;
   }
 }
