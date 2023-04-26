@@ -283,35 +283,30 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public remove(clearSelectedItems: boolean = false): void {
     const selectedItems = this.getSelectedItems();
-    if (selectedItems.length > 0) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
-        if (res === true) {
-          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            const sqlTypes = this.getSqlTypes();
-            const sqlTypesArg = {};
-            if (Util.isDefined(sqlTypes)) {
-              this.keysArray.forEach(key => {
-                sqlTypesArg[key] = sqlTypes[key];
-              });
-            }
-            merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity, sqlTypesArg)))).subscribe(obs => obs.subscribe(() => {
-              ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
-            }, error => {
-              this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-            }, () => {
-              // Ensuring that the deleted items will not longer be part of the selectionModel
-              this.clearSelection();
-              this.reloadData();
-            }));
-          } else {
-            this.deleteLocalItems();
-          }
-        } else if (clearSelectedItems) {
-          this.clearSelection();
-        }
-      });
+    if (selectedItems.length === 0) {
+      return;
     }
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+      if (res === true) {
+        if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+          const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
+          const sqlTypesArg = this.getSqlTypesOfKeys();
+          merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity, sqlTypesArg)))).subscribe(obs => obs.subscribe(() => {
+            ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
+          }, error => {
+            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+          }, () => {
+            // Ensuring that the deleted items will not longer be part of the selectionModel
+            this.clearSelection();
+            this.reloadData();
+          }));
+        } else {
+          this.deleteLocalItems();
+        }
+      } else if (clearSelectedItems) {
+        this.clearSelection();
+      }
+    });
   }
 
   public add(e?: Event): void {

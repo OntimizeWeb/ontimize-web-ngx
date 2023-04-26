@@ -1693,37 +1693,34 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return;
     }
     const selectedItems = this.getSelectedItems();
-    if (selectedItems.length > 0) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
-        if (res === true) {
-          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            const sqlTypes = this.getSqlTypes();
-            const sqlTypesArg =  {};
-            if (Util.isDefined(sqlTypes)) {
-              this.keysArray.forEach(key => {
-                sqlTypesArg[key] = sqlTypes[key];
-              });
-            }
-            this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(() => {
-              ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
-            }, error => {
-              this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
-            }, () => {
-              // Ensuring that the deleted items will not longer be part of the selectionModel
-              selectedItems.forEach(item => {
-                this.selection.deselect(item);
-              });
-              this.reloadData();
-            });
-          } else {
-            this.deleteLocalItems();
-          }
-        } else if (clearSelectedItems) {
-          this.clearSelection();
-        }
-      });
+    if (selectedItems.length === 0) {
+      return;
     }
+
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+      if (res === true) {
+        if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+          const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
+          const sqlTypesArg = this.getSqlTypesOfKeys();
+          this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(() => {
+            ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
+          }, error => {
+            this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
+          }, () => {
+            // Ensuring that the deleted items will not longer be part of the selectionModel
+            selectedItems.forEach(item => {
+              this.selection.deselect(item);
+            });
+            this.reloadData();
+          });
+        } else {
+          this.deleteLocalItems();
+        }
+      } else if (clearSelectedItems) {
+        this.clearSelection();
+      }
+    });
+
   }
 
   /**

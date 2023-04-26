@@ -26,6 +26,7 @@ import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
+import { ServiceUtils } from '../util/service.utils';
 
 interface ItemClick {
   getItemData(): any
@@ -897,6 +898,18 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       value = 'outline';
     }
     this._quickFilterAppearance = value;
+  }
+
+  protected getSqlTypesOfKeys() {
+    const sqlTypes = this.getSqlTypes();
+    const sqlTypesArg = {};
+    if (Util.isDefined(sqlTypes)) {
+      this.keysArray.forEach(key => {
+        sqlTypesArg[key] = sqlTypes[key];
+      });
+    }
+    return sqlTypesArg;
+
   }
 
 }
