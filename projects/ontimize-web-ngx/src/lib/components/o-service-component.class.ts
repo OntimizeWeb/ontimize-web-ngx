@@ -899,6 +899,18 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     this._quickFilterAppearance = value;
   }
 
+  protected getSqlTypesOfKeys() {
+    const sqlTypes = this.getSqlTypes();
+    const sqlTypesArg = {};
+    if (Util.isDefined(sqlTypes)) {
+      this.keysArray.forEach(key => {
+        sqlTypesArg[key] = sqlTypes[key];
+      });
+    }
+    return sqlTypesArg;
+
+  }
+
 }
 
 /*This class is definied to mantain bacwards compatibility */
