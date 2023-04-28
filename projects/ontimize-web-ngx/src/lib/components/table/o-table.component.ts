@@ -1665,7 +1665,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
+    Object.assign(queryArguments[3], this.getSqlTypesForFilter(queryArguments[1]));
     Object.assign(queryArguments[3], ovrrArgs ? ovrrArgs.sqltypes || {} : {});
     if (this.pageable) {
       queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
@@ -1675,17 +1675,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   getSqlTypesForFilter(filter): object {
-    const allSqlTypes = {};
-    this._oTableOptions.columns.forEach((col: OColumn) => {
-      if (col.sqlType) {
-        allSqlTypes[col.attr] = col.sqlType;
-      }
-    });
-    Object.assign(allSqlTypes, this.getSqlTypes());
-    const filterCols = Util.getValuesFromObject(filter);
+    const allSqlTypes = this.getSqlTypes();
     const sqlTypes = {};
     Object.keys(allSqlTypes).forEach(key => {
-      if (filterCols.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
+      if (filter.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
         sqlTypes[key] = allSqlTypes[key];
       }
     });
@@ -1727,30 +1720,34 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return;
     }
     const selectedItems = this.getSelectedItems();
-    if (selectedItems.length > 0) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
-        if (res === true) {
-          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            this.daoTable.removeQuery(filters).subscribe(() => {
-              ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
-            }, error => {
-              this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
-            }, () => {
-              // Ensuring that the deleted items will not longer be part of the selectionModel
-              selectedItems.forEach(item => {
-                this.selection.deselect(item);
-              });
-              this.reloadData();
-            });
-          } else {
-            this.deleteLocalItems();
-          }
-        } else if (clearSelectedItems) {
-          this.clearSelection();
-        }
-      });
+    if (selectedItems.length === 0) {
+      return;
     }
+
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+      if (res === true) {
+        if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+          const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
+          const sqlTypesArg = this.getSqlTypesOfKeys();
+          this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(() => {
+            ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
+          }, error => {
+            this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
+          }, () => {
+            // Ensuring that the deleted items will not longer be part of the selectionModel
+            selectedItems.forEach(item => {
+              this.selection.deselect(item);
+            });
+            this.reloadData();
+          });
+        } else {
+          this.deleteLocalItems();
+        }
+      } else if (clearSelectedItems) {
+        this.clearSelection();
+      }
+    });
+
   }
 
   /**
@@ -2162,11 +2159,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
 
   /**
-   * Gets sql types from data source
+   * Gets sql types from data source and table columns
    * @returns
    */
   getSqlTypes() {
-    return Util.isDefined(this.dataSource.sqlTypes) ? this.dataSource.sqlTypes : {};
+    const allSqlTypes = Util.isDefined(this.dataSource.sqlTypes) ? this.dataSource.sqlTypes : {};
+    this._oTableOptions.columns.forEach((col: OColumn) => {
+      if (col.sqlType) {
+        allSqlTypes[col.attr] = col.sqlType;
+      }
+    });
+    return allSqlTypes;
   }
 
   setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent) {
