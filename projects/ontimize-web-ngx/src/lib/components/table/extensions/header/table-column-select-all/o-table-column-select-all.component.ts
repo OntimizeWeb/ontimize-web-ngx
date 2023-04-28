@@ -11,7 +11,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL = [
   'resizable'
 ]
 @Directive({
-  selector: 'o-table-column-selectall',
+  selector: 'o-table-column-select-all',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL
 })
 export class OTableColumnSelectAllComponent {

@@ -104,6 +104,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
+import { OTableColumnSelectAllComponent } from './extensions/header/table-column-select-all/o-table-column-select-all.component';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -628,6 +629,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild('o-table-quickfilter', { static: true })
   quickfilterContentChild: OTableQuickfilter;
 
+  @ContentChild(OTableColumnSelectAllComponent, { static: true })
+  tableColumnSelectAllContentChild: OTableColumnSelectAllComponent
+
   @ViewChild('exportOptsTemplate', { static: false })
   exportOptsTemplate: TemplateRef<any>;
 
@@ -681,7 +685,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     super(injector, elRef, form);
 
     this._oTableOptions = new DefaultOTableOptions();
-    this._oTableOptions.selectColumn = this.createOColumn();
 
     try {
       this.tabGroupContainer = this.injector.get(MatTabGroup);
@@ -726,7 +729,31 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
       this.createExpandableColumn();
     }
+  }
 
+  ngAfterContentInit() {
+    if (this.tableColumnSelectAllContentChild) {
+      //
+      this.setCustomDefinitionInSelectColumn(this.tableColumnSelectAllContentChild)
+    }
+  }
+
+  setCustomDefinitionInSelectColumn(definition: OTableColumnSelectAllComponent) {
+    if (definition.title) {
+      this._oTableOptions.selectColumn.title = definition.title;
+    }
+    if (definition.width) {
+      this._oTableOptions.selectColumn.width = definition.width;
+    }
+    if (definition.minWidth) {
+      this._oTableOptions.selectColumn.minWidth = definition.minWidth;
+    }
+    if (definition.maxWidth) {
+      this._oTableOptions.selectColumn.maxWidth = definition.maxWidth;
+    }
+    if (definition.resizable) {
+      this._oTableOptions.selectColumn.resizable = definition.resizable;
+    }
   }
 
   ngAfterViewChecked() {

@@ -31,6 +31,8 @@ import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selec
 import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { OTableGestureConfig } from './config/o-table-gesture-config';
 import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
+import { OTableHeaderSelectAllComponent } from './extensions/header/table-header-select-all/o-table-header-select-all.component';
+import { OTableColumnSelectAllComponent } from './extensions/header/table-column-select-all/o-table-column-select-all.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
     ...O_TABLE_DIALOGS,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_FOOTER_COMPONENTS,
-    OTableRowExpandableComponent
+    OTableRowExpandableComponent,
+    OTableColumnSelectAllComponent,
+    OTableHeaderSelectAllComponent
   ],
   imports: [
     CommonModule,
@@ -77,7 +81,8 @@ import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_FOOTER_COMPONENTS,
-    OTableRowExpandableComponent
+    OTableRowExpandableComponent,
+    OTableColumnSelectAllComponent
   ],
   entryComponents: [
     OTableColumnAggregateComponent,
