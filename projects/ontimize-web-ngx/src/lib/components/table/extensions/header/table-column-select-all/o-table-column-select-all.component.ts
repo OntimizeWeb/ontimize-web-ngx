@@ -21,6 +21,5 @@ export class OTableColumnSelectAllComponent {
   public maxWidth: string;
   public width: string;
   public resizable = false;
-  constructor() { }
 
 }
