@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewEncapsulati
 import { OColumn } from "../../../column";
 import { OTableComponent } from "../../../o-table.component";
 import { DEFAULT_INPUTS_O_TABLE_HEADER, OTableHeaderComponent } from "../table-header/o-table-header.component";
-import { Subscription } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 
 @Component({
   selector: 'o-table-header-select-all',
@@ -18,8 +18,8 @@ export class OTableHeaderSelectAllComponent extends OTableHeaderComponent {
 
   public column: OColumn
   public resizable: boolean;
-  public isAllSelected: boolean;
-  public isIndeterminate: boolean;
+  public isAllSelected = new BehaviorSubject<boolean>(false);
+  public isIndeterminate = new BehaviorSubject<boolean>(false);
   public selectionChangeSubscription: Subscription;
 
   constructor(
@@ -27,8 +27,8 @@ export class OTableHeaderSelectAllComponent extends OTableHeaderComponent {
   ) {
     super(table);
     this.selectionChangeSubscription = this.table.selection.changed.subscribe(x => {
-      this.isAllSelected = table.isAllSelected();
-      this.isIndeterminate = table.isIndeterminate();
+      this.isAllSelected.next(table.isAllSelected());
+      this.isIndeterminate.next(table.isIndeterminate());
     })
   }
   ngOnDestroy(): void {

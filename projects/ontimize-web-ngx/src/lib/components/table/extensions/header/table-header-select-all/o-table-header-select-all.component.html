@@ -1,4 +1,4 @@
-<mat-checkbox (click)="$event.stopPropagation()" (change)="table.masterToggle($event)" [checked]="isAllSelected" [indeterminate]="isIndeterminate">
+<mat-checkbox (click)="$event.stopPropagation()" (change)="table.masterToggle($event)" [checked]="isAllSelected | async" [indeterminate]="isIndeterminate | async">
   <ng-container *ngIf="table.tableColumnSelectAllContentChild?.title">
     {{table.tableColumnSelectAllContentChild?.title | oTranslate}}
   </ng-container>
