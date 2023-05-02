@@ -2006,13 +2006,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public isAllSelected(): boolean {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource ? this.dataSource.renderedData.length:0;
+    const numSelected = this.getNumRowSelectedInCurrentData();
+    const numRows = this.dataSource ? this.dataSource.renderedData.length : 0;
     return numSelected > 0 && numSelected === numRows;
   }
 
   public isIndeterminate(): boolean {
-    const numSelected = this.selection.selected.length;
+    const numSelected = this.getNumRowSelectedInCurrentData();
     const numRows = this.dataSource ? this.dataSource.renderedData.length : 0;
     return numSelected > 0 && numRows > 0 && numSelected !== numRows;
   }

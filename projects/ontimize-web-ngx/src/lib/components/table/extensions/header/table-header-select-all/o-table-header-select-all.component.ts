@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewEncapsulati
 import { OColumn } from "../../../column";
 import { OTableComponent } from "../../../o-table.component";
 import { DEFAULT_INPUTS_O_TABLE_HEADER, OTableHeaderComponent } from "../table-header/o-table-header.component";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, merge, Subscription } from "rxjs";
 
 @Component({
   selector: 'o-table-header-select-all',
@@ -26,10 +26,22 @@ export class OTableHeaderSelectAllComponent extends OTableHeaderComponent {
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
   ) {
     super(table);
-    this.selectionChangeSubscription = this.table.selection.changed.subscribe(x => {
-      this.isAllSelected.next(table.isAllSelected());
-      this.isIndeterminate.next(table.isIndeterminate());
+  }
+
+  public ngAfterViewInit(): void {
+    const dataChanges: any[] = [
+      this.table.selection.changed
+    ];
+
+    if (this.table.matpaginator) {
+      dataChanges.push(this.table.matpaginator.page);
+    }
+
+    this.selectionChangeSubscription = merge(...dataChanges).subscribe(x => {
+      this.isAllSelected.next(this.table.isAllSelected());
+      this.isIndeterminate.next(this.table.isIndeterminate());
     })
+
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
