@@ -1,3 +1,8 @@
+## 8.12.0
+### Features
+* Add JDBC UUID support ([98583d2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98583d2)) Closes [#1201](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1201)
+
+### Bug fixes
 ## 8.11.3 (2023-04-11)
 ### Bug fixes
 * **o-form-toolbar**: Fixed custom buttons having the same style as generic form action buttons. ([108e1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/108e1fc)) Closes [#1196](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1196)
