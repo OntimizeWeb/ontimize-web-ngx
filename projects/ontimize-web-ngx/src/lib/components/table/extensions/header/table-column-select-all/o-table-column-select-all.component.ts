@@ -17,9 +17,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL = [
 export class OTableColumnSelectAllComponent {
 
   public title: string;
-  public minWidth: string = '12px';
+  public minWidth: string;
   public maxWidth: string;
-  public width: string;
+  public width: string = '18px';
   public resizable = false;
 
 }
