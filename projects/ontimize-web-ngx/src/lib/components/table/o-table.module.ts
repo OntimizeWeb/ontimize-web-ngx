@@ -77,7 +77,7 @@ import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_FOOTER_COMPONENTS,
-    OTableRowExpandableComponent,
+    OTableRowExpandableComponent
   ],
   entryComponents: [
     OTableColumnAggregateComponent,
