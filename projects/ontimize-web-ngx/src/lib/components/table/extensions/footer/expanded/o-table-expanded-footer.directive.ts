@@ -81,13 +81,16 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   public updateMessage(): void {
-    if (this.table && this.table.staticData && this.table.dataSource && this.table.dataSource.renderedData.length === 0 && !this.spanMessageNotResults) {
+    if (this.table && this.table.dataSource && this.table.dataSource.renderedData.length === 0) {
       this.createMessageSpan();
     } else {
-      const message = this.buildMessage();
-      if(Util.isDefined(this.spanMessageNotResults)) {
-        this.spanMessageNotResults.innerHTML = message;
-      }
+      this.removeMessageSpan();
+    }
+  }
+
+  removeMessageSpan() {
+    if (this.spanMessageNotResults) {
+      this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
     }
   }
 
@@ -109,7 +112,11 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   protected createMessageSpan() {
+    // 1. Remove previous message
+    this.removeMessageSpan();
+    // 2 Build message
     const message = this.buildMessage();
+    // 3 Create message
     this.spanMessageNotResults = this.renderer.createElement('span');
     const messageNotResults = this.renderer.createText(message);
     if (this.tdTableWithMessage) {
