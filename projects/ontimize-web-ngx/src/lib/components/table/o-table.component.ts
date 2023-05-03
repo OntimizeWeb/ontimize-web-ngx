@@ -104,7 +104,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
-import { OTableColumnSelectAllComponent } from './extensions/header/table-column-select-all/o-table-column-select-all.component';
+import { OTableColumnSelectAllDirective } from './extensions/header/table-column-select-all/o-table-column-select-all.directive';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -629,8 +629,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild('o-table-quickfilter', { static: true })
   quickfilterContentChild: OTableQuickfilter;
 
-  @ContentChild(OTableColumnSelectAllComponent, { static: true })
-  tableColumnSelectAllContentChild: OTableColumnSelectAllComponent
+  @ContentChild(OTableColumnSelectAllDirective, { static: true })
+  tableColumnSelectAllContentChild: OTableColumnSelectAllDirective
 
   @ViewChild('exportOptsTemplate', { static: false })
   exportOptsTemplate: TemplateRef<any>;
@@ -738,7 +738,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  setCustomDefinitionInSelectColumn(definition: OTableColumnSelectAllComponent) {
+  setCustomDefinitionInSelectColumn(definition: OTableColumnSelectAllDirective) {
     if (definition.title) {
       this._oTableOptions.selectColumn.title = definition.title;
     }

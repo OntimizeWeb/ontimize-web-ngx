@@ -1,4 +1,5 @@
 import { Directive } from '@angular/core';
+import { InputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL = [
   'width',
@@ -14,12 +15,13 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL = [
   selector: 'o-table-column-select-all',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL
 })
-export class OTableColumnSelectAllComponent {
+export class OTableColumnSelectAllDirective {
 
   public title: string;
   public minWidth: string;
   public maxWidth: string;
   public width: string = '18px';
-  public resizable = false;
+  @InputConverter()
+  public resizable:boolean = false;
 
 }

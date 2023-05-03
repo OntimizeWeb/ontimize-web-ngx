@@ -75,20 +75,35 @@
 
     <!--Checkbox Column -->
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
-      <th mat-header-cell *matHeaderCellDef [class.resizable]="resizable && tableColumnSelectAllContentChild?.title"
-        [class.mat-header-select-all-with-title]="tableColumnSelectAllContentChild?.title" class="o-center"
-        [style.width]="oTableOptions.selectColumn.width" [style.min-width]="getMinWidthColumn(oTableOptions.selectColumn)"
-        [style.max-width]="oTableOptions.selectColumn.maxWidth">
-        <div class="content">
-          <o-table-header-select-all [column]="oTableOptions.selectColumn"></o-table-header-select-all>
-        </div>
-      </th>
-      <td mat-cell *matCellDef="let row" class="o-center" [style.width]="oTableOptions.selectColumn.width"
-        [style.min-width]="getMinWidthColumn(oTableOptions.selectColumn)" [style.max-width]="oTableOptions.selectColumn.maxWidth">
-        <mat-checkbox name="id[]" (click)="$event.stopPropagation()" [disabled]="isDisableCheckbox(row)"
-          (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
-        </mat-checkbox>
-      </td>
+      <ng-container *ngIf="!tableColumnSelectAllContentChild; else customHeaderSelectAllTemplate">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="content">
+            <o-table-header-select-all [column]="oTableOptions.selectColumn"></o-table-header-select-all>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox name="id[]" (click)="$event.stopPropagation()" [disabled]="isDisableCheckbox(row)"
+            (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-template #customHeaderSelectAllTemplate>
+        <th mat-header-cell *matHeaderCellDef [class.resizable]="resizable"
+          class="mat-header-select-all-with-title o-center" [style.width]="oTableOptions.selectColumn.width"
+          [style.min-width]="getMinWidthColumn(oTableOptions.selectColumn)" [style.max-width]="oTableOptions.selectColumn.maxWidth">
+          <div class="content">
+            <o-table-header-select-all [column]="oTableOptions.selectColumn"></o-table-header-select-all>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let row" class="o-center" [style.width]="oTableOptions.selectColumn.width"
+          [style.min-width]="getMinWidthColumn(oTableOptions.selectColumn)" [style.max-width]="oTableOptions.selectColumn.maxWidth">
+          <mat-checkbox name="id[]" (click)="$event.stopPropagation()" [disabled]="isDisableCheckbox(row)"
+            (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-template>
+
+
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
 
