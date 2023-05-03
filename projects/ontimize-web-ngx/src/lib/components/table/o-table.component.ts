@@ -1624,11 +1624,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     ObservableWrapper.callEmit(this.onDataLoaded, this.daoTable.data);
   }
 
-  async showDialogError(error: string, errorOptional?: string) {
+  showDialogError(error: string, errorOptional?: string) {
     if (Util.isDefined(error) && !Util.isObject(error)) {
-      await this.dialogService.alert('ERROR', error);
+      this.dialogService.alert('ERROR', error);
     } else {
-      await this.dialogService.alert('ERROR', errorOptional);
+      this.dialogService.alert('ERROR', errorOptional);
     }
   }
 
