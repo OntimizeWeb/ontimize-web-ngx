@@ -244,7 +244,7 @@ export class Util {
    * @param value the text to normalize
    */
   static normalizeString(value: string, toLowerCase: boolean = true): string {
-    if (value?.length) {
+    if (value && value.length) {
       let result = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       if (toLowerCase) {
         result = result.toLowerCase();
@@ -280,7 +280,7 @@ export class Util {
   static parseIconPosition(value: string, defaultValue?: string): string {
     let result = defaultValue || Codes.ICON_POSITION_LEFT;
     const availablePositions = [Codes.ICON_POSITION_LEFT, Codes.ICON_POSITION_RIGHT];
-    if (value?.length) {
+    if (value && value.length) {
       result = value.toLowerCase();
     }
     if (availablePositions.indexOf(result) === -1) {
@@ -507,7 +507,7 @@ export class Util {
   static isBase64(file: string) {
     const pattern = new RegExp(/^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$/g)
 
-    if (file.startsWith('data')) {
+    if (file.substring(0, 4) === 'data') {
       file = file.substring(file.indexOf('base64') + 7);
     }
     return pattern.test(file.replace(/\s+/g, ''));

@@ -335,7 +335,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   get diameterSpinner() {
     const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
     let height = 0;
-    if (this.spinnerContainer?.nativeElement) {
+    if (this.spinnerContainer && this.spinnerContainer.nativeElement) {
       height = this.spinnerContainer.nativeElement.offsetHeight;
     }
     if (height > 0 && height <= 100) {
@@ -791,7 +791,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected createExpandableColumn() {
     this._oTableOptions.expandableColumn = new OColumn();
-    this._oTableOptions.expandableColumn.visible = this.tableRowExpandable?.expandableColumnVisible;
+    this._oTableOptions.expandableColumn.visible = this.tableRowExpandable && this.tableRowExpandable.expandableColumnVisible;
     this.updateStateExpandedColumn();
   }
 
@@ -957,7 +957,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   parseSearcheableColumns() {
     this.searcheableColumns = this.visibleColArray.filter(col => {
       const oCol = this.getOColumn(col);
-      return oCol?.searchable;
+      return oCol && oCol.searchable;
     })
 
   }
@@ -1047,7 +1047,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Store all columns and properties in var columnsArray
    * @param column
    */
-  registerColumn(column: any) {
+  registerColumn(column: OTableColumnComponent | OTableColumnCalculatedComponent | any) {
     const columnAttr = (typeof column === 'string') ? column : column.attr;
     const columnPermissions: OPermissions = this.getOColumnPermissions(columnAttr);
     if (!columnPermissions.visible) {
@@ -1332,7 +1332,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.tabGroupChangeSubscription = this.tabGroupContainer.selectedTabChange.subscribe((evt) => {
       let interval;
       const timerCallback = (tab: MatTab) => {
-        if (tab?.content.isAttached) {
+        if (tab && tab.content.isAttached) {
           clearInterval(interval);
           if (tab === this.tabContainer) {
             this.insideTabBugWorkaround();
@@ -1895,7 +1895,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     const overlayContainer = document.body.getElementsByClassName('cdk-overlay-container')[0];
-    if (overlayContainer?.contains(event.target)) {
+    if (overlayContainer && overlayContainer.contains(event.target)) {
       return;
     }
 
@@ -2235,7 +2235,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   clearFilters(triggerDatasourceUpdate: boolean = true): void {
 
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate);
-    if (this.oTableMenu?.columnFilterOption) {
+    if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.isColumnFiltersActive);
     }
     this.onFilterByColumnChange.emit();
@@ -2373,11 +2373,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   get disableTableMenuButton(): boolean {
-    return !!(this.permissions?.menu && this.permissions.menu?.enabled === false);
+    return !!(this.permissions && this.permissions.menu && this.permissions.menu.enabled === false);
   }
 
   get showTableMenuButton(): boolean {
-    const permissionHidden = !!(this.permissions?.menu && this.permissions.menu?.visible === false);
+    const permissionHidden = !!(this.permissions && this.permissions.menu && this.permissions.menu.visible === false);
     if (permissionHidden) {
       return false;
     }
@@ -2780,10 +2780,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   get headerHeight() {
     let height = 0;
-    if (this.tableHeaderEl?.nativeElement) {
+    if (this.tableHeaderEl && this.tableHeaderEl.nativeElement) {
       height += this.tableHeaderEl.nativeElement.offsetHeight;
     }
-    if (this.tableToolbarEl?.nativeElement) {
+    if (this.tableToolbarEl && this.tableToolbarEl.nativeElement) {
       height += this.tableToolbarEl.nativeElement.offsetHeight;
     }
     return height;
@@ -3046,7 +3046,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!Util.isDefined(oCol)) {
       return row[attr];
     }
-    const useRenderer = oCol.renderer?.getCellData;
+    const useRenderer = oCol.renderer && oCol.renderer.getCellData;
     if (operation == null) {
       return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
     }
@@ -3141,7 +3141,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.reloadPaginatedDataFromStart(false);
       });
     } else {
-      if (value?.length) {
+      if (value && value.length) {
         this.dataSource.quickFilter = value;
       }
     }
