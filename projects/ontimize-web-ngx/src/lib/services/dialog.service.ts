@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { ODialogComponent } from '../shared/components/dialog/o-dialog.component';
 import { ODialogConfig } from '../shared/components/dialog/o-dialog.config';
-import { Util } from '../util/util';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +30,7 @@ export class DialogService {
       self.openDialog(observer);
       self.dialogRef.componentInstance.alert(title, message, config);
     });
-    return Util.observableToPromise(observable);
-
+    return observable.toPromise();
   }
 
   public info(title: string, message: string, config?: ODialogConfig): Promise<any> {
@@ -41,7 +39,7 @@ export class DialogService {
       self.openDialog(observer);
       self.dialogRef.componentInstance.info(title, message, config);
     });
-    return Util.observableToPromise(observable);
+    return observable.toPromise();
   }
 
   public warn(title: string, message: string, config?: ODialogConfig): Promise<any> {
@@ -50,7 +48,7 @@ export class DialogService {
       self.openDialog(observer);
       self.dialogRef.componentInstance.warn(title, message, config);
     });
-    return Util.observableToPromise(observable);
+    return observable.toPromise();
   }
 
   public error(title: string, message: string, config?: ODialogConfig): Promise<any> {
@@ -59,7 +57,7 @@ export class DialogService {
       self.openDialog(observer);
       self.dialogRef.componentInstance.error(title, message, config);
     });
-    return Util.observableToPromise(observable);
+    return observable.toPromise();
   }
 
   public confirm(title: string, message: string, config?: ODialogConfig): Promise<any> {
@@ -68,7 +66,7 @@ export class DialogService {
       self.openDialog(observer);
       self.dialogRef.componentInstance.confirm(title, message, config);
     });
-    return Util.observableToPromise(observable);
+    return observable.toPromise();
   }
 
   protected openDialog(observer) {

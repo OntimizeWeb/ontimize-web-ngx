@@ -434,14 +434,6 @@ export class Util {
     return of(value);
   }
 
-  static observableToPromise(observable: Observable<any>): Promise<any> {
-    const promise =  new Promise((resolve, reject) => {
-      observable.subscribe((response: any) => {
-        resolve(response);
-      }, reject);
-    });
-    return promise;
-  }
 
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
     let dataService = configureServiceArgs.baseService;
