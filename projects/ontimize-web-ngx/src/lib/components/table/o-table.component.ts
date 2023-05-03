@@ -835,12 +835,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     };
   }
 
-  protected async checkEnabledActionPermission(attr: string) {
+  protected checkEnabledActionPermission(attr: string) {
     const actionsPerm = this.permissions ? (this.permissions.actions || []) : [];
     const permissions: OPermissions = actionsPerm.find(p => p.attr === attr);
     const enabledPermision = PermissionsUtils.checkEnabledPermission(permissions);
     if (!enabledPermision) {
-      await this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_PERMISSION');
     }
     return enabledPermision;
   }
