@@ -221,12 +221,12 @@ export class OBaseTableCellEditor implements OnInit {
    * Ends edition with the ability to skip or save changes
    * @param saveChanges
    */
-  endEdition(saveChanges: boolean) {
+  async endEdition(saveChanges: boolean) {
     const oColumn: OColumn = this.table.getOColumn(this.tableColumnAttr);
     if (oColumn) {
       const updateObserver = this.table.updateCellData(oColumn, this._rowData, saveChanges);
       if (updateObserver) {
-        updateObserver.subscribe(res => {
+        (await updateObserver).subscribe(res => {
           this.onUpdateSuccess(res);
           this.table.daoTable.setDataArray(this.table.daoTable.data);
         }, error => {

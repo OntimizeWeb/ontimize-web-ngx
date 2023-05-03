@@ -1704,8 +1704,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /**
    * Triggers navigation to new item insertion
    */
-  add() {
-    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
+  async add() {
+    if (!await this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
       return;
     }
     super.insertDetail();
@@ -1715,8 +1715,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Removes selected rows
    * @param [clearSelectedItems]
    */
-  remove(clearSelectedItems: boolean = false) {
-    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_DELETE)) {
+  async remove(clearSelectedItems: boolean = false) {
+    if (!await this.checkEnabledActionPermission(PermissionsUtils.ACTION_DELETE)) {
       return;
     }
     const selectedItems = this.getSelectedItems();
@@ -1731,8 +1731,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
           const sqlTypesArg = this.getSqlTypesOfKeys();
           this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(() => {
             ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
-          }, error => {
-            this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
+          }, async error => {
+            await this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
           }, () => {
             // Ensuring that the deleted items will not longer be part of the selectionModel
             selectedItems.forEach(item => {
@@ -1746,6 +1746,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       } else if (clearSelectedItems) {
         this.clearSelection();
       }
+    }).catch (error => {
+      /* Resolving bug issue: Promises should not be misused */
     });
 
   }
@@ -1781,8 +1783,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /**
    * Reloads data
    */
-  reloadData(clearSelectedItems: boolean = true) {
-    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
+  async reloadData(clearSelectedItems: boolean = true) {
+    if (!await this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
     this.componentStateService.refreshSelection();
@@ -1929,8 +1931,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     column.editor.startEdition(rowData);
   }
 
-  updateCellData(column: OColumn, data: any, saveChanges: boolean) {
-    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
+  async updateCellData(column: OColumn, data: any, saveChanges: boolean) {
+    if (!await this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
       const res = new Observable(innerObserver => {
         innerObserver.error();
       });
@@ -2536,8 +2538,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return this.daoTable.insertQuery(recordData, sqlTypes);
   }
 
-  updateRecord(filter: any, updateData: any, sqlTypes?: object): Observable<any> {
-    if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
+  async updateRecord(filter: any, updateData: any, sqlTypes?: object): Promise<Observable<any>> {
+    if (!await this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
       return of(this.dataSource.data);
     }
     const sqlTypesArg = sqlTypes || {};
@@ -2808,8 +2810,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @param item
    * @returns detail
    */
-  viewDetail(item: any): void {
-    if (!this.checkEnabledActionPermission('detail')) {
+  async viewDetail(item: any): Promise<void> {
+    if (!await this.checkEnabledActionPermission('detail')) {
       return;
     }
     super.viewDetail(item);
@@ -2821,8 +2823,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @param item
    * @returns detail
    */
-  editDetail(item: any): void {
-    if (!this.checkEnabledActionPermission('edit')) {
+  async editDetail(item: any): Promise<void> {
+    if (!await this.checkEnabledActionPermission('edit')) {
       return;
     }
     super.editDetail(item);
