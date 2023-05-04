@@ -1,10 +1,10 @@
-## 8.12.0
+## 8.12.0 (2023-05-04)
 ### Features
 * Add JDBC UUID support ([98583d2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98583d2)) Closes [#1201](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1201)
 * **o-table**: new directive `o-table-column-select-all` ([1375a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1375a64)) Closes [#1209](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1209)
 
 ### Bug fixes
-* Added tittle to the header's column 'select-all' when select-all-checkbox-visible is active([98583d2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98583d2)) Closes [#1201](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1201)
+* **o-table**: Fixed error searching in quickfilter when pageable='no'([545db1f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/545db1f)) Closes [#1208](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1208)
 
 ## 8.11.3 (2023-04-11)
 ### Bug fixes
