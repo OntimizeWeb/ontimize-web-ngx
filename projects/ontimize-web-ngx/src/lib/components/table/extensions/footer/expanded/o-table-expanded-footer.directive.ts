@@ -17,6 +17,9 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private tdTableWithMessage: any;
   private subscription = new Subscription();
 
+  /**
+   * Show/Hide message when the query is launched/callbacked
+   */
   @Input('oTableExpandedFooter')
   set display(val: boolean) {
     this.showMessage(val);
@@ -59,20 +62,21 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     tr.appendChild(this.tdTableWithMessage);
     this.renderer.appendChild(this.tableBody, tr);
 
+    /* Show/Hide message When the renderer data is changed with static data*/
     this.subscription.add(this.table.onContentChange.pipe(
       distinctUntilChanged((prev, curr) => prev.length === curr.length),
       filter(() => !!this.table.staticData)
     ).subscribe(() => this.showMessage(true)));
+
+    /*  Show/Hide message when the quickfilter is changed */
     if (this.table.oTableQuickFilterComponent) {
-      this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe(filter(qfValue => !!qfValue)).subscribe(() => this.updateMessage()));
+      this.subscription.add(this.table.oTableQuickFilterComponent.onChange.pipe().subscribe(() => this.showMessage(true)));
     }
   }
 
   public showMessage(display: boolean): void {
     // reset span message
-    if (this.spanMessageNotResults) {
-      this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
-    }
+    this.removeMessageSpan();
 
     if (display && this.table && this.table.dataSource && this.table.dataSource.renderedData.length === 0) {
       // generate new message
@@ -80,13 +84,6 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     }
   }
 
-  public updateMessage(): void {
-    if (this.table && this.table.dataSource && this.table.dataSource.renderedData.length === 0) {
-      this.createMessageSpan();
-    } else {
-      this.removeMessageSpan();
-    }
-  }
 
   removeMessageSpan() {
     if (this.spanMessageNotResults) {
@@ -112,11 +109,9 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   protected createMessageSpan() {
-    // 1. Remove previous message
-    this.removeMessageSpan();
-    // 2 Build message
+    // 1 Build message
     const message = this.buildMessage();
-    // 3 Create message
+    // 2 Create message
     this.spanMessageNotResults = this.renderer.createElement('span');
     const messageNotResults = this.renderer.createText(message);
     if (this.tdTableWithMessage) {
