@@ -5,6 +5,7 @@
 
 ### Bug fixes
 * **o-table**: Fixed error searching in quickfilter when pageable='no'([545db1f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/545db1f)) Closes [#1208](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1208)
+* **o-form-layout-manager**: Fixed bug when navigating in mode='split' and mode='tab' ([dfd8f8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dfd8f8d))
 
 ## 8.11.3 (2023-04-11)
 ### Bug fixes
