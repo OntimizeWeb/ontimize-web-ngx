@@ -348,9 +348,12 @@ $o_table_row_padding: 24px;
           padding-right: 24px;
         }
 
+        &.mat-column-select.mat-header-select-all-with-title {
+          padding-right: 12px;
+        }
+
         &:first-of-type {
           padding-left: 0;
-          padding-right: 0;
         }
 
         &:not(.o-column-image) {
@@ -438,10 +441,18 @@ $o_table_row_padding: 24px;
       .mat-mdc-cell,
       .mat-mdc-header-cell {
         &.mat-column-select {
-          width: 18px;
+          &:not(.mat-header-select-all-with-title) {
+            width: 18px;
+          }
+
           box-sizing: content-box;
-          padding: 0 0 0 $o_table_row_padding;
           overflow: initial;
+
+          .mat-checkbox-layout {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: inline;
+          }
         }
 
         &.mat-column-expandable {
