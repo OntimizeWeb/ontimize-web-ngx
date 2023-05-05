@@ -15,6 +15,8 @@ import { OTableMenuComponent } from './table-menu/o-table-menu.component';
 import { OTableOptionComponent } from './table-option/o-table-option.component';
 import { OTableQuickfilterComponent } from './table-quickfilter/o-table-quickfilter.component';
 import { OTableHeaderComponent } from './table-header/o-table-header.component';
+import { OTableHeaderSelectAllComponent } from './table-header-select-all/o-table-header-select-all.component';
+import { OTableColumnSelectAllDirective } from './table-column-select-all/o-table-column-select-all.directive';
 
 export const O_TABLE_HEADER_COMPONENTS = [
   OTableButtonComponent,
@@ -29,5 +31,7 @@ export const O_TABLE_HEADER_COMPONENTS = [
   OTableHeaderColumnFilterIconComponent,
   OTableHeaderComponent,
   OTableColumnsGroupingComponent,
-  OTableColumnsGroupingColumnComponent
+  OTableColumnsGroupingColumnComponent,
+  OTableColumnSelectAllDirective,
+  OTableHeaderSelectAllComponent
 ];

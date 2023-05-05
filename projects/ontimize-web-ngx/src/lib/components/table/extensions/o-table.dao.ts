@@ -30,8 +30,8 @@ export class OTableDao {
     return this.dataService[this.methods.query].apply(this.dataService, queryArgs);
   }
 
-  removeQuery(filters: any): Observable<any> {
-    return merge(...filters.map((kv => this.dataService[this.methods.delete](kv, this.entity))));
+  removeQuery(filters: any, sqlTypes?: object): Observable<any> {
+    return merge(...filters.map((kv => this.dataService[this.methods.delete](kv, this.entity, sqlTypes))));
   }
 
   insertQuery(av: object, sqlTypes?: object): Observable<any> {

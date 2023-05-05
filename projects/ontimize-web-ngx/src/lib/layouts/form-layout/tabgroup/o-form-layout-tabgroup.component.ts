@@ -340,10 +340,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   initializeComponentState() {
-    if (this.formLayoutManager) {
-      this.formLayoutManager.setAsActiveFormLayoutManager();
-    }
-
     if (!Util.isDefined(this.state) || !Util.isDefined(this.state.tabsData)) {
       return;
     }
@@ -356,6 +352,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
       extras[Codes.QUERY_PARAMS][Codes.INSERTION_MODE] = `${this.state.tabsData[0].insertionMode}`
+      if (this.formLayoutManager) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
       // Triggering first tab navigation
       this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
         if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {

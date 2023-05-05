@@ -265,9 +265,10 @@ export class OFormServiceComponent extends OFormDataComponent {
       }
 
       const queryCols = this.getAttributesValuesToQuery();
+      const sqlTypes = this.form ? this.form.getAttributesSQLTypes() : {};
 
       this.loaderSubscription = this.load();
-      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity)
+      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity, sqlTypes)
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             this.cacheQueried = true;

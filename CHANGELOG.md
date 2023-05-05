@@ -1,3 +1,12 @@
+## 8.12.0 (2023-05-05)
+### Features
+* Add JDBC UUID support ([98583d2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98583d2)) Closes [#1201](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1201)
+* **o-table**: new directive `o-table-column-select-all` ([1375a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1375a64)) Closes [#1209](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1209)
+
+### Bug fixes
+* **o-table**: Fixed error searching in quickfilter when pageable='no'([545db1f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/545db1f)) Closes [#1208](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1208)
+* **o-form-layout-manager**: Fixed bug when navigating in mode='split' and mode='tab' ([dfd8f8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dfd8f8d))
+
 ## 8.11.3 (2023-04-11)
 ### Bug fixes
 * **o-form-toolbar**: Fixed custom buttons having the same style as generic form action buttons. ([108e1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/108e1fc)) Closes [#1196](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1196)

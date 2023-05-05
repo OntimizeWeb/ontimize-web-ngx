@@ -9,3 +9,5 @@ export * from './table-option/o-table-option.component';
 export * from './table-quickfilter/o-table-quickfilter.component';
 export * from './table-columns-filter/columns/o-table-columns-filter-column.component';
 export * from './table-header/o-table-header.component';
+export * from './table-column-select-all/o-table-column-select-all.directive';
+export * from './table-header-select-all/o-table-header-select-all.component';

@@ -104,6 +104,7 @@ import {
 } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
+import { OTableColumnSelectAllDirective } from './extensions/header/table-column-select-all/o-table-column-select-all.directive';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -628,6 +629,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild('o-table-quickfilter', { static: true })
   quickfilterContentChild: OTableQuickfilter;
 
+  @ContentChild(OTableColumnSelectAllDirective, { static: true })
+  tableColumnSelectAllContentChild: OTableColumnSelectAllDirective
+
   @ViewChild('exportOptsTemplate', { static: false })
   exportOptsTemplate: TemplateRef<any>;
 
@@ -681,7 +685,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     super(injector, elRef, form);
 
     this._oTableOptions = new DefaultOTableOptions();
-    this._oTableOptions.selectColumn = this.createOColumn();
 
     try {
       this.tabGroupContainer = this.injector.get(MatTabGroup);
@@ -726,7 +729,31 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
       this.createExpandableColumn();
     }
+  }
 
+  ngAfterContentInit() {
+    if (this.tableColumnSelectAllContentChild) {
+      //
+      this.setCustomDefinitionInSelectColumn(this.tableColumnSelectAllContentChild)
+    }
+  }
+
+  setCustomDefinitionInSelectColumn(definition: OTableColumnSelectAllDirective) {
+    if (definition.title) {
+      this._oTableOptions.selectColumn.title = definition.title;
+    }
+    if (definition.width) {
+      this._oTableOptions.selectColumn.width = definition.width;
+    }
+    if (definition.minWidth) {
+      this._oTableOptions.selectColumn.minWidth = definition.minWidth;
+    }
+    if (definition.maxWidth) {
+      this._oTableOptions.selectColumn.maxWidth = definition.maxWidth;
+    }
+    if (definition.resizable) {
+      this._oTableOptions.selectColumn.resizable = definition.resizable;
+    }
   }
 
   ngAfterViewChecked() {
@@ -1638,7 +1665,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    queryArguments[3] = this.getSqlTypesForFilter(queryArguments[1]);
+    Object.assign(queryArguments[3], this.getSqlTypesForFilter(queryArguments[1]));
     Object.assign(queryArguments[3], ovrrArgs ? ovrrArgs.sqltypes || {} : {});
     if (this.pageable) {
       queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
@@ -1648,17 +1675,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   getSqlTypesForFilter(filter): object {
-    const allSqlTypes = {};
-    this._oTableOptions.columns.forEach((col: OColumn) => {
-      if (col.sqlType) {
-        allSqlTypes[col.attr] = col.sqlType;
-      }
-    });
-    Object.assign(allSqlTypes, this.getSqlTypes());
-    const filterCols = Util.getValuesFromObject(filter);
+    const allSqlTypes = this.getSqlTypes();
     const sqlTypes = {};
     Object.keys(allSqlTypes).forEach(key => {
-      if (filterCols.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
+      if (filter.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
         sqlTypes[key] = allSqlTypes[key];
       }
     });
@@ -1700,30 +1720,34 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return;
     }
     const selectedItems = this.getSelectedItems();
-    if (selectedItems.length > 0) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
-        if (res === true) {
-          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            this.daoTable.removeQuery(filters).subscribe(() => {
-              ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
-            }, error => {
-              this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
-            }, () => {
-              // Ensuring that the deleted items will not longer be part of the selectionModel
-              selectedItems.forEach(item => {
-                this.selection.deselect(item);
-              });
-              this.reloadData();
-            });
-          } else {
-            this.deleteLocalItems();
-          }
-        } else if (clearSelectedItems) {
-          this.clearSelection();
-        }
-      });
+    if (selectedItems.length === 0) {
+      return;
     }
+
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+      if (res === true) {
+        if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+          const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
+          const sqlTypesArg = this.getSqlTypesOfKeys();
+          this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(() => {
+            ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
+          }, error => {
+            this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
+          }, () => {
+            // Ensuring that the deleted items will not longer be part of the selectionModel
+            selectedItems.forEach(item => {
+              this.selection.deselect(item);
+            });
+            this.reloadData();
+          });
+        } else {
+          this.deleteLocalItems();
+        }
+      } else if (clearSelectedItems) {
+        this.clearSelection();
+      }
+    });
+
   }
 
   /**
@@ -1982,14 +2006,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public isAllSelected(): boolean {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.getNumRowSelectedInCurrentData();
+    const numSelected = this.getNumRowSelectedInCurrentData();
+    const numRows = this.dataSource ? this.dataSource.renderedData.length : 0;
     return numSelected > 0 && numSelected === numRows;
   }
 
   public isIndeterminate(): boolean {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.getNumRowSelectedInCurrentData();
+    const numSelected = this.getNumRowSelectedInCurrentData();
+    const numRows = this.dataSource ? this.dataSource.renderedData.length : 0;
     return numSelected > 0 && numRows > 0 && numSelected !== numRows;
   }
 
@@ -2135,11 +2159,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
 
   /**
-   * Gets sql types from data source
+   * Gets sql types from data source and table columns
    * @returns
    */
   getSqlTypes() {
-    return Util.isDefined(this.dataSource.sqlTypes) ? this.dataSource.sqlTypes : {};
+    const allSqlTypes = Util.isDefined(this.dataSource.sqlTypes) ? this.dataSource.sqlTypes : {};
+    this._oTableOptions.columns.forEach((col: OColumn) => {
+      if (col.sqlType) {
+        allSqlTypes[col.attr] = col.sqlType;
+      }
+    });
+    return allSqlTypes;
   }
 
   setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent) {
