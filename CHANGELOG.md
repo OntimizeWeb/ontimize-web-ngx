@@ -1,4 +1,4 @@
-## 8.12.0 (2023-05-04)
+## 8.12.0 (2023-05-05)
 ### Features
 * Add JDBC UUID support ([98583d2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98583d2)) Closes [#1201](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1201)
 * **o-table**: new directive `o-table-column-select-all` ([1375a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1375a64)) Closes [#1209](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1209)
