@@ -150,10 +150,6 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
   }
 
   initializeComponentState() {
-    if (this.formLayoutManager) {
-      this.formLayoutManager.setAsActiveFormLayoutManager();
-    }
-
     if (!Util.isDefined(this.state) || !Util.isDefined(this.state.url)) {
       return;
     }
@@ -161,6 +157,10 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     this.showLoading.next(true);
     const extras = {};
     extras[Codes.QUERY_PARAMS] = this.state.queryParams;
+
+    if (this.formLayoutManager) {
+      this.formLayoutManager.setAsActiveFormLayoutManager();
+    }
 
     this.router.navigate([this.state.url], extras).then(() => {
       this.showLoading.next(false);
