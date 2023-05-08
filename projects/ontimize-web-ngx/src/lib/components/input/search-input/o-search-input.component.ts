@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { FloatLabelType } from '@angular/material/core';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS } from '../../../config/app-config';
