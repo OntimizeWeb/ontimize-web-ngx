@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "target": "es2015",
+    "declarationMap": true,
     "module": "esnext",
     "moduleResolution": "node",
     "removeComments": true,
