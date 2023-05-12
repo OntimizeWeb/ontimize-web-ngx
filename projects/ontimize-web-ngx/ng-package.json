@@ -13,7 +13,7 @@
       "google-libphonenumber": "google-libphonenumber"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "@ngx-translate/core",
     "@ngx-translate/http-loader",
     "angular-resizable-element",

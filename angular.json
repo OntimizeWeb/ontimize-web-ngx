@@ -15,7 +15,7 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ontimize-web-ngx/tsconfig.lib.json",
             "project": "projects/ontimize-web-ngx/ng-package.json"
