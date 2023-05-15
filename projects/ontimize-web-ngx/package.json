@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "11.0.0",
+  "version": "12.0.0",
   "description": "Ontimize Web framework using Angular 8",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -42,7 +42,8 @@
     "@angular/flex-layout": "^11.0.0-beta.33",
     "@angular/forms": "~11.2.14",
     "@angular/material": "~11.2.13",
-    "@angular/material-moment-adapter": "~11.2.13","@angular/platform-browser": "~11.2.14",
+    "@angular/material-moment-adapter": "~11.2.13",
+    "@angular/platform-browser": "~11.2.14",
     "@angular/platform-browser-dynamic": "~11.2.14",
     "@angular/router": "~11.2.14",
     "rxjs": "~6.6.7",
