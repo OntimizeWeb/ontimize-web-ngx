@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin o-breadcrumb-theme($theme) {
   $primary: map-get($theme, primary);
@@ -7,14 +8,14 @@
   $foreground: map-get($theme, foreground);
 
   .toolbar-breadcrumb {
-    background-color: mat-color($background, app-bar);
+    background-color: mat.get-color-from-palette($background, app-bar);
 
     a {
-      color: mat-color($primary);
+      color: mat.get-color-from-palette($primary);
     }
 
     mat-icon {
-      color: mat-color($accent);
+      color: mat.get-color-from-palette($accent);
     }
   }
 

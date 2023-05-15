@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin o-grid-theme($theme) {
   $primary: map-get($theme, primary);
@@ -14,7 +15,7 @@
 
     .o-grid-container {
       .o-loading-blocker .o-spinner-container {
-        background-color: mat-color($background, background);
+        background-color: mat.get-color-from-palette($background, background);
       }
     }
   }

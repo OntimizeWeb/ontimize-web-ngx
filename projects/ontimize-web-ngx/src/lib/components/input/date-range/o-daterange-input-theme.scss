@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin o-daterange-input-theme($theme) {
   $primary: map-get($theme, primary);
@@ -23,15 +24,15 @@
 */
   .md-drppicker {
 
-    background-color: mat-color($background, background);
+    background-color: mat.get-color-from-palette($background, background);
 
     &:after,
     &:before {
-      border-bottom-color: mat-color($foreground, divider);
+      border-bottom-color: mat.get-color-from-palette($foreground, divider);
     }
 
     .calendar-table {
-      border-color: mat-color($foreground, divider);
+      border-color: mat.get-color-from-palette($foreground, divider);
     }
 
      th {
@@ -42,11 +43,11 @@
     th {
       text-align: center;
 
-      border-color: mat-color($foreground, divider);
+      border-color: mat.get-color-from-palette($foreground, divider);
 
       &.available {
         &:hover {
-          background: mat-color($background, hover, 0.12);
+          background: mat.get-color-from-palette($background, hover, 0.12);
           //color: mat-color($foreground, text);
         }
       }
@@ -63,7 +64,7 @@
         &.end-date,
         &.in-range,
         &.start-date {
-          background-color: mat-color($background,background);
+          background-color: mat.get-color-from-palette($background,background);
           border-color: transparent;
           color: $color-inactive;
         }
@@ -72,17 +73,17 @@
       //
       // Date Range
       &.in-range {
-        background-color: mat-color($primary,A200);
+        background-color: mat.get-color-from-palette($primary,A200);
         border-color: transparent;
       }
 
       &.active {
-        background-color: mat-color($primary);
-        color: mat-color($primary, default-contrast);
+        background-color: mat.get-color-from-palette($primary);
+        color: mat.get-color-from-palette($primary, default-contrast);
 
         &,
         &:hover {
-          background-color: mat-color($primary);
+          background-color: mat.get-color-from-palette($primary);
 
         }
       }
@@ -158,13 +159,13 @@
         li {
           button {
             &.active {
-              background: mat-color($background, hover, 0.12);
+              background: mat.get-color-from-palette($background, hover, 0.12);
             }
           }
         }
 
         li:hover {
-          background: mat-color($background, hover, 0.12);
+          background: mat.get-color-from-palette($background, hover, 0.12);
 
         }
       }

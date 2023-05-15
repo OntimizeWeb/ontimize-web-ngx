@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @import './app-global-theme.scss';
 @import './layout-margin-padding.scss';
@@ -26,8 +27,8 @@
 
 // Create a theme.
 @mixin o-material-theme($theme, $typography: null) {
-  @include mat-core($typography);
-  @include angular-material-theme($theme);
+  @include mat.core($typography);
+  @include mat.all-component-themes($theme);
   @include app-global-theme($theme, $typography);
   @include o-breadcrumb-theme($theme);
   @include o-container-theme($theme, $typography);

@@ -1,9 +1,10 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin o-container-theme($theme, $typography: null) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   @if $typography == null {
-    $typography: mat-typography-config();
+    $typography: mat.define-typography-config();
   }
 
   .o-column,
@@ -18,12 +19,12 @@
        > .o-container-header,
        > .o-container-title,
       > .mat-expansion-panel-header {
-        border-color: mat-color($foreground, divider);
-        color: mat-color($foreground, text);
+        border-color: mat.get-color-from-palette($foreground, divider);
+        color: mat.get-color-from-palette($foreground, text);
 
         .mat-tab-label,
         .mat-tab-link {
-          color: mat-color($foreground, text);
+          color: mat.get-color-from-palette($foreground, text);
         }
 
       }
@@ -32,8 +33,8 @@
       > .mat-expansion-panel-header .o-container-title {
         span {
           font: {
-            size: mat-font-size($typography, input);
-            weight: mat-font-weight($typography, input);
+            size: mat.font-size($typography, input);
+            weight: mat.font-weight($typography, input);
           }
         }
       }
@@ -55,7 +56,7 @@
   .o-row.o-appearance-outline {
     > .o-container {
       .o-container-title {
-        color: mat-color($foreground, text);
+        color: mat.get-color-from-palette($foreground, text);
       }
     }
 
@@ -68,7 +69,7 @@
       .o-container-outline-gap-icon,
       .o-container-outline-gap-title,
       .o-container-outline-start {
-        border-color: mat-color($foreground, divider);
+        border-color: mat.get-color-from-palette($foreground, divider);
       }
     }
   }

@@ -1,9 +1,10 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin o-image-theme($theme) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $warn: map-get($theme, warn);
-  $borderColor: mat-color($foreground, secondary-text);
+  $borderColor: mat.get-color-from-palette($foreground, secondary-text);
 
   .o-image {
     .o-image-content {
@@ -14,18 +15,18 @@
 
         &.o-image-drag-and-drop.o-file-dragging {
           background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='"+$borderColor+"' stroke-width='2' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
-          background-color: mat-color($background);
+          background-color: mat.get-color-from-palette($background);
         }
 
         &.o-image-drag-and-drop-required:not(.o-file-dragging) {
-          border-color: mat-color($warn);
+          border-color: mat.get-color-from-palette($warn);
         }
 
         .o-image-button-remove {
-          background-color: mat-color($background, background);
+          background-color: mat.get-color-from-palette($background, background);
 
           &:hover {
-            background-color: mat-color($foreground, disabled-button);
+            background-color: mat.get-color-from-palette($foreground, disabled-button);
           }
         }
       }

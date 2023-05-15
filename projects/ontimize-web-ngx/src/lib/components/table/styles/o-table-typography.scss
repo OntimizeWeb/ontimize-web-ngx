@@ -1,20 +1,21 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @function o-table-typography-config(
   /* Small */
-  $small-header-height:     mat-typography-level(32px, 32px, 400),
-  $small-row-height:        mat-typography-level(28px, 28px, 400),
-  $small-header-font-size:  mat-typography-level(16px, 16px, 400),
-  $small-row-font-size:     mat-typography-level(12px, 12px, 400),
+  $small-header-height:     mat.define-typography-level(32px, 32px, 400),
+  $small-row-height:        mat.define-typography-level(28px, 28px, 400),
+  $small-header-font-size:  mat.define-typography-level(16px, 16px, 400),
+  $small-row-font-size:     mat.define-typography-level(12px, 12px, 400),
   /* Medium */
-  $medium-header-height:    mat-typography-level(40px, 40px, 400),
-  $medium-row-height:       mat-typography-level(36px, 36px, 400),
-  $medium-header-font-size: mat-typography-level(20px, 20px, 400),
-  $medium-row-font-size:    mat-typography-level(14px, 14px, 400),
+  $medium-header-height:    mat.define-typography-level(40px, 40px, 400),
+  $medium-row-height:       mat.define-typography-level(36px, 36px, 400),
+  $medium-header-font-size: mat.define-typography-level(20px, 20px, 400),
+  $medium-row-font-size:    mat.define-typography-level(14px, 14px, 400),
   /* Large */
-  $large-header-height:     mat-typography-level(52px, 40px, 400),
-  $large-row-height:        mat-typography-level(48px, 36px, 400),
-  $large-header-font-size:  mat-typography-level(24px, 24px, 400),
-  $large-row-font-size:     mat-typography-level(14px, 14px, 400)
+  $large-header-height:     mat.define-typography-level(52px, 40px, 400),
+  $large-row-height:        mat.define-typography-level(48px, 36px, 400),
+  $large-header-font-size:  mat.define-typography-level(24px, 24px, 400),
+  $large-row-font-size:     mat.define-typography-level(14px, 14px, 400)
 ) {
 
   // Declare an initial map with all of the levels.
@@ -38,10 +39,10 @@
 }
 @mixin o-table-size-typography($typography, $size) {
 
-  $header-height: mat-font-size($typography, #{$size}-header-height);
-  $row-height: mat-font-size($typography, #{$size}-row-height);
-  $header-font-size: mat-font-size($typography, #{$size}-header-font-size);
-  $row-font-size: mat-font-size($typography, #{$size}-row-font-size);
+  $header-height: mat.font-size($typography, #{$size}-header-height);
+  $row-height: mat.font-size($typography, #{$size}-row-height);
+  $header-font-size: mat.font-size($typography, #{$size}-header-font-size);
+  $row-font-size: mat.font-size($typography, #{$size}-row-font-size);
 
   .o-table .o-table-container {
     .mat-table.#{$size} {

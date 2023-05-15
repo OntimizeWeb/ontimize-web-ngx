@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin o-dual-list-selector-theme($theme) {
   $foreground: map-get($theme, foreground);
@@ -8,19 +9,19 @@
   .o-dual-list-selector {
     .o-dual-list-selector-list {
       .mat-selection-list.mat-list-base {
-        border: 1px solid mat-color($foreground, divider);
+        border: 1px solid mat.get-color-from-palette($foreground, divider);
 
         .mat-list-item {
           &:not(.mat-list-option) {
-            border-bottom: 1px solid mat-color($foreground, divider);
+            border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
           }
 
           &.mat-list-option {
-            background: mat-color($background, 'hover');
+            background: mat.get-color-from-palette($background, 'hover');
 
             &[aria-selected="true"] {
-              background-color: mat-color($primary, 100);
-              color: if($is-dark-theme,#121212, mat-color($foreground,text));
+              background-color: mat.get-color-from-palette($primary, 100);
+              color: if($is-dark-theme,#121212, mat.get-color-from-palette($foreground,text));
             }
           }
         }
@@ -35,8 +36,8 @@
         box-shadow: none;
 
         &.mat-accent:not([disabled]) {
-          background-color: mat-color($foreground, divider);
-          color: mat-color($foreground, text);
+          background-color: mat.get-color-from-palette($foreground, divider);
+          color: mat.get-color-from-palette($foreground, text);
         }
       }
     }

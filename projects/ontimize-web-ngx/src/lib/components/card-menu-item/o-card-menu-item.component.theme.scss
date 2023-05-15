@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin o-card-menu-item-theme($theme,$typography) {
   $primary: map-get($theme, primary);
@@ -8,26 +9,26 @@
 
   .o-card-menu-item {
 
-    background: mat-color($background, 'card');
-    border: 1px solid mat-color($primary, 0.17);
+    background: mat.get-color-from-palette($background, 'card');
+    border: 1px solid mat.get-color-from-palette($primary, 0.17);
 
     .o-card-menu-item-main {
-      background-color: mat-color($background, background, 0.29);
+      background-color: mat.get-color-from-palette($background, background, 0.29);
     }
 
     .o-card-menu-item-title {
-      color: mat-color($primary);
-      font-size: mat-font-size($typography, title);
+      color: mat.get-color-from-palette($primary);
+      font-size: mat.font-size($typography, title);
     }
 
     .mat-button {
-      color: mat-color($primary);
-      background: mat-color($accent,100);
+      color: mat.get-color-from-palette($primary);
+      background: mat.get-color-from-palette($accent,100);
     }
 
     .o-card-menu-item-icon,
     .o-card-menu-item-info {
-      color: mat-color($primary, 0.54);
+      color: mat.get-color-from-palette($primary, 0.54);
     }
 
   }

@@ -1,15 +1,16 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @mixin app-global-theme($theme, $typography: null) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
   @if $typography == null {
-    $typography: mat-typography-config();
+    $typography: mat.define-typography-config();
   }
 
   body,
   html {
-    background-color: mat-color($background, background);
+    background-color: mat.get-color-from-palette($background, background);
   }
 
   button,
@@ -18,7 +19,7 @@
   select,
   span,
   textarea {
-    font-family: mat-font-family($typography);
+    font-family: mat.font-family($typography);
   }
 
   ::-webkit-scrollbar {
@@ -37,7 +38,7 @@
   ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
-    background-color: mat-color($primary, 200);
+    background-color: mat.get-color-from-palette($primary, 200);
     opacity: 1.0;
   }
 
@@ -60,7 +61,7 @@
       border-radius: 50%;
       left: 50%;
       animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: mat-color($primary) transparent transparent transparent;
+      border-color: mat.get-color-from-palette($primary) transparent transparent transparent;
     }
 
     div:nth-child(1) {
@@ -93,21 +94,21 @@
   .o-list-picker-dialog {
     .mat-dialog-container {
       .mat-dialog-title {
-        border-bottom: 1px solid mat-color($primary);
-        line-height: mat-font-size($typography, subheading-2);
-        font-size: mat-font-size($typography, subheading-2);
+        border-bottom: 1px solid mat.get-color-from-palette($primary);
+        line-height: mat.font-size($typography, subheading-2);
+        font-size: mat.font-size($typography, subheading-2);
 
         .mat-icon {
-          color: mat-color($primary);
+          color: mat.get-color-from-palette($primary);
         }
       }
 
       .empty-filter-list {
-        color: mat-color($foreground, disabled-text);
+        color: mat.get-color-from-palette($foreground, disabled-text);
       }
 
       .mat-dialog-content {
-        font-size: mat-font-size($typography, body-1);
+        font-size: mat.font-size($typography, body-1);
 
         .mat-selection-list[dense] {
           outline: none;
@@ -115,11 +116,11 @@
           .mat-list-item {
             .empty-filter-list,
             .mat-list-item-content > * {
-              font-size: mat-font-size($typography, body-1);
+              font-size: mat.font-size($typography, body-1);
             }
 
             .mat-line:nth-child(n+2) {
-              font-size: mat-font-size($typography, caption);
+              font-size: mat.font-size($typography, caption);
             }
 
           }
@@ -135,12 +136,12 @@
     display: block;
 
     .mat-list-item-content {
-      font-size: mat-font-size($typography, body-1);
-      color: mat-color($foreground, text);
+      font-size: mat.font-size($typography, body-1);
+      color: mat.get-color-from-palette($foreground, text);
       padding: 6px;
       flex-direction: row;
       align-items: center;
-      background-color: mat-color($background, background);
+      background-color: mat.get-color-from-palette($background, background);
       display: flex;
       box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
       box-sizing: border-box;
@@ -163,7 +164,7 @@
 
   .mat-checkbox {
     .mat-checkbox-label {
-      color: mat-color($foreground, text);
+      color: mat.get-color-from-palette($foreground, text);
     }
   }
 
@@ -208,15 +209,15 @@
     &.mat-button-base.o-button-primary,
     &.mat-button-base[ng-reflect-dialog-result="0"],
     &.mat-button-base[ng-reflect-dialog-result="true"] {
-      color: mat-color($primary, 800);
-      background-color: mat-color($primary, 100);
+      color: mat.get-color-from-palette($primary, 800);
+      background-color: mat.get-color-from-palette($primary, 100);
       border-color: transparent;
 
       &:hover,
       .mat-button-focus-overlay {
-        color: mat-color($primary);
+        color: mat.get-color-from-palette($primary);
         background-color: #ffffff;
-        border-color: mat-color($foreground, divider);
+        border-color: mat.get-color-from-palette($foreground, divider);
       }
 
     }
@@ -226,13 +227,13 @@
     &.mat-button-base.o-button-default,
     &.mat-button-base[ng-reflect-dialog-result="1"],
     &.mat-button-base[ng-reflect-dialog-result="false"] {
-      color: mat-color($primary);
+      color: mat.get-color-from-palette($primary);
       background-color: #ffffff;
 
       &:hover,
       .mat-button-focus-overlay {
-        color: mat-color($primary,800);
-        background-color: mat-color($primary,100);
+        color: mat.get-color-from-palette($primary,800);
+        background-color: mat.get-color-from-palette($primary,100);
         border-color: transparent;
       }
     }
@@ -252,27 +253,27 @@
   .o-button button.mat-stroked-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: mat-color($primary, 800);
-        background-color: mat-color($primary, 100);
+        color: mat.get-color-from-palette($primary, 800);
+        background-color: mat.get-color-from-palette($primary, 100);
         border-color: transparent;
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($primary);
+          color: mat.get-color-from-palette($primary);
           background-color: #ffffff;
-          border-color: mat-color($foreground, divider);
+          border-color: mat.get-color-from-palette($foreground, divider);
         }
 
       }
 
       &.mat-accent {
-        color: mat-color($accent);
+        color: mat.get-color-from-palette($accent);
         background-color: #ffffff;
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat-color($primary,800);
-          background-color: mat-color($primary,100);
+          color: mat.get-color-from-palette($primary,800);
+          background-color: mat.get-color-from-palette($primary,100);
           border-color: transparent;
         }
       }
@@ -315,7 +316,7 @@
 
     button {
       &:hover {
-        background-color: mat-color($primary,100);
+        background-color: mat.get-color-from-palette($primary,100);
         border-radius: 50%;
       }
 
@@ -341,17 +342,17 @@
   /* CHART FONT */
   o-chart .nvd3 {
     text {
-      font: mat-font-weight($typography, caption) mat-font-size($typography, caption) mat-font-family($typography);
-      fill: mat-color($foreground,text);
+      font: mat.font-weight($typography, caption) mat.font-size($typography, caption) mat.font-family($typography);
+      fill: mat.get-color-from-palette($foreground,text);
     }
 
     .nv-discretebar .nv-groups text,
     .nv-multibarHorizontal .nv-groups text {
-      fill: mat-color($foreground,text);
+      fill: mat.get-color-from-palette($foreground,text);
     }
 
     .nv-axis path {
-      stroke: mat-color($foreground,text);
+      stroke: mat.get-color-from-palette($foreground,text);
     }
   }
 }
