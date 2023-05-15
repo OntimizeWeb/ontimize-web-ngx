@@ -8,11 +8,6 @@
       "root": "projects/ontimize-web-ngx",
       "sourceRoot": "projects/ontimize-web-ngx/src",
       "prefix": "lib",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -45,9 +40,6 @@
               "**/node_modules/**"
             ]
           }
-        },
-        "configurations": {
-          "extractCss": true
         }
       }
     }
