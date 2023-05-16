@@ -51,8 +51,8 @@
     "google-libphonenumber": "^3.2.3"
   },
   "dependencies": {
-    "@ngx-translate/core": "~12.1.2",
-    "@ngx-translate/http-loader": "~5.0.0",
+    "@ngx-translate/core": "~13.0.0",
+    "@ngx-translate/http-loader": "~6.0.0",
     "angular-resizable-element": "3.3.4",
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
