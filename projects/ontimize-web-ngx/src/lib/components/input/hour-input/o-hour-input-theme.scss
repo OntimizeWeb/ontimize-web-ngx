@@ -1,4 +1,3 @@
-@use '~@angular/material' as mat;
 @mixin o-hour-input-theme($theme) {
   $primary: map-get($theme, primary);
 

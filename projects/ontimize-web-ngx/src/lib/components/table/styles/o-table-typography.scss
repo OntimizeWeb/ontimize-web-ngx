@@ -1,5 +1,3 @@
-@use '~@angular/material' as mat;
-@import '~@angular/material/theming';
 @function o-table-typography-config(
   /* Small */
   $small-header-height:     mat.define-typography-level(32px, 32px, 400),

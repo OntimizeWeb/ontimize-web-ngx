@@ -1,4 +1,3 @@
-@use '~@angular/material' as mat;
 @mixin o-app-header-theme($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);

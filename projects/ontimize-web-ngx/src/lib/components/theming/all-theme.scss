@@ -1,5 +1,5 @@
 @use '~@angular/material' as mat;
-@import '~@angular/material/theming';
+
 @import './app-global-theme.scss';
 @import './layout-margin-padding.scss';
 @import '../breadcrumb/o-breadcrumb-theme.scss';
@@ -52,5 +52,5 @@
   @include o-layout-padding-margin();
   @include o-daterange-input-theme($theme);
   @include o-dual-list-selector-theme($theme);
-  @include o-image-theme($theme);
+ @include o-image-theme($theme);
 }
