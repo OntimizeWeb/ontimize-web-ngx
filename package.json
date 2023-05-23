@@ -4,13 +4,21 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run build-styles && npm run copy-files",
-    "build-styles": "scss-bundle -c scss-bundle-ontimize.config.json && scss-bundle -c scss-bundle-theme.config.json",
+    "build": "ng build && npm run build-theme && npm run build-styles && npm run copy-files",
+    "build-theme": "bundle-scss --config",
+    "build-styles": "scss-bundle -c scss-bundle-ontimize.config.json",
     "copy-files": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/assets && echo '----¡Assets copied!----'  ",
     "test": "ng test --code-coverage",
     "test-ci": "ng test --no-watch --code-coverage --browsers ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e"
+  },
+  "bundleStyle": {
+    "dest": "./dist/theme.scss",
+    "mask": "./projects/ontimize-web-ngx/**/*theme.scss",
+    "sort": [
+      "o-material"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -43,20 +51,21 @@
     "@angular/compiler-cli": "~12.2.17",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
-    "copyfiles": "~2.2.0",
+    "bundle-scss": "^1.5.1",
     "codelyzer": "^6.0.0",
+    "copyfiles": "~2.2.0",
+    "google-libphonenumber": "^3.2.3",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
-    "google-libphonenumber": "^3.2.3",
     "karma": "~6.4.2",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.5.0",
-    "scss-bundle": "3.1.1",
-    "sonarqube-scanner": "^2.8.1",
     "ng-packagr": "^12.2.7",
     "protractor": "~7.0.0",
+    "scss-bundle": "3.1.1",
+    "sonarqube-scanner": "^2.8.1",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~4.3.5"
