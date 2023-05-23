@@ -1,7 +1,7 @@
 @mixin o-image-theme($theme) {
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
-  $warn: map-get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $warn: map.get($theme, warn);
   $borderColor: mat.get-color-from-palette($foreground, secondary-text);
 
   .o-image {

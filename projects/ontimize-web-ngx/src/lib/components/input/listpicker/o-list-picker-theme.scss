@@ -1,4 +1,6 @@
 @mixin o-list-picker-theme($theme) {
+  $primary: map.get($theme, primary);
+
   .o-list-picker-dialog mat-toolbar .o-list-picker-search {
     font-size: 16px;
 

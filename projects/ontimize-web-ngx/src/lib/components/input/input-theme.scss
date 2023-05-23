@@ -7,12 +7,12 @@
   }
 }
 @mixin input-theme($theme) {
-  $is-dark-theme: map-get($theme, is-dark);
-  $foreground: map-get($theme, foreground);
-  $warn: map-get($theme, warn);
+  $is-dark-theme: map.get($theme, is-dark);
+  $foreground: map.get($theme, foreground);
+  $warn: map.get($theme, warn);
   $underline-color: mat.get-color-from-palette($foreground, divider, if($is-dark-theme, 0.7, 0.42));
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
 
   /* outline appearance */
   $border-radius: 2px;

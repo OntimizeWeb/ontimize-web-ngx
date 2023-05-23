@@ -1,8 +1,8 @@
 @mixin app-global-theme($theme, $typography: null) {
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, primary);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, primary);
 
   @if $typography==null {
     $typography: mat.define-typography-config();

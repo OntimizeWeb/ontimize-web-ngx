@@ -1,7 +1,7 @@
 @mixin o-app-header-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $foreground: map-get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $foreground: map.get($theme, foreground);
 
   .o-app-header {
     nav {

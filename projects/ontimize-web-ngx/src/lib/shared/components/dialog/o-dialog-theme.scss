@@ -1,6 +1,6 @@
 @mixin o-dialog-theme($theme) {
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
   $info: mat.define-palette(mat.$light-blue-palette);
   $warn: mat.define-palette(mat.$amber-palette);
   $error: mat.define-palette(mat.$red-palette);

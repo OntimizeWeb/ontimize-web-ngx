@@ -1,5 +1,5 @@
 @mixin o-hour-input-theme($theme) {
-  $primary: map-get($theme, primary);
+  $primary: map.get($theme, primary);
 
   ngx-material-timepicker-container ngx-material-timepicker-content {
     .timepicker__header {

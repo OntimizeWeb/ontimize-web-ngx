@@ -1,5 +1,5 @@
 @mixin o-form-layout-split-pane-theme($theme) {
-  $background: map-get($theme, background);
+  $background: map.get($theme, background);
 
   .o-form-layout-split-pane {
     .spinner-container,

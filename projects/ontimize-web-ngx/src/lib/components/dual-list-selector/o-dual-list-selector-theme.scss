@@ -1,8 +1,8 @@
 @mixin o-dual-list-selector-theme($theme) {
-  $foreground: map-get($theme, foreground);
-  $primary: map-get($theme, primary);
-  $background: map-get($theme, background);
-  $is-dark-theme: map-get($theme, is-dark);
+  $foreground: map.get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $background: map.get($theme, background);
+  $is-dark-theme: map.get($theme, is-dark);
 
   .o-dual-list-selector {
     .o-dual-list-selector-list {

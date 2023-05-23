@@ -1,13 +1,13 @@
 @mixin o-table-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
   $table-background: mat.get-color-from-palette($background, 'card');
   $text-color: mat.get-color-from-palette($foreground, secondary-text);
   $text-opacity: opacity($text-color);
-  $is-dark-theme: map-get($theme, is-dark);
+  $is-dark-theme: map.get($theme, is-dark);
 
   .o-table {
     .o-table-column-resizer span {

@@ -1,6 +1,5 @@
-
 @mixin o-list-theme($theme) {
-  $foreground: map-get($theme, foreground);
+  $foreground: map.get($theme, foreground);
 
   .o-list-container {
 
