@@ -1,4 +1,4 @@
-## 8.12.1
+## 8.12.1 (2023-05-25)
 ### Bug fixes
 * **o-phone-input**: Fixing error on countries input parsing ([fb5f353](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb5f353)) Closes [#1224](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1224)
 
