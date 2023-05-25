@@ -105,10 +105,11 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
     injector: Injector
   ) {
     super(form, elRef, injector);
-    this.initializeCountryData();
+    this.fetchCountryData();
   }
 
   initialize(): void {
+    this.initializeCountryData();
     super.initialize();
     const formControl = this.getFormControl() as OFormControl;
     if (formControl) {
@@ -217,8 +218,6 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
   }
 
   protected initializeCountryData() {
-    this.fetchCountryData();
-
     if (this.countries.length) {
       this.allCountries = this.allCountries.filter((c) => this.countries.includes(c.iso2));
     }
