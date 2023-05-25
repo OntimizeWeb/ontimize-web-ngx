@@ -1,3 +1,7 @@
+## 8.12.1 (2023-05-25)
+### Bug fixes
+* **o-phone-input**: Fixing error on countries input parsing ([fb5f353](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb5f353)) Closes [#1224](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1224)
+
 ## 8.12.0 (2023-05-05)
 ### Features
 * Add JDBC UUID support ([98583d2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98583d2)) Closes [#1201](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1201)
