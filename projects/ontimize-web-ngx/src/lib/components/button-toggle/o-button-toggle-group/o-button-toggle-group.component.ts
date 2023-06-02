@@ -32,15 +32,14 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP = [
 ];
 
 @Component({
-  selector: 'o-button-toggle-group',
-  templateUrl: './o-button-toggle-group.component.html',
-  inputs: DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP,
-  outputs: DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[class.o-button-toggle-group]': 'true'
-  },
-  entryComponents: [OButtonToggleComponent]
+    selector: 'o-button-toggle-group',
+    templateUrl: './o-button-toggle-group.component.html',
+    inputs: DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP,
+    outputs: DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP,
+    encapsulation: ViewEncapsulation.None,
+    host: {
+        '[class.o-button-toggle-group]': 'true'
+    }
 })
 export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
 

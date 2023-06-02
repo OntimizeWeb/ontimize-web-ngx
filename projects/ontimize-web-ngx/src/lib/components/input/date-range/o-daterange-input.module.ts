@@ -7,9 +7,8 @@ import { ODaterangepickerDirective } from './o-daterange-input.directive';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
 
 @NgModule({
-  declarations: [DaterangepickerComponent, ODateRangeInputComponent, ODaterangepickerDirective],
-  imports: [CommonModule, OSharedModule],
-  exports: [ODateRangeInputComponent],
-  entryComponents: [DaterangepickerComponent]
+    declarations: [DaterangepickerComponent, ODateRangeInputComponent, ODaterangepickerDirective],
+    imports: [CommonModule, OSharedModule],
+    exports: [ODateRangeInputComponent]
 })
 export class ODateRangeInputModule { }

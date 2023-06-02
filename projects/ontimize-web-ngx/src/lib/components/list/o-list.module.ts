@@ -14,23 +14,22 @@ import { OListItemCardComponent } from './renderers/card/o-list-item-card.compon
 import { OListItemTextComponent } from './renderers/text/o-list-item-text.component';
 
 @NgModule({
-  declarations: [
-    OListComponent,
-    OListItemComponent,
-    OListItemAvatarComponent,
-    OListItemCardImageComponent,
-    OListItemCardComponent,
-    OListItemTextComponent
-  ],
-  imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule],
-  exports: [
-    OListComponent,
-    OListItemComponent,
-    OListItemAvatarComponent,
-    OListItemCardImageComponent,
-    OListItemCardComponent,
-    OListItemTextComponent
-  ],
-  entryComponents: [MatCheckbox]
+    declarations: [
+        OListComponent,
+        OListItemComponent,
+        OListItemAvatarComponent,
+        OListItemCardImageComponent,
+        OListItemCardComponent,
+        OListItemTextComponent
+    ],
+    imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule],
+    exports: [
+        OListComponent,
+        OListItemComponent,
+        OListItemAvatarComponent,
+        OListItemCardImageComponent,
+        OListItemCardComponent,
+        OListItemTextComponent
+    ]
 })
 export class OListModule { }

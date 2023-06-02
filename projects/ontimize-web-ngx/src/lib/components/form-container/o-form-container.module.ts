@@ -6,10 +6,9 @@ import { OSharedModule } from '../../shared/shared.module';
 import { OFormContainerComponent } from './o-form-container.component';
 
 @NgModule({
-  declarations: [OFormContainerComponent],
-  imports: [OSharedModule, CommonModule],
-  entryComponents: [OBreadcrumbComponent],
-  exports: [OFormContainerComponent]
+    declarations: [OFormContainerComponent],
+    imports: [OSharedModule, CommonModule],
+    exports: [OFormContainerComponent]
 })
 export class OFormContainerModule {
 }
