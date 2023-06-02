@@ -1,34 +1,34 @@
 @mixin o-hour-input-theme($theme) {
-  $primary: map-get($theme, primary);
+  $primary: map.get($theme, primary);
 
   ngx-material-timepicker-container ngx-material-timepicker-content {
     .timepicker__header {
-      background-color: mat-color($primary) !important;
+      background-color: mat.get-color-from-palette($primary) !important;
     }
 
     .clock-face {
       .clock-face__container {
         .clock-face__number > span.active {
-          background-color: mat-color($primary);
+          background-color: mat.get-color-from-palette($primary);
           color: #fff;
         }
       }
 
       .clock-face__clock-hand {
-        background-color: mat-color($primary);
+        background-color: mat.get-color-from-palette($primary);
       }
 
       .clock-face__clock-hand:after {
-        background-color: mat-color($primary);
+        background-color: mat.get-color-from-palette($primary);
       }
 
       .clock-face__clock-hand_minute:before {
-        border: 4px solid mat-color($primary);
+        border: 4px solid mat.get-color-from-palette($primary);
       }
     }
 
     .timepicker-button {
-      color: mat-color($primary);
+      color: mat.get-color-from-palette($primary);
     }
 
     .timepicker-dial__control {

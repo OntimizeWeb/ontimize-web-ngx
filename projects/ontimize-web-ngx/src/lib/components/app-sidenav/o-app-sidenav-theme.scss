@@ -1,10 +1,9 @@
-@import '~@angular/material/theming';
 @mixin o-app-sidenav-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
 
   .o-app-sidenav {
     .o-app-sidenav-menu-group,
@@ -12,22 +11,22 @@
       &:not([disabled=true]) {
         a.o-app-sidenav-viewer-sidenav-item-selected,
         a:hover {
-          color: mat-color($accent, 900);
-          background-color: mat-color($primary, 100);
+          color: mat.get-color-from-palette($accent, 900);
+          background-color: mat.get-color-from-palette($primary, 100);
         }
       }
     }
 
     .o-app-sidenav-sidenav {
-      background: mat-color($primary);
+      background: mat.get-color-from-palette($primary);
 
 
       .sidenav-toggle {
-        color: mat-color($primary, default-contrast);
+        color: mat.get-color-from-palette($primary, default-contrast);
       }
 
       .o-app-sidenav-item {
-        color: mat-color($primary, default-contrast);
+        color: mat.get-color-from-palette($primary, default-contrast);
 
         &.o-user-info {
           &:focus,
@@ -37,7 +36,7 @@
           color: inherit;
 
           .o-user-info-menu-item .o-user-info-item {
-            background: mat-color($primary, default-contrast, 0.74);
+            background: mat.get-color-from-palette($primary, default-contrast, 0.74);
           }
         }
       }
@@ -47,7 +46,7 @@
         .o-app-sidenav-menugroup {
           &.opened {
             + .o-app-sidenav-menugroup-items-container ul {
-              background: mat-color($primary, 800 );
+              background: mat.get-color-from-palette($primary, 800 );
             }
           }
         }
@@ -59,7 +58,7 @@
         .o-app-sidenav-menugroup {
           &.opened {
             + .o-app-sidenav-menugroup-items-container ul {
-              background: mat-color($primary, 900 );
+              background: mat.get-color-from-palette($primary, 900 );
             }
           }
         }

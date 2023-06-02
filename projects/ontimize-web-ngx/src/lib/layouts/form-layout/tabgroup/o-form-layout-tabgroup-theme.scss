@@ -1,24 +1,23 @@
-@import '~@angular/material/theming';
 @mixin o-form-layout-tabgroup-theme($theme) {
-  $background: map-get($theme, background);
-  $primary: map-get($theme, primary);
-  $foreground: map-get($theme, foreground);
+  $background: map.get($theme, background);
+  $primary: map.get($theme, primary);
+  $foreground: map.get($theme, foreground);
 
   .o-form-layout-tabgroup {
     .spinner-container {
-      background-color: mat-color($background, background);
+      background-color: mat.get-color-from-palette($background, background);
     }
 
     .mat-tab-group {
       .mat-tab-label {
         .mat-icon:hover {
-          background-color: mat-color($foreground, disabled-button);
+          background-color: mat.get-color-from-palette($foreground, disabled-button);
           border-radius: 50%;
         }
 
         &.mat-tab-label-active {
           .mat-icon:hover {
-            background-color: mat-color($primary,500, 0.4);
+            background-color: mat.get-color-from-palette($primary, 500, 0.4);
           }
         }
       }

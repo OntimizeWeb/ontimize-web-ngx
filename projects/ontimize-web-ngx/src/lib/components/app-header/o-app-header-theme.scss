@@ -1,16 +1,16 @@
 @mixin o-app-header-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $foreground: map-get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $foreground: map.get($theme, foreground);
 
   .o-app-header {
     nav {
       &.o-app-header-primary {
-        background-color: mat-color($primary);
+        background-color: mat.get-color-from-palette($primary);
       }
 
       &.o-app-header-accent {
-        background-color: mat-color($accent);
+        background-color: mat.get-color-from-palette($accent);
       }
 
       .menu-button {
@@ -19,7 +19,7 @@
     }
 
     .o-user-info {
-      color: mat-color($foreground,text);
+      color: mat.get-color-from-palette($foreground,text);
     }
   }
 

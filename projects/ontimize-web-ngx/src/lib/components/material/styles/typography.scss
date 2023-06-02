@@ -4,7 +4,6 @@
 // [3] Prevent iOS text size adjust after orientation change, without disabling user zoom
 // [4] Fonts on OSX will look more consistent with other systems that do not
 // render text using sub-pixel anti-aliasing.
-@import '~@angular/material/theming';
 @import 'variables.scss';
 
 html, body {

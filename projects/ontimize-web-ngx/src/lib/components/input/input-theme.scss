@@ -1,4 +1,3 @@
-@import '~@angular/material/theming';
 @mixin icon-color-mixin($icon-color) {
   .icon-btn,
   .mat-icon,
@@ -8,35 +7,35 @@
   }
 }
 @mixin input-theme($theme) {
-  $is-dark-theme: map-get($theme, is-dark);
-  $foreground: map-get($theme, foreground);
-  $warn: map-get($theme, warn);
-  $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
+  $is-dark-theme: map.get($theme, is-dark);
+  $foreground: map.get($theme, foreground);
+  $warn: map.get($theme, warn);
+  $underline-color: mat.get-color-from-palette($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
 
   /* outline appearance */
   $border-radius: 2px;
 
   .mat-form-field {
     &.mat-form-field-disabled.accent {
-      @include icon-color-mixin(mat-color($accent, 0.42));
+      @include icon-color-mixin(mat.get-color-from-palette($accent, 0.42));
     }
 
     &:not(.mat-form-field-disabled) {
-      @include icon-color-mixin(mat-color($foreground, icon));
+      @include icon-color-mixin(mat.get-color-from-palette($foreground, icon));
 
       .placeholder {
-        color: mat-color($foreground, icon);
+        color: mat.get-color-from-palette($foreground, icon);
       }
 
       &.accent {
-        @include icon-color-mixin(mat-color($accent));
+        @include icon-color-mixin(mat.get-color-from-palette($accent));
       }
     }
 
     .mat-disabled {
-      color: mat-color($foreground, disabled-button);
+      color: mat.get-color-from-palette($foreground, disabled-button);
     }
 
     &.mat-form-field-appearance-ontimize.read-only {
@@ -50,7 +49,7 @@
     }
 
     &.mat-form-field-invalid .mat-input-suffix .mat-icon {
-      color: mat-color($warn);
+      color: mat.get-color-from-palette($warn);
     }
 
     /* OUTLINE APPEARANCE */
@@ -81,26 +80,26 @@
   input[type="url"]:disabled,
   input[type="week"]:disabled,
   textarea:disabled {
-    color: mat-color($foreground, disabled-text);
+    color: mat.get-color-from-palette($foreground, disabled-text);
   }
 
   .o-tooltip.o-mat-error {
-    background: mat-color($primary, default-contrast);
-    border: 1px solid mat-color($warn);
-    color: mat-color($warn);
+    background: mat.get-color-from-palette($primary, default-contrast);
+    border: 1px solid mat.get-color-from-palette($warn);
+    color: mat.get-color-from-palette($warn);
   }
 
   /* CHECKBOX */
   .mat-checkbox:not(.mat-checkbox-disabled ) {
     &.mat-accent {
       .mat-checkbox-frame {
-        border-color: if($is-dark-theme, mat-color($accent,500),mat-color($foreground, secondary-text));
+        border-color: if($is-dark-theme, mat.get-color-from-palette($accent,500),mat.get-color-from-palette($foreground, secondary-text));
       }
     }
 
     &.mat-primary {
       .mat-checkbox-frame {
-        border-color: if($is-dark-theme, mat-color($primary,500),mat-color($foreground, secondary-text));
+        border-color: if($is-dark-theme, mat.get-color-from-palette($primary,500),mat.get-color-from-palette($foreground, secondary-text));
       }
     }
   }

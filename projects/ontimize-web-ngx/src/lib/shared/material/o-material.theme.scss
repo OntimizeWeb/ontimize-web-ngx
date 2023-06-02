@@ -1,0 +1,32 @@
+@use '@angular/material'as mat;
+@use "sass:map";
+
+// Create a theme.
+@mixin o-material-theme($theme, $typography: null) {
+  @include mat.core($typography);
+  @include mat.all-component-themes($theme);
+  @include app-global-theme($theme, $typography);
+  @include o-breadcrumb-theme($theme);
+  @include o-container-theme($theme, $typography);
+  @include o-form-toolbar-theme($theme);
+  @include input-theme($theme);
+  @include o-date-input-theme($theme);
+  @include o-dialog-theme($theme);
+  @include o-table-theme($theme);
+  @include o-table-typography($typography);
+  @include o-list-theme($theme);
+  @include o-list-picker-theme($theme);
+  @include o-app-header-theme($theme);
+  @include o-app-sidenav-theme($theme);
+  @include o-app-layout-theme($theme);
+  @include o-card-menu-item-theme($theme, $typography);
+  @include o-hour-input-theme($theme);
+  @include o-form-layout-split-pane-theme($theme);
+  @include o-form-layout-tabgroup-theme($theme);
+  @include o-bar-menu-theme($theme);
+  @include o-grid-theme($theme);
+  @include o-layout-padding-margin();
+  @include o-daterange-input-theme($theme);
+  @include o-dual-list-selector-theme($theme);
+  @include o-image-theme($theme);
+}

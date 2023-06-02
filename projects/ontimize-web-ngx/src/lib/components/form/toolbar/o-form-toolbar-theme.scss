@@ -1,9 +1,8 @@
-@import '~@angular/material/theming';
 @mixin o-form-toolbar-theme($theme) {
-  $primary: map-get($theme, primary);
-  $background: map-get($theme, background);
+  $primary: map.get($theme, primary);
+  $background: map.get($theme, background);
 
   .o-form-toolbar-header {
-    background-color: mat-color($background, app-bar);
+    background-color: mat.get-color-from-palette($background, app-bar);
   }
 }
