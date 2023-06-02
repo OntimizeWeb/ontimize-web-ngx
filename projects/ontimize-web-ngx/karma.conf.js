@@ -16,9 +16,12 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    coverageIstanbulReporter: {
+    coverageReporter: {
       dir: require('path').join(__dirname, '../../coverage/ontimize-web-ngx'),
-      reports: ['html', 'lcovonly', 'text-summary'],
+      subdir: '.',
+      reporters: [
+        { type: 'lcovonly' }
+      ],
       fixWebpackSourcePaths: true
     },
     sonarQubeUnitReporter: {
@@ -29,7 +32,7 @@ module.exports = function (config) {
       testFilePattern: '.spec.ts',
       useBrowserName: false
     },
-    reporters: ['progress', 'kjhtml', 'sonarqubeUnit'],
+    reporters: ['progress', 'kjhtml', 'sonarqubeUnit', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
