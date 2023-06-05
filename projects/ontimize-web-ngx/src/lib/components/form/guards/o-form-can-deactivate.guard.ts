@@ -1,7 +1,6 @@
-import { isPromise } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot } from '@angular/router';
-import { combineLatest, from, isObservable, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 
 import { BooleanConverter } from '../../../decorators/input-converter';
 import { Codes } from '../../../util/codes';
