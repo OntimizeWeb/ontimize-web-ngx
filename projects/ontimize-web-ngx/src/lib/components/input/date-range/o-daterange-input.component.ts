@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import * as _moment from 'moment';
+import moment from 'moment'
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
@@ -33,8 +33,6 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
-const moment = _moment;
-
 @Component({
   selector: 'o-daterange-input',
   templateUrl: './o-daterange-input.component.html',
@@ -62,7 +60,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   @InputConverter()
   public showRanges: boolean = false;
 
-  protected _oMinDate: _moment.Moment;
+  protected _oMinDate: moment.Moment;
 
   public mode: 'mobile' | 'desktop' | 'auto' = 'auto';
 
@@ -73,7 +71,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     this._oMinDate = moment(value, this.oformat);
   }
 
-  protected _oMaxDate: _moment.Moment;
+  protected _oMaxDate: moment.Moment;
   get oMaxDate() {
     return this._oMaxDate;
   }

@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
-    "target": "es2015",
+    "target": "es2020",
     "module": "es2020",
     "moduleResolution": "node",
     "declaration": true,
@@ -21,7 +21,7 @@
     ],
     "lib": [
       "dom",
-      "es2018"
+      "es2020"
     ]
   },
   "angularCompilerOptions": {

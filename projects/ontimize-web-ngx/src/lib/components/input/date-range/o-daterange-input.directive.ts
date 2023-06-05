@@ -4,11 +4,10 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, EventEmitter, forwardRef, Input, KeyValueDiffer, KeyValueDiffers, NgZone, Output, ViewContainerRef, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import * as _moment from 'moment';
+import moment from 'moment'
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
-const moment = _moment;
 
 @Directive({
   selector: 'input[o-daterange-input]',
@@ -33,9 +32,9 @@ export class ODaterangepickerDirective implements OnDestroy {
   public localeDiffer: KeyValueDiffer<string, any>;
 
   @Input()
-  minDate: _moment.Moment = null;
+  minDate: moment.Moment = null;
   @Input()
-  maxDate: _moment.Moment = null;
+  maxDate: moment.Moment = null;
   @Input()
   showCustomRangeLabel: boolean;
   @Input()
