@@ -1,5 +1,5 @@
 
-// tslint:disable:object-literal-key-quotes
+/* eslint-disable quote-props */
 export const MAP = {
   // English
   en: {

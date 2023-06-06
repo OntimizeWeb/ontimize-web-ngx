@@ -63,7 +63,7 @@ export class OListItemComponent implements ListItem, AfterContentInit {
     const matLinesRef = this._lines;
 
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
-    // tslint:disable-next-line: space-before-function-paren
+    // eslint-disable-next-line space-before-function-paren
     this._innerListItem.ngAfterContentInit = function () {
       const emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
       if (emptyDiv) {

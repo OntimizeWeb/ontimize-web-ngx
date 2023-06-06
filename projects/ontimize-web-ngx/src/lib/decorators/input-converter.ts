@@ -53,14 +53,14 @@ export function InputConverter(converter?: (value: any) => any) {
     const definition = Object.getOwnPropertyDescriptor(target, key);
 
     Object.defineProperty(target, key, {
-      // tslint:disable-next-line:space-before-function-paren
+      // eslint-disable-next-line space-before-function-paren
       get: definition != null ? definition.get : function () {
         return this['__' + stringKey];
       },
       set: definition != null ?
         (newValue) => {
           definition.set(converter(newValue));
-          // tslint:disable-next-line:space-before-function-paren
+          // eslint-disable-next-line space-before-function-paren
         } : function (newValue) {
           this['__' + stringKey] = converter(newValue);
         },

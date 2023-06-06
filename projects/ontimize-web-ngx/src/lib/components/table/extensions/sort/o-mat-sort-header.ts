@@ -30,7 +30,7 @@ import { OMatSort } from './o-mat-sort';
     matSortAnimations.allowChildren,
   ]
 })
-// tslint:disable-next-line: component-class-suffix
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class OMatSortHeader extends MatSortHeader {
 
   constructor(public _intl: MatSortHeaderIntl,
