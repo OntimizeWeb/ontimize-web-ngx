@@ -22,7 +22,7 @@ const defaults = {
 };
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'ck-editor',
   template: `<textarea #ck></textarea>`,
   providers: [{

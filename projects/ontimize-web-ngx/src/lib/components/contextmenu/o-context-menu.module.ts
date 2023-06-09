@@ -11,16 +11,16 @@ import { OContextMenuComponent } from './o-context-menu.component';
 import { OContextMenuDirective } from './o-context-menu.directive';
 
 @NgModule({
-  imports: [CommonModule, OSharedModule],
-  entryComponents: [OContextMenuContentComponent, OContextMenuComponent],
-  exports: [CommonModule, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OContextMenuGroupComponent, OContextMenuSeparatorComponent],
-  declarations: [
-    OContextMenuDirective,
-    OContextMenuContentComponent,
-    OContextMenuComponent,
-    OContextMenuItemComponent,
-    OContextMenuGroupComponent,
-    OWrapperContentMenuComponent,
-    OContextMenuSeparatorComponent]
+    imports: [CommonModule, OSharedModule],
+    exports: [CommonModule, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OContextMenuGroupComponent, OContextMenuSeparatorComponent],
+    declarations: [
+        OContextMenuDirective,
+        OContextMenuContentComponent,
+        OContextMenuComponent,
+        OContextMenuItemComponent,
+        OContextMenuGroupComponent,
+        OWrapperContentMenuComponent,
+        OContextMenuSeparatorComponent
+    ]
 })
 export class OContextMenuModule { }

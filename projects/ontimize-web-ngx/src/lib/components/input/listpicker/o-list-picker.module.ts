@@ -9,9 +9,8 @@ import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 import { OListPickerComponent } from './o-list-picker.component';
 
 @NgModule({
-  declarations: [OListPickerDialogComponent, OListPickerComponent, ...O_LISTPICKER_RENDERERS],
-  imports: [CommonModule, OSharedModule, OSearchInputModule, OContextMenuModule],
-  exports: [OListPickerComponent, ...O_LISTPICKER_RENDERERS],
-  entryComponents: [OListPickerDialogComponent, ...O_LISTPICKER_RENDERERS]
+    declarations: [OListPickerDialogComponent, OListPickerComponent, ...O_LISTPICKER_RENDERERS],
+    imports: [CommonModule, OSharedModule, OSearchInputModule, OContextMenuModule],
+    exports: [OListPickerComponent, ...O_LISTPICKER_RENDERERS]
 })
 export class OListPickerModule { }

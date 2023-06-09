@@ -31,62 +31,55 @@ import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selec
 import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
 
 @NgModule({
-  declarations: [
-    OTableComponent,
-    OTableColumnComponent,
-    OTableColumnCalculatedComponent,
-    OTableContextMenuComponent,
-    OTableRowDirective,
-    OTableExpandedFooterDirective,
-    OTableExportButtonComponent,
-    OTableRowClassPipe,
-    ...O_TABLE_CELL_RENDERERS,
-    ...O_TABLE_CELL_EDITORS,
-    ...O_TABLE_DIALOGS,
-    ...O_TABLE_HEADER_COMPONENTS,
-    ...O_TABLE_FOOTER_COMPONENTS,
-    OTableRowExpandableComponent
-  ],
-  imports: [
-    CommonModule,
-    OSharedModule,
-    CdkTableModule,
-    DragDropModule,
-    PortalModule,
-    OContextMenuModule,
-    ObserversModule,
-    OMatSortModule,
-    NgxMaterialTimepickerModule,
-    ODualListSelectorModule,
-    ODataToolbarModule
-  ],
-  exports: [
-    OTableComponent,
-    OTableColumnComponent,
-    CdkTableModule,
-    OTableColumnCalculatedComponent,
-    OTableContextMenuComponent,
-    OTableRowDirective,
-    OTableExpandedFooterDirective,
-    OMatSortModule,
-    OTableExportButtonComponent,
-    OTableRowClassPipe,
-    ...O_TABLE_HEADER_COMPONENTS_EXPORTED,
-    ...O_TABLE_CELL_RENDERERS,
-    ...O_TABLE_CELL_EDITORS,
-    ...O_TABLE_FOOTER_COMPONENTS,
-    OTableRowExpandableComponent
-  ],
-  entryComponents: [
-    OTableColumnAggregateComponent,
-    OTableContextMenuComponent,
-    ...O_TABLE_CELL_RENDERERS,
-    ...O_TABLE_CELL_EDITORS,
-    ...O_TABLE_DIALOGS
-  ],
-  providers: [
-    OTableExportButtonService,
-    { provide: MatPaginatorIntl, useClass: OTableMatPaginatorIntl }
-  ]
+    declarations: [
+        OTableComponent,
+        OTableColumnComponent,
+        OTableColumnCalculatedComponent,
+        OTableContextMenuComponent,
+        OTableRowDirective,
+        OTableExpandedFooterDirective,
+        OTableExportButtonComponent,
+        OTableRowClassPipe,
+        ...O_TABLE_CELL_RENDERERS,
+        ...O_TABLE_CELL_EDITORS,
+        ...O_TABLE_DIALOGS,
+        ...O_TABLE_HEADER_COMPONENTS,
+        ...O_TABLE_FOOTER_COMPONENTS,
+        OTableRowExpandableComponent
+    ],
+    imports: [
+        CommonModule,
+        OSharedModule,
+        CdkTableModule,
+        DragDropModule,
+        PortalModule,
+        OContextMenuModule,
+        ObserversModule,
+        OMatSortModule,
+        NgxMaterialTimepickerModule,
+        ODualListSelectorModule,
+        ODataToolbarModule
+    ],
+    exports: [
+        OTableComponent,
+        OTableColumnComponent,
+        CdkTableModule,
+        OTableColumnCalculatedComponent,
+        OTableContextMenuComponent,
+        OTableRowDirective,
+        OTableExpandedFooterDirective,
+        OMatSortModule,
+        OTableExportButtonComponent,
+        OTableRowClassPipe,
+        ...O_TABLE_HEADER_COMPONENTS_EXPORTED,
+        ...O_TABLE_CELL_RENDERERS,
+        ...O_TABLE_CELL_EDITORS,
+        ...O_TABLE_FOOTER_COMPONENTS,
+        OTableRowExpandableComponent
+    ],
+    providers: [
+        OTableExportButtonService,
+        { provide: MatPaginatorIntl, useClass: OTableMatPaginatorIntl }
+    ]
 })
 export class OTableModule { }

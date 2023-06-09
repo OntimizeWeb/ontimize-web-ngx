@@ -16,30 +16,29 @@ import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.
 import { OFormLayoutTabGroupOptionsDirective } from './tabgroup/options/o-form-layout-tabgroup-options.directive';
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule, ResizableModule],
-  declarations: [
-    OFormLayoutDialogComponent,
-    OFormLayoutManagerComponent,
-    OFormLayoutTabGroupComponent,
-    OFormLayoutManagerContentDirective,
-    OFormLayoutTabGroupOptionsDirective,
-    OFormLayoutDialogOptionsDirective,
-    OFormLayoutSplitPaneComponent,
-    OFormLayoutSplitPaneOptionsDirective
-  ],
-  exports: [
-    OFormLayoutManagerComponent,
-    OFormLayoutTabGroupOptionsDirective,
-    OFormLayoutDialogOptionsDirective,
-    OFormLayoutSplitPaneOptionsDirective
-  ],
-  entryComponents: [OFormLayoutDialogComponent],
-  providers: [{
-    provide: CanActivateFormLayoutChildGuard,
-    useClass: CanActivateFormLayoutChildGuard
-  },
-    OFormLayoutManagerComponentStateService
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [CommonModule, OSharedModule, RouterModule, ResizableModule],
+    declarations: [
+        OFormLayoutDialogComponent,
+        OFormLayoutManagerComponent,
+        OFormLayoutTabGroupComponent,
+        OFormLayoutManagerContentDirective,
+        OFormLayoutTabGroupOptionsDirective,
+        OFormLayoutDialogOptionsDirective,
+        OFormLayoutSplitPaneComponent,
+        OFormLayoutSplitPaneOptionsDirective
+    ],
+    exports: [
+        OFormLayoutManagerComponent,
+        OFormLayoutTabGroupOptionsDirective,
+        OFormLayoutDialogOptionsDirective,
+        OFormLayoutSplitPaneOptionsDirective
+    ],
+    providers: [{
+            provide: CanActivateFormLayoutChildGuard,
+            useClass: CanActivateFormLayoutChildGuard
+        },
+        OFormLayoutManagerComponentStateService
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OFormLayoutManagerModule { }

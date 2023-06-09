@@ -24,57 +24,56 @@ import { OValidatorComponent } from './components/validation/o-validator.compone
 import { OCustomMaterialModule } from './material/custom.material.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    OTranslateModule,
-    FlexLayoutModule,
-    OCustomMaterialModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  declarations: [
-    ColumnsFilterPipe,
-    OrderByPipe,
-    OIntegerPipe,
-    ORealPipe,
-    OMomentPipe,
-    OCurrencyPipe,
-    OPercentPipe,
-    OIconPipe,
-    OSafePipe,
-    ONTIMIZE_DIRECTIVES,
-    Error403Component,
-    ODialogComponent,
-    OErrorComponent,
-    OValidatorComponent,
-    OSnackBarComponent,
-    OLoadFilterDialogComponent,
-    OStoreFilterDialogComponent
-  ],
-  exports: [
-    FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    OTranslateModule,
-    ColumnsFilterPipe,
-    OrderByPipe,
-    OIntegerPipe,
-    ORealPipe,
-    OMomentPipe,
-    OCurrencyPipe,
-    OPercentPipe,
-    OIconPipe,
-    OSafePipe,
-    ONTIMIZE_DIRECTIVES,
-    OCustomMaterialModule,
-    Error403Component,
-    OErrorComponent,
-    OValidatorComponent,
-    OSnackBarComponent,
-    OLoadFilterDialogComponent,
-    OStoreFilterDialogComponent
-  ],
-  entryComponents: [Error403Component, OStoreFilterDialogComponent, OLoadFilterDialogComponent]
+    imports: [
+        CommonModule,
+        OTranslateModule,
+        FlexLayoutModule,
+        OCustomMaterialModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    declarations: [
+        ColumnsFilterPipe,
+        OrderByPipe,
+        OIntegerPipe,
+        ORealPipe,
+        OMomentPipe,
+        OCurrencyPipe,
+        OPercentPipe,
+        OIconPipe,
+        OSafePipe,
+        ONTIMIZE_DIRECTIVES,
+        Error403Component,
+        ODialogComponent,
+        OErrorComponent,
+        OValidatorComponent,
+        OSnackBarComponent,
+        OLoadFilterDialogComponent,
+        OStoreFilterDialogComponent
+    ],
+    exports: [
+        FlexLayoutModule,
+        FormsModule,
+        ReactiveFormsModule,
+        OTranslateModule,
+        ColumnsFilterPipe,
+        OrderByPipe,
+        OIntegerPipe,
+        ORealPipe,
+        OMomentPipe,
+        OCurrencyPipe,
+        OPercentPipe,
+        OIconPipe,
+        OSafePipe,
+        ONTIMIZE_DIRECTIVES,
+        OCustomMaterialModule,
+        Error403Component,
+        OErrorComponent,
+        OValidatorComponent,
+        OSnackBarComponent,
+        OLoadFilterDialogComponent,
+        OStoreFilterDialogComponent
+    ]
 })
 export class OSharedModule {
 }

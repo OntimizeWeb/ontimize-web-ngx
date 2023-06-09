@@ -8,19 +8,16 @@ import { OComboSearchComponent } from './combo-search/o-combo-search.component';
 import { OComboComponent } from './o-combo.component';
 
 @NgModule({
-  declarations: [
-    OComboComponent,
-    OComboSearchComponent,
-    ...O_COMBO_RENDERERS
-  ],
-  imports: [CommonModule, OSharedModule, OContextMenuModule],
-  exports: [
-    OComboComponent,
-    OComboSearchComponent,
-    ...O_COMBO_RENDERERS
-  ],
-  entryComponents: [
-    ...O_COMBO_RENDERERS
-  ],
+    declarations: [
+        OComboComponent,
+        OComboSearchComponent,
+        ...O_COMBO_RENDERERS
+    ],
+    imports: [CommonModule, OSharedModule, OContextMenuModule],
+    exports: [
+        OComboComponent,
+        OComboSearchComponent,
+        ...O_COMBO_RENDERERS
+    ]
 })
 export class OComboModule { }

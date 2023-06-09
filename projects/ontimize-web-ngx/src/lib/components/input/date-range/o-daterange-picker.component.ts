@@ -11,11 +11,10 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as _moment from 'moment';
+import moment from 'moment'
 
 import { InputConverter } from '../../../decorators/input-converter';
 
-const moment = _moment;
 
 export enum SideEnum {
   left = 'left',
@@ -51,9 +50,9 @@ export class DaterangepickerComponent implements OnInit {
   sideEnum = SideEnum;
 
   @Input()
-  minDate: _moment.Moment = null;
+  minDate: moment.Moment = null;
   @Input()
-  maxDate: _moment.Moment = null;
+  maxDate: moment.Moment = null;
   @Input()
   autoApply: boolean = false;
   @Input()
@@ -1044,7 +1043,7 @@ export class DaterangepickerComponent implements OnInit {
    * @param date the date to add time
    * @param side left or right
    */
-  private _getDateWithTime(date, side: SideEnum): _moment.Moment {
+  private _getDateWithTime(date, side: SideEnum): moment.Moment {
     let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
     if (!this.timePicker24Hour) {
       const ampm = this.timepickerVariables[side].ampmModel;

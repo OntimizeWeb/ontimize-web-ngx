@@ -3,15 +3,7 @@
   "deleteDestPath": true,
   "dest": "../../dist",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "@ngx-translate/core": "@ngx-translate/core",
-      "@ngx-translate/http-loader": "@ngx-translate/http-loader",
-      "angular-resizable-element": "angularResizableElement",
-      "moment": "moment",
-      "ngx-material-timepicker": "ngx-material-timepicker",
-      "google-libphonenumber": "google-libphonenumber"
-    }
+    "entryFile": "src/public-api.ts"
   },
   "allowedNonPeerDependencies": [
     "@ngx-translate/core",

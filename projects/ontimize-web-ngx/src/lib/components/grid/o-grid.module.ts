@@ -10,9 +10,8 @@ import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 import { OGridComponent } from './o-grid.component';
 
 @NgModule({
-  declarations: [OGridComponent, OGridItemDirective, OGridItemComponent],
-  imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule],
-  exports: [OGridComponent, OGridItemComponent, OGridItemDirective],
-  entryComponents: [OGridItemComponent]
+    declarations: [OGridComponent, OGridItemDirective, OGridItemComponent],
+    imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule],
+    exports: [OGridComponent, OGridItemComponent, OGridItemDirective]
 })
 export class OGridModule { }

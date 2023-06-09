@@ -344,7 +344,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
               break;
             case 'percentage':
               newRenderer.valueBase = this.valueBase;
-            // tslint:disable-next-line:no-switch-case-fall-through
+            // eslint-disable-next-line no-fallthrough
             case 'real':
               newRenderer.decimalSeparator = this.decimalSeparator;
               newRenderer.minDecimalDigits = this.minDecimalDigits;

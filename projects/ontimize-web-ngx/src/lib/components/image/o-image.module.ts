@@ -6,9 +6,8 @@ import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.compo
 import { OImageComponent } from './o-image.component';
 
 @NgModule({
-  declarations: [OImageComponent, OFullScreenDialogComponent],
-  imports: [CommonModule, OSharedModule],
-  exports: [OImageComponent, OFullScreenDialogComponent],
-  entryComponents: [OFullScreenDialogComponent]
+    declarations: [OImageComponent, OFullScreenDialogComponent],
+    imports: [CommonModule, OSharedModule],
+    exports: [OImageComponent, OFullScreenDialogComponent]
 })
 export class OImageModule { }
