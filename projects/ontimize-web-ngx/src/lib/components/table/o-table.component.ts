@@ -1395,6 +1395,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   setDatasource() {
+    //Deleted previous instance and subscribers
+    delete this.dataSource;
+    if(this.onRenderedDataChange) this.onRenderedDataChange.unsubscribe();
+
     const dataSourceService = this.injector.get(OTableDataSourceService);
     this.dataSource = dataSourceService.getInstance(this);
     this.registerDataSourceListeners();
