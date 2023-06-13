@@ -1,3 +1,7 @@
+## 8.12.2 (2023-06-13)
+### Bug fixes
+* **o-table**: Fixed the loading with sort on grouped table not disappearing ([b8888c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8888c5)) Closes [#1230](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1230)
+
 ## 8.12.1 (2023-05-25)
 ### Bug fixes
 * **o-phone-input**: Fixing error on countries input parsing ([fb5f353](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb5f353)) Closes [#1224](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1224)
