@@ -1,6 +1,6 @@
-## 8.12.2 (2023-06-12)
+## 8.12.2 (2023-06-13)
 ### Bug fixes
-* **o-table**: Fixing not disapearing the loading with the sorting in the grouped table Closes [#1230](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1230)
+* **o-table**: Fixing not disapearing the loading with the sorting in the grouped table ([b8888c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8888c5)) Closes [#1230](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1230)
 
 ## 8.12.1 (2023-05-25)
 ### Bug fixes
