@@ -940,7 +940,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.parseVisibleColumns();
     this.parseSearcheableColumns();
     this.setDatasource();
-    this.registerDataSourceListeners();
     this.parseGroupedColumns();
     this.parseGroupedColumnTypes();
     this.parseSortColumns();
@@ -1396,8 +1395,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   setDatasource() {
+    //Deleted previous instance and subscribers
+    delete this.dataSource;
+    if(this.onRenderedDataChange) this.onRenderedDataChange.unsubscribe();
+
     const dataSourceService = this.injector.get(OTableDataSourceService);
     this.dataSource = dataSourceService.getInstance(this);
+    this.registerDataSourceListeners();
   }
 
   protected registerDataSourceListeners() {
