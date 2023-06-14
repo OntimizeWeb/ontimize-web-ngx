@@ -1,11 +1,11 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 export class InputTestUtil {
 
-  static mockFormGroup(component: any): FormGroup {
+  static mockFormGroup(component: any): UntypedFormGroup {
 
-    const formGroup = new FormGroup({});
-    const control: FormControl = component.getControl();
+    const formGroup = new UntypedFormGroup({});
+    const control: UntypedFormControl = component.getControl();
     if (control) {
       formGroup.registerControl(component.getAttribute(), control);
     }

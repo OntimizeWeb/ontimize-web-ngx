@@ -1,5 +1,5 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
@@ -101,7 +101,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     }
   }
 
-  protected maxDecimalDigitsValidator(control: FormControl): ValidationErrors {
+  protected maxDecimalDigitsValidator(control: UntypedFormControl): ValidationErrors {
     let ctrlValue: string = control.value;
     if (typeof control.value === 'number') {
       ctrlValue = ctrlValue.toString();

@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "description": "Ontimize Web framework using Angular 8",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -11,8 +11,8 @@
   },
   "keywords": [
     "angular",
-    "angular8",
-    "angular 8",
+    "angular14",
+    "angular 14",
     "framework",
     "web framework",
     "material",

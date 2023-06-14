@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
-import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { IFileService } from '../../../interfaces/file-service.interface';
@@ -255,7 +255,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     this.onChange.emit(event);
   }
 
-  protected filetypeValidator(control: FormControl): ValidationErrors {
+  protected filetypeValidator(control: UntypedFormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
       const regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
       if (!this.files.every(file => file.type.match(regex) !== null || file.name.substr(file.name.lastIndexOf('.')).match(regex) !== null)) {
@@ -269,7 +269,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return {};
   }
 
-  protected maxFileSizeValidator(control: FormControl): ValidationErrors {
+  protected maxFileSizeValidator(control: UntypedFormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.maxFileSize) {
       if (!this.files.every(file => file.size < this.maxFileSize)) {
         return {
@@ -282,7 +282,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return {};
   }
 
-  protected maxFilesValidator(control: FormControl): ValidationErrors {
+  protected maxFilesValidator(control: UntypedFormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.multiple && this.maxFiles !== -1) {
       if (this.maxFiles < this.files.length) {
         return {

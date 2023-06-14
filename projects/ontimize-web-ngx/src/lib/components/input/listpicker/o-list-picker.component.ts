@@ -12,7 +12,7 @@ import {
   SimpleChange,
   ViewChild
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 
@@ -62,7 +62,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   public onDialogCancel: EventEmitter<any> = new EventEmitter();
   /* End outputs */
 
-  public stateCtrl: FormControl;
+  public stateCtrl: UntypedFormControl;
 
   /* Inputs */
   @InputConverter()
@@ -101,7 +101,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     injector: Injector) {
     super(form, elRef, injector);
     this.matDialog = this.injector.get<MatDialog>(MatDialog);
-    this.stateCtrl = new FormControl();
+    this.stateCtrl = new UntypedFormControl();
     /* overwritte clearButton to true */
     this.clearButton = true;
   }

@@ -9,7 +9,7 @@ import {
   Optional,
   ViewEncapsulation
 } from '@angular/core';
-import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
@@ -134,7 +134,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
       return;
     }
     this.setPipeValue();
-    const formControl: FormControl = this.getControl();
+    const formControl: UntypedFormControl = this.getControl();
     if (formControl) {
       formControl.updateValueAndValidity({ emitEvent: false });
     }
@@ -200,7 +200,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     return validators;
   }
 
-  protected minValidator(control: FormControl): ValidationErrors {
+  protected minValidator(control: UntypedFormControl): ValidationErrors {
     if ((typeof (control.value) === 'number') && (control.value < this.min)) {
       return {
         min: {
@@ -211,7 +211,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     return {};
   }
 
-  protected maxValidator(control: FormControl): ValidationErrors {
+  protected maxValidator(control: UntypedFormControl): ValidationErrors {
     if ((typeof (control.value) === 'number') && (this.max < control.value)) {
       return {
         max: {

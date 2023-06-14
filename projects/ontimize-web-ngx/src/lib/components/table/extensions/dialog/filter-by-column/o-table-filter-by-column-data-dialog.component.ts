@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
@@ -55,9 +55,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private isDefaultFilterSubject = new BehaviorSubject<boolean>(false);
   isDefaultFilter: Observable<boolean> = this.isDefaultFilterSubject.asObservable();
 
-  fcText = new FormControl();
-  fcFrom = new FormControl();
-  fcTo = new FormControl();
+  fcText = new UntypedFormControl();
+  fcFrom = new UntypedFormControl();
+  fcTo = new UntypedFormControl();
 
   protected columnData: TableFilterByColumnData[] = [];
   protected tableData: any[] = [];
@@ -356,7 +356,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return this.startView;
   }
 
-  protected getTypedValue(control: FormControl): any {
+  protected getTypedValue(control: UntypedFormControl): any {
     let value = control.value;
     if (this.isNumericType()) {
       value = control.value;
