@@ -6,11 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {Injectable, NgModule, OnDestroy} from '@angular/core';
-import {MatIconRegistry} from '@angular/material/icon';
-import {Observable, of as observableOf} from 'rxjs';
+import { Injectable, NgModule, OnDestroy } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { Observable, of as observableOf } from 'rxjs';
+
 type PublicApi<T> = {
-  [K in keyof T]: T[K] extends (...x: any[]) => T ? (...x: any[]) => PublicApi<T> : T[K]
+  [K in keyof T]: T[K] extends (...x: any[]) => T ? (...x: any[]) => PublicApi<T> : T[K];
 };
 
 /**
@@ -60,7 +61,7 @@ export class FakeMatIconRegistry implements PublicApi<MatIconRegistry>, OnDestro
   }
 
   getDefaultFontSetClass() {
-    return 'material-icons';
+    return ['material-icons'];
   }
 
   getSvgIconFromUrl(): Observable<SVGElement> {
@@ -79,7 +80,9 @@ export class FakeMatIconRegistry implements PublicApi<MatIconRegistry>, OnDestro
     return this;
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    //TODO
+   }
 
   private _generateEmptySvg(): SVGElement {
     const emptySvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -98,5 +101,4 @@ export class FakeMatIconRegistry implements PublicApi<MatIconRegistry>, OnDestro
 @NgModule({
   providers: [{ provide: MatIconRegistry, useClass: FakeMatIconRegistry }]
 })
-export class MatIconTestingModule {
-}
+export class MatIconTestingModule { }
