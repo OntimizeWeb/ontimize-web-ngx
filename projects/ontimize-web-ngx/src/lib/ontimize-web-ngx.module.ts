@@ -3,8 +3,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule } from '@angular/
 import { APP_CONFIG } from './config/app-config';
 import { INTERNAL_ONTIMIZE_MODULES, INTERNAL_ONTIMIZE_MODULES_EXPORTED } from './config/o-modules';
 import { ONTIMIZE_PROVIDERS } from './config/o-providers';
-import { ODialogComponent } from './shared/components/dialog/o-dialog.component';
-import { OSnackBarComponent } from './shared/components/snackbar/o-snackbar.component';
 import { Config } from './types/config.type';
 
 @NgModule({
