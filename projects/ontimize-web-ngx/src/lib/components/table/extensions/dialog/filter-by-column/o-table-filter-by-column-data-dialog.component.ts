@@ -190,7 +190,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   onSelect(event: MatSelectionListChange) {
-    event.option.value.selected = event.option.selected;
+    event.options.forEach(option => option.value.selected = option.selected);
   }
 
   onSelectAllChange(event: MatCheckboxChange) {
