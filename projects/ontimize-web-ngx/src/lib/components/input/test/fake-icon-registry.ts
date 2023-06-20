@@ -81,7 +81,7 @@ export class FakeMatIconRegistry implements PublicApi<MatIconRegistry>, OnDestro
   }
 
   ngOnDestroy() {
-    //TODO
+    //destroy fake icon
    }
 
   private _generateEmptySvg(): SVGElement {
