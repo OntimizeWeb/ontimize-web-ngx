@@ -33,37 +33,5 @@ export class OTableCellEditorRealComponent extends OTableCellEditorIntegerCompon
     return isNaN(floatValue) ? undefined : floatValue;
   }
 
-  resolveValidators(): ValidatorFn[] {
-    const validators: ValidatorFn[] = super.resolveValidators();
-    if (typeof (this.min) !== 'undefined') {
-      validators.push(this.minValidator.bind(this));
-    }
-    if (typeof (this.max) !== 'undefined') {
-      validators.push(this.maxValidator.bind(this));
-    }
-    return validators;
-  }
-
-  protected minValidator(control: UntypedFormControl) {
-    if ((typeof (control.value) === 'number') && (control.value < this.min)) {
-      return {
-        min: {
-          requiredMin: this.min
-        }
-      };
-    }
-    return {};
-  }
-
-  protected maxValidator(control: UntypedFormControl) {
-    if ((typeof (control.value) === 'number') && (this.max < control.value)) {
-      return {
-        max: {
-          requiredMax: this.max
-        }
-      };
-    }
-    return {};
-  }
 
 }
