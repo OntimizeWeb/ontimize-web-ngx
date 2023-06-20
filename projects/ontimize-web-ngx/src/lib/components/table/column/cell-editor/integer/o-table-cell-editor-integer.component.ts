@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl, ValidatorFn } from '@angular/forms';
+import { UntypedFormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import {
@@ -51,7 +51,7 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
     return validators;
   }
 
-  protected minValidator(control: FormControl) {
+  protected minValidator(control: UntypedFormControl) {
     if ((typeof (control.value) === 'number') && (control.value < this.min)) {
       return {
         min: {
@@ -62,7 +62,7 @@ export class OTableCellEditorIntegerComponent extends OBaseTableCellEditor {
     return {};
   }
 
-  protected maxValidator(control: FormControl) {
+  protected maxValidator(control: UntypedFormControl) {
     if ((typeof (control.value) === 'number') && (this.max < control.value)) {
       return {
         max: {

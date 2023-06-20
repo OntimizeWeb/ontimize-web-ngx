@@ -12,7 +12,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import moment from 'moment';
 import { merge, Subscription } from 'rxjs';
 
@@ -85,7 +85,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   protected _valueType: ODateValueType = 'timestamp';
 
   protected blockGroupValueChanges: boolean;
-  protected formGroup: FormGroup = new FormGroup({});
+  protected formGroup: UntypedFormGroup = new UntypedFormGroup({});
 
   @ViewChild('dateInput', { static: true })
   protected dateInput: ODateInputComponent;

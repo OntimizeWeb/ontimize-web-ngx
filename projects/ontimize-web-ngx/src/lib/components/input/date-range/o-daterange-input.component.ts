@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 
-import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import moment from 'moment'
 
 import { InputConverter } from '../../../decorators/input-converter';
@@ -268,7 +268,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
 
-  protected rangeDateValidator(control: FormControl): ValidationErrors {
+  protected rangeDateValidator(control: UntypedFormControl): ValidationErrors {
 
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control) && control.value[this._endKey].isSameOrBefore(control.value[this._startKey])) {
@@ -279,7 +279,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return {};
   }
 
-  protected minDateValidator(control: FormControl): ValidationErrors {
+  protected minDateValidator(control: UntypedFormControl): ValidationErrors {
     const mindate = moment(this._oMinDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control) && control.value[this._startKey].isBefore(mindate)) {
@@ -292,7 +292,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return {};
   }
 
-  protected maxDateValidator(control: FormControl): ValidationErrors {
+  protected maxDateValidator(control: UntypedFormControl): ValidationErrors {
     const maxdate = moment(this._oMaxDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control) && control.value[this._endKey].isAfter(maxdate)) {
@@ -304,7 +304,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     }
     return {};
   }
-  protected parseDateValidator(control: FormControl): ValidationErrors {
+  protected parseDateValidator(control: UntypedFormControl): ValidationErrors {
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)
       && ((control.value[this._startKey] && !control.value[this._startKey].isValid())

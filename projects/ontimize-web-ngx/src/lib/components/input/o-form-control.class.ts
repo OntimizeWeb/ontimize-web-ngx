@@ -1,9 +1,9 @@
-import { AbstractControlOptions, AsyncValidatorFn, FormControl, ValidatorFn } from '@angular/forms';
+import { AbstractControlOptions, AsyncValidatorFn, UntypedFormControl, ValidatorFn } from '@angular/forms';
 
 import { OFormDataComponent } from '../o-form-data-component.class';
 
-export class OFormControl extends FormControl {
-  public fControlChildren: (FormControl | OFormDataComponent)[];
+export class OFormControl extends UntypedFormControl {
+  public fControlChildren: (UntypedFormControl | OFormDataComponent)[];
 
   constructor(
     formState: any = null,
@@ -19,7 +19,7 @@ export class OFormControl extends FormControl {
       return;
     }
     this.fControlChildren.forEach(x => {
-      if (x instanceof FormControl) {
+      if (x instanceof UntypedFormControl) {
         x.markAsTouched(opts);
       } else if (x.getFormControl()) {
         x.getFormControl().markAsTouched();
@@ -33,7 +33,7 @@ export class OFormControl extends FormControl {
       return;
     }
     this.fControlChildren.forEach(x => {
-      if (x instanceof FormControl) {
+      if (x instanceof UntypedFormControl) {
         x.markAsDirty(opts);
       } else if (x.getFormControl()) {
         x.getFormControl().markAsDirty();
@@ -47,7 +47,7 @@ export class OFormControl extends FormControl {
       return;
     }
     this.fControlChildren.forEach(x => {
-      if (x instanceof FormControl) {
+      if (x instanceof UntypedFormControl) {
         x.markAsPristine(opts);
       } else if (x.getFormControl()) {
         x.getFormControl().markAsPristine();

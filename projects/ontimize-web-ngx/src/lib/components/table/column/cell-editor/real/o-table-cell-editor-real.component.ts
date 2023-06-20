@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import {
-  OTableCellEditorIntegerComponent,
-} from '../integer/o-table-cell-editor-integer.component';
+import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 
 @Component({
   selector: 'o-table-cell-editor-real',
@@ -33,37 +30,5 @@ export class OTableCellEditorRealComponent extends OTableCellEditorIntegerCompon
     return isNaN(floatValue) ? undefined : floatValue;
   }
 
-  resolveValidators(): ValidatorFn[] {
-    const validators: ValidatorFn[] = super.resolveValidators();
-    if (typeof (this.min) !== 'undefined') {
-      validators.push(this.minValidator.bind(this));
-    }
-    if (typeof (this.max) !== 'undefined') {
-      validators.push(this.maxValidator.bind(this));
-    }
-    return validators;
-  }
-
-  protected minValidator(control: FormControl) {
-    if ((typeof (control.value) === 'number') && (control.value < this.min)) {
-      return {
-        min: {
-          requiredMin: this.min
-        }
-      };
-    }
-    return {};
-  }
-
-  protected maxValidator(control: FormControl) {
-    if ((typeof (control.value) === 'number') && (this.max < control.value)) {
-      return {
-        max: {
-          requiredMax: this.max
-        }
-      };
-    }
-    return {};
-  }
 
 }

@@ -8,7 +8,7 @@ import {
   Injector,
   OnInit
 } from '@angular/core';
-import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { SnackBarService } from '../../../../../services/snackbar.service';
@@ -134,14 +134,14 @@ export class OTableInsertableRowComponent implements OnInit {
     return this.isColumnInsertable(column) && Util.isDefined(this.columnEditors[column.attr]);
   }
 
-  getControl(column: OColumn, disabled: boolean = false): FormControl {
+  getControl(column: OColumn, disabled: boolean = false): UntypedFormControl {
     if (!this.controls[column.attr]) {
       const validators: ValidatorFn[] = this.resolveValidators(column);
       const cfg = {
         value: undefined,
         disabled: disabled
       };
-      this.controls[column.attr] = new FormControl(cfg, validators);
+      this.controls[column.attr] = new UntypedFormControl(cfg, validators);
     }
     return this.controls[column.attr];
   }

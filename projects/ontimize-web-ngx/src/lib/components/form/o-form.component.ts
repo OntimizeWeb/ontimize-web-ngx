@@ -12,7 +12,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
@@ -260,7 +260,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   messageService: OFormMessageService;
   /* end of parsed inputs variables */
 
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   onDataLoaded: EventEmitter<object> = new EventEmitter<object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   /**
@@ -435,7 +435,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (comp) {
       const attr = comp.getAttribute();
       if (attr && attr.length > 0) {
-        const control: FormControl = comp.getControl();
+        const control: UntypedFormControl = comp.getControl();
         if (control) {
           this.formGroup.registerControl(attr, control);
           if (!comp.isAutomaticRegistering()) {
@@ -457,7 +457,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   unregisterFormControlComponent(comp: IFormDataComponent) {
     if (comp && comp.isAutomaticRegistering()) {
-      const control: FormControl = comp.getControl();
+      const control: UntypedFormControl = comp.getControl();
       const attr = comp.getAttribute();
       if (control && attr && attr.length > 0) {
         this.formGroup.removeControl(attr);
@@ -592,7 +592,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   ngOnInit(): void {
     this.addDeactivateGuard();
 
-    this.formGroup = new FormGroup({});
+    this.formGroup = new UntypedFormGroup({});
 
     this.formNavigation.initialize();
 

@@ -1,5 +1,5 @@
 import { ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, Type, ViewChild, Directive } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
@@ -54,10 +54,10 @@ export class OBaseTableCellEditor implements OnInit {
 
   protected _rowData: any;
 
-  formControl: FormControl;
+  formControl: UntypedFormControl;
   controlArgs: any;
 
-  formGroup: FormGroup = new FormGroup({});
+  formGroup: UntypedFormGroup = new UntypedFormGroup({});
 
   editionStarted: EventEmitter<object> = new EventEmitter<object>();
   editionCancelled: EventEmitter<object> = new EventEmitter<object>();
@@ -164,7 +164,7 @@ export class OBaseTableCellEditor implements OnInit {
         value: undefined,
         disabled: !this.enabled
       };
-      this.formControl = new FormControl(cfg, validators);
+      this.formControl = new UntypedFormControl(cfg, validators);
     }
     if (!Util.isDefined(this.formGroup.get(this.cellEditorId))) {
       this.formGroup.addControl(this.cellEditorId, this.formControl);

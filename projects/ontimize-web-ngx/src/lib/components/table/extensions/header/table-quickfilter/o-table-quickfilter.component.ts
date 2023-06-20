@@ -12,7 +12,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatMenu } from '@angular/material/menu';
 import { fromEvent, Subscription } from 'rxjs';
@@ -80,7 +80,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     protected elRef: ElementRef,
     @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
-    this.formControl = new FormControl();
+    this.formControl = new UntypedFormControl();
   }
 
   public ngOnInit(): void {

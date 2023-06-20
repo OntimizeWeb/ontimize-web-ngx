@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -17,7 +17,7 @@ import { FakeMatIconRegistry } from '../test/fake-icon-registry';
 describe('OPhoneInputComponent', () => {
   let component: OPhoneInputComponent;
   let fixture: ComponentFixture<OPhoneInputComponent>;
-  let formGroup: FormGroup;
+  let formGroup: UntypedFormGroup;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [

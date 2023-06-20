@@ -1,5 +1,5 @@
 import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren, Directive } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
@@ -107,7 +107,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: OFormControl;
   protected _fControlSubscription: Subscription;
-  protected _fGroup: FormGroup;
+  protected _fGroup: UntypedFormGroup;
   protected elRef: ElementRef;
   protected form: OFormComponent;
   protected oldValue: any;
@@ -212,7 +212,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.permissions ? this.permissions.visible : true;
   }
 
-  public getFormGroup(): FormGroup {
+  public getFormGroup(): UntypedFormGroup {
     if (this._fGroup) {
       return this._fGroup;
     }
@@ -220,13 +220,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if ((!this.hasEnabledPermission() || !this.hasVisiblePermission()) && !this._fGroup) {
       const group = {};
       group[this.oattr] = this._fControl;
-      this._fGroup = new FormGroup(group);
+      this._fGroup = new UntypedFormGroup(group);
       formGroup = this._fGroup;
     }
     return formGroup;
   }
 
-  public getFormControl(): FormControl {
+  public getFormControl(): UntypedFormControl {
     return this._fControl;
   }
 

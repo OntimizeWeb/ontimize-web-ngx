@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 export function StringConverter(value: any) {
   if (value == null || typeof value === 'string') {
     return value;

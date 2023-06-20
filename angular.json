@@ -41,8 +41,9 @@
       }
     }
   },
-  "defaultProject": "ontimize-web-ngx",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

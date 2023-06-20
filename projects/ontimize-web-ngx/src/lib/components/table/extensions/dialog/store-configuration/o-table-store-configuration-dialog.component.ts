@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Injector, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
@@ -43,11 +43,11 @@ export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogCla
     info: 'TABLE.DIALOG.PROPERTIES.PAGE.INFO'
   }];
 
-  public formGroup: FormGroup = new FormGroup({
-    name: new FormControl('', [
+  public formGroup: UntypedFormGroup = new UntypedFormGroup({
+    name: new UntypedFormControl('', [
       Validators.required
     ]),
-    description: new FormControl('')
+    description: new UntypedFormControl('')
   });
 
   constructor(

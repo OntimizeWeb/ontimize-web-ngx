@@ -1,4 +1,4 @@
-import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Util } from '../util';
 import * as lpn from 'google-libphonenumber';
 
@@ -17,7 +17,7 @@ export class OValidators {
   /**
    * Hour validator hh:mm am/pm format
    */
-  public static twelveHourFormatValidator(control: FormControl): ValidationErrors {
+  public static twelveHourFormatValidator(control: UntypedFormControl): ValidationErrors {
     const regExp = new RegExp(TWELVE_HOUR_FORMAT_PATTERN);
     if (control.value && typeof control.value === 'string' && !regExp.test(control.value)) {
       return { invalidFormatHour: true };
@@ -28,7 +28,7 @@ export class OValidators {
   /**
    * Hour validator HH:mm format
    */
-  public static twentyFourHourFormatValidator(control: FormControl): ValidationErrors {
+  public static twentyFourHourFormatValidator(control: UntypedFormControl): ValidationErrors {
     const regExp = new RegExp(TWENTY_FOUR_HOUR_FORMAT_PATTERN);
     if (control.value && typeof control.value === 'string' && !regExp.test(control.value)) {
       return { invalidFormatHour: true };
@@ -39,7 +39,7 @@ export class OValidators {
   /**
    * Email validator
    */
-  public static emailValidator(control: FormControl): ValidationErrors {
+  public static emailValidator(control: UntypedFormControl): ValidationErrors {
     if (control.value && control.value.length > 0 && !EMAIL_REGEXP.test(control.value)) {
       return { invalidEmailAddress: true };
     }
@@ -49,7 +49,7 @@ export class OValidators {
   /**
    * Phone validator
    */
-  public static phoneValidator(control: FormControl, countryCode?: any): ValidationErrors {
+  public static phoneValidator(control: UntypedFormControl, countryCode?: any): ValidationErrors {
     if (!control || !control.value) {
       return {};
     }
@@ -81,7 +81,7 @@ export class OValidators {
   /**
    * NIF validator
    */
-  public static nifValidator(control: FormControl): ValidationErrors {
+  public static nifValidator(control: UntypedFormControl): ValidationErrors {
     const newValue = control.value;
     const regExp = new RegExp(DNI_PATTERN + '|' + NIE_PATTERN);
 
@@ -132,7 +132,7 @@ export class OValidators {
       console.warn('Validation key param must be defined in patternValidator ')
     }
 
-    let validator: ValidatorFn = (control: FormControl): { [key: string]: any } => {
+    let validator: ValidatorFn = (control: UntypedFormControl): { [key: string]: any } => {
       if (!Util.isDefined(regex) || !Util.isDefined(key) || !control.value) {
         // if regex is not defined or key is not defined or control is empty return no error
         return undefined;

@@ -11,7 +11,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 
@@ -54,7 +54,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 export class OComboComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public value: OFormValue;
-  public searchControl: FormControl = new FormControl();
+  public searchControl: UntypedFormControl = new UntypedFormControl();
   public renderer: OComboCustomRenderer;
 
   /* Inputs */
