@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { UntypedFormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../../../decorators/input-converter';
-import {
-  OTableCellEditorIntegerComponent,
-} from '../integer/o-table-cell-editor-integer.component';
+import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 
 @Component({
   selector: 'o-table-cell-editor-real',
