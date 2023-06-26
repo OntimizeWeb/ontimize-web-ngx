@@ -429,7 +429,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   showPaginatorFirstLastButtons: boolean = true;
   @InputConverter()
-  autoAlignTitles: boolean = false;
+  autoAlignTitles: boolean = true;
   @InputConverter()
   multipleSort: boolean = true;
   @InputConverter()
@@ -701,6 +701,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     try {
       this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
       this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
+      this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles
     } catch (error) {
       // Do nothing because is optional
     }
