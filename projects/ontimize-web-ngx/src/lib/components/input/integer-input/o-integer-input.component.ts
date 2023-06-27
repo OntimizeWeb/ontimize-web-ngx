@@ -71,12 +71,6 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   ) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'INTEGER';
-
-    // Firefox workaround
-    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-      this.inputType = 'text';
-    }
-
     this.setComponentPipe();
   }
 
@@ -177,10 +171,6 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   setNumberDOMValue(val: any) {
     const inputElement = this.getInputEl();
     if (Util.isDefined(inputElement)) {
-      // Firefox workaround
-      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-        inputElement.type = 'number';
-      }
       inputElement.value = (val !== undefined) ? val : '';
     }
   }
@@ -188,10 +178,6 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   setTextDOMValue(val: any) {
     const inputElement = this.getInputEl();
     if (Util.isDefined(inputElement)) {
-      // Firefox workaround
-      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-        inputElement.type = 'text';
-      }
       inputElement.value = (val !== undefined) ? val : '';
     }
   }
