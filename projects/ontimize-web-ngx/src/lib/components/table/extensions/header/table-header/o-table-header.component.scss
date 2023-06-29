@@ -1,0 +1,14 @@
+.o-table-header {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  // align-items: center;
+
+  span[o-mat-sort-header] {
+    flex: 1;
+    min-width: 0;
+  }
+
+}

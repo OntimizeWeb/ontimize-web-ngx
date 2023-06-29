@@ -2,6 +2,7 @@
   &:not(.disabled) {
     cursor: col-resize;
   }
+
   display: inline-block;
   width: 13px;
   position: absolute;
@@ -9,6 +10,7 @@
   top: 6px;
   bottom: 6px;
 
+  right:-6px;
   span {
     height: 100%;
     width: 1px;
