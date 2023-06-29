@@ -1,3 +1,27 @@
+## 8.13.0
+### Features
+* **o-table**: Set auto-align-titles=`yes` by default.
+### Breaking changes
+* Due to the improvement of the issue [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241) headers align in o-table change the align title by default.
+  * To resolve this breaking change, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
+
+  ```ts
+  @NgModule({
+    declarations: [
+    ...
+    ],
+    ...
+    providers: [
+      ...
+      { provide: O_TABLE_GLOBAL_CONFIG, useValue: { autoAlignTitles: false } },
+      ...
+    ],
+    ...
+  })
+  ```
+  * New CSS class `o-table-header`
+  * The following CSS class changed `o-table-column-filter-icon`, `mat-sort-header-arrow`, `mat-sort-header-button`, `column-filter-icon`, `resizable`, `mat-header-cell`
+
 ## 8.12.2 (2023-06-13)
 ### Bug fixes
 * **o-table**: Fixed the loading with sort on grouped table not disappearing ([b8888c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8888c5)) Closes [#1230](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1230)
