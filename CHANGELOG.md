@@ -20,7 +20,7 @@
   })
   ```
   * New CSS class `o-table-header`
-  * The following CSS class changed `o-table-column-filter-icon`, `mat-sort-header-arrow`, `mat-sort-header-button`, `column-filter-icon`, `resizable`, `mat-header-cell`
+  * The following CSS class changed `o-table-column-filter-icon`, `mat-sort-header-arrow`, `mat-sort-header-button`, `column-filter-icon`, `resizable`, `mat-header-cell`, `o-table-column-resizer`
 
 ## 8.12.2 (2023-06-13)
 ### Bug fixes
