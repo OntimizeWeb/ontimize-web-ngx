@@ -105,7 +105,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     super.initialize();
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.column);
-      oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';
+      oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'start';
     }
 
     this.colArray = Util.parseArray(this.columns, true);
