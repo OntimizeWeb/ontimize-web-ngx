@@ -4,7 +4,7 @@
 
 ### Bug fixes
 * **o-form**: Fixed `fill-form` css class not expanding in some containers [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
-* **o-integer-input**: Removing old firefox versions workaround that is no longer needed [#1237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1237)
+* **o-integer-input**: Removing old firefox versions workaround that is no longer needed ([cda3108](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cda3108)) Closes [#1237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1237)
 
 ### Breaking changes
 * Due to the improvement of the issue [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241) headers align in o-table change the align title by default.
