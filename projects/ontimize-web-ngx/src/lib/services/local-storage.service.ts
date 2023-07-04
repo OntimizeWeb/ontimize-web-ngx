@@ -9,6 +9,7 @@ import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +24,7 @@ export class LocalStorageService {
   private _config: Config;
   private _router: Router;
   private authService: AuthService;
+
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>).getConfiguration();
@@ -69,12 +71,16 @@ export class LocalStorageService {
     let componentData;
     const storedComponents: object = this.getSessionUserComponentsData() || {};
     if (storedComponents[key]) {
-      const decoded = atob(storedComponents[key]);
-      try {
-        componentData = JSON.parse(decoded);
-      } catch (e) {
-        componentData = undefined;
+      if (Object.keys(storedComponents[key]).length !== 0) {
+        const decoded = atob((storedComponents[key]));
+        try {
+          componentData = JSON.parse(decoded);
+        } catch (e) {
+          componentData = undefined;
+        }
       }
+
+
     }
     return componentData;
   }
@@ -82,12 +88,33 @@ export class LocalStorageService {
   updateAppComponentStorage(componentKey: string, componentData: object) {
     let componentDataB64;
     try {
-      componentDataB64 = btoa(JSON.stringify(componentData));
+      componentDataB64 = btoa(this.stringify(componentData));
     } catch (e) {
       componentDataB64 = undefined;
     }
     this.storeComponentInSessionUser(componentKey, componentDataB64);
   }
+
+  /**
+   * Converts an object to a JSON string, avoiding circular references.
+   * @param obj The object to convert to JSON.
+   * @returns A JSON string representing the object.
+   */
+  private stringify(obj: object) {
+    let cache = [];
+    let str = JSON.stringify(obj, function (key, value) {
+      if (typeof value === "object" && value !== null) {
+        if (cache.indexOf(value) !== -1) {
+          return; // Avoid circular references
+        }
+        cache.push(value);
+      }
+      return value;
+    });
+    cache = null;
+    return str;
+  }
+
 
   public getSessionUserComponentsData(): object {
     let storedComponentsByUser = {};
