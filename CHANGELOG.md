@@ -1,14 +1,14 @@
 ## 8.13.0
 ### Features
-* **o-table**: Set auto-align-titles=`yes` by default. [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
+* **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
 
 ### Bug fixes
-* **o-form**: Fixed `fill-form` css class not expanding in some containers [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
+* **o-form**: Fixed `fill-form` css class not expanding in some containers ([53998fb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/53998fb)) Closes [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
 * **o-integer-input**: Removing old firefox versions workaround that is no longer needed ([cda3108](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cda3108)) Closes [#1237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1237)
 
 ### Breaking changes
 * Due to the improvement of the issue [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241) headers align in o-table change the align title by default.
-  * To resolve this breaking change, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
+  * To align table header texts to the center, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
 
   ```ts
   @NgModule({
