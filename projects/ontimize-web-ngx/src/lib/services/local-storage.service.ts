@@ -88,33 +88,12 @@ export class LocalStorageService {
   updateAppComponentStorage(componentKey: string, componentData: object) {
     let componentDataB64;
     try {
-      componentDataB64 = btoa(this.stringify(componentData));
+      componentDataB64 = btoa(Util.stringify(componentData));
     } catch (e) {
       componentDataB64 = undefined;
     }
     this.storeComponentInSessionUser(componentKey, componentDataB64);
   }
-
-  /**
-   * Converts an object to a JSON string, avoiding circular references.
-   * @param obj The object to convert to JSON.
-   * @returns A JSON string representing the object.
-   */
-  private stringify(obj: object) {
-    let cache = [];
-    let str = JSON.stringify(obj, function (key, value) {
-      if (typeof value === "object" && value !== null) {
-        if (cache.indexOf(value) !== -1) {
-          return; // Avoid circular references
-        }
-        cache.push(value);
-      }
-      return value;
-    });
-    cache = null;
-    return str;
-  }
-
 
   public getSessionUserComponentsData(): object {
     let storedComponentsByUser = {};
@@ -193,7 +172,7 @@ export class LocalStorageService {
 
       appData[LocalStorageService.USERS_STORAGE_KEY] = usersObject;
       try {
-        localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+        localStorage.setItem(this._config.uuid, Util.stringify(appData));
       } catch (e) {
         console.error("Cannot set new item in localStorage. Error: " + e);
       }
@@ -203,7 +182,7 @@ export class LocalStorageService {
   protected setLocalStorage(appData: any) {
     this.onSetLocalStorage.emit();
     try {
-      localStorage.setItem(this._config.uuid, JSON.stringify(appData));
+      localStorage.setItem(this._config.uuid, Util.stringify(appData));
     } catch (e) {
       console.error("Cannot set new item in localStorage. Error: " + e);
     }
