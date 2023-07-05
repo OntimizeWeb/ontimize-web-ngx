@@ -2859,18 +2859,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public getColumnWidthFromState(colDef: OColumn): string {
-    let columnWidth = colDef.width;
+    //1. By default, set width definition
+    let columnWidth = colDef.definition && colDef.definition.width ? colDef.definition.width : void 0;
     const storedData = this.state.getColumnDisplay(colDef);
     if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
+      //2. Set width if the width is stored
+      columnWidth = storedData.width;
       // check that the width of the columns saved in the initial configuration
       // in the local storage is different from the original value
       if (this.state.initialConfiguration.columnsDisplay) {
         const initialStoredData = this.state.initialConfiguration.getColumnDisplay(colDef);
-        if (initialStoredData && initialStoredData.width && initialStoredData.width === colDef.definition.originalWidth) {
-          columnWidth = storedData.width;
+       // If original width changed then the width is reseted with this value
+        if (initialStoredData && initialStoredData.width && colDef.definition.originalWidth) {
+          if (initialStoredData.width !== colDef.definition.originalWidth) {
+            columnWidth = colDef.definition.originalWidth;
+          }
         }
-      } else {
-        columnWidth = storedData.width;
       }
     }
     return columnWidth;
@@ -2885,6 +2889,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   refreshColumnsWidthFromOriginalDefinition() {
     setTimeout(() => {
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
+        c.width = c.DOMWidth = void 0;
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
