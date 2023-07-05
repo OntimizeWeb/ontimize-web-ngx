@@ -700,8 +700,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   private getGlobalConfig() {
     try {
       this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
-      this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
-      this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles
+      this.autoAdjust = this.oTableGlobalConfig.autoAdjust || this.autoAdjust;
+      this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles || this.autoAlignTitles;
     } catch (error) {
       // Do nothing because is optional
     }
@@ -1398,7 +1398,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   setDatasource() {
     //Deleted previous instance and subscribers
     delete this.dataSource;
-    if(this.onRenderedDataChange) this.onRenderedDataChange.unsubscribe();
+    if (this.onRenderedDataChange) this.onRenderedDataChange.unsubscribe();
 
     const dataSourceService = this.injector.get(OTableDataSourceService);
     this.dataSource = dataSourceService.getInstance(this);
@@ -2717,31 +2717,38 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   getTitleAlignClass(oCol: OColumn) {
-    let align;
+
     const hasTitleAlign = Util.isDefined(oCol.definition) && Util.isDefined(oCol.definition.titleAlign);
     const autoAlign = (this.autoAlignTitles && !hasTitleAlign) || (hasTitleAlign && oCol.definition.titleAlign === Codes.COLUMN_TITLE_ALIGN_AUTO);
     if (!autoAlign) {
       return oCol.getTitleAlignClass();
     }
-    switch (oCol.type) {
-      case 'image':
-      case 'date':
-      case 'action':
-      case 'boolean':
-        align = Codes.COLUMN_TITLE_ALIGN_CENTER;
-        break;
-      case 'currency':
-      case 'integer':
-      case 'real':
-      case 'percentage':
-        align = Codes.COLUMN_TITLE_ALIGN_END;
-        break;
-      case 'service':
-      default:
-        align = Codes.COLUMN_TITLE_ALIGN_START;
-        break;
+
+    let align = this.getCellAlignClass(oCol);
+    if (Util.isDefined(align) && align.length>0) {
+      align = align.substring(2);
+    }else{
+      switch (oCol.type) {
+        case 'image':
+        case 'date':
+        case 'action':
+        case 'boolean':
+          align = Codes.COLUMN_TITLE_ALIGN_CENTER;
+          break;
+        case 'currency':
+        case 'integer':
+        case 'real':
+        case 'percentage':
+          align = Codes.COLUMN_TITLE_ALIGN_END;
+          break;
+        case 'service':
+        default:
+          align = Codes.COLUMN_TITLE_ALIGN_START;
+          break;
+      }
     }
     return align;
+
   }
 
   public getCellAlignClass(column: OColumn): string {
