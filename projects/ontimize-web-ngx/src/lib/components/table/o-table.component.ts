@@ -419,7 +419,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @InputConverter()
   set horizontalScroll(value: boolean) {
     this._horizontalScroll = BooleanConverter(value);
-    this.refreshColumnsWidth();
+    this.refreshColumnsWidthFromOriginalDefinition();
   }
 
   get horizontalScroll(): boolean {
@@ -649,7 +649,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }
       }, 0);
     }
-    this.refreshColumnsWidth();
     this.checkViewportSize();
   }
 
@@ -1066,20 +1065,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     const colDef: OColumn = this.createOColumn(column.attr, this, column);
-    let columnWidth = column.width;
-    const storedData = this.state.getColumnDisplay(colDef);
-    if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
-      // check that the width of the columns saved in the initial configuration
-      // in the local storage is different from the original value
-      if (this.state.initialConfiguration.columnsDisplay) {
-        const initialStoredData = this.state.initialConfiguration.getColumnDisplay(colDef);
-        if (initialStoredData && initialStoredData.width === colDef.definition.originalWidth) {
-          columnWidth = storedData.width;
-        }
-      } else {
-        columnWidth = storedData.width;
-      }
-    }
+    let columnWidth = this.getColumnWidthFromState(colDef);
     if (Util.isDefined(columnWidth)) {
       colDef.width = columnWidth;
     }
@@ -1622,7 +1608,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected setData(data: any, sqlTypes: any) {
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.setDataArray(data);
-    this.updateScrolledState();
     if (this.pageable) {
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
@@ -2671,6 +2656,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   applyDefaultConfiguration() {
     this.initializeParams();
     this.parseVisibleColumns(true);
+    this.refreshColumnsWidthFromOriginalDefinition();
     this.reinitializateQuickFilterColumns();
     this.resetQueryRows();
     const initialConfigSortColumnsArray = ServiceUtils.parseSortColumns(this.state.initialConfiguration.sortColumns);
@@ -2697,6 +2683,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
           case 'oColumns-display':
             this.parseVisibleColumns();
             this.initializeCheckboxColumn();
+            this.refreshColumnsWidthFromLocalStorage();
             break;
           case 'quick-filter':
           case 'columns-filter':
@@ -2878,9 +2865,38 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return !this.isSelectionModeNone() && this.selection.selected.some((element: any) => keys.every(key => row[key] === element[key]));
   }
 
-  refreshColumnsWidth() {
+  public getColumnWidthFromState(colDef: OColumn): string {
+    //1. By default, set width definition
+    let columnWidth = colDef.definition && colDef.definition.width ? colDef.definition.width : void 0;
+    const storedData = this.state.getColumnDisplay(colDef);
+    if (Util.isDefined(storedData) && Util.isDefined(storedData.width)) {
+      //2. Set width if the width is stored
+      columnWidth = storedData.width;
+      // check that the width of the columns saved in the initial configuration
+      // in the local storage is different from the original value
+      if (this.state.initialConfiguration.columnsDisplay) {
+        const initialStoredData = this.state.initialConfiguration.getColumnDisplay(colDef);
+       // If original width changed then the width is reseted with this value
+        if (initialStoredData && initialStoredData.width && colDef.definition.originalWidth) {
+          if (initialStoredData.width !== colDef.definition.originalWidth) {
+            columnWidth = colDef.definition.originalWidth;
+          }
+        }
+      }
+    }
+    return columnWidth;
+  }
+
+  refreshColumnsWidthFromLocalStorage() {
+    this.oTableOptions.columns.forEach(x => {
+      x.width = this.getColumnWidthFromState(x);
+    });
+  }
+
+  refreshColumnsWidthFromOriginalDefinition() {
     setTimeout(() => {
       this._oTableOptions.columns.filter(c => c.visible).forEach(c => {
+        c.width = c.DOMWidth = void 0;
         if (Util.isDefined(c.definition) && Util.isDefined(c.definition.width)) {
           c.width = c.definition.width;
         }
