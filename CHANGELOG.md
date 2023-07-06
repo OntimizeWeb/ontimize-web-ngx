@@ -1,13 +1,13 @@
 ## 8.13.0
 ### Features
-* **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
+* **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) ([99dd44b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99dd44b)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
 
 ### Bug fixes
 * **o-form**: Fixed `fill-form` css class not expanding in some containers ([53998fb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/53998fb)) Closes [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
 * **o-integer-input**: Removing old firefox versions workaround that is no longer needed ([cda3108](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cda3108)) Closes [#1237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1237)
 * **o-table**:
   * Fixed that when resizing the columns that had a width defined in the table and saving the state in the configuration to apply it later, the width of the saved columns did not correspond to the state of the configuration
- [#1240](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1240)
+  ([81597f2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/81597f2)) [#1240](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1240)
   * Fixed that when grouping by rows and filtering by columns when switching screens and returning to the table, the data was not loaded ([2a8232d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8232d)) Closes [#1245](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1245)
 
 ### Breaking changes
