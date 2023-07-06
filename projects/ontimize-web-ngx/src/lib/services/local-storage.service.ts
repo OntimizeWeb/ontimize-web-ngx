@@ -29,7 +29,7 @@ export class LocalStorageService {
   constructor(protected injector: Injector) {
     this._config = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>).getConfiguration();
     this._router = this.injector.get<Router>(Router as Type<Router>);
-    this.initializeAuthService();
+    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     const self = this;
     this._router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -37,10 +37,7 @@ export class LocalStorageService {
       }
     });
   }
-  initializeAuthService() {
-    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
 
-  }
   getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): any {
     const componentKey = comp.getComponentKey();
     let completeKey = componentKey;
@@ -121,8 +118,8 @@ export class LocalStorageService {
   private storeComponentInSessionUser(componentKey, componentDataB64) {
     const appData = this.getStoredData();
     const session = appData[LocalStorageService.SESSION_STORAGE_KEY] || {}; // uuid -> session
-    if (!Util.isDefined(session) || !Util.isDefined(session.user)) {
-      this.initializeAuthService();
+    if (!Util.isDefined(this.authService)) {
+      this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     }
     const users = appData[LocalStorageService.USERS_STORAGE_KEY] || {}; // uuid -> users
     const idUser = session.user || this.authService.getSessionInfo().user;
