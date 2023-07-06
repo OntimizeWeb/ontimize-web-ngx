@@ -5,6 +5,9 @@
 ### Bug fixes
 * **o-form**: Fixed `fill-form` css class not expanding in some containers ([53998fb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/53998fb)) Closes [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
 * **o-integer-input**: Removing old firefox versions workaround that is no longer needed ([cda3108](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cda3108)) Closes [#1237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1237)
+* **o-table**:
+  * Fixed that when resizing the columns that had a width defined in the table and saving the state in the configuration to apply it later, the width of the saved columns did not correspond to the state of the configuration
+ [#1240](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1240)
 
 ### Breaking changes
 * Due to the improvement of the issue [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241) headers align in o-table change the align title by default.
