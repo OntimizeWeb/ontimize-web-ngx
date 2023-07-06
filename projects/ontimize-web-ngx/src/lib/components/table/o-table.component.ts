@@ -699,8 +699,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   private getGlobalConfig() {
     try {
       this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
-      this.autoAdjust = this.oTableGlobalConfig.autoAdjust || this.autoAdjust;
-      this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles || this.autoAlignTitles;
+      if (Util.isDefined(this.oTableGlobalConfig.autoAdjust)) {
+        this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
+      };
+      if (Util.isDefined(this.oTableGlobalConfig.autoAlignTitles)) {
+        this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles;
+      }
     } catch (error) {
       // Do nothing because is optional
     }
@@ -2712,9 +2716,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     let align = this.getCellAlignClass(oCol);
-    if (Util.isDefined(align) && align.length>0) {
+    if (Util.isDefined(align) && align.length > 0) {
       align = align.substring(2);
-    }else{
+    } else {
       switch (oCol.type) {
         case 'image':
         case 'date':
@@ -2876,7 +2880,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       // in the local storage is different from the original value
       if (this.state.initialConfiguration.columnsDisplay) {
         const initialStoredData = this.state.initialConfiguration.getColumnDisplay(colDef);
-       // If original width changed then the width is reseted with this value
+        // If original width changed then the width is reseted with this value
         if (initialStoredData && initialStoredData.width && colDef.definition.originalWidth) {
           if (initialStoredData.width !== colDef.definition.originalWidth) {
             columnWidth = colDef.definition.originalWidth;
