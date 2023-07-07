@@ -30,7 +30,6 @@ export class LocalStorageService {
     this._config = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>).getConfiguration();
     this._router = this.injector.get<Router>(Router as Type<Router>);
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
-
     const self = this;
     this._router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -119,8 +118,8 @@ export class LocalStorageService {
   private storeComponentInSessionUser(componentKey, componentDataB64) {
     const appData = this.getStoredData();
     const session = appData[LocalStorageService.SESSION_STORAGE_KEY] || {}; // uuid -> session
-    if (!Util.isDefined(session) || !Util.isDefined(session.user)) {
-      return;
+    if (!Util.isDefined(this.authService)) {
+      this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     }
     const users = appData[LocalStorageService.USERS_STORAGE_KEY] || {}; // uuid -> users
     const idUser = session.user || this.authService.getSessionInfo().user;
