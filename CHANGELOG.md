@@ -9,6 +9,7 @@
   * Fixed that when resizing the columns that had a width defined in the table and saving the state in the configuration to apply it later, the width of the saved columns did not correspond to the state of the configuration
   ([81597f2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/81597f2)) [#1240](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1240)
   * Fixed that when grouping by rows and filtering by columns when switching screens and returning to the table, the data was not loaded ([2a8232d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8232d)) Closes [#1245](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1245)
+  * Fixed bug that caused the localstorage to not be initialized correctly ([f44e2a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f44e2a5)) Closes [#1251](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1251)
 
 ### Breaking changes
 * Due to the improvement of the issue [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241) headers align in o-table change the align title by default.
