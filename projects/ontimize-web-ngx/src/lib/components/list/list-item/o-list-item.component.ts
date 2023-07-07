@@ -15,7 +15,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { MatLine } from '@angular/material/core';
-import { MatListAvatarCssMatStyler, MatListItem } from '@angular/material/list';
+import { MatLegacyListAvatarCssMatStyler as MatListAvatarCssMatStyler, MatLegacyListItem as MatListItem } from '@angular/material/legacy-list';
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
 import { ListItem } from './o-list-item';

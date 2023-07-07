@@ -8,7 +8,7 @@ import {
   Optional,
   ViewEncapsulation
 } from '@angular/core';
-import { MatRadioChange } from '@angular/material/radio';
+import { MatLegacyRadioChange as MatRadioChange } from '@angular/material/legacy-radio';
 
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
