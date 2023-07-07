@@ -31,7 +31,7 @@ $mat-sort-header-arrow-hint-opacity: .38;
   font: inherit;
   color: currentColor;
 
-  &:has(.mat-sort-header-arrow) {
+  &:has(+ .mat-sort-header-arrow) {
     padding-right: 6px;
   }
 }
@@ -40,7 +40,6 @@ $mat-sort-header-arrow-hint-opacity: .38;
   height: $mat-sort-header-arrow-container-size;
   width: $mat-sort-header-arrow-container-size;
   min-width: $mat-sort-header-arrow-container-size;
-  margin: 0 $mat-sort-header-arrow-margin 0 0;
   position: relative;
   display: flex;
 
