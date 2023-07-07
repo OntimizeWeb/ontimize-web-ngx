@@ -1,3 +1,37 @@
+## 8.13.0 (2023-07-07)
+### Features
+* **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) ([99dd44b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99dd44b)) ([a3f8818](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a3f8818)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
+
+### Bug fixes
+* **o-form**: Fixed `fill-form` css class not expanding in some containers ([53998fb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/53998fb)) Closes [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
+* **o-integer-input**: Removing old firefox versions workaround that is no longer needed ([cda3108](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cda3108)) Closes [#1237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1237)
+* **o-table**:
+  * Fixed that when resizing the columns that had a width defined in the table and saving the state in the configuration to apply it later, the width of the saved columns did not correspond to the state of the configuration
+  ([81597f2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/81597f2)) [#1240](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1240)
+  * Fixed that when grouping by rows and filtering by columns when switching screens and returning to the table, the data was not loaded ([2a8232d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8232d)) Closes [#1245](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1245)
+  * Fixed bug that caused the localstorage to not be initialized correctly ([f44e2a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f44e2a5)) Closes [#1251](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1251)
+
+### Breaking changes
+* Due to the improvement of the issue [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241) headers align in o-table change the align title by default.
+  * To align table header texts to the center, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
+
+  ```ts
+  @NgModule({
+    declarations: [
+    ...
+    ],
+    ...
+    providers: [
+      ...
+      { provide: O_TABLE_GLOBAL_CONFIG, useValue: { autoAlignTitles: false } },
+      ...
+    ],
+    ...
+  })
+  ```
+  * New CSS class `o-table-header`
+  * The following CSS class changed `o-table-column-filter-icon`, `mat-sort-header-arrow`, `mat-sort-header-button`, `column-filter-icon`, `resizable`, `mat-header-cell`, `o-table-column-resizer`
+
 ## 8.12.2 (2023-06-13)
 ### Bug fixes
 * **o-table**: Fixed the loading with sort on grouped table not disappearing ([b8888c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8888c5)) Closes [#1230](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1230)
