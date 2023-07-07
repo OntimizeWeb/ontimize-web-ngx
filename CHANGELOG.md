@@ -1,6 +1,6 @@
-## 8.13.0
+## 8.13.0 (2023-07-07)
 ### Features
-* **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) ([99dd44b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99dd44b)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
+* **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) ([99dd44b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99dd44b)) ([a3f8818](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a3f8818)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
 
 ### Bug fixes
 * **o-form**: Fixed `fill-form` css class not expanding in some containers ([53998fb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/53998fb)) Closes [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
