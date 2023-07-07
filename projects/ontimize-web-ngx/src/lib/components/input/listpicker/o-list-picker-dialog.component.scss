@@ -1,16 +1,18 @@
-.cdk-overlay-list-picker .mat-dialog-container {
+.cdk-overlay-list-picker .mat-mdc-dialog-container {
   .o-list-picker-dialog {
     display: flex;
     flex-direction: column;
     height: 100%;
 
-    .mat-dialog-title {
+    .mat-mdc-dialog-title {
       margin-top: -16px;
 
       .o-search-input mat-form-field {
+        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
         .mat-form-field-wrapper {
           padding-bottom: 0;
-
+          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
           .mat-form-field-prefix {
             border: 0;
 
@@ -18,12 +20,12 @@
               vertical-align: middle;
             }
           }
-
+          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
           .mat-form-field-label {
             position: static;
             padding: 0 4px;
           }
-
+          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
           .mat-form-field-underline {
             display: none;
           }
@@ -31,7 +33,7 @@
       }
     }
 
-    .mat-dialog-content {
+    .mat-mdc-dialog-content {
       .cdk-virtual-scroll-viewport {
         height: 100%;
 

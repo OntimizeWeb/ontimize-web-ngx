@@ -1,6 +1,6 @@
 import { ContentChild, Directive, Input, TemplateRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { MatLegacyTabHeaderPosition as MatTabHeaderPosition } from '@angular/material/legacy-tabs';
+import { MatTabHeaderPosition } from '@angular/material/tabs';
 
 import { BooleanConverter, NumberConverter } from '../../../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';

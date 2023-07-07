@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnInit, Type, ViewChild } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
-import { MatLegacyTab as MatTab, MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 import { NumberConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';

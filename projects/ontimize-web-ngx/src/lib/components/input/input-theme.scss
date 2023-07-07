@@ -17,7 +17,7 @@
   /* outline appearance */
   $border-radius: 2px;
 
-  .mat-form-field {
+  .mat-mdc-form-field {
     &.mat-form-field-disabled.accent {
       @include icon-color-mixin(mat.get-color-from-palette($accent, 0.42));
     }
@@ -39,25 +39,27 @@
     }
 
     &.mat-form-field-appearance-ontimize.read-only {
+      /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
       .mat-select-disabled .mat-select-value {
         color: inherit;
       }
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-underline {
         background-color: $underline-color;
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
     &.mat-form-field-invalid .mat-input-suffix .mat-icon {
       color: mat.get-color-from-palette($warn);
     }
 
     /* OUTLINE APPEARANCE */
     &.mat-form-field-appearance-outline {
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline-start {
         border-radius: $border-radius 0 0 $border-radius;
       }
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline-end {
         border-radius: 0 $border-radius $border-radius 0;
       }
@@ -90,14 +92,17 @@
   }
 
   /* CHECKBOX */
-  .mat-checkbox:not(.mat-checkbox-disabled ) {
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+  .mat-mdc-checkbox:not(.mat-checkbox-disabled ) {
     &.mat-accent {
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-frame {
         border-color: if($is-dark-theme, mat.get-color-from-palette($accent,500),mat.get-color-from-palette($foreground, secondary-text));
       }
     }
 
     &.mat-primary {
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-frame {
         border-color: if($is-dark-theme, mat.get-color-from-palette($primary,500),mat.get-color-from-palette($foreground, secondary-text));
       }

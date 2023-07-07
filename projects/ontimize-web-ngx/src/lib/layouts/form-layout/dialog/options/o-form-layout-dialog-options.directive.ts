@@ -1,5 +1,5 @@
 import { Directive, Input } from '@angular/core';
-import { LegacyDialogPosition as DialogPosition } from '@angular/material/legacy-dialog';
+import { DialogPosition } from '@angular/material/dialog';
 
 import { BooleanConverter } from '../../../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';

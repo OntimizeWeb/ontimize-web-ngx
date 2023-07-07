@@ -42,7 +42,7 @@ $o_table_row_padding: 24px;
         }
       }
 
-      thead .mat-header-row th:last-child .o-table-column-resizer {
+      thead .mat-mdc-header-row th:last-child .o-table-column-resizer {
         display: none;
       }
     }
@@ -51,7 +51,7 @@ $o_table_row_padding: 24px;
       pointer-events: none;
 
       >.o-table-toolbar,
-      >.o-table-body .mat-header-row {
+      >.o-table-body .mat-mdc-header-row {
         opacity: .75;
       }
     }
@@ -96,7 +96,7 @@ $o_table_row_padding: 24px;
         overflow-x: auto;
         padding-bottom: 16px;
 
-        .mat-header-cell {
+        .mat-mdc-header-cell {
           width: 150px;
         }
       }
@@ -111,7 +111,7 @@ $o_table_row_padding: 24px;
       }
     }
 
-    .mat-table {
+    .mat-mdc-table {
       table-layout: fixed;
       width: 100%;
 
@@ -135,23 +135,25 @@ $o_table_row_padding: 24px;
           margin-top: 4px;
         }
 
-        .mat-header-row,
-        .mat-row {
+        .mat-mdc-header-row,
+        .mat-mdc-row {
+          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
           .mat-checkbox-inner-container {
             height: $mat-checkbox-size-small;
             width: $mat-checkbox-size-small;
-
+            /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-checkmark-path {
               width: $_mat-checkbox-mark-stroke-size-small;
             }
-
+            /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-mixedmark {
               height: floor($_mat-checkbox-mark-stroke-size-small);
             }
           }
 
-          .mat-cell,
-          .mat-header-cell {
+          .mat-mdc-cell,
+          .mat-mdc-header-cell {
             .image-avatar {
               width: 24px;
               height: 24px;
@@ -169,16 +171,18 @@ $o_table_row_padding: 24px;
           margin-top: 5px;
         }
 
-        .mat-header-row,
-        .mat-row {
+        .mat-mdc-header-row,
+        .mat-mdc-row {
+          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
           .mat-checkbox-inner-container {
             height: $mat-checkbox-size-medium;
             width: $mat-checkbox-size-medium;
-
+            /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-checkmark-path {
               width: $_mat-checkbox-mark-stroke-size-medim;
             }
-
+            /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-mixedmark {
               height: floor($_mat-checkbox-mark-stroke-size-medim);
             }
@@ -197,7 +201,7 @@ $o_table_row_padding: 24px;
 
       }
 
-      tr.mat-row.o-table-row-expanded {
+      tr.mat-mdc-row.o-table-row-expanded {
         height: 0;
       }
 
@@ -205,7 +209,7 @@ $o_table_row_padding: 24px;
         height: 1px;
       }
 
-      .mat-row {
+      .mat-mdc-row {
         box-sizing: border-box;
         transition: background-color .2s;
         position: relative;
@@ -222,7 +226,7 @@ $o_table_row_padding: 24px;
         /* Non-prefixed version, currently supported by Chrome and Opera */
         user-select: none;
 
-        .mat-cell {
+        .mat-mdc-cell {
           padding: 0 12px;
           overflow: hidden;
           white-space: nowrap;
@@ -283,7 +287,7 @@ $o_table_row_padding: 24px;
           }
 
           &.o-mat-cell-multiline {
-            &:not(.mat-header-cell) {
+            &:not(.mat-mdc-header-cell) {
               padding: 6px 12px;
             }
 
@@ -325,7 +329,7 @@ $o_table_row_padding: 24px;
         cursor: pointer;
       }
 
-      .mat-header-cell {
+      .mat-mdc-header-cell {
         overflow: hidden;
         position: relative;
         box-sizing: border-box;
@@ -423,8 +427,8 @@ $o_table_row_padding: 24px;
         }
       }
 
-      .mat-cell,
-      .mat-header-cell {
+      .mat-mdc-cell,
+      .mat-mdc-header-cell {
         &.mat-column-select {
           width: 18px;
           box-sizing: content-box;
@@ -440,7 +444,7 @@ $o_table_row_padding: 24px;
         }
       }
 
-      .mat-cell {
+      .mat-mdc-cell {
         .row-container-expanded {
           overflow: hidden;
           display: flex;
@@ -497,7 +501,7 @@ $o_table_row_padding: 24px;
   }
 }
 
-.mat-tooltip.o-table-cell-tooltip {
+.mat-mdc-tooltip.o-table-cell-tooltip {
   word-wrap: break-word;
   overflow: hidden;
   min-width: 140px;

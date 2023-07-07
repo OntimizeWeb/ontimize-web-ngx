@@ -57,7 +57,7 @@
     }
   }
 
-  .mat-list {
+  .mat-mdc-list {
     overflow: auto;
 
     .mat-3-line .o-custom-list-item {
@@ -75,17 +75,18 @@
     }
 
     &.o-list-item-has-buttons {
+      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
       .o-list-item .mat-list-item-content {
         padding-right: 72px;
       }
-
+      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
       &[dense] .o-list-item .mat-list-item-content {
         padding-right: 56px;
       }
     }
 
-    .o-list-item.mat-card,
-    .o-list-item.mat-list-item {
+    .o-list-item.mat-mdc-card,
+    .o-list-item.mat-mdc-list-item {
       margin: 6px 0;
     }
   }

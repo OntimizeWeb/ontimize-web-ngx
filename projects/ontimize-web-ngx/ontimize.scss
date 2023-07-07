@@ -15,23 +15,23 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
 .o-dialog-class,
 .o-form-layout-dialog-overlay,
 .o-list-picker-dialog {
-  .mat-dialog-container {
+  .mat-mdc-dialog-container {
     border-radius: 2px;
     margin: 0;
     padding: 24px 32px;
 
-    .mat-dialog-title {
+    .mat-mdc-dialog-title {
       cursor: default;
       padding: 0 0 8px;
       margin: 0;
 
     }
 
-    .mat-dialog-content {
+    .mat-mdc-dialog-content {
       padding: 16px 0;
       margin: 0;
 
-      .mat-subheader {
+      .mat-mdc-subheader {
         cursor: default;
         padding: 0 0 24px;
 
@@ -39,7 +39,7 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
           padding: 0;
         }
 
-        + .mat-selection-list[dense] {
+        + .mat-mdc-selection-list[dense] {
           margin-top: -12px;
         }
       }
@@ -50,12 +50,12 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
         }
       }
 
-      .mat-list-base[dense] {
-        .mat-list-item {
+      .mat-mdc-list-base[dense] {
+        .mat-mdc-list-item {
           min-height: 30px;
           height: auto;
           display: flex;
-
+          /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
           .mat-list-item-content {
             width: 100%;
             padding: 0 8px;
@@ -63,13 +63,13 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
         }
       }
 
-      .mat-selection-list[dense] {
+      .mat-mdc-selection-list[dense] {
         overflow: auto;
         outline: none;
         padding-top: 0;
         min-height: 40px;
 
-        .mat-list-item {
+        .mat-mdc-list-item {
           margin: 6px 0;
           border-radius: 4px;
           cursor: default;
@@ -81,7 +81,7 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
       }
     }
 
-    .mat-dialog-actions {
+    .mat-mdc-dialog-actions {
       margin: 0;
       padding-top: 16px;
       min-height: 0;
@@ -136,32 +136,32 @@ $steps: 6;
 @include padding-margin-x();
 
 button {
-  &.mat-button,
-  &.mat-flat-button,
-  &.mat-raised-button,
-  &.mat-stroked-button {
+  &.mat-mdc-button,
+  &.mat-mdc-unelevated-button,
+  &.mat-mdc-raised-button,
+  &.mat-mdc-outlined-button {
     min-width: 112px;
   }
 
-  &.mat-button,
-  &.mat-flat-button,
-  &.mat-icon-button,
-  &.mat-raised-button {
+  &.mat-mdc-button,
+  &.mat-mdc-unelevated-button,
+  &.mat-mdc-icon-button,
+  &.mat-mdc-raised-button {
     height: $mat-button-line-height;
     line-height: $mat-button-line-height;
   }
 
-  &.mat-stroked-button {
+  &.mat-mdc-outlined-button {
     height: $mat-button-line-height;
     line-height: $mat-stroked-button-line-height;
   }
 
-  &.mat-icon-button {
+  &.mat-mdc-icon-button {
     width: $mat-button-line-height;
   }
 }
 
-.o-table-apply-configuration-dialog-list.mat-selection-list.mat-list-base[dense] .mat-list-option.mat-list-text,
+.o-table-apply-configuration-dialog-list.mat-selection-list.mat-mdc-list-base[dense] .mat-list-option.mat-list-text,
 .o-table-load-filter-dialog-list.mat-list-base[dense] .mat-list-option.mat-list-text {
   .o-table-apply-configuration-dialog-list-title,
   .o-table-load-filter-dialog-list-title {
@@ -171,8 +171,9 @@ button {
 }
 
 /*MAT MENU*/
-.o-mat-menu.mat-menu-panel {
-  .mat-menu-item {
+/*TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version.*/
+.o-mat-menu.mat-mdc-menu-panel {
+  .mat-mdc-menu-item {
     line-height: $mat-menu-item-height;
     height: $mat-menu-item-height;
   }

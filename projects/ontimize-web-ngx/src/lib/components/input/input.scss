@@ -10,7 +10,7 @@ div.icon-btn {
 $suffix-size: 20px;
 $width24: 24px;
 
-.o-tooltip.mat-tooltip {
+.o-tooltip.mat-mdc-tooltip {
   &.after,
   &.right {
     margin-left: 5px;
@@ -34,8 +34,9 @@ $width24: 24px;
   }
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   &.mat-form-field-appearance-ontimize {
+    /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
     .mat-select-arrow-wrapper {
       transform: initial;
     }
@@ -48,10 +49,11 @@ $width24: 24px;
       height: 20px;
       line-height: 20px;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-prefix,
     .mat-form-field-suffix {
-      .mat-icon-button {
+      .mat-mdc-icon-button {
         vertical-align: bottom;
 
         .mat-icon {
@@ -62,7 +64,12 @@ $width24: 24px;
   }
 
   &:not(.mat-form-field-appearance-legacy) {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-wrapper {
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-prefix,
       .mat-form-field-suffix {
         display: inherit;
@@ -73,7 +80,7 @@ $width24: 24px;
           width: $suffix-size;
         }
 
-        .mat-icon-button {
+        .mat-mdc-icon-button {
           line-height: $suffix-size;
           display: block;
           height: $suffix-size;
@@ -85,26 +92,27 @@ $width24: 24px;
   input:read-only {
     cursor: default;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   &.custom-width .mat-form-field-infix {
     width: auto;
   }
 
   &.icon-field {
     height: $width24;
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-suffix {
       cursor: default;
       text-align: center;
 
       .icon-btn,
       .mat-icon,
-      .mat-icon-button .mat-icon {
+      .mat-mdc-icon-button .mat-icon {
         vertical-align: bottom;
       }
 
       .icon-btn,
-      .mat-icon-button,
+      .mat-mdc-icon-button,
       .mat-icon:not([svgicon]) {
         height: $suffix-size;
       }

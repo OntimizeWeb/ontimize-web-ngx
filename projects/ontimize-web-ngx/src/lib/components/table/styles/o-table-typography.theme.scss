@@ -43,31 +43,31 @@
   $row-font-size: mat.font-size($typography, #{$size}-row-font-size);
 
   .o-table .o-table-container {
-    .mat-table.#{$size} {
-      tr.mat-header-row:not(.o-table-insertable) {
+    .mat-mdc-table.#{$size} {
+      tr.mat-mdc-header-row:not(.o-table-insertable) {
         height: $header-height;
 
-        .mat-header-cell {
+        .mat-mdc-header-cell {
           font-size: $header-font-size;
         }
       }
 
-      tr.mat-row {
+      tr.mat-mdc-row {
         height: $row-height;
 
-        .mat-cell {
-          .mat-form-field {
+        .mat-mdc-cell {
+          .mat-mdc-form-field {
             font-size: $row-font-size;
           }
           font-size: $row-font-size;
         }
       }
 
-      tr.o-table-insertable.mat-header-row{
+      tr.o-table-insertable.mat-mdc-header-row{
         height: $row-height;
 
-        .mat-table-sticky {
-          .mat-form-field {
+        .mat-mdc-table-sticky {
+          .mat-mdc-form-field {
             font-size: $row-font-size;
           }
           font-size: $row-font-size;
@@ -83,14 +83,14 @@
 
   .o-table-context-menu.#{$size},
   .o-table-menu.#{$size} {
-    .mat-menu-item {
+    .mat-mdc-menu-item {
       line-height: $row-height;
       height: $row-height;
     }
   }
 
   .o-table-visible-columns-dialog {
-    .mat-list.#{$size} .mat-list-item {
+    .mat-mdc-list.#{$size} .mat-mdc-list-item {
       height: $header-height;
     }
   }

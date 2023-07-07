@@ -16,9 +16,9 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatLegacyFormFieldAppearance as MatFormFieldAppearance } from '@angular/material/legacy-form-field';
-import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSelectChange } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';

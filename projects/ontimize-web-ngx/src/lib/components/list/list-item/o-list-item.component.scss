@@ -1,7 +1,7 @@
 .o-list-item {
   display: flex;
 
-  .mat-list-item {
+  .mat-mdc-list-item {
     width: 100%;
 
     .o-list-item-selection-check {
@@ -16,6 +16,7 @@
   }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 .mat-list[dense] .o-list-item .o-list-row-action .mat-checkbox-inner-container {
   height: 16px;
   width: 16px;

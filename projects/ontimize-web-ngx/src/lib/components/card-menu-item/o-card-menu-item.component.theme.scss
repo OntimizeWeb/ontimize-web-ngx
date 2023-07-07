@@ -19,7 +19,7 @@
       font-size: mat.font-size($typography, title);
     }
 
-    .mat-button {
+    .mat-mdc-button {
       color: mat.get-color-from-palette($primary);
       background: mat.get-color-from-palette($accent,100);
     }

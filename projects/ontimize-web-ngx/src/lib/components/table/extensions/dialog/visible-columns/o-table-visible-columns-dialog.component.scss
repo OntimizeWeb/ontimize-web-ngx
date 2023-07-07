@@ -1,10 +1,10 @@
 .o-table-visible-columns-dialog {
-  .mat-dialog-content.mat-dialog-content {
+  .mat-mdc-dialog-content.mat-dialog-content {
     overflow: auto;
     padding-top: 0;
     margin-top: 24px;
 
-    .mat-subheader {
+    .mat-mdc-subheader {
       display: block;
     }
 
@@ -18,31 +18,32 @@
       padding: 0 12px;
     }
 
-    .mat-list {
+    .mat-mdc-list {
       //
-      .mat-list-item {
+      .mat-mdc-list-item {
         cursor: pointer;
         height: auto;
 
         &.column-hidden {
           opacity: .4;
         }
-
+        /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+        /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
         .mat-list-item-content {
           padding: 0;
           cursor: move;
-
+          /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
           div.mat-list-text {
             padding: 0 8px;
           }
 
-          .mat-list-icon {
+          .mat-mdc-list-item-icon {
             display: flex;
           }
         }
       }
     }
-
+    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
     .mat-icon[svgicon="ontimize:drag_handle"],
     .mat-list-text {
       cursor: move;

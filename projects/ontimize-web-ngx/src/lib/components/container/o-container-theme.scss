@@ -19,9 +19,9 @@
       > .mat-expansion-panel-header {
         border-color: mat.get-color-from-palette($foreground, divider);
         color: mat.get-color-from-palette($foreground, text);
-
+        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         .mat-tab-label,
-        .mat-tab-link {
+        .mat-mdc-tab-link {
           color: mat.get-color-from-palette($foreground, text);
         }
 

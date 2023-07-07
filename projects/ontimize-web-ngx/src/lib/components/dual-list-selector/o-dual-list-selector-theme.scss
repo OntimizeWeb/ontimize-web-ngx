@@ -6,14 +6,15 @@
 
   .o-dual-list-selector {
     .o-dual-list-selector-list {
-      .mat-selection-list.mat-list-base {
+      .mat-mdc-selection-list.mat-mdc-list-base {
         border: 1px solid mat.get-color-from-palette($foreground, divider);
 
-        .mat-list-item {
+        .mat-mdc-list-item {
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
           &:not(.mat-list-option) {
             border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
           }
-
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
           &.mat-list-option {
             background: mat.get-color-from-palette($background, 'hover');
 
@@ -30,7 +31,7 @@
         }
       }
 
-      .mat-mini-fab:not([class*='mat-elevation-z']) {
+      .mat-mdc-mini-fab:not([class*='mat-elevation-z']) {
         box-shadow: none;
 
         &.mat-accent:not([disabled]) {

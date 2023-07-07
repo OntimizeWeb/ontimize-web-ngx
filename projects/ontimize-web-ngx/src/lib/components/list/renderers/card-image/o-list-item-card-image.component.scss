@@ -1,4 +1,4 @@
-.mat-list .mat-list-item.o-card-item,
+.mat-mdc-list .mat-mdc-list-item.o-card-item,
 .mat-list .mat-list-item.o-card-item .mat-list-item-content {
   height: auto;
 }
@@ -6,7 +6,7 @@
 .o-list-item-card-image {
   padding: 8px 0;
 
-  .mat-card {
+  .mat-mdc-card {
     mat-card-actions,
     mat-card-header,
     mat-card-subtitle,

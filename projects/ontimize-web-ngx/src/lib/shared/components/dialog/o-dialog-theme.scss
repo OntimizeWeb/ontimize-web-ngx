@@ -17,7 +17,7 @@
     }
   }
 
-  .mat-dialog {
+  .mat-mdc-dialog {
     background-color: mat.get-color-from-palette($background, dialog);
 
     &.mat-content-overflow {

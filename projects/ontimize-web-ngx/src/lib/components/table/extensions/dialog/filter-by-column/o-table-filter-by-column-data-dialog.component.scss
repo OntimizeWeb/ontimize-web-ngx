@@ -1,5 +1,5 @@
 .o-filter-by-column-dialog {
-  .mat-slide-toggle {
+  .mat-mdc-slide-toggle {
     padding-bottom: 24px;
   }
   .content-wrapper {
@@ -12,7 +12,7 @@
       width: 100%;
     }
 
-    .mat-form-field.hinted {
+    .mat-mdc-form-field.hinted {
       margin-bottom: 24px;
     }
 
@@ -26,9 +26,9 @@
       overflow-x: hidden;
       outline: none;
 
-      .mat-list-item {
+      .mat-mdc-list-item {
         height: 30px;
-
+        /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
         .mat-list-text {
           white-space: nowrap;
           overflow: hidden;

@@ -3,7 +3,7 @@ import { ObserversModule } from '@angular/cdk/observers';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { PortalModule } from '@angular/cdk/portal';

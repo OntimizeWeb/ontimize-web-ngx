@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { MatLegacySnackBarRef as MatSnackBarRef } from '@angular/material/legacy-snack-bar';
+import { MatSnackBarRef } from '@angular/material/snack-bar';
 
 export declare type OSnackBarIconPosition = 'left' | 'right';
 

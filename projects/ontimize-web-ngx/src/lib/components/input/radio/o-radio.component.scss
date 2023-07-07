@@ -1,11 +1,12 @@
 .o-radio {
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field--no-underline .mat-form-field-underline,
   .mat-form-field--no-underline .mat-form-field-underline .mat-form-field-ripple {
     background-image: none;
     background-color: transparent;
   }
-
-  .mat-form-field:not(.custom-width).o-radio-from-field-row .mat-form-field-infix {
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+  .mat-mdc-form-field:not(.custom-width).o-radio-from-field-row .mat-form-field-infix {
     width: auto;
   }
 

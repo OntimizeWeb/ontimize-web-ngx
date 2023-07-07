@@ -11,8 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatLegacyOption as MatOption } from '@angular/material/legacy-core';
-import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 

@@ -1,5 +1,5 @@
 import { Component, Injector, Input, ViewChild } from '@angular/core';
-import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
+import { MatMenu } from '@angular/material/menu';
 
 import { OContextMenuGroupComponent } from '../../context-menu-group/o-context-menu-group.component';
 import { OContextMenuItemComponent } from '../../context-menu-item/o-context-menu-item.component';
