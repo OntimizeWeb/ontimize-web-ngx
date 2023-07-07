@@ -1,7 +1,7 @@
 .o-table .o-table-container .mat-table .mat-header-cell {
 
   &:has(.o-table-column-filter-icon) {
-    padding-left: 6px;
+    padding-left: 0px;
   }
 
   &:has(.mat-sort-header-arrow) {
@@ -15,6 +15,7 @@
   .o-table-column-filter-icon {
     position: relative;
     display: flex;
+    margin-right: 6px;
 
     .mat-icon {
       align-self: center;
