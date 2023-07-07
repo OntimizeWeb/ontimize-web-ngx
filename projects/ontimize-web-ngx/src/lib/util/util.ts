@@ -518,4 +518,24 @@ export class Util {
     return pattern.test(file.replace(/\s+/g, ''));
 
   }
+  /**
+ * Converts an object to a JSON string, avoiding circular references.
+ * @param obj The object to convert to JSON.
+ * @returns A JSON string representing the object.
+ */
+  static stringify(obj: object) {
+    let cache = [];
+    let str = JSON.stringify(obj, function (key, value) {
+      if (typeof value === "object" && value !== null) {
+        if (cache.indexOf(value) !== -1) {
+          return; // Avoid circular references
+        }
+        cache.push(value);
+      }
+      return value;
+    });
+    cache = null;
+    return str;
+  }
+
 }

@@ -11,6 +11,7 @@ export const DEFAULT_INPUTS_O_TABLE_HEADER = [
   selector: 'o-table-header',
   inputs: DEFAULT_INPUTS_O_TABLE_HEADER,
   templateUrl: './o-table-header.component.html',
+  styleUrls:['./o-table-header.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

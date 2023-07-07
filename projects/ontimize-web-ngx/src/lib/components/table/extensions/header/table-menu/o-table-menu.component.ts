@@ -381,7 +381,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         }
 
         this.table.cd.detectChanges();
-        this.table.refreshColumnsWidth();
+        this.table.refreshColumnsWidthFromLocalStorage();
       }
     });
   }

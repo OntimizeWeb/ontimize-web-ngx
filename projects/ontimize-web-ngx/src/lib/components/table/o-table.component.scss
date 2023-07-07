@@ -127,28 +127,19 @@ $o_table_row_padding: 24px;
       }
 
       &.small {
-        .column-filter-icon {
-          margin-top: 2px;
-        }
-
-        .mat-sort-header-arrow {
-          margin-top: 4px;
-        }
 
         .mat-mdc-header-row,
         .mat-mdc-row {
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
           .mat-checkbox-inner-container {
             height: $mat-checkbox-size-small;
             width: $mat-checkbox-size-small;
+
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-checkmark-path {
               width: $_mat-checkbox-mark-stroke-size-small;
             }
+
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-mixedmark {
@@ -167,28 +158,20 @@ $o_table_row_padding: 24px;
       }
 
       &.medium {
-        .column-filter-icon {
-          margin-top: 2px;
-        }
-
-        .mat-sort-header-arrow {
-          margin-top: 5px;
-        }
 
         .mat-mdc-header-row,
         .mat-mdc-row {
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+
           .mat-checkbox-inner-container {
             height: $mat-checkbox-size-medium;
             width: $mat-checkbox-size-medium;
+
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-checkmark-path {
               width: $_mat-checkbox-mark-stroke-size-medim;
             }
+
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
             .mat-checkbox-mixedmark {
@@ -234,7 +217,8 @@ $o_table_row_padding: 24px;
         /* Non-prefixed version, currently supported by Chrome and Opera */
         user-select: none;
 
-        .mat-mdc-cell {
+        .mat-mdc-cell,
+        .mat-mdc-header-cell {
           padding: 0 12px;
           overflow: hidden;
           white-space: nowrap;
@@ -344,10 +328,6 @@ $o_table_row_padding: 24px;
         padding: 0 12px;
         vertical-align: middle;
 
-        &.resizable {
-          padding-right: 24px;
-        }
-
         &.mat-column-select.mat-header-select-all-with-title {
           padding-right: 12px;
         }
@@ -380,11 +360,9 @@ $o_table_row_padding: 24px;
 
         .column-filter-icon {
           cursor: pointer;
-          float: left;
           font-size: 18px;
           width: 18px;
           height: 18px;
-          margin-right: 2px;
           line-height: 1;
         }
 
@@ -394,17 +372,9 @@ $o_table_row_padding: 24px;
           place-content: center;
         }
 
-        .mat-sort-header-arrow {
-          position: absolute;
-          right: 0;
-        }
-
         .header-title-container {
           cursor: default;
-        }
-
-        &.resizable .mat-sort-header-arrow {
-          margin-right: 12px;
+          min-height: 20px;
         }
 
         .header-title-container,
@@ -422,14 +392,6 @@ $o_table_row_padding: 24px;
         &.center,
         &.center .mat-sort-header-button {
           text-align: center;
-        }
-
-        &.center {
-          [o-mat-sort-header] {
-            .mat-sort-header-button {
-              padding-left: 12px;
-            }
-          }
         }
 
         &.end,
