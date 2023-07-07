@@ -23,6 +23,10 @@ import {
   OTextInputComponent
 } from '../text-input/o-text-input.component';
 
+const INPUT_TYPE_TEXT = 'text'
+const INPUT_TYPE_NUMBER = 'number'
+type HTMLInputType = 'text' | 'number'
+
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   ...DEFAULT_INPUTS_O_TEXT_INPUT,
   'min',
@@ -47,7 +51,7 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 })
 export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
 
-  inputType: string = 'number';
+  inputType: HTMLInputType= INPUT_TYPE_NUMBER;
 
   @InputConverter()
   min: number;
@@ -71,12 +75,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   ) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'INTEGER';
-
-    // Firefox workaround
-    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-      this.inputType = 'text';
-    }
-
+    this.inputType = INPUT_TYPE_TEXT;
     this.setComponentPipe();
   }
 
@@ -175,25 +174,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   }
 
   setNumberDOMValue(val: any) {
-    const inputElement = this.getInputEl();
-    if (Util.isDefined(inputElement)) {
-      // Firefox workaround
-      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-        inputElement.type = 'number';
-      }
-      inputElement.value = (val !== undefined) ? val : '';
-    }
+    this.setInputTypeAndValue(INPUT_TYPE_NUMBER, val)
   }
 
   setTextDOMValue(val: any) {
-    const inputElement = this.getInputEl();
-    if (Util.isDefined(inputElement)) {
-      // Firefox workaround
-      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-        inputElement.type = 'text';
-      }
-      inputElement.value = (val !== undefined) ? val : '';
-    }
+    this.setInputTypeAndValue(INPUT_TYPE_TEXT, val)
   }
 
   resolveValidators(): ValidatorFn[] {
@@ -236,4 +221,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     }
   }
 
+  protected setInputTypeAndValue(inputType: HTMLInputType, value: any) : void {
+    const inputElement = this.getInputEl();
+    if (Util.isDefined(inputElement)) {
+      inputElement.type = inputType;
+      inputElement.value = (value !== undefined) ? value : '';
+    }
+  }
 }
