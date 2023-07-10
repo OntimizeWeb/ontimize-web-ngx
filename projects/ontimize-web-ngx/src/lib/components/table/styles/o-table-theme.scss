@@ -24,6 +24,7 @@
 
     .mat-mdc-table {
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
         border-color: mat.get-color-from-palette($foreground, secondary-text, 0.18);
       }
@@ -106,7 +107,7 @@
       }
 
       &.editable-row-table .mat-mdc-row,
-      &.totals-table .mat-row {
+      &.totals-table .mat-mdc-row {
         background-color: mat.get-color-from-palette($background, status-bar, 0.9);
       }
 
@@ -148,6 +149,7 @@
       background: mat.get-color-from-palette($primary, 50);
     }
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .o-table-quickfilter .quickFilter .mat-mdc-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
     border-right: 1px solid mat.get-color-from-palette($foreground, divider);

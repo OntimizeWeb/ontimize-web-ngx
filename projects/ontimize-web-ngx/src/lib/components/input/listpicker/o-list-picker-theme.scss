@@ -4,14 +4,18 @@
   .o-list-picker-dialog mat-toolbar .o-list-picker-search {
     font-size: 16px;
     /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
     &.o-list-picker-search .mat-input-placeholder,
     .mat-icon {
       color: mat.get-color-from-palette($primary, default-contrast);
     }
     /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
     &.o-list-picker-search .mat-input-underline {
       border-color: mat.get-color-from-palette($primary, default-contrast, 0.78);
+      /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
       .mat-input-ripple {
         background-color: mat.get-color-from-palette($primary, default-contrast);

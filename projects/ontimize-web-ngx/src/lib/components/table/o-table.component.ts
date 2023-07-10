@@ -29,11 +29,11 @@ import {
   ViewEncapsulation,
   ViewRef
 } from '@angular/core';
-import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
-import { MatLegacyTab as MatTab, MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenu } from '@angular/material/menu';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';

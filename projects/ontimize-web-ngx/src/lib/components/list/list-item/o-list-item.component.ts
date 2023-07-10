@@ -14,7 +14,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { MatLine } from '@angular/material/core';
-import { MatLegacyListItem as MatListItem } from '@angular/material/legacy-list';
+import { MatListItem } from '@angular/material/list';
 
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';

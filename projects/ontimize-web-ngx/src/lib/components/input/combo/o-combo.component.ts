@@ -12,7 +12,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { MatLegacySelect as MatSelect, MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';

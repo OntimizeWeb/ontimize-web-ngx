@@ -16,21 +16,23 @@
   $fill-appearance-label-offset: -0.5em;
 
   .mat-form-field-appearance-fill {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-flex {
       padding: $infix-padding-top $infix-padding-top 0 $infix-padding-top !important;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-infix {
       padding: $infix-padding-top 0 $infix-padding-bottom !important;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-label {
       top: $infix-margin-top + $infix-padding-top !important;
       margin-top: $fill-appearance-label-offset !important;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     &.mat-form-field-can-float {
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       &.mat-form-field-should-float .mat-form-field-label,
       .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
         @include o_mat-form-field-fill-label-floating($subscript-font-scale, $infix-padding-top + $fill-appearance-label-offset, $infix-margin-top);
@@ -38,6 +40,7 @@
 
       // Server-side rendered matInput with a label attribute but label not shown
       // (used as a pure CSS stand-in for mat-form-field-should-float).
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-input-server[label]:not(:placeholder-shown)+.mat-form-field-label-wrapper .mat-form-field-label {
         @include o_mat-form-field-fill-label-floating($subscript-font-scale, $infix-padding-top + $fill-appearance-label-offset, $infix-margin-top);
       }

@@ -116,6 +116,7 @@
 
           .mat-mdc-list-item {
             /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+            /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
             .empty-filter-list,
             .mat-list-item-content>* {
               font-size: mat.font-size($typography, body-1);
@@ -138,6 +139,8 @@
     display: block;
     /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
     .mat-list-item-content {
       font-size: mat.font-size($typography, body-1);
       color: mat.get-color-from-palette($foreground, text);
@@ -154,6 +157,7 @@
         padding: 4px;
       }
       /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
       .mat-list-text {
         padding-left: 16px;
         width: 100%;
@@ -166,6 +170,7 @@
   }
 
   .mat-mdc-checkbox {
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
     .mat-checkbox-label {
       color: mat.get-color-from-palette($foreground, text);
@@ -213,12 +218,13 @@
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
 
     &.mat-mdc-button-base.mat-primary,
-    &.mat-button-base.o-button-primary,
+    &.mat-mdc-button-base.o-button-primary,
     &.mat-button-base[ng-reflect-dialog-result="0"],
     &.mat-button-base[ng-reflect-dialog-result="true"] {
       color: mat.get-color-from-palette($primary, 800);
       background-color: mat.get-color-from-palette($primary, 100);
       border-color: transparent;
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       &:hover,
       .mat-button-focus-overlay {
@@ -230,12 +236,13 @@
     }
 
     &.mat-mdc-button-base,
-    &.mat-button-base.mat-accent,
+    &.mat-mdc-button-base.mat-accent,
     &.mat-button-base.o-button-default,
     &.mat-button-base[ng-reflect-dialog-result="1"],
     &.mat-button-base[ng-reflect-dialog-result="false"] {
       color: mat.get-color-from-palette($primary);
       background-color: #ffffff;
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       &:hover,
       .mat-button-focus-overlay {
@@ -264,6 +271,7 @@
         background-color: mat.get-color-from-palette($primary, 100);
         border-color: transparent;
         /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         &:hover,
         .mat-button-focus-overlay {
           color: mat.get-color-from-palette($primary);
@@ -276,6 +284,7 @@
       &.mat-accent {
         color: mat.get-color-from-palette($accent);
         background-color: #ffffff;
+        /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
         &:hover,
         .mat-button-focus-overlay {
@@ -293,6 +302,7 @@
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
     &.mat-mdc-outlined-button {
       padding: 0 6px;
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       .mat-button-wrapper {
         .mat-icon {
@@ -342,6 +352,7 @@
   }
 
   /*MAT MENU*/
+  /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
   /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
   .o-mat-menu.mat-mdc-menu-panel {
     min-height: auto;

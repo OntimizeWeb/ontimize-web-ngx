@@ -37,6 +37,7 @@ $width24: 24px;
 .mat-mdc-form-field {
   &.mat-form-field-appearance-ontimize {
     /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
     .mat-select-arrow-wrapper {
       transform: initial;
     }
@@ -49,6 +50,7 @@ $width24: 24px;
       height: 20px;
       line-height: 20px;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-prefix,
@@ -67,7 +69,10 @@ $width24: 24px;
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-wrapper {
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-prefix,
@@ -93,12 +98,14 @@ $width24: 24px;
     cursor: default;
   }
   /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   &.custom-width .mat-form-field-infix {
     width: auto;
   }
 
   &.icon-field {
     height: $width24;
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-suffix {

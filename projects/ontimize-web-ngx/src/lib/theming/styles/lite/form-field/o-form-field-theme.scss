@@ -32,9 +32,9 @@
   $wrapper-padding-bottom: ($subscript-margin-top + $line-height) * $subscript-font-scale * .0;
   //$wrapper-padding-bottom: 0;
 
-  .mat-form-field.mat-form-field {
+  .mat-mdc-form-field.mat-form-field {
     &.mat-form-field-invalid {
-      .mat-error {
+      .mat-mdc-form-field-error {
         display: none;
       }
     }
@@ -42,38 +42,40 @@
     font-size: mat.font-size($config, input);
 
     &.icon-field .mat-form-field-suffix .icon-btn,
-    &.icon-field .mat-form-field-suffix .mat-icon-button,
+    &.icon-field .mat-form-field-suffix .mat-mdc-icon-button,
     &:not(.mat-form-field-appearance-legacy) .mat-form-field-wrapper .mat-form-field-prefix .mat-icon-button,
     &:not(.mat-form-field-appearance-legacy) .mat-form-field-wrapper .mat-form-field-suffix .mat-icon-button {
       height: $prefix-suffix-icon-font-scale * 1em;
       width: $prefix-suffix-icon-font-scale * 1em;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     &.input-image.icon-field .mat-input-infix.mat-form-field-infix {
       line-height: 16px;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     &.icon-field .mat-form-field-suffix .mat-icon:not([svgicon]) {
       height: 20px;
       width: 20px;
     }
 
     &.mat-form-field-appearance-legacy {
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-form-field-prefix,
       .mat-form-field-suffix {
-        .mat-icon-button {
+        .mat-mdc-icon-button {
           .mat-icon {
             font-size: $prefix-suffix-icon-font-size;
           }
         }
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-wrapper {
       padding-bottom: $wrapper-padding-bottom;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-prefix,
     .mat-form-field-suffix {
       .mat-icon {
@@ -83,7 +85,7 @@
       }
 
       // Allow icon buttons in a prefix or suffix to adapt to the correct size.
-      .mat-icon-button {
+      .mat-mdc-icon-button {
         height: $prefix-suffix-icon-font-scale * 1em;
         width: $prefix-suffix-icon-font-scale * 1em;
 
@@ -93,14 +95,15 @@
         }
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-infix {
       padding: $infix-padding 0;
       border-top: $infix-margin-top solid transparent;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-can-float {
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       &.mat-form-field-should-float .mat-form-field-label,
       .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
         @include o_mat-form-field-label-floating($subscript-font-scale, $infix-padding, $infix-margin-top);
@@ -108,26 +111,27 @@
 
       // Server-side rendered matInput with a label attribute but label not shown
       // (used as a pure CSS stand-in for mat-form-field-should-float).
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-input-server[label]:not(:placeholder-shown)+.mat-form-field-label-wrapper .mat-form-field-label {
         @include o_mat-form-field-label-floating($subscript-font-scale, $infix-padding, $infix-margin-top);
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-label-wrapper {
       top: -$infix-margin-top;
       padding-top: $infix-margin-top;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-label {
       top: $infix-margin-top + $infix-padding;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-underline {
       // We want the underline to start at the end of the content box, not the padding box,
       // so we move it up by the padding amount.
       bottom: $wrapper-padding-bottom;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-subscript-wrapper {
       font-size: $subscript-font-size;
       margin-top: $subscript-margin-top;
@@ -163,9 +167,9 @@ $dedupe: 0;
   $mat-checkbox-size: 15px;
 
   .o-checkbox {
-    .mat-checkbox {
+    .mat-mdc-checkbox {
       font-size: mat.font-size($config, input);
-
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-ripple {
         left: calc(50% - #{$mat-checkbox-ripple-radius});
         top: calc(50% - #{$mat-checkbox-ripple-radius});
@@ -173,7 +177,7 @@ $dedupe: 0;
         width: $mat_checkbox-ripple-radius * 2;
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     .mat-checkbox-inner-container {
       width: $mat-checkbox-size;
       height: $mat-checkbox-size;

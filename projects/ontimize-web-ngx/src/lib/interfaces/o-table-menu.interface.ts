@@ -1,4 +1,4 @@
-import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
+import { MatMenu } from '@angular/material/menu';
 
 import { OTableOptionComponent } from '../components/table/extensions/header/table-option/o-table-option.component';
 import { EventEmitter } from '@angular/core';

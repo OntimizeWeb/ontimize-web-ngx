@@ -43,8 +43,8 @@
     opacity: .85;
   }
 
-  .o-form .o-form-toolbar .o-form-toolbar-header .mat-toolbar-tools .o-form-toolbar-button.mat-stroked-button,
-  button.mat-button-base:not(.mat-icon-button):not(.mat-fab):not(.mat-mini-fab) {
+  .o-form .o-form-toolbar .o-form-toolbar-header .mat-toolbar-tools .o-form-toolbar-button.mat-mdc-outlined-button,
+  button.mat-mdc-button-base:not(.mat-mdc-icon-button):not(.mat-mdc-fab):not(.mat-mdc-mini-fab) {
     min-width: 132px;
   }
 
@@ -53,13 +53,14 @@
 
   /* MATERIAL BUTTON STYLES*/
   button,
-  button.mat-button,
-  button.mat-stroked-button {
-    &:not(.mat-icon-button):not(.mat-fab):not(.mat-mini-fab) {
+  button.mat-mdc-button,
+  button.mat-mdc-outlined-button {
+    &:not(.mat-mdc-icon-button):not(.mat-mdc-fab):not(.mat-mdc-mini-fab) {
       border-radius: 0;
     }
 
     &:hover {
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       .mat-button-focus-overlay {
         opacity: .10;
       }
@@ -109,7 +110,7 @@
   }
 
   .o-form .o-form-toolbar-header.mat-toolbar .o-form-toolbar-button,
-  .ontimize-table.o-table .o-table-button button.mat-stroked-button {
+  .ontimize-table.o-table .o-table-button button.mat-mdc-outlined-button {
     &[disabled] {
       opacity: .65;
       color: rgba(255, 255, 255, 0.65);
@@ -118,7 +119,7 @@
 
   .ontimize-table.o-table {
     .o-table-button {
-      button.mat-stroked-button {
+      button.mat-mdc-outlined-button {
         border: 0;
       }
 
@@ -151,11 +152,11 @@
     }
 
     .o-form-toolbar>.mat-toolbar {
-      .mat-stroked-button {
+      .mat-mdc-outlined-button {
         border: none;
       }
 
-      button.mat-button.o-form-toolbar-button,
+      button.mat-mdc-button.o-form-toolbar-button,
       button.o-form-toolbar-button {
 
         &:not([disabled]),
@@ -204,7 +205,7 @@
       }
     }
 
-    .mat-menu-panel {
+    .mat-mdc-menu-panel {
       border: 1px solid mat.get-color-from-palette($foreground, divider);
     }
 
@@ -219,9 +220,9 @@
   }
 
   //TABS
-  .mat-tab-group.o-tab-ontimize {
-
-    .mat-tab-header .mat-tab-label-container .mat-tab-list .mat-tab-label,
+  .mat-mdc-tab-group.o-tab-ontimize {
+    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
+    .mat-mdc-tab-header .mat-tab-label-container .mat-tab-list .mat-tab-label,
     div.mat-tab-body-wrapper {
       border-radius: 0;
       padding: 0;
@@ -248,21 +249,22 @@
 
   //dialog
   .o-dialog-class {
-    mat-dialog-container.mat-dialog-container {
-      .mat-dialog-title {
+    /* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
+    mat-dialog-container.mat-mdc-dialog-container {
+      .mat-mdc-dialog-title {
         border-bottom-color: variables.$default-color;
       }
 
-      .mat-dialog-actions {
+      .mat-mdc-dialog-actions {
         @include o-button-class();
 
-        button.mat-button-base[ng-reflect-dialog-result="0"],
+        button.mat-mdc-button-base[ng-reflect-dialog-result="0"],
         button.mat-button-base[ng-reflect-dialog-result="true"] {
           color: white;
           background-color: variables.$primary-color;
         }
 
-        button.mat-button-base[ng-reflect-dialog-result="1"],
+        button.mat-mdc-button-base[ng-reflect-dialog-result="1"],
         button.mat-button-base[ng-reflect-dialog-result="false"] {
           color: white;
           background-color: variables.$default-color;

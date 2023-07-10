@@ -14,8 +14,8 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenu } from '@angular/material/menu';
 import { Observable } from 'rxjs';
 import { InputConverter } from '../../../../../decorators/input-converter';
 import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand.interface';

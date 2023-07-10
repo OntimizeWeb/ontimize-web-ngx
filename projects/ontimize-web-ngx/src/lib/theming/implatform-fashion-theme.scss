@@ -25,15 +25,15 @@ $typography : ontimize-lite.$typography;
   $white-30pct-opacity-on-dark: #686868;
   $black-26pct-opacity-on-light: #b0b0b0;
   $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
-
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-frame {
     border-color: mat.get-color-from-palette($foreground, secondary-text);
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-checkmark {
     fill: $checkbox-mark-color;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-checkmark-path {
     // !important is needed here because a stroke must be set as an
     // attribute on the SVG in order for line animation to work properly.
@@ -45,41 +45,49 @@ $typography : ontimize-lite.$typography;
       stroke: #000 !important;
     }
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-mixedmark {
     background-color: $checkbox-mark-color;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-checked,
   .mat-checkbox-indeterminate {
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     &.mat-primary .mat-checkbox-background {
       background-color: mat.get-color-from-palette($foreground, icon);
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     &.mat-accent .mat-checkbox-background {
       background-color: mat.get-color-from-palette($foreground, icon);
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     &.mat-warn .mat-checkbox-background {
       background-color: mat.get-color-from-palette($warn);
     }
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-disabled {
-
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     &.mat-checkbox-checked,
     &.mat-checkbox-indeterminate {
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-background {
         background-color: $disabled-color;
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     &:not(.mat-checkbox-checked) {
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-frame {
         border-color: $disabled-color;
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     .mat-checkbox-label {
       color: mat.get-color-from-palette($foreground, secondary-text);
     }
@@ -92,6 +100,7 @@ $typography : ontimize-lite.$typography;
   // This one is moved down here so it can target both
   // the theme colors and the disabled state.
   @include cdk.high-contrast {
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     .mat-checkbox-background {
       // Needs to be removed because it hides the checkbox outline.
       background: none;
@@ -100,11 +109,11 @@ $typography : ontimize-lite.$typography;
 
   // Switch this to a solid color since we're using `opacity`
   // to control how opaque the ripple should be.
-  .mat-checkbox .mat-ripple-element {
+  .mat-mdc-checkbox .mat-ripple-element {
     background-color: map.get(map.get($theme, foreground), base);
   }
 
-  .mat-checkbox-checked:not(.mat-checkbox-disabled),
+  .mat-mdc-checkbox-checked:not(.mat-checkbox-disabled),
   .mat-checkbox:active:not(.mat-checkbox-disabled) {
     &.mat-primary .mat-ripple-element {
       background: mat.get-color-from-palette($foreground, icon);
@@ -333,7 +342,7 @@ $typography : ontimize-lite.$typography;
       }
     }
 
-    .mat-menu-panel {
+    .mat-mdc-menu-panel {
       border: 1px solid mat.get-color-from-palette($foreground, divider);
     }
 
@@ -346,23 +355,23 @@ $typography : ontimize-lite.$typography;
       }
     }
   }
-
-  .mat-tab-group.o-tab-ontimize>.mat-tab-body-wrapper {
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+  .mat-mdc-tab-group.o-tab-ontimize>.mat-tab-body-wrapper {
     background: mat.get-color-from-palette($background, status-bar);
   }
-
-  .mat-tab-group .mat-tab-label.mat-tab-label-active {
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+  .mat-mdc-tab-group .mat-tab-label.mat-tab-label-active {
     color: mat.get-color-from-palette($foreground, title);
   }
 
   /* MAT PAGINATOR*/
-  .mat-paginator {
+  .mat-mdc-paginator {
     color: mat.get-color-from-palette($foreground, text);
   }
 
   .ontimize-table.o-table {
     background: mat.get-color-from-palette($background, card);
-
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
     thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
       background-color: mat.get-color-from-palette($foreground, icon);
@@ -374,8 +383,8 @@ $typography : ontimize-lite.$typography;
   }
 
   .o-table {
-    .mat-table {
-      .mat-row {
+    .mat-mdc-table {
+      .mat-mdc-row {
         //TO BE DEFINED
         //       &.o-table-group-row-level-1 {
         //         font-weight: 900;
@@ -405,7 +414,7 @@ $typography : ontimize-lite.$typography;
           background: #eaeaea;
         }
 
-        .mat-cell {
+        .mat-mdc-cell {
           color: mat.get-color-from-palette($foreground, text);
         }
       }
@@ -422,7 +431,7 @@ $typography : ontimize-lite.$typography;
         background-color: mat.get-color-from-palette($background, card);
 
         .mat-toolbar-tools {
-          button.o-form-toolbar-button.o-form-toolbar-back.mat-icon-button {
+          button.o-form-toolbar-button.o-form-toolbar-back.mat-mdc-icon-button {
             margin-right: 32px;
           }
 
@@ -431,22 +440,22 @@ $typography : ontimize-lite.$typography;
     }
   }
 
-  .mat-dialog-actions button:not([disabled]),
+  .mat-mdc-dialog-actions button:not([disabled]),
   .o-form .o-form-toolbar button:not([disabled]),
   .o-grid .o-grid-footer button:not([disabled]),
   .o-grid .o-grid-toolbar>button:not([disabled]),
   .o-list .o-list-toolbar>button:not([disabled]),
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button:not([disabled]),
-  button.mat-stroked-button:not([disabled]) {
+  button.mat-mdc-outlined-button:not([disabled]) {
 
-    &.mat-button-base.mat-primary,
+    &.mat-mdc-button-base.mat-primary,
     &.mat-button-base.o-button-primary,
     &.mat-button-base[ng-reflect-dialog-result="0"],
     &.mat-button-base[ng-reflect-dialog-result="true"] {
       color: mat.get-color-from-palette($primary, 500);
       background-color: #ffffff;
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
-
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
       &:hover,
       .mat-button-focus-overlay {
         color: mat.get-color-from-palette($primary, 500);
@@ -457,7 +466,7 @@ $typography : ontimize-lite.$typography;
 
     }
 
-    &.mat-button-base,
+    &.mat-mdc-button-base,
     &.mat-button-base.mat-accent,
     &.mat-button-base.o-button-default,
     &.mat-button-base[ng-reflect-dialog-result="1"],
@@ -465,7 +474,7 @@ $typography : ontimize-lite.$typography;
       color: mat.get-color-from-palette($foreground, text);
       background-color: #ffffff;
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
-
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
       &:hover,
       .mat-button-focus-overlay {
         color: mat.get-color-from-palette($accent, 500);
@@ -479,7 +488,7 @@ $typography : ontimize-lite.$typography;
   .o-grid .o-grid-toolbar button,
   .o-list .o-list-toolbar button,
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button {
-    &.mat-icon-button:not(.mat-menu-trigger) {
+    &.mat-mdc-icon-button:not(.mat-mdc-menu-trigger) {
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
       border-style: solid;
       border-width: 1px;
@@ -488,7 +497,7 @@ $typography : ontimize-lite.$typography;
     }
   }
 
-  .o-form .o-form-toolbar-header .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button.mat-icon-button:not(.mat-menu-trigger) {
+  .o-form .o-form-toolbar-header .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button.mat-mdc-icon-button:not(.mat-mdc-menu-trigger) {
     margin: 0 6px;
   }
 
@@ -508,9 +517,9 @@ $typography : ontimize-lite.$typography;
       >.mat-expansion-panel-header {
         border-bottom: none;
         color: mat.get-color-from-palette($foreground, title);
-
+        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
         .mat-tab-label,
-        .mat-tab-link {
+        .mat-mdc-tab-link {
           color: mat.get-color-from-palette($foreground, title);
         }
       }

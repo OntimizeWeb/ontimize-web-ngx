@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 

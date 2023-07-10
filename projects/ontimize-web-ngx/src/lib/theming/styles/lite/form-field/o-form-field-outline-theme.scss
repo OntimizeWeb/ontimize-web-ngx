@@ -22,23 +22,25 @@
   // The amount of overlap between the label and the outline.
   $mat-form-field-outline-label-overlap: .25em;
 
-  .mat-form-field.mat-form-field-appearance-outline {
+  .mat-mdc-form-field.mat-form-field-appearance-outline {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-wrapper {
       padding-bottom: 0;
 
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-infix {
       padding: $infix-padding 0;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-label {
       top: $infix-margin-top + $infix-padding;
       margin-top: $outline-appearance-label-offset;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     &.mat-form-field-can-float {
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       &.mat-form-field-should-float .mat-form-field-label,
       .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
         @include o_mat-form-field-outline-label-floating($subscript-font-scale, $infix-padding + $outline-appearance-label-offset, $infix-margin-top);
@@ -46,6 +48,7 @@
 
       // Server-side rendered matInput with a label attribute but label not shown
       // (used as a pure CSS stand-in for mat-form-field-should-float).
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-input-server[label]:not(:placeholder-shown)+.mat-form-field-label-wrapper .mat-form-field-label {
         @include o_mat-form-field-outline-label-floating($subscript-font-scale, $infix-padding + $outline-appearance-label-offset, $infix-margin-top);
       }
