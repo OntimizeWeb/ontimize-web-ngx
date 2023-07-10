@@ -1,0 +1,572 @@
+@use "sass:color";
+@use "sass:map";
+@use 'src/styles/fashion/typography-fashion.scss';
+@use 'src/styles/fashion/variables.scss';
+@use 'src/styles/lite/typography/ontimize-lite.scss'as ontimize-lite;
+@use '@angular/material'as mat;
+@use '@angular/cdk';
+
+$typography : ontimize-lite.$typography;
+
+@mixin mat-checkbox-theme($theme) {
+  $is-dark-theme: map.get($theme, is-dark);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  // The color of the checkbox's checkmark / mixedmark.
+  $checkbox-mark-color: mat.get-color-from-palette($background, background);
+
+  // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
+  // this does not work well with elements layered on top of one another. To get around this we
+  // blend the colors together based on the base color and the theme background.
+  $white-30pct-opacity-on-dark: #686868;
+  $black-26pct-opacity-on-light: #b0b0b0;
+  $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
+
+  .mat-checkbox-frame {
+    border-color: mat.get-color-from-palette($foreground, secondary-text);
+  }
+
+  .mat-checkbox-checkmark {
+    fill: $checkbox-mark-color;
+  }
+
+  .mat-checkbox-checkmark-path {
+    // !important is needed here because a stroke must be set as an
+    // attribute on the SVG in order for line animation to work properly.
+    stroke: $checkbox-mark-color !important;
+
+    @include cdk.high-contrast(black-on-white) {
+      // Having the one above be !important ends up overriding the browser's automatic
+      // color inversion so we need to re-invert it ourselves for black-on-white.
+      stroke: #000 !important;
+    }
+  }
+
+  .mat-checkbox-mixedmark {
+    background-color: $checkbox-mark-color;
+  }
+
+  .mat-checkbox-checked,
+  .mat-checkbox-indeterminate {
+    &.mat-primary .mat-checkbox-background {
+      background-color: mat.get-color-from-palette($foreground, icon);
+    }
+
+    &.mat-accent .mat-checkbox-background {
+      background-color: mat.get-color-from-palette($foreground, icon);
+    }
+
+    &.mat-warn .mat-checkbox-background {
+      background-color: mat.get-color-from-palette($warn);
+    }
+  }
+
+  .mat-checkbox-disabled {
+
+    &.mat-checkbox-checked,
+    &.mat-checkbox-indeterminate {
+      .mat-checkbox-background {
+        background-color: $disabled-color;
+      }
+    }
+
+    &:not(.mat-checkbox-checked) {
+      .mat-checkbox-frame {
+        border-color: $disabled-color;
+      }
+    }
+
+    .mat-checkbox-label {
+      color: mat.get-color-from-palette($foreground, secondary-text);
+    }
+
+    @include cdk.high-contrast {
+      opacity: .5;
+    }
+  }
+
+  // This one is moved down here so it can target both
+  // the theme colors and the disabled state.
+  @include cdk.high-contrast {
+    .mat-checkbox-background {
+      // Needs to be removed because it hides the checkbox outline.
+      background: none;
+    }
+  }
+
+  // Switch this to a solid color since we're using `opacity`
+  // to control how opaque the ripple should be.
+  .mat-checkbox .mat-ripple-element {
+    background-color: map.get(map.get($theme, foreground), base);
+  }
+
+  .mat-checkbox-checked:not(.mat-checkbox-disabled),
+  .mat-checkbox:active:not(.mat-checkbox-disabled) {
+    &.mat-primary .mat-ripple-element {
+      background: mat.get-color-from-palette($foreground, icon);
+    }
+
+    &.mat-accent .mat-ripple-element {
+      background: mat.get-color-from-palette($foreground, icon);
+    }
+
+    &.mat-warn .mat-ripple-element {
+      background: mat.get-color-from-palette($warn);
+    }
+  }
+}
+
+@mixin mat-pseudo-checkbox-theme($theme) {
+  $is-dark-theme: map.get($theme, is-dark);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
+  // this does not work well with elements layered on top of one another. To get around this we
+  // blend the colors together based on the base color and the theme background.
+  $white-30pct-opacity-on-dark: #686868;
+  $black-26pct-opacity-on-light: #b0b0b0;
+  $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
+  $colored-box-selector: '.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate';
+
+  .mat-pseudo-checkbox {
+    color: mat.get-color-from-palette(map.get($theme, foreground), secondary-text);
+
+    &::after {
+      color: mat.get-color-from-palette($background, background);
+    }
+  }
+
+  .mat-pseudo-checkbox-disabled {
+    color: $disabled-color;
+  }
+
+  .mat-primary .mat-pseudo-checkbox-checked,
+  .mat-primary .mat-pseudo-checkbox-indeterminate {
+    background: mat.get-color-from-palette($foreground, icon);
+  }
+
+  // Default to the accent color. Note that the pseudo checkboxes are meant to inherit the
+  // theme from their parent, rather than implementing their own theming, which is why we
+  // don't attach to the `mat-*` classes. Also note that this needs to be below `.mat-primary`
+  // in order to allow for the color to be overwritten if the checkbox is inside a parent that
+  // has `mat-accent` and is placed inside another parent that has `mat-primary`.
+  .mat-accent .mat-pseudo-checkbox-checked,
+  .mat-accent .mat-pseudo-checkbox-indeterminate,
+  .mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-indeterminate {
+    background: mat.get-color-from-palette($foreground, icon);
+  }
+
+  .mat-warn .mat-pseudo-checkbox-checked,
+  .mat-warn .mat-pseudo-checkbox-indeterminate {
+    background: mat.get-color-from-palette(map.get($theme, warn));
+  }
+
+  .mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-indeterminate {
+    &.mat-pseudo-checkbox-disabled {
+      background: $disabled-color;
+    }
+  }
+}
+
+@mixin implatform-fashion-theme-styles($theme, $typographyConfig: null) {
+
+  @if $typographyConfig !=null {
+    $typography: map.merge($typography, $typographyConfig);
+  }
+
+  @include mat-checkbox-theme($theme);
+  @include mat-pseudo-checkbox-theme($theme);
+  @include typography-fashion.o-table-typography-fashion($typography);
+  @include typography-fashion.o-common-typography-fashion($typography);
+  @include typography-fashion.o-form-theme-fashion($typography);
+
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $sidenav-background-color: mat.get-color-from-palette($background, status-bar);
+
+  .o-app-header {
+    nav {
+      &.o-app-header-primary {
+        background-color: $sidenav-background-color;
+      }
+
+      &.o-app-header-accent {
+        background-color: $sidenav-background-color;
+      }
+
+      .o-app-header-title {
+        color: mat.get-color-from-palette($primary);
+      }
+    }
+  }
+
+  .o-app-sidenav {
+    font-weight: 400;
+
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      a {
+        margin-left: 0 !important;
+        border-left: 8px solid transparent;
+      }
+
+      &:not([disabled='true']) {
+        border-left-color: transparent;
+
+        a:hover {
+          color: mat.get-color-from-palette($foreground, text);
+          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 96%); //#525252 4%
+          border-left: 8px solid mat.get-color-from-palette($primary);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected {
+          color: mat.get-color-from-palette($foreground, text);
+          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 98%); //#525252 2%
+          border-left: 8px solid mat.get-color-from-palette($primary);
+        }
+      }
+    }
+
+    .o-app-sidenav-sidenav {
+      background: $sidenav-background-color;
+
+      .sidenav-toggle {
+        color: mat.get-color-from-palette($foreground, icon);
+      }
+
+      .o-app-sidenav-item {
+        color: mat.get-color-from-palette($foreground, text);
+
+        &.o-user-info {
+
+          &:focus,
+          &:hover {
+            color: inherit;
+          }
+
+          color: inherit;
+
+          .o-user-info-menu-item .o-user-info-item {
+            background: mat.get-color-from-palette($primary, default-contrast, 0.74);
+          }
+        }
+      }
+
+      /* Side Navigation Level Styles */
+      .o-app-sidenav-menu-group-level-1 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-item {
+          &:not([disabled='true']) {
+
+            // a.o-app-sidenav-viewer-sidenav-item-selected,
+            a:hover {
+              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+            }
+          }
+        }
+      }
+
+      .o-app-sidenav-menu-group-level-2,
+      .o-app-sidenav-menu-group-level-3,
+      .o-app-sidenav-menu-group-level-4 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-item {
+          &:not([disabled='true']) {
+
+            // a.o-app-sidenav-viewer-sidenav-item-selected,
+            a:hover {
+              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+            }
+          }
+        }
+      }
+
+      li a {
+        color: mat.get-color-from-palette($foreground, text);
+      }
+    }
+  }
+
+  o-app-sidenav.o-app-sidenav,
+  o-app-sidenav.o-app-sidenav.header-layout {
+    .o-app-sidenav-container {
+      .o-app-header {
+        /*box-shadow: none;*/
+        border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
+        background-color: $sidenav-background-color;
+      }
+
+      mat-sidenav.mat-drawer.o-app-sidenav-sidenav {
+        box-shadow: none;
+        border-right: none;
+
+        .o-app-sidenav-menugroup.active+.o-app-sidenav-menugroup-items-container ul {
+          box-shadow: none;
+          background: none;
+        }
+      }
+    }
+
+    .mat-menu-panel {
+      border: 1px solid mat.get-color-from-palette($foreground, divider);
+    }
+
+    .o-app-header {
+      .o-user-info {
+        .o-user-info-wrapper {
+          font-weight: 500;
+          // color: white;
+        }
+      }
+    }
+  }
+
+  .mat-tab-group.o-tab-ontimize>.mat-tab-body-wrapper {
+    background: mat.get-color-from-palette($background, status-bar);
+  }
+
+  .mat-tab-group .mat-tab-label.mat-tab-label-active {
+    color: mat.get-color-from-palette($foreground, title);
+  }
+
+  /* MAT PAGINATOR*/
+  .mat-paginator {
+    color: mat.get-color-from-palette($foreground, text);
+  }
+
+  .ontimize-table.o-table {
+    background: mat.get-color-from-palette($background, card);
+
+    tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
+    thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
+      background-color: mat.get-color-from-palette($foreground, icon);
+    }
+
+    .o-table-button .mat-icon {
+      color: mat.get-color-from-palette($foreground, icon);
+    }
+  }
+
+  .o-table {
+    .mat-table {
+      .mat-row {
+        //TO BE DEFINED
+        //       &.o-table-group-row-level-1 {
+        //         font-weight: 900;
+        //         background-color: if($is-dark-theme, #464646, #b2b2b2);
+        //       }
+
+        //       &.o-table-group-row-level-2 {
+        //         font-weight: 800;
+        //         background-color: if($is-dark-theme, #575757, #cccccc);
+        //       }
+
+        //       &.o-table-group-row-level-3 {
+        //         font-weight: 700;
+        //         background-color: if($is-dark-theme,#686868, #e8e8e8);
+        //       }
+
+        //       &.o-table-group-row-level-4 {
+        //         font-weight: 600;
+        //         background-color: if($is-dark-theme, #7a7a7a, #f9f9f9);
+        //       }
+        &:hover:not(.o-table-group-row) {
+          cursor: pointer;
+          background-color: #f5f5f5;
+        }
+
+        &.selected {
+          background: #eaeaea;
+        }
+
+        .mat-cell {
+          color: mat.get-color-from-palette($foreground, text);
+        }
+      }
+    }
+  }
+
+  /* FORM */
+  .o-form {
+    .o-form-toolbar {
+      margin-bottom: 24px;
+
+      .o-form-toolbar-header {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.24);
+        background-color: mat.get-color-from-palette($background, card);
+
+        .mat-toolbar-tools {
+          button.o-form-toolbar-button.o-form-toolbar-back.mat-icon-button {
+            margin-right: 32px;
+          }
+
+        }
+      }
+    }
+  }
+
+  .mat-dialog-actions button:not([disabled]),
+  .o-form .o-form-toolbar button:not([disabled]),
+  .o-grid .o-grid-footer button:not([disabled]),
+  .o-grid .o-grid-toolbar>button:not([disabled]),
+  .o-list .o-list-toolbar>button:not([disabled]),
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button:not([disabled]),
+  button.mat-stroked-button:not([disabled]) {
+
+    &.mat-button-base.mat-primary,
+    &.mat-button-base.o-button-primary,
+    &.mat-button-base[ng-reflect-dialog-result="0"],
+    &.mat-button-base[ng-reflect-dialog-result="true"] {
+      color: mat.get-color-from-palette($primary, 500);
+      background-color: #ffffff;
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+
+      &:hover,
+      .mat-button-focus-overlay {
+        color: mat.get-color-from-palette($primary, 500);
+        background-color: mat.get-color-from-palette($primary, 100);
+        border-color: transparent;
+
+      }
+
+    }
+
+    &.mat-button-base,
+    &.mat-button-base.mat-accent,
+    &.mat-button-base.o-button-default,
+    &.mat-button-base[ng-reflect-dialog-result="1"],
+    &.mat-button-base[ng-reflect-dialog-result="false"] {
+      color: mat.get-color-from-palette($foreground, text);
+      background-color: #ffffff;
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+
+      &:hover,
+      .mat-button-focus-overlay {
+        color: mat.get-color-from-palette($accent, 500);
+        background-color: mat.get-color-from-palette($accent, 100);
+        border-color: transparent;
+      }
+    }
+  }
+
+  .o-form .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button,
+  .o-grid .o-grid-toolbar button,
+  .o-list .o-list-toolbar button,
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button {
+    &.mat-icon-button:not(.mat-menu-trigger) {
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      border-style: solid;
+      border-width: 1px;
+      border-radius: variables.$border-radius;
+      line-height: variables.$button-line-height-width-border;
+    }
+  }
+
+  .o-form .o-form-toolbar-header .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button.mat-icon-button:not(.mat-menu-trigger) {
+    margin: 0 6px;
+  }
+
+  // O-ROW, O-COLUMN
+  o-column.o-column,
+  o-row.o-row {
+    background: mat.get-color-from-palette($background, card);
+    border-radius: variables.$border-radius;
+
+    .o-container {
+      .o-container-title {
+        padding: 20px 0;
+      }
+
+      >.o-container-header,
+      >.o-container-title,
+      >.mat-expansion-panel-header {
+        border-bottom: none;
+        color: mat.get-color-from-palette($foreground, title);
+
+        .mat-tab-label,
+        .mat-tab-link {
+          color: mat.get-color-from-palette($foreground, title);
+        }
+      }
+
+      >.o-container-title,
+      >.mat-expansion-panel-header .o-container-title {
+        span {
+          font: {
+            size: mat.font-size($typography, title);
+            weight: bold;
+          }
+        }
+      }
+
+      .o-container-scroll {
+        &.o-container-gap {
+          padding: 12px 16px 16px;
+        }
+      }
+    }
+  }
+
+  o-column.o-column.top-separator,
+  o-row.o-row.top-separator {
+    margin-top: 14px;
+  }
+
+  /*background levels */
+  .bg-level-0,
+  o-column.o-column.bg-level-0,
+  o-row.o-row.bg-level-0 {
+    background-color: mat.get-color-from-palette($background, level-0);
+  }
+
+  .bg-level-06,
+  o-column.o-column.bg-level-06,
+  o-row.o-row.bg-level-06 {
+    background-color: mat.get-color-from-palette($background, level-06);
+  }
+
+  .bg-level-08,
+  o-column.o-column.bg-level-08,
+  o-row.o-row.bg-level-08 {
+    background-color: mat.get-color-from-palette($background, level-08);
+  }
+
+  .bg-level-1,
+  o-column.o-column.bg-level-1,
+  o-row.o-row.bg-level-1 {
+    background-color: mat.get-color-from-palette($background, level-1);
+  }
+
+  .o-form-content-wrapper,
+  .o-form-toolbar {
+    &[layout-padding] {
+      padding: 0;
+    }
+  }
+}

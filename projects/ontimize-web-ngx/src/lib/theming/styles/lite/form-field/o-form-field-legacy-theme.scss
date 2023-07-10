@@ -1,0 +1,57 @@
+@use '@angular/material'as mat;
+@use 'sass:math';
+
+@mixin o-mat-form-field-legacy-typography($config) {
+  // The unit-less line-height from the font config.
+  $line-height: mat.line-height($config, input);
+  // The amount to scale the font for the floating label and subscript.
+  $subscript-font-scale: .75;
+  // The amount of space between the top of the line and the top of the actual text
+  // (as a fraction of the font-size).
+  $line-spacing: math.div($line-height - 1, 2);
+  // The padding on the infix. Mocks show half of the text size, but seem to measure from the edge
+  // of the text itself, not the edge of the line; therefore we subtract off the line spacing.
+  $infix-padding: .35em - $line-spacing;
+  // The margin applied to the form-field-infix to reserve space for the floating label.
+  $infix-margin-top: 1.2em * $line-height * $subscript-font-scale;
+  // The space between the bottom of the .mat-form-field-flex area and the subscript wrapper.
+  // Mocks show half of the text size, but this margin is applied to an element with the subscript
+  // text font size, so we need to divide by the scale factor to make it half of the original text
+  // size. We again need to subtract off the line spacing since the mocks measure to the edge of the
+  // text, not the  edge of the line.
+  $subscript-margin-top: math.div(.3em, $subscript-font-scale - ($line-spacing * 2));
+  // The padding applied to the form-field-wrapper to reserve space for the subscript, since it's
+  // absolutely positioned. This is a combination of the subscript's margin and line-height, but we
+  // need to multiply by the subscript font scale factor since the wrapper has a larger font size.
+  $wrapper-padding-bottom: ($subscript-margin-top + $line-height) * $subscript-font-scale*0.1;
+
+  //$wrapper-padding-bottom: 0;
+  .mat-form-field.mat-form-field-appearance-legacy {
+    .mat-form-field-wrapper {
+      padding-bottom: $wrapper-padding-bottom;
+    }
+
+    .mat-form-field-infix {
+      padding: $infix-padding 0;
+    }
+
+    .mat-form-field-label {
+      top: $infix-margin-top + $infix-padding;
+    }
+
+    .mat-form-field-underline {
+      // We want the underline to start at the end of the content box, not the padding box,
+      // so we move it up by the padding amount.
+      bottom: $wrapper-padding-bottom;
+    }
+
+    .mat-form-field-subscript-wrapper {
+      margin-top: $subscript-margin-top;
+
+      // We want the subscript to start at the end of the content box, not the padding box,
+      // so we move it up by the padding amount (adjusted for the smaller font size);
+      top: calc(100% - #{math.div($wrapper-padding-bottom , $subscript-font-scale)});
+    }
+  }
+
+}

@@ -1,0 +1,16 @@
+@use '@angular/material'as mat;
+// Include non-theme styles for core.
+@include mat.core();
+
+/* Color definitions */
+$mat-custom-primary: (50 : #e5e5e5, 100 : #bdbdbd, 200 : #929292, 300 : #666666, 400 : #454545, 500 : #242424, 600 : #202020, 700 : #1b1b1b, 800 : #161616, 900 : #0d0d0d, A100 : #e5e5e5, A200 : #bdbdbd, A400 : #454545, A700 : #1b1b1b, contrast: (50: $black-87-opacity, 100: $black-87-opacity, 200: $black-87-opacity, 300: white, 400: white, 500: $white-87-opacity, 600: $white-87-opacity, 700: $white-87-opacity, 800: $white-87-opacity, 900: $white-87-opacity, A100: $black-87-opacity, A200: white, A400: white, A700: white, ));
+
+$mat-custom-accent: (50 : #fff9e0, 100 : #fff0b3, 200 : #ffe680, 300 : #ffdb4d, 400 : #ffd426, 500 : #ffcc00, 600 : #ffc700, 700 : #ffc000, 800 : #ffb900, 900 : #ffad00, A100 : #fff9e0, A200 : #ffe680, A400 : #ffd426, A700 : #ffc000, contrast: (50: $black-87-opacity, 100: $black-87-opacity, 200: $black-87-opacity, 300: white, 400: white, 500: $white-87-opacity, 600: $white-87-opacity, 700: $white-87-opacity, 800: $white-87-opacity, 900: $white-87-opacity, A100: $black-87-opacity, A200: white, A400: white, A700: white, ));
+
+// Define a theme.
+$primary: mat.define-palette($mat-custom-primary);
+$accent: mat.define-palette($mat-custom-accent);
+/* Light theme */
+$theme: mat.define-light-theme($primary, $accent);
+/* Dark theme */
+$dark-theme: mat.define-dark-theme($primary, $accent);

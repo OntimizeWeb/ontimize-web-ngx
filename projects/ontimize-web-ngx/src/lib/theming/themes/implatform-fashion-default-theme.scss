@@ -1,0 +1,165 @@
+@use "sass:color";
+@use '@angular/material'as mat;
+// Include non-theme styles for core.
+@include mat.core();
+
+//Definition primary and accent palettes
+$default-palette: (50: #e8e3f4,
+  100: #c5b9e4,
+  200: #9f8ad2,
+  300: #795bc0,
+  400: #5c37b3,
+  500: #3f14a5,
+  600: #39129d,
+  700: #310e93,
+  800: #290b8a,
+  900: #1b0679,
+  A100: #b3a8ff,
+  A200: #8775ff,
+  A400: #5b42ff,
+  A700: #4428ff,
+  contrast: (50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+// Define a theme.
+$primary: mat.define-palette($default-palette);
+$accent: mat.define-palette($default-palette, A100, A200, A400, A700);
+
+/*Application background-color*/
+$app-background-color: #eaeaea;
+/*Sidenav background-color*/
+$sidenav-background-color: #f5f5f5;
+
+/* Foreground color */
+$foreground-title-color: #363636;
+$foreground-color: #525252;
+
+$dark-primary-text: rgba(black, 0.87);
+$dark-secondary-text: rgba(black, 0.54);
+$dark-disabled-text: rgba(black, 0.38);
+$dark-dividers: rgba(black, 0.12);
+$dark-focused: rgba(black, 0.12);
+$light-primary-text: white;
+$light-secondary-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.5);
+$light-dividers: rgba(white, 0.12);
+$light-focused: rgba(white, 0.12);
+
+// Background palette for light themes.
+@function fashion-mat-light-theme-background($primary) {
+  @return (status-bar: color.mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
+    app-bar: color.mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
+    background: color.mix($app-background-color, mat.get-color-from-palette($primary), 97.2%),
+    hover: rgba(black, 0.04),
+    card: white,
+    dialog: white,
+    disabled-button: rgba(black, 0.12),
+    raised-button: white,
+    focused-button: $dark-focused,
+    selected-button: #e0e0e0,
+    selected-disabled-button: #bdbdbd,
+    disabled-button-toggle: #eeeeee,
+    unselected-chip: #e0e0e0,
+    disabled-list-option: #eeeeee,
+    sidenav-overlay: #525252,
+    level-0: color.mix($app-background-color, mat.get-color-from-palette($primary), 97.2%),
+    level-06: #f6f6f6,
+    level-08: #fafafa,
+    level-1: white);
+}
+
+// Background palette for dark themes.
+@function fashion-mat-dark-theme-background($primary) {
+  @return (status-bar: black,
+    app-bar: #212121,
+    background: #303030,
+    hover: rgba(white, 0.04),
+    card: #424242,
+    dialog: #424242,
+    disabled-button: rgba(white, 0.12),
+    raised-button: #424242,
+    focused-button: $light-focused,
+    selected-button: #212121,
+    selected-disabled-button: #424242,
+    disabled-button-toggle: black,
+    unselected-chip: #616161,
+    disabled-list-option: black,
+    sidenav-overlay: #525252);
+}
+
+// Foreground palette for light themes.
+$fashion-mat-light-theme-foreground: (base: $foreground-color,
+  divider: $dark-dividers,
+  dividers: $dark-dividers,
+  disabled: $dark-disabled-text,
+  disabled-button: rgba(black, 0.26),
+  disabled-text: $dark-disabled-text,
+  elevation: black,
+  hint-text: $dark-disabled-text,
+  secondary-text: $dark-secondary-text,
+  title: $foreground-title-color,
+  icon: $foreground-color,
+  icons: $foreground-color,
+  text: $foreground-color,
+  slider-min: rgba(black, 0.87),
+  slider-off: rgba(black, 0.26),
+  slider-off-active: rgba(black, 0.38),
+);
+
+// Foreground palette for dark themes.
+$fashion-mat-dark-theme-foreground: (base: white,
+  divider: $light-dividers,
+  dividers: $light-dividers,
+  disabled: $light-disabled-text,
+  disabled-button: rgba(white, 0.3),
+  disabled-text: $light-disabled-text,
+  elevation: black,
+  hint-text: $light-disabled-text,
+  secondary-text: $light-secondary-text,
+  title: $foreground-title-color,
+  icon: white,
+  icons: white,
+  text: white,
+  slider-min: white,
+  slider-off: rgba(white, 0.3),
+  slider-off-active: rgba(white, 0.3),
+);
+
+// Creates a container object for a light theme to be given to individual component theme mixins.
+@function fashion-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  @return (primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: false,
+    foreground: $fashion-mat-light-theme-foreground,
+    background: fashion-mat-light-theme-background($primary));
+}
+
+// Creates a container object for a dark theme to be given to individual component theme mixins.
+@function fashion-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  @return (primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: true,
+    foreground: $fashion-mat-dark-theme-foreground,
+    background: fashion-mat-dark-theme-background($primary));
+}
+
+/* Light theme */
+$theme: fashion-mat-light-theme($primary, $accent);
+/* Dark theme */
+$dark-theme: fashion-mat-dark-theme($primary, $accent);

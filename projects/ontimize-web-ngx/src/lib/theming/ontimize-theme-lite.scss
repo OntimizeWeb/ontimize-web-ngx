@@ -1,0 +1,23 @@
+@use "sass:map";
+@use 'src/styles/lite/layout-lite.scss';
+@use 'src/styles/lite/typography-lite.scss';
+@use 'src/styles/lite/typography/ontimize-lite.scss';
+@use 'src/styles/lite/form-field/o-form-field-theme.scss';
+@use 'ontimize-theme.scss';
+
+
+$typography : ontimize-lite.$typography;
+@mixin ontimize-theme-styles-lite($theme, $typographyConfig: null) {
+  @if $typographyConfig !=null {
+    $typography: map.merge($typography, $typographyConfig);
+  }
+
+  @include ontimize-theme.ontimize-theme-styles($theme, $typography);
+  @include typography-lite.o-table-typography-lite($typography);
+  @include o-form-field-theme.o-mat-form-field-typography-lite($typography);
+  @include typography-lite.o-common-typography-lite($typography);
+  @include layout-lite.layout-padding-margin-lite();
+
+  @include typography-lite.o-form-theme();
+
+}

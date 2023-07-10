@@ -1,0 +1,10 @@
+@mixin o-mat-form-field-standard-typography($config) {
+  $infix-padding-top: .25em;
+
+  .mat-form-field-appearance-standard {
+    .mat-form-field-flex{
+      padding: $infix-padding-top  $infix-padding-top 0  $infix-padding-top!important;
+    }
+  }
+
+}

@@ -1,0 +1,57 @@
+@use '@angular/material'as mat;
+@use 'sass:math';
+
+@mixin o-mat-form-field-fill-typography($config) {
+  // The unit-less line-height from the font config.
+  $line-height: mat.line-height($config, input);
+  // The amount to scale the font for the floating label and subscript.
+  $subscript-font-scale: .75;
+  // The padding on top of the infix.
+  $infix-padding-top: .25em;
+  // The padding below the infix.
+  $infix-padding-bottom: .3em;
+  // The margin applied to the form-field-infix to reserve space for the floating label.
+  $infix-margin-top: 1em * $line-height * $subscript-font-scale;
+  // The amount we offset the label from the input text in the fill appearance.
+  $fill-appearance-label-offset: -0.5em;
+
+  .mat-form-field-appearance-fill {
+    .mat-form-field-flex {
+      padding: $infix-padding-top $infix-padding-top 0 $infix-padding-top !important;
+    }
+
+    .mat-form-field-infix {
+      padding: $infix-padding-top 0 $infix-padding-bottom !important;
+    }
+
+    .mat-form-field-label {
+      top: $infix-margin-top + $infix-padding-top !important;
+      margin-top: $fill-appearance-label-offset !important;
+    }
+
+    &.mat-form-field-can-float {
+
+      &.mat-form-field-should-float .mat-form-field-label,
+      .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+        @include o_mat-form-field-fill-label-floating($subscript-font-scale, $infix-padding-top + $fill-appearance-label-offset, $infix-margin-top);
+      }
+
+      // Server-side rendered matInput with a label attribute but label not shown
+      // (used as a pure CSS stand-in for mat-form-field-should-float).
+      .mat-input-server[label]:not(:placeholder-shown)+.mat-form-field-label-wrapper .mat-form-field-label {
+        @include o_mat-form-field-fill-label-floating($subscript-font-scale, $infix-padding-top + $fill-appearance-label-offset, $infix-margin-top);
+      }
+    }
+
+  }
+}
+
+$fill-dedupe: 0;
+
+// Applies a floating label above the form field control itself.
+@mixin o_mat-form-field-fill-label-floating($font-scale, $infix-padding, $infix-margin-top) {
+  transform: translateY(-$infix-margin-top - $infix-padding + $fill-dedupe) scale($font-scale) !important;
+  width: math.div(100%, $font-scale + $fill-dedupe);
+
+  $fill-dedupe: $fill-dedupe + .00001 !important;
+}
