@@ -8,7 +8,7 @@ import {
   Type,
   ViewEncapsulation
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
 import { DialogService } from '../../../../../services/dialog.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';

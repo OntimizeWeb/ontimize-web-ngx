@@ -13,8 +13,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatMenu } from '@angular/material/menu';
+import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
+import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 

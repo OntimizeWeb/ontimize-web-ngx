@@ -13,8 +13,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { MatInput } from '@angular/material/input';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatLegacyInput as MatInput } from '@angular/material/legacy-input';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';

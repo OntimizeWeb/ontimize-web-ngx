@@ -1,7 +1,16 @@
 @use "sass:map";
 @use '@angular/material'as mat;
 // Include non-theme styles for core.
-@include mat.core();
+// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
+@include mat.all-legacy-component-typographies();
+@include mat.legacy-core();
 
 /* Color definitions */
 $mat-custom-primary: (50 : #e3ecf4, 100 : #b9d1e4, 200 : #8ab2d2, 300 : #5b93c0, 400 : #377bb3, 500 : #1464a5, 600 : #125c9d, 700 : #0e5293, 800 : #0b488a, 900 : #063679, A100 : #a8c7ff, A200 : #75a7ff, A400 : #4286ff, A700 : #2876ff, contrast: (50 : #000000, 100 : #000000, 200 : #000000, 300 : #000000, 400 : #ffffff, 500 : #ffffff, 600 : #ffffff, 700 : #ffffff, 800 : #ffffff, 900 : #ffffff, A100 : #000000, A200 : #000000, A400 : #ffffff, A700 : #ffffff));

@@ -17,7 +17,7 @@ import {
   SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatLegacyFormFieldAppearance as MatFormFieldAppearance } from '@angular/material/legacy-form-field';
 import { merge, Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';

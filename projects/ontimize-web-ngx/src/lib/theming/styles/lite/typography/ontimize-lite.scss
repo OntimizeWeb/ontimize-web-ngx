@@ -30,7 +30,7 @@
     U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-$o-mat-lite-typography: mat.define-typography-config($font-family: 'Poppins, "Helvetica Neue", sans-serif',
+$o-mat-lite-typography: mat.define-legacy-typography-config($font-family: 'Poppins, "Helvetica Neue", sans-serif',
   $display-4: mat.define-typography-level(84px, 92px, 300),
   $display-3: mat.define-typography-level(42px, 42px, 400),
   $display-2: mat.define-typography-level(34px, 36px, 400),

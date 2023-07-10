@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild, Directive } from '@angular/core';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatLegacyFormFieldAppearance as MatFormFieldAppearance } from '@angular/material/legacy-form-field';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { MatSelectChange } from "@angular/material/select";
+import { MatLegacySelectChange as MatSelectChange } from "@angular/material/legacy-select";
 import { OGroupedColumnTypes } from "../../../../types/o-grouped-column-types.type";
 export const DEFAULT_DUAL_LIST_SELECTOR_DATE_ITEM = [
   'item',

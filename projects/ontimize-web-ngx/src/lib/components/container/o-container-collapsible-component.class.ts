@@ -1,6 +1,6 @@
 import { AfterViewInit, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, ViewChild, Directive } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MAT_LEGACY_FORM_FIELD_DEFAULT_OPTIONS as MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/legacy-form-field';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../decorators/input-converter';
