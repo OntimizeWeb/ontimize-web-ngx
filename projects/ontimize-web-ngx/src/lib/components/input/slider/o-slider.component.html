@@ -1,9 +1,17 @@
-<div [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
-  <!-- TODO: The 'invert' property no longer exists -->
-  <!-- TODO: The 'tickInterval' property no longer exists -->
-  <!-- TODO: The 'vertical' property no longer exists -->
-  <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" [thumbLabel]="thumbLabel" [id]="getAttribute()"
-    [formControlName]="getAttribute()" [displayWith]="oDisplayWith" #ngSlider><input matSliderThumb (change)="onChangeEvent({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" /></mat-slider>
+<div [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+  <ng-container *ngIf="thumbLabel; else templateWithoutThumb">
+    <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" discrete [id]="getAttribute()" [formControlName]="getAttribute()"
+      [displayWith]="oDisplayWith"><input matSliderThumb (change)="onChangeEvent($event)" />
+    </mat-slider>
+  </ng-container>
   <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+
 </div>
+
+<ng-template #templateWithoutThumb>
+  <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" [id]="getAttribute()" [formControlName]="getAttribute()"
+    [displayWith]="oDisplayWith">
+    <input (change)="onChangeEvent($event)" />
+  </mat-slider>
+</ng-template>

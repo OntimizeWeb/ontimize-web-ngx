@@ -8,13 +8,10 @@ import {
 
 export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   'color',
-  'invert',
   'max',
   'min',
   'step',
   'thumbLabel:thumb-label',
-  'tickInterval:tick-interval',
-  'layout',
   'oDisplayWith:display-with'
 ];
 
@@ -34,13 +31,6 @@ export type SliderDisplayFunction = (value: number | null) => string | number;
 export class OSliderComponent extends OFormDataComponent {
 
   public color: string;
-  public layout: 'row' | 'column' = 'row';
-
-  @InputConverter()
-  public vertical: boolean = false;
-
-  @InputConverter()
-  public invert: boolean = false;
 
   @InputConverter()
   public thumbLabel: boolean = false;
@@ -53,15 +43,6 @@ export class OSliderComponent extends OFormDataComponent {
 
   @InputConverter()
   step: number = 1;
-
-  set tickInterval(value: any) {
-    this._tickInterval = value;
-  }
-  get tickInterval() {
-    return this._tickInterval;
-  }
-  _tickInterval: 'auto' | number = 0;
-
 
   oDisplayWith: SliderDisplayFunction;
 
