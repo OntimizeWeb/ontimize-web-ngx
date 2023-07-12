@@ -1,8 +1,8 @@
 @use "sass:color";
 @use "sass:map";
-@use 'src/styles/fashion/typography-fashion.scss';
-@use 'src/styles/fashion/variables.scss';
-@use 'src/styles/lite/typography/ontimize-lite.scss'as ontimize-lite;
+@use 'styles/fashion/typography-fashion.scss';
+@use 'styles/fashion/variables.scss';
+@use 'styles/lite/typography/ontimize-lite.scss'as ontimize-lite;
 @use '@angular/material'as mat;
 @use '@angular/cdk';
 

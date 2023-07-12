@@ -4,14 +4,17 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run build-theme && npm run build-styles && npm run copy-files",
+    "build": "ng build && npm run build-theme && npm run build-styles && npm run copy-files && npm run copy-files-themes",
     "build-theme": "bundle-scss --config",
     "build-styles": "scss-bundle -c scss-bundle-ontimize.config.json",
     "copy-files": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/assets && echo '----¡Assets copied!----'  ",
+    "copy-files-themes": "npm run clean && gulp copy-files",
     "test": "ng test --code-coverage",
     "test-ci": "ng test --no-watch --code-coverage --browsers ChromeHeadless",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "rimraf": "rimraf",
+    "clean": "rimraf tmp"
   },
   "bundleStyle": {
     "dest": "./dist/theme.scss",
@@ -62,6 +65,9 @@
     "copyfiles": "~2.2.0",
     "eslint": "^8.28.0",
     "google-libphonenumber": "^3.2.3",
+    "gulp": "4.0.2",
+    "gulp-cssimport": "^7.0.0",
+    "gulp-replace": "1.1.4",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.4.2",
@@ -72,6 +78,7 @@
     "karma-sonarqube-unit-reporter": "0.0.23",
     "ng-packagr": "^15.2.2",
     "protractor": "~7.0.0",
+    "rimraf": "^5.0.1",
     "scss-bundle": "3.1.1",
     "sonarqube-scanner": "^2.8.1",
     "ts-node": "~8.3.0",

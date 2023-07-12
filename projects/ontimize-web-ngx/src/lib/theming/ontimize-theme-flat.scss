@@ -1,5 +1,5 @@
 @use "sass:map";
-@use 'src/styles/flat/variables.scss';
+@use 'styles/flat/variables.scss';
 
 @mixin ontimize-flat-styles($theme, $color_states:null) {
   $background: map.get($theme, background);

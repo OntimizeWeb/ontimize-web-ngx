@@ -1,7 +1,7 @@
 @use "sass:map";
-@use 'src/styles/lite/layout.scss';
-@use 'src/styles/default/typography/ontimize.scss'as ontimize-typography;
-@use 'src/styles/default/addons/report-on-demand.scss';
+@use 'styles/lite/layout.scss';
+@use 'styles/default/typography/ontimize.scss'as ontimize-typography;
+@use 'styles/default/addons/report-on-demand.scss';
 @use '@angular/material'as mat;
 
 $typography: ontimize-typography.$default-typography;
