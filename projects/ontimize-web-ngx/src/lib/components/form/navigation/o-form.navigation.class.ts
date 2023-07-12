@@ -321,6 +321,10 @@ export class OFormNavigationClass {
       });
       let extras: NavigationExtras = {};
       let qParams: any = Object.assign({}, this.getQueryParams(), Codes.getIsDetailObject());
+      // deleting insertionMode current queryParam
+      delete qParams[Codes.INSERTION_MODE];
+      // Ignoring current closed form (the insertion form)
+      qParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
       extras[Codes.QUERY_PARAMS] = qParams;
       let route = [];
       const navData: ONavigationItem = this.navigationService.getLastMainNavigationRouteData();
