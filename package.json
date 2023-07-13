@@ -18,7 +18,7 @@
   },
   "bundleStyle": {
     "dest": "./dist/theme.scss",
-    "mask": "./projects/ontimize-web-ngx/**/*theme.scss",
+    "mask": ["./projects/ontimize-web-ngx/src/lib/components/**/*theme.scss","./projects/ontimize-web-ngx/src/lib/shared/**/*theme.scss"],
     "sort": [
       "o-material"
     ]
