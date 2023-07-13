@@ -377,9 +377,10 @@ export class OFormNavigationClass {
         if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
           extras.queryParams = {};
           extras.queryParams[Codes.INSERTION_MODE] = 'true';
+          extras.queryParams[Codes.IGNORE_CAN_DEACTIVATE] = true;
         }
       }
-      this.storeNavigationFormRoutes('insertFormRoute');
+      this.storeNavigationFormRoutes('insertFormRoute', !!this.formLayoutManager);
       this.router.navigate(route, extras).then((val) => {
         if (val && options && options.changeToolbarMode) {
           this.form.getFormToolbar().setInsertMode();
@@ -468,7 +469,7 @@ export class OFormNavigationClass {
     return this.confirmExitService.subscribeToDiscardChanges(this.form, ignoreAttrs);
   }
 
-  protected storeNavigationFormRoutes(activeMode: string) {
+  protected storeNavigationFormRoutes(activeMode: string, mainFormLayoutManagerComponent?: boolean) {
     const prevRouteData = this.navigationService.getPreviousRouteData();
     if (!Util.isDefined(prevRouteData)) {
       return;
@@ -477,7 +478,8 @@ export class OFormNavigationClass {
     this.navigationService.storeFormRoutes({
       detailFormRoute: formRoutes ? formRoutes.detailFormRoute : Codes.DEFAULT_DETAIL_ROUTE,
       editFormRoute: formRoutes ? formRoutes.editFormRoute : Codes.DEFAULT_EDIT_ROUTE,
-      insertFormRoute: formRoutes ? formRoutes.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE
+      insertFormRoute: formRoutes ? formRoutes.insertFormRoute : Codes.DEFAULT_INSERT_ROUTE,
+      mainFormLayoutManagerComponent
     }, activeMode);
   }
 
