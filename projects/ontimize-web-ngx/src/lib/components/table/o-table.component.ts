@@ -1732,6 +1732,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
             selectedItems.forEach(item => {
               this.selection.deselect(item);
             });
+            if (this.formLayoutManager) {
+              this.formLayoutManager.closeDetails(filters, { exitWithoutConfirmation: true });
+            }
             this.reloadData();
           });
         } else {
