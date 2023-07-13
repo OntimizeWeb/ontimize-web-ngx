@@ -1,3 +1,8 @@
+## 8.14.0
+### Bug fixes
+* **o-form-layout-manager**: Navigation problems when inserting new data fixed ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1119](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1119)
+* **o-form-layout-manager**: Closing opened tabs that are removed in the main tab ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1261)
+
 ## 8.13.0 (2023-07-07)
 ### Features
 * **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) ([99dd44b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99dd44b)) ([a3f8818](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a3f8818)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
