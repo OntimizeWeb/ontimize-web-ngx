@@ -3,7 +3,7 @@
 
 @mixin o-mat-form-field-outline-typography($config) {
   // The unit-less line-height from the font config.
-  $line-height: mat.line-height($config, input);
+  $line-height: mat.line-height($config, body-1);
   // The amount to scale the font for the floating label and subscript.
   $subscript-font-scale: .75;
   // The padding above and below the infix.
@@ -23,23 +23,28 @@
   $mat-form-field-outline-label-overlap: .25em;
 
   .mat-mdc-form-field.mat-form-field-appearance-outline {
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-wrapper {
       padding-bottom: 0;
 
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-infix {
       padding: $infix-padding 0;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-label {
       top: $infix-margin-top + $infix-padding;
       margin-top: $outline-appearance-label-offset;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     &.mat-form-field-can-float {
+
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       &.mat-form-field-should-float .mat-form-field-label,
       .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {

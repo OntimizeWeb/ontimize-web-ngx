@@ -3,7 +3,7 @@
 
 @mixin o-mat-form-field-fill-typography($config) {
   // The unit-less line-height from the font config.
-  $line-height: mat.line-height($config, input);
+  $line-height: mat.line-height($config, body-1);
   // The amount to scale the font for the floating label and subscript.
   $subscript-font-scale: .75;
   // The padding on top of the infix.

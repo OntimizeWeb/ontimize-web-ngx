@@ -1,12 +1,10 @@
 @use 'o-form-field-fill-theme.scss';
-@use 'o-form-field-legacy-theme.scss';
 @use 'o-form-field-outline-theme.scss';
-@use 'o-form-field-standard-theme.scss';
 @use '@angular/material'as mat;
 @use 'sass:math';
 
 @mixin o-mat-form-field-typography-lite($config) {
-  $line-height: mat.line-height($config, input);
+  $line-height: mat.line-height($config, body-1);
 
   // The amount to scale the font for the floating label and subscript.
   $subscript-font-scale: .75;
@@ -39,7 +37,7 @@
       }
     }
 
-    font-size: mat.font-size($config, input);
+    font-size: mat.font-size($config, body-1);
 
     &.icon-field .mat-form-field-suffix .icon-btn,
     &.icon-field .mat-form-field-suffix .mat-mdc-icon-button,
@@ -145,10 +143,8 @@
   @include o-combo();
   @include o-phone();
   @include o-mat-checkbox-typography($config);
-  @include o-form-field-legacy-theme.o-mat-form-field-legacy-typography($config);
   @include o-form-field-fill-theme.o-mat-form-field-fill-typography($config);
   @include o-form-field-outline-theme.o-mat-form-field-outline-typography($config);
-  @include o-form-field-standard-theme.o-mat-form-field-standard-typography($config);
 }
 
 $dedupe: 0;
@@ -168,7 +164,7 @@ $dedupe: 0;
 
   .o-checkbox {
     .mat-mdc-checkbox {
-      font-size: mat.font-size($config, input);
+      font-size: mat.font-size($config, body-1);
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-ripple {
         left: calc(50% - #{$mat-checkbox-ripple-radius});
