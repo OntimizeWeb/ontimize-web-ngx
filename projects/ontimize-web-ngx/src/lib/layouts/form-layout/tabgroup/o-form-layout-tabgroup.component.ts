@@ -429,7 +429,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return Object.keys(tabData.innerFormsInfo).some(formAttr => tabData.innerFormsInfo[formAttr].modified);
   }
 
-  closeDetails(detailsKeysData: any[], options?: FormLayoutCloseDetailOptions) {
+  closeDetails(detailsKeysData: any[] = [], options?: FormLayoutCloseDetailOptions) {
     detailsKeysData.forEach((detailData) => {
       const index = this.data.findIndex((item) => Util.isEquivalent(detailData, item.params || {}));
       if (index !== -1) {
