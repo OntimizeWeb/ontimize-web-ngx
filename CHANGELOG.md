@@ -1,7 +1,7 @@
 ## 8.14.0
 ### Bug fixes
-* **o-form-layout-manager**: Navigation problems when inserting new data fixed ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1119](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1119)
-* **o-form-layout-manager**: Closing opened tabs that are removed in the main tab ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1261) [#1121](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1121) 
+* **o-form-layout-manager**: Navigation problems when inserting new data fixed ([c0377eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0377eb)) Closes [#1119](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1119)
+* **o-form-layout-manager**: Closing opened tabs that are removed in the main tab ([d2f395e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f395e)) Closes [#1261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1261) [#1121](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1121) 
 
 ## 8.13.0 (2023-07-07)
 ### Features
