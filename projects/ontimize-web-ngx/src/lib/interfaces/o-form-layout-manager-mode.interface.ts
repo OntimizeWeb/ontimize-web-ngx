@@ -21,4 +21,5 @@ export interface OFormLayoutManagerMode {
   openDetail?: (detail: FormLayoutDetailComponentData) => void;
   closeDetail: (options?: FormLayoutCloseDetailOptions) => void;
   canAddDetailComponent: () => boolean | Observable<boolean>;
+  closeDetails?: (detailsKeysData:any[], options?: FormLayoutCloseDetailOptions) => void;
 }
