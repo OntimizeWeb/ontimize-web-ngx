@@ -438,4 +438,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     });
   }
 
+  getIdOfActiveItem(): string {
+    return this.data[this.data.length - 1] ? this.data[this.data.length - 1].id : this.data.length.toString();
+  }
 }

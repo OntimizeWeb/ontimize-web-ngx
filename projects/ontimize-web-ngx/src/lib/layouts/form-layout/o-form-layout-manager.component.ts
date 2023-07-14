@@ -631,4 +631,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     return result;
   }
+
+  public getIdOfActiveItem(): string {
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? `${this.oattr}-${compRef.getIdOfActiveItem()}-` : '';
+  }
 }
