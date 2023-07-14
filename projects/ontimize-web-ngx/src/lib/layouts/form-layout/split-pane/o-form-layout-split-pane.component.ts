@@ -215,4 +215,8 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
       });
     });
   }
+
+  getIdOfActiveItem(): string {
+    return 'split-pane';
+  }
 }
