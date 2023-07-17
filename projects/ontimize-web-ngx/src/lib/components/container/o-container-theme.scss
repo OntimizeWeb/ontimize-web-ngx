@@ -9,16 +9,17 @@
   .o-column-collapsible,
   .o-row,
   .o-row-collapsible {
-    > .o-container {
+    >.o-container {
       &.mat-expansion-panel {
         background-color: inherit;
       }
 
-       > .o-container-header,
-       > .o-container-title,
-      > .mat-expansion-panel-header {
+      >.o-container-header,
+      >.o-container-title,
+      >.mat-expansion-panel-header {
         border-color: mat.get-color-from-palette($foreground, divider);
         color: mat.get-color-from-palette($foreground, text);
+
         /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         .mat-tab-label,
@@ -28,12 +29,12 @@
 
       }
 
-       > .o-container-title,
-      > .mat-expansion-panel-header .o-container-title {
+      >.o-container-title,
+      >.mat-expansion-panel-header .o-container-title {
         span {
           font: {
-            size: mat.font-size($typography, input);
-            weight: mat.font-weight($typography, input);
+            size: mat.font-size($typography, body-1);
+            weight: mat.font-weight($typography, body-1);
           }
         }
       }
@@ -42,7 +43,7 @@
 
   .o-column-collapsible,
   .o-row-collapsible {
-    > .o-container {
+    >.o-container {
       .o-container-title.mat-expansion-panel-header-title {
         border: none;
       }
@@ -53,13 +54,14 @@
   .o-column.o-appearance-outline,
   .o-row-collapsible.o-appearance-outline,
   .o-row.o-appearance-outline {
-    > .o-container {
+    >.o-container {
       .o-container-title {
         color: mat.get-color-from-palette($foreground, text);
       }
     }
 
     .o-container-outline {
+
       .o-container-outline-end,
       .o-container-outline-gap,
       .o-container-outline-gap-description,
