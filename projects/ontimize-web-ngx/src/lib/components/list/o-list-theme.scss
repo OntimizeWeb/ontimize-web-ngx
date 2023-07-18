@@ -1,4 +1,5 @@
-@mixin o-list-theme($theme) {
+@mixin o-list-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $foreground: map.get($theme, foreground);
 
   .o-list-container {
@@ -10,6 +11,7 @@
     .secondary-text {
       color: mat.get-color-from-palette($foreground, secondary-text);
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
     .o-list-row-action .mat-checkbox-inner-container,

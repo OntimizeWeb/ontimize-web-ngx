@@ -8,7 +8,8 @@
 
 $typography : ontimize-lite.$typography;
 
-@mixin mat-checkbox-theme($theme) {
+@mixin mat-checkbox-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $is-dark-theme: map.get($theme, is-dark);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);

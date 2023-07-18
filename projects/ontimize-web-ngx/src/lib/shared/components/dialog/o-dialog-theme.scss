@@ -1,4 +1,5 @@
-@mixin o-dialog-theme($theme) {
+@mixin o-dialog-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
   $info: mat.define-palette(mat.$light-blue-palette);
@@ -9,9 +10,11 @@
     &.info {
       color: mat.get-color-from-palette($info);
     }
+
     &.warn {
       color: mat.get-color-from-palette($warn);
     }
+
     &.error {
       color: mat.get-color-from-palette($error);
     }
@@ -21,12 +24,11 @@
     background-color: mat.get-color-from-palette($background, dialog);
 
     &.mat-content-overflow {
-      .mat-actions, mat-dialog-actions {
+
+      .mat-actions,
+      mat-dialog-actions {
         border-top-color: mat.get-color-from-palette($foreground, divider);
       }
     }
   }
 }
-
-
-

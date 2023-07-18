@@ -1,7 +1,9 @@
-@mixin o-form-layout-split-pane-theme($theme) {
+@mixin o-form-layout-split-pane-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
 
   .o-form-layout-split-pane {
+
     .spinner-container,
     .o-split-pane-secondary-content {
       background-color: mat.get-color-from-palette($background, background);

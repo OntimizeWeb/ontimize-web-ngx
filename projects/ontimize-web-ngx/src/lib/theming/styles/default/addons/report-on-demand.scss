@@ -1,7 +1,8 @@
 @use "sass:map";
 @use '@angular/material'as mat;
 
-@mixin report-on-demand($theme) {
+@mixin report-on-demand($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
 
   .report-on-demand-sidenav {

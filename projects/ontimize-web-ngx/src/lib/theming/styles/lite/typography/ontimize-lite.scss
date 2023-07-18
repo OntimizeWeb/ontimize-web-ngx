@@ -38,12 +38,12 @@ $o-mat-lite-typography: mat.define-typography-config($font-family: 'Poppins, "He
   $headline-5: mat.define-typography-level(24px, 24px, 400),
   $headline-6: mat.define-typography-level(18px, 24px, 500),
   $subtitle-1: mat.define-typography-level(14px, 21px, 600),
-  $body-1: mat.define-typography-level(14px, 1, 400),
   $subtitle-2: mat.define-typography-level(12px, 18px, 500),
+  $body-1: mat.define-typography-level(14px, 1, 400),
   $body-2: mat.define-typography-level(12px, 15px, 400),
   $caption: mat.define-typography-level(11px, 15px, 400),
   $button: mat.define-typography-level(13px, 14px, 500));
-  /* Line-height must be unit-less fraction of the font-size
+/* Line-height must be unit-less fraction of the font-size
    but it doesnot work on input because the line-height of the user agent remains
    https://bugzilla.mozilla.org/show_bug.cgi?id=349259
    */

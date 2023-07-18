@@ -6,11 +6,9 @@
 
 $typography: ontimize-typography.$default-typography;
 
-@mixin ontimize-theme-styles($theme, $typographyConfig: null) {
+@mixin ontimize-theme-styles($theme-or-color-config) {
 
-  @if $typographyConfig !=null {
-    $typography: map.merge(ontimize-typography.$default-typography, $typographyConfig);
-  }
+  $theme: map.get($theme-or-color-config, color);
 
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
@@ -33,7 +31,7 @@ $typography: ontimize-typography.$default-typography;
   $background-tab-inactive-on-light: #D7DDE0;
   $background-tab-inactive: if($is-dark-theme, $background-tab-inactive-on-dark, $background-tab-inactive-on-light);
   // $mat-font-family: 'Lato', sans-serif !default;
-  @include report-on-demand.report-on-demand($theme);
+  @include report-on-demand.report-on-demand($theme-or-color-config);
   @include layout.layout-padding-margin();
 
   /* CONTAINER */
@@ -81,10 +79,12 @@ $typography: ontimize-typography.$default-typography;
 
   /* TABS */
   .mat-mdc-tab-group {
+
     /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
     .mat-tab-label,
     .mat-mdc-tab-link {
       opacity: .75;
+
       /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
       &.mat-tab-label-active {
         opacity: .95;
@@ -95,6 +95,7 @@ $typography: ontimize-typography.$default-typography;
     &.o-tab-ontimize {
       >.mat-mdc-tab-header {
         border: none;
+
         /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
         /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
         /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
@@ -116,14 +117,17 @@ $typography: ontimize-typography.$default-typography;
               right: 0;
             }
           }
+
           /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
           /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
           /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
           &:not(.mat-tab-label-active) {
             &:not(:last-child) {
+
               /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
               /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
               +.mat-tab-label:not(.mat-tab-label-active) {
+
                 /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
                 .mat-tab-label-content {
                   border-left: 1px solid mat.get-color-from-palette($foreground, divider);
@@ -132,11 +136,13 @@ $typography: ontimize-typography.$default-typography;
               }
             }
           }
+
           /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
           .mat-tab-label-content {
             padding: 0 8px;
             width: 100%;
           }
+
           /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
           &.mat-tab-label-active {
             background: $container-background;
@@ -155,6 +161,7 @@ $typography: ontimize-typography.$default-typography;
           display: none;
         }
       }
+
       /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
       >.mat-tab-body-wrapper {
         background: $container-background;
@@ -166,6 +173,7 @@ $typography: ontimize-typography.$default-typography;
 
     // All tabs
     &.mat-mdc-tab-group {
+
       /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
       .mat-tab-body-wrapper {
         padding: $basic-padding-size;
@@ -214,6 +222,7 @@ $typography: ontimize-typography.$default-typography;
       thead tr {
         background-color: inherit;
       }
+
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
       thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {

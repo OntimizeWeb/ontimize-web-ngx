@@ -7,12 +7,16 @@
 
 
 $typography : ontimize-lite.$typography;
-@mixin ontimize-theme-styles-lite($theme, $typographyConfig: null) {
+
+@mixin ontimize-theme-styles-lite($theme-or-color-config, $typographyConfig: null) {
+  $theme: map.get($theme-or-color-config, color);
+
   @if $typographyConfig !=null {
     $typography: map.merge($typography, $typographyConfig);
   }
 
-  @include ontimize-theme.ontimize-theme-styles($theme, $typography);
+  $theme-or-color-config:map.merge($theme-or-color-config, typography, $typography);
+  @include ontimize-theme.ontimize-theme-styles($theme-or-color-config);
   @include typography-lite.o-table-typography-lite($typography);
   @include o-form-field-theme.o-mat-form-field-typography-lite($typography);
   @include typography-lite.o-common-typography-lite($typography);

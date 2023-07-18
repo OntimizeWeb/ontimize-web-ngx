@@ -1,4 +1,6 @@
-@mixin o-card-menu-item-theme($theme, $typography) {
+@mixin o-card-menu-item-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $typography: map.get($theme-or-color-config, typography);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $warn: map.get($theme, warn);

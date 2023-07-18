@@ -1,4 +1,5 @@
 @mixin icon-color-mixin($icon-color) {
+
   .icon-btn,
   .mat-icon,
   .read-only .mat-icon,
@@ -6,7 +7,9 @@
     color: $icon-color;
   }
 }
-@mixin input-theme($theme) {
+
+@mixin input-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $is-dark-theme: map.get($theme, is-dark);
   $foreground: map.get($theme, foreground);
   $warn: map.get($theme, warn);
@@ -39,17 +42,20 @@
     }
 
     &.mat-form-field-appearance-ontimize.read-only {
+
       /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
       .mat-select-disabled .mat-select-value {
         color: inherit;
       }
+
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-underline {
         background-color: $underline-color;
       }
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
     &.mat-form-field-invalid .mat-input-suffix .mat-icon {
@@ -58,11 +64,13 @@
 
     /* OUTLINE APPEARANCE */
     &.mat-form-field-appearance-outline {
+
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline-start {
         border-radius: $border-radius 0 0 $border-radius;
       }
+
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline-end {
@@ -100,20 +108,22 @@
   /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
   /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
   /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  .mat-mdc-checkbox:not(.mat-checkbox-disabled ) {
+  .mat-mdc-checkbox:not(.mat-checkbox-disabled) {
     &.mat-accent {
+
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-frame {
-        border-color: if($is-dark-theme, mat.get-color-from-palette($accent,500),mat.get-color-from-palette($foreground, secondary-text));
+        border-color: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($foreground, secondary-text));
       }
     }
 
     &.mat-primary {
+
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-frame {
-        border-color: if($is-dark-theme, mat.get-color-from-palette($primary,500),mat.get-color-from-palette($foreground, secondary-text));
+        border-color: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($foreground, secondary-text));
       }
     }
   }

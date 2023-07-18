@@ -1,4 +1,5 @@
-@mixin o-app-sidenav-theme($theme) {
+@mixin o-app-sidenav-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $warn: map.get($theme, warn);
@@ -6,9 +7,11 @@
   $foreground: map.get($theme, foreground);
 
   .o-app-sidenav {
+
     .o-app-sidenav-menu-group,
     .o-app-sidenav-menu-item {
       &:not([disabled=true]) {
+
         a.o-app-sidenav-viewer-sidenav-item-selected,
         a:hover {
           color: mat.get-color-from-palette($accent, 900);
@@ -29,10 +32,12 @@
         color: mat.get-color-from-palette($primary, default-contrast);
 
         &.o-user-info {
+
           &:focus,
           &:hover {
             color: inherit;
           }
+
           color: inherit;
 
           .o-user-info-menu-item .o-user-info-item {
@@ -45,8 +50,8 @@
       .o-app-sidenav-menu-group-level-1 {
         .o-app-sidenav-menugroup {
           &.opened {
-            + .o-app-sidenav-menugroup-items-container ul {
-              background: mat.get-color-from-palette($primary, 800 );
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: mat.get-color-from-palette($primary, 800);
             }
           }
         }
@@ -57,8 +62,8 @@
       .o-app-sidenav-menu-group-level-4 {
         .o-app-sidenav-menugroup {
           &.opened {
-            + .o-app-sidenav-menugroup-items-container ul {
-              background: mat.get-color-from-palette($primary, 900 );
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: mat.get-color-from-palette($primary, 900);
             }
           }
         }

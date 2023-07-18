@@ -1,12 +1,10 @@
-@mixin app-global-theme($theme, $typography: null) {
+@mixin app-global-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $typography: map.get($theme-or-color-config, typography);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, primary);
-
-  @if $typography==null {
-    $typography: mat.define-typography-config();
-  }
 
   body,
   html {

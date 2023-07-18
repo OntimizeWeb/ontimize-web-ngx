@@ -1,4 +1,5 @@
-@mixin o-table-theme($theme) {
+@mixin o-table-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $warn: map.get($theme, warn);
@@ -23,6 +24,7 @@
     }
 
     .mat-mdc-table {
+
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
@@ -60,7 +62,7 @@
 
         &.o-table-group-row-level-3 {
           font-weight: 700;
-          background-color: if($is-dark-theme,#686868, #e8e8e8);
+          background-color: if($is-dark-theme, #686868, #e8e8e8);
         }
 
         &.o-table-group-row-level-4 {
@@ -74,7 +76,7 @@
         }
 
         &.selected {
-          background: mat.get-color-from-palette($primary, 50,if($is-dark-theme, 0.5, 1));
+          background: mat.get-color-from-palette($primary, 50, if($is-dark-theme, 0.5, 1));
         }
 
         .mat-mdc-cell {
@@ -90,8 +92,10 @@
 
       .mat-mdc-footer-row,
       .mat-mdc-row {
+
         .mat-mdc-cell,
         .mat-mdc-footer-cell {
+
           &.o-column-currency,
           &.o-column-integer,
           &.o-column-real {
@@ -113,7 +117,7 @@
 
       &.totals-table {
         .mat-mdc-header-row {
-          display: none!important;
+          display: none !important;
         }
 
         .mat-mdc-row {
@@ -149,6 +153,7 @@
       background: mat.get-color-from-palette($primary, 50);
     }
   }
+
   /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .o-table-quickfilter .quickFilter .mat-mdc-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {

@@ -1,69 +1,68 @@
-@mixin o-bar-menu-theme($theme) {
-  $primary: map.get($theme, primary);
+@mixin o-bar-menu-theme($theme-or-color-config) {
+    $theme: map.get($theme-or-color-config, color);
+    $primary: map.get($theme, primary);
 
 
+    $bg-color: #FFF;
+    $fg-color: rgba(0, 0, 0, 0.7);
 
-  /*background-color: mat-color($mat-primary);*/
-  $bg-color: #FFF;
-  $fg-color: rgba(0, 0, 0, 0.7);
+    $item-bg-color-hover-dark: rgba(0, 0, 0, 0.16);
+    $item-bg-color-hover-light: rgba(255, 255, 255, 0.16);
 
-  $item-bg-color-hover-dark: rgba(0, 0, 0, 0.16);
-  $item-bg-color-hover-light: rgba(255, 255, 255, 0.16);
+    .o-bar-menu {
+      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 
-  .o-bar-menu {
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-
-    nav {
-      .fake-ul {
-        .fake-ul {
-          background-color: $bg-color;
-
-          .mat-icon,
-          .o-bar-menu-group-title,
-          .o-bar-menu-item-title,
-          label.toggle {
-            color: $fg-color;
-          }
-
-          .fake-li {
-            background-color: $bg-color;
-          }
-        }
-      }
-
-      a {
-        color: $bg-color;
-      }
-    }
-
-    @media all and (min-width : 768px) {
-      nav .fake-ul {
-        .fake-li .fake-ul .fake-li-hover {
-          background: $item-bg-color-hover-dark;
-        }
-
-        .fake-li-hover {
-          background-color: $item-bg-color-hover-light;
-        }
-      }
-    }
-
-    @media all and (max-width : 767px) {
       nav {
-        a:hover {
-          background-color: rgba(255, 255, 255, 0.15);
+        .fake-ul {
+          .fake-ul {
+            background-color: $bg-color;
+
+            .mat-icon,
+            .o-bar-menu-group-title,
+            .o-bar-menu-item-title,
+            label.toggle {
+              color: $fg-color;
+            }
+
+            .fake-li {
+              background-color: $bg-color;
+            }
+          }
         }
 
-        .fake-ul {
-          border-top: 1px solid rgba(255, 255, 255, 0.5);
+        a {
+          color: $bg-color;
         }
       }
 
-      .toggle {
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.15);
+      @media all and (min-width : 768px) {
+        nav .fake-ul {
+          .fake-li .fake-ul .fake-li-hover {
+            background: $item-bg-color-hover-dark;
+          }
+
+          .fake-li-hover {
+            background-color: $item-bg-color-hover-light;
+          }
+        }
+      }
+
+      @media all and (max-width : 767px) {
+        nav {
+          a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+          }
+
+          .fake-ul {
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+          }
+        }
+
+        .toggle {
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+          }
         }
       }
     }
   }
-}

@@ -1,9 +1,8 @@
-@mixin o-container-theme($theme, $typography: null) {
+@mixin o-container-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
-  @if $typography == null {
-    $typography: mat.define-typography-config();
-  }
+  $typography: map.get($theme-or-color-config, typography);
 
   .o-column,
   .o-column-collapsible,
