@@ -1542,7 +1542,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return undefined;
   }
 
-  protected getColumnFiltersExpression(): Expression {
+  getColumnFiltersExpression(): Expression {
     // Apply column filters
     const columnFilters: OColumnValueFilter[] = this.dataSource.getColumnValueFilters();
     const beColumnFilters: Array<Expression> = [];
