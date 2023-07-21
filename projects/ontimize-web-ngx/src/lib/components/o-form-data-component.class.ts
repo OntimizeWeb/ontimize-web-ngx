@@ -708,9 +708,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     });
   }
 
-  private pushToErrorsData(errorsData: ErrorData[] = []): void {
+  private pushToErrorsData(newErrorsData: ErrorData[] = []): void {
     // avoid pushing repeated errors data
-    this.errorsData.push(...this.errorsData.filter(e => !errorsData.find(ve => ve.name === e.name)));
+    this.errorsData.push(...newErrorsData.filter(err => !this.errorsData.find(existingError => existingError.name === err.name)));
   }
 
 }
