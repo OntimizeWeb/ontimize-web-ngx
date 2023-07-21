@@ -13,7 +13,7 @@ import {
   SimpleChange,
   ViewChildren
 } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix } from '@angular/material';
 import { Subscription } from 'rxjs';
 
@@ -60,10 +60,12 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'readOnly: read-only',
   'clearButton: clear-button',
   'angularValidatorsFn: validators',
+  'angularValidatorsFnErrors: validators-errors',
   'appearance',
   'hideRequiredMarker:hide-required-marker',
   'labelVisible:label-visible',
-  'selectAllOnClick:select-all-on-click'
+  'selectAllOnClick:select-all-on-click',
+  'angularAsyncValidatorsFn: async-validators',
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -86,12 +88,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   @InputConverter()
   public clearButton: boolean = false;
   public angularValidatorsFn: ValidatorFn[] = [];
+  public angularValidatorsFnErrors: ErrorData[] = [];
   @InputConverter()
   public hideRequiredMarker: boolean = false;
   @InputConverter()
   public labelVisible: boolean = true;
   @InputConverter()
   public selectAllOnClick: boolean = false;
+  public angularAsyncValidatorsFn: AsyncValidatorFn[] = [];
 
   /* Outputs */
   public onChange: EventEmitter<object> = new EventEmitter<object>();
@@ -210,7 +214,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
-    if (Util.isDefined(changes.angularValidatorsFn)) {
+    if (Util.isDefined(changes.angularValidatorsFn) || Util.isDefined(changes.angularAsyncValidatorsFn)) {
       this.updateValidators();
     }
   }
@@ -243,6 +247,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   public hasError(error: string): boolean {
     return !this.isReadOnly && this._fControl && this._fControl.touched && this._fControl.hasError(error);
+  }
+
+  public hasSomeError(): boolean {
+    return !this.isReadOnly && this._fControl && this._fControl.touched && Util.isDefined(this._fControl.errors);
   }
 
   public getErrorValue(error: string, prop: string): string {
@@ -403,20 +411,19 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   /**
    * This method should overwritten in the child component when it have addicional form control or other oFormDataComponent
    */
-  public createFormControl(cfg?, validators?): OFormControl {
-    return new OFormControl(cfg, {
-      validators: validators
-    }, null);
+  public createFormControl(cfg?, validators?: ValidatorFn | ValidatorFn[], asyncValidators?: AsyncValidatorFn | AsyncValidatorFn[]): OFormControl {
+    return new OFormControl(cfg, validators, asyncValidators);
   }
 
   public getControl(): OFormControl {
     if (!this._fControl) {
       const validators: ValidatorFn[] = this.resolveValidators();
+      const asyncValidators: AsyncValidatorFn[] = this.resolveAsyncValidators();
       const cfg = {
         value: this.value ? this.value.value : undefined,
         disabled: !this.enabled
       };
-      this._fControl = this.createFormControl(cfg, validators);
+      this._fControl = this.createFormControl(cfg, validators, asyncValidators);
       this.registerOnFormControlChange();
     }
     return this._fControl;
@@ -424,13 +431,22 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   public resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
-    this.angularValidatorsFn.forEach((fn: ValidatorFn) => {
-      validators.push(fn);
-    });
+    if (this.angularValidatorsFn && this.angularValidatorsFn.length > 0) {
+      validators.push(...this.angularValidatorsFn);
+      this.pushToErrorsData(this.angularValidatorsFnErrors);
+    }
+
     if (this.orequired) {
       validators.push(Validators.required);
     }
     return validators;
+  }
+
+  public resolveAsyncValidators(): AsyncValidatorFn[] {
+    if (this.angularAsyncValidatorsFn && this.angularAsyncValidatorsFn.length > 0) {
+      this.pushToErrorsData(this.angularValidatorsFnErrors);
+    }
+    return this.angularAsyncValidatorsFn || [];
   }
 
   public getSQLType(): number {
@@ -568,19 +584,27 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       return;
     }
     this._fControl.clearValidators();
+    this._fControl.clearAsyncValidators();
     this.errorsData = [];
-    const validators = this.resolveValidators();
+    const validators: ValidatorFn[] = this.resolveValidators();
+    const asyncValidators: AsyncValidatorFn[] = this.resolveAsyncValidators();
     if (this.validatorChildren) {
       this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
         const validatorFunction: ValidatorFn = oValidator.getValidatorFn();
         if (validatorFunction) {
           validators.push(validatorFunction);
         }
+        const asyncValidatorFunction: AsyncValidatorFn = oValidator.getAsyncValidatorFn();
+        if (asyncValidatorFunction) {
+          asyncValidators.push(asyncValidatorFunction);
+        }
         const errorsData: ErrorData[] = oValidator.getErrorsData();
         this.errorsData.push(...errorsData);
       });
     }
     this._fControl.setValidators(validators);
+    this._fControl.setAsyncValidators(asyncValidators);
+    this._fControl.updateValueAndValidity({ emitEvent: false });
   }
 
   protected addOntimizeCustomAppearanceClass(): void {
@@ -607,7 +631,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   protected getTooltipText(): string {
     const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
-    if (liteError && Util.isDefined(this._fControl.errors)) {
+    if (liteError && this.hasSomeError()) {
       let errorsText = [];
       if (this.oMatErrorChildren && this.oMatErrorChildren.length > 0) {
         errorsText.push(...this.oMatErrorChildren
@@ -682,6 +706,11 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       onlySelf: true,
       emitEvent: false
     });
+  }
+
+  private pushToErrorsData(newErrorsData: ErrorData[] = []): void {
+    // avoid pushing repeated errors data
+    this.errorsData.push(...newErrorsData.filter(err => !this.errorsData.find(existingError => existingError.name === err.name)));
   }
 
 }
