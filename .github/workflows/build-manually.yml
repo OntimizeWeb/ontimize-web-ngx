@@ -19,10 +19,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Node 14.x
+      - name: Node 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.20.0
+          node-version: 18.10.0
       - name: npm install and npm run build
         run: |
           npm i
