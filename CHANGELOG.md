@@ -1,4 +1,8 @@
 ## 8.14.0
+### Features
+* **o-form-data-component**: New `async-validators` and `validators-errors` inputs ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
+* **o-validator**: New `async-validator-function` input ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
+
 ### Bug fixes
 * **o-form-layout-manager**: Navigation problems when inserting new data fixed ([c0377eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0377eb)) Closes [#1119](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1119)
 * **o-form-layout-manager**: Closing opened tabs that are removed in the main tab ([d2f395e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f395e)) Closes [#1261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1261) [#1121](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1121) 
