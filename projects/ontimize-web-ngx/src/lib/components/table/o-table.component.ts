@@ -817,7 +817,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getMenuPermissions(): OTableMenuPermissions {
     const result: OTableMenuPermissions = this.permissions ? this.permissions.menu : undefined;
-    return result ? result : {
+    return result || {
       visible: true,
       enabled: true,
       items: []
@@ -1542,7 +1542,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return undefined;
   }
 
-  protected getColumnFiltersExpression(): Expression {
+  getColumnFiltersExpression(): Expression {
     // Apply column filters
     const columnFilters: OColumnValueFilter[] = this.dataSource.getColumnValueFilters();
     const beColumnFilters: Array<Expression> = [];
@@ -3120,8 +3120,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return className;
   }
 
-  private stopEdition(clearSelection?: boolean) {
-    clearSelection = clearSelection ? clearSelection : false;
+  private stopEdition(clearSelection: boolean = false) {
     this.editingCell = undefined;
     this.editingRow = undefined;
     this.clearSelectionAndEditing(clearSelection);
