@@ -25,6 +25,7 @@ $transition-duration: 500ms;
     overflow: auto;
     max-height: 70%;
   }
+
   @-moz-document url-prefix() {
     .navMenu {
       height: 100%;
@@ -38,10 +39,9 @@ $transition-duration: 500ms;
     }
 
     &[disabled=true] {
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
       .mat-button-focus-overlay,
-      .mat-ripple {
+      .mat-mdc-button-persistent-ripple {
         display: none;
       }
 
@@ -87,8 +87,9 @@ $transition-duration: 500ms;
       min-height: 100%;
       display: flex;
       flex-direction: column;
+
       // The rule will match the element following the router-outlet which will be the routed component.
-      router-outlet + * {
+      router-outlet+* {
         flex-grow: 1;
       }
     }
@@ -145,6 +146,7 @@ $transition-duration: 500ms;
           }
 
           &.o-user-info {
+
             &:focus,
             &:hover {
               color: inherit;
@@ -193,7 +195,8 @@ $transition-duration: 500ms;
         line-height: 48px;
         height: 48px;
 
-        + .o-app-sidenav-menugroup-items-container {
+        +.o-app-sidenav-menugroup-items-container {
+
           .o-app-sidenav-menu-group,
           .o-app-sidenav-menu-item {
             a {
@@ -210,7 +213,8 @@ $transition-duration: 500ms;
         line-height: 40px;
         height: 40px;
 
-        + .o-app-sidenav-menugroup-items-container {
+        +.o-app-sidenav-menugroup-items-container {
+
           .o-app-sidenav-menu-group,
           .o-app-sidenav-menu-item {
             a {
@@ -228,7 +232,7 @@ $transition-duration: 500ms;
         }
       }
 
-      .o-app-sidenav-menugroup-arrow{
+      .o-app-sidenav-menugroup-arrow {
         display: flex;
       }
 
@@ -255,7 +259,8 @@ $transition-duration: 500ms;
         }
 
         .o-app-sidenav-menu-group-level-1 a {
-          + .o-app-sidenav-menugroup-items-container {
+          +.o-app-sidenav-menugroup-items-container {
+
             .o-app-sidenav-menu-group,
             .o-app-sidenav-menu-item {
               a {
@@ -266,7 +271,8 @@ $transition-duration: 500ms;
         }
 
         .o-app-sidenav-menu-group-level-2 a {
-          + .o-app-sidenav-menugroup-items-container {
+          +.o-app-sidenav-menugroup-items-container {
+
             .o-app-sidenav-menu-group,
             .o-app-sidenav-menu-item {
               a {
