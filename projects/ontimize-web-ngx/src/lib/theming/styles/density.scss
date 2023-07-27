@@ -1,0 +1,34 @@
+@mixin checkbox($ripple-size, $touch-target-size, $icon-size) {
+
+  .o-table,
+  .o-checkbox,
+  .o-dialog-class.o-table-dialog,
+  .mat-mdc-menu-panel.o-table-menu,
+  .mat-mdc-menu-panel.o-table-quickfilter-menu,
+  .mat-mdc-menu-panel.o-table-quickfilter-menu {
+    .mat-mdc-checkbox .mdc-checkbox {
+      padding: calc((var(--mdc-checkbox-ripple-size, $ripple-size) - var(--mdc-checkbox-icon-size, $icon-size)) / 2);
+      margin: calc((var(--mdc-checkbox-touch-target-size, $touch-target-size) - var(--mdc-checkbox-icon-size)) / 2);
+
+      .mdc-checkbox__background {
+        top: calc((var(--mdc-checkbox-ripple-size, $ripple-size) - var(--mdc-checkbox-icon-size, $icon-size)) / 2);
+        left: calc((var(--mdc-checkbox-ripple-size, $ripple-size) - var(--mdc-checkbox-icon-size, $icon-size)) / 2);
+        height: var(--mdc-checkbox-icon-size, $icon-size);
+        width: var(--mdc-checkbox-icon-size, $icon-size);
+      }
+
+      .mdc-checkbox__native-control {
+        top: calc((20px - var(--mdc-checkbox-touch-target-size, $touch-target-size)) / 2);
+        right: calc((20px - var(--mdc-checkbox-touch-target-size, $touch-target-size)) / 2);
+        left: calc((20px - var(--mdc-checkbox-touch-target-size, $touch-target-size)) / 2);
+        width: var(--mdc-checkbox-touch-target-size, $touch-target-size);
+        height: var(--mdc-checkbox-touch-target-size, $touch-target-size);
+      }
+
+      .mat-mdc-checkbox-touch-target {
+        height: var(--mdc-checkbox-touch-target-size, $touch-target-size);
+        width: var(--mdc-checkbox-touch-target-size, $touch-target-size);
+      }
+    }
+  }
+}

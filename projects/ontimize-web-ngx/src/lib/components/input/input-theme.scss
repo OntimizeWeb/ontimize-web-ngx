@@ -105,24 +105,15 @@
   }
 
   /* CHECKBOX */
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  .mat-mdc-checkbox:not(.mat-checkbox-disabled) {
+  .mat-mdc-checkbox:not(.mat-mdc-checkbox-disabled) {
     &.mat-accent {
-
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-frame {
+      .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
         border-color: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($foreground, secondary-text));
       }
     }
 
     &.mat-primary {
-
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-frame {
+      .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
         border-color: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($foreground, secondary-text));
       }
     }

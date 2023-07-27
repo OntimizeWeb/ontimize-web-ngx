@@ -50,51 +50,38 @@ $typography : ontimize-lite.$typography;
     }
   }
 
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  .mat-checkbox-mixedmark {
+  .mdc-checkbox__mixedmark {
     background-color: $checkbox-mark-color;
   }
 
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  .mat-checkbox-checked,
-  .mat-checkbox-indeterminate {
+  .mat-mdc-checkbox-checked,
+  .mat-mdc-checkbox-indeterminate {
 
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    &.mat-primary .mat-checkbox-background {
+    &.mat-primary .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
       background-color: mat.get-color-from-palette($foreground, icon);
     }
 
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    &.mat-accent .mat-checkbox-background {
+    &.mat-accent .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
       background-color: mat.get-color-from-palette($foreground, icon);
     }
 
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    &.mat-warn .mat-checkbox-background {
+    &.mat-warn .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
       background-color: mat.get-color-from-palette($warn);
     }
   }
 
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  .mat-checkbox-disabled {
+  .mat-mdc-checkbox-disabled {
 
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    &.mat-checkbox-checked,
+    &.mat-mdc-checkbox-checked,
     &.mat-checkbox-indeterminate {
 
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-      .mat-checkbox-background {
+      .mdc-checkbox__background {
         background-color: $disabled-color;
       }
     }
 
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    &:not(.mat-checkbox-checked) {
+
+    &:not(.mat-mdc-checkbox-checked) {
 
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-frame {
@@ -102,10 +89,6 @@ $typography : ontimize-lite.$typography;
       }
     }
 
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    .mat-checkbox-label {
-      color: mat.get-color-from-palette($foreground, secondary-text);
-    }
 
     @include cdk.high-contrast {
       opacity: .5;
@@ -145,7 +128,9 @@ $typography : ontimize-lite.$typography;
   }
 }
 
-@mixin mat-pseudo-checkbox-theme($theme) {
+@mixin mat-pseudo-checkbox-theme($theme-or-color-config) {
+
+  $theme: map.get($theme-or-color-config, color);
   $is-dark-theme: map.get($theme, is-dark);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
@@ -203,18 +188,23 @@ $typography : ontimize-lite.$typography;
   }
 }
 
-@mixin implatform-fashion-theme-styles($theme, $typographyConfig: null) {
+@mixin implatform-fashion-theme-styles($theme-or-color-config, $typographyConfig: null) {
+
 
   @if $typographyConfig !=null {
-    $typography: map.merge($typography, $typographyConfig);
+    $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
   }
 
-  @include mat-checkbox-theme($theme);
-  @include mat-pseudo-checkbox-theme($theme);
+
+  $typography: mat.get-typography-config($theme-or-color-config);
+
+  @include mat-checkbox-theme($theme-or-color-config);
+  @include mat-pseudo-checkbox-theme($theme-or-color-config);
   @include typography-fashion.o-table-typography-fashion($typography);
   @include typography-fashion.o-common-typography-fashion($typography);
   @include typography-fashion.o-form-theme-fashion($typography);
 
+  $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
   $primary: map.get($theme, primary);

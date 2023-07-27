@@ -2,17 +2,6 @@
 @use 'form-field/o-form-field-theme.scss';
 
 @mixin o-table-typography-lite($config) {
-  .o-table-quickfilter-menu {
-    $mat-checkbox-size: 16px;
-
-    .mat-mdc-checkbox {
-      font-size: mat.font-size($config, body-1);
-      .mat-checkbox-inner-container {
-        width: $mat-checkbox-size;
-        height: $mat-checkbox-size;
-      }
-    }
-  }
 
   .o-table.o-table {
     .o-table-container {
@@ -52,6 +41,7 @@
 
       .mat-mdc-table {
         .mat-mdc-form-field {
+
           /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
           .mat-form-field-infix {
             border-top: 0;
@@ -83,6 +73,7 @@
       width: 68px;
       height: 68px;
       min-width: 68px;
+
       /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       .mat-button-wrapper {
         >div {
@@ -165,6 +156,7 @@
 
   /* MD-TAB-GROUP */
   .mat-mdc-tab-group.mat-tab-group {
+
     /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
     >.mat-mdc-tab-header .mat-tab-label {
       height: 32px;
@@ -177,14 +169,17 @@
 
     .mat-mdc-paginator-page-size {
       align-items: center;
+
       /* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version. */
       /* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version. */
       .mat-paginator-page-size-select {
         margin: 6px 0;
+
         /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
         .mat-select-arrow-wrapper {
           transform: initial;
         }
+
         /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
         .mat-form-field-infix {
           border-top: 0;
@@ -231,19 +226,6 @@
       // 100% - toolbar (56px) - buttons (49px)
       max-height: calc(100% - 105px);
       min-height: calc(100% - 105px);
-    }
-  }
-
-  .o-search-input-menu {
-    $mat-checkbox-size: 16px;
-
-    .mat-mdc-checkbox {
-      font-size: mat.font-size($config, body-1);
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-inner-container {
-        width: $mat-checkbox-size;
-        height: $mat-checkbox-size;
-      }
     }
   }
 

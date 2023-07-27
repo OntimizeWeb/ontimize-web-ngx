@@ -170,14 +170,6 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 
-  .mat-mdc-checkbox {
-
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    .mat-checkbox-label {
-      color: mat.get-color-from-palette($foreground, text);
-    }
-  }
 
   o-data-toolbar {
 
@@ -382,3 +374,4 @@
     }
   }
 }
+

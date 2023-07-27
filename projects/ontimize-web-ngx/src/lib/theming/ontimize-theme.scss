@@ -3,6 +3,7 @@
 @use 'styles/default/typography/ontimize.scss'as ontimize-typography;
 @use 'styles/default/addons/report-on-demand.scss';
 @use '@angular/material'as mat;
+@use 'styles/density.scss'as o-density;
 
 $typography: ontimize-typography.$default-typography;
 
@@ -33,6 +34,8 @@ $typography: ontimize-typography.$default-typography;
   // $mat-font-family: 'Lato', sans-serif !default;
   @include report-on-demand.report-on-demand($theme-or-color-config);
   @include layout.layout-padding-margin();
+  @include o-density.checkbox(20px, 16px, 16px);
+
 
   /* CONTAINER */
   .rounded-panel,
@@ -252,11 +255,11 @@ $typography: ontimize-typography.$default-typography;
     }
   }
 
-  .mat-mdc-menu-panel.o-table-quickfilter-menu .mat-mdc-checkbox {
-    padding: 2px 0;
-  }
 
+
+  .mat-mdc-menu-panel.o-table-quickfilter-menu .mat-mdc-checkbox,
   .mat-mdc-menu-panel.o-search-input-menu .mat-mdc-checkbox {
     padding: 2px 0;
   }
+
 }

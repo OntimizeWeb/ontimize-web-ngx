@@ -46,10 +46,12 @@
       height: $prefix-suffix-icon-font-scale * 1em;
       width: $prefix-suffix-icon-font-scale * 1em;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     &.input-image.icon-field .mat-input-infix.mat-form-field-infix {
       line-height: 16px;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     &.icon-field .mat-form-field-suffix .mat-icon:not([svgicon]) {
       height: 20px;
@@ -57,6 +59,7 @@
     }
 
     &.mat-form-field-appearance-legacy {
+
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-form-field-prefix,
@@ -68,10 +71,12 @@
         }
       }
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-wrapper {
       padding-bottom: $wrapper-padding-bottom;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-prefix,
@@ -93,14 +98,17 @@
         }
       }
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-infix {
       padding: $infix-padding 0;
       border-top: $infix-margin-top solid transparent;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-can-float {
+
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       &.mat-form-field-should-float .mat-form-field-label,
       .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
@@ -114,21 +122,25 @@
         @include o_mat-form-field-label-floating($subscript-font-scale, $infix-padding, $infix-margin-top);
       }
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-label-wrapper {
       top: -$infix-margin-top;
       padding-top: $infix-margin-top;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-label {
       top: $infix-margin-top + $infix-padding;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-underline {
       // We want the underline to start at the end of the content box, not the padding box,
       // so we move it up by the padding amount.
       bottom: $wrapper-padding-bottom;
     }
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-subscript-wrapper {
       font-size: $subscript-font-size;
@@ -142,7 +154,7 @@
 
   @include o-combo();
   @include o-phone();
-  @include o-mat-checkbox-typography($config);
+
   @include o-form-field-fill-theme.o-mat-form-field-fill-typography($config);
   @include o-form-field-outline-theme.o-mat-form-field-outline-typography($config);
 }
@@ -156,31 +168,9 @@ $dedupe: 0;
   $dedupe: $dedupe + 0.00001 !global;
 }
 
-/*it's necessary redefined the font size of the checkbox*/
-@mixin o-mat-checkbox-typography($config) {
-  // The ripple size of the checkbox
-  $mat-checkbox-ripple-radius: 17px;
-  $mat-checkbox-size: 15px;
 
-  .o-checkbox {
-    .mat-mdc-checkbox {
-      font-size: mat.font-size($config, body-1);
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-      .mat-checkbox-ripple {
-        left: calc(50% - #{$mat-checkbox-ripple-radius});
-        top: calc(50% - #{$mat-checkbox-ripple-radius});
-        height: $mat-checkbox-ripple-radius * 2;
-        width: $mat_checkbox-ripple-radius * 2;
-      }
-    }
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    .mat-checkbox-inner-container {
-      width: $mat-checkbox-size;
-      height: $mat-checkbox-size;
-    }
 
-  }
-}
+
 
 /*
   Fixes https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/53
