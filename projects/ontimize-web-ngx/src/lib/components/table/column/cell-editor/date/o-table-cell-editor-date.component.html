@@ -1,5 +1,10 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div [formGroup]="formGroup" class="o-table-cell-editor-date o-table-cell-editor">
+  <div [formGroup]="formGroup" class="o-table-cell-editor-date o-table-cell-editor" 
+    [matTooltip]="tooltip" 
+    [matTooltipClass]="tooltipClass" 
+    [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay" 
+    [matTooltipHideDelay]="tooltipHideDelay">
     <mat-form-field floatLabel="never" cdkFocusInitial>
       <input #input matInput [id]="cellEditorId" [placeholder]="getPlaceholder()" [formControl]="formControl"
         [required]="orequired" [matDatepicker]="d" [matDatepickerFilter]="filterDate"

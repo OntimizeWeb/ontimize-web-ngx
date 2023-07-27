@@ -1,5 +1,10 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-integer o-table-cell-editor" [formGroup]="formGroup">
+  <div class="o-table-cell-editor-integer o-table-cell-editor" [formGroup]="formGroup" 
+    [matTooltip]="tooltip" 
+    [matTooltipClass]="tooltipClass" 
+    [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay" 
+    [matTooltipHideDelay]="tooltipHideDelay">
     <mat-form-field floatLabel="never" cdkFocusInitial>
       <input #input matInput type="number" [placeholder]="getPlaceholder()" [formControl]="formControl"
         [required]="orequired" [min]="min" [max]="max" [step]="step" [id]="cellEditorId">
