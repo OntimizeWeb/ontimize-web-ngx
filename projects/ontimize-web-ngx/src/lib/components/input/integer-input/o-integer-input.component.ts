@@ -9,12 +9,13 @@ import {
   Optional,
   ViewEncapsulation
 } from '@angular/core';
-import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
+import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -51,7 +52,7 @@ export const DEFAULT_OUTPUTS_O_INTEGER_INPUT = [
 })
 export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
 
-  inputType: HTMLInputType= INPUT_TYPE_NUMBER;
+  inputType: HTMLInputType = INPUT_TYPE_NUMBER;
 
   @InputConverter()
   min: number;
@@ -184,34 +185,12 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
     if (Util.isDefined(this.min)) {
-      validators.push(this.minValidator.bind(this));
+      validators.push(OValidators.createMinValidator(this.min));
     }
     if (Util.isDefined(this.max)) {
-      validators.push(this.maxValidator.bind(this));
+      validators.push(OValidators.createMaxValidator(this.max));
     }
     return validators;
-  }
-
-  protected minValidator(control: FormControl): ValidationErrors {
-    if ((typeof (control.value) === 'number') && (control.value < this.min)) {
-      return {
-        min: {
-          requiredMin: this.min
-        }
-      };
-    }
-    return {};
-  }
-
-  protected maxValidator(control: FormControl): ValidationErrors {
-    if ((typeof (control.value) === 'number') && (this.max < control.value)) {
-      return {
-        max: {
-          requiredMax: this.max
-        }
-      };
-    }
-    return {};
   }
 
   protected initializeStep(): void {
@@ -221,7 +200,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     }
   }
 
-  protected setInputTypeAndValue(inputType: HTMLInputType, value: any) : void {
+  protected setInputTypeAndValue(inputType: HTMLInputType, value: any): void {
     const inputElement = this.getInputEl();
     if (Util.isDefined(inputElement)) {
       inputElement.type = inputType;
