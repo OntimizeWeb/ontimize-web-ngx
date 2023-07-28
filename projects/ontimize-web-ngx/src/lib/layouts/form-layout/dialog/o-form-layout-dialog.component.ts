@@ -84,7 +84,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   closeDialog(options?: any) {
-    if(Util.isDefined(options) && Util.isDefined(options.exitWithoutConfirmation) && options.exitWithoutConfirmation) {
+    if (Util.isDefined(options) && Util.isDefined(options.exitWithoutConfirmation) && options.exitWithoutConfirmation) {
       this.dialogRef.close();
     } else {
       if (this.formLayoutManager.hasToConfirmExit(this.data)) {
@@ -124,7 +124,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   closeDetail(options) {
-   this.closeDialog(options);
+    this.closeDialog(options);
   }
 
   getDataToStore(): any {
@@ -140,5 +140,9 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
 
   canAddDetailComponent(): boolean {
     return true;
+  }
+
+  getIdOfActiveItem(): string {
+    return 'dialog';
   }
 }

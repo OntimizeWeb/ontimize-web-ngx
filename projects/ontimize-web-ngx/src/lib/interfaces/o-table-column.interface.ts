@@ -1,8 +1,9 @@
 import { ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
-import { ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 
 import { OTableComponent } from '../components/table/o-table.component';
 import { Expression } from '../types/expression.type';
+import { ErrorData } from '../types/error-data.type';
 
 export interface OTableColumn {
   attr: string;
@@ -28,6 +29,8 @@ export interface OTableColumn {
   tooltip: boolean;
   tooltipValue: string;
   angularValidatorsFn: ValidatorFn[];
+  angularValidatorsFnErrors: ErrorData[];
+  angularAsyncValidatorsFn: AsyncValidatorFn[];
   tooltipFunction: (rowData: any) => any;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
   getSQLType: () => number;

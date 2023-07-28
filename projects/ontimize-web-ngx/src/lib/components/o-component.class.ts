@@ -18,7 +18,6 @@ export class OBaseComponent implements IComponent {
   protected _orequired: boolean = false;
 
   /* Internal variables */
-  protected injector: Injector;
   protected translateService: OTranslateService;
 
   protected _isReadOnly: boolean;
@@ -28,8 +27,7 @@ export class OBaseComponent implements IComponent {
   protected _tooltipHideDelay: number = 0;
   protected permissions: OPermissions;
 
-  constructor(injector: Injector) {
-    this.injector = injector;
+  constructor(protected injector: Injector) {
     if (this.injector) {
       this.translateService = this.injector.get<OTranslateService>(OTranslateService);
     }

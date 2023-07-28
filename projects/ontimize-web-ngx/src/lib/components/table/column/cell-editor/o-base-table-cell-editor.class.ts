@@ -1,14 +1,18 @@
-import { ContentChildren, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, Type, ViewChild, Directive } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ContentChildren, Directive, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
+import { AsyncValidatorFn, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../../decorators/input-converter';
+import { OMatErrorDirective } from '../../../../directives/o-mat-error.directive';
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { SnackBarService } from '../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { OValidatorComponent } from '../../../../shared/components/validation/o-validator.component';
 import { ErrorData } from '../../../../types/error-data.type';
+import { OMatErrorOptions } from '../../../../types/o-mat-error.type';
 import { ObservableWrapper } from '../../../../util/async';
+import { Codes } from '../../../../util/codes';
+import { ComponentWithValidatorsAndErrorsData, ErrorsUtils } from '../../../../util/errors';
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
 import { OColumn } from '../o-column.class';
@@ -34,7 +38,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 })
-export class OBaseTableCellEditor implements OnInit {
+export class OBaseTableCellEditor implements OnInit, ComponentWithValidatorsAndErrorsData {
 
   protected translateService: OTranslateService;
 
@@ -77,10 +81,10 @@ export class OBaseTableCellEditor implements OnInit {
   protected oldValue: any;
   cellEditorId: string;
 
-  public errorsData: ErrorData[] = [];
+  errorsData: ErrorData[] = [];
   protected validatorsSubscription: Subscription;
   @ContentChildren(OValidatorComponent)
-  protected validatorChildren: QueryList<OValidatorComponent>;
+  validatorChildren: QueryList<OValidatorComponent>;
   protected renderer: Renderer2;
 
   @HostListener('document:keyup', ['$event'])
@@ -88,12 +92,20 @@ export class OBaseTableCellEditor implements OnInit {
     this.handleKeyup(event);
   }
 
+  tooltipPosition: string = 'below';
+  tooltipShowDelay: number = 500;
+  tooltipHideDelay: number = 0;
+  errorOptions: OMatErrorOptions;
+  @ViewChildren(OMatErrorDirective)
+  oMatErrorChildren: QueryList<OMatErrorDirective>;
+
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
     this.tableColumn = this.injector.get<OTableColumnComponent>(OTableColumnComponent as Type<OTableColumnComponent>);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
     this.cellEditorId = Util.randomNumber().toString(36);
     this.renderer = this.injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
+    this.errorOptions = ErrorsUtils.getErrorOptions(this.injector);
   }
 
   ngOnInit(): void {
@@ -160,11 +172,14 @@ export class OBaseTableCellEditor implements OnInit {
   createFormControl() {
     if (!this.formControl) {
       const validators: ValidatorFn[] = this.resolveValidators();
+      const asyncValidators: AsyncValidatorFn[] = this.resolveAsyncValidators();
       const cfg = {
         value: undefined,
         disabled: !this.enabled
       };
-      this.formControl = new UntypedFormControl(cfg, validators);
+
+      this.formControl = new UntypedFormControl(cfg, validators, asyncValidators);
+
     }
     if (!Util.isDefined(this.formGroup.get(this.cellEditorId))) {
       this.formGroup.addControl(this.cellEditorId, this.formControl);
@@ -294,10 +309,9 @@ export class OBaseTableCellEditor implements OnInit {
    */
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
-    if (this.tableColumn.angularValidatorsFn) {
-      this.tableColumn.angularValidatorsFn.forEach((fn: ValidatorFn) => {
-        validators.push(fn);
-      });
+    if (this.tableColumn.angularValidatorsFn && this.tableColumn.angularValidatorsFn.length > 0) {
+      validators.push(...this.tableColumn.angularValidatorsFn);
+      ErrorsUtils.pushToErrorsData(this, this.tableColumn.angularValidatorsFnErrors);
     }
     if (this.orequired) {
       validators.push(Validators.required);
@@ -305,8 +319,15 @@ export class OBaseTableCellEditor implements OnInit {
     return validators;
   }
 
-  public getActiveOErrors() {
-    return this.formControl.errors ? Object.keys(this.formControl.errors) : [];
+  resolveAsyncValidators(): AsyncValidatorFn[] {
+    if (this.tableColumn.angularAsyncValidatorsFn && this.tableColumn.angularAsyncValidatorsFn.length > 0) {
+      ErrorsUtils.pushToErrorsData(this, this.tableColumn.angularValidatorsFnErrors);
+    }
+    return this.tableColumn.angularAsyncValidatorsFn || []
+  }
+
+  getActiveOErrors() {
+    return ErrorsUtils.getActiveOErrors(this);
   }
 
   public getErrorText(oError: any) {
@@ -319,22 +340,7 @@ export class OBaseTableCellEditor implements OnInit {
   }
 
   protected updateValidators(): void {
-    if (!this.formControl) {
-      return;
-    }
-    this.formControl.clearValidators();
-    const validators = this.resolveValidators();
-    if (this.validatorChildren) {
-      this.validatorChildren.forEach((oValidator: OValidatorComponent) => {
-        const validatorFunction: ValidatorFn = oValidator.getValidatorFn();
-        if (validatorFunction) {
-          validators.push(validatorFunction);
-        }
-        const errorsData: ErrorData[] = oValidator.getErrorsData();
-        this.errorsData.push(...errorsData);
-      });
-    }
-    this.formControl.setValidators(validators);
+    ErrorsUtils.updateFormControlValidators(this);
   }
 
   /**
@@ -344,6 +350,10 @@ export class OBaseTableCellEditor implements OnInit {
    */
   hasError(error: string): boolean {
     return this.formControl && this.formControl.touched && (this.hasErrorExclusive(error) || this.formControl.hasError(error));
+  }
+
+  hasSomeError(): boolean {
+    return this.formControl && this.formControl.touched && Util.isDefined(this.formControl.errors);
   }
 
   hasErrorExclusive(error: string): boolean {
@@ -416,9 +426,17 @@ export class OBaseTableCellEditor implements OnInit {
       if (tableRowEl) {
         addClass ? this.renderer.addClass(tableRowEl, 'o-table-editing-row') :
           this.renderer.removeClass(tableRowEl, 'o-table-editing-row')
-          this.table.cd.detectChanges()
+        this.table.cd.detectChanges();
       }
     }
   }
 
+  get tooltip(): string {
+    const liteError = this.errorOptions.type === Codes.O_MAT_ERROR_LITE;
+    return liteError && this.hasSomeError() ? ErrorsUtils.getErrorsTooltipText(this) : '';
+  }
+
+  get tooltipClass(): string {
+    return ErrorsUtils.getTooltipClasses(this);
+  }
 }
