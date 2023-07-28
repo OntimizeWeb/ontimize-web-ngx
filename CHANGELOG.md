@@ -1,8 +1,9 @@
-## 8.14.0
+## 8.14.0 (2023-07-28)
 ### Features
 * **o-table**: Modified the visibility of the method `getColumnFilter` ([3dc21ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dc21ec))
 * **o-form-data-component**: New `async-validators` and `validators-errors` inputs ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
 * **o-validator**: New `async-validator-function` input ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
+* **o-table-column**: New `async-validators` and `validators-errors` inputs ([a806286](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a806286)) Closes [#1270](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1270)
 
 ### Bug fixes
 * **o-form-layout-manager**: Navigation problems when inserting new data fixed ([c0377eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0377eb)) Closes [#1119](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1119)
