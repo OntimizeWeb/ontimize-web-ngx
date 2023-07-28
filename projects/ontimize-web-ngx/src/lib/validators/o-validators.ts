@@ -154,4 +154,48 @@ export class OValidators {
     return validator;
 
   }
+
+  public static createMinValidator(min: number): ValidatorFn {
+    const validator: ValidatorFn = (control: FormControl) => {
+      let val = control.value;
+      if (typeof (control.value) !== 'number') {
+        try {
+          val = parseInt(control.value, 10);
+        } catch (e) {
+          val = control.value;
+        }
+      }
+      if (val < min) {
+        return {
+          min: {
+            requiredMin: min
+          }
+        };
+      }
+      return {};
+    }
+    return validator;
+  }
+
+  public static createMaxValidator(max: number): ValidatorFn {
+    const validator: ValidatorFn = (control: FormControl) => {
+      let val = control.value;
+      if (typeof (control.value) !== 'number') {
+        try {
+          val = parseInt(control.value, 10);
+        } catch (e) {
+          val = control.value;
+        }
+      }
+      if (max < val) {
+        return {
+          max: {
+            requiredMax: max
+          }
+        };
+      }
+      return {};
+    }
+    return validator;
+  }
 }
