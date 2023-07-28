@@ -1,9 +1,8 @@
 import { Directive, ElementRef, Injector, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
-import { O_MAT_ERROR_OPTIONS } from '../services/factories';
-import { OMatErrorOptions, OMatErrorType } from '../types/o-mat-error.type';
+import { OMatErrorOptions } from '../types/o-mat-error.type';
 import { Codes } from '../util/codes';
-import { Util } from '../util/util';
+import { ErrorsUtils } from '../util/errors';
 
 @Directive({
   selector: '[oMatError]'
@@ -18,14 +17,7 @@ export class OMatErrorDirective {
     private viewContainer: ViewContainerRef,
     private injector: Injector
   ) {
-    try {
-      this.errorOptions = this.injector.get(O_MAT_ERROR_OPTIONS) || {};
-    } catch (e) {
-      this.errorOptions = {};
-    }
-    if (!Util.isDefined(this.errorOptions.type)) {
-      this.errorOptions.type = Codes.O_MAT_ERROR_STANDARD as OMatErrorType;
-    }
+    this.errorOptions = ErrorsUtils.getErrorOptions(this.injector);
   }
 
   @Input()

@@ -1,6 +1,11 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" class="o-table-cell-editor-time o-table-cell-editor" fxLayout="row" fxLayoutAlign="space-between center"
-    fxLayoutGap="8px">
+    fxLayoutGap="8px" 
+    [matTooltip]="tooltip" 
+    [matTooltipClass]="tooltipClass" 
+    [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay" 
+    [matTooltipHideDelay]="tooltipHideDelay">
     <mat-form-field floatLabel="never">
 
       <input #dateInput matInput [placeholder]="getPlaceholderDate()" [formControl]="formControlDate"

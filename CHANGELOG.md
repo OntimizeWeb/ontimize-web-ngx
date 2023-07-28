@@ -1,3 +1,14 @@
+## 8.14.0 (2023-07-28)
+### Features
+* **o-table**: Modified the visibility of the method `getColumnFilter` ([3dc21ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dc21ec))
+* **o-form-data-component**: New `async-validators` and `validators-errors` inputs ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
+* **o-validator**: New `async-validator-function` input ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
+* **o-table-column**: New `async-validators` and `validators-errors` inputs ([a806286](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a806286)) Closes [#1270](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1270)
+
+### Bug fixes
+* **o-form-layout-manager**: Navigation problems when inserting new data fixed ([c0377eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0377eb)) Closes [#1119](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1119)
+* **o-form-layout-manager**: Closing opened tabs that are removed in the main tab ([d2f395e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f395e)) Closes [#1261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1261) [#1121](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1121)
+
 ## 8.13.0 (2023-07-07)
 ### Features
 * **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) ([99dd44b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99dd44b)) ([a3f8818](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a3f8818)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)

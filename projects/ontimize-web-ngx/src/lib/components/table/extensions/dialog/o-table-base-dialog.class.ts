@@ -2,9 +2,9 @@ import { Injector, QueryList, ViewChildren } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 import { OMatErrorDirective } from '../../../../directives/o-mat-error.directive';
-import { O_MAT_ERROR_OPTIONS } from '../../../../services/factories';
 import { OMatErrorOptions } from '../../../../types/o-mat-error.type';
 import { Codes } from '../../../../util/codes';
+import { ErrorsUtils } from '../../../../util/errors';
 import { Util } from '../../../../util/util';
 
 export class OTableBaseDialogClass {
@@ -14,14 +14,8 @@ export class OTableBaseDialogClass {
   protected oMatErrorChildren: QueryList<OMatErrorDirective>;
   protected formControl: AbstractControl;
 
-  constructor(
-    protected injector: Injector
-  ) {
-    try {
-      this.errorOptions = this.injector.get(O_MAT_ERROR_OPTIONS) || {};
-    } catch (e) {
-      this.errorOptions = {};
-    }
+  constructor(protected injector: Injector) {
+    this.errorOptions = ErrorsUtils.getErrorOptions(this.injector);
   }
 
   protected setFormControl(formControl: AbstractControl) {

@@ -413,6 +413,12 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
   }
 
+  public closeDetails(detailsData: any[] = [], options?: FormLayoutCloseDetailOptions): void {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      this.oTabGroup.closeDetails(detailsData, options);
+    }
+  }
+
   public openFormLayoutDialog(detailComp: FormLayoutDetailComponentData): void {
     const cssclass = ['o-form-layout-dialog-overlay'];
     if (this.dialogClass) {
@@ -624,5 +630,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       });
     }
     return result;
+  }
+
+  public getIdOfActiveItem(): string {
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? `${this.oattr}-${compRef.getIdOfActiveItem()}-` : '';
   }
 }
