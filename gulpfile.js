@@ -26,6 +26,7 @@ gulp.task('delete.angular.imports', () => {
 
 gulp.task('copy.styles.files', (callback) => {
   copyfiles(['projects/ontimize-web-ngx/src/lib/theming/styles/**/*.scss', 'dist/theming'], 5, callback);
+  copyfiles(['projects/ontimize-web-ngx/src/lib/theming/fonts/**/*.scss', 'dist/theming'], 5, callback);
 });
 
 gulp.task('concat.themes', (callback) => {
