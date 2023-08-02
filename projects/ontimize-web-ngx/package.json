@@ -46,8 +46,8 @@
     "@angular/platform-browser": "^15.2.9",
     "@angular/platform-browser-dynamic": "^15.2.9",
     "@angular/router": "^15.2.9",
-    "rxjs": "~6.6.0",
-    "zone.js": "~0.11.4",
+    "rxjs": "~7.8.0",
+    "zone.js": "~0.12.0",
     "google-libphonenumber": "^3.2.3"
   },
   "dependencies": {
@@ -58,6 +58,6 @@
     "ngx-material-timepicker": "5.4.3",
     "reflect-metadata": "0.1.13",
     "google-libphonenumber": "^3.2.3",
-    "tslib": "^2.0.0"
+    "tslib": "^2.3.0"
   }
 }

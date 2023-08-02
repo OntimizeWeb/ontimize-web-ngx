@@ -18,7 +18,11 @@
   },
   "bundleStyle": {
     "dest": "./dist/theme.scss",
-    "mask": ["./projects/ontimize-web-ngx/src/lib/components/**/*theme.scss","./projects/ontimize-web-ngx/src/lib/shared/**/*theme.scss","./projects/ontimize-web-ngx/src/lib/layout/**/*theme.scss"],
+    "mask": [
+      "./projects/ontimize-web-ngx/src/lib/components/**/*theme.scss",
+      "./projects/ontimize-web-ngx/src/lib/shared/**/*theme.scss",
+      "./projects/ontimize-web-ngx/src/lib/layouts/**/*theme.scss"
+    ],
     "sort": [
       "o-material"
     ]
@@ -44,9 +48,9 @@
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
     "reflect-metadata": "0.1.13",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.11.4"
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.12.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.2.9",
