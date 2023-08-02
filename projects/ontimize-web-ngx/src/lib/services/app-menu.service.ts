@@ -27,7 +27,7 @@ export class AppMenuService {
   protected ALL_MENU_ITEMS: MenuRootItem[];
   protected activeItem: MenuItemRoute;
 
-  public onClick: Subject<any> = new Subject();
+  public onClick: Subject<void> = new Subject<void>;
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig);
