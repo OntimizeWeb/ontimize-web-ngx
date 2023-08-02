@@ -147,20 +147,22 @@ $fashion-mat-dark-theme-foreground: (base: white,
       warn: $warn,
       is-dark: false,
       foreground: $fashion-mat-light-theme-foreground,
-      background: fashion-mat-light-theme-background($primary)));
-  }
+      background: fashion-mat-light-theme-background($primary)),
+    typography: mat.define-typography-config());
+}
 
-  // Creates a container object for a dark theme to be given to individual component theme mixins.
-  @function fashion-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-    @return (color:(primary: $primary,
-        accent: $accent,
-        warn: $warn,
-        is-dark: true,
-        foreground: $fashion-mat-dark-theme-foreground,
-        background: fashion-mat-dark-theme-background($primary)));
-  }
+// Creates a container object for a dark theme to be given to individual component theme mixins.
+@function fashion-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  @return (color:(primary: $primary,
+      accent: $accent,
+      warn: $warn,
+      is-dark: true,
+      foreground: $fashion-mat-dark-theme-foreground,
+      background: fashion-mat-dark-theme-background($primary)),
+    typography: mat.define-typography-config());
+}
 
-  /* Light theme */
-  $theme: fashion-mat-light-theme($primary, $accent);
-  /* Dark theme */
-  $dark-theme: fashion-mat-dark-theme($primary, $accent);
+/* Light theme */
+$theme: fashion-mat-light-theme($primary, $accent);
+/* Dark theme */
+$dark-theme: fashion-mat-dark-theme($primary, $accent);
