@@ -4,7 +4,7 @@
 @use 'styles/lite/typography/ontimize-lite.scss';
 @use 'styles/lite/form-field/o-form-field-theme.scss';
 @use 'ontimize-theme.scss';
-@use 'styles/density.scss' as o-density;
+@use 'styles/density.scss'as o-density;
 
 
 $typography : ontimize-lite.$typography;
@@ -30,7 +30,8 @@ $typography : ontimize-lite.$typography;
   .o-dialog-class.o-table-dialog,
   .mat-mdc-menu-panel.o-table-menu,
   .mat-mdc-menu-panel.o-table-quickfilter-menu,
-  .mat-mdc-menu-panel.o-table-quickfilter-menu {
+  .mat-mdc-menu-panel.o-table-quickfilter-menu,
+  .report-on-demand-sidenav {
     @include o-density.checkbox(17px, 15px, 15px);
   }
 }

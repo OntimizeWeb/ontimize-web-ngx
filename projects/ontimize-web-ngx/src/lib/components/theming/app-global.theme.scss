@@ -112,12 +112,18 @@
         .mat-mdc-selection-list[dense] {
           outline: none;
 
-          .mat-mdc-list-item {
+          .mat-mdc-list-option-checkbox-before {
+            padding-right: 0px;
+            margin-right: 0px;
+          }
 
-            /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-            /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
+          .mat-mdc-list-item {
+            .mdc-list-item__content {
+              padding-left: 16px;
+            }
+
             .empty-filter-list,
-            .mat-list-item-content>* {
+            .mdc-list-item__content>* {
               font-size: mat.font-size($typography, body-1);
             }
 
@@ -133,33 +139,34 @@
   }
 
   /*global styles about drag/drop in dialogs table*/
-  .cdk-drag-preview {
+  .cdk-drag-preview,
+  .cdk-dragging {
     width: 100%;
     display: block;
 
-    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-    .mat-list-item-content {
+    background-color: mat.get-color-from-palette($background, background);
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    border-radius: 2px;
+
+    .mdc-list-item__content {
+      display: block;
       font-size: mat.font-size($typography, body-1);
       color: mat.get-color-from-palette($foreground, text);
       padding: 6px;
       flex-direction: row;
       align-items: center;
-      background-color: mat.get-color-from-palette($background, background);
-      display: flex;
-      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-      box-sizing: border-box;
-      border-radius: 2px;
+      //background-color: mat.get-color-from-palette($background, background);
+      //display: flex;
+      //box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+      //box-sizing: border-box;
+      // border-radius: 2px;
 
       .mat-mdc-list-item-icon {
         padding: 4px;
       }
 
-      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-      .mat-list-text {
+      .mat-mdc-list-text {
         padding-left: 16px;
         width: 100%;
       }
@@ -374,4 +381,3 @@
     }
   }
 }
-

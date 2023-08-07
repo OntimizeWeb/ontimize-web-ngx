@@ -55,12 +55,11 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
           min-height: 30px;
           height: auto;
           display: flex;
+          padding: 0 8px;
 
-          /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-          /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-          .mat-list-item-content {
+          .mdc-list-item__content {
             width: 100%;
-            padding: 0 8px;
+
           }
         }
       }

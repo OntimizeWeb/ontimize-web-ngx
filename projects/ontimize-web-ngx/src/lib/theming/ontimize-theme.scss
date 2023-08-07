@@ -36,6 +36,7 @@ $typography: ontimize-typography.$default-typography;
   @include report-on-demand.report-on-demand($theme-or-color-config);
   @include layout.layout-padding-margin();
   @include o-density.checkbox(20px, 16px, 16px);
+  @include o-density.list();
 
 
   /* CONTAINER */
