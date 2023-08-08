@@ -102,12 +102,19 @@
         }
       }
 
+
       .empty-filter-list {
         color: mat.get-color-from-palette($foreground, disabled-text);
       }
 
       .mat-mdc-dialog-content {
         font-size: mat.font-size($typography, body-1);
+
+        .mat-mdc-subheader.mdc-list-group__subheader {
+          font-weight: inherit;
+          font-size: inherit;
+
+        }
 
         .mat-mdc-selection-list[dense] {
           outline: none;
@@ -117,10 +124,11 @@
             margin-right: 0px;
           }
 
+
+        }
+
+        .mat-mdc-list[dense] {
           .mat-mdc-list-item {
-            .mdc-list-item__content {
-              padding-left: 16px;
-            }
 
             .empty-filter-list,
             .mdc-list-item__content>* {
