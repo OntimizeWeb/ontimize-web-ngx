@@ -94,8 +94,6 @@
     .mat-mdc-dialog-container {
       .mat-mdc-dialog-title {
         border-bottom: 1px solid mat.get-color-from-palette($primary);
-        line-height: mat.font-size($typography, subtitle-2);
-        font-size: mat.font-size($typography, subtitle-2);
 
         .mat-icon {
           color: mat.get-color-from-palette($primary);
