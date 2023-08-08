@@ -25,7 +25,8 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
         cursor: default;
         padding: 0 0 8px;
         margin: 0;
-        &::before{
+
+        &::before {
           height: auto;
         }
       }
@@ -36,6 +37,7 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
 
         .mat-mdc-subheader {
           cursor: default;
+          padding: 0 0 24px;
 
           &.inner-subheader {
             padding: 0;
