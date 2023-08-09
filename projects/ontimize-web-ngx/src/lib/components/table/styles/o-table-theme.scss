@@ -154,9 +154,8 @@
     }
   }
 
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  .o-table-quickfilter .quickFilter .mat-mdc-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
+
+  .o-table-quickfilter .quickFilter .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix div {
     border-right: 1px solid mat.get-color-from-palette($foreground, divider);
   }
 }

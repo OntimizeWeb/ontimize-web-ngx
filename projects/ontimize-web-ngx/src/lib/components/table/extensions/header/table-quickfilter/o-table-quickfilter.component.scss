@@ -1,107 +1,60 @@
-.o-table-quickfilter {
-  .quickFilter {
-    .mat-mdc-form-field {
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-form-field-wrapper {
-        margin: 0;
-        padding-bottom: 0;
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        .mat-form-field-flex {
-          align-items: initial;
-          margin-top: 0;
-          height: 32px;
-          line-height: 32px;
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          .mat-form-field-outline,
-          .mat-form-field-prefix,
-          .mat-form-field-suffix {
-            top: 0;
-          }
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          .mat-form-field-infix {
-            padding: 0 4px;
-            border-top: 0;
-          }
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          .mat-form-field-prefix {
-            padding-bottom: 0;
+ .o-table-quickfilter {
+   .quickFilter {
 
-            div {
-              align-items: center;
-              display: inline-flex;
-              margin: 2px 0;
+     .mat-mdc-form-field {
 
-              .mat-badge-content {
-                background-color: #3C8500;
-                width: 14px;
-                height: 14px;
-                line-height: 14px;
-                top: -4px;
-                right: -4px;
-              }
+       .mat-mdc-form-field-subscript-wrapper {
+         display: none;
+       }
 
-              .mat-icon,
-              button {
-                margin-right: 6px;
-              }
+       .mat-mdc-form-field-flex {
 
-              button.mat-mdc-icon-button {
-                height: 100%;
-                width: auto;
-                /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-                /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-                .mat-button-ripple.mat-ripple {
-                  display: none;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+         .mdc-notched-outline__leading,
+         .mdc-notched-outline__trailing {
+           border-radius: 2px;
+         }
 
-  .search-icon {
-    cursor: pointer;
-  }
+         .mat-mdc-form-field-infix {
+           padding: 0 4px;
+           align-self: center;
+           min-height: auto;
+         }
 
-}
+         .mat-mdc-form-field-icon-prefix {
+           padding-left: 10px;
+           padding-right: 10px;
 
-.o-table-quickfilter-menu {
-  .mat-divider {
-    margin: 8px 0;
-  }
+           div {
+             align-items: center;
+             display: flex;
 
-  .checkbox-container {
-    padding: 6px 12px;
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    .mat-checkbox-layout {
-      white-space: normal;
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-ripple {
-        display: none;
-      }
-    }
-  }
-}
+             .mat-icon,
+             button {
+               margin-right: 6px;
+             }
+
+             .mat-badge-content {
+               background-color: #3C8500;
+               width: 14px;
+               height: 14px;
+               line-height: 14px;
+               top: -4px;
+               right: -4px;
+             }
+           }
+         }
+
+       }
+     }
+   }
+ }
+
+ .o-table-quickfilter-menu {
+   .checkbox-container {
+     padding: 6px 12px;
+
+     .mat-divider {
+       margin: 8px 0;
+     }
+   }
+ }

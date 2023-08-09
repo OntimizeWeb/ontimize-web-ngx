@@ -1,8 +1,7 @@
 <div class="quickFilter" fxLayout="row">
 
-  <mat-form-field appearance="outline" floatLabel="never">
-    <input matInput #filter [formControl]="formControl" (click)="$event.stopPropagation()">
-    <mat-label *ngIf="placeholder">{{ placeholder | oTranslate }}</mat-label>
+  <mat-form-field appearance="outline">
+    <input matInput #filter [formControl]="formControl" (click)="$event.stopPropagation()" placeholder="{{ placeholder | oTranslate }}">
     <div matPrefix>
       <mat-icon svgIcon="ontimize:search" [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="small"></mat-icon>
       <button mat-icon-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()">
