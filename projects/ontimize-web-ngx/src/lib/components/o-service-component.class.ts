@@ -896,7 +896,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   set quickFilterAppearance(value: MatFormFieldAppearance) {
-    const values = ['legacy', 'standard', 'fill', 'outline'];
+    const values = [ 'fill', 'outline'];
     if (values.indexOf(value) === -1) {
       console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
       value = 'outline';

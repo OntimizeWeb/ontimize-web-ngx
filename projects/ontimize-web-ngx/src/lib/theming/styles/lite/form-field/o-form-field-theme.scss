@@ -58,19 +58,6 @@
       width: 20px;
     }
 
-    &.mat-form-field-appearance-legacy {
-
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      .mat-form-field-prefix,
-      .mat-form-field-suffix {
-        .mat-mdc-icon-button {
-          .mat-icon {
-            font-size: $prefix-suffix-icon-font-size;
-          }
-        }
-      }
-    }
 
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-wrapper {

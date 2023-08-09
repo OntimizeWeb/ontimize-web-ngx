@@ -1,6 +1,6 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
-  <div class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+  <div class="mat-form-field" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
     <o-date-input #dateInput fxFlex [attr]="dateAttr" [read-only]="readOnly" [enabled]="enabled" [required]="isRequired" [label]="olabel"
       clear-button="no" automatic-registering="no" automatic-binding="no" (onFocus)="innerOnFocus($event)" (onBlur)="innerOnBlur($event)"
       [format]="oDateFormat" [locale]="oDateLocale" [start-view]="oDateStartView" [min]="oDateMinDate" [max]="oDateMaxDate" [touch-ui]="oDateTouchUi"

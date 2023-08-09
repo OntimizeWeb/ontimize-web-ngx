@@ -44,27 +44,6 @@ $width24: 24px;
 
   }
 
-  &.mat-form-field-appearance-legacy {
-    .mat-icon {
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-    }
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-form-field-prefix,
-    .mat-form-field-suffix {
-      .mat-mdc-icon-button {
-        vertical-align: bottom;
-
-        .mat-icon {
-          font-size: 150%;
-        }
-      }
-    }
-  }
-
   &:not(.mat-form-field-appearance-legacy) {
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */

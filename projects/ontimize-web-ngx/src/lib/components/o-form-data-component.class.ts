@@ -489,7 +489,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   set appearance(value: MatFormFieldAppearance) {
-    const values = ['legacy', 'standard', 'fill', 'outline'];
+    const values = ['fill', 'outline'];
     if (values.indexOf(value) === -1) {
       value = undefined;
     }
