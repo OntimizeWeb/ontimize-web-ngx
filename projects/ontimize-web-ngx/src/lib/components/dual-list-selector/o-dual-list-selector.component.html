@@ -1,4 +1,4 @@
-<div class="mat-subheader">{{description | oTranslate }} </div>
+<div mat-subheader>{{description | oTranslate }} </div>
 
 <div class="o-dual-list-selector-wrapper-selector-list">
 
@@ -18,7 +18,7 @@
         </mat-list-item>
 
         <mat-list-option checkboxPosition="before" *ngFor="let item of dataSource" [value]="item" cdkDrag class="o-drag-list-item-box">
-          <span matLine>{{ (item[display]) | oTranslate }} </span>
+          <span matListItemLine>{{ (item[display]) | oTranslate }} </span>
         </mat-list-option>
       </mat-selection-list>
 
@@ -55,7 +55,7 @@
           </ng-container>
 
           <ng-template #defaultRenderer>
-            <span matLine>{{ itemSelected[display] | oTranslate }} </span>
+            <span matListItemLine>{{ itemSelected[display] | oTranslate }} </span>
           </ng-template>
 
         </mat-list-option>

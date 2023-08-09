@@ -11,22 +11,17 @@
         border: 1px solid mat.get-color-from-palette($foreground, divider);
 
         .mat-mdc-list-item {
-
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          &:not(.mat-list-option) {
+          &:not(.mat-mdc-list-option) {
             border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
           }
+        }
 
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          &.mat-list-option {
-            background: mat.get-color-from-palette($background, 'hover');
+        .mat-mdc-list-option {
+          background: mat.get-color-from-palette($background, 'hover');
 
-            &[aria-selected="true"] {
-              background-color: mat.get-color-from-palette($primary, 100);
-              color: if($is-dark-theme, #121212, mat.get-color-from-palette($foreground, text));
-            }
+          &[aria-selected="true"] {
+            background-color: mat.get-color-from-palette($primary, 100);
+            color: if($is-dark-theme, #121212, mat.get-color-from-palette($foreground, text));
           }
         }
 

@@ -9,7 +9,7 @@
   .mat-mdc-menu-panel.o-table-quickfilter-menu .mat-mdc-checkbox,
   .mat-mdc-menu-panel.o-table-quickfilter-menu .mat-mdc-checkbox,
   .mat-list[dense] .o-list-item .o-list-row-action .mat-mdc-checkbox,
-  .report-on-demand-sidenav .mat-mdc-list-option {
+  .o-dialog-class .mat-mdc-list-option {
     .mdc-checkbox {
       padding: calc((var(--mdc-checkbox-ripple-size, $ripple-size) - var(--mdc-checkbox-icon-size, $icon-size)) / 2);
       margin: calc((var(--mdc-checkbox-touch-target-size, $touch-target-size) - var(--mdc-checkbox-icon-size)) / 2);

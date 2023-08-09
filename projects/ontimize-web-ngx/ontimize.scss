@@ -62,13 +62,22 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
               height: auto;
               display: flex;
               padding: 0 8px;
+              align-items: center;
 
               .mdc-list-item__content {
                 width: 100%;
+                align-self: center;
 
                 .mat-mdc-list-item-icon {
                   margin-top: 0;
                   padding: 4px;
+                }
+
+                .mdc-list-item__first-text,
+                .mdc-list-item__secondary-text {
+                  &::before {
+                    display: flex;
+                  }
                 }
 
                 .mdc-list-item__secondary-text {
@@ -94,6 +103,11 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
               margin: 6px 0;
               border-radius: 4px;
               cursor: default;
+
+
+              .mdc-list-item__start {
+                margin-top: 0;
+              }
             }
 
             p {

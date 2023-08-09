@@ -111,6 +111,7 @@
         .mat-mdc-subheader.mdc-list-group__subheader {
           font-weight: inherit;
           font-size: inherit;
+          margin:0;
 
         }
 
@@ -118,6 +119,7 @@
           outline: none;
 
           .mat-mdc-list-option-checkbox-before {
+            align-self: auto;
             padding-right: 0px;
             margin-right: 0px;
           }
@@ -146,7 +148,7 @@
 
   /*global styles about drag/drop in dialogs table*/
   .cdk-drag-preview,
-  .cdk-dragging {
+  .cdk-drag-dragging {
     width: 100%;
     display: block;
 
