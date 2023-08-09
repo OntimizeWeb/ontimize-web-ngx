@@ -198,12 +198,11 @@ button.mat-mdc-button-base {
 }
 
 /*MAT MENU*/
-/*TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version.*/
-/*TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version.*/
 .o-mat-menu.mat-mdc-menu-panel {
   .mat-mdc-menu-item {
     line-height: $mat-menu-item-height;
     height: $mat-menu-item-height;
+    min-height: $mat-menu-item-height;
   }
 }
 

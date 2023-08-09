@@ -86,6 +86,7 @@
     .mat-mdc-menu-item {
       line-height: $row-height;
       height: $row-height;
+      min-height: $row-height;
     }
   }
 
