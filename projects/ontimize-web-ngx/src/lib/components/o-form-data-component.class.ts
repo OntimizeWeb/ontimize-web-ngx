@@ -49,7 +49,8 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'appearance',
   'hideRequiredMarker:hide-required-marker',
   'labelVisible:label-visible',
-  'selectAllOnClick:select-all-on-click'
+  'selectAllOnClick:select-all-on-click',
+  'subscriptSizing:subscript-sizing'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
