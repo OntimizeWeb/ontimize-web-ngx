@@ -1,6 +1,6 @@
-import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren, Directive } from '@angular/core';
+import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren, Directive, Input } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix } from '@angular/material/form-field';
+import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix, SubscriptSizing } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
 import { O_INPUTS_OPTIONS } from '../config/app-config';
@@ -81,6 +81,15 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   public labelVisible: boolean = true;
   @InputConverter()
   public selectAllOnClick: boolean = false;
+
+  @Input()
+  get subscriptSizing(): SubscriptSizing {
+    return this._subscriptSizing || this.errorOptions?.type==='lite'?'dynamic':'fixed' ;
+  }
+  set subscriptSizing(value: SubscriptSizing) {
+    this._subscriptSizing = value || this.errorOptions?.type === 'lite' ? 'dynamic' : 'fixed';
+  }
+  private _subscriptSizing: SubscriptSizing | null = null;
 
   /* Outputs */
   public onChange: EventEmitter<object> = new EventEmitter<object>();

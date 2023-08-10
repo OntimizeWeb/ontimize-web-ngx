@@ -5,7 +5,7 @@
   <!-- https://github.com/angular/material2/issues/7891 -->
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
     [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" [class.o-radio-from-field-row]="layout==='row'"
-    floatLabel="always" class="mat-form-field--no-underline" fxFill>
+    floatLabel="always" class="mat-form-field--no-underline" fxFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [required]="isRequired" style="display: none" />
@@ -24,7 +24,7 @@
     </mat-error>
   </mat-form-field>
   <div *ngIf="isReadOnly" (click)="$event.stopPropagation()" class="read-only-blocker" fxFill></div>
-  
+
   <o-context-menu *ngIf="!this.isReadOnly && this.enabled">
     <o-context-menu-item attr="refresh" label="FORM_SERVICE_COMPONENT.REFRESH" svg-icon="ontimize:autorenew" (execute)="refresh()">
     </o-context-menu-item>

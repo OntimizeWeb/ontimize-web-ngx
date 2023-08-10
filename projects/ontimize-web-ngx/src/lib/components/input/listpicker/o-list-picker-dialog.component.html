@@ -1,6 +1,6 @@
 <div mat-dialog-title *ngIf="filter">
   <o-search-input #searchInput [columns]="menuColumns" show-menu="no" float-label="never"
-    (onSearch)="onFilterList($event)" class="o-list-picker-search" appearance="legacy"></o-search-input>
+    (onSearch)="onFilterList($event)" class="o-list-picker-search" appearance="fill"></o-search-input>
 </div>
 <div mat-dialog-content [class.o-list-picker-has-filter]="filter" fxFlex>
   <cdk-virtual-scroll-viewport [itemSize]="itemSize">

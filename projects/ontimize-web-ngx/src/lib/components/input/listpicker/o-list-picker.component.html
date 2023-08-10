@@ -5,7 +5,7 @@
   <input #inputModel class="input-model" type="text" [id]="getAttribute()" [formControlName]="getAttribute()">
 
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.custom-width]="hasCustomWidth"
-    [hideRequiredMarker]="hideRequiredMarker" class="icon-field" #innerInputContainer fxFlexFill>
+    [hideRequiredMarker]="hideRequiredMarker" class="icon-field" #innerInputContainer fxFlexFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
 
     <input #visibleInput matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"

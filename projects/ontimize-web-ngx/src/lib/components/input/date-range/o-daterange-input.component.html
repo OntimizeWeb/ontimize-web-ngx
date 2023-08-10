@@ -2,7 +2,7 @@
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
 
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
-    class="icon-field" fxFlexFill>
+    class="icon-field" fxFlexFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input #matInputRef matInput type="text" o-daterange-input [id]="getAttribute()" [formControlName]="getAttribute()" [required]="isRequired"
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" showDropdowns="true" showCancel="true" [showRanges]="showRanges"

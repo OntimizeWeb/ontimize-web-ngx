@@ -1,7 +1,8 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [oContextMenu]="oContextMenu">
+
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth"
-    [hideRequiredMarker]="hideRequiredMarker" fxFill>
+    [hideRequiredMarker]="hideRequiredMarker" fxFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [multiple]="getMultiple()" [required]="isRequired" [panelClass]="{ 'o-combo-panel': true, 'o-combo-panel-search': searchable }"
