@@ -508,13 +508,13 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   get floatLabel(): FloatLabelType {
     if (!this.labelVisible) {
-      this.floatLabel = 'never';
+      this.floatLabel = 'always';
     }
     return this._floatLabel;
   }
 
   set floatLabel(value: FloatLabelType) {
-    const values = ['always', 'never', 'auto'];
+    const values = ['always', 'auto'];
     if (values.indexOf(value) === -1) {
       value = 'auto';
     }

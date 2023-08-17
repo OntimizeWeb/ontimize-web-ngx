@@ -50,3 +50,7 @@
 
   }
 }
+
+@mixin o-form-field() {
+  @include mat.form-field-density(-2)
+}

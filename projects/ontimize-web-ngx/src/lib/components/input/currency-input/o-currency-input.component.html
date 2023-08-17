@@ -1,27 +1,24 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
-  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="space-between center">
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="space-between center">
 
   <div *ngIf="useSymbol('left')" matSuffix class="icon-btn" [class.mat-disabled]="!enabled">
     {{ currency_symbols[currencySymbol] }}
   </div>
-  <mat-icon *ngIf="useIcon('left')" svgIcon="ontimize:{{currencySymbol}}" matSuffix class="svg-icon"
-    [class.mat-disabled]="!enabled"></mat-icon>
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
-    [class.custom-width]="hasCustomWidth" class="icon-field" fxFill [subscriptSizing]="subscriptSizing">
+  <mat-icon *ngIf="useIcon('left')" svgIcon="ontimize:{{currencySymbol}}" matSuffix class="svg-icon" [class.mat-disabled]="!enabled"></mat-icon>
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
+    class="icon-field" fxFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-    <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()"
-      [placeholder]="placeHolder" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly"
-      [min]="min" [max]="max" [step]="step" [required]="isRequired" (change)="onChangeEvent($event)">
+    <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step"
+      [required]="isRequired" (change)="onChangeEvent($event)">
 
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <div *ngIf="useSymbol('right')" matSuffix class="icon-btn" [class.mat-disabled]="!enabled">
+    <div *ngIf="useSymbol('right')" matIconSuffix class="icon-btn" [class.mat-disabled]="!enabled">
       {{ currency_symbols[currencySymbol] }}
     </div>
-    <mat-icon *ngIf="useIcon('right')" svgIcon="ontimize:{{currencySymbol}}" matSuffix class="svg-icon"
-      [class.mat-disabled]="!enabled">
+    <mat-icon *ngIf="useIcon('right')" svgIcon="ontimize:{{currencySymbol}}" matIconSuffix class="svg-icon" [class.mat-disabled]="!enabled">
     </mat-icon>
 
     <mat-error *oMatError="hasError('required')">

@@ -1,162 +1,49 @@
-@use 'o-form-field-fill-theme.scss';
-@use 'o-form-field-outline-theme.scss';
 @use '@angular/material'as mat;
 @use 'sass:math';
 
+
 @mixin o-mat-form-field-typography-lite($config) {
-  $line-height: mat.line-height($config, body-1);
-
-  // The amount to scale the font for the floating label and subscript.
-  $subscript-font-scale: .75;
-  // The amount to scale the font for the prefix and suffix icons.
-  $prefix-suffix-icon-font-scale: 1.4;
-
-  // The padding on the infix. Mocks show half of the text size.
-  $infix-padding: .3em;
-
-  $infix-margin-top: 1em * $line-height * $subscript-font-scale;
-  // Font size to use for the label and subscript text.
-  $subscript-font-size: $subscript-font-scale * 100%;
-  // Font size to use for the for the prefix and suffix icons.
-  $prefix-suffix-icon-font-size: $prefix-suffix-icon-font-scale * 100%;
-  // The space between the bottom of the .mat-form-field-flex area and the subscript wrapper.
-  // Mocks show half of the text size, but this margin is applied to an element with the subscript
-  // text font size, so we need to divide by the scale factor to make it half of the original text
-  // size.
-  $subscript-margin-top: math.div(.3em, $subscript-font-scale);
-  // The padding applied to the form-field-wrapper to reserve space for the subscript, since it's
-  // absolutely positioned. This is a combination of the subscript's margin and line-height, but we
-  // need to multiply by the subscript font scale factor since the wrapper has a larger font size.
-  $wrapper-padding-bottom: ($subscript-margin-top + $line-height) * $subscript-font-scale * .0;
-  //$wrapper-padding-bottom: 0;
-
-  .mat-mdc-form-field.mat-form-field {
-    &.mat-form-field-invalid {
-      .mat-mdc-form-field-error {
-        display: none;
-      }
-    }
-
-    font-size: mat.font-size($config, body-1);
-
-    &.icon-field .mat-form-field-suffix .icon-btn,
-    &.icon-field .mat-form-field-suffix .mat-mdc-icon-button,
-    &:not(.mat-form-field-appearance-legacy) .mat-form-field-wrapper .mat-form-field-prefix .mat-icon-button,
-    &:not(.mat-form-field-appearance-legacy) .mat-form-field-wrapper .mat-form-field-suffix .mat-icon-button {
-      height: $prefix-suffix-icon-font-scale * 1em;
-      width: $prefix-suffix-icon-font-scale * 1em;
-    }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    &.input-image.icon-field .mat-input-infix.mat-form-field-infix {
-      line-height: 16px;
-    }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    &.icon-field .mat-form-field-suffix .mat-icon:not([svgicon]) {
-      height: 20px;
-      width: 20px;
-    }
+ .mat-mdc-form-field {
 
 
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-wrapper {
-      padding-bottom: $wrapper-padding-bottom;
-    }
+  @include mat.form-field-density(-4);
 
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-prefix,
-    .mat-form-field-suffix {
-      .mat-icon {
-        font-size: $prefix-suffix-icon-font-size;
-        // line-height: $line-height!important;
-        height: $line-height * 1em;
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        min-height: auto;
+        padding-bottom: 4px;
+
+
+        .mat-mdc-floating-label {
+          display: block;
+        }
+
+        // .mat-mdc-form-field-icon-suffix,
+        // .mat-mdc-form-field-icon-prefix {
+        //   button.mat-mdc-button-base.mat-mdc-icon-button {
+        //     width: 20px;
+        //     height: 20px;
+        //     font-size: 20px;
+
+        //     svg {
+        //       width: var(--mdc-icon-button-icon-size, 20px);
+        //       height: var(--mdc-icon-button-icon-size, 20px);
+        //     }
+        //   }
+        // }
       }
 
-      // Allow icon buttons in a prefix or suffix to adapt to the correct size.
-      .mat-mdc-icon-button {
-        height: $prefix-suffix-icon-font-scale * 1em;
-        width: $prefix-suffix-icon-font-scale * 1em;
-
-        .mat-icon {
-          height: $line-height * 1em;
-          line-height: $line-height;
+      &:not(.mdc-text-field--outlined) {
+        .mat-mdc-form-field-infix {
+          min-height: auto;
+          padding-top: 14px;
         }
       }
     }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-infix {
-      padding: $infix-padding 0;
-      border-top: $infix-margin-top solid transparent;
-    }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-can-float {
-
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      &.mat-form-field-should-float .mat-form-field-label,
-      .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
-        @include o_mat-form-field-label-floating($subscript-font-scale, $infix-padding, $infix-margin-top);
-      }
-
-      // Server-side rendered matInput with a label attribute but label not shown
-      // (used as a pure CSS stand-in for mat-form-field-should-float).
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      .mat-input-server[label]:not(:placeholder-shown)+.mat-form-field-label-wrapper .mat-form-field-label {
-        @include o_mat-form-field-label-floating($subscript-font-scale, $infix-padding, $infix-margin-top);
-      }
-    }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-label-wrapper {
-      top: -$infix-margin-top;
-      padding-top: $infix-margin-top;
-    }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-label {
-      top: $infix-margin-top + $infix-padding;
-    }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-underline {
-      // We want the underline to start at the end of the content box, not the padding box,
-      // so we move it up by the padding amount.
-      bottom: $wrapper-padding-bottom;
-    }
-
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-subscript-wrapper {
-      font-size: $subscript-font-size;
-      margin-top: $subscript-margin-top;
-
-      // We want the subscript to start at the end of the content box, not the padding box,
-      // so we move it up by the padding amount (adjusted for the smaller font size);
-      top: calc(100% - #{math.div($wrapper-padding-bottom , $subscript-font-scale)});
-    }
   }
-
-  @include o-combo();
-  @include o-phone();
-
-  @include o-form-field-fill-theme.o-mat-form-field-fill-typography($config);
-  @include o-form-field-outline-theme.o-mat-form-field-outline-typography($config);
 }
-
-$dedupe: 0;
-
-@mixin o_mat-form-field-label-floating($font-scale, $infix-padding, $infix-margin-top) {
-  transform: translateY(-$infix-margin-top - $infix-padding + $dedupe) scale($font-scale);
-  width: math.div(100%, $font-scale) + $dedupe;
-
-  $dedupe: $dedupe + 0.00001 !global;
 }
-
-
-
 
 
 /*
