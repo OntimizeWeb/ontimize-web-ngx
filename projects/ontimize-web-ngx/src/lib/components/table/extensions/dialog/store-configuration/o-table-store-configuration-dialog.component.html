@@ -23,7 +23,7 @@
       <mat-selection-list #propertiesList dense class="o-table-save-configuration-dialog-list o-scroll">
         <mat-list-option checkboxPosition="before" *ngFor="let property of properties" [value]="property.property">
           <div fxLayout="row" fxLayoutAlign="center center" fxFlex>
-            <span matLine fxFlex>{{ property.name | oTranslate }}</span>
+            <span matListItemTitle fxFlex>{{ property.name | oTranslate }}</span>
             <mat-icon *ngIf="property.info" matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
           </div>
         </mat-list-option>
