@@ -5,6 +5,7 @@
 @use 'styles/lite/typography/ontimize-lite.scss'as ontimize-lite;
 @use '@angular/material'as mat;
 @use '@angular/cdk';
+@use 'styles/default/typography/ontimize.scss'as ontimize-typography;
 
 $typography : ontimize-lite.$typography;
 
@@ -190,10 +191,17 @@ $typography : ontimize-lite.$typography;
 
 @mixin implatform-fashion-theme-styles($theme-or-color-config, $typographyConfig: null) {
 
+  $current-typography: if(ontimize-typography.$lite-typography==null, ontimize-typography.$default-typography, ontimize-typography.$lite-typography);
 
   @if $typographyConfig !=null {
-    $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
+    $typography: map-merge($current-typography, $typographyConfig);
   }
+
+  @else {
+    $typography: $current-typography;
+  }
+
+  $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typography);
 
 
   $typography: mat.get-typography-config($theme-or-color-config);

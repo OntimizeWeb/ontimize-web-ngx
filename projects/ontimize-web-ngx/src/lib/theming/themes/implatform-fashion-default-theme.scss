@@ -38,7 +38,7 @@ $default-palette: (50: #e8e3f4,
 
 // Define a theme.
 $primary: mat.define-palette($default-palette);
-$accent: mat.define-palette($default-palette, A100, A200, A400, A700);
+$accent: mat.define-palette($default-palette);
 
 /*Application background-color*/
 $app-background-color: #eaeaea;
