@@ -237,7 +237,11 @@ $transition-duration: 500ms;
             box-sizing: border-box;
             display: block;
             line-height: 48px;
+            height: auto;
             font-size: 14px;
+            >.mat-icon{
+              vertical-align: baseline;
+            }
           }
         }
 

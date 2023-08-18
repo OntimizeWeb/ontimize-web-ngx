@@ -1,4 +1,5 @@
 @use '@angular/material'as mat;
+@use '../ontimize-theme.scss';
 
 @include mat.all-component-typographies();
 @include mat.core();
@@ -6,10 +7,5 @@
 $primary: mat.define-palette(mat.$indigo-palette);
 $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
-$theme: mat.define-light-theme((color: (primary: $primary,
-      accent: $accent),
-    typography: mat.define-typography-config()));
-
-$dark-theme: mat.define-dark-theme((color: (primary: $primary,
-      accent: $accent),
-    typography: mat.define-typography-config()));
+$theme: ontimize-theme.o-mat-light-theme((color: (primary: $primary, accent: $accent), typography: mat.define-typography-config()));
+$dark-theme: ontimize-theme.o-mat-dark-theme((color: (primary: $primary, accent: $accent), typography: mat.define-typography-config()));

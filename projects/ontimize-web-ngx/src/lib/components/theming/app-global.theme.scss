@@ -247,8 +247,7 @@
       background-color: $background-primary-button;
       border-color: $border-color-primary-button;
 
-      &:hover,
-      .mat-mdc-button-touch-target {
+      &:hover {
         color: mat.get-color-from-palette($primary);
         background-color: $background-hover-primary-button;
         border-color: mat.get-color-from-palette($foreground, divider);
@@ -261,8 +260,7 @@
       color: mat.get-color-from-palette($accent);
       background-color: $background-accent-button;
 
-      &:hover,
-      .mat-mdc-button-touch-target {
+      &:hover {
         color: mat.get-color-from-palette($primary, 800);
         background-color: mat.get-color-from-palette($primary, 100);
         border-color: transparent;
@@ -288,8 +286,7 @@
         background-color: $background-primary-button;
         border-color: $border-color-primary-button;
 
-        &:hover,
-        .mat-mdc-button-touch-target {
+        &:hover{
           color: mat.get-color-from-palette($primary, 500);
           background-color: $background-hover-primary-button;
           border-color: mat.get-color-from-palette($foreground, divider);
@@ -301,8 +298,7 @@
         color: mat.get-color-from-palette($accent, 500);
         background-color: $background-accent-button;
 
-        &:hover,
-        .mat-mdc-button-touch-target {
+        &:hover {
           color: $font-color-hover-accent-button;
           background-color: $background-hover-accent-button;
         }

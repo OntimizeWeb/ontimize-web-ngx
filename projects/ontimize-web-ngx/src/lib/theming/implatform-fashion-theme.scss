@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "sass:map";
+@use 'themes/implatform-fashion-default-theme.scss';
 @use 'styles/fashion/typography-fashion.scss';
 @use 'styles/fashion/variables.scss';
 @use 'styles/lite/typography/ontimize-lite.scss'as ontimize-lite;
@@ -8,6 +9,7 @@
 @use 'styles/default/typography/ontimize.scss'as ontimize-typography;
 
 $typography : ontimize-lite.$typography;
+
 
 @mixin mat-checkbox-theme($theme-or-color-config) {
   $theme: map.get($theme-or-color-config, color);
@@ -27,6 +29,7 @@ $typography : ontimize-lite.$typography;
   $white-30pct-opacity-on-dark: #686868;
   $black-26pct-opacity-on-light: #b0b0b0;
   $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
+  $checkbox-background-color: if($is-dark-theme, $black-26pct-opacity-on-light,  mat.get-color-from-palette($background, sidenav-overlay));
 
   /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-frame {
@@ -59,11 +62,11 @@ $typography : ontimize-lite.$typography;
   .mat-mdc-checkbox-indeterminate {
 
     &.mat-primary .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-      background-color: mat.get-color-from-palette($foreground, icon);
+      background-color: $checkbox-background-color;
     }
 
     &.mat-accent .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-      background-color: mat.get-color-from-palette($foreground, icon);
+      background-color: $checkbox-background-color;
     }
 
     &.mat-warn .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
@@ -217,7 +220,16 @@ $typography : ontimize-lite.$typography;
   $foreground: map.get($theme, foreground);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
-  $sidenav-background-color: mat.get-color-from-palette($background, status-bar);
+  $warn:  mat.get-color-from-palette($theme, warn);
+  $is-dark-theme: map.get($theme, is-dark);
+  $background-primary-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-primary-button: if($is-dark-theme,  mat.get-color-from-palette($primary, 500, 0.04),  mat.get-color-from-palette($primary, 100));
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme,  mat.get-color-from-palette($accent, 500, 0.04),  mat.get-color-from-palette($accent, 100));
+  $background-hover-warn-button: if($is-dark-theme,  mat.get-color-from-palette($warn, 500, 0.04),  mat.get-color-from-palette($warn, 100));
+  $table-row-over-background: if($is-dark-theme, #ffffff1f, #f5f5f5);
+  $table-row-selected-background: if($is-dark-theme, #f1f6fa80, #eaeaea);
+  $sidenav-background-color: if($is-dark-theme, mix(#1e1e1e,  mat.get-color-from-palette($primary, 500), 94%),  mat.get-color-from-palette($background, status-bar));
 
   .o-app-header {
     nav {
@@ -230,7 +242,7 @@ $typography : ontimize-lite.$typography;
       }
 
       .o-app-header-title {
-        color: mat.get-color-from-palette($primary);
+        color: mat.get-color-from-palette($foreground, button);
       }
     }
   }
@@ -249,13 +261,13 @@ $typography : ontimize-lite.$typography;
         border-left-color: transparent;
 
         a:hover {
-          color: mat.get-color-from-palette($foreground, text);
+          color: mat.get-color-from-palette($foreground, button);
           background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 96%); //#525252 4%
           border-left: 8px solid mat.get-color-from-palette($primary);
         }
 
         a.o-app-sidenav-viewer-sidenav-item-selected {
-          color: mat.get-color-from-palette($foreground, text);
+          color: mat.get-color-from-palette($foreground, button);
           background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 98%); //#525252 2%
           border-left: 8px solid mat.get-color-from-palette($primary);
         }
@@ -266,11 +278,11 @@ $typography : ontimize-lite.$typography;
       background: $sidenav-background-color;
 
       .sidenav-toggle {
-        color: mat.get-color-from-palette($foreground, icon);
+        color: mat.get-color-from-palette($foreground, button);
       }
 
       .o-app-sidenav-item {
-        color: mat.get-color-from-palette($foreground, text);
+        color: mat.get-color-from-palette($foreground, button);
 
         &.o-user-info {
 
@@ -336,6 +348,23 @@ $typography : ontimize-lite.$typography;
     }
   }
 
+  .o-app-sidenav-container {
+    .mat-drawer.o-app-sidenav-sidenav.mat-drawer-closed {
+      nav {
+
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+
+          a {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+          }
+        }
+      }
+    }
+  }
+
   o-app-sidenav.o-app-sidenav,
   o-app-sidenav.o-app-sidenav.header-layout {
     .o-app-sidenav-container {
@@ -370,10 +399,6 @@ $typography : ontimize-lite.$typography;
     }
   }
 
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-  .mat-mdc-tab-group.o-tab-ontimize>.mat-tab-body-wrapper {
-    background: mat.get-color-from-palette($background, status-bar);
-  }
 
   /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
   .mat-mdc-tab-group .mat-tab-label.mat-tab-label-active {
@@ -394,12 +419,17 @@ $typography : ontimize-lite.$typography;
       background-color: mat.get-color-from-palette($foreground, icon);
     }
 
-    .o-table-button .mat-icon {
-      color: mat.get-color-from-palette($foreground, icon);
-    }
   }
 
   .o-table {
+    .o-table-quickfilter .quickFilter .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
+      border-color:  mat.get-color-from-palette($foreground, text, 0.32);
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      color:  mat.get-color-from-palette($foreground, text, 0.32);
+    }
+
     .mat-mdc-table {
       .mat-mdc-row {
         //TO BE DEFINED
@@ -424,15 +454,15 @@ $typography : ontimize-lite.$typography;
         //       }
         &:hover:not(.o-table-group-row) {
           cursor: pointer;
-          background-color: #f5f5f5;
+          background-color: $table-row-over-background;
         }
 
         &.selected {
-          background: #eaeaea;
+          background-color: $table-row-selected-background;
         }
 
         .mat-mdc-cell {
-          color: mat.get-color-from-palette($foreground, text);
+          color: mat.get-color-from-palette($foreground, base);
         }
       }
     }
@@ -464,42 +494,58 @@ $typography : ontimize-lite.$typography;
   .o-list .o-list-toolbar>button:not([disabled]),
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button:not([disabled]),
   button.mat-mdc-outlined-button:not([disabled]) {
+    &.mat-button-base {
+      border-color:  mat.get-color-from-palette($foreground, text, 0.32);
+    }
 
     &.mat-mdc-button-base.mat-primary,
-    &.mat-button-base.o-button-primary,
-    &.mat-button-base[ng-reflect-dialog-result="0"],
-    &.mat-button-base[ng-reflect-dialog-result="true"] {
-      color: mat.get-color-from-palette($primary, 500);
-      background-color: #ffffff;
-      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+    &.mat-button-base.o-button-primary {
+      color:  mat.get-color-from-palette($primary, 500);
+      background-color: $background-primary-button;
+      border-color:  mat.get-color-from-palette($foreground, text, 0.32);
 
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-      &:hover,
-      .mat-button-focus-overlay {
+      .mat-icon {
         color: mat.get-color-from-palette($primary, 500);
-        background-color: mat.get-color-from-palette($primary, 100);
-        border-color: transparent;
 
+      }
+
+      &:hover {
+        background-color: $background-hover-primary-button;
+        border-color:  mat.get-color-from-palette($foreground, text, 0.32);
       }
 
     }
 
-    &.mat-mdc-button-base,
     &.mat-button-base.mat-accent,
-    &.mat-button-base.o-button-default,
-    &.mat-button-base[ng-reflect-dialog-result="1"],
-    &.mat-button-base[ng-reflect-dialog-result="false"] {
+    &.mat-button-base.o-button-default {
       color: mat.get-color-from-palette($foreground, text);
-      background-color: #ffffff;
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
 
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-      &:hover,
-      .mat-button-focus-overlay {
-        color: mat.get-color-from-palette($accent, 500);
-        background-color: mat.get-color-from-palette($accent, 100);
-        border-color: transparent;
+      .mat-icon {
+        color:  mat.get-color-from-palette($accent, 500);
       }
+
+      &:hover {
+        color:  mat.get-color-from-palette($accent, 500);
+        background-color: $background-hover-accent-button;
+        border-color:  mat.get-color-from-palette($foreground, text, 0.32);
+      }
+    }
+
+    &.mat-button-base.mat-warn {
+      color:  mat.get-color-from-palette($warn);
+      border-color:  mat.get-color-from-palette($foreground, text, 0.32);
+
+      &:hover {
+        background-color: $background-hover-warn-button;
+        border-color:  mat.get-color-from-palette($foreground, text, 0.32);
+      }
+    }
+  }
+
+  .o-button button.mat-stroked-button:not([disabled]).mat-button-base {
+    &.mat-accent {
+      color:  mat.get-color-from-palette($accent, 500);
     }
   }
 
@@ -572,6 +618,12 @@ $typography : ontimize-lite.$typography;
   o-column.o-column.bg-level-0,
   o-row.o-row.bg-level-0 {
     background-color: mat.get-color-from-palette($background, level-0);
+  }
+
+  .bg-level-04,
+  o-column.o-column.bg-level-04,
+  o-row.o-row.bg-level-04 {
+    background-color:  mat.get-color-from-palette($background, level-04);
   }
 
   .bg-level-06,

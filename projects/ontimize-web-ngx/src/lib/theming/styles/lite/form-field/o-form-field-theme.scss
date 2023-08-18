@@ -3,49 +3,31 @@
 
 
 @mixin o-mat-form-field-typography-lite($config) {
- .mat-mdc-form-field {
+  .mat-mdc-form-field {
 
 
-  @include mat.form-field-density(-4);
+    @include mat.form-field-density(-4);
 
-  .mat-mdc-text-field-wrapper {
-    .mat-mdc-form-field-flex {
-      .mat-mdc-form-field-infix {
-        min-height: auto;
-        padding-bottom: 4px;
-
-
-        .mat-mdc-floating-label {
-          display: block;
-        }
-
-      }
-
-      &:not(.mdc-text-field--outlined) {
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-flex {
         .mat-mdc-form-field-infix {
           min-height: auto;
-          padding-top: 14px;
+          padding-bottom: 4px;
+
+
+          .mat-mdc-floating-label {
+            display: block;
+          }
+
+        }
+
+        &:not(.mdc-text-field--outlined) {
+          .mat-mdc-form-field-infix {
+            min-height: auto;
+            padding-top: 14px;
+          }
         }
       }
     }
-  }
-}
-}
-
-
-/*
-  Fixes https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/53
-   set line-height to normal as user-agent set in the inputs
-   https://bugzilla.mozilla.org/show_bug.cgi?id=349259
-*/
-@mixin o-combo() {
-  .o-combo mat-select {
-    line-height: normal;
-  }
-}
-
-@mixin o-phone() {
-  .o-phone-input mat-select {
-    line-height: normal;
   }
 }
