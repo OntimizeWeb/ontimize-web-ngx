@@ -197,6 +197,9 @@ button.mat-mdc-button-base {
   &.mat-mdc-icon-button {
     width: $mat-button-line-height;
     padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center
   }
 }
 
