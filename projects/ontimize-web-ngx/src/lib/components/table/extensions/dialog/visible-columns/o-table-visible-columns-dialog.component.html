@@ -21,6 +21,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayoutAlign="end center">
-  <button type="button" mat-stroked-button [mat-dialog-close]="null" class="o-button-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="null" class="o-button-default cancel" cancel>{{ 'CANCEL' | oTranslate }}</button>
   <button type="button" mat-stroked-button (click)="closeDialog()" class="o-button-primary">{{ 'ACCEPT' | oTranslate }}</button>
 </mat-dialog-actions>

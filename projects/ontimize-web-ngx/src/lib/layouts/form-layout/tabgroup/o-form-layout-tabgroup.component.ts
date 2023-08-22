@@ -340,10 +340,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   initializeComponentState() {
-    if (this.formLayoutManager) {
-      this.formLayoutManager.setAsActiveFormLayoutManager();
-    }
-
     if (!Util.isDefined(this.state) || !Util.isDefined(this.state.tabsData)) {
       return;
     }
@@ -356,6 +352,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
       extras[Codes.QUERY_PARAMS][Codes.INSERTION_MODE] = `${this.state.tabsData[0].insertionMode}`
+      if (this.formLayoutManager) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
       // Triggering first tab navigation
       this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
         if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
@@ -430,4 +429,16 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return Object.keys(tabData.innerFormsInfo).some(formAttr => tabData.innerFormsInfo[formAttr].modified);
   }
 
+  closeDetails(detailsKeysData: any[] = [], options?: FormLayoutCloseDetailOptions) {
+    detailsKeysData.forEach((detailData) => {
+      const index = this.data.findIndex((item) => Util.isEquivalent(detailData, item.params || {}));
+      if (index !== -1) {
+        this.closeTab(index, options);
+      }
+    });
+  }
+
+  getIdOfActiveItem(): string {
+    return this.data[this.data.length - 1] ? this.data[this.data.length - 1].id : this.data.length.toString();
+  }
 }

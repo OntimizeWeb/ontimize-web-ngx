@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChildren, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, QueryList, ViewEncapsulation } from '@angular/core';
 import { ValidatorFn, Validators } from '@angular/forms';
 
 import { NumberConverter } from '../../../decorators/input-converter';
@@ -6,6 +6,8 @@ import { OFormComponent } from '../../form/o-form.component';
 import {
   OFormDataComponent
 } from '../../o-form-data-component.class';
+import { OMatPrefix } from '../../../directives/o-mat-prefix.directive';
+import { OMatSuffix } from '../../../directives/o-mat-suffix.directive';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   'minLength: min-length',
@@ -23,13 +25,17 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 
 export class OTextInputComponent extends OFormDataComponent implements OnInit {
 
+  @ContentChildren(OMatPrefix) _prefixChildren: QueryList<OMatPrefix>;
+  @ContentChildren(OMatSuffix) _suffixChildren: QueryList<OMatSuffix>;
+
   protected _minLength: number = -1;
   protected _maxLength: number = -1;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
-    injector: Injector) {
+    injector: Injector
+  ) {
     super(form, elRef, injector);
   }
 

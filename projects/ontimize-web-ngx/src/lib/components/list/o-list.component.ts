@@ -38,6 +38,7 @@ import {
 } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
+import { SQLTypes } from '../../util/sqltypes';
 
 export const DEFAULT_INPUTS_O_LIST = [
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
@@ -65,7 +66,9 @@ export const DEFAULT_INPUTS_O_LIST = [
   'insertButtonFloatable:insert-button-floatable',
 
   // show-buttons-text [yes|no|true|false]: show text of buttons. Default: no.
-  'showButtonsText: show-buttons-text'
+  'showButtonsText: show-buttons-text',
+  // keys-sql-types [string]: entity keys types, separated by ';'. Default: no value.
+  'keysSqlTypes: keys-sql-types',
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -125,6 +128,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
   protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
+  protected keysSqlTypes: string;
+  keysSqlTypesArray: Array<string> = [];
 
   protected oMatSort: OMatSort;
 
@@ -187,6 +192,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public initialize(): void {
     super.initialize();
+    this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
     if (!Util.isDefined(this.quickFilterColumns)) {
       this.quickFilterColumns = this.columns;
     }
@@ -272,28 +278,30 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public remove(clearSelectedItems: boolean = false): void {
     const selectedItems = this.getSelectedItems();
-    if (selectedItems.length > 0) {
-      this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
-        if (res === true) {
-          if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
-            const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
-            merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity)))).subscribe(obs => obs.subscribe(() => {
-              ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
-            }, error => {
-              this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
-            }, () => {
-              // Ensuring that the deleted items will not longer be part of the selectionModel
-              this.clearSelection();
-              this.reloadData();
-            }));
-          } else {
-            this.deleteLocalItems();
-          }
-        } else if (clearSelectedItems) {
-          this.clearSelection();
-        }
-      });
+    if (selectedItems.length === 0) {
+      return;
     }
+    this.dialogService.confirm('CONFIRM', 'MESSAGES.CONFIRM_DELETE').then(res => {
+      if (res === true) {
+        if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
+          const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
+          const sqlTypesArg = this.getSqlTypesOfKeys();
+          merge(filters.map((kv => this.dataService[this.deleteMethod](kv, this.entity, sqlTypesArg)))).subscribe(obs => obs.subscribe(() => {
+            ObservableWrapper.callEmit(this.onItemDeleted, selectedItems);
+          }, error => {
+            this.dialogService.alert('ERROR', 'MESSAGES.ERROR_DELETE');
+          }, () => {
+            // Ensuring that the deleted items will not longer be part of the selectionModel
+            this.clearSelection();
+            this.reloadData();
+          }));
+        } else {
+          this.deleteLocalItems();
+        }
+      } else if (clearSelectedItems) {
+        this.clearSelection();
+      }
+    });
   }
 
   public add(e?: Event): void {
@@ -364,5 +372,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         this.selection.select(foundItem);
       }
     });
+  }
+
+  public getSqlTypes() {
+    const sqlTypes = this.sqlTypes;
+    this.keysSqlTypesArray.forEach((kst, i) => sqlTypes[this.keysArray[i]] = SQLTypes.getSQLTypeValue(kst));
+    return sqlTypes;
   }
 }

@@ -16,7 +16,7 @@
   <button type="button" mat-stroked-button [disabled]="filterList.selectedOptions.selected.length!==1"
     (click)="removeFilter(filterList.selectedOptions.selected[0].value)" class="o-button-danger">{{ 'DELETE' | oTranslate }}</button>
   <span fxFlex></span>
-  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default cancel">{{ 'CANCEL' | oTranslate }}</button>
   <button type="button" mat-stroked-button [mat-dialog-close]="true" [disabled]="filterList.selectedOptions.selected.length!==1"
     class="o-button-primary">
     {{'TABLE.BUTTONS.APPLY' | oTranslate }}

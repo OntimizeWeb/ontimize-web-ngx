@@ -11,3 +11,5 @@ export * from './table-columns-filter/columns/o-table-columns-filter-column.comp
 export * from './table-header/o-table-header.component';
 export * from './table-columns-grouping/o-table-columns-grouping.component';
 export * from './table-columns-grouping/columns/o-table-columns-grouping-column.component';
+export * from './table-column-select-all/o-table-column-select-all.directive';
+export * from './table-header-select-all/o-table-header-select-all.component';

@@ -306,6 +306,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected dynamicFormSubscription: Subscription;
 
   protected deactivateGuard: CanDeactivateFormGuard;
+  public deactivateGuardId: string;
   protected formCache: OFormCacheClass;
   protected formNavigation: OFormNavigationClass;
 
@@ -564,7 +565,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (!this.confirmExit) {
       return true;
     }
-    const canDiscardChanges = this.canDiscardChanges;
+    const canDiscardChanges = !!this.canDiscardChanges;
     this.canDiscardChanges = false;
     return canDiscardChanges || this.showConfirmDiscardChanges();
   }
@@ -621,15 +622,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   destroyDeactivateGuard() {
     try {
-      if (!this.deactivateGuard || !this.actRoute || !this.actRoute.routeConfig || !this.actRoute.routeConfig.canDeactivate) {
+      if (this.hasDeactivateGuard()) {
+        this.deactivateGuard.removeForm(this);
+        if (!this.deactivateGuard.isFormsCacheEmpty()) {
+          return;
+        }
+      }
+      if (!this.actRoute || !this.actRoute.routeConfig || !this.actRoute.routeConfig.canDeactivate) {
         return;
       }
-      this.deactivateGuard.removeForm(this);
-      for (let i = this.actRoute.routeConfig.canDeactivate.length - 1; i >= 0; i--) {
-        if (this.actRoute.routeConfig.canDeactivate[i].name === OFormComponent.guardClassName) {
-          this.actRoute.routeConfig.canDeactivate.splice(i, 1);
-          break;
-        }
+      const guardIndex = this.actRoute.routeConfig.canDeactivate.findIndex((canDeactivate) => canDeactivate.name === OFormComponent.guardClassName)
+      if (guardIndex >= 0) {
+        this.actRoute.routeConfig.canDeactivate.splice(guardIndex, 1);
       }
       if (this.actRoute.routeConfig.canDeactivate.length === 0) {
         delete this.actRoute.routeConfig.canDeactivate;
@@ -1238,9 +1242,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     this.loaderSubscription = this.load();
     const self = this;
+    const sqlTypes = this.getAttributesSQLTypes();
     const observable = new Observable(observer => {
       this.canDiscardChanges = true;
-      this.dataService[this.deleteMethod](filter, this.entity).subscribe(
+      this.dataService[this.deleteMethod](filter, this.entity, sqlTypes).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             self.formCache.setCacheSnapshot();

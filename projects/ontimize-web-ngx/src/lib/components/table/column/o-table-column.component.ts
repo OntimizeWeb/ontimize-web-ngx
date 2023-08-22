@@ -13,13 +13,14 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { InputConverter } from '../../../decorators/input-converter';
 import { OTableColumn } from '../../../interfaces/o-table-column.interface';
 import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
+import { ErrorData } from '../../../types/error-data.type';
 import { Expression } from '../../../types/expression.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { Codes } from '../../../util/codes';
@@ -92,6 +93,10 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'angularValidatorsFn: validators',
 
+  'angularValidatorsFnErrors: validators-errors',
+
+  'angularAsyncValidatorsFn: async-validators',
+
   ...O_TABLE_CELL_RENDERERS_INPUTS,
   ...O_TABLE_CELL_EDITORS_INPUTS
 ];
@@ -147,6 +152,9 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected _multiline: boolean = false;
 
   public angularValidatorsFn: ValidatorFn[] = [];
+  public angularValidatorsFnErrors: ErrorData[] = [];
+
+  public angularAsyncValidatorsFn: AsyncValidatorFn[] = [];
 
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 

@@ -104,7 +104,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     super.initialize();
     if (this.table) {
       const oCol: OColumn = this.table.getOColumn(this.column);
-      oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'center';
+      oCol.definition.contentAlign = oCol.definition.contentAlign ? oCol.definition.contentAlign : 'start';
     }
 
     this.colArray = Util.parseArray(this.columns, true);
@@ -150,7 +150,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } else {
       filter[this.column] = cellvalue;
     }
-    this.dataService[this.queryMethod](filter, this.colArray, this.entity)
+    const sqlTypes = this.getSqlTypesForFilter(filter);
+    this.dataService[this.queryMethod](filter, this.colArray, this.entity, sqlTypes)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.responseMap[cellvalue] = resp.data[0][this.valueColumn];
@@ -166,6 +167,18 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       });
   }
 
+  getSqlTypesForFilter(filter: Object) {
+    const sqlType = {};
+    const tableSqlTypes = this.table.getSqlTypes();
+
+    Object.keys(filter).forEach(filterKey => {
+      const pKeyEquiv = Object.keys(this._pKeysEquiv).find(keyEquiv => keyEquiv === filterKey);
+      const keyEquiv = Util.isDefined(pKeyEquiv) ? this._pKeysEquiv[pKeyEquiv] : filterKey;
+      sqlType[filterKey] = tableSqlTypes[keyEquiv]
+    });
+
+    return sqlType;
+  }
   public configureService(): void {
     const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     this.dataService = Util.configureService(configureServiceArgs);

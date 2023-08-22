@@ -15,11 +15,16 @@ import { InputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
+import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import {
   OTextInputComponent
 } from '../text-input/o-text-input.component';
+
+const INPUT_TYPE_TEXT = 'text'
+const INPUT_TYPE_NUMBER = 'number'
+type HTMLInputType = 'text' | 'number'
 
 export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   'min',
@@ -40,7 +45,7 @@ export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
 })
 export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
 
-  inputType: string = 'number';
+  inputType: HTMLInputType = INPUT_TYPE_NUMBER;
 
   @InputConverter()
   min: number;
@@ -64,12 +69,7 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   ) {
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'INTEGER';
-
-    // Firefox workaround
-    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-      this.inputType = 'text';
-    }
-
+    this.inputType = INPUT_TYPE_TEXT;
     this.setComponentPipe();
   }
 
@@ -168,58 +168,22 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   }
 
   setNumberDOMValue(val: any) {
-    const inputElement = this.getInputEl();
-    if (Util.isDefined(inputElement)) {
-      // Firefox workaround
-      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-        inputElement.type = 'number';
-      }
-      inputElement.value = (val !== undefined) ? val : '';
-    }
+    this.setInputTypeAndValue(INPUT_TYPE_NUMBER, val)
   }
 
   setTextDOMValue(val: any) {
-    const inputElement = this.getInputEl();
-    if (Util.isDefined(inputElement)) {
-      // Firefox workaround
-      if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
-        inputElement.type = 'text';
-      }
-      inputElement.value = (val !== undefined) ? val : '';
-    }
+    this.setInputTypeAndValue(INPUT_TYPE_TEXT, val)
   }
 
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
     if (Util.isDefined(this.min)) {
-      validators.push(this.minValidator.bind(this));
+      validators.push(OValidators.createMinValidator(this.min));
     }
     if (Util.isDefined(this.max)) {
-      validators.push(this.maxValidator.bind(this));
+      validators.push(OValidators.createMaxValidator(this.max));
     }
     return validators;
-  }
-
-  protected minValidator(control: UntypedFormControl): ValidationErrors {
-    if ((typeof (control.value) === 'number') && (control.value < this.min)) {
-      return {
-        min: {
-          requiredMin: this.min
-        }
-      };
-    }
-    return {};
-  }
-
-  protected maxValidator(control: UntypedFormControl): ValidationErrors {
-    if ((typeof (control.value) === 'number') && (this.max < control.value)) {
-      return {
-        max: {
-          requiredMax: this.max
-        }
-      };
-    }
-    return {};
   }
 
   protected initializeStep(): void {
@@ -229,4 +193,11 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
     }
   }
 
+  protected setInputTypeAndValue(inputType: HTMLInputType, value: any): void {
+    const inputElement = this.getInputEl();
+    if (Util.isDefined(inputElement)) {
+      inputElement.type = inputType;
+      inputElement.value = (value !== undefined) ? value : '';
+    }
+  }
 }

@@ -249,7 +249,10 @@ export class OFormNavigationComponent implements OnDestroy {
         this.router.navigate(route, extras).then((navigationDone: boolean) => {
           if (navigationDone) {
             this.currentIndex = index;
-            this.navigationService.removeLastItem();
+            const url = this.router.routerState.snapshot.url.split('?')[0];
+            if (url !== navData.url) {
+              this.navigationService.removeLastItem();
+            }
           }
         });
       }

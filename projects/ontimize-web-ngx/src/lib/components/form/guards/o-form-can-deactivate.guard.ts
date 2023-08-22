@@ -37,11 +37,22 @@ export class CanDeactivateFormGuard implements CanDeactivate<CanComponentDeactiv
   }
 
   addForm(form: OFormComponent) {
-    this.oForms[form.oattr] = form;
+    form.deactivateGuardId = this.getFormKey(form)
+    this.oForms[form.deactivateGuardId] = form;
   }
 
   removeForm(form: OFormComponent) {
-    delete this.oForms[form.oattr];
+    delete this.oForms[form.deactivateGuardId];
+    delete form.deactivateGuardId;
+  }
+
+  isFormsCacheEmpty(): boolean {
+    return Object.keys(this.oForms).length === 0;
+  }
+
+  private getFormKey(form: OFormComponent): string {
+    const formLayoutManager = form.getFormManager();
+    return formLayoutManager ? `${formLayoutManager.getIdOfActiveItem()}${form.oattr}` : form.oattr;
   }
 }
 

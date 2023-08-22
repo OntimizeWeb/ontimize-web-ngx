@@ -16,8 +16,10 @@ export interface OFormLayoutManagerMode {
   updateNavigation: (data: any, keysValues: any, insertionMode?: boolean) => void;
   updateActiveData: (data: any) => void;
   getRouteOfActiveItem: () => any[];
+  getIdOfActiveItem: () => string;
   isMainComponent: (comp: ILayoutManagerComponent) => boolean;
   openDetail?: (detail: FormLayoutDetailComponentData) => void;
   closeDetail: (options?: FormLayoutCloseDetailOptions) => void;
   canAddDetailComponent: () => boolean | Observable<boolean>;
+  closeDetails?: (detailsKeysData:any[], options?: FormLayoutCloseDetailOptions) => void;
 }

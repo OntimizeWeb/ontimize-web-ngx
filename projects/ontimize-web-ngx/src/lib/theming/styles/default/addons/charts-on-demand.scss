@@ -1,0 +1,9 @@
+@use "sass:map";
+
+@mixin o-chart-on-demand($theme) {
+  $is-dark-theme: map.get($theme, is-dark);
+
+  .title-sidenav-content {
+    background-color: if($is-dark-theme, transparent, #ffffff);
+  }
+}

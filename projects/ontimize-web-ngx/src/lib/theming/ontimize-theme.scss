@@ -3,10 +3,59 @@
 @use 'styles/lite/layout.scss';
 @use 'styles/default/typography/ontimize.scss'as ontimize-typography;
 @use 'styles/default/addons/report-on-demand.scss';
+@use 'styles/default/addons/charts-on-demand.scss';
 @use '@angular/material'as mat;
 @use 'styles/density.scss'as o-density;
 
 $typography: ontimize-typography.$default-typography;
+$background-color: #eceff1;
+/*Application background-color*/
+$app-background-color: #eaeaea;
+
+// Background palette for light themes.
+@function ontimize-light-theme-background($mat-theme) {
+  $background: map.get($mat-theme, background);
+  @return map.merge($background,
+    (level-0: $app-background-color,
+      level-04: #f2f2f2,
+      level-06: #f6f6f6,
+      level-08: #fafafa,
+      level-1: white,
+      background: $background-color));
+}
+
+// Background palette for dark themes.
+@function ontimize-dark-theme-background($mat-theme) {
+  $background: map.get($mat-theme, background);
+  @return map.merge($background,
+    (level-0: #171717,
+      level-04: #1E1E1E,
+      level-06: #2C2C2C,
+      level-08: #333333,
+      level-1: #383838));
+}
+
+// Creates a container object for a light theme to be given to individual component theme mixins.
+@function o-mat-light-theme($primary, $accent, $warn: mat-palette($mat-red)) {
+  $mat-theme: mat-light-theme($primary, $accent, $warn);
+  @return (primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: false,
+    foreground: map.get($mat-theme, foreground),
+    background: ontimize-light-theme-background($mat-theme));
+}
+
+// Creates a container object for a dark theme to be given to individual component theme mixins.
+@function o-mat-dark-theme($primary, $accent, $warn: mat-palette($mat-red)) {
+  $mat-theme: mat-dark-theme($primary, $accent, $warn);
+  @return (primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: true,
+    foreground: map.get($mat-theme, foreground),
+    background: ontimize-dark-theme-background($mat-theme));
+}
 
 @mixin ontimize-theme-styles($theme-or-color-config) {
 
@@ -14,7 +63,7 @@ $typography: ontimize-typography.$default-typography;
 
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
-  // $warn: map-get($theme, warn);
+  // $warn: map.get($theme, warn);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
   $container-background: mat.get-color-from-palette($background, 'card');
@@ -32,12 +81,52 @@ $typography: ontimize-typography.$default-typography;
   $background-tab-inactive-on-dark: #686868;
   $background-tab-inactive-on-light: #D7DDE0;
   $background-tab-inactive: if($is-dark-theme, $background-tab-inactive-on-dark, $background-tab-inactive-on-light);
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 100));
+  $background-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, transparent, #ffffff);
   // $mat-font-family: 'Lato', sans-serif !default;
   @include report-on-demand.report-on-demand($theme-or-color-config);
+  @include charts-on-demand.o-chart-on-demand($theme-or-color-config);
   @include layout.layout-padding-margin();
   @include o-density.checkbox(20px, 16px, 16px);
   @include o-density.list();
 
+
+  .mat-dialog-actions {
+
+    button:not([disabled]) {
+
+      &.o-button-primary.mat-stroked-button.mat-button-base,
+      &.mat-button-base.mat-primary,
+      &.mat-button-base.o-button-primary {
+        color: #303030;
+        background-color: $background-primary-button;
+        border-color: transparent;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat.get-color-from-palette($primary);
+          background-color: $background-hover-primary-button;
+          border-color: mat.get-color-from-palette($foreground, divider);
+        }
+      }
+
+      &.o-button-default.cancel {
+        color: mat.get-color-from-palette($accent);
+        background-color: $background-accent-button;
+        border-color: mat.get-color-from-palette($foreground, divider);
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: #303030;
+          background-color: $background-hover-accent-button;
+          border-color: transparent;
+        }
+      }
+
+    }
+  }
 
   /* CONTAINER */
   .rounded-panel,
@@ -264,4 +353,34 @@ $typography: ontimize-typography.$default-typography;
     padding: 2px 0;
   }
 
+  /*background levels */
+  .bg-level-0,
+  o-column.o-column.bg-level-0,
+  o-row.o-row.bg-level-0 {
+    background-color: mat.get-color-from-palette($background, level-0);
+  }
+
+  .bg-level-04,
+  o-column.o-column.bg-level-04,
+  o-row.o-row.bg-level-04 {
+    background-color: mat.get-color-from-palette($background, level-04);
+  }
+
+  .bg-level-06,
+  o-column.o-column.bg-level-06,
+  o-row.o-row.bg-level-06 {
+    background-color: mat.get-color-from-palette($background, level-06);
+  }
+
+  .bg-level-08,
+  o-column.o-column.bg-level-08,
+  o-row.o-row.bg-level-08 {
+    background-color: mat.get-color-from-palette($background, level-08);
+  }
+
+  .bg-level-1,
+  o-column.o-column.bg-level-1,
+  o-row.o-row.bg-level-1 {
+    background-color: mat.get-color-from-palette($background, level-1);
+  }
 }

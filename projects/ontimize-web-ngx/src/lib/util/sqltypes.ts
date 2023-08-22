@@ -265,6 +265,8 @@ export class SQLTypes {
 
   public static BASE64 = 6464;
 
+  public static UUID = 6465;
+
   /**
    * The constant in the Java programming language, sometimes referred to
    * as a type code, that identifies the generic SQL type <code>XML</code>.
@@ -388,6 +390,9 @@ export class SQLTypes {
       case 'BASE64':
         value = SQLTypes.BASE64;
         break;
+      case 'UUID':
+        value = SQLTypes.UUID;
+        break;
       default:
         value = SQLTypes.OTHER;
         break;
@@ -508,6 +513,9 @@ export class SQLTypes {
         break;
       case SQLTypes.BASE64:
         value = 'BASE64';
+        break;
+      case SQLTypes.UUID:
+        value = 'UUID';
         break;
       default:
         value = 'OTHER';
