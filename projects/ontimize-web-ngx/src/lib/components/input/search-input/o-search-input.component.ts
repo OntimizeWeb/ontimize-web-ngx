@@ -122,9 +122,9 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   }
 
   set floatLabel(value: FloatLabelType) {
-    const values = ['always', 'never', 'auto'];
+    const values = ['always', 'auto'];
     if (values.indexOf(value) === -1) {
-      value = 'auto';
+      value = 'always';
     }
     this._floatLabel = value;
   }

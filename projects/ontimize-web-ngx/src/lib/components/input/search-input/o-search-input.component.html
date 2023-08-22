@@ -1,6 +1,6 @@
 <form [formGroup]="getFormGroup()">
   <div class="quickFilter" fxLayout="row">
-    <mat-form-field [appearance]="appearance" floatLabel="never">
+    <mat-form-field [appearance]="appearance">
       <mat-icon *ngIf="!showFilterMenu" svgIcon="ontimize:search" matPrefix></mat-icon>
       <input #term matInput id="term" type="search" formControlName="term" [placeholder]="placeholder">
       <mat-label *ngIf="placeholder">{{ placeholder | oTranslate }}</mat-label>

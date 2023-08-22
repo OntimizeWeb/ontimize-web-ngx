@@ -63,18 +63,11 @@
     }
 
     /* OUTLINE APPEARANCE */
-    &.mat-form-field-appearance-outline {
+    &.mat-form-field-appearance-outline .mdc-text-field--outlined .mdc-notched-outline {
 
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-form-field-outline-start {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__trailing {
         border-radius: $border-radius 0 0 $border-radius;
-      }
-
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-form-field-outline-end {
-        border-radius: 0 $border-radius $border-radius 0;
       }
     }
   }
