@@ -818,7 +818,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getMenuPermissions(): OTableMenuPermissions {
     const result: OTableMenuPermissions = this.permissions ? this.permissions.menu : undefined;
-    return result || {
+    return result ? result : {
       visible: true,
       enabled: true,
       items: []
@@ -1543,7 +1543,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return undefined;
   }
 
-  getColumnFiltersExpression(): Expression {
+  protected getColumnFiltersExpression(): Expression {
     // Apply column filters
     const columnFilters: OColumnValueFilter[] = this.dataSource.getColumnValueFilters();
     const beColumnFilters: Array<Expression> = [];
@@ -1724,20 +1724,23 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
           const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
           const sqlTypesArg = this.getSqlTypesOfKeys();
-          this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(() => {
-            ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
-          }, error => {
-            this.showDialogError(error, 'MESSAGES.ERROR_DELETE');
-          }, () => {
-            // Ensuring that the deleted items will not longer be part of the selectionModel
-            selectedItems.forEach(item => {
-              this.selection.deselect(item);
+          this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(
+            {
+              next: (v) => {
+                ObservableWrapper.callEmit(this.onRowDeleted, selectedItems);
+              },
+              error: (e) => {
+                this.showDialogError(e, 'MESSAGES.ERROR_DELETE');
+              },
+              complete: () => {
+                // Ensuring that the deleted items will not longer be part of the selectionModel
+                selectedItems.forEach(item => {
+                  this.selection.deselect(item);
+                });
+                this.reloadData();
+              }
             });
-            if (this.formLayoutManager) {
-              this.formLayoutManager.closeDetails(filters, { exitWithoutConfirmation: true });
-            }
-            this.reloadData();
-          });
+
         } else {
           this.deleteLocalItems();
         }
@@ -3121,7 +3124,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return className;
   }
 
-  private stopEdition(clearSelection: boolean = false) {
+  private stopEdition(clearSelection?: boolean) {
+    clearSelection = clearSelection ? clearSelection : false;
     this.editingCell = undefined;
     this.editingRow = undefined;
     this.clearSelectionAndEditing(clearSelection);
