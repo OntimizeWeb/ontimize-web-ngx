@@ -5,34 +5,18 @@
     height: 100%;
 
     .mat-mdc-dialog-title {
-      margin-top: -16px;
+      margin-top: -30px;
 
       .o-search-input mat-form-field {
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        .mat-form-field-wrapper {
+        .mat-mdc-text-field-wrapper {
           padding-bottom: 0;
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          .mat-form-field-prefix {
-            border: 0;
 
-            .mat-icon {
-              vertical-align: middle;
+          .mdc-line-ripple {
+
+            &::after,
+            &::before {
+              border: none;
             }
-          }
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          .mat-form-field-label {
-            position: static;
-            padding: 0 4px;
-          }
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          .mat-form-field-underline {
-            display: none;
           }
         }
       }
