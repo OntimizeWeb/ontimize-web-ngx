@@ -1,10 +1,7 @@
 .o-checkbox {
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
   mat-checkbox {
     z-index: 1;
   }
-
 
   .custom-width {
     white-space: nowrap;
