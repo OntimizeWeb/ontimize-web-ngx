@@ -203,9 +203,8 @@ button.mat-mdc-button-base {
   }
 }
 
-/*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-.o-table-apply-configuration-dialog-list.mat-selection-list.mat-mdc-list-base[dense] .mat-list-option.mat-list-text,
-.o-table-load-filter-dialog-list.mat-mdc-list-base[dense] .mat-list-option.mat-list-text {
+.o-table-apply-configuration-dialog-list.mat-mdc-selection-list.mat-mdc-list-base[dense],
+.o-table-load-filter-dialog-list.mat-mdc-list-base[dense]  {
 
   .o-table-apply-configuration-dialog-list-title,
   .o-table-load-filter-dialog-list-title {
@@ -213,6 +212,8 @@ button.mat-mdc-button-base {
 
   }
 }
+
+
 
 /*MAT MENU*/
 .o-mat-menu.mat-mdc-menu-panel {
