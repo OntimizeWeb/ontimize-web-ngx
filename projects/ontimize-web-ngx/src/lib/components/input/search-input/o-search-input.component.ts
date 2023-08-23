@@ -16,6 +16,7 @@ import { Util } from '../../../util/util';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',
+  'label',
   'width',
   'floatLabel: float-label',
   'appearance',
@@ -48,18 +49,22 @@ declare type ColumnObject = {
 export class OSearchInputComponent implements OnInit, AfterViewInit {
 
   public onSearch: EventEmitter<any> = new EventEmitter<any>();
-
+  public label: string;
   public colArray: ColumnObject[] = [];
   public _placeholder: string = 'SEARCH';
 
   get placeholder(): string {
-    return this._placeholder;
+    return this.translateService.get(this._placeholder);
   }
 
   set placeholder(value: string) {
     if (Util.isDefined(value)) {
       this._placeholder = value;
     }
+  }
+
+  get labelVisible(): boolean {
+    return Util.isDefined(this.label);
   }
 
   public width: string;

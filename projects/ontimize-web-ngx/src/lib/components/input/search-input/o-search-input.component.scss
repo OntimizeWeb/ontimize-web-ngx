@@ -18,7 +18,7 @@
           }
 
           .mat-mdc-form-field-icon-prefix {
-            align-self: center;
+            align-self: stretch;
             display: flex;
 
             div {
@@ -76,7 +76,6 @@
 
           .mat-mdc-form-field-flex {
             margin: 0;
-
 
             .mat-mdc-form-field-icon-prefix {
               border-right: 1px solid rgba(0, 0, 0, 0.12);
