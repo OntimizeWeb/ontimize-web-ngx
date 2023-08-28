@@ -1,12 +1,15 @@
-<div fxLayout="row" fxLayoutAlign="center center">
-  <mat-icon *ngIf="icon !== undefined && iconPosition === ICON_POSITION_LEFT" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{
-    icon }}</mat-icon>
-  <div class="mat-list-text">
-    <h3 matLine class="primary-text"> {{ title }} </h3>
-    <h4 *ngIf="primaryText !== undefined" matLine class="primary-text">{{ primaryText }}</h4>
-    <p *ngIf="secondaryText !== undefined" matLine class="secondary-text">{{ secondaryText }}</p>
+<div fxLayout="row" fxLayoutAlign="start center">
+  <mat-icon *ngIf="icon !== undefined && iconPosition === ICON_POSITION_LEFT" class="material-icons o-list-item-icon"
+    (click)="onActionIconClick($event)">
+    {{ icon }}
+  </mat-icon>
+  <div class="mat-mdc-list-item">
+    <span matListItemTitle class="primary-text"> {{ title }} </span>
+    <span *ngIf="primaryText !== undefined" matListItemLine class="primary-text">{{ primaryText }}</span>
+    <span *ngIf="secondaryText !== undefined" matListItemLine class="secondary-text">{{ secondaryText }}</span>
   </div>
-  <mat-icon *ngIf="icon !== undefined && iconPosition === ICON_POSITION_RIGHT" class="material-icons o-list-item-icon" (click)="onActionIconClick($event)">{{
-    icon }}
+  <mat-icon *ngIf="icon !== undefined && iconPosition === ICON_POSITION_RIGHT" class="material-icons o-list-item-icon"
+    (click)="onActionIconClick($event)">
+    {{icon }}
   </mat-icon>
 </div>

@@ -36,23 +36,23 @@ export class OListItemTextRenderer {
   ) { }
 
   modifyMatListItemElement() {
-    if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
-      const listItem = this.elRef.nativeElement.parentElement.parentElement;
-      if (listItem && listItem.nodeName === 'MAT-LIST-ITEM') {
-        let linesNo = 3;
-        if (this.title === undefined) {
-          linesNo--;
-        }
-        if (this.primaryText === undefined) {
-          linesNo--;
-        }
-        if (this.secondaryText === undefined) {
-          linesNo--;
-        }
-        listItem.classList.add('mat-' + linesNo + '-line');
-        listItem.querySelector('.mat-list-text').remove();
+
+    const listItem = this.elRef.nativeElement?.parentElement?.parentElement?.parentElement;
+    if (listItem && listItem.nodeName === 'MAT-LIST-ITEM') {
+      let linesNo = 3;
+      if (this.title === undefined) {
+        linesNo--;
       }
+      if (this.primaryText === undefined) {
+        linesNo--;
+      }
+      if (this.secondaryText === undefined) {
+        linesNo--;
+      }
+      this._listItem._innerListItem.lines = linesNo;
+      listItem.querySelector('.mat-mdc-list-item').remove();
     }
+
   }
 
   onActionIconClick(e?: Event) {

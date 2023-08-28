@@ -3,10 +3,15 @@
     <mat-checkbox [checked]="isSelected" (change)="onCheckboxChange()" (click)="onCheckboxClicked($event)"></mat-checkbox>
   </div>
   <ng-content select="[o-list-item-avatar], [matListAvatar], [matListIcon]"> </ng-content>
-  <div class="mat-list-text">
+  <div class="mat-mdc-list-item">
     <ng-content select="[matLine]"></ng-content>
   </div>
-  <ng-content></ng-content>
+  <!--matListItemMeta to put content into the meta section of a list item-->
+  <div matListItemMeta>
+    <ng-content select="o-list-item-card-image,o-list-item-card"></ng-content>
+  </div>
+  <ng-content select="o-list-item-text,o-list-item-avatar, [o-list-item]"></ng-content>
+
   <div fxLayout="row" class="row-buttons-container">
     <div class="o-list-row-action o-list-item-icon" *ngIf="_list && _list.editButtonInRow" (click)="onEditIconClicked($event)">
       <mat-icon class="material-icons">{{ _list.editButtonInRowIcon }}</mat-icon>

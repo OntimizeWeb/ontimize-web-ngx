@@ -1,18 +1,25 @@
-.o-list-row-action + .o-list-item-avatar {
-  padding: 0px 0px 0px 10px
-}
+ $avatar-size:40px;
 
-/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-.mat-mdc-list.selectable .o-list-item-avatar .mat-list-text {
-  padding-right: 0px;
-}
+ .o-list-item-avatar {
+   .mat-mdc-list-item-avatar {
+     width: $avatar-size;
+     height: $avatar-size;
+     border-radius: 50%;
+   }
+ }
 
-.mat-mdc-list,
-.mat-nav-list {
-  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-  .mat-mdc-list-item .mat-list-item-content .o-list-item-avatar.o-custom-list-item .mat-list-text {
-    padding: 0 16px;
-  }
-}
+ .o-list-row-action+.o-list-item-avatar {
+   padding: 0px 0px 0px 10px
+ }
+
+ .mat-mdc-list.selectable .o-list-item-avatar .mat-mdc-list-item {
+   padding-right: 0px;
+ }
+
+ .mat-mdc-list,
+ .mat-nav-list {
+
+   .mat-mdc-list-item .mdc-list-item__content .o-list-item-avatar.o-custom-list-item .mat-mdc-list-item {
+     padding: 0 16px;
+   }
+ }

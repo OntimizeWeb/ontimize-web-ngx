@@ -12,9 +12,7 @@
       color: mat.get-color-from-palette($foreground, secondary-text);
     }
 
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    .o-list-row-action .mat-checkbox-inner-container,
+    .o-list-row-action .mdc-checkbox,
     .o-list-item-icon {
       color: mat.get-color-from-palette($foreground, icon);
     }

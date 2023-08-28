@@ -129,7 +129,7 @@
 
         }
 
-        .mat-list[dense],
+        .mdc-list[dense],
         .mat-mdc-selection-list[dense] {
           outline: none;
 
@@ -150,7 +150,7 @@
               font-size: mat.font-size($typography, body-1);
             }
 
-            .mat-line:nth-child(n+2) {
+            .mat-mdc-list-item-line:nth-child(n+2) {
               font-size: mat.font-size($typography, caption);
             }
 
@@ -159,6 +159,42 @@
       }
     }
 
+  }
+
+
+  /*MAT LIST DENSE in v15 is unsupported */
+  .mat-mdc-list[dense] {
+    .mat-mdc-list-item {
+      height: auto;
+
+      &.mdc-list-item--with-three-lines {
+        height: 76px;
+      }
+
+      &.mdc-list-item--with-two-lines {
+        height: 60px;
+      }
+
+      &.mdc-list-item--with-one-line {
+        height: 60px;
+      }
+
+
+
+
+      .mdc-list-item__primary-text,
+      .mdc-list-item__secondary-text {
+        height: 16px;
+        margin-bottom: 0;
+        &::before {
+          height: auto;
+          content: none;
+        }
+
+        font-size: mat.font-size($typography, caption);
+
+      }
+    }
   }
 
   /*global styles about drag/drop in dialogs table*/
