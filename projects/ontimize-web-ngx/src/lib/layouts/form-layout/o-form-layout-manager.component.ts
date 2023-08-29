@@ -28,10 +28,7 @@ import { AbstractComponentStateService } from '../../services/state/o-component-
 import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-form-layout-manager-component-state.class';
 import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import {
-  FormLayoutCloseDetailOptions,
-  FormLayoutDetailComponentData
-} from '../../types/form-layout-detail-component-data.type';
+import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
@@ -94,6 +91,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   public oattr: string;
   public _mode: string = OFormLayoutManagerComponent.DIALOG_MODE;
+  public stretchTabs = false;
 
   public get mode(): string {
     return this._mode;
@@ -195,6 +193,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     if (value.hasOwnProperty('separator')) {
       this.separator = value['separator'];
+    }
+    if (value.hasOwnProperty('stretchTabs')){
+      this.stretchTabs = value['stretchTabs'];
     }
   }
 

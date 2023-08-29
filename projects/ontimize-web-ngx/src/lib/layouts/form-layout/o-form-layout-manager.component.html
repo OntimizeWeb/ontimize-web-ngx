@@ -2,7 +2,7 @@
   <ng-container *ngSwitchCase="OFormLayoutManagerComponent.TAB_MODE">
     <o-form-layout-tabgroup #tabGroup [title]="title" (onMainTabSelected)="onMainTabSelected.emit($event)"
       (onSelectedTabChange)="onSelectedTabChange.emit($event)" (onCloseTab)="onCloseTab.emit($event)"
-      [options]="tabGroupOptions">
+      [options]="tabGroupOptions" [stretch-tabs]="stretchTabs">
       <ng-content *ngTemplateOutlet="contentBlock"></ng-content>
     </o-form-layout-tabgroup>
   </ng-container>

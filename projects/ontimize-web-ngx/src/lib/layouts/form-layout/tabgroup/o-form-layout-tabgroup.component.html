@@ -1,5 +1,5 @@
 <mat-tab-group #tabGroup oTabGroup="ontimize" fxFill (selectedTabChange)="onTabSelectChange($event)" [color]="color"
-  [backgroundColor]="backgroundColor" [headerPosition]="headerPosition" [@.disabled]="disableAnimation">
+  [backgroundColor]="backgroundColor" [headerPosition]="headerPosition" [@.disabled]="disableAnimation" [mat-stretch-tabs]="stretchTabs">
   <mat-tab label="{{ mainTabTitle | oTranslate }}">
     <ng-content></ng-content>
   </mat-tab>

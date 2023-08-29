@@ -30,10 +30,12 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
+import { InputConverter } from '../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
-  'options'
+  'options',
+  'stretchTabs: stretch-tabs'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
@@ -59,6 +61,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public title: string;
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
+  @InputConverter()
+  public stretchTabs: boolean = false;
 
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
