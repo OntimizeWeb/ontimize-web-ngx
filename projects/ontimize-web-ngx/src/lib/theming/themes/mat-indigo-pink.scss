@@ -7,5 +7,5 @@
 $primary: mat.define-palette(mat.$indigo-palette);
 $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
-$theme: ontimize-theme.o-mat-light-theme((color: (primary: $primary, accent: $accent), typography: mat.define-typography-config()));
-$dark-theme: ontimize-theme.o-mat-dark-theme((color: (primary: $primary, accent: $accent), typography: mat.define-typography-config()));
+$theme: ontimize-theme.o-mat-light-theme($primary, $accent);
+$dark-theme: ontimize-theme.o-mat-dark-theme($primary, $accent);

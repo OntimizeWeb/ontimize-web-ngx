@@ -36,25 +36,27 @@ $app-background-color: #eaeaea;
 }
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
-@function o-mat-light-theme($primary, $accent, $warn: mat-palette($mat-red)) {
-  $mat-theme: mat-light-theme($primary, $accent, $warn);
-  @return (primary: $primary,
-    accent: $accent,
-    warn: $warn,
-    is-dark: false,
-    foreground: map.get($mat-theme, foreground),
-    background: ontimize-light-theme-background($mat-theme));
+@function o-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  $mat-theme: mat.define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  @return (color:(primary: $primary,
+      accent: $accent,
+      warn: $warn,
+      is-dark: false,
+      foreground: map.get($mat-theme, foreground),
+      background: ontimize-light-theme-background($mat-theme)),
+    typography: mat.define-typography-config())
 }
 
 // Creates a container object for a dark theme to be given to individual component theme mixins.
-@function o-mat-dark-theme($primary, $accent, $warn: mat-palette($mat-red)) {
-  $mat-theme: mat-dark-theme($primary, $accent, $warn);
-  @return (primary: $primary,
-    accent: $accent,
-    warn: $warn,
-    is-dark: true,
-    foreground: map.get($mat-theme, foreground),
-    background: ontimize-dark-theme-background($mat-theme));
+@function o-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  $mat-theme: mat.define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  @return (color:(primary: $primary,
+      accent: $accent,
+      warn: $warn,
+      is-dark: true,
+      foreground: map.get($mat-theme, foreground),
+      background: ontimize-dark-theme-background($mat-theme)),
+    typography: mat.define-typography-config())
 }
 
 @mixin ontimize-theme-styles($theme-or-color-config) {
@@ -174,8 +176,7 @@ $app-background-color: #eaeaea;
   /* TABS */
   .mat-mdc-tab-group {
 
-    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-    .mat-tab-label,
+    .mdc-tab__text-label,
     .mat-mdc-tab-link {
       opacity: .75;
 
@@ -190,11 +191,7 @@ $app-background-color: #eaeaea;
       >.mat-mdc-tab-header {
         border: none;
 
-        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-        .mat-tab-label-container .mat-tab-label {
+        .mat-mdc-tab-label-container .mat-mdc-tab {
           background: $background-tab-inactive;
           padding: 0;
 
@@ -268,8 +265,7 @@ $app-background-color: #eaeaea;
     // All tabs
     &.mat-mdc-tab-group {
 
-      /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-      .mat-tab-body-wrapper {
+      .mat-mdc-tab-body-wrapper {
         padding: $basic-padding-size;
       }
     }
