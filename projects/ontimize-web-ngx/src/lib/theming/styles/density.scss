@@ -13,7 +13,7 @@
   // .o-dialog-class .mat-mdc-list-option {
 
   mat-checkbox.mat-mdc-checkbox,
-  .mdc-checkbox {
+  .mat-mdc-checkbox .mdc-checkbox {
     padding: calc((var(--mdc-checkbox-ripple-size, $ripple-size) - var(--mdc-checkbox-icon-size, $icon-size)) / 2);
     margin: calc((var(--mdc-checkbox-touch-target-size, $touch-target-size) - var(--mdc-checkbox-icon-size)) / 2);
 
