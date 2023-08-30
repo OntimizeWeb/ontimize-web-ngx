@@ -60,6 +60,7 @@
     }
 
     &:hover {
+
       /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       .mat-button-focus-overlay {
         opacity: .10;
@@ -221,9 +222,9 @@
 
   //TABS
   .mat-mdc-tab-group.o-tab-ontimize {
-    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
-    .mat-mdc-tab-header .mat-tab-label-container .mat-tab-list .mat-tab-label,
-    div.mat-tab-body-wrapper {
+
+    .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab-list .mat-mdc-tab,
+    div.mat-mdc-tab-body-wrapper {
       border-radius: 0;
       padding: 0;
     }
@@ -249,6 +250,7 @@
 
   //dialog
   .o-dialog-class {
+
     /* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
     mat-dialog-container.mat-mdc-dialog-container {
       .mat-mdc-dialog-title {

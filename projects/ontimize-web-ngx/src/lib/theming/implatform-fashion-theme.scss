@@ -151,6 +151,7 @@ $typography : ontimize-lite.$typography;
   $colored-box-selector: '.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate';
 
   .mat-mdc-select-panel {
+
     &.mat-primary,
     &.mat-accent {
       .mat-pseudo-checkbox-checked {
@@ -410,9 +411,7 @@ $typography : ontimize-lite.$typography;
     }
   }
 
-
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-  .mat-mdc-tab-group .mat-tab-label.mat-tab-label-active {
+  .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label{
     color: mat.get-color-from-palette($foreground, title);
   }
 
@@ -594,8 +593,7 @@ $typography : ontimize-lite.$typography;
         border-bottom: none;
         color: mat.get-color-from-palette($foreground, title);
 
-        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-        .mat-tab-label,
+        .mat-mdc-tab,
         .mat-mdc-tab-link {
           color: mat.get-color-from-palette($foreground, title);
         }

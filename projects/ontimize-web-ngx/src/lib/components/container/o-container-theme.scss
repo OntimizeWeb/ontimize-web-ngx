@@ -19,9 +19,7 @@
         border-color: mat.get-color-from-palette($foreground, divider);
         color: mat.get-color-from-palette($foreground, text);
 
-        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
-        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
-        .mat-tab-label,
+        .mdc-tab__text-label,
         .mat-mdc-tab-link {
           color: mat.get-color-from-palette($foreground, text);
         }
