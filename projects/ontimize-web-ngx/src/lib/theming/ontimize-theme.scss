@@ -93,7 +93,7 @@ $app-background-color: #eaeaea;
   @include layout.layout-padding-margin();
   @include o-density.checkbox(20px, 16px, 16px);
   @include o-density.list();
-
+  @include o-density.radio(-1);
 
   .mat-dialog-actions {
 

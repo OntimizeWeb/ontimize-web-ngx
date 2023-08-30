@@ -1,4 +1,5 @@
 @use '@angular/material'as mat;
+@use './../../density.scss' as o-density;
 @use 'sass:math';
 
 
@@ -7,6 +8,7 @@
 
 
     @include mat.form-field-density(-4);
+    @include o-density.radio(-3);
 
 
     .mat-mdc-form-field-subscript-wrapper {

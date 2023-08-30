@@ -41,6 +41,10 @@
   }
 }
 
+@mixin radio($density) {
+  @include mat.radio-density($density);
+}
+
 @mixin list() {
   .mdc-list[dense] {
     @include mat.list-density(-1);
