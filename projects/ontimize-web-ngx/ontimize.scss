@@ -64,7 +64,8 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
               padding: 0 8px;
               align-items: center;
 
-              .mdc-list-item__content {
+              .mdc-list-item__content,
+              .mat-mdc-list-item-meta {
                 width: 100%;
                 align-self: center;
 
@@ -184,9 +185,18 @@ button.mat-mdc-button-base {
   &.mat-mdc-button,
   &.mat-mdc-unelevated-button,
   &.mat-mdc-icon-button,
-  &.mat-mdc-raised-button {
+  &.mat-mdc-raised-button,
+  &.mat-mdc-outlined-button {
     height: $mat-button-line-height;
     line-height: $mat-button-line-height;
+
+    .mat-mdc-button-touch-target {
+      height: $mat-button-line-height;
+    }
+
+    >.mat-icon{
+      line-height: 1;
+    }
   }
 
   &.mat-mdc-outlined-button {
@@ -199,12 +209,16 @@ button.mat-mdc-button-base {
     padding: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+
+    .mat-mdc-button-touch-target {
+      width: $mat-button-line-height;
+    }
   }
 }
 
 .o-table-apply-configuration-dialog-list.mat-mdc-selection-list.mat-mdc-list-base[dense],
-.o-table-load-filter-dialog-list.mat-mdc-list-base[dense]  {
+.o-table-load-filter-dialog-list.mat-mdc-list-base[dense] {
 
   .o-table-apply-configuration-dialog-list-title,
   .o-table-load-filter-dialog-list-title {
