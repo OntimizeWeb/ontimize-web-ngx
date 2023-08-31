@@ -2,7 +2,7 @@ import { ContentChild, Directive, Input, TemplateRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatTabHeaderPosition } from '@angular/material/tabs';
 
-import { BooleanConverter, InputConverter, NumberConverter } from '../../../../decorators/input-converter';
+import { BooleanConverter, NumberConverter } from '../../../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 @Directive({

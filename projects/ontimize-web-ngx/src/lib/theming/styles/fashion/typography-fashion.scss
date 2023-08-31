@@ -23,21 +23,29 @@
 
   .o-column-collapsible,
   .o-row-collapsible {
-    >.o-container.mat-expansion-panel .mat-expansion-panel-header {
-      padding-left: 4px;
-    }
-  }
-
-  .o-column-collapsible,
-  .o-row-collapsible {
     >.o-container.mat-expansion-panel {
+      .mat-expansion-panel-header {
+        padding-left: 4px;
+      }
+
       .mat-expansion-panel-content .mat-expansion-panel-body {
         >.o-container-scroll {
           padding: 10px 6px 6px;
         }
       }
     }
+
+    &.o-appearance-outline {
+      >.o-container.mat-expansion-panel {
+        .mat-expansion-panel-content .mat-expansion-panel-body {
+          >.o-container-scroll {
+            padding: 12px;
+          }
+        }
+      }
+    }
   }
+
 
   .o-column>.o-container .o-container-scroll.o-container-gap,
   .o-row>.o-container .o-container-scroll.o-container-gap {
@@ -47,17 +55,6 @@
   .o-column.o-appearance-outline>.o-container .o-container-scroll.o-container-gap,
   .o-row.o-appearance-outline>.o-container .o-container-scroll.o-container-gap {
     padding: 12px;
-  }
-
-  .o-column-collapsible.o-appearance-outline,
-  .o-row-collapsible.o-appearance-outline {
-    >.o-container.mat-expansion-panel {
-      .mat-expansion-panel-content .mat-expansion-panel-body {
-        >.o-container-scroll {
-          padding: 12px;
-        }
-      }
-    }
   }
 }
 

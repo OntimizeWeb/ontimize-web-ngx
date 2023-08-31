@@ -50,7 +50,7 @@ export class OListItemComponent implements ListItem, AfterContentInit {
   ) { }
 
   public ngAfterContentInit(): void {
-    const matLinesRef = this._titles!.length + this._lines!.length;
+    const matLinesRef = this._titles.length + this._lines.length;
 
     const ngAfterContentInitOriginal = this._innerListItem.ngAfterViewInit;
     // eslint-disable-next-line space-before-function-paren
