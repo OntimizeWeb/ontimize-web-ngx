@@ -24,10 +24,7 @@
     }
 
     .mat-mdc-table {
-
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
+      .mat-mdc-checkbox-disabled:not(.mat-mdc-checkbox-checked) .mdc-checkbox__background {
         border-color: mat.get-color-from-palette($foreground, secondary-text, 0.18);
       }
 

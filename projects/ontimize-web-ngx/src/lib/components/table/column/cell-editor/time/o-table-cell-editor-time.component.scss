@@ -2,11 +2,8 @@
   cursor: default;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.mat-mdc-form-field:not(.custom-width) .mat-form-field-infix {
+.mat-mdc-form-field:not(.custom-width) .mat-mdc-form-field-infix {
   width: 84px;
-  
 }
 
 button.mat-mdc-outlined-button{
