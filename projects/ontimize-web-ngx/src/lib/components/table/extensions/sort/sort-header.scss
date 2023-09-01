@@ -13,6 +13,14 @@ $mat-sort-header-arrow-hint-opacity: .38;
   .mat-sort-header-disabled & {
     cursor: default;
   }
+
+  .mat-sort-header-content {
+    flex-grow: 1;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+  }
 }
 
 .mat-sort-header-position-before {

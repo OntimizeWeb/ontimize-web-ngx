@@ -2,7 +2,7 @@
 </o-table-header-column-filter-icon>
 
 <ng-container *ngIf="column.orderable">
-  <span o-mat-sort-header fxFlex>{{ column.title | oTranslate }}</span>
+  <span o-mat-sort-header>{{ column.title | oTranslate }}</span>
 </ng-container>
 <ng-container *ngIf="!column.orderable">
   <span class="header-title-container" fxFlex>{{ column.title | oTranslate }}</span>
