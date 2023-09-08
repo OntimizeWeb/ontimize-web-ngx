@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 export function StringConverter(value: any) {
   if (value == null || typeof value === 'string') {
     return value;
@@ -21,48 +19,37 @@ export function NumberConverter(value: any) {
   return parseFloat(value.toString());
 }
 
-function createConverterIfNeeded(metadata: any, converter?: (value: any) => any) {
+function createConverterIfNeeded(typeName: string, converter?: (value: any) => any) {
   if (converter != null) {
     return converter;
   }
-  switch (metadata.name) {
+  switch (typeName) {
     case 'String':
-      converter = StringConverter;
-      break;
+      return StringConverter;
     case 'Boolean':
-      converter = BooleanConverter;
-      break;
+      return BooleanConverter;
     case 'Number':
-      converter = NumberConverter;
-      break;
+      return NumberConverter;
+    default:
+      return BooleanConverter;
   }
-  return converter;
 }
 
-export function InputConverter(converter?: (value: any) => any) {
-
+export function InputConverter(typeName?: string, converter?: (value: any) => any) {
   return (target: object, key: string | symbol) => {
-    const metadata = (Reflect as any).getMetadata('design:type', target, key);
-    if (metadata == null) {
-      throw new Error('The reflection metadata could not be found.');
-    }
-    converter = createConverterIfNeeded(metadata, converter);
-    if (converter == null) {
-      throw new Error('There is no converter for the given property type "' + metadata.name + '".');
-    }
-
     const stringKey = typeof key === 'string' ? key : key.toString();
-    const definition = Object.getOwnPropertyDescriptor(target, key);
+    typeName = typeName || 'Boolean'; // Si no se proporciona, asumir como "Boolean"
+    converter = createConverterIfNeeded(typeName, converter);
 
-    Object.defineProperty(target, key, {
-      // eslint-disable-next-line space-before-function-paren
+    const definition = Object.getOwnPropertyDescriptor(target, stringKey);
+
+    Object.defineProperty(target, stringKey, {
       get: definition != null ? definition.get : function () {
         return this['__' + stringKey];
       },
       set: definition != null ?
         (newValue) => {
           definition.set(converter(newValue));
-          // eslint-disable-next-line space-before-function-paren
         } : function (newValue) {
           this['__' + stringKey] = converter(newValue);
         },

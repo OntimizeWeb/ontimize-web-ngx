@@ -1,12 +1,10 @@
-import 'reflect-metadata';
-
 import { Component } from '@angular/core';
 
 export function OComponent(newCompAnnotations: any) {
 
   function OComponentInner(target: Function) {
     const parentTarget = Object.getPrototypeOf(target.prototype).constructor;
-    const parentAnnotations = Reflect.getMetadata('annotations', parentTarget);
+    const parentAnnotations = getAnnotations(parentTarget);
     if (parentAnnotations) {
       const parentAnnotation = parentAnnotations[0];
       copyDecorators(newCompAnnotations, parentAnnotation);
@@ -15,13 +13,21 @@ export function OComponent(newCompAnnotations: any) {
       copyDecorators(newCompAnnotations, parentDecorators);
     }
     const metadata = new Component(newCompAnnotations);
-    Reflect.defineMetadata('annotations', [metadata], target);
+    setAnnotations(target, [metadata]);
   }
   return OComponentInner;
 }
 
 function isPresent(obj) {
   return obj !== undefined && obj !== null;
+}
+
+function getAnnotations(target: any) {
+  return target['__annotations__'];
+}
+
+function setAnnotations(target: any, annotations: any[]) {
+  target['__annotations__'] = annotations;
 }
 
 function getDecorators(target: any) {
