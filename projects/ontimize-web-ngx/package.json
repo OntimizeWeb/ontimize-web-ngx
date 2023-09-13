@@ -56,7 +56,6 @@
     "angular-resizable-element": "3.3.4",
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
-    "reflect-metadata": "0.1.13",
     "google-libphonenumber": "^3.2.3",
     "tslib": "^2.3.0"
   }
