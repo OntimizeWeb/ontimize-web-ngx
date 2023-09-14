@@ -27,7 +27,6 @@ export class OListPickerRendererRealComponent extends OListPickerRendererInteger
   maxDecimalDigits: number = 2;
 
   protected decimalSeparator: string = '.';
-  protected numberService: NumberService;
 
   protected componentPipe: ORealPipe;
   protected pipeArguments: IRealPipeArgument;
@@ -36,7 +35,6 @@ export class OListPickerRendererRealComponent extends OListPickerRendererInteger
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.numberService = this.injector.get(NumberService);
     this.setComponentPipe();
   }
 

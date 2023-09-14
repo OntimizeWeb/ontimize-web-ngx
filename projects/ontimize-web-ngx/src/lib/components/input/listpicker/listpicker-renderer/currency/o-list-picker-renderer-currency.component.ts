@@ -42,7 +42,6 @@ export class OListPickerRendererCurrencyComponent extends OListPickerRendererRea
   constructor(protected injector: Injector) {
     super(injector);
     this.currencyService = this.injector.get(CurrencyService);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
