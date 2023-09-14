@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnInit } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { OTablePaginator } from '../../../../../interfaces/o-table-paginator.interface';
 import { OTableComponent } from '../../../o-table.component';
 import { OBaseTablePaginator } from './o-base-table-paginator.class';
@@ -21,7 +21,7 @@ export const DEFAULT_PAGINATOR_TABLE = [
 })
 export class OTablePaginatorComponent extends OBaseTablePaginator implements OTablePaginator, OnInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   showFirstLastButtons: boolean = true;
 
   constructor(

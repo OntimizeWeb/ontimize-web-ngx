@@ -1,14 +1,6 @@
-import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  OnInit,
-  TemplateRef,
-  ViewChild
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
 import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER, OListPickerCustomRenderer } from '../o-list-picker-renderer.class';
 
@@ -28,7 +20,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER = [
 })
 export class OListPickerRendererIntegerComponent extends OListPickerCustomRenderer implements AfterContentInit, OnInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
   protected componentPipe: OIntegerPipe;

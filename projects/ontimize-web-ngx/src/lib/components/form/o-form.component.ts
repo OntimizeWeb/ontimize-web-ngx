@@ -16,7 +16,7 @@ import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IComponent } from '../../interfaces/component.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
@@ -28,12 +28,13 @@ import { NavigationService, ONavigationItem } from '../../services/navigation.se
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
+import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
-import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
@@ -43,9 +44,8 @@ import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormValue } from './o-form-value';
-import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OFormMessageService } from './services/o-form-message.service';
+import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
 interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -192,7 +192,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public static guardClassName = 'CanDeactivateFormGuard';
 
   /* inputs variables */
-  @InputConverter()
+  @BooleanInputConverter()
   showHeader: boolean = true;
   headerMode: string = 'floating';
   headerPosition: 'top' | 'bottom' = 'top';
@@ -204,11 +204,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   keys: string = '';
   columns: string = '';
   service: string;
-  @InputConverter()
+  @BooleanInputConverter()
   stayInRecordAfterEdit: boolean = false;
   afterInsertMode: 'new' | 'detail' | 'close' = 'close';
   serviceType: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected queryOnInit: boolean = true;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
@@ -217,19 +217,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected deleteMethod: string = Codes.DELETE_METHOD;
   protected _layoutDirection: string = OFormComponent.DEFAULT_LAYOUT_DIRECTION;
   protected _layoutAlign: string = 'start stretch';
-  @InputConverter()
+  @BooleanInputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
-  @InputConverter()
+  @BooleanInputConverter()
   undoButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showHeaderNavigation: boolean = false;
   public oattr: string = '';
-  @InputConverter()
+  @BooleanInputConverter()
   includeBreadcrumb: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   detectChangesOnBlur: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   confirmExit: boolean = true;
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
@@ -245,7 +245,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   // public insertFallbackFunction: Function;
   // public updateFallbackFunction: Function;
   // public deleteFallbackFunction: Function;
-  @InputConverter()
+  @BooleanInputConverter()
   public ignoreDefaultNavigation: boolean = false;
   messageServiceType: string;
   /* end of inputs variables */

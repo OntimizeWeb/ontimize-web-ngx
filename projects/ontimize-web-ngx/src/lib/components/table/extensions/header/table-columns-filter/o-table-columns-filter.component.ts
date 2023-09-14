@@ -1,15 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ContentChildren,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  QueryList
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChildren, forwardRef, Inject, Injector, Input, OnInit, QueryList } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
@@ -44,14 +35,14 @@ export class OTableColumnsFilterComponent implements OnInit {
 
   protected _columns: string;
   protected _mode: string = 'default';
-  @InputConverter()
+  @BooleanInputConverter()
   preloadValues: boolean = true;
 
   get mode(): string {
     return this._mode;
   }
 
-  @InputConverter()
+  @Input()
   set mode(val: string) {
     const m = OTableColumnsFilterComponent.OTableColumnsFilterModes.find(e => e === val);
     if (Util.isDefined(m)) {

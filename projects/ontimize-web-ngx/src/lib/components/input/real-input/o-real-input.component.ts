@@ -1,14 +1,12 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
 import { NumberService } from '../../../services/number.service';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import {
-  OIntegerInputComponent
-} from '../integer-input/o-integer-input.component';
+import { OIntegerInputComponent } from '../integer-input/o-integer-input.component';
 import { OFormControl } from '../o-form-control.class';
 
 export const DEFAULT_INPUTS_O_REAL_INPUT = [
@@ -27,19 +25,19 @@ export const DEFAULT_INPUTS_O_REAL_INPUT = [
 })
 export class ORealInputComponent extends OIntegerInputComponent implements OnInit {
 
-  @InputConverter()
+  @NumberInputConverter()
   minDecimalDigits: number = 2;
 
-  @InputConverter()
+  @NumberInputConverter()
   maxDecimalDigits: number = 2;
 
-  @InputConverter()
+  @NumberInputConverter()
   step: number = 0.01;
 
-  @InputConverter()
+  @BooleanInputConverter()
   grouping: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   strict: boolean = false;
 
   protected decimalSeparator: string;

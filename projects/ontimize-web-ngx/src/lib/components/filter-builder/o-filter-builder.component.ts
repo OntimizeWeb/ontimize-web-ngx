@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { OFormComponent } from '../../components/form/o-form.component';
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../decorators/input-converter';
 import { IFilterBuilderCmpTarget } from '../../interfaces/filter-builder-component-target.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IServiceDataComponent } from '../../interfaces/service-data-component.interface';
@@ -69,11 +69,11 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   public filters: string;
   public targetCmp: IServiceDataComponent;
   public expressionBuilder: (values: Array<{ attr, value }>) => Expression;
-  @InputConverter()
+  @BooleanInputConverter()
   public queryOnChange: boolean = false;
-  @InputConverter()
+  @NumberInputConverter()
   public queryOnChangeDelay: number = 0;
-  @InputConverter()
+  @BooleanInputConverter()
   public queryOnChangeEventType: CHANGE_EVENTS = Codes.DEFAULT_CHANGE_EVENT;
 
   protected filterComponents: Array<IFilterBuilderCmpTarget> = [];

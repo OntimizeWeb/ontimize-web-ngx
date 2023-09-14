@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
 import { OValidators } from '../../../../../validators/o-validators';
 import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
@@ -16,11 +16,11 @@ export class OTableCellEditorRealComponent extends OTableCellEditorIntegerCompon
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
-  @InputConverter()
+  @NumberInputConverter()
   min: number;
-  @InputConverter()
+  @NumberInputConverter()
   max: number;
-  @InputConverter()
+  @NumberInputConverter()
   step: number = 0.01;
 
   constructor(protected injector: Injector) {

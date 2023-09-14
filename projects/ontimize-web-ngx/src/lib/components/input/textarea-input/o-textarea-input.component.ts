@@ -1,10 +1,8 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { NumberInputConverter } from '../../../decorators/input-converter';
 import { OFormComponent } from '../../form/o-form.component';
-import {
-  OTextInputComponent
-} from '../text-input/o-text-input.component';
+import { OTextInputComponent } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_TEXTAREA_INPUT = [
   'columns',
@@ -20,9 +18,9 @@ export const DEFAULT_INPUTS_O_TEXTAREA_INPUT = [
 })
 export class OTextareaInputComponent extends OTextInputComponent {
 
-  @InputConverter()
+  @NumberInputConverter()
   public rows: number = 5;
-  @InputConverter()
+  @NumberInputConverter()
   public columns: number = 3;
 
   constructor(

@@ -4,7 +4,7 @@ import { ThemePalette } from '@angular/material/core';
 import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
 import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
 import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
 
@@ -45,21 +45,21 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
 
 export class OAppLayoutComponent implements AfterViewInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   sidenavOpened: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showUserInfo: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showLanguageSelector: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   useFlagIcons: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   protected _showHeader: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public showTitle: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public staticTitle: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public showStaticTitle: boolean = false;
 
   public headerColor: ThemePalette;

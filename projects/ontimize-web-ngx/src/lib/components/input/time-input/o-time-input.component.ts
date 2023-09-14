@@ -16,16 +16,14 @@ import { UntypedFormGroup } from '@angular/forms';
 import moment from 'moment';
 import { merge, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import {
-  OFormDataComponent
-} from '../../o-form-data-component.class';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { ODateInputComponent } from '../date-input/o-date-input.component';
 import { OHourInputComponent } from '../hour-input/o-hour-input.component';
@@ -68,16 +66,16 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   public oDateStartView: 'month' | 'year' = 'month';
   public oDateMinDate: any;
   public oDateMaxDate: any;
-  @InputConverter()
+  @BooleanInputConverter()
   public oDateTouchUi: boolean;
   public oDateStartAt: any;
   public oDateFilterDate: DateFilterFunction;
-  @InputConverter()
+  @BooleanInputConverter()
   public oDateTextInputEnabled: boolean = true;
   public oHourFormat: number = 24;
   public oHourMin: string;
   public oHourMax: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public oHourTextInputEnabled: boolean = true;
   public oHourPlaceholder = '';
   public oDatePlaceholder = '';

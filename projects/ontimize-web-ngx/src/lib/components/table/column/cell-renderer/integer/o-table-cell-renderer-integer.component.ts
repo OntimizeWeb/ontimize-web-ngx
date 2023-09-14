@@ -1,14 +1,6 @@
-import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
@@ -27,7 +19,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
 })
 export class OTableCellRendererIntegerComponent extends OBaseTableCellRenderer implements AfterContentInit, OnInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
   protected componentPipe: OIntegerPipe;

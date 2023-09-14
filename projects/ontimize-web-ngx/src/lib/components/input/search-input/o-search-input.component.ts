@@ -5,7 +5,7 @@ import { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-f
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS } from '../../../config/app-config';
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { SnackBarService } from '../../../services/snackbar.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { Expression } from '../../../types/expression.type';
@@ -69,11 +69,11 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
 
   public width: string;
   public columns: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public showCaseSensitiveCheckbox: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public showMenu: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   protected _filterCaseSensitive: boolean = false;
   protected _floatLabel: FloatLabelType;
   protected _appearance: MatFormFieldAppearance;

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 
 import { OBreadcrumbComponent } from '../../components/breadcrumb/o-breadcrumb.component';
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
 import { OFormComponent } from '../form/o-form.component';
 
@@ -28,7 +28,7 @@ export class OFormContainerComponent implements AfterViewInit {
 
   @ViewChild('breadcrumb', { read: ViewContainerRef }) breadContainer: ViewContainerRef;
 
-  @InputConverter()
+  @BooleanInputConverter()
   breadcrumb: boolean = false;
   public breadcrumbLabelColumns: string;
   public breadcrumbSeparator: string = ' ';

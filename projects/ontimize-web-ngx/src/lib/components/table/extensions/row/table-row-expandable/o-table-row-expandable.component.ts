@@ -1,14 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ContentChild,
-  EventEmitter,
-  Output,
-  TemplateRef,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, EventEmitter, Output, TemplateRef, ViewEncapsulation } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_OUTPUTS_O_TABLE_ROW_EXPANDABLE = [
   'onExpanded',
@@ -51,10 +43,10 @@ export class OTableRowExpandableComponent {
   private _iconCollapse: string = 'remove';
   private _iconExpand: string = 'add';
 
-  @InputConverter()
+  @BooleanInputConverter()
   public expandableColumnVisible: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public multiple: boolean = false;
 
   set iconCollapse(value: string) {

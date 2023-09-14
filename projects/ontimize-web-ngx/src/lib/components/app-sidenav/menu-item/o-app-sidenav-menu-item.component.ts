@@ -14,14 +14,8 @@ import {
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators/input-converter';
-import {
-  MenuItemAction,
-  MenuItemLocale,
-  MenuItemLogout,
-  MenuItemRoute,
-  MenuItemUserInfo
-} from '../../../interfaces/app-menu.interface';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
+import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo } from '../../../interfaces/app-menu.interface';
 import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { AuthService } from '../../../services/auth.service';
@@ -75,9 +69,9 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
   menuItem: any; // TODO MenuRootItem;
   menuItemType: string;
-  @InputConverter()
+  @BooleanInputConverter()
   sidenavOpened: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   disabled: boolean = false;
 
   protected appSidenavToggleSubscription: Subscription = new Subscription();

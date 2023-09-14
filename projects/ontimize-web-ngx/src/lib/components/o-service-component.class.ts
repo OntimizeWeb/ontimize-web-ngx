@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild, Directive } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { OFilterBuilderComponent } from '../components/filter-builder/o-filter-builder.component';
 import { OSearchInputComponent } from '../components/input/search-input/o-search-input.component';
-import { BooleanConverter, InputConverter } from '../decorators/input-converter';
+import { BooleanConverter, BooleanInputConverter } from '../decorators/input-converter';
 import { IServiceDataComponent } from '../interfaces/service-data-component.interface';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
@@ -136,28 +136,28 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     return this._title;
   }
   protected _title: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected ovisible: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   protected oenabled: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   protected controls: boolean = true;
   public detailMode: string = Codes.DETAIL_MODE_CLICK;
   protected detailFormRoute: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected recursiveDetail: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   detailButtonInRow: boolean = false;
   detailButtonInRowIcon: string = Codes.DETAIL_ICON;
   protected editFormRoute: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected recursiveEdit: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   editButtonInRow: boolean = false;
   editButtonInRowIcon: string = Codes.EDIT_ICON;
-  @InputConverter()
+  @BooleanInputConverter()
   insertButton: boolean;
-  @InputConverter()
+  @BooleanInputConverter()
   paginationControls: boolean = true;
 
   get pageSizeOptions(): number[] {
@@ -189,7 +189,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     return this._rowHeight;
   }
   protected insertFormRoute: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected recursiveInsert: boolean = false;
 
   protected _filterCaseSensitive: boolean = false;

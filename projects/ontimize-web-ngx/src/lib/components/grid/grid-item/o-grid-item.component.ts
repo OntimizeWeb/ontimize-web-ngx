@@ -1,14 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../decorators/input-converter';
-import { ObservableWrapper } from '../../../util/async';
+import { NumberInputConverter } from '../../../decorators/input-converter';
 import { IGridItem } from '../../../interfaces/o-grid-item.interface';
+import { ObservableWrapper } from '../../../util/async';
 
 export const DEFAULT_INPUTS_O_GRID_ITEM = [
   'colspan',
@@ -33,9 +27,9 @@ export class OGridItemComponent implements IGridItem {
   mdDoubleClick: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(TemplateRef) public template: TemplateRef<any>;
-  @InputConverter()
+  @NumberInputConverter()
   colspan: number = 1;
-  @InputConverter()
+  @NumberInputConverter()
   rowspan: number = 1;
 
   constructor(public _el: ElementRef) { }

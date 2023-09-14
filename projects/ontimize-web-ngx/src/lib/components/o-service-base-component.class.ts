@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, HostListener, Injector, isDevMode, OnChanges, SimpleChange, Type, Directive } from '@angular/core';
+import { ChangeDetectorRef, Directive, HostListener, Injector, isDevMode, OnChanges, SimpleChange, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-import { InputConverter } from '../decorators/input-converter';
+import { BooleanInputConverter } from '../decorators/input-converter';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
@@ -11,8 +11,8 @@ import { OErrorDialogManager } from '../services/o-error-dialog-manager.service'
 import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { AbstractServiceComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
-import { OQueryDataArgs } from '../types/query-data-args.type';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
+import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
@@ -102,12 +102,12 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   service: string;
   serviceType: string;
   entity: string;
-  @InputConverter()
+  @BooleanInputConverter()
   queryOnInit: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   queryOnBind: boolean = true;
   queryOnEvent: any;
-  @InputConverter()
+  @BooleanInputConverter()
   pageable: boolean = false;
   columns: string;
   keys: string;
@@ -139,9 +139,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   insertMethod: string = Codes.INSERT_METHOD;
   updateMethod: string = Codes.UPDATE_METHOD;
   deleteMethod: string = Codes.DELETE_METHOD;
-  @InputConverter()
+  @BooleanInputConverter()
   storeState: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   queryWithNullParentKeys: boolean = false;
   queryFallbackFunction: (err: any) => void;
   // insertFallbackFunction: (err: any) => void;

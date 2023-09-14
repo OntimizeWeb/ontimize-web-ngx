@@ -43,7 +43,7 @@
 
     <span class="separator">&ndash;</span>
 
-    <mat-form-field floatLabel="never">
+    <mat-form-field>
 
       <input #hourInput matInput [ngxTimepicker]="picker" [placeholder]="getPlaceholderHour()"
         [formControl]="formControlHour" [required]="orequired" (change)="onHourChange($event)" [min]="oHourMin"

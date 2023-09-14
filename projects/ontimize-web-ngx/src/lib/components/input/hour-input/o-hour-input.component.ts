@@ -1,29 +1,16 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
 import { NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 
-import { InputConverter, NumberConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberConverter } from '../../../decorators/input-converter';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import {
-  OFormDataComponent
-} from '../../o-form-data-component.class';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
 
@@ -49,7 +36,7 @@ export const DEFAULT_INPUTS_O_HOUR_INPUT = [
 })
 export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   public textInputEnabled: boolean = true;
   public min: string;
   public max: string;

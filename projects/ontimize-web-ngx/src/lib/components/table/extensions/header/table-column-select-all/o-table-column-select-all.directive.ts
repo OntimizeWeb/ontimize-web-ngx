@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL = [
   'width',
@@ -21,7 +21,7 @@ export class OTableColumnSelectAllDirective {
   public minWidth: string;
   public maxWidth: string;
   public width: string = '18px';
-  @InputConverter()
+  @BooleanInputConverter()
   public resizable:boolean = false;
 
 }

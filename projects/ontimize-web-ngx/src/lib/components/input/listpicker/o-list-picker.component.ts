@@ -16,16 +16,14 @@ import { UntypedFormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
-import {
-  OFormServiceComponent
-} from '../o-form-service-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OListPickerCustomRenderer } from './listpicker-renderer/o-list-picker-renderer.class';
 import { OListPickerDialogComponent } from './o-list-picker-dialog.component';
 
@@ -65,22 +63,18 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   public stateCtrl: UntypedFormControl;
 
   /* Inputs */
-  @InputConverter()
+  @BooleanInputConverter()
   public textInputEnabled: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public dialogDisableClose: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   protected filter: boolean = true;
   protected dialogWidth: string;
   protected dialogHeight: string = '55%';
   protected dialogClass: string;
-  @InputConverter()
+  @NumberInputConverter()
   protected queryRows: number;
 
-  /*Override clearButton = true */
-  // @InputConverter()
-  // public clearButton: boolean = true;
-  /* End inputs */
 
   public renderer: OListPickerCustomRenderer;
 

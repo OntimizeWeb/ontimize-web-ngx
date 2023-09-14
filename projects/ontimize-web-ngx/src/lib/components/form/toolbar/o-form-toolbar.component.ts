@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { DialogService } from '../../../services/dialog.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { SnackBarService } from '../../../services/snackbar.service';
@@ -42,9 +42,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   public headeractions: string = '';
   public labelHeaderAlign: string = 'center';
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showHeaderActionsText: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public showHeaderNavigation: boolean = true;
 
   public formActions: string[];

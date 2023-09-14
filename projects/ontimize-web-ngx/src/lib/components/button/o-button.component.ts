@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { Codes } from '../../util';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
@@ -48,7 +48,7 @@ export class OButtonComponent implements OnInit {
   public svgIcon: string;
   public iconPosition: string = Codes.ICON_POSITION_LEFT; // left (default)
   public image: string;
-  @InputConverter() enabled: boolean = true;
+  @BooleanInputConverter() enabled: boolean = true;
   public color: ThemePalette;
 
   /* Outputs */

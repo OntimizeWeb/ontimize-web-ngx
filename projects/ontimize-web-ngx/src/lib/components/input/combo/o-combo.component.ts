@@ -1,21 +1,9 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnDestroy,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
@@ -23,9 +11,7 @@ import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
-import {
-  OFormServiceComponent
-} from '../o-form-service-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
 
 export const DEFAULT_INPUTS_O_COMBO = [
@@ -58,13 +44,13 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   public renderer: OComboCustomRenderer;
 
   /* Inputs */
-  @InputConverter()
+  @BooleanInputConverter()
   public multiple: boolean;
-  @InputConverter()
+  @BooleanInputConverter()
   public multipleTriggerLabel: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public searchable: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   protected nullSelection: boolean = true;
   public nullSelectionLabel: string;
   /* End inputs*/

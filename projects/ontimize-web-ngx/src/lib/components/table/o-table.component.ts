@@ -37,7 +37,8 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { BooleanConverter, InputConverter } from '../../decorators/input-converter';
+
+import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
 import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import { OTableButton } from '../../interfaces/o-table-button.interface';
 import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
@@ -48,7 +49,7 @@ import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { ComponentStateServiceProvider, OntimizeServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
@@ -74,25 +75,20 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import {
-  AbstractOServiceComponent
-} from '../o-service-component.class';
+import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import {
-  OTableFilterByColumnDataDialogComponent
-} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableButtonComponent } from './extensions/header/table-button/o-table-button.component';
+import { OTableColumnSelectAllDirective } from './extensions/header/table-column-select-all/o-table-column-select-all.directive';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
-import {
-  OTableColumnsGroupingColumnComponent
-} from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
+import { OTableColumnsGroupingColumnComponent } from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
 import { OTableHeaderComponent } from './extensions/header/table-header/o-table-header.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
@@ -100,13 +96,9 @@ import { OTableDataSourceService } from './extensions/o-table-datasource.service
 import { OTableVirtualScrollStrategy } from './extensions/o-table-strategy.service';
 import { OTableDao } from './extensions/o-table.dao';
 import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
-import {
-  OTableRowExpandableComponent,
-  OTableRowExpandedChange
-} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
-import { OTableColumnSelectAllDirective } from './extensions/header/table-column-select-all/o-table-column-select-all.directive';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -346,25 +338,25 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public tableContextMenu: OContextMenuComponent;
 
-  @InputConverter()
+  @BooleanInputConverter()
   selectAllCheckbox: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   exportButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showConfigurationOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   columnsVisibilityButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showFilterOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showReportOnDemandOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showChartsOnDemandOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showButtonsText: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   filterColumnActiveByDefault: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showResetWidthOption: boolean = true;
 
   // Expandable input callback function
@@ -401,21 +393,21 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return this._filterCaseSensitive;
   }
 
-  @InputConverter()
+  @BooleanInputConverter()
   insertButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   refreshButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   deleteButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   fixedHeader: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showTitle: boolean = false;
   editionMode: string = Codes.EDITION_MODE_NONE;
   selectionMode: string = Codes.SELECTION_MODE_MULTIPLE;
 
   protected _horizontalScroll = false;
-  @InputConverter()
+  @BooleanInputConverter()
   set horizontalScroll(value: boolean) {
     this._horizontalScroll = BooleanConverter(value);
     this.refreshColumnsWidthFromOriginalDefinition();
@@ -425,27 +417,27 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return this._horizontalScroll;
   }
 
-  @InputConverter()
+  @BooleanInputConverter()
   showPaginatorFirstLastButtons: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   autoAlignTitles: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   multipleSort: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   orderable: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   resizable: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   autoAdjust: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   groupable: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   expandGroupsSameLevel: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   collapseGroupedColumns: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   virtualScroll: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   contextMenu: boolean = true;
   // Maintaining this getter to allow component extensions (avoiding a breaking change)
   get enabled(): boolean {
@@ -465,7 +457,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return this._selectAllCheckboxVisible;
   }
 
-  @InputConverter()
+  @BooleanInputConverter()
   keepSelectedItems: boolean = true;
 
   public exportMode: string = Codes.EXPORT_MODE_VISIBLE;

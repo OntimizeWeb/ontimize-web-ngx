@@ -1,19 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
-import {
-  OBaseTableCellEditor,
-} from '../o-base-table-cell-editor.class';
+import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
   'indeterminateOnNull: indeterminate-on-null',
@@ -41,14 +31,14 @@ export class OTableCellEditorBooleanComponent extends OBaseTableCellEditor imple
 
   indeterminate: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   indeterminateOnNull: boolean = false;
   trueValue: any;
   falseValue: any;
 
   protected _booleanType: string = 'boolean';
 
-  @InputConverter()
+  @BooleanInputConverter()
   autoCommit: boolean = true;
 
   constructor(protected injector: Injector) {

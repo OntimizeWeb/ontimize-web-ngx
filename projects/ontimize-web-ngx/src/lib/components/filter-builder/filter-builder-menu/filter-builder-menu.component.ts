@@ -1,6 +1,7 @@
 import { Component, Injector, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { InputConverter } from '../../../decorators/input-converter';
+
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { DialogService } from '../../../services/dialog.service';
 import { OLoadFilterDialogComponent } from '../../../shared/components/filter/load-filter/o-load-filter-dialog.component';
 import { OStoreFilterDialogComponent } from '../../../shared/components/filter/store-filter/o-store-filter-dialog.component';
@@ -28,9 +29,9 @@ export class OFilterBuilderMenuComponent {
   protected dialog: MatDialog;
   protected dialogService: DialogService;
   protected _filterBuilder: OFilterBuilderComponent;
-  @InputConverter()
+  @BooleanInputConverter()
   showFilterOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showClearFilterOption: boolean = true;
   public icon: string;
   public svgIcon: string;
