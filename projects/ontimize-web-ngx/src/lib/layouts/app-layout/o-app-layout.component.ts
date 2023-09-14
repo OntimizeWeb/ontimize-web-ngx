@@ -57,7 +57,6 @@ export class OAppLayoutComponent implements AfterViewInit {
   protected _showHeader: boolean = true;
   @BooleanInputConverter()
   public showTitle: boolean = false;
-  @BooleanInputConverter()
   public staticTitle: string;
   @BooleanInputConverter()
   public showStaticTitle: boolean = false;

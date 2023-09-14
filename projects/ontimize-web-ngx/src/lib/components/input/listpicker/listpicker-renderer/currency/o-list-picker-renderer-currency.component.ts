@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { BooleanInputConverter } from '../../../../../decorators/input-converter';
+import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
 import { OListPickerRendererRealComponent } from '../real/o-list-picker-renderer-real.component';
@@ -21,9 +21,9 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY = [
 })
 export class OListPickerRendererCurrencyComponent extends OListPickerRendererRealComponent implements OnInit {
 
-  @BooleanInputConverter()
+  @NumberInputConverter()
   minDecimalDigits: number = 2;
-  @BooleanInputConverter()
+  @NumberInputConverter()
   maxDecimalDigits: number = 2;
 
   protected currencySymbol: string;
