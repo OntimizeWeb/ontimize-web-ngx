@@ -73,7 +73,6 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   public queryOnChange: boolean = false;
   @NumberInputConverter()
   public queryOnChangeDelay: number = 0;
-  @BooleanInputConverter()
   public queryOnChangeEventType: CHANGE_EVENTS = Codes.DEFAULT_CHANGE_EVENT;
 
   protected filterComponents: Array<IFilterBuilderCmpTarget> = [];
