@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { BooleanInputConverter, NumberInputConverter } from '../../../../../decorators/input-converter';
+import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
 import { OComboRendererRealComponent } from '../real/o-combo-renderer-real.component';
