@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx",
-  "version": "15.0.0-SNAPSHOT-1",
+  "version": "15.0.0-SNAPSHOT-2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -47,7 +47,6 @@
     "angular-resizable-element": "3.3.4",
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
-    "reflect-metadata": "0.1.13",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

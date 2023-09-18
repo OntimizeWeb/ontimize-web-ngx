@@ -1,10 +1,26 @@
-import { AfterViewInit, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, SimpleChange, ViewChildren, Directive, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  ContentChildren,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Injector,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  SimpleChange,
+  ViewChildren
+} from '@angular/core';
 import { AsyncValidatorFn, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix, SubscriptSizing } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
 import { O_INPUTS_OPTIONS } from '../config/app-config';
-import { BooleanConverter, InputConverter } from '../decorators/input-converter';
+import { BooleanConverter, BooleanInputConverter } from '../decorators/input-converter';
 import { OMatErrorDirective } from '../directives/o-mat-error.directive';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../interfaces/form-data-type-component.interface';
@@ -69,20 +85,20 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   OnInit, AfterViewInit, OnDestroy, OnChanges {
   /* Inputs */
   public sqlType: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public autoBinding: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public autoRegistering: boolean = true;
   public width: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public clearButton: boolean = false;
   public angularValidatorsFn: ValidatorFn[] = [];
   public angularValidatorsFnErrors: ErrorData[] = [];
-  @InputConverter()
+  @BooleanInputConverter()
   public hideRequiredMarker: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public labelVisible: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public selectAllOnClick: boolean = false;
   public angularAsyncValidatorsFn: AsyncValidatorFn[] = [];
 

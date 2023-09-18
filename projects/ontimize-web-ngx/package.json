@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "15.0.0-SNAPSHOT-1",
+  "version": "15.0.0-SNAPSHOT-2",
   "description": "Ontimize Web framework using Angular 15",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -56,7 +56,6 @@
     "angular-resizable-element": "3.3.4",
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
-    "reflect-metadata": "0.1.13",
     "google-libphonenumber": "^3.2.3",
     "tslib": "^2.3.0"
   }

@@ -1,20 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
+import { OTableButton } from '../../../../../interfaces/o-table-button.interface';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
-import { OTableButton } from '../../../../../interfaces/o-table-button.interface';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
   'oattr: attr',
@@ -47,7 +37,7 @@ export class OTableButtonComponent implements OTableButton, OnInit {
   public onClick: EventEmitter<object> = new EventEmitter<object>();
 
   public oattr: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public enabled: boolean = true;
   public icon: string;
   public svgIcon: string;

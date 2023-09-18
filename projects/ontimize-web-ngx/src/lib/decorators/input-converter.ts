@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import { coerceNumberProperty } from "@angular/cdk/coercion";
 
 export function StringConverter(value: any) {
   if (value == null || typeof value === 'string') {
@@ -15,59 +15,40 @@ export function BooleanConverter(value: any) {
 }
 
 export function NumberConverter(value: any) {
-  if (value == null || typeof value === 'number') {
-    return value;
-  }
-  return parseFloat(value.toString());
+  return coerceNumberProperty(value);
 }
 
-function createConverterIfNeeded(metadata: any, converter?: (value: any) => any) {
-  if (converter != null) {
-    return converter;
-  }
-  switch (metadata.name) {
-    case 'String':
-      converter = StringConverter;
-      break;
-    case 'Boolean':
-      converter = BooleanConverter;
-      break;
-    case 'Number':
-      converter = NumberConverter;
-      break;
-  }
-  return converter;
-}
-
-export function InputConverter(converter?: (value: any) => any) {
-
-  return (target: object, key: string | symbol) => {
-    const metadata = (Reflect as any).getMetadata('design:type', target, key);
-    if (metadata == null) {
-      throw new Error('The reflection metadata could not be found.');
-    }
-    converter = createConverterIfNeeded(metadata, converter);
-    if (converter == null) {
-      throw new Error('There is no converter for the given property type "' + metadata.name + '".');
-    }
-
-    const stringKey = typeof key === 'string' ? key : key.toString();
-    const definition = Object.getOwnPropertyDescriptor(target, key);
-
-    Object.defineProperty(target, key, {
-      // eslint-disable-next-line space-before-function-paren
-      get: definition != null ? definition.get : function () {
-        return this['__' + stringKey];
+export function BooleanInputConverter() {
+  return function decorator(target: unknown, propertyKey: PropertyKey): any {
+    const privateFieldName = `_${String(propertyKey)}`
+    Object.defineProperty(target, privateFieldName, {
+      configurable: true,
+      writable: true,
+    })
+    return {
+      get() {
+        return this[privateFieldName]
       },
-      set: definition != null ?
-        (newValue) => {
-          definition.set(converter(newValue));
-          // eslint-disable-next-line space-before-function-paren
-        } : function (newValue) {
-          this['__' + stringKey] = converter(newValue);
-        },
-      enumerable: true,
-      configurable: true
-    });
-  };
+      set(value: unknown) {
+        this[privateFieldName] = BooleanConverter(value);
+      },
+    }
+  }
+}
+export function NumberInputConverter() {
+  return function decorator(target: unknown, propertyKey: PropertyKey): any {
+    const privateFieldName = `_${String(propertyKey)}`
+    Object.defineProperty(target, privateFieldName, {
+      configurable: true,
+      writable: true,
+    })
+    return {
+      get() {
+        return this[privateFieldName]
+      },
+      set(value: unknown) {
+        this[privateFieldName] = NumberConverter(value);
+      },
+    }
+  }
 }

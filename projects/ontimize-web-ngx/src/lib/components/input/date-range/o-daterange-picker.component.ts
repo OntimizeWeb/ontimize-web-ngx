@@ -1,19 +1,8 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
-import { UntypedFormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import moment from 'moment'
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, UntypedFormControl } from '@angular/forms';
+import moment from 'moment';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 
 
 export enum SideEnum {
@@ -59,7 +48,7 @@ export class DaterangepickerComponent implements OnInit {
   singleDatePicker: boolean = false;
   @Input()
   showDropdowns: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   showWeekNumbers: boolean = false;
   @Input()
   showISOWeekNumbers: boolean = false;

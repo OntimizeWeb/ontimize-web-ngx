@@ -1,12 +1,12 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-text o-table-cell-editor" [formGroup]="formGroup" 
-    [matTooltip]="tooltip" 
-    [matTooltipClass]="tooltipClass" 
+  <div class="o-table-cell-editor-text o-table-cell-editor" [formGroup]="formGroup"
+    [matTooltip]="tooltip"
+    [matTooltipClass]="tooltipClass"
     [matTooltipPosition]="tooltipPosition"
-    [matTooltipShowDelay]="tooltipShowDelay" 
+    [matTooltipShowDelay]="tooltipShowDelay"
     [matTooltipHideDelay]="tooltipHideDelay">
-    
-    <mat-form-field floatLabel="never" cdkFocusInitial>
+
+    <mat-form-field cdkFocusInitial>
       <input #input matInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId"
         [required]="orequired">
       <mat-error *oMatError="hasError('required')">

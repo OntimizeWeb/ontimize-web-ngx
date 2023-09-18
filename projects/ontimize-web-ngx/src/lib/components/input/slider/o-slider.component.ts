@@ -1,10 +1,8 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 
 import { OFormComponent } from '../../../components/form/o-form.component';
-import { InputConverter } from '../../../decorators/input-converter';
-import {
-  OFormDataComponent
-} from '../../o-form-data-component.class';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   'color',
@@ -32,16 +30,16 @@ export class OSliderComponent extends OFormDataComponent {
 
   public color: string;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public thumbLabel: boolean = false;
 
-  @InputConverter()
+  @NumberInputConverter()
   min: number;
 
-  @InputConverter()
+  @NumberInputConverter()
   max: number;
 
-  @InputConverter()
+  @NumberInputConverter()
   step: number = 1;
 
   oDisplayWith: SliderDisplayFunction;

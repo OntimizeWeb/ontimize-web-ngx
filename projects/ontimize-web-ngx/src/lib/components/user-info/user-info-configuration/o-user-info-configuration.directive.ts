@@ -1,6 +1,7 @@
-import { ContentChildren, Directive } from "@angular/core";
-import { InputConverter } from "../../../decorators";
-import { OUserInfoConfigurationItemDirective } from "../user-info-configuration-item/o-user-info-configuration-item.directive";
+import { ContentChildren, Directive } from '@angular/core';
+
+import { BooleanInputConverter } from '../../../decorators';
+import { OUserInfoConfigurationItemDirective } from '../user-info-configuration-item/o-user-info-configuration-item.directive';
 
 export const DEFAULT_INPUTS_O_USER_INFO_MENU = [
   'showProfile: show-profile',
@@ -21,13 +22,13 @@ export class OUserInfoConfigurationDirective {
 
   @ContentChildren(OUserInfoConfigurationItemDirective) userInfoConfigurationItems: Array<OUserInfoConfigurationItemDirective>;
 
-  @InputConverter()
+  @BooleanInputConverter()
   showProfile: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   showSettings: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   showLogout: boolean = true;
 
   constructor() { }

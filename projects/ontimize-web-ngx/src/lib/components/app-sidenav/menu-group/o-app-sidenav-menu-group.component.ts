@@ -10,12 +10,12 @@ import {
   OnDestroy,
   OnInit,
   Type,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { MenuGroup, MenuGroupRoute } from '../../../interfaces/app-menu.interface';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { PermissionsService } from '../../../services/permissions/permissions.service';
@@ -72,10 +72,10 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
 
   public menuGroup: (MenuGroup | MenuGroupRoute);
 
-  @InputConverter()
+  @BooleanInputConverter()
   sidenavOpened: boolean = true;
 
-  @InputConverter()
+  @NumberInputConverter()
   level: number = 1;
 
   hidden: boolean;

@@ -20,8 +20,7 @@ import {
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { merge, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
-import { ListItem } from './list-item/o-list-item';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IList } from '../../interfaces/o-list.interface';
 import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
@@ -31,14 +30,13 @@ import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
 import { ServiceUtils } from '../../util/service.utils';
+import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import {
-  AbstractOServiceComponent
-} from '../o-service-component.class';
+import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
+import { ListItem } from './list-item/o-list-item';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-import { SQLTypes } from '../../util/sqltypes';
 
 export const DEFAULT_INPUTS_O_LIST = [
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
@@ -97,17 +95,17 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public listItemDirectives: QueryList<OListItemDirective>;
 
   /* Inputs */
-  @InputConverter()
+  @BooleanInputConverter()
   public refreshButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public selectable: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public odense: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public deleteButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public insertButtonFloatable: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showButtonsText: boolean = false;
 
   paginationControls: boolean = false;

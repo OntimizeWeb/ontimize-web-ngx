@@ -1,7 +1,8 @@
 import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { InputConverter } from '../../decorators/input-converter';
+
+import { BooleanInputConverter, NumberInputConverter } from '../../decorators/input-converter';
 import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { FormValueOptions } from '../../types';
 import { Util } from '../../util/util';
@@ -45,16 +46,16 @@ export const DEFAULT_INPUTS_O_IMAGE = [
 export class OImageComponent extends OFormDataComponent implements OnInit, OnDestroy {
 
   public acceptFileType: string = 'image/*';
-  @InputConverter()
+  @NumberInputConverter()
   public maxFileSize: number;
   public emptyimage: string;
   public notfoundimage: string;
   public emptyicon: string;
   public height: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public autoFit: boolean = true;
   public currentFileName: string = '';
-  @InputConverter()
+  @BooleanInputConverter()
   protected showControls: boolean = true;
   set fullScreenButton(val: boolean) {
     val = Util.parseBoolean(String(val));

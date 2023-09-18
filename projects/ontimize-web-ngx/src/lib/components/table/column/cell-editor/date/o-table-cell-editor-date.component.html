@@ -1,11 +1,11 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div [formGroup]="formGroup" class="o-table-cell-editor-date o-table-cell-editor" 
-    [matTooltip]="tooltip" 
-    [matTooltipClass]="tooltipClass" 
+  <div [formGroup]="formGroup" class="o-table-cell-editor-date o-table-cell-editor"
+    [matTooltip]="tooltip"
+    [matTooltipClass]="tooltipClass"
     [matTooltipPosition]="tooltipPosition"
-    [matTooltipShowDelay]="tooltipShowDelay" 
+    [matTooltipShowDelay]="tooltipShowDelay"
     [matTooltipHideDelay]="tooltipHideDelay">
-    <mat-form-field floatLabel="never" cdkFocusInitial>
+    <mat-form-field cdkFocusInitial>
       <input #input matInput [id]="cellEditorId" [placeholder]="getPlaceholder()" [formControl]="formControl"
         [required]="orequired" [matDatepicker]="d" [matDatepickerFilter]="filterDate"
         (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">

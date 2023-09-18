@@ -1,23 +1,12 @@
-import {
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnDestroy,
-  OnInit,
-  Optional,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OntimizeMomentDateAdapter } from '../../../shared/material/date/ontimize-moment-date-adapter';
 import { DateCustomClassFunction } from '../../../types/date-custom-class.type';
@@ -57,7 +46,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 })
 export class ODateInputComponent extends OTextInputComponent implements OnDestroy, OnInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   public textInputEnabled: boolean = true;
   protected _oformat: string = 'L';
   protected olocale: string;
@@ -81,7 +70,7 @@ export class ODateInputComponent extends OTextInputComponent implements OnDestro
       }
     }
   }
-  @InputConverter()
+  @BooleanInputConverter()
   protected oTouchUi: boolean;
   protected oStartAt: string;
   protected _filterDate: DateFilterFunction;

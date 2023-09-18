@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
 import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
+import { NumberInputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   // currency-symbol [string]: currency symbol. Default: dollar ($).
@@ -21,9 +21,9 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
 })
 export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealComponent implements OnInit {
 
-  @InputConverter()
+  @NumberInputConverter()
   minDecimalDigits: number = 2;
-  @InputConverter()
+  @NumberInputConverter()
   maxDecimalDigits: number = 2;
 
   protected currencySymbol: string;

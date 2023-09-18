@@ -2,7 +2,7 @@ import { ContentChildren, Directive, EventEmitter, HostListener, Injector, OnIni
 import { AsyncValidatorFn, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../decorators/input-converter';
 import { OMatErrorDirective } from '../../../../directives/o-mat-error.directive';
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { SnackBarService } from '../../../../services/snackbar.service';
@@ -42,14 +42,14 @@ export class OBaseTableCellEditor implements OnInit, ComponentWithValidatorsAndE
 
   protected translateService: OTranslateService;
 
-  @InputConverter()
+  @BooleanInputConverter()
   orequired: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   showPlaceHolder: boolean = false;
   olabel: string;
-  @InputConverter()
+  @BooleanInputConverter()
   updateRecordOnEdit: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showNotificationOnEdit: boolean = true;
   protected _enabled: boolean = true;
 

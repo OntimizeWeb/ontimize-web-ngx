@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { NumberService } from '../../../../../services/number.service';
-import {
-  OComboRendererIntegerComponent
-} from '../integer/o-combo-renderer-integer.component';
+import { OComboRendererIntegerComponent } from '../integer/o-combo-renderer-integer.component';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER_REAL = [
   // decimal-separator [string]: decimal separator. Default: dot (.).
@@ -22,9 +20,9 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_REAL = [
 })
 export class OComboRendererRealComponent extends OComboRendererIntegerComponent implements OnInit {
 
-  @InputConverter()
+  @NumberInputConverter()
   minDecimalDigits: number = 2;
-  @InputConverter()
+  @NumberInputConverter()
   maxDecimalDigits: number = 2;
 
   protected decimalSeparator: string = '.';

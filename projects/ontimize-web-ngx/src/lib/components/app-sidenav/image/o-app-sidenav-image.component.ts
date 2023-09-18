@@ -25,8 +25,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [];
 export class OAppSidenavImageComponent implements OnInit, OnDestroy, OnChanges {
 
   protected sidenav: OAppSidenavComponent;
-  protected openedSrc: string;
-  protected closedSrc: string;
+  public openedSrc: string;
+  public closedSrc: string;
   private _src: string;
 
   protected subscription = new Subscription();

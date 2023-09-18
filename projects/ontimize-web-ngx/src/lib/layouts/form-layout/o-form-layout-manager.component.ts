@@ -16,7 +16,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
@@ -123,7 +123,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
    */
   public title: string;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public storeState: boolean = true;
 
   /**

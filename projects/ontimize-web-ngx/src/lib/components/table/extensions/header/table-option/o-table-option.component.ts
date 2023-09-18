@@ -1,15 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Injector,
-  Type,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Type, ViewEncapsulation } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_TABLE_OPTION = [
   'oattr: attr',
@@ -45,13 +36,13 @@ export class OTableOptionComponent {
   onClick: EventEmitter<object> = new EventEmitter<object>();
 
   oattr: string;
-  @InputConverter()
+  @BooleanInputConverter()
   enabled: boolean = true;
   icon: string;
   olabel: string;
-  @InputConverter()
+  @BooleanInputConverter()
   showCheckboxOption: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   active: boolean = false;
 
   cd: ChangeDetectorRef;

@@ -9,10 +9,10 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
@@ -42,7 +42,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER = [
 export class OTableColumnResizerComponent implements OnInit, OnDestroy {
 
   column: OColumn;
-  @InputConverter()
+  @BooleanInputConverter()
   disabled: boolean = false;
 
   // resizing = new EventEmitter<boolean>();

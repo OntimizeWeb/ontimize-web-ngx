@@ -2,7 +2,7 @@ import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators';
+import { BooleanInputConverter } from '../../decorators';
 import { AuthService } from '../../services/auth.service';
 import { DialogService } from '../../services/dialog.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
@@ -36,13 +36,13 @@ export class OUserInfoComponent implements OnDestroy {
   userInfoSubscription: Subscription;
   protected userInfo: UserInfo;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showLogout: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showSettings: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showProfile: boolean = false;
 
   public userInfoConfiguration: OUserInfoConfigurationDirective;

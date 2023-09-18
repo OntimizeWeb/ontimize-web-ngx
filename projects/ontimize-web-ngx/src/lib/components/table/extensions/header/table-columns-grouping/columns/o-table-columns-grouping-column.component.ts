@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { InputConverter } from '../../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../../decorators/input-converter';
 import { GroupedColumnAggregateConfiguration } from '../../../../../../interfaces/o-table-columns-grouping-interface';
 import { AggregateFunction } from '../../../../../../types/aggregate-function.type';
 import { Util } from '../../../../../../util';
@@ -35,11 +35,11 @@ export class OTableColumnsGroupingColumnComponent {
   public aggregateName: string;
   private _aggregate: string;
   public aggregateFunction: AggregateFunction;
-  @InputConverter()
+  @BooleanInputConverter()
   expandGroupsSameLevel: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   changeAggregateSameLevel: boolean = true;
- 
+
   set aggregate(value: string) {
     this._aggregate = value;
   }

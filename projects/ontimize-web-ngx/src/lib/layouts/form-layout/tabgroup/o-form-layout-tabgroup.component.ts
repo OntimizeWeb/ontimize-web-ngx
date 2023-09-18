@@ -18,19 +18,16 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
-import {
-  FormLayoutCloseDetailOptions,
-  FormLayoutDetailComponentData
-} from '../../../types/form-layout-detail-component-data.type';
+import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
-import { InputConverter } from '../../../decorators/input-converter';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -61,7 +58,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public title: string;
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
-  @InputConverter()
+  @BooleanInputConverter()
   public stretchTabs: boolean = false;
 
   @ViewChild('tabGroup') tabGroup: MatTabGroup;

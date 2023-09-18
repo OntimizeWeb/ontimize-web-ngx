@@ -1,11 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
-import { NumberService } from '../../../../../services/number.service';
-import {
-  DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL,
-  OListPickerRendererRealComponent
-} from '../real/o-list-picker-renderer-real.component';
+import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL, OListPickerRendererRealComponent } from '../real/o-list-picker-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE = [
   ...DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL,
@@ -25,7 +21,6 @@ export class OListPickerRendererPercentageComponent extends OListPickerRendererR
   maxDecimalDigits = 0;
   valueBase: OPercentageValueBaseType = 1;
 
-  protected numberService: NumberService;
 
   protected componentPipe: OPercentPipe;
   protected pipeArguments: IPercentPipeArgument;
@@ -34,9 +29,6 @@ export class OListPickerRendererPercentageComponent extends OListPickerRendererR
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.numberService = this.injector.get(NumberService);
-
-    this.setComponentPipe();
   }
 
   setComponentPipe() {

@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../pipes/o-percentage.pipe';
 import { Util } from '../../../util/util';
-import {
-  ORealInputComponent
-} from '../real-input/o-real-input.component';
+import { ORealInputComponent } from '../real-input/o-real-input.component';
 
 
 export const DEFAULT_INPUTS_O_PERCENT_INPUT = [
@@ -24,7 +22,7 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
 })
 export class OPercentInputComponent extends ORealInputComponent implements OnInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   grouping: boolean = true;
 
   valueBase: OPercentageValueBaseType = 1;

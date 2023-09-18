@@ -1,16 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ComponentFactoryResolver,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnInit } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { OPermissions } from '../../../../../types/o-permissions.type';
@@ -59,9 +50,9 @@ export class OTableInsertableRowComponent implements OnInit {
 
   protected position: string = OTableInsertableRowComponent.DEFAULT_ROW_POSITION;
 
-  @InputConverter()
+  @BooleanInputConverter()
   showPlaceHolder: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   includeParentKeys: boolean = true;
 
   enabled = true;

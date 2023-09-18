@@ -1,16 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  forwardRef,
-  Inject,
-  Injector,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
 import { OPermissions } from '../../../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../../../util/permissions';
@@ -43,11 +34,11 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
 export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy {
 
   /* Inputs */
-  @InputConverter()
+  @BooleanInputConverter()
   public insertButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public refreshButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   public deleteButton: boolean = true;
   /* End of inputs */
 

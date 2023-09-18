@@ -1,26 +1,14 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  Optional,
-  ViewEncapsulation
-} from '@angular/core';
-import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { UntypedFormControl, ValidatorFn } from '@angular/forms';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import {
-  OTextInputComponent
-} from '../text-input/o-text-input.component';
+import { OTextInputComponent } from '../text-input/o-text-input.component';
 
 const INPUT_TYPE_TEXT = 'text'
 const INPUT_TYPE_NUMBER = 'number'
@@ -47,14 +35,14 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
 
   inputType: HTMLInputType = INPUT_TYPE_NUMBER;
 
-  @InputConverter()
+  @NumberInputConverter()
   min: number;
-  @InputConverter()
+  @NumberInputConverter()
   max: number;
-  @InputConverter()
+  @NumberInputConverter()
   step: number = 1;
 
-  @InputConverter()
+  @BooleanInputConverter()
   protected grouping: boolean = false;
   protected thousandSeparator: string;
   protected olocale: string;

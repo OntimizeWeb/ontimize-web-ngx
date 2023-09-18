@@ -12,10 +12,6 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
-    "types": [
-      "jasmine",
-      "node"
-    ],
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -26,11 +22,9 @@
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
-    "annotateForClosureCompiler": false,
-    "skipTemplateCodegen": true,
+    "enableI18nLegacyMessageIdFormat": false,
     "strictMetadataEmit": true,
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
-    "enableResourceInlining": true
+    "strictInjectionParameters": true
   }
 }

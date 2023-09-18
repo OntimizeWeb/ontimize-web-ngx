@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../decorators/input-converter';
 import { OTranslateService } from '../../../../services/translate/o-translate.service';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
@@ -92,7 +92,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
     return this.isVisibleCopy.getValue();
   }
 
-  @InputConverter()
+  @BooleanInputConverter()
   set showSelectAll(value: boolean) {
     if (typeof value !== 'boolean') {
       value = Util.parseBoolean(value as any);

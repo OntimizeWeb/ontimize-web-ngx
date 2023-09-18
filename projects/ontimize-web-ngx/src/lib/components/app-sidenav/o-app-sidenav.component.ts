@@ -10,14 +10,14 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { MenuGroup, MenuItemUserInfo } from '../../interfaces/app-menu.interface';
 import { AppMenuService } from '../../services/app-menu.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
@@ -65,7 +65,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   protected _menuRootArray: MenuRootItem[] = [];
   protected _layoutMode: OAppLayoutMode = Codes.APP_LAYOUT_MODE_DESKTOP;
   protected _sidenavMode: OSidenavMode;
-  @InputConverter()
+  @BooleanInputConverter()
   protected opened: boolean = true;
   _showUserInfo: boolean = true;
   _showToggleButton: boolean = true;
