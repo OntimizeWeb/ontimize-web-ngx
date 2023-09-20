@@ -1,17 +1,24 @@
 <div [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
-  <ng-container *ngIf="thumbLabel; else templateWithoutThumb">
-    <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" discrete [id]="getAttribute()" [formControlName]="getAttribute()"
-      [displayWith]="oDisplayWith"><input matSliderThumb /><input matSliderThumb (change)="onChangeEvent($event)" />
+  <ng-container [ngSwitch]="true">
+    <mat-slider *ngSwitchCase="thumbLabel && !showTickMarks" discrete [color]="color" [max]="max" [min]="min" [step]="step"
+      [displayWith]="oDisplayWith">
+      <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [formControlName]="getAttribute()" />
+    </mat-slider>
+    <mat-slider *ngSwitchCase="!thumbLabel && !showTickMarks" [color]="color" [max]="max" [min]="min" [step]="step" [displayWith]="oDisplayWith">
+      <input matSliderThumb (change)="onChangeEvent($event)"  [id]="getAttribute()" [formControlName]="getAttribute()" />
+    </mat-slider>
+    <mat-slider *ngSwitchCase="thumbLabel && showTickMarks" [color]="color" [max]="max" [min]="min" [step]="step" discrete
+      [displayWith]="oDisplayWith" showTickMarks>
+      <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [formControlName]="getAttribute()" />
+    </mat-slider>
+    <mat-slider *ngSwitchCase="!thumbLabel && showTickMarks" [color]="color" [max]="max" [min]="min" [step]="step" [displayWith]="oDisplayWith"
+      showTickMarks>
+      <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [formControlName]="getAttribute()" />
     </mat-slider>
   </ng-container>
   <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
 
 </div>
 
-<ng-template #templateWithoutThumb>
-  <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" [id]="getAttribute()" [formControlName]="getAttribute()"
-    [displayWith]="oDisplayWith"><input matSliderThumb />
-    <input (change)="onChangeEvent($event)" />
-  </mat-slider>
-</ng-template>
+

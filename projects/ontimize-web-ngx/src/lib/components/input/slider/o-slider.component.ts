@@ -10,11 +10,12 @@ export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   'min',
   'step',
   'thumbLabel:thumb-label',
-  'oDisplayWith:display-with'
+  'oDisplayWith:display-with',
+  'showTickMarks:show-tick-marks'
 ];
 
 
-export type SliderDisplayFunction = (value: number | null) => string | number;
+export type SliderDisplayFunction = (value: number) => string;
 
 @Component({
   selector: 'o-slider',
@@ -33,6 +34,9 @@ export class OSliderComponent extends OFormDataComponent {
   @BooleanInputConverter()
   public thumbLabel: boolean = false;
 
+  @BooleanInputConverter()
+  public showTickMarks: boolean = false;
+
   @NumberInputConverter()
   min: number;
 
@@ -42,7 +46,7 @@ export class OSliderComponent extends OFormDataComponent {
   @NumberInputConverter()
   step: number = 1;
 
-  oDisplayWith: SliderDisplayFunction;
+  oDisplayWith: SliderDisplayFunction = (value: number) => `${value}`;;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -55,5 +59,6 @@ export class OSliderComponent extends OFormDataComponent {
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
   }
+
 
 }
