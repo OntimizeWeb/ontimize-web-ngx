@@ -9,21 +9,24 @@
       background-color: mat.get-color-from-palette($background, background);
     }
 
-    .mat-mdc-tab-group {
+    .mat-mdc-tab-group.o-tab-ontimize>.mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab.mdc-tab {
 
-      .mdc-tab {
+      .mat-icon:hover {
+        background-color: mat.get-color-from-palette($foreground, disabled-button);
+        border-radius: 50%;
+      }
+
+
+      &.mdc-tab--active {
         .mat-icon:hover {
-          background-color: mat.get-color-from-palette($foreground, disabled-button);
-          border-radius: 50%;
+          background-color: mat.get-color-from-palette($primary, 500, 0.4);
+        }
+        .mdc-tab__text-label {
+          color: mat.get-color-from-palette($foreground, text);
         }
 
-
-        &.mdc-tab--active {
-          .mat-icon:hover {
-            background-color: mat.get-color-from-palette($primary, 500, 0.4);
-          }
-        }
       }
     }
+
   }
 }
