@@ -134,7 +134,8 @@
           outline: none;
 
           .mat-mdc-list-option-checkbox-before {
-            align-self: auto;
+            display: flex;
+            align-items: center;
             padding-right: 0px;
             margin-right: 0px;
           }
@@ -184,7 +185,6 @@
 
       .mdc-list-item__primary-text,
       .mdc-list-item__secondary-text {
-        height: 16px;
         margin-bottom: 0;
         &::before {
           height: auto;
@@ -349,9 +349,7 @@
     &.mat-mdc-outlined-button {
       padding: 0 6px;
 
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-      .mat-button-wrapper {
+      .mat-mdc-button-wrapper {
         .mat-icon {
           margin-right: 4px;
           font-size: 20px;
@@ -391,6 +389,11 @@
         margin-left: 8px;
 
         .mat-mdc-paginator-icon {
+          width: 20px;
+        }
+
+        .mat-mdc-button-touch-target {
+          height: 20px;
           width: 20px;
         }
       }
