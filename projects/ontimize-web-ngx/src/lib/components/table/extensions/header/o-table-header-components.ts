@@ -48,5 +48,6 @@ export const O_TABLE_HEADER_COMPONENTS_EXPORTED = [
   OTableInsertableRowComponent,
   OTableQuickfilterComponent,
   OTableColumnsFilterColumnComponent,
-  OTableHeaderComponent
+  OTableHeaderComponent,
+  OTableColumnSelectAllDirective
 ];

@@ -4,6 +4,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
+  AfterContentInit,
   AfterViewInit,
   ApplicationRef,
   ChangeDetectionStrategy,
@@ -271,7 +272,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     '(document:click)': 'handleDOMClick($event)'
   }
 })
-export class OTableComponent extends AbstractOServiceComponent<OTableComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
+export class OTableComponent extends AbstractOServiceComponent<OTableComponentStateService> implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
@@ -622,11 +623,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
 
   @ViewChild('exportOptsTemplate')
-
-  @ContentChild(OTableColumnSelectAllDirective, { static: true })
-  tableColumnSelectAllContentChild: OTableColumnSelectAllDirective
-
   exportOptsTemplate: TemplateRef<any>;
+
+  @ContentChild(OTableColumnSelectAllDirective)
+  tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
+
+
 
   public groupedColumnsArray: string[] = [];
   @HostListener('window:resize', [])
