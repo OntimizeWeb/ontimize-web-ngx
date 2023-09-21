@@ -9,6 +9,8 @@
   padding: 8px 0;
 
   .mat-mdc-card {
+    padding: 0 12px;
+
     .mat-card-header .mat-card-title {
       margin-bottom: 12px;
     }
@@ -22,6 +24,10 @@
     mat-card-subtitle,
     mat-card-title {
       width: 100%;
+    }
+
+    .mat-mdc-card-content {
+      padding: 0px;
     }
 
     &.large {
