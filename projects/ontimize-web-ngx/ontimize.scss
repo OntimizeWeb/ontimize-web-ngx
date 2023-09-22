@@ -240,14 +240,3 @@ button.mat-mdc-button-base {
 .overlay-ref-display-none .cdk-overlay-pane.o-context-menu {
   display: none;
 }
-
-/* DATE PICKER */
-.mat-calendar-controls {
-
-  button.mat-calendar-next-button,
-  button.mat-calendar-previous-button {
-    &::after {
-      margin: $mat-calendar-prev-next-icon-margin;
-    }
-  }
-}
