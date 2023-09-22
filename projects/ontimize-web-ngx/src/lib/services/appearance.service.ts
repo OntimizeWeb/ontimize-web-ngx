@@ -10,10 +10,13 @@ export class AppearanceService {
   isDarkMode$: Observable<boolean> = this.isDarkModeSubject.asObservable();
 
   constructor() {
+    // Retrieve the dark mode setting from local storage
     const isDarkMode = localStorage.getItem('isDarkMode');
+    // Initialize the BehaviorSubject with the retrieved setting (default to false if not found)
     this.isDarkModeSubject.next(isDarkMode === 'true');
   }
 
+  // Method to set the dark mode and update the local storage
   setDarkMode(isDarkMode: boolean) {
     this.isDarkModeSubject.next(isDarkMode);
     localStorage.setItem('isDarkMode', isDarkMode.toString());
