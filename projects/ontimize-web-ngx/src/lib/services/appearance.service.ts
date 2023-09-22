@@ -1,7 +1,8 @@
 
-import { Injectable, Injector, Type } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppConfig } from '../config/app-config';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,25 +11,27 @@ export class AppearanceService {
   private isDarkModeSubject = new BehaviorSubject<boolean>(false);
   isDarkMode$: Observable<boolean> = this.isDarkModeSubject.asObservable();
   protected _appConfig: AppConfig;
-
+  protected localStorageService: LocalStorageService;
   constructor(protected injector: Injector) {
-    this._appConfig = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>);
-    const config = JSON.parse(localStorage.getItem(this._appConfig.getConfiguration().uuid));
+    this.localStorageService = this.injector.get(LocalStorageService);
 
-    if (config && config.theme && typeof config.theme.isDark === 'boolean') {
-      const isDark = config.theme.isDark;
+    const config = this.localStorageService.getStoredData();
+
+    if (config && config["theme"] && typeof config["theme"].isDark === 'boolean') {
+      const isDark = config["theme"].isDark;
       this.isDarkModeSubject.next(isDark);
     }
 
   }
 
   setDarkMode(isDarkMode: boolean) {
-    const config = JSON.parse(localStorage.getItem(this._appConfig.getConfiguration().uuid));
-    this.isDarkModeSubject.next(isDarkMode);
+    const config = this.localStorageService.getStoredData();
     if (config) {
-      config.theme.isDark = isDarkMode;
+      config["theme"] = config["theme"] || {};
+      config["theme"].isDark = isDarkMode;
     }
-    localStorage.setItem(this._appConfig.getConfiguration().uuid, JSON.stringify(config));
+    this.localStorageService.setLocalStorage(config);
+    this.isDarkModeSubject.next(isDarkMode);
   }
 
   isDarkMode(): boolean {
