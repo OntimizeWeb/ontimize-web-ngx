@@ -504,12 +504,12 @@ $typography : ontimize-lite.$typography;
   .o-list .o-list-toolbar>button:not([disabled]),
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button:not([disabled]),
   button.mat-mdc-outlined-button:not([disabled]) {
-    &.mat-button-base {
+    &.mat-mdc-button-base {
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
     }
 
     &.mat-mdc-button-base.mat-primary,
-    &.mat-button-base.o-button-primary {
+    &.mat-mdc-button-base.o-button-primary {
       color: mat.get-color-from-palette($primary, 500);
       background-color: $background-primary-button;
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
@@ -526,8 +526,8 @@ $typography : ontimize-lite.$typography;
 
     }
 
-    &.mat-button-base.mat-accent,
-    &.mat-button-base.o-button-default {
+    &.mat-mdc-button-base.mat-accent,
+    &.mat-mdc-button-base.o-button-default {
       color: mat.get-color-from-palette($foreground, text);
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
 
@@ -542,7 +542,7 @@ $typography : ontimize-lite.$typography;
       }
     }
 
-    &.mat-button-base.mat-warn {
+    &.mat-mdc-button-base.mat-warn {
       color: mat.get-color-from-palette($warn);
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
 
@@ -553,7 +553,7 @@ $typography : ontimize-lite.$typography;
     }
   }
 
-  .o-button button.mat-stroked-button:not([disabled]).mat-button-base {
+  .o-button button.mat-stroked-button:not([disabled])mat-mdc-button-base {
     &.mat-accent {
       color: mat.get-color-from-palette($accent, 500);
     }

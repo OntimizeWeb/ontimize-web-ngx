@@ -93,15 +93,15 @@ $app-background-color: #eaeaea;
   @include layout.layout-padding-margin();
   @include o-density.checkbox(20px, 16px, 16px);
   @include o-density.list();
-  @include o-density.radio(-1);
+  @include o-density.radio();
 
   .mat-dialog-actions {
 
     button:not([disabled]) {
 
-      &.o-button-primary.mat-stroked-button.mat-button-base,
-      &.mat-button-base.mat-primary,
-      &.mat-button-base.o-button-primary {
+      &.o-button-primary.mat-stroked-buttonmat-mdc-button-base,
+      &.mat-mdc-button-base.mat-primary,
+      &.mat-mdc-button-base.o-button-primary {
         color: #303030;
         background-color: $background-primary-button;
         border-color: transparent;

@@ -292,7 +292,7 @@
     }
 
     &.mat-mdc-button-base,
-    &.mat-button-base.mat-accent {
+    &.mat-mdc-button-base.mat-accent {
       color: mat.get-color-from-palette($accent);
       background-color: $background-accent-button;
 

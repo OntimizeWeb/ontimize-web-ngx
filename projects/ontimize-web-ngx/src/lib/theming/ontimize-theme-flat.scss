@@ -261,13 +261,13 @@
         @include o-button-class();
 
         button.mat-mdc-button-base[ng-reflect-dialog-result="0"],
-        button.mat-button-base[ng-reflect-dialog-result="true"] {
+        button.mat-mdc-button-base[ng-reflect-dialog-result="true"] {
           color: white;
           background-color: variables.$primary-color;
         }
 
         button.mat-mdc-button-base[ng-reflect-dialog-result="1"],
-        button.mat-button-base[ng-reflect-dialog-result="false"] {
+        button.mat-mdc-button-base[ng-reflect-dialog-result="false"] {
           color: white;
           background-color: variables.$default-color;
         }
