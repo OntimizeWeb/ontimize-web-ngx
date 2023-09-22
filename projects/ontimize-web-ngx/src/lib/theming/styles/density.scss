@@ -1,4 +1,5 @@
 @use '@angular/material'as mat;
+@use "sass:selector";
 
 @mixin checkbox($ripple-size, $touch-target-size, $icon-size) {
 
@@ -18,6 +19,7 @@
     .mdc-checkbox__native-control {
       top: calc((20px - var(--mdc-checkbox-touch-target-size, $touch-target-size)) / 2);
       right: calc((20px - var(--mdc-checkbox-touch-target-size, $touch-target-size)) / 2);
+
       left: calc((20px - var(--mdc-checkbox-touch-target-size, $touch-target-size)) / 2);
       width: var(--mdc-checkbox-touch-target-size, $touch-target-size);
       height: var(--mdc-checkbox-touch-target-size, $touch-target-size);
@@ -32,8 +34,12 @@
   }
 }
 
-@mixin radio($density) {
-  @include mat.radio-density($density);
+@mixin radio() {
+
+  :root {
+    --mdc-radio-state-layer-size: 20px
+  }
+
 }
 
 @mixin list() {

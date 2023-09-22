@@ -5,22 +5,21 @@
 
 @mixin o-mat-form-field-typography-lite($config) {
   $prefix-suffix-icon-font-scale: 1.4;
-
   .mat-mdc-form-field {
 
-
     @include mat.form-field-density(-4);
-    @include o-density.radio(-3);
+
 
     &.icon-field .mat-mdc-form-field-icon-suffix .icon-btn,
     &.icon-field .mat-mdc-form-field-icon-suffix .mat-icon-button,
     .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-suffix .mat-mdc-icon-button,
     .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix .mat-mdc-icon-button {
-      svg{
+      svg {
         height: 100%;
         width: 100%;
       }
-      .mat-mdc-button-touch-target{
+
+      .mat-mdc-button-touch-target {
         width: 20px;
         height: 20px;
       }
