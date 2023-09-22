@@ -59,6 +59,12 @@ $width24: 24px;
         line-height: $suffix-size;
         width: $suffix-size;
         height: $suffix-size;
+        svg,
+        img,
+        .mat-mdc-button-touch-target {
+          width: 20px;
+          height: 20px;
+        }
       }
 
       .svg-icon>svg {
