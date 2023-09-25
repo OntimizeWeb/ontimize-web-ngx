@@ -1,0 +1,44 @@
+@mixin o-dual-list-selector-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $foreground: map.get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $background: map.get($theme, background);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  .o-dual-list-selector {
+    .o-dual-list-selector-list {
+      .mat-mdc-selection-list.mat-mdc-list-base {
+        border: 1px solid mat.get-color-from-palette($foreground, divider);
+
+        .mat-mdc-list-item {
+          &:not(.mat-mdc-list-option) {
+            border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
+          }
+        }
+
+        .mat-mdc-list-option {
+          background: mat.get-color-from-palette($background, 'hover');
+
+          &[aria-selected="true"] {
+            background-color: mat.get-color-from-palette($primary, 100);
+            color: if($is-dark-theme, #121212, mat.get-color-from-palette($foreground, text));
+          }
+        }
+
+        &.cdk-drop-list-dragging {
+          border-style: dashed;
+          border-width: 2px;
+        }
+      }
+
+      .mat-mdc-mini-fab:not([class*='mat-elevation-z']) {
+        box-shadow: none;
+
+        &.mat-accent:not([disabled]) {
+          background-color: mat.get-color-from-palette($foreground, divider);
+          color: mat.get-color-from-palette($foreground, text);
+        }
+      }
+    }
+  }
+}

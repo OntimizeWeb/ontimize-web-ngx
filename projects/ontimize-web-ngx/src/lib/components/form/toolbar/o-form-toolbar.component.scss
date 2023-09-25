@@ -1,0 +1,40 @@
+.o-form-toolbar {
+  flex: none;
+  display: block;
+
+  .o-form-toolbar-header {
+    min-height: 50px;
+    max-height: 50px;
+    padding: 0 16px 0 4px;
+
+    &.breadcrumb {
+      padding: 16px;
+      min-height: 84px;
+      max-height: 84px;
+    }
+
+    .mat-toolbar-tools {
+      width: 100%;
+
+      button.o-form-toolbar-button.mat-mdc-icon-button.mat-mdc-button-base {
+        padding: 0;
+        margin: 0;
+        background: transparent;
+      }
+    }
+
+      .o-breadcrumb {
+        width: 100%;
+        height: 32px;
+        min-height: initial;
+
+        .mat-toolbar {
+          padding: 0;
+          min-height: initial;
+          max-height: initial;
+          height: 100%;
+        }
+
+      }
+    }
+  }

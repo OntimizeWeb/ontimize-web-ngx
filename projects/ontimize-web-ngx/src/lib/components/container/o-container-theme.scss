@@ -1,0 +1,74 @@
+@mixin o-container-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $typography: map.get($theme-or-color-config, typography);
+
+  .o-column,
+  .o-column-collapsible,
+  .o-row,
+  .o-row-collapsible {
+    >.o-container {
+      &.mat-expansion-panel {
+        background-color: inherit;
+      }
+
+      >.o-container-header,
+      >.o-container-title,
+      >.mat-expansion-panel-header {
+        border-color: mat.get-color-from-palette($foreground, divider);
+        color: mat.get-color-from-palette($foreground, text);
+
+        .mdc-tab__text-label,
+        .mat-mdc-tab-link {
+          color: mat.get-color-from-palette($foreground, text);
+        }
+
+      }
+
+      >.o-container-title,
+      >.mat-expansion-panel-header .o-container-title {
+        span {
+          font: {
+            size: mat.font-size($typography, body-1);
+            weight: mat.font-weight($typography, body-1);
+          }
+        }
+      }
+    }
+  }
+
+  .o-column-collapsible,
+  .o-row-collapsible {
+    >.o-container {
+      .o-container-title.mat-expansion-panel-header-title {
+        border: none;
+      }
+    }
+  }
+
+  .o-column-collapsible.o-appearance-outline,
+  .o-column.o-appearance-outline,
+  .o-row-collapsible.o-appearance-outline,
+  .o-row.o-appearance-outline {
+    >.o-container {
+      .o-container-title {
+        color: mat.get-color-from-palette($foreground, text);
+      }
+    }
+
+    .o-container-outline {
+
+      .o-container-outline-end,
+      .o-container-outline-gap,
+      .o-container-outline-gap-description,
+      .o-container-outline-gap-empty1,
+      .o-container-outline-gap-empty2,
+      .o-container-outline-gap-icon,
+      .o-container-outline-gap-title,
+      .o-container-outline-start {
+        border-color: mat.get-color-from-palette($foreground, divider);
+      }
+    }
+  }
+}

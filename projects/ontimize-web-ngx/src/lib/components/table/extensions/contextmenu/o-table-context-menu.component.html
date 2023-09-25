@@ -1,0 +1,70 @@
+<o-context-menu #defaultContextMenu>
+
+  <ng-container *ngIf="isDataCell | async">
+    <o-context-menu-item attr="refresh" label="TABLE_CONTEXT_MENU.REFRESH" svg-icon="ontimize:autorenew" (execute)="refresh()"
+      [visible]="isVisibleRefresh | async"></o-context-menu-item>
+    <o-context-menu-item attr="detail" icon="chevron_right" label="TABLE_CONTEXT_MENU.VIEW_DETAIL" (execute)="gotoDetails($event)"
+      [visible]="isVisibleDetail | async"></o-context-menu-item>
+    <o-context-menu-item attr="edit" icon="edit" label="TABLE_CONTEXT_MENU.EDIT" (execute)="edit($event)" [visible]="isVisibleEdit | async">
+    </o-context-menu-item>
+    <o-context-menu-item attr="insert" label="TABLE_CONTEXT_MENU.INSERT" icon="add" (execute)="add()" [visible]="isVisibleInsert | async">
+    </o-context-menu-item>
+    <o-context-menu-item attr="delete" label="TABLE_CONTEXT_MENU.DELETE" icon="delete" (execute)="delete($event)" [visible]="isVisibleDelete | async">
+    </o-context-menu-item>
+    <!-- FILTER GROUP -->
+    <o-context-menu-group label="TABLE_CONTEXT_MENU.FILTER" icon="filter_alt" type="group" [visible]="isVisibleFilter | async">
+      <o-context-menu-item icon="filter_alt" [label]="labelFilterByColumn" (execute)="filterByColumn($event)"></o-context-menu-item>
+      <o-context-menu-item icon="filter_alt" label="TABLE_CONTEXT_MENU.FILTER_BY_VALUE" (execute)="filterByValue()"></o-context-menu-item>
+    </o-context-menu-group>
+    <!-- COPY GROUP -->
+    <o-context-menu-separator [visible]="isVisibleCopy | async"></o-context-menu-separator>
+    <o-context-menu-group label="TABLE_CONTEXT_MENU.COPY" icon="file_copy" type="group" [visible]="isVisibleCopy | async">
+      <o-context-menu-item icon="file_copy" label="TABLE_CONTEXT_MENU.COPY_CELL" (execute)="copyCell($event)"></o-context-menu-item>
+      <o-context-menu-item icon="file_copy" label="TABLE_CONTEXT_MENU.COPY_ROW" (execute)="copyRow($event)"></o-context-menu-item>
+      <o-context-menu-item label="TABLE_CONTEXT_MENU.COPY_ALL" icon="file_copy" (execute)="copyAll()"></o-context-menu-item>
+      <o-context-menu-item label="TABLE_CONTEXT_MENU.COPY_SELECTION" icon="file_copy" (execute)="copySelection()"></o-context-menu-item>
+    </o-context-menu-group>
+    <o-context-menu-separator [visible]="isVisibleSelectAll | async"></o-context-menu-separator>
+    <o-context-menu-item attr="select-all" [label]="table.isAllSelected() ? 'TABLE_CONTEXT_MENU.DESELECT_ALL': 'TABLE_CONTEXT_MENU.SELECT_ALL'"
+      icon="select_all" (execute)="table.isAllSelected() ? unSelectAll() : selectAll()" [visible]="isVisibleSelectAll | async"></o-context-menu-item>
+
+    <!-- GROUP BY -->
+    <o-context-menu-separator [visible]="isVisibleGroupByRow | async"></o-context-menu-separator>
+    <o-context-menu-group label="TABLE_CONTEXT_MENU.GROUP_BY" icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async">
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_YEAR" (execute)="groupByColumn('YEAR')"
+        icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async" [enabled]="isEnabledGroupByColumn | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_MONTH" (execute)="groupByColumn('MONTH')"
+        icon="format_indent_increase" type="group" [visible]="isVisibleGroupByRow | async" [enabled]="isEnabledGroupByColumn | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH" icon="format_indent_increase" type="group"
+        (execute)="groupByColumn('YEAR_MONTH')" [visible]="isVisibleGroupByRow | async" [enabled]="isEnabledGroupByColumn | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="isDateColumn | async" label="TABLE_CONTEXT_MENU.GROUP_BY_YEAR_MONTH_DAY" icon="format_indent_increase" type="group"
+        (execute)="groupByColumn('YEAR_MONTH_DAY')" [visible]="isVisibleGroupByRow | async" [enabled]="isEnabledGroupByColumn | async">
+      </o-context-menu-item>
+      <o-context-menu-item *ngIf="!(isDateColumn | async)" icon="format_indent_increase" [label]="labelGroupByColumn" (execute)="groupByColumn()"
+        [enabled]="isEnabledGroupByColumn | async"></o-context-menu-item>
+      <o-context-menu-item *ngIf="isEnabledUnGroupByColumn | async" icon="format_indent_decrease" [label]="labelUnGroupByColumn"
+        (execute)="unGroupByColumn()" [enabled]="isEnabledUnGroupByColumn | async"></o-context-menu-item>
+      <o-context-menu-item icon="format_line_spacing" label="TABLE_CONTEXT_MENU.UNGROUP_ALLCOLUMNS" (execute)="unGroupAll()"
+        [enabled]="isEnabledUnGroupAllColumn | async">
+      </o-context-menu-item>
+    </o-context-menu-group>
+  </ng-container>
+
+  <!-- GROUP BY HEADER CELL AGGREGATE FUNCTION -->
+  <ng-container *ngIf="isGroupableCell | async">
+    <o-context-menu-group label="TABLE_CONTEXT_MENU.GROUP_BY.AGGREGATE_FUNCTION" icon="format_indent_increase" type="group">
+      <o-context-menu-item *ngFor="let aggregateFn of availableColumnAggregates" label="{{ 'AGGREGATE_NAME.' + aggregateFn }}"
+        (execute)="changeAggregateFunction($event, aggregateFn)"></o-context-menu-item>
+    </o-context-menu-group>
+  </ng-container>
+
+  <ng-container *ngIf="isTableGroupedRow | async">
+    <o-context-menu-item icon="unfold_more" label="TABLE_CONTEXT_MENU.EXPAND_ALL_GROUPS" (execute)="expandRowGroupsSameLevel()"></o-context-menu-item>
+    <o-context-menu-item icon="unfold_less" label="TABLE_CONTEXT_MENU.COLLAPSE_ALL_GROUPS" (execute)="collapseRowGroupsSameLevel()">
+    </o-context-menu-item>
+  </ng-container>
+
+</o-context-menu>

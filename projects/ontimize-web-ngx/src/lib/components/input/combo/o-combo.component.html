@@ -1,0 +1,63 @@
+<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [oContextMenu]="oContextMenu">
+
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth"
+    [hideRequiredMarker]="hideRequiredMarker" fxFill [subscriptSizing]="subscriptSizing">
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+    <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [multiple]="getMultiple()" [required]="isRequired" [panelClass]="{ 'o-combo-panel': true, 'o-combo-panel-search': searchable }"
+      (selectionChange)="onSelectionChange($event)" (closed)="innerOnBlur($event)">
+      <o-combo-search *ngIf="searchable" [formControl]="searchControl"></o-combo-search>
+
+      <mat-select-trigger *ngIf="multiple && multipleTriggerLabel">
+        {{ selectModel.selected[0] ? getFirstSelectedValue(): '' }}
+        <span *ngIf="!isEmpty()">
+          {{ 'INPUT.COMBO.MESSAGE_TRIGGER' | oTranslate: { values: [getFormControl().value.length -1] } }}
+        </span>
+      </mat-select-trigger>
+
+      <mat-select-trigger *ngIf="!multiple && !multipleTriggerLabel">
+        <ng-container *ngFor="let item of filteredDataArray">
+          <ng-container *ngIf="renderer && item[valueColumn] == getValue()">
+            <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ value: item }">
+            </ng-template>
+          </ng-container>
+          <ng-container *ngIf="!renderer && item[valueColumn] == getValue()">
+            {{ getOptionDescriptionValue(item) }}
+          </ng-container>
+        </ng-container>
+      </mat-select-trigger>
+
+      <div class="o-combo-options-container">
+        <mat-option *ngIf="hasNullSelection()" [value]="null">{{translate ?
+          (nullSelectionLabel|oTranslate): nullSelectionLabel}}
+        </mat-option>
+        <mat-option *ngFor="let item of filteredDataArray" [value]="getValueColumn(item)">
+          <ng-container *ngIf="renderer">
+            <ng-template *ngTemplateOutlet="renderer?.templateref; context:{ value: item }">
+            </ng-template>
+          </ng-container>
+          <ng-container *ngIf="!renderer">
+            {{ getOptionDescriptionValue(item) }}
+          </ng-container>
+        </mat-option>
+      </div>
+    </mat-select>
+
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
+  </mat-form-field>
+
+  <o-context-menu *ngIf="!this.isReadOnly && this.enabled">
+    <o-context-menu-item attr="refresh" label="FORM_SERVICE_COMPONENT.REFRESH" svg-icon="ontimize:autorenew" (execute)="refresh()">
+    </o-context-menu-item>
+  </o-context-menu>
+</div>

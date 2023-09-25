@@ -1,0 +1,62 @@
+{
+  "name": "ontimize-web-ngx",
+  "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
+  "version": "15.0.0-beta.0",
+  "description": "Ontimize Web framework using Angular 15",
+  "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
+  "author": "Imatia S.L.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:OntimizeWeb/ontimize-web-ngx.git"
+  },
+  "keywords": [
+    "angular",
+    "angular15",
+    "angular 15",
+    "framework",
+    "web framework",
+    "material",
+    "angular material",
+    "material components",
+    "ontimize-web-ngx",
+    "ontimizeWeb"
+  ],
+  "license": "Apache-2.0",
+  "readmeFilename": "README.md",
+  "main": "./bundles/ontimize-web-ngx.umd.js",
+  "metadata": "./index.metadata.json",
+  "module": "./index.js",
+  "es2015": "./esm2015/ontimize-web-ngx.js",
+  "typings": "./index.d.ts",
+  "scripts": {
+    "clean": "rimraf coverage && o-ngx-lib-builder clean",
+    "test": "karma start",
+    "test-watch": "karma start --singleRun=false --autoWatch=true"
+  },
+  "peerDependencies": {
+    "@angular/animations": "^15.2.9",
+    "@angular/cdk": "^15.2.9",
+    "@angular/common": "^15.2.9",
+    "@angular/compiler": "^15.2.9",
+    "@angular/core": "^15.2.9",
+    "@angular/flex-layout": "^15.0.0-beta.42",
+    "@angular/forms": "^15.2.9",
+    "@angular/material": "^15.2.9",
+    "@angular/material-moment-adapter": "^15.2.9",
+    "@angular/platform-browser": "^15.2.9",
+    "@angular/platform-browser-dynamic": "^15.2.9",
+    "@angular/router": "^15.2.9",
+    "rxjs": "~7.8.0",
+    "zone.js": "~0.12.0",
+    "google-libphonenumber": "^3.2.3"
+  },
+  "dependencies": {
+    "@ngx-translate/core": "~13.0.0",
+    "@ngx-translate/http-loader": "~6.0.0",
+    "angular-resizable-element": "3.3.4",
+    "moment": "2.29.2",
+    "ngx-material-timepicker": "5.4.3",
+    "google-libphonenumber": "^3.2.3",
+    "tslib": "^2.3.0"
+  }
+}

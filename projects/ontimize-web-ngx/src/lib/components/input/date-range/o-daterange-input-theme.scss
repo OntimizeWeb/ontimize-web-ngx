@@ -1,0 +1,178 @@
+@mixin o-daterange-input-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  $color-inactive: #999999;
+
+  /*
+  *  variables
+  */
+
+  // Select
+  $select-border: 1px solid #f2f2f2 !default;
+  $select-background: rgba(255, 255, 255, 0.90) !default;
+  $select-padding: 5px !default;
+  $select-radius: 2px !default;
+  $input-height: 3rem !default;
+
+  /*
+* styles
+*/
+  .md-drppicker {
+
+    background-color: mat.get-color-from-palette($background, background);
+
+    &:after,
+    &:before {
+      border-bottom-color: mat.get-color-from-palette($foreground, divider);
+    }
+
+    .calendar-table {
+      border-color: mat.get-color-from-palette($foreground, divider);
+    }
+
+    th {
+      font-weight: normal;
+    }
+
+    td,
+    th {
+      text-align: center;
+
+      border-color: mat.get-color-from-palette($foreground, divider);
+
+      &.available {
+        &:hover {
+          background: mat.get-color-from-palette($background, hover, 0.12);
+          //color:  mat.get-color-from-palette($foreground, text);
+        }
+      }
+
+      &.week {
+        font-size: 80%;
+        color: #ccc;
+      }
+    }
+
+    td {
+      &.off {
+
+        &,
+        &.end-date,
+        &.in-range,
+        &.start-date {
+          background-color: mat.get-color-from-palette($background, background);
+          border-color: transparent;
+          color: $color-inactive;
+        }
+      }
+
+      //
+      // Date Range
+      &.in-range {
+        background-color: mat.get-color-from-palette($primary, A200);
+        border-color: transparent;
+      }
+
+      &.active {
+        background-color: mat.get-color-from-palette($primary);
+        color: mat.get-color-from-palette($primary, default-contrast);
+
+        &,
+        &:hover {
+          background-color: mat.get-color-from-palette($primary);
+
+        }
+      }
+    }
+
+    // disabled controls
+    option,
+    td {
+      &.disabled {
+        color: #999;
+
+      }
+    }
+
+    .dropdowns {
+      select {
+
+        background-color: $select-background;
+
+        &.ampmselect,
+        &.hourselect,
+        &.minuteselect,
+        &.secondselect {
+          width: 50px;
+          margin: 0 auto;
+          background: #eee;
+          border: 1px solid #eee;
+          padding: 2px;
+          outline: 0;
+          font-size: 12px;
+        }
+
+      }
+    }
+
+    .calendar-time {
+      .select {
+        .select-item {
+
+          background-color: transparent;
+
+          border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+          /* Remove focus */
+          &:after {
+
+            border-top: 6px solid rgba(0, 0, 0, 0.12);
+
+          }
+
+          .select-label {
+            color: rgba(0, 0, 0, 0.26);
+
+          }
+        }
+      }
+    }
+
+    .calendar-time select.disabled {
+      color: $color-inactive;
+    }
+
+
+
+    /* ranges */
+    .show-ranges {
+      .drp-calendar.left {
+        border-left: 1px solid #ddd;
+      }
+    }
+
+    .ranges {
+      ul {
+        li {
+          button {
+            &.active {
+              background: mat.get-color-from-palette($background, hover, 0.12);
+            }
+          }
+        }
+
+        li:hover {
+          background: mat.get-color-from-palette($background, hover, 0.12);
+
+        }
+      }
+    }
+
+  }
+
+}

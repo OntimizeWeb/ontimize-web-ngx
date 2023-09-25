@@ -1,0 +1,34 @@
+@mixin o-dialog-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $info: mat.define-palette(mat.$light-blue-palette);
+  $warn: mat.define-palette(mat.$amber-palette);
+  $error: mat.define-palette(mat.$red-palette);
+
+  .alert-icon {
+    &.info {
+      color: mat.get-color-from-palette($info);
+    }
+
+    &.warn {
+      color: mat.get-color-from-palette($warn);
+    }
+
+    &.error {
+      color: mat.get-color-from-palette($error);
+    }
+  }
+
+  .mat-mdc-dialog {
+    background-color: mat.get-color-from-palette($background, dialog);
+
+    &.mat-content-overflow {
+
+      .mat-actions,
+      mat-dialog-actions {
+        border-top-color: mat.get-color-from-palette($foreground, divider);
+      }
+    }
+  }
+}

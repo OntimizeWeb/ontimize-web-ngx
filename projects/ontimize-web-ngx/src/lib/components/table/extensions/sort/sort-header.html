@@ -1,0 +1,21 @@
+<div class="mat-sort-header-container mat-focus-indicator" [class.mat-sort-header-sorted]="_isSorted()"
+  [class.mat-sort-header-position-before]="arrowPosition === 'before'" [attr.tabindex]="_isDisabled() ? null : 0"
+  [attr.role]="_isDisabled() ? null : 'button'">
+
+  <div class="mat-sort-header-content">
+    <ng-content></ng-content>
+  </div>
+
+  <!-- Disable animations while a current animation is running -->
+  <div class="mat-sort-header-arrow" *ngIf="_renderArrow()" [@arrowOpacity]="_getArrowViewState()" [@arrowPosition]="_getArrowViewState()"
+    [@allowChildren]="_getArrowDirectionState()" (@arrowPosition.start)="_disableViewStateAnimation = true"
+    (@arrowPosition.done)="_disableViewStateAnimation = false">
+    <div class="mat-sort-header-stem"></div>
+    <div class="mat-sort-header-indicator" [@indicator]="_getArrowDirectionState()">
+      <div class="mat-sort-header-pointer-left" [@leftPointer]="_getArrowDirectionState()"></div>
+      <div class="mat-sort-header-pointer-right" [@rightPointer]="_getArrowDirectionState()"></div>
+      <div class="mat-sort-header-pointer-middle"></div>
+    </div>
+    <span [ngClass]="getSortIndicatorNumberedClass()"> {{ getSortIndicatorNumbered() }} </span>
+  </div>
+</div>

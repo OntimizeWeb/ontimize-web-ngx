@@ -1,0 +1,19 @@
+.o-phone-input {
+  overflow: hidden;
+
+  .read-only {
+    pointer-events: none;
+
+    .mat-mdc-select-arrow-wrapper {
+      visibility: hidden;
+    }
+
+    .mdc-line-ripple::after {
+      background-image: none;
+    }
+  }
+
+  .mat-mdc-form-field.icon-field {
+    height: 100%;
+  }
+}

@@ -1,0 +1,18 @@
+.o-table-header {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+
+  span[o-mat-sort-header] {
+    flex: 1;
+    min-width: 0;
+
+    /* when it has no sibling .o-table-column-resizer sets the padding to the right because the number indicator is being cut off */
+    &:not(:has(+.o-table-column-resizer)) {
+      padding-right: 6px;
+    }
+  }
+
+}

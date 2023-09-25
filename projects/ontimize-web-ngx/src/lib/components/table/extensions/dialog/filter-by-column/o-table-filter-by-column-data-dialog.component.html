@@ -1,0 +1,106 @@
+<span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }}: {{ column.title | oTranslate }}</span>
+<div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between stretch" class="dialog-list-container">
+  <div fxLayout="column" class="content-wrapper" [class.content-wrapper-fixed-dimension]="getFixedDimensionClass()">
+    <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)" *ngIf="isDefaultFilter | async">
+      {{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}
+    </mat-slide-toggle>
+    <div fxFlex *ngIf="!(isCustomFilter | async);else customFilterTemplate" fxLayout="column">
+      <mat-form-field class="hinted">
+        <mat-icon matPrefix svgIcon="ontimize:search"></mat-icon>
+        <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
+        <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
+      </mat-form-field>
+      <div *ngIf="(listData | async).length > 0; else emptyListData" fxLayout="row" fxLayoutAlign="space-between start">
+        <div fxLayout="row" fxLayoutAlign="start start">
+          <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"
+            class="select-all-checkbox">
+            {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
+          </mat-checkbox>
+          <span *ngIf="!listData" class="column-filter-empty-list">
+            {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' | oTranslate }}
+          </span>
+        </div>
+        <button type="button" mat-icon-button (click)="onClickSortValues()">
+          <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
+        </button>
+      </div>
+
+      <ng-template #emptyListData>
+        <span class="column-filter-empty-list">
+          {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' | oTranslate }}
+        </span>
+      </ng-template>
+
+      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list"
+        (selectionChange)="onSelect($event)">
+        <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before" [selected]="record.selected"
+          [value]="record">
+          <ng-container *ngIf="!column.renderer">
+            {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
+          </ng-container>
+          <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
+            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
+          </ng-template>
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+  </div>
+</div>
+
+
+<mat-dialog-actions fxLayoutAlign="space-between center">
+  <button type="button" mat-stroked-button [mat-dialog-close]="clearAction" class="o-button-info">
+    {{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }} </button>
+  <span align="end">
+    <button type="button" mat-stroked-button [mat-dialog-close]="cancelAction" class="o-button-default cancel">
+      {{ 'CANCEL' | oTranslate }} </button>
+    <button type="button" mat-stroked-button [mat-dialog-close]="acceptAction" class="o-button-primary">
+      {{ 'ACCEPT' | oTranslate }} </button>
+  </span>
+</mat-dialog-actions>
+
+<!-- TEMPLATE CUSTOM FILTER-->
+<ng-template #customFilterTemplate>
+  <div *ngIf="isTextType()">
+    <mat-form-field fxFlex class="hinted">
+      <input matInput #filterText [formControl]="fcText" placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
+      <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
+      <button type="button" matSuffix mat-icon-button (click)="clearValues()">
+        <mat-icon svgIcon="ontimize:close"></mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div *ngIf="isNumericType()" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="12px">
+    <mat-form-field>
+      <input matInput [formControl]="fcFrom" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.FROM' | oTranslate }}">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [formControl]="fcTo" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.TO' | oTranslate }}">
+    </mat-form-field>
+    <button type="button" mat-icon-button (click)="clearValues()">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+  </div>
+  <div *ngIf="isDateType()" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="12px">
+    <mat-form-field>
+      <input matInput [matDatepicker]="datepickerFrom" [max]="fcTo.value" [formControl]="fcFrom"
+        placeholder="{{ 'TABLE.FILTER_BY_COLUMN.FROM' | oTranslate }}">
+      <mat-datepicker-toggle matSuffix [for]="datepickerFrom">
+        <mat-icon matDatepickerToggleIcon>today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #datepickerFrom [startView]="getStartedViewDatepicker()"></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="datepickerTo" [min]="fcFrom.value" [formControl]="fcTo"
+        placeholder="{{ 'TABLE.FILTER_BY_COLUMN.TO' | oTranslate }}">
+      <mat-datepicker-toggle matSuffix [for]="datepickerTo">
+        <mat-icon matDatepickerToggleIcon>today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #datepickerTo [startView]="getStartedViewDatepicker()"></mat-datepicker>
+    </mat-form-field>
+    <button type="button" matSuffix mat-icon-button (click)="clearValues()">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+  </div>
+
+</ng-template>

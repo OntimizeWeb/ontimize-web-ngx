@@ -1,0 +1,19 @@
+.o-app-sidenav-menu-group {
+  .o-app-sidenav-menugroup {
+    &.mat-mdc-button {
+      min-width: 0;
+    }
+  }
+
+  &[disabled=true] {
+    .o-app-sidenav-menugroup {
+      cursor: default;
+    }
+  }
+
+  .mat-mdc-tooltip.menugroup-tooltip {
+    margin-left: 28px;
+  }
+
+
+}

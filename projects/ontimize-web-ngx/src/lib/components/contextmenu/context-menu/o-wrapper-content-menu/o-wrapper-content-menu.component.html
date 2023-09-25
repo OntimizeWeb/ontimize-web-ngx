@@ -1,0 +1,21 @@
+<mat-menu #childMenu="matMenu" [class]="class" [overlapTrigger]="false" [hasBackdrop]="false">
+  <ng-container *ngFor="let child of items">
+    <!-- Handle branch node menu items -->
+    <span *ngIf="isGroup(child) && child.isVisible">
+      <button mat-menu-item color="primary" [matMenuTriggerFor]="menu.childMenu" [disabled]="child.disabled">
+        <mat-icon *ngIf="child.svgIcon != null" [svgIcon]="child.svgIcon"></mat-icon>
+        <mat-icon *ngIf="child.svgIcon == null && child.icon != null">{{ child.icon }}</mat-icon>
+        <span>{{ child.label | oTranslate}}</span>
+      </button>
+      <o-wrapper-content-menu #menu [items]="getChildren(child)" [class]="class"></o-wrapper-content-menu>
+    </span>
+    <!-- Handle leaf node menu items -->
+    <button mat-menu-item (click)="onClick(child, $event)" [disabled]="child.disabled" *ngIf="isItem(child) && child.isVisible">
+      <mat-icon *ngIf="child.svgIcon != null" [svgIcon]="child.svgIcon"></mat-icon>
+      <mat-icon *ngIf="child.svgIcon == null && child.icon != null">{{ child.icon }}</mat-icon>
+      <span>{{ child.label | oTranslate}} </span>
+    </button>
+    <!-- separator leaf node menu items -->
+    <mat-divider *ngIf="isSeparator(child) && child.isVisible"></mat-divider>
+  </ng-container>
+</mat-menu>

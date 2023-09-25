@@ -1,0 +1,117 @@
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
+*
+*/
+
+// Layout
+// ------------------------------
+@use "sass:math";
+
+$baseline-grid: 4px !default;
+$layout-gutter-width: ($baseline-grid * 2) !default;
+$layout-gutter-width-vertical: $baseline-grid;
+$layout-gutter-width-horizontal: 14px !default;
+
+@mixin layout-padding-margin-lite() {
+  [layout-padding] > [flex-lt-md],
+  [layout-padding] > [flex-sm] {
+    padding: $layout-gutter-width * 0.25;
+  }
+
+  [layout-padding],
+  [layout-padding] > [flex-gt-sm],
+  [layout-padding] > [flex-lt-lg],
+  [layout-padding] > [flex-md],
+  [layout-padding] > [flex] {
+    padding: $layout-gutter-width * 0.5;
+    //padding: $layout-gutter-width / 2 $layout-gutter-width $layout-gutter-width / 2 $layout-gutter-width;
+  }
+
+  [layout-padding] > [flex-gt-md],
+  [layout-padding] > [flex-lg] {
+    padding: math.div($layout-gutter-width, 1);
+  }
+
+  [layout-margin] > [flex-lt-md],
+  [layout-margin] > [flex-sm] {
+    margin: $layout-gutter-width * 0.25;
+  }
+
+  [layout-margin],
+  [layout-margin] > [flex-gt-sm],
+  [layout-margin] > [flex-lt-lg],
+  [layout-margin] > [flex-md],
+  [layout-margin] > [flex] {
+    margin: $layout-gutter-width * 0.5;
+  }
+
+  [layout-margin] > [flex-gt-md],
+  [layout-margin] > [flex-lg] {
+    margin: math.div($layout-gutter-width, 1);
+  }
+
+  [layout-wrap] {
+    flex-wrap: wrap;
+  }
+
+  [layout-nowrap] {
+    flex-wrap: nowrap;
+  }
+
+  [layout-padding-vertical] {
+    padding: $layout-gutter-width-vertical 0;
+  }
+
+  [layout-margin-vertical] {
+    margin: $layout-gutter-width-vertical 0;
+  }
+
+  [layout-padding-horizontal] {
+    padding: 0 $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-horizontal] {
+    margin: 0 $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-left] {
+    padding-left: $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-left] {
+    margin-left: $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-right] {
+    padding-right: $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-right] {
+    margin-right: $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-top] {
+    padding-top: $layout-gutter-width-vertical;
+  }
+
+  [layout-margin-top] {
+    margin-top: $layout-gutter-width-vertical;
+  }
+
+  [layout-padding-bottom] {
+    padding-bottom: $layout-gutter-width-vertical;
+  }
+
+  [layout-margin-bottom] {
+    margin-bottom: $layout-gutter-width-vertical;
+  }
+
+}

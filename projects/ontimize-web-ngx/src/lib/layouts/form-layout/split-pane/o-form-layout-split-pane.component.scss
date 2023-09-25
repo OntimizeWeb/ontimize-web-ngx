@@ -1,0 +1,55 @@
+.o-form-layout-split-pane {
+  .o-split-pane-row-wrapper {
+    height: 100%;
+  }
+  .o-split-pane-content-wrapper {
+    z-index: 1000;
+    min-width: 15%;
+    > .o-split-pane-resize-handle {
+      width: 8px;
+      position: relative;
+      cursor: col-resize;
+      > .o-split-pane-resize-border {
+        position: absolute;
+        height: 100%;
+        width: 2px;
+        left: 3px;
+        background-color: #929292;
+        > div {
+          width: 4px;
+          height: 32px;
+          position: absolute;
+          top: calc(50% - 16px);
+          left: -1px;
+          background-color: #666;
+        }
+      }
+    }
+    &:not(.resized) {
+      width: 50%;
+    }
+  }
+  .mwlResizable {
+    box-sizing: border-box; // required for the enableGhostResize option to work
+  }
+  .o-split-pane-secondary-content {
+    padding: 0 8px;
+    overflow: auto;
+    > * {
+      height: 100%;
+    }
+  }
+  .spinner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+    visibility: visible;
+    opacity: 1;
+    -moz-transition: opacity 0.25s linear;
+    -webkit-transition: opacity 0.25s linear;
+    transition: opacity 0.25s linear;
+  }
+}

@@ -1,0 +1,9 @@
+.o-table-group-by-column-dialog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .mat-mdc-dialog-content {
+    flex: 1;
+  }
+}

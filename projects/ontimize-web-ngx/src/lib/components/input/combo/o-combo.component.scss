@@ -1,0 +1,20 @@
+.o-combo {
+
+  .read-only .mat-mdc-select-arrow-wrapper {
+    visibility: hidden;
+  }
+
+  .mat-mdc-select-arrow-wrapper {
+    line-height: 20px;
+  }
+}
+
+.o-combo-panel.o-combo-panel-search {
+  height: 100%;
+
+  .o-combo-options-container {
+    height: calc(100% - 3em);
+    overflow: auto;
+
+  }
+}

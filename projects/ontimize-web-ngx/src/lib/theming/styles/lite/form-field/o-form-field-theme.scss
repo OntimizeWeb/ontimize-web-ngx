@@ -1,0 +1,57 @@
+@use '@angular/material'as mat;
+@use './../../density.scss'as o-density;
+@use 'sass:math';
+
+
+@mixin o-mat-form-field-typography-lite($config) {
+  $prefix-suffix-icon-font-scale: 1.4;
+  .mat-mdc-form-field {
+
+    @include mat.form-field-density(-4);
+
+
+    &.icon-field .mat-mdc-form-field-icon-suffix .icon-btn,
+    &.icon-field .mat-mdc-form-field-icon-suffix .mat-icon-button,
+    .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-suffix .mat-mdc-icon-button,
+    .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix .mat-mdc-icon-button {
+      svg {
+        height: 100%;
+        width: 100%;
+      }
+
+      .mat-mdc-button-touch-target {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-flex {
+        .mat-mdc-form-field-infix {
+          min-height: auto;
+          padding-bottom: 4px;
+
+
+          .mat-mdc-floating-label {
+            display: block;
+          }
+
+          .mat-mdc-select-arrow-wrapper {
+            height: auto;
+          }
+        }
+
+        &:not(.mdc-text-field--outlined) {
+          .mat-mdc-form-field-infix {
+            min-height: auto;
+            padding-top: 14px;
+          }
+        }
+      }
+    }
+  }
+}

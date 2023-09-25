@@ -1,0 +1,4 @@
+<mat-button-toggle-group [disabled]="!enabled" [name]="name" [value]="value" [vertical]="layout==='column'" [multiple]="multiple"
+  (change)="onChange.emit($event)">
+  <ng-container #childContainer></ng-container>
+</mat-button-toggle-group>
