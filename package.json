@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build && npm run build-theme && npm run build-styles && npm run copy-files && npm run copy-files-themes",
+    "build-prod": "ng build -c production && npm run build-theme && npm run build-styles && npm run copy-files && npm run copy-files-themes",
     "build-theme": "bundle-scss --config",
     "build-styles": "scss-bundle -c scss-bundle-ontimize.config.json",
     "copy-files": "copyfiles -u 3 ./projects/ontimize-web-ngx/assets/svg/ontimize-icon-set.svg ./dist/assets && echo '----¡Assets copied!----'  ",
