@@ -7,7 +7,7 @@
 * **input files**: new `subscriptSizing` input.
 * **o-slider**: new `show-tick-marks` input.
 
-> [!IMPORTANT]
+> [!NOTE]
 > For the migration process, the guide available at the following URL has been followed:
 https://update.angular.io/?l=3&v=8.2-15.0.
 
