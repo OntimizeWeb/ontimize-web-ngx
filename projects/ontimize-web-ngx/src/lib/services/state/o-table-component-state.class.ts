@@ -9,7 +9,7 @@ import { DefaultServiceComponentStateClass } from './o-component-state.class';
 import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
-import { Util } from '../../util';
+import { Util } from '../../util/util';
 import { OGroupedColumnTypes } from '../../types';
 
 export class OTableComponentStateClass extends DefaultServiceComponentStateClass {

@@ -1,6 +1,6 @@
 import { Directive, ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
 
-import { Util } from '../../util';
+import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent } from '../o-form-data-component.class';

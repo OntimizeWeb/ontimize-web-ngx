@@ -1,4 +1,4 @@
-import { OTableComponent } from "../components";
+import type { OTableComponent } from "../components/table/o-table.component";
 
 export interface IExportDataProvider {
   table: OTableComponent;

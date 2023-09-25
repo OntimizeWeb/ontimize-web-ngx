@@ -1,8 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-import { SessionInfo } from '../types';
+
 import { DialogService } from './dialog.service';
+import { SessionInfo } from '../types/session-info.type';
 
 @Injectable()
 export abstract class AuthService {

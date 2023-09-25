@@ -1,5 +1,5 @@
 import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { Util } from '../util';
+import { Util } from '../util/util';
 import * as lpn from 'google-libphonenumber';
 
 const EMAIL_REGEXP = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
