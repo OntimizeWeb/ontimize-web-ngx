@@ -42,7 +42,7 @@ $o_table_row_padding: 24px;
         }
       }
 
-      thead .mat-header-row th:last-child .o-table-column-resizer {
+      thead .mat-mdc-header-row th:last-child .o-table-column-resizer {
         display: none;
       }
     }
@@ -51,7 +51,7 @@ $o_table_row_padding: 24px;
       pointer-events: none;
 
       >.o-table-toolbar,
-      >.o-table-body .mat-header-row {
+      >.o-table-body .mat-mdc-header-row {
         opacity: .75;
       }
     }
@@ -96,7 +96,7 @@ $o_table_row_padding: 24px;
         overflow-x: auto;
         padding-bottom: 16px;
 
-        .mat-header-cell {
+        .mat-mdc-header-cell {
           width: 150px;
         }
       }
@@ -111,7 +111,7 @@ $o_table_row_padding: 24px;
       }
     }
 
-    .mat-table {
+    .mat-mdc-table {
       table-layout: fixed;
       width: 100%;
 
@@ -127,31 +127,11 @@ $o_table_row_padding: 24px;
       }
 
       &.small {
-        .column-filter-icon {
-          margin-top: 2px;
-        }
 
-        .mat-sort-header-arrow {
-          margin-top: 4px;
-        }
-
-        .mat-header-row,
-        .mat-row {
-          .mat-checkbox-inner-container {
-            height: $mat-checkbox-size-small;
-            width: $mat-checkbox-size-small;
-
-            .mat-checkbox-checkmark-path {
-              width: $_mat-checkbox-mark-stroke-size-small;
-            }
-
-            .mat-checkbox-mixedmark {
-              height: floor($_mat-checkbox-mark-stroke-size-small);
-            }
-          }
-
-          .mat-cell,
-          .mat-header-cell {
+        .mat-mdc-header-row,
+        .mat-mdc-row {
+                .mat-mdc-cell,
+          .mat-mdc-header-cell {
             .image-avatar {
               width: 24px;
               height: 24px;
@@ -160,31 +140,6 @@ $o_table_row_padding: 24px;
         }
       }
 
-      &.medium {
-        .column-filter-icon {
-          margin-top: 2px;
-        }
-
-        .mat-sort-header-arrow {
-          margin-top: 5px;
-        }
-
-        .mat-header-row,
-        .mat-row {
-          .mat-checkbox-inner-container {
-            height: $mat-checkbox-size-medium;
-            width: $mat-checkbox-size-medium;
-
-            .mat-checkbox-checkmark-path {
-              width: $_mat-checkbox-mark-stroke-size-medim;
-            }
-
-            .mat-checkbox-mixedmark {
-              height: floor($_mat-checkbox-mark-stroke-size-medim);
-            }
-          }
-        }
-      }
 
       &.large {
         .column-filter-icon {
@@ -197,7 +152,7 @@ $o_table_row_padding: 24px;
 
       }
 
-      tr.mat-row.o-table-row-expanded {
+      tr.mat-mdc-row.o-table-row-expanded {
         height: 0;
       }
 
@@ -205,7 +160,7 @@ $o_table_row_padding: 24px;
         height: 1px;
       }
 
-      .mat-row {
+      .mat-mdc-row {
         box-sizing: border-box;
         transition: background-color .2s;
         position: relative;
@@ -222,7 +177,8 @@ $o_table_row_padding: 24px;
         /* Non-prefixed version, currently supported by Chrome and Opera */
         user-select: none;
 
-        .mat-cell {
+        .mat-mdc-cell,
+        .mat-mdc-header-cell {
           padding: 0 12px;
           overflow: hidden;
           white-space: nowrap;
@@ -283,7 +239,7 @@ $o_table_row_padding: 24px;
           }
 
           &.o-mat-cell-multiline {
-            &:not(.mat-header-cell) {
+            &:not(.mat-mdc-header-cell) {
               padding: 6px 12px;
             }
 
@@ -325,20 +281,19 @@ $o_table_row_padding: 24px;
         cursor: pointer;
       }
 
-      .mat-header-cell {
+      .mat-mdc-header-cell {
         overflow: hidden;
         position: relative;
         box-sizing: border-box;
         padding: 0 12px;
         vertical-align: middle;
 
-        &.resizable {
-          padding-right: 24px;
+        &.mat-column-select.mat-header-select-all-with-title {
+          padding-right: 12px;
         }
 
         &:first-of-type {
           padding-left: 0;
-          padding-right: 0;
         }
 
         &:not(.o-column-image) {
@@ -365,11 +320,9 @@ $o_table_row_padding: 24px;
 
         .column-filter-icon {
           cursor: pointer;
-          float: left;
           font-size: 18px;
           width: 18px;
           height: 18px;
-          margin-right: 2px;
           line-height: 1;
         }
 
@@ -379,17 +332,9 @@ $o_table_row_padding: 24px;
           place-content: center;
         }
 
-        .mat-sort-header-arrow {
-          position: absolute;
-          right: 0;
-        }
-
         .header-title-container {
           cursor: default;
-        }
-
-        &.resizable .mat-sort-header-arrow {
-          margin-right: 12px;
+          min-height: 20px;
         }
 
         .header-title-container,
@@ -409,27 +354,27 @@ $o_table_row_padding: 24px;
           text-align: center;
         }
 
-        &.center {
-          [o-mat-sort-header] {
-            .mat-sort-header-button {
-              padding-left: 12px;
-            }
-          }
-        }
-
         &.end,
         &.end .mat-sort-header-button {
           text-align: right;
         }
       }
 
-      .mat-cell,
-      .mat-header-cell {
+      .mat-mdc-cell,
+      .mat-mdc-header-cell {
         &.mat-column-select {
-          width: 18px;
+          &:not(.mat-header-select-all-with-title) {
+            width: 18px;
+          }
+
           box-sizing: content-box;
-          padding: 0 0 0 $o_table_row_padding;
           overflow: initial;
+
+          .mat-checkbox-layout {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: inline;
+          }
         }
 
         &.mat-column-expandable {
@@ -440,7 +385,7 @@ $o_table_row_padding: 24px;
         }
       }
 
-      .mat-cell {
+      .mat-mdc-cell {
         .row-container-expanded {
           overflow: hidden;
           display: flex;
@@ -497,7 +442,7 @@ $o_table_row_padding: 24px;
   }
 }
 
-.mat-tooltip.o-table-cell-tooltip {
+.mat-mdc-tooltip.o-table-cell-tooltip {
   word-wrap: break-word;
   overflow: hidden;
   min-width: 140px;

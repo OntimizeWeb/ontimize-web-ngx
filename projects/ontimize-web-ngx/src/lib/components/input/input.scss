@@ -10,7 +10,8 @@ div.icon-btn {
 $suffix-size: 20px;
 $width24: 24px;
 
-.o-tooltip.mat-tooltip {
+.o-tooltip.mat-mdc-tooltip {
+
   &.after,
   &.right {
     margin-left: 5px;
@@ -34,51 +35,45 @@ $width24: 24px;
   }
 }
 
-.mat-form-field {
-  &.mat-form-field-appearance-ontimize {
-    .mat-select-arrow-wrapper {
-      transform: initial;
-    }
+.mat-mdc-form-field {
+  .mat-mdc-form-field-flex {
 
-  }
+    .mat-mdc-form-field-icon-prefix,
+    .mat-mdc-form-field-icon-suffix {
+      display: inherit;
+      align-items: center;
 
-  &.mat-form-field-appearance-legacy {
-    .mat-icon {
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-    }
+      &:last-child {
+        padding-right: 6px;
+      }
 
-    .mat-form-field-prefix,
-    .mat-form-field-suffix {
-      .mat-icon-button {
-        vertical-align: bottom;
+      mat-icon {
+        font-size: $suffix-size;
+        width: $suffix-size;
+        height: $suffix-size;
+        line-height: $suffix-size;
+        padding: 0;
+      }
 
-        .mat-icon {
-          font-size: 150%;
+      .mat-mdc-icon-button {
+        line-height: $suffix-size;
+        width: $suffix-size;
+        height: $suffix-size;
+        svg,
+        img,
+        .mat-mdc-button-touch-target {
+          width: 20px;
+          height: 20px;
         }
       }
-    }
-  }
 
-  &:not(.mat-form-field-appearance-legacy) {
-    .mat-form-field-wrapper {
-      .mat-form-field-prefix,
-      .mat-form-field-suffix {
-        display: inherit;
-
-        .mat-icon {
-          height: $suffix-size;
-          line-height: $suffix-size;
-          width: $suffix-size;
-        }
-
-        .mat-icon-button {
-          line-height: $suffix-size;
-          display: block;
-          height: $suffix-size;
-        }
+      .svg-icon>svg {
+        padding: 3px 0;
+        box-sizing: border-box;
+        width: $suffix-size;
       }
+
+
     }
   }
 
@@ -86,34 +81,42 @@ $width24: 24px;
     cursor: default;
   }
 
-  &.custom-width .mat-form-field-infix {
+  &.custom-width .mat-mdc-form-field-infix {
     width: auto;
   }
 
   &.icon-field {
     height: $width24;
 
-    .mat-form-field-suffix {
+    .mat-mdc-form-field-icon-suffix {
       cursor: default;
       text-align: center;
 
       .icon-btn,
       .mat-icon,
-      .mat-icon-button .mat-icon {
-        vertical-align: bottom;
+      .mat-mdc-icon-button .mat-icon {
+        vertical-align: baseline;
       }
 
-      .icon-btn,
-      .mat-icon-button,
-      .mat-icon:not([svgicon]) {
+      .mat-mdc-icon-button {
+
+        svg,
+        img {
+          width: $suffix-size;
+          height: $suffix-size;
+        }
+      }
+
+
+      .mat-mdc-icon-button .mat-mdc-button-touch-target {
         height: $suffix-size;
+        width: $suffix-size;
       }
 
-      .svg-icon > svg {
+      .svg-icon>svg {
         padding: 3px 0;
         box-sizing: border-box;
       }
-
     }
   }
 }

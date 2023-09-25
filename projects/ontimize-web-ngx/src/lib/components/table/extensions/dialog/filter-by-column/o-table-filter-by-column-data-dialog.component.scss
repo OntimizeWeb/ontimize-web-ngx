@@ -1,18 +1,20 @@
 .o-filter-by-column-dialog {
-  .mat-slide-toggle {
+  .mat-mdc-slide-toggle {
     padding-bottom: 24px;
   }
+
   .content-wrapper {
     padding: 24px 0 12px;
     margin: 0;
-    &.content-wrapper-fixed-dimension{
+
+    &.content-wrapper-fixed-dimension {
       max-height: 430px;
       min-height: 430px;
       min-width: 250px;
       width: 100%;
     }
 
-    .mat-form-field.hinted {
+    .mat-mdc-form-field.hinted {
       margin-bottom: 24px;
     }
 
@@ -26,10 +28,10 @@
       overflow-x: hidden;
       outline: none;
 
-      .mat-list-item {
+      .mat-mdc-list-item {
         height: 30px;
 
-        .mat-list-text {
+        .mat-mdc-list-item {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;

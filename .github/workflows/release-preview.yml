@@ -8,7 +8,7 @@ concurrency:
 on:
   pull_request:
     types: [labeled, synchronize]
-    branches: ['master']
+    branches: ['main.15.x']
     paths: ['projects/ontimize-web-ngx/**']
 
 jobs:
@@ -23,10 +23,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Node 14.x
+      - name: Node 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.20.0
+          node-version: 18.10.0
           registry-url: ${{ env.NPM_REGISTRY }}
 
       - name: obtain package.json version

@@ -17,12 +17,11 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu } from '@angular/material/menu';
 import { Observable } from 'rxjs';
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand.interface';
 import { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
 import { DialogService } from '../../../../../services/dialog.service';
-
 import { O_CHART_ON_DEMAND_SERVICE, O_REPORT_SERVICE } from '../../../../../services/factories';
 import { OntimizeExportDataProviderService } from '../../../../../services/ontimize-export-data-provider.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
@@ -36,13 +35,9 @@ import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
-import {
-  OTableApplyConfigurationDialogComponent
-} from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
+import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
-import {
-  OTableStoreConfigurationDialogComponent
-} from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
+import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 
@@ -93,23 +88,23 @@ export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
 export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, OnDestroy {
 
   /* Inputs */
-  @InputConverter()
+  @BooleanInputConverter()
   selectAllCheckbox: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   exportButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showConfigurationOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showFilterOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   columnsVisibilityButton: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showGroupByOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showResetWidthOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showReportOnDemandOption: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showChartsOnDemandOption: boolean = true;
 
 
@@ -381,7 +376,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         }
 
         this.table.cd.detectChanges();
-        this.table.refreshColumnsWidth();
+        this.table.refreshColumnsWidthFromLocalStorage();
       }
     });
   }

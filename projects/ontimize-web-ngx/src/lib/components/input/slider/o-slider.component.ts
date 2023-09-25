@@ -1,25 +1,21 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 
 import { OFormComponent } from '../../../components/form/o-form.component';
-import { InputConverter } from '../../../decorators/input-converter';
-import {
-  OFormDataComponent
-} from '../../o-form-data-component.class';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
   'color',
-  'invert',
   'max',
   'min',
   'step',
   'thumbLabel:thumb-label',
-  'tickInterval:tick-interval',
-  'layout',
-  'oDisplayWith:display-with'
+  'oDisplayWith:display-with',
+  'showTickMarks:show-tick-marks'
 ];
 
 
-export type SliderDisplayFunction = (value: number | null) => string | number;
+export type SliderDisplayFunction = (value: number) => string;
 
 @Component({
   selector: 'o-slider',
@@ -34,36 +30,23 @@ export type SliderDisplayFunction = (value: number | null) => string | number;
 export class OSliderComponent extends OFormDataComponent {
 
   public color: string;
-  public layout: 'row' | 'column' = 'row';
 
-  @InputConverter()
-  public vertical: boolean = false;
-
-  @InputConverter()
-  public invert: boolean = false;
-
-  @InputConverter()
+  @BooleanInputConverter()
   public thumbLabel: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
+  public showTickMarks: boolean = false;
+
+  @NumberInputConverter()
   min: number;
 
-  @InputConverter()
+  @NumberInputConverter()
   max: number;
 
-  @InputConverter()
+  @NumberInputConverter()
   step: number = 1;
 
-  set tickInterval(value: any) {
-    this._tickInterval = value;
-  }
-  get tickInterval() {
-    return this._tickInterval;
-  }
-  _tickInterval: 'auto' | number = 0;
-
-
-  oDisplayWith: SliderDisplayFunction;
+  oDisplayWith: SliderDisplayFunction = (value: number) => `${value}`;;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -76,5 +59,6 @@ export class OSliderComponent extends OFormDataComponent {
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
   }
+
 
 }

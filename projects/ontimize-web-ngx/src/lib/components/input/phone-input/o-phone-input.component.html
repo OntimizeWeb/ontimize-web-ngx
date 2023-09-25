@@ -1,5 +1,5 @@
 <div [formGroup]="getFormGroup()" fxLayout="row wrap" [fxLayoutGap]="gap +' grid'">
-  <mat-form-field class="mat-form-phone" [floatLabel]="floatLabel" [appearance]="appearance" [class.read-only]="isReadOnly" fxFlex.xs>
+  <mat-form-field class="mat-form-phone" [floatLabel]="floatLabel" [appearance]="appearance" [class.read-only]="isReadOnly" fxFlex.xs [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <mat-select [value]="selectedCountry" (selectionChange)="onCountrySelect($event)" [disabled]="!enabled">
       <mat-option *ngFor="let country of allCountries" [value]="country"> {{country.name}} +{{country.dialCode}}</mat-option>

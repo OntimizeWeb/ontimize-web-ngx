@@ -1,14 +1,6 @@
-import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  OnInit,
-  TemplateRef,
-  ViewChild
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
 import { OComboCustomRenderer } from '../o-combo-renderer.class';
 
@@ -27,7 +19,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_INTEGER = [
 })
 export class OComboRendererIntegerComponent extends OComboCustomRenderer implements AfterContentInit, OnInit {
 
-  @InputConverter()
+  @BooleanInputConverter()
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
   protected componentPipe: OIntegerPipe;

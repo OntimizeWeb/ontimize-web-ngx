@@ -6,13 +6,11 @@
     font-size: 48px;
   }
 
-  .mat-raised-button {
+  .mat-mdc-raised-button {
     height: initial;
 
-    .mat-button-wrapper {
-      > div {
-        line-height: inherit;
-      }
+    .mdc-button__label {
+      line-height: initial;
     }
   }
 }

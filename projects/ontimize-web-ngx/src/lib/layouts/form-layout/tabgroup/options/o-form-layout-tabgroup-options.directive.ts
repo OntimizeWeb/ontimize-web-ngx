@@ -56,6 +56,11 @@ export class OFormLayoutTabGroupOptionsDirective {
   public set maxTabs(value: number) {
     this._maxTabs = NumberConverter(value);
   }
+  @Input('stretch-tabs')
+  public set stretchTabs(value:boolean) {
+    this._stretchTabs = BooleanConverter(value);
+  }
+  protected _stretchTabs: boolean = false;
 
   @ContentChild(TemplateRef)
   templateMatTabLabel: TemplateRef<any>;
@@ -72,7 +77,9 @@ export class OFormLayoutTabGroupOptionsDirective {
       title: this.title,
       labelColumns: this.labelColumns,
       separator: this.separator,
-      maxTabs: this._maxTabs
+      maxTabs: this._maxTabs,
+      stretchTabs: this._stretchTabs
+
     }
     // Deleting undefined properties
     Object.keys(result).forEach(key => result[key] == null ? delete result[key] : {});

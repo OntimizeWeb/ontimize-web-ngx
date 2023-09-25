@@ -26,7 +26,6 @@ export class OListPickerRendererDateComponent extends OListPickerCustomRenderer 
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {

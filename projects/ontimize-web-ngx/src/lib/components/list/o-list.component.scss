@@ -2,20 +2,24 @@
 ::-webkit-input-placeholder {
   color: #8E0C39;
 }
+
 /* Mozilla Firefox 4 to 18 */
 :-moz-placeholder {
   color: #8E0C39;
   opacity: 1;
 }
+
 /* Mozilla Firefox 19+ */
 ::-moz-placeholder {
   color: #8E0C39;
   opacity: 1;
 }
+
 /* Internet Explorer 10-11 */
 :-ms-input-placeholder {
   color: #8E0C39;
 }
+
 /* Standard (https://drafts.scsswg.org/selectors-4/#placeholder) */
 :placeholder-shown {
   color: #8E0C39;
@@ -45,22 +49,22 @@
 
     &:not(.pageable-loading) {
       top: 0;
-      background: rgba(255,255,255, 1);
+      background: rgba(255, 255, 255, 1);
     }
 
     &.pageable-loading {
-      background: rgba(255,255,255,0.5);
+      background: rgba(255, 255, 255, 0.5);
     }
 
     path {
-      stroke-width: 5px!important;
+      stroke-width: 5px !important;
     }
   }
 
-  .mat-list {
+  .mat-mdc-list {
     overflow: auto;
 
-    .mat-3-line .o-custom-list-item {
+    .mdc-list-item--with-three-lines .o-custom-list-item {
       position: relative;
     }
 
@@ -75,18 +79,28 @@
     }
 
     &.o-list-item-has-buttons {
-      .o-list-item .mat-list-item-content {
+      .o-list-item .mat-mdc-list-item {
         padding-right: 72px;
       }
 
-      &[dense] .o-list-item .mat-list-item-content {
+      &[dense] .o-list-item .mat-mdc-list-item {
         padding-right: 56px;
       }
     }
 
-    .o-list-item.mat-card,
-    .o-list-item.mat-list-item {
-      margin: 6px 0;
+    .o-list-item {
+
+      &.mat-mdc-card {
+        margin: 6px 0;
+        padding-bottom: 16px;
+      }
+
+      .mat-mdc-list-item {
+        .mat-mdc-list-item-unscoped-content {
+          display: flex;
+          align-items: center;
+        }
+      }
     }
   }
 

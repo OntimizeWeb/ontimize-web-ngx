@@ -13,13 +13,14 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { OTableColumn } from '../../../interfaces/o-table-column.interface';
 import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
+import { ErrorData } from '../../../types/error-data.type';
 import { Expression } from '../../../types/expression.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { Codes } from '../../../util/codes';
@@ -27,11 +28,7 @@ import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
 import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor';
-import {
-  O_TABLE_CELL_RENDERERS_INPUTS,
-  O_TABLE_CELL_RENDERERS_OUTPUTS,
-  renderersMapping
-} from './cell-renderer/cell-renderer';
+import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
@@ -92,6 +89,10 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'angularValidatorsFn: validators',
 
+  'angularValidatorsFnErrors: validators-errors',
+
+  'angularAsyncValidatorsFn: async-validators',
+
   ...O_TABLE_CELL_RENDERERS_INPUTS,
   ...O_TABLE_CELL_EDITORS_INPUTS
 ];
@@ -126,12 +127,12 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected _resizable: boolean;
   protected _searchable: boolean = true;
   protected _groupable: boolean;
-  @InputConverter()
+  @BooleanInputConverter()
   public editable: boolean = false;
   public width: string;
   public minWidth: string;
   public maxWidth: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public tooltip: boolean = false;
   tooltipValue: string;
   tooltipFunction: (rowData: any) => any;
@@ -147,6 +148,9 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected _multiline: boolean = false;
 
   public angularValidatorsFn: ValidatorFn[] = [];
+  public angularValidatorsFnErrors: ErrorData[] = [];
+
+  public angularAsyncValidatorsFn: AsyncValidatorFn[] = [];
 
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
@@ -192,7 +196,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected translate: boolean = false;
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
@@ -204,14 +208,14 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   valueBase: OPercentageValueBaseType = 1;
 
   /* input editor */
-  @InputConverter()
+  @BooleanInputConverter()
   protected orequired: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   showPlaceHolder: boolean = false;
   olabel: string;
-  @InputConverter()
+  @BooleanInputConverter()
   updateRecordOnEdit: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showNotificationOnEdit: boolean = false;
 
   /* input editor date */
@@ -219,28 +223,28 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected oStartView: 'month' | 'year' = 'month';
   protected oMinDate: string;
   protected oMaxDate: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected oTouchUi: boolean = false;
   protected oStartAt: string;
   protected filterDate: DateFilterFunction;
   protected dateValueType: ODateValueType = 'timestamp';
 
   /* input editor integer */
-  @InputConverter()
+  @NumberInputConverter()
   min: number;
-  @InputConverter()
+  @NumberInputConverter()
   max: number;
-  @InputConverter()
+  @NumberInputConverter()
   step: number;
-  @InputConverter()
+  @NumberInputConverter()
   minDecimalDigits: number = 2;
-  @InputConverter()
+  @NumberInputConverter()
   maxDecimalDigits: number = 2;
 
   /* input editor boolean */
-  @InputConverter()
+  @BooleanInputConverter()
   indeterminateOnNull: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   autoCommit: boolean;
 
   /* output cell renderer action */
@@ -252,7 +256,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   editionCommitted: EventEmitter<object> = new EventEmitter<object>();
   onPostUpdateRecord: EventEmitter<object> = new EventEmitter<object>();
 
-  @InputConverter()
+  @BooleanInputConverter()
   asyncLoad: boolean = false;
 
   @ViewChild('container', { read: ViewContainerRef, static: true })

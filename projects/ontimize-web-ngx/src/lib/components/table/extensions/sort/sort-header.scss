@@ -8,15 +8,25 @@ $mat-sort-header-arrow-hint-opacity: .38;
 .mat-sort-header-container {
   display: flex;
   cursor: pointer;
+  align-items: center;
 
   .mat-sort-header-disabled & {
     cursor: default;
+  }
+
+  .mat-sort-header-content {
+    flex-grow: 1;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
   }
 }
 
 .mat-sort-header-position-before {
   flex-direction: row-reverse;
 }
+
 
 .mat-sort-header-button {
   border: none;
@@ -28,13 +38,16 @@ $mat-sort-header-arrow-hint-opacity: .38;
   outline: 0;
   font: inherit;
   color: currentColor;
+
+  &:has(+ .mat-sort-header-arrow) {
+    padding-right: 6px;
+  }
 }
 
 .mat-sort-header-arrow {
   height: $mat-sort-header-arrow-container-size;
   width: $mat-sort-header-arrow-container-size;
   min-width: $mat-sort-header-arrow-container-size;
-  margin: 0 0 0 $mat-sort-header-arrow-margin;
   position: relative;
   display: flex;
 

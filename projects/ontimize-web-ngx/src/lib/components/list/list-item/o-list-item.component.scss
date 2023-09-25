@@ -1,12 +1,8 @@
 .o-list-item {
   display: flex;
 
-  .mat-list-item {
+  .mat-mdc-list-item {
     width: 100%;
-
-    .o-list-item-selection-check {
-      padding-right: 16px;
-    }
 
     .row-buttons-container .o-list-row-action {
       height: 24px;
@@ -14,9 +10,4 @@
       cursor: pointer;
     }
   }
-}
-
-.mat-list[dense] .o-list-item .o-list-row-action .mat-checkbox-inner-container {
-  height: 16px;
-  width: 16px;
 }

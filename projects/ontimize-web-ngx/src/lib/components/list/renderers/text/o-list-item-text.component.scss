@@ -1,15 +1,1 @@
-.mat-list {
 
-  &.selectable {
-    &[dense] .mat-list-item-content {
-      padding-right: 32px;
-    }
-    &:not([dense]) .mat-list-item-content {
-      padding-right: 36px;
-    }
-  }
-
-  .o-list-row-action + .o-list-item-text {
-   // padding-left: 20px;
-  }
-}

@@ -2,31 +2,42 @@
 @use "sass:map";
 
 // Create a theme.
-@mixin o-material-theme($theme, $typography: null) {
-  @include mat.core($typography);
-  @include mat.all-component-themes($theme);
-  @include app-global-theme($theme, $typography);
-  @include o-breadcrumb-theme($theme);
-  @include o-container-theme($theme, $typography);
-  @include o-form-toolbar-theme($theme);
-  @include input-theme($theme);
-  @include o-date-input-theme($theme);
-  @include o-dialog-theme($theme);
-  @include o-table-theme($theme);
+@mixin o-material-theme($theme-or-color-config, $typographyConfig: null) {
+
+  //merge $typographyConfig in $theme-or-color-config
+  @if $typographyConfig !=null {
+    $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
+  }
+
+  //Include theme styles for core and each component used in your app.;
+  @include mat.all-component-themes($theme-or-color-config);
+
+  $typography: mat.get-typography-config($theme-or-color-config);
+  //Emit the CSS rules for these CSS classes and native elements
+  @include mat.typography-hierarchy($typography);
+
+  @include app-global-theme($theme-or-color-config);
+  @include o-breadcrumb-theme($theme-or-color-config);
+  @include o-container-theme($theme-or-color-config);
+  @include o-form-toolbar-theme($theme-or-color-config);
+  @include input-theme($theme-or-color-config);
+  @include o-date-input-theme($theme-or-color-config);
+  @include o-dialog-theme($theme-or-color-config);
+  @include o-table-theme($theme-or-color-config);
   @include o-table-typography($typography);
-  @include o-list-theme($theme);
-  @include o-list-picker-theme($theme);
-  @include o-app-header-theme($theme);
-  @include o-app-sidenav-theme($theme);
-  @include o-app-layout-theme($theme);
-  @include o-card-menu-item-theme($theme, $typography);
-  @include o-hour-input-theme($theme);
-  @include o-form-layout-split-pane-theme($theme);
-  @include o-form-layout-tabgroup-theme($theme);
-  @include o-bar-menu-theme($theme);
-  @include o-grid-theme($theme);
+  @include o-list-theme($theme-or-color-config);
+  @include o-list-picker-theme($theme-or-color-config);
+  @include o-app-header-theme($theme-or-color-config);
+  @include o-app-sidenav-theme($theme-or-color-config);
+  @include o-app-layout-theme($theme-or-color-config);
+  @include o-card-menu-item-theme($theme-or-color-config);
+  @include o-hour-input-theme($theme-or-color-config);
+  @include o-form-layout-split-pane-theme($theme-or-color-config);
+  @include o-form-layout-tabgroup-theme($theme-or-color-config);
+  @include o-bar-menu-theme($theme-or-color-config);
+  @include o-grid-theme($theme-or-color-config);
   @include o-layout-padding-margin();
-  @include o-daterange-input-theme($theme);
-  @include o-dual-list-selector-theme($theme);
-  @include o-image-theme($theme);
+  @include o-daterange-input-theme($theme-or-color-config);
+  @include o-dual-list-selector-theme($theme-or-color-config);
+  @include o-image-theme($theme-or-color-config);
 }

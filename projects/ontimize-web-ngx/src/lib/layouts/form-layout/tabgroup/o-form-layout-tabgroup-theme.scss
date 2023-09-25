@@ -1,4 +1,5 @@
-@mixin o-form-layout-tabgroup-theme($theme) {
+@mixin o-form-layout-tabgroup-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
   $primary: map.get($theme, primary);
   $foreground: map.get($theme, foreground);
@@ -8,19 +9,24 @@
       background-color: mat.get-color-from-palette($background, background);
     }
 
-    .mat-tab-group {
-      .mat-tab-label {
+    .mat-mdc-tab-group.o-tab-ontimize>.mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab.mdc-tab {
+
+      .mat-icon:hover {
+        background-color: mat.get-color-from-palette($foreground, disabled-button);
+        border-radius: 50%;
+      }
+
+
+      &.mdc-tab--active {
         .mat-icon:hover {
-          background-color: mat.get-color-from-palette($foreground, disabled-button);
-          border-radius: 50%;
+          background-color: mat.get-color-from-palette($primary, 500, 0.4);
+        }
+        .mdc-tab__text-label {
+          color: mat.get-color-from-palette($foreground, text);
         }
 
-        &.mat-tab-label-active {
-          .mat-icon:hover {
-            background-color: mat.get-color-from-palette($primary, 500, 0.4);
-          }
-        }
       }
     }
+
   }
 }

@@ -11,7 +11,7 @@ import { OContextMenuOverlayService } from './o-context-menu-overlay.service';
 export class OContextMenuService implements OnDestroy {
 
   public showContextMenu: Subject<IOContextMenuClickEvent> = new Subject<IOContextMenuClickEvent>();
-  public closeContextMenu: Subject<Event> = new Subject();
+  public closeContextMenu: Subject<void> = new Subject<void>();
   protected fakeElement: ElementRef = new ElementRef({ nativeElement: '' });
   protected subscription: Subscription = new Subscription();
 

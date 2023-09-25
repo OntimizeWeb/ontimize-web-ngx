@@ -1,20 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  Optional,
-  Renderer2,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
 
 import { OListItemComponent } from '../../list-item/o-list-item.component';
-import {
-  OListItemTextRenderer
-} from '../o-list-item-text-renderer.class';
+import { OListItemTextRenderer } from '../o-list-item-text-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_AVATAR = [
   'avatar',
@@ -41,7 +28,6 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements A
   protected avatarType: string;
   protected emptyAvatar: string;
 
-
   constructor(
     elRef: ElementRef,
     _renderer: Renderer2,
@@ -50,6 +36,7 @@ export class OListItemAvatarComponent extends OListItemTextRenderer implements A
   ) {
     super(elRef, _renderer, _injector, _listItem);
   }
+
 
   ngAfterViewInit() {
     this.modifyMatListItemElement();

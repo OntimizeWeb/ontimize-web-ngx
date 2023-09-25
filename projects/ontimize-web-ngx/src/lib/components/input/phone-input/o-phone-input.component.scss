@@ -3,15 +3,17 @@
 
   .read-only {
     pointer-events: none;
-    .mat-select-arrow-wrapper {
+
+    .mat-mdc-select-arrow-wrapper {
       visibility: hidden;
     }
-    .mat-form-field-underline {
+
+    .mdc-line-ripple::after {
       background-image: none;
     }
   }
 
-  .mat-form-field.icon-field {
+  .mat-mdc-form-field.icon-field {
     height: 100%;
   }
 }

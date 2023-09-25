@@ -1,12 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { NumberService } from '../../../../../services/number.service';
-import {
-  DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER,
-  OListPickerRendererIntegerComponent
-} from '../integer/o-list-picker-renderer-integer.component';
+import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER, OListPickerRendererIntegerComponent } from '../integer/o-list-picker-renderer-integer.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL = [
   ...DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER,
@@ -24,13 +21,12 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL = [
 })
 export class OListPickerRendererRealComponent extends OListPickerRendererIntegerComponent implements OnInit {
 
-  @InputConverter()
+  @NumberInputConverter()
   minDecimalDigits: number = 2;
-  @InputConverter()
+  @NumberInputConverter()
   maxDecimalDigits: number = 2;
 
   protected decimalSeparator: string = '.';
-  protected numberService: NumberService;
 
   protected componentPipe: ORealPipe;
   protected pipeArguments: IRealPipeArgument;
@@ -39,7 +35,6 @@ export class OListPickerRendererRealComponent extends OListPickerRendererInteger
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.numberService = this.injector.get(NumberService);
     this.setComponentPipe();
   }
 

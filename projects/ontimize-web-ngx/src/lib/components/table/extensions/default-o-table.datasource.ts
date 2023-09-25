@@ -36,7 +36,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _virtualPageChange = new BehaviorSubject<OnRangeChangeVirtualScroll>(new OnRangeChangeVirtualScroll({ start: 0, end: 0 }));
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject(null);
-  protected groupByColumnChange = new Subject();
+  protected groupByColumnChange: Subject<void> = new Subject<void>;
 
   protected filteredData: any[] = [];
   protected aggregateData: any = {};

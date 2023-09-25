@@ -39,7 +39,7 @@
 
     <img [src]="src" alt="empty image" *ngIf="useEmptyImage()" />
 
-    <span class="mat-body-1" *ngIf="isEmpty()">{{ 'OIMAGE.TEXT.DROP&DRAG' | oTranslate }}</span>
+    <span class="mat-subtitle-2" *ngIf="isEmpty()">{{ 'OIMAGE.TEXT.DROP&DRAG' | oTranslate }}</span>
 
     <button mat-button color="primary" (click)="openFileSelector()" *ngIf="!hasControls() && isEmpty()">
       {{ 'OIMAGE.BUTTON.BROWSEFILE' | oTranslate }}

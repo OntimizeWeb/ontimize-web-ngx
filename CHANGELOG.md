@@ -1,3 +1,167 @@
+## 15.0.0-beta.0 (2023-09-25)
+### Features
+> [!NOTE]
+> For the migration process, the guide available at the following URL has been followed:
+https://update.angular.io/?l=3&v=8.2-15.0.
+
+* Migration to Angular 15.
+* Migration to Angular Material 15.
+* **appearance.service**: created a new service that allows you to manage dark mode.
+* **o-form-layout-manager**, **o-form-layout-tabgroup-options**: new `stretch-tabs` input.
+* **input files**: new `subscriptSizing` input.
+* **o-slider**: new `show-tick-marks` input.
+
+> [!IMPORTANT]
+> Due to the high number of changes derived from migration, it is recommended to consult the guide at the following link:
+https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15.
+### BREAKING CHANGES
+* **app.module**: The ONTIMIZE_MODULES import should be replaced by BrowserModule, BrowserAnimationsModule, OntimizeWebModule.forRoot(CONFIG).
+  - Before
+    ```ts
+    @NgModule({
+      imports: [
+        ONTIMIZE_MODULES
+      ]
+    })
+    ```
+  - After
+    ```ts
+    @NgModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        OntimizeWebModule.forRoot(CONFIG)
+      ]
+    })
+    ```
+* **ontimize-web-ngx-theming**: The theming library is now integrated into `ontimize-web-ngx` so the library import must be removed.
+  - Before
+    ```css
+
+    @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme.scss';
+    @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme-lite.scss';
+
+    ```
+  - After
+    ```css
+    @use 'ontimize-web-ngx/theming/ontimize-theme.scss';
+    @use 'ontimize-web-ngx/theming/ontimize-theme-lite.scss';
+    ```
+
+* NODE-SASS usage is deprecated and will be removed so the following steps must be followed:
+  * You must replace node-sass with sass, which is the Dart version of sass.
+    ```cmd
+    npm uninstall node-sass
+    npm install sass
+    ```
+  * The migration to Dart sass is done automatically by the Angular migration process but if you need to migrate a file you can use the following tool to do automatic migrations: https://sass-lang.com/documentation/cli/migrator/.
+
+* InputConverter has been replaced by BooleanConverter and NumberConverter.
+
+* **app-routing.module**: the opt object that is included in forRoot is now of type ExtraOptions.
+
+  - Before
+    ```ts
+    const opt = {
+      enableTracing: false
+    };
+    ```
+
+  - After
+    ```ts
+    const opt: ExtraOptions = {
+      enableTracing: false
+    };
+      ```
+* **o-slider**: inputs `invert`, `tick-internal` and `layout` have been removed.
+## 8.14.0 (2023-07-28)
+### Features
+* **o-table**: Modified the visibility of the method `getColumnFilter` ([3dc21ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dc21ec))
+* **o-form-data-component**: New `async-validators` and `validators-errors` inputs ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
+* **o-validator**: New `async-validator-function` input ([c716336](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c716336)) Closes [#1266](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1266)
+* **o-table-column**: New `async-validators` and `validators-errors` inputs ([a806286](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a806286)) Closes [#1270](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1270)
+
+### Bug fixes
+* **o-form-layout-manager**: Navigation problems when inserting new data fixed ([c0377eb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c0377eb)) Closes [#1119](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1119)
+* **o-form-layout-manager**: Closing opened tabs that are removed in the main tab ([d2f395e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2f395e)) Closes [#1261](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1261) [#1121](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1121)
+
+## 8.13.0 (2023-07-07)
+### Features
+* **o-table**: Set auto-align-titles=`yes` by default. ([f74a32e2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f74a32e2)) ([99dd44b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/99dd44b)) ([a3f8818](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a3f8818)) Closes [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241)
+
+### Bug fixes
+* **o-form**: Fixed `fill-form` css class not expanding in some containers ([53998fb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/53998fb)) Closes [#1246](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1246)
+* **o-integer-input**: Removing old firefox versions workaround that is no longer needed ([cda3108](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cda3108)) Closes [#1237](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1237)
+* **o-table**:
+  * Fixed that when resizing the columns that had a width defined in the table and saving the state in the configuration to apply it later, the width of the saved columns did not correspond to the state of the configuration
+  ([81597f2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/81597f2)) [#1240](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1240)
+  * Fixed that when grouping by rows and filtering by columns when switching screens and returning to the table, the data was not loaded ([2a8232d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2a8232d)) Closes [#1245](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1245)
+  * Fixed bug that caused the localstorage to not be initialized correctly ([f44e2a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f44e2a5)) Closes [#1251](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1251)
+
+### Breaking changes
+* Due to the improvement of the issue [#1241](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1241) headers align in o-table change the align title by default.
+  * To align table header texts to the center, you can use the new `O_TABLE_GLOBAL_CONFIG` InjectionToken as follows
+
+  ```ts
+  @NgModule({
+    declarations: [
+    ...
+    ],
+    ...
+    providers: [
+      ...
+      { provide: O_TABLE_GLOBAL_CONFIG, useValue: { autoAlignTitles: false } },
+      ...
+    ],
+    ...
+  })
+  ```
+  * New CSS class `o-table-header`
+  * The following CSS class changed `o-table-column-filter-icon`, `mat-sort-header-arrow`, `mat-sort-header-button`, `column-filter-icon`, `resizable`, `mat-header-cell`, `o-table-column-resizer`
+
+## 8.12.2 (2023-06-13)
+### Bug fixes
+* **o-table**: Fixed the loading with sort on grouped table not disappearing ([b8888c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b8888c5)) Closes [#1230](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1230)
+
+## 8.12.1 (2023-05-25)
+### Bug fixes
+* **o-phone-input**: Fixing error on countries input parsing ([fb5f353](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fb5f353)) Closes [#1224](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1224)
+
+## 8.12.0 (2023-05-05)
+### Features
+* Add JDBC UUID support ([98583d2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/98583d2)) Closes [#1201](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1201)
+* **o-table**: new directive `o-table-column-select-all` ([1375a64](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1375a64)) Closes [#1209](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1209)
+
+### Bug fixes
+* **o-table**: Fixed error searching in quickfilter when pageable='no'([545db1f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/545db1f)) Closes [#1208](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1208)
+* **o-form-layout-manager**: Fixed bug when navigating in mode='split' and mode='tab' ([dfd8f8d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dfd8f8d))
+
+## 8.11.3 (2023-04-11)
+### Bug fixes
+* **o-form-toolbar**: Fixed custom buttons having the same style as generic form action buttons. ([108e1fc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/108e1fc)) Closes [#1196](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1196)
+
+## 8.11.2 (2023-03-23)
+### Bug fixes
+* **o-form-data-component**: Fixed ontimize inputs remain disabled if initialized with `enable=false` even after enable is set to true ([618444a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/618444a)) Closes [#1188](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1188)
+
+
+## 8.11.1 (2023-03-15)
+### Bug fixes
+* **o-form-navigation**: Fixed form navigation between details ([95d7512](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/95d7512)) Closes [#1180](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1180)
+
+## 8.11.0 (2023-03-02)
+### Features:
+* New scrollbar style ([e0348e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e0348e1)) Closes [#1155](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1155)
+* `o-text-input`:  new `o-mat-prefix` and `o-mat-suffix` directive to add prefix and suffix  ([3972dc1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3972dc1)) ([7f9d973](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7f9d973)) Closes [#1141](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1141)
+
+### Bug fixes
+* Stroked buttons
+  * Fixed color of texts and background on dark mode ([5786312](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5786312))
+  * Fixed warn and accent button colors on light mode ([8f862b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8f862b4))Closes [#81](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/81)
+* **o-table**: Fixed align text right when dragging in window show/hide columns([5ceb428](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5ceb428)) Closes [#1163](https://github.com/OntimizeWeb/ontimize-web-ngx-theming/issues/#1163)
+* **o-app-layout**: Fixed menu section growing on available space ([1d0d03a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1d0d03a)) Closes [#1169](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/#1163)
+* Removed unnecesary scroll from `o-card-menu-layout` ([44ce1ed](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/44ce1ed)) Closes [#1165](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1165)
+
 ## 8.10.0 (2023-01-26)
 ### Features:
 * **o-image**: Added drag&drop functionality ([2518809](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2518809)) Closes [#1112](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1112)

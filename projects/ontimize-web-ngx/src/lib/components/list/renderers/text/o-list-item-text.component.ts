@@ -1,20 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  OnInit,
-  Optional,
-  Renderer2,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
 
 import { OListItemComponent } from '../../list-item/o-list-item.component';
-import {
-  OListItemTextRenderer,
-} from '../o-list-item-text-renderer.class';
+import { OListItemTextRenderer } from '../o-list-item-text-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_TEXT = [
   'iconPosition : icon-position'

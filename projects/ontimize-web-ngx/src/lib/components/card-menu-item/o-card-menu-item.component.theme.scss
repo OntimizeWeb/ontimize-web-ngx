@@ -1,4 +1,6 @@
-@mixin o-card-menu-item-theme($theme,$typography) {
+@mixin o-card-menu-item-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $typography: map.get($theme-or-color-config, typography);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $warn: map.get($theme, warn);
@@ -16,12 +18,12 @@
 
     .o-card-menu-item-title {
       color: mat.get-color-from-palette($primary);
-      font-size: mat.font-size($typography, title);
+      font-size: mat.font-size($typography, headline-5);
     }
 
-    .mat-button {
+    .mat-mdc-button {
       color: mat.get-color-from-palette($primary);
-      background: mat.get-color-from-palette($accent,100);
+      background: mat.get-color-from-palette($accent, 100);
     }
 
     .o-card-menu-item-icon,

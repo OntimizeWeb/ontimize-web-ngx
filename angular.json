@@ -7,7 +7,7 @@
       "projectType": "library",
       "root": "projects/ontimize-web-ngx",
       "sourceRoot": "projects/ontimize-web-ngx/src",
-      "prefix": "lib",
+      "prefix": "o",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -45,5 +45,13 @@
     "schematicCollections": [
       "@angular-eslint/schematics"
     ]
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }

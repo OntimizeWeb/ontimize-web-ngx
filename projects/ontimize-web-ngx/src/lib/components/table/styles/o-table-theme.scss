@@ -1,4 +1,5 @@
-@mixin o-table-theme($theme) {
+@mixin o-table-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $warn: map.get($theme, warn);
@@ -22,13 +23,13 @@
       color: mat.get-color-from-palette($foreground, secondary-text);
     }
 
-    .mat-table {
-      .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
+    .mat-mdc-table {
+      .mat-mdc-checkbox-disabled:not(.mat-mdc-checkbox-checked) .mdc-checkbox__background {
         border-color: mat.get-color-from-palette($foreground, secondary-text, 0.18);
       }
 
-      .mat-header-row {
-        .mat-header-cell {
+      .mat-mdc-header-row {
+        .mat-mdc-header-cell {
           color: mat.get-color-from-palette($foreground, text);
 
           .column-filter-icon {
@@ -45,7 +46,7 @@
         }
       }
 
-      .mat-row {
+      .mat-mdc-row {
         &.o-table-group-row-level-1 {
           font-weight: 900;
           background-color: if($is-dark-theme, #464646, #b2b2b2);
@@ -58,7 +59,7 @@
 
         &.o-table-group-row-level-3 {
           font-weight: 700;
-          background-color: if($is-dark-theme,#686868, #e8e8e8);
+          background-color: if($is-dark-theme, #686868, #e8e8e8);
         }
 
         &.o-table-group-row-level-4 {
@@ -72,24 +73,26 @@
         }
 
         &.selected {
-          background: mat.get-color-from-palette($primary, 50,if($is-dark-theme, 0.5, 1));
+          background: mat.get-color-from-palette($primary, 50, if($is-dark-theme, 0.5, 1));
         }
 
-        .mat-cell {
+        .mat-mdc-cell {
           color: mat.get-color-from-palette($foreground, secondary-text);
         }
 
       }
 
-      .mat-footer-row.o-table-aggregate {
+      .mat-mdc-footer-row.o-table-aggregate {
         font-weight: bold;
         background-color: mat.get-color-from-palette($background, status-bar);
       }
 
-      .mat-footer-row,
-      .mat-row {
-        .mat-cell,
-        .mat-footer-cell {
+      .mat-mdc-footer-row,
+      .mat-mdc-row {
+
+        .mat-mdc-cell,
+        .mat-mdc-footer-cell {
+
           &.o-column-currency,
           &.o-column-integer,
           &.o-column-real {
@@ -104,17 +107,17 @@
         }
       }
 
-      &.editable-row-table .mat-row,
-      &.totals-table .mat-row {
+      &.editable-row-table .mat-mdc-row,
+      &.totals-table .mat-mdc-row {
         background-color: mat.get-color-from-palette($background, status-bar, 0.9);
       }
 
       &.totals-table {
-        .mat-header-row {
-          display: none!important;
+        .mat-mdc-header-row {
+          display: none !important;
         }
 
-        .mat-row {
+        .mat-mdc-row {
           font-weight: bold;
         }
       }
@@ -143,12 +146,13 @@
   }
 
   .o-table-visible-columns-dialog {
-    .mat-list-item.dnd-sortable-drag {
+    .mat-mdc-list-item.dnd-sortable-drag {
       background: mat.get-color-from-palette($primary, 50);
     }
   }
 
-  .o-table-quickfilter .quickFilter .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
+
+  .o-table-quickfilter .quickFilter .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix div {
     border-right: 1px solid mat.get-color-from-palette($foreground, divider);
   }
 }

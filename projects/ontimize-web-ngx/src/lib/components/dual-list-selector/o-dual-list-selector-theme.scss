@@ -1,4 +1,5 @@
-@mixin o-dual-list-selector-theme($theme) {
+@mixin o-dual-list-selector-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $foreground: map.get($theme, foreground);
   $primary: map.get($theme, primary);
   $background: map.get($theme, background);
@@ -6,21 +7,21 @@
 
   .o-dual-list-selector {
     .o-dual-list-selector-list {
-      .mat-selection-list.mat-list-base {
+      .mat-mdc-selection-list.mat-mdc-list-base {
         border: 1px solid mat.get-color-from-palette($foreground, divider);
 
-        .mat-list-item {
-          &:not(.mat-list-option) {
+        .mat-mdc-list-item {
+          &:not(.mat-mdc-list-option) {
             border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
           }
+        }
 
-          &.mat-list-option {
-            background: mat.get-color-from-palette($background, 'hover');
+        .mat-mdc-list-option {
+          background: mat.get-color-from-palette($background, 'hover');
 
-            &[aria-selected="true"] {
-              background-color: mat.get-color-from-palette($primary, 100);
-              color: if($is-dark-theme,#121212, mat.get-color-from-palette($foreground,text));
-            }
+          &[aria-selected="true"] {
+            background-color: mat.get-color-from-palette($primary, 100);
+            color: if($is-dark-theme, #121212, mat.get-color-from-palette($foreground, text));
           }
         }
 
@@ -30,7 +31,7 @@
         }
       }
 
-      .mat-mini-fab:not([class*='mat-elevation-z']) {
+      .mat-mdc-mini-fab:not([class*='mat-elevation-z']) {
         box-shadow: none;
 
         &.mat-accent:not([disabled]) {

@@ -1,4 +1,5 @@
-@mixin o-app-header-theme($theme) {
+@mixin o-app-header-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $foreground: map.get($theme, foreground);
@@ -19,7 +20,7 @@
     }
 
     .o-user-info {
-      color: mat.get-color-from-palette($foreground,text);
+      color: mat.get-color-from-palette($foreground, text);
     }
   }
 

@@ -10,15 +10,21 @@ on:
         default: 'minor'
         type: choice
         options:
-          - 'minor'
-          - 'hotfix'
+          - "minor"
+          - "hotfix"
+          - "rc"
+          - "beta"
+      RELEASE_CANDIDATE_VERSION:
+        description: "Release candidate version (e.g. 15.0.0-rc.0)"
+      BETA_VERSION:
+        description: "Beta version (e.g. 15.0.0-beta.0)"
 
 env:
   NPM_REGISTRY: https://registry.npmjs.org/
   CI_EMAIL: ontimize-web@imatia.com
   CI_USERNAME: ontimize-web
-  MAIN_BRANCH: master
-  DEVELOP_BRANCH: 8.x.x
+  MAIN_BRANCH: main.15.x
+  DEVELOP_BRANCH: 15.x.x
   LIBRARY_PATH: projects/ontimize-web-ngx
 
 jobs:
@@ -32,12 +38,57 @@ jobs:
           if [ "${{ github.event.inputs.RELEASE_TYPE }}" = "hotfix" ]; then
             BASELINE_BRANCH=${{ env.MAIN_BRANCH }}
             isHotfix=1
+            isMinor=0
+            isRC=0
+            isBeta=0
+          elif [ "${{ github.event.inputs.RELEASE_TYPE }}" = "rc" ]; then
+            BASELINE_BRANCH=${{ env.DEVELOP_BRANCH }}
+            isHotfix=0
+            isMinor=0
+            isRC=1
+            isBeta=0
+          elif [ "${{ github.event.inputs.RELEASE_TYPE }}" = "beta" ]; then
+            BASELINE_BRANCH=${{ env.DEVELOP_BRANCH }}
+            isHotfix=0
+            isMinor=0
+            isRC=0
+            isBeta=1
           else
             BASELINE_BRANCH=${{ env.DEVELOP_BRANCH }}
             isHotfix=0
+            isMinor=1
+            isRC=0
+            isBeta=0
           fi
           echo "BASELINE_BRANCH=$BASELINE_BRANCH" >> $GITHUB_ENV
           echo "isHotfix=$isHotfix" >> $GITHUB_OUTPUT
+          echo "isMinor=$isMinor" >> $GITHUB_OUTPUT
+          echo "isRC=$isRC" >> $GITHUB_OUTPUT
+          echo "isBeta=$isBeta" >> $GITHUB_OUTPUT
+
+      - name: Setup release candidate version
+        if: ${{ steps.parameters.outputs.isRC == true }}
+        id: release-candidate
+        run: |
+          versionNumber=${{ github.event.inputs.RELEASE_CANDIDATE_VERSION}}
+          if [[ $versionNumber =~ ^[0-9]+\.[0-9]+\.[0-9]+\-rc\.[0-9]+ ]]; then
+            echo "version=${BASH_REMATCH[0]}" >> $GITHUB_OUTPUT
+          else
+            echo "Invalid Release Candidate version"
+            exit 1
+          fi
+
+      - name: Setup Beta version
+        if: ${{ steps.parameters.outputs.isBeta == true }}
+        id: beta
+        run: |
+          versionNumber=${{ github.event.inputs.BETA_VERSION}}
+          if [[ $versionNumber =~ ^[0-9]+\.[0-9]+\.[0-9]+\-beta\.[0-9]+ ]]; then
+            echo "version=${BASH_REMATCH[0]}" >> $GITHUB_OUTPUT
+          else
+            echo "Invalid Beta version"
+            exit 1
+          fi
 
       - name: Checkout merge commit
         uses: actions/checkout@v3
@@ -45,10 +96,10 @@ jobs:
           ref: ${{ env.BASELINE_BRANCH }}
           fetch-depth: 0
 
-      - name: Node 14.x
+      - name: Node 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.20.0
+          node-version: 18.10.0
           registry-url: ${{ env.NPM_REGISTRY }}
 
       - name: obtain package.json version
@@ -63,17 +114,47 @@ jobs:
 
       ## MINOR
       - name: bumping minor version in package.json
-        if: ${{ steps.parameters.outputs.isHotfix == false }}
+        if: ${{ steps.parameters.outputs.isMinor == true }}
         run: |
           version=$(echo "${{ steps.project.outputs.version }}" | sed 's/-SNAPSHOT-[0-9]//')
           npm version $version --no-git-tag-version
           echo "RELEASE_VERSION=$(node -pe "require('./package.json')['version']")" >> $GITHUB_ENV
 
       - name: bumping minor version in internal package.json
-        if: ${{ steps.parameters.outputs.isHotfix == false }}
+        if: ${{ steps.parameters.outputs.isMinor == true }}
         working-directory: ${{ env.LIBRARY_PATH }}
         run: |
           version=$(echo "${{ steps.project.outputs.version }}" | sed 's/-SNAPSHOT-[0-9]//')
+          npm version $version --no-git-tag-version
+
+      ## RELEASE CANDIDATE
+      - name: bumping minor version in package.json
+        if: ${{ steps.parameters.outputs.isRC == true }}
+        run: |
+          version=$(echo "${{ steps.release-candidate.outputs.version }}")
+          npm version $version --no-git-tag-version
+          echo "RELEASE_VERSION=$(node -pe "require('./package.json')['version']")" >> $GITHUB_ENV
+
+      - name: bumping minor version in internal package.json
+        if: ${{ steps.parameters.outputs.isRC == true }}
+        working-directory: ${{ env.LIBRARY_PATH }}
+        run: |
+          version=$(echo "${{ steps.release-candidate.outputs.version }}")
+          npm version $version --no-git-tag-version
+
+      ## Beta
+      - name: bumping minor version in package.json
+        if: ${{ steps.parameters.outputs.isBeta == true }}
+        run: |
+          version=$(echo "${{ steps.beta.outputs.version }}")
+          npm version $version --no-git-tag-version
+          echo "RELEASE_VERSION=$(node -pe "require('./package.json')['version']")" >> $GITHUB_ENV
+
+      - name: bumping minor version in internal package.json
+        if: ${{ steps.parameters.outputs.isBeta == true }}
+        working-directory: ${{ env.LIBRARY_PATH }}
+        run: |
+          version=$(echo "${{ steps.beta.outputs.version }}")
           npm version $version --no-git-tag-version
 
       ## HOTFIX
@@ -90,7 +171,7 @@ jobs:
           npm version patch --no-git-tag-version
 
       - name: Create release branch
-        if: ${{ steps.parameters.outputs.isHotfix == false }}
+        if: ${{ steps.parameters.outputs.isMinor == true }} || ${{ steps.parameters.outputs.isRC == true }} || ${{ steps.parameters.outputs.isBeta == true }}
         run: |
           version=${{ env.RELEASE_VERSION }}
           git checkout -b release/$version

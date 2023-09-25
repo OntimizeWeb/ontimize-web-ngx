@@ -2,7 +2,7 @@
   [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
   [matTooltipHideDelay]="tooltipHideDelay" (click)="onClickInput($event)">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
-    [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill>
+    [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <input matInput #matInputRef [matDatepicker]="picker" [id]="getAttribute()" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"

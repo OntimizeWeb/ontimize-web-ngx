@@ -21,7 +21,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
@@ -32,9 +32,7 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import {
-  AbstractOServiceComponent
-} from '../o-service-component.class';
+import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
@@ -93,30 +91,30 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   /* Inputs */
   protected _queryRows = 32;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public fixedHeader: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showPageSize: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showSort: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showFooter: boolean = true;
 
   public gridItemHeight = '1:1';
 
-  @InputConverter()
+  @BooleanInputConverter()
   public refreshButton: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   insertButton: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public insertButtonFloatable: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   showButtonsText: boolean = false;
 
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';

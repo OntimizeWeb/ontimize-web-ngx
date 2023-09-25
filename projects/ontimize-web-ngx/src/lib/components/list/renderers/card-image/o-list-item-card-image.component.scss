@@ -1,17 +1,33 @@
-.mat-list .mat-list-item.o-card-item,
-.mat-list .mat-list-item.o-card-item .mat-list-item-content {
-  height: auto;
+.mat-mdc-list .mat-mdc-list-item.o-card-item.mdc-list-item--with-trailing-meta {
+  .mat-mdc-list-item-meta {
+    margin: 0;
+    width: 100%;
+  }
 }
 
 .o-list-item-card-image {
   padding: 8px 0;
 
-  .mat-card {
+  .mat-mdc-card {
+    padding: 0 12px;
+
+    .mat-card-header .mat-card-title {
+      margin-bottom: 12px;
+    }
+
+    .mat-card-subtitle {
+      margin-bottom: 16px;
+    }
+
     mat-card-actions,
     mat-card-header,
     mat-card-subtitle,
     mat-card-title {
       width: 100%;
+    }
+
+    .mat-mdc-card-content {
+      padding: 0px;
     }
 
     &.large {

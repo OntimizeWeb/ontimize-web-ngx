@@ -8,23 +8,21 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { UntypedFormControl, ValidatorFn } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
 import { FormValueOptions } from '../../../../../types/form-value-options.type';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import {
-  OBaseTableCellEditor,
-} from '../o-base-table-cell-editor.class';
+import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
   'oDateFormat: date-format',
@@ -77,7 +75,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   public oDateFormat: string = 'L';
   public oHourMax: string;
   public oHourMin: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public oDateTouchUi: boolean;
   public oDateStartAt: string;
 

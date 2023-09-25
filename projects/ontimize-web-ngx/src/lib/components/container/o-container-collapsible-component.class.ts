@@ -1,9 +1,9 @@
-import { AfterViewInit, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, ViewChild, Directive } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Injector, OnDestroy, Optional, ViewChild } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { OContainerComponent } from './o-container-component.class';
 
 export const DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE = [
@@ -29,7 +29,7 @@ export const DEFAULT_OUTPUTS_O_CONTAINER_COLLAPSIBLE = [
 })
 export class OContainerCollapsibleComponent extends OContainerComponent implements AfterViewInit, OnDestroy {
 
-  @InputConverter()
+  @BooleanInputConverter()
   public expanded: boolean = true;
   public collapsedHeight = '37px';
   public expandedHeight = '37px';

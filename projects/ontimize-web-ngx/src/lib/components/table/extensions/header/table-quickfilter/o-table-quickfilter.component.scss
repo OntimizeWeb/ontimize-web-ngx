@@ -1,84 +1,61 @@
-.o-table-quickfilter {
-  .quickFilter {
-    .mat-form-field {
-      .mat-form-field-wrapper {
-        margin: 0;
-        padding-bottom: 0;
+ .o-table-quickfilter {
+   .quickFilter {
 
-        .mat-form-field-flex {
-          align-items: initial;
-          margin-top: 0;
-          height: 32px;
-          line-height: 32px;
+     .mat-mdc-form-field {
 
-          .mat-form-field-outline,
-          .mat-form-field-prefix,
-          .mat-form-field-suffix {
-            top: 0;
-          }
+       .mat-mdc-form-field-subscript-wrapper {
+         display: none;
+       }
 
-          .mat-form-field-infix {
-            padding: 0 4px;
-            border-top: 0;
-          }
+       .mat-mdc-form-field-flex {
 
-          .mat-form-field-prefix {
-            padding-bottom: 0;
+         .mdc-notched-outline__leading,
+         .mdc-notched-outline__trailing {
+           border-radius: 2px;
+         }
 
-            div {
-              align-items: center;
-              display: inline-flex;
-              margin: 2px 0;
+         .mat-mdc-form-field-infix {
+           align-self: center;
+           padding: 0;
+           min-height: 30px;
+           display: flex;
+         }
 
-              .mat-badge-content {
-                background-color: #3C8500;
-                width: 14px;
-                height: 14px;
-                line-height: 14px;
-                top: -4px;
-                right: -4px;
-              }
+         .mat-mdc-form-field-icon-prefix {
+           padding-left: 10px;
+           padding-right: 10px;
 
-              .mat-icon,
-              button {
-                margin-right: 6px;
-              }
+           div {
+             align-items: center;
+             display: flex;
 
-              button.mat-icon-button {
-                height: 100%;
-                width: auto;
+             .mat-icon,
+             button {
+               margin-right: 6px;
+             }
 
-                .mat-button-ripple.mat-ripple {
-                  display: none;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+             .mat-badge-content {
+               background-color: #3C8500;
+               width: 14px;
+               height: 14px;
+               line-height: 14px;
+               top: -4px;
+               right: -4px;
+             }
+           }
+         }
 
-  .search-icon {
-    cursor: pointer;
-  }
+       }
+     }
+   }
+ }
 
-}
+ .o-table-quickfilter-menu {
+   .checkbox-container {
+     padding: 6px 12px;
 
-.o-table-quickfilter-menu {
-  .mat-divider {
-    margin: 8px 0;
-  }
-
-  .checkbox-container {
-    padding: 6px 12px;
-
-    .mat-checkbox-layout {
-      white-space: normal;
-
-      .mat-checkbox-ripple {
-        display: none;
-      }
-    }
-  }
-}
+     .mat-divider {
+       margin: 8px 0;
+     }
+   }
+ }

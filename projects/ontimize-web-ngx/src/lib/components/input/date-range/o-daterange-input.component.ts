@@ -1,10 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
-
 import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import moment from 'moment'
+import moment from 'moment';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { FormValueOptions } from '../../../types/form-value-options.type';
@@ -48,16 +47,16 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   @ViewChild('matInputRef', { read: ElementRef, static: true })
   private matInputRef!: ElementRef;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public textInputEnabled: boolean = true;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showWeekNumbers: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public oTouchUi: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public showRanges: boolean = false;
 
   protected _oMinDate: moment.Moment;

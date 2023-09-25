@@ -1,9 +1,14 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
-  <div class="o-table-cell-editor-real o-table-cell-editor" [formGroup]="formGroup">
-    <mat-form-field floatLabel="never" cdkFocusInitial>
+  <div class="o-table-cell-editor-real o-table-cell-editor" [formGroup]="formGroup"
+    [matTooltip]="tooltip"
+    [matTooltipClass]="tooltipClass"
+    [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay"
+    [matTooltipHideDelay]="tooltipHideDelay">
+    <mat-form-field cdkFocusInitial>
 
       <input #input matInput type="number" [placeholder]="getPlaceholder()" [formControl]="formControl"
-        [required]="orequired" [min]="min" [max]="max" [step]="step" [id]="cellEditorId"> 
+        [required]="orequired" [min]="min" [max]="max" [step]="step" [id]="cellEditorId">
 
       <mat-error *oMatError="hasError('required')">
         {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}

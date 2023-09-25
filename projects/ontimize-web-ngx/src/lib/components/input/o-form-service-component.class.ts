@@ -1,20 +1,18 @@
-import { ElementRef, EventEmitter, Injector, NgZone, ViewChild, Directive } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injector, NgZone, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
-import { FormValueOptions } from '../../types/form-value-options.type';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
+import { FormValueOptions } from '../../types/form-value-options.type';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import {
-  OFormDataComponent
-} from '../o-form-data-component.class';
+import { OFormDataComponent } from '../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // static-data [Array<any>] : way to populate with static data. Default: no value.
@@ -84,19 +82,19 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected visibleColumns: string;
   protected descriptionColumns: string;
   public separator: string = Codes.SPACE_SEPARATOR;
-  @InputConverter()
+  @BooleanInputConverter()
   protected queryOnInit: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   protected queryOnBind: boolean = false;
   protected queryOnEvent: any;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
-  @InputConverter()
+  @BooleanInputConverter()
   queryWithNullParentKeys: boolean = false;
   public setValueOnValueChange: string;
   public queryFallbackFunction: (error: any) => void;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public translate: boolean = false;
   public sort: 'ASC' | 'DESC';
 
@@ -265,9 +263,10 @@ export class OFormServiceComponent extends OFormDataComponent {
       }
 
       const queryCols = this.getAttributesValuesToQuery();
+      const sqlTypes = this.form ? this.form.getAttributesSQLTypes() : {};
 
       this.loaderSubscription = this.load();
-      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity)
+      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity, sqlTypes)
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             this.cacheQueried = true;

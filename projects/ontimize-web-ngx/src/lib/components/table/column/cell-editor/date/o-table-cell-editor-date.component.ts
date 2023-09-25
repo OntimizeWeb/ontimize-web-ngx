@@ -1,25 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import moment from 'moment';
 
-import { InputConverter } from '../../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
 import { OntimizeMomentDateAdapter } from '../../../../../shared/material/date/ontimize-moment-date-adapter';
 import { DateFilterFunction } from '../../../../../types/date-filter-function.type';
 import { ODateValueType } from '../../../../../types/o-date-value.type';
 import { Util } from '../../../../../util/util';
-import {
-  OBaseTableCellEditor,
-} from '../o-base-table-cell-editor.class';
+import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
   'format',
@@ -58,7 +48,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   oStartView: 'month' | 'year' = 'month';
   protected min: string;
   protected max: string;
-  @InputConverter()
+  @BooleanInputConverter()
   oTouchUi: boolean = false;
   protected startAt: string;
   filterDate: DateFilterFunction;

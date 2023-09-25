@@ -43,9 +43,8 @@ export class OListItemCardRenderer {
   ) { }
 
   modifyMatListItemElement() {
-    if (this.elRef.nativeElement && this.elRef.nativeElement.parentElement) {
-      const matListItem = this.elRef.nativeElement.parentElement.parentElement;
-      matListItem.querySelector('.mat-list-text').remove();
+    const matListItem = this.elRef.nativeElement?.parentElement?.parentElement;
+    if (matListItem) {
       matListItem.classList.add('o-card-item');
     }
   }

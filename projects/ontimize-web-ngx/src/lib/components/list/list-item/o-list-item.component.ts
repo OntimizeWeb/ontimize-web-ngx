@@ -2,7 +2,6 @@ import {
   AfterContentInit,
   ChangeDetectorRef,
   Component,
-  ContentChild,
   ContentChildren,
   ElementRef,
   forwardRef,
@@ -14,8 +13,8 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MatLine } from '@angular/material/core';
-import { MatListAvatarCssMatStyler, MatListItem } from '@angular/material/list';
+import { MatListItem, MatListItemLine, MatListItemTitle } from '@angular/material/list';
+
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
 import { ListItem } from './o-list-item';
@@ -32,24 +31,15 @@ import { ListItem } from './o-list-item';
 export class OListItemComponent implements ListItem, AfterContentInit {
 
   public modelData: any;
+  public linesNo = 1;
 
-  @ContentChildren(MatLine)
-  protected _lines: QueryList<MatLine>;
+  @ContentChildren(MatListItemLine, { descendants: true }) _lines: QueryList<MatListItemLine>;
+  @ContentChildren(MatListItemTitle, { descendants: true }) _titles: QueryList<MatListItemTitle>;
+
 
   @ViewChild('innerListItem', { static: true })
-  protected _innerListItem: MatListItem;
+  public _innerListItem: MatListItem;
 
-  @ContentChild(MatListAvatarCssMatStyler)
-  set _hasAvatar(avatar: MatListAvatarCssMatStyler) {
-    const listItemNativeEl = this.elRef.nativeElement.getElementsByTagName('mat-list-item');
-    if (listItemNativeEl && listItemNativeEl.length === 1) {
-      if ((avatar !== null && avatar !== undefined)) {
-        this._renderer.addClass(listItemNativeEl[0], 'mat-list-avatar');
-      } else {
-        this._renderer.removeClass(listItemNativeEl[0], 'mat-list-avatar');
-      }
-    }
-  }
 
   constructor(
     public elRef: ElementRef,
@@ -60,11 +50,11 @@ export class OListItemComponent implements ListItem, AfterContentInit {
   ) { }
 
   public ngAfterContentInit(): void {
-    const matLinesRef = this._lines;
+    const matLinesRef = this._titles.length + this._lines.length;
 
-    const ngAfterContentInitOriginal = this._innerListItem.ngAfterContentInit;
+    const ngAfterContentInitOriginal = this._innerListItem.ngAfterViewInit;
     // eslint-disable-next-line space-before-function-paren
-    this._innerListItem.ngAfterContentInit = function () {
+    this._innerListItem.ngAfterViewInit = function () {
       const emptyDiv = this._element.nativeElement.querySelector('.mat-list-text:empty');
       if (emptyDiv) {
         emptyDiv.remove();

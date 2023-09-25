@@ -1,6 +1,7 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
-  <div class="mat-form-field mat-form-field-appearance-legacy" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+  <div class="mat-mdc-form-field" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+    <div class="mat-mdc-form-field-flex">
     <o-date-input #dateInput fxFlex [attr]="dateAttr" [read-only]="readOnly" [enabled]="enabled" [required]="isRequired" [label]="olabel"
       clear-button="no" automatic-registering="no" automatic-binding="no" (onFocus)="innerOnFocus($event)" (onBlur)="innerOnBlur($event)"
       [format]="oDateFormat" [locale]="oDateLocale" [start-view]="oDateStartView" [min]="oDateMinDate" [max]="oDateMaxDate" [touch-ui]="oDateTouchUi"
@@ -12,13 +13,15 @@
 
     <o-hour-input #hourInput fxFlex [attr]="hourAttr" [read-only]="readOnly" [enabled]="enabled" [required]="isRequired" clear-button="no"
       automatic-registering="no" automatic-binding="no" (onFocus)="innerOnFocus($event)" (onBlur)="innerOnBlur($event)" [format]="oHourFormat"
-      [text-input-enabled]="oHourTextInputEnabled" [min]="oHourMin" [max]="oHourMax" hide-required-marker="yes" label-visible="no"
+      [text-input-enabled]="oHourTextInputEnabled" [min]="oHourMin" [max]="oHourMax" hide-required-marker="yes" label=""
       [placeholder]="oHourPlaceholder" [select-all-on-click]="selectAllOnClick">
     </o-hour-input>
-
-    <button class="mat-form-field-suffix" type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-      <mat-icon svgIcon="ontimize:close"></mat-icon>
-    </button>
+    <div class="mat-mdc-form-field-icon-suffix">
+      <button type="button" *ngIf="showClearButton" matIconSuffix mat-icon-button (click)="onClickClearValue($event)">
+        <mat-icon svgIcon="ontimize:close"></mat-icon>
+      </button>
+    </div>
+    </div>
   </div>
 
   <mat-error *ngFor="let oError of getActiveOErrors()">

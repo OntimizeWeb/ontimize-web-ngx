@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IFileService } from '../../../interfaces/file-service.interface';
 import { fileServiceFactory } from '../../../services/factories';
 import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.service';
@@ -9,7 +9,7 @@ import { OConfigureServiceArgs } from '../../../types/configure-service-args.typ
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
-import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
@@ -93,16 +93,16 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
 
   public autoBinding: boolean = false;
   public autoRegistering: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public showInfo: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public multiple: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public splitUpload: boolean = true;
   public acceptFileType: string;
-  @InputConverter()
+  @NumberInputConverter()
   public maxFileSize: number;
-  @InputConverter()
+  @NumberInputConverter()
   public maxFiles: number = -1;
 
   public onBeforeUpload: EventEmitter<any> = new EventEmitter<any>();

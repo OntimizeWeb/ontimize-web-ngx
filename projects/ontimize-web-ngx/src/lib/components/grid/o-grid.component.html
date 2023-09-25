@@ -34,7 +34,7 @@
       <!--O-GRID-PAGINATOR-->
       <div class="o-grid-paginator" *ngIf="showPageSize">
         <div class="o-grid-page-size-label">{{ 'GRID.ITEMS_PER_PAGE' | oTranslate }}:</div>
-        <mat-form-field class="o-grid-select-page" floatLabel="never">
+        <mat-form-field class="o-grid-select-page">
           <mat-select placeholder="" #pageSizeSelect [(value)]="queryRows" (selectionChange)="pageSizeChanged()">
             <mat-option *ngFor="let page of pageSizeOptions" [value]="page">
               {{ page }}
@@ -45,7 +45,7 @@
 
       <!--O-GRID-SORT-->
       <div class="o-grid-sort" *ngIf="showSort && sortableColumns.length > 0">
-        <mat-form-field class="o-grid-select-sort" floatLabel="never">
+        <mat-form-field class="o-grid-select-sort">
           <mat-icon matPrefix>sort</mat-icon>
           <mat-select #sortSelect [value]="currentOrderColumn" (selectionChange)="sortColumnChanged($event)"
             placeholder=" {{ 'GRID.SORT_BY' | oTranslate }}">

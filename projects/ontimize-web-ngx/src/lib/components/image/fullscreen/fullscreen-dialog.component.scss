@@ -1,11 +1,11 @@
-.o-image-fullscreen-dialog-cdk-overlay .mat-dialog-container {
+.o-image-fullscreen-dialog-cdk-overlay .mat-mdc-dialog-container {
   padding: 0;
 
   .o-fullscreen-dialog {
     height: 100%;
     display: block;
 
-    .mat-dialog-content.o-fullscreen-dialog-content {
+    .mat-mdc-dialog-content.o-fullscreen-dialog-content {
       margin: 12px;
       height: 100%;
       // height - toolbar - margins

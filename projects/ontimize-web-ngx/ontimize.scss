@@ -15,80 +15,115 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
 .o-dialog-class,
 .o-form-layout-dialog-overlay,
 .o-list-picker-dialog {
-  .mat-dialog-container {
-    border-radius: 2px;
-    margin: 0;
-    padding: 24px 32px;
+  .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+      padding: 24px 32px;
+      border-radius: 2px;
 
-    .mat-dialog-title {
-      cursor: default;
-      padding: 0 0 8px;
-      margin: 0;
 
-    }
-
-    .mat-dialog-content {
-      padding: 16px 0;
-      margin: 0;
-
-      .mat-subheader {
+      .mat-mdc-dialog-title {
         cursor: default;
-        padding: 0 0 24px;
+        padding: 0 0 8px;
+        margin: 0;
 
-        &.inner-subheader {
-          padding: 0;
-        }
-
-        + .mat-selection-list[dense] {
-          margin-top: -12px;
-        }
-      }
-
-      form {
-        > *:not(:last-child) {
-          margin-bottom: 18px;
-        }
-      }
-
-      .mat-list-base[dense] {
-        .mat-list-item {
-          min-height: 30px;
+        &::before {
           height: auto;
-          display: flex;
+        }
+      }
 
-          .mat-list-item-content {
-            width: 100%;
-            padding: 0 8px;
+      .mat-mdc-dialog-content {
+        padding: 16px 0;
+        margin: 0;
+
+        .mat-mdc-subheader {
+          cursor: default;
+          padding: 0 0 24px;
+
+          &.inner-subheader {
+            padding: 0;
+          }
+
+          +.mat-mdc-selection-list[dense] {
+            margin-top: -12px;
+          }
+        }
+
+        form {
+          >*:not(:last-child) {
+            margin-bottom: 18px;
+          }
+        }
+
+        .mat-mdc-list-base {
+
+          &[dense] {
+            .mat-mdc-list-item {
+              min-height: 30px;
+              height: auto;
+              display: flex;
+              padding: 0 8px;
+
+              .mdc-list-item__content,
+              .mat-mdc-list-item-meta {
+                width: 100%;
+                align-self: center;
+
+                .mat-mdc-list-item-icon {
+                  margin-top: 0;
+                  padding: 4px;
+                }
+
+                .mdc-list-item__first-text,
+                .mdc-list-item__secondary-text {
+                  &::before {
+                    display: flex;
+                  }
+                }
+
+                .mdc-list-item__secondary-text {
+                  padding: 0 8px;
+
+                  &::before {
+                    height: auto;
+                  }
+                }
+
+              }
+            }
+
+          }
+
+          &.mat-mdc-selection-list[dense] {
+            overflow: auto;
+            outline: none;
+            padding-top: 0;
+            min-height: 40px;
+
+            .mat-mdc-list-item {
+              margin: 6px 0;
+              border-radius: 4px;
+              cursor: default;
+
+
+              .mdc-list-item__start {
+                margin-top: 0;
+              }
+            }
+
+            p {
+              white-space: normal;
+            }
           }
         }
       }
 
-      .mat-selection-list[dense] {
-        overflow: auto;
-        outline: none;
-        padding-top: 0;
-        min-height: 40px;
+      .mat-mdc-dialog-actions {
+        padding: 16px 0 0 0;
+        min-height: 0;
 
-        .mat-list-item {
-          margin: 6px 0;
-          border-radius: 4px;
-          cursor: default;
+        button {
+          min-width: 104px;
         }
-
-        p {
-          white-space: normal;
-        }
-      }
-    }
-
-    .mat-dialog-actions {
-      margin: 0;
-      padding-top: 16px;
-      min-height: 0;
-      padding-bottom: 0;
-
-      button {
-        min-width: 104px;
       }
     }
   }
@@ -108,8 +143,9 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
 }
 
 $steps: 6;
+
 @mixin padding-margin-x {
-   @for $i from 1 through $steps{
+  @for $i from 1 through $steps {
     $val: $i * 4;
 
     .vertical-padding-#{$val} {
@@ -133,36 +169,56 @@ $steps: 6;
     }
   }
 }
+
 @include padding-margin-x();
 
-button {
-  &.mat-button,
-  &.mat-flat-button,
-  &.mat-raised-button,
-  &.mat-stroked-button {
+button.mat-mdc-button-base {
+
+  &.mat-mdc-button,
+  &.mat-mdc-unelevated-button,
+  &.mat-mdc-raised-button,
+  &.mat-mdc-outlined-button {
     min-width: 112px;
   }
 
-  &.mat-button,
-  &.mat-flat-button,
-  &.mat-icon-button,
-  &.mat-raised-button {
+  &.mat-mdc-button,
+  &.mat-mdc-unelevated-button,
+  &.mat-mdc-icon-button,
+  &.mat-mdc-raised-button,
+  &.mat-mdc-outlined-button {
     height: $mat-button-line-height;
     line-height: $mat-button-line-height;
+
+    .mat-mdc-button-touch-target {
+      height: $mat-button-line-height;
+    }
+
+    >.mat-icon{
+      line-height: 1;
+    }
   }
 
-  &.mat-stroked-button {
+  &.mat-mdc-outlined-button {
     height: $mat-button-line-height;
     line-height: $mat-stroked-button-line-height;
   }
 
-  &.mat-icon-button {
+  &.mat-mdc-icon-button {
     width: $mat-button-line-height;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    .mat-mdc-button-touch-target {
+      width: $mat-button-line-height;
+    }
   }
 }
 
-.o-table-apply-configuration-dialog-list.mat-selection-list.mat-list-base[dense] .mat-list-option.mat-list-text,
-.o-table-load-filter-dialog-list.mat-list-base[dense] .mat-list-option.mat-list-text {
+.o-table-apply-configuration-dialog-list.mat-mdc-selection-list.mat-mdc-list-base[dense],
+.o-table-load-filter-dialog-list.mat-mdc-list-base[dense] {
+
   .o-table-apply-configuration-dialog-list-title,
   .o-table-load-filter-dialog-list-title {
     font-weight: bold;
@@ -170,24 +226,17 @@ button {
   }
 }
 
+
+
 /*MAT MENU*/
-.o-mat-menu.mat-menu-panel {
-  .mat-menu-item {
+.o-mat-menu.mat-mdc-menu-panel {
+  .mat-mdc-menu-item {
     line-height: $mat-menu-item-height;
     height: $mat-menu-item-height;
+    min-height: $mat-menu-item-height;
   }
 }
 
 .overlay-ref-display-none .cdk-overlay-pane.o-context-menu {
   display: none;
-}
-
-/* DATE PICKER */
-.mat-calendar-controls {
-  button.mat-calendar-next-button,
-  button.mat-calendar-previous-button {
-    &::after {
-      margin: $mat-calendar-prev-next-icon-margin;
-    }
-  }
 }

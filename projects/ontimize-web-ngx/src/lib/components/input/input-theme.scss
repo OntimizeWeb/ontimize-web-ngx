@@ -1,4 +1,5 @@
 @mixin icon-color-mixin($icon-color) {
+
   .icon-btn,
   .mat-icon,
   .read-only .mat-icon,
@@ -6,7 +7,9 @@
     color: $icon-color;
   }
 }
-@mixin input-theme($theme) {
+
+@mixin input-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $is-dark-theme: map.get($theme, is-dark);
   $foreground: map.get($theme, foreground);
   $warn: map.get($theme, warn);
@@ -17,7 +20,7 @@
   /* outline appearance */
   $border-radius: 2px;
 
-  .mat-form-field {
+  .mat-mdc-form-field {
     &.mat-form-field-disabled.accent {
       @include icon-color-mixin(mat.get-color-from-palette($accent, 0.42));
     }
@@ -38,28 +41,31 @@
       color: mat.get-color-from-palette($foreground, disabled-button);
     }
 
-    &.mat-form-field-appearance-ontimize.read-only {
-      .mat-select-disabled .mat-select-value {
+    &.mat-form-field-appearance-ontimize.read-only{
+
+      .mat-mdc-select-disabled .mat-mdc-select-value {
         color: inherit;
       }
 
-      .mat-form-field-underline {
+      mat-label {
+        color: $underline-color;
+      }
+
+      .mdc-line-ripple::after {
         background-color: $underline-color;
       }
     }
 
-    &.mat-form-field-invalid .mat-input-suffix .mat-icon {
+    &.mat-form-field-invalid .mat-mdc-form-field-icon-suffix .mat-icon {
       color: mat.get-color-from-palette($warn);
     }
 
     /* OUTLINE APPEARANCE */
-    &.mat-form-field-appearance-outline {
-      .mat-form-field-outline-start {
-        border-radius: $border-radius 0 0 $border-radius;
-      }
+    &.mat-form-field-appearance-outline .mdc-text-field--outlined .mdc-notched-outline {
 
-      .mat-form-field-outline-end {
-        border-radius: 0 $border-radius $border-radius 0;
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__trailing {
+        border-radius: $border-radius 0 0 $border-radius;
       }
     }
   }
@@ -90,16 +96,16 @@
   }
 
   /* CHECKBOX */
-  .mat-checkbox:not(.mat-checkbox-disabled ) {
+  .mat-mdc-checkbox:not(.mat-mdc-checkbox-disabled) {
     &.mat-accent {
-      .mat-checkbox-frame {
-        border-color: if($is-dark-theme, mat.get-color-from-palette($accent,500),mat.get-color-from-palette($foreground, secondary-text));
+      .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+        border-color: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($foreground, secondary-text));
       }
     }
 
     &.mat-primary {
-      .mat-checkbox-frame {
-        border-color: if($is-dark-theme, mat.get-color-from-palette($primary,500),mat.get-color-from-palette($foreground, secondary-text));
+      .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+        border-color: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($foreground, secondary-text));
       }
     }
   }

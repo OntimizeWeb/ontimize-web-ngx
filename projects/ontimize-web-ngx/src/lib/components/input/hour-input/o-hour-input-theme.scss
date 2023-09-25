@@ -1,4 +1,5 @@
-@mixin o-hour-input-theme($theme) {
+@mixin o-hour-input-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $primary: map.get($theme, primary);
 
   ngx-material-timepicker-container ngx-material-timepicker-content {
@@ -8,7 +9,7 @@
 
     .clock-face {
       .clock-face__container {
-        .clock-face__number > span.active {
+        .clock-face__number>span.active {
           background-color: mat.get-color-from-palette($primary);
           color: #fff;
         }

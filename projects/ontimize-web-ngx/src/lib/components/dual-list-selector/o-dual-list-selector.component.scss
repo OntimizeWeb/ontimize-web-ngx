@@ -15,47 +15,38 @@
   }
 
   .o-dual-list-selector-list {
-    .mat-mini-fab {
+    .mat-mdc-mini-fab {
       line-height: 14px;
       height: 18px;
       width: 18px;
 
-      .mat-button-wrapper {
-        padding: 0;
-        line-height: 14px;
-
-        .mat-icon {
-          font-size: 18px;
-          height: 18px;
-          width: 18px;
-        }
+      .mat-icon {
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
       }
+
     }
 
-    .mat-selection-list.mat-list-base {
+    .mat-mdc-selection-list.mat-mdc-list-base {
       overflow-y: scroll;
       width: 100%;
       position: relative;
       border-radius: 4px;
       padding: 16px;
 
-      .mat-list-item.mat-list-item:not(.mat-list-option) {
+      .mat-mdc-list-item.mat-mdc-list-item:not(.mat-mdc-list-option) {
         margin: 0;
 
-        .mat-checkbox-label {
+        .mat-mdc-list-item-line {
           font-weight: 500;
-        }
-
-        .mat-checkbox-label,
-        .mat-checkbox-layout {
-          width: 100%;
         }
       }
 
     }
 
     .mat-list-option.cdk-drag.o-drag-list-item-box {
-      .mat-list-item-content {
+      .mdc-list-item__content {
         cursor: move;
       }
     }

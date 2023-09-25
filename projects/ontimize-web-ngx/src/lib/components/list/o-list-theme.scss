@@ -1,4 +1,5 @@
-@mixin o-list-theme($theme) {
+@mixin o-list-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
   $foreground: map.get($theme, foreground);
 
   .o-list-container {
@@ -11,7 +12,7 @@
       color: mat.get-color-from-palette($foreground, secondary-text);
     }
 
-    .o-list-row-action .mat-checkbox-inner-container,
+    .o-list-row-action .mdc-checkbox,
     .o-list-item-icon {
       color: mat.get-color-from-palette($foreground, icon);
     }

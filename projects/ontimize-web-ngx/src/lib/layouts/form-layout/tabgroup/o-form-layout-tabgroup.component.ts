@@ -18,14 +18,12 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
-import {
-  FormLayoutCloseDetailOptions,
-  FormLayoutDetailComponentData
-} from '../../../types/form-layout-detail-component-data.type';
+import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
@@ -33,7 +31,8 @@ import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component'
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
-  'options'
+  'options',
+  'stretchTabs: stretch-tabs'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
@@ -59,6 +58,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public title: string;
   public options: any;
   public showLoading = new BehaviorSubject<boolean>(false);
+  @BooleanInputConverter()
+  public stretchTabs: boolean = false;
 
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
@@ -340,10 +341,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   }
 
   initializeComponentState() {
-    if (this.formLayoutManager) {
-      this.formLayoutManager.setAsActiveFormLayoutManager();
-    }
-
     if (!Util.isDefined(this.state) || !Util.isDefined(this.state.tabsData)) {
       return;
     }
@@ -356,6 +353,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       const extras = {};
       extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
       extras[Codes.QUERY_PARAMS][Codes.INSERTION_MODE] = `${this.state.tabsData[0].insertionMode}`
+      if (this.formLayoutManager) {
+        this.formLayoutManager.setAsActiveFormLayoutManager();
+      }
       // Triggering first tab navigation
       this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
         if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
@@ -430,4 +430,16 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     return Object.keys(tabData.innerFormsInfo).some(formAttr => tabData.innerFormsInfo[formAttr].modified);
   }
 
+  closeDetails(detailsKeysData: any[] = [], options?: FormLayoutCloseDetailOptions) {
+    detailsKeysData.forEach((detailData) => {
+      const index = this.data.findIndex((item) => Util.isEquivalent(detailData, item.params || {}));
+      if (index !== -1) {
+        this.closeTab(index, options);
+      }
+    });
+  }
+
+  getIdOfActiveItem(): string {
+    return this.data[this.data.length - 1] ? this.data[this.data.length - 1].id : this.data.length.toString();
+  }
 }

@@ -23,33 +23,33 @@ html, body {
 /************
  * Headings
  ************/
-.mat-display-4 {
+.mat-headline-1 {
   font-size: $display-4-font-size-base;
   font-weight: 300;
   letter-spacing: -0.010em;
   line-height: $display-4-font-size-base;
 }
 
-.mat-display-3 {
+.mat-headline-2 {
   font-size: $display-3-font-size-base;
   font-weight: 400;
   letter-spacing: -0.005em;
   line-height: $display-3-font-size-base;
 }
 
-.mat-display-2 {
+.mat-headline-3 {
   font-size: $display-2-font-size-base;
   font-weight: 400;
   line-height: rem(6.4);
 }
 
-.mat-display-1 {
+.mat-headline-4 {
   font-size: $display-1-font-size-base;
   font-weight: 400;
   line-height: rem(4);
 }
 
-.mat-headline {
+.mat-headline-5 {
   font-size: $headline-font-size-base;
   font-weight: 400;
   line-height: rem(3.2);
@@ -61,7 +61,7 @@ html, body {
   letter-spacing: 0.020em;
 }
 
-.mat-button {
+.mat-mdc-button {
   letter-spacing: 0.010em;
 }
 

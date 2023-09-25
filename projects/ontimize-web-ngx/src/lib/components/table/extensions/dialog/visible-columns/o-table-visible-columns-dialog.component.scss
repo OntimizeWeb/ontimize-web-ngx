@@ -1,10 +1,10 @@
 .o-table-visible-columns-dialog {
-  .mat-dialog-content.mat-dialog-content {
+  .mat-mdc-dialog-content.mat-mdc-dialog-content {
     overflow: auto;
     padding-top: 0;
     margin-top: 24px;
 
-    .mat-subheader {
+    .mat-mdc-subheader {
       display: block;
     }
 
@@ -15,12 +15,14 @@
     }
 
     .cdk-drop-list {
-      padding: 0 12px;
+      padding: 0;
     }
 
-    .mat-list {
-      //
-      .mat-list-item {
+    .mat-mdc-list {
+
+      .mat-mdc-list-item {
+        padding-left: 0;
+        flex-direction: column;
         cursor: pointer;
         height: auto;
 
@@ -28,15 +30,18 @@
           opacity: .4;
         }
 
-        .mat-list-item-content {
+        .mdc-list-item__content {
           padding: 0;
           cursor: move;
 
-          div.mat-list-text {
-            padding: 0 8px;
+
+
+          .mdc-list-item__start {
+            margin-top: 0;
           }
 
-          .mat-list-icon {
+
+          .mat-mdc-list-item-icon {
             display: flex;
           }
         }
@@ -44,7 +49,7 @@
     }
 
     .mat-icon[svgicon="ontimize:drag_handle"],
-    .mat-list-text {
+    .mat-mdc-list-item {
       cursor: move;
     }
 

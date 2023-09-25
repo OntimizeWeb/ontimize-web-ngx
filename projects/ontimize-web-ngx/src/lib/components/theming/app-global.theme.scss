@@ -1,11 +1,23 @@
-@mixin app-global-theme($theme, $typography: null) {
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
+@mixin app-global-theme($theme-or-color-config, $typography: null) {
+  $theme: map.get($theme-or-color-config, color);
+  $accent: map.get($theme, accent);
   $primary: map.get($theme, primary);
-  $accent: map.get($theme, primary);
+  $foreground: map.get($theme, foreground);
+  $background: map.get($theme, background);
+  $is-dark-theme: map.get($theme, is-dark);
+  $background-primary-button: if($is-dark-theme, transparent, mat.get-color-from-palette($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500, 0.04), #ffffff);
+  $border-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
+  $font-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 800));
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500, 0.04), mat.get-color-from-palette($accent, 100));
+  $font-color-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 800));
+  $border-color-accent-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
+  $scrollbar-color: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 200));
 
   @if $typography==null {
-    $typography: mat.define-typography-config();
+    $typography: map.get($theme-or-color-config, 'typography');
+
   }
 
   body,
@@ -23,8 +35,8 @@
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 8px;
+    height: 8px;
     background-color: transparent;
     opacity: 1.0;
   }
@@ -32,13 +44,13 @@
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: none;
     border-radius: 0;
-    background-color: transparent;
+    background-color: #c7c7c7;
   }
 
   ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
-    background-color: mat.get-color-from-palette($primary, 200);
+    background-color: $scrollbar-color;
     opacity: 1.0;
   }
 
@@ -93,35 +105,53 @@
   .o-dialog-class,
   .o-form-layout-dialog-overlay,
   .o-list-picker-dialog {
-    .mat-dialog-container {
-      .mat-dialog-title {
+    .mat-mdc-dialog-container {
+      .mat-mdc-dialog-title {
         border-bottom: 1px solid mat.get-color-from-palette($primary);
-        line-height: mat.font-size($typography, subheading-2);
-        font-size: mat.font-size($typography, subheading-2);
 
         .mat-icon {
           color: mat.get-color-from-palette($primary);
         }
       }
 
+
       .empty-filter-list {
         color: mat.get-color-from-palette($foreground, disabled-text);
       }
 
-      .mat-dialog-content {
+      .mat-mdc-dialog-content {
         font-size: mat.font-size($typography, body-1);
 
-        .mat-selection-list[dense] {
+        .mat-mdc-subheader.mdc-list-group__subheader {
+          font-weight: inherit;
+          font-size: inherit;
+          margin: 0;
+
+        }
+
+        .mdc-list[dense],
+        .mat-mdc-selection-list[dense] {
           outline: none;
 
-          .mat-list-item {
+          .mat-mdc-list-option-checkbox-before {
+            display: flex;
+            align-items: center;
+            padding-right: 0px;
+            margin-right: 0px;
+          }
+
+
+        }
+
+        .mat-mdc-list[dense] {
+          .mat-mdc-list-item {
 
             .empty-filter-list,
-            .mat-list-item-content>* {
+            .mdc-list-item__content>* {
               font-size: mat.font-size($typography, body-1);
             }
 
-            .mat-line:nth-child(n+2) {
+            .mat-mdc-list-item-line:nth-child(n+2) {
               font-size: mat.font-size($typography, caption);
             }
 
@@ -132,28 +162,70 @@
 
   }
 
+
+  /*MAT LIST DENSE in v15 is unsupported */
+  .mat-mdc-list[dense] {
+    .mat-mdc-list-item {
+      height: auto;
+
+      &.mdc-list-item--with-three-lines {
+        height: 76px;
+      }
+
+      &.mdc-list-item--with-two-lines {
+        height: 60px;
+      }
+
+      &.mdc-list-item--with-one-line {
+        height: 60px;
+      }
+
+
+
+
+      .mdc-list-item__primary-text,
+      .mdc-list-item__secondary-text {
+        margin-bottom: 0;
+        &::before {
+          height: auto;
+          content: none;
+        }
+
+        font-size: mat.font-size($typography, caption);
+
+      }
+    }
+  }
+
   /*global styles about drag/drop in dialogs table*/
-  .cdk-drag-preview {
+  .cdk-drag-preview,
+  .cdk-drag-dragging {
     width: 100%;
     display: block;
 
-    .mat-list-item-content {
+    background-color: mat.get-color-from-palette($background, background);
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    border-radius: 2px;
+
+    .mdc-list-item__content {
+      display: block;
       font-size: mat.font-size($typography, body-1);
       color: mat.get-color-from-palette($foreground, text);
       padding: 6px;
       flex-direction: row;
       align-items: center;
-      background-color: mat.get-color-from-palette($background, background);
-      display: flex;
-      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-      box-sizing: border-box;
-      border-radius: 2px;
+      //background-color: mat.get-color-from-palette($background, background);
+      //display: flex;
+      //box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+      //box-sizing: border-box;
+      // border-radius: 2px;
 
-      .mat-list-icon {
+      .mat-mdc-list-item-icon {
         padding: 4px;
       }
 
-      .mat-list-text {
+      .mat-mdc-list-text {
         padding-left: 16px;
         width: 100%;
       }
@@ -164,11 +236,6 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 
-  .mat-checkbox {
-    .mat-checkbox-label {
-      color: mat.get-color-from-palette($foreground, text);
-    }
-  }
 
   o-data-toolbar {
 
@@ -188,7 +255,7 @@
     }
   }
 
-  .mat-dialog-actions,
+  .mat-mdc-dialog-actions,
   .o-form .o-form-toolbar {
     button {
       margin: 0 8px;
@@ -204,39 +271,32 @@
   }
 
   /*BUTTONS HOVER*/
-  .mat-dialog-actions button:not([disabled]),
-  .o-form .o-form-toolbar button:not([disabled]),
+  .mat-mdc-dialog-actions button:not([disabled]),
+  .o-form .o-form-toolbar button:not([disabled]).o-form-toolbar-button,
   .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
   .o-list .o-list-toolbar button.o-list-button:not([disabled]),
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
 
-    &.mat-button-base.mat-primary,
-    &.mat-button-base.o-button-primary,
-    &.mat-button-base[ng-reflect-dialog-result="0"],
-    &.mat-button-base[ng-reflect-dialog-result="true"] {
+    &.mat-mdc-button-base.mat-primary,
+    &.mat-mdc-button-base.o-button-primary {
       color: mat.get-color-from-palette($primary, 800);
-      background-color: mat.get-color-from-palette($primary, 100);
-      border-color: transparent;
+      background-color: $background-primary-button;
+      border-color: $border-color-primary-button;
 
-      &:hover,
-      .mat-button-focus-overlay {
+      &:hover {
         color: mat.get-color-from-palette($primary);
-        background-color: #ffffff;
+        background-color: $background-hover-primary-button;
         border-color: mat.get-color-from-palette($foreground, divider);
       }
 
     }
 
-    &.mat-button-base,
-    &.mat-button-base.mat-accent,
-    &.mat-button-base.o-button-default,
-    &.mat-button-base[ng-reflect-dialog-result="1"],
-    &.mat-button-base[ng-reflect-dialog-result="false"] {
-      color: mat.get-color-from-palette($primary);
-      background-color: #ffffff;
+    &.mat-mdc-button-base,
+    &.mat-mdc-button-base.mat-accent {
+      color: mat.get-color-from-palette($accent);
+      background-color: $background-accent-button;
 
-      &:hover,
-      .mat-button-focus-overlay {
+      &:hover {
         color: mat.get-color-from-palette($primary, 800);
         background-color: mat.get-color-from-palette($primary, 100);
         border-color: transparent;
@@ -255,31 +315,28 @@
 
   }
 
-  .o-button button.mat-stroked-button {
+  .o-button button.mat-mdc-outlined-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: mat.get-color-from-palette($primary, 800);
-        background-color: mat.get-color-from-palette($primary, 100);
-        border-color: transparent;
+        color: $font-color-primary-button;
+        background-color: $background-primary-button;
+        border-color: $border-color-primary-button;
 
-        &:hover,
-        .mat-button-focus-overlay {
-          color: mat.get-color-from-palette($primary);
-          background-color: #ffffff;
+        &:hover {
+          color: mat.get-color-from-palette($primary, 500);
+          background-color: $background-hover-primary-button;
           border-color: mat.get-color-from-palette($foreground, divider);
         }
 
       }
 
       &.mat-accent {
-        color: mat.get-color-from-palette($accent);
-        background-color: #ffffff;
+        color: mat.get-color-from-palette($accent, 500);
+        background-color: $background-accent-button;
 
-        &:hover,
-        .mat-button-focus-overlay {
-          color: mat.get-color-from-palette($primary, 800);
-          background-color: mat.get-color-from-palette($primary, 100);
-          border-color: transparent;
+        &:hover {
+          color: $font-color-hover-accent-button;
+          background-color: $background-hover-accent-button;
         }
       }
 
@@ -289,10 +346,10 @@
 
   .o-form .o-form-toolbar button,
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
-    &.mat-stroked-button {
+    &.mat-mdc-outlined-button {
       padding: 0 6px;
 
-      .mat-button-wrapper {
+      .mat-mdc-button-wrapper {
         .mat-icon {
           margin-right: 4px;
           font-size: 20px;
@@ -310,12 +367,12 @@
   }
 
   /*MAT PAGINATION*/
-  .mat-paginator {
-    .mat-paginator-range-label {
+  .mat-mdc-paginator {
+    .mat-mdc-paginator-range-label {
       margin: 0 16px;
     }
 
-    .mat-paginator-page-size-label {
+    .mat-mdc-paginator-page-size-label {
       margin-right: 16px;
     }
 
@@ -325,13 +382,18 @@
         border-radius: 50%;
       }
 
-      &.mat-icon-button {
+      &.mat-mdc-icon-button {
         height: 20px;
         width: 20px;
         line-height: 20px;
         margin-left: 8px;
 
-        .mat-paginator-icon {
+        .mat-mdc-paginator-icon {
+          width: 20px;
+        }
+
+        .mat-mdc-button-touch-target {
+          height: 20px;
           width: 20px;
         }
       }
@@ -340,7 +402,9 @@
   }
 
   /*MAT MENU*/
-  .o-mat-menu.mat-menu-panel {
+  /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
+  .o-mat-menu.mat-mdc-menu-panel {
     min-height: auto;
   }
 

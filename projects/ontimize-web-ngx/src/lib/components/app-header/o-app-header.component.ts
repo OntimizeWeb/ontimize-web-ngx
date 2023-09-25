@@ -2,7 +2,7 @@ import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation }
 import { ThemePalette } from '@angular/material/core';
 import { Observable } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
 import { DialogService } from '../../services/dialog.service';
 import { OModulesInfoService } from '../../services/o-modules-info.service';
@@ -51,11 +51,11 @@ export class OAppHeaderComponent {
   @ViewChild('userInfo')
   public userInfo: OUserInfoComponent;
 
-  @InputConverter()
+  @BooleanInputConverter()
   showUserInfo: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   showLanguageSelector: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   useFlagIcons: boolean = false;
 
   public onSidenavToggle = new EventEmitter<void>();

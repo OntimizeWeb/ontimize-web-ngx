@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { InputConverter } from '../../decorators/input-converter';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+
+import { BooleanInputConverter } from '../../decorators/input-converter';
 
 
 export const DEFAULT_INPUTS_O_DATA_TOOLBAR = [
@@ -22,7 +23,7 @@ export const DEFAULT_INPUTS_O_DATA_TOOLBAR = [
 
 })
 export class ODataToolbarComponent {
-  @InputConverter()
+  @BooleanInputConverter()
   showTitle: boolean = false;
 
   public title: string;

@@ -2,11 +2,10 @@
   cursor: default;
 }
 
-.mat-form-field:not(.custom-width) .mat-form-field-infix {
+.mat-mdc-form-field:not(.custom-width) .mat-mdc-form-field-infix {
   width: 84px;
-  
 }
 
-button.mat-stroked-button{
+button.mat-mdc-outlined-button{
   margin:0 6px;
 }

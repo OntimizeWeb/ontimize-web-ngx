@@ -16,7 +16,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
@@ -28,10 +28,7 @@ import { AbstractComponentStateService } from '../../services/state/o-component-
 import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-form-layout-manager-component-state.class';
 import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import {
-  FormLayoutCloseDetailOptions,
-  FormLayoutDetailComponentData
-} from '../../types/form-layout-detail-component-data.type';
+import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
@@ -94,6 +91,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 
   public oattr: string;
   public _mode: string = OFormLayoutManagerComponent.DIALOG_MODE;
+  public stretchTabs = false;
 
   public get mode(): string {
     return this._mode;
@@ -125,7 +123,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
    */
   public title: string;
 
-  @InputConverter()
+  @BooleanInputConverter()
   public storeState: boolean = true;
 
   /**
@@ -195,6 +193,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     if (value.hasOwnProperty('separator')) {
       this.separator = value['separator'];
+    }
+    if (value.hasOwnProperty('stretchTabs')){
+      this.stretchTabs = value['stretchTabs'];
     }
   }
 
@@ -413,6 +414,12 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
   }
 
+  public closeDetails(detailsData: any[] = [], options?: FormLayoutCloseDetailOptions): void {
+    if (this.isTabMode() && Util.isDefined(this.oTabGroup)) {
+      this.oTabGroup.closeDetails(detailsData, options);
+    }
+  }
+
   public openFormLayoutDialog(detailComp: FormLayoutDetailComponentData): void {
     const cssclass = ['o-form-layout-dialog-overlay'];
     if (this.dialogClass) {
@@ -624,5 +631,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       });
     }
     return result;
+  }
+
+  public getIdOfActiveItem(): string {
+    const compRef = this.getLayoutModeComponent();
+    return Util.isDefined(compRef) ? `${this.oattr}-${compRef.getIdOfActiveItem()}-` : '';
   }
 }

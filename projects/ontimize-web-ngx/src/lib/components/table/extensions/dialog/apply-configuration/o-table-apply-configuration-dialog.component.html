@@ -4,12 +4,14 @@
   <div mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</div>
   <mat-selection-list #configurationList dense class="o-table-apply-configuration-dialog-list">
     <mat-list-option checkboxPosition="before" [value]="default_configuration">
-      <span matLine class="o-table-apply-configuration-dialog-list-title">{{ 'TABLE.DIALOG.APPLY_CONFIGURATION_DEFAULT' | oTranslate }}</span>
-      <span matLine>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION_DEFAULT_DESCRIPTION' | oTranslate }}</span>
+      <span matListItemTitle class="o-table-apply-configuration-dialog-list-title">
+        {{ 'TABLE.DIALOG.APPLY_CONFIGURATION_DEFAULT' | oTranslate }}
+      </span>
+      <span matListItemLine>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION_DEFAULT_DESCRIPTION' | oTranslate }}</span>
     </mat-list-option>
     <mat-list-option checkboxPosition="before" *ngFor="let configuration of configurations; let i = index" [value]="configuration.name">
-      <span matLine>{{ configuration.name }}</span>
-      <span matLine>{{ configuration.description }}</span>
+      <span matListItemTitle>{{ configuration.name }}</span>
+      <span matListItemLine>{{ configuration.description }}</span>
     </mat-list-option>
   </mat-selection-list>
 </mat-dialog-content>
@@ -20,7 +22,7 @@
     {{ 'DELETE' | oTranslate }}
   </button>
   <span fxFlex></span>
-  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default cancel">{{ 'CANCEL' | oTranslate }}</button>
   <button type="button" mat-stroked-button [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1"
     class="o-button-primary">{{ 'OK' | oTranslate }}</button>
 </mat-dialog-actions>

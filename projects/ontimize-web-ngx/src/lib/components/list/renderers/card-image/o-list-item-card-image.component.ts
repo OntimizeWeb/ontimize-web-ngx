@@ -1,22 +1,9 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Injector,
-  Optional,
-  Renderer2,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
 
-import { InputConverter } from '../../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../../decorators/input-converter';
 import { Util } from '../../../../util/util';
 import { OListItemComponent } from '../../list-item/o-list-item.component';
-import {
-  OListItemCardRenderer,
-} from '../o-list-item-card-renderer.class';
+import { OListItemCardRenderer } from '../o-list-item-card-renderer.class';
 
 export const DEFAULT_INPUTS_O_LIST_ITEM_CARD_IMAGE = [
   'content',
@@ -47,9 +34,9 @@ export class OListItemCardImageComponent extends OListItemCardRenderer implement
   protected _content: string;
   protected _avatar: string;
   protected _icon: string;
-  @InputConverter()
+  @BooleanInputConverter()
   protected _collapsible: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   protected _collapsed: boolean = true;
 
   onIconClick: EventEmitter<object> = new EventEmitter<object>();

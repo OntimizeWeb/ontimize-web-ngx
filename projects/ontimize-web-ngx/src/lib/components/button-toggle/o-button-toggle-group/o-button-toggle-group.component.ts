@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
 
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { Util } from '../../../util/util';
 import { OButtonToggleComponent } from '../o-button-toggle.component';
 
@@ -63,7 +63,7 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   }
   protected _enabled: boolean = true;
   public layout: 'row' | 'column' = 'row';
-  @InputConverter()
+  @BooleanInputConverter()
   public multiple: boolean = false;
   public value: any;
   /* End inputs */

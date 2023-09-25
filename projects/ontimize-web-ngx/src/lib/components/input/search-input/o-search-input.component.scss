@@ -1,22 +1,23 @@
 .o-search-input {
   .quickFilter {
-    .mat-form-field {
-      .mat-form-field-wrapper {
+    .mat-mdc-form-field {
+
+      .mat-mdc-text-field-wrapper {
         padding-bottom: 0;
 
-        .mat-form-field-flex {
-          padding-top: 0;
+        .mat-mdc-form-field-flex {
           height: 32px;
           line-height: 32px;
+          padding: 0 10px;
 
-          .mat-form-field-infix {
+          .mat-mdc-form-field-infix {
             border-top: 0;
             padding: 0 4px;
             align-self: center;
           }
 
-          .mat-form-field-prefix {
-            align-self: center;
+          .mat-mdc-form-field-icon-prefix {
+            align-self: stretch;
             display: flex;
 
             div {
@@ -38,62 +39,44 @@
                 margin-right: 6px;
               }
 
-              button.mat-icon-button {
+              button.mat-mdc-icon-button {
                 height: 100%;
                 width: auto;
 
-                .mat-button-ripple.mat-ripple {
+                .mat-mdc-button-persistent-ripple {
                   display: none;
                 }
               }
             }
           }
 
-          .mat-form-field-subscript-wrapper {
+          .mat-mdc-form-field-subscript-wrapper {
             display: none;
           }
         }
       }
 
-      &.mat-form-field-appearance-fill,
-      &.mat-form-field-appearance-legacy,
-      &.mat-form-field-appearance-standard {
-        .mat-form-field-flex {
+      &.mat-form-field-appearance-fill {
+
+        .mat-mdc-form-field-flex {
           padding-top: 0;
         }
 
-        .mat-form-field-underline {
+        .mat-mdc-form-field-underline {
           bottom: 0;
         }
       }
 
-      &.mat-form-field-appearance-legacy {
-        .mat-form-field-label-wrapper {
-          display: flex;
-          align-items: baseline;
-
-          .mat-form-field-label {
-            padding-left: 4px;
-            align-self: center;
-            position: initial;
-          }
-
-        }
-      }
 
       &.mat-form-field-appearance-outline {
-        .mat-form-field-wrapper {
+
+        .mat-mdc-text-field-wrapper {
           margin: 0;
 
-          .mat-form-field-flex {
+          .mat-mdc-form-field-flex {
             margin: 0;
 
-            .mat-form-field-outline,
-            .mat-form-field-prefix {
-              top: 0;
-            }
-
-            .mat-form-field-prefix {
+            .mat-mdc-form-field-icon-prefix {
               border-right: 1px solid rgba(0, 0, 0, 0.12);
             }
           }
@@ -110,13 +93,5 @@
 
   .checkbox-container {
     padding: 6px 12px;
-
-    .mat-checkbox-layout {
-      white-space: normal;
-
-      .mat-checkbox-ripple {
-        display: none;
-      }
-    }
   }
 }

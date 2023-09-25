@@ -4,20 +4,20 @@ name: Build Release
 on:
   pull_request:
     types: [closed]
-    branches: [master]
+    branches: [main.15.x]
     paths: ['projects/ontimize-web-ngx/**']
   workflow_dispatch:
     inputs:
       BASELINE:
         description: 'Release branch'
         required: true
-        default: 'master'
+        default: 'main.15.x'
 
 env:
   NPM_REGISTRY: https://registry.npmjs.org/
   CI_EMAIL: ontimize-web@imatia.com
   CI_USERNAME: ontimize-web
-  DEVELOP_BRANCH: 8.x.x
+  DEVELOP_BRANCH: 15.x.x
   LIBRARY_PATH: projects/ontimize-web-ngx
 
 jobs:
@@ -44,10 +44,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Node 14.x
+      - name: Node 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.20.0
+          node-version: 18.10.0
           registry-url: ${{ env.NPM_REGISTRY }}
 
       - name: obtain package.json version

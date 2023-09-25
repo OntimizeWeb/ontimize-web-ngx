@@ -1,6 +1,6 @@
 .o-app-sidenav-menu-group {
   .o-app-sidenav-menugroup {
-    &.mat-button {
+    &.mat-mdc-button {
       min-width: 0;
     }
   }
@@ -11,7 +11,7 @@
     }
   }
 
-  .mat-tooltip.menugroup-tooltip {
+  .mat-mdc-tooltip.menugroup-tooltip {
     margin-left: 28px;
   }
 

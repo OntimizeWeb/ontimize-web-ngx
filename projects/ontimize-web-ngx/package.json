@@ -1,8 +1,8 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "14.0.0",
-  "description": "Ontimize Web framework using Angular 8",
+  "version": "15.0.0-SNAPSHOT-2",
+  "description": "Ontimize Web framework using Angular 15",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
   "repository": {
@@ -11,8 +11,8 @@
   },
   "keywords": [
     "angular",
-    "angular14",
-    "angular 14",
+    "angular15",
+    "angular 15",
     "framework",
     "web framework",
     "material",
@@ -34,20 +34,20 @@
     "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
-    "@angular/animations": "^14.3.0",
-    "@angular/cdk": "^14.2.7",
-    "@angular/common": "^14.3.0",
-    "@angular/compiler": "^14.3.0",
-    "@angular/core": "^14.3.0",
-    "@angular/flex-layout": "^14.0.0-beta.40",
-    "@angular/forms": "^14.3.0",
-    "@angular/material": "^14.2.7",
-    "@angular/material-moment-adapter": "^14.2.7",
-    "@angular/platform-browser": "^14.3.0",
-    "@angular/platform-browser-dynamic": "^14.3.0",
-    "@angular/router": "^14.3.0",
-    "rxjs": "~6.6.0",
-    "zone.js": "~0.11.4",
+    "@angular/animations": "^15.2.9",
+    "@angular/cdk": "^15.2.9",
+    "@angular/common": "^15.2.9",
+    "@angular/compiler": "^15.2.9",
+    "@angular/core": "^15.2.9",
+    "@angular/flex-layout": "^15.0.0-beta.42",
+    "@angular/forms": "^15.2.9",
+    "@angular/material": "^15.2.9",
+    "@angular/material-moment-adapter": "^15.2.9",
+    "@angular/platform-browser": "^15.2.9",
+    "@angular/platform-browser-dynamic": "^15.2.9",
+    "@angular/router": "^15.2.9",
+    "rxjs": "~7.8.0",
+    "zone.js": "~0.12.0",
     "google-libphonenumber": "^3.2.3"
   },
   "dependencies": {
@@ -56,8 +56,7 @@
     "angular-resizable-element": "3.3.4",
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
-    "reflect-metadata": "0.1.13",
     "google-libphonenumber": "^3.2.3",
-    "tslib": "^2.0.0"
+    "tslib": "^2.3.0"
   }
 }

@@ -1,12 +1,29 @@
-.o-table .o-table-container .mat-table .mat-header-cell {
+.o-table .o-table-container .mat-mdc-table .mat-mdc-header-cell {
+
+  &:has(.o-table-column-filter-icon) {
+    padding-left: 0px;
+  }
+
+  &:has(.mat-sort-header-arrow) {
+    padding-right: 6px;
+  }
+
+  &:has(.o-table-column-resizer) {
+    padding-right: 0px;
+  }
+
   .o-table-column-filter-icon {
+    position: relative;
     display: flex;
-    position: absolute;
-    left: 0;
+    margin-right: 6px;
+
+    .mat-icon {
+      align-self: center;
+    }
 
     .o-table-header-indicator-numbered {
       right: -5px;
-      bottom: -8px;
+      bottom: -6px
     }
   }
 }

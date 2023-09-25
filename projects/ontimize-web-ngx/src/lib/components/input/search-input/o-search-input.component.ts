@@ -5,7 +5,7 @@ import { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-f
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS } from '../../../config/app-config';
-import { InputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { SnackBarService } from '../../../services/snackbar.service';
 import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { Expression } from '../../../types/expression.type';
@@ -16,6 +16,7 @@ import { Util } from '../../../util/util';
 
 export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'placeholder',
+  'label',
   'width',
   'floatLabel: float-label',
   'appearance',
@@ -48,12 +49,12 @@ declare type ColumnObject = {
 export class OSearchInputComponent implements OnInit, AfterViewInit {
 
   public onSearch: EventEmitter<any> = new EventEmitter<any>();
-
+  public label: string;
   public colArray: ColumnObject[] = [];
   public _placeholder: string = 'SEARCH';
 
   get placeholder(): string {
-    return this._placeholder;
+    return this.translateService.get(this._placeholder);
   }
 
   set placeholder(value: string) {
@@ -62,13 +63,17 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     }
   }
 
+  get labelVisible(): boolean {
+    return Util.isDefined(this.label);
+  }
+
   public width: string;
   public columns: string;
-  @InputConverter()
+  @BooleanInputConverter()
   public showCaseSensitiveCheckbox: boolean = false;
-  @InputConverter()
+  @BooleanInputConverter()
   public showMenu: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   protected _filterCaseSensitive: boolean = false;
   protected _floatLabel: FloatLabelType;
   protected _appearance: MatFormFieldAppearance;
@@ -122,9 +127,9 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   }
 
   set floatLabel(value: FloatLabelType) {
-    const values = ['always', 'never', 'auto'];
+    const values = ['always', 'auto'];
     if (values.indexOf(value) === -1) {
-      value = 'auto';
+      value = 'always';
     }
     this._floatLabel = value;
   }
@@ -134,7 +139,7 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   }
 
   set appearance(value: MatFormFieldAppearance) {
-    const values = ['legacy', 'standard', 'fill', 'outline'];
+    const values = ['fill', 'outline'];
     if (values.indexOf(value) === -1) {
       value = undefined;
     }

@@ -1,7 +1,8 @@
-import { Directive, Injector } from "@angular/core";
-import { Router } from "@angular/router";
-import { InputConverter } from "../../../decorators";
-import { DialogService } from "../../../services";
+import { Directive, Injector } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { BooleanInputConverter } from '../../../decorators';
+import { DialogService } from '../../../services';
 
 export const DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM = [
   'name',
@@ -22,10 +23,10 @@ export const DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM = [
 
 export class OUserInfoConfigurationItemDirective {
 
-  @InputConverter()
+  @BooleanInputConverter()
   toolTip: boolean = false;
 
-  @InputConverter()
+  @BooleanInputConverter()
   confirm: boolean = false;
 
   public action: () => void;

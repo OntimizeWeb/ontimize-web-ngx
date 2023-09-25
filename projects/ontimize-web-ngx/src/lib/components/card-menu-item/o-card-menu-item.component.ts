@@ -12,12 +12,12 @@ import {
   QueryList,
   ViewChild,
   ViewContainerRef,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { InputConverter } from '../../decorators/input-converter';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 
 export const DEFAULT_INPUTS_O_MENU_CARD = [
@@ -58,7 +58,7 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
   icon: string;
   tooltip: string;
   buttonText: string;
-  @InputConverter()
+  @BooleanInputConverter()
   disabledButton: boolean = false;
   mainContainerLayout = 'column';
   secondaryContainerLayout = 'column';
