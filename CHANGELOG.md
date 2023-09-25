@@ -1,5 +1,9 @@
-## 15.0.0-BETA-0
+## 15.0.0-beta.0 (2023-09-25)
 ### Features
+> [!NOTE]
+> For the migration process, the guide available at the following URL has been followed:
+https://update.angular.io/?l=3&v=8.2-15.0.
+
 * Migration to Angular 15.
 * Migration to Angular Material 15.
 * **appearance.service**: created a new service that allows you to manage dark mode.
@@ -7,46 +11,42 @@
 * **input files**: new `subscriptSizing` input.
 * **o-slider**: new `show-tick-marks` input.
 
-> [!NOTE]
-> For the migration process, the guide available at the following URL has been followed:
-https://update.angular.io/?l=3&v=8.2-15.0.
-
 > [!IMPORTANT]
 > Due to the high number of changes derived from migration, it is recommended to consult the guide at the following link:
 https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15.
 ### BREAKING CHANGES
 * **app.module**: The ONTIMIZE_MODULES import should be replaced by BrowserModule, BrowserAnimationsModule, OntimizeWebModule.forRoot(CONFIG).
-- Before
-  ```ts
-  @NgModule({
-    imports: [
-      ONTIMIZE_MODULES
-    ]
-  })
-  ```
-- After
-  ```ts
-  @NgModule({
-    imports: [
-      BrowserModule,
-      BrowserAnimationsModule,
-      OntimizeWebModule.forRoot(CONFIG)
-    ]
-  })
-  ```
+  - Before
+    ```ts
+    @NgModule({
+      imports: [
+        ONTIMIZE_MODULES
+      ]
+    })
+    ```
+  - After
+    ```ts
+    @NgModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        OntimizeWebModule.forRoot(CONFIG)
+      ]
+    })
+    ```
 * **ontimize-web-ngx-theming**: The theming library is now integrated into `ontimize-web-ngx` so the library import must be removed.
-  ```css
+  - Before
+    ```css
 
-  @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme.scss';
-  @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme-lite.scss';
+    @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme.scss';
+    @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme-lite.scss';
 
-  ```
-  should be replaced by
-
-  ```css
-  @use 'ontimize-web-ngx/theming/ontimize-theme.scss';
-  @use 'ontimize-web-ngx/theming/ontimize-theme-lite.scss';
-  ```
+    ```
+  - After
+    ```css
+    @use 'ontimize-web-ngx/theming/ontimize-theme.scss';
+    @use 'ontimize-web-ngx/theming/ontimize-theme-lite.scss';
+    ```
 
 * NODE-SASS usage is deprecated and will be removed so the following steps must be followed:
   * You must replace node-sass with sass, which is the Dart version of sass.
@@ -61,18 +61,18 @@ https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15
 * **app-routing.module**: the opt object that is included in forRoot is now of type ExtraOptions.
 
   - Before
-   ```ts
+    ```ts
     const opt = {
-    enableTracing: false
-    };
-   ```
-
-  - After
-   ```ts
-    const opt: ExtraOptions = {
-    enableTracing: false
+      enableTracing: false
     };
     ```
+
+  - After
+    ```ts
+    const opt: ExtraOptions = {
+      enableTracing: false
+    };
+      ```
 * **o-slider**: inputs `invert`, `tick-internal` and `layout` have been removed.
 ## 8.14.0 (2023-07-28)
 ### Features
