@@ -6,10 +6,10 @@ import { IExportDataProvider } from '../../interfaces/export-data-provider.inter
 
 import { IExportService } from '../../interfaces/export-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { HttpRequestOptions } from '../../types';
-import { Util } from '../../util';
+import { Util } from '../../util/util';
 import { OntimizeExportDataProviderService } from '../ontimize-export-data-provider.service';
 import { OntimizeBaseService } from './ontimize-base-service.class';
+import { HttpRequestOptions } from '../../types/http-request-options.type';
 
 @Injectable()
 export class OntimizeExportService extends OntimizeBaseService implements IExportService {

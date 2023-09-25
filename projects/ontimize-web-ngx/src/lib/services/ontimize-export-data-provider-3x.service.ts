@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
+import type { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { Util } from "../util/util";
 import { OntimizeExportDataBaseProviderService } from "./ontimize-export-data-base-provider.service";
 

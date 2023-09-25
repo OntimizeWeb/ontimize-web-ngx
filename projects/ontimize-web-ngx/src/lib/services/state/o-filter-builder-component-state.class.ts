@@ -1,5 +1,5 @@
 import { OFilterBuilderStatus, OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
-import { Util } from '../../util';
+import { Util } from '../../util/util';
 import { DefaultComponentStateClass } from './o-component-state.class';
 
 export class OFilterBuilderComponentStateClass extends DefaultComponentStateClass {

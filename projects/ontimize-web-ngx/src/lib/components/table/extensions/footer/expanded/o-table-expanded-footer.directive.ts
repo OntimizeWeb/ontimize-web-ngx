@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
-import { Util } from '../../../../../util';
+import { Util } from '../../../../../util/util';
 import { OTableComponent } from './../../../o-table.component';
 
 @Directive({

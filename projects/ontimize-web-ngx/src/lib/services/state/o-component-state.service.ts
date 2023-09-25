@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
-import { Util } from '../../util';
+import { Util } from '../../util/util';
 import { LocalStorageService } from '../local-storage.service';
 import { AbstractComponentStateClass, DefaultComponentStateClass, DefaultServiceComponentStateClass } from './o-component-state.class';
 

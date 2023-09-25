@@ -1,4 +1,4 @@
-import { OTableComponent } from "../components";
+import type { OTableComponent } from "../components";
 
 export interface IChartOnDemandService {
   openChartOnDemand(table: OTableComponent);

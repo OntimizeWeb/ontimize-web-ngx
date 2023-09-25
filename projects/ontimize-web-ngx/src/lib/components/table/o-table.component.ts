@@ -40,16 +40,16 @@ import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rx
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
-import { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
-import { OTableButton } from '../../interfaces/o-table-button.interface';
-import { OTableButtons } from '../../interfaces/o-table-buttons.interface';
-import { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
-import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
-import { OTableMenu } from '../../interfaces/o-table-menu.interface';
-import { OTableOptions } from '../../interfaces/o-table-options.interface';
-import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
-import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
-import { ServiceResponse } from '../../interfaces/service-response.interface';
+import type { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
+import type { OTableButton } from '../../interfaces/o-table-button.interface';
+import type { OTableButtons } from '../../interfaces/o-table-buttons.interface';
+import type { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
+import type { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
+import type { OTableMenu } from '../../interfaces/o-table-menu.interface';
+import type { OTableOptions } from '../../interfaces/o-table-options.interface';
+import type { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
+import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
+import type { ServiceResponse } from '../../interfaces/service-response.interface';
 import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';

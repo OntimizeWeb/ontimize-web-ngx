@@ -7,9 +7,10 @@ import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { MomentService } from '../../services/moment.service';
 import { SnackBarService } from '../../services/snackbar.service';
-import { Codes, Util } from '../../util';
 import { ObservableWrapper } from '../../util/async';
 import { _getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
+import { Util } from '../../util/util';
+import { Codes } from '../../util/codes';
 
 /**
  * `OTranslateService` factory.

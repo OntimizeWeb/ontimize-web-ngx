@@ -6,8 +6,8 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
 import { DialogService } from '../../services/dialog.service';
 import { OModulesInfoService } from '../../services/o-modules-info.service';
-import { Codes } from '../../util';
 import { OUserInfoComponent } from '../user-info/o-user-info.component';
+import { Codes } from '../../util/codes';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',

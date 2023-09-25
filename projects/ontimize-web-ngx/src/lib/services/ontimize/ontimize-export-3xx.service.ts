@@ -5,10 +5,10 @@ import { share } from 'rxjs/operators';
 import { AppConfig } from '../../config/app-config';
 import { IExportDataProvider } from '../../interfaces/export-data-provider.interface';
 import { IExportService } from '../../interfaces/export-service.interface';
-import { HttpRequestOptions } from '../../types';
-import { Util } from '../../util';
 import { OntimizeExportDataProviderService } from '../ontimize-export-data-provider.service';
 import { OntimizeBaseService } from './ontimize-base-service.class';
+import { Util } from '../../util/util';
+import { HttpRequestOptions } from '../../types/http-request-options.type';
 
 @Injectable()
 export class OntimizeExportService3X extends OntimizeBaseService implements IExportService {
@@ -51,7 +51,7 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
       format: format,
       path: this.servicePath
     }
-    
+
     let exportData: any = this.exportDataProvider.getExportConfiguration(paramExport);
 
 

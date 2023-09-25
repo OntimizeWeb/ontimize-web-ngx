@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { IFileService } from '../../interfaces/file-service.interface';
-import { Util } from '../../util';
+import { Util } from '../../util/util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
 
 @Injectable()

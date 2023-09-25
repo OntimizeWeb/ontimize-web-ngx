@@ -1,6 +1,6 @@
 import { Injector, OnInit, PipeTransform, TemplateRef, Directive } from '@angular/core';
 
-import { Util } from '../../../../util';
+import { Util } from '../../../../util/util';
 import { OListPickerComponent } from '../o-list-picker.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER = [];

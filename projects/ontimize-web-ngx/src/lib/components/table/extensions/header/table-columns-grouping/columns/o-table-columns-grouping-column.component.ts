@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BooleanInputConverter } from '../../../../../../decorators/input-converter';
 import { GroupedColumnAggregateConfiguration } from '../../../../../../interfaces/o-table-columns-grouping-interface';
 import { AggregateFunction } from '../../../../../../types/aggregate-function.type';
-import { Util } from '../../../../../../util';
+import { Util } from '../../../../../../util/util';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_GROUPING_COLUMN = [
   // attr [string]: column name.

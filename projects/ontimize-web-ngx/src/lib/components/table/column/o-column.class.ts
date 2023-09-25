@@ -6,8 +6,9 @@ import { Expression } from '../../../types/expression.type';
 import { OperatorFunction } from '../../../types/operation-function.type';
 import { OColumnAggregate } from '../../../types/table/o-column-aggregate.type';
 import { OColumnTooltip } from '../../../types/table/o-column-tooltip.type';
-import { Codes, Util } from '../../../util';
+import { Util } from '../../../util/util';
 import { OBaseTableCellRenderer } from './cell-renderer/o-base-table-cell-renderer.class';
+import { Codes } from '../../../util/codes';
 
 export class OColumn {
   attr: string;

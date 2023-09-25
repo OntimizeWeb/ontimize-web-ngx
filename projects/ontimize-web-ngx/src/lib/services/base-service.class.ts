@@ -7,16 +7,16 @@ import { map, share } from 'rxjs/operators';
 import { AppConfig } from '../config/app-config';
 import { ServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
-import { HttpRequestOptions } from '../types';
 import { Config } from '../types/config.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
-import { Util } from '../util';
+import { Util } from '../util/util';
 import { Codes } from '../util/codes';
 import { AuthService } from './auth.service';
 import { BaseServiceResponse } from './base-service-response.class';
 import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
+import { HttpRequestOptions } from '../types/http-request-options.type';
 
 export class BaseService {
 

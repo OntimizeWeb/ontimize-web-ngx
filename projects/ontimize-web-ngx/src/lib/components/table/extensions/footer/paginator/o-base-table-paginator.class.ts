@@ -1,5 +1,6 @@
 import { OTablePaginator } from '../../../../../interfaces/o-table-paginator.interface';
-import { Codes, Util } from '../../../../../util';
+import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
 
 export class OBaseTablePaginator implements OTablePaginator {
 
