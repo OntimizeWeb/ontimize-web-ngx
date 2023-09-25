@@ -178,7 +178,7 @@ export class LocalStorageService {
     }
   }
 
-  protected setLocalStorage(appData: any) {
+  setLocalStorage(appData: any) {
     this.onSetLocalStorage.emit();
     try {
       localStorage.setItem(this._config.uuid, Util.stringify(appData));
