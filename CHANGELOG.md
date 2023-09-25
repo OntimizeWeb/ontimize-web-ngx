@@ -1,3 +1,79 @@
+## 15.0.0-BETA-0
+### Features
+* Migration to Angular 15.
+* Migration to Angular Material 15.
+* **appearance.service**: created a new service that allows you to manage dark mode.
+* **o-form-layout-manager**, **o-form-layout-tabgroup-options**: new `stretch-tabs` input.
+* **input files**: new `subscriptSizing` input.
+* **o-slider**: new `show-tick-marks` input.
+
+> [!IMPORTANT]
+> For the migration process, the guide available at the following URL has been followed:
+https://update.angular.io/?l=3&v=8.2-15.0.
+
+> [!IMPORTANT]
+> Due to the high number of changes derived from migration, it is recommended to consult the guide at the following link:
+https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15.
+### BREAKING CHANGES
+* **app.module**: The ONTIMIZE_MODULES import should be replaced by BrowserModule, BrowserAnimationsModule, OntimizeWebModule.forRoot(CONFIG).
+- Before
+  ```ts
+  @NgModule({
+    imports: [
+      ONTIMIZE_MODULES
+    ]
+  })
+  ```
+- After
+  ```ts
+  @NgModule({
+    imports: [
+      BrowserModule,
+      BrowserAnimationsModule,
+      OntimizeWebModule.forRoot(CONFIG)
+    ]
+  })
+  ```
+* **ontimize-web-ngx-theming**: The theming library is now integrated into `ontimize-web-ngx` so the library import must be removed.
+  ```css
+
+  @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme.scss';
+  @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme-lite.scss';
+
+  ```
+  should be replaced by
+
+  ```css
+  @use 'ontimize-web-ngx/theming/ontimize-theme.scss';
+  @use 'ontimize-web-ngx/theming/ontimize-theme-lite.scss';
+  ```
+
+* NODE-SASS usage is deprecated and will be removed so the following steps must be followed:
+  * You must replace node-sass with sass, which is the Dart version of sass.
+    ```cmd
+    npm uninstall node-sass
+    npm install sass
+    ```
+  * The migration to Dart sass is done automatically by the Angular migration process but if you need to migrate a file you can use the following tool to do automatic migrations: https://sass-lang.com/documentation/cli/migrator/.
+
+* InputConverter has been replaced by BooleanConverter and NumberConverter.
+
+* **app-routing.module**: the opt object that is included in forRoot is now of type ExtraOptions.
+
+  - Before
+   ```ts
+    const opt = {
+    enableTracing: false
+    };
+   ```
+
+  - After
+   ```ts
+    const opt: ExtraOptions = {
+    enableTracing: false
+    };
+    ```
+* **o-slider**: inputs `invert`, `tick-internal` and `layout` have been removed.
 ## 8.14.0 (2023-07-28)
 ### Features
 * **o-table**: Modified the visibility of the method `getColumnFilter` ([3dc21ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dc21ec))

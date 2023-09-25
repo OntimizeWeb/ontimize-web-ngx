@@ -3,7 +3,7 @@
 
 <h1 align="center">
   <div style="display:inline-block;vertical-align: middle;">
-    <a name="logo" href="https://ontimizeweb.github.io/docs/v8/">
+    <a name="logo" href="https://ontimizeweb.github.io/docs/v15/">
       Ontimize Web
     </a>
   </div>
@@ -21,7 +21,7 @@
 
 Ontimize Web is web application framework that provides to you an environment for solving the problematic situation of building aplications that require a browser-based user interface. Ontimize Web allows developing data management applications quickly and agile.
 
-Ontimize Web is based on the [8.x version of Angular](https://v8.angular.io/docs), and comes with many significant performance, usability, and feature improvements.
+Ontimize Web is based on the [15.x version of Angular](https://v15.angular.io/docs), and comes with many significant performance, usability, and feature improvements.
 
 ### 📖 Documentation
 
@@ -29,7 +29,7 @@ Check out our [documentation site](https://ontimizeweb.github.io/docs/) to know 
 
 ## :zap: Getting started
 
-Follow the [Getting Started](https://ontimizeweb.github.io/docs/v8/doc-overview/) documentation section to get started quickly.
+Follow the [Getting Started](https://ontimizeweb.github.io/docs/v15/doc-overview/) documentation section to get started quickly.
 There is a practical [Quickstart Application](https://github.com/OntimizeWeb/ontimize-web-ngx-quickstart), a perfect starting point for building your own Ontimize Web app.
 
 ### Ontimize Web Examples
@@ -43,7 +43,7 @@ We would love any feedback you have or to know when you encounter issues, by fil
 
 ## :gear: Development
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.9.
 
 ### Installation
 
@@ -77,4 +77,4 @@ The script `build` executes the following commands:
 
 ## :eyes: Versions and dependencies
 
-Each version of the Addons is compatible with a version of the framework, you can check the dependencies between Angular, Ontimize web and Addons [here](https://ontimizeweb.github.io/docs/v8/versions/).
+Each version of the Addons is compatible with a version of the framework, you can check the dependencies between Angular, Ontimize web and Addons [here](https://ontimizeweb.github.io/docs/v15/versions/).
