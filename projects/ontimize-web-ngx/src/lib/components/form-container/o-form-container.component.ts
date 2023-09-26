@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewCont
 import { OBreadcrumbComponent } from '../../components/breadcrumb/o-breadcrumb.component';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
-import { OFormComponent } from '../form/o-form.component';
+import type { OFormComponent } from '../form/o-form.component';
 
 export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
   // breadcrumb [boolean]: show breadscrum of the form. Default: yes.

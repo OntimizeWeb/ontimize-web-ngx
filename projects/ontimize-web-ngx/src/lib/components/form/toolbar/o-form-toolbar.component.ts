@@ -9,7 +9,7 @@ import { OPermissions } from '../../../types/o-permissions.type';
 import { Codes } from '../../../util/codes';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../o-form.component';
+import { BaseOForm } from '../form.class';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -116,7 +116,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   protected _existsChangesToSaveSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private _form: OFormComponent,
+    private _form: BaseOForm,
     public element: ElementRef,
     protected injector: Injector
   ) {
@@ -365,7 +365,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   protected parsePermissions(): void {
-    if (this._form.oattr) {
+    if (this._form.getAttribute()) {
       this.actionsPermissions = this._form.getActionsPermissions();
 
       if (!Util.isDefined(this.actionsPermissions)) {
