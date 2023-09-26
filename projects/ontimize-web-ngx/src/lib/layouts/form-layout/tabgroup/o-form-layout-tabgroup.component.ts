@@ -27,7 +27,7 @@ import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
-import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component';
+import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -82,7 +82,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
     protected elementRef: ElementRef,
-    @Inject(forwardRef(() => OFormLayoutManagerComponent)) public formLayoutManager: OFormLayoutManagerComponent
+    @Inject(forwardRef(() => OFormLayoutManagerBase)) public formLayoutManager: OFormLayoutManagerBase
   ) {
     this.dialogService = injector.get(DialogService);
     this.router = this.injector.get(Router);
