@@ -1,9 +1,8 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Util } from '../../../util/util';
-import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
+import { OBarMenuBase } from '../o-bar-menu-base.class';
 
 export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
   // route [string]: name of the state to navigate. Default: no value.
@@ -31,7 +30,7 @@ export class OBarMenuItemComponent extends OBaseMenuItemClass implements OnInit 
   action: () => void;
 
   constructor(
-    @Inject(forwardRef(() => OBarMenuComponent)) protected menu: OBarMenuComponent,
+    @Inject(forwardRef(() => OBarMenuBase)) protected menu: OBarMenuBase,
     protected elRef: ElementRef,
     protected injector: Injector
   ) {

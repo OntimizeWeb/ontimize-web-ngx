@@ -22,7 +22,7 @@ import {
   TableFilterByColumnDialogResult
 } from '../../../../../types/table/o-table-filter-by-column-data.type';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../column/o-column.class';
+import type { OColumn } from '../../../column/o-column.class';
 import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { Codes } from '../../../../../util/codes';
 

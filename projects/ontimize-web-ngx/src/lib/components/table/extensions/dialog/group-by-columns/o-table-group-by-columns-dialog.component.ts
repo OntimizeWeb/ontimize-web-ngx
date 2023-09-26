@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewEncapsulatio
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { OGroupedColumnTypes } from '../../../../../types';
 import { Util } from '../../../../../util/util';
-import { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';
-import { OColumn } from '../../../column/o-column.class';
+import type { OColumn } from '../../../column/o-column.class';
+import type { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';
 
 @Component({
   selector: 'o-table-group-by-columns-dialog',

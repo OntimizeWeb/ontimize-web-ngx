@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../o-column.class';
+import type { OColumn } from '../../o-column.class';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE = [

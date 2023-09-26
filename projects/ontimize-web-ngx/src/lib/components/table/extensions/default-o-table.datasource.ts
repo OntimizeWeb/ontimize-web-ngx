@@ -9,7 +9,7 @@ import { OTableOptions } from '../../../interfaces/o-table-options.interface';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../types/table/o-column-value-filter.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
-import { OColumn } from '../column/o-column.class';
+import type { OColumn } from '../column/o-column.class';
 import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
 import { OTableGroupedRow } from './row/o-table-row-group.class';

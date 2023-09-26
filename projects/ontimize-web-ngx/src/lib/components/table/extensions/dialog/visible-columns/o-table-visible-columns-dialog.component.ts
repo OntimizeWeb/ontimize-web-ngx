@@ -14,8 +14,8 @@ import { DialogService } from '../../../../../services/dialog.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../column/o-column.class';
-import { OTableComponent } from '../../../o-table.component';
+import type { OColumn } from '../../../column/o-column.class';
+import { OTableBase } from '../../../o-table-base.class';
 
 export type ColumnVisibilityConfiguration = {
   attr: string;
@@ -46,7 +46,7 @@ export class OTableVisibleColumnsDialogComponent {
   protected activeColumnValueFilters: string[] = [];
   protected activeSortColumns: string[] = [];
   protected activeGroupByColumns: string[] = [];
-  protected table: OTableComponent;
+  protected table: OTableBase;
   constructor(
     protected injector: Injector,
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,

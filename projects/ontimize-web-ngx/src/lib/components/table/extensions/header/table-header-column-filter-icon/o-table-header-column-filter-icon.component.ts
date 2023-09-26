@@ -5,7 +5,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../column';
+import type { OColumn } from '../../../column';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_ICON = [

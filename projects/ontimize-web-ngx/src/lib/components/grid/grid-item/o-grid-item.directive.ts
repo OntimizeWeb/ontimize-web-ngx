@@ -3,7 +3,7 @@ import { Directive, ElementRef, EventEmitter, HostListener, Renderer2 } from '@a
 import { ObservableWrapper } from '../../../util/async';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
-import { OGridComponent } from '../o-grid.component';
+import type { OGridComponent } from '../o-grid.component';
 
 @Directive({
   selector: 'mat-grid-tile[o-grid-item]',

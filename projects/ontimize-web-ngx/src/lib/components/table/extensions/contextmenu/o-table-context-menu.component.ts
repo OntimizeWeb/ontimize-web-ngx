@@ -6,9 +6,9 @@ import { OTranslateService } from '../../../../services/translate/o-translate.se
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
-import { OColumn } from '../../column/o-column.class';
-import { OTableComponent } from '../../o-table.component';
+import type { OColumn } from '../../column/o-column.class';
 import { OTableGroupedRow } from '../row/o-table-row-group.class';
+import { OTableBase } from '../../o-table-base.class';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -158,7 +158,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   public isDateColumn: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor(
     protected injector: Injector,
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase
   ) {
     this.translateService = this.injector.get(OTranslateService);
   }

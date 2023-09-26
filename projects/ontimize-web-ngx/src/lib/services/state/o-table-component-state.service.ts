@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { OColumn } from '../../components/table/column/o-column.class';
+import type { OColumn } from '../../components/table/column/o-column.class';
 import { OTableComponent } from '../../components/table/o-table.component';
 import { OFilterDefinition } from '../../types/o-filter-definition.type';
 import { OColumnDisplay } from '../../types/table/o-column-display.type';

@@ -4,7 +4,7 @@ import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Util } from '../../../../../util/util';
-import { OTableComponent } from './../../../o-table.component';
+import { OTableBase } from '../../../o-table-base.class';
 
 @Directive({
   selector: '[oTableExpandedFooter]'
@@ -38,7 +38,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private _colspan: number;
 
   constructor(
-    public table: OTableComponent,
+    public table: OTableBase,
     public element: ElementRef,
     private renderer: Renderer2,
     protected injector: Injector
