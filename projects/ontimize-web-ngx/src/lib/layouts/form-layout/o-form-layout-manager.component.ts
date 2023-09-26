@@ -245,7 +245,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     protected dialog: MatDialog,
     protected elRef: ElementRef,
     @SkipSelf() @Optional()
-    public parentFormLayoutManager: OFormLayoutManagerComponent
+    public parentFormLayoutManager: OFormLayoutManagerBase
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.localStorageService = this.injector.get(LocalStorageService);

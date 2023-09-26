@@ -49,6 +49,8 @@ import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
+import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
+import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -290,7 +292,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected navigationService: NavigationService;
   protected snackBarService: SnackBarService;
 
-  protected _formToolbar: OFormToolbarComponent;
+  protected _formToolbar: OFormToolbarBase;
 
   protected _components: IFormDataComponentHash = {};
   protected _compSQLTypes: object = {};
@@ -1462,11 +1464,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formCache.undoLastChange();
   }
 
-  getFormToolbar(): OFormToolbarComponent {
+  getFormToolbar(): OFormToolbarBase {
     return this._formToolbar;
   }
 
-  getFormManager(): OFormLayoutManagerComponent {
+  getFormManager(): OFormLayoutManagerBase {
     return this.formNavigation.formLayoutManager;
   }
 

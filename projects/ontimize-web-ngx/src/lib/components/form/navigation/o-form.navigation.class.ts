@@ -3,7 +3,6 @@ import { ActivatedRoute, NavigationExtras, Router, UrlSegmentGroup } from '@angu
 import { combineLatest, Observable, Subscription } from 'rxjs';
 
 import { OFormLayoutDialogComponent } from '../../../layouts/form-layout/dialog/o-form-layout-dialog.component';
-import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import {
   FormLayoutCloseDetailOptions,
@@ -12,12 +11,13 @@ import {
 import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../o-form.component';
 import { OFormConfirmExitService } from './o-form-confirm-exit.service';
+import { OFormBase } from '../o-form-base.class';
+import { OFormLayoutManagerBase } from '../../../layouts/form-layout/o-form-layout-manager-base.class';
 
 export class OFormNavigationClass {
 
-  formLayoutManager: OFormLayoutManagerComponent;
+  formLayoutManager: OFormLayoutManagerBase;
   formLayoutDialog: OFormLayoutDialogComponent;
 
   protected navigationService: NavigationService;
@@ -43,7 +43,7 @@ export class OFormNavigationClass {
 
   constructor(
     protected injector: Injector,
-    protected form: OFormComponent,
+    protected form: OFormBase,
     protected router: Router,
     protected actRoute: ActivatedRoute
   ) {
@@ -51,7 +51,7 @@ export class OFormNavigationClass {
     this.confirmExitService = injector.get(OFormConfirmExitService);
 
     try {
-      this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
+      this.formLayoutManager = this.injector.get(OFormLayoutManagerBase);
     } catch (e) {
       // No parent formLayoutManager
     }
@@ -232,7 +232,7 @@ export class OFormNavigationClass {
 
   protected setModifiedState(modified: boolean, confirmExit: boolean) {
     if (this.formLayoutManager) {
-      this.formLayoutManager.setModifiedState(this.form.oattr, modified, confirmExit);
+      this.formLayoutManager.setModifiedState(this.form.getAttribute(), modified, confirmExit);
     }
   }
 
@@ -243,7 +243,7 @@ export class OFormNavigationClass {
       if (isInInsertMode) {
         formData = {};
         formData.new_tab_title = 'LAYOUT_MANANGER.INSERTION_MODE_TITLE';
-      } else if (this.formLayoutManager.allowToUpdateNavigation(this.form.oattr)) {
+      } else if (this.formLayoutManager.allowToUpdateNavigation(this.form.getAttribute())) {
         formData = {};
         Object.keys(this.form.formData).forEach(key => {
           formData[key] = this.form.formData[key].value;

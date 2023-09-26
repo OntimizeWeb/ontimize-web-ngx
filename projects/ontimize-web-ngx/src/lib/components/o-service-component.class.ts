@@ -27,6 +27,7 @@ import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
+import { OFormLayoutManagerBase } from '../layouts/form-layout/o-form-layout-manager-base.class';
 
 interface ItemClick {
   getItemData(): any
@@ -227,7 +228,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   public selection = new SelectionModel<Element>(true, []);
 
   protected onTriggerUpdateSubscription: any;
-  protected formLayoutManager: OFormLayoutManagerComponent;
+  protected formLayoutManager: OFormLayoutManagerBase;
   protected formLayoutManagerTabIndex: number;
   public oFormLayoutDialog: OFormLayoutDialogComponent;
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation, forwardRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -10,6 +10,7 @@ import { Codes } from '../../../util/codes';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
+import { OFormToolbarBase } from './o-form-toolbar-base.class';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -33,7 +34,8 @@ export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-toolbar]': 'true'
-  }
+  },
+  providers: [{ provide: OFormToolbarBase, useExisting: forwardRef(() => OFormToolbarComponent) }],
 })
 export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
 
