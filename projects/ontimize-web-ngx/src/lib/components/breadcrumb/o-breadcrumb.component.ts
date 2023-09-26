@@ -7,8 +7,7 @@ import { OBreadcrumbService } from '../../services/o-breadcrumb.service';
 import { OBreadcrumb } from '../../types/o-breadcrumb-item.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { OFormComponent } from '../form/o-form.component';
-
+import { OFormBase } from '../form/o-form-base.class';
 export const DEFAULT_INPUTS_O_BREADCRUMB = [
   // form [OFormComponent]: Ontimize Web Form reference.
   '_formRef: form',
@@ -37,10 +36,10 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   public breadcrumbs: BehaviorSubject<OBreadcrumb[]> = new BehaviorSubject([]);
 
   protected router: Router;
-  set form(value: OFormComponent) {
+  set form(value: OFormBase) {
     this._formRef = value;
   }
-  protected _formRef: OFormComponent;
+  protected _formRef: OFormBase;
   protected labelColsArray: Array<string> = [];
   protected navigationService: NavigationService;
   protected subscription: Subscription = new Subscription();

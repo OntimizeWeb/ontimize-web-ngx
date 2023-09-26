@@ -48,10 +48,7 @@ import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-
-interface IFormDataComponentHash {
-  [attr: string]: IFormDataComponent;
-}
+import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.

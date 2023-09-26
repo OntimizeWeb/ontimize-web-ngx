@@ -6,8 +6,9 @@ export abstract class OFormLayoutManagerBase {
   abstract getLabelFromData(data: any): string;
   abstract getLabelFromUrlParams(urlParams: object): string;
   abstract getFormDataFromLabelColumns(data: any);
+  abstract isTabMode(): boolean;
   abstract setAsActiveFormLayoutManager();
   abstract hasToConfirmExit(data: FormLayoutDetailComponentData, options?: FormLayoutCloseDetailOptions): boolean
-  abstract updateIfNeeded(): boolean;
+  abstract updateIfNeeded(): void;
 
 }
