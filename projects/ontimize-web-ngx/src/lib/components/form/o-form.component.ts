@@ -42,7 +42,7 @@ import { Util } from '../../util/util';
 import { OFormContainerComponent } from '../form-container/o-form-container.component';
 import { OFormControl } from '../input/o-form-control.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
-import { BaseOForm } from './form.class';
+import { OFormBase } from './o-form-base.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormValue } from './o-form-value';
@@ -176,7 +176,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 @Component({
   selector: 'o-form',
   providers: [
-    { provide: BaseOForm, useExisting: forwardRef(() => OFormComponent) },
+    { provide: OFormBase, useExisting: forwardRef(() => OFormComponent) },
     OntimizeServiceProvider,
     OFormMessageService
   ],

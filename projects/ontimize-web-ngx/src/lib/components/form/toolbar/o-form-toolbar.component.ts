@@ -9,7 +9,7 @@ import { OPermissions } from '../../../types/o-permissions.type';
 import { Codes } from '../../../util/codes';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
-import { BaseOForm } from '../form.class';
+import { OFormBase } from '../o-form-base.class';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -116,7 +116,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   protected _existsChangesToSaveSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private _form: BaseOForm,
+    private _form: OFormBase,
     public element: ElementRef,
     protected injector: Injector
   ) {

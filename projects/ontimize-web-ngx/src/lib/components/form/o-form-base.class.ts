@@ -7,7 +7,7 @@ import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
 
-export abstract class BaseOForm {
+export abstract class OFormBase {
   includeBreadcrumb: boolean;
   isCacheStackEmpty: boolean;
   formContainer: OFormContainerComponent;
