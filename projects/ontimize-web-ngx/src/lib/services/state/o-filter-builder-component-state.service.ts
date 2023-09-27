@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { OFilterBuilderComponent } from '../../components';
 import { OFilterBuilderStatus } from '../../types';
 import { AbstractComponentStateService } from './o-component-state.service';
 import { OFilterBuilderComponentStateClass } from './o-filter-builder-component-state.class';
+import { OFilterBuilderBase } from '../../components/filter-builder/o-filter-builder-base.class';
 
 @Injectable()
-export class OFilterBuilderComponentStateService extends AbstractComponentStateService<OFilterBuilderComponentStateClass, OFilterBuilderComponent> {
+export class OFilterBuilderComponentStateService extends AbstractComponentStateService<OFilterBuilderComponentStateClass, OFilterBuilderBase> {
 
-  initialize(component: OFilterBuilderComponent) {
+  initialize(component: OFilterBuilderBase) {
     this.state = new OFilterBuilderComponentStateClass();
     super.initialize(component);
   }

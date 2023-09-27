@@ -1,9 +1,9 @@
+import { ComponentType } from '@angular/cdk/overlay';
 import { Inject, Injectable, Injector, forwardRef } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { OSnackBarBase } from '../shared/components/snackbar/o-snackbar-base.class';
 import { type OSnackBarConfig } from '../shared/components/snackbar/o-snackbar.component';
-import { ComponentType } from '@angular/cdk/portal';
 @Injectable({
   providedIn: 'root'
 })

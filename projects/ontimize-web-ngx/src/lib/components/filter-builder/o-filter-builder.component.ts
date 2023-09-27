@@ -18,6 +18,7 @@ import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
+import { OFilterBuilderBase } from './o-filter-builder-base.class';
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.
@@ -54,7 +55,10 @@ export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
   selector: 'o-filter-builder',
   templateUrl: './o-filter-builder.component.html',
   inputs: DEFAULT_INPUTS_O_FILTER_BUILDER,
-  outputs: DEFAULT_OUTPUTS_O_FILTER_BUILDER
+  outputs: DEFAULT_OUTPUTS_O_FILTER_BUILDER,
+  providers: [
+    { provide: OFilterBuilderBase, useExisting: forwardRef(() => OFilterBuilderComponent) }
+  ]
 })
 
 /**

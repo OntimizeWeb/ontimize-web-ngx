@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
 import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
@@ -7,6 +7,7 @@ import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OAppSidenavBase } from '../../components/app-sidenav/o-app-sidenav-base.class';
 import { OAppHeaderBase } from '../../components/app-header/o-app-header-base.class';
+import { OAppLayoutBase } from './o-app-layout-base.class';
 
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
@@ -40,7 +41,10 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
   outputs: DEFAULT_OUTPUTS_O_APP_LAYOUT,
   templateUrl: './o-app-layout.component.html',
   styleUrls: ['./o-app-layout.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    { provide: OAppLayoutBase, useExisting: forwardRef(() => OAppLayoutComponent) }
+  ]
 })
 
 export class OAppLayoutComponent implements AfterViewInit {
