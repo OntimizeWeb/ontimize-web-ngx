@@ -1,7 +1,8 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, forwardRef } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { ODialogConfig } from './o-dialog.config';
+import type { ODialogConfig } from './o-dialog.config';
+import { ODialogBase } from './o-dialog-base.class';
 
 @Component({
   selector: 'o-dialog',
@@ -10,7 +11,11 @@ import { ODialogConfig } from './o-dialog.config';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-dialog]': 'true'
-  }
+  },
+  providers: [
+    { provide: ODialogBase, useExisting: forwardRef(() => ODialogComponent) }
+
+  ]
 })
 export class ODialogComponent {
 

@@ -9,11 +9,15 @@ import type { OTableQuickfilter } from "../../interfaces/o-table-quickfilter.int
 import type { OTableMenu } from "../../interfaces/o-table-menu.interface";
 import type { OColumnValueFilter } from "../../types/table/o-column-value-filter.type";
 import type { OContextMenuComponent } from "../contextmenu/o-context-menu.component";
-import type { OFilterDefinition, OGroupedColumnTypes, OTableMenuPermissions, SQLOrder } from "../../types";
+import type { Expression, OFilterDefinition, OGroupedColumnTypes, OTableMenuPermissions, SQLOrder } from "../../types";
 import { Observable } from "rxjs";
 import type { OTableComponentStateClass } from "../../services/state/o-table-component-state.class";
 import type { OTableHeaderComponent } from "./extensions/header/table-header/o-table-header.component";
 import type { MatPaginator } from "@angular/material/paginator";
+import { MatCheckboxChange } from "@angular/material/checkbox";
+import type { OTableColumnSelectAllDirective } from "./extensions/header/table-column-select-all/o-table-column-select-all.directive";
+import type { OFilterBuilderComponent } from "../filter-builder/o-filter-builder.component";
+
 
 export abstract class OTableBase {
   abstract getMenuPermissions(): OTableMenuPermissions;
@@ -102,5 +106,13 @@ export abstract class OTableBase {
   abstract registerTableHeaders(tableHeader: OTableHeaderComponent);
   abstract showButtonsText: boolean;
   abstract matpaginator: MatPaginator;
-  abstract isIndeterminate(): boolean
+  abstract isIndeterminate(): boolean;
+  abstract onFilterByColumnChange: EventEmitter<any>;
+  abstract masterToggle(event: MatCheckboxChange): void;
+  abstract tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
+
+  abstract getColumnFiltersExpression(): Expression;
+  abstract columns: string;
+  abstract getParentKeysValues();
+  abstract filterBuilder: OFilterBuilderComponent;
 }

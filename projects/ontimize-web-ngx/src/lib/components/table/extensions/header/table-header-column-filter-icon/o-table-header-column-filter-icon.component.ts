@@ -6,7 +6,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column';
-import { OTableComponent } from '../../../o-table.component';
+import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_ICON = [
   'column'
@@ -42,7 +42,7 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
 
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase
   ) {
     this.subscription.add(this.table.onFilterByColumnChange.subscribe(() => {
       this.updateStateColumnFilter();

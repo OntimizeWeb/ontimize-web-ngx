@@ -15,7 +15,7 @@ import {
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
-import { OTableComponent } from '../../../o-table.component';
+import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER = [
   'column'
@@ -65,7 +65,7 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
   protected columnsStartWidth = {};
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase,
     protected elRef: ElementRef,
     protected ngZone: NgZone,
     protected renderer: Renderer2

@@ -10,7 +10,8 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  forwardRef
 } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -24,6 +25,7 @@ import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
 import { MenuRootItem } from '../../types/menu-root-item.type';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
+import { OAppSidenavBase } from './o-app-sidenav-base.class';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'opened',
@@ -53,6 +55,9 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
   host: {
     '[class.o-app-sidenav]': 'true'
   },
+  providers: [
+    { provide: OAppSidenavBase, useExisting: forwardRef(() => OAppSidenavComponent) }
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {

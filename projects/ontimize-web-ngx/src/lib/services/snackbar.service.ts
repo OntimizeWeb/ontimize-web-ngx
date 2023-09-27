@@ -1,9 +1,9 @@
-import { Injectable, Injector } from '@angular/core';
+import { Inject, Injectable, Injector, forwardRef } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-
-import { OSnackBarComponent, OSnackBarConfig } from '../shared/components/snackbar/o-snackbar.component';
-
+import { OSnackBarBase } from '../shared/components/snackbar/o-snackbar-base.class';
+import { type OSnackBarConfig } from '../shared/components/snackbar/o-snackbar.component';
+import { ComponentType } from '@angular/cdk/portal';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +13,10 @@ export class SnackBarService {
   protected static DEFAULT_CONTAINER_CLASS: string = 'o-snackbar-container';
 
   protected matSnackBar: MatSnackBar;
-  protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
+  protected snackBarRef: MatSnackBarRef<OSnackBarBase>;
 
   constructor(
-    protected injector: Injector
+    protected injector: Injector,
   ) {
     this.matSnackBar = this.injector.get(MatSnackBar);
   }
@@ -33,7 +33,8 @@ export class SnackBarService {
         duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION,
         panelClass: containerClasses
       };
-      self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, matConfig);
+      //TODO It has been typed with the component type because it needed the component but adding it produces a circular dependency
+      self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarBase as ComponentType<OSnackBarBase>, matConfig);
 
       self.snackBarRef.onAction().subscribe(arg => {
         observer.next(arg);
@@ -48,5 +49,7 @@ export class SnackBarService {
     });
     return observable.toPromise();
   }
+
+
 
 }

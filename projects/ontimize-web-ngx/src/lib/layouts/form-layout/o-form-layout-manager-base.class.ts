@@ -32,4 +32,7 @@ export abstract class OFormLayoutManagerBase {
   abstract setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean);
   abstract updateIfNeeded(): void;
   abstract updateNavigation(data: any, keysValues: any, insertionMode: boolean);
+  abstract getDataToStore(): any;
+  abstract getComponentKey(): string;
+
 }

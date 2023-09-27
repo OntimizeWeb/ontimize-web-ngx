@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
-import { OMatSortHeader } from "../../sort/o-mat-sort-header";
-import type { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
 import type { OColumn } from "../../../column/o-column.class";
 import { OTableBase } from "../../../o-table-base.class";
+import { OMatSortHeader } from "../../sort/o-mat-sort-header";
+import type { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
 
 export const DEFAULT_INPUTS_O_TABLE_HEADER = [
   'column'

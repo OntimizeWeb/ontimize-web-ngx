@@ -1,7 +1,8 @@
+import { Injectable } from "@angular/core";
 import { PermissionsService } from "../../services/permissions/permissions.service";
 import { MenuRootItem } from '../../types/menu-root-item.type';
 
-
+@Injectable()
 export abstract class OBarMenuBase {
   abstract getPermissionsService(): PermissionsService;
   abstract collapseAll();
