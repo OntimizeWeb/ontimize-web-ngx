@@ -5,7 +5,7 @@ import { BooleanInputConverter } from '../../../../../decorators/input-converter
 import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
 import { OPermissions } from '../../../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../../../util/permissions';
-import { OTableComponent } from '../../../o-table.component';
+import { OTableBase } from '../../../o-table-base.class';
 import { OTableButtonComponent } from '../table-button/o-table-button.component';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTONS = [
@@ -52,7 +52,7 @@ export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy 
 
   constructor(
     protected injector: Injector,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) protected table: OTableBase
   ) {
     this.permissions = this.table.getActionsPermissions();
   }

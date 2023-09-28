@@ -1,10 +1,11 @@
-import { Component, ElementRef, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Injector, OnInit, ViewEncapsulation, forwardRef } from '@angular/core';
 
 import { AppMenuService } from '../../services/app-menu.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { MenuRootItem } from '../../types/menu-root-item.type';
 import { Util } from '../../util/util';
+import { OBarMenuBase } from './o-bar-menu-base.class';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -21,7 +22,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-bar-menu]': 'true'
-  }
+  },
+  providers: [{ provide: OBarMenuBase, useExisting: forwardRef(() => OBarMenuComponent) }],
 })
 export class OBarMenuComponent implements OnInit {
 

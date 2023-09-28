@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Observable } from 'rxjs';
 
@@ -6,8 +6,9 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
 import { DialogService } from '../../services/dialog.service';
 import { OModulesInfoService } from '../../services/o-modules-info.service';
-import { OUserInfoComponent } from '../user-info/o-user-info.component';
 import { Codes } from '../../util/codes';
+import { OUserInfoBase } from '../user-info/o-user-info-base.class';
+import { OAppHeaderBase } from './o-app-header-base.class';
 
 export const DEFAULT_INPUTS_O_APP_HEADER = [
   'showUserInfo: show-user-info',
@@ -36,7 +37,11 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
     '[class.o-app-header-small]': 'headerHeight==="small"',
     '[class.o-app-header-medium]': 'headerHeight==="medium"',
     '[class.o-app-header-large]': 'headerHeight==="large"'
-  }
+  },
+  providers: [
+    { provide: OAppHeaderBase, useExisting: forwardRef(() => OAppHeaderComponent) }
+
+  ]
 })
 export class OAppHeaderComponent {
 
@@ -49,7 +54,7 @@ export class OAppHeaderComponent {
   public headerTitle$: Observable<string>;
 
   @ViewChild('userInfo')
-  public userInfo: OUserInfoComponent;
+  public userInfo: OUserInfoBase;
 
   @BooleanInputConverter()
   showUserInfo: boolean = true;

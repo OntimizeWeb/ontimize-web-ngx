@@ -32,8 +32,8 @@ import type { OPermissions } from '../../../../../types/o-permissions.type';
 import type { OTableMenuPermissions } from '../../../../../types/table/o-table-menu-permissions.type';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../column/o-column.class';
-import { OTableComponent } from '../../../o-table.component';
+import type { OColumn } from '../../../column/o-column.class';
+import { OTableBase } from '../../../o-table-base.class';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog';
 import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
@@ -146,7 +146,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     protected injector: Injector,
     protected dialog: MatDialog,
     protected cd: ChangeDetectorRef,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent,
+    @Inject(forwardRef(() => OTableBase)) protected table: OTableBase,
 
     @Optional() @Inject(O_CHART_ON_DEMAND_SERVICE) public chartOnDemandService: IChartOnDemandService,
 

@@ -1,12 +1,13 @@
-import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
-import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
-import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
 import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
+import { OAppSidenavBase } from '../../components/app-sidenav/o-app-sidenav-base.class';
+import { OAppHeaderBase } from '../../components/app-header/o-app-header-base.class';
+import { OAppLayoutBase } from './o-app-layout-base.class';
 
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
@@ -40,7 +41,10 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
   outputs: DEFAULT_OUTPUTS_O_APP_LAYOUT,
   templateUrl: './o-app-layout.component.html',
   styleUrls: ['./o-app-layout.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    { provide: OAppLayoutBase, useExisting: forwardRef(() => OAppLayoutComponent) }
+  ]
 })
 
 export class OAppLayoutComponent implements AfterViewInit {
@@ -65,10 +69,10 @@ export class OAppLayoutComponent implements AfterViewInit {
   public headerHeight = Codes.DEFAULT_ROW_HEIGHT;
 
   @ViewChild('appSidenav')
-  public appSidenav: OAppSidenavComponent;
+  public appSidenav: OAppSidenavBase;
 
   @ViewChild('appHeader')
-  public appHeader: OAppHeaderComponent;
+  public appHeader: OAppHeaderBase;
 
   @ContentChild(OUserInfoConfigurationDirective)
   public userInfoConfiguration: OUserInfoConfigurationDirective;

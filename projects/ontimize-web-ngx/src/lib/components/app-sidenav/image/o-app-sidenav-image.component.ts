@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { merge, Subscription } from 'rxjs';
+import { Subscription, merge } from 'rxjs';
+import { OAppSidenavBase } from '../o-app-sidenav-base.class';
 
-import { OAppSidenavComponent } from '../o-app-sidenav.component';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_IMAGE = [
   'openedSrc: opened-src',
@@ -24,7 +24,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_IMAGE = [];
 })
 export class OAppSidenavImageComponent implements OnInit, OnDestroy, OnChanges {
 
-  protected sidenav: OAppSidenavComponent;
+  protected sidenav: OAppSidenavBase;
   public openedSrc: string;
   public closedSrc: string;
   private _src: string;
@@ -35,7 +35,7 @@ export class OAppSidenavImageComponent implements OnInit, OnDestroy, OnChanges {
     protected injector: Injector,
     protected cd: ChangeDetectorRef
   ) {
-    this.sidenav = this.injector.get(OAppSidenavComponent);
+    this.sidenav = this.injector.get(OAppSidenavBase);
   }
 
   ngOnInit() {

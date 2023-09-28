@@ -100,6 +100,7 @@ import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
 import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
+import { OTableBase } from './o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -251,7 +252,8 @@ type DisableSelectionFunction = (item: any) => boolean;
     ComponentStateServiceProvider,
     OTableDataSourceService,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
-    { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy }
+    { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
+    { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) }
   ],
   animations: [
     trigger('detailExpand', [

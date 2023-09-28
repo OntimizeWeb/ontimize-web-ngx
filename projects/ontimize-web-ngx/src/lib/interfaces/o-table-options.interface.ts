@@ -1,4 +1,4 @@
-import { OColumn } from '../components/table/column/o-column.class';
+import type { OColumn } from '../components/table/column/o-column.class';
 
 export interface OTableOptions {
   selectColumn: OColumn;

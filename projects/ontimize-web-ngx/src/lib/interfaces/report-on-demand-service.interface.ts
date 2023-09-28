@@ -1,5 +1,5 @@
-import type { OTableComponent } from "../components/table/o-table.component";
+import { OTableBase } from "../components/table/o-table-base.class";
 
 export interface IReportService {
-  openReportOnDemand(table: OTableComponent): void;
+  openReportOnDemand(table: OTableBase): void;
 }

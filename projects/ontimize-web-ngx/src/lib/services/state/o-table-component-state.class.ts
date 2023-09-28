@@ -1,4 +1,4 @@
-import { OColumn } from '../../components/table/column/o-column.class';
+import type { OColumn } from '../../components/table/column/o-column.class';
 import {
   OFilterColumn
 } from '../../components/table/extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';

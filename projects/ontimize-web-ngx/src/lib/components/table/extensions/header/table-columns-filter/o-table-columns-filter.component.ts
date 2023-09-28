@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, ContentChildren, forwardRef, Inject
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../column/o-column.class';
+import type { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 import { OFilterColumn, OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-column.component';
 

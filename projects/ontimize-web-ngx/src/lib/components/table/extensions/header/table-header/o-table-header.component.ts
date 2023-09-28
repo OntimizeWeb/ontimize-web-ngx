@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
-import { OTableComponent } from "../../../o-table.component";
+import type { OColumn } from "../../../column/o-column.class";
+import { OTableBase } from "../../../o-table-base.class";
 import { OMatSortHeader } from "../../sort/o-mat-sort-header";
 import type { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
-import type { OColumn } from "../../../column/o-column.class";
 
 export const DEFAULT_INPUTS_O_TABLE_HEADER = [
   'column'
@@ -33,7 +33,7 @@ export class OTableHeaderComponent {
   @ViewChild(OMatSortHeader) matSortHeader: OMatSortHeader;
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) protected table: OTableBase
   ) {
     this.resizable = this.table.resizable;
   }

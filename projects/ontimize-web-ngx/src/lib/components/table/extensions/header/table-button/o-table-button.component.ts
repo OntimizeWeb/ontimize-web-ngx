@@ -4,7 +4,7 @@ import { BooleanInputConverter } from '../../../../../decorators/input-converter
 import { OTableButton } from '../../../../../interfaces/o-table-button.interface';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
-import { OTableComponent } from '../../../o-table.component';
+import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTON = [
   'oattr: attr',
@@ -47,7 +47,7 @@ export class OTableButtonComponent implements OTableButton, OnInit {
   constructor(
     protected injector: Injector,
     public elRef: ElementRef,
-    @Inject(forwardRef(() => OTableComponent)) protected _table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) protected _table: OTableBase
   ) { }
 
   public ngOnInit(): void {
@@ -66,7 +66,7 @@ export class OTableButtonComponent implements OTableButton, OnInit {
     return this.iconPosition === Codes.ICON_POSITION_LEFT;
   }
 
-  get table(): OTableComponent {
+  get table(): OTableBase {
     return this._table;
   }
 

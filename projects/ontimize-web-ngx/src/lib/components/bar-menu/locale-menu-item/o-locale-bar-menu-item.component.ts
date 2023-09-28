@@ -1,7 +1,7 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
 
-import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
+import { OBarMenuBase } from '../o-bar-menu-base.class';
 
 export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
   // locale [string]: language. For example: es
@@ -23,7 +23,7 @@ export class OLocaleBarMenuItemComponent extends OBaseMenuItemClass {
   locale: string;
 
   constructor(
-    @Inject(forwardRef(() => OBarMenuComponent)) protected menu: OBarMenuComponent,
+    @Inject(forwardRef(() => OBarMenuBase)) protected menu: OBarMenuBase,
     protected elRef: ElementRef,
     protected injector: Injector
   ) {

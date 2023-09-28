@@ -8,7 +8,7 @@ import { OPermissions } from '../../../../../types/o-permissions.type';
 import { Observable, ObservableWrapper } from '../../../../../util/async';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellEditor } from '../../../column/cell-editor/o-base-table-cell-editor.class';
-import { OColumn } from '../../../column/o-column.class';
+import type { OColumn } from '../../../column/o-column.class';
 import { OTableComponent } from '../../../o-table.component';
 
 export const DEFAULT_INPUTS_O_TABLE_INSERTABLE_ROW = [

@@ -26,7 +26,7 @@ import type { OInputsOptions } from '../../../../../types/o-inputs-options.type'
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
-import { OTableComponent } from '../../../o-table.component';
+import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
   'placeholder'
@@ -78,7 +78,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) protected table: OTableBase
   ) {
     this.formControl = new UntypedFormControl();
   }

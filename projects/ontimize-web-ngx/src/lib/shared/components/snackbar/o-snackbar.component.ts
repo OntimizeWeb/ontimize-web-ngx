@@ -1,5 +1,6 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, forwardRef } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
+import { OSnackBarBase } from './o-snackbar-base.class';
 
 export declare type OSnackBarIconPosition = 'left' | 'right';
 
@@ -25,7 +26,11 @@ export class OSnackBarConfig {
   styleUrls: ['o-snackbar.component.scss'],
   host: {
     '[class.o-snackbar]': 'true'
-  }
+  },
+  providers: [
+    { provide: OSnackBarBase, useExisting: forwardRef(() => OSnackBarComponent) }
+
+  ]
 })
 export class OSnackBarComponent {
 

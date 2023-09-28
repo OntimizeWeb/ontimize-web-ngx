@@ -1,10 +1,10 @@
 import { Injectable, Injector } from "@angular/core";
-import type{ OTableComponent } from "../components/table/o-table.component";
+import { OTableBase } from "../components/table/o-table-base.class";
 
 @Injectable()
 export class OntimizeExportDataBaseProviderService {
 
-  table: OTableComponent;
+  table: OTableBase;
   columns: any;
   colsNotIncluded: string[]
   columnNames: any;
@@ -16,7 +16,7 @@ export class OntimizeExportDataBaseProviderService {
   constructor(protected injector: Injector) { }
 
 
-  initializeProvider(table: OTableComponent) {
+  initializeProvider(table: OTableBase) {
     this.table = table;
     // Table columns
     const tableOptions = this.table.oTableOptions;
