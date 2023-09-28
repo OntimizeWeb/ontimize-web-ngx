@@ -2,8 +2,10 @@ import { ComponentType } from '@angular/cdk/overlay';
 import { Injectable, Injector } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+
+import { OSnackBarComponent, OSnackBarConfig } from '../shared/components/snackbar/o-snackbar.component';
 import { OSnackBarBase } from '../shared/components/snackbar/o-snackbar-base.class';
-import { type OSnackBarConfig } from '../shared/components/snackbar/o-snackbar.component';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +15,7 @@ export class SnackBarService {
   protected static DEFAULT_CONTAINER_CLASS: string = 'o-snackbar-container';
 
   protected matSnackBar: MatSnackBar;
-  protected snackBarRef: MatSnackBarRef<OSnackBarBase>;
+  protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
 
   constructor(
     protected injector: Injector,
@@ -33,8 +35,8 @@ export class SnackBarService {
         duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION,
         panelClass: containerClasses
       };
-      //TODO It has been typed with the component type because it needed the component but adding it produces a circular dependency
-      self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarBase as ComponentType<OSnackBarBase>, matConfig);
+
+      self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, matConfig);
 
       self.snackBarRef.onAction().subscribe(arg => {
         observer.next(arg);

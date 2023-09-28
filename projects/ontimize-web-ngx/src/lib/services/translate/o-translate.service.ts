@@ -6,11 +6,11 @@ import { Observable, Subscriber } from 'rxjs';
 import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { MomentService } from '../../services/moment.service';
-import { SnackBarService } from '../../services/snackbar.service';
 import { ObservableWrapper } from '../../util/async';
 import { _getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
 import { Util } from '../../util/util';
 import { Codes } from '../../util/codes';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * `OTranslateService` factory.
@@ -139,9 +139,10 @@ export class OTranslateService {
         let newLang = lang;
         if (!exists) {
           newLang = Util.isDefined(this.appConfig['_config']['defaultLocale']) ? this.appConfig['_config']['defaultLocale'] : this.ngxTranslateService.getDefaultLang();
-          const msg = CORE_TRANSLATIONS.MAP[newLang || this.DEFAULT_LANG]['MESSAGES.ERROR_MISSING_LANG'];
-          this.injector.get(SnackBarService).open(msg, {
-            milliseconds: 2500
+          const translations = CORE_TRANSLATIONS.MAP[newLang] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
+          const msg = translations['MESSAGES.ERROR_MISSING_LANG'];
+          this.injector.get(MatSnackBar).open(msg, ' ', {
+            duration: 2500
           });
         }
         this.ngxTranslateService.use(newLang).subscribe(
