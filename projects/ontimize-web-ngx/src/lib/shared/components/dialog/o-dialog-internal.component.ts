@@ -1,8 +1,7 @@
-import { Component } from "@angular/core";
-import { ODialogBase } from "./o-dialog-base.class";
-import type { ODialogConfig } from "./o-dialog.config";
+import { Component, Injector } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { OTranslateService } from "../../../services/translate/o-translate.service";
+import type { ODialogConfig } from "./o-dialog.config";
 
 @Component({
   selector: 'app-local-dialog',
@@ -21,10 +20,10 @@ export class ODialogInternalComponent {
   protected _useIcon: boolean;
   protected _icon: string;
   protected _alertType: string;
-
+  private translateService: OTranslateService;
   constructor(
-    public dialogRef: MatDialogRef<ODialogInternalComponent>, private translateService: OTranslateService) {
-
+    public dialogRef: MatDialogRef<ODialogInternalComponent>, protected injector: Injector) {
+    this.translateService = injector.get(OTranslateService);
   }
 
   onOkClick() {
