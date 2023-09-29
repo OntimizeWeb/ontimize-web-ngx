@@ -1,4 +1,4 @@
-## 15.0.0-beta.0 (2023-09-25)
+## 15.0.0-beta.0 (2023-09-29)
 ### Features
 > [!NOTE]
 > For the migration process, the guide available at the following URL has been followed:
