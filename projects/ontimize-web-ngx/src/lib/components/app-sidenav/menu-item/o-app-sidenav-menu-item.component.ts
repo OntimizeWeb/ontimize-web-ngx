@@ -16,7 +16,6 @@ import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo } from '../../../interfaces/app-menu.interface';
-import { OAppLayoutComponent } from '../../../layouts/app-layout/o-app-layout.component';
 import { AppMenuService } from '../../../services/app-menu.service';
 import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
@@ -26,7 +25,8 @@ import { OTranslateService } from '../../../services/translate/o-translate.servi
 import { OPermissions } from '../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
-import { OAppSidenavComponent } from '../o-app-sidenav.component';
+import { OAppSidenavBase } from '../o-app-sidenav-base.class';
+import { OAppLayoutBase } from '../../../layouts/app-layout/o-app-layout-base.class';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM = [
   'menuItem : menu-item',
@@ -64,7 +64,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
   protected appMenuService: AppMenuService;
   protected userInfoSubscription: Subscription;
 
-  protected sidenav: OAppSidenavComponent;
+  protected sidenav: OAppSidenavBase;
   protected router: Router;
 
   menuItem: any; // TODO MenuRootItem;
@@ -76,7 +76,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
 
   protected appSidenavToggleSubscription: Subscription = new Subscription();
   protected routerSubscription: Subscription;
-  protected oAppLayoutComponent: OAppLayoutComponent;
+  protected oAppLayoutComponent: OAppLayoutBase;
 
   protected permissions: OPermissions;
   protected mutationObserver: MutationObserver;
@@ -94,8 +94,8 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.dialogService = this.injector.get<DialogService>(DialogService as Type<DialogService>);
     this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
     this.oUserInfoService = this.injector.get<OUserInfoService>(OUserInfoService as Type<OUserInfoService>);
-    this.sidenav = this.injector.get<OAppSidenavComponent>(OAppSidenavComponent as Type<OAppSidenavComponent>);
-    this.oAppLayoutComponent = this.injector.get<OAppLayoutComponent>(OAppLayoutComponent as Type<OAppLayoutComponent>);
+    this.sidenav = this.injector.get<OAppSidenavBase>(OAppSidenavBase as Type<OAppSidenavBase>);
+    this.oAppLayoutComponent = this.injector.get<OAppLayoutBase>(OAppLayoutBase as Type<OAppLayoutBase>);
     this.router = this.injector.get<Router>(Router as Type<Router>);
     this.appMenuService = this.injector.get<AppMenuService>(AppMenuService as Type<AppMenuService>);
 

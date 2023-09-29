@@ -94,7 +94,7 @@ export class OntimizeAuthService extends AuthService {
   }
 
   public onLoginError(error: any): void {
-    this.dialogService.alert('ERROR', 'MESSAGES.ERROR_LOGIN');
+    this.alert('ERROR', 'MESSAGES.ERROR_LOGIN');
   }
 
   public logout(): Observable<any> {

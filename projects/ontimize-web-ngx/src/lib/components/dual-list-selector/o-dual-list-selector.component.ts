@@ -2,7 +2,8 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { MatSelectionList } from '@angular/material/list';
 import { OGroupedColumnTypes } from '../../types';
-import { Codes, Util } from '../../util';
+import { Util } from '../../util/util';
+import { Codes } from '../../util/codes';
 
 export const DEFAULT_DUAL_LIST_SELECTOR = [
   //key: The unique identifier field of each object in the data source and data destination arrays

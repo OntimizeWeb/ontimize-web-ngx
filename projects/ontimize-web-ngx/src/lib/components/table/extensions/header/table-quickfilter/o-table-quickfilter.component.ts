@@ -19,14 +19,14 @@ import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS } from '../../../../../config/app-config';
-import { OTableOptions } from '../../../../../interfaces/o-table-options.interface';
-import { OTableQuickfilter } from '../../../../../interfaces/o-table-quickfilter.interface';
-import { Expression } from '../../../../../types/expression.type';
-import { OInputsOptions } from '../../../../../types/o-inputs-options.type';
+import type { OTableOptions } from '../../../../../interfaces/o-table-options.interface';
+import type { OTableQuickfilter } from '../../../../../interfaces/o-table-quickfilter.interface';
+import type { Expression } from '../../../../../types/expression.type';
+import type { OInputsOptions } from '../../../../../types/o-inputs-options.type';
 import { FilterExpressionUtils } from '../../../../../util/filter-expression.utils';
 import { Util } from '../../../../../util/util';
-import { OColumn } from '../../../column/o-column.class';
-import { OTableComponent } from '../../../o-table.component';
+import type { OColumn } from '../../../column/o-column.class';
+import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_QUICKFILTER = [
   'placeholder'
@@ -78,7 +78,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
   constructor(
     protected injector: Injector,
     protected elRef: ElementRef,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) protected table: OTableBase
   ) {
     this.formControl = new UntypedFormControl();
   }
@@ -210,7 +210,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
   public getCountColumnsChecked(): number {
     let count = 0;
     this.quickFilterColumns.forEach((col: OColumn) => {
-      if(col.searching){
+      if (col.searching) {
         count++;
       }
     });

@@ -1,8 +1,8 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
 
 import { Util } from '../../../util/util';
-import { OBarMenuComponent } from '../o-bar-menu.component';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
+import { OBarMenuBase } from '../o-bar-menu-base.class';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class OBarMenuGroupComponent extends OBaseMenuItemClass {
   id: string;
 
   constructor(
-    @Inject(forwardRef(() => OBarMenuComponent)) protected menu: OBarMenuComponent,
+    @Inject(forwardRef(() => OBarMenuBase)) protected menu: OBarMenuBase,
     protected elRef: ElementRef,
     protected injector: Injector
   ) {

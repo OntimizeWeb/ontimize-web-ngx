@@ -1,8 +1,10 @@
+import { ComponentType } from '@angular/cdk/overlay';
 import { Injectable, Injector } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 
 import { OSnackBarComponent, OSnackBarConfig } from '../shared/components/snackbar/o-snackbar.component';
+import { OSnackBarBase } from '../shared/components/snackbar/o-snackbar-base.class';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,7 @@ export class SnackBarService {
   protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
 
   constructor(
-    protected injector: Injector
+    protected injector: Injector,
   ) {
     this.matSnackBar = this.injector.get(MatSnackBar);
   }
@@ -33,6 +35,7 @@ export class SnackBarService {
         duration: config && config.milliseconds ? config.milliseconds : SnackBarService.DEFAULT_DURATION,
         panelClass: containerClasses
       };
+
       self.snackBarRef = self.matSnackBar.openFromComponent(OSnackBarComponent, matConfig);
 
       self.snackBarRef.onAction().subscribe(arg => {
@@ -48,5 +51,7 @@ export class SnackBarService {
     });
     return observable.toPromise();
   }
+
+
 
 }

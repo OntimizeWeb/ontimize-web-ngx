@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-
 import { OBreadcrumbComponent } from '../../components/breadcrumb/o-breadcrumb.component';
 import { BooleanInputConverter } from '../../decorators/input-converter';
-import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
-import { OFormComponent } from '../form/o-form.component';
+import { OFormBase } from '../form/o-form-base.class';
+import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
 
 export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
   // breadcrumb [boolean]: show breadscrum of the form. Default: yes.
@@ -33,8 +32,8 @@ export class OFormContainerComponent implements AfterViewInit {
   public breadcrumbLabelColumns: string;
   public breadcrumbSeparator: string = ' ';
 
-  protected form: OFormComponent;
-  protected formMananger: OFormLayoutManagerComponent;
+  protected form: OFormBase;
+  protected formMananger: OFormLayoutManagerBase;
 
   constructor(private resolver: ComponentFactoryResolver) { }
 
@@ -45,7 +44,7 @@ export class OFormContainerComponent implements AfterViewInit {
     }
   }
 
-  setForm(form: OFormComponent) {
+  setForm(form: OFormBase) {
     this.form = form;
     this.formMananger = form.getFormManager();
   }

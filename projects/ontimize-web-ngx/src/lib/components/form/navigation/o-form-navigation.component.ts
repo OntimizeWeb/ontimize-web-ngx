@@ -2,13 +2,13 @@ import { Component, forwardRef, Inject, Injector, OnDestroy, Type, ViewEncapsula
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerBase } from '../../../layouts/form-layout/o-form-layout-manager-base.class';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize/ontimize.service';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../o-form.component';
+import { OFormBase } from '../o-form-base.class';
 import { OFormNavigationClass } from './o-form.navigation.class';
 
 export type QueryConfiguration = {
@@ -41,7 +41,7 @@ export class OFormNavigationComponent implements OnDestroy {
 
   protected formNavigation: OFormNavigationClass;
   protected navigationService: NavigationService;
-  protected formLayoutManager: OFormLayoutManagerComponent;
+  protected formLayoutManager: OFormLayoutManagerBase;
 
   protected querySubscription: Subscription;
   protected dataService: any;
@@ -49,7 +49,7 @@ export class OFormNavigationComponent implements OnDestroy {
 
   constructor(
     protected injector: Injector,
-    @Inject(forwardRef(() => OFormComponent)) private _form: OFormComponent,
+    @Inject(forwardRef(() => OFormBase)) private _form: OFormBase,
     private router: Router
   ) {
     this.formNavigation = this._form.getFormNavigation();

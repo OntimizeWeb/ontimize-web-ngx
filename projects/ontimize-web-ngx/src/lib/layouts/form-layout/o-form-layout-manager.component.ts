@@ -33,6 +33,7 @@ import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
+import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -75,6 +76,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   providers: [
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OFormLayoutManagerComponentStateService },
+    { provide: OFormLayoutManagerBase, useExisting: OFormLayoutManagerComponent }
   ],
   host: {
     '[class.o-form-layout-manager]': 'true'
@@ -194,7 +196,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     if (value.hasOwnProperty('separator')) {
       this.separator = value['separator'];
     }
-    if (value.hasOwnProperty('stretchTabs')){
+    if (value.hasOwnProperty('stretchTabs')) {
       this.stretchTabs = value['stretchTabs'];
     }
   }
@@ -243,7 +245,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     protected dialog: MatDialog,
     protected elRef: ElementRef,
     @SkipSelf() @Optional()
-    public parentFormLayoutManager: OFormLayoutManagerComponent
+    public parentFormLayoutManager: OFormLayoutManagerBase
   ) {
     this.oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
     this.localStorageService = this.injector.get(LocalStorageService);

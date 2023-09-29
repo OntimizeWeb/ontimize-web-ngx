@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/cor
 import { ThemePalette } from '@angular/material/core';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
-import { Codes } from '../../util';
+import { Codes } from '../../util/codes';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',

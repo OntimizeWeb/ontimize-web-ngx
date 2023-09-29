@@ -2,8 +2,9 @@ import { Injectable, Injector } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
+import { ODialogBase } from '../shared/components/dialog/o-dialog-base.class';
 import { ODialogComponent } from '../shared/components/dialog/o-dialog.component';
-import { ODialogConfig } from '../shared/components/dialog/o-dialog.config';
+import type { ODialogConfig } from '../shared/components/dialog/o-dialog.config';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,13 @@ import { ODialogConfig } from '../shared/components/dialog/o-dialog.config';
 export class DialogService {
 
   protected ng2Dialog: MatDialog;
-  dialogRef: MatDialogRef<ODialogComponent>;
+  dialogRef: MatDialogRef<ODialogBase>;
 
   constructor(protected injector: Injector) {
     this.ng2Dialog = this.injector.get(MatDialog);
   }
 
-  public get dialog(): ODialogComponent {
+  public get dialog(): ODialogBase {
     if (this.dialogRef) {
       return this.dialogRef.componentInstance;
     }
@@ -75,6 +76,7 @@ export class DialogService {
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-dialog-service']
     };
+    //TODO It has been typed with the component type because it needed the component but adding it produces a circular dependency
     this.dialogRef = this.ng2Dialog.open(ODialogComponent, cfg);
     this.dialogRef.afterClosed().subscribe(result => {
       result = result === undefined ? false : result;

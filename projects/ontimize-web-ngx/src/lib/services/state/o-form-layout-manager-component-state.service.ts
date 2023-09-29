@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 
-import { OFormLayoutManagerComponent } from '../../layouts';
+
 import { AbstractComponentStateService } from './o-component-state.service';
 import { OFormLayoutManagerComponentStateClass } from './o-form-layout-manager-component-state.class';
+import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
 
 @Injectable()
-export class OFormLayoutManagerComponentStateService extends AbstractComponentStateService<OFormLayoutManagerComponentStateClass, OFormLayoutManagerComponent> {
+export class OFormLayoutManagerComponentStateService extends AbstractComponentStateService<OFormLayoutManagerComponentStateClass, OFormLayoutManagerBase> {
 
-  initialize(component: OFormLayoutManagerComponent) {
+  initialize(component: OFormLayoutManagerBase) {
     this.state = new OFormLayoutManagerComponentStateClass();
     super.initialize(component);
   }

@@ -17,14 +17,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
-import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
-import { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
+import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
 
+import type { FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_SPLIT_PANE = [
   'options'
 ];
@@ -74,7 +74,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     protected elementRef: ElementRef,
     protected componentFactoryResolver: ComponentFactoryResolver,
     public renderer: Renderer2,
-    @Inject(forwardRef(() => OFormLayoutManagerComponent)) public formLayoutManager: OFormLayoutManagerComponent
+    @Inject(forwardRef(() => OFormLayoutManagerBase)) public formLayoutManager: OFormLayoutManagerBase
   ) {
     this.router = this.injector.get(Router);
     this.dialogService = injector.get(DialogService);

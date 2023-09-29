@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { IFormControlComponent } from '../../../interfaces/form-control-component.interface';
 import { IFormDataComponent } from '../../../interfaces/form-data-component.interface';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../o-form.component';
+import { OFormBase } from '../o-form-base.class';
 
 export class OFormCacheClass {
 
@@ -19,7 +19,7 @@ export class OFormCacheClass {
 
   protected changedFormControls: string[] = [];
 
-  constructor(protected form: OFormComponent) {
+  constructor(protected form: OFormBase) {
   }
 
   protected updateFormDataCache() {

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { DialogService } from '../../../services/dialog.service';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../o-form.component';
-
+import { OFormBase } from '../o-form-base.class';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +13,7 @@ export class OFormConfirmExitService {
 
   constructor(protected dialogService: DialogService) { }
 
-  subscribeToDiscardChanges(form: OFormComponent, ignoreAttrs: string[] = []): Promise<boolean> {
+  subscribeToDiscardChanges(form: OFormBase, ignoreAttrs: string[] = []): Promise<boolean> {
     let subscription: Promise<boolean>;
     if (form.isInitialStateChanged(ignoreAttrs)) {
       subscription = this.getConfirmDialogSubscription(form);
@@ -31,7 +31,7 @@ export class OFormConfirmExitService {
     this.confirmDialogSubscription = null;
   }
 
-  protected getConfirmDialogSubscription(form: OFormComponent): Promise<boolean> {
+  protected getConfirmDialogSubscription(form: OFormBase): Promise<boolean> {
     if (!Util.isDefined(this.confirmDialogSubscription)) {
       this.confirmDialogSubscription = new Promise((resolve) => {
         this.dialogService.confirm(

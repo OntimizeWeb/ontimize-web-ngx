@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation, forwardRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -9,7 +9,8 @@ import { OPermissions } from '../../../types/o-permissions.type';
 import { Codes } from '../../../util/codes';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../o-form.component';
+import { OFormBase } from '../o-form-base.class';
+import { OFormToolbarBase } from './o-form-toolbar-base.class';
 
 export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'labelHeader: label-header',
@@ -33,7 +34,8 @@ export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-form-toolbar]': 'true'
-  }
+  },
+  providers: [{ provide: OFormToolbarBase, useExisting: forwardRef(() => OFormToolbarComponent) }],
 })
 export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -116,7 +118,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   protected _existsChangesToSaveSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private _form: OFormComponent,
+    private _form: OFormBase,
     public element: ElementRef,
     protected injector: Injector
   ) {
@@ -365,7 +367,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   protected parsePermissions(): void {
-    if (this._form.oattr) {
+    if (this._form.getAttribute()) {
       this.actionsPermissions = this._form.getActionsPermissions();
 
       if (!Util.isDefined(this.actionsPermissions)) {

@@ -5,7 +5,7 @@ import { OTranslateService } from '../../services/translate/o-translate.service'
 import { OPermissions } from '../../types/o-permissions.type';
 import { PermissionsUtils } from '../../util/permissions';
 import { Util } from '../../util/util';
-import { OBarMenuComponent } from './o-bar-menu.component';
+import { OBarMenuBase } from './o-bar-menu-base.class';
 
 export const DEFAULT_INPUTS_O_BASE_MENU_ITEM = [
   // title [string]: menu item title. Default: no value.
@@ -43,7 +43,7 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
   @HostListener('mouseout') onMouseout = () => this.isHovered = false;
 
   constructor(
-    protected menu: OBarMenuComponent,
+    protected menu: OBarMenuBase,
     protected elRef: ElementRef,
     protected injector: Injector) {
 

@@ -28,7 +28,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "lib",
+            "prefix": "o",
             "style": "kebab-case"
           }
         ]

@@ -61,10 +61,10 @@ jobs:
           echo "Version ${{ steps.project.outputs.version }} is not a properly named for RELEASE"
           exit 1
 
-      - name: npm install and npm run build
+      - name: npm install and npm run build-prod
         run: |
           npm i
-          npm run build
+          npm run build-prod
 
       - name: Publish
         run: |

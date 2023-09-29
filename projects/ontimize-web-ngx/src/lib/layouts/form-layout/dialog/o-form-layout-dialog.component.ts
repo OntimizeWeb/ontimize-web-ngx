@@ -12,10 +12,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
-import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { DialogService } from '../../../services/dialog.service';
-import { Util } from '../../../util';
+import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
+import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
 
 @Component({
   selector: 'o-form-layout-dialog',
@@ -27,7 +27,7 @@ import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-
   }
 })
 export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, AfterViewInit {
-  formLayoutManager: OFormLayoutManagerComponent;
+  formLayoutManager: OFormLayoutManagerBase;
   queryParams: any;
   params: object;
   urlSegments: any[];

@@ -23,7 +23,7 @@ import { OTranslateService } from '../../../services/translate/o-translate.servi
 import { OPermissions } from '../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
-import { OAppSidenavComponent } from '../o-app-sidenav.component';
+import { OAppSidenavBase } from '../o-app-sidenav-base.class';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',
@@ -65,7 +65,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   protected permissionsService: PermissionsService;
 
   public appMenuService: AppMenuService;
-  public sidenav: OAppSidenavComponent;
+  public sidenav: OAppSidenavBase;
   protected sidenavSubscription: Subscription = new Subscription();
   protected permissions: OPermissions;
   protected mutationObserver: MutationObserver;
@@ -93,7 +93,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
     this.permissionsService = this.injector.get(PermissionsService);
-    this.sidenav = this.injector.get(OAppSidenavComponent);
+    this.sidenav = this.injector.get(OAppSidenavBase);
     this.router = this.injector.get<Router>(Router as Type<Router>);
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd && this.appMenuService.isRouteItem(this.menuGroup)) {

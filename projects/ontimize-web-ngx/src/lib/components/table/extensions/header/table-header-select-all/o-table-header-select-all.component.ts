@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewEncapsulation } from "@angular/core";
-import { OColumn } from "../../../column";
-import { OTableComponent } from "../../../o-table.component";
 import { DEFAULT_INPUTS_O_TABLE_HEADER, OTableHeaderComponent } from "../table-header/o-table-header.component";
 import { BehaviorSubject, merge, Subscription } from "rxjs";
+import type { OColumn } from "../../../column/o-column.class";
+import { OTableBase } from "../../../o-table-base.class";
 
 @Component({
   selector: 'o-table-header-select-all',
@@ -16,14 +16,14 @@ import { BehaviorSubject, merge, Subscription } from "rxjs";
 })
 export class OTableHeaderSelectAllComponent extends OTableHeaderComponent {
 
-  public column: OColumn
+  public column: OColumn;
   public resizable: boolean;
   public isAllSelected = new BehaviorSubject<boolean>(false);
   public isIndeterminate = new BehaviorSubject<boolean>(false);
   public selectionChangeSubscription: Subscription;
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase
   ) {
     super(table);
   }

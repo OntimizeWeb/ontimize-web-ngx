@@ -1,6 +1,6 @@
 import { Injector, OnInit, PipeTransform, TemplateRef, Directive } from '@angular/core';
 
-import { Util } from '../../../../util';
+import { Util } from '../../../../util/util';
 import { OComboComponent } from '../o-combo.component';
 
 export const DEFAULT_INPUTS_O_COMBO_RENDERER = [];

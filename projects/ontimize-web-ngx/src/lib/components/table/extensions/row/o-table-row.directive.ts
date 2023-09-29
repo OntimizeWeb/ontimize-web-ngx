@@ -1,7 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, forwardRef, Inject, OnDestroy, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { OTableBase } from '../../o-table-base.class';
 
-import { OTableComponent } from '../../o-table.component';
 
 @Directive({
   selector: '[oTableRow]'
@@ -10,7 +10,7 @@ export class OTableRowDirective implements AfterViewInit, OnDestroy {
   protected resizeSubscription: Subscription;
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase,
     protected elementRef: ElementRef,
     protected renderer: Renderer2
   ) {

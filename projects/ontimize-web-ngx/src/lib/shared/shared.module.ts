@@ -22,58 +22,60 @@ import { OSnackBarComponent } from './components/snackbar/o-snackbar.component';
 import { OErrorComponent } from './components/validation/o-error.component';
 import { OValidatorComponent } from './components/validation/o-validator.component';
 import { OCustomMaterialModule } from './material/custom.material.module';
+import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        OTranslateModule,
-        FlexLayoutModule,
-        OCustomMaterialModule,
-        FormsModule,
-        ReactiveFormsModule
-    ],
-    declarations: [
-        ColumnsFilterPipe,
-        OrderByPipe,
-        OIntegerPipe,
-        ORealPipe,
-        OMomentPipe,
-        OCurrencyPipe,
-        OPercentPipe,
-        OIconPipe,
-        OSafePipe,
-        ONTIMIZE_DIRECTIVES,
-        Error403Component,
-        ODialogComponent,
-        OErrorComponent,
-        OValidatorComponent,
-        OSnackBarComponent,
-        OLoadFilterDialogComponent,
-        OStoreFilterDialogComponent
-    ],
-    exports: [
-        FlexLayoutModule,
-        FormsModule,
-        ReactiveFormsModule,
-        OTranslateModule,
-        ColumnsFilterPipe,
-        OrderByPipe,
-        OIntegerPipe,
-        ORealPipe,
-        OMomentPipe,
-        OCurrencyPipe,
-        OPercentPipe,
-        OIconPipe,
-        OSafePipe,
-        ONTIMIZE_DIRECTIVES,
-        OCustomMaterialModule,
-        Error403Component,
-        OErrorComponent,
-        OValidatorComponent,
-        OSnackBarComponent,
-        OLoadFilterDialogComponent,
-        OStoreFilterDialogComponent
-    ]
+  imports: [
+    CommonModule,
+    OTranslateModule,
+    FlexLayoutModule,
+    OCustomMaterialModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  declarations: [
+    ColumnsFilterPipe,
+    OrderByPipe,
+    OIntegerPipe,
+    ORealPipe,
+    OMomentPipe,
+    OCurrencyPipe,
+    OPercentPipe,
+    OIconPipe,
+    OSafePipe,
+    ONTIMIZE_DIRECTIVES,
+    Error403Component,
+    ODialogComponent,
+    ODialogInternalComponent,
+    OErrorComponent,
+    OValidatorComponent,
+    OSnackBarComponent,
+    OLoadFilterDialogComponent,
+    OStoreFilterDialogComponent
+  ],
+  exports: [
+    FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule,
+    OTranslateModule,
+    ColumnsFilterPipe,
+    OrderByPipe,
+    OIntegerPipe,
+    ORealPipe,
+    OMomentPipe,
+    OCurrencyPipe,
+    OPercentPipe,
+    OIconPipe,
+    OSafePipe,
+    ONTIMIZE_DIRECTIVES,
+    OCustomMaterialModule,
+    Error403Component,
+    OErrorComponent,
+    OValidatorComponent,
+    OSnackBarComponent,
+    OLoadFilterDialogComponent,
+    OStoreFilterDialogComponent
+  ]
 })
 export class OSharedModule {
 }
