@@ -48,7 +48,7 @@ jobs:
         run: |
           echo "FAILURE_MESSAGE=The build process has failed" >> $GITHUB_ENV
           npm i
-          npm run build
+          npm run build-prod
 
       - name: Add PR comment with release preview
         env:
