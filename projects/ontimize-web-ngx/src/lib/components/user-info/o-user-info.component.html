@@ -1,0 +1,35 @@
+<div class="o-user-info-container" fxLayout="row" fxLayoutAlign="center">
+  <ng-container *ngIf="existsUserInfo">
+    <div class="o-user-info-wrapper" fxLayout="row" fxLayoutAlign="center center" [matMenuTriggerFor]="menu"
+      fxLayoutGap="16px">
+      <div fxLayout="row" fxLayoutAlign="center center" class="o-user-info-avatar-wrapper">
+        <img [src]="avatar" *ngIf="avatar" alt="avatar image"/>
+      </div>
+      <span class="o-user-info-username" *ngIf="username"> {{ username }}</span>
+      <mat-icon svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
+    </div>
+    <mat-menu #menu="matMenu" yPosition="below" class="o-mat-menu">
+      <button type="button" mat-menu-item (click)="onProfileClick()" *ngIf="showProfile">
+        <mat-icon>person</mat-icon>
+        <span>{{ 'APP_LAYOUT.USER_PROFILE' | oTranslate }}</span>
+      </button>
+      <button type="button" mat-menu-item (click)="onSettingsClick()" *ngIf="showSettings">
+        <mat-icon svgIcon="ontimize:settings"></mat-icon>
+        <span>{{ 'APP_LAYOUT.SETTINGS' | oTranslate }}</span>
+      </button>
+      <ng-container *ngIf="userInfoConfiguration">
+        <button *ngFor="let item of userInfoConfiguration.userInfoConfigurationItems" type="button" mat-menu-item
+          [matTooltip]="item.name | oTranslate" matTooltipDisabled="item.tooltip" [ngClass]="item.class"
+          (click)="item.triggerOnClick($event)">
+          <mat-icon>{{item.icon}} </mat-icon>
+          <span>{{ item.name | oTranslate }}</span>
+        </button>
+      </ng-container>
+      <button type="button" mat-menu-item (click)="onLogoutClick()" *ngIf="showLogout">
+        <mat-icon svgIcon="ontimize:power_settings_new"></mat-icon>
+        <span>{{ 'LOGOUT' | oTranslate }}</span>
+      </button>
+
+    </mat-menu>
+  </ng-container>
+</div>

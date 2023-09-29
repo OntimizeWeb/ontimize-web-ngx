@@ -1,0 +1,8 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="title-container" mat-dialog-title>
+  <span fxFlex fxLayoutAlign="center center" > {{ (title || 'LAYOUT_MANANGER.DIALOG_TITLE') | oTranslate }}{{ label }} </span>
+  <mat-icon (click)="closeDialog()" svgIcon="ontimize:close"></mat-icon>
+</div>
+
+<div mat-dialog-content class="form-layout-dialog-container">
+  <ng-template o-form-layout-manager-content></ng-template>
+</div>

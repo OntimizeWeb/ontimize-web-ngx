@@ -1,0 +1,427 @@
+@mixin app-global-theme($theme-or-color-config, $typography: null) {
+  $theme: map.get($theme-or-color-config, color);
+  $accent: map.get($theme, accent);
+  $primary: map.get($theme, primary);
+  $foreground: map.get($theme, foreground);
+  $background: map.get($theme, background);
+  $is-dark-theme: map.get($theme, is-dark);
+  $background-primary-button: if($is-dark-theme, transparent, mat.get-color-from-palette($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500, 0.04), #ffffff);
+  $border-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
+  $font-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 800));
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500, 0.04), mat.get-color-from-palette($accent, 100));
+  $font-color-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 800));
+  $border-color-accent-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
+  $scrollbar-color: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 200));
+
+  @if $typography==null {
+    $typography: map.get($theme-or-color-config, 'typography');
+
+  }
+
+  body,
+  html {
+    background-color: mat.get-color-from-palette($background, background);
+  }
+
+  button,
+  html,
+  input,
+  select,
+  span,
+  textarea {
+    font-family: mat.font-family($typography);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+    opacity: 1.0;
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 0;
+    background-color: #c7c7c7;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    background-color: $scrollbar-color;
+    opacity: 1.0;
+  }
+
+  .o-loading {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    z-index: 999;
+
+    div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      margin: 6px;
+      border: 3px solid;
+      border-radius: 50%;
+      left: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: mat.get-color-from-palette($primary) transparent transparent transparent;
+    }
+
+    div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+
+  }
+
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* MODAL DIALOG IN O-DIALOG, FORM LAYOUT MANAGER AND LIST-PICKER */
+
+  .o-dialog-class,
+  .o-form-layout-dialog-overlay,
+  .o-list-picker-dialog {
+    .mat-mdc-dialog-container {
+      .mat-mdc-dialog-title {
+        border-bottom: 1px solid mat.get-color-from-palette($primary);
+
+        .mat-icon {
+          color: mat.get-color-from-palette($primary);
+        }
+      }
+
+
+      .empty-filter-list {
+        color: mat.get-color-from-palette($foreground, disabled-text);
+      }
+
+      .mat-mdc-dialog-content {
+        font-size: mat.font-size($typography, body-1);
+
+        .mat-mdc-subheader.mdc-list-group__subheader {
+          font-weight: inherit;
+          font-size: inherit;
+          margin: 0;
+
+        }
+
+        .mdc-list[dense],
+        .mat-mdc-selection-list[dense] {
+          outline: none;
+
+          .mat-mdc-list-option-checkbox-before {
+            display: flex;
+            align-items: center;
+            padding-right: 0px;
+            margin-right: 0px;
+          }
+
+
+        }
+
+        .mat-mdc-list[dense] {
+          .mat-mdc-list-item {
+
+            .empty-filter-list,
+            .mdc-list-item__content>* {
+              font-size: mat.font-size($typography, body-1);
+            }
+
+            .mat-mdc-list-item-line:nth-child(n+2) {
+              font-size: mat.font-size($typography, caption);
+            }
+
+          }
+        }
+      }
+    }
+
+  }
+
+
+  /*MAT LIST DENSE in v15 is unsupported */
+  .mat-mdc-list[dense] {
+    .mat-mdc-list-item {
+      height: auto;
+
+      &.mdc-list-item--with-three-lines {
+        height: 76px;
+      }
+
+      &.mdc-list-item--with-two-lines {
+        height: 60px;
+      }
+
+      &.mdc-list-item--with-one-line {
+        height: 60px;
+      }
+
+
+
+
+      .mdc-list-item__primary-text,
+      .mdc-list-item__secondary-text {
+        margin-bottom: 0;
+        &::before {
+          height: auto;
+          content: none;
+        }
+
+        font-size: mat.font-size($typography, caption);
+
+      }
+    }
+  }
+
+  /*global styles about drag/drop in dialogs table*/
+  .cdk-drag-preview,
+  .cdk-drag-dragging {
+    width: 100%;
+    display: block;
+
+    background-color: mat.get-color-from-palette($background, background);
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    border-radius: 2px;
+
+    .mdc-list-item__content {
+      display: block;
+      font-size: mat.font-size($typography, body-1);
+      color: mat.get-color-from-palette($foreground, text);
+      padding: 6px;
+      flex-direction: row;
+      align-items: center;
+      //background-color: mat.get-color-from-palette($background, background);
+      //display: flex;
+      //box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+      //box-sizing: border-box;
+      // border-radius: 2px;
+
+      .mat-mdc-list-item-icon {
+        padding: 4px;
+      }
+
+      .mat-mdc-list-text {
+        padding-left: 16px;
+        width: 100%;
+      }
+    }
+  }
+
+  .cdk-drop-list-dragging .o-drag-list-item-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+
+  o-data-toolbar {
+
+    &.o-grid-toolbar button.o-grid-button,
+    &.o-list-toolbar button.o-list-button,
+    &.o-table-toolbar .buttons .o-table-button,
+    &.o-table-toolbar .buttons button {
+      margin: 0 4px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .mat-mdc-dialog-actions,
+  .o-form .o-form-toolbar {
+    button {
+      margin: 0 8px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  /*BUTTONS HOVER*/
+  .mat-mdc-dialog-actions button:not([disabled]),
+  .o-form .o-form-toolbar button:not([disabled]).o-form-toolbar-button,
+  .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
+  .o-list .o-list-toolbar button.o-list-button:not([disabled]),
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
+
+    &.mat-mdc-button-base.mat-primary,
+    &.mat-mdc-button-base.o-button-primary {
+      color: mat.get-color-from-palette($primary, 800);
+      background-color: $background-primary-button;
+      border-color: $border-color-primary-button;
+
+      &:hover {
+        color: mat.get-color-from-palette($primary);
+        background-color: $background-hover-primary-button;
+        border-color: mat.get-color-from-palette($foreground, divider);
+      }
+
+    }
+
+    &.mat-mdc-button-base,
+    &.mat-mdc-button-base.mat-accent {
+      color: mat.get-color-from-palette($accent);
+      background-color: $background-accent-button;
+
+      &:hover {
+        color: mat.get-color-from-palette($primary, 800);
+        background-color: mat.get-color-from-palette($primary, 100);
+        border-color: transparent;
+      }
+    }
+
+  }
+
+  .o-form .o-form-toolbar [o-form-toolbar-buttons]>* {
+
+    margin: 0 8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+  }
+
+  .o-button button.mat-mdc-outlined-button {
+    &:not([disabled]) {
+      &.mat-primary {
+        color: $font-color-primary-button;
+        background-color: $background-primary-button;
+        border-color: $border-color-primary-button;
+
+        &:hover {
+          color: mat.get-color-from-palette($primary, 500);
+          background-color: $background-hover-primary-button;
+          border-color: mat.get-color-from-palette($foreground, divider);
+        }
+
+      }
+
+      &.mat-accent {
+        color: mat.get-color-from-palette($accent, 500);
+        background-color: $background-accent-button;
+
+        &:hover {
+          color: $font-color-hover-accent-button;
+          background-color: $background-hover-accent-button;
+        }
+      }
+
+    }
+
+  }
+
+  .o-form .o-form-toolbar button,
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
+    &.mat-mdc-outlined-button {
+      padding: 0 6px;
+
+      .mat-mdc-button-wrapper {
+        .mat-icon {
+          margin-right: 4px;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+
+        }
+
+        span {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  /*MAT PAGINATION*/
+  .mat-mdc-paginator {
+    .mat-mdc-paginator-range-label {
+      margin: 0 16px;
+    }
+
+    .mat-mdc-paginator-page-size-label {
+      margin-right: 16px;
+    }
+
+    button {
+      &:hover {
+        background-color: mat.get-color-from-palette($primary, 100);
+        border-radius: 50%;
+      }
+
+      &.mat-mdc-icon-button {
+        height: 20px;
+        width: 20px;
+        line-height: 20px;
+        margin-left: 8px;
+
+        .mat-mdc-paginator-icon {
+          width: 20px;
+        }
+
+        .mat-mdc-button-touch-target {
+          height: 20px;
+          width: 20px;
+        }
+      }
+    }
+
+  }
+
+  /*MAT MENU*/
+  /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
+  .o-mat-menu.mat-mdc-menu-panel {
+    min-height: auto;
+  }
+
+  /* CHART FONT */
+  o-chart .nvd3 {
+    text {
+      font: mat.font-weight($typography, caption) mat.font-size($typography, caption) mat.font-family($typography);
+      fill: mat.get-color-from-palette($foreground, text);
+    }
+
+    .nv-discretebar .nv-groups text,
+    .nv-multibarHorizontal .nv-groups text {
+      fill: mat.get-color-from-palette($foreground, text);
+    }
+
+    .nv-axis path {
+      stroke: mat.get-color-from-palette($foreground, text);
+    }
+  }
+}

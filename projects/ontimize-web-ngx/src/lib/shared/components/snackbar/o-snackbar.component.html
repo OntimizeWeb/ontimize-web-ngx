@@ -1,0 +1,9 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <mat-icon *ngIf="icon && iconPosition==='left'" class="o-snackbar-icon">{{ icon }}</mat-icon>
+  <span fxFlex class="o-snackbar-message">
+    {{ message | oTranslate }}
+  </span>
+  <mat-icon *ngIf="icon && iconPosition==='right'" class="o-snackbar-icon">{{ icon }}</mat-icon>
+  <button type="button" *ngIf="action" (click)="onAction()"
+    class="mat-simple-snackbar-action">{{ action | oTranslate }}</button>
+</div>

@@ -1,0 +1,67 @@
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
+*
+*/
+
+// Layout
+// ------------------------------
+@use "sass:math";
+$baseline-grid: 8px !default;
+$layout-gutter-width: ($baseline-grid * 2) !default;
+
+@mixin layout-padding-margin() {
+
+  [layout-padding]>[flex-sm],
+  [layout-padding]>[flex-lt-md] {
+    padding: math.div($layout-gutter-width, 4);
+  }
+
+  [layout-padding],
+  [layout-padding]>[flex],
+  [layout-padding]>[flex-gt-sm],
+  [layout-padding]>[flex-md],
+  [layout-padding]>[flex-lt-lg] {
+    padding: math.div($layout-gutter-width, 2);
+  }
+
+  [layout-padding]>[flex-gt-md],
+  [layout-padding]>[flex-lg] {
+    padding: math.div($layout-gutter-width, 1);
+  }
+
+  [layout-margin]>[flex-sm],
+  [layout-margin]>[flex-lt-md] {
+    margin: math.div($layout-gutter-width, 4);
+  }
+
+  [layout-margin],
+  [layout-margin]>[flex],
+  [layout-margin]>[flex-gt-sm],
+  [layout-margin]>[flex-md],
+  [layout-margin]>[flex-lt-lg] {
+    margin: math.div($layout-gutter-width, 2);
+  }
+
+  [layout-margin]>[flex-gt-md],
+  [layout-margin]>[flex-lg] {
+    margin: math.div($layout-gutter-width, 1);
+    }
+
+    [layout-wrap] {
+      flex-wrap: wrap;
+    }
+
+    [layout-nowrap] {
+      flex-wrap: nowrap;
+    }
+  }
+
+  @include layout-padding-margin();

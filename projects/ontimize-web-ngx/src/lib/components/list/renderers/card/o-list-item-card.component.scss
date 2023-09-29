@@ -1,0 +1,22 @@
+.mat-mdc-list .mat-mdc-list-item.o-card-item.mdc-list-item--with-trailing-meta {
+  height: auto;
+
+  .mat-mdc-list-item-meta {
+    margin: 0;
+    width: 100%;
+  }
+}
+
+.o-list-item-card {
+  padding: 8px 0;
+
+  .mat-mdc-card {
+    padding: 16px;
+  }
+
+  mat-card,
+  mat-card-actions,
+  mat-card-title-group {
+    width: 100%;
+  }
+}

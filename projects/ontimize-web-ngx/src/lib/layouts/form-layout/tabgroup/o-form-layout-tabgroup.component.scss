@@ -1,0 +1,61 @@
+.o-form-layout-tabgroup {
+  .mat-mdc-tab-group {
+    .mdc-tab {
+      span.mdc-tab__ripple{
+        display: none;
+      }
+      span.tab-label {
+        width: 100%;
+        max-width: 120px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+
+        &.modified {
+          font-weight: 700;
+
+          &:after {
+            content: '*';
+          }
+        }
+      }
+
+      .mat-icon {
+        height: 14px;
+        width: 14px;
+        font-size: 8px;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+    }
+
+    .mat-mdc-tab-body-wrapper {
+      flex: 1 1 auto;
+    }
+
+    o-form-toolbar {
+      padding: 0;
+      top: 0px !important;
+
+      .mat-toolbar {
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+  }
+
+  .spinner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+    visibility: visible;
+    opacity: 1;
+    -moz-transition: opacity .25s linear;
+    -webkit-transition: opacity .25s linear;
+    transition: opacity .25s linear;
+
+  }
+}

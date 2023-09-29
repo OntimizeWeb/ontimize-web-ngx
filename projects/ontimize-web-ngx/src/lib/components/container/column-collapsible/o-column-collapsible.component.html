@@ -1,0 +1,24 @@
+<mat-expansion-panel #expPanel [expanded]="expanded" class="o-container" (opened)="updateInnerHeight(null)" (closed)="updateInnerHeight(0)">
+  <mat-expansion-panel-header #containerTitle [expandedHeight]="expandedHeight" [collapsedHeight]="collapsedHeight">
+    <mat-panel-title fxLayout="row" fxLayoutAlign="start center" class="o-container-title">
+      <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
+      <span *ngIf="title">{{ title | oTranslate }}</span>
+    </mat-panel-title>
+    <mat-panel-description fxLayout="row" fxLayoutAlign="start center">
+      <span>{{ description | oTranslate }}</span>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div #containerContent id="innerCol" fxLayout="column" fxLayoutAlign="{{ layoutAlign }}" fxLayoutGap="{{ layoutGap }}"
+    class="o-container-scroll o-scroll" fxFlex="grow">
+    <ng-content></ng-content>
+  </div>
+</mat-expansion-panel>
+<div #oContainerOutline *ngIf="isAppearanceOutline()" [class.o-container-outline-expanded]="expPanel.expanded" class="o-container-outline">
+  <div class="o-container-outline-start"></div>
+  <div class="o-container-outline-gap-title"></div>
+  <div class="o-container-outline-gap-empty1"></div>
+  <div class="o-container-outline-gap-description"></div>
+  <div class="o-container-outline-gap-empty2"></div>
+  <div class="o-container-outline-gap-icon"></div>
+  <div class="o-container-outline-end"></div>
+</div>

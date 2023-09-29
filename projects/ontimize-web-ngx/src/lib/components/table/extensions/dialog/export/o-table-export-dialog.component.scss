@@ -1,0 +1,16 @@
+.o-table-export-dialog {
+  .mat-icon {
+    padding: 6px 6px 0;
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
+  }
+
+  .mat-mdc-raised-button {
+    height: initial;
+
+    .mdc-button__label {
+      line-height: initial;
+    }
+  }
+}

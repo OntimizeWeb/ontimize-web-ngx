@@ -1,0 +1,70 @@
+@use "layout-lite";
+
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
+*
+*/
+
+// Layout
+// ------------------------------
+$baseline-grid: 4px !default;
+layout-lite.$layout-gutter-width-vertical: $baseline-grid;
+$layout-gutter-width-horizontal: 14px !default;
+@mixin layout-padding-margin() {
+  [layout-padding-vertical] {
+    padding: layout-lite.$layout-gutter-width-vertical 0;
+  }
+
+  [layout-margin-vertical] {
+    margin: layout-lite.$layout-gutter-width-vertical 0;
+  }
+
+  [layout-padding-horizontal] {
+    padding: 0 $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-horizontal] {
+    margin: 0 $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-left] {
+    padding-left: $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-left] {
+    margin-left: $layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-right] {
+    padding-right: $layout-gutter-width-horizontal;
+  }
+
+  [layout-margin-right] {
+    margin-right:$layout-gutter-width-horizontal;
+  }
+
+  [layout-padding-top] {
+    padding-top: layout-lite.$layout-gutter-width-vertical;
+  }
+
+  [layout-margin-top] {
+    margin-top: layout-lite.$layout-gutter-width-vertical;
+  }
+
+  [layout-padding-bottom] {
+    padding-bottom: layout-lite.$layout-gutter-width-vertical;
+  }
+
+  [layout-margin-bottom] {
+    margin-bottom: layout-lite.$layout-gutter-width-vertical;
+  }
+
+}

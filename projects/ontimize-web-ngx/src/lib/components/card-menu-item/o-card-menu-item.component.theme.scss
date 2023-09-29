@@ -1,0 +1,36 @@
+@mixin o-card-menu-item-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $typography: map.get($theme-or-color-config, typography);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  .o-card-menu-item {
+
+    background: mat.get-color-from-palette($background, 'card');
+    border: 1px solid mat.get-color-from-palette($primary, 0.17);
+
+    .o-card-menu-item-main {
+      background-color: mat.get-color-from-palette($background, background, 0.29);
+    }
+
+    .o-card-menu-item-title {
+      color: mat.get-color-from-palette($primary);
+      font-size: mat.font-size($typography, headline-5);
+    }
+
+    .mat-mdc-button {
+      color: mat.get-color-from-palette($primary);
+      background: mat.get-color-from-palette($accent, 100);
+    }
+
+    .o-card-menu-item-icon,
+    .o-card-menu-item-info {
+      color: mat.get-color-from-palette($primary, 0.54);
+    }
+
+  }
+
+}

@@ -1,0 +1,61 @@
+ .o-table-quickfilter {
+   .quickFilter {
+
+     .mat-mdc-form-field {
+
+       .mat-mdc-form-field-subscript-wrapper {
+         display: none;
+       }
+
+       .mat-mdc-form-field-flex {
+
+         .mdc-notched-outline__leading,
+         .mdc-notched-outline__trailing {
+           border-radius: 2px;
+         }
+
+         .mat-mdc-form-field-infix {
+           align-self: center;
+           padding: 0;
+           min-height: 30px;
+           display: flex;
+         }
+
+         .mat-mdc-form-field-icon-prefix {
+           padding-left: 10px;
+           padding-right: 10px;
+
+           div {
+             align-items: center;
+             display: flex;
+
+             .mat-icon,
+             button {
+               margin-right: 6px;
+             }
+
+             .mat-badge-content {
+               background-color: #3C8500;
+               width: 14px;
+               height: 14px;
+               line-height: 14px;
+               top: -4px;
+               right: -4px;
+             }
+           }
+         }
+
+       }
+     }
+   }
+ }
+
+ .o-table-quickfilter-menu {
+   .checkbox-container {
+     padding: 6px 12px;
+
+     .mat-divider {
+       margin: 8px 0;
+     }
+   }
+ }

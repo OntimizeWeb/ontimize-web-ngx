@@ -1,0 +1,19 @@
+<nav fxFlex fxLayout="row" fxLayoutAlign="space-between stretch" [ngClass]="color ? 'o-app-header-'+color : ''">
+  <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+    <ng-content></ng-content>
+    <ng-content select="o-app-layout-header-projection-start"></ng-content>
+    <span *ngIf="showTitle && !showStaticTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
+      {{ headerTitle$ | async | oTranslate }}
+    </span>
+    <span *ngIf="showTitle && showStaticTitle" class="o-app-header-title" fxLayout="row" fxLayoutAlign="center center">
+      {{ staticTitle | oTranslate }}
+    </span>
+    <div fxLayout="row" fxLayoutAlign="end stretch" class="o-app-header-default-actions">
+      <div class="layout-header-projection-end">
+        <ng-content select="o-app-layout-header-projection-end"></ng-content>
+      </div>
+      <o-user-info #userInfo *ngIf="showUserInfo"></o-user-info>
+      <o-language-selector *ngIf="showLanguageSelector" [use-flag-icons]="useFlagIcons"></o-language-selector>
+    </div>
+  </div>
+</nav>

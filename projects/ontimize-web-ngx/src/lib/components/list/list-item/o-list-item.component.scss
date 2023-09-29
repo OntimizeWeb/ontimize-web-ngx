@@ -1,0 +1,13 @@
+.o-list-item {
+  display: flex;
+
+  .mat-mdc-list-item {
+    width: 100%;
+
+    .row-buttons-container .o-list-row-action {
+      height: 24px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+}

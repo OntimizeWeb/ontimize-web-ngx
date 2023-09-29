@@ -1,0 +1,7 @@
+<div class="fake-li mat-primary " [class.fake-li-hover]="isHovered" [class.is-selected]="isConfiguredLang()">
+  <a fxLayout="row" fxLayoutAlign="space-between center" (click)="configureI18n()" class="mat-list-item">
+    <mat-icon *ngIf="icon !== undefined" class="o-bar-menu-item-icon mat-24">{{ icon }}</mat-icon>
+    <div fxFlex matLine class="o-bar-menu-item-title">{{ title | oTranslate }}</div>
+    <mat-icon *ngIf="isConfiguredLang()" class="o-bar-menu-item-icon configured-lang mat-24" svgIcon="ontimize:check_circle"></mat-icon>
+  </a>
+</div>

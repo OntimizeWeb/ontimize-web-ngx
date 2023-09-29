@@ -1,0 +1,37 @@
+.cdk-overlay-list-picker .mat-mdc-dialog-container {
+  .o-list-picker-dialog {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .mat-mdc-dialog-title {
+      margin-top: -30px;
+
+      .o-search-input mat-form-field {
+        .mat-mdc-text-field-wrapper {
+          padding-bottom: 0;
+
+          .mdc-line-ripple {
+
+            &::after,
+            &::before {
+              border: none;
+            }
+          }
+        }
+      }
+    }
+
+    .mat-mdc-dialog-content {
+      .cdk-virtual-scroll-viewport {
+        height: 100%;
+
+        mat-list mat-list-item {
+          cursor: pointer;
+        }
+      }
+
+    }
+
+  }
+}

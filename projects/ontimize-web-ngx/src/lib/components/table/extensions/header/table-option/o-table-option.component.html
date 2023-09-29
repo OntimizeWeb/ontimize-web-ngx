@@ -1,0 +1,18 @@
+<ng-container *ngIf="showCheckboxOption; then checkboxTemplate; else buttonTemplate"></ng-container>
+
+<ng-template #checkboxTemplate>
+  <span mat-menu-item>
+    <mat-checkbox [disabled]="!enabled" [ngModel]="activeCheckboxOption" (change)="innerOnClick()" disableRipple="true"> 
+      {{ olabel | oTranslate }}
+      <mat-icon *ngIf="icon"> {{ icon }}</mat-icon>
+    </mat-checkbox>
+  </span>
+</ng-template>
+
+<ng-template #buttonTemplate>
+  <button [disabled]="!enabled" type="button" (click)="innerOnClick()" mat-menu-item fxLayout="row"
+    fxLayoutAlign="start center">
+    {{ olabel | oTranslate }}
+    <mat-icon *ngIf="icon"> {{ icon }}</mat-icon>
+  </button>
+</ng-template>

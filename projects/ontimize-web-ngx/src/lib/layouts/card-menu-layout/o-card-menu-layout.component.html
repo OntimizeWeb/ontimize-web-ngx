@@ -1,0 +1,9 @@
+<div fxLayout="row wrap" class="scrolling" fxLayout.lt-md="column" fxLayoutAlign="space-around center" fxLayoutGap="8px">
+  <ng-container *ngFor="let item of cardItems">
+    <o-card-menu-item *ngIf="item['show-in-card-menu'] !== false" button-text="CARD_MENU_LAYOUT.BUTTON_TEXT" [route]="item.route" [title]="item.name"
+      [tooltip]="item.tooltip" [icon]="item.icon" [image]="item.image" [detail-component]="item.component"
+      [detail-component-inputs]="item['component-inputs']" [ngClass]="item.class">
+    </o-card-menu-item>
+  </ng-container>
+  <ng-content select="o-card-menu-item"></ng-content>
+</div>

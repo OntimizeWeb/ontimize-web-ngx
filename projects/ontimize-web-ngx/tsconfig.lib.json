@@ -1,0 +1,36 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "declarationMap": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "noImplicitReturns": true,
+    "listFiles": true,
+    "pretty": true,
+    "stripInternal": true,
+    "outDir": "dist",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "types": [
+      "moment"
+    ],
+    "typeRoots": [
+      "node_modules/moment"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "src/lib/ontimize-web-ngx.module.ts"
+  ],
+  "angularCompilerOptions": {
+    "skipMetadataEmit": false,
+    "strictMetadataEmit": true
+  }
+}

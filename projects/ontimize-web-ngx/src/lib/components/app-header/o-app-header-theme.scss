@@ -1,0 +1,27 @@
+@mixin o-app-header-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $foreground: map.get($theme, foreground);
+
+  .o-app-header {
+    nav {
+      &.o-app-header-primary {
+        background-color: mat.get-color-from-palette($primary);
+      }
+
+      &.o-app-header-accent {
+        background-color: mat.get-color-from-palette($accent);
+      }
+
+      .menu-button {
+        background: transparent;
+      }
+    }
+
+    .o-user-info {
+      color: mat.get-color-from-palette($foreground, text);
+    }
+  }
+
+}

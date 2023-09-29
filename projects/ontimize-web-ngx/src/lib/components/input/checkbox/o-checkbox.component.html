@@ -1,0 +1,15 @@
+<div [class.custom-width]="hasCustomWidth" [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip"
+  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="start center" fxFill>
+  <mat-checkbox [id]="getAttribute()" [formControlName]="getAttribute()" (change)="onChangeEvent($event)"
+    [labelPosition]="labelPosition" [color]="color">
+    {{ olabel | oTranslate }}
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
+  </mat-checkbox>
+  <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+</div>

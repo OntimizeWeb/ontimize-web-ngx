@@ -1,0 +1,25 @@
+.o-user-info {
+  .o-user-info-container {
+    cursor: pointer;
+    height: 100%;
+  }
+
+  .o-user-info-avatar-wrapper {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 100%;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  mat-icon {
+    font-size: 16px;
+    line-height: 26px;
+    height: 100%;
+  }
+
+}
