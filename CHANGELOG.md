@@ -1,3 +1,8 @@
+## 8.14.1
+
+### Bug fixes
+* **o-table**: fixed action columns bug ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1283)
+
 ## 8.14.0 (2023-07-28)
 ### Features
 * **o-table**: Modified the visibility of the method `getColumnFilter` ([3dc21ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dc21ec))
