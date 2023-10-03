@@ -1,7 +1,7 @@
 ## 8.14.1
 
 ### Bug fixes
-* **o-table**: fixed action columns bug ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1283)
+* **o-table**: Fixed a bug that prevented exporting tables with action type columns ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1283)
 
 ## 8.14.0 (2023-07-28)
 ### Features
