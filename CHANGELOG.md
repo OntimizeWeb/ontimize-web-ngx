@@ -1,3 +1,20 @@
+## 15.0.0-beta.1
+**Themes**
+
+* New `ontimize` theme
+* Renamed `ontimize-web-ngx/theming/themes/ontimize.scss` to `ontimize-web-ngx/theming/themes/ontimize-blue.scss`
+* Renamed `ontimize-web-ngx/theming/themes/implatform-fashion-*.scss` to `ontimize-web-ngx/theming/themes/fashion-*.scss`
+
+
+* Removed old themes based on material
+```css
+ontimize-web-ngx/theming/themes/mat-indigo-pink.scss
+ontimize-web-ngx/theming/themes/mat-deeppurple-amber.scss
+ontimize-web-ngx/theming/themes/mat-pink-bluegrey.scss
+ontimize-web-ngx/theming/themes/mat-purple-green.scss;
+```
+* Removed deprecated flat style
+
 ## 15.0.0-beta.0 (2023-09-29)
 ### Features
 > [!NOTE]
