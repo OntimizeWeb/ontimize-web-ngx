@@ -10,7 +10,7 @@
 @use 'styles/density.scss'as o-density;
 @use 'styles/paginator.scss';
 
-
+@use '../theme.scss';
 @use 'addons/report-on-demand.scss';
 @use 'addons/charts-on-demand.scss';
 
@@ -84,6 +84,7 @@ $app-background-color: #eaeaea;
   $background-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 100));
   $background-hover-primary-button: if($is-dark-theme, transparent, #ffffff);
 
+  @include theme.o-material-theme($theme-or-color-config);
   @include layout.layout-padding-margin();
   @include o-density.checkbox(19px, 19px, 15px);
   @include o-density.list();

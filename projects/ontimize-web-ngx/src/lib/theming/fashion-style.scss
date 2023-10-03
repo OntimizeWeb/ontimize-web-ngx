@@ -6,7 +6,7 @@
 @use 'typography/ontimize.scss'as ontimize-typography;
 @use '@angular/material'as mat;
 @use '@angular/cdk';
-// @use 'styles/default/typography/ontimize.scss'as ontimize-typography;
+@use '../theme.scss';
 
 @mixin mat-checkbox-theme($theme-or-color-config) {
   $theme: map.get($theme-or-color-config, color);
@@ -204,7 +204,7 @@
 @mixin implatform-fashion-theme-styles($theme-or-color-config) {
 
   $typography: mat.get-typography-config($theme-or-color-config);
-
+  @include theme.o-material-theme($theme-or-color-config);
   @include mat-checkbox-theme($theme-or-color-config);
   @include mat-pseudo-checkbox-theme($theme-or-color-config);
   @include typography-fashion.o-table-typography-fashion($typography);
@@ -395,7 +395,7 @@
     }
   }
 
-  .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label{
+  .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label {
     color: mat.get-color-from-palette($foreground, title);
   }
 
