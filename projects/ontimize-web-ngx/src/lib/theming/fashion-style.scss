@@ -1,15 +1,12 @@
 @use "sass:color";
 @use "sass:map";
-@use 'themes/implatform-fashion-default-theme.scss';
+@use 'themes/fashion.scss';
 @use 'styles/fashion/typography-fashion.scss';
 @use 'styles/fashion/variables.scss';
-@use 'styles/lite/typography/ontimize-lite.scss'as ontimize-lite;
+@use 'typography/ontimize.scss'as ontimize-typography;
 @use '@angular/material'as mat;
 @use '@angular/cdk';
-@use 'styles/default/typography/ontimize.scss'as ontimize-typography;
-
-$typography : ontimize-lite.$typography;
-
+// @use 'styles/default/typography/ontimize.scss'as ontimize-typography;
 
 @mixin mat-checkbox-theme($theme-or-color-config) {
   $theme: map.get($theme-or-color-config, color);
@@ -204,20 +201,7 @@ $typography : ontimize-lite.$typography;
 
 }
 
-@mixin implatform-fashion-theme-styles($theme-or-color-config, $typographyConfig: null) {
-
-  $current-typography: if(ontimize-typography.$lite-typography==null, ontimize-typography.$default-typography, ontimize-typography.$lite-typography);
-
-  @if $typographyConfig !=null {
-    $typography: map-merge($current-typography, $typographyConfig);
-  }
-
-  @else {
-    $typography: $current-typography;
-  }
-
-  $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typography);
-
+@mixin implatform-fashion-theme-styles($theme-or-color-config) {
 
   $typography: mat.get-typography-config($theme-or-color-config);
 
