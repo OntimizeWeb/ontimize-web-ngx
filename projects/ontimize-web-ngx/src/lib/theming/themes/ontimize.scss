@@ -1,6 +1,6 @@
 @use "sass:map";
 @use '@angular/material'as mat;
-@use '../ontimize-theme.scss';
+@use '../ontimize-style.scss';
 
 @include mat.all-component-typographies();
 @include mat.core();
@@ -13,17 +13,9 @@ $mat-custom-accent: (50 : #e3ecf4, 100 : #b9d1e4, 200 : #8ab2d2, 300 : #5b93c0, 
 // Define a theme.
 $primary: mat.define-palette($mat-custom-primary);
 $accent: mat.define-palette($mat-custom-accent);
-$background-color: #eceff1;
 
 /* Light theme */
-$theme: ontimize-theme.o-mat-light-theme($primary, $accent);
+$theme: ontimize-style.o-mat-light-theme($primary, $accent);
 
-// Insert custom background color
-$background: map.get($theme, color, background);
-$background: map.merge($background, (background: $background-color));
-
-$theme: map.merge($theme, color, (background: $background));
 /* Dark theme */
-$primary-dark: mat.define-palette($mat-custom-primary);
-$accent-dark: mat.define-palette($mat-custom-accent);
-$dark-theme: ontimize-theme.o-mat-dark-theme($primary, $accent);
+$dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);

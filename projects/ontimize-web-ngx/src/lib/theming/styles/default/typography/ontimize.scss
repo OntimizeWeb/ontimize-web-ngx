@@ -1,9 +1,0 @@
-@use "sass:map";
-@use 'o-table-typography.scss';
-@use '@angular/material'as mat;
-
-
-$default-typography: mat.define-typography-config($font-family: 'Poppins, "Helvetica Neue", sans-serif');
-$default-typography: map.merge($default-typography, o-table-typography.$table-typography);
-
-$lite-typography: null !default;

@@ -1,0 +1,144 @@
+@use 'variables.scss';
+@use '@angular/material'as mat;
+@use "sass:map";
+
+@mixin o-table-style($theme) {
+
+  $foreground: map.get($theme, color, foreground);
+  $accent: map.get($theme, color, accent);
+
+  /* TABLE */
+  .ontimize-table.o-table {
+    font-weight: 400;
+
+    .o-table-container {
+      border: none;
+      border-radius: variables.$border-radius;
+      box-sizing: border-box;
+
+      /*Toolbar*/
+      .o-table-toolbar {
+        margin: 0 0 4px;
+        padding-top: variables.$basic-padding-size;
+
+        .buttons .o-table-button .mat-mdc-button {
+
+          height: 30px;
+          border: none;
+          padding: 0 6px;
+          border-radius: 0;
+
+          &.disabled {
+            border: none;
+            border-radius: 0;
+          }
+
+          &:not(.disabled):hover {
+            border: none;
+            border-radius: 0;
+          }
+        }
+      }
+
+      .o-table-menu {
+        .o-table-option-active {
+          background: mat.get-color-from-palette($foreground, divider);
+        }
+      }
+
+      thead tr th {
+        font-weight: 700;
+      }
+
+      tbody tr.even,
+      thead tr {
+        background-color: inherit;
+      }
+
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+      tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
+      thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
+        background-color: mat.get-color-from-palette($accent);
+      }
+
+      .mat-mdc-header-cell {
+        font-weight: 700;
+
+        .column-filter-icon {
+          margin-right: 4px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+
+    .mat-mdc-paginator {
+      background: inherit;
+    }
+
+    .mat-mdc-table {
+      .mat-mdc-header-row .mat-mdc-header-cell {
+        font-weight: 700;
+      }
+
+      .mat-mdc-form-field {
+        .mat-mdc-form-field-infix {
+          border-top: 0;
+        }
+      }
+
+      .mat-mdc-row .mat-mdc-cell {
+        &:not(.o-column-image):first-of-type {
+          padding-left: 12px;
+        }
+
+        &:last-of-type {
+          padding-right: 12px;
+        }
+      }
+
+      .mat-mdc-cell,
+      .mat-mdc-header-cell {
+        &.mat-column-select {
+          padding: 0 0 0 12px;
+        }
+      }
+    }
+  }
+
+  .ontimize-table.o-table.o-table-fixed {
+    .o-scrollable-container {
+      height: 100%;
+      overflow-y: auto;
+    }
+  }
+
+
+
+  .mat-mdc-menu-panel.o-table-quickfilter-menu .mat-mdc-checkbox,
+  .mat-mdc-menu-panel.o-search-input-menu .mat-mdc-checkbox {
+    padding: 2px 0;
+  }
+
+  .o-table-export-dialog.o-table-export-dialog {
+    .mat-mdc-raised-button {
+      width: 68px;
+      height: 68px;
+      min-width: 68px;
+
+      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+      .mat-button-wrapper {
+        >div {
+          line-height: 1;
+        }
+      }
+
+      .mat-icon {
+        padding: 0 6px 6px;
+        width: 38px;
+        height: 38px;
+        font-size: 38px;
+      }
+    }
+  }
+}
