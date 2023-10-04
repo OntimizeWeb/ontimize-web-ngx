@@ -2,12 +2,9 @@
 @use '@angular/material'as mat;
 @use '../ontimize-style.scss';
 
-@include mat.all-component-typographies();
-@include mat.core();
 
 /* Color definitions */
 $mat-custom-primary: (50 : #e3ecf4, 100 : #b9d1e4, 200 : #8ab2d2, 300 : #5b93c0, 400 : #377bb3, 500 : #1464a5, 600 : #125c9d, 700 : #0e5293, 800 : #0b488a, 900 : #063679, A100 : #a8c7ff, A200 : #75a7ff, A400 : #4286ff, A700 : #2876ff, contrast: (50 : #000000, 100 : #000000, 200 : #000000, 300 : #000000, 400 : #ffffff, 500 : #ffffff, 600 : #ffffff, 700 : #ffffff, 800 : #ffffff, 900 : #ffffff, A100 : #000000, A200 : #000000, A400 : #ffffff, A700 : #ffffff));
-
 $mat-custom-accent: (50 : #e3ecf4, 100 : #b9d1e4, 200 : #8ab2d2, 300 : #5b93c0, 400 : #377bb3, 500 : #1464a5, 600 : #125c9d, 700 : #0e5293, 800 : #0b488a, 900 : #063679, A100 : #a8c7ff, A200 : #75a7ff, A400 : #4286ff, A700 : #2876ff, contrast: (50 : #000000, 100 : #000000, 200 : #000000, 300 : #000000, 400 : #ffffff, 500 : #ffffff, 600 : #ffffff, 700 : #ffffff, 800 : #ffffff, 900 : #ffffff, A100 : #000000, A200 : #000000, A400 : #ffffff, A700 : #ffffff));
 
 // Define a theme.

@@ -9,6 +9,7 @@
     $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
   }
 
+  @include mat.core();
   //Include theme styles for core and each component used in your app.;
   @include mat.all-component-themes($theme-or-color-config);
 
