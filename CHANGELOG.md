@@ -1,19 +1,63 @@
 ## 15.0.0-beta.1
-**Themes**
+### Feature
+* New `ontimize` theme.
+### Breaking changes
 
-* New `ontimize` theme
-* Renamed `ontimize-web-ngx/theming/themes/ontimize.scss` to `ontimize-web-ngx/theming/themes/ontimize-blue.scss`
-* Renamed `ontimize-web-ngx/theming/themes/implatform-fashion-*.scss` to `ontimize-web-ngx/theming/themes/fashion-*.scss`
+* Renamed `ontimize-web-ngx/theming/themes/ontimize.scss` to `ontimize-web-ngx/theming/themes/ontimize-blue.scss` with old style.
 
+* Mixins `fashion-mat-light-theme` and `fashion-mat-dark-theme`:
+  - has been renamed to `o-mat-light-theme` and `o-mat-dark-theme`.
+  - has been moved to `ontimize-web-ngx/theming/ontimize-styles.scss`.
+* Mixins `o-mat-light-theme` and `o-mat-dark-theme` has been moved to `ontimize-web-ngx/theming/ontimize-styles-v8.scss`.
+
+* Renamed `ontimize-web-ngx/theming/themes/implatform-fashion-default-theme.scss` to `ontimize-web-ngx/theming/themes/fashion.scss`
+* Mixin `o-material-theme` has been included in `ontimize-styles.scss``
 
 * Removed old themes based on material
-```css
-ontimize-web-ngx/theming/themes/mat-indigo-pink.scss
-ontimize-web-ngx/theming/themes/mat-deeppurple-amber.scss
-ontimize-web-ngx/theming/themes/mat-pink-bluegrey.scss
-ontimize-web-ngx/theming/themes/mat-purple-green.scss;
+  ```scss
+  ontimize-web-ngx/theming/themes/mat-indigo-pink.scss
+  ontimize-web-ngx/theming/themes/mat-deeppurple-amber.scss
+  ontimize-web-ngx/theming/themes/mat-pink-bluegrey.scss
+  ontimize-web-ngx/theming/themes/mat-purple-green.scss;
+  ```
+* Removed deprecated flat style and lite.
+
+
+Below is an example of how the ontimize themes were applied before and now.
+- Before
+```scss
+/*Import the file who have the theme functions and the ontimize-theme-styles mixin.*/
+@import 'node_modules/ontimize-web-ngx-theming/ontimize-theme.scss';
+
+/* Choose ontimize theme */
+@import 'node_modules/ontimize-web-ngx-theming/src/themes/ontimize.scss';
+
+// Include ontimize theme
+@include ontimize-theme-styles($theme);
+
+// After define theme, it is necessary to transfer color and typography to Ontimize Web framework
+@import 'node_modules/ontimize-web-ngx/theme.scss';
+@include o-material-theme($theme, $default-typography);
+
+// Propagate theme to screen styles definition.
+@import '../../app/login/login.theme.scss';
+@include login-theme($theme);
 ```
-* Removed deprecated flat style
+
+Now
+```scss
+/* Choose ontimize theme */
+@use 'ontimize-web-ngx/theming/themes/ontimize.scss'as theme;
+/*Import the file who have the theme functions and the ontimize-theme-styles mixin.*/
+@use 'ontimize-web-ngx/theming/ontimize-style.scss';
+@use '../../app/login/login.theme.scss'as login;
+
+// Include ontimize styles
+@include ontimize-style.ontimize-theme-styles(theme.$theme);
+
+// Propagate theme to screen styles definition.
+@include login.login-theme(theme.$theme);
+```
 
 ## 15.0.0-beta.0 (2023-09-29)
 ### Features
