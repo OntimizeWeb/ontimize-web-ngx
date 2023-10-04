@@ -40,7 +40,7 @@ gulp.task('concat.themes', (callback) => {
 gulp.task('concat.themes.scss', gulp.series('copy.themes.files', 'delete.angular.imports', 'copy.styles.files', 'concat.themes'));
 const FILES = [
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style.scss',
-  'projects/ontimize-web-ngx/src/lib/theming/fashion-style.scss',
+  'projects/ontimize-web-ngx/src/lib/theming/ontimize-style-v8.scss',
   'dist/theming/'
 ];
 

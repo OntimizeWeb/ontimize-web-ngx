@@ -1,0 +1,307 @@
+@use "sass:map";
+@use '@angular/material'as mat;
+@use 'fonts/poppins.scss';
+@use 'styles/ontimize-v8/variables.scss';
+@use 'typography/ontimize.scss';
+@use 'styles/ontimize-v8/o-form-field-style.scss';
+@use 'styles/ontimize-v8/o-table-style.scss';
+@use 'styles/ontimize-v8/containers';
+@use 'styles/layout.scss';
+@use 'styles/density.scss'as o-density;
+@use 'styles/paginator.scss';
+
+@use '../theme.scss';
+@use 'addons/report-on-demand.scss';
+@use 'addons/charts-on-demand.scss';
+
+$background-color: #eceff1;
+/*Application background-color*/
+$app-background-color: #eaeaea;
+
+// Background palette for light themes.
+@function ontimize-light-theme-background($mat-theme) {
+  $background: map.get($mat-theme, background);
+  @return map.merge($background,
+    (level-0: $app-background-color,
+      level-04: #f2f2f2,
+      level-06: #f6f6f6,
+      level-08: #fafafa,
+      level-1: white,
+      background: $background-color));
+}
+
+// Background palette for dark themes.
+@function ontimize-dark-theme-background($mat-theme) {
+  $background: map.get($mat-theme, background);
+  @return map.merge($background,
+    (level-0: #171717,
+      level-04: #1E1E1E,
+      level-06: #2C2C2C,
+      level-08: #333333,
+      level-1: #383838));
+}
+
+// Creates a container object for a light theme to be given to individual component theme mixins.
+@function o-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  $mat-theme: mat.define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  @return (color:(primary: $primary,
+      accent: $accent,
+      warn: $warn,
+      is-dark: false,
+      foreground: map.get($mat-theme, foreground),
+      background: ontimize-light-theme-background($mat-theme)),
+    typography:ontimize.$typography)
+}
+
+// Creates a container object for a dark theme to be given to individual component theme mixins.
+@function o-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  $mat-theme: mat.define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  @return (color:(primary: $primary,
+      accent: $accent,
+      warn: $warn,
+      is-dark: true,
+      foreground: map.get($mat-theme, foreground),
+      background: ontimize-dark-theme-background($mat-theme)),
+    typography: ontimize.$typography)
+}
+
+@mixin ontimize-theme-styles($theme-or-color-config) {
+
+  $theme: map.get($theme-or-color-config, color);
+
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $container-background: mat.get-color-from-palette($background, 'card');
+
+  $fill-background-input: mat.get-color-from-palette($foreground, base, 0.1);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  $background-tab-inactive: if($is-dark-theme, variables.$background-tab-inactive-on-dark, variables.$background-tab-inactive-on-light);
+  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 100));
+  $background-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, transparent, #ffffff);
+
+  @include theme.o-material-theme($theme-or-color-config);
+  @include layout.layout-padding-margin();
+  @include o-density.checkbox(19px, 19px, 15px);
+  @include o-density.list();
+  @include o-density.radio();
+  @include o-table-style.o-table-style($theme-or-color-config);
+  @include report-on-demand.report-on-demand($theme-or-color-config);
+  @include charts-on-demand.o-chart-on-demand($theme-or-color-config);
+
+
+  .mat-dialog-actions {
+
+    button:not([disabled]) {
+
+      &.o-button-primary.mat-stroked-buttonmat-mdc-button-base,
+      &.mat-mdc-button-base.mat-primary,
+      &.mat-mdc-button-base.o-button-primary {
+        color: #303030;
+        background-color: $background-primary-button;
+        border-color: transparent;
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: mat.get-color-from-palette($primary);
+          background-color: $background-hover-primary-button;
+          border-color: mat.get-color-from-palette($foreground, divider);
+        }
+      }
+
+      &.o-button-default.cancel {
+        color: mat.get-color-from-palette($accent);
+        background-color: $background-accent-button;
+        border-color: mat.get-color-from-palette($foreground, divider);
+
+        &:hover,
+        .mat-button-focus-overlay {
+          color: #303030;
+          background-color: $background-hover-accent-button;
+          border-color: transparent;
+        }
+      }
+
+    }
+  }
+
+  /* CONTAINER */
+  .rounded-panel,
+  .standalone-chart-container,
+  .standalone-form-container .o-form-content-wrapper {
+    background: $container-background;
+    border-radius: variables.$border-radius;
+  }
+
+  .standalone-chart-container {
+    margin-top: 48px;
+  }
+
+  .standalone-form-container {
+    .inner-form {
+      padding: variables.$basic-padding-size*2;
+    }
+  }
+
+  /* APP SIDENAV */
+  .o-app-sidenav {
+    font-weight: 400;
+    color: #aaaaaa;
+  }
+
+  /* USER INFO */
+  o-app-header .o-app-header-title {
+    font-weight: 700;
+  }
+
+  .o-app-header {
+    background-color: $container-background;
+  }
+
+  /* FORM */
+  .o-form-toolbar {
+    .mat-toolbar {
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.24);
+      background-color: mat.get-color-from-palette($background, background);
+      border-radius: variables.$border-radius;
+      min-height: initial;
+    }
+  }
+
+  /* TABS */
+  .mat-mdc-tab-group {
+
+    .mdc-tab,
+    .mat-mdc-tab-link {
+      opacity: .75;
+
+      &.mdc-tab--active {
+        opacity: .95;
+      }
+    }
+
+    // Ontimize tabs
+    &.o-tab-ontimize {
+      >.mat-mdc-tab-header {
+
+        .mat-mdc-tab-label-container .mat-mdc-tab {
+          background: $background-tab-inactive;
+          padding: 0;
+
+          span.tab-label {
+            text-overflow: clip;
+            position: relative;
+
+            span.gradient-layer {
+              width: 12px;
+
+              background: linear-gradient(to right, transparent, $background-tab-inactive 100%);
+              height: 100%;
+              position: absolute;
+              right: 0;
+            }
+          }
+
+          &:not(.mdc-tab--active) {
+            &:not(:last-child) {
+
+              +.mdc-tab:not(.mdc-tab--active) {
+                .mdc-tab__content .mdc-tab__text-label {
+                  border-left: 1px solid mat.get-color-from-palette($foreground, divider);
+
+                }
+              }
+            }
+          }
+
+          .mdc-tab__content {
+            width: 100%;
+
+            .mdc-tab__text-label {
+              padding: 0 8px;
+            }
+          }
+
+          &.mdc-tab--active {
+            background: $container-background;
+
+            span.tab-label {
+              span.gradient-layer {
+                background: linear-gradient(to right, transparent, $container-background 100%);
+
+              }
+            }
+          }
+        }
+
+        .mdc-tab-indicator__content--underline {
+          border: none;
+        }
+      }
+
+
+      >.mat-mdc-tab-body-wrapper {
+        background: $container-background;
+        border-radius: variables.$border-radius;
+        border-top: variables.$tabs-header-border;
+        border-top-left-radius: initial;
+      }
+    }
+
+    // All tabs
+    &.mat-mdc-tab-group {
+
+      .mat-mdc-tab-body-wrapper {
+        padding: variables.$basic-padding-size;
+      }
+    }
+  }
+
+  /* BUTTON */
+  button {
+
+    &.mat-mdc-button,
+    &.mat-mdc-unelevated-button,
+    &.mat-mdc-icon-button,
+    &.mat-mdc-raised-button,
+    &.mat-mdc-outlined-button {
+      border-radius: variables.$border-radius;
+    }
+  }
+
+
+  /*background levels */
+  .bg-level-0,
+  o-column.o-column.bg-level-0,
+  o-row.o-row.bg-level-0 {
+    background-color: mat.get-color-from-palette($background, level-0);
+  }
+
+  .bg-level-04,
+  o-column.o-column.bg-level-04,
+  o-row.o-row.bg-level-04 {
+    background-color: mat.get-color-from-palette($background, level-04);
+  }
+
+  .bg-level-06,
+  o-column.o-column.bg-level-06,
+  o-row.o-row.bg-level-06 {
+    background-color: mat.get-color-from-palette($background, level-06);
+  }
+
+  .bg-level-08,
+  o-column.o-column.bg-level-08,
+  o-row.o-row.bg-level-08 {
+    background-color: mat.get-color-from-palette($background, level-08);
+  }
+
+  .bg-level-1,
+  o-column.o-column.bg-level-1,
+  o-row.o-row.bg-level-1 {
+    background-color: mat.get-color-from-palette($background, level-1);
+  }
+}

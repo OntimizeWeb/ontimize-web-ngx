@@ -1,278 +1,708 @@
+@use "sass:color";
 @use "sass:map";
-@use '@angular/material'as mat;
 @use 'fonts/poppins.scss';
-@use 'styles/variables.scss';
-@use 'typography/ontimize.scss';
-@use 'styles/o-form-field-style.scss';
-@use 'styles/o-table-style.scss';
-@use 'styles/containers';
-@use 'styles/layout.scss';
-@use 'styles/density.scss'as o-density;
-@use 'styles/paginator.scss';
+@use 'styles/ontimize/variables.scss';
+@use '@angular/material'as mat;
+@use '@angular/cdk';
+@use 'styles/ontimize/typography-ontimize.scss';
+@use 'typography/ontimize.scss'as ontimize;
+@use 'ontimize-style-v8.scss'as ontimize-style;
 
-@use '../theme.scss';
-@use 'addons/report-on-demand.scss';
-@use 'addons/charts-on-demand.scss';
-
-$background-color: #eceff1;
-/*Application background-color*/
-$app-background-color: #eaeaea;
+/*Sidenav background-color*/
+$sidenav-background-color: #f5f5f5;
 
 // Background palette for light themes.
-@function ontimize-light-theme-background($mat-theme) {
+@function ontimize-light-theme-background($primary, $mat-theme) {
+  $primary-500: mat.get-color-from-palette($primary, 500);
   $background: map.get($mat-theme, background);
   @return map.merge($background,
-    (level-0: $app-background-color,
+    (level-0: mix(variables.$app-background-color, $primary-500, 98%),
       level-04: #f2f2f2,
       level-06: #f6f6f6,
       level-08: #fafafa,
       level-1: white,
-      background: $background-color));
+      sidenav-overlay: #525252,
+      status-bar: mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
+      app-bar: mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
+      background: mix(variables.$app-background-color, mat.get-color-from-palette($primary), 97.2%)));
 }
 
 // Background palette for dark themes.
-@function ontimize-dark-theme-background($mat-theme) {
+@function ontimize-dark-theme-background($primary, $mat-theme) {
+  $primary-500: mat.get-color-from-palette($primary, 500);
   $background: map.get($mat-theme, background);
   @return map.merge($background,
-    (level-0: #171717,
-      level-04: #1E1E1E,
-      level-06: #2C2C2C,
-      level-08: #333333,
-      level-1: #383838));
+    (level-0: mix(#171717, $primary-500, 94%),
+      level-04: mix(#1E1E1E, $primary-500, 94%),
+      level-06: mix(#2C2C2C, $primary-500, 94%),
+      level-08: mix(#333333, $primary-500, 94%),
+      level-1: mix(#383838, $primary-500, 94%),
+      sidenav-overlay: #525252,
+      status-bar: mix(#272727, $primary-500, 94%)));
 }
+
+// Foreground palette for light themes.
+$ontimize-light-theme-foreground: (base: rgba(black, 0.6),
+  divider: rgba(black, 0.12),
+  dividers: rgba(black, 0.12),
+  disabled: rgba(black, 0.38),
+  disabled-button: rgba(black, 0.38),
+  disabled-text: rgba(black, 0.38),
+  elevation: black,
+  hint-text: rgba(black, 0.38),
+  secondary-text: rgba(black, 0.54),
+  title: rgba(black, 0.87),
+  icon: rgba(black, 0.6),
+  icons: rgba(black, 0.6),
+  text: rgba(black, 0.87),
+  slider-min: rgba(black, 0.38),
+  slider-off: rgba(black, 0.38),
+  slider-off-active: rgba(black, 0.38),
+  button: rgba(black, 0.74));
+
+// Foreground palette for dark themes.
+$ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
+  divider: rgba(white, 0.12),
+  dividers: rgba(white, 0.12),
+  disabled: rgba(white, 0.38),
+  disabled-button: rgba(white, 0.38),
+  disabled-text: rgba(white, 0.38),
+  elevation: black,
+  hint-text: rgba(white, 0.38),
+  secondary-text: rgba(white, 0.54),
+  title: rgba(white, 0.87),
+  icon: rgba(white, 0.6),
+  icons: rgba(white, 0.6),
+  text: rgba(white, 0.87),
+  slider-min: rgba(white, 0.38),
+  slider-off: rgba(white, 0.38),
+  slider-off-active: rgba(white, 0.38),
+  button: rgba(white, 0.74));
+
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
 @function o-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
   $mat-theme: mat.define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  $color: map.get($mat-theme, color);
   @return (color:(primary: $primary,
       accent: $accent,
       warn: $warn,
       is-dark: false,
-      foreground: map.get($mat-theme, foreground),
-      background: ontimize-light-theme-background($mat-theme)),
+      foreground: $ontimize-light-theme-foreground,
+      background: ontimize-light-theme-background($primary, $color)),
     typography:ontimize.$typography)
 }
 
 // Creates a container object for a dark theme to be given to individual component theme mixins.
 @function o-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
   $mat-theme: mat.define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  $color: map.get($mat-theme, color);
   @return (color:(primary: $primary,
       accent: $accent,
       warn: $warn,
       is-dark: true,
-      foreground: map.get($mat-theme, foreground),
-      background: ontimize-dark-theme-background($mat-theme)),
-    typography: ontimize.$typography)
+      foreground: $ontimize-dark-theme-foreground,
+      background: ontimize-dark-theme-background($primary, $color)),
+    typography:ontimize.$typography)
+}
+
+@mixin mat-checkbox-theme($theme-or-color-config) {
+  $theme: map.get($theme-or-color-config, color);
+  $is-dark-theme: map.get($theme, is-dark);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  // The color of the checkbox's checkmark / mixedmark.
+  $checkbox-mark-color: mat.get-color-from-palette($background, background);
+
+  // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
+  // this does not work well with elements layered on top of one another. To get around this we
+  // blend the colors together based on the base color and the theme background.
+  $white-30pct-opacity-on-dark: #686868;
+  $black-26pct-opacity-on-light: #b0b0b0;
+  $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
+  $checkbox-background-color: if($is-dark-theme, $black-26pct-opacity-on-light, mat.get-color-from-palette($background, sidenav-overlay));
+
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+  .mat-checkbox-frame {
+    border-color: mat.get-color-from-palette($foreground, secondary-text);
+  }
+
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+  .mat-checkbox-checkmark {
+    fill: $checkbox-mark-color;
+  }
+
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+  .mat-checkbox-checkmark-path {
+    // !important is needed here because a stroke must be set as an
+    // attribute on the SVG in order for line animation to work properly.
+    stroke: $checkbox-mark-color !important;
+
+    @include cdk.high-contrast(black-on-white) {
+      // Having the one above be !important ends up overriding the browser's automatic
+      // color inversion so we need to re-invert it ourselves for black-on-white.
+      stroke: #000 !important;
+    }
+  }
+
+  .mdc-checkbox__mixedmark {
+    background-color: $checkbox-mark-color;
+  }
+
+  .mat-mdc-checkbox-checked,
+  .mat-mdc-checkbox-indeterminate {
+
+    &.mat-primary .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+      background-color: $checkbox-background-color;
+    }
+
+    &.mat-accent .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+      background-color: $checkbox-background-color;
+    }
+
+    &.mat-warn .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+      background-color: mat.get-color-from-palette($warn);
+    }
+  }
+
+  .mat-mdc-checkbox-disabled {
+
+    &.mat-mdc-checkbox-checked,
+    &.mat-checkbox-indeterminate {
+
+      .mdc-checkbox__background {
+        background-color: $disabled-color;
+      }
+    }
+
+
+    &:not(.mat-mdc-checkbox-checked) {
+
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+      .mat-checkbox-frame {
+        border-color: $disabled-color;
+      }
+    }
+
+
+    @include cdk.high-contrast {
+      opacity: .5;
+    }
+  }
+
+  // This one is moved down here so it can target both
+  // the theme colors and the disabled state.
+  @include cdk.high-contrast {
+
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+    .mat-checkbox-background {
+      // Needs to be removed because it hides the checkbox outline.
+      background: none;
+    }
+  }
+
+  // Switch this to a solid color since we're using `opacity`
+  // to control how opaque the ripple should be.
+  .mat-mdc-checkbox .mat-ripple-element {
+    background-color: map.get(map.get($theme, foreground), base);
+  }
+
+  .mat-mdc-checkbox-checked:not(.mat-checkbox-disabled),
+  .mat-checkbox:active:not(.mat-checkbox-disabled) {
+    &.mat-primary .mat-ripple-element {
+      background: mat.get-color-from-palette($foreground, icon);
+    }
+
+    &.mat-accent .mat-ripple-element {
+      background: mat.get-color-from-palette($foreground, icon);
+    }
+
+    &.mat-warn .mat-ripple-element {
+      background: mat.get-color-from-palette($warn);
+    }
+  }
+}
+
+@mixin mat-pseudo-checkbox-theme($theme-or-color-config) {
+
+  $theme: map.get($theme-or-color-config, color);
+  $is-dark-theme: map.get($theme, is-dark);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
+  // this does not work well with elements layered on top of one another. To get around this we
+  // blend the colors together based on the base color and the theme background.
+  $white-30pct-opacity-on-dark: #686868;
+  $black-26pct-opacity-on-light: #b0b0b0;
+  $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
+  $colored-box-selector: '.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate';
+
+  .mat-mdc-select-panel {
+
+    &.mat-primary,
+    &.mat-accent {
+      .mat-pseudo-checkbox-checked {
+        background-color: transparent;
+      }
+    }
+  }
+
+  .mat-pseudo-checkbox {
+    color: mat.get-color-from-palette(map.get($theme, foreground), secondary-text);
+
+    &::after {
+      color: mat.get-color-from-palette($background, background);
+    }
+  }
+
+  .mat-pseudo-checkbox-disabled {
+    color: $disabled-color;
+  }
+
+  .mat-primary .mat-pseudo-checkbox-checked,
+  .mat-primary .mat-pseudo-checkbox-indeterminate {
+    background: mat.get-color-from-palette($foreground, icon);
+  }
+
+  // Default to the accent color. Note that the pseudo checkboxes are meant to inherit the
+  // theme from their parent, rather than implementing their own theming, which is why we
+  // don't attach to the `mat-*` classes. Also note that this needs to be below `.mat-primary`
+  // in order to allow for the color to be overwritten if the checkbox is inside a parent that
+  // has `mat-accent` and is placed inside another parent that has `mat-primary`.
+  .mat-accent .mat-pseudo-checkbox-checked,
+  .mat-accent .mat-pseudo-checkbox-indeterminate,
+  .mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-indeterminate {
+    background: mat.get-color-from-palette($foreground, icon);
+  }
+
+  .mat-warn .mat-pseudo-checkbox-checked,
+  .mat-warn .mat-pseudo-checkbox-indeterminate {
+    background: mat.get-color-from-palette(map.get($theme, warn));
+  }
+
+  .mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-indeterminate {
+    &.mat-pseudo-checkbox-disabled {
+      background: $disabled-color;
+    }
+  }
 }
 
 @mixin ontimize-theme-styles($theme-or-color-config) {
 
-  $theme: map.get($theme-or-color-config, color);
+  $typography: mat.get-typography-config($theme-or-color-config);
+  //Apply v8 styles
+  @include ontimize-style.ontimize-theme-styles($theme-or-color-config);
+  //Apply new styles
+  @include mat-checkbox-theme($theme-or-color-config);
+  @include mat-pseudo-checkbox-theme($theme-or-color-config);
+  @include typography-ontimize.o-table-typography-fashion($typography);
+  @include typography-ontimize.o-common-typography-fashion($typography);
+  @include typography-ontimize.o-form-theme-fashion($typography);
 
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
+  $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
-  $container-background: mat.get-color-from-palette($background, 'card');
-
-  $fill-background-input: mat.get-color-from-palette($foreground, base, 0.1);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: mat.get-color-from-palette($theme, warn);
   $is-dark-theme: map.get($theme, is-dark);
-
-  $background-tab-inactive: if($is-dark-theme, variables.$background-tab-inactive-on-dark, variables.$background-tab-inactive-on-light);
+  $background-primary-button: if($is-dark-theme, transparent, #ffffff);
+  $background-hover-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500, 0.04), mat.get-color-from-palette($primary, 100));
   $background-accent-button: if($is-dark-theme, transparent, #ffffff);
-  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 100));
-  $background-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 100));
-  $background-hover-primary-button: if($is-dark-theme, transparent, #ffffff);
-
-  @include theme.o-material-theme($theme-or-color-config);
-  @include layout.layout-padding-margin();
-  @include o-density.checkbox(19px, 19px, 15px);
-  @include o-density.list();
-  @include o-density.radio();
-  @include o-table-style.o-table-style($theme-or-color-config);
-  @include report-on-demand.report-on-demand($theme-or-color-config);
-  @include charts-on-demand.o-chart-on-demand($theme-or-color-config);
-
-
-  .mat-dialog-actions {
-
-    button:not([disabled]) {
-
-      &.o-button-primary.mat-stroked-buttonmat-mdc-button-base,
-      &.mat-mdc-button-base.mat-primary,
-      &.mat-mdc-button-base.o-button-primary {
-        color: #303030;
-        background-color: $background-primary-button;
-        border-color: transparent;
-
-        &:hover,
-        .mat-button-focus-overlay {
-          color: mat.get-color-from-palette($primary);
-          background-color: $background-hover-primary-button;
-          border-color: mat.get-color-from-palette($foreground, divider);
-        }
-      }
-
-      &.o-button-default.cancel {
-        color: mat.get-color-from-palette($accent);
-        background-color: $background-accent-button;
-        border-color: mat.get-color-from-palette($foreground, divider);
-
-        &:hover,
-        .mat-button-focus-overlay {
-          color: #303030;
-          background-color: $background-hover-accent-button;
-          border-color: transparent;
-        }
-      }
-
-    }
-  }
-
-  /* CONTAINER */
-  .rounded-panel,
-  .standalone-chart-container,
-  .standalone-form-container .o-form-content-wrapper {
-    background: $container-background;
-    border-radius: variables.$border-radius;
-  }
-
-  .standalone-chart-container {
-    margin-top: 48px;
-  }
-
-  .standalone-form-container {
-    .inner-form {
-      padding: variables.$basic-padding-size*2;
-    }
-  }
-
-  /* APP SIDENAV */
-  .o-app-sidenav {
-    font-weight: 400;
-    color: #aaaaaa;
-  }
-
-  /* USER INFO */
-  o-app-header .o-app-header-title {
-    font-weight: 700;
-  }
+  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500, 0.04), mat.get-color-from-palette($accent, 100));
+  $background-hover-warn-button: if($is-dark-theme, mat.get-color-from-palette($warn, 500, 0.04), mat.get-color-from-palette($warn, 100));
+  $table-row-over-background: if($is-dark-theme, #ffffff1f, #f5f5f5);
+  $table-row-selected-background: if($is-dark-theme, #f1f6fa80, #eaeaea);
+  $sidenav-background-color: if($is-dark-theme, mix(#1e1e1e, mat.get-color-from-palette($primary, 500), 94%), mat.get-color-from-palette($background, status-bar));
 
   .o-app-header {
-    background-color: $container-background;
+    nav {
+      &.o-app-header-primary {
+        background-color: $sidenav-background-color;
+      }
+
+      &.o-app-header-accent {
+        background-color: $sidenav-background-color;
+      }
+
+      .o-app-header-title {
+        color: mat.get-color-from-palette($foreground, button);
+      }
+    }
+  }
+
+  .o-app-sidenav {
+    font-weight: 400;
+
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      a {
+        margin-left: 0 !important;
+        border-left: 8px solid transparent;
+      }
+
+      &:not([disabled='true']) {
+        border-left-color: transparent;
+
+        a:hover {
+          color: mat.get-color-from-palette($foreground, button);
+          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 96%); //#525252 4%
+          border-left: 8px solid mat.get-color-from-palette($primary);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected {
+          color: mat.get-color-from-palette($foreground, button);
+          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 98%); //#525252 2%
+          border-left: 8px solid mat.get-color-from-palette($primary);
+        }
+      }
+    }
+
+    .o-app-sidenav-sidenav {
+      background: $sidenav-background-color;
+
+      .sidenav-toggle {
+        color: mat.get-color-from-palette($foreground, button);
+      }
+
+      .o-app-sidenav-item {
+        color: mat.get-color-from-palette($foreground, button);
+
+        &.o-user-info {
+
+          &:focus,
+          &:hover {
+            color: inherit;
+          }
+
+          color: inherit;
+
+          .o-user-info-menu-item .o-user-info-item {
+            background: mat.get-color-from-palette($primary, default-contrast, 0.74);
+          }
+        }
+      }
+
+      /* Side Navigation Level Styles */
+      .o-app-sidenav-menu-group-level-1 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-item {
+          &:not([disabled='true']) {
+
+            // a.o-app-sidenav-viewer-sidenav-item-selected,
+            a:hover {
+              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+            }
+          }
+        }
+      }
+
+      .o-app-sidenav-menu-group-level-2,
+      .o-app-sidenav-menu-group-level-3,
+      .o-app-sidenav-menu-group-level-4 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-item {
+          &:not([disabled='true']) {
+
+            // a.o-app-sidenav-viewer-sidenav-item-selected,
+            a:hover {
+              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+            }
+          }
+        }
+      }
+
+      li a {
+        color: mat.get-color-from-palette($foreground, text);
+      }
+    }
+  }
+
+  .o-app-sidenav-container {
+    .mat-drawer.o-app-sidenav-sidenav.mat-drawer-closed {
+      nav {
+
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+
+          a {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  o-app-sidenav.o-app-sidenav,
+  o-app-sidenav.o-app-sidenav.header-layout {
+    .o-app-sidenav-container {
+      .o-app-header {
+        /*box-shadow: none;*/
+        border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
+        background-color: $sidenav-background-color;
+      }
+
+      mat-sidenav.mat-drawer.o-app-sidenav-sidenav {
+        box-shadow: none;
+        border-right: none;
+
+        .o-app-sidenav-menugroup.active+.o-app-sidenav-menugroup-items-container ul {
+          box-shadow: none;
+          background: none;
+        }
+      }
+    }
+
+    .mat-mdc-menu-panel {
+      border: 1px solid mat.get-color-from-palette($foreground, divider);
+    }
+
+    .o-app-header {
+      .o-user-info {
+        .o-user-info-wrapper {
+          font-weight: 500;
+          // color: white;
+        }
+      }
+    }
+  }
+
+  .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: mat.get-color-from-palette($foreground, title);
+  }
+
+  /* MAT PAGINATOR*/
+  .mat-mdc-paginator {
+    color: mat.get-color-from-palette($foreground, text);
+  }
+
+  .ontimize-table.o-table {
+    background: mat.get-color-from-palette($background, card);
+
+    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+    tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
+    thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
+      background-color: mat.get-color-from-palette($foreground, icon);
+    }
+
+  }
+
+  .o-table {
+    .o-table-quickfilter .quickFilter .mat-form-field .mat-mdc-text-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      color: mat.get-color-from-palette($foreground, text, 0.32);
+    }
+
+    .mat-mdc-table {
+      .mat-mdc-row {
+        //TO BE DEFINED
+        //       &.o-table-group-row-level-1 {
+        //         font-weight: 900;
+        //         background-color: if($is-dark-theme, #464646, #b2b2b2);
+        //       }
+
+        //       &.o-table-group-row-level-2 {
+        //         font-weight: 800;
+        //         background-color: if($is-dark-theme, #575757, #cccccc);
+        //       }
+
+        //       &.o-table-group-row-level-3 {
+        //         font-weight: 700;
+        //         background-color: if($is-dark-theme,#686868, #e8e8e8);
+        //       }
+
+        //       &.o-table-group-row-level-4 {
+        //         font-weight: 600;
+        //         background-color: if($is-dark-theme, #7a7a7a, #f9f9f9);
+        //       }
+        &:hover:not(.o-table-group-row) {
+          cursor: pointer;
+          background-color: $table-row-over-background;
+        }
+
+        &.selected {
+          background-color: $table-row-selected-background;
+        }
+
+        .mat-mdc-cell {
+          color: mat.get-color-from-palette($foreground, base);
+        }
+      }
+    }
   }
 
   /* FORM */
-  .o-form-toolbar {
-    .mat-toolbar {
-      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.24);
-      background-color: mat.get-color-from-palette($background, background);
-      border-radius: variables.$border-radius;
-      min-height: initial;
-    }
-  }
+  .o-form {
+    .o-form-toolbar {
+      margin-bottom: 24px;
 
-  /* TABS */
-  .mat-mdc-tab-group {
+      .o-form-toolbar-header {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.24);
+        background-color: mat.get-color-from-palette($background, card);
 
-    .mdc-tab,
-    .mat-mdc-tab-link {
-      opacity: .75;
-
-      &.mdc-tab--active {
-        opacity: .95;
-      }
-    }
-
-    // Ontimize tabs
-    &.o-tab-ontimize {
-      >.mat-mdc-tab-header {
-
-        .mat-mdc-tab-label-container .mat-mdc-tab {
-          background: $background-tab-inactive;
-          padding: 0;
-
-          span.tab-label {
-            text-overflow: clip;
-            position: relative;
-
-            span.gradient-layer {
-              width: 12px;
-
-              background: linear-gradient(to right, transparent, $background-tab-inactive 100%);
-              height: 100%;
-              position: absolute;
-              right: 0;
-            }
+        .mat-toolbar-tools {
+          button.o-form-toolbar-button.o-form-toolbar-back.mat-mdc-icon-button {
+            margin-right: 32px;
           }
 
-          &:not(.mdc-tab--active) {
-            &:not(:last-child) {
-
-              +.mdc-tab:not(.mdc-tab--active) {
-                .mdc-tab__content .mdc-tab__text-label {
-                  border-left: 1px solid mat.get-color-from-palette($foreground, divider);
-
-                }
-              }
-            }
-          }
-
-          .mdc-tab__content {
-            width: 100%;
-
-            .mdc-tab__text-label {
-              padding: 0 8px;
-            }
-          }
-
-          &.mdc-tab--active {
-            background: $container-background;
-
-            span.tab-label {
-              span.gradient-layer {
-                background: linear-gradient(to right, transparent, $container-background 100%);
-
-              }
-            }
-          }
-        }
-
-        .mdc-tab-indicator__content--underline {
-          border: none;
         }
       }
+    }
+  }
 
+  .mat-mdc-dialog-actions button:not([disabled]),
+  .o-form .o-form-toolbar button:not([disabled]),
+  .o-grid .o-grid-footer button:not([disabled]),
+  .o-grid .o-grid-toolbar>button:not([disabled]),
+  .o-list .o-list-toolbar>button:not([disabled]),
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button:not([disabled]),
+  button.mat-mdc-outlined-button:not([disabled]) {
+    &.mat-mdc-button-base {
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+    }
 
-      >.mat-mdc-tab-body-wrapper {
-        background: $container-background;
-        border-radius: variables.$border-radius;
-        border-top: variables.$tabs-header-border;
-        border-top-left-radius: initial;
+    &.mat-mdc-button-base.mat-primary,
+    &.mat-mdc-button-base.o-button-primary {
+      color: mat.get-color-from-palette($primary, 500);
+      background-color: $background-primary-button;
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+
+      .mat-icon {
+        color: mat.get-color-from-palette($primary, 500);
+
+      }
+
+      &:hover {
+        background-color: $background-hover-primary-button;
+        border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      }
+
+    }
+
+    &.mat-mdc-button-base.mat-accent,
+    &.mat-mdc-button-base.o-button-default {
+      color: mat.get-color-from-palette($foreground, text);
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+
+      .mat-icon {
+        color: mat.get-color-from-palette($accent, 500);
+      }
+
+      &:hover {
+        color: mat.get-color-from-palette($accent, 500);
+        background-color: $background-hover-accent-button;
+        border-color: mat.get-color-from-palette($foreground, text, 0.32);
       }
     }
 
-    // All tabs
-    &.mat-mdc-tab-group {
+    &.mat-mdc-button-base.mat-warn {
+      color: mat.get-color-from-palette($warn);
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
 
-      .mat-mdc-tab-body-wrapper {
-        padding: variables.$basic-padding-size;
+      &:hover {
+        background-color: $background-hover-warn-button;
+        border-color: mat.get-color-from-palette($foreground, text, 0.32);
       }
     }
   }
 
-  /* BUTTON */
-  button {
+  .o-button button.mat-stroked-button:not([disabled])mat-mdc-button-base {
+    &.mat-accent {
+      color: mat.get-color-from-palette($accent, 500);
+    }
+  }
 
-    &.mat-mdc-button,
-    &.mat-mdc-unelevated-button,
-    &.mat-mdc-icon-button,
-    &.mat-mdc-raised-button,
-    &.mat-mdc-outlined-button {
+  .o-form .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button,
+  .o-grid .o-grid-toolbar button,
+  .o-list .o-list-toolbar button,
+  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button {
+    &.mat-mdc-icon-button:not(.mat-mdc-menu-trigger) {
+      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      border-style: solid;
+      border-width: 1px;
       border-radius: variables.$border-radius;
+      line-height: variables.$button-line-height-width-border;
     }
   }
 
+  .o-form .o-form-toolbar-header .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button.mat-mdc-icon-button:not(.mat-mdc-menu-trigger) {
+    margin: 0 6px;
+  }
+
+  // O-ROW, O-COLUMN
+  o-column.o-column,
+  o-row.o-row {
+    background: mat.get-color-from-palette($background, card);
+    border-radius: variables.$border-radius;
+
+    .o-container {
+      .o-container-title {
+        padding: 20px 0;
+      }
+
+      >.o-container-header,
+      >.o-container-title,
+      >.mat-expansion-panel-header {
+        border-bottom: none;
+        color: mat.get-color-from-palette($foreground, title);
+
+        .mat-mdc-tab,
+        .mat-mdc-tab-link {
+          color: mat.get-color-from-palette($foreground, title);
+        }
+      }
+
+      >.o-container-title,
+      >.mat-expansion-panel-header .o-container-title {
+        span {
+          font: {
+            size: mat.font-size($typography, headline-5);
+            weight: bold;
+          }
+        }
+      }
+
+      .o-container-scroll {
+        &.o-container-gap {
+          padding: 12px 16px 16px;
+        }
+      }
+    }
+  }
+
+  o-column.o-column.top-separator,
+  o-row.o-row.top-separator {
+    margin-top: 14px;
+  }
 
   /*background levels */
   .bg-level-0,
@@ -303,5 +733,12 @@ $app-background-color: #eaeaea;
   o-column.o-column.bg-level-1,
   o-row.o-row.bg-level-1 {
     background-color: mat.get-color-from-palette($background, level-1);
+  }
+
+  .o-form-content-wrapper,
+  .o-form-toolbar {
+    &[layout-padding] {
+      padding: 0;
+    }
   }
 }
