@@ -3,9 +3,6 @@
 @use '@angular/material'as mat;
 @use '../typography/ontimize.scss';
 
-@include mat.all-component-typographies();
-@include mat.core();
-
 //Definition primary and accent palettes
 $default-palette: (50: #e8e3f4,
   100: #c5b9e4,
@@ -42,106 +39,6 @@ $default-palette: (50: #e8e3f4,
 $primary: mat.define-palette($default-palette);
 $accent: mat.define-palette($default-palette);
 
-
-/*Application background-color*/
-$app-background-color: #eaeaea;
-/*Sidenav background-color*/
-$sidenav-background-color: #f5f5f5;
-
-// Background palette for light themes.
-@function fashion-light-theme-background($primary, $mat-theme) {
-  $primary-500: mat.get-color-from-palette($primary, 500);
-  $background: map.get($mat-theme, background);
-  @return map.merge($background,
-    (level-0: mix($app-background-color, $primary-500, 98%),
-      level-04: #f2f2f2,
-      level-06: #f6f6f6,
-      level-08: #fafafa,
-      level-1: white,
-      sidenav-overlay: #525252,
-      status-bar: mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
-      app-bar: mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
-      background: mix($app-background-color, mat.get-color-from-palette($primary), 97.2%)));
-}
-
-// Background palette for dark themes.
-@function fashion-dark-theme-background($primary, $mat-theme) {
-  $primary-500: mat.get-color-from-palette($primary, 500);
-  $background: map.get($mat-theme, background);
-  @return map.merge($background,
-    (level-0: mix(#171717, $primary-500, 94%),
-      level-04: mix(#1E1E1E, $primary-500, 94%),
-      level-06: mix(#2C2C2C, $primary-500, 94%),
-      level-08: mix(#333333, $primary-500, 94%),
-      level-1: mix(#383838, $primary-500, 94%),
-      sidenav-overlay: #525252,
-      status-bar: mix(#272727, $primary-500, 94%)));
-}
-
-// Foreground palette for light themes.
-$fashion-light-theme-foreground: (base: rgba(black, 0.6),
-  divider: rgba(black, 0.12),
-  dividers: rgba(black, 0.12),
-  disabled: rgba(black, 0.38),
-  disabled-button: rgba(black, 0.38),
-  disabled-text: rgba(black, 0.38),
-  elevation: black,
-  hint-text: rgba(black, 0.38),
-  secondary-text: rgba(black, 0.54),
-  title: rgba(black, 0.87),
-  icon: rgba(black, 0.6),
-  icons: rgba(black, 0.6),
-  text: rgba(black, 0.87),
-  slider-min: rgba(black, 0.38),
-  slider-off: rgba(black, 0.38),
-  slider-off-active: rgba(black, 0.38),
-  button: rgba(black, 0.74));
-
-// Foreground palette for dark themes.
-$fashion-dark-theme-foreground: (base: rgba(white, 0.6),
-  divider: rgba(white, 0.12),
-  dividers: rgba(white, 0.12),
-  disabled: rgba(white, 0.38),
-  disabled-button: rgba(white, 0.38),
-  disabled-text: rgba(white, 0.38),
-  elevation: black,
-  hint-text: rgba(white, 0.38),
-  secondary-text: rgba(white, 0.54),
-  title: rgba(white, 0.87),
-  icon: rgba(white, 0.6),
-  icons: rgba(white, 0.6),
-  text: rgba(white, 0.87),
-  slider-min: rgba(white, 0.38),
-  slider-off: rgba(white, 0.38),
-  slider-off-active: rgba(white, 0.38),
-  button: rgba(white, 0.74));
-
-
-// Creates a container object for a light theme to be given to individual component theme mixins.
-@function fashion-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  $mat-theme: mat.define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
-  $color: map.get($mat-theme, color);
-  @return (color:(primary: $primary,
-      accent: $accent,
-      warn: $warn,
-      is-dark: false,
-      foreground: $fashion-light-theme-foreground,
-      background: fashion-light-theme-background($primary, $color)),
-    typography:ontimize.$typography)
-}
-
-// Creates a container object for a dark theme to be given to individual component theme mixins.
-@function fashion-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  $mat-theme: mat.define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
-  $color: map.get($mat-theme, color);
-  @return (color:(primary: $primary,
-      accent: $accent,
-      warn: $warn,
-      is-dark: true,
-      foreground: $fashion-dark-theme-foreground,
-      background: fashion-dark-theme-background($primary, $color)),
-    typography:ontimize.$typography)
-}
 
 /* Light theme */
 $theme: fashion-mat-light-theme($primary, $accent);
