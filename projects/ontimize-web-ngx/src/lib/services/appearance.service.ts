@@ -22,6 +22,8 @@ export class AppearanceService {
     this._document = inject(DOCUMENT);
     const config = this.localStorageService.getStoredData();
 
+    this.isDarkMode$.subscribe(x => this.updateThemeClass(x));
+
     if (config && config["theme"] && typeof config["theme"].isDark === 'boolean') {
       const isDark = config["theme"].isDark;
       this.isDarkModeSubject.next(isDark);
@@ -35,7 +37,6 @@ export class AppearanceService {
       config["theme"] = config["theme"] || {};
       config["theme"].isDark = isDarkMode;
     }
-    this.updateThemeClass(isDarkMode);
     this.localStorageService.setLocalStorage(config);
     this.isDarkModeSubject.next(isDarkMode);
   }
