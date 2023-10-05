@@ -3229,7 +3229,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getColumnsNotIncluded(): string[] {
     let colsNotIncluded = [];
-    colsNotIncluded = this.oTableOptions.columns.filter(c => void 0 !== c.renderer && c.type === 'image').map(c => c.attr);
+    colsNotIncluded = this.oTableOptions.columns.filter(c => void 0 !== c.renderer && (c.type === 'image' || c.type === 'action')).map(c => c.attr);
     colsNotIncluded.push(Codes.NAME_COLUMN_SELECT);
     colsNotIncluded.push(Codes.NAME_COLUMN_EXPANDABLE);
     return colsNotIncluded;
