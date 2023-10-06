@@ -75,6 +75,7 @@ jobs:
       - name: GitHub Release / Create release
         uses: ncipollo/release-action@2792aea87063cfd0d27953ac38e3ab45afacc154
         with:
+          commit: ${{ env.BASELINE_BRANCH }}
           tag: ${{ steps.project.outputs.version }}
           name: ${{ steps.project.outputs.version }}
           token: ${{ secrets.OWEB_GH_TOKEN_PUSH }}

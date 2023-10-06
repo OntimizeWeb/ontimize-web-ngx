@@ -20,7 +20,7 @@ $layout-gutter-width: ($baseline-grid * 2) !default;
 $layout-gutter-width-vertical: $baseline-grid;
 $layout-gutter-width-horizontal: 14px !default;
 
-@mixin layout-padding-margin-lite() {
+@mixin layout-padding-margin() {
   [layout-padding] > [flex-lt-md],
   [layout-padding] > [flex-sm] {
     padding: $layout-gutter-width * 0.25;

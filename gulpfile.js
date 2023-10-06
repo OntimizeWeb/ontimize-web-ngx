@@ -25,8 +25,10 @@ gulp.task('delete.angular.imports', () => {
 });
 
 gulp.task('copy.styles.files', (callback) => {
+  copyfiles(['projects/ontimize-web-ngx/src/lib/theming/addons/**/*.scss', 'dist/theming'], 5, callback);
   copyfiles(['projects/ontimize-web-ngx/src/lib/theming/styles/**/*.scss', 'dist/theming'], 5, callback);
   copyfiles(['projects/ontimize-web-ngx/src/lib/theming/fonts/**/*.scss', 'dist/theming'], 5, callback);
+  copyfiles(['projects/ontimize-web-ngx/src/lib/theming/typography/**/*.scss', 'dist/theming'], 5, callback);
 });
 
 gulp.task('concat.themes', (callback) => {
@@ -37,11 +39,8 @@ gulp.task('concat.themes', (callback) => {
 
 gulp.task('concat.themes.scss', gulp.series('copy.themes.files', 'delete.angular.imports', 'copy.styles.files', 'concat.themes'));
 const FILES = [
-  'projects/ontimize-web-ngx/src/lib/theming/ontimize-theme.scss',
-  'projects/ontimize-web-ngx/src/lib/theming/ontimize-theme-lite.scss',
-  'projects/ontimize-web-ngx/src/lib/theming/ontimize-theme-flat.scss',
-  'projects/ontimize-web-ngx/src/lib/theming/implatform-fashion-theme.scss',
-  'projects/ontimize-web-ngx/src/lib/theming/ontimize.scss',
+  'projects/ontimize-web-ngx/src/lib/theming/ontimize-style.scss',
+  'projects/ontimize-web-ngx/src/lib/theming/ontimize-style-v8.scss',
   'dist/theming/'
 ];
 
