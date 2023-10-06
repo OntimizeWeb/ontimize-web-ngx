@@ -1,4 +1,7 @@
 ## 15.0.0-beta.1(2023-10-06)
+**Ontimize themes**
+The code related to *Ontimize themes* has been refactored with the aim of improving their configuration and performance, which implies the following changes
+
 ### Feature
 * New `ontimize` theme.
 * New mixin `ontimize-theme-all-component-color` to only generates the color styles now.
