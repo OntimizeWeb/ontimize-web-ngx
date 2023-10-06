@@ -6,6 +6,7 @@
 
   $foreground: map.get($theme, color, foreground);
   $accent: map.get($theme, color, accent);
+  $typography: map.get($theme, typography);
 
   /* TABLE */
   .ontimize-table.o-table {
@@ -141,4 +142,83 @@
       }
     }
   }
+
+  @if($typography) {
+    @include o-table-typography($typography);
+  }
+}
+
+@mixin o-table-size-typography($typography, $size) {
+
+  $header-height: mat.font-size($typography, #{$size}-header-height);
+  $row-height: mat.font-size($typography, #{$size}-row-height);
+  $header-font-size: mat.font-size($typography, #{$size}-header-font-size);
+  $row-font-size: mat.font-size($typography, #{$size}-row-font-size);
+
+  .o-table .o-table-container {
+    .mat-mdc-table.#{$size} {
+      tr.mat-mdc-header-row:not(.o-table-insertable) {
+        height: $header-height;
+
+        .mat-mdc-header-cell {
+          font-size: $header-font-size;
+        }
+      }
+
+      tr.mat-mdc-row {
+        height: $row-height;
+
+        .mat-mdc-cell {
+          .mat-mdc-form-field {
+            font-size: $row-font-size;
+          }
+
+          font-size: $row-font-size;
+        }
+      }
+
+      tr.o-table-insertable.mat-mdc-header-row {
+        height: $row-height;
+
+        .mat-mdc-table-sticky {
+          .mat-mdc-form-field {
+            font-size: $row-font-size;
+          }
+
+          font-size: $row-font-size;
+        }
+      }
+
+      .o-table-no-results span {
+        font-size: $row-font-size;
+        line-height: $header-height;
+      }
+    }
+  }
+
+  .o-table-context-menu.#{$size},
+  .o-table-menu.#{$size} {
+    .mat-mdc-menu-item {
+      line-height: $row-height;
+      height: $row-height;
+      min-height: $row-height;
+    }
+  }
+
+  .o-table-visible-columns-dialog {
+    .mat-mdc-list.#{$size} .mat-mdc-list-item {
+      height: $header-height;
+    }
+  }
+
+}
+
+@mixin o-table-typography($typography: null) {
+  @if $typography==null {
+    $typography: o-table-typography();
+  }
+
+  @include o-table-size-typography($typography, 'small');
+  @include o-table-size-typography($typography, 'medium');
+  @include o-table-size-typography($typography, 'large');
 }

@@ -297,6 +297,14 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
   }
 }
 
+@mixin ontimize-theme-all-component-color($theme-or-color-config) {
+  $color: map.get($theme-or-color-config, color);
+  @include ontimize-theme-styles((color: $color,
+      typography: null,
+      density: null,
+    ));
+}
+
 @mixin ontimize-theme-styles($theme-or-color-config) {
 
   $typography: mat.get-typography-config($theme-or-color-config);
@@ -305,9 +313,12 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
   //Apply new styles
   @include mat-checkbox-theme($theme-or-color-config);
   @include mat-pseudo-checkbox-theme($theme-or-color-config);
-  @include typography-ontimize.o-table-typography-fashion($typography);
-  @include typography-ontimize.o-common-typography-fashion($typography);
-  @include typography-ontimize.o-form-theme-fashion($typography);
+
+  @if($typography) {
+    @include typography-ontimize.o-table-typography-fashion($typography);
+    @include typography-ontimize.o-common-typography-fashion($typography);
+    @include typography-ontimize.o-form-theme-fashion($typography);
+  }
 
   $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
@@ -681,12 +692,14 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
         }
       }
 
-      >.o-container-title,
-      >.mat-expansion-panel-header .o-container-title {
-        span {
-          font: {
-            size: mat.font-size($typography, headline-5);
-            weight: bold;
+      @if($typography) {
+        >.o-container-title,
+        >.mat-expansion-panel-header .o-container-title {
+          span {
+            font: {
+              size: mat.font-size($typography, headline-5);
+              weight: bold;
+            }
           }
         }
       }

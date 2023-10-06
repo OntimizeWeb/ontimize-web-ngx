@@ -9,13 +9,23 @@
     $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
   }
 
-  @include mat.core();
+
   //Include theme styles for core and each component used in your app.;
-  @include mat.all-component-themes($theme-or-color-config);
+  $typography: map.get($theme-or-color-config, typography);
+
+  @if($typography) {
+    @include mat.core();
+    @include mat.all-component-themes($theme-or-color-config);
+  }
+
+  @else {
+    @include mat.all-component-colors($theme-or-color-config);
+  }
+
 
   $typography: mat.get-typography-config($theme-or-color-config);
   //Emit the CSS rules for these CSS classes and native elements
-  @include mat.typography-hierarchy($typography);
+  // @include mat.typography-hierarchy($typography);
 
   @include app-global-theme($theme-or-color-config);
   @include o-breadcrumb-theme($theme-or-color-config);
@@ -25,7 +35,6 @@
   @include o-date-input-theme($theme-or-color-config);
   @include o-dialog-theme($theme-or-color-config);
   @include o-table-theme($theme-or-color-config);
-  @include o-table-typography($typography);
   @include o-list-theme($theme-or-color-config);
   @include o-list-picker-theme($theme-or-color-config);
   @include o-app-header-theme($theme-or-color-config);
