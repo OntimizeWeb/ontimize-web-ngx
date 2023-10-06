@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx",
-  "version": "15.0.0-beta.1",
+  "version": "15.0.0-SNAPSHOT-0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
