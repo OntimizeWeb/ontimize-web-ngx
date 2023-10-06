@@ -16,12 +16,17 @@
       background-color: mat.get-color-from-palette($background, background, 0.29);
     }
 
-    .o-card-menu-item-title {
-      color: mat.get-color-from-palette($primary);
-      font-size: mat.font-size($typography, headline-5);
+    @if($typography) {
+      .o-card-menu-item-title {
+        font-size: mat.font-size($typography, headline-6);
+      }
     }
 
-    .mat-mdc-button {
+    .o-card-menu-item-title {
+      color: mat.get-color-from-palette($primary);
+    }
+
+    .mat-mdc-button:not(:disabled) {
       color: mat.get-color-from-palette($primary);
       background: mat.get-color-from-palette($accent, 100);
     }

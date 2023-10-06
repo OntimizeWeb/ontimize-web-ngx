@@ -26,12 +26,14 @@
 
       }
 
-      >.o-container-title,
-      >.mat-expansion-panel-header .o-container-title {
-        span {
-          font: {
-            size: mat.font-size($typography, body-1);
-            weight: mat.font-weight($typography, body-1);
+      @if($typography) {
+        >.o-container-title,
+        >.mat-expansion-panel-header .o-container-title {
+          span {
+            font: {
+              size: mat.font-size($typography, body-1);
+              weight: mat.font-weight($typography, body-1);
+            }
           }
         }
       }

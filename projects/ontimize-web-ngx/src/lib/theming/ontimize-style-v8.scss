@@ -1,13 +1,19 @@
 @use "sass:map";
-@use 'fonts/poppins.scss';
-@use 'styles/lite/layout.scss';
-@use 'styles/default/typography/ontimize.scss'as ontimize-typography;
-@use 'styles/default/addons/report-on-demand.scss';
-@use 'styles/default/addons/charts-on-demand.scss';
 @use '@angular/material'as mat;
+@use 'fonts/poppins.scss';
+@use 'styles/ontimize-v8/variables.scss';
+@use 'typography/ontimize.scss';
+@use 'styles/ontimize-v8/o-form-field-style.scss';
+@use 'styles/ontimize-v8/o-table-style.scss';
+@use 'styles/ontimize-v8/containers';
+@use 'styles/layout.scss';
 @use 'styles/density.scss'as o-density;
+@use 'styles/paginator.scss';
 
-$typography: ontimize-typography.$default-typography;
+@use '../theme.scss';
+@use 'addons/report-on-demand.scss';
+@use 'addons/charts-on-demand.scss';
+
 $background-color: #eceff1;
 /*Application background-color*/
 $app-background-color: #eaeaea;
@@ -44,7 +50,7 @@ $app-background-color: #eaeaea;
       is-dark: false,
       foreground: map.get($mat-theme, foreground),
       background: ontimize-light-theme-background($mat-theme)),
-    typography: mat.define-typography-config())
+    typography:ontimize.$typography)
 }
 
 // Creates a container object for a dark theme to be given to individual component theme mixins.
@@ -56,7 +62,7 @@ $app-background-color: #eaeaea;
       is-dark: true,
       foreground: map.get($mat-theme, foreground),
       background: ontimize-dark-theme-background($mat-theme)),
-    typography: mat.define-typography-config())
+    typography: ontimize.$typography)
 }
 
 @mixin ontimize-theme-styles($theme-or-color-config) {
@@ -65,35 +71,28 @@ $app-background-color: #eaeaea;
 
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
-  // $warn: map.get($theme, warn);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
   $container-background: mat.get-color-from-palette($background, 'card');
-  $border-radius: 2px;
-  $button-line-height: 30px;
-  $basic-padding-size: 8px;
-  // $tabs-header-border: 1px solid mat.get-color-from-palette($foreground, divider);
-  $tabs-header-border: none;
-  $inactive-tab-opacity: .35;
-  $font-size-title-container: 1;
+
   $fill-background-input: mat.get-color-from-palette($foreground, base, 0.1);
   $is-dark-theme: map.get($theme, is-dark);
 
-  // $background-tab-active: mat.get-color-from-palette($background, 800);
-  $background-tab-inactive-on-dark: #686868;
-  $background-tab-inactive-on-light: #D7DDE0;
-  $background-tab-inactive: if($is-dark-theme, $background-tab-inactive-on-dark, $background-tab-inactive-on-light);
+  $background-tab-inactive: if($is-dark-theme, variables.$background-tab-inactive-on-dark, variables.$background-tab-inactive-on-light);
   $background-accent-button: if($is-dark-theme, transparent, #ffffff);
   $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 100));
   $background-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 100));
   $background-hover-primary-button: if($is-dark-theme, transparent, #ffffff);
-  // $mat-font-family: 'Lato', sans-serif !default;
-  @include report-on-demand.report-on-demand($theme-or-color-config);
-  @include charts-on-demand.o-chart-on-demand($theme-or-color-config);
+
+  @include theme.o-material-theme($theme-or-color-config);
   @include layout.layout-padding-margin();
-  @include o-density.checkbox(20px, 16px, 16px);
+  @include o-density.checkbox(19px, 19px, 15px);
   @include o-density.list();
   @include o-density.radio();
+  @include o-table-style.o-table-style($theme-or-color-config);
+  @include report-on-demand.report-on-demand($theme-or-color-config);
+  @include charts-on-demand.o-chart-on-demand($theme-or-color-config);
+
 
   .mat-dialog-actions {
 
@@ -135,7 +134,7 @@ $app-background-color: #eaeaea;
   .standalone-chart-container,
   .standalone-form-container .o-form-content-wrapper {
     background: $container-background;
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
   }
 
   .standalone-chart-container {
@@ -144,7 +143,7 @@ $app-background-color: #eaeaea;
 
   .standalone-form-container {
     .inner-form {
-      padding: $basic-padding-size*2;
+      padding: variables.$basic-padding-size*2;
     }
   }
 
@@ -168,7 +167,7 @@ $app-background-color: #eaeaea;
     .mat-toolbar {
       box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.24);
       background-color: mat.get-color-from-palette($background, background);
-      border-radius: $border-radius;
+      border-radius: variables.$border-radius;
       min-height: initial;
     }
   }
@@ -221,10 +220,12 @@ $app-background-color: #eaeaea;
 
           .mdc-tab__content {
             width: 100%;
+
             .mdc-tab__text-label {
               padding: 0 8px;
             }
           }
+
           &.mdc-tab--active {
             background: $container-background;
 
@@ -245,8 +246,8 @@ $app-background-color: #eaeaea;
 
       >.mat-mdc-tab-body-wrapper {
         background: $container-background;
-        border-radius: $border-radius;
-        border-top: $tabs-header-border;
+        border-radius: variables.$border-radius;
+        border-top: variables.$tabs-header-border;
         border-top-left-radius: initial;
       }
     }
@@ -255,7 +256,7 @@ $app-background-color: #eaeaea;
     &.mat-mdc-tab-group {
 
       .mat-mdc-tab-body-wrapper {
-        padding: $basic-padding-size;
+        padding: variables.$basic-padding-size;
       }
     }
   }
@@ -268,75 +269,10 @@ $app-background-color: #eaeaea;
     &.mat-mdc-icon-button,
     &.mat-mdc-raised-button,
     &.mat-mdc-outlined-button {
-      border-radius: $border-radius;
+      border-radius: variables.$border-radius;
     }
   }
 
-  /* TABLE */
-  .ontimize-table.o-table {
-    font-weight: 400;
-
-    .o-table-container {
-      border: none;
-      border-radius: $border-radius;
-      box-sizing: border-box;
-
-      /*Toolbar*/
-      .o-table-toolbar {
-        margin: 0 0 4px;
-        padding-top: $basic-padding-size;
-      }
-
-      .o-table-menu {
-        .o-table-option-active {
-          background: mat.get-color-from-palette($foreground, divider);
-        }
-      }
-
-      thead tr th {
-        font-weight: 700;
-      }
-
-      tbody tr.even,
-      thead tr {
-        background-color: inherit;
-      }
-
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-      tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
-      thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
-        background-color: mat.get-color-from-palette($accent);
-      }
-
-      .mat-mdc-header-cell {
-        font-weight: 700;
-      }
-    }
-
-    .mat-mdc-paginator {
-      background: inherit;
-    }
-
-    .mat-mdc-table {
-      .mat-mdc-header-row .mat-mdc-header-cell {
-        font-weight: 700;
-      }
-    }
-  }
-
-  .ontimize-table.o-table.o-table-fixed {
-    .o-scrollable-container {
-      height: 100%;
-      overflow-y: auto;
-    }
-  }
-
-
-
-  .mat-mdc-menu-panel.o-table-quickfilter-menu .mat-mdc-checkbox,
-  .mat-mdc-menu-panel.o-search-input-menu .mat-mdc-checkbox {
-    padding: 2px 0;
-  }
 
   /*background levels */
   .bg-level-0,

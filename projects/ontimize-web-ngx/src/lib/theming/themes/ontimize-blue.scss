@@ -1,9 +1,6 @@
 @use "sass:map";
 @use '@angular/material'as mat;
-@use '../ontimize-theme.scss';
-
-@include mat.all-component-typographies();
-@include mat.core();
+@use '../ontimize-style-v8.scss'as ontimize-style;
 
 /* Color definitions */
 $mat-custom-primary: (50 : #e3ecf4, 100 : #b9d1e4, 200 : #8ab2d2, 300 : #5b93c0, 400 : #377bb3, 500 : #1464a5, 600 : #125c9d, 700 : #0e5293, 800 : #0b488a, 900 : #063679, A100 : #a8c7ff, A200 : #75a7ff, A400 : #4286ff, A700 : #2876ff, contrast: (50 : #000000, 100 : #000000, 200 : #000000, 300 : #000000, 400 : #ffffff, 500 : #ffffff, 600 : #ffffff, 700 : #ffffff, 800 : #ffffff, 900 : #ffffff, A100 : #000000, A200 : #000000, A400 : #ffffff, A700 : #ffffff));
@@ -13,17 +10,9 @@ $mat-custom-accent: (50 : #e3ecf4, 100 : #b9d1e4, 200 : #8ab2d2, 300 : #5b93c0, 
 // Define a theme.
 $primary: mat.define-palette($mat-custom-primary);
 $accent: mat.define-palette($mat-custom-accent);
-$background-color: #eceff1;
 
 /* Light theme */
-$theme: ontimize-theme.o-mat-light-theme((color: (primary: $primary, accent: $accent), typography: mat.define-typography-config()));
+$theme: ontimize-style.o-mat-light-theme($primary, $accent);
 
-// Insert custom background color
-$background: map.get($theme, color, background);
-$background: map.merge($background, (background: $background-color));
-
-$theme: map.merge($theme, color, (background: $background));
 /* Dark theme */
-$primary-dark: mat.define-palette($mat-custom-primary);
-$accent-dark: mat.define-palette($mat-custom-accent);
-$dark-theme: ontimize-theme.o-mat-dark-theme((color: (primary: $primary, accent: $accent), typography: mat.define-typography-config()));
+$dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);

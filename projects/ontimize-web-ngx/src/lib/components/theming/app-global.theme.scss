@@ -25,13 +25,16 @@
     background-color: mat.get-color-from-palette($background, background);
   }
 
-  button,
-  html,
-  input,
-  select,
-  span,
-  textarea {
-    font-family: mat.font-family($typography);
+  @if($typography) {
+
+    button,
+    html,
+    input,
+    select,
+    span,
+    textarea {
+      font-family: mat.font-family($typography);
+    }
   }
 
   ::-webkit-scrollbar {
@@ -120,7 +123,9 @@
       }
 
       .mat-mdc-dialog-content {
-        font-size: mat.font-size($typography, body-1);
+        @if($typography) {
+          font-size: mat.font-size($typography, body-1);
+        }
 
         .mat-mdc-subheader.mdc-list-group__subheader {
           font-weight: inherit;
@@ -143,18 +148,20 @@
 
         }
 
-        .mat-mdc-list[dense] {
-          .mat-mdc-list-item {
+        @if($typography) {
+          .mat-mdc-list[dense] {
+            .mat-mdc-list-item {
 
-            .empty-filter-list,
-            .mdc-list-item__content>* {
-              font-size: mat.font-size($typography, body-1);
+              .empty-filter-list,
+              .mdc-list-item__content>* {
+                font-size: mat.font-size($typography, body-1);
+              }
+
+              .mat-mdc-list-item-line:nth-child(n+2) {
+                font-size: mat.font-size($typography, caption);
+              }
+
             }
-
-            .mat-mdc-list-item-line:nth-child(n+2) {
-              font-size: mat.font-size($typography, caption);
-            }
-
           }
         }
       }
@@ -186,12 +193,15 @@
       .mdc-list-item__primary-text,
       .mdc-list-item__secondary-text {
         margin-bottom: 0;
+
         &::before {
           height: auto;
           content: none;
         }
 
-        font-size: mat.font-size($typography, caption);
+        @if($typography) {
+          font-size: mat.font-size($typography, caption);
+        }
 
       }
     }
@@ -208,9 +218,14 @@
     box-sizing: border-box;
     border-radius: 2px;
 
+    @if($typography) {
+      .mdc-list-item__content {
+        font-size: mat.font-size($typography, body-1);
+      }
+    }
+
     .mdc-list-item__content {
       display: block;
-      font-size: mat.font-size($typography, body-1);
       color: mat.get-color-from-palette($foreground, text);
       padding: 6px;
       flex-direction: row;
@@ -402,26 +417,9 @@
   }
 
   /*MAT MENU*/
-  /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
-  /* TODO(mdc-migration): The following rule targets internal classes of menu that may no longer apply for the MDC version. */
   .o-mat-menu.mat-mdc-menu-panel {
     min-height: auto;
   }
 
-  /* CHART FONT */
-  o-chart .nvd3 {
-    text {
-      font: mat.font-weight($typography, caption) mat.font-size($typography, caption) mat.font-family($typography);
-      fill: mat.get-color-from-palette($foreground, text);
-    }
 
-    .nv-discretebar .nv-groups text,
-    .nv-multibarHorizontal .nv-groups text {
-      fill: mat.get-color-from-palette($foreground, text);
-    }
-
-    .nv-axis path {
-      stroke: mat.get-color-from-palette($foreground, text);
-    }
-  }
 }

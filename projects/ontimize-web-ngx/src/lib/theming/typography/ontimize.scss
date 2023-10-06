@@ -1,14 +1,14 @@
 @use "sass:map";
 @use '@angular/material'as mat;
-@use "../../default/typography/o-table-typography";
+@use "o-table-typography";
 
 $o-mat-lite-typography: mat.define-typography-config($font-family: 'Poppins, "Helvetica Neue", sans-serif',
   $headline-1: mat.define-typography-level(84px, 92px, 300),
   $headline-2: mat.define-typography-level(42px, 42px, 400),
   $headline-3: mat.define-typography-level(34px, 36px, 400),
   $headline-4: mat.define-typography-level(26px, 30px, 400),
-  $headline-5: mat.define-typography-level(20px, 24px, 400),
-  $headline-6: mat.define-typography-level(18px, 26px, 500),
+  $headline-5: mat.define-typography-level(24px, 24px, 400),
+  $headline-6: mat.define-typography-level(18px, 24px, 500),
   $subtitle-1: mat.define-typography-level(14px, 21px, 600),
   $subtitle-2: mat.define-typography-level(12px, 18px, 500),
   $body-1: mat.define-typography-level(13px, 1.125em, 400),
