@@ -1,18 +1,16 @@
-## 15.0.0-beta.1
+## 15.0.0-beta.1(2023-10-06)
 ### Feature
 * New `ontimize` theme.
+* New mixin `ontimize-theme-all-component-color` to only generates the color styles now.
+* AppearanceService set/remove CSS class name `o-dark` in body tag when isDarkMode$ changes.
 ### Breaking changes
-
 * Renamed `ontimize-web-ngx/theming/themes/ontimize.scss` to `ontimize-web-ngx/theming/themes/ontimize-blue.scss` with old style.
-
+* Renamed `ontimize-web-ngx/theming/themes/implatform-fashion-default-theme.scss` to `ontimize-web-ngx/theming/themes/fashion.scss`
 * Mixins `fashion-mat-light-theme` and `fashion-mat-dark-theme`:
   - has been renamed to `o-mat-light-theme` and `o-mat-dark-theme`.
   - has been moved to `ontimize-web-ngx/theming/ontimize-styles.scss`.
-* Mixins `o-mat-light-theme` and `o-mat-dark-theme` has been moved to `ontimize-web-ngx/theming/ontimize-styles-v8.scss`.
-
-* Renamed `ontimize-web-ngx/theming/themes/implatform-fashion-default-theme.scss` to `ontimize-web-ngx/theming/themes/fashion.scss`
 * Mixin `o-material-theme` has been included in `ontimize-styles.scss``
-
+* Mixins `o-mat-light-theme` and `o-mat-dark-theme` has been moved to `ontimize-web-ngx/theming/ontimize-styles-v8.scss`.
 * Removed old themes based on material
   ```scss
   ontimize-web-ngx/theming/themes/mat-indigo-pink.scss
@@ -54,6 +52,11 @@ Now
 
 // Include ontimize styles
 @include ontimize-style.ontimize-theme-styles(theme.$theme);
+
+//Include dark styles option
+.o-dark {
+  @include ontimize-style.ontimize-theme-all-component-color(theme.$dark-theme);
+}
 
 // Propagate theme to screen styles definition.
 @include login.login-theme(theme.$theme);
