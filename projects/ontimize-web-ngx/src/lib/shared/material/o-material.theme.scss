@@ -22,10 +22,7 @@
     @include mat.all-component-colors($theme-or-color-config);
   }
 
-
   $typography: mat.get-typography-config($theme-or-color-config);
-  //Emit the CSS rules for these CSS classes and native elements
-  // @include mat.typography-hierarchy($typography);
 
   @include app-global-theme($theme-or-color-config);
   @include o-breadcrumb-theme($theme-or-color-config);
