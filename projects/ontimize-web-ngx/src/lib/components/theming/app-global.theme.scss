@@ -111,11 +111,16 @@
     .mat-mdc-dialog-container {
       .mat-mdc-dialog-title {
         border-bottom: 1px solid mat.get-color-from-palette($primary);
-
         .mat-icon {
           color: mat.get-color-from-palette($primary);
         }
       }
+      @if($typography){
+      .mat-mdc-dialog-title {
+        line-height: mat.font-size($typography, subtitle-1);
+        font-size: mat.font-size($typography, subtitle-1);
+      }
+    }
 
 
       .empty-filter-list {
