@@ -213,7 +213,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     }
   }
 
-  public quickFilterPlaceholder: string;
+  public quickFilterPlaceholder: string = ' ';
   /* end of inputs variables */
 
   /* outputs variables */
