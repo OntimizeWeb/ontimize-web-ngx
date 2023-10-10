@@ -1,3 +1,8 @@
+## 15.0.0-beta.2
+### Bug fixes
+* **o-table, o-list, o-grid**: Fixed that the fonts of the titles of the modal and the containers (o-row, o-column) had the font size prior to the migration to Angular 15 ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1296)
+* **o-table, o-list, o-grid**: Fixed the placeholder being shown in quickfilter ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1298)
+
 ## 15.0.0-beta.1(2023-10-06)
 The code related to **Ontimize themes** has been refactored with the aim of improving their configuration and performance, which implies the following changes
 
