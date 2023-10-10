@@ -112,7 +112,7 @@ export class OTranslateService {
       textTranslated = undefined;
     }
     if (!textTranslated) {
-      const bundle = CORE_TRANSLATIONS.MAP[this.defaultLocale] || CORE_TRANSLATIONS.MAP[this.ngxTranslateService.currentLang] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
+      const bundle = CORE_TRANSLATIONS.MAP[this.ngxTranslateService.currentLang] || CORE_TRANSLATIONS.MAP[this.defaultLocale] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
       if (bundle && bundle[text]) {
         textTranslated = bundle[text];
       } else {
