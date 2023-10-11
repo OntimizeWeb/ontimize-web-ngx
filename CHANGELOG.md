@@ -1,3 +1,8 @@
+## 8.14.2
+
+### Bug fixes
+* **o-translate**: Fixed a bug that caused applications to always translate into English if they did not find the language and not the language configured in defaultLocale ([#348ae21](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/348ae21)) Closes [#1304](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1304)
+
 ## 8.14.1 (2023-10-03)
 
 ### Bug fixes
