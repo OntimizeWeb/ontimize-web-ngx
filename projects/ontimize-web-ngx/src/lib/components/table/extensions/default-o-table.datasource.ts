@@ -310,7 +310,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   /** Returns a sorted copy of the database data. */
   protected getSortedData(data: any[]): any[] {
-    return this._sort.getSortedData(data);
+    const rendererData = this.getRenderedData(data);
+    return this._sort.getSortedData(rendererData);
   }
 
   /**
