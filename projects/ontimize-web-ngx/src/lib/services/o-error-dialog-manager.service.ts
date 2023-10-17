@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import type { ODialogConfig } from '../shared';
@@ -15,8 +15,7 @@ export class OErrorDialogManager {
 
   dialogRef: MatDialogRef<ODialogInternalComponent>;
 
-  constructor(protected injector: Injector, protected ng2Dialog: MatDialog) {
-    this.ng2Dialog = this.injector.get(MatDialog);
+  constructor(protected ng2Dialog: MatDialog) {
   }
   protected restart() {
     this.errorDialogSubscription = null;
