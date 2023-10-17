@@ -350,6 +350,14 @@ export class Util {
     return L;
 
   }
+  static isArrayEqual(array1: Array<any>, array2: Array<any>) {
+    if (array1.length !== array2.length) return false
+
+    array1.sort()
+    array2.sort()
+
+    return array1.every((elem, index) => elem === array2[index])
+  };
 
   static differenceArrays(array1: Array<any>, array2: Array<any>): Array<any> {
     const difference = array1.filter(obj => {
