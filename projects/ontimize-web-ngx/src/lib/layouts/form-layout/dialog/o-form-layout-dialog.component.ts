@@ -1,8 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
   Inject,
   Injector,
   ViewChild,
@@ -35,7 +33,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   title: string;
   data: any;
 
-  protected componentFactory: ComponentFactory<any>;
+  protected component;
   protected dialogService: DialogService;
 
   @ViewChild(OFormLayoutManagerContentDirective) contentDirective: OFormLayoutManagerContentDirective;
@@ -43,7 +41,6 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   constructor(
     public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,
     protected injector: Injector,
-    protected componentFactoryResolver: ComponentFactoryResolver,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     this.dialogService = injector.get(DialogService);
@@ -52,8 +49,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     }
     if (data.data) {
       this.data = data.data;
-      const component = data.data.component;
-      this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
+      this.component = data.data.component;;
       this.params = data.data.params;
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
@@ -64,10 +60,10 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   ngAfterViewInit() {
-    if (this.contentDirective && this.componentFactory) {
+    if (this.contentDirective && this.component) {
       const viewContainerRef = this.contentDirective.viewContainerRef;
       viewContainerRef.clear();
-      viewContainerRef.createComponent(this.componentFactory);
+      viewContainerRef.createComponent(this.component);
     }
   }
 

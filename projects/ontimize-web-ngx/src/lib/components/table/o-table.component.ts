@@ -9,9 +9,9 @@ import {
   ApplicationRef,
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver,
   ContentChild,
   ContentChildren,
+  createComponent,
   ElementRef,
   EventEmitter,
   forwardRef,
@@ -323,7 +323,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
-  portalHost: Array<DomPortalOutlet> = [];
+  portalHost = [];
   onDataLoadedCellRendererSubscription: Subscription;
 
   get diameterSpinner() {
@@ -672,9 +672,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     public injector: Injector,
     elRef: ElementRef,
     protected dialog: MatDialog,
-    private _viewContainerRef: ViewContainerRef,
     private appRef: ApplicationRef,
-    private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
@@ -1437,15 +1435,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
-      this.portalHost[rowIndex] = new DomPortalOutlet(
-        this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
-        this._componentFactoryResolver,
-        this.appRef,
-        this.injector
-      );
+      const expandedRowContainer = this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex));
 
-      const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
-      this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
+      // Detach existing portal if any
+      if (this.portalHost[rowIndex]) {
+        this.portalHost[rowIndex].detach();
+      }
+
+      // Attach new portal
+      const componentRef = createComponent(Component, {
+        environmentInjector: this.appRef.injector,
+        hostElement: expandedRowContainer,
+      });
+
+      this.appRef.attachView(componentRef.hostView);
+      this.portalHost[rowIndex] = componentRef;
+
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }

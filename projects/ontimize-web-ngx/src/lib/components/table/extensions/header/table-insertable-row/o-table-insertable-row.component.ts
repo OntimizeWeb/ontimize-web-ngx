@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmitter, forwardRef, Inject, Injector, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Inject, Injector, OnInit } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
@@ -63,8 +63,7 @@ export class OTableInsertableRowComponent implements OnInit {
 
   constructor(
     protected injector: Injector,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent,
-    protected resolver: ComponentFactoryResolver
+    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.snackBarService = this.injector.get(SnackBarService);
@@ -99,7 +98,7 @@ export class OTableInsertableRowComponent implements OnInit {
       .filter((col) => this.isColumnInsertable(col)).forEach(col => {
         const columnEditorType = col.editor ? col.editor.type : col.type;
         if (col.definition) {
-          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, this.resolver, col.definition.container, col.definition, false);
+          const editor: OBaseTableCellEditor = col.definition.buildCellEditor(columnEditorType, col.definition.container, col.definition, false);
           this.columnEditors[col.attr] = editor;
           let disabledCol = !this.enabled;
           if (!disabledCol) {

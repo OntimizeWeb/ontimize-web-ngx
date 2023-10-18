@@ -2,8 +2,6 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
   EventEmitter,
   forwardRef,
   Inject,
@@ -266,7 +264,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
-    protected resolver: ComponentFactoryResolver,
     protected injector: Injector
   ) {
   }
@@ -312,153 +309,151 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     if (!Util.isDefined(this.renderer) && Util.isDefined(this.type)) {
       const componentRef = renderersMapping[this.type];
       if (componentRef !== undefined) {
-        const factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(componentRef);
-        if (factory) {
-          const ref = this.container.createComponent(factory);
-          const newRenderer = ref.instance;
-          newRenderer.filterSource = this.filterSource;
-          newRenderer.filterFunction = this.filterFunction;
-          switch (this.type) {
-            case 'currency':
-              newRenderer.currencySymbol = this.currencySymbol;
-              newRenderer.currencySymbolPosition = this.currencySymbolPosition;
-              newRenderer.decimalSeparator = this.decimalSeparator;
-              newRenderer.minDecimalDigits = this.minDecimalDigits;
-              newRenderer.maxDecimalDigits = this.maxDecimalDigits;
-              newRenderer.grouping = this.grouping;
-              newRenderer.thousandSeparator = this.thousandSeparator;
-              break;
-            case 'date':
-              newRenderer.format = this.format;
-              break;
-            case 'time':
-              newRenderer.format = this.format;
-              break;
-            case 'integer':
-              newRenderer.grouping = this.grouping;
-              newRenderer.thousandSeparator = this.thousandSeparator;
-              break;
-            case 'boolean':
-              newRenderer.trueValue = this.trueValue;
-              newRenderer.falseValue = this.falseValue;
-              newRenderer.renderTrueValue = this.renderTrueValue;
-              newRenderer.renderFalseValue = this.renderFalseValue;
-              newRenderer.renderType = this.renderType;
-              newRenderer.booleanType = this.booleanType;
-              break;
-            case 'percentage':
-              newRenderer.valueBase = this.valueBase;
-            // eslint-disable-next-line no-fallthrough
-            case 'real':
-              newRenderer.decimalSeparator = this.decimalSeparator;
-              newRenderer.minDecimalDigits = this.minDecimalDigits;
-              newRenderer.maxDecimalDigits = this.maxDecimalDigits;
-              newRenderer.grouping = this.grouping;
-              newRenderer.thousandSeparator = this.thousandSeparator;
-              break;
-            case 'image':
-              newRenderer.imageType = this.imageType;
-              newRenderer.avatar = this.avatar;
-              newRenderer.emptyImage = this.emptyImage;
-              break;
-            case 'action':
-              newRenderer.icon = this.icon;
-              newRenderer.action = this.action;
-              newRenderer.text = this.text;
-              newRenderer.iconPosition = this.iconPosition;
-              newRenderer.onClick = this.onClick;
-              break;
-            case 'service':
-              newRenderer.entity = this.entity;
-              newRenderer.service = this.service;
-              newRenderer.columns = this.columns;
-              newRenderer.valueColumn = this.valueColumn;
-              newRenderer.parentKeys = this.parentKeys;
-              newRenderer.queryMethod = this.queryMethod;
-              newRenderer.serviceType = this.serviceType;
-              newRenderer.translate = this.translate;
-              break;
-            case 'translate':
-              newRenderer.translateArgsFn = this.translateArgsFn;
-              break;
-          }
-          this.registerRenderer(newRenderer);
+        let newRenderer;
+        const ref = this.container.createComponent(componentRef);
+        newRenderer = ref.instance;
+        newRenderer.filterSource = this.filterSource;
+        newRenderer.filterFunction = this.filterFunction;
+        switch (this.type) {
+          case 'currency':
+            newRenderer.currencySymbol = this.currencySymbol;
+            newRenderer.currencySymbolPosition = this.currencySymbolPosition;
+            newRenderer.decimalSeparator = this.decimalSeparator;
+            newRenderer.minDecimalDigits = this.minDecimalDigits;
+            newRenderer.maxDecimalDigits = this.maxDecimalDigits;
+            newRenderer.grouping = this.grouping;
+            newRenderer.thousandSeparator = this.thousandSeparator;
+            break;
+          case 'date':
+            newRenderer.format = this.format;
+            break;
+          case 'time':
+            newRenderer.format = this.format;
+            break;
+          case 'integer':
+            newRenderer.grouping = this.grouping;
+            newRenderer.thousandSeparator = this.thousandSeparator;
+            break;
+          case 'boolean':
+            newRenderer.trueValue = this.trueValue;
+            newRenderer.falseValue = this.falseValue;
+            newRenderer.renderTrueValue = this.renderTrueValue;
+            newRenderer.renderFalseValue = this.renderFalseValue;
+            newRenderer.renderType = this.renderType;
+            newRenderer.booleanType = this.booleanType;
+            break;
+          case 'percentage':
+            newRenderer.valueBase = this.valueBase;
+          // eslint-disable-next-line no-fallthrough
+          case 'real':
+            newRenderer.decimalSeparator = this.decimalSeparator;
+            newRenderer.minDecimalDigits = this.minDecimalDigits;
+            newRenderer.maxDecimalDigits = this.maxDecimalDigits;
+            newRenderer.grouping = this.grouping;
+            newRenderer.thousandSeparator = this.thousandSeparator;
+            break;
+          case 'image':
+            newRenderer.imageType = this.imageType;
+            newRenderer.avatar = this.avatar;
+            newRenderer.emptyImage = this.emptyImage;
+            break;
+          case 'action':
+            newRenderer.icon = this.icon;
+            newRenderer.action = this.action;
+            newRenderer.text = this.text;
+            newRenderer.iconPosition = this.iconPosition;
+            newRenderer.onClick = this.onClick;
+            break;
+          case 'service':
+            newRenderer.entity = this.entity;
+            newRenderer.service = this.service;
+            newRenderer.columns = this.columns;
+            newRenderer.valueColumn = this.valueColumn;
+            newRenderer.parentKeys = this.parentKeys;
+            newRenderer.queryMethod = this.queryMethod;
+            newRenderer.serviceType = this.serviceType;
+            newRenderer.translate = this.translate;
+            break;
+          case 'translate':
+            newRenderer.translateArgsFn = this.translateArgsFn;
+            break;
         }
+        this.registerRenderer(newRenderer);
+
       }
     }
   }
 
-  buildCellEditor(type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any, registerInColumn: boolean = true) {
+  buildCellEditor(type: string, container: ViewContainerRef, propsOrigin: any, registerInColumn: boolean = true) {
     let editor;
     const componentRef = editorsMapping[type] || editorsMapping.text;
     if (componentRef === undefined) {
       return editor;
     }
-    const factory: ComponentFactory<any> = resolver.resolveComponentFactory(componentRef);
-    if (factory) {
-      const ref = container.createComponent(factory);
-      editor = ref.instance;
-      if (propsOrigin !== undefined) {
-        switch (type) {
-          case 'date':
-            editor.format = propsOrigin.format;
-            editor.locale = propsOrigin.locale;
-            editor.oStartView = propsOrigin.oStartView;
-            editor.oMinDate = propsOrigin.oMinDate;
-            editor.oMaxDate = propsOrigin.oMaxDate;
-            editor.oTouchUi = propsOrigin.oTouchUi;
-            editor.oStartAt = propsOrigin.oStartAt;
-            editor.filterDate = propsOrigin.filterDate;
-            editor.dateValueType = propsOrigin.dateValueType;
-            break;
-          case 'time':
-            editor.oDateFormat = propsOrigin.oDateFormat;
-            editor.oHourFormat = propsOrigin.oHourFormat;
-            editor.oDateLocale = propsOrigin.oDateLocale;
-            editor.oMinDate = propsOrigin.oMinDate;
-            editor.oMaxDate = propsOrigin.oMaxDate;
 
-            editor.oTouchUi = propsOrigin.oTouchUi;
-            editor.oDateStartAt = propsOrigin.oDateStartAt;
-            editor.oDateTextInputEnabled = propsOrigin.oDateTextInputEnabled;
+    const ref = container.createComponent(componentRef);
+    editor = ref.instance;
+    if (propsOrigin !== undefined) {
+      switch (type) {
+        case 'date':
+          editor.format = propsOrigin.format;
+          editor.locale = propsOrigin.locale;
+          editor.oStartView = propsOrigin.oStartView;
+          editor.oMinDate = propsOrigin.oMinDate;
+          editor.oMaxDate = propsOrigin.oMaxDate;
+          editor.oTouchUi = propsOrigin.oTouchUi;
+          editor.oStartAt = propsOrigin.oStartAt;
+          editor.filterDate = propsOrigin.filterDate;
+          editor.dateValueType = propsOrigin.dateValueType;
+          break;
+        case 'time':
+          editor.oDateFormat = propsOrigin.oDateFormat;
+          editor.oHourFormat = propsOrigin.oHourFormat;
+          editor.oDateLocale = propsOrigin.oDateLocale;
+          editor.oMinDate = propsOrigin.oMinDate;
+          editor.oMaxDate = propsOrigin.oMaxDate;
 
-            editor.oHourMin = propsOrigin.oHourMin;
-            editor.oHourMax = propsOrigin.oHourMax;
-            editor.oHourTextInputEnabled = propsOrigin.oHourTextInputEnabled;
-            editor.oHourPlaceholder = propsOrigin.oHourPlaceholder;
-            editor.oDatePlaceholder = propsOrigin.oDatePlaceholder;
-            break;
-          case 'boolean':
-            editor.booleanType = propsOrigin.booleanType;
-            editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
-            editor.autoCommit = propsOrigin.autoCommit;
-            editor.trueValue = propsOrigin.trueValue;
-            editor.falseValue = propsOrigin.falseValue;
-            break;
-          case 'integer':
-          case 'percentage':
-          case 'currency':
-          case 'real':
-            editor.min = propsOrigin.min;
-            editor.max = propsOrigin.max;
-            editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
-            break;
-          case 'image':
-            break;
-          default:
-            break;
-        }
-        editor.olabel = propsOrigin.olabel;
-        editor.type = propsOrigin.type;
+          editor.oTouchUi = propsOrigin.oTouchUi;
+          editor.oDateStartAt = propsOrigin.oDateStartAt;
+          editor.oDateTextInputEnabled = propsOrigin.oDateTextInputEnabled;
+
+          editor.oHourMin = propsOrigin.oHourMin;
+          editor.oHourMax = propsOrigin.oHourMax;
+          editor.oHourTextInputEnabled = propsOrigin.oHourTextInputEnabled;
+          editor.oHourPlaceholder = propsOrigin.oHourPlaceholder;
+          editor.oDatePlaceholder = propsOrigin.oDatePlaceholder;
+          break;
+        case 'boolean':
+          editor.booleanType = propsOrigin.booleanType;
+          editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
+          editor.autoCommit = propsOrigin.autoCommit;
+          editor.trueValue = propsOrigin.trueValue;
+          editor.falseValue = propsOrigin.falseValue;
+          break;
+        case 'integer':
+        case 'percentage':
+        case 'currency':
+        case 'real':
+          editor.min = propsOrigin.min;
+          editor.max = propsOrigin.max;
+          editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
+          break;
+        case 'image':
+          break;
+        default:
+          break;
       }
-      editor.registerInColumn = registerInColumn;
+      editor.olabel = propsOrigin.olabel;
+      editor.type = propsOrigin.type;
     }
+    editor.registerInColumn = registerInColumn;
+
     return editor;
   }
 
   protected createEditor() {
     if (!Util.isDefined(this.editor) && this.editable) {
-      const newEditor = this.buildCellEditor(this.type, this.resolver, this.container, this);
+      const newEditor = this.buildCellEditor(this.type, this.container, this);
       if (newEditor) {
         newEditor.orequired = this.orequired;
         newEditor.showPlaceHolder = this.showPlaceHolder;
