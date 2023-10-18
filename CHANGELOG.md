@@ -1,7 +1,13 @@
+## 8.14.2 (2023-10-18)
+
+### Bug fixes
+* **o-translate**: Fixed a bug that caused applications to always translate into English if they did not find the language and not the language configured in defaultLocale ([348ae21](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/348ae21)) Closes [#1304](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1304)
+* **o-table**: Fixed translation type columns not sorting by translation value.([302dfaa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/302dfaa)) Closes [#1305](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1305)
+
 ## 8.14.1 (2023-10-03)
 
 ### Bug fixes
-* **o-table**: Fixed a bug that prevented exporting tables with action type columns ([#4392770](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4392770)) Closes [#1283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1283)
+* **o-table**: Fixed a bug that prevented exporting tables with action type columns ([4392770](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4392770)) Closes [#1283](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1283)
 
 ## 8.14.0 (2023-07-28)
 ### Features

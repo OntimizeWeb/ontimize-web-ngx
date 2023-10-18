@@ -314,7 +314,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     return route;
   }
 
-  getKeys() {
+  getKeys(): string[] {
     return this.keysArray;
   }
 
