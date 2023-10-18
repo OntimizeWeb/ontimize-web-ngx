@@ -35,8 +35,6 @@ export class OFormContainerComponent implements AfterViewInit {
   protected form: OFormBase;
   protected formMananger: OFormLayoutManagerBase;
 
-  constructor() { }
-
   ngAfterViewInit() {
     this.breadcrumb = this.breadcrumb && this.form && !this.formMananger;
     if (this.breadcrumb) {

@@ -77,8 +77,6 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   @ContentChildren(forwardRef(() => OButtonToggleComponent))
   protected _children: QueryList<OButtonToggleComponent>;
 
-  constructor() { }
-
   ngOnInit(): void {
     if (!Util.isDefined(this.name)) {
       this.name = this.oattr;
