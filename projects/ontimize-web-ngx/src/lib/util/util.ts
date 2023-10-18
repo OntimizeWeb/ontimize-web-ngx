@@ -351,6 +351,10 @@ export class Util {
 
   }
 
+  static isArrayEqual(array1: Array<any>, array2: Array<any>) {
+    return array1.length === array2.length && array1.every((v, i) => v === array2[i])
+  };
+
   static differenceArrays(array1: Array<any>, array2: Array<any>): Array<any> {
     const difference = array1.filter(obj => {
       return !array2.some(obj2 => {

@@ -3157,9 +3157,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       '';
   }
 
-  protected queryCellRenderers(): Observable<any> {
+  public queryCellRenderers(): Observable<any> {
     const quickFilterValue = this.getQuickFilterValue();
-    if (Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) {
+
+    if ((Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) || this.sortColArray.length > 0) {
       const queries = this.oTableOptions.columns
         .filter(oCol => oCol.searching && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))
         .map(oCol => (oCol.renderer as any).queryAllData());
@@ -3181,6 +3182,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
+  // onMatSortChange
   public filterData(value?: string, loadMore?: boolean): void {
     //
   }
