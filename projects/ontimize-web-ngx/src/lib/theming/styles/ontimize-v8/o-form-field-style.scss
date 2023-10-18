@@ -1,10 +1,21 @@
 @use '@angular/material'as mat;
-
+@use 'variables.scss';
 
 .mat-mdc-form-field {
 
   @include mat.form-field-density(-4);
 
+  &.mat-form-field-appearance-outline .mdc-notched-outline {
+    .mdc-notched-outline__leading {
+      border-top-left-radius: variables.$border-radius;
+      border-bottom-left-radius: variables.$border-radius;
+    }
+
+    .mdc-notched-outline__trailing {
+      border-top-right-radius: variables.$border-radius;
+      border-bottom-right-radius: variables.$border-radius;
+    }
+  }
 
   &.icon-field .mat-mdc-form-field-icon-suffix .icon-btn,
   &.icon-field .mat-mdc-form-field-icon-suffix .mat-icon-button,
