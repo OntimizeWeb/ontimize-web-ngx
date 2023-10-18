@@ -12,10 +12,11 @@ import { Util } from '../util/util';
 export class OErrorDialogManager {
 
   protected errorDialogSubscription: Promise<boolean>;
-  protected ng2Dialog: MatDialog;
-  dialogRef: MatDialogRef<ODialogInternalComponent>;
-  constructor() { }
 
+  dialogRef: MatDialogRef<ODialogInternalComponent>;
+
+  constructor(protected ng2Dialog: MatDialog) {
+  }
   protected restart() {
     this.errorDialogSubscription = null;
   }
