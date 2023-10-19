@@ -1,3 +1,8 @@
+## 8.14.3 (2023-10-19)
+
+### Bug fixes
+* **o-table**: Fixed that the message that there are no results was not displayed when searching.([6935d5c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6935d5c)) Closes [#1319](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1319)
+
 ## 8.14.2 (2023-10-18)
 
 ### Bug fixes
