@@ -1,10 +1,12 @@
 ## 15.0.0-beta.2
 ### Bug fixes
-* Fixed that the fonts of the titles of the modal and the containers (o-row, o-column) had the font size prior to the migration to Angular 15 ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1296)
+* Fixed that the fonts of the titles of the modal and the containers (o-row, o-column) had the font size prior to the migration to Angular 15 ([e6d2532](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e6d2532))  Closes [#1296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1296)
 * **o-table, o-list, o-grid**: Fixed the placeholder being shown in quickfilter ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1298)
 * **o-user-info**: Exported `o-user-info-configuration` directive ([dc6820f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc6820f))  Closes [#1307](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1307)
 * **o-table**:
   - Fix appearance outline in table quickfilter([1906d9d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1906d9d))  Closes [#1315](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1315)
+* **o-form-layout-manager**: Fixed a new detail not opening from the detail in mode=tab.([3618287](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3618287))  Closes [#1316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1316)
+
 
 ## 15.0.0-beta.1(2023-10-06)
 The code related to **Ontimize themes** has been refactored with the aim of improving their configuration and performance, which implies the following changes
