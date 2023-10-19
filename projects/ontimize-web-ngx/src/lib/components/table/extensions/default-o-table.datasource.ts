@@ -132,16 +132,16 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return merge(...displayDataChanges).pipe(
       map((x: any) => {
         let data = Object.assign([], this._database.data);
-        if (Array.isArray(data) && data.length > 0) {
-          if (x instanceof OnRangeChangeVirtualScroll) {
-            // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
-            data = this.getVirtualScrollData(this.renderedData, x);
-          } else {
-            /*
-              it is necessary to first calculate the calculated columns and
-              then filter and sort the data
-            */
 
+        if (x instanceof OnRangeChangeVirtualScroll) {
+          // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
+          data = this.getVirtualScrollData(this.renderedData, x);
+        } else {
+          /*
+            it is necessary to first calculate the calculated columns and
+            then filter and sort the data
+          */
+          if (Array.isArray(data) && data.length > 0) {
             if (this.existsAnyCalculatedColumn()) {
               data = this.getColumnCalculatedData(data);
             }
@@ -151,33 +151,33 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
               data = this.getQuickFilterData(data);
               data = this.getSortedData(data);
             }
-
-            this.filteredData = Object.assign([], data);
-
-            if (this.table.pageable) {
-              const totalRecordsNumber = this.table.getTotalRecordsNumber();
-              this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
-            } else {
-              this.resultsLength = data.length;
-              data = this.getPaginationData(data);
-            }
-            if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
-              data = this.getGroupedData(data);
-            }
-
-            this.renderedData = data;
-
-            /*
-              when the data is very large, the application crashes so it gets a limited range of data the first time
-              because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll
-            */
-            if (this.table.virtualScrollViewport && !this._paginator) {
-              data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
-            }
-
-            this.aggregateData = this.getAggregatesData(this.renderedData);
           }
+          this.filteredData = Object.assign([], data);
+
+          if (this.table.pageable) {
+            const totalRecordsNumber = this.table.getTotalRecordsNumber();
+            this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+          } else {
+            this.resultsLength = data.length;
+            data = this.getPaginationData(data);
+          }
+          if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
+            data = this.getGroupedData(data);
+          }
+
+          this.renderedData = data;
+
+          /*
+            when the data is very large, the application crashes so it gets a limited range of data the first time
+            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll
+          */
+          if (this.table.virtualScrollViewport && !this._paginator) {
+            data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+          }
+
+          this.aggregateData = this.getAggregatesData(this.renderedData);
         }
+
         return data;
       }));
   }
