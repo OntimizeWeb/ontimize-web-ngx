@@ -298,11 +298,7 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
 }
 
 @mixin ontimize-theme-all-component-color($theme-or-color-config) {
-  $color: map.get($theme-or-color-config, color);
-  @include ontimize-theme-styles((color: $color,
-      typography: null,
-      density: null,
-    ));
+  @include ontimize-style.ontimize-theme-all-component-color($theme-or-color-config);
 }
 
 @mixin ontimize-theme-styles($theme-or-color-config) {
@@ -693,6 +689,7 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
       }
 
       @if($typography) {
+
         >.o-container-title,
         >.mat-expansion-panel-header .o-container-title {
           span {

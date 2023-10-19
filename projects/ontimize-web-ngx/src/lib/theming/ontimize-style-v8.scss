@@ -305,3 +305,11 @@ $app-background-color: #eaeaea;
     background-color: mat.get-color-from-palette($background, level-1);
   }
 }
+
+@mixin ontimize-theme-all-component-color($theme-or-color-config) {
+  $color: map.get($theme-or-color-config, color);
+  @include ontimize-theme-styles((color: $color,
+      typography: null,
+      density: null,
+    ));
+}
