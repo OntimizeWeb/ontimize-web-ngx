@@ -23,9 +23,9 @@ import {
   SimpleChange,
   TemplateRef,
   ViewChild,
+  ViewContainerRef,
   ViewEncapsulation,
   ViewRef,
-  createComponent,
   forwardRef
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -37,6 +37,7 @@ import moment from 'moment';
 import { BehaviorSubject, Observable, Subscription, combineLatest, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
 import type { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import type { OTableButton } from '../../interfaces/o-table-button.interface';
@@ -670,6 +671,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     public injector: Injector,
     elRef: ElementRef,
     protected dialog: MatDialog,
+    private _viewContainerRef: ViewContainerRef,
     private appRef: ApplicationRef,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
@@ -1433,22 +1435,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
-      const expandedRowContainer = this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex));
+      this.portalHost[rowIndex] = new DomPortalOutlet(
+        this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
+        null,
+        this.appRef,
+        this.injector
+      );
 
-      // Detach existing portal if any
-      if (this.portalHost[rowIndex]) {
-        this.portalHost[rowIndex].detach();
-      }
-
-      // Attach new portal
-      const componentRef = createComponent(Component, {
-        environmentInjector: this.appRef.injector,
-        hostElement: expandedRowContainer,
-      });
-
-      this.appRef.attachView(componentRef.hostView);
-      this.portalHost[rowIndex] = componentRef;
-
+      const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
+      this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
       const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
