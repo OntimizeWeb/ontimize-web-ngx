@@ -322,7 +322,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableRowExpandable: OTableRowExpandableComponent;
 
   _filterColumns: Array<OFilterColumn>;
-  portalHost = [];
+  portalHost: Array<DomPortalOutlet> = [];
   onDataLoadedCellRendererSubscription: Subscription;
 
   get diameterSpinner() {
