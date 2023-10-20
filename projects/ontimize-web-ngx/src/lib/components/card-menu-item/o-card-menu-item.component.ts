@@ -3,8 +3,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
   ContentChildren,
   ElementRef,
   Injector,
@@ -90,7 +88,6 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
     protected injector: Injector,
     protected router: Router,
     protected actRoute: ActivatedRoute,
-    protected resolver: ComponentFactoryResolver,
     protected cd: ChangeDetectorRef,
     protected elRef: ElementRef
   ) {
@@ -102,8 +99,7 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (this.detailComponentContainer && this.detailComponent) {
-      const factory: ComponentFactory<any> = this.resolver.resolveComponentFactory(this.detailComponent);
-      const ref = this.detailComponentContainer.createComponent(factory);
+      const ref = this.detailComponentContainer.createComponent(this.detailComponent);
       if (this.detailComponentInputs && ref.instance) {
         const keys = Object.keys(this.detailComponentInputs);
         for (let i = 0, len = keys.length; i < len; i++) {

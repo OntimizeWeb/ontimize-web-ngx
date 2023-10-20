@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
+import { ViewContainerRef } from '@angular/core';
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 
 import { OTableComponent } from '../components/table/o-table.component';
@@ -34,7 +34,7 @@ export interface OTableColumn {
   tooltipFunction: (rowData: any) => any;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
   getSQLType: () => number;
-  buildCellEditor: (type: string, resolver: ComponentFactoryResolver, container: ViewContainerRef, propsOrigin: any, registerInColumn?:boolean) => any;
+  buildCellEditor: (type: string, container: ViewContainerRef, propsOrigin: any, registerInColumn?: boolean) => any;
   registerEditor: (editor: any) => void;
   registerRenderer: (editor: any) => void;
 }

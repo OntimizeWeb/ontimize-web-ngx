@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ComponentFactoryResolver,
   ElementRef,
   forwardRef,
   Inject,
@@ -72,7 +71,6 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
   constructor(
     protected injector: Injector,
     protected elementRef: ElementRef,
-    protected componentFactoryResolver: ComponentFactoryResolver,
     public renderer: Renderer2,
     @Inject(forwardRef(() => OFormLayoutManagerBase)) public formLayoutManager: OFormLayoutManagerBase
   ) {
@@ -133,11 +131,11 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
       this.contentDirective.viewContainerRef.clear();
       return;
     }
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.data.component);
-    if (this.contentDirective && componentFactory) {
+    const component = this.data.component;
+    if (this.contentDirective && component) {
       const viewContainerRef = this.contentDirective.viewContainerRef;
       viewContainerRef.clear();
-      viewContainerRef.createComponent(componentFactory);
+      viewContainerRef.createComponent(component);
     }
   }
 

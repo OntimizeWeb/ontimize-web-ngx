@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, forwardRef, Inject, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector } from '@angular/core';
 
 import { OTableColumnCalculated } from '../../../../interfaces/o-table-column-calculated.interface';
 import { OperatorFunction } from '../../../../types/operation-function.type';
@@ -32,9 +32,8 @@ export class OTableColumnCalculatedComponent extends OTableColumnComponent imple
 
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
-    protected resolver: ComponentFactoryResolver,
     protected injector: Injector) {
-    super(table, resolver, injector);
+    super(table, injector);
 
   }
 
