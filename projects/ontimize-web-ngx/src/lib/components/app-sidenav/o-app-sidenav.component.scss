@@ -192,11 +192,11 @@ $transition-duration: 500ms;
         .o-app-sidenav-menu-group,
         .o-app-sidenav-menu-item {
           a {
-            // width: $sidenav-closed-width - $margin-left-buttom;
-            // max-width: $sidenav-closed-width - $margin-left-buttom;
-            // min-width: $sidenav-closed-width - $margin-left-buttom;
-            // padding-left: 4px;
-            // padding-right: 12px;
+            width: $sidenav-closed-width - $margin-left-buttom;
+            max-width: $sidenav-closed-width - $margin-left-buttom;
+            min-width: $sidenav-closed-width - $margin-left-buttom;
+            padding-left: 4px;
+            padding-right: 12px;
           }
 
           &:not([disabled=true]) {
@@ -239,7 +239,8 @@ $transition-duration: 500ms;
             line-height: 48px;
             height: auto;
             font-size: 14px;
-            >.mat-icon{
+
+            >.mat-icon {
               vertical-align: baseline;
             }
           }
