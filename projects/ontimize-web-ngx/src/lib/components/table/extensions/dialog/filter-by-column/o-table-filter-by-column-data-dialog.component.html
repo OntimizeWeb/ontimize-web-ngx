@@ -1,10 +1,10 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }}: {{ column.title | oTranslate }}</span>
-<div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between stretch" class="dialog-list-container">
+<div mat-dialog-content class="dialog-list-container">
   <div fxLayout="column" class="content-wrapper" [class.content-wrapper-fixed-dimension]="getFixedDimensionClass()">
     <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)" *ngIf="isDefaultFilter | async">
       {{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}
     </mat-slide-toggle>
-    <div fxFlex *ngIf="!(isCustomFilter | async);else customFilterTemplate" fxLayout="column">
+    <div fxFill *ngIf="!(isCustomFilter | async);else customFilterTemplate" fxLayout="column">
       <mat-form-field class="hinted">
         <mat-icon matPrefix svgIcon="ontimize:search"></mat-icon>
         <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
@@ -31,8 +31,7 @@
         </span>
       </ng-template>
 
-      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList fxFlex fxLayout="column" class="select-values-list"
-        (selectionChange)="onSelect($event)">
+      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList class="select-values-list" (selectionChange)="onSelect($event)">
         <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before" [selected]="record.selected"
           [value]="record">
           <ng-container *ngIf="!column.renderer">
