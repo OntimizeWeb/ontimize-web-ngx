@@ -3,7 +3,7 @@
 
 .mat-mdc-form-field {
 
-  @include mat.form-field-density(-4);
+  @include mat.form-field-density(-2);
 
   &.mat-form-field-appearance-outline .mdc-notched-outline {
     .mdc-notched-outline__leading {
@@ -51,13 +51,13 @@
           height: auto;
         }
       }
-
-      &:not(.mdc-text-field--outlined) {
-        .mat-mdc-form-field-infix {
-          min-height: auto;
-          padding-top: 14px;
-        }
-      }
     }
+
+  }
+
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix,
+  .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+    padding-bottom: 4px;
+    padding-top: 18px;
   }
 }
