@@ -1,4 +1,6 @@
 ## 15.0.0-beta.2
+### Features
+* * New mixin `ontimize-theme-all-component-color` to only generates the color styles in ontimize-styles-v8.scss.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1331](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1331)
 
 ### Bug fixes
 * Fixed that the fonts of the titles of the modal and the containers (o-row, o-column) had the font size prior to the migration to Angular 15 ([e6d2532](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e6d2532))  Closes [#1296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1296)
