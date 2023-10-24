@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  Injector,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
@@ -30,8 +23,10 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   params: object;
   urlSegments: any[];
   label: string;
-  title: string;
+  title: string = 'LAYOUT_MANANGER.DIALOG_TITLE';
   data: any;
+  dialogTitleSeparator: string;
+
 
   protected component;
   protected dialogService: DialogService;
@@ -44,7 +39,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     this.dialogService = injector.get(DialogService);
-    if (data.title) {
+    if (typeof data.title !== 'undefined') {
       this.title = data.title;
     }
     if (data.data) {
@@ -53,6 +48,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
       this.params = data.data.params;
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
+      this.dialogTitleSeparator = data.dialogTitleSeparator
     }
     if (data.layoutManagerComponent) {
       this.formLayoutManager = data.layoutManagerComponent;
@@ -68,11 +64,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   updateNavigation(data: any) {
-    let label = this.formLayoutManager.getLabelFromData(data);
-    if (label && label.length) {
-      label = ': ' + label;
-    }
-    this.label = label;
+    this.label = this.formLayoutManager.getLabelFromData(data);
   }
 
   updateActiveData(data: any) {

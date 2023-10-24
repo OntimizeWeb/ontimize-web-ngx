@@ -58,7 +58,8 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'dialogHeight: dialog-height',
   'dialogMinHeight: dialog-min-height',
   'dialogMaxHeight dialog-max-height',
-  'dialogClass: dialog-class'
+  'dialogClass: dialog-class',
+  'dialogTitleSeparator: dialog-title-separator'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -143,6 +144,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   public dialogMinHeight: string;
   public dialogMaxHeight: string;
   public dialogClass: string = '';
+  public dialogTitleSeparator = ':';
 
   @ViewChild('tabGroup')
   public oTabGroup: OFormLayoutManagerMode;
@@ -214,6 +216,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     if (value.hasOwnProperty('separator')) {
       this.separator = value['separator'];
+    }
+    if (value.hasOwnProperty('dialogTitleSeparator')) {
+      this.dialogTitleSeparator = value['dialogTitleSeparator'];
     }
   }
 
@@ -434,7 +439,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       data: {
         data: detailComp,
         layoutManagerComponent: this,
-        title: dialogOptions.title || this.title,
+        title: (this.title || dialogOptions.title),
+        dialogTitleSeparator: this.dialogTitleSeparator
       },
       width: dialogOptions.width || this.dialogWidth,
       minWidth: dialogOptions.minWidth || this.dialogMinWidth,
