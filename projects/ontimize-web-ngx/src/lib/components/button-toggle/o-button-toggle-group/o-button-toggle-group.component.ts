@@ -1,8 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
   ContentChildren,
   EventEmitter,
   forwardRef,
@@ -32,14 +30,14 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP = [
 ];
 
 @Component({
-    selector: 'o-button-toggle-group',
-    templateUrl: './o-button-toggle-group.component.html',
-    inputs: DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP,
-    outputs: DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP,
-    encapsulation: ViewEncapsulation.None,
-    host: {
-        '[class.o-button-toggle-group]': 'true'
-    }
+  selector: 'o-button-toggle-group',
+  templateUrl: './o-button-toggle-group.component.html',
+  inputs: DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP,
+  outputs: DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-button-toggle-group]': 'true'
+  }
 })
 export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
 
@@ -79,8 +77,6 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   @ContentChildren(forwardRef(() => OButtonToggleComponent))
   protected _children: QueryList<OButtonToggleComponent>;
 
-  constructor(protected resolver: ComponentFactoryResolver) { }
-
   ngOnInit(): void {
     if (!Util.isDefined(this.name)) {
       this.name = this.oattr;
@@ -93,10 +89,9 @@ export class OButtonToggleGroupComponent implements AfterViewInit, OnInit {
   }
 
   protected buildChildren(): void {
-    const factory: ComponentFactory<OButtonToggleComponent> = this.resolver.resolveComponentFactory(OButtonToggleComponent);
     this._viewContainerRef.clear();
     const childList = this._children.map((child) => {
-      const componentRef = this._viewContainerRef.createComponent(factory);
+      const componentRef = this._viewContainerRef.createComponent(OButtonToggleComponent);
       componentRef.instance.oattr = child.oattr;
       componentRef.instance.label = child.label;
       componentRef.instance.icon = child.icon;

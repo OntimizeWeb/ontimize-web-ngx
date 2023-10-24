@@ -17,9 +17,6 @@
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
 
-  /* outline appearance */
-  $border-radius: 2px;
-
   .mat-mdc-form-field {
     &.mat-form-field-disabled.accent {
       @include icon-color-mixin(mat.get-color-from-palette($accent, 0.42));
@@ -41,7 +38,7 @@
       color: mat.get-color-from-palette($foreground, disabled-button);
     }
 
-    &.mat-form-field-appearance-ontimize.read-only{
+    &.mat-form-field-appearance-ontimize.read-only {
 
       .mat-mdc-select-disabled .mat-mdc-select-value {
         color: inherit;
@@ -60,14 +57,6 @@
       color: mat.get-color-from-palette($warn);
     }
 
-    /* OUTLINE APPEARANCE */
-    &.mat-form-field-appearance-outline .mdc-text-field--outlined .mdc-notched-outline {
-
-      .mdc-notched-outline__leading,
-      .mdc-notched-outline__trailing {
-        border-radius: $border-radius 0 0 $border-radius;
-      }
-    }
   }
 
   input:not([type]):disabled,
@@ -90,9 +79,11 @@
   }
 
   .o-tooltip.o-mat-error {
-    background: mat.get-color-from-palette($primary, default-contrast);
-    border: 1px solid mat.get-color-from-palette($warn);
-    color: mat.get-color-from-palette($warn);
+    .mdc-tooltip__surface {
+      background: mat.get-color-from-palette($primary, default-contrast);
+      border: 1px solid mat.get-color-from-palette($warn);
+      color: mat.get-color-from-palette($warn);
+    }
   }
 
   /* CHECKBOX */

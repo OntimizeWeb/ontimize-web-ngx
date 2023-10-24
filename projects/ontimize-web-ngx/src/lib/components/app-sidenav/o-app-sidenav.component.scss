@@ -191,14 +191,6 @@ $transition-duration: 500ms;
 
         .o-app-sidenav-menu-group,
         .o-app-sidenav-menu-item {
-          a {
-            width: $sidenav-closed-width - $margin-left-buttom;
-            max-width: $sidenav-closed-width - $margin-left-buttom;
-            min-width: $sidenav-closed-width - $margin-left-buttom;
-            padding-left: 4px;
-            padding-right: 12px;
-          }
-
           &:not([disabled=true]) {
             a.o-app-sidenav-viewer-sidenav-item-selected {
               padding: 0 8px;
@@ -239,8 +231,13 @@ $transition-duration: 500ms;
             line-height: 48px;
             height: auto;
             font-size: 14px;
-            >.mat-icon{
-              vertical-align: baseline;
+
+
+            >.mat-icon {
+              vertical-align: middle;
+              height: 24px;
+              width: 24px;
+              font-size: 24px;
             }
           }
         }
@@ -275,6 +272,10 @@ $transition-duration: 500ms;
                 font-size: 12px;
                 line-height: 40px;
                 height: 40px;
+
+                .mat-mdc-button-touch-target {
+                  height: 40px;
+                }
               }
             }
           }
@@ -285,6 +286,10 @@ $transition-duration: 500ms;
           line-height: 40px;
           height: 40px;
 
+          .mat-mdc-button-touch-target {
+            height: 40px;
+          }
+
           +.o-app-sidenav-menugroup-items-container {
 
             .o-app-sidenav-menu-group,
@@ -293,6 +298,10 @@ $transition-duration: 500ms;
                 font-size: 11px;
                 line-height: 40px;
                 height: 40px;
+
+                .mat-mdc-button-touch-target {
+                  height: 40px;
+                }
 
                 .mat-icon {
                   font-size: 20px;

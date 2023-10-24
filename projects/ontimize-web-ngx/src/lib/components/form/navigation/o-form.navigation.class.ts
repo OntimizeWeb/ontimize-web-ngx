@@ -373,7 +373,7 @@ export class OFormNavigationClass {
         route.push(navData.getInsertFormRoute());
       } else {
         extras.relativeTo = this.actRoute;
-        route = ['../' + Codes.DEFAULT_INSERT_ROUTE];
+        route = [Codes.DEFAULT_INSERT_ROUTE];
         if (this.formLayoutManager && this.formLayoutManager.isTabMode()) {
           extras.queryParams = {};
           extras.queryParams[Codes.INSERTION_MODE] = 'true';
