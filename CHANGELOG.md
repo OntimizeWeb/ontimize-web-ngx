@@ -1,6 +1,6 @@
 ## 15.0.0-beta.2(2023-10-24)
 ### Features
-* * New mixin `ontimize-theme-all-component-color` to only generates the color styles in ontimize-styles-v8.scss.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1331](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1331)
+* New mixin `ontimize-theme-all-component-color` to only generates the color styles in ontimize-styles-v8.scss.([9c89f8c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c89f8c))  Closes [#1331](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1331)
 * **o-form-layout-manager,o-form-layout-dialog-options**: New input `dialog-title-separator`.([ecdcf28](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecdcf28))  Closes [#1338](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1338)
 
 ### Bug fixes
