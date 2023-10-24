@@ -132,6 +132,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return merge(...displayDataChanges).pipe(
       map((x: any) => {
         let data = Object.assign([], this._database.data);
+
         if (x instanceof OnRangeChangeVirtualScroll) {
           // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
           data = this.getVirtualScrollData(this.renderedData, x);
@@ -140,17 +141,17 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
             it is necessary to first calculate the calculated columns and
             then filter and sort the data
           */
+          if (Array.isArray(data) && data.length > 0) {
+            if (this.existsAnyCalculatedColumn()) {
+              data = this.getColumnCalculatedData(data);
+            }
 
-          if (this.existsAnyCalculatedColumn()) {
-            data = this.getColumnCalculatedData(data);
+            if (!this.table.pageable) {
+              data = this.getColumnValueFilterData(data);
+              data = this.getQuickFilterData(data);
+              data = this.getSortedData(data);
+            }
           }
-
-          if (!this.table.pageable) {
-            data = this.getColumnValueFilterData(data);
-            data = this.getQuickFilterData(data);
-            data = this.getSortedData(data);
-          }
-
           this.filteredData = Object.assign([], data);
 
           if (this.table.pageable) {
@@ -176,6 +177,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
           this.aggregateData = this.getAggregatesData(this.renderedData);
         }
+
         return data;
       }));
   }
@@ -310,8 +312,30 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   /** Returns a sorted copy of the database data. */
   protected getSortedData(data: any[]): any[] {
-    return this._sort.getSortedData(data);
+    const rendererData = this.getDataToSort(data);
+    const sortedData = this._sort.getSortedData(rendererData);
+
+    const tableKeys = this.table.getKeys();
+    const originalDataSorted = [];
+
+    sortedData.forEach(sortedElement => {
+      const keysValuesInSortData = tableKeys.map(element => sortedElement[element]);
+
+      let i = 0;
+      let found = false;
+      while (i < data.length && !found) {
+        const keysValuesInData = tableKeys.map(element => data[i][element]);
+        if (Util.isArrayEqual(keysValuesInSortData, keysValuesInData)) {
+          originalDataSorted.push(data[i]);
+          found = true;
+        }
+        i++;
+      }
+    });
+    return originalDataSorted;
+
   }
+
 
   /**
    * Returns the data the table stores. No filters are applied.
@@ -354,6 +378,26 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       const obj = {};
       visibleColumns.forEach((oCol: OColumn) => {
         const useRenderer = oCol.renderer && oCol.renderer.getCellData;
+        obj[oCol.attr] = useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+      });
+      return obj;
+    });
+  }
+  public getDataToSort(data: any[]): any[] {
+
+    const sortColumns = this._tableOptions.columns.filter(oCol => oCol.visible && this._sort.activeArray.map(x => x.id).indexOf(oCol.attr) > -1);
+    const existColumnToTrasformToSort = sortColumns.filter((oCol: OColumn) => (oCol.type === 'translate' || oCol.type === 'service')).length > 0;
+    if (!existColumnToTrasformToSort) {
+      return data;
+    }
+    this.table.getKeys().forEach(key => {
+      sortColumns.push(this.table.getOColumn(key));
+    })
+
+    return data.map((row) => {
+      const obj = {};
+      sortColumns.forEach((oCol: OColumn) => {
+        const useRenderer = oCol.renderer && (oCol.type === 'translate' || oCol.type === 'service') && oCol.renderer.getCellData;
         obj[oCol.attr] = useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
       });
       return obj;
@@ -655,6 +699,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       Object.assign(record, rowData);
     }
   }
+
 
   private getDataInformationByGroup(data: any[], level: number) {
     const recordHash = {};

@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="title-container" mat-dialog-title>
-  <span fxFlex fxLayoutAlign="center center" > {{ (title || 'LAYOUT_MANANGER.DIALOG_TITLE') | oTranslate }}{{ label }} </span>
+  <span fxFlex fxLayoutAlign="center center"> {{ title | oTranslate }} <span *ngIf="title?.length>0">{{dialogTitleSeparator}}&nbsp;</span>{{ label }}</span>
   <mat-icon (click)="closeDialog()" svgIcon="ontimize:close"></mat-icon>
 </div>
 

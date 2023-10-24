@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { OBreadcrumbComponent } from '../../components/breadcrumb/o-breadcrumb.component';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { OFormBase } from '../form/o-form-base.class';
@@ -35,8 +35,6 @@ export class OFormContainerComponent implements AfterViewInit {
   protected form: OFormBase;
   protected formMananger: OFormLayoutManagerBase;
 
-  constructor(private resolver: ComponentFactoryResolver) { }
-
   ngAfterViewInit() {
     this.breadcrumb = this.breadcrumb && this.form && !this.formMananger;
     if (this.breadcrumb) {
@@ -50,8 +48,7 @@ export class OFormContainerComponent implements AfterViewInit {
   }
 
   createBreadcrumb(container: ViewContainerRef) {
-    const factory = this.resolver.resolveComponentFactory(OBreadcrumbComponent);
-    const ref = container.createComponent(factory);
+    const ref = container.createComponent(OBreadcrumbComponent);
     ref.instance.form = this.form;
     ref.instance.labelColumns = this.breadcrumbLabelColumns;
     ref.instance.separator = this.breadcrumbSeparator;

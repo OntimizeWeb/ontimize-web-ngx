@@ -1,7 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
   AfterContentInit,
@@ -9,12 +8,10 @@ import {
   ApplicationRef,
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver,
   ContentChild,
   ContentChildren,
   ElementRef,
   EventEmitter,
-  forwardRef,
   HostListener,
   Inject,
   Injector,
@@ -28,7 +25,8 @@ import {
   ViewChild,
   ViewContainerRef,
   ViewEncapsulation,
-  ViewRef
+  ViewRef,
+  forwardRef
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
@@ -36,9 +34,10 @@ import { MatMenu } from '@angular/material/menu';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import moment from 'moment';
-import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
 import type { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
 import type { OTableButton } from '../../interfaces/o-table-button.interface';
@@ -99,8 +98,8 @@ import { OTableDao } from './extensions/o-table.dao';
 import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
 import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
-import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
 import { OTableBase } from './o-table-base.class';
+import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -674,7 +673,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     protected dialog: MatDialog,
     private _viewContainerRef: ViewContainerRef,
     private appRef: ApplicationRef,
-    private _componentFactoryResolver: ComponentFactoryResolver,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
@@ -1439,7 +1437,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     } else {
       this.portalHost[rowIndex] = new DomPortalOutlet(
         this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
-        this._componentFactoryResolver,
+        null,
         this.appRef,
         this.injector
       );
@@ -3158,9 +3156,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       '';
   }
 
-  protected queryCellRenderers(): Observable<any> {
+  public queryCellRenderers(): Observable<any> {
     const quickFilterValue = this.getQuickFilterValue();
-    if (Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) {
+
+    if ((Util.isDefined(quickFilterValue) && quickFilterValue.length > 0) || this.sortColArray.length > 0) {
       const queries = this.oTableOptions.columns
         .filter(oCol => oCol.searching && this.isInstanceOfOTableCellRendererServiceComponent(oCol.renderer))
         .map(oCol => (oCol.renderer as any).queryAllData());
@@ -3182,6 +3181,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
+  // onMatSortChange
   public filterData(value?: string, loadMore?: boolean): void {
     //
   }

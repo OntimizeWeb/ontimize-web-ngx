@@ -37,8 +37,8 @@ export class OTranslateService {
   protected localStorageKey: string;
   protected notFoundLang: Array<string> = [];
   protected appConfig: AppConfig;
-
   protected existingLangFiles: Array<string> = [];
+  protected defaultLocale: string;
 
   constructor(protected injector: Injector) {
     this.ngxTranslateService = this.injector.get(TranslateService);
@@ -46,6 +46,7 @@ export class OTranslateService {
     this.httpClient = this.injector.get(HttpClient);
     this.appConfig = this.injector.get(AppConfig);
     this.localStorageKey = this.appConfig.getConfiguration().uuid;
+    this.defaultLocale = this.appConfig.getConfiguration().defaultLocale;
   }
 
   public storeLanguage(language: string): void {
@@ -112,7 +113,7 @@ export class OTranslateService {
       textTranslated = undefined;
     }
     if (!textTranslated) {
-      const bundle = CORE_TRANSLATIONS.MAP[this.ngxTranslateService.currentLang] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
+      const bundle = CORE_TRANSLATIONS.MAP[this.ngxTranslateService.currentLang] || CORE_TRANSLATIONS.MAP[this.defaultLocale] || CORE_TRANSLATIONS.MAP[this.DEFAULT_LANG];
       if (bundle && bundle[text]) {
         textTranslated = bundle[text];
       } else {

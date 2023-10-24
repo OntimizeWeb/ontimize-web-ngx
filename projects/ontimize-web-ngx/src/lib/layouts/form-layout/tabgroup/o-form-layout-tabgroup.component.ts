@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
   forwardRef,
@@ -79,7 +78,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   constructor(
     protected injector: Injector,
-    protected componentFactoryResolver: ComponentFactoryResolver,
     protected location: ViewContainerRef,
     protected elementRef: ElementRef,
     @Inject(forwardRef(() => OFormLayoutManagerBase)) public formLayoutManager: OFormLayoutManagerBase
@@ -261,10 +259,9 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   createTabComponent(tabData: FormLayoutDetailComponentData, content: OFormLayoutManagerContentDirective) {
     const component = tabData.component;
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     const viewContainerRef: ViewContainerRef = content.viewContainerRef;
     viewContainerRef.clear();
-    viewContainerRef.createComponent(componentFactory);
+    viewContainerRef.createComponent(component);
     tabData.rendered = true;
   }
 
