@@ -1,18 +1,23 @@
-## 15.0.0-beta.2
+## 15.0.0-beta.2(2023-10-24)
 ### Features
 * * New mixin `ontimize-theme-all-component-color` to only generates the color styles in ontimize-styles-v8.scss.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1331](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1331)
+* **o-form-layout-manager,o-form-layout-dialog-options**: New input `dialog-title-separator`.([ecdcf28](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecdcf28))  Closes [#1338](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1338)
 
 ### Bug fixes
 * Fixed that the fonts of the titles of the modal and the containers (o-row, o-column) had the font size prior to the migration to Angular 15 ([e6d2532](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e6d2532))  Closes [#1296](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1296)
 * **o-table, o-list, o-grid**: Fixed the placeholder being shown in quickfilter ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1298)
-* **o-user-info**: Exported `o-user-info-configuration` directive ([dc6820f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc6820f))  Closes [#1307](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1307)
+* **o-user-info**: Exported `o-user-info-configuration` and `o-user-info-configuration-item` directive ([dc6820f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc6820f))  Closes [#1307](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1307)
 * **o-table**:
   - Fix appearance outline in table quickfilter ([1906d9d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1906d9d))  Closes [#1315](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1315)
   - Improved styles in filter by column modal ([42a7b1a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42a7b1a)) Closes [#1334](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1334)
+*  Removed deprecated ComponentFactory and ComponentFactoryResolver ([5f1eaf2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f1eaf2)) Closes [#1317](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1317)
 * **o-form-layout-manager**: Fixed a new detail not opening from the detail in mode=tab.([3618287](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3618287)) Closes [#1316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1316)
-* Fixed untitled inputs having a higher height than the others.([33d184c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33d184c)) Closes [#1328](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1328)
+*  Fixed `untitled inputs` having a higher height than the others.([33d184c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33d184c)) Closes [#1328](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1328)
 * Styles in the input errors tooltip were corrected ([ed15a94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed15a94)) Closes [#1330](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1330)
+* **o-app-layout**: Fixed the icons are cutted when the menu is collapsed ([72bd2cd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/72bd2cd)) Closes [#1335](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1335)
 * **ontimize-blue theme**: The primary and accent color of the dark palette is modified to improve accesibility and contrast ([6000a23](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6000a23)) Closes [#1336](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1336)
+***o-form**: Fixed that `OErrorDialogManager` service did not launch the modal with the error that occurred in the o-form ([f17bf43](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6000f17bf43a23)) Closes [#1310](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1310)
+
 
 
 
