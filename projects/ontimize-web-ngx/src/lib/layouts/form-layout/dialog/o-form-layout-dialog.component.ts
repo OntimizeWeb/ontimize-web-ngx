@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
-  Inject,
-  Injector,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
@@ -32,10 +23,12 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   params: object;
   urlSegments: any[];
   label: string;
-  title: string;
+  title: string = 'LAYOUT_MANANGER.DIALOG_TITLE';
   data: any;
+  dialogTitleSeparator: string;
 
-  protected componentFactory: ComponentFactory<any>;
+
+  protected component;
   protected dialogService: DialogService;
 
   @ViewChild(OFormLayoutManagerContentDirective) contentDirective: OFormLayoutManagerContentDirective;
@@ -43,20 +36,19 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   constructor(
     public dialogRef: MatDialogRef<OFormLayoutDialogComponent>,
     protected injector: Injector,
-    protected componentFactoryResolver: ComponentFactoryResolver,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     this.dialogService = injector.get(DialogService);
-    if (data.title) {
+    if (typeof data.title !== 'undefined') {
       this.title = data.title;
     }
     if (data.data) {
       this.data = data.data;
-      const component = data.data.component;
-      this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
+      this.component = data.data.component;;
       this.params = data.data.params;
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
+      this.dialogTitleSeparator = data.dialogTitleSeparator
     }
     if (data.layoutManagerComponent) {
       this.formLayoutManager = data.layoutManagerComponent;
@@ -64,19 +56,15 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   ngAfterViewInit() {
-    if (this.contentDirective && this.componentFactory) {
+    if (this.contentDirective && this.component) {
       const viewContainerRef = this.contentDirective.viewContainerRef;
       viewContainerRef.clear();
-      viewContainerRef.createComponent(this.componentFactory);
+      viewContainerRef.createComponent(this.component);
     }
   }
 
   updateNavigation(data: any) {
-    let label = this.formLayoutManager.getLabelFromData(data);
-    if (label && label.length) {
-      label = ': ' + label;
-    }
-    this.label = label;
+    this.label = this.formLayoutManager.getLabelFromData(data);
   }
 
   updateActiveData(data: any) {

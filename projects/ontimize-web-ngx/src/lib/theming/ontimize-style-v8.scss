@@ -151,6 +151,20 @@ $app-background-color: #eaeaea;
   .o-app-sidenav {
     font-weight: 400;
     color: #aaaaaa;
+
+    .mat-drawer-closed {
+
+      .o-app-sidenav-menu-group,
+      .o-app-sidenav-menu-item {
+        a {
+          width: variables.$sidenav-closed-width - variables.$margin-left-buttom;
+          max-width: variables.$sidenav-closed-width - variables.$margin-left-buttom;
+          min-width: variables.$sidenav-closed-width - variables.$margin-left-buttom;
+          padding-left: 4px;
+          padding-right: 12px;
+        }
+      }
+    }
   }
 
   /* USER INFO */
@@ -304,4 +318,12 @@ $app-background-color: #eaeaea;
   o-row.o-row.bg-level-1 {
     background-color: mat.get-color-from-palette($background, level-1);
   }
+}
+
+@mixin ontimize-theme-all-component-color($theme-or-color-config) {
+  $color: map.get($theme-or-color-config, color);
+  @include ontimize-theme-styles((color: $color,
+      typography: null,
+      density: null,
+    ));
 }

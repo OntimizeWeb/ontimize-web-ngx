@@ -50,7 +50,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 })
 export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, AfterViewInit, OnDestroy {
 
-  protected _placeholder: string = 'TABLE.FILTER';
+  protected _placeholder: string = undefined;
 
   get placeholder(): string {
     return this._placeholder;
