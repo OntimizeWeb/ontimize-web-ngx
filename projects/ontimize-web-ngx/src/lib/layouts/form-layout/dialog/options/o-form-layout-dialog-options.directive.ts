@@ -65,6 +65,9 @@ export class OFormLayoutDialogOptionsDirective {
   @Input()
   public separator: string;
 
+  @Input('dialog-title-separator')
+  public dialogTitleSeparator;
+
   getOptions() {
     const result = {
       width: this.width,
@@ -80,7 +83,8 @@ export class OFormLayoutDialogOptionsDirective {
       closeOnNavigation: this._closeOnNavigation,
       title: this.title,
       labelColumns: this.labelColumns,
-      separator: this.separator
+      separator: this.separator,
+      dialogTitleSeparator: this.dialogTitleSeparator
     }
     // Deleting undefined properties
     Object.keys(result).forEach(key => result[key] == null ? delete result[key] : {});
