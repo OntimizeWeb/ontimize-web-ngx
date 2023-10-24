@@ -7,10 +7,12 @@
 * **o-table, o-list, o-grid**: Fixed the placeholder being shown in quickfilter ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/))  Closes [#1298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1298)
 * **o-user-info**: Exported `o-user-info-configuration` directive ([dc6820f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc6820f))  Closes [#1307](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1307)
 * **o-table**:
-  - Fix appearance outline in table quickfilter([1906d9d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1906d9d))  Closes [#1315](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1315)
+  - Fix appearance outline in table quickfilter ([1906d9d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1906d9d))  Closes [#1315](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1315)
+  - Improved styles in filter by column modal ([42a7b1a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42a7b1a)) Closes [#1334](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1334)
 * **o-form-layout-manager**: Fixed a new detail not opening from the detail in mode=tab.([3618287](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3618287)) Closes [#1316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1316)
 * Fixed untitled inputs having a higher height than the others.([33d184c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33d184c)) Closes [#1328](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1328)
 * Styles in the input errors tooltip were corrected ([ed15a94](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ed15a94)) Closes [#1330](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1330)
+* **ontimize-blue theme**: The primary and accent color of the dark palette is modified to improve accesibility and contrast ([6000a23](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6000a23)) Closes [#1336](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1336)
 
 
 
