@@ -1,6 +1,10 @@
 .o-list-item {
   display: flex;
 
+  .o-card-item {
+    padding: 8px 0px;
+  }
+
   .mat-mdc-list-item {
     width: 100%;
 
