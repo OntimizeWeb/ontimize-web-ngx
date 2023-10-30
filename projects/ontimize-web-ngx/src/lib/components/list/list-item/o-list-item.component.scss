@@ -2,11 +2,15 @@
   display: flex;
 
   .o-card-item {
-    padding: 8px 0px;
+    padding: 8px 4px;
   }
 
   .mat-mdc-list-item {
     width: 100%;
+
+    &.mdc-list-item--with-trailing-meta {
+      height: auto;
+    }
 
     .row-buttons-container .o-list-row-action {
       height: 24px;
