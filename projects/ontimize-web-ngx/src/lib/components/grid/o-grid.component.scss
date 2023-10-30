@@ -1,10 +1,17 @@
-:host.o-grid {
+.o-grid {
   height: 100%;
 
   .o-grid-container {
     position: relative;
     height: 100%;
     display: flex;
+
+    .o-grid-toolbar {
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+
+    }
 
     .o-grid-no-results {
       padding: 16px;

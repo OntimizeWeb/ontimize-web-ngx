@@ -13,7 +13,8 @@ import {
   QueryList,
   SimpleChange,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  ViewEncapsulation
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
@@ -81,6 +82,7 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   inputs: DEFAULT_INPUTS_O_GRID,
   templateUrl: './o-grid.component.html',
   styleUrls: ['./o-grid.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-grid]': 'true',
     '[class.o-grid-fixed]': 'fixedHeader'
