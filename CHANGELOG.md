@@ -1,3 +1,8 @@
+## 15.0.0-beta.3
+### Bug fixes
+* **o-table**: Fixed scrolling with sticky headers and the header scrolls with the content ([e3dc83c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e3dc83c)) Closes [#1355](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1355)
+* **o-grid, o-list**: Fixed the quickfilter is not aligned with buttons ([fd469d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd469d9)) Closes [#1358](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1358)
+
 ## 15.0.0-beta.2(2023-10-24)
 ### Features
 * New mixin `ontimize-theme-all-component-color` to generates the color styles in ontimize-styles-v8.scss.([9c89f8c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c89f8c))  Closes [#1331](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1331)
