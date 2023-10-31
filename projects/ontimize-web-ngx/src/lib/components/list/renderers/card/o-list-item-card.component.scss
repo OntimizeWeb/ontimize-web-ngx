@@ -1,5 +1,4 @@
 .mat-mdc-list .mat-mdc-list-item.o-card-item.mdc-list-item--with-trailing-meta {
-  height: auto;
 
   .mat-mdc-list-item-meta {
     margin: 0;
@@ -8,10 +7,9 @@
 }
 
 .o-list-item-card {
-  padding: 8px 0;
 
   .mat-mdc-card {
-    padding: 16px;
+    padding: 16px 16px 0px 16px;
   }
 
   mat-card,
