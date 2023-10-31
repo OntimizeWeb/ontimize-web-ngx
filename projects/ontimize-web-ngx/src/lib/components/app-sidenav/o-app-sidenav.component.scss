@@ -67,7 +67,6 @@ $transition-duration: 500ms;
       .o-app-sidenav-sidenav.mat-drawer-closed {
         visibility: visible !important;
         transform: translate3d($sidenav-diff, 0, 0);
-        -moz-transform: translate3d($sidenav-diff+10, 0, 0);
       }
 
       .o-app-sidenav-content.mat-drawer-content {
