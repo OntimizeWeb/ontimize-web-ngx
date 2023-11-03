@@ -5,6 +5,7 @@
 
 
   mat-checkbox.mat-mdc-checkbox .mdc-checkbox {
+
     @include checkbox-size(28px, 16px);
   }
 
@@ -21,6 +22,9 @@
 }
 
 @mixin checkbox-size($ripple-size, $icon-size) {
+  width: $icon-size;
+  height: $icon-size;
+  flex: 0 0 $icon-size;
   padding: calc(($ripple-size - $icon-size) / 2) + 1;
 
 
