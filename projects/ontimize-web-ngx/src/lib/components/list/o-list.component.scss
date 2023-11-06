@@ -29,16 +29,6 @@
   position: relative;
   flex-direction: column;
 
-  .o-list-content {
-    &.o-list-content-toolbar-dense {
-      .add-button {
-        &.add-button-top {
-          top: 60px;
-        }
-      }
-    }
-  }
-
   .spinner-container {
     position: absolute;
     top: 0;
@@ -83,9 +73,6 @@
         padding-right: 72px;
       }
 
-      &[dense] .o-list-item .mat-mdc-list-item {
-        padding-right: 56px;
-      }
     }
 
     .o-list-item {
