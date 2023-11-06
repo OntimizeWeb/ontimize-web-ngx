@@ -1,9 +1,3 @@
-$mat-checkbox-size-medium: 18px !default;
-$_mat-checkbox-mark-stroke-size-medim:calc(2 / 15) * $mat-checkbox-size-medium !default;
-
-$mat-checkbox-size-small: 16px !default;
-$_mat-checkbox-mark-stroke-size-small: calc(2 / 15) * $mat-checkbox-size-small !default;
-
 $o_table_row_padding: 24px;
 
 .o-table {
@@ -184,13 +178,6 @@ $o_table_row_padding: 24px;
           white-space: nowrap;
           text-overflow: ellipsis;
 
-          &:not(.o-column-image):first-of-type {
-            padding-left: $o_table_row_padding;
-          }
-
-          &:last-of-type {
-            padding-right: $o_table_row_padding;
-          }
 
           &.grouping-row {
             padding-top: 30px;
@@ -364,7 +351,7 @@ $o_table_row_padding: 24px;
       .mat-mdc-header-cell {
         &.mat-column-select {
           &:not(.mat-header-select-all-with-title) {
-            width: 18px;
+            width: 30px;
           }
 
           box-sizing: content-box;
