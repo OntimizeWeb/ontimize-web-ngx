@@ -29,11 +29,11 @@
     }
 
     .mat-mdc-selection-list.mat-mdc-list-base {
-      overflow-y: scroll;
+      overflow-y: auto;
       width: 100%;
       position: relative;
       border-radius: 4px;
-      padding: 16px;
+      padding: 0 16px 16px 16px;
 
       .mat-mdc-list-item.mat-mdc-list-item:not(.mat-mdc-list-option) {
         margin: 0;
