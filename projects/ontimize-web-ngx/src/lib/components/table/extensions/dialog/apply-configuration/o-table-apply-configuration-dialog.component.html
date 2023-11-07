@@ -2,7 +2,7 @@
 
 <mat-dialog-content fxLayout="column">
   <div mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</div>
-  <mat-selection-list #configurationList dense class="o-table-apply-configuration-dialog-list">
+  <mat-selection-list #configurationList class="o-table-apply-configuration-dialog-list">
     <mat-list-option checkboxPosition="before" [value]="default_configuration">
       <span matListItemTitle class="o-table-apply-configuration-dialog-list-title">
         {{ 'TABLE.DIALOG.APPLY_CONFIGURATION_DEFAULT' | oTranslate }}

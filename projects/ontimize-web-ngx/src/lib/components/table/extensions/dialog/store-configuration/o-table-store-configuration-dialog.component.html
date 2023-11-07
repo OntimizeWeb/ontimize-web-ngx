@@ -3,14 +3,14 @@
 <mat-dialog-content>
   <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_CONFIGURATION' | oTranslate }}</div>
   <form #form [formGroup]="formGroup" fxLayout="column">
-    <mat-form-field>
+    <mat-form-field subscriptSizing="dynamic">
       <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}"
         formControlName="name" required />
       <mat-error *oMatError="hasError(formGroup.controls['name'], 'required')">
         {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field class="example-full-width">
+    <mat-form-field class="example-full-width" subscriptSizing="dynamic">
       <textarea matInput placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4"
         cols="50"></textarea>
     </mat-form-field>
@@ -20,12 +20,12 @@
         {{ 'SELECT_ALL' | oTranslate }}
       </mat-checkbox>
 
-      <mat-selection-list #propertiesList dense class="o-table-save-configuration-dialog-list o-scroll">
+      <mat-selection-list #propertiesList class="o-table-save-configuration-dialog-list o-scroll">
         <mat-list-option checkboxPosition="before" *ngFor="let property of properties" [value]="property.property">
-          <div fxLayout="row" fxLayoutAlign="center center" fxFlex>
+          <!-- <div fxLayout="row" fxLayoutAlign="center center" fxFlex> -->
             <span matListItemTitle fxFlex>{{ property.name | oTranslate }}</span>
-            <mat-icon *ngIf="property.info" matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
-          </div>
+            <mat-icon matListItemMeta *ngIf="property.info" matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
+          <!-- </div> -->
         </mat-list-option>
       </mat-selection-list>
     </div>
