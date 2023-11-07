@@ -1,6 +1,6 @@
 ## 15.0.0-beta.3
 ### Bug fixes
-**Firefox**
+* **Firefox**:
   * Fixed collapsed app menu has a incorrect padding left ([cd89bc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cd89bc3)) Closes [#1362](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1362)
    * Fixed inputs height in Firefox is higher than Chrone ([4da537e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4da537e)) Closes [#1371](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1371)
 * **o-table**:
