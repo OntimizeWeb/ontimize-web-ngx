@@ -22,10 +22,8 @@
 
       <mat-selection-list #propertiesList class="o-table-save-configuration-dialog-list o-scroll">
         <mat-list-option checkboxPosition="before" *ngFor="let property of properties" [value]="property.property">
-          <!-- <div fxLayout="row" fxLayoutAlign="center center" fxFlex> -->
-            <span matListItemTitle fxFlex>{{ property.name | oTranslate }}</span>
-            <mat-icon matListItemMeta *ngIf="property.info" matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
-          <!-- </div> -->
+          <span matListItemTitle fxFlex>{{ property.name | oTranslate }}</span>
+          <mat-icon matListItemMeta *ngIf="property.info" matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
         </mat-list-option>
       </mat-selection-list>
     </div>
