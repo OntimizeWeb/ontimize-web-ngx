@@ -49,8 +49,6 @@ export const DEFAULT_INPUTS_O_LIST = [
 
   'selectable',
 
-  'odense : dense',
-
   // delete-button [no|yes]: show delete button when user select items. Default: yes.
   'deleteButton: delete-button',
 
@@ -99,8 +97,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public refreshButton: boolean = true;
   @BooleanInputConverter()
   public selectable: boolean = false;
-  @BooleanInputConverter()
-  public odense: boolean = false;
   @BooleanInputConverter()
   public deleteButton: boolean = true;
   @BooleanInputConverter()
@@ -203,10 +199,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public reinitialize(options: OListInitializationOptions): void {
     super.reinitialize(options);
-  }
-
-  public getDense(): boolean {
-    return this.odense;
   }
 
   public onListItemClicked(onNext: (item: OListItemDirective) => void): object {
