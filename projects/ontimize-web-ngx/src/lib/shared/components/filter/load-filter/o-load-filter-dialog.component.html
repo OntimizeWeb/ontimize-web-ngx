@@ -1,10 +1,10 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate }}</span>
 <mat-dialog-content fxLayout="column">
   <div mat-subheader>{{ 'TABLE.DIALOG.LOAD_FILTER' | oTranslate }}</div>
-  <mat-selection-list #filterList dense class="o-table-load-filter-dialog-list">
+  <mat-selection-list #filterList class="o-table-load-filter-dialog-list">
     <mat-list-option *ngFor="let filter of filters " [value]="filter.name" checkboxPosition="before">
       <span matListItemTitle class="o-table-load-filter-dialog-list-title">{{ filter.name }}</span>
-      <span matListItemTitle>{{ filter.description }}</span>
+      <span matListItemLine>{{ filter.description }}</span>
     </mat-list-option>
     <mat-list-item *ngIf="filters.length === 0">
       <span class="empty-filter-list">{{ 'TABLE.DIALOG.EMPTY_FILTER_LIST' | oTranslate }}</span>
