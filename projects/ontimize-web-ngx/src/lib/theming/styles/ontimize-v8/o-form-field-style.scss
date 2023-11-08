@@ -36,9 +36,10 @@
     .mat-mdc-form-field-flex {
       .mat-mdc-form-field-infix {
         min-height: auto;
-        padding-bottom: 4px;
 
-
+        .mat-mdc-form-field-input-control:not(textarea){
+          height: 1em;
+        }
         .mat-mdc-floating-label {
           display: block;
         }

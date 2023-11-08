@@ -86,7 +86,7 @@ $app-background-color: #eaeaea;
 
   @include theme.o-material-theme($theme-or-color-config);
   @include layout.layout-padding-margin();
-  @include o-density.checkbox(19px, 19px, 15px);
+  @include o-density.checkbox();
   @include o-density.list();
   @include o-density.radio();
   @include o-table-style.o-table-style($theme-or-color-config);

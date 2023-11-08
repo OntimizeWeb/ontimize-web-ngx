@@ -234,11 +234,11 @@ export const DEFAULT_OUTPUTS_O_TABLE = [
   'onRowDeleted'
 ];
 
-const stickyHeaderSelector = '.mat-header-row .mat-table-sticky';
-const stickyFooterSelector = '.mat-footer-row .mat-table-sticky';
-const rowSelector = '.mat-row';
-const headerSelector = '.mat-header-row';
-const footerSelector = '.mat-footer-row';
+const stickyHeaderSelector = '.mat-mdc-header-row .mat-mdc-table-sticky';
+const stickyFooterSelector = '.mat-mdc-footer-row .mat-mdc-table-sticky';
+const rowSelector = '.mat-mdc-row';
+const headerSelector = '.mat-mdc-header-row';
+const footerSelector = '.mat-mdc-header-row';
 
 type DisableSelectionFunction = (item: any) => boolean;
 

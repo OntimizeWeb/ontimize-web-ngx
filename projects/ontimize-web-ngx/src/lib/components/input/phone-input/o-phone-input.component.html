@@ -1,12 +1,13 @@
 <div [formGroup]="getFormGroup()" fxLayout="row wrap" [fxLayoutGap]="gap +' grid'">
-  <mat-form-field class="mat-form-phone" [floatLabel]="floatLabel" [appearance]="appearance" [class.read-only]="isReadOnly" fxFlex.xs [subscriptSizing]="subscriptSizing">
+  <mat-form-field class="mat-form-phone" [floatLabel]="floatLabel" [appearance]="appearance" [class.read-only]="isReadOnly" fxFlex.xs
+    [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <mat-select [value]="selectedCountry" (selectionChange)="onCountrySelect($event)" [disabled]="!enabled">
       <mat-option *ngFor="let country of allCountries" [value]="country"> {{country.name}} +{{country.dialCode}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth" class="icon-field" [appearance]="appearance"
-    fxFlex>
+    [subscriptSizing]="subscriptSizing" fxFlex>
     <input #matInputRef matInput type="tel" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired">
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">

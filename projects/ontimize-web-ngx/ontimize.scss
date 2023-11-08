@@ -54,67 +54,6 @@ $mat-stroked-button-line-height: $mat-button-line-height - 2;
           }
         }
 
-        .mat-mdc-list-base {
-
-          &[dense] {
-            .mat-mdc-list-item {
-              min-height: 30px;
-              height: auto;
-              display: flex;
-              padding: 0 8px;
-
-              .mdc-list-item__content,
-              .mat-mdc-list-item-meta {
-                width: 100%;
-                align-self: center;
-
-                .mat-mdc-list-item-icon {
-                  margin-top: 0;
-                  padding: 4px;
-                }
-
-                .mdc-list-item__first-text,
-                .mdc-list-item__secondary-text {
-                  &::before {
-                    display: flex;
-                  }
-                }
-
-                .mdc-list-item__secondary-text {
-                  padding: 0 8px;
-
-                  &::before {
-                    height: auto;
-                  }
-                }
-
-              }
-            }
-
-          }
-
-          &.mat-mdc-selection-list[dense] {
-            overflow: auto;
-            outline: none;
-            padding-top: 0;
-            min-height: 40px;
-
-            .mat-mdc-list-item {
-              margin: 6px 0;
-              border-radius: 4px;
-              cursor: default;
-
-
-              .mdc-list-item__start {
-                margin-top: 0;
-              }
-            }
-
-            p {
-              white-space: normal;
-            }
-          }
-        }
       }
 
       .mat-mdc-dialog-actions {
@@ -193,7 +132,7 @@ button.mat-mdc-button-base {
       height: $mat-button-line-height;
     }
 
-    >.mat-icon{
+    >.mat-icon {
       line-height: 1;
     }
   }
@@ -216,15 +155,6 @@ button.mat-mdc-button-base {
   }
 }
 
-.o-table-apply-configuration-dialog-list.mat-mdc-selection-list.mat-mdc-list-base[dense],
-.o-table-load-filter-dialog-list.mat-mdc-list-base[dense] {
-
-  .o-table-apply-configuration-dialog-list-title,
-  .o-table-load-filter-dialog-list-title {
-    font-weight: bold;
-
-  }
-}
 
 
 

@@ -1,5 +1,5 @@
 @use "sass:map";
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 
 @mixin report-on-demand($theme-or-color-config) {
   $theme: map.get($theme-or-color-config, color);
@@ -7,6 +7,10 @@
 
   .report-on-demand-sidenav {
     .mat-expansion-panel {
+      border: 1px solid mat.get-color-from-palette($background, background);
+    }
+
+    .mat-expansion-panel-header {
       background-color: mat.get-color-from-palette($background, background);
     }
   }

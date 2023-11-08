@@ -34,7 +34,10 @@
           padding: 0;
           cursor: move;
 
-
+          .mdc-list-item__secondary-text,
+          .mdc-list-item__primary-text {
+            padding: 0 8px;
+          }
 
           .mdc-list-item__start {
             margin-top: 0;
