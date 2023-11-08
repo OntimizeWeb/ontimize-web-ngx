@@ -7,8 +7,7 @@
 
   .report-on-demand-sidenav {
     .mat-expansion-panel {
-      border: solid;
-      border-color: mat.get-color-from-palette($background, background);
+      border: 1px solid mat.get-color-from-palette($background, background);
     }
 
     .mat-expansion-panel-header {
