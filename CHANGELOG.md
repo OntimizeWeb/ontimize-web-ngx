@@ -1,3 +1,26 @@
+## 15.0.0-beta.3(2023-11-08)
+### Bug fixes
+* **Firefox**:
+  * Fixed collapsed app menu has a incorrect padding left ([cd89bc3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cd89bc3)) Closes [#1362](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1362)
+   * Fixed inputs height in Firefox is higher than Chrone ([4da537e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4da537e)) Closes [#1371](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1371)
+* **o-table**:
+  * Fixed scrolling with sticky headers and the header scrolls with the content ([e3dc83c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e3dc83c)) Closes [#1355](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1355)
+   * Fixed the header checkbox is not aligned with the cell checkboxes ([03da28d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03da28d)) Closes [#1370](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1370)
+   * Improved mat-list in the table dialog styles ([91c5924](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/91c5924)) Closes [#1354](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1354)
+   * Improved drag&drop styles ([86766e9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/86766e9)) Closes [#1301](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1301)
+
+* **o-grid, o-list**: Fixed the quickfilter is not aligned with buttons ([fd469d9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fd469d9)) Closes [#1358](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1358)
+* **o-list**: Set padding between card items ([d2563be](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d2563be)) Closes [#1357](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1357)
+* **o-phone**: Fixed incorrect phone input height ([b4368b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b4368b5)) Closes [#1368](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1368)
+* **o-form-layout-manager**: The shape of the close button on the tab is not circular ([aa3d7c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa3d7c5)) Closes [#1369](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1369)
+* **checkbox**: Checkbox ripple is not aligned to the center ([aa3d7c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa3d7c5)) Closes [#1369](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1369)
+* **report-on-demand**: Improved report-on-demand styles ([72133c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/72133c3)) Closes [#1379](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1379)
+
+
+
+### Breaking changes
+* **o-list**: Removed input `dense` ([3573efd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3573efd)) Closes [#1374](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1374)
+
 ## 15.0.0-beta.2(2023-10-24)
 ### Features
 * New mixin `ontimize-theme-all-component-color` to generates the color styles in ontimize-styles-v8.scss.([9c89f8c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c89f8c))  Closes [#1331](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1331)
