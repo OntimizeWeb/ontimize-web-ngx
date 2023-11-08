@@ -5,7 +5,7 @@
   <div mat-subheader>{{'TABLE.VISIBLE_COLUMNS.DESCRIPTION' | oTranslate}}</div>
 
   <div [ngClass]="rowHeight">
-    <mat-list cdkDropList (cdkDropListDropped)="drop($event)" dense>
+    <mat-list cdkDropList (cdkDropListDropped)="drop($event)">
       <mat-list-item *ngFor="let column of columns" cdkDrag (click)="onClickColumn(column)" [ngClass]="{'column-hidden':!column.visible}"
         class="o-drag-list-item-box">
         <div fxLayout="row" fxFlex fxLayoutAlign="stretch center">
