@@ -21,7 +21,10 @@
 
           &[aria-selected="true"] {
             background-color: mat.get-color-from-palette($primary, 100);
-            color: if($is-dark-theme, #121212, mat.get-color-from-palette($foreground, text));
+
+            .mdc-list-item__secondary-text {
+              color: if($is-dark-theme, #121212, mat.get-color-from-palette($foreground, text));
+            }
           }
         }
 

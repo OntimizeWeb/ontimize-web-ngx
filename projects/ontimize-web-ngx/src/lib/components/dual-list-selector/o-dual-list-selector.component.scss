@@ -12,37 +12,37 @@
     .o-dual-list-selector-source-wrapper {
       overflow: auto;
     }
-  }
 
-  .o-dual-list-selector-list {
-    .mat-mdc-mini-fab {
-      line-height: 14px;
-      height: 18px;
-      width: 18px;
-
-      .mat-icon {
-        font-size: 18px;
+    .o-dual-list-selector-list {
+      .mat-mdc-mini-fab {
+        line-height: 14px;
         height: 18px;
         width: 18px;
-      }
 
-    }
-
-    .mat-mdc-selection-list.mat-mdc-list-base {
-      overflow-y: auto;
-      width: 100%;
-      position: relative;
-      border-radius: 4px;
-      padding: 0 16px 16px 16px;
-
-      .mat-mdc-list-item.mat-mdc-list-item:not(.mat-mdc-list-option) {
-        margin: 0;
-
-        .mat-mdc-list-item-line {
-          font-weight: 500;
+        .mat-icon {
+          font-size: 18px;
+          height: 18px;
+          width: 18px;
         }
+
       }
 
+      .mat-mdc-selection-list.mat-mdc-list-base {
+        overflow-y: auto;
+        width: 100%;
+        position: relative;
+        border-radius: 4px;
+        padding: 0 16px 16px 16px;
+
+        .mat-mdc-list-item.mat-mdc-list-item:not(.mat-mdc-list-option) {
+          margin: 0;
+
+          .mat-mdc-list-item-line {
+            font-weight: 500;
+          }
+        }
+
+      }
     }
 
     .mat-list-option.cdk-drag.o-drag-list-item-box {
