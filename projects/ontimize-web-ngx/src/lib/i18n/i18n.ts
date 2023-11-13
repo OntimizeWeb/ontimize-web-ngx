@@ -477,7 +477,7 @@ export const MAP = {
     'TABLE.BUTTONS.SAVE_CONFIGURATION': 'Guardar configuración',
     'TABLE.BUTTONS.APPLY_CONFIGURATION': 'Aplicar configuración',
     'TABLE.BUTTONS.APPLY': 'Aplicar',
-    'TABLE.BUTTONS.RESETWIDTH': 'Resetear el archo de las columnas',
+    'TABLE.BUTTONS.RESETWIDTH': 'Resetear el ancho de las columnas',
     'TABLE.BUTTONS.REPORT_ON_DEMAND': 'Informe a la carta',
     'TABLE.SELECT.ROWS._': '%d registros seleccionados',
     'TABLE.SELECT.ROWS.0': ' ',
