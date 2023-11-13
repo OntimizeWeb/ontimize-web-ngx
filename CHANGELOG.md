@@ -1,3 +1,7 @@
+## 8.14.4 (2023-11-13)
+### Bug fixes
+* **o-table**: Fixes menu open when ENTER in editable column.([daacfa4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/daacfa4)) Closes [#1386](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1386)
+
 ## 15.0.0-beta.3(2023-11-08)
 ### Bug fixes
 * **Firefox**:
