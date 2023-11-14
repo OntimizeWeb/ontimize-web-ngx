@@ -11,6 +11,14 @@ export class CurrencyUtil {
     'zh': 'CNY', // Chinese
     'ru': 'RUB', // Russian
     'ar': 'AED', // Arabic
+    'cr': 'CRC', // Costa Rican Colón
+    'ng': 'NGN', // Nigerian Naira
+    'ph': 'PHP', // Philippine Peso
+    'pl': 'PLN', // Polish Zloty
+    'py': 'PYG', // Paraguayan Guarani
+    'th': 'THB', // Thai Baht
+    'ua': 'UAH', // Ukrainian Hryvnia
+    'vn': 'VND', // Vietnamese Dong
   };
 
   static currencyCodeToSymbol = {
