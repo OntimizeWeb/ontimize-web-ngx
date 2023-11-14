@@ -44,7 +44,7 @@ export class CurrencyUtil {
     if (code) {
       return code;
     } else {
-      return 'USD';
+      return 'EUR';
     }
   }
   static getCurrencyCodeFromSymbol(symbol: string): string | undefined {
