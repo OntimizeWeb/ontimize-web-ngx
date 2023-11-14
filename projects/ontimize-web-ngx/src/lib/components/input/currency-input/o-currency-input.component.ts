@@ -3,6 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {
   ORealInputComponent
 } from '../real-input/o-real-input.component';
+import { CurrencyUtil } from '../../../util';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   'currencySymbol: currency-symbol',
@@ -20,16 +21,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
 
   static currency_icons = ['USD', 'EUR', 'GBP', 'ILS', 'INR', 'JPY', 'KRW', 'BTC'];
 
-  currency_symbols = {
-    CRC: '₡', // Costa Rican Colón
-    NGN: '₦', // Nigerian Naira
-    PHP: '₱', // Philippine Peso
-    PLN: 'zł', // Polish Zloty
-    PYG: '₲', // Paraguayan Guarani
-    THB: '฿', // Thai Baht
-    UAH: '₴', // Ukrainian Hryvnia
-    VND: '₫', // Vietnamese Dong
-  };
+  currency_symbols = CurrencyUtil.currencyCodeToSymbol;
 
   currencySymbol: string = 'EUR';
   currencySymbolPosition: string = 'right';

@@ -6,3 +6,4 @@ export * from './util';
 export * from './codes';
 export * from './filter-expression.utils';
 export * from './service.utils';
+export * from './currencyUtil';
