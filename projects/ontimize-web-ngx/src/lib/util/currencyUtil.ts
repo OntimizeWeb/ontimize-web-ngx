@@ -14,14 +14,23 @@ export class CurrencyUtil {
   };
 
   static currencyCodeToSymbol = {
-    'EUR': '€',
-    'USD': '$',
-    'BRL': 'R$',
-    'JPY': '¥',
-    'CNY': '¥',
-    'RUB': '₽',
-    'AED': 'د.إ',
+    EUR: '€',     // Euro
+    USD: '$',     // US Dollar
+    BRL: 'R$',    // Brazilian Real
+    JPY: '¥',     // Japanese Yen
+    CNY: '¥',     // Chinese Yuan
+    RUB: '₽',     // Russian Ruble
+    AED: 'د.إ',   // UAE Dirham
+    CRC: '₡',     // Costa Rican Colón
+    NGN: '₦',     // Nigerian Naira
+    PHP: '₱',     // Philippine Peso
+    PLN: 'zł',    // Polish Zloty
+    PYG: '₲',     // Paraguayan Guarani
+    THB: '฿',     // Thai Baht
+    UAH: '₴',     // Ukrainian Hryvnia
+    VND: '₫',     // Vietnamese Dong
   };
+
   static getCurrencyCode(language: string): string {
     const code = this.languageToCurrencyCode[language];
     if (code) {
