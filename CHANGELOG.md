@@ -1,3 +1,11 @@
+## 15.0.0-beta.4(2023-11-15)
+### Features
+* Create class *CurrencyUtil* to lookup the currency symbol for a given currency code.([a4d6d86](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a4d6d86))
+
+### Bug fixes
+* Fixed the user info save in localstorage when user is undefined([fa14aeb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fa14aeb)) Closes [#1391](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1391)
+* **o-mat-menu**: Set the font size smallest ([8797691](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8797691)) Closes [#1393](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1393)
+
 ## 8.14.4 (2023-11-13)
 ### Bug fixes
 * **o-table**: Fixes menu open when ENTER in editable column.([daacfa4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/daacfa4)) Closes [#1386](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1386)
