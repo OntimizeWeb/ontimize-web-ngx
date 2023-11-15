@@ -1,4 +1,4 @@
-<mat-menu #childMenu="matMenu" [class]="class" [overlapTrigger]="false" [hasBackdrop]="false">
+<mat-menu class="o-mat-menu" #childMenu="matMenu" [class]="class" [overlapTrigger]="false" [hasBackdrop]="false">
   <ng-container *ngFor="let child of items">
     <!-- Handle branch node menu items -->
     <span *ngIf="isGroup(child) && child.isVisible">
