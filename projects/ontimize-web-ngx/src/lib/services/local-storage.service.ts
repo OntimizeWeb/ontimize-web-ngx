@@ -122,7 +122,10 @@ export class LocalStorageService {
       this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     }
     const users = appData[LocalStorageService.USERS_STORAGE_KEY] || {}; // uuid -> users
-    const idUser = session.user || this.authService.getSessionInfo().user;
+    const idUser = session.user || this.authService.getSessionInfo()?.user;
+    if (!Util.isDefined(idUser)) {
+      return;
+    }
     const user = users[idUser] || {}; // uuid -> users-> user
 
     let componentsData = {};
