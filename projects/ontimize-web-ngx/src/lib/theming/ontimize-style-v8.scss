@@ -68,7 +68,7 @@ $app-background-color: #eaeaea;
 @mixin ontimize-theme-styles($theme-or-color-config) {
 
   $theme: map.get($theme-or-color-config, color);
-
+  $typography: mat.get-typography-config($theme-or-color-config);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $background: map.get($theme, background);
@@ -89,6 +89,7 @@ $app-background-color: #eaeaea;
   @include o-density.checkbox();
   @include o-density.list();
   @include o-density.radio();
+  @include o-density.menu($typography);
   @include o-table-style.o-table-style($theme-or-color-config);
   @include report-on-demand.report-on-demand($theme-or-color-config);
   @include charts-on-demand.o-chart-on-demand($theme-or-color-config);
