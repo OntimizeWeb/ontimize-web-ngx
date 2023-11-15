@@ -73,3 +73,18 @@
 @mixin o-form-field() {
   @include mat.form-field-density(-2);
 }
+
+@mixin menu($typography) {
+
+  /*MAT MENU*/
+  .o-mat-menu.mat-mdc-menu-panel {
+    min-height: auto;
+
+    @if($typography) {
+      .mdc-list-item__primary-text{
+        font-size: mat.font-size($typography, body-2);
+
+      }
+    }
+  }
+}
