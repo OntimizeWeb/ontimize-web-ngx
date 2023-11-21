@@ -15,22 +15,6 @@ import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
 
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
-  'oattr: attr',
-  'olabel: label',
-  'floatLabel: float-label',
-  'oplaceholder: placeholder',
-  'tooltip',
-  'tooltipPosition: tooltip-position',
-  'tooltipShowDelay: tooltip-show-delay',
-  'tooltipHideDelay: tooltip-hide-delay',
-  'enabled',
-  'orequired: required',
-  'service',
-  'entity',
-  'serviceType : service-type',
-  'width',
-  'readOnly: read-only',
-  'clearButton: clear-button',
 
   // accept-file-type [string]: file types allowed on the file input, separated by ';'. Default: no value.
   // file_extension, audio/*, video/*, image/*, media_type. See https://www.w3schools.com/tags/att_input_accept.asp
