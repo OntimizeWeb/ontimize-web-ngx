@@ -1,4 +1,6 @@
 <mat-menu #menu="matMenu" x-position="before" [class]="(rowHeightObservable | async) +' o-table-menu'">
+  <!--this options is neccessary to refresh descendants menu #1348-->
+  <span mat-menu-item style="display: none;"></span>
   <!-- DEFAULT OPTIONS -->
   <o-table-option #selectAllCheckboxOption *ngIf="showSelectAllCheckbox" [active]="isSelectAllOptionActive" (onClick)="onShowsSelects()"
     label="TABLE.BUTTONS.SELECT" show-checkbox-option="true"></o-table-option>
