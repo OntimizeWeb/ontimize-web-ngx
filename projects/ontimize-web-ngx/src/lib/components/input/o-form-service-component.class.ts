@@ -219,14 +219,12 @@ export class OFormServiceComponent extends OFormDataComponent {
     const setValueSetKeys = Object.keys(this._setValueOnValueChangeEquiv);
     if (setValueSetKeys.length) {
       const formComponents = this.form.getComponents();
-      if (Util.isDefined(record)) {
-        setValueSetKeys.forEach(key => {
-          const comp = formComponents[this._setValueOnValueChangeEquiv[key]];
-          if (Util.isDefined(comp)) {
-            comp.setValue(record[key]);
-          }
-        });
-      }
+      setValueSetKeys.forEach(key => {
+        const comp = formComponents[this._setValueOnValueChangeEquiv[key]];
+        if (Util.isDefined(comp)) {
+          comp.setValue(Util.isDefined(record) ? record[key] : undefined);
+        }
+      });
     }
   }
 
