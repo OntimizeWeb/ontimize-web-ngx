@@ -1,4 +1,4 @@
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 @use 'variables.scss';
 
 .mat-mdc-form-field {
@@ -36,9 +36,12 @@
     .mat-mdc-form-field-flex {
       .mat-mdc-form-field-infix {
         min-height: auto;
+        align-items: center;
 
-        .mat-mdc-form-field-input-control:not(textarea){
-          height: 1em;
+        @-moz-document url-prefix() {
+          .mat-mdc-form-field-input-control:not(textarea) {
+            height: 1em;
+          }
         }
         .mat-mdc-floating-label {
           display: block;
