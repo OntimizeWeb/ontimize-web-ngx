@@ -21,8 +21,9 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
-import { OServiceComponent } from '../o-service-component.class';
+import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDataSource } from './o-tree.datasource';
+import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
 
 export interface OTreeNode {
   label: string;
@@ -106,7 +107,7 @@ type nodeHashType = {
     '[class.o-tree]': 'true',
   },
 })
-export class OTreeComponent extends OServiceComponent implements OnInit, OnDestroy, AfterViewInit {
+export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStateService> implements OnInit, OnDestroy, AfterViewInit {  
   treeControl = new NestedTreeControl<OTreeNode>((node) => node.children);
   dataSource: OTreeDataSource;
   hasChild = (_: number, node: OTreeNode) =>
