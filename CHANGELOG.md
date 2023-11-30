@@ -1,3 +1,10 @@
+## 15.0.0
+### Features
+* Hide hint error when O_MAT_ERROR_OPTIONS injection token value is `{type: 'lite'}`([03820e6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03820e6)) Closes [#1402](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1402)
+
+### Bug fixes
+
+
 ## 15.0.0-beta.4(2023-11-15)
 ### Features
 * Create class *CurrencyUtil* to lookup the currency symbol for a given currency code.([a4d6d86](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a4d6d86))
