@@ -18,6 +18,9 @@ export class OMatErrorDirective {
     private injector: Injector
   ) {
     this.errorOptions = ErrorsUtils.getErrorOptions(this.injector);
+    if (this.errorOptions.type === Codes.O_MAT_ERROR_LITE) {
+      this.element.nativeElement.hidden = true;
+    }
   }
 
   @Input()

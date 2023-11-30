@@ -69,8 +69,8 @@
       box-sizing: border-box;
       display: block;
       position: absolute;
-      width: 40px;
-      height: 40px;
+      aspect-ratio: 1;
+      height: calc(100% - 12px);
       margin: 6px;
       border: 3px solid;
       border-radius: 50%;
