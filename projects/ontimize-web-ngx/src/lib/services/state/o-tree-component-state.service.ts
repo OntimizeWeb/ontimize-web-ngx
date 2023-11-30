@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { OTreeComponent } from '../../components/tree/o-tree.component';
-import { OFilterDefinition } from '../../types/o-filter-definition.type';
-import { OColumnDisplay } from '../../types/table/o-column-display.type';
-import { OColumnSearchable } from '../../types/table/o-column-searchable.type';
-import { OTableConfiguration } from '../../types/table/o-table-configuration.type';
-import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
-import { Codes } from '../../util/codes';
-import { Util } from '../../util/util';
 import { AbstractComponentStateService } from './o-component-state.service';
 import { OTreeComponentStateClass } from './o-tree-component-state.class';
 
-import type { OColumn } from '../../components/table/column/o-column.class';
 
 @Injectable()
 export class OTreeComponentStateService extends AbstractComponentStateService<OTreeComponentStateClass, OTreeComponent> {
