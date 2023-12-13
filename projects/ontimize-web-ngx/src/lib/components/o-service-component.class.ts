@@ -844,9 +844,11 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   protected getPaginationDataFromArray(dataArray: any[]): any[] {
-    let result= dataArray;
+    let result: any[];
     if (this.paginationControls) {
-      result = result.splice(this.currentPage * this.queryRows, this.queryRows);
+      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
+    } else {
+      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
     }
     return result;
   }
