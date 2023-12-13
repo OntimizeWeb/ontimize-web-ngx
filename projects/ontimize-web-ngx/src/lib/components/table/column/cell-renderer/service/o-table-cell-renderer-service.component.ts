@@ -235,7 +235,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       this.dataService[this.queryMethod]({}, this.colArray, this.entity)
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
-            (resp.data || []).forEach(item => {
+            const respData = Util.isArray(resp.data) ? resp.data : [];
+            respData.forEach(item => {
               if (Util.isDefined(item[this.column])) {
                 this.cellValues.push(item[this.column]);
                 this.responseMap[item[this.column]] = item[this.valueColumn];
