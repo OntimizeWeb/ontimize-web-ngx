@@ -127,6 +127,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   @BooleanInputConverter()
   selectAllCheckboxVisible: boolean = true;
   protected _quickFilter: boolean = false;
+  paginationControls = false;
   quickFilterColumns: string;
 
   nodesArray: OTreeNode[] = [];
@@ -464,4 +465,5 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   public remove(clearSelectedItems: boolean = false): void { }
+
 }
