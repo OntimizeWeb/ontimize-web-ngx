@@ -143,8 +143,19 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     this.dataService[this.queryMethod](filter, this.colArray, this.entity, sqlTypes)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
-          this.responseMap[cellvalue] = resp.data[0][this.valueColumn];
-          this.onDataLoaded.emit(this.responseMap[cellvalue]);
+          let respData;
+          if (Util.isArray(resp.data)) {
+            respData = resp.data[0];
+          } else if (Util.isObject(resp.data) && Object.keys(resp.data).length > 0) {
+            respData = resp.data;
+          } else {
+            console.warn('Component has received not supported service data. Supported data are Array or Object');
+          }
+
+          if (Util.isDefined(respData)) {
+            this.responseMap[cellvalue] = respData[this.valueColumn];
+            this.onDataLoaded.emit(this.responseMap[cellvalue]);
+          }
         }
       }, err => {
         console.error(err);
@@ -223,7 +234,16 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       this.dataService[this.queryMethod]({}, this.colArray, this.entity)
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
-            (resp.data || []).forEach(item => {
+            let respData = [];
+            if (Util.isArray(resp.data)) {
+              respData = resp.data;
+            } else if (Util.isObject(resp.data) && Object.keys(resp.data).length > 0) {
+              respData = [resp.data];
+            } else {
+              console.warn('Component has received not supported service data. Supported data are Array or Object');
+            }
+
+            respData.forEach(item => {
               if (Util.isDefined(item[this.column])) {
                 this.cellValues.push(item[this.column]);
                 this.responseMap[item[this.column]] = item[this.valueColumn];

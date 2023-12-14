@@ -1,6 +1,6 @@
 <input matInput class="o-combo-search-hidden" />
 
-<mat-form-field class="o-combo-search-inner">
+<mat-form-field class="o-combo-search-inner" subscriptSizing="dynamic">
   <input matInput #searchSelectInput placeholder="{{ placeholder | oTranslate }}" (keydown)="handleKeydown($event)"
     (input)="onInputChange($event.target.value)" (blur)="onBlur($event.target.value)" class="mat-select-search-input" />
   <button mat-icon-button matSuffix *ngIf="value" (click)="reset(true)" class="mat-select-search-clear">
