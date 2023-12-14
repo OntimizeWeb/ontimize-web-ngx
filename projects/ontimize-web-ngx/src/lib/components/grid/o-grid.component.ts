@@ -449,4 +449,14 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
       this.quickFilterComponent.setActiveColumns(parsedArr);
     }
   }
+
+  protected getPaginationDataFromArray(dataArray: any[]): any[] {
+    let result: any[];
+    if (this.paginationControls) {
+      result = dataArray.splice(this.currentPage * this.queryRows, this.queryRows);
+    } else {
+      result = dataArray.splice(0, this.queryRows * (this.currentPage + 1));
+    }
+    return result;
+  }
 }
