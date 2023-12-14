@@ -1,6 +1,6 @@
 ## 8.14.5 (2023-12-14)
 ### Bug fixes
-* **o-service-component.class.ts**: Fixed bug in the `getPaginationDataFromArray` method that returned a subset of data when there was no pagination control Closes [#1413](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1413)
+* **o-service-component.class.ts**: Fixed bug in the `getPaginationDataFromArray` method that returned a subset of data when there was no pagination control ([b76d0ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b76d0ea)) Closes [#1413](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1413)
 * **o-table-cell-renderer-service-**: Fixed the table crashed when the result of the o-table-cell-renderer-service has no values ([4bf6bf8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4bf6bf8)) Closes [#1415](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1415)
 
 ## 8.14.4 (2023-11-13)
