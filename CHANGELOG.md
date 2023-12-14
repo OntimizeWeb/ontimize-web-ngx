@@ -1,3 +1,8 @@
+## 8.14.5 (2023-12-14)
+### Bug fixes
+* **o-service-component.class.ts**: Fixed bug in the `getPaginationDataFromArray` method that returned a subset of data when there was no pagination control ([b76d0ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b76d0ea))([d519e76](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d519e76)) Closes [#1413](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1413)
+* **o-table-cell-renderer-service-**: Fixed the table crashed when the result of the o-table-cell-renderer-service has no values ([4bf6bf8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4bf6bf8)) Closes [#1415](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1415)
+
 ## 15.0.0-beta.4(2023-11-15)
 ### Features
 * Create class *CurrencyUtil* to lookup the currency symbol for a given currency code.([a4d6d86](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a4d6d86))
