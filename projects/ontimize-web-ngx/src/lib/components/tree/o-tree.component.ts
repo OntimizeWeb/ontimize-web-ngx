@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { NestedTreeControl } from '@angular/cdk/tree';
+import { FlatTreeControl } from '@angular/cdk/tree';
 import {
   AfterViewInit,
   Component,
@@ -15,7 +15,8 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { filter, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
@@ -23,12 +24,19 @@ import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
-import { OTreeDataSource } from './o-tree.datasource';
 
 export interface OTreeNode {
   label: string;
   data: any;
   children?: OTreeNode[];
+  display?: string;
+}
+
+export interface OTreeFlatNode {
+  label: string;
+  level: number,
+  expandable: boolean,
+  data: any;
   display?: string;
 }
 
@@ -108,10 +116,26 @@ type nodeHashType = {
   },
 })
 export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
-  treeControl = new NestedTreeControl<OTreeNode>((node) => node.children);
-  dataSource: OTreeDataSource;
-  hasChild = (_: number, node: OTreeNode) =>
-    !!node.children && node.children.length > 0;
+  /** Map from flat node to nested node. This helps us finding the nested node to be modified */
+  flatNodeMap = new Map<OTreeFlatNode, OTreeNode>();
+
+  /** Map from nested node to flattened node. This helps us to keep the same object for selection */
+  nestedNodeMap = new Map<OTreeNode, OTreeFlatNode>();
+
+
+  getLevel = (node: OTreeFlatNode) => node.level;
+
+  isExpandable = (node: OTreeFlatNode) => node.expandable;
+
+  getChildren = (node: OTreeNode): OTreeNode[] => this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
+
+  hasChild = (_: number, _nodeData: OTreeFlatNode) => _nodeData.expandable;
+
+  hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
+  treeControl = new FlatTreeControl<OTreeFlatNode>(this.getLevel, this.isExpandable);
+
+  dataSource: MatTreeFlatDataSource<OTreeNode, OTreeFlatNode>;
+
   @BooleanInputConverter()
   refreshButton: boolean = true;
   @BooleanInputConverter()
@@ -130,10 +154,11 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   paginationControls = false;
   quickFilterColumns: string;
 
+  childreNodes: OTreeNode[] = [];
   nodesArray: OTreeNode[] = [];
   ancestors: any[] = [];
 
-  checklistSelection = new SelectionModel<OTreeNode>(true);
+  checklistSelection = new SelectionModel<OTreeFlatNode>(true);
 
   selectionChange: EventEmitter<any> = new EventEmitter();
 
@@ -142,6 +167,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   @ContentChild('parentNodeTemplate', { read: TemplateRef, static: false })
   parentNodeTemplate: TemplateRef<any>;
+  treeFlattener: any;
 
   @ContentChild('nodeTemplate', { read: TemplateRef, static: false })
   set nodeTemplate(value: TemplateRef<any>) {
@@ -155,6 +181,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   protected parentNodesHash: nodeHashType[];
   public enabledDeleteButton: boolean = false;
   protected subscription: Subscription = new Subscription();
+  showTreeeMenuButton = true;
 
   constructor(
     public injector: Injector,
@@ -211,12 +238,13 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
-  todoLeafItemSelectionToggle(node: OTreeNode): void {
+  todoLeafItemSelectionToggle(node: OTreeFlatNode): void {
     this.todoItemSelectionToggle(node);
   }
 
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
-  todoItemSelectionToggle(node: OTreeNode): void {
+  todoItemSelectionToggle(node: OTreeFlatNode): void {
+
     this.checklistSelection.toggle(node);
     if (this.checkboxSelectionMode === 'children') {
       const descendants = this.treeControl.getDescendants(node);
@@ -246,10 +274,10 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (nodeData !== null) {
       if (nodeData['parent_id']) {
         ancestor = {
-          label: this.dataSource.tree.dataArray.filter(
+          label: this.dataSource.data.filter(
             (item) => item['category_id'] == nodeData['parent_id']
           )[0]['name'],
-          data: this.dataSource.tree.dataArray.filter(
+          data: this.dataSource.data.filter(
             (item) => item['category_id'] == nodeData['parent_id']
           )[0],
         };
@@ -264,7 +292,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   /** */
 
   /** Whether all the descendants of the node are selected. */
-  descendantsAllSelected(node: OTreeNode): boolean {
+  descendantsAllSelected(node: OTreeFlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected = descendants.every((child) =>
       this.checklistSelection.isSelected(child)
@@ -273,7 +301,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   /** Whether part of the descendants are selected */
-  descendantsPartiallySelected(node: OTreeNode): boolean {
+  descendantsPartiallySelected(node: OTreeFlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
     const result = descendants.some((child) =>
       this.checklistSelection.isSelected(child)
@@ -282,8 +310,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   /* Checks all the parents when a leaf node is selected/unselected */
-  protected checkAllParentsSelection(node: OTreeNode): void {
-    let parent: OTreeNode | null = this.getParentNode(node);
+  protected checkAllParentsSelection(node: OTreeFlatNode): void {
+    let parent: OTreeFlatNode | null = this.getParentNode(node);
     while (parent) {
       this.checkRootNodeSelection(parent);
       parent = this.getParentNode(parent);
@@ -291,7 +319,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   /** Check root node checked state and change it accordingly */
-  protected checkRootNodeSelection(node: OTreeNode): void {
+  protected checkRootNodeSelection(node: OTreeFlatNode): void {
     const nodeSelected = this.checklistSelection.isSelected(node);
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected = descendants.every((child) =>
@@ -305,7 +333,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   // /* Get the parent node of a node */
-  protected getParentNode(node: OTreeNode): OTreeNode | null {
+  protected getParentNode(node: OTreeFlatNode): OTreeFlatNode | null {
     const currentLevel = this.getLevel(node);
 
     if (currentLevel < 1) {
@@ -324,64 +352,121 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     return null;
   }
 
-  getLevel(node: OTreeNode) {
-    return this.treeControl.dataNodes.indexOf(node);
-  }
-
   /** */
 
   protected setDatasource() {
-    this.dataSource = new OTreeDataSource(this);
+    // this.dataSource = new OTreeDataSource(this);
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      this.getLevel,
+      this.isExpandable,
+      this.getChildren,
+    );
+    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   }
 
-  filterData(value?: string, loadMore?: boolean): void {
-    if (value && value.length > 0) {
-      this.updateNodesDisplay(
-        this.parentNodesHash.map((nodeHash) => nodeHash.node),
-        value
-      );
-      return;
-    }
-    super.filterData(value, loadMore);
+  getParentNodes(node: OTreeNode, tree:OTreeNode[]):OTreeNode[] {
+    let ascensors = this.dataResponseArray.filter((item) => node[this.parentColumn] === item[this.keys]);
+    ascensors.forEach(item => {
+      const existingNode = tree.findIndex(x => x[this.keys] === item[this.keys]) > -1;
+      if (Util.isDefined(item[this.parentColumn]) && !existingNode) {
+        return this.getParentNodes(item, tree);
+      } else {
+        return [item];
+      }
+    });
+    return ascensors;
   }
+  filterData(value?: string, loadMore?: boolean): void {
+
+    let filteredTreeData = [];
+    if (value) {
+      this.nestedNodeMap.forEach(nestedNode => {
+        if (nestedNode.label.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) > -1) {
+          filteredTreeData.push(this.flatNodeMap.get(nestedNode));
+        }
+      });
+
+      console.log('filternodes ', filteredTreeData);
+      filteredTreeData.forEach(node => {
+        const parentNodes = this.getParentNodes(node, filteredTreeData);
+        if (!Util.isArrayEmpty(parentNodes)) {
+          filteredTreeData= filteredTreeData.concat(parentNodes);
+        }
+      });
+
+    } else {
+      filteredTreeData = this.dataResponseArray;
+    }
+
+    // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
+    // file node as children.
+    this.setDataArray(filteredTreeData);
+    // const data = this.transformer(filteredTreeData, 0);
+    // Notify the change.
+    if (value) {
+      this.treeControl.expandAll();
+    }
+
+
+    //this.dataArray.forEach(item=>)
+  }
+
 
   setDataArray(data: any): void {
     super.setDataArray(data);
-    this.createFlatNodesArray();
-    this.dataSource.data = this.nodesArray;
+    this.childreNodes = this.dataArray.filter(
+      (item) => item[this.parentColumn] != null
+    );
+    this.dataSource.data = data;
+    console.log('datanodes ', this.treeControl.dataNodes);
   }
 
-  protected createFlatNodesArray() {
-    let allNodesHash: nodeHashType[] = this.dataArray.map((item) => {
-      return {
-        id: this.getItemKey(item),
-        node: this.createNode(item),
-      };
-    });
-    const childNodesHash = allNodesHash.filter(
-      (item) => item.node.data[this.parentColumn] != null
-    );
+  transformer = (node: any, level: number) => {
 
-    childNodesHash.forEach((item) => {
-      const parentNode = allNodesHash.find(
-        (nodeItem) => nodeItem.id == item.node.data[this.parentColumn]
-      );
-      if (parentNode != null) {
-        parentNode.node.children = [
-          ...(parentNode.node.children || []),
-          item.node,
-        ];
-      }
-    });
+    const existingNode = this.nestedNodeMap.get(node);
+    if (existingNode) {
+      return existingNode;
+    }
+    const nodeChildren = this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
+    const flatNode: OTreeFlatNode =
+      existingNode && existingNode.label === node.label ? existingNode : { 'label': this.getItemText(node), 'level': level, 'expandable': !!nodeChildren?.length, 'data': node };
+    this.flatNodeMap.set(flatNode, node);
+    this.nestedNodeMap.set(node, flatNode);
+    console.log('flatNode ', flatNode);
+    nodeChildren.forEach(node => this.transformer(node, level + 1));
+    return flatNode;
 
-    this.parentNodesHash = allNodesHash.filter(
-      (item) => item.node.data[this.parentColumn] == null
-    );
+    // let allNodesHash: nodeHashType[] = this.dataArray.map((item) => {
+    //   return {
+    //     id: this.getItemKey(item),
+    //     node: this.createNode(item),
+    //   };
+    // });
+    // const childNodesHash = allNodesHash.filter(
+    //   (item) => item.node.data[this.parentColumn] != null
+    // );
 
-    const parentNodesArray = this.parentNodesHash.map((item) => item.node);
+    // childNodesHash.forEach((item) => {
+    //   const parentNode = allNodesHash.find(
+    //     (nodeItem) => nodeItem.id == item.node.data[this.parentColumn]
+    //   );
+    //   if (parentNode != null) {
+    //     parentNode.node.children = [
+    //       ...(parentNode.node.children || []),
+    //       item.node,
+    //     ];
+    //   }
+    // });
 
-    this.sort(parentNodesArray);
-    this.nodesArray = parentNodesArray;
+    // this.parentNodesHash = allNodesHash.filter(
+    //   (item) => item.node.data[this.parentColumn] == null
+    // );
+
+    // const parentNodesArray = this.parentNodesHash.map((item) => item.node);
+
+    // this.sort(parentNodesArray);
+    // this.nodesArray = parentNodesArray;
   }
 
   protected sort(array: OTreeNode[]): void {
@@ -395,12 +480,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
   }
 
-  protected createNode(item: any): OTreeNode {
-    return {
-      label: this.getItemText(item),
-      data: item,
-    };
-  }
+
 
   protected getItemText(item: any): string {
     return this.visibleColumnsArray
@@ -414,36 +494,14 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   protected updateNodesDisplay(
-    nodesArray: OTreeNode[],
     quickfilter: string,
     fixedValue?: boolean
   ): void {
-    nodesArray.forEach((node) => {
-      let display: boolean = !!fixedValue;
-      if (!display) {
-        if (node.children) {
-          node.display = this.filterByQuickFilterColumns(node.data, quickfilter)
-            ? 'block'
-            : 'none';
-          this.updateNodesDisplay(
-            node.children,
-            quickfilter,
-            node.display === 'block'
-          );
-        }
-        const newValue =
-          node.children &&
-          node.display !== 'block' &&
-          node.children.some((node) => node.display === 'block');
-        if (newValue) {
-          this.treeControl.expand(node);
-        }
-        display =
-          newValue || this.filterByQuickFilterColumns(node.data, quickfilter);
-      }
-      node.display = display ? 'block' : 'none';
-    });
-  }
+    const filterData = this.treeControl.dataNodes.filter(node =>
+      this.filterByQuickFilterColumns(node, quickfilter));
+    console.log(filterData);
+
+
 
   protected filterByQuickFilterColumns(
     item: any,
@@ -456,7 +514,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       )
     );
     return this.getQuickFilterColumns().some((col) =>
-      regExpStr.test(Util.normalizeString(item[col] + '', !caseSensitive))
+      regExpStr.test(Util.normalizeString(item.data[col] + '', !caseSensitive))
     );
   }
 

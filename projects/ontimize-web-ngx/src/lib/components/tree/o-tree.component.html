@@ -46,14 +46,19 @@
     <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
       [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never">
     </o-search-input>
+    <button type="button" *ngIf="showTreeeMenuButton" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu"
+      (click)="$event.stopPropagation()">
+      <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
+    </button>
+    <mat-menu #treeMenu></mat-menu>
 
   </div>
 
 
-  <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
     <!-- This is the tree node template for leaf nodes -->
-    <cdk-nested-tree-node *cdkTreeNodeDef="let node" fxLayout="row" fxLayoutAlign="start center" class="tree-node"
-      [style.display]="node.display || 'block'" (click)="leafNodeClicked(node, $event)">
+    <mat-tree-node *matTreeNodeDef="let node" (click)="leafNodeClicked(node, $event)" matTreeNodeToggle matTreeNodePadding>
       <!-- use a disabled button to provide padding for tree leaf -->
       <button mat-icon-button disabled></button>
 
@@ -71,11 +76,10 @@
         </ng-container>
       </ng-template>
 
-    </cdk-nested-tree-node>
+    </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
-    <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChild" class="tree-node" [style.display]="node.display || 'block'"
-      (click)="parentNodeClicked(node, $event)">
-      <button mat-icon-button [attr.aria-label]="'toggle ' + node.label" cdkTreeNodeToggle>
+    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="parentNodeClicked(node, $event)" matTreeNodePadding>
+      <button mat-icon-button [attr.aria-label]="'toggle ' + node.label" matTreeNodeToggle>
         <mat-icon class="mat-icon-rtl-mirror">
           {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
         </mat-icon>
@@ -95,12 +99,8 @@
         <ng-container [ngTemplateOutlet]="parentNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
         </ng-container>
       </ng-template>
-
-      <div [class.example-tree-invisible]="!treeControl.isExpanded(node)">
-        <ng-container cdkTreeNodeOutlet></ng-container>
-      </div>
-    </cdk-nested-tree-node>
-  </cdk-tree>
+    </mat-tree-node>
+  </mat-tree>
 </div>
 
 <ng-template let-node #leafNodeFulltemplate>
