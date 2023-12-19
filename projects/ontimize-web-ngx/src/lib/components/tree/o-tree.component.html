@@ -46,14 +46,13 @@
     <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
       [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never">
     </o-search-input>
-    <button type="button" *ngIf="showTreeeMenuButton" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu"
+    <button type="button" *ngIf="showTreeMenuButton" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu.matMenu"
       (click)="$event.stopPropagation()">
       <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
     </button>
-    <mat-menu #treeMenu></mat-menu>
+    <o-tree-menu #treeMenu [select-all-checkbox]="selectAllCheckbox"></o-tree-menu>
 
   </div>
-
 
   <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
 
@@ -79,7 +78,7 @@
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
     <mat-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="parentNodeClicked(node, $event)" matTreeNodePadding>
-      <button mat-icon-button [attr.aria-label]="'toggle ' + node.label" matTreeNodeToggle>
+      <button mat-icon-button [attr.aria-label]="'toggle ' + node.label" matTreeNodeToggle (click)="onClickToggleButton(node)">
         <mat-icon class="mat-icon-rtl-mirror">
           {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
         </mat-icon>
