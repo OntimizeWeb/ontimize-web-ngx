@@ -295,7 +295,8 @@ export const MAP = {
     'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Clear filter',
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'This action will clear every filter on this section. Are you sure you want to continue?',
     'OIMAGE.TEXT.DROP&DRAG': 'Drag and drop image file here',
-    'OIMAGE.BUTTON.BROWSEFILE': 'Select image'
+    'OIMAGE.BUTTON.BROWSEFILE': 'Select image',
+    'TREE.BUTTONS.SELECT': 'Select...',
   },
 
   // Spanish
@@ -585,7 +586,8 @@ export const MAP = {
     'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Limpiar filtro',
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros de esta sección. ¿Desea continuar?',
     'OIMAGE.TEXT.DROP&DRAG': 'Arrastra y suelta la imagen aquí',
-    'OIMAGE.BUTTON.BROWSEFILE':'Seleccionar imagen'
+    'OIMAGE.BUTTON.BROWSEFILE': 'Seleccionar imagen',
+    'TREE.BUTTONS.SELECT': 'Seleccionar...',
   },
   // Portuguese - BRAZIL
   pt: {
@@ -861,6 +863,7 @@ export const MAP = {
     'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER': 'Filtro limpo',
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta ação limpará todos os filtros nesta seção. Você tem certeza que quer continuar?',
     'OIMAGE.TEXT.DROP&DRAG': 'Arraste e solte a imagem aqui',
-    'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem'
+    'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem',
+    'TREE.BUTTONS.SELECT': 'Selecionar...'
   }
 }
