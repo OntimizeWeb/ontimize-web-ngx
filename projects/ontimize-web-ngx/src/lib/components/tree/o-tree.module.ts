@@ -1,3 +1,4 @@
+import { OTreeNodeComponent } from './tree-node/tree-node.component';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -9,8 +10,8 @@ import { MatTreeModule } from '@angular/material/tree';
 import { OTreeMenuComponent } from './header/tree-menu/o-tree-menu.component';
 
 @NgModule({
-	declarations: [OTreeComponent, OTreeMenuComponent],
+  declarations: [OTreeNodeComponent,OTreeComponent, OTreeMenuComponent],
   imports: [CommonModule, OSearchInputModule, OSharedModule, CdkTreeModule, MatTreeModule],
-	exports: [OTreeComponent],
+  exports: [OTreeComponent, OTreeNodeComponent],
 })
-export class OTreeModule {}
+export class OTreeModule { }
