@@ -103,25 +103,26 @@
 </div>
 
 <ng-template let-node #leafNodeFulltemplate>
-  <div class="leaf-node">
-    <ng-container *ngIf="leafNodeTemplate; else defaultLeafNodeTpl" [ngTemplateOutlet]="leafNodeTemplate"
-      [ngTemplateOutletContext]="{$implicit:node.data}">
-    </ng-container>
+  <!-- <div class="leaf-node"> -->
+  <ng-container *ngIf="leafNodeTemplate; else defaultLeafNodeTpl" [ngTemplateOutlet]="leafNodeTemplate"
+    [ngTemplateOutletContext]="{$implicit:node.data}">
+  </ng-container>
 
-    <ng-template #defaultLeafNodeTpl>
-      {{node.label}}
-    </ng-template>
-  </div>
+  <ng-template #defaultLeafNodeTpl>
+    {{node.label}}
+  </ng-template>
+  <!-- </div> -->
 </ng-template>
 
 <ng-template let-node #parentNodeFulltemplate>
-  <div class="parent-node">
-    <ng-container *ngIf="parentNodeTemplate; else defaultParentNodeTpl" [ngTemplateOutlet]="parentNodeTemplate"
-      [ngTemplateOutletContext]="{$implicit:node.data}">
-    </ng-container>
+  <!-- <div class="parent-node"> -->
+  <ng-container *ngIf="parentNodeTemplate; else defaultParentNodeTpl" [ngTemplateOutlet]="parentNodeTemplate"
+    [ngTemplateOutletContext]="{$implicit:node.data}">
+  </ng-container>
 
-    <ng-template #defaultParentNodeTpl>
-      {{node.label}}
-    </ng-template>
-  </div>
+  <ng-template #defaultParentNodeTpl>
+    <span>{{node.label}}</span>
+    <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" fxFlex></mat-progress-bar>
+  </ng-template>
+  <!-- </div> -->
 </ng-template>

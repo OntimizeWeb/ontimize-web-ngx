@@ -1,26 +1,5 @@
 .o-tree {
-	.example-tree-invisible {
-		display: none;
-	}
-
-	.tree-node {
-		display: block;
-		.tree-node {
-			padding-left: 16px;
-		}
-	}
-
-	.mat-checkbox {
-		padding: 0;
-	}
-
-	.node-wrapper {
-		display: inline;
-	}
-
-	.parent-node,
-	.leaf-node {
-		display: inline;
-		cursor: pointer;
-	}
+  .mat-mdc-progress-bar {
+    margin-left: 30px;
+  }
 }
