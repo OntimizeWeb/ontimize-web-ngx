@@ -22,6 +22,7 @@ import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
+import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -73,6 +74,8 @@ export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report servi
 export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
 
 export const O_EXPORT_DATA_SERVICE = new InjectionToken<IExportDataProvider>('Export data provider');
+
+export const O_REPORT_DATA_SERVICE = new InjectionToken<IReportDataProvider>('Report data provider');
 
 export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 

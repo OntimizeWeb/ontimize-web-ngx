@@ -37,3 +37,4 @@ export * from './service-response.interface';
 export * from './export-data-provider.interface';
 export * from './o-table-export-data.interface'
 export * from './query-parameter.interface';
+export * from './report-data-provider.interface';
