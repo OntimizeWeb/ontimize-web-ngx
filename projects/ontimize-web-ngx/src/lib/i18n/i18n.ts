@@ -588,8 +588,8 @@ export const MAP = {
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros de esta sección. ¿Desea continuar?',
     'OIMAGE.TEXT.DROP&DRAG': 'Arrastra y suelta la imagen aquí',
     'OIMAGE.BUTTON.BROWSEFILE': 'Seleccionar imagen',
-    'REPORT.BOOLEANCOLUMN.TRUEVALUE': 'Si',
-    'REPORT.BOOLEANCOLUMN.FALSEVALUE': 'No'
+    'REPORT.COLUMN.TRUEVALUE': 'Si',
+    'REPORT.COLUMN.FALSEVALUE': 'No'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -866,7 +866,7 @@ export const MAP = {
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta ação limpará todos os filtros nesta seção. Você tem certeza que quer continuar?',
     'OIMAGE.TEXT.DROP&DRAG': 'Arraste e solte a imagem aqui',
     'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem',
-    'REPORT.BOOLEANCOLUMN.TRUEVALUE': 'Sim',
-    'REPORT.BOOLEANCOLUMN.FALSEVALUE': 'Não'
+    'REPORT.COLUMN.TRUEVALUE': 'Sim',
+    'REPORT.COLUMN.FALSEVALUE': 'Não'
   }
 }
