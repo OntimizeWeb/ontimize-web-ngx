@@ -1,3 +1,11 @@
+## 8.14.6
+### Features
+* Added new literals in the bundle ([9160190](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9160190))
+
+### Bug fixes
+* **o-table**: Fixed the submenu is still actived when the submenu lost focus in the submenu in table menu. ([c5527f1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c5527f1)) Closes [#1427](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1427)
+* Fixed typos in bundle
+
 ## 8.14.5 (2023-12-14)
 ### Bug fixes
 * **o-service-component.class.ts**: Fixed bug in the `getPaginationDataFromArray` method that returned a subset of data when there was no pagination control ([b76d0ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b76d0ea))([d519e76](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d519e76)) Closes [#1413](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1413)
