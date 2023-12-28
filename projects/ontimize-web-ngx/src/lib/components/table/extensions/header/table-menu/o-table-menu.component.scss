@@ -1,4 +1,9 @@
 .o-table-menu {
+  span.mat-menu-item.padding-0 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .mat-divider {
     margin: 0 8px;
   }
