@@ -252,7 +252,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       return false;
     }
     const perm: OPermissions = this.getPermissionByAttr('select-all-checkbox');
-    return this.showFilterOption && !(perm && perm.visible === false);
+    return this.selectAllCheckbox && !(perm && perm.visible === false);
   }
 
   get rowHeightObservable(): Observable<string> {
