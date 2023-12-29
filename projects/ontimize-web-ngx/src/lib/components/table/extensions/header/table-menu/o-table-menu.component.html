@@ -11,7 +11,7 @@
   <span mat-menu-item class="padding-0" *ngIf="showResetWidthOption">
     <o-table-option (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
   </span>
-  <mat-divider *ngIf="showSelectAllCheckbox || showColumnsVisibilityButton || showResetWidthOption"></mat-divider>
+  <mat-divider *ngIf="showFirstDivider"></mat-divider>
   <span mat-menu-item class="padding-0" *ngIf="showExportButton">
     <o-table-option #exportButtonOption (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"></o-table-option>
   </span>
@@ -21,7 +21,7 @@
   <span mat-menu-item class="padding-0" *ngIf="showChartsOnDemandButton">
     <o-table-option (onClick)="onChartsOnDemandClicked()" label="TABLE.BUTTONS.CHART_ON_DEMAND"></o-table-option>
   </span>
-  <mat-divider *ngIf=" showExportButton || showReportOnDemandButton || showChartsOnDemandButton"></mat-divider>
+  <mat-divider *ngIf="showSecondDivider"></mat-divider>
   <span mat-menu-item class="padding-0" *ngIf="showGroupByButton">
     <o-table-option #columnsGroupByOption (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
   </span>
