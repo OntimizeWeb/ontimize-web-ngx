@@ -3,7 +3,7 @@
 * Added new literals in the bundle ([9160190](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9160190))
 
 ### Bug fixes
-* **o-table**: Fixed the submenu is still actived when the submenu lost focus in the submenu in table menu. ([c5527f1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c5527f1)) ([2bc4ee2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bc4ee2)) Closes [#1427](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1427)
+* **o-table**: Fixed the submenu is still actived when the submenu lost focus in table options menu. ([c5527f1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c5527f1)) ([2bc4ee2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bc4ee2)) Closes [#1427](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1427)
 * Fixed typos in bundle ([42a8e97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42a8e97))
 42a8e97
 
