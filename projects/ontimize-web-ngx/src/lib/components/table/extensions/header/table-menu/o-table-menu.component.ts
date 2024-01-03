@@ -248,7 +248,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       return false;
     }
     const perm: OPermissions = this.getPermissionByAttr('select-all-checkbox');
-    return this.showFilterOption && !(perm && perm.visible === false);
+    return this.selectAllCheckbox && !(perm && perm.visible === false);
   }
 
   get rowHeightObservable(): Observable<string> {
@@ -325,6 +325,25 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     return !(perm && perm.visible === false);
 
   }
+  get showFirstDivider(): boolean {
+    return (this.showAnyOptionFirstSection && this.showAnyOptionSecondSection) ||
+      (this.showAnyOptionFirstSection && !this.showAnyOptionSecondSection && this.showAnyOptionThirdSection);
+  }
+
+  get showSecondDivider(): boolean {
+    return this.showAnyOptionSecondSection && this.showAnyOptionThirdSection;
+  }
+
+  get showAnyOptionThirdSection():boolean {
+    return this.showGroupByButton || this.showFilterMenu || this.showConfigurationMenu;
+  }
+  get showAnyOptionFirstSection(): boolean {
+    return this.showSelectAllCheckbox || this.showColumnsVisibilityButton || this.showResetWidthOption;
+  }
+  get showAnyOptionSecondSection(): boolean {
+    return this.showExportButton || this.showReportOnDemandButton || this.showChartsOnDemandButton;
+  }
+
 
   onShowsSelects() {
     const tableOptions = this.table.oTableOptions;
