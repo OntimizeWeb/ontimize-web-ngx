@@ -1,7 +1,10 @@
 .o-table-menu {
-  span.mat-menu-item.padding-0 {
+  span.mat-mdc-menu-item.padding-0 {
     padding-left: 0;
     padding-right: 0;
+    .mdc-list-item__primary-text{
+      width: 100%;
+    }
   }
 
   .mat-divider {
