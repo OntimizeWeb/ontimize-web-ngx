@@ -1,6 +1,10 @@
 {
-  "name": "ontimize-web-ngx",
+  "name": "@OntimizeWeb/ontimize-web-ngx",
   "version": "15.0.0-SNAPSHOT-7",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OntimizeWeb/ontimize-web-ngx.git"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
