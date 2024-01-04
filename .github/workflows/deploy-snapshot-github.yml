@@ -19,13 +19,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      # Setup .npmrc file to publish to GitHub Packages
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18.10.0'
-          registry-url: 'https://npm.pkg.github.com'
-          # Defaults to the user or organization that owns the workflow file
-          scope: '@OntimizeWeb'
       - name: 'Cache node modules'
         uses: actions/cache@v3
         with:
@@ -37,6 +30,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.10.0
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@OntimizeWeb'
 
       - name: obtain package.json version
         id: project
