@@ -1,0 +1,62 @@
+name: Deploy snapshot to Github Packages
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "feature/deploy-github-packages"
+
+env:
+  NEXUS_REGISTRY: http://nexus-jx.34.122.211.64.nip.io/repository/npm-private/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: 'Cache node modules'
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Node 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.10.0
+
+      - name: obtain package.json version
+        id: project
+        run: |
+          echo "version=$(node -pe "require('./package.json')['version']")" >> "$GITHUB_OUTPUT"
+      - name: abort if not SNAPSHOT
+        if: "!contains(steps.project.outputs.version, 'SNAPSHOT')"
+        run: |
+          echo "Version ${{ steps.project.outputs.version }} is not a properly named SNAPSHOT"
+          exit 1
+      - name: npm install and npm run build
+        run: |
+          npm i
+          npm run build-prod
+      # Setup .npmrc file to publish to GitHub Packages
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.10.0'
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@OntimizeWeb'
+      - name: Publish
+        run: |
+          cd dist
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
