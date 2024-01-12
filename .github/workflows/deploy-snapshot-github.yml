@@ -48,6 +48,10 @@ jobs:
         run: |
           npm version ${{ steps.project.outputs.version }}.$( date "+%s") --no-git-tag-version
 
+      - name: npm install
+        run: |
+          npm i
+
       # Adpat artifact name to Github packages
       - name: Update package.json names
         run: |
@@ -56,9 +60,8 @@ jobs:
 
       - run: echo registry=https://npm.pkg.github.com/OntimizeWeb >> .npmrc
 
-      - name: npm install and npm run build
+      - name: npm run build
         run: |
-          npm i
           npm run build-prod
 
       - name: Publish SNAPSHOT
