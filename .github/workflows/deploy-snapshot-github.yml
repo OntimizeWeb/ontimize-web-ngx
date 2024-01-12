@@ -33,6 +33,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@OntimizeWeb'
+          always-auth: true
 
       - name: obtain package.json version
         id: project
@@ -41,15 +42,27 @@ jobs:
       - name: abort if not SNAPSHOT
         if: "!contains(steps.project.outputs.version, 'SNAPSHOT')"
         run: |
-          echo "Version ${{ steps.project.outputs.version }} is not a properly named SNAPSHOT"
+          echo "Version ${{ steps.project.outputs.version }} is not a properly named for SNAPSHOT"
           exit 1
+      - name: bump SNAPSHOT version
+        run: |
+          npm version ${{ steps.project.outputs.version }}.$( date "+%s")
+
+      # Adpat artifact name to Github packages
+      - name: Update package.json names
+        run: |
+          sed -i '2,2s/ontimize-web-ng/@OntimizeWeb\/ontimize-web-ng/g' package.json
+          sed -i '2,2s/ontimize-web-ng/@OntimizeWeb\/ontimize-web-ng/g' projects/ontimize-web-ng/package.json
+
+      - run: echo registry=https://npm.pkg.github.com/OntimizeWeb >> .npmrc
+
       - name: npm install and npm run build
         run: |
           npm ci
           npm run build-prod
-      - name: Publish
-        run: |
-          cd dist
-          npm publish
+
+      - name: Publish SNAPSHOT
         env:
           NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
+        run: |
+          npm publish dist/ --verbose --tag ${{ steps.project.outputs.version }}
