@@ -51,8 +51,8 @@ jobs:
       # Adpat artifact name to Github packages
       - name: Update package.json names
         run: |
-          sed -i '2,2s/ontimize-web-ng/@OntimizeWeb\/ontimize-web-ng/g' package.json
-          sed -i '2,2s/ontimize-web-ng/@OntimizeWeb\/ontimize-web-ng/g' projects/ontimize-web-ng/package.json
+          sed -i '2,2s/ontimize-web-ngx/@OntimizeWeb\/ontimize-web-ngx/g' package.json
+          sed -i '2,2s/ontimize-web-ngx/@OntimizeWeb\/ontimize-web-ngx/g' projects/ontimize-web-ngx/package.json
 
       - run: echo registry=https://npm.pkg.github.com/OntimizeWeb >> .npmrc
 
