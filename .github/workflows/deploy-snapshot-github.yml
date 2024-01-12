@@ -84,4 +84,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
         run: |
           cd dist
-          npm dist-tag add @ontimizeweb/ontimize-web-ngx@${{ steps.bump.outputs.bumpVersion }} ""snapshot-15x"
+          npm dist-tag add @ontimizeweb/ontimize-web-ngx@${{ steps.bump.outputs.bumpVersion }} "snapshot-15x"
