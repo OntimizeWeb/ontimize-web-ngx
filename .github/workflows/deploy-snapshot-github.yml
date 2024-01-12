@@ -6,6 +6,10 @@ on:
     branches:
       - "feature/deploy-github-packages"
 
+env:
+  LIBRARY_PATH: projects/ontimize-web-ngx
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -47,8 +51,11 @@ jobs:
       - name: bump SNAPSHOT version
         id: bump
         run: |
-          npm version ${{ steps.project.outputs.version }}.$( date "+%s") --no-git-tag-version
+          bumpedVersion = ${{ steps.project.outputs.version }}.$( date "+%s")
+          npm version $bumpedVersion --no-git-tag-version
           echo "bumpVersion=$(node -pe "require('./package.json')['version']")" >> "$GITHUB_OUTPUT"
+          cd ${{ env.LIBRARY_PATH }}
+          npm version $bumpedVersion --no-git-tag-version
 
       - name: npm install
         run: |
@@ -60,8 +67,6 @@ jobs:
           sed -i '2,2s/ontimize-web-ngx/@OntimizeWeb\/ontimize-web-ngx/g' package.json
           sed -i '2,2s/ontimize-web-ngx/@OntimizeWeb\/ontimize-web-ngx/g' projects/ontimize-web-ngx/package.json
 
-      - run: echo registry=https://npm.pkg.github.com/OntimizeWeb >> .npmrc
-
       - name: npm run build
         run: |
           npm run build-prod
@@ -70,5 +75,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
         run: |
-          npm publish dist/ --verbose --tag next
-          npm dist-tag add ${{ steps.bump.outputs.bumpVersion }} ${{ steps.project.outputs.version }}
+          cd dist
+          echo registry=https://npm.pkg.github.com/OntimizeWeb >> .npmrc
+          npm publish --verbose --tag next
+
+      - name: Add tag
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
+        run: |
+          cd dist
+          npm dist-tag add @ontimizeweb/ontimize-web-ngx@${{ steps.bump.outputs.bumpVersion }} ${{ steps.project.outputs.version }}
