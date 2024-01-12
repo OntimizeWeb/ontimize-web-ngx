@@ -51,7 +51,7 @@ jobs:
       - name: bump SNAPSHOT version
         id: bump
         run: |
-          bumpedVersion = ${{ steps.project.outputs.version }}.$( date "+%s")
+          bumpedVersion=${{ steps.project.outputs.version }}.$( date "+%s")
           npm version $bumpedVersion --no-git-tag-version
           echo "bumpVersion=$(node -pe "require('./package.json')['version']")" >> "$GITHUB_OUTPUT"
           cd ${{ env.LIBRARY_PATH }}
