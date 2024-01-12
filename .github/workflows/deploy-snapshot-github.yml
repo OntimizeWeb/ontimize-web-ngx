@@ -45,8 +45,10 @@ jobs:
           echo "Version ${{ steps.project.outputs.version }} is not a properly named for SNAPSHOT"
           exit 1
       - name: bump SNAPSHOT version
+        id: bump
         run: |
           npm version ${{ steps.project.outputs.version }}.$( date "+%s") --no-git-tag-version
+          echo "bumpVersion=$(node -pe "require('./package.json')['version']")" >> "$GITHUB_OUTPUT"
 
       - name: npm install
         run: |
@@ -68,4 +70,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
         run: |
-          npm publish dist/ --verbose --tag ${{ steps.project.outputs.version }}
+          npm publish dist/ --verbose --tag next
+          npm dist-tag add ${{ steps.bump.outputs.bumpVersion }} ${{ steps.project.outputs.version }}
