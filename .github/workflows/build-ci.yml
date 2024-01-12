@@ -49,7 +49,7 @@ jobs:
 
       - name: bump SNAPSHOT version
         run: |
-          npm version ${{ steps.project.outputs.version }}.$( date "+%s")
+          npm version ${{ steps.project.outputs.version }}.$( date "+%s") --no-git-tag-version
 
       # Adpat artifact name to Github packages
       - name: Update package.json names
