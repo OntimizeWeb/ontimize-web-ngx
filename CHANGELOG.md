@@ -1,9 +1,16 @@
 ## 15.0.0-beta.5(2024-01-15)
 ### Features
 * Hide hint error when O_MAT_ERROR_OPTIONS injection token value is `{type: 'lite'}`([03820e6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03820e6)) Closes [#1402](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1402)
+* **o-form**: added new emitters  `onBeforeInsert`, `onBeforeUpdate`, `onBeforeDelete` that allow modifying the insertion, deletion and update parameters ([a6b9a1d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6b9a1d)) Closes [#1434](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1434)
+* **o-file-input**: Removed the common inputs with `OFormDataComponent` ([31c719e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/31c719e)) Closes [#1353](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1353)
 
 ### Bug fixes
 * Fixes scroll with oLocker directive ([788003d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/788003d)) Closes [#1406](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1406)
+* **o-currency-input**: Fixed bug that caused to appear two icons ([c1c0a39](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c1c0a39)) Closes [#1408](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1408)
+* **o-table**: Fixed bug that caused the table menu details to be displayed in the wrong position ([6432ca0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6432ca0)) Closes [#1348](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1348)
+* **o-table-quickfilter**: Fixed bug that caused the height input to be incorrect ([66eae3b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66eae3b)) Closes [#1383](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1383)
+* **OFormServiceComponent**: Fixed bug that prevented the `emitOnValueChange` from being reset correctly ([6296480](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6296480)) Closes [#1342](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1342)
+
 
 ## 8.14.6 (2024-01-02)
 ### Features
