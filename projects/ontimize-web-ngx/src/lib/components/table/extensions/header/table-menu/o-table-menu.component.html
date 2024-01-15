@@ -1,20 +1,30 @@
 <mat-menu #menu="matMenu" x-position="before" [class]="(rowHeightObservable | async) +' o-table-menu o-mat-menu'">
+  <!-- It is necessary to wrap the o-table button with <span mat-menu-item> so that the submenus collapse when losing focus -->
   <!-- DEFAULT OPTIONS -->
-  <o-table-option #selectAllCheckboxOption *ngIf="showSelectAllCheckbox" [active]="isSelectAllOptionActive" (onClick)="onShowsSelects()"
-    label="TABLE.BUTTONS.SELECT" show-checkbox-option="true"></o-table-option>
-  <o-table-option #columnsVisibilityButtonOption *ngIf="showColumnsVisibilityButton" (onClick)="onChangeColumnsVisibilityClicked()"
-    label="TABLE.BUTTONS.COLVIS"></o-table-option>
-  <o-table-option *ngIf="showResetWidthOption" (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
-
-  <mat-divider *ngIf="showSelectAllCheckbox || showColumnsVisibilityButton || showResetWidthOption"></mat-divider>
-
-  <o-table-option #exportButtonOption *ngIf="showExportButton" (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"></o-table-option>
-  <o-table-option (onClick)="onReportOnDemandClicked()" label="TABLE.BUTTONS.REPORT_ON_DEMAND" *ngIf="showReportOnDemandButton"></o-table-option>
-  <o-table-option *ngIf="showChartsOnDemandButton" (onClick)="onChartsOnDemandClicked()" label="TABLE.BUTTONS.CHART_ON_DEMAND"></o-table-option>
-  <mat-divider *ngIf=" showExportButton || showReportOnDemandButton || showChartsOnDemandButton"></mat-divider>
-
-  <o-table-option #columnsGroupByOption *ngIf="showGroupByButton" (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
-
+  <span mat-menu-item class="padding-0" *ngIf="showSelectAllCheckbox">
+    <o-table-option #selectAllCheckboxOption [active]="isSelectAllOptionActive" (onClick)="onShowsSelects()" label="TABLE.BUTTONS.SELECT"
+      show-checkbox-option="true"></o-table-option>
+  </span>
+  <span mat-menu-item class="padding-0" *ngIf="showColumnsVisibilityButton">
+    <o-table-option #columnsVisibilityButtonOption (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS"></o-table-option>
+  </span>
+  <span mat-menu-item class="padding-0" *ngIf="showResetWidthOption">
+    <o-table-option (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
+  </span>
+  <mat-divider *ngIf="showFirstDivider"></mat-divider>
+  <span mat-menu-item class="padding-0" *ngIf="showExportButton">
+    <o-table-option #exportButtonOption (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"></o-table-option>
+  </span>
+  <span mat-menu-item class="padding-0" *ngIf="showReportOnDemandButton">
+    <o-table-option (onClick)="onReportOnDemandClicked()" label="TABLE.BUTTONS.REPORT_ON_DEMAND"></o-table-option>
+  </span>
+  <span mat-menu-item class="padding-0" *ngIf="showChartsOnDemandButton">
+    <o-table-option (onClick)="onChartsOnDemandClicked()" label="TABLE.BUTTONS.CHART_ON_DEMAND"></o-table-option>
+  </span>
+  <mat-divider *ngIf="showSecondDivider"></mat-divider>
+  <span mat-menu-item class="padding-0" *ngIf="showGroupByButton">
+    <o-table-option #columnsGroupByOption (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
+  </span>
   <button type="button" #filterMenuButton *ngIf="showFilterMenu" mat-menu-item [matMenuTriggerFor]="filterMenu">{{
     'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
   <button type="button" #configurationMenuButton *ngIf="showConfigurationMenu" mat-menu-item [matMenuTriggerFor]="configurationMenu">{{
@@ -22,10 +32,12 @@
   <ng-content></ng-content>
 </mat-menu>
 
-<mat-menu #filterMenu="matMenu" [class]="(rowHeightObservable| async) +' o-table-menu'">
-  <o-table-option #columnFilterOption show-checkbox-option="true" [active]="isColumnFilterOptionActive" (onClick)="onFilterByColumnClicked()"
-    label="TABLE.BUTTONS.FILTER_BY_COLUMN">
-  </o-table-option>
+<mat-menu #filterMenu="matMenu" [class]="(rowHeightObservable| async) +' o-table-menu o-mat-menu'">
+  <span mat-menu-item class="padding-0">
+    <o-table-option #columnFilterOption show-checkbox-option="true" [active]="isColumnFilterOptionActive" (onClick)="onFilterByColumnClicked()"
+      label="TABLE.BUTTONS.FILTER_BY_COLUMN">
+    </o-table-option>
+  </span>
   <button type="button" mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate
     }}</button>
   <button type="button" mat-menu-item (click)="onLoadFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate
@@ -34,7 +46,7 @@
     }}</button>
 </mat-menu>
 
-<mat-menu #configurationMenu="matMenu" [class]="(rowHeightObservable | async) +' o-table-menu'">
+<mat-menu #configurationMenu="matMenu" [class]="(rowHeightObservable | async) +' o-table-menu  o-mat-menu'">
   <button type="button" mat-menu-item (click)="onStoreConfigurationClicked()">{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' |
     oTranslate }}</button>
   <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' |
