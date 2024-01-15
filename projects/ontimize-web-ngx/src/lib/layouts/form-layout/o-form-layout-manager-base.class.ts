@@ -34,5 +34,6 @@ export abstract class OFormLayoutManagerBase {
   abstract updateNavigation(data: any, keysValues: any, insertionMode: boolean);
   abstract getDataToStore(): any;
   abstract getComponentKey(): string;
+  abstract closeDetails(detailsKeysData: any[], options?: FormLayoutCloseDetailOptions): void;
 
 }

@@ -1,10 +1,23 @@
-## 15.0.0
+## 15.0.0-beta.5(2024-01-15)
 ### Features
 * Hide hint error when O_MAT_ERROR_OPTIONS injection token value is `{type: 'lite'}`([03820e6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03820e6)) Closes [#1402](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1402)
 
 ### Bug fixes
 * Fixes scroll with oLocker directive ([788003d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/788003d)) Closes [#1406](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1406)
 
+## 8.14.6 (2024-01-02)
+### Features
+* Added new literals in the bundle ([9160190](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9160190))
+
+### Bug fixes
+* **o-table**: Fixed the submenu is still actived when the submenu lost focus in table options menu. ([c5527f1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c5527f1)) ([2bc4ee2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bc4ee2)) Closes [#1427](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1427)
+* Fixed typos in bundle ([42a8e97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42a8e97))
+42a8e97
+
+## 8.14.5 (2023-12-14)
+### Bug fixes
+* **o-service-component.class.ts**: Fixed bug in the `getPaginationDataFromArray` method that returned a subset of data when there was no pagination control ([b76d0ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b76d0ea))([d519e76](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d519e76)) Closes [#1413](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1413)
+* **o-table-cell-renderer-service-**: Fixed the table crashed when the result of the o-table-cell-renderer-service has no values ([4bf6bf8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4bf6bf8)) Closes [#1415](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1415)
 
 ## 15.0.0-beta.4(2023-11-15)
 ### Features

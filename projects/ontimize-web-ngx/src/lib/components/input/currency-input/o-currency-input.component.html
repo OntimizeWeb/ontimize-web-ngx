@@ -1,4 +1,4 @@
-<div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+<div class="currency-container" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="space-between center">
 
   <div *ngIf="useSymbol('left')" matSuffix class="icon-btn" [class.mat-disabled]="!enabled">

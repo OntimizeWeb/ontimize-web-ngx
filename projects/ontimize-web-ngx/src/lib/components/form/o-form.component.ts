@@ -160,6 +160,9 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'beforeCloseDetail',
   'beforeGoEditMode',
   'onFormModeChange',
+  'onBeforeInsert',
+  'onBeforeUpdate',
+  'onBeforeDelete',
   'onInsert',
   'onUpdate',
   'onDelete',
@@ -276,6 +279,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   onUpdateMode = new EventEmitter<null>();
   onInitialMode = new EventEmitter<null>();
   onFormModeChange: EventEmitter<number> = new EventEmitter<number>();
+  public onBeforeInsert: EventEmitter<any> = new EventEmitter();
+  public onBeforeUpdate: EventEmitter<any> = new EventEmitter();
+  public onBeforeDelete: EventEmitter<any> = new EventEmitter();
   public onInsert: EventEmitter<any> = new EventEmitter();
   public onUpdate: EventEmitter<any> = new EventEmitter();
   public onDelete: EventEmitter<any> = new EventEmitter();
@@ -458,7 +464,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
   }
 
-  getAttribute():string {
+  getAttribute(): string {
     if (this.oattr) {
       return this.oattr;
     }
@@ -956,6 +962,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const values = this.getAttributesValuesToInsert();
     const sqlTypes = this.getAttributesSQLTypes();
+    this.onBeforeInsert.emit(values);
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
       self.formCache.setCacheSnapshot();
@@ -1027,7 +1034,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.dialogService.alert('INFO', this._messageService.getNothingToUpdateMessage());
       return;
     }
-
+    this.onBeforeUpdate.emit(values);
     // invoke update method...
     this.updateData(filter, values, sqlTypes).subscribe(resp => {
       self.postCorrectUpdate(resp);
@@ -1057,6 +1064,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   delete() {
     const filter = this.getKeysValues();
+    this.onBeforeDelete.emit(filter);
     return this.deleteData(filter);
   }
 
