@@ -1,13 +1,17 @@
-import { DataSource, CollectionViewer, SelectionChange } from "@angular/cdk/collections";
-import { FlatTreeControl } from "@angular/cdk/tree";
-import { BehaviorSubject, Observable, merge, map } from "rxjs";
-import { OTreeComponent, OTreeFlatNode, OTreeNode } from "./o-tree.component";
-import { OTreeDao } from "./o-tree-dao.service";
-import { Util } from "../../util";
-import { ServiceResponse } from "../../interfaces/service-response.interface";
+import { CollectionViewer, DataSource, SelectionChange } from '@angular/cdk/collections';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { Injector } from '@angular/core';
+import { BehaviorSubject, map, merge, Observable } from 'rxjs';
+
+import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OTranslateService } from '../../services/translate';
+import { Util } from '../../util';
+import { OTreeDao } from './o-tree-dao.service';
+import { OTreeComponent, OTreeFlatNode } from './o-tree.component';
 
 export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   dataChange = new BehaviorSubject<OTreeFlatNode[]>([]);
+  translateService: any;
 
   get data(): OTreeFlatNode[] {
     return this.dataChange.value;
@@ -21,8 +25,10 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     private oTree: OTreeComponent,
     private _treeControl: FlatTreeControl<OTreeFlatNode>,
     private _database: OTreeDao,
-
-  ) { }
+    private injector: Injector
+  ) {
+    this.translateService = this.injector.get(OTranslateService);
+  }
 
   connect(collectionViewer: CollectionViewer): Observable<OTreeFlatNode[]> {
     this._treeControl.expansionModel.changed.subscribe(change => {
@@ -44,77 +50,77 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   /** Handle expand/collapse behaviors */
   handleTreeControl(change: SelectionChange<OTreeFlatNode>) {
     if (change.added) {
-      change.added.forEach(node => this.toggleNode(node, true));
+      change.added.forEach(node => this.oTree.toggleNode(node, true));
     }
     if (change.removed) {
       change.removed
         .slice()
         .reverse()
-        .forEach(node => this.toggleNode(node, false));
+        .forEach(node => this.oTree.toggleNode(node, false));
     }
+  }
+  isTreeFlatNode(value: any) {
+    let isType = false;
+    return isType = 'level' in value && 'label' in value;
   }
 
   updateTree(parentNode: OTreeFlatNode, children: Array<any>, expand: boolean) {
     const treeNode = parentNode.treeNode ? parentNode.treeNode : this.oTree;
-    const index = this.data.findIndex(node => treeNode.getItemKey(node.data) === treeNode.getItemKey(parentNode.data))
+    const index = this.data.findIndex(node => {
+      if (node.treeNode && parentNode.treeNode) {
+        return node.treeNode.getItemKey(node.data) === parentNode.treeNode.getItemKey(parentNode.data)
+      } else {
+        return node.label === parentNode.label;
+      }
+    });
+
     if (!children || index < 0) {
       // If no children, or cannot find the node, no op
       return;
     }
 
-    parentNode.isLoading = true;
-
-    setTimeout(() => {
-      if (expand) {
-        const nodes = children.map(child => treeNode.transformer(child, parentNode.level + 1));
-        this.data.splice(index + 1, 0, ...nodes);
+    let rootNode: OTreeFlatNode;
+    if (expand) {
+      let level = parentNode.level + 1;
+      let nodes: Array<OTreeFlatNode>;
+      if (Util.isDefined(parentNode.treeNode) && Util.isDefined(parentNode.treeNode.rootTitle)) {
+        //let rootNode: OTreeFlatNode;
+        rootNode = { label: this.translateService.get(parentNode.treeNode.rootTitle), level: level, expandable: true, data: {}, isLoading: false, treeNode: treeNode.treeNode };
+        console.log('rootNode ', rootNode);
+        level++;
+        const rootNodeChildren = children.map(child => treeNode.transformer(child, level));
+        nodes = [rootNode, ...rootNodeChildren];
       } else {
-        let count = 0;
-        for (
-          let i = index + 1;
-          i < this.data.length && this.data[i].level > parentNode.level;
-          i++, count++
-        ) { }
-        this.data.splice(index + 1, count);
+        nodes = children.map(child => {
+          if (this.isTreeFlatNode(child)) {
+            return child;
+          } else {
+            return treeNode.transformer(child, level);
+          }
+        });
       }
-
-      // notify the change
-      this.dataChange.next(this.data);
-      parentNode.isLoading = false;
-    }, 1000);
-  }
-
-  /**
-   * Toggle the node, remove from display list
-   */
-  toggleNode(node: OTreeFlatNode, expand: boolean) {
-    const children = node.treeNode ? node.treeNode.getChildren(node):this.oTree.getChildren(node);
+      this.data.splice(index + 1, 0, ...nodes);
 
 
-    if (Util.isArray(children)) {
-      this.updateTree(node, children, expand);
     } else {
-      children.subscribe((res: ServiceResponse) => {
-        let data;
-        if (Util.isArray(res.data)) {
-          data = res.data;
-        } else if (res.isSuccessful()) {
-          const arrData = (res.data !== undefined) ? res.data : [];
-          data = Util.isArray(arrData) ? arrData : [];
-        }
-        this.updateTree(node, data, expand);
-        //this.loadingSubject.next(false);
-      }, err => {
-
-
-        //  this.loadingSubject.next(false);
-        // if (Util.isDefined(this.queryFallbackFunction)) {
-        //   this.queryFallbackFunction(err);
-        // } else {
-        //   this.oErrorDialogManager.openErrorDialog(err);
-        //   console.error(err);
-        // }
-      });
+      let count = 0;
+      for (
+        let i = index + 1;
+        i < this.data.length && this.data[i].level > parentNode.level;
+        i++, count++
+      ) { }
+      this.data.splice(index + 1, count);
     }
+
+    // notify the change
+    this.data = this.data;
+    this.dataChange.next(this.data);
+    if (Util.isDefined(rootNode)) {
+      this._treeControl.expand(rootNode);
+    }
+    parentNode.isLoading = false;
+
   }
+
+
 }

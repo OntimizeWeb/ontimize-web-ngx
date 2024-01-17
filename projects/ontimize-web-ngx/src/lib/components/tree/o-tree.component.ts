@@ -27,6 +27,7 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 
 export interface OTreeNode {
   label: string;
@@ -36,7 +37,7 @@ export interface OTreeNode {
   isLoading?: boolean;
 }
 
-export interface OTreeFlatNode {
+export type OTreeFlatNode = {
   label: string;
   level: number,
   expandable: boolean,
@@ -135,25 +136,45 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   isExpandable = (node: OTreeFlatNode) => node.expandable;
 
   getChildren = (node: OTreeFlatNode): OTreeNode[] | any => {
-    if (node.treeNode && !this.treeControl.isExpanded(node)) {
-      const pkArray = Util.parseArray(node.treeNode.parentColumn);
-      const pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
-      console.log('getChildren ', pkArray, pKeysEquiv);
-      let filter = ServiceUtils.getFilterUsingParentKeys(node.data,pKeysEquiv);
-      return node.treeNode.queryData(node, filter);
+    console.log('getChildren ', node, this);
+    const descendants = this.treeControl.dataNodes ? this.treeControl.getDescendants(node) : void 0;
+    if (Util.isDefined(descendants) && descendants.length > 0) {
+      return descendants;
     } else {
-      if (node.level === 0 && Util.isDefined(this.rootTitle)) {
-        return this.rootNodes;
+      if (node.treeNode) {
+        const pkArray = Util.parseArray(node.treeNode.parentColumn);
+        const pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
+        console.log('getChildren ', pkArray, pKeysEquiv);
+        let filter = ServiceUtils.getFilterUsingParentKeys(node.data, pKeysEquiv);
+        return node.treeNode.queryData(node, filter);
       } else {
-        return this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
+        if (node.level === 0 && Util.isDefined(this.rootTitle)) {
+          return this.rootNodes;
+        } if (node.level !== 0 && Util.isDefined(node.treeNode.rootTitle)) {
+          return this.treeControl.getDescendants(node);
+        }
+        else {
+          return this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
+        }
       }
     }
   }
+  // else {
+  // if (node.level === 0 && Util.isDefined(this.rootTitle)) {
+  //   return this.rootNodes;
+  // } if (node.level !==0 && Util.isDefined(node.treeNode.rootTitle)) {
+  //   return this.treeControl.getDescendants(node);
+  // }
+  // else {
+  //   return this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
+  // }
+  //}
+  //}
 
   hasChild = (_: number, _nodeData: OTreeFlatNode) => _nodeData.expandable;
 
   hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
-  treeControl = new FlatTreeControl<OTreeFlatNode>(this.getLevel, this.isExpandable);
+
 
   dataSource: OTreeDataSource;
 
@@ -181,7 +202,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   childreNodes: OTreeNode[] = [];
   nodesArray: OTreeNode[] = [];
   ancestors: any[] = [];
-
   checklistSelection = new SelectionModel<OTreeFlatNode>(true);
 
   onNodeSelected: EventEmitter<any> = new EventEmitter();
@@ -199,6 +219,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   parentNodeTemplate: TemplateRef<any>;
 
   treeFlattener: any;
+  treeControl: FlatTreeControl<OTreeFlatNode, OTreeFlatNode>;
 
   @ContentChild('nodeTemplate', { read: TemplateRef, static: false })
   set nodeTemplate(value: TemplateRef<any>) {
@@ -208,9 +229,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
   }
 
-  @ContentChild(forwardRef(() => OTreeNodeComponent), {descendants:false})
+  @ContentChild(forwardRef(() => OTreeNodeComponent), { descendants: false })
   treeNode!: OTreeNodeComponent;
-
 
   protected visibleColumnsArray: string[] = [];
   protected parentNodesHash: nodeHashType[];
@@ -226,6 +246,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
+
   }
 
   ngOnInit() {
@@ -237,6 +258,10 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         () => (this.enabledDeleteButton = !this.selection.isEmpty())
       )
     );
+  }
+
+  ngAfterContentInit() {
+    console.log("this.treeNode ",this, this.treeNode);
   }
 
   public initialize(): void {
@@ -279,6 +304,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   ngAfterViewInit(): void {
     this.visibleColumnsArray = Util.parseArray(this.visibleColumns, true);
     this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
+    this.setTreeControl();
     this.setDatasource();
     this.afterViewInit();
     if (this.queryOnInit) {
@@ -313,15 +339,48 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       this.viewDetail(node.data);
     }
   }
-  toggleNode(node: OTreeFlatNode, expand: boolean) {
-    console.log('toggleNode', node);
-  }
+  // toggleNode(node: OTreeFlatNode, expand: boolean) {
+  //   console.log('toggleNode', node);
+  // }
   onClickToggleButton(node) {
     if (this.treeControl.isExpanded(node)) {
       this.onNodeExpanded.emit(node);
     } else {
       this.onNodeCollapsed.emit(node);
     }
+  }
+  /**
+  * Toggle the node, remove from display list
+  */
+  toggleNode(node: OTreeFlatNode, expand: boolean) {
+
+    const children = this.getChildren(node);
+    node.isLoading = true;
+    if (Util.isArray(children)) {
+      this.dataSource.updateTree(node, children, expand);
+    } else {
+      children.subscribe((res: ServiceResponse) => {
+        let data;
+        if (Util.isArray(res.data)) {
+          data = res.data;
+        } else if (res.isSuccessful()) {
+          const arrData = (res.data !== undefined) ? res.data : [];
+          data = Util.isArray(arrData) ? arrData : [];
+        }
+        this.dataSource.updateTree(node, data, expand);
+
+      }, err => {
+
+        node.isLoading = false;
+        if (Util.isDefined(this.queryFallbackFunction)) {
+          this.queryFallbackFunction(err);
+        } else {
+          this.oErrorDialogManager.openErrorDialog(err);
+          console.error(err);
+        }
+      });
+    }
+
   }
 
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
@@ -439,10 +498,17 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     return null;
   }
 
+  protected setTreeControl() {
+    if (!Util.isDefined(this.treeControl)){
+      this.treeControl = new FlatTreeControl<OTreeFlatNode>(this.getLevel, this.isExpandable);
+    }
+  }
   /** */
 
   protected setDatasource() {
-    this.dataSource = new OTreeDataSource(this, this.treeControl, this.daoTree);
+    if (!Util.isDefined(this.dataSource)) {
+      this.dataSource = new OTreeDataSource(this, this.treeControl, this.daoTree, this.injector);
+    }
   }
 
   getParentNodes(node: OTreeNode, tree: OTreeNode[]): OTreeNode[] {
@@ -524,40 +590,10 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       existingNode && existingNode.label === node.label ? existingNode : { 'label': this.getItemText(node), 'level': level, treeNode: this.treeNode, 'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length, 'data': node, 'isLoading': false };
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
-    console.log('flatNode ', flatNode);
     nodeChildren.forEach(node => this.transformer(node, level + 1));
     return flatNode;
 
-    // let allNodesHash: nodeHashType[] = this.dataArray.map((item) => {
-    //   return {
-    //     id: this.getItemKey(item),
-    //     node: this.createNode(item),
-    //   };
-    // });
-    // const childNodesHash = allNodesHash.filter(
-    //   (item) => item.node.data[this.parentColumn] != null
-    // );
 
-    // childNodesHash.forEach((item) => {
-    //   const parentNode = allNodesHash.find(
-    //     (nodeItem) => nodeItem.id == item.node.data[this.parentColumn]
-    //   );
-    //   if (parentNode != null) {
-    //     parentNode.node.children = [
-    //       ...(parentNode.node.children || []),
-    //       item.node,
-    //     ];
-    //   }
-    // });
-
-    // this.parentNodesHash = allNodesHash.filter(
-    //   (item) => item.node.data[this.parentColumn] == null
-    // );
-
-    // const parentNodesArray = this.parentNodesHash.map((item) => item.node);
-
-    // this.sort(parentNodesArray);
-    // this.nodesArray = parentNodesArray;
   }
 
   protected sort(array: OTreeNode[]): void {
@@ -570,8 +606,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         .forEach((node) => this.sort(node.children));
     }
   }
-
-
 
   protected getItemText(item: any): string {
     return this.visibleColumnsArray
@@ -616,18 +650,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   public remove(clearSelectedItems: boolean = false): void { }
 
-  protected doChildQuery(queryMethodName: string, queryArguments: any[], callback: any) {
-    // const self = this;
-    // let children = [];
-    // this.dataService[queryMethodName].apply(this.dataService, queryArguments).subscribe(resp => {
 
-    //   if (resp && resp.data && resp.data.length > 0) {
-    //     children = resp.data;
-    //   }
-    //   return children;
-    // }, error => {
-
-    // });
-  }
 
 }

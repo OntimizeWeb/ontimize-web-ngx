@@ -1,18 +1,19 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, SkipSelf } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, SkipSelf } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { ServiceResponse } from '../../../interfaces/service-response.interface';
 import { OQueryDataArgs } from '../../../types/query-data-args.type';
 import { ServiceUtils } from '../../../util/service.utils';
-import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form';
 import { OTreeComponent, OTreeNode } from '../o-tree.component';
+import { Util } from '../../../util/util';
 
 @Component({
   selector: 'o-tree-node',
   template: ' '
 })
-export class OTreeNodeComponent extends OTreeComponent implements OnInit {
+export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterViewInit {
+
 
   constructor(
     public injector: Injector,
@@ -25,24 +26,20 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit {
   }
 
   ngOnInit() {
-
     super.ngOnInit();
     this.queryOnBind = true;
     this.queryOnInit = false;
-
-    if (Util.isDefined(this.parentNode)) {
-      console.log('ngOnInit - this.parentNode', this.parentNode);
-      //this.parentNode.registerChildNode(this);
-    } else if (Util.isDefined(this.oTree)) {
-      //this.oTree.registerTreeNode(this);
-      console.log('ngOnInit - this.parentNode', this.oTree);
-    }
   }
 
-  public queryData(parentNode: OTreeNode, filter?: any, ovrrArgs?: OQueryDataArgs): Observable<ServiceResponse> | Observable<any>  {
+  ngAfterViewInit(): void {
+    this.visibleColumnsArray = Util.parseArray(this.visibleColumns, true);
+    this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
+  }
+
+  public queryData(parentNode: OTreeNode, filter?: any, ovrrArgs?: OQueryDataArgs): Observable<ServiceResponse> | Observable<any> {
     const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
-      return of({ data:[]});
+      return of({ data: [] });
     }
     const filterParentKeys = this.getParentKeysValues();
     if (!ServiceUtils.filterContainsAllParentKeys(filterParentKeys, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
@@ -66,7 +63,7 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit {
          * that there are no results when the query is aborted*/
         this.cd.detectChanges();
         this.loadingSubject.next(false);
-        return of({ code:400,data: [],message:'' });
+        return of({ code: 400, data: [], message: '' });
       }
 
       return this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>;
