@@ -30,6 +30,7 @@ import { OTreeNodeComponent } from './tree-node/tree-node.component';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 
 export interface OTreeNode {
+  id: string | number;
   label: string;
   data: any;
   treeNode?: OTreeNodeComponent,
@@ -38,8 +39,10 @@ export interface OTreeNode {
 }
 
 export type OTreeFlatNode = {
+  id: string | number,
   label: string;
   level: number,
+  rootNode?:boolean,
   expandable: boolean,
   treeNode?: OTreeNodeComponent,
   data: any;
@@ -130,34 +133,40 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   /** Map from nested node to flattened node. This helps us to keep the same object for selection */
   nestedNodeMap = new Map<OTreeNode, OTreeFlatNode>();
 
-
   getLevel = (node: OTreeFlatNode) => node.level;
 
   isExpandable = (node: OTreeFlatNode) => node.expandable;
 
   getChildren = (node: OTreeFlatNode): OTreeNode[] | any => {
-    console.log('getChildren ', node, this);
+
     const descendants = this.treeControl.dataNodes ? this.treeControl.getDescendants(node) : void 0;
     if (Util.isDefined(descendants) && descendants.length > 0) {
       return descendants;
     } else {
-      if (node.treeNode) {
-        const pkArray = Util.parseArray(node.treeNode.parentColumn);
-        const pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
-        console.log('getChildren ', pkArray, pKeysEquiv);
-        let filter = ServiceUtils.getFilterUsingParentKeys(node.data, pKeysEquiv);
-        return node.treeNode.queryData(node, filter);
+      if (node.level === 0 && Util.isDefined(this.rootTitle)) {
+        return this.rootNodes;
       } else {
-        if (node.level === 0 && Util.isDefined(this.rootTitle)) {
-          return this.rootNodes;
-        } if (node.level !== 0 && Util.isDefined(node.treeNode.rootTitle)) {
-          return this.treeControl.getDescendants(node);
-        }
-        else {
+        if (node.treeNode) {
+          if (Util.isDefined(node.treeNode.rootTitle) && !Util.isDefined(node.rootNode)) {
+            return [{
+              id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.treeNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, treeNode: node.treeNode
+            }];
+          } else {
+            const pkArray = Util.parseArray(node.treeNode.parentColumn);
+            const pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
+            let filter = ServiceUtils.getFilterUsingParentKeys(node.data, pKeysEquiv);
+            return node.treeNode.queryData(node, filter);
+          }
+
+          // if (node.level !== 0 && Util.isDefined(node.treeNode.rootTitle)) {
+          //   return this.treeControl.getDescendants(node);
+          // }
+        } else {
           return this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
         }
       }
     }
+
   }
   // else {
   // if (node.level === 0 && Util.isDefined(this.rootTitle)) {
@@ -250,6 +259,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   ngOnInit() {
+    this.setTreeControl();
     this.initialize();
     this.initializeParams();
 
@@ -260,9 +270,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     );
   }
 
-  ngAfterContentInit() {
-    console.log("this.treeNode ",this, this.treeNode);
-  }
 
   public initialize(): void {
     super.initialize();
@@ -304,7 +311,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   ngAfterViewInit(): void {
     this.visibleColumnsArray = Util.parseArray(this.visibleColumns, true);
     this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
-    this.setTreeControl();
     this.setDatasource();
     this.afterViewInit();
     if (this.queryOnInit) {
@@ -353,32 +359,36 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   * Toggle the node, remove from display list
   */
   toggleNode(node: OTreeFlatNode, expand: boolean) {
-
-    const children = this.getChildren(node);
     node.isLoading = true;
-    if (Util.isArray(children)) {
-      this.dataSource.updateTree(node, children, expand);
+    if (expand) {
+      const children = this.getChildren(node);
+
+      if (Util.isArray(children)) {
+        this.dataSource.updateTree(node, children, expand);
+      } else {
+        children.subscribe((res: ServiceResponse) => {
+          let data;
+          if (Util.isArray(res.data)) {
+            data = res.data;
+          } else if (res.isSuccessful()) {
+            const arrData = (res.data !== undefined) ? res.data : [];
+            data = Util.isArray(arrData) ? arrData : [];
+          }
+          this.dataSource.updateTree(node, data, expand);
+
+        }, err => {
+
+          node.isLoading = false;
+          if (Util.isDefined(this.queryFallbackFunction)) {
+            this.queryFallbackFunction(err);
+          } else {
+            this.oErrorDialogManager.openErrorDialog(err);
+            console.error(err);
+          }
+        });
+      }
     } else {
-      children.subscribe((res: ServiceResponse) => {
-        let data;
-        if (Util.isArray(res.data)) {
-          data = res.data;
-        } else if (res.isSuccessful()) {
-          const arrData = (res.data !== undefined) ? res.data : [];
-          data = Util.isArray(arrData) ? arrData : [];
-        }
-        this.dataSource.updateTree(node, data, expand);
-
-      }, err => {
-
-        node.isLoading = false;
-        if (Util.isDefined(this.queryFallbackFunction)) {
-          this.queryFallbackFunction(err);
-        } else {
-          this.oErrorDialogManager.openErrorDialog(err);
-          console.error(err);
-        }
-      });
+      this.dataSource.updateTree(node, [], expand);
     }
 
   }
@@ -420,6 +430,9 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (nodeData !== null) {
       if (nodeData['parent_id']) {
         ancestor = {
+          id: this.dataSource.data.filter(
+            (item) => item['category_id'] == nodeData['parent_id']
+          )[0]['id'],
           label: this.dataSource.data.filter(
             (item) => item['category_id'] == nodeData['parent_id']
           )[0]['name'],
@@ -499,7 +512,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   protected setTreeControl() {
-    if (!Util.isDefined(this.treeControl)){
+    if (!Util.isDefined(this.treeControl)) {
       this.treeControl = new FlatTreeControl<OTreeFlatNode>(this.getLevel, this.isExpandable);
     }
   }
@@ -570,8 +583,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     let rootNode: OTreeFlatNode;
     if (Util.isDefined(this.rootTitle)) {
       level = +1;
-      rootNode = { label: this.translateService.get(this.rootTitle), level: 0, expandable: true, data: {}, isLoading: false };
-      this.dataSource.data = [rootNode, ...this.rootNodes.map(node => this.transformer(node, level))];
+      rootNode = { id: 0, label: this.translateService.get(this.rootTitle), level: 0, expandable: true, data: {}, isLoading: false };
+      this.dataSource.data = [rootNode];
       this.treeControl.expand(rootNode);
     } else {
       this.dataSource.data = this.rootNodes.map(node => this.transformer(node, level));
@@ -587,9 +600,19 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
     const nodeChildren = this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
     const flatNode: OTreeFlatNode =
-      existingNode && existingNode.label === node.label ? existingNode : { 'label': this.getItemText(node), 'level': level, treeNode: this.treeNode, 'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length, 'data': node, 'isLoading': false };
+      existingNode && existingNode.label === node.label ? existingNode :
+        {
+          'id': this.getNodeId(node),
+          'label': this.getItemText(node),
+          'level': level,
+          treeNode: this.treeNode,
+          'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length,
+          'data': node,
+          'isLoading': false
+        };
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
+    //recursive transformer
     nodeChildren.forEach(node => this.transformer(node, level + 1));
     return flatNode;
 
@@ -650,6 +673,13 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   public remove(clearSelectedItems: boolean = false): void { }
 
+  protected getNodeId(item: any = {}) {
+    let id = '';
+    this.keysArray.forEach(key => {
+      id += item[key];
+    });
+    return this.keys + ':' + id;
+  }
 
 
 }

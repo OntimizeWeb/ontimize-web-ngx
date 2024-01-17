@@ -26,7 +26,8 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterV
   }
 
   ngOnInit() {
-    super.ngOnInit();
+    this.initialize();
+    this.initializeParams();
     this.queryOnBind = true;
     this.queryOnInit = false;
   }
