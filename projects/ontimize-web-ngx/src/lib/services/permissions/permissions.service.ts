@@ -15,7 +15,9 @@ import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PermissionsService {
 
   protected permissionsService: any;
