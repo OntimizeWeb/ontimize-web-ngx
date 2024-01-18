@@ -49,6 +49,8 @@ export type OTreeFlatNode = {
   treeNode?: OTreeNodeComponent,
   data: any;
   isLoading?: boolean;
+  route?: string
+
 }
 
 export const DEFAULT_INPUTS_O_TREE = [
@@ -108,7 +110,8 @@ export const DEFAULT_INPUTS_O_TREE = [
   // the checkbox you selected and its parent nodes or the checkbox you selected and its child nodes. Default: children.
   'checkboxSelectionMode: checkbox-selection-mode',
   'rootTitle: root-title',
-  'recursive'
+  'recursive',
+  'route'
 ];
 
 export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded'];
@@ -253,6 +256,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   protected parentNodesHash: nodeHashType[];
   public enabledDeleteButton: boolean = false;
   protected subscription: Subscription = new Subscription();
+  public route:string;
   get showTreeMenuButton(): boolean {
     const staticOpt = this.selectAllCheckbox;
     return staticOpt;
@@ -339,20 +343,27 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     event.stopPropagation();
   }
 
-  leafNodeClicked(node: OTreeNode, event: Event): void {
+  leafNodeClicked(node: OTreeFlatNode, event: Event): void {
     this.nodeClicked(node, event);
   }
 
-  parentNodeClicked(node: OTreeNode, event: Event): void {
+  parentNodeClicked(node: OTreeFlatNode, event: Event): void {
     this.nodeClicked(node, event);
   }
 
-  protected nodeClicked(node: OTreeNode, event: Event) {
+  protected nodeClicked(node: OTreeFlatNode, event: Event) {
     event.stopPropagation();
-    if (this.detailMode !== Codes.DETAIL_MODE_NONE) {
-      node.treeNode ? node.treeNode.viewDetail(node.data) : this.viewDetail(node.data);
-      // this.viewDetail(node.data);
+    if (this.detailMode !== Codes.DETAIL_MODE_NONE && !this.isRootNode(node)) {
+      /*
+      Se podria mejorar llamando this.viewDetail(node.data);
+      si almacenamos el nodo, actualmente se esta almacenando si existe un tree-node hijo
+      */
+      this.navigateToViewDetail(node);
     }
+  }
+
+  isRootNode(node:OTreeFlatNode) {
+    return Util.isDefined(node.rootNode) && node.rootNode;
   }
 
   onClickToggleButton(node) {
@@ -596,7 +607,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     let rootNode: OTreeFlatNode;
     if (Util.isDefined(this.rootTitle)) {
       level = +1;
-      rootNode = { id: 0, label: this.translateService.get(this.rootTitle), level: 0, expandable: true, data: {}, isLoading: false };
+      rootNode = { id: 0, label: this.translateService.get(this.rootTitle), rootNode: true, level: 0, expandable: true, data: {}, isLoading: false };
       this.dataSource.data = [rootNode];
       this.treeControl.expand(rootNode);
     } else {
@@ -621,7 +632,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
           treeNode: this.treeNode,
           'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length || this.recursive,
           'data': node,
-          'isLoading': false
+          'isLoading': false,
+          'route': this.route
         };
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
@@ -712,6 +724,27 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     let queryArguments = [filter, this.colArray, this.entity];
 
     return this.dataService[queryMethodName].apply(this.dataService, queryArguments) as Observable<ServiceResponse>;
+  }
+  protected navigateToViewDetail(node:OTreeFlatNode) {
+    if (Util.isDefined(node.route)) {
+      let route = undefined;
+
+        let nodeRoute = node.route;
+        let routeArray = nodeRoute.split(Codes.ROUTE_SEPARATOR);
+        for (let i = 0, len = routeArray.length; i < len; i++) {
+          if (routeArray[i].startsWith(Codes.ROUTE_VARIABLE_CHAR)) {
+            routeArray[i] = node.data[routeArray[i].substring(1)];
+          }
+        }
+        route = routeArray.join(Codes.ROUTE_SEPARATOR);
+
+      if (Util.isDefined(route)) {
+        const extras = {
+          relativeTo: this.actRoute
+        };
+        this.router.navigate([route], extras);
+      }
+    }
   }
 }
 
