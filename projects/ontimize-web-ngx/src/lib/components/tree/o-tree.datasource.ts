@@ -10,6 +10,7 @@ import { OTreeComponent, OTreeFlatNode } from './o-tree.component';
 export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   dataChange = new BehaviorSubject<OTreeFlatNode[]>([]);
   translateService: any;
+  protected _database: OTreeDao;
 
   get data(): OTreeFlatNode[] {
     return this.dataChange.value;
@@ -22,10 +23,10 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   constructor(
     private oTree: OTreeComponent,
     private _treeControl: FlatTreeControl<OTreeFlatNode>,
-    private _database: OTreeDao,
     private injector: Injector
   ) {
     this.translateService = this.injector.get(OTranslateService);
+    this._database = this.oTree.daoTree;
   }
 
   connect(collectionViewer: CollectionViewer): Observable<OTreeFlatNode[]> {
@@ -79,7 +80,7 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
         if (this.isTreeFlatNode(child)) {
           return child;
         } else {
-          return treeNode.transformer(child, level);
+          return treeNode.transformer(child, level, parentNode);
         }
       });
       // }

@@ -64,7 +64,7 @@
       <ng-container *ngIf="selectAllCheckboxVisible; else simpleLeafNodeTpl">
         <div class="node-wrapper">
           <mat-checkbox *ngIf="selectAllCheckboxVisible; else simpleLeafNodeTpl" [checked]="checklistSelection.isSelected(node)"
-            (click)="checkboxClicked($event)" (change)="todoLeafItemSelectionToggle(node)">
+            (click)="checkboxClicked($event)" (change)="todoLeafItemSelectionToggle($event)">
           </mat-checkbox>
           <ng-container [ngTemplateOutlet]="leafNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
           </ng-container>
@@ -77,8 +77,8 @@
 
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
-    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="parentNodeClicked(node, $event)" matTreeNodePadding>
-      <button mat-icon-button [attr.aria-label]="'toggle ' + node.label" matTreeNodeToggle (click)="onClickToggleButton(node)">
+    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="parentNodeClicked($event, node)" matTreeNodePadding>
+      <button mat-icon-button [attr.aria-label]="'toggle ' + node.label" matTreeNodeToggle (click)="onClickToggleButton($event, node)">
         <mat-icon class="mat-icon-rtl-mirror">
           {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
         </mat-icon>
