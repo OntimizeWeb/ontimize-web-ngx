@@ -1537,7 +1537,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return undefined;
   }
 
-  protected getColumnFiltersExpression(): Expression {
+  getColumnFiltersExpression(): Expression {
     // Apply column filters
     const columnFilters: OColumnValueFilter[] = this.dataSource.getColumnValueFilters();
     const beColumnFilters: Array<Expression> = [];
@@ -1731,6 +1731,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
                 selectedItems.forEach(item => {
                   this.selection.deselect(item);
                 });
+                if (this.formLayoutManager) {
+                  this.formLayoutManager.closeDetails(filters, { exitWithoutConfirmation: true });
+                }
                 this.reloadData();
               }
             });

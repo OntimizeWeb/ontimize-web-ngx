@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
 @Component({
   selector: 'o-currency-input',
   templateUrl: './o-currency-input.component.html',
+  styleUrls: ['./o-currency-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_CURRENCY_INPUT,
   encapsulation: ViewEncapsulation.None
 })
@@ -35,6 +36,6 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   }
 
   useSymbol(position: string): boolean {
-    return this.currency_symbols.hasOwnProperty(this.currencySymbol) && this.currencySymbolPosition === position;
+    return !this.existsOntimizeIcon() && this.currency_symbols.hasOwnProperty(this.currencySymbol) && this.currencySymbolPosition === position;
   }
 }

@@ -297,6 +297,8 @@ export const MAP = {
     'OIMAGE.TEXT.DROP&DRAG': 'Drag and drop image file here',
     'OIMAGE.BUTTON.BROWSEFILE': 'Select image',
     'TREE.BUTTONS.SELECT': 'Select...',
+    'REPORT.COLUMN.TRUEVALUE': 'Yes',
+    'REPORT.COLUMN.FALSEVALUE': 'No'
   },
 
   // Spanish
@@ -559,7 +561,7 @@ export const MAP = {
     'TABLE.BUTTONS.GROUPBY': 'Agrupar por',
     'TABLE.BUTTONS.CHART_ON_DEMAND': 'Gráficas a la carta',
     'TABLE.DIALOG.TITLE_GROUPBY': 'Agrupar / desagrupar por columnas',
-    'TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION': 'Arrastre y suelte de la izquierda (Columnas disponibles) a la derecha (Columnas agrupadas). Reordena las columnas agrupadas si fuera necesario',
+    'TABLE_GROUP_BY_COLUMNS_DIALOG.DESCRIPTION': 'Arrastre y suelte de la izquierda (Columnas disponibles) a la derecha (Columnas agrupadas). Reordene las columnas agrupadas si fuera necesario',
     'TABLE_GROUP_BY_COLUMNS_DIALOG.ALL_COLUMNS': 'Columnas disponibles',
     'TABLE_GROUP_BY_COLUMNS_DIALOG.GROUPED_COLUMNS': 'Columnas agrupadas',
     'DUAL_LIST_SELECTOR.DROP_EMPTY_MESSAGE': 'Arrastre aquí para establecer las columnas agrupadas',
@@ -567,7 +569,7 @@ export const MAP = {
     'TABLE.VISIBLE_COLUMNS_DIALOG.VALUE_FILTER_WARN': '<li>Filtrado de columna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.SORT_WARN': '<li>Ordenación por columna</li>',
     'TABLE.VISIBLE_COLUMNS_DIALOG.GROUPING_WARN': '<li>Agrupamento por coluna</li>',
-    'TABLE.VISIBLE_COLUMNS.DESCRIPTION': 'Haz click sobre el icono para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
+    'TABLE.VISIBLE_COLUMNS.DESCRIPTION': 'Haga click sobre el icono para ocultar/mostrar la columna. Utilice arrastrar y soltar para modificar el orden de las columnas.',
     'APP_LAYOUT.SETTINGS': 'Configuración',
     'AGGREGATE_NAME.count': 'Count',
     'AGGREGATE_NAME.min': 'Min',
@@ -588,6 +590,8 @@ export const MAP = {
     'OIMAGE.TEXT.DROP&DRAG': 'Arrastra y suelta la imagen aquí',
     'OIMAGE.BUTTON.BROWSEFILE': 'Seleccionar imagen',
     'TREE.BUTTONS.SELECT': 'Seleccionar...',
+    'REPORT.COLUMN.TRUEVALUE': 'Si',
+    'REPORT.COLUMN.FALSEVALUE': 'No'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -865,5 +869,7 @@ export const MAP = {
     'OIMAGE.TEXT.DROP&DRAG': 'Arraste e solte a imagem aqui',
     'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem',
     'TREE.BUTTONS.SELECT': 'Selecionar...'
+    'REPORT.COLUMN.TRUEVALUE': 'Sim',
+    'REPORT.COLUMN.FALSEVALUE': 'Não'
   }
 }
