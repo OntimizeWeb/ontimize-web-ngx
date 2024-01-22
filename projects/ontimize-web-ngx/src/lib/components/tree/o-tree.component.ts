@@ -582,10 +582,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   transformer = (node: any, level: number, parentNode?: any) => {
 
-    // const existingNode = this.nestedNodeMap.get(node);
-    // if (existingNode) {
-    //   return existingNode;
-    // }
     const nodeChildren = this.childreNodes.filter((item) => item[this.parentColumn] === node[this.keys]);
     const flatNode: OTreeFlatNode =
     {
@@ -669,7 +665,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       id += item[key];
     });
     if (Util.isDefined(this.parentKeys) && Util.isDefined(parentNode)) {
-      id += parentNode.data[this.parentKeys];
+      id += parentNode.id;
     }
 
     return this.keys + ':' + id;
