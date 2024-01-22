@@ -97,9 +97,6 @@ export const DEFAULT_INPUTS_O_TREE = [
   'detailFormRoute: detail-form-route',
   // show-buttons-text [yes|no|true|false]: show text of header buttons. Default: yes.
   'showButtonsText: show-buttons-text',
-  // checkbox-selection-mode [single|parents|children]: whether clicking on a checkbox will select only the checkbox you selected,
-  // the checkbox you selected and its parent nodes or the checkbox you selected and its child nodes. Default: children.
-  'checkboxSelectionMode: checkbox-selection-mode',
   'rootTitle: root-title',
   'recursive',
   'route'
@@ -189,7 +186,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   deleteButton: boolean = false;
   @BooleanInputConverter()
   showButtonsText: boolean = false;
-  checkboxSelectionMode: string = 'children';
 
   visibleColumns: string;
   separator: string = Codes.HYPHEN_SEPARATOR;
@@ -209,7 +205,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   childreNodes: OTreeFlatNode[] = [];
   nodesArray: OTreeFlatNode[] = [];
   ancestors: any[] = [];
-  checklistSelection = new SelectionModel<OTreeFlatNode>(true);
+  checklistSelection = new SelectionModel<OTreeFlatNode>(true, [], true, (sm1, sm2) => sm1.id === sm2.id);
 
   onNodeSelected: EventEmitter<any> = new EventEmitter();
   onNodeExpanded: EventEmitter<any> = new EventEmitter();
@@ -328,6 +324,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   checkboxClicked(event: Event): void {
     event.stopPropagation();
+    console.log('checkboxClicked ', this.selection);
   }
 
   leafNodeClicked(node: OTreeFlatNode, event: Event): void {
@@ -408,114 +405,59 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
   todoItemSelectionToggle(node: OTreeFlatNode): void {
     this.checklistSelection.toggle(node);
-    if (this.checkboxSelectionMode === 'children') {
-      const descendants = this.treeControl.getDescendants(node);
-      this.checklistSelection.isSelected(node)
-        ? this.checklistSelection.select(...descendants)
-        : this.checklistSelection.deselect(...descendants);
 
-      // Force update for the parent
-      descendants.every((child) => this.checklistSelection.isSelected(child));
-      this.onNodeSelected.emit(node.data);
-    } else if (this.checkboxSelectionMode === 'parents') {
-      this.ancestors = [];
-      this.fillAncestorArray(node.data);
-      if (this.ancestors) {
-        this.ancestors.forEach((ancestor) => {
-          this.checklistSelection.isSelected(node)
-            ? this.checklistSelection.select(ancestor)
-            : this.checklistSelection.deselect(ancestor);
-        });
-      }
-      this.onNodeSelected.emit(node.data);
-    }
+    const descendants = this.treeControl.getDescendants(node);
+    this.checklistSelection.isSelected(node)
+      ? this.checklistSelection.select(...descendants)
+      : this.checklistSelection.deselect(...descendants);
+
+    // Force update for the parent
+    descendants.every((child) => this.checklistSelection.isSelected(child));
+    this.onNodeSelected.emit(node.data);
+
+
   }
 
-  fillAncestorArray(nodeData) {
-    //   let ancestor: OTreeFlatNode;
-    //   if (nodeData !== null) {
-    //     if (nodeData['parent_id']) {
-    //       ancestor = {
-    //         id: this.dataSource.data.filter(
-    //           (item) => item['category_id'] == nodeData['parent_id']
-    //         )[0]['id'],
-    //         label: this.dataSource.data.filter(
-    //           (item) => item['category_id'] == nodeData['parent_id']
-    //         )[0]['name'],
-    //         data: this.dataSource.data.filter(
-    //           (item) => item['category_id'] == nodeData['parent_id']
-    //         )[0],
-    //       };
-    //       if (ancestor) {
-    //         this.ancestors.unshift(ancestor);
-    //         this.fillAncestorArray(ancestor);
-    //       }
-    //     }
-    //   }
-  }
-
-  /** */
 
   /** Whether all the descendants of the node are selected. */
   descendantsAllSelected(node: OTreeFlatNode): boolean {
+    let descAllSelected = false;
     const descendants = this.treeControl.getDescendants(node);
-    const descAllSelected = descendants.every((child) =>
-      this.checklistSelection.isSelected(child)
-    );
-    return descAllSelected;
+    if (node.expandable) {
+
+      if (this.treeControl.isExpanded(node) && descendants.length > 0) {
+        descAllSelected = descendants.every((child) =>
+          this.checklistSelection.isSelected(child)
+        );
+        descAllSelected ? this.checklistSelection.select(node) : this.checklistSelection.deselect(node);
+        return descAllSelected;
+      } else {
+        return this.checklistSelection.isSelected(node);
+      }
+
+    } else {
+      return this.checklistSelection.isSelected(node);
+    }
+
   }
 
   /** Whether part of the descendants are selected */
   descendantsPartiallySelected(node: OTreeFlatNode): boolean {
+
+    let result = false;
     const descendants = this.treeControl.getDescendants(node);
-    const result = descendants.some((child) =>
-      this.checklistSelection.isSelected(child)
-    );
-    return result && !this.descendantsAllSelected(node);
-  }
-
-  /* Checks all the parents when a leaf node is selected/unselected */
-  protected checkAllParentsSelection(node: OTreeFlatNode): void {
-    let parent: OTreeFlatNode | null = this.getParentNode(node);
-    while (parent) {
-      this.checkRootNodeSelection(parent);
-      parent = this.getParentNode(parent);
-    }
-  }
-
-  /** Check root node checked state and change it accordingly */
-  protected checkRootNodeSelection(node: OTreeFlatNode): void {
-    const nodeSelected = this.checklistSelection.isSelected(node);
-    const descendants = this.treeControl.getDescendants(node);
-    const descAllSelected = descendants.every((child) =>
-      this.checklistSelection.isSelected(child)
-    );
-    if (nodeSelected && !descAllSelected) {
-      this.checklistSelection.deselect(node);
-    } else if (!nodeSelected && descAllSelected) {
-      this.checklistSelection.select(node);
-    }
-  }
-
-  // /* Get the parent node of a node */
-  protected getParentNode(node: OTreeFlatNode): OTreeFlatNode | null {
-    const currentLevel = this.getLevel(node);
-
-    if (currentLevel < 1) {
-      return null;
-    }
-
-    const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
-
-    for (let i = startIndex; i >= 0; i--) {
-      const currentNode = this.treeControl.dataNodes[i];
-
-      if (this.getLevel(currentNode) < currentLevel) {
-        return currentNode;
+    if (node.expandable) {
+      result = false;
+      if (descendants.length > 0) {
+        result = descendants.some((child) =>
+          this.checklistSelection.isSelected(child)
+        );
       }
     }
-    return null;
+    return result && !this.descendantsAllSelected(node);
+
   }
+
 
   protected setTreeControl() {
     if (!Util.isDefined(this.treeControl)) {
@@ -544,24 +486,12 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
           //if not exist node in tree then, add parent before node
           return this.getParentNodes(parentNode, index, tree);
         }
-        //tree.splice(indexParent, 0, parentNode)
       } else {
         return tree;
       }
     } else {
       return tree;
     }
-
-    //let ascensors = this.dataResponseArray.filter((item) => node.data[this.parentColumn] === item[this.keys]);
-    // ascensors.forEach(item => {
-    //   const existingNode = tree.findIndex(x => x[this.keys] === item[this.keys]) > -1;
-    //   if (Util.isDefined(item[this.parentColumn]) && !existingNode) {
-    //     return this.getParentNodes(item, tree);
-    //   } else {
-    //     return [item];
-    //   }
-    // });
-    //return ascensors;
   }
 
   filterData(value?: string, loadMore?: boolean): void {
@@ -599,7 +529,10 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
 
   }
-
+  /**
+   * Expands nodes with nodes
+   * @param treeData
+   */
   expandNodesWithNodes(treeData: OTreeFlatNode[]) {
     treeData.filter(node => node.expandable).forEach(node => {
       const descendants = this.treeControl.getDescendants(node);
@@ -609,7 +542,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       }
     });
   }
-
 
   /**
     * Gets data tree
