@@ -20,7 +20,6 @@ import { Observable, of, Subscription } from 'rxjs';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
-import { OQueryDataArgs } from '../../types';
 import { Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { ServiceUtils } from '../../util/service.utils';
@@ -364,9 +363,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     } else {
       children.subscribe((res: ServiceResponse) => {
         let data;
-        if (Util.isArray(res.data)) {
-          data = res.data;
-        } else if (res.isSuccessful()) {
+        if (res.isSuccessful()) {
           const arrData = (res.data !== undefined) ? res.data : [];
           data = Util.isArray(arrData) ? arrData : [];
         }
