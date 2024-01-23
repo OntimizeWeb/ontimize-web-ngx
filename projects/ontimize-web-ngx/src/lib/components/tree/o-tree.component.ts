@@ -133,6 +133,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       return this.getTreeNodeChildren(node);
     }
   }
+
   getTreeNodeChildren(node: OTreeFlatNode): any {
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
@@ -324,14 +325,13 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   checkboxClicked(event: Event): void {
     event.stopPropagation();
-    console.log('checkboxClicked ', this.selection);
   }
 
-  leafNodeClicked(node: OTreeFlatNode, event: Event): void {
+  leafNodeClicked(event: Event, node: OTreeFlatNode): void {
     this.nodeClicked(node, event);
   }
 
-  parentNodeClicked(node: OTreeFlatNode, event: Event): void {
+  parentNodeClicked(event: Event, node: OTreeFlatNode): void {
     this.nodeClicked(node, event);
   }
 
@@ -625,16 +625,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   getItemKey(item: any): string {
     return this.keysArray.map((col) => item[col]).join(';');
   }
-
-  protected updateNodesDisplay(
-    quickfilter: string,
-    fixedValue?: boolean
-  ): void {
-    const filterData = this.treeControl.dataNodes.filter(node =>
-      this.filterByQuickFilterColumns(node, quickfilter));
-    console.log(filterData);
-  }
-
 
 
   protected filterByQuickFilterColumns(

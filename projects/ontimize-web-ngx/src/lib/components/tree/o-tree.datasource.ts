@@ -100,7 +100,7 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     }
 
     // notify the change
-    this.data = this.data;
+    // this.data = this.data;
     this.dataChange.next(this.data);
     parentNode.isLoading = false;
 
