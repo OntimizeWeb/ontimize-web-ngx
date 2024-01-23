@@ -13,6 +13,10 @@
     .o-image-form-field {
       width: 100%;
 
+      .o-image-div {
+        height: 16px;
+      }
+
       .o-image-form-field-input {
         display: none;
         height: 0;
@@ -64,7 +68,7 @@
         place-content: center;
       }
 
-      > img {
+      >img {
         height: 100%;
         width: 100%;
 
@@ -75,7 +79,7 @@
       }
     }
 
-    &.o-image-auto-fit .o-image-display-container > img {
+    &.o-image-auto-fit .o-image-display-container>img {
       height: auto;
       max-height: 100%;
       max-width: 100%;

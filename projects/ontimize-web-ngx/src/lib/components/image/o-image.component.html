@@ -4,7 +4,7 @@
     (change)="fileChange(input)" class="o-image-form-field-hidden" />
 
   <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
-    <div fxLayout="row" fxLayoutAlign="start center" class="o-image-controls" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+    <div fxLayout="row" fxLayoutAlign="start center" class="o-image-div" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
       [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
       <input type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="olabel | oTranslate" [required]="isRequired" readonly
         (click)="input.click()" (change)="onChangeEvent($event)" class="o-image-form-field-input">
