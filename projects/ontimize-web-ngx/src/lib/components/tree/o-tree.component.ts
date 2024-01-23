@@ -350,34 +350,35 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     node.isLoading = true;
     if (expand && node.expandable) {
       const children = this.getChildren(node);
-      this.expandNodeWithChildren(children, node, expand);
+      if (Util.isArray(children)) {
+        this.dataSource.updateTree(node, children, expand);
+      } else {
+        this.updateAsyncTree(children, node, expand);
+      }
     } else {
       this.dataSource.updateTree(node, [], expand);
     }
 
   }
 
-  private expandNodeWithChildren(children: any, node: OTreeFlatNode, expand: boolean) {
-    if (Util.isArray(children)) {
-      this.dataSource.updateTree(node, children, expand);
-    } else {
-      children.subscribe((res: ServiceResponse) => {
-        let data;
-        if (res.isSuccessful()) {
-          const arrData = (res.data !== undefined) ? res.data : [];
-          data = Util.isArray(arrData) ? arrData : [];
-        }
-        this.dataSource.updateTree(node, data, expand);
-      }, err => {
-        node.isLoading = false;
-        if (Util.isDefined(this.queryFallbackFunction)) {
-          this.queryFallbackFunction(err);
-        } else {
-          this.oErrorDialogManager.openErrorDialog(err);
-          console.error(err);
-        }
-      });
-    }
+  private updateAsyncTree(children: any, node: OTreeFlatNode, expand: boolean) {
+    children.subscribe((res: ServiceResponse) => {
+      let data;
+      if (res.isSuccessful()) {
+        const arrData = (res.data !== undefined) ? res.data : [];
+        data = Util.isArray(arrData) ? arrData : [];
+      }
+      this.dataSource.updateTree(node, data, expand);
+    }, err => {
+      node.isLoading = false;
+      if (Util.isDefined(this.queryFallbackFunction)) {
+        this.queryFallbackFunction(err);
+      } else {
+        this.oErrorDialogManager.openErrorDialog(err);
+        console.error(err);
+      }
+    });
+
   }
 
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
