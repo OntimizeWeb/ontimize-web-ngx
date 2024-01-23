@@ -1,8 +1,7 @@
-import { BehaviorSubject, Observable, of } from 'rxjs';
-
-import { OQueryDataArgs } from '../../types/query-data-args.type';
-import { OTreeFlatNode } from './o-tree.component';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, of } from 'rxjs';
+
+import { OTreeFlatNode } from './o-tree.component';
 
 @Injectable()
 export class OTreeDao {

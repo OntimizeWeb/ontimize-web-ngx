@@ -44,7 +44,7 @@
     </div>
 
     <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
-      [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never">
+      [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no">
     </o-search-input>
     <button type="button" *ngIf="showTreeMenuButton" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu.matMenu"
       (click)="$event.stopPropagation()">
