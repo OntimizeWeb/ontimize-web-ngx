@@ -2,7 +2,7 @@
 
   <div *ngIf="hasControls()" fxLayout="row" fxLayoutAlign="start center">
 
-    <div class="buttons" fxFlex fxLayout>
+    <div class="buttons">
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
 
         <button *ngIf="insertButton" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
@@ -16,7 +16,7 @@
         </button>
 
         <button *ngIf="deleteButton" type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-          [class.disabled]="!enabledDeleteButton" (click)="remove()">
+          [class.disabled]="!enabledDeleteButton">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
           <span>{{ 'DELETE' | oTranslate }}</span>
         </button>
@@ -33,16 +33,16 @@
         </button>
 
         <button *ngIf="deleteButton" type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-          [class.disabled]="!enabledDeleteButton" (click)="remove()">
+          [class.disabled]="!enabledDeleteButton">
           <mat-icon svgIcon="ontimize:delete"></mat-icon>
         </button>
       </ng-template>
 
-
-
       <ng-content select="[o-tree-button]"></ng-content>
     </div>
-
+    <div fxFlex>
+      <span fxLayoutAlign="center center" class="title">{{ title | oTranslate }}</span>
+    </div>
     <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
       [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no">
     </o-search-input>
@@ -103,7 +103,6 @@
 </div>
 
 <ng-template let-node #leafNodeFulltemplate>
-  <!-- <div class="leaf-node"> -->
   <ng-container *ngIf="leafNodeTemplate; else defaultLeafNodeTpl" [ngTemplateOutlet]="leafNodeTemplate"
     [ngTemplateOutletContext]="{$implicit:node.data}">
   </ng-container>
@@ -111,11 +110,9 @@
   <ng-template #defaultLeafNodeTpl>
     {{node.label}}
   </ng-template>
-  <!-- </div> -->
 </ng-template>
 
 <ng-template let-node #parentNodeFulltemplate>
-  <!-- <div class="parent-node"> -->
   <ng-container *ngIf="parentNodeTemplate; else defaultParentNodeTpl" [ngTemplateOutlet]="parentNodeTemplate"
     [ngTemplateOutletContext]="{$implicit:node.data}">
   </ng-container>
@@ -124,5 +121,4 @@
     <span>{{node.label}}</span>
     <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" fxFlex></mat-progress-bar>
   </ng-template>
-  <!-- </div> -->
 </ng-template>

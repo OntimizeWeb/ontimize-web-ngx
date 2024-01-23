@@ -119,14 +119,11 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
 })
 export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
 
-  /** Map from nested node to flattened node. This helps us to keep the same object for selection */
-  // nestedNodeMap = new Map<OTreeNode, OTreeFlatNode>();
-
   getLevel = (node: OTreeFlatNode) => node.level;
 
   isExpandable = (node: OTreeFlatNode) => node.expandable;
 
-  getChildren = (node: OTreeFlatNode): OTreeFlatNode[] | any => {
+  getChildren = (node: OTreeFlatNode): any => {
     if (this.recursive) {
       return this.getRecursiveChildrenNode(node);
     } else {
@@ -137,20 +134,18 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   getTreeNodeChildren(node: OTreeFlatNode): any {
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
-    } else {
-      if (node.treeNode) {
-        if (Util.isDefined(node.treeNode.rootTitle) && !Util.isDefined(node.rootNode)) {
-          let rootNode: OTreeFlatNode = {
-            id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.treeNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, treeNode: node.treeNode
-          };
-          this.daoTree.flatNodeMap.set(rootNode, node);
-          return [rootNode];
-        } else {
-          return node.treeNode.childQueryData(node);
-        }
+    } else if (node.treeNode) {
+      if (Util.isDefined(node.treeNode.rootTitle) && !Util.isDefined(node.rootNode)) {
+        let rootNode: OTreeFlatNode = {
+          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.treeNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, treeNode: node.treeNode
+        };
+        this.daoTree.flatNodeMap.set(rootNode, node);
+        return [rootNode];
       } else {
-        return this.childreNodes.filter((item) => item[this.parentKeys] === node[this.keys]);
+        return node.treeNode.childQueryData(node);
       }
+    } else {
+      return this.childreNodes.filter((item) => item[this.parentKeys] === node[this.keys]);
     }
   }
 
@@ -273,23 +268,13 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   protected initializeDao() {
-    // Configure dao methods
-    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
-    const methods = {
-      query: queryMethodName,
-      update: this.updateMethod,
-      delete: this.deleteMethod,
-      insert: this.insertMethod
-    };
 
     if (this.staticData) {
       this.queryOnBind = false;
       this.queryOnInit = false;
-      // this.daoTree = new OTreeDao(undefined, this.entity, methods);
       this.setDataArray(this.staticData);
     } else {
       this.configureService();
-      // this.daoTree = new OTreeDao(this.dataService, this.entity, methods);
     }
   }
 
@@ -447,7 +432,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     let result = false;
     const descendants = this.treeControl.getDescendants(node);
     if (node.expandable) {
-      result = false;
       if (descendants.length > 0) {
         result = descendants.some((child) =>
           this.checklistSelection.isSelected(child)
@@ -554,7 +538,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   setDataArray(data: any): void {
     this.daoTree.flatNodeMap.clear();
     this.daoTree.setDataArray(data);
-    // ObservableWrapper.callEmit(this.onDataLoaded, this.daoTree.data);
     if (this.recursive) {
       this.childreNodes = data.filter(
         (item: any) => item[this.parentColumn] != null
@@ -646,9 +629,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     super.insertDetail();
   }
 
-  public remove(clearSelectedItems: boolean = false): void { }
-
-  protected getNodeId(item: any = {}, parentNode: any) {
+  protected getNodeId(item: any, parentNode: any) {
     /** revisarlo:igual con id incremental era mas facil e igual de eficiente */
     let id = '';
     this.keysArray.forEach(key => {
