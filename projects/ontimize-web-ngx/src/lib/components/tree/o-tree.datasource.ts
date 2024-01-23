@@ -32,10 +32,10 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   connect(collectionViewer: CollectionViewer): Observable<OTreeFlatNode[]> {
     this._treeControl.expansionModel.changed.subscribe(change => {
       if (
-        (change as SelectionChange<OTreeFlatNode>).added ||
-        (change as SelectionChange<OTreeFlatNode>).removed
+        change.added ||
+        change.removed
       ) {
-        this.handleTreeControl(change as SelectionChange<OTreeFlatNode>);
+        this.handleTreeControl(change);
       }
     });
 
@@ -44,7 +44,9 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     }));
   }
 
-  disconnect(collectionViewer: CollectionViewer): void { }
+  disconnect(collectionViewer: CollectionViewer): void {
+    this.dataChange.complete();
+   }
 
   /** Handle expand/collapse behaviors */
   handleTreeControl(change: SelectionChange<OTreeFlatNode>) {
@@ -60,8 +62,7 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   }
 
   isTreeFlatNode(value: any) {
-    let isType = false;
-    return isType = 'level' in value && 'label' in value;
+    return 'level' in value && 'label' in value;
   }
 
   updateTree(parentNode: OTreeFlatNode, children: Array<any>, expand: boolean) {
@@ -95,12 +96,11 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
         let i = index + 1;
         i < this.data.length && this.data[i].level > parentNode.level;
         i++, count++
-      ) { }
+      );
       this.data.splice(index + 1, count);
     }
 
     // notify the change
-    // this.data = this.data;
     this.dataChange.next(this.data);
     parentNode.isLoading = false;
 

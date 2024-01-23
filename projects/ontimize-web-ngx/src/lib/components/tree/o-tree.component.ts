@@ -349,37 +349,38 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   */
   toggleNode(node: OTreeFlatNode, expand: boolean) {
     node.isLoading = true;
-    if (expand) {
+    if (expand && node.expandable) {
       const children = this.getChildren(node);
-
-      if (Util.isArray(children)) {
-        this.dataSource.updateTree(node, children, expand);
-      } else {
-        children.subscribe((res: ServiceResponse) => {
-          let data;
-          if (Util.isArray(res.data)) {
-            data = res.data;
-          } else if (res.isSuccessful()) {
-            const arrData = (res.data !== undefined) ? res.data : [];
-            data = Util.isArray(arrData) ? arrData : [];
-          }
-          this.dataSource.updateTree(node, data, expand);
-
-        }, err => {
-
-          node.isLoading = false;
-          if (Util.isDefined(this.queryFallbackFunction)) {
-            this.queryFallbackFunction(err);
-          } else {
-            this.oErrorDialogManager.openErrorDialog(err);
-            console.error(err);
-          }
-        });
-      }
+      this.expandNodeWithChildren(children, node, expand);
     } else {
       this.dataSource.updateTree(node, [], expand);
     }
 
+  }
+
+  private expandNodeWithChildren(children: any, node: OTreeFlatNode, expand: boolean) {
+    if (Util.isArray(children)) {
+      this.dataSource.updateTree(node, children, expand);
+    } else {
+      children.subscribe((res: ServiceResponse) => {
+        let data;
+        if (Util.isArray(res.data)) {
+          data = res.data;
+        } else if (res.isSuccessful()) {
+          const arrData = (res.data !== undefined) ? res.data : [];
+          data = Util.isArray(arrData) ? arrData : [];
+        }
+        this.dataSource.updateTree(node, data, expand);
+      }, err => {
+        node.isLoading = false;
+        if (Util.isDefined(this.queryFallbackFunction)) {
+          this.queryFallbackFunction(err);
+        } else {
+          this.oErrorDialogManager.openErrorDialog(err);
+          console.error(err);
+        }
+      });
+    }
   }
 
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
@@ -482,7 +483,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
     let filteredTreeData = [];
     if (value) {
-      for (let [nestedNode, parent] of this.daoTree.flatNodeMap) {
+      for (let [nestedNode] of this.daoTree.flatNodeMap) {
         if (nestedNode.label.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) > -1) {
           filteredTreeData.push(nestedNode);
         }
@@ -491,13 +492,11 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       let index = 0;
       while (index < filteredTreeData.length) {
         let node = filteredTreeData[index];
-        // filteredTreeData.forEach((node, index) => {
         const parentNodes = this.getParentNodes(node, index, filteredTreeData);
         if (!Util.isArrayEmpty(parentNodes)) {
           filteredTreeData = parentNodes;
         }
         index++;
-        //});
       }
       this.dataSource.data = filteredTreeData;
     } else {
@@ -643,7 +642,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
 
-  public childQueryData(node: OTreeFlatNode, ovrrArgs?: OQueryDataArgs): Observable<ServiceResponse> | Observable<any> {
+  public childQueryData(node: OTreeFlatNode): Observable<ServiceResponse> | Observable<any> {
     let queryMethodName = this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return of({ data: [] });
@@ -651,7 +650,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     const parentItem = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
     let filter
     if (this.recursive) {
-      filter = (parentItem !== undefined) ? parentItem : {};
+      filter = parentItem ?? {};
       filter[this.parentColumn] = node.data[this.keysArray[0]]
     } else {
       filter = ServiceUtils.getFilterUsingParentKeys(node.data, node.treeNode._pKeysEquiv);
@@ -659,7 +658,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
     let queryArguments = [filter, this.colArray, this.entity];
 
-    return this.dataService[queryMethodName].apply(this.dataService, queryArguments) as Observable<ServiceResponse>;
+    return this.dataService[queryMethodName](...queryArguments) as Observable<ServiceResponse>;
   }
 
   protected navigateToViewDetail(node: OTreeFlatNode) {
