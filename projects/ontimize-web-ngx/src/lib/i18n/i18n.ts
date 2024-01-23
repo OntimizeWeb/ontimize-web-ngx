@@ -868,7 +868,7 @@ export const MAP = {
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta ação limpará todos os filtros nesta seção. Você tem certeza que quer continuar?',
     'OIMAGE.TEXT.DROP&DRAG': 'Arraste e solte a imagem aqui',
     'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem',
-    'TREE.BUTTONS.SELECT': 'Selecionar...'
+    'TREE.BUTTONS.SELECT': 'Selecionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Sim',
     'REPORT.COLUMN.FALSEVALUE': 'Não'
   }
