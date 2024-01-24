@@ -1,3 +1,7 @@
+## 15.0.0-rc.9
+### Features
+* New component `o-tree` based in Angular Material ([5aba7bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aba7bf)) Closes [#1423](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1423)
+
 ## 15.0.0-beta.5(2024-01-15)
 ### Features
 * Hide hint error when O_MAT_ERROR_OPTIONS injection token value is `{type: 'lite'}`([03820e6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03820e6)) Closes [#1402](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1402)
