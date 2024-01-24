@@ -41,3 +41,4 @@ export * from './dual-list-selector/index';
 export * from './o-data-toolbar/index';
 export * from './expandable-container/o-expandable-container.component';
 export * from './expandable-container/o-expandable-container.module';
+export * from './tree/index';

@@ -81,10 +81,14 @@
     min-height: auto;
 
     @if($typography) {
-      .mdc-list-item__primary-text{
+      .mdc-list-item__primary-text {
         font-size: mat.font-size($typography, body-2);
 
       }
     }
   }
+}
+
+@mixin tree() {
+  @include mat.tree-density(-2);
 }
