@@ -293,7 +293,10 @@ export class OFormNavigationClass {
           navData = this.navigationService.getLastItem();
         }
         const extras: NavigationExtras = {};
-        extras[Codes.QUERY_PARAMS] = navData.queryParams;
+        extras.queryParams = navData.queryParams;
+        if (options && options.exitWithoutConfirmation) {
+          extras.queryParams[Codes.IGNORE_CAN_DEACTIVATE] = options.exitWithoutConfirmation;
+        }
         this.router.navigate([navData.url], extras).then(val => {
           if (val && options && options.changeToolbarMode) {
             this.form.getFormToolbar().setInitialMode();
