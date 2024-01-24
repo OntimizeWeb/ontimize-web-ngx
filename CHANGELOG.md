@@ -1,3 +1,6 @@
+## 8.14.7
+* **o-form**:  Fixed confirmation message being displayed after inserting a record in the o-form ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
+
 ## 8.14.6 (2024-01-02)
 ### Features
 * Added new literals in the bundle ([9160190](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9160190))
