@@ -15,7 +15,9 @@ import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PermissionsService {
 
   protected permissionsService: any;
@@ -57,20 +59,28 @@ export class PermissionsService {
 
   getUserPermissionsAsPromise(): Promise<boolean> {
     const self = this;
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise((resolve: (value: boolean) => void) => {
       self.permissions = {};
       if (Util.isDefined(self.ontimizePermissionsConfig)) {
         self.configureService();
-        self.queryPermissions().subscribe(() => {
-          resolve(true);
-        }, error => {
-          resolve(true);
+        const subscription = self.queryPermissions().subscribe({
+          next: () => {
+            resolve(true);
+          },
+          error: (err) => {
+            console.error(err);
+            resolve(true);
+          },
+          complete: () => {
+            subscription.unsubscribe();
+          }
         });
       } else {
         resolve(true);
       }
     });
   }
+
 
   protected queryPermissions(): Observable<any> {
     const self = this;
