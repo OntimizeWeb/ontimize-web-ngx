@@ -14,7 +14,6 @@ export function getPermissionsServiceProvider(injector: Injector) {
   imports: [CommonModule],
   providers: [
     { provide: PermissionsGuardService, useClass: PermissionsGuardService },
-    { provide: PermissionsService, useFactory: getPermissionsServiceProvider, deps: [Injector] },
     { provide: OntimizePermissionsService, useFactory: permissionsServiceFactory, deps: [Injector] }
   ]
 })
