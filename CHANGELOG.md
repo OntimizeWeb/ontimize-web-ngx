@@ -1,4 +1,4 @@
-## 15.0.0-rc.9(2024-01-26)
+## 15.0.0-rc.0 (2024-01-26)
 ### Features
 * New component `o-tree` based in Angular Material ([5aba7bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aba7bf)) Closes [#1423](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1423)
 
