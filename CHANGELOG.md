@@ -4,7 +4,7 @@
 
 ### Bug fixes
 * The theme `ontimize-black-yellow` is not working because of the implementation of two undefined variables `$black-87-opacity` and `$white-87-opacity` imported from Angular Material ([8763e9a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8763e9a)) Closes [#1442](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1442)
-* Fixed **permissions** not loading when app starts ([ca8c58c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca8c58c)) Closes [#1442](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1440) .
+* Fixed **permissions** not loading when app starts ([ca8c58c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ca8c58c)) Closes [#1440](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1440) .
 * **o-image**: Fixed the error tooltip showing in incorrect position ([6a482ab](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a482ab)) Closes [#1409](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1409)
 * Translated literals ´Filter by´ and ´Copy all´ from the table's context menu into Spanish ([9c5d1e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c5d1e1)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
 
