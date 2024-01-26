@@ -15,6 +15,8 @@ import { OColumnModule } from '../components/container/column/o-column.module';
 import { ORowCollapsibleModule } from '../components/container/row-collapsible/o-row-collapsible.module';
 import { ORowModule } from '../components/container/row/o-row.module';
 import { OContextMenuModule } from '../components/contextmenu/o-context-menu.module';
+import { ODualListSelectorModule } from '../components/dual-list-selector/o-dual-list-selector.module';
+import { OExpandableContainerModule } from '../components/expandable-container/o-expandable-container.module';
 import { OFilterBuilderModule } from '../components/filter-builder/o-filter-builder.module';
 import { OFormContainerModule } from '../components/form-container/o-form-container.module';
 import { OFormModule } from '../components/form/o-form.module';
@@ -26,7 +28,6 @@ import { OCurrencyInputModule } from '../components/input/currency-input/o-curre
 import { ODateInputModule } from '../components/input/date-input/o-date-input.module';
 import { ODateRangeInputModule } from '../components/input/date-range/o-daterange-input.module';
 import { OEmailInputModule } from '../components/input/email-input/o-email-input.module';
-import { OPhoneInputModule} from '../components/input/phone-input/o-phone-input.module';
 import { OFileInputModule } from '../components/input/file-input/o-file-input.module';
 import { OHourInputModule } from '../components/input/hour-input/o-hour-input.module';
 import { OHTMLInputModule } from '../components/input/html-input/o-html-input.module';
@@ -35,6 +36,7 @@ import { OListPickerModule } from '../components/input/listpicker/o-list-picker.
 import { ONIFInputModule } from '../components/input/nif-input/o-nif-input.module';
 import { OPasswordInputModule } from '../components/input/password-input/o-password-input.module';
 import { OPercentInputModule } from '../components/input/percent-input/o-percent-input.module';
+import { OPhoneInputModule } from '../components/input/phone-input/o-phone-input.module';
 import { ORadioModule } from '../components/input/radio/o-radio.module';
 import { ORealInputModule } from '../components/input/real-input/o-real-input.module';
 import { OSearchInputModule } from '../components/input/search-input/o-search-input.module';
@@ -45,7 +47,9 @@ import { OTextareaInputModule } from '../components/input/textarea-input/o-texta
 import { OTimeInputModule } from '../components/input/time-input/o-time-input.module';
 import { OLanguageSelectorModule } from '../components/language-selector/o-language-selector.module';
 import { OListModule } from '../components/list/o-list.module';
+import { ODataToolbarModule } from '../components/o-data-toolbar/o-data-toolbar.module';
 import { OTableModule } from '../components/table/o-table.module';
+import { OTreeModule } from '../components/tree';
 import { OUserInfoModule } from '../components/user-info/o-user-info.module';
 import { APP_CONFIG, AppConfig } from '../config/app-config';
 import { OAppLayoutModule } from '../layouts/app-layout/o-app-layout.module';
@@ -58,9 +62,6 @@ import { OTranslateService } from '../services/translate/o-translate.service';
 import { OSharedModule } from '../shared/shared.module';
 import { Util } from '../util/util';
 import { appInitializerFactory } from './o-providers';
-import { OExpandableContainerModule } from '../components/expandable-container/o-expandable-container.module';
-import { ODualListSelectorModule } from '../components/dual-list-selector/o-dual-list-selector.module';
-import { ODataToolbarModule } from '../components/o-data-toolbar/o-data-toolbar.module';
 
 @NgModule({
   providers: [{
@@ -127,7 +128,8 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   ODateRangeInputModule,
   OExpandableContainerModule,
   ODualListSelectorModule,
-  ODataToolbarModule
+  ODataToolbarModule,
+  OTreeModule
 ];
 
 // AoT requires an exported function for factories

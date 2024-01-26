@@ -296,6 +296,7 @@ export const MAP = {
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'This action will clear every filter on this section. Are you sure you want to continue?',
     'OIMAGE.TEXT.DROP&DRAG': 'Drag and drop image file here',
     'OIMAGE.BUTTON.BROWSEFILE': 'Select image',
+    'TREE.BUTTONS.SELECT': 'Select...',
     'REPORT.COLUMN.TRUEVALUE': 'Yes',
     'REPORT.COLUMN.FALSEVALUE': 'No'
   },
@@ -537,14 +538,14 @@ export const MAP = {
     'TABLE_CONTEXT_MENU.COPY': 'Copiar',
     'TABLE_CONTEXT_MENU.COPY_CELL': 'Copiar celda',
     'TABLE_CONTEXT_MENU.COPY_ROW': 'Copiar celda',
-    'TABLE_CONTEXT_MENU.COPY_ALL': 'Copy all',
+    'TABLE_CONTEXT_MENU.COPY_ALL': 'Copiar todo',
     'TABLE_CONTEXT_MENU.COPY_SELECTION': 'Copiar selección',
     'TABLE_CONTEXT_MENU.SELECT_ALL': 'Seleccionar todos',
     'TABLE_CONTEXT_MENU.DESELECT_ALL': 'Deseleccionar todos',
     'TABLE_CONTEXT_MENU.REFRESH': 'Refrescar',
     'TABLE_CONTEXT_MENU.DELETE': 'Borrar',
     'TABLE_CONTEXT_MENU.FILTER': 'Filtrar',
-    'TABLE_CONTEXT_MENU.FILTER_BY': 'Filter by:',
+    'TABLE_CONTEXT_MENU.FILTER_BY': 'Filtrar por:',
     'TABLE_CONTEXT_MENU.FILTER_BY_VALUE': 'Filtrar por este valor',
     'TABLE_CONTEXT_MENU.GROUP_BY': 'Agrupar por',
     'TABLE_CONTEXT_MENU.GROUP_BY_YEAR': 'Agrupar por año',
@@ -588,6 +589,7 @@ export const MAP = {
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros de esta sección. ¿Desea continuar?',
     'OIMAGE.TEXT.DROP&DRAG': 'Arrastra y suelta la imagen aquí',
     'OIMAGE.BUTTON.BROWSEFILE': 'Seleccionar imagen',
+    'TREE.BUTTONS.SELECT': 'Seleccionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Si',
     'REPORT.COLUMN.FALSEVALUE': 'No'
   },
@@ -866,6 +868,7 @@ export const MAP = {
     'FILTERBUILDERMENU.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta ação limpará todos os filtros nesta seção. Você tem certeza que quer continuar?',
     'OIMAGE.TEXT.DROP&DRAG': 'Arraste e solte a imagem aqui',
     'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem',
+    'TREE.BUTTONS.SELECT': 'Selecionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Sim',
     'REPORT.COLUMN.FALSEVALUE': 'Não'
   }

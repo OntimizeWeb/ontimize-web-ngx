@@ -90,6 +90,7 @@ $app-background-color: #eaeaea;
   @include o-density.list();
   @include o-density.radio();
   @include o-density.menu($typography);
+  @include o-density.tree();
   @include o-table-style.o-table-style($theme-or-color-config);
   @include report-on-demand.report-on-demand($theme-or-color-config);
   @include charts-on-demand.o-chart-on-demand($theme-or-color-config);
