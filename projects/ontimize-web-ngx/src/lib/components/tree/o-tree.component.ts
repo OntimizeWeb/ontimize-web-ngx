@@ -103,7 +103,6 @@ export const DEFAULT_INPUTS_O_TREE = [
 
 export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded'];
 
-
 @Component({
   selector: 'o-tree',
   templateUrl: './o-tree.component.html',
@@ -582,6 +581,10 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     return flatNode;
 
 
+  }
+
+  onSelectCheckboxChange(visible: boolean) {
+    this.selectAllCheckboxVisible = visible;
   }
 
   protected sort(array: OTreeFlatNode[]): void {

@@ -1,7 +1,7 @@
 
-import { ChangeDetectionStrategy, Component, Injector, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Injector, ViewChild } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatMenu } from '@angular/material/menu';
-import { OTreeComponent } from '../../o-tree.component';
 
 @Component({
   selector: 'o-tree-menu',
@@ -9,25 +9,23 @@ import { OTreeComponent } from '../../o-tree.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: [
     'selectAllCheckbox: select-all-checkbox',
-
+    'selectAllCheckboxVisible: select-all-checkbox-visible',
+  ],
+  outputs: [
+    'onSelectCheckboxChange'
   ]
 })
 export class OTreeMenuComponent {
   @ViewChild('menu', { static: true })
   matMenu: MatMenu;
+
   selectAllCheckbox = false;
-  tree: OTreeComponent;
+  selectAllCheckboxVisible = false;
 
-  constructor(protected injector: Injector) {
-    this.tree = this.injector.get(OTreeComponent);
-  }
+  public onSelectCheckboxChange: EventEmitter<boolean> = new EventEmitter();
 
-  get isSelectAllOptionActive(): boolean {
-    return this.tree.selectAllCheckboxVisible;
-  }
-
-  set isSelectAllOptionActive(value) {
-    this.tree.selectAllCheckboxVisible = value
+  toggleShowCheckbox(event: MatCheckboxChange) {
+    this.onSelectCheckboxChange.emit(event.checked);
   }
 
 }

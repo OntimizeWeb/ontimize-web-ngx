@@ -1,6 +1,6 @@
 <mat-menu #menu="matMenu" x-position="before" class="o-tree-menu o-mat-menu">
   <span mat-menu-item *ngIf="selectAllCheckbox">
-    <mat-checkbox [(ngModel)]="isSelectAllOptionActive">
+    <mat-checkbox (change)="toggleShowCheckbox($event)"  [(ngModel)]="selectAllCheckboxVisible">
       {{ 'TREE.BUTTONS.SELECT' | oTranslate }}
     </mat-checkbox>
   </span>
