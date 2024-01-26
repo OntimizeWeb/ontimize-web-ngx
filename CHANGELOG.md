@@ -8,6 +8,8 @@
 * **o-image**: Fixed the error tooltip showing in incorrect position ([6a482ab](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6a482ab)) Closes [#1409](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1409)
 * Translated literals ´Filter by´ and ´Copy all´ from the table's context menu into Spanish ([9c5d1e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c5d1e1)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
 
+## 8.14.7 (2024-01-24)
+* **o-form**:  Fixed confirmation message being displayed after inserting a record in the o-form ([ecc3faf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecc3faf)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
 
 ## 15.0.0-beta.5(2024-01-15)
 ### Features
@@ -21,7 +23,6 @@
 * **o-table**: Fixed bug that caused the table menu details to be displayed in the wrong position ([6432ca0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6432ca0)) Closes [#1348](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1348)
 * **o-table-quickfilter**: Fixed bug that caused the height input to be incorrect ([66eae3b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66eae3b)) Closes [#1383](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1383)
 * **OFormServiceComponent**: Fixed bug that prevented the `emitOnValueChange` from being reset correctly ([6296480](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6296480)) Closes [#1342](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1342)
-
 
 ## 8.14.6 (2024-01-02)
 ### Features
