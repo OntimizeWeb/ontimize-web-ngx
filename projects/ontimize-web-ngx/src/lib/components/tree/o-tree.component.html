@@ -50,7 +50,8 @@
       (click)="$event.stopPropagation()">
       <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
     </button>
-    <o-tree-menu #treeMenu [select-all-checkbox]="selectAllCheckbox"></o-tree-menu>
+    <o-tree-menu #treeMenu [select-all-checkbox]="selectAllCheckbox" [select-all-checkbox-visible]="selectAllCheckboxVisible"
+      (onSelectCheckboxChange)="onSelectCheckboxChange($event)"></o-tree-menu>
 
   </div>
 
