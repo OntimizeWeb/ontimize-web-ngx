@@ -1,10 +1,11 @@
-<div fxLayout="column" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [class.o-image-auto-fit]="autoFit" class="o-image-content" fxFill>
+<div fxLayout="column" [formGroup]="getFormGroup()" [class.o-image-auto-fit]="autoFit" class="o-image-content" fxFill>
 
   <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'" readonly
     (change)="fileChange(input)" class="o-image-form-field-hidden" />
 
-  <mat-form-field *ngIf="hasControls()" class="o-image-form-field">
+  <mat-form-field *ngIf="hasControls()" class="o-image-form-field" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+    [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay"
+    [subscriptSizing]="subscriptSizing">
     <input type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="olabel | oTranslate" [required]="isRequired" readonly
       (click)="input.click()" (change)="onChangeEvent($event)" class="o-image-form-field-input">
     <input matInput readonly (click)="input.click()" [placeholder]="olabel | oTranslate" [required]="isRequired" [formControl]="stateCtrl" />
@@ -23,7 +24,8 @@
 
   <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container"
     [ngClass]="{'o-image-drag-and-drop': isEmpty() , 'o-image-drag-and-drop-required': hasErrorInDragAndDrop() }" fxLayoutGap="15px" oFileDragAndDrop
-    (onFileDropped)="onFileDropped($event)">
+    (onFileDropped)="onFileDropped($event)" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [matTooltipDisabled]="hasControls()">
 
     <button mat-icon-button *ngIf="!isEmpty() && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
       class="o-image-button-remove">
