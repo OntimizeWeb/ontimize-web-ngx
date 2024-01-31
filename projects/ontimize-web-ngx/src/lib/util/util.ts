@@ -441,7 +441,7 @@ export class Util {
 
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
     let dataService = configureServiceArgs.baseService;
-    const entity = configureServiceArgs.service;
+    const entity = configureServiceArgs.entity;
     const service = configureServiceArgs.service;
     const serviceType = configureServiceArgs.serviceType;
     const injector = configureServiceArgs.injector;
