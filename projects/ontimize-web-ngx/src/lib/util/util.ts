@@ -244,20 +244,17 @@ export class Util {
    * @param value the text to normalize
    */
   static normalizeString(value: string, toLowerCase: boolean = true): string {
-    switch (typeof value) {
-      case 'string':
-        if (value && value.length) {
-          let result = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-          if (toLowerCase) {
-            result = result.toLowerCase();
-          }
-          return result;
+    if (typeof value === 'string') {
+      if (value && value.length) {
+        let result = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if (toLowerCase) {
+          result = result.toLowerCase();
         }
-        return '';
-
-      default:
-        return value;
+        return result;
+      }
+      return '';
     }
+    return value;
   }
 
   /**
