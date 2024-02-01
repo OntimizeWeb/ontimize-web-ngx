@@ -17,5 +17,8 @@
         background-color: mat.get-color-from-palette($background, background);
       }
     }
+    .mat-paginator{
+      background-color: inherit;
+    }
   }
 }

@@ -540,7 +540,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
               if (normalizedValue.includes('*')) {
                 regExp = new RegExp('^' + normalizedValue.split('*').join('.*') + '$');
               }
-              return colValues.some(colValue => regExp ? regExp.test(colValue) : colValue.includes(normalizedValue));
+              return colValues.some(colValue => regExp ? regExp.test(colValue) : colValue.toString().includes(normalizedValue));
             });
             break;
           case ColumnValueFilterOperator.BETWEEN:
