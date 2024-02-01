@@ -43,7 +43,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_SPLIT_PANE = [
     '[class.o-form-layout-split-pane]': 'true'
   }
 })
-export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFormLayoutManagerMode {
+export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayoutManagerMode {
 
   data: FormLayoutDetailComponentData;
   public showLoading = new BehaviorSubject<boolean>(false);
@@ -62,7 +62,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
   protected _options: any;
 
   public set options(value: any) {
-    if (Util.isDefined(value) && Object.keys(value).length === 0) {
+    if (Util.isDefined(value) && Object.keys(value).length !== 0) {
       this._options = value;
     }
   }
@@ -84,7 +84,7 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
     return this.formLayoutManager.state;
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     if (this.mainWrapper && this.mainWrapper.nativeElement) {
       this.setOption(this.mainWrapper.nativeElement, 'mainWidth', 'width');
       this.setOption(this.mainWrapper.nativeElement, 'mainMaxWidth', 'max-width');
@@ -95,9 +95,6 @@ export class OFormLayoutSplitPaneComponent implements OnInit, AfterViewInit, OFo
       this.setOption(this.detailWrapper.nativeElement, 'detailMaxWidth', 'max-width');
       this.setOption(this.detailWrapper.nativeElement, 'detailMinWidth', 'min-width');
     }
-  }
-
-  ngAfterViewInit() {
     this.initializeComponentState();
   }
 
