@@ -6,7 +6,6 @@ import {
   forwardRef,
   Inject,
   Injector,
-  OnInit,
   Renderer2,
   ViewChild,
   ViewEncapsulation
