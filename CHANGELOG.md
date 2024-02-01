@@ -1,4 +1,14 @@
+## 8.14.8 (2024-02-01)
+### Bug fixes
+* Translated literals `Filter by` and `Copy all`` from the table's context menu into Spanish ([9af5c08](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9af5c08)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
+* **o-table**: Fixed filtering by columns is not working with boolean fields ([1635094](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1635094)) Closes [#1466](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1466)
+* **o-grid**: Fixed the pagination has white background ([7547255](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7547255)) Closes [#1461](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1461)
+* Fixed an error in browsing details about items in a paginated table.([7547255](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7547255)) Closes [#1461](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1461)
+* **o-form-layout-split**: The inputs `main-width`,`main-max-width`, `main-min-width`,`detail-width`,`detail-max-width`,`detailMaxWidth` does not work ([06e2fed](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/06e2fed)) Closes [#1375](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1375)
+
+
 ## 8.14.7 (2024-01-24)
+### Bug fixes
 * **o-form**:  Fixed confirmation message being displayed after inserting a record in the o-form ([ecc3faf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecc3faf)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
 
 ## 8.14.6 (2024-01-02)
