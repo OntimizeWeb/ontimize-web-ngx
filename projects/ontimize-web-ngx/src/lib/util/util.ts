@@ -14,7 +14,7 @@ import { OConfigureMessageServiceArgs } from '../types/configure-message-service
 
 export class Util {
 
-  static columnAggregates = ['sum', 'count', 'avg', 'min', 'max'];
+  static readonly columnAggregates = ['sum', 'count', 'avg', 'min', 'max'];
 
   static isObject(val: any): boolean {
     const valType = typeof val;
