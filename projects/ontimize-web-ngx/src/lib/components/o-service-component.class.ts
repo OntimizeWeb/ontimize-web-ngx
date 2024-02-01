@@ -457,7 +457,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
         queryMethod: this.pageable ? this.paginatedQueryMethod : this.queryMethod,
         totalRecordsNumber: this.getTotalRecordsNumber(),
         queryRows: this.queryRows,
-        queryRecordOffset: Math.max(this.state.queryRecordOffset - this.queryRows, 0)
+        queryRecordOffset: Math.max(this.currentPage * this.queryRows, this.state.queryRecordOffset - this.queryRows)
       }, result);
     }
     return result;
