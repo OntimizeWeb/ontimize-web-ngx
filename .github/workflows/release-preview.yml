@@ -18,13 +18,13 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout merge commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Node 18.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.10.0
           registry-url: ${{ env.NPM_REGISTRY }}
@@ -32,7 +32,7 @@ jobs:
       - name: obtain package.json version
         id: project
         run: |
-          echo ::set-output name=version::$(node -pe "require('./package.json')['version']")
+          echo "version=$(node -pe "require('./package.json')['version']")" >> "$GITHUB_OUTPUT"
           echo "RELEASE_VERSION=$(node -pe "require('./package.json')['version']")" >> $GITHUB_ENV
 
       - name: abort if SNAPSHOT
