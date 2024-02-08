@@ -25,11 +25,12 @@ import {
   SimpleChange,
   TemplateRef,
   ViewChild,
+  ViewChildren,
   ViewContainerRef,
   ViewEncapsulation,
   ViewRef
 } from '@angular/core';
-import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, PageEvent } from '@angular/material';
+import { MatCheckboxChange, MatDialog, MatMenu, MatTab, MatTabGroup, MatTooltip, PageEvent } from '@angular/material';
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -44,7 +45,7 @@ import { OTableOptions } from '../../interfaces/o-table-options.interface';
 import { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { ComponentStateServiceProvider, OntimizeServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
@@ -86,6 +87,7 @@ import {
 } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableButtonComponent } from './extensions/header/table-button/o-table-button.component';
+import { OTableColumnSelectAllDirective } from './extensions/header/table-column-select-all/o-table-column-select-all.directive';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import {
@@ -298,6 +300,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public virtualScrollViewport: CdkVirtualScrollViewport;
 
   public oTableGlobalConfig: OTableGlobalConfig;
+  routerSubscription: Subscription;
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
       this.virtualScrollViewport = value;
@@ -671,6 +674,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected triggerSelectionEvents: boolean = true;
 
+  @ViewChildren(MatTooltip)
+  tooltip: QueryList<MatTooltip>;
+
   constructor(
     public injector: Injector,
     elRef: ElementRef,
@@ -800,6 +806,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   ngOnDestroy() {
+
     //detach all porta host created
     if (this.portalHost) {
       this.portalHost.forEach(x => x.detach());
@@ -2808,6 +2815,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     Util.copyToClipboard(JSON.stringify(selectedItems));
   }
 
+  destroyActivedTooltips() {
+    this.tooltip.forEach(tp => {
+      if (tp._overlayRef) {
+        tp._overlayRef.detach();
+      }
+    });
+  }
 
   /**
    * Triggers navigation to item detail, receiving item data
@@ -2818,6 +2832,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.checkEnabledActionPermission('detail')) {
       return;
     }
+    this.destroyActivedTooltips();
     super.viewDetail(item);
   }
 
