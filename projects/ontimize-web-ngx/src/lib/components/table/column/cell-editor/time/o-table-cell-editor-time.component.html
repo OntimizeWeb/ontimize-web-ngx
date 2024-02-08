@@ -6,7 +6,7 @@
     [matTooltipPosition]="tooltipPosition"
     [matTooltipShowDelay]="tooltipShowDelay"
     [matTooltipHideDelay]="tooltipHideDelay">
-    <mat-form-field>
+    <mat-form-field subscriptSizing="dynamic">
 
       <input #dateInput matInput [placeholder]="getPlaceholderDate()" [formControl]="formControlDate"
         [required]="orequired" [matDatepicker]="d" (dateChange)="onDateChange($event)" [min]="minDate" [max]="maxDate"
@@ -43,7 +43,7 @@
 
     <span class="separator">&ndash;</span>
 
-    <mat-form-field>
+    <mat-form-field subscriptSizing="dynamic">
 
       <input #hourInput matInput [ngxTimepicker]="picker" [placeholder]="getPlaceholderHour()"
         [formControl]="formControlHour" [required]="orequired" (change)="onHourChange($event)" [min]="oHourMin"

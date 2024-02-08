@@ -5,7 +5,7 @@
     [matTooltipPosition]="tooltipPosition"
     [matTooltipShowDelay]="tooltipShowDelay"
     [matTooltipHideDelay]="tooltipHideDelay">
-    <mat-form-field cdkFocusInitial>
+    <mat-form-field cdkFocusInitial subscriptSizing="dynamic">
 
       <input #input matInput type="number" [placeholder]="getPlaceholder()" [formControl]="formControl"
         [required]="orequired" [min]="min" [max]="max" [step]="step" [id]="cellEditorId">
