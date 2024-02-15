@@ -235,7 +235,6 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'disableSelectionFunction: disable-selection-function',
 
-  'disablePageSizeCalculation: disable-page-size-calculation'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -598,8 +597,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   quickFilterCallback: QuickFilterFunction;
   disableSelectionFunction: DisableSelectionFunction;
-  @InputConverter()
-  disablePageSizeCalculation: boolean = false;
 
   @ViewChild('tableBody', { static: false })
   protected tableBodyEl: ElementRef;
