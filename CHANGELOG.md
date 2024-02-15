@@ -1,3 +1,13 @@
+## 8.14.9 (2024-02-15)
+### Features
+* **o-table, o-grid, o-list**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([1af87f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1af87f5)) Closes [#1480](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1480)
+
+### Bug fixes
+* Fixed the tooltip being displayed when navigating to the table details ([da77fae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da77fae)) Closes [#1473](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1473)
+* Fixed error in the standard navigation of a table when it is pageable ([c8e6495](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8e6495)) Closes [#1476](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1476)
+* Modified insert button text translation ([f5059b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5059b5)) Closes [#1482](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1482)
+
+
 ## 8.14.8 (2024-02-01)
 ### Bug fixes
 * Translated literals `Filter by` and `Copy all` from the table's context menu into Spanish ([9af5c08](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9af5c08)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
