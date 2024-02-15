@@ -276,7 +276,10 @@ export class OFormNavigationComponent implements OnDestroy {
   }
 
   showNavigation() {
-    return (this.navigationData || []).length > 1;
+    /*
+      queryConf is only defined when the service is pageable
+    */
+    return (Util.isDefined(this.queryConf) && Util.isDefined(this.queryConf.totalRecordsNumber)) ? this.queryConf.totalRecordsNumber > 1 : this.navigationData.length > 1
   }
 
   set currentIndex(arg: number) {

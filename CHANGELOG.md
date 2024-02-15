@@ -1,3 +1,21 @@
+## 8.14.9 (2024-02-15)
+### Features
+* **o-table, o-grid, o-list**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([1af87f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1af87f5)) Closes [#1480](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1480)
+
+### Bug fixes
+* Fixed the tooltip being displayed when navigating to the table details ([da77fae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da77fae)) Closes [#1473](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1473)
+* Fixed error in the standard navigation of a table when it is pageable ([c8e6495](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8e6495)) Closes [#1476](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1476)
+* Modified insert button text translation ([f5059b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5059b5)) Closes [#1482](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1482)
+
+
+## 8.14.8 (2024-02-01)
+### Bug fixes
+* Translated literals `Filter by` and `Copy all` from the table's context menu into Spanish ([9af5c08](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9af5c08)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
+* **o-table**: Fixed filtering by columns is not working with boolean fields ([1635094](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1635094)) Closes [#1466](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1466)
+* **o-grid**: Fixed the pagination has white background ([7547255](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7547255)) Closes [#1461](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1461)
+* Fixed an error in navigation details about items in a paginated table.([9773e10](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9773e10)) Closes [#1460](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1460)
+* **o-form-layout-split**: The inputs `main-width`,`main-max-width`, `main-min-width`,`detail-width`,`detail-max-width`,`detailMaxWidth` does not work ([06e2fed](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/06e2fed)) Closes [#1375](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1375)
+
 ## 15.0.0-rc.0 (2024-01-26)
 ### Features
 * New component `o-tree` based in Angular Material ([5aba7bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aba7bf)) Closes [#1423](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1423)
