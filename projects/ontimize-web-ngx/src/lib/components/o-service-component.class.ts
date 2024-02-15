@@ -100,7 +100,9 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'pageSizeOptions: page-size-options',
 
   //quickFilterAppearance[legacy|standard|fill|outline] Indicates which of the mat-form-field different appearance variants will be used. Default: outline
-  'quickFilterAppearance:quick-filter-appearance'
+  'quickFilterAppearance:quick-filter-appearance',
+
+  'disablePageSizeCalculation: disable-page-size-calculation'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -154,6 +156,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   insertButton: boolean;
   @InputConverter()
   paginationControls: boolean = true;
+  @InputConverter()
+  disablePageSizeCalculation: boolean = false;
 
   get pageSizeOptions(): number[] {
     return this._pageSizeOptions;
@@ -808,7 +812,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     } else {
       newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
       const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
-      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+      queryLength = this.disablePageSizeCalculation ? this.queryRows : Math.min(this.queryRows, newEndRecord - newStartRecord);
     }
 
     const queryArgs: OQueryDataArgs = {
