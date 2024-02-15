@@ -233,9 +233,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
   'showResetWidthOption: show-reset-width-option',
 
-  'disableSelectionFunction: disable-selection-function',
-
-  'disablePageSizeCalculation: disable-page-size-calculation'
+  'disableSelectionFunction: disable-selection-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -598,8 +596,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   quickFilterCallback: QuickFilterFunction;
   disableSelectionFunction: DisableSelectionFunction;
-  @InputConverter()
-  disablePageSizeCalculation: boolean = false;
 
   @ViewChild('tableBody', { static: false })
   protected tableBodyEl: ElementRef;
