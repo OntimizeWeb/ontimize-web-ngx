@@ -3,6 +3,9 @@
 * Fixed the tooltip being displayed when navigating to the table details ([da77fae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da77fae)) Closes [#1473](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1473)
 * Fixed error in the standard navigation of a table when it is pageable ([c8e6495](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8e6495)) Closes [#1476](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1476)
 
+### Features
+* **o-table**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([7c3949d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c3949d)) Closes [#1485](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1485)
+
 ## 8.14.8 (2024-02-01)
 ### Bug fixes
 * Translated literals `Filter by` and `Copy all` from the table's context menu into Spanish ([9af5c08](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9af5c08)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
