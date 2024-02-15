@@ -1,6 +1,6 @@
 ## 8.14.9 (2024-02-15)
 ### Features
-* **o-table**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([7c3949d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c3949d)) Closes [#1485](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1485)
+* **o-table, o-grid, o-list**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([1af87f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1af87f5)) Closes [#1480](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1480)
 
 ### Bug fixes
 * Fixed the tooltip being displayed when navigating to the table details ([da77fae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da77fae)) Closes [#1473](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1473)
