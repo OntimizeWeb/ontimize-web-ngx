@@ -5,6 +5,7 @@
 ### Bug fixes
 * Fixed the tooltip being displayed when navigating to the table details ([da77fae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da77fae)) Closes [#1473](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1473)
 * Fixed error in the standard navigation of a table when it is pageable ([c8e6495](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8e6495)) Closes [#1476](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1476)
+* Modified insert button text translation ([f5059b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5059b5)) Closes [#1482](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1482)
 
 
 ## 8.14.8 (2024-02-01)
