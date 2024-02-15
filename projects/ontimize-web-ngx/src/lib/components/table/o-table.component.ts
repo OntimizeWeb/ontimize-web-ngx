@@ -233,8 +233,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
   'showResetWidthOption: show-reset-width-option',
 
-  'disableSelectionFunction: disable-selection-function',
-
+  'disableSelectionFunction: disable-selection-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
