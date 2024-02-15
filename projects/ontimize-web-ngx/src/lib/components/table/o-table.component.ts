@@ -233,7 +233,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
   'showResetWidthOption: show-reset-width-option',
 
-  'disableSelectionFunction: disable-selection-function'
+  'disableSelectionFunction: disable-selection-function',
+
+  'disablePageSizeCalculation: disable-page-size-calculation'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -596,6 +598,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   quickFilterCallback: QuickFilterFunction;
   disableSelectionFunction: DisableSelectionFunction;
+  @InputConverter()
+  disablePageSizeCalculation: boolean = false;
 
   @ViewChild('tableBody', { static: false })
   protected tableBodyEl: ElementRef;
@@ -2510,7 +2514,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     } else {
       newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
       const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
-      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+      queryLength = this.disablePageSizeCalculation ? this.queryRows : Math.min(this.queryRows, newEndRecord - newStartRecord);
     }
 
     const queryArgs: OQueryDataArgs = {
