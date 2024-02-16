@@ -12,6 +12,7 @@
     "moment",
     "ngx-material-timepicker",
     "tslib",
-    "google-libphonenumber"
+    "google-libphonenumber",
+    "ngx-skeleton-loader"
   ]
 }
