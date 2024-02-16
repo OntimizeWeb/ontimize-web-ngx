@@ -1,7 +1,7 @@
 <div class="o-list-container" [style.display]="isVisible()? '' : 'none'" fxFill>
   <div *ngIf="loading | async" fxLayoutAlign="center center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0"
     class="spinner-container">
-    <mat-progress-spinner strokeWidth="3" mode="indeterminate"></mat-progress-spinner>
+    <o-list-skeleton></o-list-skeleton>
   </div>
   <o-data-toolbar *ngIf="hasControls()" [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
     <ng-container o-data-toolbar-projection-start>
