@@ -325,18 +325,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   portalHost: Array<DomPortalOutlet> = [];
   onDataLoadedCellRendererSubscription: Subscription;
 
-  get diameterSpinner() {
-    const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
-    let height = 0;
-    if (this.spinnerContainer && this.spinnerContainer.nativeElement) {
-      height = this.spinnerContainer.nativeElement.offsetHeight;
-    }
-    if (height > 0 && height <= 100) {
-      return Math.floor(height - (height * 0.1));
-    } else {
-      return minHeight;
-    }
-  }
+
 
   public tableContextMenu: OContextMenuComponent;
 
