@@ -1,3 +1,4 @@
+import { OConfigureServiceArgs } from './../../../types/configure-service-args.type';
 import { Component, forwardRef, Inject, Injector, OnDestroy, Type, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -75,22 +76,14 @@ export class OFormNavigationComponent implements OnDestroy {
     if (!this.queryConf) {
       return;
     }
-    let loadingService: any = OntimizeService;
-    if (this.queryConf.serviceType) {
-      loadingService = this.queryConf.serviceType;
-    }
-    try {
-      this.dataService = this.injector.get(loadingService);
-      if (Util.isDataService(this.dataService)) {
-        const serviceCfg = this.dataService.getDefaultServiceConfiguration(this.queryConf.service);
-        if (this.queryConf.entity) {
-          serviceCfg.entity = this.queryConf.entity;
-        }
-        this.dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const configureService: OConfigureServiceArgs = {
+      injector: this.injector,
+      baseService: OntimizeService,
+      entity: this.queryConf.entity,
+      service: this.queryConf.service,
+      serviceType: this.queryConf.serviceType
+    };
+    this.dataService = Util.configureService(configureService);
   }
 
   protected queryNavigationData(offset: number, length?: number): Promise<any> {
