@@ -108,7 +108,7 @@
 
   <div *ngIf="loading | async" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
     <div fxLayoutAlign="center center" [class.o-spinner-container-controls]="hasControls()" class="o-spinner-container">
-      <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+      <o-grid-skeleton></o-grid-skeleton>
     </div>
   </div>
 
