@@ -162,7 +162,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   insertButton: boolean;
   @BooleanInputConverter()
   paginationControls: boolean = true;
-  @InputConverter()
+  @BooleanInputConverter()
   disablePageSizeCalculation: boolean = false;
 
   get pageSizeOptions(): number[] {
