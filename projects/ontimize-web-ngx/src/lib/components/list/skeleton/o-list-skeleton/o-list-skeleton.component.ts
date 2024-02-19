@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Injector, ViewEncapsulation } from '@angular/core';
+import { OSkeletonComponent } from '../../../o-skeleton.component';
 
 @Component({
   selector: 'o-list-skeleton',
@@ -9,8 +10,10 @@ import { Component, ElementRef, ViewEncapsulation } from '@angular/core';
     '[class.o-list-skeleton]': 'true'
   }
 })
-export class OListSkeletonComponent {
-  constructor(protected elRef: ElementRef) {
+export class OListSkeletonComponent extends OSkeletonComponent {
+
+  constructor(protected elRef: ElementRef, protected injector: Injector) {
+    super(injector)
   }
 
   get count() {

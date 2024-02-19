@@ -1,18 +1,16 @@
-<div *ngFor="let item of count">
-
-  <!--row grid -->
-  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" class="o-grid-skeleton-row">
-    <!-- row title -->
-    <ngx-skeleton-loader count="1" [theme]="{ height: '10px', width:'5%' }"></ngx-skeleton-loader>
-    <ng-container *ngFor="let i of [1,2,3,4,5]">
-      <div fxFlex="20%">
-        <ngx-skeleton-loader count="1" [theme]="{ height: '60px' }">
-        </ngx-skeleton-loader>
-        <ngx-skeleton-loader count="1" [theme]="{ height: '10px', width:'100%' }">
-        </ngx-skeleton-loader>
-        <ngx-skeleton-loader count="1" [theme]="{ height: '10px', width:'70%' }">
-        </ngx-skeleton-loader>
-      </div>
-    </ng-container>
+<div *ngFor="let item of count" fxLayout="column" fxLayoutGap="10px" class="o-grid-skeleton-item">
+  <ngx-skeleton-loader count="1" animation="{{isDarkMode?'progress-dark':'progress'}}"
+    [theme]="{ height: '10px', width:'5%', 'border-radius':'none' }"></ngx-skeleton-loader>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <div fxFlex="20%" *ngFor="let i of [1,2,3,4,5]">
+      <ngx-skeleton-loader count="1" [theme]="{ height: '60px', 'border-radius':'none' }" animation="{{isDarkMode?'progress-dark':'progress'}}">
+      </ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{ height: '10px', width:'100%', 'border-radius':'none' }"
+        animation="{{isDarkMode?'progress-dark':'progress'}}">
+      </ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{ height: '10px', width:'70%', 'border-radius':'none' }"
+        animation="{{isDarkMode?'progress-dark':'progress'}}">
+      </ngx-skeleton-loader>
+    </div>
   </div>
 </div>

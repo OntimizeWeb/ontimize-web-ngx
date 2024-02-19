@@ -11,7 +11,7 @@ import { OListItemAvatarComponent } from './renderers/avatar/o-list-item-avatar.
 import { OListItemCardImageComponent } from './renderers/card-image/o-list-item-card-image.component';
 import { OListItemCardComponent } from './renderers/card/o-list-item-card.component';
 import { OListItemTextComponent } from './renderers/text/o-list-item-text.component';
-import { OListSkeletonComponent } from './skeleton/o-grid-skeleton/o-list-skeleton.component';
+import { OListSkeletonComponent } from './skeleton/o-list-skeleton/o-list-skeleton.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 

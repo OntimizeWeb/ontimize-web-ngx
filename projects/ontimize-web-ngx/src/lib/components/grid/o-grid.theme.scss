@@ -14,10 +14,11 @@
 
     .o-grid-container {
       .o-loading-blocker .o-spinner-container {
-        background-color: mat.get-color-from-palette($background, background);
+        background-color: mat.get-color-from-palette($background, level-0);
       }
     }
-    .mat-paginator{
+
+    .mat-paginator {
       background-color: inherit;
     }
   }

@@ -1,1 +1,22 @@
-<ngx-skeleton-loader [count]="count" [theme]="{height:'28px','border-radius': '5px'}"></ngx-skeleton-loader>
+<div class="o-table-skeleton-item" *ngFor="let i of count" fxLayout="row" fxLayoutGap="10px">
+  <div fxFlex="20%">
+    <ngx-skeleton-loader count="1" animation="{{isDarkMode?'progress-dark':'progress'}}"
+      [theme]="{height:'15px','border-radius': '0'}"></ngx-skeleton-loader>
+  </div>
+  <div fxFlex="20%">
+    <ngx-skeleton-loader count="1" animation="{{isDarkMode?'progress-dark':'progress'}}"
+      [theme]="{height:'15px','border-radius': '0'}"></ngx-skeleton-loader>
+  </div>
+  <div fxFlex="20">
+    <ngx-skeleton-loader count="1" animation="{{isDarkMode?'progress-dark':'progress'}}"
+      [theme]="{height:'15px','border-radius': '0'}"></ngx-skeleton-loader>
+  </div>
+  <div fxFlex="20%">
+    <ngx-skeleton-loader count="1" animation="{{isDarkMode?'progress-dark':'progress'}}"
+      [theme]="{height:'15px','border-radius': '0'}"></ngx-skeleton-loader>
+  </div>
+  <div fxFlex="20%">
+    <ngx-skeleton-loader count="1" animation="{{isDarkMode?'progress-dark':'progress'}}"
+      [theme]="{height:'15px','border-radius': '0'}"></ngx-skeleton-loader>
+  </div>
+</div>

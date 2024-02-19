@@ -1,4 +1,6 @@
-import { Component, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { OSkeletonComponent } from '../../../../o-skeleton.component';
+
 
 @Component({
   selector: 'o-table-skeleton',
@@ -10,14 +12,15 @@ import { Component, ElementRef, ViewEncapsulation } from '@angular/core';
   }
 
 })
-export class OTableSkeletonComponent {
-  constructor(protected elRef: ElementRef){
+export class OTableSkeletonComponent extends OSkeletonComponent implements OnDestroy {
+
+  constructor(protected elRef: ElementRef, protected injector: Injector) {
+    super(injector)
   }
 
   get count() {
     const parentElement = this.elRef.nativeElement.parentElement;
-    return Math.floor(parentElement.offsetHeight / 36);
-
+    return Array(Math.floor(parentElement.offsetHeight / 32));
   }
-  //public count = 0;
+
 }

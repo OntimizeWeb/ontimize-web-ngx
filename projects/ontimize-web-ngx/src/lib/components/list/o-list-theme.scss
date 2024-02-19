@@ -1,6 +1,7 @@
 @mixin o-list-theme($theme-or-color-config) {
   $theme: map.get($theme-or-color-config, color);
   $foreground: map.get($theme, foreground);
+  $background: map.get($theme, background);
 
   .o-list-container {
 
@@ -15,6 +16,17 @@
     .o-list-row-action .mdc-checkbox,
     .o-list-item-icon {
       color: mat.get-color-from-palette($foreground, icon);
+    }
+
+    .spinner-container {
+      &:not(.pageable-loading) {
+        background-color: mat.get-color-from-palette($background, level-0);
+
+      }
+
+      &.pageable-loading {
+        background-color: mat.get-color-from-palette($background, level-08);
+      }
     }
   }
 }

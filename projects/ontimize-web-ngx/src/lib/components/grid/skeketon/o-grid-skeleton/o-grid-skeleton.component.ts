@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, ViewEncapsulation, Injector } from '@angular/core';
+import { OSkeletonComponent } from '../../../o-skeleton.component';
 
 @Component({
   selector: 'o-grid-skeleton',
@@ -10,13 +11,16 @@ import { Component, ElementRef, ViewEncapsulation } from '@angular/core';
   }
 
 })
-export class OGridSkeletonComponent {
-  constructor(protected elRef: ElementRef) {
+export class OGridSkeletonComponent extends OSkeletonComponent {
+
+  constructor(protected elRef: ElementRef, protected injector: Injector) {
+    super(injector);
   }
+
   get count() {
     const parentElement = this.elRef.nativeElement.parentElement;
     /** 60+10+10+10*3 */
-    return Array(Math.floor(parentElement.offsetHeight / 160));
+    return Array(Math.floor(parentElement.offsetHeight / 130));
 
   }
 }
