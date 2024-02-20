@@ -52,7 +52,7 @@
     </ng-template>
   </div>
   <!--TABLE PAGINATOR-->
-  <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
+  <mat-paginator *ngIf="paginator && (showLoading | async)===false" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
     [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons">
   </mat-paginator>
 
@@ -68,7 +68,7 @@
 
 <ng-template #table>
 
-  <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
+  <table *ngIf="(showLoading | async)===false" mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
     [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()"
     [oTableExpandedFooter]="!(loading | async)" [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()"
     aria-describedby="ontimize-web table">

@@ -6,7 +6,8 @@
   <o-data-toolbar *ngIf="hasControls()" [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
     <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
-        <button *ngIf="insertButton && !insertButtonFloatable" class="o-list-button text" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
+        <button *ngIf="insertButton && !insertButtonFloatable" class="o-list-button text" type="button" mat-stroked-button aria-label="Insert"
+          (click)="add($event)">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
           <span>{{ 'ADD' | oTranslate }}</span>
         </button>
@@ -23,7 +24,8 @@
         </button>
       </ng-container>
       <ng-template #showButtonsWithoutText>
-        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-list-button no-text" mat-icon-button aria-label="Insert" (click)="add($event)">
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-list-button no-text" mat-icon-button aria-label="Insert"
+          (click)="add($event)">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
         </button>
 
@@ -49,14 +51,14 @@
       </o-search-input>
     </ng-container>
   </o-data-toolbar>
-  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%">
-
+  <ng-container *ngIf="(loading | async) === false">
+  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%" >
     <!--MAT-LIST-->
-    <mat-list  (scroll)="onScroll($event)" [class.selectable]="selectable"
+    <mat-list (scroll)="onScroll($event)" [class.selectable]="selectable"
       [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)">
 
       <mat-list-item *ngIf="!getDataArray().length" fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
-        <h3 matLine>
+        <h3 matListItemTitle fxLayout="row" fxLayoutAlign="center center">
           {{ 'TABLE.EMPTY' | oTranslate }}
           <ng-container *ngIf="getQuickFilterValue().length > 0">
             {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : {values: [getQuickFilterValue()]} }}
@@ -74,5 +76,5 @@
     [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
     <mat-icon svgIcon="ontimize:add"></mat-icon>
   </button>
-
+</ng-container>
 </div>

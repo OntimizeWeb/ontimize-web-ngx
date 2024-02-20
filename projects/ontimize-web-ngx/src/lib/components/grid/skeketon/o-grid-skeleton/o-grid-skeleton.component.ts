@@ -20,7 +20,7 @@ export class OGridSkeletonComponent extends OSkeletonComponent {
   get count() {
     const parentElement = this.elRef.nativeElement.parentElement;
     /** 60+10+10+10*3 */
-    return Array(Math.floor(parentElement.offsetHeight / 130));
+    return Array(Math.floor(parentElement.offsetHeight / 175));
 
   }
 }

@@ -20,12 +20,12 @@
 
     .spinner-container {
       &:not(.pageable-loading) {
-        background-color: mat.get-color-from-palette($background, level-0);
+        background-color: transparent;
 
       }
 
       &.pageable-loading {
-        background-color: mat.get-color-from-palette($background, level-08);
+        background-color: transparent;
       }
     }
   }
