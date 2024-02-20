@@ -1,3 +1,10 @@
+## 15.0.0
+> [!NOTE]
+> In this version the features and bugfixes of version [8.14.8](#8148-2024-02-01) and [8.14.9](#8149-2024-02-15) were integrated
+
+### Features
+* **o-table, o-grid, o-list**: Added skeleton ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1089](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1089)
+
 ## 8.14.9 (2024-02-15)
 ### Features
 * **o-table, o-grid, o-list**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([1af87f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1af87f5)) Closes [#1480](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1480)
