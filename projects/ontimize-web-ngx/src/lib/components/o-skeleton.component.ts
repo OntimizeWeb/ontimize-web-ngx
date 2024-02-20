@@ -15,7 +15,6 @@ export class OSkeletonComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('se destruye');
     this.subscription?.unsubscribe();
   }
 }
