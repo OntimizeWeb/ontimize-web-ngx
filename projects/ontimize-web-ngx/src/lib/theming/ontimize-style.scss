@@ -761,10 +761,10 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
   }
 
   .o-grid-skeleton-item,
-  .o-table-skeleton-item,
+  .o-table .o-table-skeleton-item,
   .o-list-skeleton-item {
-    .skeleton-loader {
-      background-color: mat.get-color-from-palette($background, level-04);
+    div.skeleton-loader {
+      background: mat.get-color-from-palette($background, level-04) no-repeat;
     }
   }
 
