@@ -1,4 +1,35 @@
+## 15.0.0 (2024-02-21)
+> [!NOTE]
+> In this version, the features and bugfixes of version [8.14.8](#8148-2024-02-01) and [8.14.9](#8149-2024-02-15) were integrated
+
+### Features
+* **o-table, o-grid, o-list**: Added skeleton ([2695595](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2695595)) Closes [#1089](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1089)
+
+### Bug fixes
+* **o-daterange-input**: Fixed that the background of daterange picker is the same as that of the cards([18b3955](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18b3955)) Closes [#1492](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1492)
+
+## 8.14.9 (2024-02-15)
+### Features
+* **o-table, o-grid, o-list**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([1af87f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1af87f5)) Closes [#1480](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1480)
+
+### Bug fixes
+* Fixed the tooltip being displayed when navigating to the table details ([da77fae](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da77fae)) Closes [#1473](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1473)
+* Fixed error in the standard navigation of a table when it is pageable ([c8e6495](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c8e6495)) Closes [#1476](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1476)
+* Modified insert button text translation ([f5059b5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f5059b5)) Closes [#1482](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1482)
+
+
+## 8.14.8 (2024-02-01)
+### Bug fixes
+* Translated literals `Filter by` and `Copy all` from the table's context menu into Spanish ([9af5c08](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9af5c08)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
+* **o-table**: Fixed filtering by columns is not working with boolean fields ([1635094](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1635094)) Closes [#1466](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1466)
+* **o-grid**: Fixed the pagination has white background ([7547255](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7547255)) Closes [#1461](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1461)
+* Fixed an error in navigation details about items in a paginated table.([9773e10](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9773e10)) Closes [#1460](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1460)
+* **o-form-layout-split**: The inputs `main-width`,`main-max-width`, `main-min-width`,`detail-width`,`detail-max-width`,`detailMaxWidth` does not work ([06e2fed](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/06e2fed)) Closes [#1375](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1375)
+
 ## 15.0.0-rc.0 (2024-01-26)
+> [!NOTE]
+> In this version, the bugfixes of version [8.14.7](#8147-2024-01-24) were integrated
+
 ### Features
 * New component `o-tree` based in Angular Material ([5aba7bf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5aba7bf)) Closes [#1423](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1423)
 
@@ -9,9 +40,13 @@
 * Translated literals ´Filter by´ and ´Copy all´ from the table's context menu into Spanish ([9c5d1e1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c5d1e1)) Closes [#1452](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1452)
 
 ## 8.14.7 (2024-01-24)
+### Bug fixes
 * **o-form**:  Fixed confirmation message being displayed after inserting a record in the o-form ([ecc3faf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecc3faf)) Closes [#595](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/595)
 
 ## 15.0.0-beta.5(2024-01-15)
+> [!NOTE]
+> In this version, the features and bugfixes of version [8.14.5](#8145-2023-12-14) and [8.14.6](#8146-2024-01-02) were integrated
+
 ### Features
 * Hide hint error when O_MAT_ERROR_OPTIONS injection token value is `{type: 'lite'}`([03820e6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/03820e6)) Closes [#1402](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1402)
 * **o-form**: added new emitters  `onBeforeInsert`, `onBeforeUpdate`, `onBeforeDelete` that allow modifying the insertion, deletion and update parameters ([a6b9a1d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a6b9a1d)) Closes [#1434](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1434)
@@ -39,6 +74,9 @@
 * **o-table-cell-renderer-service-**: Fixed the table crashed when the result of the o-table-cell-renderer-service has no values ([4bf6bf8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4bf6bf8)) Closes [#1415](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1415)
 
 ## 15.0.0-beta.4(2023-11-15)
+> [!NOTE]
+> In this version the bugfixes of version [8.14.4](#8144-2023-11-13) were integrated.
+
 ### Features
 * Create class *CurrencyUtil* to lookup the currency symbol for a given currency code.([a4d6d86](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a4d6d86))
 
@@ -68,12 +106,13 @@
 * **checkbox**: Checkbox ripple is not aligned to the center ([aa3d7c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/aa3d7c5)) Closes [#1369](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1369)
 * **report-on-demand**: Improved report-on-demand styles ([72133c3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/72133c3)) Closes [#1379](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1379)
 
-
-
 ### Breaking changes
 * **o-list**: Removed input `dense` ([3573efd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3573efd)) Closes [#1374](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1374)
 
 ## 15.0.0-beta.2(2023-10-24)
+> [!NOTE]
+> In this version, the bugfixes of version [8.14.2](#8142-2023-10-18) and [8.14.3](#8143-2023-10-19) were integrated.
+
 ### Features
 * New mixin `ontimize-theme-all-component-color` to generates the color styles in ontimize-styles-v8.scss.([9c89f8c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9c89f8c))  Closes [#1331](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1331)
 * **o-form-layout-manager,o-form-layout-dialog-options**: New input `dialog-title-separator`.([ecdcf28](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecdcf28))  Closes [#1338](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1338)
@@ -107,6 +146,9 @@
 
 
 ## 15.0.0-beta.1(2023-10-06)
+> [!NOTE]
+> In this version, the bugfixes of version [8.14.1](#8141-2023-10-03) were integrated.
+
 The code related to **Ontimize themes** has been refactored with the aim of improving their configuration and performance, which implies the following changes
 
 ### Feature

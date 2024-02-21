@@ -1,0 +1,15 @@
+.o-table-skeleton {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  padding: 10px;
+
+  .o-table-skeleton-header {
+    height: 40px;
+    margin: 0px 10px 10px 10px;
+  }
+
+  .o-table-skeleton-item {
+    margin: 0 10px;
+  }
+}

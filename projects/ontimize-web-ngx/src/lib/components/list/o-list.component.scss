@@ -39,11 +39,6 @@
 
     &:not(.pageable-loading) {
       top: 0;
-      background: rgba(255, 255, 255, 1);
-    }
-
-    &.pageable-loading {
-      background: rgba(255, 255, 255, 0.5);
     }
 
     path {

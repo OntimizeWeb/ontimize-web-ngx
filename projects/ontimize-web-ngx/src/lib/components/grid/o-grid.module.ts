@@ -8,10 +8,12 @@ import { ODataToolbarModule } from '../o-data-toolbar/o-data-toolbar.module';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 import { OGridComponent } from './o-grid.component';
+import { OGridSkeletonComponent } from './skeketon/o-grid-skeleton/o-grid-skeleton.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
-    declarations: [OGridComponent, OGridItemDirective, OGridItemComponent],
-    imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule],
+    declarations: [OGridComponent, OGridItemDirective, OGridItemComponent, OGridSkeletonComponent],
+    imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule, NgxSkeletonLoaderModule],
     exports: [OGridComponent, OGridItemComponent, OGridItemDirective]
 })
 export class OGridModule { }

@@ -13,7 +13,7 @@ import { OConfigureMessageServiceArgs } from '../types/configure-message-service
 
 export class Util {
 
-  static columnAggregates = ['sum', 'count', 'avg', 'min', 'max'];
+  static readonly columnAggregates = ['sum', 'count', 'avg', 'min', 'max'];
 
   static isObject(val: any): boolean {
     const valType = typeof val;
@@ -243,14 +243,17 @@ export class Util {
    * @param value the text to normalize
    */
   static normalizeString(value: string, toLowerCase: boolean = true): string {
-    if (value && value.length) {
-      let result = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      if (toLowerCase) {
-        result = result.toLowerCase();
+    if (typeof value === 'string') {
+      if (value && value.length) {
+        let result = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if (toLowerCase) {
+          result = result.toLowerCase();
+        }
+        return result;
       }
-      return result;
+      return '';
     }
-    return '';
+    return value;
   }
 
   /**
@@ -454,7 +457,7 @@ export class Util {
 
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
     let dataService = configureServiceArgs.baseService;
-    const entity = configureServiceArgs.service;
+    const entity = configureServiceArgs.entity;
     const service = configureServiceArgs.service;
     const serviceType = configureServiceArgs.serviceType;
     const injector = configureServiceArgs.injector;

@@ -755,4 +755,22 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
       padding: 0;
     }
   }
+
+  .o-table-skeleton-header {
+    background-color: mat.get-color-from-palette($background, level-04);
+  }
+
+  .o-grid-skeleton-item,
+  .o-table .o-table-skeleton-item,
+  .o-list-skeleton-item {
+    div.skeleton-loader {
+      background: mat.get-color-from-palette($background, level-04) no-repeat;
+    }
+  }
+
+  .o-list-skeleton-item {
+    background-color: mat.get-color-from-palette($background, level-08);
+    border-radius: variables.$border-radius;
+  }
+
 }

@@ -24,7 +24,7 @@
 */
   .md-drppicker {
 
-    background-color: mat.get-color-from-palette($background, background);
+    background-color: mat.get-color-from-palette($background, card);
 
     &:after,
     &:before {

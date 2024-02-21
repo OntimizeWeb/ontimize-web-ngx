@@ -5,10 +5,10 @@
     <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
         <!-- button new-->
-        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button o-grid-button text"  mat-stroked-button aria-label="Insert"
-          (click)="add()">
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-add-button o-grid-button text" mat-stroked-button
+          aria-label="Insert" (click)="add()">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
-          <span>{{ 'INSERT' | oTranslate }}</span>
+          <span>{{ 'ADD' | oTranslate }}</span>
         </button>
 
         <!--button refresh-->
@@ -20,8 +20,8 @@
 
       <ng-template #showButtonsWithoutText>
         <!-- button new-->
-        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-button o-grid-add-button no-text" mat-icon-button aria-label="Insert"
-          (click)="add()">
+        <button *ngIf="insertButton && !insertButtonFloatable" type="button" class="o-grid-button o-grid-add-button no-text" mat-icon-button
+          aria-label="Insert" (click)="add()">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
         </button>
 
@@ -70,46 +70,49 @@
     </ng-container>
   </o-data-toolbar>
 
-  <!--no results-->
-  <div class="o-grid-no-results fill-remaining" *ngIf="gridItems.length === 0" fxLayoutAlign="center start" layout-padding>
-    {{'GRID.EMPTY' | oTranslate}}
-    <ng-container *ngIf="quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0">
-      {{ 'GRID.EMPTY_USING_FILTER' | oTranslate : { values: [ searchInputComponent.getValue()] } }}
-    </ng-container>
-  </div>
+  <ng-container *ngIf="(loading | async)===false">
+    <!--no results-->
+    <div class="o-grid-no-results fill-remaining" *ngIf="gridItems.length === 0" fxLayoutAlign="center start" layout-padding>
+      {{'GRID.EMPTY' | oTranslate}}
+      <ng-container *ngIf="quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0">
+        {{ 'GRID.EMPTY_USING_FILTER' | oTranslate : { values: [ searchInputComponent.getValue()] } }}
+      </ng-container>
+    </div>
 
-  <!--MAT-GRID-LIST-->
-  <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining"
-    *ngIf="gridItems.length > 0">
-    <mat-grid-tile o-grid-item *ngFor="let item of gridItems" [colspan]="item.colspan" [rowspan]="item.rowspan">
-      <ng-container *ngTemplateOutlet="item.template"></ng-container>
-    </mat-grid-tile>
-  </mat-grid-list>
 
-  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()" class="o-grid-add-floatable-button"
-    [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
-    [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
-    <mat-icon svgIcon="ontimize:add"></mat-icon>
-  </button>
+    <!--MAT-GRID-LIST-->
+    <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining"
+      *ngIf="gridItems.length > 0">
+      <mat-grid-tile o-grid-item *ngFor="let item of gridItems" [colspan]="item.colspan" [rowspan]="item.rowspan">
+        <ng-container *ngTemplateOutlet="item.template"></ng-container>
+      </mat-grid-tile>
+    </mat-grid-list>
 
-  <!-- GRID FOOTER -->
-  <div *ngIf="!paginationControls && showFooter" fxLayout="row" fxLayoutAlign="center center" class="o-grid-footer">
-    <button type="button" mat-button *ngIf="getDataArray().length < totalRecords && getDataArray().length>0" (click)="loadMore()"
-      class="mat-raised-button">
-      {{ 'GRID.BUTTON_NEXT' | oTranslate }}
+    <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()"
+      class="o-grid-add-floatable-button" [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
+      [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
+      <mat-icon svgIcon="ontimize:add"></mat-icon>
     </button>
-    <span fxFlex></span>
-    <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [getDataArray().length, totalRecords]}
-      }}</span>
-  </div>
 
-  <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls && showFooter" [length]="totalRecords" [pageSize]="queryRows"
-    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
+    <!-- GRID FOOTER -->
+    <div *ngIf="!paginationControls && showFooter && (loading | async)===false" fxLayout="row" fxLayoutAlign="center center" class="o-grid-footer">
+      <button type="button" mat-button *ngIf="getDataArray().length < totalRecords && getDataArray().length>0" (click)="loadMore()"
+        class="mat-raised-button">
+        {{ 'GRID.BUTTON_NEXT' | oTranslate }}
+      </button>
+      <span fxFlex></span>
+      <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [getDataArray().length, totalRecords]}
+        }}</span>
+    </div>
 
+    <mat-paginator class="o-mat-paginator" #paginator *ngIf="paginationControls && showFooter" [length]="totalRecords" [pageSize]="queryRows"
+      [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
+  </ng-container>
   <div *ngIf="loading | async" fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
     <div fxLayoutAlign="center center" [class.o-spinner-container-controls]="hasControls()" class="o-spinner-container">
-      <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+      <o-grid-skeleton></o-grid-skeleton>
     </div>
   </div>
+
 
 </div>

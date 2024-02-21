@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "15.0.0-rc.0",
+  "version": "15.0.0",
   "description": "Ontimize Web framework using Angular 15",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
@@ -57,6 +57,7 @@
     "moment": "2.29.2",
     "ngx-material-timepicker": "5.4.3",
     "google-libphonenumber": "^3.2.3",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "ngx-skeleton-loader": "7.0.0"
   }
 }

@@ -37,9 +37,9 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
 
   // additional-data [JSON]: used to send aditional information in the upload request.
   'additionalData: additional-data',
-  'appearance',
-  'hideRequiredMarker:hide-required-marker',
-  'labelVisible:label-visible'
+  'service',
+  'entity',
+  'serviceType : service-type',
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [

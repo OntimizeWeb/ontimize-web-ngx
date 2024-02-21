@@ -23,6 +23,7 @@ import {
   SimpleChange,
   TemplateRef,
   ViewChild,
+  ViewChildren,
   ViewContainerRef,
   ViewEncapsulation,
   ViewRef,
@@ -100,6 +101,7 @@ import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensi
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OTableBase } from './o-table-base.class';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
+import { MatTooltip } from '@angular/material/tooltip';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -325,18 +327,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   portalHost: Array<DomPortalOutlet> = [];
   onDataLoadedCellRendererSubscription: Subscription;
 
-  get diameterSpinner() {
-    const minHeight = OTableComponent.DEFAULT_BASE_SIZE_SPINNER;
-    let height = 0;
-    if (this.spinnerContainer && this.spinnerContainer.nativeElement) {
-      height = this.spinnerContainer.nativeElement.offsetHeight;
-    }
-    if (height > 0 && height <= 100) {
-      return Math.floor(height - (height * 0.1));
-    } else {
-      return minHeight;
-    }
-  }
+
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -667,6 +658,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   protected triggerSelectionEvents: boolean = true;
 
+  @ViewChildren(MatTooltip)
+  tooltip: QueryList<MatTooltip>;
+
   constructor(
     public injector: Injector,
     elRef: ElementRef,
@@ -795,6 +789,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   ngOnDestroy() {
+
     //detach all porta host created
     if (this.portalHost) {
       this.portalHost.forEach(x => x.detach());
@@ -2505,7 +2500,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     } else {
       newStartRecord = Math.max(this.state.queryRecordOffset, (this.currentPage * this.queryRows));
       const newEndRecord = Math.min(newStartRecord + this.queryRows, this.state.totalQueryRecordsNumber);
-      queryLength = Math.min(this.queryRows, newEndRecord - newStartRecord);
+      queryLength = this.disablePageSizeCalculation ? this.queryRows : Math.min(this.queryRows, newEndRecord - newStartRecord);
     }
 
     const queryArgs: OQueryDataArgs = {
@@ -2809,6 +2804,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     Util.copyToClipboard(JSON.stringify(selectedItems));
   }
 
+  destroyActivedTooltips() {
+    this.tooltip.forEach(tp => {
+      if (tp._overlayRef) {
+        tp._overlayRef.detach();
+      }
+    });
+  }
 
   /**
    * Triggers navigation to item detail, receiving item data
@@ -2819,6 +2821,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.checkEnabledActionPermission('detail')) {
       return;
     }
+    this.destroyActivedTooltips();
     super.viewDetail(item);
   }
 
