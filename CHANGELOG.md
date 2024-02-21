@@ -6,7 +6,7 @@
 * **o-table, o-grid, o-list**: Added skeleton ([2695595](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2695595)) Closes [#1089](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1089)
 
 ### Bug fixes
-* **o-daterange-input**: Fixed that the background of daterange picker is the same as that of the cards([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1492](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1492)
+* **o-daterange-input**: Fixed that the background of daterange picker is the same as that of the cards([18b3955](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/18b3955)) Closes [#1492](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1492)
 
 ## 8.14.9 (2024-02-15)
 ### Features
