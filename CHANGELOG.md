@@ -1,9 +1,12 @@
-## 15.0.0 (2024-02-20)
+## 15.0.0 (2024-02-21)
 > [!NOTE]
 > In this version, the features and bugfixes of version [8.14.8](#8148-2024-02-01) and [8.14.9](#8149-2024-02-15) were integrated
 
 ### Features
 * **o-table, o-grid, o-list**: Added skeleton ([2695595](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2695595)) Closes [#1089](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1089)
+
+### Bug fixes
+* **o-daterange-input**: Fixed that the background of daterange picker is the same as that of the cards([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1492](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1492)
 
 ## 8.14.9 (2024-02-15)
 ### Features
