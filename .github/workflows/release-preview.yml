@@ -8,7 +8,7 @@ concurrency:
 on:
   pull_request:
     types: [labeled, synchronize]
-    branches: ['master']
+    branches: ['main.8.x']
     paths: ['projects/ontimize-web-ngx/**']
 
 jobs:

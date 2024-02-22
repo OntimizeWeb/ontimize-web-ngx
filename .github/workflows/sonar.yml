@@ -2,7 +2,7 @@ name: Sonar
 on:
   push:
     branches:
-      - master
+      - main.8.x
       - 8.x.x
       - hotfix/8.*
   pull_request:
