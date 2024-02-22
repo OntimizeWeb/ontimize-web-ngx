@@ -4,14 +4,14 @@ name: Build Release
 on:
   pull_request:
     types: [closed]
-    branches: [master]
+    branches: [main.8.x]
     paths: ['projects/ontimize-web-ngx/**']
   workflow_dispatch:
     inputs:
       BASELINE:
         description: 'Release branch'
         required: true
-        default: 'master'
+        default: 'main.8.x'
 
 env:
   NPM_REGISTRY: https://registry.npmjs.org/

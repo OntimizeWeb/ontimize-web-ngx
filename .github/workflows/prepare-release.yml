@@ -17,7 +17,7 @@ env:
   NPM_REGISTRY: https://registry.npmjs.org/
   CI_EMAIL: ontimize-web@imatia.com
   CI_USERNAME: ontimize-web
-  MAIN_BRANCH: master
+  MAIN_BRANCH: main.8.x
   DEVELOP_BRANCH: 8.x.x
   LIBRARY_PATH: projects/ontimize-web-ngx
 
