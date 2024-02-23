@@ -171,7 +171,7 @@ jobs:
           npm version patch --no-git-tag-version
 
       - name: Create release branch
-        if: ${{ steps.parameters.outputs.isMinor == true }} || ${{ steps.parameters.outputs.isRC == true }} || ${{ steps.parameters.outputs.isBeta == true }}
+        if: ${{ steps.parameters.outputs.isHotfix == false }}
         run: |
           version=${{ env.RELEASE_VERSION }}
           git checkout -b release/$version
