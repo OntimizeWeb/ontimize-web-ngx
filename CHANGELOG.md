@@ -3,7 +3,7 @@
 * Exported `o-skeleton`, `o-table-skeleton`,`o-list-skeleton` and `o-grid-skeleton` components for reuse([794d7cf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794d7cf)) Closes [#1499](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1499)
 
 ### Bug fixes
-* **o-table**: Fixed that the skeletons were always displayed and the data in the table with static-data was not displayed ([b5825f2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5825f2)) Closes [#1503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1503)
+* **o-table**: Fixed problem into tables working with static-data that the skeleton was always shown and never dissapears ([b5825f2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5825f2)) Closes [#1503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1503)
 
 ## 15.0.0 (2024-02-21)
 > [!NOTE]
