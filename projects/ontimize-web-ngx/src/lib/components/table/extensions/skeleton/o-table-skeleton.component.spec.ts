@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OTableSkeletonComponent } from './o-table-skeleton.component';
 import { Injector } from '@angular/core';
-import { APP_CONFIG, AppConfig } from '../../../../../config/app-config';
-import { TestUtils } from '../../../../input/test/test-utils';
-import { appConfigFactory } from '../../../../../services/app-config.provider';
-import { AppearanceService } from '../../../../../services/appearance.service';
-import { AuthService } from '../../../../../services/auth.service';
+import { APP_CONFIG, AppConfig } from '../../../../config/app-config';
+import { TestUtils } from '../../../input/test/test-utils';
+import { appConfigFactory } from '../../../../services/app-config.provider';
+import { AppearanceService } from '../../../../services/appearance.service';
+import { AuthService } from '../../../../services/auth.service';
 import { MatDialogModule } from '@angular/material/dialog';
 
 describe('OTableSkeletonComponent', () => {
