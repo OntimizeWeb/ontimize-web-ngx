@@ -9,3 +9,4 @@ export * from './renderers/card/o-list-item-card.component';
 export * from './renderers/o-list-item-card-renderer.class';
 export * from './renderers/o-list-item-text-renderer.class';
 export * from './renderers/text/o-list-item-text.component';
+export * from './skeleton/o-list-skeleton.component';
