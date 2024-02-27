@@ -24,7 +24,8 @@ export class OMatSort extends MatSort {
   protected activeSortColumn: string;
   protected activeSortDirection: string;
 
-  @Output('matSortChange') readonly oSortChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output('matSortChange')
+  readonly oSortChange: EventEmitter<any> = new EventEmitter<any>();
 
   set oMatSortColumns(value: SQLOrder[]) {
     this.restart();
