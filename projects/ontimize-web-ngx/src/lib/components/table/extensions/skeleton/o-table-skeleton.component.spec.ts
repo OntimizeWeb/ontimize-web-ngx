@@ -1,21 +1,22 @@
-import { AppearanceService } from './../../../../services/appearance.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OListSkeletonComponent } from './o-list-skeleton.component';
+import { OTableSkeletonComponent } from './o-table-skeleton.component';
 import { Injector } from '@angular/core';
 import { APP_CONFIG, AppConfig } from '../../../../config/app-config';
-import { appConfigFactory } from '../../../../services';
 import { TestUtils } from '../../../input/test/test-utils';
+import { appConfigFactory } from '../../../../services/app-config.provider';
+import { AppearanceService } from '../../../../services/appearance.service';
 import { AuthService } from '../../../../services/auth.service';
 import { MatDialogModule } from '@angular/material/dialog';
-describe('OListSkeletonComponent', () => {
-  let component: OListSkeletonComponent;
-  let fixture: ComponentFixture<OListSkeletonComponent>;
+
+describe('OTableSkeletonComponent', () => {
+  let component: OTableSkeletonComponent;
+  let fixture: ComponentFixture<OTableSkeletonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MatDialogModule],
-      declarations: [OListSkeletonComponent],
+      declarations: [OTableSkeletonComponent],
       providers: [
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
@@ -26,7 +27,7 @@ describe('OListSkeletonComponent', () => {
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(OListSkeletonComponent);
+    fixture = TestBed.createComponent(OTableSkeletonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

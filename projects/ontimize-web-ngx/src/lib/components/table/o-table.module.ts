@@ -29,7 +29,7 @@ import { OTableRowExpandableComponent } from './extensions/row/table-row-expanda
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton/o-table-skeleton.component';
+import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +78,8 @@ import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton/
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_FOOTER_COMPONENTS,
-    OTableRowExpandableComponent
+    OTableRowExpandableComponent,
+    OTableSkeletonComponent
   ],
   providers: [
     OTableExportButtonService,

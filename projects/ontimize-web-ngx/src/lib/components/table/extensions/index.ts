@@ -16,3 +16,4 @@ export * from './row/table-row-expandable/o-table-row-expandable.component';
 export * from './o-table-datasource.service';
 export * from './o-table-strategy.service';
 export * from './pipes/o-table-row-class.pipe';
+export * from './skeleton/o-table-skeleton.component';
