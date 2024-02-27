@@ -1,3 +1,10 @@
+## 15.0.1 (2024-02-27)
+### Features
+* Exported `o-skeleton`, `o-table-skeleton`,`o-list-skeleton` and `o-grid-skeleton` components for reuse([794d7cf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794d7cf)) Closes [#1499](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1499)
+
+### Bug fixes
+* **o-table**: Fixed that the skeletons were always displayed and the data in the table with static-data was not displayed ([b5825f2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b5825f2)) Closes [#1503](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1503)
+
 ## 15.0.0 (2024-02-21)
 > [!NOTE]
 > In this version, the features and bugfixes of version [8.14.8](#8148-2024-02-01) and [8.14.9](#8149-2024-02-15) were integrated
