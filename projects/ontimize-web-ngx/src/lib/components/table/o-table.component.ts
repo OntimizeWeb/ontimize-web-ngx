@@ -292,12 +292,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
-    if (Util.isDefined(_sort) && !Util.isDefined(this.sort)) {
-      this.sort = _sort;
-      this.registerSortListener();
-      this.setDatasource();
+    if (Util.isDefined(_sort)){
+      if (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && JSON.stringify(this.sort) !== JSON.stringify(_sort))) {
+        this.sort = _sort;
+        this.registerSortListener();
+        this.setDatasource();
+      }
     }
-
   };
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
@@ -1339,6 +1340,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   registerSortListener() {
     if (Util.isDefined(this.sort)) {
+      this.sortSubscription?.unsubscribe();
       this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
     }
@@ -1392,6 +1394,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
       this.stopEdition();
       this.checkSelectedItemData();
+      if (!this.pageable) {
+        setTimeout(() => {
+          this.updateSortingSubject(false);
+          if (this.cd && !(this.cd as ViewRef).destroyed) {
+            this.cd.detectChanges();
+          }
+        }, 500);
+      }
     });
   }
 
