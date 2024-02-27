@@ -1,5 +1,5 @@
 import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { OSkeletonComponent } from '../../../../o-skeleton.component';
+import { OSkeletonComponent } from '../../../o-skeleton.component';
 
 
 @Component({

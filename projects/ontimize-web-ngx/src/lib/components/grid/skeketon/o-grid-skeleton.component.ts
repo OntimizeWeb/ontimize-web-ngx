@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewEncapsulation, Injector } from '@angular/core';
-import { OSkeletonComponent } from '../../../o-skeleton.component';
+import { OSkeletonComponent } from '../../o-skeleton.component';
 
 @Component({
   selector: 'o-grid-skeleton',
