@@ -292,12 +292,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
-    if (Util.isDefined(_sort)){
-      if (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && JSON.stringify(this.sort) !== JSON.stringify(_sort))) {
-        this.sort = _sort;
-        this.registerSortListener();
-        this.setDatasource();
-      }
+    if (Util.isDefined(_sort) &&
+      (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && JSON.stringify(this.sort) !== JSON.stringify(_sort)))) {
+      this.sort = _sort;
+      this.registerSortListener();
+      this.setDatasource();
     }
   };
 
