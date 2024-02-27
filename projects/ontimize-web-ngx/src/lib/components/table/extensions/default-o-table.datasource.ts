@@ -312,6 +312,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   /** Returns a sorted copy of the database data. */
   protected getSortedData(data: any[]): any[] {
+    if (!this._sort) return data;
     const rendererData = this.getDataToSort(data);
     const sortedData = this._sort.getSortedData(rendererData);
 
@@ -332,6 +333,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         i++;
       }
     });
+    this.table.updateSortingSubject(false);
     return originalDataSorted;
 
   }
@@ -384,7 +386,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     });
   }
   public getDataToSort(data: any[]): any[] {
-
+    if (!this._sort) return data;
     const sortColumns = this._tableOptions.columns.filter(oCol => oCol.visible && this._sort.activeArray.map(x => x.id).indexOf(oCol.attr) > -1);
     const existColumnToTrasformToSort = sortColumns.filter((oCol: OColumn) => (oCol.type === 'translate' || oCol.type === 'service')).length > 0;
     if (!existColumnToTrasformToSort) {

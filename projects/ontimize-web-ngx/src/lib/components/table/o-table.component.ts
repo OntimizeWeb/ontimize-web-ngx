@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
   AfterContentInit,
@@ -12,6 +13,7 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
+  forwardRef,
   HostListener,
   Inject,
   Injector,
@@ -26,30 +28,19 @@ import {
   ViewChildren,
   ViewContainerRef,
   ViewEncapsulation,
-  ViewRef,
-  forwardRef
+  ViewRef
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu } from '@angular/material/menu';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatTooltip } from '@angular/material/tooltip';
 import moment from 'moment';
-import { BehaviorSubject, Observable, Subscription, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
-import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
-import type { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
-import type { OTableButton } from '../../interfaces/o-table-button.interface';
-import type { OTableButtons } from '../../interfaces/o-table-buttons.interface';
-import type { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
-import type { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
-import type { OTableMenu } from '../../interfaces/o-table-menu.interface';
-import type { OTableOptions } from '../../interfaces/o-table-options.interface';
-import type { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
-import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
-import type { ServiceResponse } from '../../interfaces/service-response.interface';
 import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
@@ -101,8 +92,17 @@ import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensi
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { OTableBase } from './o-table-base.class';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
-import { MatTooltip } from '@angular/material/tooltip';
 
+import type { IOContextMenuContext } from '../../interfaces/o-context-menu.interface';
+import type { OTableButton } from '../../interfaces/o-table-button.interface';
+import type { OTableButtons } from '../../interfaces/o-table-buttons.interface';
+import type { OTableColumnsGrouping } from '../../interfaces/o-table-columns-grouping-interface';
+import type { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
+import type { OTableMenu } from '../../interfaces/o-table-menu.interface';
+import type { OTableOptions } from '../../interfaces/o-table-options.interface';
+import type { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
+import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
+import type { ServiceResponse } from '../../interfaces/service-response.interface';
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
@@ -288,7 +288,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public paginator: OTablePaginator;
 
-  @ViewChild(OMatSort) sort: OMatSort;
+  sort: OMatSort;
+
+  @ViewChild(OMatSort)
+  set oMatSort(_sort: OMatSort) {
+    if (Util.isDefined(_sort) && !Util.isDefined(this.sort)) {
+      this.sort = _sort;
+      this.registerSortListener();
+      this.setDatasource();
+    }
+
+  };
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
 
@@ -308,9 +318,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
           }
         });
       }
-
-      this.setDatasource();
-      this.registerSortListener();
     }
   }
 
@@ -937,7 +944,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.parseGroupedColumns();
     this.parseGroupedColumnTypes();
     this.parseSortColumns();
-    this.registerSortListener();
     this.setFiltersConfiguration();
     this.addDefaultRowButtons();
     if (Util.isDefined(this.oTableColumnsGroupingComponent)) {
@@ -1337,13 +1343,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.sort.setMultipleSort(this.multipleSort);
     }
 
-    if (this.sortColumns && this.staticData) {
-      this.updateSortingSubject(true);
-    }
 
   }
 
-  private updateSortingSubject(value: boolean) {
+  public updateSortingSubject(value: boolean) {
     /* the loadingSortingSubject not refresh in the template
     because change detection not working with virtual scrolling */
     const ngZone = this.injector.get(NgZone);
@@ -1389,14 +1392,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
       this.stopEdition();
       this.checkSelectedItemData();
-      if (!this.pageable) {
-        setTimeout(() => {
-          this.updateSortingSubject(false);
-          if (this.cd && !(this.cd as ViewRef).destroyed) {
-            this.cd.detectChanges();
-          }
-        }, 500);
-      }
     });
   }
 
@@ -1617,9 +1612,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   projectContentChanged() {
-    setTimeout(() => {
-      this.updateSortingSubject(false);
-    }, 500);
     this.loadingScrollSubject.next(false);
 
     this.initViewPort(this.dataSource.renderedData);
