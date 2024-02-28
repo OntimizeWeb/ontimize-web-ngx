@@ -227,6 +227,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
   'showResetWidthOption: show-reset-width-option',
 
+  // show-pivot-table-option [yes|no|true|false]: show pivot table menu option in the header menu
+  'showPivotTableOption: show-pivot-table-option',
+
   'disableSelectionFunction: disable-selection-function'
 ];
 
@@ -358,6 +361,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   filterColumnActiveByDefault: boolean = true;
   @BooleanInputConverter()
   showResetWidthOption: boolean = true;
+  @BooleanInputConverter()
+  showPivotTableOption: boolean = true;
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;

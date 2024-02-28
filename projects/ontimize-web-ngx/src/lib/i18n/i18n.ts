@@ -298,7 +298,8 @@ export const MAP = {
     'OIMAGE.BUTTON.BROWSEFILE': 'Select image',
     'TREE.BUTTONS.SELECT': 'Select...',
     'REPORT.COLUMN.TRUEVALUE': 'Yes',
-    'REPORT.COLUMN.FALSEVALUE': 'No'
+    'REPORT.COLUMN.FALSEVALUE': 'No',
+    'TABLE.BUTTONS.PIVOT_TABLE': 'Pivot table'
   },
 
   // Spanish
@@ -591,7 +592,8 @@ export const MAP = {
     'OIMAGE.BUTTON.BROWSEFILE': 'Seleccionar imagen',
     'TREE.BUTTONS.SELECT': 'Seleccionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Si',
-    'REPORT.COLUMN.FALSEVALUE': 'No'
+    'REPORT.COLUMN.FALSEVALUE': 'No',
+    'TABLE.BUTTONS.PIVOT_TABLE': 'Tabla pivotada'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -870,6 +872,7 @@ export const MAP = {
     'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem',
     'TREE.BUTTONS.SELECT': 'Selecionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Sim',
-    'REPORT.COLUMN.FALSEVALUE': 'Não'
+    'REPORT.COLUMN.FALSEVALUE': 'Não',
+    'TABLE.BUTTONS.PIVOT_TABLE': 'Tabela dinâmica'
   }
 }
