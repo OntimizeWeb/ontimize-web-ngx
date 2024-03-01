@@ -1,3 +1,7 @@
+## 15.0.2
+### Features
+* **o-table**: added new input `non-hidable-columns` to prevent a visible column from being hidden([50119a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/50119a6)) Closes [#1515](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1515)
+
 ## 15.0.1 (2024-02-27)
 ### Features
 * Exported `o-skeleton`, `o-table-skeleton`,`o-list-skeleton` and `o-grid-skeleton` components for reuse([794d7cf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/794d7cf)) Closes [#1499](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1499)
