@@ -60,8 +60,11 @@ export class OTableVisibleColumnsDialogComponent {
       this.table = data.table;
 
       const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
+      const nonHidableColumns = Util.parseArray(this.table.nonHidableColumns, true);
 
-      this.table.oTableOptions.columns.filter(oCol => visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined).forEach((oCol: OColumn) => {
+      this.table.oTableOptions.columns.filter(oCol => (visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined) &&
+        nonHidableColumns.indexOf(oCol.attr) === -1
+      ).forEach((oCol: OColumn) => {
         this.columns.push({
           attr: oCol.attr,
           title: oCol.title,
