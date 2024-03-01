@@ -471,6 +471,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public searcheableColumns: string[] = [];
   public defaultVisibleColumns: string;
   public groupedColumns: string;
+  public nonHidableColumns: string;
 
   public sortColumns: string;
   public groupedColumnTypes: OGroupedColumnTypes[] = [];
