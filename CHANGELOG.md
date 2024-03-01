@@ -1,6 +1,9 @@
-## 15.0.2
+## 15.0.2(2024-03-01)
 ### Features
 * **o-table**: added new input `non-hidable-columns` to prevent a visible column from being hidden([50119a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/50119a6)) Closes [#1515](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1515)
+
+### Bug fixes
+* **o-table**: Fixed an error being displayed in the console due to a circular structure in JSON ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1518](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1518)
 
 ## 15.0.1 (2024-02-27)
 ### Features
