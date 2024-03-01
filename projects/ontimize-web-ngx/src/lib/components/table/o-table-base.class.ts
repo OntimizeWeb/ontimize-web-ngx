@@ -97,7 +97,7 @@ export abstract class OTableBase {
   abstract isSelectionModeNone(): boolean;
   abstract isAllSelected(): boolean
 
-
+  abstract nonHidableColumns: string;
   abstract visibleColumns: string;
   abstract sortColArray: SQLOrder[];
   abstract currentPage: number;

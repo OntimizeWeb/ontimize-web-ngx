@@ -227,7 +227,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   // show-reset-width-option [yes|no|true|false]: show reset width menu option in the header menu
   'showResetWidthOption: show-reset-width-option',
 
-  'disableSelectionFunction: disable-selection-function'
+  'disableSelectionFunction: disable-selection-function',
+
+  'nonHidableColumns: non-hidable-columns'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -293,7 +295,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
     if (Util.isDefined(_sort) &&
-      (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && JSON.stringify(this.sort) !== JSON.stringify(_sort)))) {
+      (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && Util.stringify(this.sort) !== Util.stringify(_sort)))) {
       this.sort = _sort;
       this.registerSortListener();
       this.setDatasource();
@@ -469,6 +471,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public searcheableColumns: string[] = [];
   public defaultVisibleColumns: string;
   public groupedColumns: string;
+  public nonHidableColumns: string;
 
   public sortColumns: string;
   public groupedColumnTypes: OGroupedColumnTypes[] = [];
