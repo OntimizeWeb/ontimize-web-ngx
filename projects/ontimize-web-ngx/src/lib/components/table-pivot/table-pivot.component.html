@@ -1,0 +1,145 @@
+<div mat-dialog-title class="dialog-title" fxLayout="row" fxLayoutAlign="space-between center">
+  {{ 'TABLE.PIVOT_TABLE_TITLE' | oTranslate }}
+  <div>
+    <mat-icon svgIcon="ontimize:settings" #configurationMenuButton [matMenuTriggerFor]="configurationMenu"></mat-icon>
+    <mat-icon aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
+      <ng-container *ngIf="fullscreen">fullscreen_exit</ng-container>
+      <ng-container *ngIf="!fullscreen">fullscreen</ng-container>
+    </mat-icon>
+    <mat-icon svgIcon="ontimize:close" [mat-dialog-close]="true"></mat-icon>
+
+    <mat-menu #configurationMenu="matMenu" class="o-mat-menu">
+      <button type="button" [disabled]="!appliedConfiguration" mat-menu-item (click)="openSavePreferences()">
+        {{ 'BUTTONS.SAVE_CONFIGURATION' | oTranslate }}
+      </button>
+      <button type="button" mat-menu-item (click)="openSaveAsPreferences()">
+        {{ 'BUTTONS.SAVEAS_CONFIGURATION' | oTranslate }}
+      </button>
+      <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">
+        {{'BUTTONS.APPLY_CONFIGURATION'| oTranslate }}
+      </button>
+    </mat-menu>
+  </div>
+</div>
+<div #dialog mat-dialog-content class="dialog-container" fxFill>
+  <mat-sidenav-container class="mat-sidenav-container" [class.opened]="openedSidenav" fxFill>
+    <mat-sidenav #sidenav [(opened)]="openedSidenav" mode="side" class="o-table-pivot-sidenav">
+      <div fxLayout="column" fxFill fxLayoutGap="20px">
+        <o-button *ngIf="openedSidenav" (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
+          [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
+        </o-button>
+
+        <div fxLayout="column" *ngIf="openedSidenav" class="container-title" fxLayoutGap="10px">
+          <mat-form-field subscriptSizing='dynamic'>
+            <input [(ngModel)]="pivotTablePreference.title" matInput placeholder="{{ 'TITLE' | oTranslate }}">
+          </mat-form-field>
+          <mat-form-field subscriptSizing='dynamic'>
+            <input [(ngModel)]="pivotTablePreference.subtitle" matInput placeholder="{{ 'SUBTITLE' | oTranslate }}">
+          </mat-form-field>
+        </div>
+
+        <mat-accordion multi="true" displayMode="flat" fxFlex="1 1 auto" *ngIf="openedSidenav" [@.disabled]="true">
+          <mat-expansion-panel class="acordions" expanded="true">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'PIVOT FIELDS COLUMNS' | oTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-selection-list #pivotFieldsList id="pivotFieldsList" dense cdkDropList #pivotFieldsList="cdkDropList"
+              [cdkDropListConnectedTo]="[columnList,rowList, functionsList]" [cdkDropListData]="columns" (cdkDropListDropped)="dropFields($event)"
+              class="columns" (selectionChange)="onSelectionChangeColumns($event)" [compareWith]="columnsCompareFunction">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columns" [value]="column" cdkDrag>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span matListItemLine fxFlex>
+                    {{column.title | oTranslate}}
+                  </span>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="acordions" expanded="true">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'COLUMNS' | oTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list dense cdkDropList #columnList="cdkDropList" [cdkDropListConnectedTo]="[pivotFieldsList,rowList]"
+              [cdkDropListData]="pivotTablePreference.columns" (cdkDropListDropped)="drop($event)">
+              <mat-list-item *ngFor="let column of pivotTablePreference.columns" cdkDrag>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+                  <span matListItemLine fxFlex>
+                    {{column.title | oTranslate}}
+                  </span>
+                  <!-- <mat-icon mat-list-icon (click)="editColumn($event, column)" class="button-edit">
+                    edit
+                  </mat-icon> -->
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="acordions" expanded="true">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'ROWS' | oTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list dense #rowList="cdkDropList" cdkDropList [cdkDropListConnectedTo]="[columnsList,pivotFieldsList, functionsList]"
+              [cdkDropListData]="pivotTablePreference.rows" (cdkDropListDropped)="drop($event)">
+              <mat-list-item *ngFor="let row of pivotTablePreference.rows" cdkDrag>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span matListItemLine fxFlex>
+                    {{row.title | oTranslate}}
+                  </span>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="acordions" expanded="true">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'FUNCTIONS' | oTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list dense cdkDropList #functionsList="cdkDropList" [cdkDropListConnectedTo]="[columnsList]"
+              (cdkDropListDropped)="dropFunctions($event)">
+              <mat-list-item [cdkDropListConnectedTo]="[columnsList,rowList,pivotFieldsList]" cdkDropList
+                *ngFor="let function of pivotTablePreference.functions">
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span matListItemLine fxFlex>
+                    {{function.type | oTranslate }}({{function.column.title | oTranslate }})
+                  </span>
+                  <mat-icon mat-list-icon (click)="selectFunction($event, function)" class="button-edit">
+                    edit
+                  </mat-icon>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
+          <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearPivotTablePreferences()">
+            {{'CLEAR' | oTranslate }}</button>
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewPivotTable()" [disabled]="columns.length===0">
+            {{'PREVIEW' | oTranslate }}</button>
+        </div>
+
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="sidenav-container-content" fxFill>
+        <o-table *ngIf="showPivotTable$ | async" [title]="pivotTablePreference.title" query-on-init="false" #pivotTable fxFlex
+          [columns]="processedHeader" [static-data]="processedData" insert-button="no" delete-button="no" refresh-button="no" pagination-controls="no"
+          fixed-header="yes" keys="id" store-state="no">
+          <ng-container *ngFor="let functionAggregate of pivotTablePreference.functions">
+            <o-table-column-aggregate [attr]="functionAggregate.column.attr" [aggregate]="functionAggregate.type"></o-table-column-aggregate>
+          </ng-container>
+        </o-table>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

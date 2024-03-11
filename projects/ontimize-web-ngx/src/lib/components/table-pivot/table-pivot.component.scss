@@ -1,0 +1,19 @@
+ .o-table-pivot-sidenav {
+   .acordions.mat-expansion-panel {
+     margin-bottom: 8px px;
+
+     .mat-expansion-panel-body {
+       padding: 6px 0;
+
+       .cdk-drag {
+         cursor: move;
+       }
+
+       .mat-mdc-list {
+         min-height: 40px;
+
+
+       }
+     }
+   }
+ }

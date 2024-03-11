@@ -1,0 +1,19 @@
+<span mat-dialog-title> {{ 'TABLE_PIVOT.SELECT_FUNCTION_DIALOG.TITLE' | oTranslate }}</span>
+
+<mat-dialog-content>
+  <div mat-subheader>{{ 'TABLE_PIVOT.SELECT_FUNCTION_DIALOG.DESCRIPTION' | oTranslate }}</div>
+
+  <mat-radio-group name="Function" [(ngModel)]="selectedFunction" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
+    <mat-radio-button *ngFor="let function of functions" [value]="function.id">
+      {{ function.value | oTranslate }}
+    </mat-radio-button>
+  </mat-radio-group>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
+    {{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" (click)="save()" [mat-dialog-close]="true" [disabled]="!selectedFunction">
+    {{'SAVE' | oTranslate }}</button>
+</mat-dialog-actions>

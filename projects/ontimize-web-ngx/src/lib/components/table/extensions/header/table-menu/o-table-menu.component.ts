@@ -40,6 +40,7 @@ import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-
 import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
+import { OTablePivotComponent } from '../../../../table-pivot/table-pivot.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
@@ -562,6 +563,15 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   }
 
   onPivotTablelicked() {
+    const dialogRef = this.dialog.open(OTablePivotComponent, {
+      data: this.table,
+      width: '90%',
+      height: '90%',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
+    });
 
   }
 
