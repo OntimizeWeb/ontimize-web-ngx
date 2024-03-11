@@ -5,17 +5,21 @@ import {
   Component,
   Injector,
   OnDestroy,
-  ViewEncapsulation,
+  Type,
+  ViewEncapsulation
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { MenuGroup } from '../../interfaces/app-menu.interface';
+import { PermissionsService } from '../../services';
 import { AppMenuService } from '../../services/app-menu.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
+import { OPermissions } from '../../types';
 import { MenuRootItem } from '../../types/menu-root-item.type';
 
 export const DEFAULT_INPUTS_O_MENU_LAYOUT = [
-  'parentMenuId : parent-menu-id'
+  'parentMenuId : parent-menu-id',
+  'excludeMenusId : exclude-menus-id'
 ];
 
 export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
@@ -41,6 +45,13 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
   protected menuRoots: MenuRootItem[];
   protected cardItemsArray: MenuRootItem[];
   protected parentMenuId: string;
+  protected excludeMenusId: string;
+  protected permissions: OPermissions;
+  protected permissionsService: PermissionsService;
+  protected parentMenuIds: string[];
+  protected excludeIds: string[];
+
+  hidden: boolean;
 
   constructor(
     private injector: Injector,
@@ -49,6 +60,7 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRoots = this.appMenuService.getMenuRoots();
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
 
     this.translateServiceSubscription = this.translateService.onLanguageChanged.subscribe(() => {
       this.cd.detectChanges();
@@ -70,7 +82,11 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
     if (!this.parentMenuId) {
       cardItemsAux = this.menuRoots.filter(item => !this.appMenuService.isMenuGroup(item));
     } else {
-      cardItemsAux = this.getItemsFilteredByParentId(this.menuRoots);
+
+      this.parentMenuIds = (this.parentMenuId || '').split(';').map(id => id.trim());
+      this.excludeIds = (this.excludeMenusId || '').split(';').map(id => id.trim());
+
+      cardItemsAux = this.getItemsFilteredByParentId(this.menuRoots, this.parentMenuIds);
     }
 
     this.cardItems = cardItemsAux;
@@ -85,20 +101,34 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
     this.cd.detectChanges();
   }
 
-  protected getItemsFilteredByParentId(array: MenuRootItem[]): MenuRootItem[] {
-    let result: MenuRootItem[];
+  protected getItemsFilteredByParentId(array: MenuRootItem[], parentMenuIds: string[]): MenuRootItem[] {
+    let result: MenuRootItem[] = [];
     const groups = array.filter(item => this.appMenuService.isMenuGroup(item));
 
-    for (let i = 0, len = groups.length; i < len; i++) {
-      const menuGroup = (groups[i] as MenuGroup);
-      if (menuGroup.id === this.parentMenuId) {
-        result = menuGroup.items;
-        break;
-      } else {
-        result = this.getItemsFilteredByParentId(menuGroup.items);
+    parentMenuIds.forEach(parentMenuId => {
+      for (let i = 0, len = groups.length; i < len; i++) {
+        const menuGroup = groups[i] as MenuGroup;
+        if (menuGroup.id === parentMenuId) {
+          let permissions = this.permissionsService.getMenuPermissions(parentMenuId);
+          menuGroup.items.forEach(item => {
+            let hidden = permissions?.visible === false || this.excludeIds.includes(item.id);
+
+            item['show-in-card-menu'] = !hidden;
+          });
+          result = result.concat(menuGroup.items);
+          break;
+        } else {
+          const childResult = this.getItemsFilteredByParentId(menuGroup.items, [parentMenuId]);
+          if (childResult.length) {
+            result = result.concat(childResult);
+            break;
+          }
+        }
       }
-    }
+    });
+
     return result;
   }
+
 
 }
