@@ -155,4 +155,15 @@
   .o-table-quickfilter .quickFilter .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix div {
     border-right: 1px solid mat.get-color-from-palette($foreground, divider);
   }
+
+  /* TABLE PIVOT */
+  .o-table-pivot-sidenav {
+    .mat-expansion-panel {
+      border: 1px solid mat.get-color-from-palette($background, background);
+    }
+
+    .mat-expansion-panel-header {
+      background-color: mat.get-color-from-palette($background, background);
+    }
+  }
 }

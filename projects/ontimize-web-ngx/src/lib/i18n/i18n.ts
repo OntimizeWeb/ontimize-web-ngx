@@ -299,7 +299,9 @@ export const MAP = {
     'TREE.BUTTONS.SELECT': 'Select...',
     'REPORT.COLUMN.TRUEVALUE': 'Yes',
     'REPORT.COLUMN.FALSEVALUE': 'No',
-    'TABLE.BUTTONS.PIVOT_TABLE': 'Pivot table'
+    'TABLE.BUTTONS.PIVOT_TABLE': 'Pivot table',
+    'TABLE_PIVOT.SELECT_FUNCTION_DIALOG.TITLE': 'Value field configuration',
+    'TABLE_PIVOT.SELECT_FUNCTION_DIALOG.DESCRIPTION':'Choose the type of calculation you want to use to summarize the data for the selected field'
   },
 
   // Spanish

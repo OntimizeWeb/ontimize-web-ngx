@@ -545,4 +545,12 @@ export class Util {
     return str;
   }
 
+  static setFullscreenDialog(fullscreen: boolean, dialogRef: any, defaultWidth:string='70%', defaultHeight='70%'): void {
+    if (!fullscreen) {
+      dialogRef.updateSize("100%", "100%");
+    } else {
+      dialogRef.updateSize(defaultWidth, defaultHeight);
+    }
+  }
 }
+

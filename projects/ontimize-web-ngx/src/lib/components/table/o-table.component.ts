@@ -3283,4 +3283,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return disable;
 
   }
+
+  public getOperableColumns(): OColumn[] {
+    return this.oTableOptions.columns.filter(oCol => oCol.type !== "image" && oCol.type !== "action" && oCol.visible && this.colArray.findIndex(column => column === oCol.attr) > -1).map(
+      (x: OColumn) => x
+    )
+  }
 }
