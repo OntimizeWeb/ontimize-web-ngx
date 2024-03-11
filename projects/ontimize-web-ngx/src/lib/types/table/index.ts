@@ -10,3 +10,5 @@ export * from './o-table-initialization-options.type';
 export * from './o-table-menu-permissions.type';
 export * from './o-table-permissions.type';
 export * from './o-table-global-config.type';
+export * from './o-table-pivot-preferences.type';
+export * from './o-table-pivot-function.type';
