@@ -16,7 +16,10 @@ import { OPivotTableSelectFunctionDialogComponent } from './select-function-dial
   selector: 'o-pivot-table',
   templateUrl: './pivot-table.component.html',
   styleUrls: ['./pivot-table.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-pivot-table]': 'true'
+  }
 
 })
 export class OPivotTableComponent {
@@ -81,8 +84,9 @@ export class OPivotTableComponent {
     this.options.columns = this.pivotTablePreference.columns.join(';');
     this.showPivotTableSubject.next(false);
     this.getProcessedData(this.sourceTable.getDataArray(), this.pivotTablePreference);
-    this.pivotTable.reinitialize({});
     this.showPivotTableSubject.next(true);
+    this.pivotTable.reinitialize({});
+
   }
 
   public clearPivotTablePreferences() {
@@ -130,13 +134,12 @@ export class OPivotTableComponent {
 
 
   drop(event: CdkDragDrop<string[]>) {
-
+    if (!event.isPointerOverContainer) {
+      event.previousContainer.data.splice(event.previousIndex, 1);
+     }
     if (event.previousContainer.id === 'pivotFieldsList') {
-      //this.pivotFieldsList.options[event.previousIndex].
-
       event.container.data.splice(event.currentIndex, 0, event.previousContainer.data[event.previousIndex])
     } else {
-      //event.previousContainer.data[event.previousIndex]
       if (event.previousContainer === event.container) {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {

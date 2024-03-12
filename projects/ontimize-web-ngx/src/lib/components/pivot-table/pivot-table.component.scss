@@ -1,19 +1,28 @@
- .o-table-pivot-sidenav {
-   .acordions.mat-expansion-panel {
-     margin-bottom: 8px px;
+.o-pivot-table {
+  .o-pivot-table-sidenav {
+    width: 256px;
+    padding: 16px;
+    border: 1px solid;
+     .acordions.mat-expansion-panel {
+      margin-bottom: 8px 0px;
 
-     .mat-expansion-panel-body {
-       padding: 6px 0;
+      .mat-expansion-panel-body {
+        padding: 6px 0;
 
-       .cdk-drag {
-         cursor: move;
-       }
+        .cdk-drag {
+          cursor: move;
+        }
 
-       .mat-mdc-list {
-         min-height: 40px;
+        .mat-mdc-list {
+          min-height: 40px;
 
 
-       }
-     }
-   }
- }
+        }
+      }
+    }
+  }
+
+  .o-pivot-table-sidenav-content {
+    margin-left: 16px;
+  }
+}

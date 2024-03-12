@@ -1,9 +1,11 @@
-@mixin table-pivot($theme-or-color-config) {
+@mixin o-pivot-table-theme($theme-or-color-config) {
   $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
 
-  .o-table-pivot-sidenav {
-    .mat-expansion-panel {
+  .o-pivot-table-sidenav {
+    border: 1px solid mat.get-color-from-palette($background, background);
+
+    .o-pivot-table-sidenav .mat-expansion-panel {
       border: 1px solid mat.get-color-from-palette($background, background);
     }
 

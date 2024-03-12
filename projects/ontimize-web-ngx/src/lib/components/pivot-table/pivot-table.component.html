@@ -22,8 +22,8 @@
   </div>
 </div>
 <div #dialog mat-dialog-content class="dialog-container" fxFill>
-  <mat-sidenav-container class="mat-sidenav-container" [class.opened]="openedSidenav" fxFill>
-    <mat-sidenav #sidenav [(opened)]="openedSidenav" mode="side" class="o-table-pivot-sidenav">
+  <mat-sidenav-container [class.opened]="openedSidenav" fxFill>
+    <mat-sidenav #sidenav [(opened)]="openedSidenav" mode="side" class="o-pivot-table-sidenav">
       <div fxLayout="column" fxFill fxLayoutGap="20px">
         <o-button *ngIf="openedSidenav" (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
@@ -130,7 +130,7 @@
 
       </div>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content class="o-pivot-table-sidenav-content">
       <div class="sidenav-container-content" fxFill>
         <o-table *ngIf="showPivotTable$ | async" [title]="pivotTablePreference.title" query-on-init="false" #pivotTable fxFlex
           [columns]="processedHeader" [static-data]="processedData" insert-button="no" delete-button="no" refresh-button="no" pagination-controls="no"
