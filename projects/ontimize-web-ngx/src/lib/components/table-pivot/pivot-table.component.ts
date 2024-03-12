@@ -4,24 +4,24 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { BehaviorSubject } from 'rxjs';
 
-import { OTablePivotFunction } from '../../types/table/o-table-pivot-function.type';
-import { DefaultOTablePivotPreferences, OTablePivotPreferences } from '../../types/table/o-table-pivot-preferences.type';
+import { OPivotTableFunction } from '../../types/o-pivot-table-function.type';
+import { DefaultOPivotTablePreferences, OPivotTablePreferences } from '../../types/o-pivot-table-preferences.type';
 import { Observable, Util } from '../../util';
 import { OColumn } from '../table/column/o-column.class';
 import { OTableComponent } from '../table/o-table.component';
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
-import { OTablePivotSelectFunctionDialogComponent } from './select-function-dialog/select-function-dialog.component';
+import { OPivotTableSelectFunctionDialogComponent } from './select-function-dialog/select-function-dialog.component';
 
 @Component({
-  selector: 'o-table-pivot',
-  templateUrl: './table-pivot.component.html',
-  styleUrls: ['./table-pivot.component.scss'],
+  selector: 'o-pivot-table',
+  templateUrl: './pivot-table.component.html',
+  styleUrls: ['./pivot-table.component.scss'],
   encapsulation: ViewEncapsulation.None
 
 })
-export class OTablePivotComponent {
+export class OPivotTableComponent {
   @ViewChild('pivotTable') pivotTable: OTableComponent;
-  @ViewChild('pivotFieldsList') pivotFieldsList: MatSelectionList;
+  @ViewChild(MatSelectionList) pivotFieldsList: MatSelectionList;
 
   showPivotTable$: Observable<boolean>;
   protected showPivotTableSubject = new BehaviorSubject<boolean>(false);
@@ -35,7 +35,7 @@ export class OTablePivotComponent {
   public entity: string;
   public service: string;
   public openedSidenav: boolean = true;
-  public pivotTablePreference: OTablePivotPreferences;
+  public pivotTablePreference: OPivotTablePreferences;
   public appliedConfiguration: boolean = false;
   public dialog: MatDialog;
   public options: OTableInitializationOptions;
@@ -45,13 +45,11 @@ export class OTablePivotComponent {
   constructor(
     public injector: Injector,
     @Inject(MAT_DIALOG_DATA) data: OTableComponent,
-    public dialogRef: MatDialogRef<OTablePivotComponent>) {
+    public dialogRef: MatDialogRef<OPivotTableComponent>) {
     this.dialog = this.injector.get<MatDialog>(MatDialog);
     this.sourceTable = data;
     this.initialize();
   }
-
-
 
   protected initialize() {
     this.showPivotTable$ = this.showPivotTableSubject.asObservable();
@@ -80,6 +78,7 @@ export class OTablePivotComponent {
 
   previewPivotTable() {
     //this.getProcessHeader();
+    this.options.columns = this.pivotTablePreference.columns.join(';');
     this.showPivotTableSubject.next(false);
     this.getProcessedData(this.sourceTable.getDataArray(), this.pivotTablePreference);
     this.showPivotTableSubject.next(true);
@@ -94,16 +93,16 @@ export class OTablePivotComponent {
   }
 
   initializePivotTablePreferences() {
-    this.pivotTablePreference = new DefaultOTablePivotPreferences();
+    this.pivotTablePreference = new DefaultOPivotTablePreferences();
 
 
   }
 
-  selectFunction(event: Event, nameFunction: OTablePivotFunction) {
+  selectFunction(event: Event, nameFunction: OPivotTableFunction) {
     event.stopPropagation();
 
     this.dialog
-      .open(OTablePivotSelectFunctionDialogComponent, {
+      .open(OPivotTableSelectFunctionDialogComponent, {
         data: nameFunction,
         panelClass: ['o-dialog-class', 'o-table-dialog']
       })
@@ -120,30 +119,22 @@ export class OTablePivotComponent {
   isCheckedFunction(nameFunction) {
 
   }
-  private updatedFunctionData(data: OTablePivotFunction) {
+  private updatedFunctionData(data: OPivotTableFunction) {
     const index = this.pivotTablePreference.functions.findIndex(x => x.column.attr === data.column.attr);
     if (index > -1) {
       this.pivotTablePreference.functions[index] = data;
     }
   }
 
-  dropFields(event: CdkDragDrop<string[]>) {
-    // if (event.previousContainer.id !== 'pivotFieldsList') {
-    //   event.container.data.splice(event.previousIndex, 0), currentArray.splice(from, 1)[0])
-    // }
-    //moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
-    //this.updateColumnsSort();
-  }
 
-  // dropColumns(event: CdkDragDrop<string[]>) {
-  //   console.log('drop columns ', event);
-  //   moveItemInArray(this.pivotTablePreference.columns, event.previousIndex, event.currentIndex);
-  //   //this.updateColumnsSort();
-  // }
 
   drop(event: CdkDragDrop<string[]>) {
 
-    if (event.previousContainer.id === 'pivotFieldsList')
+    if (event.previousContainer.id === 'pivotFieldsList') {
+      //this.pivotFieldsList.options[event.previousIndex].
+
+      event.container.data.splice(event.currentIndex, 0, event.previousContainer.data[event.previousIndex])
+    } else {
       //event.previousContainer.data[event.previousIndex]
       if (event.previousContainer === event.container) {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -155,6 +146,7 @@ export class OTablePivotComponent {
           event.currentIndex,
         );
       }
+    }
   }
   dropFunctions(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
@@ -233,35 +225,53 @@ export class OTablePivotComponent {
 
   onSelectionChangeColumns(event: MatSelectionListChange) {
     const selectedColumn: OColumn = event.options[0].value;
-    switch (selectedColumn.type) {
-      case 'integer':
-      case 'real':
-      case 'currency':
-      case 'percentage':
-      case 'date':
-        const indexColumn = this.pivotTablePreference.columns.filter((row: OColumn) => row.attr === selectedColumn.attr).length;
-        indexColumn > 0 ? this.pivotTablePreference.columns.splice(indexColumn, 1) : this.pivotTablePreference.columns.push(selectedColumn);
-        if (selectedColumn.type !== 'date') {
-          const indexFunction = this.pivotTablePreference.functions.filter((pivotFunction: OTablePivotFunction) => pivotFunction.column.attr === selectedColumn.attr).length;
-          indexFunction > 0 ? this.pivotTablePreference.functions.splice(indexFunction, 1) : this.pivotTablePreference.functions.push(this.createFunction(selectedColumn));
-        }
-        this.options.columns = this.pivotTablePreference.columns.join(';');
-        break;
-      default:
-        const indexRow = this.pivotTablePreference.rows.filter((row: OColumn) => row.attr === selectedColumn.attr).length;
-        indexRow > 0 ? this.pivotTablePreference.rows.splice(indexRow, 1) : this.pivotTablePreference.rows.push(selectedColumn);
-        break;
+    //event.options[0].selected === false, then remove
+    if (event.options[0].selected === false) {
+      //UPDATE COLUMNS
+      const indexColumn = this.pivotTablePreference.columns.filter((row: OColumn) => row.attr === selectedColumn.attr).length;
+      if (indexColumn > 0) {
+        this.pivotTablePreference.columns = this.pivotTablePreference.columns.splice(indexColumn, 1);
+      }
+      //UPDATE FUNCTIONS
+      const indexFunction = this.pivotTablePreference.functions.filter((pivotFunction: OPivotTableFunction) => pivotFunction.column.attr === selectedColumn.attr).length;
+      if (indexFunction > 0) {
+        this.pivotTablePreference.functions = this.pivotTablePreference.functions.splice(indexFunction, 1);
+      }
+      //UPDATE ROWS
+      const indexRows = this.pivotTablePreference.rows.filter((row: OColumn) => row.attr === selectedColumn.attr).length;
+      if (indexRows > 0) {
+        this.pivotTablePreference.rows = this.pivotTablePreference.rows.splice(indexFunction, 1);
+      }
+
+    } else {
+      switch (selectedColumn.type) {
+        case 'integer':
+        case 'real':
+        case 'currency':
+        case 'percentage':
+        case 'date':
+          this.pivotTablePreference.columns.push(selectedColumn);
+          if (selectedColumn.type !== 'date') {
+            this.pivotTablePreference.functions.push(this.createFunction(selectedColumn));
+          }
+          break;
+        default:
+          this.pivotTablePreference.rows.push(selectedColumn);
+          break;
+      }
     }
 
     // this.pivotTable.reinitialize(this.options);
 
   }
 
-  createFunction(column: OColumn): OTablePivotFunction {
+
+
+  createFunction(column: OColumn): OPivotTableFunction {
     return { column: column, type: (column.type === 'date' ? 'TOTAL' : 'SUM') }
   }
 
-  getProcessedData(source, configs: OTablePivotPreferences) {
+  getProcessedData(source, configs: OPivotTablePreferences) {
     this.processed_data = [];
     const rowsId: string[] = configs.rows.map((x: OColumn) => x.attr);
     const columnsId = configs.columns.map((x: OColumn) => x.attr);
@@ -269,7 +279,7 @@ export class OTablePivotComponent {
     const columns = this.findUnique(this.pluck(source, columnsId));
     // const columns = [];
     const aggregateFunctions = configs.functions;
-    const functionsHeader = configs.functions.map((x: OTablePivotFunction) => x.column.title);
+    const functionsHeader = configs.functions.map((x: OPivotTableFunction) => x.column.title);
 
 
     this.processed_headers = [...rowsId, ...columns, ...functionsHeader].join(';')
@@ -295,7 +305,7 @@ export class OTablePivotComponent {
         row_count += count;
       }
 
-      configs.functions.forEach((aggregateFunction: OTablePivotFunction) => {
+      configs.functions.forEach((aggregateFunction: OPivotTableFunction) => {
         let totalAggregate = 0;
         source.forEach(data => {
           //agrupa los valores iguales

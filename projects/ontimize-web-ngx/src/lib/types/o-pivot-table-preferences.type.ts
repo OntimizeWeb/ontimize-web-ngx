@@ -1,19 +1,19 @@
-import { OColumn } from "../../components/table/column/o-column.class";
-import { OTablePivotFunction } from "./o-table-pivot-function.type";
+import { OColumn } from "../components/table/column/o-column.class";
+import { OPivotTableFunction } from "./o-pivot-table-function.type";
 
-export type OTablePivotPreferences = {
+export type OPivotTablePreferences = {
   title: string
   subtitle: string,
   columns: Array<OColumn>,
   rows?: Array<OColumn>,
   orderBy?: Array<any>,
-  functions?: Array<OTablePivotFunction>,
+  functions?: Array<OPivotTableFunction>,
   groups?: Array<string>,
   entity: string,
   service: string
 }
 
-export class DefaultOTablePivotPreferences implements OTablePivotPreferences {
+export class DefaultOPivotTablePreferences implements OPivotTablePreferences {
   public title: string;
   public subtitle: string;
   public vertical: boolean;

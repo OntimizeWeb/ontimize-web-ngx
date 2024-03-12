@@ -45,8 +45,8 @@
                 {{ 'PIVOT FIELDS COLUMNS' | oTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list #pivotFieldsList id="pivotFieldsList" dense cdkDropList #pivotFieldsList="cdkDropList"
-              [cdkDropListConnectedTo]="[columnList,rowList, functionsList]" [cdkDropListData]="columns" (cdkDropListDropped)="dropFields($event)"
+            <mat-selection-list id="pivotFieldsList" dense cdkDropList #pivotFieldsList="cdkDropList"
+              [cdkDropListConnectedTo]="[columnsList,rowList, functionsList]" [cdkDropListData]="columns"
               class="columns" (selectionChange)="onSelectionChangeColumns($event)" [compareWith]="columnsCompareFunction">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columns" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
@@ -64,7 +64,7 @@
                 {{ 'COLUMNS' | oTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-list dense cdkDropList #columnList="cdkDropList" [cdkDropListConnectedTo]="[pivotFieldsList,rowList]"
+            <mat-list dense cdkDropList #columnsList="cdkDropList" [cdkDropListConnectedTo]="[pivotFieldsList,rowList]"
               [cdkDropListData]="pivotTablePreference.columns" (cdkDropListDropped)="drop($event)">
               <mat-list-item *ngFor="let column of pivotTablePreference.columns" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">

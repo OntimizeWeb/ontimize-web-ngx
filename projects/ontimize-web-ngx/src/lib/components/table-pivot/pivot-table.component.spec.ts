@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OTablePivotComponent } from './table-pivot.component';
+import { OPivotTableComponent } from './pivot-table.component';
 
-describe('OTablePivotComponent', () => {
-  let component: OTablePivotComponent;
-  let fixture: ComponentFixture<OTablePivotComponent>;
+describe('OPivotTableComponent', () => {
+  let component: OPivotTableComponent;
+  let fixture: ComponentFixture<OPivotTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OTablePivotComponent ]
+      declarations: [ OPivotTableComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(OTablePivotComponent);
+    fixture = TestBed.createComponent(OPivotTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
