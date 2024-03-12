@@ -40,7 +40,7 @@ import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-
 import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
-import { OPivotTableComponent } from '../../../../table-pivot/pivot-table.component';
+import { OPivotTableComponent } from '../../../../pivot-table/pivot-table.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [

@@ -81,6 +81,7 @@ export class OPivotTableComponent {
     this.options.columns = this.pivotTablePreference.columns.join(';');
     this.showPivotTableSubject.next(false);
     this.getProcessedData(this.sourceTable.getDataArray(), this.pivotTablePreference);
+    this.pivotTable.reinitialize({});
     this.showPivotTableSubject.next(true);
   }
 
