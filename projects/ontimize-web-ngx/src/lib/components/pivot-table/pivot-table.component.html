@@ -46,9 +46,9 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list id="pivotFieldsList" dense cdkDropList #pivotFieldsList="cdkDropList"
-              [cdkDropListConnectedTo]="[columnsList,rowList, functionsList]" [cdkDropListData]="columns"
-              class="columns" (selectionChange)="onSelectionChangeColumns($event)" [compareWith]="columnsCompareFunction">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columns" [value]="column" cdkDrag>
+              [cdkDropListConnectedTo]="[columnsList,rowList, functionsList]" [cdkDropListData]="operableColumns" class="columns"
+              (selectionChange)="onSelectionChangeColumns($event)" [compareWith]="columnsCompareFunction">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of operableColumns" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span matListItemLine fxFlex>
                     {{column.title | oTranslate}}
@@ -122,10 +122,10 @@
         </mat-accordion>
 
         <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
-          <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearPivotTablePreferences()">
-            {{'CLEAR' | oTranslate }}</button>
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewPivotTable()" [disabled]="columns.length===0">
-            {{'PREVIEW' | oTranslate }}</button>
+          <button type="button" mat-stroked-button class="o-pivot-table-clear-button" (click)="clearPivotTablePreferences()">
+            {{'BUTTON.CLEAR' | oTranslate }}</button>
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewPivotTable()" [disabled]="pivotTablePreference.rows.length===0">
+            {{'BUTTON.PREVIEW' | oTranslate }}</button>
         </div>
 
       </div>
@@ -135,6 +135,11 @@
         <o-table *ngIf="showPivotTable$ | async" [title]="pivotTablePreference.title" query-on-init="false" #pivotTable fxFlex
           [columns]="processedHeader" [static-data]="processedData" insert-button="no" delete-button="no" refresh-button="no" pagination-controls="no"
           fixed-header="yes" keys="id" store-state="no">
+          <ng-container *ngFor="let totalColumn of columns">
+            <ng-container *ngFor="let functionAggregate of pivotTablePreference.functions">
+              <o-table-column-aggregate [attr]="totalColumn" [aggregate]="functionAggregate.type"></o-table-column-aggregate>
+            </ng-container>
+          </ng-container>
           <ng-container *ngFor="let functionAggregate of pivotTablePreference.functions">
             <o-table-column-aggregate [attr]="functionAggregate.column.attr" [aggregate]="functionAggregate.type"></o-table-column-aggregate>
           </ng-container>

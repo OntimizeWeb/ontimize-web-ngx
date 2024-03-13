@@ -32,6 +32,7 @@ export class OPivotTableComponent {
   public sourceTable: OTableComponent;
   public fullscreen: boolean = false;
   public columns: any;
+  public operableColumns: OColumn[];
   public functions: any;
   public columnsToGroupData: any;
   public columnsOrderBy: any[];
@@ -57,9 +58,10 @@ export class OPivotTableComponent {
   protected initialize() {
     this.showPivotTable$ = this.showPivotTableSubject.asObservable();
     this.functions = [];
+    this.columns = [];
     this.columnsToGroupData = [];
     this.columnsOrderBy = [];
-    this.columns = this.sourceTable.getOperableColumns();
+    this.operableColumns = this.sourceTable.getOperableColumns();
     this.entity = this.sourceTable.entity;
     this.service = this.sourceTable.service;
     this.options = {};
@@ -81,11 +83,11 @@ export class OPivotTableComponent {
 
   previewPivotTable() {
     //this.getProcessHeader();
-    this.options.columns = this.pivotTablePreference.columns.join(';');
+    this.options.columns = this.pivotTablePreference.columns.map(col=>col.attr).join(';');
     this.showPivotTableSubject.next(false);
     this.getProcessedData(this.sourceTable.getDataArray(), this.pivotTablePreference);
     this.showPivotTableSubject.next(true);
-    this.pivotTable.reinitialize({});
+    this.pivotTable.reinitialize(this.options);
 
   }
 
@@ -136,7 +138,7 @@ export class OPivotTableComponent {
   drop(event: CdkDragDrop<string[]>) {
     if (!event.isPointerOverContainer) {
       event.previousContainer.data.splice(event.previousIndex, 1);
-     }
+    }
     if (event.previousContainer.id === 'pivotFieldsList') {
       event.container.data.splice(event.currentIndex, 0, event.previousContainer.data[event.previousIndex])
     } else {
@@ -167,27 +169,27 @@ export class OPivotTableComponent {
 
 
   updateColumnsSort() {
-    this.pivotTablePreference.columns.sort((a: any, b: any) => {
-      let indexA = this.columns.findIndex(x => x.id === a.id);
-      let indexB = this.columns.findIndex(x => x.id === b.id);
-      return indexA - indexB;
-    });
+    // this.pivotTablePreference.columns.sort((a: any, b: any) => {
+    //   let indexA = this.columns.findIndex(x => x.id === a.id);
+    //   let indexB = this.columns.findIndex(x => x.id === b.id);
+    //   return indexA - indexB;
+    // });
   }
 
   updateColumnToGroupSort() {
-    this.pivotTablePreference.groups.sort((a: string, b: string) => {
-      let indexA = this.columnsToGroupData.findIndex(x => x === a);
-      let indexB = this.columnsToGroupData.findIndex(x => x === b);
-      return indexA - indexB;
-    });
+    // this.pivotTablePreference.groups.sort((a: string, b: string) => {
+    //   let indexA = this.columnsToGroupData.findIndex(x => x === a);
+    //   let indexB = this.columnsToGroupData.findIndex(x => x === b);
+    //   return indexA - indexB;
+    // });
   }
 
   updateColumnGroupBySort() {
-    this.pivotTablePreference.orderBy.sort((a: any, b: any) => {
-      let indexA = this.columnsOrderBy.findIndex(x => x.columnId === a.columnId);
-      let indexB = this.columnsOrderBy.findIndex(x => x.columnId === b.columnId);
-      return indexA - indexB;
-    });
+    // this.pivotTablePreference.orderBy.sort((a: any, b: any) => {
+    //   let indexA = this.columnsOrderBy.findIndex(x => x.columnId === a.columnId);
+    //   let indexB = this.columnsOrderBy.findIndex(x => x.columnId === b.columnId);
+    //   return indexA - indexB;
+    // });
   }
 
 
@@ -201,13 +203,13 @@ export class OPivotTableComponent {
 
   }
 
-  changeOrder(column: any, event) {
-    const columnSelectedToOrder = this.columnsOrderBy.find(x => x.columnId === column.columnId);
-    if (columnSelectedToOrder) {
-      columnSelectedToOrder.ascendent = !columnSelectedToOrder.ascendent;
-    }
-    event.stopPropagation();
-  }
+  // changeOrder(column: any, event) {
+  //   const columnSelectedToOrder = this.columnsOrderBy.find(x => x.columnId === column.columnId);
+  //   if (columnSelectedToOrder) {
+  //     columnSelectedToOrder.ascendent = !columnSelectedToOrder.ascendent;
+  //   }
+  //   event.stopPropagation();
+  // }
 
   columnsOrderByCompareFunction(co1: any, co2: any) {
 
@@ -280,47 +282,35 @@ export class OPivotTableComponent {
     const rowsId: string[] = configs.rows.map((x: OColumn) => x.attr);
     const columnsId = configs.columns.map((x: OColumn) => x.attr);
     const rows = this.findUnique(this.pluck(source, rowsId));
-    const columns = this.findUnique(this.pluck(source, columnsId));
+    this.columns = this.findUnique(this.pluck(source, columnsId));
     // const columns = [];
     const aggregateFunctions = configs.functions;
     const functionsHeader = configs.functions.map((x: OPivotTableFunction) => x.column.title);
 
 
-    this.processed_headers = [...rowsId, ...columns, ...functionsHeader].join(';')
+    this.processed_headers = [...rowsId, ... this.columns, ...functionsHeader].join(';')
 
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       let processed_row = {};
       processed_row['id'] = i;
       processed_row[rowsId[0]] = row;
-      let row_count = 0;
-      for (let j = 0; j < columns.length; j++) {
-        const column = columns[j];
-        let count = 0;
 
-        for (let k = 0; k < source.length; k++) {
-          const data = source[k];
+      for (let j = 0; j < this.columns.length; j++) {
+        const column = this.columns[j];
 
-          if (data[configs.rows[0].attr] == row && data[configs.columns[0].attr] == column) {
-            count++;
-          }
-        }
-        processed_row[column] = count;
-        row_count += count;
-      }
+        configs.functions.forEach((aggregateFunction: OPivotTableFunction) => {
+          const dataGroupedByColumm = source.filter(rowData => rowData[configs.rows[0].attr] == row && rowData[configs.columns[0].attr] == column)
+          const totalAggregateByColumn = this.calculateAggregate(dataGroupedByColumm, aggregateFunction.column.attr, aggregateFunction.type);
+          processed_row[column] = totalAggregateByColumn;
 
-      configs.functions.forEach((aggregateFunction: OPivotTableFunction) => {
-        let totalAggregate = 0;
-        source.forEach(data => {
-          //agrupa los valores iguales
-          if (data[configs.rows[0].attr] == row) {
-            totalAggregate += data[aggregateFunction.column.attr]
-          }
+          const dataGroupedByRow = source.filter(rowData => rowData[configs.rows[0].attr] == row)
+          let totalAggregateColumn = this.calculateAggregate(dataGroupedByRow, aggregateFunction.column.attr, aggregateFunction.type);
 
+          processed_row[aggregateFunction.column.attr] = totalAggregateColumn;
         });
-        processed_row[aggregateFunction.column.attr] = totalAggregate;
-      });
-      //processed_row.push(row_count);
+
+      }
       this.processed_data.push(processed_row);
     }
     console.log('processedData ', this.processedHeader, this.processedData);
@@ -343,6 +333,32 @@ export class OPivotTableComponent {
   }
   editColumn(event: Event, column: OColumn) {
 
+  }
+
+  protected calculateAggregate(data: any[], columnAttr: string, operator: string): any {
+    let resultAggregate;
+
+    switch (operator.toLowerCase()) {
+      case 'count':
+        resultAggregate = Util.count(data);
+        break;
+      case 'min':
+        const tempMin = data.map(x => x[columnAttr]);
+        resultAggregate = Util.min(tempMin);
+        break;
+      case 'max':
+        const tempMax = data.map(x => x[columnAttr]);
+        resultAggregate = Util.max(tempMax);
+        break;
+      case 'avg':
+        resultAggregate = Util.avg(columnAttr, data);
+        break;
+      default:
+        resultAggregate = Util.sum(columnAttr, data);
+        break;
+    }
+
+    return resultAggregate;
   }
 }
 

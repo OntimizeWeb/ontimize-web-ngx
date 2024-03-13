@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OPivotTableFunction } from '../../../types';
 
 @Component({
-  selector: 'o-table-pivot-select-function-dialog',
+  selector: 'o-pivot-table-select-function-dialog',
   templateUrl: './select-function-dialog.component.html',
   styleUrls: ['./select-function-dialog.component.scss'],
 })

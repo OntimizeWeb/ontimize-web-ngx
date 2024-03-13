@@ -3,7 +3,8 @@
     width: 256px;
     padding: 16px;
     border: 1px solid;
-     .acordions.mat-expansion-panel {
+
+    .acordions.mat-expansion-panel {
       margin-bottom: 8px 0px;
 
       .mat-expansion-panel-body {
@@ -20,6 +21,13 @@
         }
       }
     }
+
+    .mat-mdc-dialog-actions {
+      button.mdc-button {
+        min-width: 80px;
+      }
+    }
+
   }
 
   .o-pivot-table-sidenav-content {

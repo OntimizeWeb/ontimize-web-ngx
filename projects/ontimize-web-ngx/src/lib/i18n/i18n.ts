@@ -300,8 +300,11 @@ export const MAP = {
     'REPORT.COLUMN.TRUEVALUE': 'Yes',
     'REPORT.COLUMN.FALSEVALUE': 'No',
     'TABLE.BUTTONS.PIVOT_TABLE': 'Pivot table',
+    'TABLE.PIVOT_TABLE_TITLE': 'Pivot table',
     'TABLE_PIVOT.SELECT_FUNCTION_DIALOG.TITLE': 'Value field configuration',
-    'TABLE_PIVOT.SELECT_FUNCTION_DIALOG.DESCRIPTION':'Choose the type of calculation you want to use to summarize the data for the selected field'
+    'TABLE_PIVOT.SELECT_FUNCTION_DIALOG.DESCRIPTION': 'Choose the type of calculation you want to use to summarize the data for the selected field',
+    'BUTTON.CLEAR': 'Clear',
+    'BUTTON.PREVIEW': 'Preview'
   },
 
   // Spanish
@@ -595,7 +598,10 @@ export const MAP = {
     'TREE.BUTTONS.SELECT': 'Seleccionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Si',
     'REPORT.COLUMN.FALSEVALUE': 'No',
-    'TABLE.BUTTONS.PIVOT_TABLE': 'Tabla pivotada'
+    'TABLE.BUTTONS.PIVOT_TABLE': 'Tabla dinámica',
+    'TABLE.PIVOT_TABLE_TITLE': 'Tabla dinámica',
+    'BUTTON.CLEAR': 'Limpiar',
+    'BUTTON.PREVIEW': 'Previsualizar'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -875,6 +881,9 @@ export const MAP = {
     'TREE.BUTTONS.SELECT': 'Selecionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Sim',
     'REPORT.COLUMN.FALSEVALUE': 'Não',
-    'TABLE.BUTTONS.PIVOT_TABLE': 'Tabela dinâmica'
+    'TABLE.BUTTONS.PIVOT_TABLE': 'Tabela dinâmica',
+    'TABLE.PIVOT_TABLE_TITLE': 'Tabela dinâmica',
+    'BUTTON.CLEAR': 'Limpar',
+    'BUTTON.PREVIEW': 'Visualização'
   }
 }
