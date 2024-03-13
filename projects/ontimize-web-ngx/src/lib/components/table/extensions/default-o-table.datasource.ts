@@ -606,14 +606,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       //If the data is grouped, the values ​​of the subgroups in level 1 are summed
       if (data[0] instanceof OTableGroupedRow) {
         this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
-          value = x.getColumnAggregateData(column).reduce((acumulator, currentValue) => {
-            return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
-          }, value);
+          value = Util.sum(x.getColumnAggregateData(column), column);
         });
       } else {
-        value = data.reduce((acumulator, currentValue) => {
-          return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
-        }, value);
+        value = Util.sum(column, data);
       }
     }
     return +(value).toFixed(2);
@@ -625,24 +621,17 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       //If the data is grouped, the count is calculated by adding the counts for each subgroup in level 1
       if (data[0] instanceof OTableGroupedRow) {
         this.getDataFromFirstLevelTableGroupRow(data).forEach(x => {
-          value = x.getColumnAggregateData(column).reduce((acumulator) => {
-            return acumulator + 1;
-          }, value);
+          value = Util.count(x.getColumnAggregateData(column));
         });
       } else {
-        value = data.reduce((acumulator) => {
-          return acumulator + 1;
-        }, 0);
+        value = Util.count(data);
       }
     }
     return value;
   }
 
-  protected avg(column, data): number {
-    const totalSum = this.sum(column, data);
-    const totalCount = this.count(column, data);
-    return +((totalSum === 0 || totalCount === 0) ? 0 : (totalSum / totalCount)).toFixed(2);
-
+  protected avg(column:string, data:any[]): number {
+    return Util.avg(column, data);
   }
 
   protected min(column, data): number {
@@ -650,13 +639,13 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     //If the data is grouped, the minimum is calculated with the minimum of each subgroup in level 1
     if (data[0] instanceof OTableGroupedRow) {
       tempMin = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
-        return Math.min(...x.getColumnAggregateData(column).map(x => x[column]));
+        return Util.min(x.getColumnAggregateData(column).map(x => x[column]));
       });
     } else {
       tempMin = data.map(x => x[column]);
     }
 
-    return tempMin.length > 0 ? Math.min(...tempMin) : 0;
+    return Util.min(tempMin);
   }
 
   protected max(column, data): number {
@@ -664,12 +653,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     if (data[0] instanceof OTableGroupedRow) {
       //If the data are grouped, the maximum is calculated with the maximum of each subgroup in level 1
       tempMax = this.getDataFromFirstLevelTableGroupRow(data).map(x => {
-        return Math.max(...x.getColumnAggregateData(column).map(x => x[column]));
+        return Util.max(x.getColumnAggregateData(column).map(x => x[column]));
       });
     } else {
       tempMax = data.map(x => x[column]);
     }
-    return tempMax.length > 0 ? Math.max(...tempMax) : 0;
+    return Util.max(tempMax);
   }
 
   private isFirstLevelTableGroupRow(tableRowGroupData: any) {
