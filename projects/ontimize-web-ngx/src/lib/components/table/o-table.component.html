@@ -30,7 +30,8 @@
       <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox" [export-button]="exportButton"
         [columns-visibility-button]="columnsVisibilityButton" [show-configuration-option]="showConfigurationOption"
         [show-filter-option]="showFilterOption" [show-report-on-demand-option]="showReportOnDemandOption"
-        [show-charts-on-demand-option]="showChartsOnDemandOption" [show-reset-width-option]="showResetWidthOption" [show-group-by-option]="groupable">
+        [show-charts-on-demand-option]="showChartsOnDemandOption" [show-reset-width-option]="showResetWidthOption"
+        [show-pivot-table-option]="showPivotTableOption" [show-group-by-option]="groupable">
         <ng-content select="o-table-option"></ng-content>
       </o-table-menu>
       <ng-template #exportOptsTemplate>
@@ -52,8 +53,9 @@
     </ng-template>
   </div>
   <!--TABLE PAGINATOR-->
-  <mat-paginator *ngIf="paginator && (showLoading | async)===false" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
-    [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons">
+  <mat-paginator *ngIf="paginator && (showLoading | async)===false" #matpaginator [length]="dataSource?.resultsLength"
+    [pageIndex]="paginator.pageIndex" [pageSize]="queryRows" [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)"
+    [showFirstLastButtons]="paginator.showFirstLastButtons">
   </mat-paginator>
 
   <!--LOADING-->
@@ -68,10 +70,10 @@
 
 <ng-template #table>
 
-  <table *ngIf="(showLoading | async)===false" mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
-    [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()"
-    [oTableExpandedFooter]="!(loading | async)" [oTableExpandedFooterColspan]="visibleColArray.length" [multiTemplateDataRows]="showExpandableRow()"
-    aria-describedby="ontimize-web table">
+  <table *ngIf="(showLoading | async)===false" mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()"
+    [dataSource]="dataSource" oMatSort [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async"
+    (cdkObserveContent)="projectContentChanged()" [oTableExpandedFooter]="!(loading | async)" [oTableExpandedFooterColspan]="visibleColArray.length"
+    [multiTemplateDataRows]="showExpandableRow()" aria-describedby="ontimize-web table">
 
     <!--Checkbox Column -->
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">

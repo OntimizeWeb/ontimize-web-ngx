@@ -21,6 +21,9 @@
   <span mat-menu-item class="padding-0" *ngIf="showChartsOnDemandButton">
     <o-table-option (onClick)="onChartsOnDemandClicked()" label="TABLE.BUTTONS.CHART_ON_DEMAND"></o-table-option>
   </span>
+  <span mat-menu-item class="padding-0" *ngIf="showPivotTableButton">
+    <o-table-option (onClick)="onPivotTablelicked()" label="TABLE.BUTTONS.PIVOT_TABLE"></o-table-option>
+  </span>
   <mat-divider *ngIf="showSecondDivider"></mat-divider>
   <span mat-menu-item class="padding-0" *ngIf="showGroupByButton">
     <o-table-option #columnsGroupByOption (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
