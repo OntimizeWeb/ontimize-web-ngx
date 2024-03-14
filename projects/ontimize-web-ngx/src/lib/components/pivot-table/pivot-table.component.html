@@ -133,7 +133,7 @@
     <mat-sidenav-content class="o-pivot-table-sidenav-content">
       <div class="sidenav-container-content" fxFill>
         <o-table *ngIf="showPivotTable$ | async" [title]="pivotTablePreference.title" query-on-init="false" #pivotTable fxFlex
-          [columns]="processedHeader" [static-data]="processedData" insert-button="no" delete-button="no" refresh-button="no" pagination-controls="no"
+          [columns]="this.options.columns" [static-data]="processedData" insert-button="no" delete-button="no" refresh-button="no" pagination-controls="no"
           fixed-header="yes" keys="id" store-state="no">
           <ng-container *ngFor="let totalColumn of columns">
             <ng-container *ngFor="let functionAggregate of pivotTablePreference.functions">

@@ -72,9 +72,6 @@ export class OPivotTableComponent {
   get processedData() {
     return this.processed_data;
   }
-  get processedHeader() {
-    return this.processed_headers;
-  }
 
   setFullscreenDialog() {
     Util.setFullscreenDialog(this.fullscreen, this.dialogRef, '90%', '90%');
@@ -82,8 +79,7 @@ export class OPivotTableComponent {
   }
 
   previewPivotTable() {
-    //this.getProcessHeader();
-    this.options.columns = this.pivotTablePreference.columns.map(col=>col.attr).join(';');
+
     this.showPivotTableSubject.next(false);
     this.getProcessedData(this.sourceTable.getDataArray(), this.pivotTablePreference);
     this.showPivotTableSubject.next(true);
@@ -282,27 +278,29 @@ export class OPivotTableComponent {
     const rowsId: string[] = configs.rows.map((x: OColumn) => x.attr);
     const columnsId = configs.columns.map((x: OColumn) => x.attr);
     const rows = this.findUnique(this.pluck(source, rowsId));
-    this.columns = this.findUnique(this.pluck(source, columnsId));
-    // const columns = [];
+    this.columns = this.findUnique(this.pluck(source, columnsId)).sort();
+
     const aggregateFunctions = configs.functions;
     const functionsHeader = configs.functions.map((x: OPivotTableFunction) => x.column.title);
 
+    const columns = [...rowsId, ... this.columns, ...functionsHeader]
+    const columnsToAggregate = [... this.columns, ...functionsHeader]
+    this.options.columns = columns.join(';');
 
-    this.processed_headers = [...rowsId, ... this.columns, ...functionsHeader].join(';')
-
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
+    rows.forEach((row, index) => {
       let processed_row = {};
-      processed_row['id'] = i;
+      processed_row['id'] = index;
       processed_row[rowsId[0]] = row;
 
-      for (let j = 0; j < this.columns.length; j++) {
-        const column = this.columns[j];
+      columnsToAggregate.forEach(column => {
 
         configs.functions.forEach((aggregateFunction: OPivotTableFunction) => {
-          const dataGroupedByColumm = source.filter(rowData => rowData[configs.rows[0].attr] == row && rowData[configs.columns[0].attr] == column)
-          const totalAggregateByColumn = this.calculateAggregate(dataGroupedByColumm, aggregateFunction.column.attr, aggregateFunction.type);
-          processed_row[column] = totalAggregateByColumn;
+          if (configs.columns.length > 0) {
+            const dataGroupedByColumm = source.filter(rowData => rowData[configs.rows[0].attr] == row && rowData[configs.columns[0].attr] == column)
+            const totalAggregateByColumn = this.calculateAggregate(dataGroupedByColumm, aggregateFunction.column.attr, aggregateFunction.type);
+            processed_row[column] = totalAggregateByColumn;
+          }
+
 
           const dataGroupedByRow = source.filter(rowData => rowData[configs.rows[0].attr] == row)
           let totalAggregateColumn = this.calculateAggregate(dataGroupedByRow, aggregateFunction.column.attr, aggregateFunction.type);
@@ -310,10 +308,11 @@ export class OPivotTableComponent {
           processed_row[aggregateFunction.column.attr] = totalAggregateColumn;
         });
 
-      }
+
+      });
       this.processed_data.push(processed_row);
-    }
-    console.log('processedData ', this.processedHeader, this.processedData);
+    });
+    console.log('processedData ', this.options.columns, this.processedData);
 
   }
 
@@ -322,10 +321,9 @@ export class OPivotTableComponent {
   }
 
 
-  findUnique(a) {
-    return a.filter(function (item, pos) {
-      return a.indexOf(item) == pos;
-    });
+  findUnique(a): string[] {
+    return a.filter((item, pos) => a.indexOf(item) == pos);
+
   }
 
   pluck(array, key) {
