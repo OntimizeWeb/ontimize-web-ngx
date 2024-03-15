@@ -6,3 +6,4 @@ export * from './ontimize-file.service';
 export * from './ontimize-service-response.adapter';
 export * from './ontimize-service-response.class';
 export * from './ontimize.service';
+export * from './rest.service';
