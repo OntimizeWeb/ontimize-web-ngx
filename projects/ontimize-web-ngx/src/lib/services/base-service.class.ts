@@ -6,7 +6,6 @@ import { map, share } from 'rxjs/operators';
 
 import { AppConfig } from '../config/app-config';
 import { ServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
-import { ServiceResponse } from '../interfaces/service-response.interface';
 import { Config } from '../types/config.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
 import { Util } from '../util/util';
@@ -17,8 +16,9 @@ import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 import { HttpRequestOptions } from '../types/http-request-options.type';
+import { BaseResponse } from '../interfaces/base-response.interface';
 
-export class BaseService {
+export class BaseService<T extends BaseResponse> {
 
   protected httpClient: HttpClient;
   protected router: Router;
@@ -26,7 +26,7 @@ export class BaseService {
   protected _urlBase: string;
   protected _appConfig: Config;
   protected _config: AppConfig;
-  protected responseParser: OntimizeServiceResponseParser;
+  protected responseParser: OntimizeServiceResponseParser<T>;
   protected authService: AuthService;
   protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
@@ -36,7 +36,7 @@ export class BaseService {
     this.router = this.injector.get<Router>(Router as Type<Router>);
     this._config = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>);
     this._appConfig = this._config.getConfiguration();
-    this.responseParser = this.injector.get<OntimizeServiceResponseParser>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser>);
+    this.responseParser = this.injector.get<OntimizeServiceResponseParser<T>>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser<T>>);
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService)
     this.configureAdapter();
@@ -68,20 +68,20 @@ export class BaseService {
     this._urlBase = value;
   }
 
-  public doRequest(param: ServiceRequestParam): Observable<ServiceResponse> {
+  public doRequest(param: ServiceRequestParam<T>): Observable<T> {
 
-    const dataObservable: Observable<ServiceResponse> = new Observable((observer: Subscriber<ServiceResponse>) => {
+    const dataObservable: Observable<T> = new Observable((observer: Subscriber<T>) => {
       const options = param.options || {
         headers: this.buildHeaders()
       };
       options.observe = 'response';
-      let requestObs: Observable<ServiceResponse>;
+      let requestObs: Observable<T>;
       switch (param.method) {
         case 'GET':
-          requestObs = this.httpClient.get<ServiceResponse>(param.url, options);
+          requestObs = this.httpClient.get<T>(param.url, options);
           break;
         case 'PUT':
-          requestObs = this.httpClient.put<ServiceResponse>(param.url, param.body, options);
+          requestObs = this.httpClient.put<T>(param.url, param.body, options);
           break;
         case 'DELETE':
           const deleteOptions: HttpRequestOptions = {
@@ -89,11 +89,14 @@ export class BaseService {
             body: param.body
           };
           deleteOptions.observe = 'response';
-          requestObs = this.httpClient.delete<ServiceResponse>(param.url, deleteOptions);
+          requestObs = this.httpClient.delete<T>(param.url, deleteOptions);
+          break;
+        case 'PATCH':
+          requestObs = this.httpClient.patch<T>(param.url, param.body, options);
           break;
         case 'POST':
         default:
-          requestObs = this.httpClient.post<ServiceResponse>(param.url, param.body, options);
+          requestObs = this.httpClient.post<T>(param.url, param.body, options);
           break;
       }
 
@@ -130,27 +133,27 @@ export class BaseService {
    * Successful response parsers, there is one parser for each CRUD method which calls to the common parser.
    * User can overwrite the chosen methods parsers or the common parser
    */
-  protected parseSuccessfulResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseSuccessfulResponse(resp: T, observer: Subscriber<T>) {
     this.responseParser.parseSuccessfulResponse(resp, observer, this);
   }
 
-  protected parseSuccessfulQueryResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseSuccessfulQueryResponse(resp: T, observer: Subscriber<T>) {
     this.parseSuccessfulResponse(resp, observer);
   }
 
-  protected parseSuccessfulAdvancedQueryResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseSuccessfulAdvancedQueryResponse(resp: T, observer: Subscriber<T>) {
     this.parseSuccessfulResponse(resp, observer);
   }
 
-  protected parseSuccessfulInsertResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseSuccessfulInsertResponse(resp: T, observer: Subscriber<T>) {
     this.parseSuccessfulResponse(resp, observer);
   }
 
-  protected parseSuccessfulUpdateResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseSuccessfulUpdateResponse(resp: T, observer: Subscriber<T>) {
     this.parseSuccessfulResponse(resp, observer);
   }
 
-  protected parseSuccessfulDeleteResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseSuccessfulDeleteResponse(resp: T, observer: Subscriber<T>) {
     this.parseSuccessfulResponse(resp, observer);
   }
 
@@ -158,27 +161,27 @@ export class BaseService {
    * Unsuccessful response parsers, there is one parser for each CRUD method which calls to the common parser.
    * User can overwrite the chosen methods parsers or the common parser
    */
-  protected parseUnsuccessfulResponse(error: any, observer: Subscriber<ServiceResponse>) {
+  protected parseUnsuccessfulResponse(error: any, observer: Subscriber<T>) {
     this.responseParser.parseUnsuccessfulResponse(error, observer, this);
   }
 
-  protected parseUnsuccessfulQueryResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseUnsuccessfulQueryResponse(resp: T, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulAdvancedQueryResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseUnsuccessfulAdvancedQueryResponse(resp: T, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulInsertResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseUnsuccessfulInsertResponse(resp: T, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulUpdateResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseUnsuccessfulUpdateResponse(resp: T, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulDeleteResponse(resp: ServiceResponse, observer: Subscriber<ServiceResponse>) {
+  protected parseUnsuccessfulDeleteResponse(resp: T, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
