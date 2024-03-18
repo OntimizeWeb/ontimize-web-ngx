@@ -101,7 +101,7 @@ export const DEFAULT_INPUTS_O_TREE = [
   'route'
 ];
 
-export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded'];
+export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded', 'onNodeClick'];
 
 @Component({
   selector: 'o-tree',
@@ -205,6 +205,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   onNodeExpanded: EventEmitter<any> = new EventEmitter();
   onNodeCollapsed: EventEmitter<any> = new EventEmitter();
   onLoadNextLevel: EventEmitter<any> = new EventEmitter();
+  onNodeClick: EventEmitter<any> = new EventEmitter<any>();
   rootTitle: string;
   rootNodes: OTreeFlatNode[] = [];
   daoTree: OTreeDao;
@@ -321,6 +322,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   protected nodeClicked(node: OTreeFlatNode, event: Event) {
     event.stopPropagation();
     event.preventDefault();
+    this.onNodeClick.emit(node);
     if (this.detailMode !== Codes.DETAIL_MODE_NONE && !this.isRootNode(node)) {
       /*
       Se podria mejorar llamando this.viewDetail(node.data);
