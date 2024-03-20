@@ -46,7 +46,7 @@
     "@ngx-translate/core": "~13.0.0",
     "@ngx-translate/http-loader": "~6.0.0",
     "angular-resizable-element": "3.3.4",
-    "moment": "2.29.2",
+    "moment": "2.29.4",
     "ngx-material-timepicker": "5.4.3",
     "ngx-skeleton-loader": "7.0.0",
     "rxjs": "~7.8.0",
