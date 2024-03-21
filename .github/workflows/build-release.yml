@@ -31,13 +31,13 @@ jobs:
           echo "BASELINE_BRANCH=${{ github.event.inputs.BASELINE || github.ref }}" >> $GITHUB_ENV
 
       - name: Checkout merge commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ env.BASELINE_BRANCH }}
           fetch-depth: 0
 
       - name: 'Cache node modules'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -45,7 +45,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Node 18.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.10.0
           registry-url: ${{ env.NPM_REGISTRY }}
