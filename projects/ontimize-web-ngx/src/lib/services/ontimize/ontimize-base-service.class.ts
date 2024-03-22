@@ -3,9 +3,10 @@ import { Observable } from 'rxjs';
 
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { BaseService } from '../base-service.class';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 
 @Injectable()
-export class OntimizeBaseService extends BaseService implements IAuthService {
+export class OntimizeBaseService extends BaseService<ServiceResponse> implements IAuthService {
 
   protected _startSessionPath: string;
 

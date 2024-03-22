@@ -22,6 +22,7 @@ import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
+import { RestService } from './ontimize/rest.service';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -96,8 +97,10 @@ export function dataServiceFactory(injector: Injector): any {
     return new OntimizeEEService(injector);
   } else if ('Ontimize' === config.serviceType) {
     return new OntimizeService(injector);
-  }
-  return Util.createServiceInstance(config.serviceType, injector);
+  } else if ('APIRest' === config.serviceType) {
+    return new RestService(injector);
+  } else
+    return Util.createServiceInstance(config.serviceType, injector);
 }
 
 /**

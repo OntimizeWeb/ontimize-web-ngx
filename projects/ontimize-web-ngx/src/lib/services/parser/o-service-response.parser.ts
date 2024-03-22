@@ -1,19 +1,19 @@
 import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
-import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { BaseService } from '../base-service.class';
+import { BaseResponse } from '../../interfaces/base-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OntimizeServiceResponseParser {
+export class OntimizeServiceResponseParser<T extends BaseResponse> {
 
   constructor(
     protected injector: Injector
   ) { }
 
-  parseSuccessfulResponse(resp: ServiceResponse, subscriber: Subscriber<ServiceResponse>, service: BaseService) {
+  parseSuccessfulResponse(resp: T, subscriber: Subscriber<T>, service: BaseService<T>) {
     if (resp && resp.isUnauthorized()) {
       service.clientErrorFallback(401);
     } else if (resp && resp.isFailed()) {
@@ -26,7 +26,7 @@ export class OntimizeServiceResponseParser {
     }
   }
 
-  parseUnsuccessfulResponse(error, subscriber: Subscriber<ServiceResponse>, service: BaseService) {
+  parseUnsuccessfulResponse(error, subscriber: Subscriber<T>, service: BaseService<T>) {
     if (error) {
       switch (error.status) {
         case 401:
