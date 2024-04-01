@@ -545,4 +545,48 @@ export class Util {
     return str;
   }
 
+  static setFullscreenDialog(fullscreen: boolean, dialogRef: any, defaultWidth: string = '70%', defaultHeight = '70%'): void {
+    if (!fullscreen) {
+      dialogRef.updateSize("100%", "100%");
+    } else {
+      dialogRef.updateSize(defaultWidth, defaultHeight);
+    }
+  }
+
+  static sum(column: string, data: any[]): number {
+    let value = 0;
+    if (data) {
+      value = data.reduce((acumulator, currentValue) => {
+        return acumulator + (isNaN(currentValue[column]) ? 0 : currentValue[column]);
+      }, value);
+
+    }
+    return +(value).toFixed(2);
+  }
+
+  static count(data: any[]): number {
+    let value = 0;
+    if (data) {
+      value = data.reduce((acumulator) => {
+        return acumulator + 1;
+      }, 0);
+    }
+    return value;
+  }
+
+  static avg(column: string, data: any[]): number {
+    const totalSum = this.sum(column, data);
+    const totalCount = this.count(data);
+    return +((totalSum === 0 || totalCount === 0) ? 0 : (totalSum / totalCount)).toFixed(2);
+
+  }
+
+  static min(data: any[]): number {
+    return data.length > 0 ? Math.min(...data) : 0;
+  }
+
+  static max(data: any[]): number {
+    return data.length > 0 ? Math.max(...data) : 0;
+  }
 }
+

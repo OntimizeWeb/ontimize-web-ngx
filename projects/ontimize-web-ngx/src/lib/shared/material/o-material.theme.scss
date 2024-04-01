@@ -47,4 +47,5 @@
   @include o-daterange-input-theme($theme-or-color-config);
   @include o-dual-list-selector-theme($theme-or-color-config);
   @include o-image-theme($theme-or-color-config);
+  @include o-pivot-table-theme($theme-or-color-config);
 }

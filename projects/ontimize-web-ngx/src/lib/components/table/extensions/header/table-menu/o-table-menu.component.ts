@@ -40,6 +40,7 @@ import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-
 import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
+import { OPivotTableComponent } from '../../../../pivot-table/pivot-table.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
@@ -68,7 +69,9 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
   'showReportOnDemandOption: show-report-on-demand-option',
 
   // show-charts-on-demand-option [yes|no|true|false]: show charts on demand option in the header menu
-  'showChartsOnDemandOption: show-charts-on-demand-option'
+  'showChartsOnDemandOption: show-charts-on-demand-option',
+  // show-pivot-table-option [yes|no|true|false]: show pivot table option in the header menu
+  'showPivotTableOption: show-pivot-table-option'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
@@ -140,6 +143,8 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
   protected permissions: OTableMenuPermissions;
   protected mutationObservers: MutationObserver[] = [];
   protected exportDataProvider: OntimizeExportDataProviderService;
+  @BooleanInputConverter()
+  showPivotTableOption: boolean = true;
 
 
   constructor(
@@ -288,6 +293,14 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     return !(perm && perm.visible === false);
   }
 
+  get showPivotTableButton(): boolean {
+    if (!this.showPivotTableOption) {
+      return false;
+    }
+    const perm: OPermissions = this.getPermissionByAttr('show-pivot-table');
+    return !(perm && perm.visible === false);
+  }
+
   get enabledColumnsVisibilityButton(): boolean {
     const perm: OPermissions = this.getPermissionByAttr('show-hide-columns');
     return !(perm && perm.enabled === false);
@@ -341,7 +354,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     return this.showSelectAllCheckbox || this.showColumnsVisibilityButton || this.showResetWidthOption;
   }
   get showAnyOptionSecondSection(): boolean {
-    return this.showExportButton || this.showReportOnDemandButton || this.showChartsOnDemandButton;
+    return this.showExportButton || this.showReportOnDemandButton || this.showChartsOnDemandButton || this.showPivotTableButton;
   }
 
 
@@ -547,6 +560,19 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
         }
       }
     });
+  }
+
+  onPivotTablelicked() {
+    const dialogRef = this.dialog.open(OPivotTableComponent, {
+      data: this.table,
+      width: '90%',
+      height: '90%',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      disableClose: true,
+      panelClass: ['o-dialog-class', 'o-table-dialog']
+    });
+
   }
 
 }

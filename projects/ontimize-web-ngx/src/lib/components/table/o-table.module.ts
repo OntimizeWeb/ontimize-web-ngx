@@ -1,12 +1,13 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ObserversModule } from '@angular/cdk/observers';
+import { PortalModule } from '@angular/cdk/portal';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
-import { PortalModule } from '@angular/cdk/portal';
 import { OSharedModule } from '../../shared/shared.module';
 import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
 import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selector.module';
@@ -26,10 +27,9 @@ import { O_TABLE_HEADER_COMPONENTS, O_TABLE_HEADER_COMPONENTS_EXPORTED } from '.
 import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
 import { OTableRowExpandableComponent } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
 import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
 
 @NgModule({
   declarations: [
