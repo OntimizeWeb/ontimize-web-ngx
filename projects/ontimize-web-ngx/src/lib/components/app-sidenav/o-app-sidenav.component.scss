@@ -32,6 +32,11 @@ $transition-duration: 500ms;
   .o-app-sidenav-menu-item {
     a {
       margin-left: $margin-left-buttom;
+      .mat-icon {
+        svg {
+          display: flex;
+        }
+      }
     }
 
     &[disabled=true] {
