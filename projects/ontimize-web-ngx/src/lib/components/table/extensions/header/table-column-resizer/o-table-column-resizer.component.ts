@@ -137,7 +137,6 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     });
 
     const moveEvent = (startEvent instanceof MouseEvent) ? 'mousemove' : 'touchmove';
-    const endEvent = (startEvent instanceof MouseEvent) ? 'mouseup' : 'touchend';
     this.ngZone.runOutsideAngular(() => {
       this.dragListeners.push(this.renderer.listen('document', moveEvent, (e: MouseEvent | TouchEvent) => this.resizeEvent(e)));
     });
