@@ -1,6 +1,6 @@
 ## 8.14.10 (2024-04-02)
 ### Features
-* **o-app-layout**: New propertie svgIcon in MenuItem and MenuGroup ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1542](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1542)
+* **o-app-layout**: New propertie `svgIcon` in MenuItem and MenuGroup ([0a18c78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a18c78)) Closes [#1542](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1542)
 
 ## 8.14.9 (2024-02-15)
 ### Features
