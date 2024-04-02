@@ -12,8 +12,8 @@
 
     <a mat-button *ngIf="isLocaleItem()" (click)="triggerClick($event)">
       <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-icon *ngIf="menuItem.svgIcon" [svgIcon]="menuItem.svgIcon"></mat-icon>
         <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
-        <mat-icon *ngIf="menuItem.svgIcon" [svgIcon]= "menuItem.svgIcon"></mat-icon>
         {{ menuItem.name | oTranslate }}
         <mat-icon *ngIf="isConfiguredLang()" class="configured-lang">check_circle</mat-icon>
       </div>
@@ -33,8 +33,8 @@
   <li *ngIf="!hidden" class="o-app-sidenav-menuitem o-app-sidenav-item">
     <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="triggerClick($event)"
       [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
-      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
       <mat-icon *ngIf="menuItem.svgIcon" [svgIcon]="menuItem.svgIcon"></mat-icon>
+      <mat-icon *ngIf="menuItem.icon">{{ menuItem.icon }}</mat-icon>
     </a>
   </li>
 </ng-container>
