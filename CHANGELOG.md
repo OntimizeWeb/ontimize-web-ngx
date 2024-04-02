@@ -1,3 +1,7 @@
+## 8.14.10 (2024-04-02)
+### Features
+* **o-app-layout**: New propertie svgIcon in MenuItem and MenuGroup ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1542](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1542)
+
 ## 8.14.9 (2024-02-15)
 ### Features
 * **o-table, o-grid, o-list**: added new input `disable-page-size-calculation` to control the number of records consulted on the last page of the table([1af87f5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1af87f5)) Closes [#1480](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1480)
