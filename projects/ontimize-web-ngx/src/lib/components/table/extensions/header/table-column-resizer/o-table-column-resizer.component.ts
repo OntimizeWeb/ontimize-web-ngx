@@ -94,12 +94,15 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('mousedown', ['$event'])
-  onMousedown(e: MouseEvent) {
+  @HostListener('touchstart', ['$event'])
+  onMousedown(e: MouseEvent | TouchEvent) {
     if (!this.isDisabled) {
       this.startResize(e);
     }
   }
 
+  @HostListener('document:mouseup')
+  @HostListener('document:touchend')
   onMouseup() {
     this.isResizing = false;
     this.stopDragging();
@@ -117,35 +120,35 @@ export class OTableColumnResizerComponent implements OnInit, OnDestroy {
     }
   }
 
-  startResize(startEvent: MouseEvent): void {
+  startResize(startEvent: MouseEvent | TouchEvent): void {
     startEvent.preventDefault();
     startEvent.stopPropagation();
     if (!Util.isDefined(this.headerEl)) {
       return;
     }
     const DOMWidth = this.table.getClientWidthColumn(this.column);
-    this.startX = startEvent.screenX;
+    this.startX = (startEvent instanceof MouseEvent) ? startEvent.screenX : startEvent.touches[0].screenX;
     this.startWidth = DOMWidth;
     this.minWidth = this.column.getMinWidthValue();
     this.initializeWidthData();
     this.ngZone.runOutsideAngular(() => {
-      this.dragListeners.push(this.renderer.listen('document', 'mouseup', (e: MouseEvent) => this.stopDragging()));
+      this.dragListeners.push(this.renderer.listen('document', 'mouseup', () => this.stopDragging()));
+      this.dragListeners.push(this.renderer.listen('document', 'touchend', () => this.stopDragging()));
     });
 
-    if (!(startEvent instanceof MouseEvent)) {
-      return;
-    }
+    const moveEvent = (startEvent instanceof MouseEvent) ? 'mousemove' : 'touchmove';
+    const endEvent = (startEvent instanceof MouseEvent) ? 'mouseup' : 'touchend';
     this.ngZone.runOutsideAngular(() => {
-      this.dragListeners.push(this.renderer.listen('document', 'mousemove', (e: MouseEvent) => this.resizeEvent(e)));
+      this.dragListeners.push(this.renderer.listen('document', moveEvent, (e: MouseEvent | TouchEvent) => this.resizeEvent(e)));
     });
     this.isResizing = true;
   }
 
-  protected resizeEvent(event: MouseEvent): void {
-    if (!this.isResizing || !(event instanceof MouseEvent)) {
+  protected resizeEvent(event: MouseEvent | TouchEvent): void {
+    if (!this.isResizing) {
       return;
     }
-    const movementX = (event.screenX - this.startX);
+    const movementX = (event instanceof MouseEvent) ? (event.screenX - this.startX) : (event.touches[0].screenX - this.startX);
     if (movementX === 0) {
       return;
     }
