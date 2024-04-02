@@ -1,3 +1,8 @@
+## 8.14.10 (2024-04-02)
+### Features
+* **o-app-layout**: New propertie `svgIcon` in MenuItem and MenuGroup ([0a18c78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a18c78)) Closes [#1542](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1542)
+* **o-table**: Fixed bug that caused the width of the columns to not adjust properly on a tablet ([1c8f76a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c8f76a)) Closes [#1534](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1534)
+
 ## 15.0.3 (2024-03-18)
 ### Features
   * **o-tree**: Added a new output `onNodeClik` for node click ([8b6137b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b6137b)) Closes [#1530](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1530)
