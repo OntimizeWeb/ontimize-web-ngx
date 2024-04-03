@@ -7,6 +7,7 @@ export interface MenuCommonItem {
   id: string;
   name: string;
   tooltip?: string;
+  svgIcon?: string;
   icon?: string;
   class?: string;
 }
