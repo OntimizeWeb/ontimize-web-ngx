@@ -18,6 +18,8 @@ import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
+import { OQueryParams } from '../types/query-params.type';
+import { OntimizeQueryArgumentsAdapter } from '../services/query-arguments/ontimize-query-arguments.adapter';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -118,6 +120,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
+  queryArgumentAdapter: any;
 
   set oQueryRows(value: number) {
     if (Util.isDefined(value)) {
@@ -172,7 +175,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   protected queryOnEventSubscription: Subscription;
   public cd: ChangeDetectorRef; // borrar
-  protected queryArguments: any[];
+  protected queryArguments: OQueryParams;
 
   protected router: Router;
   protected actRoute: ActivatedRoute;
@@ -224,7 +227,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       this.queryOnInit = false;
       this.setDataArray(this.staticData);
     } else {
-      this.configureService();
+      this.configureAdapter();
+      //this.configureService();
     }
 
     if (this.form && Util.isDefined(this.dataService)) {
@@ -320,6 +324,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   getKeys(): string[] {
     return this.keysArray;
   }
+  public configureAdapter() {
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
+  }
+
 
   configureService() {
     const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
@@ -380,7 +388,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       // ensuring false value
       this.abortQuery.next(false);
 
-      this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
 
       if (this.abortQuery.value) {
         this.state.queryRecordOffset = 0;
@@ -394,7 +401,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         return;
       }
 
-      this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
+      this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter, ovrrArgs));
+
+      this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter,[queryMethodName, this.dataService, this.queryArguments])
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;
@@ -463,18 +472,20 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     return result;
   }
 
-  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
+
+  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
     const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
 
-    let queryArguments = [compFilter, queryCols, this.entity, sqlTypes];
+
     if (this.pageable) {
-      const queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
-      const queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
-      queryArguments = queryArguments.concat([queryOffset, queryRowsN, undefined]);
+      ovrrArgs.offset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
+      ovrrArgs.length = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
+
     }
-    return queryArguments;
+    console.log('queryParams', { filters: compFilter, columns: queryCols, entity: this.entity, pageable: this.pageable, sqlTypes: sqlTypes, ovrrArgs: ovrrArgs });
+    return { filters: compFilter, columns: queryCols, entity: this.entity, pageable: this.pageable, sqlTypes: sqlTypes, ovrrArgs: ovrrArgs, sort: null };
   }
 
   updatePaginationInfo(queryRes: ServiceResponse) {

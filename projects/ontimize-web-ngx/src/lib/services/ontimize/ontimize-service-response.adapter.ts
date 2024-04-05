@@ -1,12 +1,12 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { ServiceResponseAdapter } from '../../interfaces/service-response-adapter.interface';
+import { IServiceResponseAdapter } from '../../interfaces/service-response-adapter.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OntimizeServiceResponse } from './ontimize-service-response.class';
 
 @Injectable()
-export class OntimizeServiceResponseAdapter implements ServiceResponseAdapter<OntimizeServiceResponse> {
+export class OntimizeServiceResponseAdapter implements IServiceResponseAdapter<OntimizeServiceResponse> {
 
   adapt(res: HttpResponse<any>): ServiceResponse {
     return new OntimizeServiceResponse(

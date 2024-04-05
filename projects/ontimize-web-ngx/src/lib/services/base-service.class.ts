@@ -5,7 +5,7 @@ import { Observable, Subscriber } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
 import { AppConfig } from '../config/app-config';
-import { ServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
+import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { Config } from '../types/config.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
 import { Util } from '../util/util';
@@ -17,6 +17,8 @@ import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-resp
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 import { HttpRequestOptions } from '../types/http-request-options.type';
 import { BaseResponse } from '../interfaces/base-response.interface';
+import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
+import { IBaseQueryArgument } from './query-arguments/base-query-argument.interface';
 
 export class BaseService<T extends BaseResponse> {
 
@@ -28,8 +30,9 @@ export class BaseService<T extends BaseResponse> {
   protected _config: AppConfig;
   protected responseParser: OntimizeServiceResponseParser<T>;
   protected authService: AuthService;
-  protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
+  protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
+  queryArgumentAdapter: IBaseQueryArgument;
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
@@ -40,11 +43,17 @@ export class BaseService<T extends BaseResponse> {
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService)
     this.configureAdapter();
+    this.configureQueryParamsAdapter();
   }
 
   public configureAdapter() {
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
+  }
+
+  public configureQueryParamsAdapter() {
     this.adapter = this.injector.get(OntimizeServiceResponseAdapter);
   }
+
 
   public configureService(config: any): void {
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;

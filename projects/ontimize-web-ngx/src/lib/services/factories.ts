@@ -24,6 +24,10 @@ import { OntimizePermissionsService } from './permissions/ontimize-permissions.s
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 import { RestService } from './ontimize/rest.service';
 
+import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
+import { RestQueryArgumentsAdapter } from './query-arguments/rest-query-arguments.adapter';
+import { IBaseQueryArgument } from './query-arguments/base-query-argument.interface';
+
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
  * ---------------------------------------------------------------------------------------------------- */
@@ -148,6 +152,20 @@ export function exportDataFactory(injector: Injector): IExportDataProvider {
   }
 
 }
+export function serviceResquestAdapterFactory(injector: Injector): IBaseQueryArgument {
+  // const serviceClass = _getInjectionTokenValue(O_DATA_SERVICE, injector);
+  // const service = Util.createServiceInstance(serviceClass, injector);
+  // if (Util.isDefined(service)) {
+  //   return service;
+  // }
+  const config = injector.get(AppConfig).getConfiguration();
+  if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
+    return new OntimizeQueryArgumentsAdapter();
+  } else if ('APIRest' === config.serviceType) {
+    return new RestQueryArgumentsAdapter();
+  } else
+    return Util.createServiceInstance(config.serviceType, injector);
+}
 
 /**
  * Creates a new instance of the permission service.
@@ -199,6 +217,7 @@ export const ComponentStateServiceProvider = { provide: AbstractComponentStateSe
 
 export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
+export const ServiceRequestAdapter = { provide: OntimizeQueryArgumentsAdapter, useFactory: serviceResquestAdapterFactory, deps: [Injector] };
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
  * ---------------------------------------------------------------------------------------------------- */
@@ -217,5 +236,7 @@ export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: I
   }
   return service;
 }
+
+
 
 

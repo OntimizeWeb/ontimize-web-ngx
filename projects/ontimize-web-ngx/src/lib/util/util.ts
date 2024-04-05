@@ -545,4 +545,60 @@ export class Util {
     return str;
   }
 
+  // static parseQueryParams(query:object) {
+  //   return Object.entries(query)
+  //     .map(([key, value]) => key + '=' + encodeURIComponent(value))
+  //     .join('&')
+  // }
+
+  // static toQueryString(params = {}, prefix) {
+  //   const query = Object.keys(params).map((k) => {
+  //     let key = k;
+  //     let value = params[key];
+
+  //     if (!value && (value === null || value === undefined || isNaN(value))) {
+  //       value = '';
+  //     }
+
+  //     switch (params.constructor) {
+  //       case Array:
+  //         key = `${prefix}[]`;
+  //         break;
+  //       case Object:
+  //         key = (prefix ? `${prefix}[${key}]` : key);
+  //         break;
+  //     }
+
+  //     if (typeof value === 'object') {
+  //       return this.toQueryString(value, key); // for nested objects
+  //     }
+
+  //     return `${key}=${encodeURIComponent(value)}`;
+  //   });
+
+  //   return query.join('&');
+  // }
+  static objectToQueryString = (initialObj) => {
+    const reducer = (obj, parentPrefix = null) => (prev, key) => {
+      const val = obj[key];
+      key = encodeURIComponent(key);
+      const prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
+
+      if (val == null || typeof val === 'function') {
+        prev.push(`${encodeURIComponent(prefix)}=`);
+        return prev;
+      }
+
+      if (['number', 'boolean', 'string'].includes(typeof val)) {
+        prev.push(`${ encodeURIComponent(prefix)}=${encodeURIComponent(val)}`);
+        return prev;
+      }
+
+      prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'));
+      return prev;
+    };
+
+    return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&');
+  };
+
 }
