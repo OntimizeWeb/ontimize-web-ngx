@@ -5,6 +5,7 @@ import { share } from 'rxjs/operators';
 import { IDataService } from '../../interfaces/data-service.interface';
 import { Util } from '../../util/util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
+import { ServiceResponse } from '../../interfaces';
 
 @Injectable()
 export class OntimizeService extends OntimizeBaseService implements IDataService {
@@ -91,6 +92,10 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
       successCallback: this.parseSuccessfulQueryResponse,
       errorCallBack: this.parseUnsuccessfulQueryResponse
     });
+  }
+
+  queryById(kv?: object, av?: string[], entity?: string, sqltypes?: object): Observable<ServiceResponse> {
+    return this.query(kv, av, entity, sqltypes);
   }
 
   public advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object,

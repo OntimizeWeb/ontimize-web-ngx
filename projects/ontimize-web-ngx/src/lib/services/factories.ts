@@ -22,11 +22,15 @@ import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
-import { RestService } from './ontimize/rest.service';
+import { JSONAPIService } from './jsonapi/jsonapi.service';
 
 import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
-import { RestQueryArgumentsAdapter } from './query-arguments/rest-query-arguments.adapter';
+import { JSONAPIQueryArgumentsAdapter } from './query-arguments/jsonapi-query-arguments.adapter';
 import { IBaseQueryArgument } from './query-arguments/base-query-argument.interface';
+import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
+import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
+import { BaseServiceResponse } from './base-service-response.class';
+import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -101,8 +105,8 @@ export function dataServiceFactory(injector: Injector): any {
     return new OntimizeEEService(injector);
   } else if ('Ontimize' === config.serviceType) {
     return new OntimizeService(injector);
-  } else if ('APIRest' === config.serviceType) {
-    return new RestService(injector);
+  } else if ('JSONAPI' === config.serviceType) {
+    return new JSONAPIService(injector);
   } else
     return Util.createServiceInstance(config.serviceType, injector);
 }
@@ -161,10 +165,25 @@ export function serviceResquestAdapterFactory(injector: Injector): IBaseQueryArg
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
     return new OntimizeQueryArgumentsAdapter();
-  } else if ('APIRest' === config.serviceType) {
-    return new RestQueryArgumentsAdapter();
-  } else
-    return Util.createServiceInstance(config.serviceType, injector);
+  } else if ('JSONAPI' === config.serviceType) {
+    return new JSONAPIQueryArgumentsAdapter();
+  }
+  return new JSONAPIQueryArgumentsAdapter();
+}
+
+export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
+  // const serviceClass = _getInjectionTokenValue(O_DATA_SERVICE, injector);
+  // const service = Util.createServiceInstance(serviceClass, injector);
+  // if (Util.isDefined(service)) {
+  //   return service;
+  // }
+  const config = injector.get(AppConfig).getConfiguration();
+  if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
+    return new OntimizeServiceResponseAdapter();
+  } else if ('JSONAPI' === config.serviceType) {
+    return new JSONAPIServiceResponseAdapter();
+  }
+  return new JSONAPIServiceResponseAdapter();
 }
 
 /**
@@ -218,6 +237,8 @@ export const ComponentStateServiceProvider = { provide: AbstractComponentStateSe
 export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
 export const ServiceRequestAdapter = { provide: OntimizeQueryArgumentsAdapter, useFactory: serviceResquestAdapterFactory, deps: [Injector] };
+
+export const ServiceResponseAdapter = { provide: OntimizeServiceResponseAdapter, useFactory: serviceResponseAdapterFactory, deps: [Injector] };
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
  * ---------------------------------------------------------------------------------------------------- */

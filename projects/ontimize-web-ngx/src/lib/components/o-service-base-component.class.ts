@@ -116,7 +116,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   parentKeys: string;
   staticData: Array<any>;
   queryMethod: string = Codes.QUERY_METHOD;
-  paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
+  paginatedQueryMethod: string;
+  //paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
 
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
@@ -372,7 +373,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
-    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+
+    //const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+
+    const queryMethodName =  this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return;
     }
@@ -473,14 +477,14 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
 
-  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
+  getQueryArguments(filter: object, ovrrArgs: OQueryDataArgs = {}): OQueryParams {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
     const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
 
 
     if (this.pageable) {
-      ovrrArgs.offset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
+      ovrrArgs.offset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : (this.state.queryRecordOffset ? this.state.queryRecordOffset:0);
       ovrrArgs.length = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
 
     }

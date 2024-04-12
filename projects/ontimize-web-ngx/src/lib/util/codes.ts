@@ -9,6 +9,7 @@ export class Codes {
   public static INSERT_METHOD = 'insert';
   public static UPDATE_METHOD = 'update';
   public static QUERY_METHOD = 'query';
+  public static QUERYBYID_METHOD = 'queryById';
 
   public static DEFAULT_QUERY_ROWS = 10;
   public static PAGE_SIZE_OPTIONS = [10, 25, 50, 100];

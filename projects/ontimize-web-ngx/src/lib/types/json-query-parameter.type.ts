@@ -1,4 +1,4 @@
-export type RestQueryParameter = {
+export type JSONAPIQueryParameter = {
   id?: any;
   type?: string;
   attributes?: object;

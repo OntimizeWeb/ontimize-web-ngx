@@ -216,6 +216,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @BooleanInputConverter()
   protected queryOnInit: boolean = true;
   protected parentKeys: string;
+  protected getMethod: string = ""
+  protected queryByIdMethod: string = Codes.QUERYBYID_METHOD;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected insertMethod: string = Codes.INSERT_METHOD;
   protected updateMethod: string = Codes.UPDATE_METHOD;
@@ -1092,7 +1094,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
-    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
+    this.querySubscription = this.dataService[this.queryByIdMethod](filter, av, this.entity, sqlTypes)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);

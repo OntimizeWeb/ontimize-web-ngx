@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable, share } from 'rxjs';
 
-import { RestResponse } from '../../interfaces/rest-response.interface';
+import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { BaseService } from '../base-service.class';
 import { Util } from '../../util/util';
 import { OQueryParams } from '../../types/query-params.type';
@@ -10,13 +10,14 @@ import { HttpHeaders } from '@angular/common/http';
 
 
 @Injectable()
-export class RestService extends BaseService<RestResponse> implements IAuthService {
+export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAuthService {
   public path: string = '';
   protected _startSessionPath: string;
 
   constructor(protected injector: Injector) {
     super(injector);
   }
+
   public startsession(user: string, password: string): Observable<string | number> {
     const url = this.urlBase + this._startSessionPath;
     const options: any = {
@@ -77,9 +78,21 @@ export class RestService extends BaseService<RestResponse> implements IAuthServi
     // TODO init other params
   }
 
-  query(queryParams: OQueryParams): Observable<RestResponse> {
+  query(queryParams: OQueryParams): Observable<JSONAPIResponse> {
 
     const url = `${this.urlBase}${this.path}?${Util.objectToQueryString(queryParams)}`;
+
+    return this.doRequest({
+      method: 'GET',
+      url: url,
+      successCallback: this.parseSuccessfulInsertResponse,
+      errorCallBack: this.parseUnsuccessfulInsertResponse
+    });
+  }
+
+  queryById(kv: string, queryParams: OQueryParams): Observable<JSONAPIResponse> {
+    const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
+    const url = `${this.urlBase}${this.path}/${id}?${Util.objectToQueryString(queryParams)}`;
 
     return this.doRequest({
       method: 'GET',
@@ -103,10 +116,11 @@ export class RestService extends BaseService<RestResponse> implements IAuthServi
 
   // }
 
-  insert(av: object): Observable<RestResponse> {
+  insert(av: object, entity: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}`;
+    let attributes = { attributes: av, type: entity };
     const body = JSON.stringify({
-      data: av
+      data: attributes
     });
 
     return this.doRequest({
@@ -118,15 +132,18 @@ export class RestService extends BaseService<RestResponse> implements IAuthServi
     });
   }
 
-  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<RestResponse> {
-    const url = `${this.urlBase}${this.path}/${entity}`;
+  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
+    const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
+    const url = `${this.urlBase}${this.path}/${id}`;
+
+    let attributes = Object.assign({}, { attributes: av }, kv, { type: entity });
 
     const body = JSON.stringify({
-      data: av
+      data: attributes
     });
 
     return this.doRequest({
-      method: 'PUT',
+      method: 'PATCH',
       url: url,
       body: body,
       successCallback: this.parseSuccessfulUpdateResponse,
@@ -134,10 +151,9 @@ export class RestService extends BaseService<RestResponse> implements IAuthServi
     });
   }
 
-  delete(kv: object = {}, entity?: string): Observable<RestResponse>{
-    let urlQuery = '';
-    Object.keys(kv).forEach(key => urlQuery = key + '=' + kv[key]);
-    const url = `${this.urlBase}${this.path}/${entity}?urlQuery`;
+  delete(kv: object = {}, entity?: string): Observable<JSONAPIResponse> {
+    const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
+    const url = `${this.urlBase}${this.path}/${id}`;
 
     return this.doRequest({
       method: 'DELETE',

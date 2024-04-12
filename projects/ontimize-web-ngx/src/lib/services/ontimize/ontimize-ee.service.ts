@@ -80,6 +80,11 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     });
   }
 
+  queryById(kv?: object, av?: string[], entity?: string, sqltypes?: object): Observable<ServiceResponse> {
+    return this.query(kv, av, entity, sqltypes);
+  }
+
+
   public advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object,
     offset?: number, pagesize?: number, orderby?: Array<object>): Observable<ServiceResponse> {
 
