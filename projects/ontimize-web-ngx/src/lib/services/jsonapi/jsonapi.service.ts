@@ -75,10 +75,11 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
+    this.context = config.context;
     // TODO init other params
   }
 
-  query(queryParams: OQueryParams): Observable<JSONAPIResponse> {
+  query(queryParams: OQueryParams, keys:any[]): Observable<JSONAPIResponse> {
 
     const url = `${this.urlBase}${this.path}?${Util.objectToQueryString(queryParams)}`;
 
@@ -91,30 +92,17 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   }
 
   queryById(kv: string, queryParams: OQueryParams): Observable<JSONAPIResponse> {
-    const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
+    const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}?${Util.objectToQueryString(queryParams)}`;
 
     return this.doRequest({
       method: 'GET',
       url: url,
       successCallback: this.parseSuccessfulInsertResponse,
-      errorCallBack: this.parseUnsuccessfulInsertResponse
+      errorCallBack: this.parseUnsuccessfulInsertResponse,
     });
   }
 
-  // advancedQuery(queryParams: any): Observable<RestResponse> {
-
-  //   const url = `${this.urlBase}${this.path}/${entity}`;
-
-
-  //   return this.doRequest({
-  //     method: 'GET',
-  //     url: url,
-  //     successCallback: this.parseSuccessfulInsertResponse,
-  //     errorCallBack: this.parseUnsuccessfulInsertResponse
-  //   });
-
-  // }
 
   insert(av: object, entity: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}`;

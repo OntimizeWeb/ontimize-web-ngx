@@ -15,18 +15,29 @@ export class JSONAPIServiceResponse implements ServiceResponse {
     public statusText: string,
     public headers: HttpHeaders,
     public ok: boolean,
-    public body: any
+    public body: any,
+    public context: any
   ) {
+
     if (body?.data) {
+      let key;
+      if (context) {
+        key = context['keys'];
+      }
       if (Util.isArray(body.data)) {
-        this.data = body.data.map((data: any) => Object.assign({}, data['attributes'], { id: data['id'] }));
+        this.data = body.data.map((data: any) => {
+          let keyValue = {};
+          keyValue[key] = data['id']
+          return Object.assign({}, data['attributes'], keyValue)
+        });
       } else {
-        this.data = Object.assign({}, body.data['attributes'], { id: body.data['id'] });
+        let keyValue = {};
+        keyValue[key] = body.data['id']
+        this.data = Object.assign({}, body.data['attributes'], keyValue);
       }
     }
     this.code = (this.status >= 200 || this.status < 300) ? 0 : (this.status === 404 ? 3 : 1);
     this.message = this.statusText;
-
 
   }
 

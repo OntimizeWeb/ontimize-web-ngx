@@ -17,8 +17,7 @@ import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-resp
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 import { HttpRequestOptions } from '../types/http-request-options.type';
 import { BaseResponse } from '../interfaces/base-response.interface';
-import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
-import { IBaseQueryArgument } from './query-arguments/base-query-argument.interface';
+
 
 export class BaseService<T extends BaseResponse> {
 
@@ -32,7 +31,8 @@ export class BaseService<T extends BaseResponse> {
   protected authService: AuthService;
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
-  queryArgumentAdapter: IBaseQueryArgument;
+  //queryArgumentAdapter: IBaseQueryArgument;
+  protected context: any;
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
@@ -42,21 +42,24 @@ export class BaseService<T extends BaseResponse> {
     this.responseParser = this.injector.get<OntimizeServiceResponseParser<T>>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser<T>>);
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService)
-    this.configureAdapter();
-    this.configureQueryParamsAdapter();
+    //this.configureAdapter();
+
   }
 
-  public configureAdapter() {
-    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
-  }
+  // public configureAdapter() {
+  //   this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
+  // }
 
-  public configureQueryParamsAdapter() {
+  public configureResponseAdapter() {
     this.adapter = this.injector.get(OntimizeServiceResponseAdapter);
+    this.adapter.setContext(this.context);
   }
 
 
   public configureService(config: any): void {
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
+    this.context = config.context;
+    this.configureResponseAdapter();
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): any {

@@ -7,4 +7,6 @@ export class BaseQueryArgument {
     return (service[method].apply(service, queryArguments) as Observable<ServiceResponse>);
   }
 
+  parseQueryParameters(args: any) :any { }
+
 }

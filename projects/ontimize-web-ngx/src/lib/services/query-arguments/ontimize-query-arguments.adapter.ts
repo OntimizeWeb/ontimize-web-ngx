@@ -5,7 +5,6 @@ import { IBaseQueryArgument } from './base-query-argument.interface';
 @Injectable()
 export class OntimizeQueryArgumentsAdapter extends BaseQueryArgument implements IBaseQueryArgument {
 
-
   parseQueryParameters(args: any) {
     let queryargs = [args.filter, args.columns, args.entity, args.sqlTypes];
     if (args.pageable) {

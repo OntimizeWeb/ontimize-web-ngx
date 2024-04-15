@@ -20,6 +20,7 @@ import { OExpandableContainerComponent } from './expandable-container/o-expandab
 import { OFormComponent } from './form/o-form.component';
 import { OQueryParams } from '../types/query-params.type';
 import { OntimizeQueryArgumentsAdapter } from '../services/query-arguments/ontimize-query-arguments.adapter';
+import { BaseQueryArgument } from '../services/query-arguments/base-query-argument.adapter';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -121,7 +122,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
-  queryArgumentAdapter: any;
+  queryArgumentAdapter: BaseQueryArgument;
 
   set oQueryRows(value: number) {
     if (Util.isDefined(value)) {
@@ -331,7 +332,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 
   configureService() {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType, context: {keys: this.keysArray} }
     this.dataService = Util.configureService(configureServiceArgs);
   }
 

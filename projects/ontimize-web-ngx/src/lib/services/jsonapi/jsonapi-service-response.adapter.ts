@@ -6,6 +6,7 @@ import { IServiceResponseAdapter } from '../../interfaces/service-response-adapt
 
 @Injectable()
 export class JSONAPIServiceResponseAdapter implements IServiceResponseAdapter<JSONAPIServiceResponse> {
+  context: any;
 
   adapt(res: HttpResponse<any>): JSONAPIServiceResponse {
     return new JSONAPIServiceResponse(
@@ -13,7 +14,11 @@ export class JSONAPIServiceResponseAdapter implements IServiceResponseAdapter<JS
       res.statusText,
       res.headers,
       res.ok,
-      res.body
+      res.body,
+      this.context
     );
+  }
+  setContext(context: any) {
+    this.context = context;
   }
 }

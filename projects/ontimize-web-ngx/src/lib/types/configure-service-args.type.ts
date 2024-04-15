@@ -6,4 +6,5 @@ export type OConfigureServiceArgs = {
   entity: string;
   service: string;
   serviceType: string;
+  context?:any
 };

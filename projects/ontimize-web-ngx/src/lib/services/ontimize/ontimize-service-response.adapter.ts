@@ -7,7 +7,7 @@ import { OntimizeServiceResponse } from './ontimize-service-response.class';
 
 @Injectable()
 export class OntimizeServiceResponseAdapter implements IServiceResponseAdapter<OntimizeServiceResponse> {
-
+  context;
   adapt(res: HttpResponse<any>): ServiceResponse {
     return new OntimizeServiceResponse(
       res.body.code,
@@ -17,5 +17,9 @@ export class OntimizeServiceResponseAdapter implements IServiceResponseAdapter<O
       res.body.startRecordIndex,
       res.body.totalQueryRecordsNumber
     );
+  }
+
+  setContext(context) {
+   // this.context = context;
   }
 }
