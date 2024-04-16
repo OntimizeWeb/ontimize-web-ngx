@@ -27,7 +27,7 @@
 
       td,
       th {
-        color: get-color-from-palette($foreground, text);
+        color: mat.get-color-from-palette($foreground, text);
 
         &.in-range {
           color: if($is-dark-theme, #000000, #fff);
