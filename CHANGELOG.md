@@ -1,3 +1,7 @@
+## 8.14.12 (2024-04-16)
+### Bug fixes
+* **o-table**: Fixed data not being updated with `static-data` ([3dc2645](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dc2645)) Closes [#1556](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1556)
+
 ## 8.14.11 (2024-04-16)
 ### Bug fixes
 * **o-daterange-input**: Fixed bug with day names rotating ([a994a26](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a994a26)) Closes [#1538](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1538)
@@ -5,7 +9,6 @@
 
 ### Features
 * **o-daterange-input**: Added dark mode ([3ade7f7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ade7f7)) Closes [#1498](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1496)
-
 
 ## 8.14.10 (2024-04-02)
 ### Features
