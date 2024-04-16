@@ -28,7 +28,7 @@
 
       td,
       th {
-        color: if($is-dark-theme, #fff, #000000);
+        color: mat-color($foreground, text);
 
         &.in-range {
           color: if($is-dark-theme, #000000, #fff);
