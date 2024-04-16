@@ -1,3 +1,19 @@
+## 15.1.0
+> [!NOTE]
+> In this version, the features and bugfixes of version [8.14.10](#81410-2024-04-02), [8.14.11](#81411-2024-04-16) and [8.14.12](#81412-2024-04-16) were integrated
+
+## 8.14.12 (2024-04-16)
+### Bug fixes
+* **o-table**: Fixed data not being updated with `static-data` ([3dc2645](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3dc2645)) Closes [#1556](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1556)
+
+## 8.14.11 (2024-04-16)
+### Bug fixes
+* **o-daterange-input**: Fixed bug with day names rotating ([a994a26](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a994a26)) Closes [#1538](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1538)
+* **o-form**: Initialized `header-actions` to all ([d08a6e6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d08a6e6)) Closes [#1548](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1548)
+
+### Features
+* **o-daterange-input**: Added dark mode ([3ade7f7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3ade7f7)) Closes [#1498](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1496)
+
 ## 8.14.10 (2024-04-02)
 ### Features
 * **o-app-layout**: New propertie `svgIcon` in MenuItem and MenuGroup ([0a18c78](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a18c78)) Closes [#1542](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1542)

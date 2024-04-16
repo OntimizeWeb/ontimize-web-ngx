@@ -764,6 +764,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
+    super.ngOnChanges(changes);
     if (Util.isDefined(changes.autoAdjust) && changes.autoAdjust.currentValue !== changes.autoAdjust.previousValue) {
       this.autoAdjust = changes.autoAdjust.currentValue;
     }
