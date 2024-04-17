@@ -179,6 +179,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
+    super.ngOnChanges(changes);
     if (changes.staticData !== undefined) {
       this.dataResponseArray = changes.staticData.currentValue;
       this.onDataLoaded.emit(this.dataResponseArray);
