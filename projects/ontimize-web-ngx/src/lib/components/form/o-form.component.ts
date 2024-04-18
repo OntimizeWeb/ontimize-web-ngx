@@ -51,6 +51,8 @@ import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
 import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
+import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
+import { OQueryDataArgs } from '../../types';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -238,6 +240,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
+  queryArgumentAdapter: any;
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
       val = Util.parseArray(val, true);
@@ -680,6 +683,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
 
     this.configureService();
+    this.configureAdapter();
 
     this.formNavigation.subscribeToQueryParams();
     this.formNavigation.subscribeToUrlParams();
@@ -906,11 +910,26 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Reload the form data
    */
   reload(useFilter: boolean = false) {
+    console.log(this.getQueryArguments(useFilter), this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(useFilter)));
+    let queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(useFilter));
+
+    this.queryData(queryArguments);
+  }
+
+  public configureAdapter() {
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
+  }
+
+
+  getQueryArguments(useFilter:boolean) {
+    const av = this.getAttributesToQuery();
+    const sqlTypes = this.getAttributesSQLTypes();
     let filter = {};
     if (useFilter) {
       filter = this.getCurrentKeysValues();
     }
-    this.queryData(filter);
+
+    return { filters: filter, columns: av, entity: this.entity, sqlTypes: sqlTypes };
   }
 
   /**
@@ -1074,7 +1093,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Allow to manage the call to the service data
    * @param filter
    */
-  queryData(filter: any) {
+  queryData(filter: OQueryDataArgs) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
       return;
@@ -1092,9 +1111,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.loaderSubscription.unsubscribe();
     }
     this.loaderSubscription = this.load();
-    const av = this.getAttributesToQuery();
-    const sqlTypes = this.getAttributesSQLTypes();
-    this.querySubscription = this.dataService[this.queryByIdMethod](filter, av, this.entity, sqlTypes)
+
+    this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, filter])
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);

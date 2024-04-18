@@ -489,7 +489,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       ovrrArgs.length = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
 
     }
-    console.log('queryParams', { filters: compFilter, columns: queryCols, entity: this.entity, pageable: this.pageable, sqlTypes: sqlTypes, ovrrArgs: ovrrArgs });
+
     return { filters: compFilter, columns: queryCols, entity: this.entity, pageable: this.pageable, sqlTypes: sqlTypes, ovrrArgs: ovrrArgs, sort: null };
   }
 

@@ -31,7 +31,6 @@ export class BaseService<T extends BaseResponse> {
   protected authService: AuthService;
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
-  //queryArgumentAdapter: IBaseQueryArgument;
   protected context: any;
 
   constructor(protected injector: Injector) {
@@ -42,13 +41,7 @@ export class BaseService<T extends BaseResponse> {
     this.responseParser = this.injector.get<OntimizeServiceResponseParser<T>>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser<T>>);
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService)
-    //this.configureAdapter();
-
   }
-
-  // public configureAdapter() {
-  //   this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
-  // }
 
   public configureResponseAdapter() {
     this.adapter = this.injector.get(OntimizeServiceResponseAdapter);

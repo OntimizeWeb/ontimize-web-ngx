@@ -8,5 +8,6 @@ export type JSONAPIQueryParameter = {
   page?: object;
   include?: string;
   fields?: object;
+  filters?:object
 
 }

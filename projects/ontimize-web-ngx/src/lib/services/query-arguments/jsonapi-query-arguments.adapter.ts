@@ -24,8 +24,10 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       queryargs.page['limit'] = args.ovrrArgs.length;
     }
 
-    if (Util.isDefined(args.filter) && FilterExpressionUtils.instanceofBasicExpression(args.filter)) {
-      console.log(FilterExpressionUtils.instanceofBasicExpression(args.filter));
+    if (Util.isDefined(args.filters) && FilterExpressionUtils.instanceofBasicExpression(args.filters)) {
+      console.log(FilterExpressionUtils.instanceofBasicExpression(args.filters));
+    } else {
+      queryargs.filters = args.filters;
     }
 
     return [queryargs];
