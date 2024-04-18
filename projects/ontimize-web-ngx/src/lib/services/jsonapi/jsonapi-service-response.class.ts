@@ -36,6 +36,10 @@ export class JSONAPIServiceResponse implements ServiceResponse {
         this.data = Object.assign({}, body.data['attributes'], keyValue);
       }
     }
+    if (body?.meta) {
+      this.totalQueryRecordsNumber = body.meta.total;
+      this.startRecordIndex = body.meta.limit;
+    }
     this.code = (this.status >= 200 || this.status < 300) ? 0 : (this.status === 404 ? 3 : 1);
     this.message = this.statusText;
 
