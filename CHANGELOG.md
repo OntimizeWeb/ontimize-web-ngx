@@ -1,6 +1,6 @@
-## 15.1.0
-> [!NOTE]
-> In this version, the features and bugfixes of version [8.14.10](#81410-2024-04-02), [8.14.11](#81411-2024-04-16) and [8.14.12](#81412-2024-04-16) were integrated
+## 8.14.13 (2024-04-19)
+### Bug fixes
+* **o-grid, o-list**: Fixed data not being updated with `static-data` ([da0abd6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da0abd6)) Closes [#1556](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1556)
 
 ## 8.14.12 (2024-04-16)
 ### Bug fixes
