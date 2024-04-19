@@ -10,6 +10,7 @@ export class JSONAPIServiceResponse implements ServiceResponse {
   public startRecordIndex: number;
   public totalQueryRecordsNumber: number;
   public data: any;
+
   constructor(
     public status: number,
     public statusText: string,
@@ -38,8 +39,9 @@ export class JSONAPIServiceResponse implements ServiceResponse {
     }
     if (body?.meta) {
       this.totalQueryRecordsNumber = body.meta.total;
-      this.startRecordIndex = body.meta.limit;
+      this.startRecordIndex = this.context?.ovrrArgs?.offset ? this.context.ovrrArgs.offset : 0;
     }
+
     this.code = (this.status >= 200 || this.status < 300) ? 0 : (this.status === 404 ? 3 : 1);
     this.message = this.statusText;
 

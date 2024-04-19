@@ -31,7 +31,14 @@ export class BaseService<T extends BaseResponse> {
   protected authService: AuthService;
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
-  protected context: any;
+  private _context: any;
+  protected get context(): any {
+    return this._context;
+  }
+  protected set context(value: any) {
+    this.adapter.setContext(value);
+    this._context = value;
+  }
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
@@ -50,9 +57,10 @@ export class BaseService<T extends BaseResponse> {
 
 
   public configureService(config: any): void {
+    this.configureResponseAdapter();
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
     this.context = config.context;
-    this.configureResponseAdapter();
+
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): any {

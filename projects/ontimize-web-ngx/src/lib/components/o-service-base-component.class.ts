@@ -407,7 +407,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       }
 
       this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter, ovrrArgs));
-
+      this.dataService.context = Object.assign({},this.dataService.context, ovrrArgs);
       this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter,[queryMethodName, this.dataService, this.queryArguments])
         .subscribe((res: ServiceResponse) => {
           let data;
@@ -482,7 +482,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
     const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
-
+    // const sort = this.sorto
 
     if (this.pageable) {
       ovrrArgs.offset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : (this.state.queryRecordOffset ? this.state.queryRecordOffset:0);
@@ -490,7 +490,15 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
     }
 
-    return { filters: compFilter, columns: queryCols, entity: this.entity, pageable: this.pageable, sqlTypes: sqlTypes, ovrrArgs: ovrrArgs, sort: null };
+    return {
+      filters: compFilter,
+      columns: queryCols,
+      entity: this.entity,
+      pageable: this.pageable,
+      sqlTypes: sqlTypes,
+      ovrrArgs: ovrrArgs,
+      sort: null
+    };
   }
 
   updatePaginationInfo(queryRes: ServiceResponse) {
