@@ -1,4 +1,4 @@
-## 8.14.13 (2024-04-18)
+## 8.14.13 (2024-04-19)
 ### Bug fixes
 * **o-grid, o-list**: Fixed data not being updated with `static-data` ([da0abd6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da0abd6)) Closes [#1556](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1556)
 
