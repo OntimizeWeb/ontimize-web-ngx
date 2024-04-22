@@ -5,17 +5,17 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
+import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
+import { OQueryDataArgs } from '../../types/query-data-args.type';
+import { OQueryParams } from '../../types/query-params.type';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent } from '../o-form-data-component.class';
-import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
-import { OQueryDataArgs } from '../../types/query-data-args.type';
-import { OQueryParams } from '../../types/query-params.type';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // static-data [Array<any>] : way to populate with static data. Default: no value.
@@ -269,15 +269,11 @@ export class OFormServiceComponent extends OFormDataComponent {
         this.loaderSubscription.unsubscribe();
       }
 
-      const queryCols = this.getAttributesValuesToQuery();
-      const sqlTypes = this.form ? this.form.getAttributesSQLTypes() : {};
-
       this.loaderSubscription = this.load();
 
       this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter));
 
       this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryMethod, this.dataService, this.queryArguments])
-      //this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity, sqlTypes)
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             this.cacheQueried = true;
@@ -302,7 +298,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   getQueryArguments(filter: object, ovrrArgs: OQueryDataArgs = {}): OQueryParams {
     const compFilter = filter;
     const queryCols = this.getAttributesValuesToQuery();
-    const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
+    const sqlTypes = (ovrrArgs?.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
 
     return { filters: compFilter, columns: queryCols, entity: this.entity, sqlTypes: sqlTypes };
   }

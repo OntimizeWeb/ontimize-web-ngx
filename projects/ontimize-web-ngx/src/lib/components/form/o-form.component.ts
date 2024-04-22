@@ -1112,7 +1112,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     this.loaderSubscription = this.load();
 
-    this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, filter])
+    this.querySubscription = this.queryArgumentAdapter.request(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, filter])
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);
