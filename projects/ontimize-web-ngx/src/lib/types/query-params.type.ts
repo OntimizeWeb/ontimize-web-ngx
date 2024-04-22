@@ -5,8 +5,8 @@ export type OQueryParams = {
   filters: Object;
   columns: string[];
   entity: string;
-  pageable: boolean;
-  sqlTypes: Object;
-  sort: SQLOrder[];
-  ovrrArgs: OQueryDataArgs
+  pageable?: boolean;
+  sqlTypes?: Object;
+  sort?: SQLOrder[];//pending
+  ovrrArgs?: OQueryDataArgs
 }

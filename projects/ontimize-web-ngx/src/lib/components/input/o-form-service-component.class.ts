@@ -13,6 +13,9 @@ import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent } from '../o-form-data-component.class';
+import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
+import { OQueryDataArgs } from '../../types/query-data-args.type';
+import { OQueryParams } from '../../types/query-params.type';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // static-data [Array<any>] : way to populate with static data. Default: no value.
@@ -111,7 +114,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   public loaderSubscription: Subscription;
   loading: boolean = false;
 
-  protected querySuscription: Subscription;
+  protected querySubscription: Subscription;
   protected cacheQueried: boolean = false;
   protected _pKeysEquiv = {};
   protected _setValueOnValueChangeEquiv = {};
@@ -123,8 +126,10 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected subscriptionDataLoad: Subscription = new Subscription();
   public delayLoad = 250;
   public loadingSubject = new BehaviorSubject<boolean>(false);
+  queryArgumentAdapter: any;
 
   public oContextMenu: OContextMenuComponent;
+  queryArguments: any;
   @ViewChild(OContextMenuComponent)
   set oContextMenuRef(value: OContextMenuComponent) {
     this.oContextMenu = value;
@@ -177,6 +182,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       this.setDataArray(this.staticData);
     } else {
       this.configureService();
+      this.configureAdapter();
     }
 
     if (this.queryOnEvent !== undefined && this.queryOnEvent.subscribe !== undefined) {
@@ -233,7 +239,10 @@ export class OFormServiceComponent extends OFormDataComponent {
     const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     this.dataService = Util.configureService(configureServiceArgs);
 
+  }
 
+  public configureAdapter() {
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
   getAttributesValuesToQuery(columns?: Array<any>) {
@@ -253,8 +262,8 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (!ServiceUtils.filterContainsAllParentKeys(filter, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setDataArray([]);
     } else {
-      if (this.querySuscription) {
-        this.querySuscription.unsubscribe();
+      if (this.querySubscription) {
+        this.querySubscription.unsubscribe();
       }
       if (this.loaderSubscription) {
         this.loaderSubscription.unsubscribe();
@@ -264,7 +273,11 @@ export class OFormServiceComponent extends OFormDataComponent {
       const sqlTypes = this.form ? this.form.getAttributesSQLTypes() : {};
 
       this.loaderSubscription = this.load();
-      this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity, sqlTypes)
+
+      this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter));
+
+      this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryMethod, this.dataService, this.queryArguments])
+      //this.querySuscription = this.dataService[this.queryMethod](filter, queryCols, this.entity, sqlTypes)
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             this.cacheQueried = true;
@@ -284,6 +297,14 @@ export class OFormServiceComponent extends OFormDataComponent {
           }
         });
     }
+  }
+
+  getQueryArguments(filter: object, ovrrArgs: OQueryDataArgs = {}): OQueryParams {
+    const compFilter = filter;
+    const queryCols = this.getAttributesValuesToQuery();
+    const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
+
+    return { filters: compFilter, columns: queryCols, entity: this.entity, sqlTypes: sqlTypes };
   }
 
   getDataArray(): any[] {

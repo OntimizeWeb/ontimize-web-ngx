@@ -13,10 +13,11 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
     let fields: object = {};
     fields[args.entity] = args.columns.toString();
     let queryargs: JSONAPIQueryParameter = {
-      // type: args.entity,
       fields: fields
-      //fields[entity]: args.columns.toString()
     };
+    // if (args.sort) {
+    //   queryargs.sort = args.sort;
+    // }
     // [{ "name": "name", "op": "eq", "val": "Author 0" }]
     if (args.pageable) {
       queryargs.page = {};
@@ -32,6 +33,7 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
 
     return [queryargs];
   }
+
 
   deCompose(expresion, columns: Array<string>, kv: Object) {
     const basicExpresion: Expression = expresion[FilterExpressionUtils.BASIC_EXPRESSION_KEY];
