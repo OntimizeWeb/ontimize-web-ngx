@@ -79,7 +79,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     // TODO init other params
   }
 
-  query(queryParams: OQueryParams, keys:any[]): Observable<JSONAPIResponse> {
+  query(queryParams: OQueryParams, keys: any[]): Observable<JSONAPIResponse> {
 
     const url = `${this.urlBase}${this.path}?${Util.objectToQueryString(queryParams)}`;
 
@@ -124,7 +124,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
     const url = `${this.urlBase}${this.path}/${id}`;
 
-    let attributes = Object.assign({}, { attributes: av }, kv, { type: entity });
+    let attributes = Object.assign({}, { attributes: av }, {id: id}, { type: entity });
 
     const body = JSON.stringify({
       data: attributes
