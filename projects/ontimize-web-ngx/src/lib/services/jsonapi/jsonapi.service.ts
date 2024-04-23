@@ -27,14 +27,18 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
       observe: 'response'
     };
     const dataObservable: Observable<string | number> = new Observable(observer => {
-      this.httpClient.post(url, null, options).subscribe((resp: any) => {
-        if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
-          observer.next(resp.headers.get('X-Auth-Token'));
-        } else {
-          // Invalid sessionId ...
-          observer.error('Invalid user or password');
-        }
-      }, error => observer.error(error));
+      this.httpClient.post(url, null, options).subscribe(
+        {
+          next: (resp: any) => {
+            if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
+              observer.next(resp.headers.get('X-Auth-Token'));
+            } else {
+              // Invalid sessionId ...
+              observer.error('Invalid user or password');
+            }
+          }
+          , error: (error) => observer.error(error)
+        });
     });
     return dataObservable.pipe(share());
   }
@@ -42,17 +46,22 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   public endsession(user: string, sessionId: number): Observable<number> {
     const url = this.urlBase + '/endsession?user=' + user + '&sessionid=' + sessionId;
     const dataObservable: Observable<any> = new Observable(_closeSessionObserver => {
-      this.httpClient.get(url).subscribe(resp => {
-        _closeSessionObserver.next(resp);
-      }, error => {
-        if (error.status === 401 || error.status === 0 || !error.ok) {
-          _closeSessionObserver.next(0);
-        } else {
-          _closeSessionObserver.error(error);
-        }
-      });
+      this.httpClient.get(url).subscribe(
+        {
+          next: (resp) => {
+            _closeSessionObserver.next(resp);
+          }, error: (error) => {
+            if (error.status === 401 || error.status === 0 || !error.ok) {
+              _closeSessionObserver.next(0);
+            } else {
+              _closeSessionObserver.error(error);
+            }
+          }
+        });
+
     });
     return dataObservable.pipe(share());
+
   }
 
   protected buildHeaders(): HttpHeaders {
@@ -124,7 +133,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
     const url = `${this.urlBase}${this.path}/${id}`;
 
-    let attributes = Object.assign({}, { attributes: av }, {id: id}, { type: entity });
+    let attributes = Object.assign({}, { attributes: av }, { id: id }, { type: entity });
 
     const body = JSON.stringify({
       data: attributes
