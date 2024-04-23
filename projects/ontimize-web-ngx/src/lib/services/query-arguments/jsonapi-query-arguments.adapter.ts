@@ -59,16 +59,16 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       } else {
         const key = expresion.lop as string;
         const value = expresion.rop;
-        // if (columns.findIndex(c => c === key) > -1 && !key.startsWith(FashionFilterExpressionUtils.FILTER_BUILDER_PREFIX_ATTR)) {
-        //   if (!kv.hasOwnProperty('quickFilter')) {
-        //     kv['quickFilter'] = {};
-        //   }
-        //   const mappedKey = this.convertCamelToSnake(key);
-        //   kv['quickFilter'][mappedKey] = value;
-        // } else {
-        //   const mappedKey = key.replace(FashionFilterExpressionUtils.FILTER_BUILDER_PREFIX_ATTR, '');
-        //   kv[mappedKey] = value;
-        // }
+       /* if (columns.findIndex(c => c === key) > -1 && !key.startsWith(FashionFilterExpressionUtils.FILTER_BUILDER_PREFIX_ATTR)) {
+          if (!kv.hasOwnProperty('quickFilter')) {
+            kv['quickFilter'] = {};
+          }
+          const mappedKey = this.convertCamelToSnake(key);
+          kv['quickFilter'][mappedKey] = value;
+        } else {
+          const mappedKey = key.replace(FashionFilterExpressionUtils.FILTER_BUILDER_PREFIX_ATTR, '');
+          kv[mappedKey] = value;
+        }*/
         return kv;
       }
     }

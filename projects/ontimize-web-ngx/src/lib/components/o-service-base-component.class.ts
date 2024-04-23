@@ -230,7 +230,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       this.setDataArray(this.staticData);
     } else {
       this.configureAdapter();
-      //this.configureService();
     }
 
     if (this.form && Util.isDefined(this.dataService)) {
@@ -375,7 +374,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
 
-    //const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    /* const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod; */
 
     const queryMethodName =  this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
@@ -407,7 +406,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       }
 
       this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter, ovrrArgs));
-      this.dataService.context = Object.assign({},this.dataService.context, ovrrArgs);
+      this.dataService.context = { ...this.dataService.context, ovrrArgs };
       this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter,[queryMethodName, this.dataService, this.queryArguments])
         .subscribe((res: ServiceResponse) => {
           let data;
@@ -482,11 +481,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
     const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
-    // const sort = this.sorto
 
     if (this.pageable) {
-      ovrrArgs.offset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : (this.state.queryRecordOffset ? this.state.queryRecordOffset:0);
-      ovrrArgs.length = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
+      ovrrArgs.offset = ovrrArgs?.hasOwnProperty('offset') ? ovrrArgs.offset : (this.state.queryRecordOffset ? this.state.queryRecordOffset:0);
+      ovrrArgs.length = ovrrArgs?.hasOwnProperty('length') ? ovrrArgs.length : this.queryRows;
 
     }
 
@@ -521,7 +519,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   getComponentFilter(existingFilter: any = {}): any {
     const filterParentKeys = this.getParentKeysFromContext(this._pKeysEquiv, this.getContextComponent());
-    existingFilter = Object.assign(existingFilter || {}, filterParentKeys);
+    existingFilter = { ...existingFilter || {}, filterParentKeys };
     return existingFilter;
   }
 
