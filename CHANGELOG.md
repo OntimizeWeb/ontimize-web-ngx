@@ -1,3 +1,9 @@
+## 15.0.4
+### Features
+  * **o-card-menu-layout**:
+    * Added permissions to the component ([9d02537](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d02537)) Closes [#1523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1523)
+    * Added new input `exclude-menus-id` to control menus that should not appear on cards.
+
 ## 15.0.3 (2024-03-18)
 ### Features
   * **o-tree**: Added a new output `onNodeClik` for node click ([8b6137b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8b6137b)) Closes [#1530](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1530)
