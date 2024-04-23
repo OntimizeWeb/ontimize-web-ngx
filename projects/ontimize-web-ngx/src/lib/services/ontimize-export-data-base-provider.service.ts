@@ -42,7 +42,7 @@ export class OntimizeExportDataBaseProviderService {
   }
 
   protected getFilterWithBasicExpression(): any {
-    let filter =this.table.getComponentFilter();
+    let filter = this.table.getComponentFilter();
 
     if (Object.keys(filter).length > 0) {
       const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
@@ -58,7 +58,10 @@ export class OntimizeExportDataBaseProviderService {
         FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
 
     }
-    const quickFilterExpr = this.table.oTableQuickFilterComponent.filterExpression;
+    let quickFilterExpr = undefined;
+    if (Util.isDefined(this.table.oTableQuickFilterComponent)) {
+      quickFilterExpr = this.table.oTableQuickFilterComponent.filterExpression;
+    }
     let filterBuilderExpr = undefined;
     if (Util.isDefined(this.table.filterBuilder)) {
       filterBuilderExpr = this.table.filterBuilder.getExpression();
