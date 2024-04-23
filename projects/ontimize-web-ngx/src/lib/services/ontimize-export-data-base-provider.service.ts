@@ -58,14 +58,9 @@ export class OntimizeExportDataBaseProviderService {
         FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
 
     }
-    let quickFilterExpr = undefined;
-    if (Util.isDefined(this.table.oTableQuickFilterComponent)) {
-      quickFilterExpr = this.table.oTableQuickFilterComponent.filterExpression;
-    }
-    let filterBuilderExpr = undefined;
-    if (Util.isDefined(this.table.filterBuilder)) {
-      filterBuilderExpr = this.table.filterBuilder.getExpression();
-    }
+    const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent) ? this.table.oTableQuickFilterComponent.filterExpression : undefined;
+
+    const filterBuilderExpr = Util.isDefined(this.table.filterBuilder) ? this.table.filterBuilder.getExpression() : undefined;
     let complexExpr = quickFilterExpr || filterBuilderExpr;
     if (quickFilterExpr && filterBuilderExpr) {
       complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
