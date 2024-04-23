@@ -203,7 +203,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   headerPosition: 'top' | 'bottom' = 'top';
   labelheader: string = '';
   labelHeaderAlign: string = 'center';
-  headeractions: string = '';
+  headeractions: string = 'all';
   showHeaderActionsText: string = 'yes';
   entity: string;
   keys: string = '';

@@ -21,7 +21,7 @@ $layout-gutter-width: ($baseline-grid * 2) !default;
 
   [layout-padding]>[flex-sm],
   [layout-padding]>[flex-lt-md] {
-    padding: math.div($layout-gutter-width, 4);
+    padding: calc($layout-gutter-width / 4);
   }
 
   [layout-padding],
@@ -29,17 +29,17 @@ $layout-gutter-width: ($baseline-grid * 2) !default;
   [layout-padding]>[flex-gt-sm],
   [layout-padding]>[flex-md],
   [layout-padding]>[flex-lt-lg] {
-    padding: math.div($layout-gutter-width, 2);
+    padding: calc($layout-gutter-width / 2);
   }
 
   [layout-padding]>[flex-gt-md],
   [layout-padding]>[flex-lg] {
-    padding: math.div($layout-gutter-width, 1);
+    padding: $layout-gutter-width
   }
 
   [layout-margin]>[flex-sm],
   [layout-margin]>[flex-lt-md] {
-    margin: math.div($layout-gutter-width, 4);
+    margin: calc($layout-gutter-width / 4);
   }
 
   [layout-margin],
@@ -47,13 +47,13 @@ $layout-gutter-width: ($baseline-grid * 2) !default;
   [layout-margin]>[flex-gt-sm],
   [layout-margin]>[flex-md],
   [layout-margin]>[flex-lt-lg] {
-    margin: math.div($layout-gutter-width, 2);
+    margin: calc($layout-gutter-width / 2);
   }
 
   [layout-margin]>[flex-gt-md],
   [layout-margin]>[flex-lg] {
-    margin: math.div($layout-gutter-width, 1);
-    }
+    margin: $layout-gutter-width;
+  }
 
     [layout-wrap] {
       flex-wrap: wrap;
