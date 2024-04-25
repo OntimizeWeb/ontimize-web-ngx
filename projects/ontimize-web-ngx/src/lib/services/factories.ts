@@ -156,12 +156,7 @@ export function exportDataFactory(injector: Injector): IExportDataProvider {
   }
 
 }
-export function serviceResquestAdapterFactory(injector: Injector): IBaseQueryArgument {
-  // const serviceClass = _getInjectionTokenValue(O_DATA_SERVICE, injector);
-  // const service = Util.createServiceInstance(serviceClass, injector);
-  // if (Util.isDefined(service)) {
-  //   return service;
-  // }
+export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgument {
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
     return new OntimizeQueryArgumentsAdapter();
@@ -172,11 +167,6 @@ export function serviceResquestAdapterFactory(injector: Injector): IBaseQueryArg
 }
 
 export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
-  // const serviceClass = _getInjectionTokenValue(O_DATA_SERVICE, injector);
-  // const service = Util.createServiceInstance(serviceClass, injector);
-  // if (Util.isDefined(service)) {
-  //   return service;
-  // }
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
     return new OntimizeServiceResponseAdapter();
@@ -236,7 +226,7 @@ export const ComponentStateServiceProvider = { provide: AbstractComponentStateSe
 
 export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
-export const ServiceRequestAdapter = { provide: OntimizeQueryArgumentsAdapter, useFactory: serviceResquestAdapterFactory, deps: [Injector] };
+export const ServiceRequestAdapter = { provide: OntimizeQueryArgumentsAdapter, useFactory: serviceRequestAdapterFactory, deps: [Injector] };
 
 export const ServiceResponseAdapter = { provide: OntimizeServiceResponseAdapter, useFactory: serviceResponseAdapterFactory, deps: [Injector] };
 /* ----------------------------------------------------------------------------------------------------
