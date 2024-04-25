@@ -16,10 +16,7 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
     let queryargs: JSONAPIQueryParameter = {
       fields: fields
     };
-    // if (args.sort) {
-    //   queryargs.sort = args.sort;
-    // }
-    // [{ "name": "name", "op": "eq", "val": "Author 0" }]
+
     if (args.pageable) {
       queryargs.page = {};
       queryargs.page['offset'] = args.ovrrArgs.offset;
@@ -59,17 +56,6 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
         return this.deComposeExpresion(expresion.rop, columns, kv);
       } else {
         const key = expresion.lop as string;
-        const value = expresion.rop;
-       /* if (columns.findIndex(c => c === key) > -1 && !key.startsWith(FashionFilterExpressionUtils.FILTER_BUILDER_PREFIX_ATTR)) {
-          if (!kv.hasOwnProperty('quickFilter')) {
-            kv['quickFilter'] = {};
-          }
-          const mappedKey = this.convertCamelToSnake(key);
-          kv['quickFilter'][mappedKey] = value;
-        } else {
-          const mappedKey = key.replace(FashionFilterExpressionUtils.FILTER_BUILDER_PREFIX_ATTR, '');
-          kv[mappedKey] = value;
-        }*/
         return kv;
       }
     }

@@ -4,12 +4,12 @@ export type CHANGE_EVENTS = 'onValueChange' | 'onChange';
 
 export class Codes {
 
-  public static PAGINATED_QUERY_METHOD = 'advancedQuery';
-  public static DELETE_METHOD = 'delete';
-  public static INSERT_METHOD = 'insert';
-  public static UPDATE_METHOD = 'update';
-  public static QUERY_METHOD = 'query';
-  public static QUERYBYID_METHOD = 'queryById';
+  public static readonly PAGINATED_QUERY_METHOD = 'advancedQuery';
+  public static readonly DELETE_METHOD = 'delete';
+  public static readonly INSERT_METHOD = 'insert';
+  public static readonly UPDATE_METHOD = 'update';
+  public static readonly QUERY_METHOD = 'query';
+  public static readonly QUERYBYID_METHOD = 'queryById';
 
   public static DEFAULT_QUERY_ROWS = 10;
   public static PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
