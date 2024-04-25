@@ -29,14 +29,16 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
       observe: 'response'
     };
     const dataObservable: Observable<string | number> = new Observable(observer => {
-      this.httpClient.post(url, null, options).subscribe((resp: any) => {
-        if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
-          observer.next(resp.headers.get('X-Auth-Token'));
-        } else {
-          // Invalid sessionId ...
-          observer.error('Invalid user or password');
-        }
-      }, error => observer.error(error));
+      this.httpClient.post(url, null, options).subscribe({
+        next: (resp: any) => {
+          if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
+            observer.next(resp.headers.get('X-Auth-Token'));
+          } else {
+            // Invalid sessionId ...
+            observer.error('Invalid user or password');
+          }
+        }, error: (error) => observer.error(error)
+      });
     });
     return dataObservable.pipe(share());
   }

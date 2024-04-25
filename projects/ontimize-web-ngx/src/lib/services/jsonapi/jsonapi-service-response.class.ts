@@ -21,7 +21,7 @@ export class JSONAPIServiceResponse implements ServiceResponse {
   ) {
 
     if (body?.data) {
-      let key;
+      let key: string;
       if (context) {
         key = context['keys'];
       }
@@ -29,12 +29,12 @@ export class JSONAPIServiceResponse implements ServiceResponse {
         this.data = body.data.map((data: any) => {
           let keyValue = {};
           keyValue[key] = data['id']
-          return Object.assign({}, data['attributes'], keyValue)
+          return { ...data['attributes'], ...keyValue };
         });
       } else {
         let keyValue = {};
         keyValue[key] = body.data['id']
-        this.data = Object.assign({}, body.data['attributes'], keyValue);
+        this.data = { ...body.data['attributes'], ...keyValue };
       }
     }
     if (body?.meta) {
@@ -42,7 +42,13 @@ export class JSONAPIServiceResponse implements ServiceResponse {
       this.startRecordIndex = this.context?.ovrrArgs?.offset ? this.context.ovrrArgs.offset : 0;
     }
 
-    this.code = (this.status >= 200 || this.status < 300) ? 0 : (this.status === 404 ? 3 : 1);
+    if (this.status >= 200 || this.status < 300) {
+      this.code = 0;
+    } else if (this.status === 404) {
+      this.code = 3;
+    } else {
+      this.code = 1;
+    }
     this.message = this.statusText;
 
   }

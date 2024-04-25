@@ -22,13 +22,6 @@ export class OntimizeBaseService extends BaseService<ServiceResponse> implements
     super(injector);
   }
 
-  public parseQueryParams() {
-
-  }
-  public parseResponse() {
-
-  }
-
   public configureService(config: any): void {
     super.configureService(config);
   }

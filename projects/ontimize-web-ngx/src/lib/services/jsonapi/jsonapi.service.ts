@@ -130,10 +130,10 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   }
 
   update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
-    const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
+    const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
-    let attributes = Object.assign({}, { attributes: av }, { id: id }, { type: entity });
+    let attributes = {...{ attributes: av }, ...{ id: id }, ...{ type: entity }  };
 
     const body = JSON.stringify({
       data: attributes
@@ -149,7 +149,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   }
 
   delete(kv: object = {}, entity?: string): Observable<JSONAPIResponse> {
-    const id = Object.values(kv)[0];//TODO tner en cuenta multiples keys
+    const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
     return this.doRequest({
