@@ -53,6 +53,7 @@ import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
 import { OQueryDataArgs } from '../../types';
+import { OQueryParams } from '../../types/query-params.type';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -921,7 +922,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
 
-  getQueryArguments(useFilter:boolean) {
+  getQueryArguments(useFilter:boolean): OQueryParams {
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
     let filter = {};
@@ -929,7 +930,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       filter = this.getCurrentKeysValues();
     }
 
-    return { filters: filter, columns: av, entity: this.entity, sqlTypes: sqlTypes };
+    return { filter: filter, columns: av, entity: this.entity, sqlTypes: sqlTypes };
   }
 
   /**

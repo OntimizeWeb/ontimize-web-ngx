@@ -489,7 +489,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
 
     return {
-      filters: compFilter,
+      filter: compFilter,
       columns: queryCols,
       entity: this.entity,
       pageable: this.pageable,

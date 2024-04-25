@@ -5,11 +5,12 @@ import { JSONAPIQueryParameter as JSONAPIQueryParameter } from '../../types/json
 import { FilterExpressionUtils, Util } from '../../util';
 import { BaseQueryArgument } from './base-query-argument.adapter';
 import { IBaseQueryArgument } from './base-query-argument.interface';
+import { OQueryParams } from '../../types/query-params.type';
 
 @Injectable()
 export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements IBaseQueryArgument {
 
-  parseQueryParameters(args: any): JSONAPIQueryParameter[] {
+  parseQueryParameters(args: OQueryParams): JSONAPIQueryParameter[] {
     let fields: object = {};
     fields[args.entity] = args.columns.toString();
     let queryargs: JSONAPIQueryParameter = {
@@ -25,10 +26,10 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       queryargs.page['limit'] = args.ovrrArgs.length;
     }
 
-    if (Util.isDefined(args.filters) && FilterExpressionUtils.instanceofBasicExpression(args.filters)) {
-      console.log(FilterExpressionUtils.instanceofBasicExpression(args.filters));
+    if (Util.isDefined(args.filter) && FilterExpressionUtils.instanceofBasicExpression(args.filter)) {
+      console.log(FilterExpressionUtils.instanceofBasicExpression(args.filter));
     } else {
-      queryargs.filters = args.filters;
+      queryargs.filter = args.filter;
     }
 
     return [queryargs];
