@@ -553,7 +553,12 @@ export class Util {
     const reducer = (obj, parentPrefix = null) => (prev, key) => {
       const val = obj[key];
       key = encodeURIComponent(key);
-      const prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
+      let prefix:string;
+      if (key === 'filterParentKeys') {
+        prefix = parentPrefix;
+      } else {
+        prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
+      }
 
       if (val == null || typeof val === 'function') {
         prev.push(`${encodeURIComponent(prefix)}=`);
