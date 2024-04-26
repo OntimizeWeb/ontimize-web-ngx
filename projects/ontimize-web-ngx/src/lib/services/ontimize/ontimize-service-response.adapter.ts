@@ -20,6 +20,6 @@ export class OntimizeServiceResponseAdapter implements IServiceResponseAdapter<O
   }
 
   setContext(context) {
-   // this.context = context;
+    this.context = context;
   }
 }

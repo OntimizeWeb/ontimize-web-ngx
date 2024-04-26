@@ -229,6 +229,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       this.queryOnInit = false;
       this.setDataArray(this.staticData);
     } else {
+      this.configureService();
       this.configureAdapter();
     }
 
