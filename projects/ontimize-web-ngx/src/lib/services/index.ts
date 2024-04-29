@@ -21,6 +21,7 @@ export * from './o-modules-info.service';
 export * from './o-user-info.service';
 export * from './ontimize-icon-registry.service';
 export * from './ontimize/index';
+export * from './jsonapi/index';
 export * from './parser/o-service-response.parser';
 export * from './permissions/index';
 export * from './remote-config.service';
