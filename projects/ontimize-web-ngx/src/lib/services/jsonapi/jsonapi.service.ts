@@ -100,6 +100,10 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
+  advancedQuery(queryParams: OQueryParams, keys: any[]): Observable<JSONAPIResponse> {
+    return this.query(queryParams,keys);
+  }
+
   queryById(queryParams: OQueryParams): Observable<JSONAPIResponse> {
     const id = Object.values(queryParams.filter)[0]
     const url = `${this.urlBase}${this.path}/${id}?${Util.objectToQueryString(queryParams)}`;

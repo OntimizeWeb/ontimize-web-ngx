@@ -117,8 +117,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   parentKeys: string;
   staticData: Array<any>;
   queryMethod: string = Codes.QUERY_METHOD;
-  paginatedQueryMethod: string;
-  //paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
+  paginatedQueryMethod: string = Codes.PAGINATED_QUERY_METHOD;
 
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
@@ -332,7 +331,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 
   configureService() {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType, context: {keys: this.keysArray} }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType, context: { keys: this.keysArray } }
     this.dataService = Util.configureService(configureServiceArgs);
   }
 
@@ -375,9 +374,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
 
-    /* const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod; */
+    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
 
-    const queryMethodName =  this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return;
     }
@@ -408,7 +406,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
       this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter, ovrrArgs));
       this.dataService.context = { ...this.dataService.context, ovrrArgs };
-      this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter,[queryMethodName, this.dataService, this.queryArguments])
+      this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [queryMethodName, this.dataService, this.queryArguments])
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;

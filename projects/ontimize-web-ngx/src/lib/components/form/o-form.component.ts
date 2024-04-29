@@ -909,8 +909,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Reload the form data
    */
   reload(useFilter: boolean = false) {
-    let queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(useFilter));
-
+    let queryArguments = this.getQueryArguments(useFilter);
     this.queryData(queryArguments);
   }
 
@@ -1096,6 +1095,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       console.warn('OFormComponent: no service configured! aborting query');
       return;
     }
+
     if (!Util.isDefined(queryDataArgs.filter) || Object.keys(queryDataArgs.filter).length === 0) {
       console.warn('OFormComponent: no filter configured! aborting query');
       return;
@@ -1110,7 +1110,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     this.loaderSubscription = this.load();
 
-    this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, queryDataArgs])
+    const queryParameter = this.queryArgumentAdapter.parseQueryParameters(queryDataArgs);
+
+    this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, queryParameter])
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);
