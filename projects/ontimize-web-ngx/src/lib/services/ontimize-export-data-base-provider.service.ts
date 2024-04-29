@@ -1,6 +1,8 @@
 import { Injectable, Injector } from "@angular/core";
 import { OTableBase } from "../components/table/o-table-base.class";
-import { FilterExpressionUtils, Util } from "../util";
+import { FilterExpressionUtils } from "../util/filter-expression.utils";
+import { Util } from "../util/util";
+
 
 @Injectable()
 export class OntimizeExportDataBaseProviderService {
