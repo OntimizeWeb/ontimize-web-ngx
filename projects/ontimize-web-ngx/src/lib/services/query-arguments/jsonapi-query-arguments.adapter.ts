@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Expression } from '../../types/expression.type';
-import { JSONAPIQueryParameter as JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
+import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { FilterExpressionUtils, Util } from '../../util';
 import { BaseQueryArgument } from './base-query-argument.adapter';
 import { IBaseQueryArgument } from './base-query-argument.interface';

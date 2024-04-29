@@ -484,7 +484,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
 
     if (this.pageable) {
-      ovrrArgs.offset = ovrrArgs?.hasOwnProperty('offset') ? ovrrArgs.offset : (this.state.queryRecordOffset ? this.state.queryRecordOffset:0);
+      const queryRecordOffset = this.state.queryRecordOffset ? this.state.queryRecordOffset : 0;
+      ovrrArgs.offset = ovrrArgs?.hasOwnProperty('offset') ? ovrrArgs.offset : queryRecordOffset;
       ovrrArgs.length = ovrrArgs?.hasOwnProperty('length') ? ovrrArgs.length : this.queryRows;
 
     }
@@ -520,7 +521,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   getComponentFilter(existingFilter: any = {}): any {
     const filterParentKeys = this.getParentKeysFromContext(this._pKeysEquiv, this.getContextComponent());
-    existingFilter = { ...existingFilter || {}, filterParentKeys };
+    existingFilter = { ...existingFilter || {}, ...filterParentKeys };
     return existingFilter;
   }
 

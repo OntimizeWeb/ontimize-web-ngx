@@ -19,15 +19,17 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IComponent } from '../../interfaces/component.interface';
+import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
 import { DialogService } from '../../services/dialog.service';
 import { OntimizeServiceProvider } from '../../services/factories';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
+import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
@@ -36,24 +38,20 @@ import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
+import { OQueryParams } from '../../types/query-params.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OFormContainerComponent } from '../form-container/o-form-container.component';
 import { OFormControl } from '../input/o-form-control.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
-import { OFormBase } from './o-form-base.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
+import { OFormBase } from './o-form-base.class';
 import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
-import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
-import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
-import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
-import { OQueryDataArgs } from '../../types';
-import { OQueryParams } from '../../types/query-params.type';
+import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -911,7 +909,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Reload the form data
    */
   reload(useFilter: boolean = false) {
-    console.log(this.getQueryArguments(useFilter), this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(useFilter)));
     let queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(useFilter));
 
     this.queryData(queryArguments);
@@ -922,7 +919,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
 
-  getQueryArguments(useFilter:boolean): OQueryParams {
+  getQueryArguments(useFilter: boolean): OQueryParams {
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
     let filter = {};
@@ -1092,14 +1089,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Allow to manage the call to the service data
-   * @param filter
+   * @param OQueryParams
    */
-  queryData(filter: OQueryDataArgs) {
+  queryData(queryDataArgs: OQueryParams) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
       return;
     }
-    if (!Util.isDefined(filter) || Object.keys(filter).length === 0) {
+    if (!Util.isDefined(queryDataArgs.filter) || Object.keys(queryDataArgs.filter).length === 0) {
       console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
@@ -1113,7 +1110,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     this.loaderSubscription = this.load();
 
-    this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, filter])
+    this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, queryDataArgs])
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);
