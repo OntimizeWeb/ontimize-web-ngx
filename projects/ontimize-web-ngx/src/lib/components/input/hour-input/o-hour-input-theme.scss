@@ -10,7 +10,7 @@
     }
 
     .clock-face {
-      background-color: if($is-dark-theme, #464646, #fff);
+      background-color: mat.get-color-from-palette($background, level-1);
 
       .clock-face__container {
         .clock-face__number>span.active {
