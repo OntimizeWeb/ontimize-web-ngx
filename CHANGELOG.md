@@ -1,12 +1,14 @@
-## 15.0.4
+## 15.0.4 (2024-04-29)
 > [!NOTE]
 > In this version, the features and bugfixes of version [8.14.10](#81410-2024-04-02), [8.14.11](#81411-2024-04-16), [8.14.12](#81412-2024-04-16) and [8.14.13](#81413-2024-04-19) were integrated
 
 ### Features
   * **o-card-menu-layout**:
-    * Added permissions to the component ([9d02537](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d02537)) Closes [#1523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1523)
+    * Added permissions to the component ([9ae15d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9ae15d7)) Closes [#1523](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1523)
     * Added new input `exclude-menus-id` to control menus that should not appear on cards.
-
+### Bug fixes
+  * **o-table**: Fixed bug with exportation in non-pageable tables ([9d02537](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d02537)) Closes [#1264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1264)
+  * **o-hour-input**: Fixed bug in dark mode ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1577](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1577)
 
 ## 8.14.13 (2024-04-19)
 ### Bug fixes
