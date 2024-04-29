@@ -8,7 +8,7 @@
     * Added new input `exclude-menus-id` to control menus that should not appear on cards.
 ### Bug fixes
   * **o-table**: Fixed bug with exportation in non-pageable tables ([9d02537](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9d02537)) Closes [#1264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1264)
-  * **o-hour-input**: Fixed bug in dark mode ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1577](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1577)
+  * **o-hour-input**: Fixed bug in dark mode ([a0231a9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a0231a9)) Closes [#1577](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1577)
 
 ## 8.14.13 (2024-04-19)
 ### Bug fixes
