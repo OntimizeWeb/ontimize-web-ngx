@@ -70,7 +70,7 @@
           </tr>
           <tr class='week-days'>
             <th scope="col" *ngIf="showWeekNumbers || showISOWeekNumbers" class="week"><span>{{this.locale.weekLabel}}</span></th>
-            <th scope="col" *ngFor="let dayofweek of locale.daysOfWeek"><span>{{dayofweek}}</span></th>
+            <th scope="col" *ngFor="let dayofweek of adjustedDaysOfWeek"><span>{{dayofweek}}</span></th>
           </tr>
         </thead>
         <tbody class="drp-animate">

@@ -114,6 +114,7 @@ export class DaterangepickerComponent implements OnInit {
   leftCalendar: any = {};
   rightCalendar: any = {};
   showCalInRanges: boolean = false;
+  adjustedDaysOfWeek = [];
 
   options: any = {}; // should get some opt from user
   @Input() drops: string;
@@ -134,15 +135,16 @@ export class DaterangepickerComponent implements OnInit {
   ngOnInit() {
     this._buildLocale();
     const daysOfWeek = [...this.locale.daysOfWeek];
+     this.adjustedDaysOfWeek = [...daysOfWeek];
+
+    // Check if rotation is needed
     if (this.locale.firstDay !== 0) {
       let iterator = this.locale.firstDay;
-
       while (iterator > 0) {
-        daysOfWeek.push(daysOfWeek.shift());
+        this.adjustedDaysOfWeek.push(this.adjustedDaysOfWeek.shift()); // Rotate the days
         iterator--;
       }
     }
-    this.locale.daysOfWeek = daysOfWeek;
     if (this.inline) {
       this._old.start = this.startDate.clone();
       this._old.end = this.endDate.clone();
@@ -150,12 +152,12 @@ export class DaterangepickerComponent implements OnInit {
 
     this.updateMonthsInView();
     this.renderCalendar(SideEnum.left);
-    //Right calendar in singleDatepicker is not rendering
     if (!this.singleDatePicker) {
       this.renderCalendar(SideEnum.right);
     }
     this.renderRanges();
   }
+
   renderRanges() {
     this.rangesArray = [];
     let start;

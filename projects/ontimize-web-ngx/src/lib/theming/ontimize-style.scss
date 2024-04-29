@@ -2,11 +2,11 @@
 @use "sass:map";
 @use 'fonts/poppins.scss';
 @use 'styles/ontimize/variables.scss';
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 @use '@angular/cdk';
 @use 'styles/ontimize/typography-ontimize.scss';
-@use 'typography/ontimize.scss'as ontimize;
-@use 'ontimize-style-v8.scss'as ontimize-style;
+@use 'typography/ontimize.scss' as ontimize;
+@use 'ontimize-style-v8.scss' as ontimize-style;
 
 /*Sidenav background-color*/
 $sidenav-background-color: #f5f5f5;
@@ -42,7 +42,8 @@ $sidenav-background-color: #f5f5f5;
 }
 
 // Foreground palette for light themes.
-$ontimize-light-theme-foreground: (base: rgba(black, 0.6),
+$ontimize-light-theme-foreground: (
+  base: rgba(black, 0.6),
   divider: rgba(black, 0.12),
   dividers: rgba(black, 0.12),
   disabled: rgba(black, 0.38),
@@ -58,10 +59,12 @@ $ontimize-light-theme-foreground: (base: rgba(black, 0.6),
   slider-min: rgba(black, 0.38),
   slider-off: rgba(black, 0.38),
   slider-off-active: rgba(black, 0.38),
-  button: rgba(black, 0.74));
+  button: rgba(black, 0.74)
+);
 
 // Foreground palette for dark themes.
-$ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
+$ontimize-dark-theme-foreground: (
+  base: rgba(white, 0.6),
   divider: rgba(white, 0.12),
   dividers: rgba(white, 0.12),
   disabled: rgba(white, 0.38),
@@ -77,7 +80,8 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
   slider-min: rgba(white, 0.38),
   slider-off: rgba(white, 0.38),
   slider-off-active: rgba(white, 0.38),
-  button: rgba(white, 0.74));
+  button: rgba(white, 0.74)
+);
 
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
@@ -522,6 +526,13 @@ $ontimize-dark-theme-foreground: (base: rgba(white, 0.6),
       background-color: mat.get-color-from-palette($foreground, icon);
     }
 
+  }
+
+  .o-tree {
+    .selected-node {
+      color: mat.get-color-from-palette($primary, 500);
+      font-weight: 800;
+    }
   }
 
   .o-table {

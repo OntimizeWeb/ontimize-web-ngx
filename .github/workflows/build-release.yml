@@ -73,7 +73,7 @@ jobs:
           npm publish
 
       - name: GitHub Release / Create release
-        uses: ncipollo/release-action@2792aea87063cfd0d27953ac38e3ab45afacc154
+        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
         with:
           commit: ${{ env.BASELINE_BRANCH }}
           tag: ${{ steps.project.outputs.version }}
