@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  NEXUS_REGISTRY: http://nexus-jx.34.122.211.64.nip.io/repository/npm-private/
+  NEXUS_REGISTRY: http://nexus.imatia.com/repository/npm-private/
 
 jobs:
   build:
