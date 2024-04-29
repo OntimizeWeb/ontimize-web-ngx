@@ -59,7 +59,7 @@
 
     <!-- This is the tree node template for leaf nodes -->
     <mat-tree-node *matTreeNodeDef="let node" (click)="leafNodeClicked($event, node)" matTreeNodeToggle matTreeNodePadding
-      [ngClass]="{'selected-node': selectedNode==node}">
+      [ngClass]="{'selected-node': isSelectedNode(node)}">
       <!-- use a disabled button to provide padding for tree leaf -->
       <button mat-icon-button disabled></button>
 
