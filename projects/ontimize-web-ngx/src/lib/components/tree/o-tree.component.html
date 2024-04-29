@@ -58,7 +58,8 @@
   <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
 
     <!-- This is the tree node template for leaf nodes -->
-    <mat-tree-node *matTreeNodeDef="let node" (click)="leafNodeClicked($event,node)" matTreeNodeToggle matTreeNodePadding>
+    <mat-tree-node *matTreeNodeDef="let node" (click)="leafNodeClicked($event, node)" matTreeNodeToggle matTreeNodePadding
+      [ngClass]="{'selected-node': selectedNode==node}">
       <!-- use a disabled button to provide padding for tree leaf -->
       <button mat-icon-button disabled></button>
 
@@ -78,7 +79,8 @@
 
     </mat-tree-node>
     <!-- This is the tree node template for expandable nodes -->
-    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="parentNodeClicked($event, node)" matTreeNodePadding>
+    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="parentNodeClicked($event, node)" matTreeNodePadding
+      [ngClass]="{'selected-node': isSelectedNode(node)}">
       <button mat-icon-button [attr.aria-label]="'toggle ' + node.label" matTreeNodeToggle (click)="onClickToggleButton($event, node)">
         <mat-icon class="mat-icon-rtl-mirror">
           {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
