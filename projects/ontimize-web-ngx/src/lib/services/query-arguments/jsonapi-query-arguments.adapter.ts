@@ -1,3 +1,4 @@
+import { SQLOrder } from './../../types/sql-order.type';
 import { Injectable } from '@angular/core';
 
 import { Expression } from '../../types/expression.type';
@@ -22,6 +23,17 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       queryargs.page = {};
       queryargs.page['offset'] = args.ovrrArgs.offset;
       queryargs.page['limit'] = args.ovrrArgs.length;
+    }
+
+    if (Util.isDefined(args.sort)) {
+      let sort = '';
+      args.sort.forEach((sortElement: SQLOrder, idx: number, array: SQLOrder[]) => {
+        sort += sortElement.ascendent ? sortElement.columnName : ('-' + sortElement.columnName);
+        if (idx + 1 !== array.length) {
+          sort += ',';
+        }
+      })
+      queryargs.sort = sort;
     }
 
     if (Util.isDefined(args.filter) && FilterExpressionUtils.instanceofBasicExpression(args.filter)) {
