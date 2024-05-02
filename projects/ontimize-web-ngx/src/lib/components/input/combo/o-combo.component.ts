@@ -215,6 +215,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   public clearValue(options?: FormValueOptions, setDirty: boolean = false): void {
     if (this.multiple) {
+      this.setValue(this.defaultValue, options, setDirty);
       this.value.value = [];
       if (Util.isDefined(this.comboSearch)) {
         this.comboSearch.resetSelectedValues();
