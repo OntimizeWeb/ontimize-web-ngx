@@ -1,4 +1,4 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { IServiceResponseAdapter } from '../../interfaces/service-response-adapter.interface';
@@ -21,5 +21,9 @@ export class OntimizeServiceResponseAdapter implements IServiceResponseAdapter<O
 
   setContext(context) {
     this.context = context;
+  }
+
+  adaptError(error: HttpErrorResponse) {
+    return error;
   }
 }

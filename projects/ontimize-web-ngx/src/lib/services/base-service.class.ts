@@ -118,11 +118,15 @@ export class BaseService<T extends BaseResponse> {
           this.refreshAuthToken(data);
           return this.adapter.adapt(data);
         })
-      ).subscribe(resp => {
-        (param.successCallback || this.parseSuccessfulResponse).bind(this)(resp, observer);
-      }, error => {
-        (param.errorCallBack || this.parseUnsuccessfulResponse).bind(this)(error, observer);
-      }, () => observer.complete());
+      ).subscribe({
+        next: (resp) => {
+          (param.successCallback || this.parseSuccessfulResponse).bind(this)(resp, observer);
+        },
+        error: (error) => {
+          (param.errorCallBack || this.parseUnsuccessfulResponse).bind(this)(error, observer);
+        },
+        complete: () => observer.complete()
+      });
     });
     return dataObservable.pipe(share());
   }
@@ -175,7 +179,8 @@ export class BaseService<T extends BaseResponse> {
    * User can overwrite the chosen methods parsers or the common parser
    */
   protected parseUnsuccessfulResponse(error: any, observer: Subscriber<T>) {
-    this.responseParser.parseUnsuccessfulResponse(error, observer, this);
+    const errorText = this.adapter.adaptError(error);
+    this.responseParser.parseUnsuccessfulResponse(errorText, observer, this);
   }
 
   protected parseUnsuccessfulQueryResponse(resp: T, observer: Subscriber<T>) {
