@@ -1,6 +1,6 @@
 ## 15.1.0
 > [!NOTE]
-> In this version, the features and bugfixes of version [8.14.114](#81414-2024-05-02) were integrated
+> In this version, the features and bugfixes of version [8.14.14](#81414-2024-05-02) were integrated
 
 ## 8.14.14 (2024-05-02)
 ### Bug fixes
