@@ -221,4 +221,8 @@ export class OComboSearchComponent implements OnInit, OnDestroy {
       });
   }
 
+  public resetSelectedValues() {
+    this.previousSelectedValues = [];
+  }
+
 }

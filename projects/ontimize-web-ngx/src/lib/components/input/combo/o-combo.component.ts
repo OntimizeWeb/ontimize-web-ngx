@@ -29,6 +29,8 @@ import {
   OFormServiceComponent
 } from '../o-form-service-component.class';
 import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
+import { OComboSearchComponent } from './combo-search/o-combo-search.component';
+
 
 export const DEFAULT_INPUTS_O_COMBO = [
   ...DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
@@ -82,6 +84,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
 
   @ViewChild('selectModel', { static: false })
   protected selectModel: MatSelect;
+
+  @ViewChild('comboSearch', { static: false })
+  protected comboSearch: OComboSearchComponent;
 
   protected _filteredDataArray: any[] = [];
 
@@ -212,6 +217,9 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
     if (this.multiple) {
       this.setValue(this.defaultValue, options, setDirty);
       this.value.value = [];
+      if (Util.isDefined(this.comboSearch)) {
+        this.comboSearch.resetSelectedValues();
+      }
     } else {
       super.clearValue(options, setDirty);
     }
