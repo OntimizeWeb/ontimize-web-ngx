@@ -85,7 +85,7 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   @ViewChild('selectModel', { static: false })
   protected selectModel: MatSelect;
 
-  @ViewChild('comboSearch')
+  @ViewChild('comboSearch', { static: false })
   protected comboSearch: OComboSearchComponent;
 
   protected _filteredDataArray: any[] = [];
