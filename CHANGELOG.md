@@ -1,3 +1,7 @@
+## 8.14.14 (2024-05-02)
+### Bug fixes
+* **o-combo**: Fixed error that prevented the selected values ​​from being properly cleaned  ([a2ab9d7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2ab9d7)) Closes [#1584](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1584)
+
 ## 8.14.13 (2024-04-19)
 ### Bug fixes
 * **o-grid, o-list**: Fixed data not being updated with `static-data` ([da0abd6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da0abd6)) Closes [#1556](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1556)
