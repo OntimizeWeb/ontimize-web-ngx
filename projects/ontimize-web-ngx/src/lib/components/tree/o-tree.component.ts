@@ -195,7 +195,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   protected _quickFilter: boolean = false;
   paginationControls = false;
   quickFilterColumns: string;
-
+  selectedNode: OTreeFlatNode;
   childreNodes: OTreeFlatNode[] = [];
   nodesArray: OTreeFlatNode[] = [];
   ancestors: any[] = [];
@@ -323,6 +323,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     event.stopPropagation();
     event.preventDefault();
     this.onNodeClick.emit(node);
+    this.selectedNode = node;
     if (this.detailMode !== Codes.DETAIL_MODE_NONE && !this.isRootNode(node)) {
       /*
       Se podria mejorar llamando this.viewDetail(node.data);
@@ -684,5 +685,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         this.router.navigate([route], extras);
       }
     }
+  }
+  isSelectedNode(node: OTreeFlatNode) {
+    return this.selectedNode == node;
   }
 }
