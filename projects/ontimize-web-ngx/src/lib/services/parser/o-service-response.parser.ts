@@ -3,6 +3,7 @@ import { Subscriber } from 'rxjs';
 
 import { BaseService } from '../base-service.class';
 import { BaseResponse } from '../../interfaces/base-response.interface';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class OntimizeServiceResponseParser<T extends BaseResponse> {
     }
   }
 
-  parseUnsuccessfulResponse(error, subscriber: Subscriber<T>, service: BaseService<T>) {
+  parseUnsuccessfulResponse(error: HttpErrorResponse, subscriber: Subscriber<T>, service: BaseService<T>) {
     if (error) {
       switch (error.status) {
         case 401:
