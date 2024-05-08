@@ -1,3 +1,15 @@
+## 15.1.0-SNAPSHOT-2 (2004-05-08)
+### Features
+* Added management JSON API errors
+
+## 15.1.0-SNAPSHOT-1 (2004-05-08)
+### Features
+* Added sorting JSON API
+
+## 15.1.0-SNAPSHOT-0(2004-30-04)
+### Features
+* Added CRUD operations for JSON AP
+
 ## 15.0.2(2024-03-01)
 ### Features
 * **o-table**: added new input `non-hidable-columns` to prevent a visible column from being hidden([50119a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/50119a6)) Closes [#1515](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1515)
