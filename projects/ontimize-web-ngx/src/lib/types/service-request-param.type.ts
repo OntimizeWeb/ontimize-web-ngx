@@ -1,5 +1,6 @@
 import { Subscriber } from 'rxjs';
 import { HttpRequestOptions } from './http-request-options.type';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export type ServiceRequestParam<T> = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
@@ -7,5 +8,5 @@ export type ServiceRequestParam<T> = {
   body?: any,
   options?: HttpRequestOptions,
   successCallback?: (resp: T, observer: Subscriber<T>) => void,
-  errorCallBack?: (resp: T, observer: Subscriber<T>) => void
+  errorCallBack?: (resp: HttpErrorResponse, observer: Subscriber<T>) => void
 };

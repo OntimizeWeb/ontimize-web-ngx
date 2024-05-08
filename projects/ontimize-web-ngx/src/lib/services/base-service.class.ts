@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injector, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
@@ -118,11 +118,15 @@ export class BaseService<T extends BaseResponse> {
           this.refreshAuthToken(data);
           return this.adapter.adapt(data);
         })
-      ).subscribe(resp => {
-        (param.successCallback || this.parseSuccessfulResponse).bind(this)(resp, observer);
-      }, error => {
-        (param.errorCallBack || this.parseUnsuccessfulResponse).bind(this)(error, observer);
-      }, () => observer.complete());
+      ).subscribe({
+        next: (resp) => {
+          (param.successCallback || this.parseSuccessfulResponse).bind(this)(resp, observer);
+        },
+        error: (error) => {
+          (param.errorCallBack || this.parseUnsuccessfulResponse).bind(this)(error, observer);
+        },
+        complete: () => observer.complete()
+      });
     });
     return dataObservable.pipe(share());
   }
@@ -174,27 +178,28 @@ export class BaseService<T extends BaseResponse> {
    * Unsuccessful response parsers, there is one parser for each CRUD method which calls to the common parser.
    * User can overwrite the chosen methods parsers or the common parser
    */
-  protected parseUnsuccessfulResponse(error: any, observer: Subscriber<T>) {
-    this.responseParser.parseUnsuccessfulResponse(error, observer, this);
+  protected parseUnsuccessfulResponse(error: HttpErrorResponse, observer: Subscriber<T>) {
+    const adaptedError = this.adapter.adaptError(error);
+    this.responseParser.parseUnsuccessfulResponse(adaptedError, observer, this);
   }
 
-  protected parseUnsuccessfulQueryResponse(resp: T, observer: Subscriber<T>) {
+  protected parseUnsuccessfulQueryResponse(resp: HttpErrorResponse, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulAdvancedQueryResponse(resp: T, observer: Subscriber<T>) {
+  protected parseUnsuccessfulAdvancedQueryResponse(resp: HttpErrorResponse, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulInsertResponse(resp: T, observer: Subscriber<T>) {
+  protected parseUnsuccessfulInsertResponse(resp: HttpErrorResponse, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulUpdateResponse(resp: T, observer: Subscriber<T>) {
+  protected parseUnsuccessfulUpdateResponse(resp: HttpErrorResponse, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
-  protected parseUnsuccessfulDeleteResponse(resp: T, observer: Subscriber<T>) {
+  protected parseUnsuccessfulDeleteResponse(resp: HttpErrorResponse, observer: Subscriber<T>) {
     this.parseUnsuccessfulResponse(resp, observer);
   }
 
