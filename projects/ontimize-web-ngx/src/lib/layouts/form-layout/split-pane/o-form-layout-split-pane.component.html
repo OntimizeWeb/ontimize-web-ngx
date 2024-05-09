@@ -5,7 +5,7 @@
     </div>
 
     <div #detailWrapper class="o-split-pane-content-wrapper mwlResizable" mwlResizable [enableGhostResize]="true"
-      (resizeEnd)="onResizeEnd('width', $event, detailWrapper)">
+      (resizeEnd)="onResizeEnd('width', $event, detailWrapper)" [validateResize]="onValidateResize.bind(this)">
 
       <div class="o-split-pane-resize-handle" mwlResizeHandle [resizeEdges]="{ left: true }">
         <div class="o-split-pane-resize-border">

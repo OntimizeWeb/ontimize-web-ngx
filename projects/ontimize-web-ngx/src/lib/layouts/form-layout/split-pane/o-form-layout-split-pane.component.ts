@@ -124,6 +124,39 @@ export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayout
     this.renderer.setStyle(el, property, `${event.rectangle[property]}px`);
   }
 
+  onValidateResize(event: ResizeEvent): boolean {
+    if (event.rectangle.width) {
+      return this.validateMinOption('detailMinWidth', this.detailWrapper, event.rectangle.width)
+        || this.validateMaxOption('detailMaxWidth', this.detailWrapper, event.rectangle.width)
+        || this.validateMaxOption('mainMaxWidth', this.mainWrapper, event.rectangle.width)
+        || this.validateMinOption('mainMinWidth', this.mainWrapper, event.rectangle.width);
+    }
+    return true;
+  }
+  protected validateMinOption(option: string, wrapper: ElementRef, width: number): boolean {
+    if (this._options[option]) {
+      let minWidth = Util.checkPixelsValueString(this._options[option]) ? this._options[option] : this.calculatePercentage(wrapper, this._options[option]);
+      if (minWidth > width) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  protected validateMaxOption(option: string, wrapper: ElementRef, width: number): boolean {
+    if (this._options[option]) {
+      let maxWidth = Util.checkPixelsValueString(this._options[option]) ? this._options[option] : this.calculatePercentage(wrapper, this._options[option]);
+      if (width > maxWidth) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  calculatePercentage(element: ElementRef, percentageValue: string) {
+    return (element.nativeElement.parentNode.clientWidth * parseFloat(percentageValue) / 100);
+  }
+
   protected createComponent() {
     if (!this.data) {
       this.contentDirective.viewContainerRef.clear();
