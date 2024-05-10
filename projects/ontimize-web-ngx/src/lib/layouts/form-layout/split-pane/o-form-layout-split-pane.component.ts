@@ -126,35 +126,59 @@ export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayout
 
   onValidateResize(event: ResizeEvent): boolean {
     if (event.rectangle.width) {
-      return this.validateMinOption('detailMinWidth', this.detailWrapper, event.rectangle.width)
-        || this.validateMaxOption('detailMaxWidth', this.detailWrapper, event.rectangle.width)
-        || this.validateMaxOption('mainMaxWidth', this.mainWrapper, event.rectangle.width)
-        || this.validateMinOption('mainMinWidth', this.mainWrapper, event.rectangle.width);
+      return this.validateOption('detailMinWidth', this.detailWrapper, event.rectangle.width)
+        && this.validateOption('detailMaxWidth', this.detailWrapper, event.rectangle.width)
+        && this.validateOption('mainMaxWidth', this.mainWrapper, event.rectangle.width)
+        && this.validateOption('mainMinWidth', this.mainWrapper, event.rectangle.width);
     }
     return true;
   }
-  protected validateMinOption(option: string, wrapper: ElementRef, width: number): boolean {
+
+  protected validateOption(option: string, wrapper: ElementRef, width: number): boolean {
     if (this._options[option]) {
-      let minWidth = Util.checkPixelsValueString(this._options[option]) ? this._options[option] : this.calculatePercentage(wrapper, this._options[option]);
-      if (minWidth > width) {
+      let optionValueParsedToNumber: number;
+      try {
+        optionValueParsedToNumber = this.parseOptionValue(option, wrapper);
+      } catch (e) {
+        console.warn('o-form-layout-split-pane: Input ' + option + ' has a incorrect value ' + this._options[option]);
+        return true;
+      }
+
+      if (option.indexOf('Min') > -1 && optionValueParsedToNumber > width) {
+        return false;
+      }
+      if (option.indexOf('Max') > -1 && width > optionValueParsedToNumber) {
         return false;
       }
     }
     return true;
   }
 
-  protected validateMaxOption(option: string, wrapper: ElementRef, width: number): boolean {
-    if (this._options[option]) {
-      let maxWidth = Util.checkPixelsValueString(this._options[option]) ? this._options[option] : this.calculatePercentage(wrapper, this._options[option]);
-      if (width > maxWidth) {
-        return false;
-      }
-    }
-    return true;
+  protected parseOptionValue(option: string, wrapper: ElementRef): number {
+    return Util.checkPixelsValueString(this._options[option]) ?
+      this.getPixelNumberValue(option) :
+      this.calculatePercentage(wrapper, option);
   }
 
-  calculatePercentage(element: ElementRef, percentageValue: string) {
-    return (element.nativeElement.parentNode.clientWidth * parseFloat(percentageValue) / 100);
+  protected getPixelNumberValue(option: string): number {
+    const pixelValueString = this._options[option];
+    const widthValueInPixels = parseFloat(pixelValueString.substr(0, pixelValueString.length - 'px'.length));
+    if (isNaN(widthValueInPixels)) {
+      throw new Error('Error parsed ' + option);
+    } else {
+      return widthValueInPixels;
+    }
+  }
+
+  protected calculatePercentage(element: ElementRef, option: string): number {
+    const percentageValueString = this._options[option];
+    const widthValue = element.nativeElement.parentNode.clientWidth * parseFloat(percentageValueString) / 100;
+
+    if (isNaN(widthValue)) {
+      throw new Error('Error parsed ' + option);
+    } else {
+      return widthValue;
+    }
   }
 
   protected createComponent() {
