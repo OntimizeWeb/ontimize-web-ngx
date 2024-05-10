@@ -136,6 +136,10 @@ export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayout
 
   protected validateOption(option: string, wrapper: ElementRef, width: number): boolean {
     if (this._options[option]) {
+      if (option.indexOf('main') > -1) {
+        width = wrapper.nativeElement.parentNode.clientWidth - width;
+      }
+
       let optionValueParsedToNumber: number;
       try {
         optionValueParsedToNumber = this.parseOptionValue(option, wrapper);
