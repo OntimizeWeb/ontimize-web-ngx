@@ -553,11 +553,18 @@ export class Util {
     const reducer = (obj, parentPrefix = null) => (prev, key) => {
       const val = obj[key];
       key = encodeURIComponent(key);
-      let prefix:string;
+      let prefix: string;
       if (key === 'filterParentKeys') {
         prefix = parentPrefix;
       } else {
         prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
+      }
+      if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
+        let filterArray = [];
+        Object.keys(val).forEach(itemfilter =>
+          filterArray.push(`${encodeURIComponent(itemfilter)}=${encodeURIComponent(val[itemfilter])}`)
+        )
+        return prev.push(filterArray);
       }
 
       if (val == null || typeof val === 'function') {
@@ -566,9 +573,10 @@ export class Util {
       }
 
       if (['number', 'boolean', 'string'].includes(typeof val)) {
-        prev.push(`${ encodeURIComponent(prefix)}=${encodeURIComponent(val)}`);
+        prev.push(`${encodeURIComponent(prefix)}=${encodeURIComponent(val)}`);
         return prev;
       }
+
 
       prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'));
       return prev;

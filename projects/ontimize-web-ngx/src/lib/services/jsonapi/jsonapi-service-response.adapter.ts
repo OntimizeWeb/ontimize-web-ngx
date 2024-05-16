@@ -24,7 +24,7 @@ export class JSONAPIServiceResponseAdapter implements IServiceResponseAdapter<JS
    * @returns
    */
   adaptError(httpError: HttpErrorResponse) {
-    return httpError.error?.errors.map((error: any) => this.getErrorMessage(error)).join('\n');
+    return httpError.error.errors?.map((error: any) => this.getErrorMessage(error)).join('\n');
   }
 
   /**

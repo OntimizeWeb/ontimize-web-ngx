@@ -25,7 +25,7 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       queryargs.page['limit'] = args.ovrrArgs.length;
     }
 
-    if (Util.isDefined(args.sort)) {
+    if (Util.isDefined(args.sort) && args.sort.length>0) {
       let sort = '';
       args.sort.forEach((sortElement: SQLOrder, idx: number, array: SQLOrder[]) => {
         sort += sortElement.ascendent ? sortElement.columnName : ('-' + sortElement.columnName);
@@ -36,10 +36,11 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       queryargs.sort = sort;
     }
 
-    if (Util.isDefined(args.filter) && FilterExpressionUtils.instanceofBasicExpression(args.filter)) {
-      console.log(FilterExpressionUtils.instanceofBasicExpression(args.filter));
-    } else {
-      queryargs.filter = args.filter;
+    if (Util.isDefined(args.filter)) {
+      queryargs.filter = {};
+      Object.keys(args.filter).forEach(filter => {
+        queryargs.filter[filter] = args.filter[filter];
+      });
     }
 
     return [queryargs];
