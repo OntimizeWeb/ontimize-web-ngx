@@ -13,8 +13,12 @@ import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements IBaseQueryArgument {
 
   parseQueryParameters(args: OQueryParams): JSONAPIQueryParameter[] {
+
+    if (!Util.isDefined(args)) return [];
     let fields: object = {};
+
     fields[args.entity] = args.columns.toString();
+
     let queryargs: JSONAPIQueryParameter = {
       fields: fields
     };
@@ -25,7 +29,7 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       queryargs.page['limit'] = args.ovrrArgs.length;
     }
 
-    if (Util.isDefined(args.sort) && args.sort.length>0) {
+    if (!Util.isArrayEmpty(args.sort)) {
       let sort = '';
       args.sort.forEach((sortElement: SQLOrder, idx: number, array: SQLOrder[]) => {
         sort += sortElement.ascendent ? sortElement.columnName : ('-' + sortElement.columnName);

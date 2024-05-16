@@ -1,12 +1,12 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, share } from 'rxjs';
 
-import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
-import { BaseService } from '../base-service.class';
-import { Util } from '../../util/util';
-import { OQueryParams } from '../../types/query-params.type';
 import { IAuthService } from '../../interfaces/auth-service.interface';
-import { HttpHeaders } from '@angular/common/http';
+import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
+import { OQueryParams } from '../../types/query-params.type';
+import { Util } from '../../util/util';
+import { BaseService } from '../base-service.class';
 
 
 @Injectable()
@@ -90,7 +90,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
 
   query(queryParams: OQueryParams, keys: any[]): Observable<JSONAPIResponse> {
     queryParams = Util.objectToQueryString(queryParams);
-    const queryParamsString = Util.isDefined(queryParams) ? `?${Util.objectToQueryString(queryParams)}`:'';
+    const queryParamsString = Util.isDefined(queryParams) ?'?'+ queryParams : '';
 
     const url = `${this.urlBase}${this.path}${queryParamsString}`;
 
@@ -103,7 +103,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   }
 
   advancedQuery(queryParams: OQueryParams, keys: any[]): Observable<JSONAPIResponse> {
-    return this.query(queryParams,keys);
+    return this.query(queryParams, keys);
   }
 
   queryById(queryParams: OQueryParams): Observable<JSONAPIResponse> {
@@ -139,7 +139,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
-    let attributes = {...{ attributes: av }, ...{ id: id }, ...{ type: entity }  };
+    let attributes = { ...{ attributes: av }, ...{ id: id }, ...{ type: entity } };
 
     const body = JSON.stringify({
       data: attributes

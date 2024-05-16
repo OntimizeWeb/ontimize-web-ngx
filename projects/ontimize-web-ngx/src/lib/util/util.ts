@@ -560,11 +560,8 @@ export class Util {
         prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
       }
       if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
-        let filterArray = [];
-        Object.keys(val).forEach(itemfilter =>
-          filterArray.push(`${encodeURIComponent(itemfilter)}=${encodeURIComponent(val[itemfilter])}`)
-        )
-        return prev.push(filterArray);
+        prev.push(Object.keys(val).map(itemfilter => `${encodeURIComponent(`filter[${ itemfilter}]`)} = ${encodeURIComponent(JSON.stringify(val[itemfilter]))}`).join('&'));
+        return prev;
       }
 
       if (val == null || typeof val === 'function') {
