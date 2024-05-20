@@ -92,7 +92,7 @@ export class Util {
   }
 
   static isArrayEmpty(array: any[]): boolean {
-    if (array && array.length === 0) {
+    if (!Util.isDefined(array) || array.length === 0) {
       return true;
     }
     return false;
