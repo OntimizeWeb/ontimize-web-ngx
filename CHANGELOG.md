@@ -1,16 +1,16 @@
-## 15.1.0-SNAPSHOT-3 (2014-05-21)
+## 15.1.0-SNAPSHOT-3 (2024-05-21)
 ### Features
 * Added complex filtering
 
-## 15.1.0-SNAPSHOT-2 (2014-05-08)
+## 15.1.0-SNAPSHOT-2 (2024-05-08)
 ### Features
 * Added management JSON API errors
 
-## 15.1.0-SNAPSHOT-1 (2014-05-08)
+## 15.1.0-SNAPSHOT-1 (2024-05-08)
 ### Features
 * Added sorting JSON API
 
-## 15.1.0-SNAPSHOT-0(2014-30-04)
+## 15.1.0-SNAPSHOT-0(2024-04-30)
 ### Features
 * Added CRUD operations for JSON AP
 
