@@ -92,7 +92,7 @@ export class Util {
   }
 
   static isArrayEmpty(array: any[]): boolean {
-    if (array && array.length === 0) {
+    if (!Util.isDefined(array) || array.length === 0) {
       return true;
     }
     return false;
@@ -553,12 +553,22 @@ export class Util {
     const reducer = (obj, parentPrefix = null) => (prev, key) => {
       const val = obj[key];
       key = encodeURIComponent(key);
-      let prefix:string;
+      let prefix: string;
       if (key === 'filterParentKeys') {
         prefix = parentPrefix;
       } else {
         prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
       }
+
+      if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
+        prev.push(Object.keys(val).map(itemfilter => {
+          const filterKey = `filter[${itemfilter}]`;
+          return `${encodeURIComponent(filterKey)} = ${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+        }).join('&'));
+
+        return prev;
+      }
+
 
       if (val == null || typeof val === 'function') {
         prev.push(`${encodeURIComponent(prefix)}=`);
@@ -566,9 +576,10 @@ export class Util {
       }
 
       if (['number', 'boolean', 'string'].includes(typeof val)) {
-        prev.push(`${ encodeURIComponent(prefix)}=${encodeURIComponent(val)}`);
+        prev.push(`${encodeURIComponent(prefix)}=${encodeURIComponent(val)}`);
         return prev;
       }
+
 
       prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'));
       return prev;
