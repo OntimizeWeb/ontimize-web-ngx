@@ -7,6 +7,8 @@ import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-t
 import { DialogService } from '../../../../../services/dialog.service';
 import { OntimizeServiceProvider } from '../../../../../services/factories';
 import { OntimizeService } from '../../../../../services/ontimize/ontimize.service';
+import { BaseQueryArgument } from '../../../../../services/query-arguments/base-query-argument.adapter';
+import { OntimizeQueryArgumentsAdapter } from '../../../../../services/query-arguments/ontimize-query-arguments.adapter';
 import { OConfigureServiceArgs } from '../../../../../types/configure-service-args.type';
 import { Expression } from '../../../../../types/expression.type';
 import { Codes } from '../../../../../util/codes';
@@ -14,9 +16,9 @@ import { FilterExpressionUtils } from '../../../../../util/filter-expression.uti
 import { ServiceUtils } from '../../../../../util/service.utils';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
-import type { OColumn } from '../../o-column.class';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
+import type { OColumn } from '../../o-column.class';
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
   'service',
@@ -81,12 +83,17 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected pipeArguments: ITranslatePipeArgument = {};
 
   protected subscritpions: Subscription = new Subscription();
+  queryArgumentAdapter: BaseQueryArgument;
 
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'service';
     this.dialogService = injector.get<DialogService>(DialogService as Type<DialogService>);
     this.setComponentPipe();
+  }
+
+  public configureAdapter() {
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
   public initialize(): void {
@@ -100,6 +107,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.configureService();
+    this.configureAdapter();
   }
 
   public ngAfterViewInit(): void {
@@ -139,8 +147,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } else {
       filter[this.column] = cellvalue;
     }
-    const sqlTypes = this.getSqlTypesForFilter(filter);
-    this.dataService[this.queryMethod](filter, this.colArray, this.entity, sqlTypes)
+    const queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter));
+    this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryMethod, this.dataService, queryArguments])
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           let respData;
@@ -165,6 +173,17 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
           this.dialogService.alert('ERROR', 'MESSAGES.ERROR_QUERY');
         }
       });
+  }
+
+  getQueryArguments(filter: {}): any {
+    const sqlTypes = this.getSqlTypesForFilter(filter);
+
+    return {
+      filter: filter,
+      columns: this.colArray,
+      entity: this.entity,
+      sqlTypes: sqlTypes
+    };
   }
 
   getSqlTypesForFilter(filter: Object) {
@@ -231,7 +250,9 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
         console.warn('Service not properly configured! aborting query');
         observer.next();
       }
-      this.dataService[this.queryMethod]({}, this.colArray, this.entity)
+
+      const queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments({}));
+      this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryMethod, this.dataService, queryArguments])
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             let respData = [];
