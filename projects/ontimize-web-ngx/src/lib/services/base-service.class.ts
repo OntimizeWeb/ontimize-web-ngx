@@ -82,6 +82,9 @@ export class BaseService<T extends BaseResponse> {
   }
 
   public doRequest(param: ServiceRequestParam<T>): Observable<T> {
+    if (param?.url.length >= 2048) {
+      console.warn('The maximum length in the URL request must not be greater than 2048 characters.')
+    }
 
     const dataObservable: Observable<T> = new Observable((observer: Subscriber<T>) => {
       const options = param.options || {
