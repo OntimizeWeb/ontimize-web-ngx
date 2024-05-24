@@ -72,7 +72,7 @@ export class PermissionsService {
     });
   }
 
-  protected queryPermissions(): Observable<any> {
+  public queryPermissions(): Observable<any> {
     const self = this;
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       self.permissionsService.loadPermissions().subscribe((res: any) => {
