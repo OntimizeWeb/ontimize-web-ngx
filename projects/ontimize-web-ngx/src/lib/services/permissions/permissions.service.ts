@@ -14,6 +14,7 @@ import { OTablePermissions } from '../../types/table/o-table-permissions.type';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
+import { OComponentPermissionsByRoute } from '../../types/o-component-permissions-by-route.type';
 
 @Injectable()
 export class PermissionsService {
@@ -111,7 +112,7 @@ export class PermissionsService {
     return result;
   }
 
-  protected getOComponentPermissions(attr: string, actRoute: ActivatedRoute, selector: string): any {
+  public getOComponentPermissions(attr: string, actRoute: ActivatedRoute, selector: string): OComponentPermissionsByRoute {
     if (!Util.isDefined(this.permissions)) {
       return undefined;
     }
@@ -125,10 +126,11 @@ export class PermissionsService {
     if (attrPermissions && attrPermissions.selector === selector) {
       compPermissions = attrPermissions;
     }
-    return {
+    const permissions: OComponentPermissionsByRoute = {
       route: routePermissions,
       component: compPermissions
     };
+    return permissions;
   }
 
   getTablePermissions(attr: string, actRoute: ActivatedRoute): OTablePermissions {
