@@ -1,3 +1,11 @@
+## 15.1.0-SNAPSHOT-5(2024-05-28)
+### Bugfix
+* Removed space in the filter
+
+## 15.1.0-SNAPSHOT-4(2024-05-22)
+### Features
+* Adapt table cell renderer
+
 ## 15.1.0-SNAPSHOT-3 (2024-05-21)
 ### Features
 * Added complex filtering
