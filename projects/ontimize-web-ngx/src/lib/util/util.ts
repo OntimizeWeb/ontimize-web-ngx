@@ -563,7 +563,7 @@ export class Util {
       if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
         prev.push(Object.keys(val).map(itemfilter => {
           const filterKey = `filter[${itemfilter}]`;
-          return `${encodeURIComponent(filterKey)} = ${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+          return `${encodeURIComponent(filterKey)}=${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
         }).join('&'));
 
         return prev;
