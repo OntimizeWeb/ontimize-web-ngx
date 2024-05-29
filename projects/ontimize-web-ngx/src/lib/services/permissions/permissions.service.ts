@@ -90,6 +90,9 @@ export class PermissionsService {
   }
 
   protected getPermissionIdFromActRoute(actRoute: ActivatedRoute): string {
+    if (!Util.isDefined(actRoute)) {
+      return undefined;
+    }
     let result: string;
     let snapshot: ActivatedRouteSnapshot = actRoute.snapshot;
     result = ((snapshot.data || {})['oPermission'] || {})['permissionId'];
