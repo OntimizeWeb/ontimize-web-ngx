@@ -307,8 +307,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     let propertyB: number | string = '';
     [propertyA, propertyB] = [a['value'], b['value']];
 
-    const valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
-    const valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
+    const valueA = (typeof propertyA === 'undefined' || propertyA === null) ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
+    const valueB = (typeof propertyB === 'undefined' || propertyB === null) ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
     return (valueA <= valueB ? -1 : 1) * (this.activeSortDirection === 'asc' ? 1 : -1);
   }
 
