@@ -461,7 +461,6 @@ export class Util {
     const service = configureServiceArgs.service;
     const serviceType = configureServiceArgs.serviceType;
     const injector = configureServiceArgs.injector;
-    const context = configureServiceArgs.context;
 
     if (serviceType) {
       dataService = serviceType;
@@ -475,9 +474,6 @@ export class Util {
         const serviceCfg = dataService.getDefaultServiceConfiguration(service);
         if (entity) {
           serviceCfg.entity = entity;
-        }
-        if (context) {
-          serviceCfg.context = context;
         }
         dataService.configureService(serviceCfg);
       }

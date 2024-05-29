@@ -21,20 +21,12 @@ export class JSONAPIServiceResponse implements ServiceResponse {
   ) {
 
     if (body?.data) {
-      let key: string;
-      if (context) {
-        key = context['keys'];
-      }
       if (Util.isArray(body.data)) {
         this.data = body.data.map((data: any) => {
-          let keyValue = {};
-          keyValue[key] = data['id']
-          return { ...data['attributes'], ...keyValue };
+          return data['attributes'];
         });
       } else {
-        let keyValue = {};
-        keyValue[key] = body.data['id']
-        this.data = { ...body.data['attributes'], ...keyValue };
+        this.data = body.data['attributes']
       }
     }
     if (body?.meta) {

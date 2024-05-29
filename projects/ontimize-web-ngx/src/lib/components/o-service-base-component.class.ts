@@ -331,7 +331,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 
   configureService() {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType, context: { keys: this.keysArray } }
+    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     this.dataService = Util.configureService(configureServiceArgs);
   }
 
@@ -405,7 +405,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       }
 
       this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter, ovrrArgs));
-      this.dataService.context = { ...this.dataService.context, ovrrArgs };
+      this.dataService.context = { ovrrArgs };
       this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [queryMethodName, this.dataService, this.queryArguments])
         .subscribe((res: ServiceResponse) => {
           let data;
