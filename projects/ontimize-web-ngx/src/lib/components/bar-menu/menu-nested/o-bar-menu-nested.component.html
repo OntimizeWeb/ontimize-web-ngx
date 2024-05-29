@@ -1,5 +1,5 @@
 <ng-container *ngFor="let item of items">
-  <ng-container [ngSwitch]="appMenuService.getMenuItemType(item)">
+  <ng-container [ngSwitch]="appMenuService.getMenuItemType(item)" *ngIf="appMenuService.isVisible(item)">
 
     <o-bar-menu-group *ngSwitchCase="'group'" [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [ngClass]="item.class">
       <o-bar-menu-nested [items]="item.items"> </o-bar-menu-nested>

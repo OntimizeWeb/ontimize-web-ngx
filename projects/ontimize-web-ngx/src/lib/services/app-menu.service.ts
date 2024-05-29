@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
 import {
+  MenuCommonItem,
   MenuGroup,
   MenuItem,
   MenuItemAction,
@@ -101,6 +102,10 @@ export class AppMenuService {
 
   isRouteItem(item: MenuItemRoute): boolean {
     return Util.isDefined(item.route);
+  }
+
+  isVisible(item: MenuCommonItem): boolean {
+    return !Util.isDefined(item.visible) || (Util.isDefined(item.visible) && item.visible);
   }
 
   private getMenuItems(item: MenuRootItem): MenuRootItem[] {
