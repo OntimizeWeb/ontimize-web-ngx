@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JSONAPIServiceResponse } from './jsonapi-service-response.class';
 import { IServiceResponseAdapter } from '../../interfaces/service-response-adapter.interface';
+import { JSONAPIContext } from '../../types/jsonapi-context.type';
 
 @Injectable()
 export class JSONAPIServiceResponseAdapter implements IServiceResponseAdapter<JSONAPIServiceResponse> {
@@ -48,7 +49,7 @@ export class JSONAPIServiceResponseAdapter implements IServiceResponseAdapter<JS
    * Sets context
    * @param context
    */
-  setContext(context: any) {
+  setContext(context: JSONAPIContext) {
     this.context = context;
   }
 }

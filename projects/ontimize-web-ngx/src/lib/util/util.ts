@@ -461,7 +461,6 @@ export class Util {
     const service = configureServiceArgs.service;
     const serviceType = configureServiceArgs.serviceType;
     const injector = configureServiceArgs.injector;
-    const context = configureServiceArgs.context;
 
     if (serviceType) {
       dataService = serviceType;
@@ -475,9 +474,6 @@ export class Util {
         const serviceCfg = dataService.getDefaultServiceConfiguration(service);
         if (entity) {
           serviceCfg.entity = entity;
-        }
-        if (context) {
-          serviceCfg.context = context;
         }
         dataService.configureService(serviceCfg);
       }
@@ -563,7 +559,7 @@ export class Util {
       if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
         prev.push(Object.keys(val).map(itemfilter => {
           const filterKey = `filter[${itemfilter}]`;
-          return `${encodeURIComponent(filterKey)} = ${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+          return `${encodeURIComponent(filterKey)}=${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
         }).join('&'));
 
         return prev;
