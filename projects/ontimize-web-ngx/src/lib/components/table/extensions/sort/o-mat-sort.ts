@@ -190,10 +190,7 @@ export class OMatSort extends MatSort {
     let propertyA: number | string = '';
     let propertyB: number | string = '';
     [propertyA, propertyB] = [a[this.activeSortColumn], b[this.activeSortColumn]];
-
-    const valueA = typeof propertyA === 'undefined' ? '' : propertyA === '' ? propertyA : isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
-    const valueB = typeof propertyB === 'undefined' ? '' : propertyB === '' ? propertyB : isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
-    return (valueA <= valueB ? -1 : 1) * (this.activeSortDirection === 'asc' ? 1 : -1);
+    return Util.sortFunction(propertyA, propertyB, this.activeSortDirection);
   }
 
 }
