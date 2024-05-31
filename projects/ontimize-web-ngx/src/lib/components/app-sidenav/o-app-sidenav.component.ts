@@ -78,7 +78,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   onSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   afterSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   protected oUserInfoService: OUserInfoService;
-  protected subscription: Subscription;
+  protected subscription: Subscription = new Subscription();
   protected userInfo: UserInfo;
 
   protected mediaWatch: Subscription;
