@@ -93,7 +93,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRootArray = this.appMenuService.getMenuRoots();
-    this.subscription.add(this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots()));;
+    this.subscription.add(this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots()));
     this.oUserInfoService = this.injector.get(OUserInfoService);
     const self = this;
     this.mediaWatch = this.media.asObservable().subscribe(() => {
@@ -105,6 +105,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   refreshMenuRoots(): void {
     this.menuRootArray = [...this.appMenuService.getMenuRoots()];
+    this.cd.detectChanges();
   }
 
   @HostListener('window:resize', [])
@@ -209,16 +210,6 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   isSidenavOpened(): boolean {
     return this.opened && !this.isMobileMode() && !this.isScreenSmall();
   }
-
-  // get menuRootArray(): MenuRootItem[] {
-  //   return this._menuRootArray;
-  // }
-
-  // set menuRootArray(val: MenuRootItem[]) {
-  //   this._menuRootArray = [ ...val];
-  //   this.menuRootArray$ = of(this._menuRootArray);
-  //   console.log(this.menuRootArray$.forEach(x => console.log(x)));
-  // }
 
   toggleSidenav() {
     const promise = this.sidenav.opened ? this.sidenav.close() : this.sidenav.open();
