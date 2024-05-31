@@ -128,6 +128,7 @@ export class OntimizeAuthService extends AuthService {
   public onLogoutError(error: any): void {
     console.error('Error on logout');
     this.clearSessionData();
+    this.restartPermission();
     this.redirectLogin(false);
   }
 
@@ -153,6 +154,11 @@ export class OntimizeAuthService extends AuthService {
     const extras = {};
     extras[Codes.QUERY_PARAMS] = arg;
     this.router.navigate([Codes.LOGIN_ROUTE], extras);
+  }
+
+  public restartPermission() {
+    const permissionsService = this.injector.get(PermissionsService);
+    permissionsService.restart();
   }
 
 }
