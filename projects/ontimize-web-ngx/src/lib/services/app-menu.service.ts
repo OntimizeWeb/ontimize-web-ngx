@@ -1,3 +1,4 @@
+import { PermissionsService } from './permissions/permissions.service';
 import { Injectable, Injector } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -27,12 +28,13 @@ export class AppMenuService {
   protected MENU_ROOTS: MenuRootItem[];
   protected ALL_MENU_ITEMS: MenuRootItem[];
   protected activeItem: MenuItemRoute;
+  protected permissionsService: PermissionsService;
 
   public onClick: Subject<any> = new Subject();
+  public onPermissionMenuChanged: Subject<void> = new Subject();
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig);
-    this.MENU_ROOTS = this._config.getMenuConfiguration();
     this.router = this.injector.get(Router);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -40,10 +42,51 @@ export class AppMenuService {
       }
     });
 
+    this.setMenuItemsByMenuConfiguration();
+
+    this.permissionsService = this.injector.get(PermissionsService);
+    this.permissionsService.onChangePermissions.subscribe(x => {
+      this.mergeMenuItemsWithPermissions();
+      this.onPermissionMenuChanged.next()
+    });
+
+  }
+
+  setMenuItemsByMenuConfiguration() {
+    /*
+      spread operator (...) in array multi-level not works
+      JSON.parse and JSON.stringify are the specific methods used for multi-level deep copying
+    */
+    const defaultMenuConfiguration = JSON.parse(JSON.stringify(this._config.getMenuConfiguration()));
+    this.MENU_ROOTS = defaultMenuConfiguration;
     this.ALL_MENU_ITEMS = [];
     for (let i = 0, len = this.MENU_ROOTS.length; i < len; i++) {
       const item: MenuRootItem = this.MENU_ROOTS[i];
       this.ALL_MENU_ITEMS = this.ALL_MENU_ITEMS.concat(this.getMenuItems(item));
+    }
+  }
+
+  mergeMenuItemsWithPermissions() {
+
+    this.setMenuItemsByMenuConfiguration();
+    const permissionsMenu = this.permissionsService.getMenuPermissions();
+
+    if (Util.isDefined(permissionsMenu)) {
+      this.MENU_ROOTS = [...this.MENU_ROOTS.map(menu => {
+        const indexPermission = permissionsMenu.findIndex(permission => permission.attr === menu.id);
+        if (indexPermission > -1) {
+          menu.visible = permissionsMenu[indexPermission].visible;
+        }
+        return menu;
+      })];
+
+      this.ALL_MENU_ITEMS = [...this.ALL_MENU_ITEMS.map(menu => {
+        const indexPermission = permissionsMenu.findIndex(permission => permission.attr === menu.id);
+        if (indexPermission > -1) {
+          menu.visible = permissionsMenu[indexPermission].visible;
+        }
+        return menu;
+      })];
     }
   }
 
