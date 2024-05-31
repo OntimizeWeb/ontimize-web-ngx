@@ -131,7 +131,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
 
   protected parsePermissions() {
     // if oattr in form, it can have permissions
-    this.permissions = this.permissionsService.getMenuPermissions(this.menuGroup.id);
+    this.permissions = this.permissionsService.getMenuPermissionsByAttr(this.menuGroup.id);
     if (!Util.isDefined(this.permissions)) {
       return;
     }

@@ -76,7 +76,7 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
 
   protected parsePermissions() {
     // if oattr in form, it can have permissions
-    this.permissions = this.menu.getPermissionsService().getMenuPermissions(this.attr);
+    this.permissions = this.menu.getPermissionsService().getMenuPermissionsByAttr(this.attr);
     if (!Util.isDefined(this.permissions)) {
       return;
     }
