@@ -710,6 +710,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(this.oTableGlobalConfig.autoAlignTitles)) {
         this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles;
       }
+      if (Util.isDefined(this.oTableGlobalConfig.columnFiltersActive)) {
+        this._isColumnFiltersActive = this.oTableGlobalConfig.columnFiltersActive;
+      }
     } catch (error) {
       // Do nothing because is optional
     }
