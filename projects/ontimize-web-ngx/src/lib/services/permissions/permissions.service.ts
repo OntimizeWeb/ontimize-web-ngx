@@ -1,9 +1,10 @@
 import { Injectable, Injector } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
+import { OComponentPermissionsByRoute } from '../../types/o-component-permissions-by-route.type';
 import { OComponentPermissions } from '../../types/o-component-permissions.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissionsDefinition } from '../../types/o-permissions-definition.type';
@@ -14,10 +15,10 @@ import { OTablePermissions } from '../../types/table/o-table-permissions.type';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
-import { OComponentPermissionsByRoute } from '../../types/o-component-permissions-by-route.type';
 
 @Injectable()
 export class PermissionsService {
+  public onChangePermissions: Subject<any> = new Subject<[]>() ;
 
   protected permissionsService: any;
   protected ontimizePermissionsConfig: any;
@@ -50,6 +51,7 @@ export class PermissionsService {
 
   restart() {
     this.permissions = undefined;
+    this.onChangePermissions.next(this.permissions);
   }
 
   hasPermissions(): boolean {
@@ -78,6 +80,7 @@ export class PermissionsService {
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       self.permissionsService.loadPermissions().subscribe((res: any) => {
         self.permissions = res;
+        self.onChangePermissions.next(self.permissions);
         innerObserver.next(res);
       }, (err: any) => {
         console.error('[Permissions.queryPermissions]: error', err);
@@ -188,7 +191,17 @@ export class PermissionsService {
     return permissions;
   }
 
-  protected mergeOPermissionsArrays(permissionsA: OPermissions[], permissionsB: OPermissions[]): OPermissions[] {
+  getAllMenuPermissions(): OPermissions[] {
+
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const permissions: OPermissions[] = this.permissions.menu || [];
+
+    return permissions;
+  }
+
+   mergeOPermissionsArrays(permissionsA: OPermissions[], permissionsB: OPermissions[]): OPermissions[] {
     if (!Util.isDefined(permissionsA) || !Util.isDefined(permissionsB)) {
       return permissionsA || permissionsB;
     }
