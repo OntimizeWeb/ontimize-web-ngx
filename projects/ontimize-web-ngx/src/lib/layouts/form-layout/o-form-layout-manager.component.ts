@@ -36,6 +36,7 @@ import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
+import { O_GLOBAL_CONFIG } from '../../types/o-global-config.type';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -253,6 +254,23 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       this.subscription.add(this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
       }));
+    }
+    this.getInjectionTokenConfig();
+
+  }
+
+  private getInjectionTokenConfig() {
+    try {
+      const oGlobalConfig = this.injector.get(O_GLOBAL_CONFIG);
+      if (Util.isDefined(oGlobalConfig.storeState)) {
+        this.storeState = oGlobalConfig.storeState;
+        if (!this.storeState) {
+          this.subscription.unsubscribe();
+        }
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 

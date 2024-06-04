@@ -38,3 +38,4 @@ export * from './sql-order.type';
 export * from './o-grouped-column-types.type';
 export * from './o-filter-definition.type';
 export * from './form/index';
+export * from './o-global-config.type';

@@ -18,6 +18,7 @@ import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
+import { O_GLOBAL_CONFIG } from '../types/o-global-config.type';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -198,7 +199,22 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     } catch (e) {
       // No parent OExpandableContainerComponent
     }
+    this.getGlobalInjectionTokenConfig();
   }
+
+  private getGlobalInjectionTokenConfig() {
+
+    try {
+      const oGlobalConfig = this.injector.get(O_GLOBAL_CONFIG);
+      if (Util.isDefined(oGlobalConfig.storeState)) {
+        this.storeState = oGlobalConfig.storeState;
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
+    }
+  }
+
 
   get state(): AbstractServiceComponentStateClass {
     return this.componentStateService.state;
