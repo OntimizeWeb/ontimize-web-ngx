@@ -1,3 +1,4 @@
+import { OFormGlobalConfig } from './../../types/form/o-form-global-config.type';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -46,6 +47,7 @@ import { OFormValue } from './o-form-value';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OFormMessageService } from './services/o-form-message.service';
+import { O_FORM_GLOBAL_CONFIG } from './o-form-tokens';
 
 interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -231,6 +233,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @InputConverter()
   confirmExit: boolean = true;
+  oFormGlobalConfig: OFormGlobalConfig;
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
       val = Util.parseArray(val, true);
@@ -369,6 +372,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.formContainer.setForm(this);
     } catch (e) {
       //
+    }
+    this.getGlobalConfig();
+  }
+
+  private getGlobalConfig() {
+    try {
+      this.oFormGlobalConfig = this.injector.get(O_FORM_GLOBAL_CONFIG);
+      if (Util.isDefined(this.oFormGlobalConfig.headerActions)) {
+        this.headeractions = this.oFormGlobalConfig.headerActions;
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 
