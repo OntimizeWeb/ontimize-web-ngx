@@ -127,7 +127,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     if (this.showUserInfo && this.showToggleButton) {
       this.userInfo = this.oUserInfoService.getUserInfo();
-      this.permissionSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
+      this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
         this.userInfo = res;
         this.refreshMenuItemUserInfo();
       });
