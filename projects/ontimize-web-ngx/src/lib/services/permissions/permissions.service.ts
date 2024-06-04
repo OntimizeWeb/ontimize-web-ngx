@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
+import { OComponentPermissionsByRoute } from '../../types/o-component-permissions-by-route.type';
 import { OComponentPermissions } from '../../types/o-component-permissions.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissionsDefinition } from '../../types/o-permissions-definition.type';
@@ -14,7 +15,6 @@ import { OTablePermissions } from '../../types/table/o-table-permissions.type';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
-import { OComponentPermissionsByRoute } from '../../types/o-component-permissions-by-route.type';
 
 @Injectable()
 export class PermissionsService {

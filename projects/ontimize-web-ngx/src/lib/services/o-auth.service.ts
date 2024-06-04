@@ -121,6 +121,7 @@ export class OntimizeAuthService extends AuthService {
   public onLogoutSuccess(sessionId: number): void {
     if (sessionId === 0) {
       this.clearSessionData();
+      this.restartPermission();
       this.redirectLogin(false);
     }
   }
