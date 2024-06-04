@@ -78,7 +78,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   onSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   afterSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   protected oUserInfoService: OUserInfoService;
-  protected subscription: Subscription = new Subscription();
+  protected userInfoSubscription: Subscription;
+  protected permissionSubscription: Subscription;
   protected userInfo: UserInfo;
 
   protected mediaWatch: Subscription;
@@ -93,7 +94,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRootArray = this.appMenuService.getMenuRoots();
-    this.subscription.add(this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots()));
+    this.permissionSubscription = this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots());
     this.oUserInfoService = this.injector.get(OUserInfoService);
     const self = this;
     this.mediaWatch = this.media.asObservable().subscribe(() => {
@@ -126,7 +127,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     if (this.showUserInfo && this.showToggleButton) {
       this.userInfo = this.oUserInfoService.getUserInfo();
-      this.subscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
+      this.permissionSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
         this.userInfo = res;
         this.refreshMenuItemUserInfo();
       });
@@ -190,8 +191,12 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
       this.routerSubscription.unsubscribe();
     }
 
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.userInfoSubscription) {
+      this.userInfoSubscription.unsubscribe();
+    }
+
+    if (this.permissionSubscription) {
+      this.permissionSubscription.unsubscribe();
     }
   }
 
