@@ -1,7 +1,11 @@
-## 8.14.15 (2024-05-10)
+## 8.14.15
+### Features
+* **MenuItem, MenuGroup**: New property `visible` [#1597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1597)
+
 ### Bug fixes
 * **o-form-layout-split-pane**:
 Fixed that when resizing the maximum and minimum width (`main-max-width`, `main-min-width`, `detail-max-width` and `detail-min-width`) is validated  ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1594](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1594)
+* **o-table**: Fixed bug in local sorting with nullable values [#1596](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1596)
 
 ## 8.14.14 (2024-05-02)
 ### Bug fixes
