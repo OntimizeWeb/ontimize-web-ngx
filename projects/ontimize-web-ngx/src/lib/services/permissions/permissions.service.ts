@@ -179,7 +179,7 @@ export class PermissionsService {
     return permissions;
   }
 
-  getMenuPermissionsByAttr(attr: string): OPermissions {
+  getMenuPermissions(attr: string): OPermissions {
     let permissions;
     if (!Util.isDefined(this.permissions)) {
       return undefined;
@@ -191,7 +191,7 @@ export class PermissionsService {
     return permissions;
   }
 
-  getMenuPermissions(): OPermissions[] {
+  getAllMenuPermissions(): OPermissions[] {
 
     if (!Util.isDefined(this.permissions)) {
       return undefined;

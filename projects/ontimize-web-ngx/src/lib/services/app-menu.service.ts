@@ -69,7 +69,7 @@ export class AppMenuService {
   mergeMenuItemsWithPermissions() {
 
     this.setMenuItemsByMenuConfiguration();
-    const permissionsMenu = this.permissionsService.getMenuPermissions();
+    const permissionsMenu = this.permissionsService.getAllMenuPermissions();
 
     if (Util.isDefined(permissionsMenu)) {
       this.MENU_ROOTS = [...this.MENU_ROOTS.map(menu => {
