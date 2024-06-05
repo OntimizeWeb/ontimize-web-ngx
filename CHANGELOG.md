@@ -1,6 +1,7 @@
 ## 8.14.15
 ### Features
 * **MenuItem, MenuGroup**: New property `visible` [#1597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1597)
+* **o-service-component.class.ts**: new method `clearData`
 
 ### Bug fixes
 * **o-form-layout-split-pane**:
