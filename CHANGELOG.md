@@ -1,12 +1,15 @@
 ## 8.14.15
 ### Features
-* **MenuItem, MenuGroup**: New property `visible` [#1597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1597)
-* **o-service-component.class.ts**: new method `clearData`
+* **MenuItem, MenuGroup**: New property `visible`([a079be8](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/a079be8)) Closes [#1597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1597)
+* **IServiceDataComponent**: new method `clearData`([aac4d90](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/aac4d90))
+* Injection Tokens ([11e762b](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/11e762b)) Closes [#1601](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1601)
+  * New injection token `O_GLOBAL_CONFIG` to allow customize the store state
+  * New injection token `O_FORM_CONFIG` to allow customize the header actions
+  * Updated injection token `O_TABLE_GLOBAL_CONFIG` to allow customize options such as  `filterColumnActiveByDefault`, `editionMode`, `detailMode`, `rowHeight`
+
 
 ### Bug fixes
-* **o-form-layout-split-pane**:
-Fixed that when resizing the maximum and minimum width (`main-max-width`, `main-min-width`, `detail-max-width` and `detail-min-width`) is validated  ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1594](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1594)
-* **o-table**: Fixed bug in local sorting with nullable values [#1596](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1596)
+* **o-table**: Fixed bug in local sorting with nullable values ([926daaf](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/926daaf)) Closes [#1596](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1596)
 
 ## 8.14.14 (2024-05-02)
 ### Bug fixes
