@@ -20,7 +20,7 @@ export class Codes {
   public static EDIT_ICON = 'mode_edit';
 
   public static DEFAULT_ROW_HEIGHT = 'medium';
-  public static AVAILABLE_ROW_HEIGHTS_VALUES = ['small', 'medium', 'large'];
+  public static readonly AVAILABLE_ROW_HEIGHTS_VALUES = ['small', 'medium', 'large'];
 
   public static DETAIL_MODE_NONE = 'none';
   public static DETAIL_MODE_CLICK = 'click';
@@ -30,7 +30,7 @@ export class Codes {
   public static EDITION_MODE_NONE = 'none';
   public static EDITION_MODE_CLICK = 'click';
   public static EDITION_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
-  public static AVAILABLE_MODES = [Codes.EDITION_MODE_NONE, Codes.EDITION_MODE_CLICK, ...Codes.EDITION_MODE_DBLCLICK_VALUES];
+  public static readonly AVAILABLE_MODES = [Codes.EDITION_MODE_NONE, Codes.EDITION_MODE_CLICK, ...Codes.EDITION_MODE_DBLCLICK_VALUES];
 
   public static SELECTION_MODE_NONE = 'none';
   public static SELECTION_MODE_SINGLE = 'single';

@@ -11,14 +11,13 @@ import { OErrorDialogManager } from '../services/o-error-dialog-manager.service'
 import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { AbstractServiceComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
-import { OQueryDataArgs } from '../types/query-data-args.type';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
+import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
-import { O_GLOBAL_CONFIG } from '../types/o-global-config.type';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
