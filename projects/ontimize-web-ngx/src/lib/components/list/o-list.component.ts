@@ -14,7 +14,6 @@ import {
   OnInit,
   Optional,
   QueryList,
-  SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
 import { MatFormFieldAppearance } from '@angular/material';
@@ -27,10 +26,14 @@ import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServi
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
+import { OListPermissions } from '../../types/o-list-permissions.type';
+import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
+import { PermissionsUtils } from '../../util';
 import { ObservableWrapper } from '../../util/async';
 import { ServiceUtils } from '../../util/service.utils';
+import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import {
@@ -40,7 +43,6 @@ import {
 } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OListItemDirective } from './list-item/o-list-item.directive';
-import { SQLTypes } from '../../util/sqltypes';
 
 export const DEFAULT_INPUTS_O_LIST = [
   ...DEFAULT_INPUTS_O_SERVICE_COMPONENT,
@@ -80,6 +82,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onInsertButtonClick',
   'onItemDeleted'
 ];
+
 @Component({
   selector: 'o-list',
   providers: [
@@ -120,6 +123,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
+  protected permissions: OListPermissions;
   /* End Inputs */
 
   public sortColArray: SQLOrder[] = [];
@@ -137,6 +141,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   keysSqlTypesArray: Array<string> = [];
 
   protected oMatSort: OMatSort;
+  protected actionsPermissions: OPermissions[];
+  public enabledInsertButton: boolean = true;
+  public enabledRefreshButton: boolean = true;
+  private mutationObservers: MutationObserver[] = [];
 
   constructor(
     injector: Injector,
@@ -153,7 +161,54 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngOnInit(): void {
     this.initialize();
+    this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
+    this.actionsPermissions = this.getActionsPermissions();
     this.subscription.add(this.selection.changed.subscribe(() => this.enabledDeleteButton = !this.selection.isEmpty()));
+    if (Util.isDefined(this.actionsPermissions)) {
+      const insertPerm: OPermissions = this.getPermissionByAttr('insert');
+      const refreshPerm: OPermissions = this.getPermissionByAttr('refresh');
+      const deletePerm: OPermissions = this.getPermissionByAttr('delete');
+      if (Util.isDefined(refreshPerm)) {
+        this.refreshButton = refreshPerm.visible;
+        this.enabledRefreshButton = refreshPerm.enabled;
+      }
+      if (Util.isDefined(deletePerm)) {
+        this.deleteButton = deletePerm.visible
+        this.enabledDeleteButton = deletePerm.enabled
+      }
+      if (Util.isDefined(insertPerm)) {
+        this.insertButton = insertPerm.visible
+        this.enabledInsertButton = insertPerm.enabled;
+      }
+    }
+  }
+
+
+  private permissionManagement(permission: OPermissions, attr?: string): void {
+    let elementByAction;
+    const attrAction = Util.isDefined(attr) ? attr : permission.attr;
+    const allElements = this.elRef.nativeElement.querySelectorAll('[o-list-toolbar]');
+
+    allElements.forEach(element => {
+      if (element.getAttribute('attr') === attrAction) {
+        elementByAction = element;
+      }
+    });
+    if (Util.isDefined(elementByAction)) {
+      if (!permission.visible) {
+        elementByAction.remove();
+      } else {
+        if (!permission.enabled) {
+          elementByAction.disabled = true;
+          const mutationObserver = PermissionsUtils.registerDisabledChangesInDom(elementByAction);
+          this.mutationObservers.push(mutationObserver);
+        }
+      }
+    }
+  }
+
+  public getPermissionByAttr(attr: string): OPermissions {
+    return this.actionsPermissions.find((perm: OPermissions) => perm.attr === attr);
   }
 
   public ngAfterViewInit(): void {
@@ -166,11 +221,19 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
+    if (Util.isDefined(this.actionsPermissions)) {
+      const customPermissions = this.actionsPermissions.filter(perm => perm.attr !== 'insert' && perm.attr !== 'refresh' && perm.attr !== 'delete');
+      customPermissions.forEach(permission => {
+        this.permissionManagement(permission);
+      });
+    }
   }
 
   public ngAfterContentInit(): void {
     this.setListItemDirectivesData();
     this.subscription.add(this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData()));
+
+
   }
 
   public ngOnDestroy(): void {
@@ -194,6 +257,15 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
+    this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
+  }
+
+  getActionsPermissions(): OPermissions[] {
+    let permissions: OPermissions[];
+    if (Util.isDefined(this.permissions)) {
+      permissions = (this.permissions.actions || []);
+    }
+    return permissions;
   }
 
   public reinitialize(options: OListInitializationOptions): void {
@@ -233,7 +305,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-
     this.queryData(void 0, queryArgs);
   }
 
