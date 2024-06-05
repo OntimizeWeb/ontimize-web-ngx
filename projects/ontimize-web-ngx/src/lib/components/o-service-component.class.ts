@@ -26,6 +26,7 @@ import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
+import { O_GLOBAL_CONFIG } from '../types/o-global-config.type';
 
 interface ItemClick {
   getItemData(): any
@@ -267,6 +268,23 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       this.formLayoutManager = this.oFormLayoutDialog.formLayoutManager;
     } catch (e) {
       // no parent form layout manager
+    }
+    this.getGlobalInjectionTokenConfig();
+  }
+
+  private getGlobalInjectionTokenConfig() {
+
+    try {
+      const oGlobalConfig = this.injector.get(O_GLOBAL_CONFIG);
+      if (Util.isDefined(oGlobalConfig.storeState)) {
+        this.storeState = oGlobalConfig.storeState;
+      };
+      if (Util.isDefined(oGlobalConfig.rowHeight) && Codes.isValidRowHeight(oGlobalConfig.rowHeight)) {
+        this.rowHeight = oGlobalConfig.rowHeight;
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 

@@ -699,14 +699,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.filterColumnActiveByDefault)) {
         this.filterColumnActiveByDefault = oTableGlobalConfig.filterColumnActiveByDefault;
       }
-      if (Util.isDefined(oTableGlobalConfig.editionMode)) {
+      if (Util.isDefined(oTableGlobalConfig.editionMode) && Codes.isValidEditionMode(oTableGlobalConfig.editionMode)) {
         this.editionMode = oTableGlobalConfig.editionMode;
       }
-      if (Util.isDefined(oTableGlobalConfig.detailMode)) {
+      if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
         this.detailMode = oTableGlobalConfig.detailMode;
-      }
-      if (Util.isDefined(oTableGlobalConfig.rowHeight)) {
-        this.rowHeight = oTableGlobalConfig.rowHeight;
       }
     } catch (error) {
       // Do nothing because is optional

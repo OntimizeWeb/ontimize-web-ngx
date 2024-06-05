@@ -199,22 +199,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     } catch (e) {
       // No parent OExpandableContainerComponent
     }
-    this.getGlobalInjectionTokenConfig();
   }
-
-  private getGlobalInjectionTokenConfig() {
-
-    try {
-      const oGlobalConfig = this.injector.get(O_GLOBAL_CONFIG);
-      if (Util.isDefined(oGlobalConfig.storeState)) {
-        this.storeState = oGlobalConfig.storeState;
-      };
-
-    } catch (error) {
-      // Do nothing because is optional
-    }
-  }
-
 
   get state(): AbstractServiceComponentStateClass {
     return this.componentStateService.state;
