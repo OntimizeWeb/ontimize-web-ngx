@@ -27,6 +27,8 @@ import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
 import { O_GLOBAL_CONFIG } from '../types/o-global-config.type';
+import { OPermissions } from '../types';
+import { PermissionsUtils } from '../util';
 
 interface ItemClick {
   getItemData(): any
@@ -412,6 +414,36 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       const compRoute = this.formLayoutManager.getRouteForComponent(this);
       if (compRoute && compRoute.length > 0) {
         routeArr.unshift(...compRoute);
+      }
+    }
+  }
+
+  protected getActionsPermissions(permissions: any): OPermissions[] {
+    return Util.isDefined(permissions) ? (permissions.actions || []) : [];
+  }
+
+  protected getPermissionByAttr(attr: string, actionsPermissions: OPermissions[]): OPermissions {
+    return actionsPermissions.find((perm: OPermissions) => perm.attr === attr);
+  }
+
+  protected managePermission(elementRef: any, permission: OPermissions, mutationObservers: any[], selector: string, attr?: string): void {
+    let elementByAction;
+    const attrAction = Util.isDefined(attr) ? attr : permission.attr;
+    const allElements = elementRef.nativeElement.querySelectorAll(selector);
+
+    allElements.forEach(element => {
+      if (element.getAttribute('attr') === attrAction) {
+        elementByAction = element;
+      }
+    });
+
+    if (Util.isDefined(elementByAction)) {
+      if (!permission.visible) {
+        elementByAction.remove();
+      } else if (!permission.enabled) {
+        elementByAction.disabled = true;
+        const mutationObserver = PermissionsUtils.registerDisabledChangesInDom(elementByAction);
+        mutationObservers.push(mutationObserver);
       }
     }
   }

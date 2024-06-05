@@ -27,7 +27,6 @@ import { OPermissions } from '../../types';
 import { OListPermissions } from '../../types/o-list-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
-import { PermissionsUtils } from '../../util';
 import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
@@ -207,53 +206,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public ngOnInit(): void {
     this.initialize();
     this.permissions = this.permissionsService.getGridPermissions(this.oattr, this.actRoute);
-    this.actionsPermissions = this.getActionsPermissions();
-    if (Util.isDefined(this.actionsPermissions)) {
-      const insertPerm: OPermissions = this.getPermissionByAttr('insert');
-      const refreshPerm: OPermissions = this.getPermissionByAttr('refresh');
+    this.actionsPermissions = this.getActionsPermissions(this.permissions);
+    this.setButtonPermissions();
+  }
 
-      if (Util.isDefined(refreshPerm)) {
-        this.refreshButton = refreshPerm.visible;
-        this.enabledRefreshButton = refreshPerm.enabled;
-      }
-      if (Util.isDefined(insertPerm)) {
-        this.insertButton = insertPerm.visible
-        this.enabledInsertButton = insertPerm.enabled;
-      }
-    }
-  }
-  public getPermissionByAttr(attr: string): OPermissions {
-    return this.actionsPermissions.find((perm: OPermissions) => perm.attr === attr);
-  }
-  private permissionManagement(permission: OPermissions, attr?: string): void {
-    let elementByAction;
-    const attrAction = Util.isDefined(attr) ? attr : permission.attr;
-    const allElements = this.elRef.nativeElement.querySelectorAll('[o-grid-toolbar]');
 
-    allElements.forEach(element => {
-      if (element.getAttribute('attr') === attrAction) {
-        elementByAction = element;
-      }
-    });
-    if (Util.isDefined(elementByAction)) {
-      if (!permission.visible) {
-        elementByAction.remove();
-      } else {
-        if (!permission.enabled) {
-          elementByAction.disabled = true;
-          const mutationObserver = PermissionsUtils.registerDisabledChangesInDom(elementByAction);
-          this.mutationObservers.push(mutationObserver);
-        }
-      }
-    }
-  }
-  getActionsPermissions(): OPermissions[] {
-    let permissions: OPermissions[];
-    if (Util.isDefined(this.permissions)) {
-      permissions = (this.permissions.actions || []);
-    }
-    return permissions;
-  }
 
   public initialize(): void {
     super.initialize();
@@ -292,12 +249,28 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
+    this.manageCustomPermissions();
+  }
+  private setButtonPermissions(): void {
     if (Util.isDefined(this.actionsPermissions)) {
-      const customPermissions = this.actionsPermissions.filter(perm => perm.attr !== 'insert' && perm.attr !== 'refresh' && perm.attr !== 'delete');
-      customPermissions.forEach(permission => {
-        this.permissionManagement(permission);
-      });
+      this.setPermission('insert', 'insertButton', 'enabledInsertButton');
+      this.setPermission('refresh', 'refreshButton', 'enabledRefreshButton');
     }
+  }
+
+  private setPermission(attr: string, visibleProp: string, enabledProp: string): void {
+    const perm = this.getPermissionByAttr(attr, this.actionsPermissions);
+    if (Util.isDefined(perm)) {
+      this[visibleProp] = perm.visible;
+      this[enabledProp] = perm.enabled;
+    }
+  }
+
+  private manageCustomPermissions(): void {
+    const customPermissions = this.actionsPermissions.filter(perm => !['insert', 'refresh', 'delete'].includes(perm.attr));
+    customPermissions.forEach(permission => {
+      this.managePermission(this.elRef, permission, this.mutationObservers, '[o-grid-toolbar]');
+    });
   }
 
   public ngAfterContentInit(): void {
