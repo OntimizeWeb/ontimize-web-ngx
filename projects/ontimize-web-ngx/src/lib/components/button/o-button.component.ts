@@ -90,31 +90,31 @@ export class OButtonComponent implements OnInit {
   }
 
   isFab(): boolean {
-    return this.otype === 'FAB'
+    return this.otype === 'FAB';
   }
 
   isRaised(): boolean {
-    return this.otype === 'RAISED'
+    return this.otype === 'RAISED';
   }
 
   isFlat(): boolean {
-    return this.otype === 'FLAT'
+    return this.otype === 'FLAT';
   }
 
   isStroked(): boolean {
-    return (this.otype === 'STROKED' || !this.otype)
+    return (this.otype === 'STROKED' || !this.otype);
   }
 
   isBasic(): boolean {
-    return this.otype === 'BASIC'
+    return this.otype === 'BASIC';
   }
 
   isMiniFab(): boolean {
-    return this.otype === 'FAB-MINI'
+    return this.otype === 'FAB-MINI';
   }
 
   isIconButton(): boolean {
-    return this.otype === 'ICON'
+    return this.otype === 'ICON';
   }
   isVisible(): boolean {
     return this.visible;
