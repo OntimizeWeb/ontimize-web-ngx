@@ -2,6 +2,9 @@ export type OAppLayoutMode = 'mobile' | 'desktop';
 export type OSidenavMode = 'over' | 'push' | 'side';
 export type CHANGE_EVENTS = 'onValueChange' | 'onChange';
 
+export type ORowHeight = 'small' | 'medium' | 'large';
+export type OTableEditionMode = 'none' | 'click' | 'dblclick' | 'doubleclick';
+export type OTableDetailMode = 'none' | 'click' | 'dblclick' | 'doubleclick';
 export class Codes {
 
   public static PAGINATED_QUERY_METHOD = 'advancedQuery';
