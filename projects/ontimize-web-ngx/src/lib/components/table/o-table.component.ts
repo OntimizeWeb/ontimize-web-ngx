@@ -58,7 +58,6 @@ import { SQLOrder } from '../../types/sql-order.type';
 import { OColumnAggregate } from '../../types/table/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/table/o-column-value-filter.type';
 import { TableFilterByColumnDialogResult } from '../../types/table/o-table-filter-by-column-data.type';
-import { OTableGlobalConfig } from '../../types/table/o-table-global-config.type';
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
@@ -71,28 +70,20 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
-import {
-  AbstractOServiceComponent,
-  DEFAULT_INPUTS_O_SERVICE_COMPONENT,
-  DEFAULT_OUTPUTS_O_SERVICE_COMPONENT
-} from '../o-service-component.class';
+import { AbstractOServiceComponent, DEFAULT_INPUTS_O_SERVICE_COMPONENT, DEFAULT_OUTPUTS_O_SERVICE_COMPONENT } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
-import {
-  OTableFilterByColumnDataDialogComponent
-} from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
+import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
 import { OBaseTablePaginator } from './extensions/footer/paginator/o-base-table-paginator.class';
 import { OTableButtonComponent } from './extensions/header/table-button/o-table-button.component';
 import { OTableColumnSelectAllDirective } from './extensions/header/table-column-select-all/o-table-column-select-all.directive';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
-import {
-  OTableColumnsGroupingColumnComponent
-} from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
+import { OTableColumnsGroupingColumnComponent } from './extensions/header/table-columns-grouping/columns/o-table-columns-grouping-column.component';
 import { OTableHeaderComponent } from './extensions/header/table-header/o-table-header.component';
 import { OTableInsertableRowComponent } from './extensions/header/table-insertable-row/o-table-insertable-row.component';
 import { OTableOptionComponent } from './extensions/header/table-option/o-table-option.component';
@@ -100,10 +91,7 @@ import { OTableDataSourceService } from './extensions/o-table-datasource.service
 import { OTableVirtualScrollStrategy } from './extensions/o-table-strategy.service';
 import { OTableDao } from './extensions/o-table.dao';
 import { OTableGroupedRow } from './extensions/row/o-table-row-group.class';
-import {
-  OTableRowExpandableComponent,
-  OTableRowExpandedChange
-} from './extensions/row/table-row-expandable/o-table-row-expandable.component';
+import { OTableRowExpandableComponent, OTableRowExpandedChange } from './extensions/row/table-row-expandable/o-table-row-expandable.component';
 import { OMatSort } from './extensions/sort/o-mat-sort';
 import { O_TABLE_GLOBAL_CONFIG } from './utils/o-table.tokens';
 
@@ -297,8 +285,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ViewChild(OMatSort, { static: false }) sort: OMatSort;
 
   public virtualScrollViewport: CdkVirtualScrollViewport;
-
-  public oTableGlobalConfig: OTableGlobalConfig;
 
   @ViewChild('virtualScrollViewPort', { static: false }) set cdkVirtualScrollViewport(value: CdkVirtualScrollViewport) {
     if (value != this.virtualScrollViewport) {
@@ -698,21 +684,35 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     this.snackBarService = this.injector.get(SnackBarService);
-    this.getGlobalConfig();
+    this.getInjectionTokenConfig();
   }
 
-  private getGlobalConfig() {
+  private getInjectionTokenConfig() {
     try {
-      this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
-      if (Util.isDefined(this.oTableGlobalConfig.autoAdjust)) {
-        this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
+      const oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
+      if (Util.isDefined(oTableGlobalConfig.autoAdjust)) {
+        this.autoAdjust = oTableGlobalConfig.autoAdjust;
       };
-      if (Util.isDefined(this.oTableGlobalConfig.autoAlignTitles)) {
-        this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles;
+      if (Util.isDefined(oTableGlobalConfig.autoAlignTitles)) {
+        this.autoAlignTitles = oTableGlobalConfig.autoAlignTitles;
       }
+      if (Util.isDefined(oTableGlobalConfig.filterColumnActiveByDefault)) {
+        this.filterColumnActiveByDefault = oTableGlobalConfig.filterColumnActiveByDefault;
+      }
+      if (Util.isDefined(oTableGlobalConfig.editionMode) && Codes.isValidEditionMode(oTableGlobalConfig.editionMode)) {
+        this.editionMode = oTableGlobalConfig.editionMode;
+      }
+      if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
+        this.detailMode = oTableGlobalConfig.detailMode;
+      }
+
+      if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
+        this.rowHeight = oTableGlobalConfig.rowHeight;
+      };
     } catch (error) {
       // Do nothing because is optional
     }
+
   }
 
   get state(): OTableComponentStateClass {

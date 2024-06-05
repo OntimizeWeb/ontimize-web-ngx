@@ -11,8 +11,8 @@ import { OErrorDialogManager } from '../services/o-error-dialog-manager.service'
 import { OntimizeService } from '../services/ontimize/ontimize.service';
 import { AbstractServiceComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
-import { OQueryDataArgs } from '../types/query-data-args.type';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
+import { OQueryDataArgs } from '../types/query-data-args.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
