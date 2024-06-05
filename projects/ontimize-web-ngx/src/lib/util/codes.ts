@@ -25,7 +25,7 @@ export class Codes {
   public static DETAIL_MODE_NONE = 'none';
   public static DETAIL_MODE_CLICK = 'click';
   public static DETAIL_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
-  static AVAILABLE_DETAIL_MODES = [Codes.DETAIL_MODE_NONE, Codes.DETAIL_MODE_CLICK, ...Codes.DETAIL_MODE_DBLCLICK_VALUES];
+  public static readonly AVAILABLE_DETAIL_MODES = [Codes.DETAIL_MODE_NONE, Codes.DETAIL_MODE_CLICK, ...Codes.DETAIL_MODE_DBLCLICK_VALUES];
 
   public static EDITION_MODE_NONE = 'none';
   public static EDITION_MODE_CLICK = 'click';
