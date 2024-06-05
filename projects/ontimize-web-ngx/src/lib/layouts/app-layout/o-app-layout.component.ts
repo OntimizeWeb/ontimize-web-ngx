@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChild, EventEmitter, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material';
 
 import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
@@ -7,8 +7,6 @@ import { OUserInfoConfigurationDirective } from '../../components/user-info/user
 import { InputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
-import { O_GLOBAL_CONFIG } from '../../types/o-global-config.type';
-
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
@@ -25,7 +23,6 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'showTitle: show-title',
   'staticTitle: static-title',
   'showStaticTitle: show-static-title'
-
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -45,22 +42,6 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
 })
 
 export class OAppLayoutComponent implements AfterViewInit {
-
-  constructor(protected injector: Injector) {
-    this.getGlobalInjectionTokenConfig();
-  }
-
-  private getGlobalInjectionTokenConfig() {
-    try {
-      const oGlobalConfig = this.injector.get(O_GLOBAL_CONFIG);
-
-      if (Util.isDefined(oGlobalConfig.rowHeight) && Codes.isValidRowHeight(oGlobalConfig.rowHeight)) {
-        this.headerHeight = oGlobalConfig.rowHeight;
-      };
-    } catch (error) {
-      // Do nothing because is optional
-    }
-  }
 
   @InputConverter()
   sidenavOpened: boolean = true;

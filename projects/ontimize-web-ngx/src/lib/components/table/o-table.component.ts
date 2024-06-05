@@ -705,6 +705,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
         this.detailMode = oTableGlobalConfig.detailMode;
       }
+
+      if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
+        this.rowHeight = oTableGlobalConfig.rowHeight;
+      };
     } catch (error) {
       // Do nothing because is optional
     }

@@ -233,7 +233,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @InputConverter()
   confirmExit: boolean = true;
-  oFormGlobalConfig: OFormGlobalConfig;
+
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
       val = Util.parseArray(val, true);
@@ -378,9 +378,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   private getGlobalConfig() {
     try {
-      this.oFormGlobalConfig = this.injector.get(O_FORM_GLOBAL_CONFIG);
-      if (Util.isDefined(this.oFormGlobalConfig.headerActions)) {
-        this.headeractions = this.oFormGlobalConfig.headerActions;
+      const oFormGlobalConfig = this.injector.get(O_FORM_GLOBAL_CONFIG);
+      if (Util.isDefined(oFormGlobalConfig.headerActions)) {
+        this.headeractions = oFormGlobalConfig.headerActions;
       };
 
     } catch (error) {
