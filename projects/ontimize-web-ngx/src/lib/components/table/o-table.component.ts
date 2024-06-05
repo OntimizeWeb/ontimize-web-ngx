@@ -2582,6 +2582,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
+  clearData() {
+    this.setData([], this.sqlTypes);
+  }
+
   protected deleteLocalItems() {
     const dataArray = this.getDataArray();
     const selectedItems = this.getSelectedItems();
