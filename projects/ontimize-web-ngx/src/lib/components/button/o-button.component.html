@@ -1,33 +1,33 @@
-<button type="button" (click)="onButtonClick($event)" *ngIf="isBasic()" mat-button [class.mat-icon-button]="needsIconButtonClass"
+<button type="button" (click)="onButtonClick($event)" *ngIf="isBasic() && isVisible()" mat-button [class.mat-icon-button]="needsIconButtonClass"
   [disabled]="!enabled" [color]="color">
   <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
 </button>
 
-<button type="button" (click)="onButtonClick($event)" *ngIf="isRaised()" mat-raised-button class="mat-raised-button"
+<button type="button" (click)="onButtonClick($event)" *ngIf="isRaised() && isVisible()" mat-raised-button class="mat-raised-button"
   [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="color">
   <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
 </button>
 
-<button type="button" (click)="onButtonClick($event)" *ngIf="isStroked()" mat-stroked-button [class.mat-icon-button]="needsIconButtonClass"
+<button type="button" (click)="onButtonClick($event)" *ngIf="isStroked() && isVisible()" mat-stroked-button
+  [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="color">
+  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+</button>
+
+<button type="button" (click)="onButtonClick($event)" *ngIf="isFlat() && isVisible()" mat-flat-button [class.mat-icon-button]="needsIconButtonClass"
   [disabled]="!enabled" [color]="color">
   <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
 </button>
 
-<button type="button" (click)="onButtonClick($event)" *ngIf="isFlat()" mat-flat-button [class.mat-icon-button]="needsIconButtonClass"
-  [disabled]="!enabled" [color]="color">
+<button type="button" (click)="onButtonClick($event)" *ngIf="isIconButton() && isVisible()" mat-icon-button
+  [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="color">
   <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
 </button>
 
-<button type="button" (click)="onButtonClick($event)" *ngIf="isIconButton()" mat-icon-button [class.mat-icon-button]="needsIconButtonClass"
-  [disabled]="!enabled" [color]="color">
+<button type="button" (click)="onButtonClick($event)" *ngIf="isFab() && isVisible()" mat-fab [disabled]="!enabled" [color]="color">
   <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
 </button>
 
-<button type="button" (click)="onButtonClick($event)" *ngIf="isFab()" mat-fab [disabled]="!enabled" [color]="color">
-  <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
-</button>
-
-<button type="button" (click)="onButtonClick($event)" *ngIf="isMiniFab()" mat-mini-fab [disabled]="!enabled" [color]="color">
+<button type="button" (click)="onButtonClick($event)" *ngIf="isMiniFab() && isVisible()" mat-mini-fab [disabled]="!enabled" [color]="color">
   <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
 </button>
 
