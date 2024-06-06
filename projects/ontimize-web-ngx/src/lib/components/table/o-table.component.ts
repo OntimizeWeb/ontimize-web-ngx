@@ -479,7 +479,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   set visibleColArray(arg: any[]) {
-    const permissionsBlocked = this.permissions ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
+    const permissionsBlocked = this.permissions && this.permissions.columns ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
