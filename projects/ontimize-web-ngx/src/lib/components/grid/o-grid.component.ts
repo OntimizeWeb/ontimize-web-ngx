@@ -24,7 +24,7 @@ import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServi
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
 import { OPermissions } from '../../types';
-import { OListPermissions } from '../../types/o-list-permissions.type';
+import { OGridPermissions } from '../../types/o-grid-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { Codes } from '../../util/codes';
@@ -182,7 +182,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected media: MediaObserver;
 
   protected oMatSort: OMatSort;
-  protected permissions: OListPermissions;
+  protected permissions: OGridPermissions;
   protected actionsPermissions: OPermissions[];
   public enabledInsertButton: boolean = true;
   public enabledRefreshButton: boolean = true;
