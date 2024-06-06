@@ -16,10 +16,13 @@ import { PermissionsService } from '../services/permissions/permissions.service'
 import { AbstractServiceComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
+import { OPermissions } from '../types';
 import { Expression } from '../types/expression.type';
+import { O_GLOBAL_CONFIG } from '../types/o-global-config.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { OTableInitializationOptions } from '../types/table/o-table-initialization-options.type';
+import { PermissionsUtils } from '../util';
 import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { FilterExpressionUtils } from '../util/filter-expression.utils';
@@ -248,6 +251,10 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected clickPrevent = false;
   protected _quickFilterAppearance: MatFormFieldAppearance = 'outline';
 
+  private mutationObservers: MutationObserver[] = [];
+  public enabledInsertButton: boolean = true;
+  public enabledRefreshButton: boolean = true;
+
   constructor(
     injector: Injector,
     protected elRef: ElementRef,
@@ -267,6 +274,20 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       this.formLayoutManager = this.oFormLayoutDialog.formLayoutManager;
     } catch (e) {
       // no parent form layout manager
+    }
+    this.getGlobalInjectionTokenConfig();
+  }
+
+  private getGlobalInjectionTokenConfig() {
+
+    try {
+      const oGlobalConfig = this.injector.get(O_GLOBAL_CONFIG);
+      if (Util.isDefined(oGlobalConfig.storeState)) {
+        this.storeState = oGlobalConfig.storeState;
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 
@@ -397,6 +418,56 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       const compRoute = this.formLayoutManager.getRouteForComponent(this);
       if (compRoute && compRoute.length > 0) {
         routeArr.unshift(...compRoute);
+      }
+    }
+  }
+  protected setButtonPermissions(actionsPermissions): void {
+    if (Util.isDefined(actionsPermissions)) {
+      this.setPermission('insert', 'insertButton', 'enabledInsertButton', actionsPermissions);
+      this.setPermission('refresh', 'refreshButton', 'enabledRefreshButton', actionsPermissions);
+      this.setPermission('delete', 'deleteButton', 'enabledDeleteButton', actionsPermissions);
+    }
+  }
+  protected setPermission(attr: string, visibleProp: string, enabledProp: string, actionsPermissions): void {
+    const perm = this.getPermissionByAttr(attr, actionsPermissions);
+    if (Util.isDefined(perm)) {
+      this[visibleProp] = perm.visible;
+      this[enabledProp] = perm.enabled;
+    }
+  }
+
+  protected manageCustomPermissions(actionsPermissions, selector): void {
+    const customPermissions = actionsPermissions.filter(perm => !['insert', 'refresh', 'delete'].includes(perm.attr));
+    customPermissions.forEach(permission => {
+      this.managePermission(this.elRef, permission, this.mutationObservers, selector);
+    });
+  }
+  protected getActionsPermissions(permissions: any): OPermissions[] {
+    return Util.isDefined(permissions) ? (permissions.actions || []) : [];
+  }
+
+  protected getPermissionByAttr(attr: string, actionsPermissions: OPermissions[]): OPermissions {
+    return actionsPermissions.find((perm: OPermissions) => perm.attr === attr);
+  }
+
+  protected managePermission(elementRef: any, permission: OPermissions, mutationObservers: any[], selector: string, attr?: string): void {
+    let elementByAction;
+    const attrAction = Util.isDefined(attr) ? attr : permission.attr;
+    const allElements = elementRef.nativeElement.querySelectorAll(selector);
+
+    allElements.forEach(element => {
+      if (element.getAttribute('attr') === attrAction) {
+        elementByAction = element;
+      }
+    });
+
+    if (Util.isDefined(elementByAction)) {
+      if (!permission.visible) {
+        elementByAction.remove();
+      } else if (!permission.enabled) {
+        elementByAction.disabled = true;
+        const mutationObserver = PermissionsUtils.registerDisabledChangesInDom(elementByAction);
+        mutationObservers.push(mutationObserver);
       }
     }
   }
