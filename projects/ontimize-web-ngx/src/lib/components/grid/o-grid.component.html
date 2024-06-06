@@ -88,7 +88,7 @@
     </mat-grid-tile>
   </mat-grid-list>
 
-  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add()" class="o-grid-add-floatable-button"
+  <button type="button" aria-label="Insert" *ngIf="insertButton && insertButtonFloatable" [disabled]="!enabledInsertButton" mat-fab (click)="add()" class="o-grid-add-floatable-button"
     [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
     [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
     <mat-icon svgIcon="ontimize:add"></mat-icon>
