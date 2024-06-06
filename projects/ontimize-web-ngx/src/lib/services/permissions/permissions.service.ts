@@ -170,7 +170,7 @@ export class PermissionsService {
     const compPerm: OComponentPermissions = perm.component;
 
     if (!Util.isDefined(routePerm) || !Util.isDefined(compPerm)) {
-      return <OComponentPermissions>(compPerm || routePerm);
+      return compPerm || routePerm;
     }
 
     const permissions: OComponentPermissions = {
