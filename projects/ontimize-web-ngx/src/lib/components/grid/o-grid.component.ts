@@ -184,9 +184,6 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected oMatSort: OMatSort;
   protected permissions: OGridPermissions;
   protected actionsPermissions: OPermissions[];
-  public enabledInsertButton: boolean = true;
-  public enabledRefreshButton: boolean = true;
-  private mutationObservers: MutationObserver[] = [];
 
 
   constructor(
@@ -207,7 +204,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     this.initialize();
     this.permissions = this.permissionsService.getGridPermissions(this.oattr, this.actRoute);
     this.actionsPermissions = this.getActionsPermissions(this.permissions);
-    this.setButtonPermissions();
+    this.setButtonPermissions(this.actionsPermissions);
   }
 
 
@@ -249,28 +246,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
-    this.manageCustomPermissions();
-  }
-  private setButtonPermissions(): void {
-    if (Util.isDefined(this.actionsPermissions)) {
-      this.setPermission('insert', 'insertButton', 'enabledInsertButton');
-      this.setPermission('refresh', 'refreshButton', 'enabledRefreshButton');
-    }
-  }
-
-  private setPermission(attr: string, visibleProp: string, enabledProp: string): void {
-    const perm = this.getPermissionByAttr(attr, this.actionsPermissions);
-    if (Util.isDefined(perm)) {
-      this[visibleProp] = perm.visible;
-      this[enabledProp] = perm.enabled;
-    }
-  }
-
-  private manageCustomPermissions(): void {
-    const customPermissions = this.actionsPermissions.filter(perm => !['insert', 'refresh', 'delete'].includes(perm.attr));
-    customPermissions.forEach(permission => {
-      this.managePermission(this.elRef, permission, this.mutationObservers, '[o-grid-toolbar]');
-    });
+    this.manageCustomPermissions(this.actionsPermissions, '[o-grid-toolbar]');
   }
 
   public ngAfterContentInit(): void {

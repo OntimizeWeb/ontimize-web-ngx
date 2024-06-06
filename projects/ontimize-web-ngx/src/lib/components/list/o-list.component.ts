@@ -141,9 +141,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   protected oMatSort: OMatSort;
   protected actionsPermissions: OPermissions[];
-  public enabledInsertButton: boolean = true;
-  public enabledRefreshButton: boolean = true;
-  private mutationObservers: MutationObserver[] = [];
+
 
   constructor(
     injector: Injector,
@@ -162,7 +160,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     this.initialize();
     this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
     this.actionsPermissions = this.getActionsPermissions(this.permissions);
-    this.setButtonPermissions();
+    this.setButtonPermissions(this.actionsPermissions);
   }
 
   public ngAfterViewInit(): void {
@@ -175,29 +173,9 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
-    this.manageCustomPermissions();
-  }
-  private setButtonPermissions(): void {
-    if (Util.isDefined(this.actionsPermissions)) {
-      this.setPermission('insert', 'insertButton', 'enabledInsertButton');
-      this.setPermission('refresh', 'refreshButton', 'enabledRefreshButton');
-      this.setPermission('delete', 'deleteButton', 'enabledDeleteButton');
-    }
-  }
-  private setPermission(attr: string, visibleProp: string, enabledProp: string): void {
-    const perm = this.getPermissionByAttr(attr, this.actionsPermissions);
-    if (Util.isDefined(perm)) {
-      this[visibleProp] = perm.visible;
-      this[enabledProp] = perm.enabled;
-    }
+    this.manageCustomPermissions(this.actionsPermissions, '[o-list-toolbar]');
   }
 
-  private manageCustomPermissions(): void {
-    const customPermissions = this.actionsPermissions.filter(perm => !['insert', 'refresh', 'delete'].includes(perm.attr));
-    customPermissions.forEach(permission => {
-      this.managePermission(this.elRef, permission, this.mutationObservers, '[o-list-toolbar]');
-    });
-  }
   public ngAfterContentInit(): void {
     this.setListItemDirectivesData();
     this.subscription.add(this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData()));
