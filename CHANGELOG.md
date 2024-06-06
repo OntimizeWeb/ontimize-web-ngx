@@ -1,6 +1,21 @@
 ## 15.1.0
 > [!NOTE]
-> In this version, the features and bugfixes of version [8.14.14](#81414-2024-05-02) were integrated
+> In this version, the features and bugfixes of versions [8.14.14](#81414-2024-05-02) and [8.14.15](#81415-2024-06-06) were integrated
+
+## 8.14.15 (2024-06-06)
+### Features
+* **MenuItem, MenuGroup**: New property `visible`([a079be8](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/a079be8)) Closes [#1597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1597)
+* **IServiceDataComponent**: new method `clearData`([aac4d90](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/aac4d90))
+* Injection Tokens ([11e762b](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/11e762b)) Closes [#1601](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1601)
+  * New injection token `O_GLOBAL_CONFIG` to allow customize the store state
+  * New injection token `O_FORM_CONFIG` to allow customize the header actions
+  * Updated injection token `O_TABLE_GLOBAL_CONFIG` to allow customize options such as  `filterColumnActiveByDefault`, `editionMode`, `detailMode`, `rowHeight`
+* **o-button, o-list, o-grid**: Added permissions ([fb41830](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/fb41830)) Closes [#1602](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1602)
+
+### Bug fixes
+* **o-table**:
+  * Fixed bug in local sorting with nullable values ([926daaf](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/926daaf)) Closes [#1596](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1596)
+  * Fixed bug with permissions ([e6cf942](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/e6cf942)) Closes [#1612](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1612)
 
 ## 8.14.14 (2024-05-02)
 ### Bug fixes

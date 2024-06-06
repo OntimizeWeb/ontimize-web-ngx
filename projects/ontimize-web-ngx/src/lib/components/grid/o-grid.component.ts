@@ -11,7 +11,6 @@ import {
   OnInit,
   Optional,
   QueryList,
-  SimpleChange,
   ViewChild,
   ViewChildren,
   ViewEncapsulation
@@ -27,6 +26,8 @@ import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
+import { OPermissions } from '../../types';
+import { OGridPermissions } from '../../types/o-grid-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { Codes } from '../../util/codes';
@@ -176,6 +177,9 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected media: MediaObserver;
 
   protected oMatSort: OMatSort;
+  protected permissions: OGridPermissions;
+  protected actionsPermissions: OPermissions[];
+
 
   constructor(
     injector: Injector,
@@ -193,7 +197,12 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
 
   public ngOnInit(): void {
     this.initialize();
+    this.permissions = this.permissionsService.getGridPermissions(this.oattr, this.actRoute);
+    this.actionsPermissions = this.getActionsPermissions(this.permissions);
+    this.setButtonPermissions(this.actionsPermissions);
   }
+
+
 
   public initialize(): void {
     super.initialize();
@@ -232,6 +241,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
+    this.manageCustomPermissions(this.actionsPermissions, '[o-grid-toolbar]');
   }
 
   public ngAfterContentInit(): void {

@@ -29,6 +29,7 @@ import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-fo
 import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
+import { O_GLOBAL_CONFIG } from '../../types/o-global-config.type';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
@@ -261,6 +262,23 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       this.subscription.add(this.localStorageService.onRouteChange.subscribe(res => {
         this.updateStateStorage();
       }));
+    }
+    this.getInjectionTokenConfig();
+
+  }
+
+  private getInjectionTokenConfig() {
+    try {
+      const oGlobalConfig = this.injector.get(O_GLOBAL_CONFIG);
+      if (Util.isDefined(oGlobalConfig.storeState)) {
+        this.storeState = oGlobalConfig.storeState;
+        if (!this.storeState) {
+          this.subscription.unsubscribe();
+        }
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 
