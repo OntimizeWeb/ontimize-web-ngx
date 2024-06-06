@@ -28,12 +28,13 @@ import { NavigationService, ONavigationItem } from '../../services/navigation.se
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
+import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
-import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
@@ -42,10 +43,10 @@ import { OFormControl } from '../input/o-form-control.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
+import { O_FORM_GLOBAL_CONFIG } from './o-form-tokens';
 import { OFormValue } from './o-form-value';
-import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OFormMessageService } from './services/o-form-message.service';
+import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
 interface IFormDataComponentHash {
   [attr: string]: IFormDataComponent;
@@ -234,6 +235,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @InputConverter()
   confirmExit: boolean = true;
+
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
       val = Util.parseArray(val, true);
@@ -375,6 +377,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.formContainer.setForm(this);
     } catch (e) {
       //
+    }
+    this.getGlobalConfig();
+  }
+
+  private getGlobalConfig() {
+    try {
+      const oFormGlobalConfig = this.injector.get(O_FORM_GLOBAL_CONFIG);
+      if (Util.isDefined(oFormGlobalConfig.headerActions)) {
+        this.headeractions = oFormGlobalConfig.headerActions;
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 

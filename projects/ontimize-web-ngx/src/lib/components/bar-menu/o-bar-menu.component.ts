@@ -5,6 +5,7 @@ import { PermissionsService } from '../../services/permissions/permissions.servi
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { MenuRootItem } from '../../types/menu-root-item.type';
 import { Util } from '../../util/util';
+import { Subscription } from 'rxjs';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -33,6 +34,7 @@ export class OBarMenuComponent implements OnInit {
   protected _menuTitle: string;
   protected _tooltip: string;
   protected _id: string;
+  protected subscription: Subscription = new Subscription();
 
   constructor(
     protected elRef: ElementRef,
@@ -41,6 +43,7 @@ export class OBarMenuComponent implements OnInit {
     this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.appMenuService = this.injector.get(AppMenuService);
+    this.subscription.add(this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots()));
     this.menuRoots = this.appMenuService.getMenuRoots();
   }
 
@@ -108,4 +111,14 @@ export class OBarMenuComponent implements OnInit {
   get menuItems(): MenuRootItem[] {
     return this.menuRoots;
   }
+
+  refreshMenuRoots(): void {
+    this.menuRoots= [...this.appMenuService.getMenuRoots()];
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+
+  }
 }
+

@@ -16,14 +16,15 @@
       <div class="navMenu">
         <nav *ngFor="let menuRootItem of menuRootArray">
 
-          <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group'">
+          <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)">
             <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
               [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
             </o-app-sidenav-menu-item>
           </ul>
 
           <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
-            *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group'" (onItemClick)="onMenuItemClick()">
+            *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group' && appMenuService.isVisible(menuRootItem)"
+            (onItemClick)="onMenuItemClick()">
           </o-app-sidenav-menu-group>
 
         </nav>

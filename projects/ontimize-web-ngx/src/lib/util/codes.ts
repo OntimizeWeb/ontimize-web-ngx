@@ -2,6 +2,9 @@ export type OAppLayoutMode = 'mobile' | 'desktop';
 export type OSidenavMode = 'over' | 'push' | 'side';
 export type CHANGE_EVENTS = 'onValueChange' | 'onChange';
 
+export type ORowHeight = 'small' | 'medium' | 'large';
+export type OTableEditionMode = 'none' | 'click' | 'dblclick' | 'doubleclick';
+export type OTableDetailMode = 'none' | 'click' | 'dblclick' | 'doubleclick';
 export class Codes {
 
   public static PAGINATED_QUERY_METHOD = 'advancedQuery';
@@ -17,15 +20,17 @@ export class Codes {
   public static EDIT_ICON = 'mode_edit';
 
   public static DEFAULT_ROW_HEIGHT = 'medium';
-  public static AVAILABLE_ROW_HEIGHTS_VALUES = ['small', 'medium', 'large'];
+  public static readonly AVAILABLE_ROW_HEIGHTS_VALUES = ['small', 'medium', 'large'];
 
   public static DETAIL_MODE_NONE = 'none';
   public static DETAIL_MODE_CLICK = 'click';
   public static DETAIL_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
+  public static readonly AVAILABLE_DETAIL_MODES = [Codes.DETAIL_MODE_NONE, Codes.DETAIL_MODE_CLICK, ...Codes.DETAIL_MODE_DBLCLICK_VALUES];
 
   public static EDITION_MODE_NONE = 'none';
   public static EDITION_MODE_CLICK = 'click';
   public static EDITION_MODE_DBLCLICK_VALUES = ['dblclick', 'doubleclick'];
+  public static readonly AVAILABLE_MODES = [Codes.EDITION_MODE_NONE, Codes.EDITION_MODE_CLICK, ...Codes.EDITION_MODE_DBLCLICK_VALUES];
 
   public static SELECTION_MODE_NONE = 'none';
   public static SELECTION_MODE_SINGLE = 'single';
@@ -124,6 +129,7 @@ export class Codes {
   public static DEFAULT_CHANGE_EVENT: CHANGE_EVENTS = 'onValueChange';
   public static TYPES_DATE_GROUPS = ["YEAR", "MONTH", "YEAR_MONTH", "YEAR_MONTH_DAY"];
 
+
   static isDoubleClickMode(value: string): boolean {
     return Codes.DETAIL_MODE_DBLCLICK_VALUES.indexOf(value) !== -1;
   }
@@ -158,4 +164,11 @@ export class Codes {
     }
     return !((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105));
   }
+  static isValidEditionMode(editionMode: OTableEditionMode) {
+    return Codes.AVAILABLE_MODES.indexOf(editionMode) !== -1;
+  }
+  static isValidDetailMode(detailMode: OTableDetailMode): any {
+    return Codes.AVAILABLE_DETAIL_MODES.indexOf(detailMode) !== -1;
+  }
+
 }

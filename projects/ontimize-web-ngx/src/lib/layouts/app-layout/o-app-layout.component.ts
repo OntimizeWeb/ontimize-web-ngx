@@ -8,7 +8,6 @@ import { InputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
 
-
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
   'sidenavMode: sidenav-mode',
@@ -24,7 +23,6 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'showTitle: show-title',
   'staticTitle: static-title',
   'showStaticTitle: show-static-title'
-
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
