@@ -7,10 +7,11 @@
   * New injection token `O_FORM_CONFIG` to allow customize the header actions
   * Updated injection token `O_TABLE_GLOBAL_CONFIG` to allow customize options such as  `filterColumnActiveByDefault`, `editionMode`, `detailMode`, `rowHeight`
 * **o-button, o-list, o-grid**: Added permissions ([fb41830](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/fb41830)) Closes [#1602](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1602)
-* **o-table**: Fixed bug with permissions ([e6cf942](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/e6cf942)) Closes [#1612](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1612)
 
 ### Bug fixes
-* **o-table**: Fixed bug in local sorting with nullable values ([926daaf](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/926daaf)) Closes [#1596](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1596)
+* **o-table**:
+  * Fixed bug in local sorting with nullable values ([926daaf](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/926daaf)) Closes [#1596](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1596)
+  * Fixed bug with permissions ([e6cf942](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/e6cf942)) Closes [#1612](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1612)
 
 ## 8.14.14 (2024-05-02)
 ### Bug fixes
