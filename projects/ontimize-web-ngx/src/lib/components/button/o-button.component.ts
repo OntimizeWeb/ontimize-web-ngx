@@ -1,7 +1,6 @@
-import { Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injector, OnInit, Type, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
-import { Injector, Type } from '@angular/core';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { Codes } from '../../util/codes';
 
