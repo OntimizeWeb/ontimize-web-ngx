@@ -1,11 +1,14 @@
 import { Injectable, Injector } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { AppConfig } from '../../config/app-config';
+import { OComponentPermissionsByRoute } from '../../types/o-component-permissions-by-route.type';
 import { OComponentPermissions } from '../../types/o-component-permissions.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
+import { OGridPermissions } from '../../types/o-grid-permissions.type';
+import { OListPermissions } from '../../types/o-list-permissions.type';
 import { OPermissionsDefinition } from '../../types/o-permissions-definition.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { ORoutePermissions } from '../../types/o-route-permissions.type';
@@ -19,6 +22,7 @@ import { OntimizePermissionsService } from './ontimize-permissions.service';
   providedIn: 'root'
 })
 export class PermissionsService {
+  public onChangePermissions: Subject<any> = new Subject<[]>();
 
   protected permissionsService: any;
   protected ontimizePermissionsConfig: any;
@@ -51,6 +55,7 @@ export class PermissionsService {
 
   restart() {
     this.permissions = undefined;
+    this.onChangePermissions.next(this.permissions);
   }
 
   hasPermissions(): boolean {
@@ -81,12 +86,12 @@ export class PermissionsService {
     });
   }
 
-
-  protected queryPermissions(): Observable<any> {
+  public queryPermissions(): Observable<any> {
     const self = this;
     const dataObservable: Observable<any> = new Observable(innerObserver => {
       self.permissionsService.loadPermissions().subscribe((res: any) => {
         self.permissions = res;
+        self.onChangePermissions.next(self.permissions);
         innerObserver.next(res);
       }, (err: any) => {
         console.error('[Permissions.queryPermissions]: error', err);
@@ -99,6 +104,9 @@ export class PermissionsService {
   }
 
   protected getPermissionIdFromActRoute(actRoute: ActivatedRoute): string {
+    if (!Util.isDefined(actRoute)) {
+      return undefined;
+    }
     let result: string;
     let snapshot: ActivatedRouteSnapshot = actRoute.snapshot;
     result = ((snapshot.data || {})['oPermission'] || {})['permissionId'];
@@ -121,7 +129,7 @@ export class PermissionsService {
     return result;
   }
 
-  protected getOComponentPermissions(attr: string, actRoute: ActivatedRoute, selector: string): any {
+  public getOComponentPermissions(attr: string, actRoute: ActivatedRoute, selector: string): OComponentPermissionsByRoute {
     if (!Util.isDefined(this.permissions)) {
       return undefined;
     }
@@ -135,10 +143,11 @@ export class PermissionsService {
     if (attrPermissions && attrPermissions.selector === selector) {
       compPermissions = attrPermissions;
     }
-    return {
+    const permissions: OComponentPermissionsByRoute = {
       route: routePermissions,
       component: compPermissions
     };
+    return permissions;
   }
 
   getTablePermissions(attr: string, actRoute: ActivatedRoute): OTablePermissions {
@@ -161,24 +170,37 @@ export class PermissionsService {
     };
     return permissions;
   }
-
-  getFormPermissions(attr: string, actRoute: ActivatedRoute): OFormPermissions {
+  private getServiceBasePermissions(attr: string, actRoute: ActivatedRoute, selector: string): OComponentPermissions {
     if (!Util.isDefined(this.permissions)) {
       return undefined;
     }
-    const perm = this.getOComponentPermissions(attr, actRoute, 'o-form');
-    const routePerm: OFormPermissions = <OFormPermissions>perm.route;
-    const compPerm: OFormPermissions = <OFormPermissions>perm.component;
+    const perm = this.getOComponentPermissions(attr, actRoute, selector);
+    const routePerm: OComponentPermissions = perm.route;
+    const compPerm: OComponentPermissions = perm.component;
+
     if (!Util.isDefined(routePerm) || !Util.isDefined(compPerm)) {
       return compPerm || routePerm;
     }
-    const permissions: OFormPermissions = {
-      selector: 'o-form',
+
+    const permissions: OComponentPermissions = {
+      selector: selector,
       attr: routePerm.attr,
       components: this.mergeOPermissionsArrays(compPerm.components, routePerm.components),
       actions: this.mergeOPermissionsArrays(compPerm.actions, routePerm.actions)
     };
+
     return permissions;
+  }
+  getFormPermissions(attr: string, actRoute: ActivatedRoute): OFormPermissions {
+    return <OFormPermissions>this.getServiceBasePermissions(attr, actRoute, 'o-form');
+  }
+
+  getListPermissions(attr: string, actRoute: ActivatedRoute): OListPermissions {
+    return <OListPermissions>this.getServiceBasePermissions(attr, actRoute, 'o-list');
+  }
+
+  getGridPermissions(attr: string, actRoute: ActivatedRoute): OGridPermissions {
+    return <OGridPermissions>this.getServiceBasePermissions(attr, actRoute, 'o-grid');
   }
 
   getMenuPermissions(attr: string): OPermissions {
@@ -191,6 +213,27 @@ export class PermissionsService {
     permissions = allMenu.find(comp => comp.attr === attr);
 
     return permissions;
+  }
+
+  getAllMenuPermissions(): OPermissions[] {
+
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const permissions: OPermissions[] = this.permissions.menu || [];
+
+    return permissions;
+  }
+
+
+  getOButtonPermissions(attr: string, actRoute: ActivatedRoute): OPermissions {
+    let permissions;
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    permissions = this.getOComponentPermissions(attr, actRoute, 'o-button');
+
+    return permissions.component;
   }
 
   protected mergeOPermissionsArrays(permissionsA: OPermissions[], permissionsB: OPermissions[]): OPermissions[] {

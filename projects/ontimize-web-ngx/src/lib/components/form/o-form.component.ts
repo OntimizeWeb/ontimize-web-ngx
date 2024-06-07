@@ -22,7 +22,7 @@ import { IComponent } from '../../interfaces/component.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { OFormLayoutManagerComponent } from '../../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
 import { DialogService } from '../../services/dialog.service';
 import { OntimizeServiceProvider } from '../../services/factories';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
@@ -42,15 +42,18 @@ import { Util } from '../../util/util';
 import { OFormContainerComponent } from '../form-container/o-form-container.component';
 import { OFormControl } from '../input/o-form-control.class';
 import { OFormCacheClass } from './cache/o-form.cache.class';
-import { OFormBase } from './o-form-base.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
+import { OFormBase } from './o-form-base.class';
+import { O_FORM_GLOBAL_CONFIG } from './o-form-tokens';
 import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
-import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
-import { OFormLayoutManagerBase } from '../../layouts/form-layout/o-form-layout-manager-base.class';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
+import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
+
+interface IFormDataComponentHash {
+  [attr: string]: IFormDataComponent;
+}
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -236,6 +239,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
+
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
       val = Util.parseArray(val, true);
@@ -377,6 +381,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.formContainer.setForm(this);
     } catch (e) {
       //
+    }
+    this.getGlobalConfig();
+  }
+
+  private getGlobalConfig() {
+    try {
+      const oFormGlobalConfig = this.injector.get(O_FORM_GLOBAL_CONFIG);
+      if (Util.isDefined(oFormGlobalConfig.headerActions)) {
+        this.headeractions = oFormGlobalConfig.headerActions;
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 
