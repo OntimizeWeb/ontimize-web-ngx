@@ -1,6 +1,10 @@
 ## 15.1.0
 > [!NOTE]
-> In this version, the features and bugfixes of versions [8.14.14](#81414-2024-05-02) and [8.14.15](#81415-2024-06-06) were integrated
+> In this version, the features and bugfixes of versions [8.14.14](#81414-2024-05-02), [8.14.15](#81415-2024-06-06) and [8.14.16](#81416-2024-06-06) were integrated
+
+## 8.14.16 (2024-06-10)
+### Bug fixes
+* **o-card-menu-layout**:  Fixed that the component defined in the app.menu.config.ts file was not displayed([584c48d](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/584c48d)) Closes [#1618](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1618)
 
 ## 8.14.15 (2024-06-06)
 ### Features
