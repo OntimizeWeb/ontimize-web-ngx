@@ -17,6 +17,7 @@ import { OTablePermissions } from '../../types/table/o-table-permissions.type';
 import { Util } from '../../util/util';
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './ontimize-permissions.service';
+import { OTreePermissions } from '../../types/o-tree-permissions.type';
 
 @Injectable({
   providedIn: 'root'
@@ -201,6 +202,10 @@ export class PermissionsService {
 
   getGridPermissions(attr: string, actRoute: ActivatedRoute): OGridPermissions {
     return <OGridPermissions>this.getServiceBasePermissions(attr, actRoute, 'o-grid');
+  }
+
+  getTreePermissions(attr: string, actRoute: ActivatedRoute): OTreePermissions {
+    return <OTreePermissions>this.getServiceBasePermissions(attr, actRoute, 'o-tree');
   }
 
   getMenuPermissions(attr: string): OPermissions {
