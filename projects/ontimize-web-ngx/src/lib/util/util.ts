@@ -547,4 +547,9 @@ export class Util {
     return (valueA <= valueB ? -1 : 1) * (activeSortDirection === 'asc' ? 1 : -1);
   }
 
+  static cloneArray<T>(arr: T[]): T[] {
+    const clonedArray = arr.map((x) => Object.assign({}, x))
+    return clonedArray;
+  }
+
 }
