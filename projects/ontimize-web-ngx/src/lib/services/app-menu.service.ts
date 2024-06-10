@@ -1,4 +1,3 @@
-import { PermissionsService } from './permissions/permissions.service';
 import { Injectable, Injector } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -17,6 +16,7 @@ import {
 import { MenuRootItem } from '../types/menu-root-item.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
+import { PermissionsService } from './permissions/permissions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +57,7 @@ export class AppMenuService {
       spread operator (...) in array multi-level not works
       JSON.parse and JSON.stringify are the specific methods used for multi-level deep copying
     */
-    const defaultMenuConfiguration = JSON.parse(JSON.stringify(this._config.getMenuConfiguration()));
+    const defaultMenuConfiguration = Util.cloneArray(this._config.getMenuConfiguration());
     this.MENU_ROOTS = defaultMenuConfiguration;
     this.ALL_MENU_ITEMS = [];
     for (let i = 0, len = this.MENU_ROOTS.length; i < len; i++) {
