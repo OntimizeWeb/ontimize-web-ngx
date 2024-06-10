@@ -1,3 +1,7 @@
+## 8.14.16 (2024-06-10)
+### Bug fixes
+* **o-card-menu-layout**:  Fixed that the component defined in the app.menu.config.ts file was not displayed([584c48d](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/584c48d)) Closes [#1618](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1618)
+
 ## 8.14.15 (2024-06-06)
 ### Features
 * **MenuItem, MenuGroup**: New property `visible`([a079be8](https://github.com/OntimizeWeb/ontimize-web-ngx/pull/1593/commits/a079be8)) Closes [#1597](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1597)
