@@ -1,4 +1,5 @@
-import { Directive, ElementRef, EventEmitter, Injector, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injector, QueryList, Renderer2, ViewChildren } from '@angular/core';
+import { MatListItemLine, MatListItemTitle } from '@angular/material/list';
 
 import { Util } from '../../../util/util';
 import { OListItemComponent } from '../list-item/o-list-item.component';
@@ -27,7 +28,8 @@ export class OListItemTextRenderer {
   protected _icon: string;
 
   onIconClick: EventEmitter<object> = new EventEmitter<object>();
-
+  @ViewChildren(MatListItemTitle) titles: QueryList<MatListItemTitle>;
+  @ViewChildren(MatListItemLine) lines: QueryList<MatListItemLine>;
   constructor(
     public elRef: ElementRef,
     protected _renderer: Renderer2,
@@ -38,6 +40,7 @@ export class OListItemTextRenderer {
   modifyMatListItemElement() {
 
     const listItem = this.elRef.nativeElement?.parentElement?.parentElement?.parentElement;
+
     if (listItem && listItem.nodeName === 'MAT-LIST-ITEM') {
       let linesNo = 3;
       if (this.title === undefined) {
@@ -49,6 +52,8 @@ export class OListItemTextRenderer {
       if (this.secondaryText === undefined) {
         linesNo--;
       }
+      this._listItem._innerListItem._lines = this.lines;
+      this._listItem._innerListItem._titles = this.titles;
       this._listItem._innerListItem.lines = linesNo;
       listItem.querySelector('.mat-mdc-list-item').remove();
     }
