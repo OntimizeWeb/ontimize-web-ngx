@@ -285,7 +285,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if (Util.isDefined(changes.staticData)) {
+    if (Util.isDefined(changes.staticData) && !changes.staticData.firstChange ) {
       this.setData(changes.staticData.currentValue);
     }
   }
