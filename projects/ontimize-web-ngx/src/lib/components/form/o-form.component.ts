@@ -1675,8 +1675,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     this.zone.run(() => {
       this.formData = newFormData;
-      const components = { ...this.getComponents() };
-      const keyComponents = [...Object.keys(this.getComponents())];
+      const components = this.getComponents();
+      const keyComponents = [...Object.keys(components)];
       if (!Util.isArrayEmpty(this.setValueOrderArray)) {
         keyComponents.sort((a, b) => {
           const indexA = this.setValueOrderArray.indexOf(a) === -1 ? 1 : 0;
