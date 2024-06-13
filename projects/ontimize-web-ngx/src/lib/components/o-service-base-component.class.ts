@@ -284,8 +284,12 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
   }
 
+  protected canSetStaticData(staticData: any): boolean {
+    return Util.isDefined(staticData)
+  }
+
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if (Util.isDefined(changes.staticData)) {
+    if (this.canSetStaticData(changes.staticData.currentValue)) {
       this.setData(changes.staticData.currentValue);
     }
   }
