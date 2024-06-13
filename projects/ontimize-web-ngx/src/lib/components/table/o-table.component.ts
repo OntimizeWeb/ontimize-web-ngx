@@ -1629,6 +1629,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     ObservableWrapper.callEmit(this.onDataLoaded, this.daoTable.data);
   }
 
+  protected canSetStaticData(staticData): boolean {
+    return super.canSetStaticData(staticData) && Util.isDefined(this.daoTable);
+  }
+
   showDialogError(error: string, errorOptional?: string) {
     if (Util.isDefined(error) && !Util.isObject(error)) {
       this.dialogService.alert('ERROR', error);
