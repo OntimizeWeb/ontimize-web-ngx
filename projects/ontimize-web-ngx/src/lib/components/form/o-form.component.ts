@@ -1675,41 +1675,35 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     this.zone.run(() => {
       this.formData = newFormData;
-      let components = this.getComponents();
+      let components = { ...this.getComponents() };
       if ((this.setValueOrderArray != null) && !Util.isArrayEmpty(this.setValueOrderArray)) {
         this.setValueOrderArray.forEach(attr => {
           const comp = this.getFieldReference(attr);
-           if (Util.isFormDataComponent(comp)) {
-            try {
-              if (comp.isAutomaticBinding()) {
-                comp.data = self.getDataValue(attr);
-              }
-              delete components[attr];
-
-            } catch (error) {
-              console.error(error);
-             }
-
-          }
+          this.setDatainFormDataComponent(comp, attr);
+          delete components[attr];
         })
       }
 
       if (components) {
         Object.keys(components).forEach(key => {
           const comp = components[key];
-          if (Util.isFormDataComponent(comp)) {
-            try {
-              if (comp.isAutomaticBinding()) {
-                comp.data = self.getDataValue(key);
-              }
-            } catch (error) {
-              console.error(error);
-            }
-          }
+          this.setDatainFormDataComponent(comp, key);
         });
         self.initializeFields();
       }
     });
+  }
+
+  private setDatainFormDataComponent(comp: IFormDataComponent, attr: string) {
+    if (Util.isFormDataComponent(comp)) {
+      try {
+        if (comp.isAutomaticBinding()) {
+          comp.data = this.getDataValue(attr);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
   protected initializeFields(): void {
