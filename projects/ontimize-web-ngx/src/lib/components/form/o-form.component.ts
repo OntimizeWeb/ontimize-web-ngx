@@ -156,6 +156,8 @@ export const DEFAULT_INPUTS_O_FORM = [
   'ignoreDefaultNavigation: ignore-default-navigation',
 
   'messageServiceType : message-service-type',
+  //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
+  'setValueOrder: set-value-order'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -211,6 +213,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   entity: string;
   keys: string = '';
   columns: string = '';
+  setValueOrder: string = '';
   service: string;
   @BooleanInputConverter()
   stayInRecordAfterEdit: boolean = false;
@@ -239,6 +242,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
+  setValueOrderArray: string[];
 
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
@@ -693,6 +697,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
+    this.setValueOrderArray = Util.parseArray(this.setValueOrder);
 
     this.configureService();
 
@@ -1670,7 +1675,25 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     this.zone.run(() => {
       this.formData = newFormData;
-      const components = this.getComponents();
+      let components = this.getComponents();
+      if ((this.setValueOrderArray != null) && !Util.isArrayEmpty(this.setValueOrderArray)) {
+        this.setValueOrderArray.forEach(attr => {
+          const comp = this.getFieldReference(attr);
+           if (Util.isFormDataComponent(comp)) {
+            try {
+              if (comp.isAutomaticBinding()) {
+                comp.data = self.getDataValue(attr);
+              }
+              delete components[attr];
+
+            } catch (error) {
+              console.error(error);
+             }
+
+          }
+        })
+      }
+
       if (components) {
         Object.keys(components).forEach(key => {
           const comp = components[key];
