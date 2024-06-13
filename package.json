@@ -70,7 +70,7 @@
     "copyfiles": "~2.2.0",
     "eslint": "^8.28.0",
     "google-libphonenumber": "^3.2.3",
-    "gulp": "4.0.2",
+    "gulp": "5.0.0",
     "gulp-cssimport": "^7.0.0",
     "gulp-replace": "1.1.4",
     "jasmine-core": "~3.6.0",
