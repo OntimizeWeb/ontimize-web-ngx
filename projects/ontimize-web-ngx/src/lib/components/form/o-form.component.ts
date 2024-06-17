@@ -156,6 +156,8 @@ export const DEFAULT_INPUTS_O_FORM = [
   'ignoreDefaultNavigation: ignore-default-navigation',
 
   'messageServiceType : message-service-type',
+  //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
+  'setValueOrder: set-value-order'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -211,6 +213,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   entity: string;
   keys: string = '';
   columns: string = '';
+  setValueOrder: string = '';
   service: string;
   @BooleanInputConverter()
   stayInRecordAfterEdit: boolean = false;
@@ -239,6 +242,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
+  setValueOrderArray: string[];
 
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
@@ -693,6 +697,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
+    this.setValueOrderArray = Util.parseArray(this.setValueOrder);
 
     this.configureService();
 
@@ -1671,22 +1676,35 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.zone.run(() => {
       this.formData = newFormData;
       const components = this.getComponents();
-      if (components) {
-        Object.keys(components).forEach(key => {
+      const keyComponents = [...Object.keys(components)];
+      if (!Util.isArrayEmpty(this.setValueOrderArray)) {
+        keyComponents.sort((a, b) => {
+          const indexA = this.setValueOrderArray.indexOf(a) === -1 ? 1 : 0;
+          const indexB = this.setValueOrderArray.indexOf(b) === -1 ? 1 : 0;
+          return indexA - indexB;
+        });
+      }
+
+      if (!Util.isArrayEmpty(keyComponents)) {
+        keyComponents.forEach(key => {
           const comp = components[key];
-          if (Util.isFormDataComponent(comp)) {
-            try {
-              if (comp.isAutomaticBinding()) {
-                comp.data = self.getDataValue(key);
-              }
-            } catch (error) {
-              console.error(error);
-            }
-          }
+          this.setDataInFormDataComponent(comp, key);
         });
         self.initializeFields();
       }
     });
+  }
+
+  private setDataInFormDataComponent(comp: IFormDataComponent, attr: string) {
+    if (Util.isFormDataComponent(comp)) {
+      try {
+        if (comp.isAutomaticBinding()) {
+          comp.data = this.getDataValue(attr);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
   protected initializeFields(): void {
