@@ -289,7 +289,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if (this.canSetStaticData(changes.staticData.currentValue)) {
+    if (this.canSetStaticData(changes.staticData?.currentValue)) {
       this.setData(changes.staticData.currentValue);
     }
   }
