@@ -8,8 +8,10 @@
 ### Bug fixes
 * **o-list**: Fixed `A list item cannot have wrapping content without a title` error being displayed in the console in develop mode ([5a55d3b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a55d3b)) Closes [#1625](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1625)
 * **o-table**:
-  * Fixed `Cannot read properties of undefined (reading 'toString')` error being displayed in the console ([dc1eee2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc1eee2))([c2376a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c2376a1)) Closes [#1626](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1625)
+  * Fixed `Cannot read properties of undefined (reading 'sqlTypesChange')` error being displayed in the console ([dc1eee2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc1eee2))([c2376a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c2376a1)) Closes [#1626](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1626)
+  * Fixed `Cannot read properties of undefined (reading 'toString')` error being displayed in the console ([959f3cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/959f3cc)) Closes [#1635](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1635)
   * Fixed the background in dark mode when selecting a row has too much contrast ([31ebd5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/31ebd5d)) Closes [#1508](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1508)
+  * Fixed that the skeleton was not expanded in `o-table-row-expandable` ([7b9019c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b9019c)) Closes [#1509](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1509)
 
 ## 8.14.16 (2024-06-10)
 ### Bug fixes
