@@ -29,6 +29,8 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
+import { OPermissions } from '../../types';
+import { OTreePermissions } from '../../types/o-tree-permissions.type';
 
 export type OTreeFlatNode = {
   id: string | number,
@@ -229,7 +231,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   @ContentChild(forwardRef(() => OTreeNodeComponent), { descendants: false })
   treeNode!: OTreeNodeComponent;
-
+  protected permissions: OTreePermissions;
+  protected actionsPermissions: OPermissions[];
   protected visibleColumnsArray: string[] = [];
   public enabledDeleteButton: boolean = false;
   protected subscription: Subscription = new Subscription();
@@ -258,6 +261,9 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         () => (this.enabledDeleteButton = !this.selection.isEmpty())
       )
     );
+    this.permissions = this.permissionsService.getTreePermissions(this.oattr, this.actRoute);
+    this.actionsPermissions = this.getActionsPermissions(this.permissions);
+    this.setButtonPermissions(this.actionsPermissions);
   }
 
 
@@ -296,6 +302,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
+    this.manageCustomPermissions(this.actionsPermissions, '[o-tree-button]');
   }
 
   ngOnDestroy(): void {

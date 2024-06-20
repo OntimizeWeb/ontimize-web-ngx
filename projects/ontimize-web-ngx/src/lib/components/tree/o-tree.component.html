@@ -5,12 +5,12 @@
     <div class="buttons">
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
 
-        <button *ngIf="insertButton" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
+        <button *ngIf="insertButton" type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
           <span>{{ 'INSERT' | oTranslate }}</span>
         </button>
 
-        <button *ngIf="refreshButton" type="button" mat-stroked-button aria-label="Refresh" (click)="reloadData()">
+        <button *ngIf="refreshButton" type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
           <span>{{ 'REFRESH' | oTranslate }}</span>
         </button>
@@ -24,11 +24,11 @@
       </ng-container>
 
       <ng-template #showButtonsWithoutText>
-        <button *ngIf="insertButton" type="button" mat-icon-button aria-label="Insert" (click)="add($event)">
+        <button *ngIf="insertButton" type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
           <mat-icon svgIcon="ontimize:add"></mat-icon>
         </button>
 
-        <button *ngIf="refreshButton" type="button" mat-icon-button aria-label="Refresh" (click)="reloadData()">
+        <button *ngIf="refreshButton" type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()">
           <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
         </button>
 

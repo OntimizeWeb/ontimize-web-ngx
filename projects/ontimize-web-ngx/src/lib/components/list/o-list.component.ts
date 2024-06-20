@@ -14,7 +14,6 @@ import {
   OnInit,
   Optional,
   QueryList,
-  SimpleChange,
   ViewEncapsulation
 } from '@angular/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
@@ -26,6 +25,8 @@ import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServi
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
+import { OListPermissions } from '../../types/o-list-permissions.type';
+import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { ObservableWrapper } from '../../util/async';
@@ -71,6 +72,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   'onInsertButtonClick',
   'onItemDeleted'
 ];
+
 @Component({
   selector: 'o-list',
   providers: [
@@ -109,6 +111,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public quickFilterColumns: string;
   public route: string;
   public sortColumns: string;
+  protected permissions: OListPermissions;
   /* End Inputs */
 
   public sortColArray: SQLOrder[] = [];
@@ -126,6 +129,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   keysSqlTypesArray: Array<string> = [];
 
   protected oMatSort: OMatSort;
+  protected actionsPermissions: OPermissions[];
+
 
   constructor(
     injector: Injector,
@@ -142,7 +147,9 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngOnInit(): void {
     this.initialize();
-    this.subscription.add(this.selection.changed.subscribe(() => this.enabledDeleteButton = !this.selection.isEmpty()));
+    this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
+    this.actionsPermissions = this.getActionsPermissions(this.permissions);
+    this.setButtonPermissions(this.actionsPermissions);
   }
 
   public ngAfterViewInit(): void {
@@ -155,11 +162,14 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
+    this.manageCustomPermissions(this.actionsPermissions, '[o-list-toolbar]');
   }
 
   public ngAfterContentInit(): void {
     this.setListItemDirectivesData();
     this.subscription.add(this.listItemDirectives.changes.subscribe(() => this.setListItemDirectivesData()));
+
+
   }
 
   public ngOnDestroy(): void {
@@ -183,6 +193,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     if (!Util.isDefined(this.state.totalQueryRecordsNumber)) {
       this.state.totalQueryRecordsNumber = 0;
     }
+    this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
   }
 
   public reinitialize(options: OListInitializationOptions): void {
@@ -218,7 +229,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         replace: true
       };
     }
-
     this.queryData(void 0, queryArgs);
   }
 

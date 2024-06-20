@@ -29,7 +29,7 @@ export class OTableCellEditorRealComponent extends OTableCellEditorIntegerCompon
 
   getCellData() {
     const cellData = super.getCellData();
-    const floatValue = parseFloat(cellData.toString());
+    const floatValue = parseFloat(cellData?.toString());
     return isNaN(floatValue) ? undefined : floatValue;
   }
 

@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
 import {
+  MenuCommonItem,
   MenuGroup,
   MenuItem,
   MenuItemAction,
@@ -15,6 +16,7 @@ import {
 import { MenuRootItem } from '../types/menu-root-item.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
+import { PermissionsService } from './permissions/permissions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +28,13 @@ export class AppMenuService {
   protected MENU_ROOTS: MenuRootItem[];
   protected ALL_MENU_ITEMS: MenuRootItem[];
   protected activeItem: MenuItemRoute;
+  protected permissionsService: PermissionsService;
 
   public onClick: Subject<void> = new Subject<void>;
+  public onPermissionMenuChanged: Subject<void> = new Subject();
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig);
-    this.MENU_ROOTS = this._config.getMenuConfiguration();
     this.router = this.injector.get(Router);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -39,10 +42,51 @@ export class AppMenuService {
       }
     });
 
+    this.setMenuItemsByMenuConfiguration();
+
+    this.permissionsService = this.injector.get(PermissionsService);
+    this.permissionsService.onChangePermissions.subscribe(x => {
+      this.mergeMenuItemsWithPermissions();
+      this.onPermissionMenuChanged.next()
+    });
+
+  }
+
+  setMenuItemsByMenuConfiguration() {
+    /*
+      spread operator (...) in array multi-level not works
+      JSON.parse and JSON.stringify are the specific methods used for multi-level deep copying
+    */
+    const defaultMenuConfiguration = Util.cloneArray(this._config.getMenuConfiguration());
+    this.MENU_ROOTS = defaultMenuConfiguration;
     this.ALL_MENU_ITEMS = [];
     for (let i = 0, len = this.MENU_ROOTS.length; i < len; i++) {
       const item: MenuRootItem = this.MENU_ROOTS[i];
       this.ALL_MENU_ITEMS = this.ALL_MENU_ITEMS.concat(this.getMenuItems(item));
+    }
+  }
+
+  mergeMenuItemsWithPermissions() {
+
+    this.setMenuItemsByMenuConfiguration();
+    const permissionsMenu = this.permissionsService.getAllMenuPermissions();
+
+    if (Util.isDefined(permissionsMenu)) {
+      this.MENU_ROOTS = [...this.MENU_ROOTS.map(menu => {
+        const indexPermission = permissionsMenu.findIndex(permission => permission.attr === menu.id);
+        if (indexPermission > -1) {
+          menu.visible = permissionsMenu[indexPermission].visible;
+        }
+        return menu;
+      })];
+
+      this.ALL_MENU_ITEMS = [...this.ALL_MENU_ITEMS.map(menu => {
+        const indexPermission = permissionsMenu.findIndex(permission => permission.attr === menu.id);
+        if (indexPermission > -1) {
+          menu.visible = permissionsMenu[indexPermission].visible;
+        }
+        return menu;
+      })];
     }
   }
 
@@ -101,6 +145,10 @@ export class AppMenuService {
 
   isRouteItem(item: MenuItemRoute): boolean {
     return Util.isDefined(item.route);
+  }
+
+  isVisible(item: MenuCommonItem): boolean {
+    return !Util.isDefined(item.visible) || (Util.isDefined(item.visible) && item.visible);
   }
 
   private getMenuItems(item: MenuRootItem): MenuRootItem[] {

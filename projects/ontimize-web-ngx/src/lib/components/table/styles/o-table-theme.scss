@@ -73,7 +73,7 @@
         }
 
         &.selected {
-          background: mat.get-color-from-palette($primary, 50, if($is-dark-theme, 0.5, 1));
+          background: mat.get-color-from-palette($background, hover, 0.12);
         }
 
         .mat-mdc-cell {

@@ -10,6 +10,7 @@ export interface MenuCommonItem {
   svgIcon?: string;
   icon?: string;
   class?: string;
+  visible?: boolean;
 }
 
 export interface MenuGroup extends MenuCommonItem {
