@@ -3,7 +3,7 @@
 > In this version, the features and bugfixes of versions [8.14.14](#81414-2024-05-02), [8.14.15](#81415-2024-06-06) and [8.14.16](#81416-2024-06-10) were integrated
 
 ### Features
-***o-form**: New input `set-value-order`([1db9783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1db9783)) Closes [#1619](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1619)
+* **o-form**: New input `set-value-order`([1db9783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1db9783)) Closes [#1619](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1619)
 * **o-tree**: Added permissions ([54d8906](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54d8906)) Closes [#1616](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1616)
 
 ### Bug fixes
