@@ -4,6 +4,7 @@
 
 ### Features
 ***o-form**: New input `set-value-order`([1db9783](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1db9783)) Closes [#1619](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1619)
+* **o-tree**: Added permissions ([54d8906](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/54d8906)) Closes [#1616](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1616)
 
 ### Bug fixes
 * **o-list**: Fixed `A list item cannot have wrapping content without a title` error being displayed in the console in develop mode ([5a55d3b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5a55d3b)) Closes [#1625](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1625)
