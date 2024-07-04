@@ -62,5 +62,7 @@ export type Config = {
   // permissionsServiceType [ undefined | '' | class ]: The permissions service type used (Ontimize REST standart 'OntimizePermissions', Ontimize REST JEE 'OntimizeEEPermissions' or custom implementation) in the whole application. By default 'OntimizePermissions'.
   permissionsServiceType?: any;
 
-  exportConfiguration?: OExportConfiguration
+  exportConfiguration?: OExportConfiguration,
+
+  nameConvention?: 'upper' | 'lower' | 'database'
 };
