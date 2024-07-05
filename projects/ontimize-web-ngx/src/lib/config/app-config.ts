@@ -113,6 +113,6 @@ export class AppConfig {
   }
 
   getNameConvention() {
-    return 'database' || this._config.nameConvention;
+    return this._config.nameConvention || 'database';
   }
 }

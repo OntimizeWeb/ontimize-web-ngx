@@ -15,7 +15,7 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
   parseQueryParameters(args: OQueryParams): JSONAPIQueryParameter[] {
 
     if (!Util.isDefined(args)) return [];
-    let fields: object = {};
+    let fields = {};
 
     fields[args.entity] = args.columns.toString();
 
