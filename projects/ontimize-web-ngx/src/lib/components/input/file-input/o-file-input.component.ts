@@ -40,6 +40,8 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'service',
   'entity',
   'serviceType : service-type',
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -105,7 +107,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   protected service: string;
   protected entity: string;
   protected serviceType: string;
-
+  public configureServiceArgs: OConfigureServiceArgs;
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
@@ -149,7 +151,10 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   }
 
   public configureService(): void {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeFileService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeFileService, entity: this.entity, service: this.service, serviceType: this.serviceType };
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
     this.fileService = Util.configureService(configureServiceArgs);
 
   }
