@@ -7,7 +7,7 @@ export type JSONAPIQueryParameter = {
   meta?: object;
   page?: object;
   include?: string;
-  fields?: object;
+  fields?: { [entity: string]: string };
   filter?: object;
   sort?: string;
 

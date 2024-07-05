@@ -336,7 +336,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   configureService() {
     let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     if (Util.isDefined(this.configureServiceArgs)) {
-      configureServiceArgs = this.configureServiceArgs;
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
     }
 
     this.dataService = Util.configureService(configureServiceArgs);
