@@ -598,7 +598,7 @@ export class Util {
       default:
         parsedValues = parsedColumns;
     }
-    return value = parsedValues;
+    return parsedValues;
   }
 
   static parseDataToNameConvention(convention: string, data: any): any {
@@ -608,7 +608,11 @@ export class Util {
     return Util.mapKeys(data, (val, key) => convention === 'lower' ? Util.toLowerCase(key) : Util.toUpperCase(key));
   }
 
-  static mapKeys = (obj, fn) =>
+  /**
+   * Map keys of object
+   * For example: converting the keys of an object to uppercase
+   */
+  static readonly mapKeys = (obj, fn) =>
     Object.keys(obj).reduce((acc, k) => {
       acc[fn(obj[k], k, obj)] = obj[k];
       return acc;
