@@ -4,15 +4,22 @@ import { Subscriber } from 'rxjs';
 import { BaseService } from '../base-service.class';
 import { BaseResponse } from '../../interfaces/base-response.interface';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AppConfig } from '../../config/app-config';
+import { Util } from '../../util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OntimizeServiceResponseParser<T extends BaseResponse> {
+  appConfig: AppConfig;
+  nameConvention: string;
 
   constructor(
     protected injector: Injector
-  ) { }
+  ) {
+    this.appConfig = this.injector.get(AppConfig);
+    this.nameConvention = this.appConfig.getNameConvention();
+  }
 
   parseSuccessfulResponse(resp: T, subscriber: Subscriber<T>, service: BaseService<T>) {
     if (resp && resp.isUnauthorized()) {
@@ -20,11 +27,34 @@ export class OntimizeServiceResponseParser<T extends BaseResponse> {
     } else if (resp && resp.isFailed()) {
       subscriber.error(resp.message);
     } else if (resp && resp.isSuccessful()) {
+      if (this.nameConvention !== 'database') {
+        resp.data = this.parseData(resp.data);
+      }
       subscriber.next(resp);
     } else {
       // Unknow state -> error
       subscriber.error('Service unavailable');
     }
+  }
+
+  parseData(data: any) {
+    let nameConvention = this.appConfig.getNameConvention();
+
+    if (nameConvention === 'lower') {
+      nameConvention = 'upper'
+    } else if (nameConvention === 'upper') {
+      nameConvention = 'lower';
+    }
+
+    if (Util.isArray(data)) {
+      data = data.map(element => {
+        return Util.parseDataToNameConvention(nameConvention, element);
+      });
+    } else if (Util.isObject(data)) {
+      return Util.parseDataToNameConvention(nameConvention, data);
+    }
+
+    return data;
   }
 
   parseUnsuccessfulResponse(error: HttpErrorResponse, subscriber: Subscriber<T>, service: BaseService<T>) {
