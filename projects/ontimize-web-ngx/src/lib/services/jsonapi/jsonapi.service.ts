@@ -96,6 +96,9 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
       const keyFields = Object.keys(queryParams.fields)[0];
       queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
     }
+    if (Util.isDefined(queryParams.sort)) {
+      queryParams.sort = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.sort);
+    }
     queryParams = Util.objectToQueryString(queryParams);
 
     const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParams : '';
