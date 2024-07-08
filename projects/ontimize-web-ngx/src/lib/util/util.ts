@@ -583,17 +583,24 @@ export class Util {
     return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&');
   };
 
-  static parseColumnsToNameConvention(convention: string, value: object) {
-    const parsedColumns = Object.values(value)[0].split(',');
+  static parseColumnsToNameConvention(convention: string, value: object | string) {
+    let parsedColumns = value;
+    if (Util.isObject(value)) {
+      parsedColumns = Object.values(value)[0].split(',');
+    }
     let parsedValues;
     switch (convention) {
       case 'lower':
         parsedValues = Util.parseToLowerCase(parsedColumns);
-        parsedValues = parsedValues.join();
+        if (Util.isArray(parsedValues)) {
+          parsedValues = parsedValues.join();
+        }
         break;
       case 'upper':
-        parsedValues = Util.parseToUpperCase(parsedColumns)
-        parsedValues = parsedValues.join();
+        parsedValues = Util.parseToUpperCase(parsedColumns);
+        if (Util.isArray(parsedValues)) {
+          parsedValues = parsedValues.join();
+        }
         break;
       default:
         parsedValues = parsedColumns;
