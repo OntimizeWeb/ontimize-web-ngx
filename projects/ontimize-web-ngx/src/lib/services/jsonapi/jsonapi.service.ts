@@ -92,10 +92,10 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
-
-    const keyFields = Object.keys(queryParams.fields)[0];
-    queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
-
+    if (Util.isDefined(queryParams.fields)) {
+      const keyFields = Object.keys(queryParams.fields)[0];
+      queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
+    }
     queryParams = Util.objectToQueryString(queryParams);
 
     const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParams : '';
