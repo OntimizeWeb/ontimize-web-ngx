@@ -107,7 +107,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   protected service: string;
   protected entity: string;
   protected serviceType: string;
-  public configureServiceArgs: OConfigureServiceArgs;
+  protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,

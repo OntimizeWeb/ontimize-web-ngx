@@ -343,7 +343,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     return m;
   }
-  public configureServiceArgs: OConfigureServiceArgs;
+  protected configureServiceArgs: OConfigureServiceArgs;
 
   constructor(
     protected router: Router,

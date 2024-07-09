@@ -186,7 +186,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected sqlTypes = undefined;
 
   public abortQuery: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public configureServiceArgs: OConfigureServiceArgs;
+  protected configureServiceArgs: OConfigureServiceArgs;
 
   constructor(
     protected injector: Injector

@@ -137,7 +137,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     this.oContextMenu = value;
   }
 
-  public configureServiceArgs: OConfigureServiceArgs;
+  protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
