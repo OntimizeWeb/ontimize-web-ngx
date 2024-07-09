@@ -29,7 +29,9 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'parentKeys: parent-keys',
   'queryMethod: query-method',
   'serviceType : service-type',
-  'translateArgsFn: translate-params'
+  'translateArgsFn: translate-params',
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
@@ -69,6 +71,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
+  protected configureServiceArgs: OConfigureServiceArgs;
 
   /* Outputs */
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
@@ -199,7 +202,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return sqlType;
   }
   public configureService(): void {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
     this.dataService = Util.configureService(configureServiceArgs);
   }
 

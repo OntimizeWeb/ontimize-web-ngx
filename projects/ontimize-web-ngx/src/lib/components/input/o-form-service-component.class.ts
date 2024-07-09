@@ -60,7 +60,9 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   'translate',
 
   // sort [string]: sorting ASC or DESC. Default: no value
-  'sort'
+  'sort',
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
@@ -135,6 +137,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     this.oContextMenu = value;
   }
 
+  protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
     form: OFormComponent,
     elRef: ElementRef,
@@ -236,7 +239,10 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   /* Utility methods */
   configureService() {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType };
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
     this.dataService = Util.configureService(configureServiceArgs);
 
   }

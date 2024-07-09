@@ -80,14 +80,16 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   'queryWithNullParentKeys: query-with-null-parent-keys',
 
   // [function]: function to execute on query error. Default: no value.
-  'queryFallbackFunction: query-fallback-function'
+  'queryFallbackFunction: query-fallback-function',
   // ,
 
   // 'insertFallbackFunction: insert-fallback-function',
 
   // 'updateFallbackFunction: update-fallback-function',
 
-  // 'deleteFallbackFunction: delete-fallback-function'
+  // 'deleteFallbackFunction: delete-fallback-function',
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args'
 ];
 
 @Directive({
@@ -184,6 +186,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected sqlTypes = undefined;
 
   public abortQuery: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  protected configureServiceArgs: OConfigureServiceArgs;
 
   constructor(
     protected injector: Injector
@@ -331,7 +334,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 
   configureService() {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
+
     this.dataService = Util.configureService(configureServiceArgs);
   }
 

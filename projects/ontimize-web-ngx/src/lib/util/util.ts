@@ -576,12 +576,84 @@ export class Util {
         return prev;
       }
 
-
       prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'));
       return prev;
     };
 
     return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&');
   };
+
+  static parseColumnsToNameConvention(convention: string, value: object | string) {
+    let parsedColumns = value;
+    if (Util.isObject(value)) {
+      parsedColumns = Object.values(value)[0].split(',');
+    }
+    let parsedValues;
+    switch (convention) {
+      case 'lower':
+        parsedValues = Util.parseToLowerCase(parsedColumns);
+        if (Util.isArray(parsedValues)) {
+          parsedValues = parsedValues.join();
+        }
+        break;
+      case 'upper':
+        parsedValues = Util.parseToUpperCase(parsedColumns);
+        if (Util.isArray(parsedValues)) {
+          parsedValues = parsedValues.join();
+        }
+        break;
+      default:
+        parsedValues = parsedColumns;
+    }
+    return parsedValues;
+  }
+
+  static parseDataToNameConvention(convention: string, data: any): any {
+    if (convention === 'database') {
+      return data;
+    }
+    return Util.mapKeys(data, (val, key) => convention === 'lower' ? Util.toLowerCase(key) : Util.toUpperCase(key));
+  }
+
+  /**
+   * Map keys of object
+   * For example: converting the keys of an object to uppercase
+   */
+  static readonly mapKeys = (obj, fn) =>
+    Object.keys(obj).reduce((acc, k) => {
+      acc[fn(obj[k], k, obj)] = obj[k];
+      return acc;
+    }, {});
+
+  static toLowerCase(value: string) {
+    return value.toLocaleLowerCase();
+  }
+
+  static toUpperCase(value: string) {
+    return value.toUpperCase();
+  }
+
+
+  static parseToLowerCase(value: any) {
+    if (Util.isArray(value)) {
+      return value.map((x: string) => x.toLocaleLowerCase());
+    } else if (typeof value === 'string') {
+      return value.toLocaleLowerCase();
+    } else if (typeof value === 'object') {
+      return Util.mapKeys(value, Util.toLowerCase);
+    }
+    return value;
+  }
+
+  static parseToUpperCase(value: any) {
+    if (Util.isArray(value)) {
+      return value.map((x: string) => x.toLocaleUpperCase());
+    } else if (typeof value === 'string') {
+      return value.toLocaleUpperCase();
+    } else if (typeof value === 'object') {
+      return Util.mapKeys(value, Util.toUpperCase);
+    }
+    return value;
+  }
 
 }

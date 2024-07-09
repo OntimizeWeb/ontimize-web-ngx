@@ -2,9 +2,10 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, share } from 'rxjs';
 
+import { AppConfig } from '../../config/app-config';
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
-import { OQueryParams } from '../../types/query-params.type';
+import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
 
@@ -13,9 +14,11 @@ import { BaseService } from '../base-service.class';
 export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAuthService {
   public path: string = '';
   protected _startSessionPath: string;
+  protected config: AppConfig;
 
   constructor(protected injector: Injector) {
     super(injector);
+    this.config = this.injector.get(AppConfig);
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
@@ -88,33 +91,47 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     // TODO init other params
   }
 
-  query(queryParams: OQueryParams, keys: any[]): Observable<JSONAPIResponse> {
+  query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
+    if (Util.isDefined(queryParams.fields)) {
+      const keyFields = Object.keys(queryParams.fields)[0];
+      queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
+    }
+    if (Util.isDefined(queryParams.sort)) {
+      queryParams.sort = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.sort);
+    }
     queryParams = Util.objectToQueryString(queryParams);
-    const queryParamsString = Util.isDefined(queryParams) ?'?'+ queryParams : '';
+
+    const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParams : '';
 
     const url = `${this.urlBase}${this.path}${queryParamsString}`;
 
     return this.doRequest({
       method: 'GET',
       url: url,
-      successCallback: this.parseSuccessfulInsertResponse,
-      errorCallBack: this.parseUnsuccessfulInsertResponse
+      successCallback: this.parseSuccessfulQueryResponse,
+      errorCallBack: this.parseUnsuccessfulQueryResponse
     });
   }
 
-  advancedQuery(queryParams: OQueryParams, keys: any[]): Observable<JSONAPIResponse> {
-    return this.query(queryParams, keys);
+  advancedQuery(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
+    return this.query(queryParams);
   }
 
-  queryById(queryParams: OQueryParams): Observable<JSONAPIResponse> {
-    const id = Object.values(queryParams.filter)[0]
+  queryById(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
+
+    const keyFields = Object.keys(queryParams.fields)[0];
+    queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
+    queryParams.filter = Util.parseDataToNameConvention(this._appConfig.nameConvention, queryParams.filter);
+
+    const id = Object.values(queryParams.filter)[0];
+
     const url = `${this.urlBase}${this.path}/${id}?${Util.objectToQueryString(queryParams)}`;
 
     return this.doRequest({
       method: 'GET',
       url: url,
-      successCallback: this.parseSuccessfulInsertResponse,
-      errorCallBack: this.parseUnsuccessfulInsertResponse,
+      successCallback: this.parseSuccessfulQueryResponse,
+      errorCallBack: this.parseUnsuccessfulQueryResponse,
     });
   }
 
