@@ -185,6 +185,11 @@ export class ODateInputComponent extends OTextInputComponent implements OnDestro
     }
   }
 
+  public clearValue(options?: FormValueOptions, setDirty: boolean = false): void {
+    super.clearValue(options, setDirty);
+    this.dateValue = void 0;
+  }
+
   public onChangeEvent(event: MatDatepickerInputEvent<any>): void {
     const isValid = event.value && event.value.isValid && event.value.isValid();
     let val = isValid ? event.value.valueOf() : event.value;

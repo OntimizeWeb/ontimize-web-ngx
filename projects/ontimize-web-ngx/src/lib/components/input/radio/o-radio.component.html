@@ -11,7 +11,7 @@
       [required]="isRequired" style="display: none" />
     <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()"
       [value]="getValue()" [required]="isRequired" [labelPosition]="labelPosition"
-      (change)="onMatRadioGroupChange($event)" [fxLayout]="layout" fxLayoutGap="8px">
+      (change)="onMatRadioGroupChange($event)" [fxLayout]="layout" [fxLayoutGap]="labelGap">
       <mat-radio-button *ngFor="let item of dataArray" [value]="getValueColumn(item)" [disabled]="!enabled">
         {{ getOptionDescriptionValue(item) }}
       </mat-radio-button>

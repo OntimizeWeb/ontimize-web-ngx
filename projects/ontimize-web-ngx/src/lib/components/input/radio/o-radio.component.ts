@@ -21,7 +21,8 @@ import {
 
 export const DEFAULT_INPUTS_O_RADIO = [
   'layout',
-  'labelPosition: label-position'
+  'labelPosition: label-position',
+  'labelGap: label-gap'
 ];
 
 
@@ -43,6 +44,7 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   /* Inputs */
   public layout: 'row' | 'column' = 'column';
   public labelPosition: 'before' | 'after' = 'after';
+  public labelGap = '8px'
   /* End inputs*/
 
   value: OFormValue;
