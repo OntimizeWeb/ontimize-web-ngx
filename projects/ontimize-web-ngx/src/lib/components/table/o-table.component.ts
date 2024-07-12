@@ -1320,6 +1320,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.queryRows = this.state.queryRows;
       }
     }
+    this.selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
   }
   updateStateExpandedColumn() {
     if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
