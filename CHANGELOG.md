@@ -1,3 +1,11 @@
+## 15.1.1 (2024-07-12)
+### Features
+* **o-radio**: New input `label-gap` ([27ab61d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/27ab61d)) Closes [#1643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1643)
+
+### Bug fixes
+* **o-table**: Fixed that allow selecting all with `selection-mode='simple'` ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1642](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1642)
+
+
 ## 15.1.0 (2024-06-20)
 > [!NOTE]
 > In this version, the features and bugfixes of versions [8.14.14](#81414-2024-05-02), [8.14.15](#81415-2024-06-06) and [8.14.16](#81416-2024-06-10) were integrated
