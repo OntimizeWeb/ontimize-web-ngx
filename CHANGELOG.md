@@ -3,8 +3,9 @@
 * **o-radio**: New input `label-gap` ([27ab61d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/27ab61d)) Closes [#1643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1643)
 
 ### Bug fixes
-* **o-table**: Fixed that allow selecting all with `selection-mode='simple'` ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1642](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1642)
-
+* **o-table**: Fixed that allow selecting all with `selection-mode='simple'` ([f02ee98](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f02ee98)) Closes [#1642](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1642)
+* **o-date-input**: Fixed that the `getValueAsDate()` method it still maintains the value after calling the clearValue() method
+([f875a30](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f875a30)) Closes [#1649](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1649)
 
 ## 15.1.0 (2024-06-20)
 > [!NOTE]
