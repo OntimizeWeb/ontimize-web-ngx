@@ -6,16 +6,18 @@ import { OntimizeBaseService } from './ontimize-base-service.class';
 @Injectable()
 export class OntimizePreferencesService extends OntimizeBaseService {
 
+  public path: string = '';
   public configureService(config: any): void {
     super.configureService(config);
-    this.path = config.path || this.path;
+    this.path = config.path ||  '/preferences';
   }
 
   public saveAsPreferences(preferencesparams?: object): Observable<any> {
     const body = JSON.stringify(
       preferencesparams
     )
-    const url = this.urlBase + '/preferences/save';
+
+    const url = this.urlBase + `/${this.path}/save`;
 
     return this.doRequest({
       method: 'POST',
@@ -28,7 +30,7 @@ export class OntimizePreferencesService extends OntimizeBaseService {
     const body = JSON.stringify(
       preferencesparams
     )
-    const url = this.urlBase + '/preferences/update/' + id;
+    const url = this.urlBase + `/${this.path}/update/${id}`;
 
     return this.doRequest({
       method: 'PUT',
@@ -39,7 +41,7 @@ export class OntimizePreferencesService extends OntimizeBaseService {
 
   public getPreferences(entity?: string, service?: string): Observable<any> {
 
-    const url = this.urlBase + '/preferences/preferences?entity=' + entity + '&service=' + service + "&type=REPORT";
+    const url = this.urlBase + `${this.path}/${entity}?entity=${entity}&service=${service}&type=REPORT`;
 
     return this.doRequest({
       method: 'GET',

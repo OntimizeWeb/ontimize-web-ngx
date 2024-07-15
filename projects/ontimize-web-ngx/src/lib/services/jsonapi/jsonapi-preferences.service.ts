@@ -10,7 +10,7 @@ export class JSONAPIPreferencesService extends JSONAPIService {
 
   public configureService(config: any): void {
     super.configureService(config);
-    this.path = config.path || 'preferences';
+    this.path = config.path || '/preferences';
   }
 
   public saveAsPreferences(preferencesparams?: object): Observable<any> {
