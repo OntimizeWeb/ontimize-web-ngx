@@ -67,7 +67,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected routerSubscription: Subscription;
   appMenuService: AppMenuService;
-  protected _menuRootArray: MenuRootItem[] = [];
+  menuRootArray: MenuRootItem[] = [];
   protected _layoutMode: OAppLayoutMode = Codes.APP_LAYOUT_MODE_DESKTOP;
   protected _sidenavMode: OSidenavMode;
   @BooleanInputConverter()
@@ -84,6 +84,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   afterSidenavToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
   protected oUserInfoService: OUserInfoService;
   protected userInfoSubscription: Subscription;
+  protected permissionSubscription: Subscription;
   protected userInfo: UserInfo;
 
   protected mediaWatch: Subscription;
@@ -98,6 +99,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRootArray = this.appMenuService.getMenuRoots();
+    this.permissionSubscription = this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots());
     this.oUserInfoService = this.injector.get(OUserInfoService);
     const self = this;
     this.mediaWatch = this.media.asObservable().subscribe(() => {
@@ -105,6 +107,11 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
         self.sidenav.close();
       }
     });
+  }
+
+  refreshMenuRoots(): void {
+    this.menuRootArray = [...this.appMenuService.getMenuRoots()];
+    this.cd.detectChanges();
   }
 
   @HostListener('window:resize', [])
@@ -127,10 +134,10 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
       this.userInfo = this.oUserInfoService.getUserInfo();
       this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
         this.userInfo = res;
-        this.refreshMenuRoots();
+        this.refreshMenuItemUserInfo();
       });
     }
-    this.refreshMenuRoots();
+    this.refreshMenuItemUserInfo();
   }
 
   get layoutMode(): OAppLayoutMode {
@@ -155,7 +162,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  protected refreshMenuRoots() {
+  protected refreshMenuItemUserInfo() {
     if (this.showUserInfo && this.userInfo && this._showToggleButton) {
       const firstRoot = this.menuRootArray[0];
       const alreadyExistsUserInfo = firstRoot ? firstRoot.id === 'user-info' : false;
@@ -188,8 +195,13 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+
     if (this.userInfoSubscription) {
       this.userInfoSubscription.unsubscribe();
+    }
+
+    if (this.permissionSubscription) {
+      this.permissionSubscription.unsubscribe();
     }
   }
 
@@ -207,14 +219,6 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isSidenavOpened(): boolean {
     return this.opened && !this.isMobileMode() && !this.isScreenSmall();
-  }
-
-  get menuRootArray(): MenuRootItem[] {
-    return this._menuRootArray;
-  }
-
-  set menuRootArray(val: MenuRootItem[]) {
-    this._menuRootArray = val;
   }
 
   toggleSidenav() {

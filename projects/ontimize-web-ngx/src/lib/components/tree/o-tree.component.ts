@@ -29,6 +29,8 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
+import { OPermissions } from '../../types';
+import { OTreePermissions } from '../../types/o-tree-permissions.type';
 
 export type OTreeFlatNode = {
   id: string | number,
@@ -101,7 +103,7 @@ export const DEFAULT_INPUTS_O_TREE = [
   'route'
 ];
 
-export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded'];
+export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded', 'onNodeClick'];
 
 @Component({
   selector: 'o-tree',
@@ -195,7 +197,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   protected _quickFilter: boolean = false;
   paginationControls = false;
   quickFilterColumns: string;
-
+  selectedNode: OTreeFlatNode;
   childreNodes: OTreeFlatNode[] = [];
   nodesArray: OTreeFlatNode[] = [];
   ancestors: any[] = [];
@@ -205,6 +207,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   onNodeExpanded: EventEmitter<any> = new EventEmitter();
   onNodeCollapsed: EventEmitter<any> = new EventEmitter();
   onLoadNextLevel: EventEmitter<any> = new EventEmitter();
+  onNodeClick: EventEmitter<any> = new EventEmitter<any>();
   rootTitle: string;
   rootNodes: OTreeFlatNode[] = [];
   daoTree: OTreeDao;
@@ -228,7 +231,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   @ContentChild(forwardRef(() => OTreeNodeComponent), { descendants: false })
   treeNode!: OTreeNodeComponent;
-
+  protected permissions: OTreePermissions;
+  protected actionsPermissions: OPermissions[];
   protected visibleColumnsArray: string[] = [];
   public enabledDeleteButton: boolean = false;
   protected subscription: Subscription = new Subscription();
@@ -257,6 +261,9 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         () => (this.enabledDeleteButton = !this.selection.isEmpty())
       )
     );
+    this.permissions = this.permissionsService.getTreePermissions(this.oattr, this.actRoute);
+    this.actionsPermissions = this.getActionsPermissions(this.permissions);
+    this.setButtonPermissions(this.actionsPermissions);
   }
 
 
@@ -295,6 +302,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (this.queryOnInit) {
       this.queryData();
     }
+    this.manageCustomPermissions(this.actionsPermissions, '[o-tree-button]');
   }
 
   ngOnDestroy(): void {
@@ -321,6 +329,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   protected nodeClicked(node: OTreeFlatNode, event: Event) {
     event.stopPropagation();
     event.preventDefault();
+    this.onNodeClick.emit(node);
+    this.selectedNode = node;
     if (this.detailMode !== Codes.DETAIL_MODE_NONE && !this.isRootNode(node)) {
       /*
       Se podria mejorar llamando this.viewDetail(node.data);
@@ -682,5 +692,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         this.router.navigate([route], extras);
       }
     }
+  }
+  isSelectedNode(node: OTreeFlatNode) {
+    return this.selectedNode == node;
   }
 }

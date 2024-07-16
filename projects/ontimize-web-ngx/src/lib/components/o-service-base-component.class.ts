@@ -292,9 +292,13 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
   }
 
+  protected canSetStaticData(staticData: any): boolean {
+    return Util.isDefined(staticData)
+  }
+
   ngOnChanges(changes: { [propName: string]: SimpleChange }) {
-    if (Util.isDefined(changes.staticData)) {
-      this.setDataArray(changes.staticData.currentValue);
+    if (this.canSetStaticData(changes.staticData?.currentValue)) {
+      this.setData(changes.staticData.currentValue);
     }
   }
 
@@ -379,6 +383,12 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   }
 
+  public clearData() {
+    this.state.queryRecordOffset = 0;
+    this.state.totalQueryRecordsNumber = 0;
+    this.setData([], []);
+  }
+
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
 
     const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
@@ -400,9 +410,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
 
       if (this.abortQuery.value) {
-        this.state.queryRecordOffset = 0;
-        this.state.totalQueryRecordsNumber = 0;
-        this.setData([], []);
+        this.clearData();
         /**  this.cd.detectChanges() is used to update loadingSubject value (this.loadingSubject.next(true); in line 377)
          *  before using the next line and so update the oTableExpandedFooter directive and display the message
          * that there are no results when the query is aborted*/

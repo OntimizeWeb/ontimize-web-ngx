@@ -3,6 +3,7 @@
     [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
     <div fxLayout="row" fxLayoutAlign="start center" fxFill>
       <ng-container *ngIf="sidenavOpened">
+        <mat-icon *ngIf="menuGroup.svgIcon" [svgIcon]="menuGroup.svgIcon"></mat-icon>
         <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
         <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
         <span class="fill-remaining"></span>
@@ -14,6 +15,8 @@
         </ng-template>
       </ng-container>
       <ng-container *ngIf="!sidenavOpened">
+        <mat-icon [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip" matTooltipPosition="right" *ngIf="menuGroup.svgIcon"
+          [svgIcon]="menuGroup.svgIcon"></mat-icon>
         <mat-icon [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip" matTooltipPosition="right" *ngIf="menuGroup.icon">{{
           menuGroup.icon }}</mat-icon>
       </ng-container>
@@ -23,14 +26,16 @@
   <div class="o-app-sidenav-menugroup-items-container">
     <ul [@contentExpansion]="contentExpansion" class="o-app-sidenav-menugroup-ul">
       <ng-container *ngFor="let menuItem of menuGroup.items">
-        <o-app-sidenav-menu-item [sidenav-opened]="sidenavOpened" *ngIf="!menuItem.items; else menuGroup" [disabled]="disabled" [menu-item]="menuItem"
-          [menu-item-type]="appMenuService.getMenuItemType(menuItem)" (onClick)="onMenuItemClick($event)">
-        </o-app-sidenav-menu-item>
-        <ng-template #menuGroup>
-          <o-app-sidenav-menu-group [menu-group]="menuItem" [sidenav-opened]="sidenavOpened" [level]="level + 1"
-            *ngIf="appMenuService.getMenuItemType(menuItem) === 'group'" (onItemClick)="onMenuItemClick($event)">
-          </o-app-sidenav-menu-group>
-        </ng-template>
+        <ng-container *ngIf="appMenuService.isVisible(menuItem)">
+          <o-app-sidenav-menu-item [sidenav-opened]="sidenavOpened" *ngIf="!menuItem.items; else menuGroup" [disabled]="disabled"
+            [menu-item]="menuItem" [menu-item-type]="appMenuService.getMenuItemType(menuItem)" (onClick)="onMenuItemClick($event)">
+          </o-app-sidenav-menu-item>
+          <ng-template #menuGroup>
+            <o-app-sidenav-menu-group [menu-group]="menuItem" [sidenav-opened]="sidenavOpened" [level]="level + 1"
+              *ngIf="appMenuService.getMenuItemType(menuItem) === 'group'" (onItemClick)="onMenuItemClick($event)">
+            </o-app-sidenav-menu-group>
+          </ng-template>
+        </ng-container>
       </ng-container>
     </ul>
   </div>

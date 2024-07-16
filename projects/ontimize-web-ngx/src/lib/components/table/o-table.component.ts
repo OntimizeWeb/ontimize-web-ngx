@@ -13,7 +13,6 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
-  forwardRef,
   HostListener,
   Inject,
   Injector,
@@ -28,7 +27,8 @@ import {
   ViewChildren,
   ViewContainerRef,
   ViewEncapsulation,
-  ViewRef
+  ViewRef,
+  forwardRef
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,7 +37,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
 import moment from 'moment';
-import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
@@ -45,7 +45,7 @@ import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServi
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OColumnDisplay, OFilterDefinition, OGroupedColumnTypes } from '../../types';
+import { OColumnDisplay, OFilterDefinition, OGroupedColumnTypes, OTableGlobalConfig } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -54,7 +54,6 @@ import { SQLOrder } from '../../types/sql-order.type';
 import { OColumnAggregate } from '../../types/table/o-column-aggregate.type';
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../types/table/o-column-value-filter.type';
 import { TableFilterByColumnDialogResult } from '../../types/table/o-table-filter-by-column-data.type';
-import { OTableGlobalConfig } from '../../types/table/o-table-global-config.type';
 import { OTableInitializationOptions } from '../../types/table/o-table-initialization-options.type';
 import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
 import { OTablePermissions } from '../../types/table/o-table-permissions.type';
@@ -486,7 +485,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   set visibleColArray(arg: any[]) {
-    const permissionsBlocked = this.permissions ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
+    const permissionsBlocked = this.permissions && this.permissions.columns ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
@@ -693,21 +692,35 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     this.snackBarService = this.injector.get(SnackBarService);
-    this.getGlobalConfig();
+    this.getInjectionTokenConfig();
   }
 
-  private getGlobalConfig() {
+  private getInjectionTokenConfig() {
     try {
-      this.oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
-      if (Util.isDefined(this.oTableGlobalConfig.autoAdjust)) {
-        this.autoAdjust = this.oTableGlobalConfig.autoAdjust;
+      const oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
+      if (Util.isDefined(oTableGlobalConfig.autoAdjust)) {
+        this.autoAdjust = oTableGlobalConfig.autoAdjust;
       };
-      if (Util.isDefined(this.oTableGlobalConfig.autoAlignTitles)) {
-        this.autoAlignTitles = this.oTableGlobalConfig.autoAlignTitles;
+      if (Util.isDefined(oTableGlobalConfig.autoAlignTitles)) {
+        this.autoAlignTitles = oTableGlobalConfig.autoAlignTitles;
       }
+      if (Util.isDefined(oTableGlobalConfig.filterColumnActiveByDefault)) {
+        this.filterColumnActiveByDefault = oTableGlobalConfig.filterColumnActiveByDefault;
+      }
+      if (Util.isDefined(oTableGlobalConfig.editionMode) && Codes.isValidEditionMode(oTableGlobalConfig.editionMode)) {
+        this.editionMode = oTableGlobalConfig.editionMode;
+      }
+      if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
+        this.detailMode = oTableGlobalConfig.detailMode;
+      }
+
+      if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
+        this.rowHeight = oTableGlobalConfig.rowHeight;
+      };
     } catch (error) {
       // Do nothing because is optional
     }
+
   }
 
   get state(): OTableComponentStateClass {
@@ -765,6 +778,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   ngOnChanges(changes: { [propName: string]: SimpleChange }): void {
+    super.ngOnChanges(changes);
     if (Util.isDefined(changes.autoAdjust) && changes.autoAdjust.currentValue !== changes.autoAdjust.previousValue) {
       this.autoAdjust = changes.autoAdjust.currentValue;
     }
@@ -1307,6 +1321,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.queryRows = this.state.queryRows;
       }
     }
+    this.selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
   }
   updateStateExpandedColumn() {
     if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
@@ -1614,6 +1629,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
     ObservableWrapper.callEmit(this.onDataLoaded, this.daoTable.data);
+  }
+
+  protected canSetStaticData(staticData): boolean {
+    return super.canSetStaticData(staticData) && Util.isDefined(this.daoTable);
   }
 
   showDialogError(error: string, errorOptional?: string) {

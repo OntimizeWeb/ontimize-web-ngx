@@ -654,6 +654,24 @@ export class Util {
       return Util.mapKeys(value, Util.toUpperCase);
     }
     return value;
+  static sortFunction(propertyA: string | number, propertyB: string | number, activeSortDirection: string) {
+
+    let valueA: string | number = '';
+    let valueB: string | number = '';
+
+    if (Util.isDefined(propertyA)) {
+      valueA = isNaN(+propertyA) ? propertyA.toString().trim().toLowerCase() : +propertyA;
+    }
+
+    if (Util.isDefined(propertyB)) {
+      valueB = isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
+    }
+    return (valueA <= valueB ? -1 : 1) * (activeSortDirection === 'asc' ? 1 : -1);
+  }
+
+  static cloneArray<T>(arr: T[]): T[] {
+    const clonedArray = arr.map((x) => Object.assign({}, x))
+    return clonedArray;
   }
 
 }
