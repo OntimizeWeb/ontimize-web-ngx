@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-import { OntimizeBaseService } from './ontimize-base-service.class';
+import { OntimizeEEService } from './ontimize-ee.service';
 
 @Injectable()
-export class OntimizePreferencesService extends OntimizeBaseService {
+export class OntimizePreferencesService extends OntimizeEEService {
 
   public path: string = '';
   public configureService(config: any): void {
     super.configureService(config);
-    this.path = config.path ||  '/preferences';
+    this.path = config.path || '/preferences';
   }
 
   public saveAsPreferences(preferencesparams?: object): Observable<any> {
@@ -17,7 +16,7 @@ export class OntimizePreferencesService extends OntimizeBaseService {
       preferencesparams
     )
 
-    const url = this.urlBase + `/${this.path}/save`;
+    const url = `${this.urlBase}${this.path}/save`;
 
     return this.doRequest({
       method: 'POST',
@@ -30,7 +29,7 @@ export class OntimizePreferencesService extends OntimizeBaseService {
     const body = JSON.stringify(
       preferencesparams
     )
-    const url = this.urlBase + `/${this.path}/update/${id}`;
+    const url = `${this.urlBase}${this.path}/update/${id}`;
 
     return this.doRequest({
       method: 'PUT',
@@ -41,7 +40,7 @@ export class OntimizePreferencesService extends OntimizeBaseService {
 
   public getPreferences(entity?: string, service?: string): Observable<any> {
 
-    const url = this.urlBase + `${this.path}/${entity}?entity=${entity}&service=${service}&type=REPORT`;
+    const url = `${this.urlBase}${this.path}/preferences?entity=${entity}&service=${service}&type=REPORT`;
 
     return this.doRequest({
       method: 'GET',
@@ -52,7 +51,7 @@ export class OntimizePreferencesService extends OntimizeBaseService {
 
   public deletePreferences(id?: number): Observable<any> {
 
-    const url = this.urlBase + '/preferences/remove/' + id;
+    const url = `${this.urlBase}${this.path}/remove/${id}`;
     return this.doRequest({
       method: 'DELETE',
       url: url
