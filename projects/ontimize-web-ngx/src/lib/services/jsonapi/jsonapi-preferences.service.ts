@@ -16,21 +16,23 @@ export class JSONAPIPreferencesService extends JSONAPIService {
   public saveAsPreferences(preferencesparams?: object): Observable<any> {
     preferencesparams['preferences'] = JSON.stringify(preferencesparams['params']);
     preferencesparams['entity'] = preferencesparams['entity'] + '-' + preferencesparams['service'];
+    preferencesparams['type'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
     delete preferencesparams['params'];
     delete preferencesparams['service'];
     return super.insert(preferencesparams, preferencesparams['entity']);
   }
 
   public savePreferences(id: number, preferencesparams?: object): Observable<any> {
+    preferencesparams['type'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
     return super.update({ id: id }, preferencesparams, preferencesparams['entity']);
   }
 
-  public getPreferences(entity?: string, service?: string): Observable<any> {
+  public getPreferences(entity: string, service: string, type: string): Observable<any> {
     let queryParams: JSONAPIQueryParameter = { fields: {}, filter: {} };
+
     let fields = { preference: 'id,name,description,preferences,entity,type' };
     queryParams.fields['Preference'] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, fields);
-    //queryParams.filter = { entity: entity + '-' + service, type: 0 };
-    queryParams.filter = { entity: entity + '-' + service };
+    queryParams.filter = { entity: entity + '-' + service, type: (type === 'REPORT' ? 0 : 1) };
     return super.query(queryParams);
   }
 
