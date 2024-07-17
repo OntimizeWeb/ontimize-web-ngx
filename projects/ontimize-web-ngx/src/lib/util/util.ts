@@ -654,6 +654,8 @@ export class Util {
       return Util.mapKeys(value, Util.toUpperCase);
     }
     return value;
+  }
+
   static sortFunction(propertyA: string | number, propertyB: string | number, activeSortDirection: string) {
 
     let valueA: string | number = '';
