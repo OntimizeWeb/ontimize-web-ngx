@@ -1,3 +1,7 @@
+## 15.1.2 (2024-07-18)
+### Bug fixes
+* **o-table**: Fixed onRowSelected and onRowDeselect events are not emitted ([4d605be](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d605be)) Closes [#1654](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1654)
+
 ## 15.1.1 (2024-07-12)
 ### Features
 * **o-radio**: New input `label-gap` ([27ab61d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/27ab61d)) Closes [#1643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1643)
