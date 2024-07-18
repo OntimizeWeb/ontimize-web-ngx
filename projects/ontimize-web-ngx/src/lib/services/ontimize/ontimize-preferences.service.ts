@@ -38,9 +38,9 @@ export class OntimizePreferencesService extends OntimizeEEService {
     });
   }
 
-  public getPreferences(entity?: string, service?: string): Observable<any> {
+  public getPreferences(entity?: string, service?: string, type?:string): Observable<any> {
 
-    const url = `${this.urlBase}${this.path}/preferences?entity=${entity}&service=${service}&type=REPORT`;
+    const url = `${this.urlBase}${this.path}/preferences?entity=${entity}&service=${service}&type=${type}`;
 
     return this.doRequest({
       method: 'GET',

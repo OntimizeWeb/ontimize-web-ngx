@@ -14,25 +14,24 @@ export class JSONAPIPreferencesService extends JSONAPIService {
   }
 
   public saveAsPreferences(preferencesparams?: object): Observable<any> {
-    preferencesparams['preferences'] = JSON.stringify(preferencesparams['params']);
-    preferencesparams['entity'] = preferencesparams['entity'] + '-' + preferencesparams['service'];
-    preferencesparams['type'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
-    delete preferencesparams['params'];
-    delete preferencesparams['service'];
-    return super.insert(preferencesparams, preferencesparams['entity']);
+    preferencesparams['preferencepreferences'] = btoa(preferencesparams['preferencespreference']);
+    preferencesparams['preferenceentity'] = preferencesparams['preferenceentity'] + '-' + preferencesparams['preferenceservice'];
+    preferencesparams['preferencetype'] = preferencesparams['preferencetype'] === 'REPORT' ? 0 : 1;
+    delete preferencesparams['preferenceservice'];
+    return super.insert(preferencesparams, 'Preference');
   }
 
   public savePreferences(id: number, preferencesparams?: object): Observable<any> {
-    preferencesparams['type'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
+    preferencesparams['preferencetype'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
     return super.update({ id: id }, preferencesparams, preferencesparams['entity']);
   }
 
   public getPreferences(entity: string, service: string, type: string): Observable<any> {
     let queryParams: JSONAPIQueryParameter = { fields: {}, filter: {} };
 
-    let fields = { preference: 'id,name,description,preferences,entity,type' };
+    let fields = { preference: 'preferenceid,preferencename,preferencedescription,preferencepreferences,preferenceentity,preferencetype' };
     queryParams.fields['Preference'] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, fields);
-    queryParams.filter = { entity: entity + '-' + service, type: (type === 'REPORT' ? 0 : 1) };
+    queryParams.filter = { preferenceentity: entity + '-' + service, preferencetype: (type === 'REPORT' ? 0 : 1) };
     return super.query(queryParams);
   }
 
