@@ -1,8 +1,6 @@
 ## 15.1.2 (2024-07-18)
 ### Bug fixes
-* **o-table**: Fix selection-mode ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1654](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1654)
-
-
+* **o-table**: Fixed that the onRowSelected and onRowDeselect events are not emitted ([4d605be](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d605be)) Closes [#1654](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1654)
 
 ## 15.1.1 (2024-07-12)
 ### Features
