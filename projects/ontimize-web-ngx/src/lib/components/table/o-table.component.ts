@@ -1310,6 +1310,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     //Initialize show filter by column icon
     this.isColumnFiltersActive = this.filterColumnActiveByDefault;
 
+    this.selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
+
     this.initializeCheckboxColumn();
 
     if (this.storeState) {
@@ -1320,7 +1322,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.queryRows = this.state.queryRows;
       }
     }
-    this.selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
+
   }
   updateStateExpandedColumn() {
     if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
