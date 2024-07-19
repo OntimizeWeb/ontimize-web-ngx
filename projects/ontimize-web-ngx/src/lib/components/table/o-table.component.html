@@ -195,7 +195,7 @@
 
         <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
           <ng-container *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
-            <mat-form-field class="insertable-form-field o-table-cell-editor-text o-table-cell-editor" [hideRequiredMarker]="false">
+            <mat-form-field class="insertable-form-field o-table-cell-editor-text o-table-cell-editor" [hideRequiredMarker]="false" subscriptSizing="dynamic">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
                 [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)">
               <mat-error *oMatError="oTableInsertableRowComponent.columnHasError(column, 'required')">
@@ -225,7 +225,7 @@
           <ng-container *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
             <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
-                [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)">
+                [formControl]="oTableInsertableRowComponent.getControl(column)" [required]="oTableInsertableRowComponent.isColumnRequired(column)" subscriptSizing="dynamic">
               <mat-error *oMatError="oTableInsertableRowComponent.columnHasError(column, 'required')">
                 {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
               </mat-error>
