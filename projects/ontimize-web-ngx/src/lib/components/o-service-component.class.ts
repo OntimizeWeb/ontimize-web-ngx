@@ -232,7 +232,14 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   /* end of outputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
-  public selection = new SelectionModel<Element>(true, []);
+  protected _selection: SelectionModel<Element>;
+
+  get selection() {
+    if (!Util.isDefined(this._selection)) {
+      this._selection = new SelectionModel<Element>(true, []);
+    }
+    return this._selection;
+  }
 
   protected onTriggerUpdateSubscription: any;
   protected formLayoutManager: OFormLayoutManagerBase;
@@ -970,7 +977,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   set quickFilterAppearance(value: MatFormFieldAppearance) {
-    const values = [ 'fill', 'outline'];
+    const values = ['fill', 'outline'];
     if (values.indexOf(value) === -1) {
       console.warn('The quick-filter-appearance attribute is undefined so the outline value will be used');
       value = 'outline';
