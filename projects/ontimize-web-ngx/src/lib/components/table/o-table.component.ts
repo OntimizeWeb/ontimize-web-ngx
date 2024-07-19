@@ -1310,8 +1310,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     //Initialize show filter by column icon
     this.isColumnFiltersActive = this.filterColumnActiveByDefault;
 
-    this.selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
-
     this.initializeCheckboxColumn();
 
     if (this.storeState) {
@@ -1322,8 +1320,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.queryRows = this.state.queryRows;
       }
     }
-
   }
+
+  get selection() {
+    if (!Util.isDefined(this._selection)) {
+      this._selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
+    }
+    return this._selection;
+  }
+
   updateStateExpandedColumn() {
     if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
     if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {

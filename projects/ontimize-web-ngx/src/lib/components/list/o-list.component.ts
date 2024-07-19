@@ -1,4 +1,3 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import {
   AfterContentInit,
   AfterViewInit,
@@ -119,7 +118,6 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public onInsertButtonClick: EventEmitter<any> = new EventEmitter();
   public onItemDeleted: EventEmitter<any> = new EventEmitter();
 
-  public selection = new SelectionModel<Element>(true, []);
   public enabledDeleteButton: boolean = false;
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   public storePaginationState: boolean = false;
