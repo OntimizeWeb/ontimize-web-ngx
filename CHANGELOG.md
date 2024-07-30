@@ -1,3 +1,6 @@
+## 15.1.0-SNAPSHOT-6
+* New `JSONAPIPreferencesService` and `OntimizePreferencesService` services
+
 ## 15.1.0-SNAPSHOT-5(2024-05-28)
 ### Bugfix
 * Removed space in the filter
@@ -20,7 +23,8 @@
 
 ## 15.1.0-SNAPSHOT-0(2024-04-30)
 ### Features
-* Added CRUD operations for JSON AP
+* Added CRUD operations for JSON API
+
 ## 15.1.1 (2024-07-12)
 ### Features
 * **o-radio**: New input `label-gap` ([27ab61d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/27ab61d)) Closes [#1643](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1643)
