@@ -8,6 +8,7 @@ import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
+import { query } from '@angular/animations';
 
 
 @Injectable()
@@ -92,14 +93,10 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
-    if (Util.isDefined(queryParams.fields)) {
-      const keyFields = Object.keys(queryParams.fields)[0];
-      queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
-    }
-    if (Util.isDefined(queryParams.sort)) {
-      queryParams.sort = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.sort);
-    }
+    queryParams = this.parseNameConventionQueryParams(queryParams);
     queryParams = Util.objectToQueryString(queryParams);
+
+    // queryParams = new URLSearchParams(Util.objectToQueryString(queryParams)).toString();
 
     const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParams : '';
 
@@ -119,9 +116,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
 
   queryById(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
 
-    const keyFields = Object.keys(queryParams.fields)[0];
-    queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
-    queryParams.filter = Util.parseDataToNameConvention(this._appConfig.nameConvention, queryParams.filter);
+    queryParams = this.parseNameConventionQueryParams(queryParams);
 
     const id = Object.values(queryParams.filter)[0];
 
@@ -135,52 +130,78 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
+  private parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
+    if (Util.isDefined(queryParams.fields)) {
+      const keyFields = Object.keys(queryParams.fields)[0];
+      queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
+    }
+    if (Util.isDefined(queryParams.sort)) {
+      queryParams.sort = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.sort);
+    }
+    if (Util.isDefined(queryParams.filter)) {
+      queryParams.filter = Object.values(queryParams.filter).map(filter =>
+        Util.parseDataToNameConvention(this._appConfig.nameConvention, filter));
+    } else {
+      queryParams.filter = Util.parseDataToNameConvention(this._appConfig.nameConvention, queryParams.filter);
+    }
 
-  insert(av: object, entity: string): Observable<JSONAPIResponse> {
-    const url = `${this.urlBase}${this.path}`;
-    let attributes = { attributes: av, type: entity };
-    const body = JSON.stringify({
-      data: attributes
-    });
-
-    return this.doRequest({
-      method: 'POST',
-      url: url,
-      body: body,
-      successCallback: this.parseSuccessfulInsertResponse,
-      errorCallBack: this.parseUnsuccessfulInsertResponse
-    });
+    return queryParams;
   }
 
-  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
-    const id = Object.values(kv)[0];
-    const url = `${this.urlBase}${this.path}/${id}`;
+getStandartEntity(entity: string) {
+  return entity.charAt(0).toUpperCase() + entity.slice(1);
+}
 
-    let attributes = { ...{ attributes: av }, ...{ id: id }, ...{ type: entity } };
+insert(av: object, entity: string): Observable < JSONAPIResponse > {
+  const url = `${this.urlBase}${this.path}`;
 
-    const body = JSON.stringify({
-      data: attributes
-    });
+  av = Util.parseDataToNameConvention(this._appConfig.nameConvention, av);
 
-    return this.doRequest({
-      method: 'PATCH',
-      url: url,
-      body: body,
-      successCallback: this.parseSuccessfulUpdateResponse,
-      errorCallBack: this.parseUnsuccessfulUpdateResponse
-    });
-  }
+  let attributes = { attributes: av, type: entity };
+  const body = JSON.stringify({
+    data: attributes
+  });
 
-  delete(kv: object = {}, entity?: string): Observable<JSONAPIResponse> {
-    const id = Object.values(kv)[0];
-    const url = `${this.urlBase}${this.path}/${id}`;
+  return this.doRequest({
+    method: 'POST',
+    url: url,
+    body: body,
+    successCallback: this.parseSuccessfulInsertResponse,
+    errorCallBack: this.parseUnsuccessfulInsertResponse
+  });
+}
 
-    return this.doRequest({
-      method: 'DELETE',
-      url: url,
-      successCallback: this.parseSuccessfulDeleteResponse,
-      errorCallBack: this.parseUnsuccessfulDeleteResponse
-    });
-  }
+update(kv: object, av: object, entity ?: string, sqltypes ?: object): Observable < JSONAPIResponse > {
+  const id = Object.values(kv)[0];
+  const url = `${this.urlBase}${this.path}/${id}`;
+
+  av = Util.parseDataToNameConvention(this._appConfig.nameConvention, av);
+
+  let attributes = { ...{ attributes: av }, ...{ id: id }, ...{ type: entity } };
+
+  const body = JSON.stringify({
+    data: attributes
+  });
+
+  return this.doRequest({
+    method: 'PATCH',
+    url: url,
+    body: body,
+    successCallback: this.parseSuccessfulUpdateResponse,
+    errorCallBack: this.parseUnsuccessfulUpdateResponse
+  });
+}
+
+delete (kv: object = {}, entity ?: string): Observable < JSONAPIResponse > {
+  const id = Object.values(kv)[0];
+  const url = `${this.urlBase}${this.path}/${id}`;
+
+  return this.doRequest({
+    method: 'DELETE',
+    url: url,
+    successCallback: this.parseSuccessfulDeleteResponse,
+    errorCallBack: this.parseUnsuccessfulDeleteResponse
+  });
+}
 
 }

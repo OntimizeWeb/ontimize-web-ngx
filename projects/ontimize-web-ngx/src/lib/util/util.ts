@@ -1,3 +1,4 @@
+import { BasicExpression } from './../types/basic-expression.type';
 import { Injector } from '@angular/core';
 import moment from 'moment';
 import { from, isObservable, Observable, of } from 'rxjs';
@@ -10,6 +11,7 @@ import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
 import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
+import { FilterExpressionUtils } from './filter-expression.utils';
 
 export class Util {
 
@@ -559,7 +561,13 @@ export class Util {
       if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
         prev.push(Object.keys(val).map(itemfilter => {
           const filterKey = `filter[${itemfilter}]`;
-          return `${encodeURIComponent(filterKey)}=${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+          if (Util.isObject(val[itemfilter])) {
+            /** In case filter and basic expresion*/
+            return `${encodeURIComponent(filterKey)}=${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+          } else {
+            /** In case the simple filter to espape quotes*/
+            return `${encodeURIComponent(filterKey)}=${encodeURIComponent(val[itemfilter])}`;
+          }
         }).join('&'));
 
         return prev;
@@ -612,7 +620,23 @@ export class Util {
     if (convention === 'database') {
       return data;
     }
-    return Util.mapKeys(data, (val, key) => convention === 'lower' ? Util.toLowerCase(key) : Util.toUpperCase(key));
+    if (Util.isDefined(data) && Util.isObject(data) &&
+      FilterExpressionUtils.instanceofExpression(data)) {
+      return Util.parseFilterExpresionNameConvention(convention, data);
+
+    } else {
+      return Util.mapKeys(data, (val, key) => {
+        return convention === 'lower' ? Util.toLowerCase(key) : Util.toUpperCase(key)
+      });
+    }
+  }
+
+  static parseFilterExpresionNameConvention(convention: string, data: any): any {
+    if (Util.isObject(data['rop'])) {
+      return { 'lop': Util.parseFilterExpresionNameConvention(convention, data['lop']), 'op': data['op'], 'rop': Util.parseDataToNameConvention(convention, data['rop']) };
+    } else {
+      return { 'lop': (convention === 'lower' ? Util.toLowerCase(data['lop']) : Util.toUpperCase(data['lop'])), 'op': data['op'], 'rop': data['rop'] };
+    }
   }
 
   /**
