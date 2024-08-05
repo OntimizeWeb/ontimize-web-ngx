@@ -23,16 +23,16 @@
   </mat-form-field>
 
   <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container"
-    [ngClass]="{'o-image-drag-and-drop': isEmpty() , 'o-image-drag-and-drop-required': hasErrorInDragAndDrop() }" fxLayoutGap="15px" oFileDragAndDrop
+    [ngClass]="{'o-image-drag-and-drop': this.getValue()?.length === 0 , 'o-image-drag-and-drop-required': hasErrorInDragAndDrop() }" fxLayoutGap="15px" oFileDragAndDrop
     (onFileDropped)="onFileDropped($event)" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
     [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [matTooltipDisabled]="hasControls()">
 
-    <button mat-icon-button *ngIf="!isEmpty() && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
+    <button mat-icon-button *ngIf="this.getValue()?.length !== 0 && !hasControls() && enabled && !isReadOnly" (click)="onClickClearValue($event)"
       class="o-image-button-remove">
       <mat-icon>close</mat-icon>
     </button>
 
-    <img *ngIf="!(isEmpty())" [src]="src" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"
+    <img *ngIf="this.getValue()?.length !== 0" [src]="src" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"
       [ngClass]="{'o-image-cursor': !isReadOnly}" />
 
     <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()">
@@ -41,9 +41,9 @@
 
     <img [src]="src" alt="empty image" *ngIf="useEmptyImage()" />
 
-    <span class="mat-subtitle-2" *ngIf="isEmpty()">{{ 'OIMAGE.TEXT.DROP&DRAG' | oTranslate }}</span>
+    <span class="mat-subtitle-2" *ngIf="this.getValue()?.length === 0">{{ 'OIMAGE.TEXT.DROP&DRAG' | oTranslate }}</span>
 
-    <button mat-button color="primary" (click)="openFileSelector()" *ngIf="!hasControls() && isEmpty()">
+    <button mat-button color="primary" (click)="openFileSelector()" *ngIf="!hasControls() && this.getValue()?.length === 0">
       {{ 'OIMAGE.BUTTON.BROWSEFILE' | oTranslate }}
     </button>
 
