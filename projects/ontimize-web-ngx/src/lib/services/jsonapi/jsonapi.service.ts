@@ -8,7 +8,6 @@ import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
-import { query } from '@angular/animations';
 
 
 @Injectable()
@@ -95,8 +94,6 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
     queryParams = this.parseNameConventionQueryParams(queryParams);
     queryParams = Util.objectToQueryString(queryParams);
-
-    // queryParams = new URLSearchParams(Util.objectToQueryString(queryParams)).toString();
 
     const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParams : '';
 
