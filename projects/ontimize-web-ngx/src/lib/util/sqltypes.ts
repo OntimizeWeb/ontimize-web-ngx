@@ -1,3 +1,5 @@
+import { Util } from "./util";
+
 export class SQLTypes {
 
   /**
@@ -527,6 +529,9 @@ export class SQLTypes {
   public static parseUsingSQLType(arg: any, type: string): any {
     let value = arg;
     type = type ? type.toUpperCase() : '';
+    if (!Util.isDefined(arg)) {
+      return value;
+    }
     try {
       switch (type) {
         case 'TINYINT':
