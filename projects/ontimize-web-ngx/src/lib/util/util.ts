@@ -590,54 +590,6 @@ export class Util {
     return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&');
   };
 
-  static parseColumnsToNameConvention(convention: string, value: object | string) {
-    let parsedColumns = value;
-    if (Util.isObject(value)) {
-      parsedColumns = Object.values(value)[0].split(',');
-    }
-    let parsedValues;
-    switch (convention) {
-      case 'lower':
-        parsedValues = Util.parseToLowerCase(parsedColumns);
-        if (Util.isArray(parsedValues)) {
-          parsedValues = parsedValues.join();
-        }
-        break;
-      case 'upper':
-        parsedValues = Util.parseToUpperCase(parsedColumns);
-        if (Util.isArray(parsedValues)) {
-          parsedValues = parsedValues.join();
-        }
-        break;
-      default:
-        parsedValues = parsedColumns;
-    }
-    return parsedValues;
-  }
-
-  static parseDataToNameConvention(convention: string, data: any): any {
-    if (convention === 'database') {
-      return data;
-    }
-    if (Util.isDefined(data) && Util.isObject(data) &&
-      FilterExpressionUtils.instanceofExpression(data)) {
-      return Util.parseFilterExpresionNameConvention(convention, data);
-
-    } else {
-      return Util.mapKeys(data, (val, key) => {
-        return convention === 'lower' ? Util.toLowerCase(key) : Util.toUpperCase(key)
-      });
-    }
-  }
-
-  static parseFilterExpresionNameConvention(convention: string, data: any): any {
-    if (Util.isObject(data['rop'])) {
-      return { 'lop': Util.parseFilterExpresionNameConvention(convention, data['lop']), 'op': data['op'], 'rop': Util.parseDataToNameConvention(convention, data['rop']) };
-    } else {
-      return { 'lop': (convention === 'lower' ? Util.toLowerCase(data['lop']) : Util.toUpperCase(data['lop'])), 'op': data['op'], 'rop': data['rop'] };
-    }
-  }
-
   /**
    * Map keys of object
    * For example: converting the keys of an object to uppercase
@@ -648,12 +600,24 @@ export class Util {
       return acc;
     }, {});
 
+  static readonly mapValues = (obj, fn) =>
+    Object.keys(obj).reduce((acc, k) => ({ ...acc, [k]: fn(obj[k]) }), {});
+
+
   static toLowerCase(value: string) {
-    return value.toLocaleLowerCase();
+    if (typeof value === 'string') {
+      return value.toLocaleLowerCase();
+    } else {
+      return value;
+    }
   }
 
   static toUpperCase(value: string) {
-    return value.toUpperCase();
+    if (typeof value === 'string') {
+      return value.toUpperCase();
+    } else {
+      return value;
+    }
   }
 
 
