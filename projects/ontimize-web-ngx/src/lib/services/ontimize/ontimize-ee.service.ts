@@ -104,9 +104,9 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     pagesize = (Util.isDefined(pagesize)) ? pagesize : this.pagesize;
 
     if (Util.isDefined(kv) && !Util.isObjectEmpty(kv)) {
-       Object.values(kv).forEach(filter => kv[filter] = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, filter));
+      Object.keys(kv).map(filter =>
+        NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv[filter]));
     }
-
 
     av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
     sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
@@ -184,6 +184,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
     sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+
     const body = JSON.stringify({
       filter: kv,
       sqltypes: sqltypes

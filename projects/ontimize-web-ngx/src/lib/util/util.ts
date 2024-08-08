@@ -10,7 +10,6 @@ import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { ODateValueType } from '../types/o-date-value.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
-import { FilterExpressionUtils } from './filter-expression.utils';
 
 export class Util {
 
@@ -596,7 +595,9 @@ export class Util {
    */
   static readonly mapKeys = (obj, fn) =>
     Object.keys(obj).reduce((acc, k) => {
+      console.log(obj[k], acc);
       acc[fn(obj[k], k, obj)] = obj[k];
+      console.log(obj[k],k, acc);
       return acc;
     }, {});
 
