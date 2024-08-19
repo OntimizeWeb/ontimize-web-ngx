@@ -13,15 +13,15 @@ export class JSONAPIPreferencesService extends JSONAPIService {
     this.path = config.path || '/preferences';
   }
 
-  public saveAsPreferences(preferencesparams?: object): Observable<any> {
-    preferencesparams['preferencepreferences'] = btoa(preferencesparams['preferencespreference']);
+  public saveAsPreferences(preferencesparams: object): Observable<any> {
+    preferencesparams['preferencepreferences'] = btoa(JSON.stringify(preferencesparams['preferencepreferences']));
     preferencesparams['preferenceentity'] = preferencesparams['preferenceentity'] + '-' + preferencesparams['preferenceservice'];
     preferencesparams['preferencetype'] = preferencesparams['preferencetype'] === 'REPORT' ? 0 : 1;
     delete preferencesparams['preferenceservice'];
     return super.insert(preferencesparams, 'Preference');
   }
 
-  public savePreferences(id: number, preferencesparams?: object): Observable<any> {
+  public savePreferences(id: number, preferencesparams: object): Observable<any> {
     preferencesparams['preferencetype'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
     return super.update({ id: id }, preferencesparams, preferencesparams['entity']);
   }
