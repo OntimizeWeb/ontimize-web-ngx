@@ -23,7 +23,7 @@ export class JSONAPIPreferencesService extends JSONAPIService {
 
   public savePreferences(id: number, preferencesparams: object): Observable<any> {
     preferencesparams['preferencetype'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
-    return super.update({ id: id }, preferencesparams, preferencesparams['entity']);
+    return super.update({ id: id }, preferencesparams, 'Preference');
   }
 
   public getPreferences(entity: string, service: string, type: string): Observable<any> {
@@ -37,7 +37,7 @@ export class JSONAPIPreferencesService extends JSONAPIService {
 
 
   public deletePreferences(id?: number): Observable<any> {
-    const url = this.urlBase + '/Preferences/' + id;
+    const url = this.urlBase + '/Preference/' + id;
     return this.doRequest({
       method: 'DELETE',
       url: url
