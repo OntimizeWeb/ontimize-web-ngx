@@ -6,9 +6,9 @@ import { AppConfig } from '../../config/app-config';
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
+import { NameConvention } from '../../util/name-convention.utils';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
-import { NameConvention } from '../../util/name-convention.utils';
 
 
 @Injectable()
@@ -128,7 +128,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
-  private parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
+  protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
     if (Util.isDefined(queryParams.fields)) {
       const keyFields = Object.keys(queryParams.fields)[0];
       queryParams.fields[keyFields] = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, queryParams.fields);
@@ -146,14 +146,10 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     return queryParams;
   }
 
-  getStandartEntity(entity: string) {
-    return entity.charAt(0).toUpperCase() + entity.slice(1);
-  }
-
   insert(av: object, entity: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}`;
 
-    av = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention,  av);
+    av = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, av);
 
     let attributes = { attributes: av, type: entity };
     const body = JSON.stringify({
@@ -169,7 +165,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
-  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
+  update(kv: object, av: object, entity?: string): Observable<JSONAPIResponse> {
     const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
@@ -190,7 +186,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
-  delete(kv: object = {}, entity?: string): Observable<JSONAPIResponse> {
+  delete(kv: object = {}): Observable<JSONAPIResponse> {
     const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
@@ -202,4 +198,13 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
+  /**
+  * Gets standart entity
+  * @param entity
+  * @returns  return the first chart of the entity in uppercase
+  */
+
+  getStandartEntity(entity: string) {
+    return entity.charAt(0).toUpperCase() + entity.slice(1);
+  }
 }
