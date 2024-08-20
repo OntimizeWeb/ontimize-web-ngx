@@ -40,3 +40,5 @@ export * from './o-filter-definition.type';
 export * from './form/index';
 export * from './o-global-config.type';
 export * from './preferences.type';
+export * from './query-params.type';
+export * from './json-query-parameter.type';
