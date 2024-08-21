@@ -595,9 +595,7 @@ export class Util {
    */
   static readonly mapKeys = (obj, fn) =>
     Object.keys(obj).reduce((acc, k) => {
-      console.log(obj[k], acc);
       acc[fn(obj[k], k, obj)] = obj[k];
-      console.log(obj[k],k, acc);
       return acc;
     }, {});
 
