@@ -49,7 +49,6 @@ export class NameConvention {
     }
 
     return Util.mapValues(data, (val, key) => {
-      console.log(val, key);
       return convention === 'lower' ? Util.toLowerCase(val) : Util.toUpperCase(val)
     });
 
