@@ -1,5 +1,7 @@
 ## 15.1.0-SNAPSHOT-6
 * New `JSONAPIPreferencesService` and `OntimizePreferencesService` services
+* Add nameConvention
+* Parse the values ​​to the format according to their sqltype
 
 ## 15.1.0-SNAPSHOT-5(2024-05-28)
 ### Bugfix
