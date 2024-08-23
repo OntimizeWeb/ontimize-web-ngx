@@ -33,7 +33,7 @@
     </button>
 
     <img *ngIf="this.getValue()?.length !== 0" [src]="src" alt="" (click)="openFileSelector()" (error)="notFoundImageUrl($event)"
-      [ngClass]="{'o-image-cursor': !isReadOnly}"  (onKeyDown)="openFileSelector()"/>
+      [ngClass]="{'o-image-cursor': !isReadOnly}"  (keyDown)="openFileSelector()"/>
 
     <mat-icon class="empty-icon" [class.mat-disabled]="!enabled" aria-label="empty image" *ngIf="useEmptyIcon()">
       {{ emptyicon }}
