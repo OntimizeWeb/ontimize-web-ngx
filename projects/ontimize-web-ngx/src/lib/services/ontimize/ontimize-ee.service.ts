@@ -67,7 +67,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
     kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, 'Ontimize', av);
     sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
 
     const url = `${this.urlBase}${this.path}/${entity}/search`;
@@ -108,7 +108,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
         NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv[filter]));
     }
 
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, 'Ontimize', av);
     sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
 
     orderby = orderby.map(orderByItem => NameConvention.parseValuesDataToNameConvention(this._appConfig.nameConvention, orderByItem));
@@ -138,7 +138,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, 'Ontimize', av);
     sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
 
     const body = JSON.stringify({
@@ -160,7 +160,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     const url = `${this.urlBase}${this.path}/${entity}`;
 
     kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, 'Ontimize', av);
     sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
 
     const body = JSON.stringify({
