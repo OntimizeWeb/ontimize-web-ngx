@@ -507,6 +507,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this._components;
   }
 
+  getComponentByAttr(attr:string): IFormDataComponent {
+    return this._components[attr];
+  }
+
+
   public load(): any {
     const self = this;
     const zone = this.injector.get(NgZone);
@@ -1266,7 +1271,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     ).forEach((item) => {
       const control = self.formGroup.controls[item];
       if (control instanceof OFormControl) {
-        values[item] = control.getValue();
+        const comp = this.getComponentByAttr(item);
+        /** Parse the values ​​to the format according to their sqltype to send to the update request */
+        values[item] = SQLTypes.parseUsingSQLType(control.getValue(), SQLTypes.getSQLTypeKey(comp.getSQLType())); ;
       } else {
         values[item] = control.value;
       }
@@ -1533,7 +1540,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const componentsKeys = Object.keys(components).filter(key => self.ignoreFormCacheKeys.indexOf(key) === -1);
     componentsKeys.forEach(compKey => {
       const comp: IFormDataComponent = components[compKey];
-      values[compKey] = comp.getValue();
+      /** Parse the values ​​to the format according to their sqltype to send to the insert request */
+      values[compKey] = SQLTypes.parseUsingSQLType(comp.getValue(), SQLTypes.getSQLTypeKey(comp.getSQLType()));
     });
     return values;
   }
