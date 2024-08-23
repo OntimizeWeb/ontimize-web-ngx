@@ -6,6 +6,7 @@ import { AppConfig } from '../../config/app-config';
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
+import { NameConvention } from '../../util/name-convention.utils';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
 
@@ -15,10 +16,12 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   public path: string = '';
   protected _startSessionPath: string;
   protected config: AppConfig;
+  protected nameConvention: string;
 
   constructor(protected injector: Injector) {
     super(injector);
     this.config = this.injector.get(AppConfig);
+    this.nameConvention = this._appConfig.nameConvention;
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
@@ -92,13 +95,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
-    if (Util.isDefined(queryParams.fields)) {
-      const keyFields = Object.keys(queryParams.fields)[0];
-      queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
-    }
-    if (Util.isDefined(queryParams.sort)) {
-      queryParams.sort = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.sort);
-    }
+    queryParams = this.parseNameConventionQueryParams(queryParams);
     queryParams = Util.objectToQueryString(queryParams);
 
     const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParams : '';
@@ -119,9 +116,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
 
   queryById(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
 
-    const keyFields = Object.keys(queryParams.fields)[0];
-    queryParams.fields[keyFields] = Util.parseColumnsToNameConvention(this._appConfig.nameConvention, queryParams.fields);
-    queryParams.filter = Util.parseDataToNameConvention(this._appConfig.nameConvention, queryParams.filter);
+    queryParams = this.parseNameConventionQueryParams(queryParams);
 
     const id = Object.values(queryParams.filter)[0];
 
@@ -135,9 +130,31 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
+  protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
+    if (Util.isDefined(queryParams.fields)) {
+      const keyFields = Object.keys(queryParams.fields)[0];
+      queryParams.fields[keyFields] = NameConvention.parseColumnsToNameConvention(this.nameConvention, this._appConfig.serviceType, queryParams.fields);
+    }
+    if (Util.isDefined(queryParams.sort)) {
+      queryParams.sort = NameConvention.parseColumnsToNameConvention(this.nameConvention, this._appConfig.serviceType, queryParams.sort);
+    }
+
+    if (Util.isDefined(queryParams.filter)) {
+      let filters = {};
+      for (const filter in queryParams.filter) {
+        Object.assign(filters, NameConvention.parseDataToNameConvention(this.nameConvention, { [filter]: queryParams.filter[filter] }));
+      }
+      queryParams.filter = filters;
+    }
+
+    return queryParams;
+  }
 
   insert(av: object, entity: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}`;
+
+    av = NameConvention.parseDataToNameConvention(this.nameConvention, av);
+
     let attributes = { attributes: av, type: entity };
     const body = JSON.stringify({
       data: attributes
@@ -152,9 +169,11 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
-  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
+  update(kv: object, av: object, entity?: string): Observable<JSONAPIResponse> {
     const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
+
+    av = NameConvention.parseDataToNameConvention(this.nameConvention, av);
 
     let attributes = { ...{ attributes: av }, ...{ id: id }, ...{ type: entity } };
 
@@ -171,7 +190,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
-  delete(kv: object = {}, entity?: string): Observable<JSONAPIResponse> {
+  delete(kv: object = {}): Observable<JSONAPIResponse> {
     const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
@@ -183,4 +202,13 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     });
   }
 
+  /**
+  * Gets standart entity
+  * @param entity
+  * @returns  return the first chart of the entity in uppercase
+  */
+
+  getStandartEntity(entity: string) {
+    return entity.charAt(0).toUpperCase() + entity.slice(1);
+  }
 }

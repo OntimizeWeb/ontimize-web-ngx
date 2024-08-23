@@ -220,8 +220,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected queryOnInit: boolean = true;
   protected parentKeys: string;
   protected getMethod: string = ""
-  protected queryByIdMethod: string = Codes.QUERYBYID_METHOD;
-  protected queryMethod: string = Codes.QUERY_METHOD;
+  protected queryMethod: string = Codes.QUERYBYID_METHOD;
   protected insertMethod: string = Codes.INSERT_METHOD;
   protected updateMethod: string = Codes.UPDATE_METHOD;
   protected deleteMethod: string = Codes.DELETE_METHOD;
@@ -1118,7 +1117,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     const queryParameter = this.queryArgumentAdapter.parseQueryParameters(queryDataArgs);
 
-    this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryByIdMethod, this.dataService, queryParameter])
+    this.querySubscription = this.queryArgumentAdapter.request(this.queryMethod, this.dataService, queryParameter)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);

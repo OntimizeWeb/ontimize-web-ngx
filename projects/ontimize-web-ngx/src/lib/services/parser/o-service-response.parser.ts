@@ -6,6 +6,7 @@ import { BaseResponse } from '../../interfaces/base-response.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppConfig } from '../../config/app-config';
 import { Util } from '../../util';
+import { NameConvention } from '../../util/name-convention.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -48,10 +49,10 @@ export class OntimizeServiceResponseParser<T extends BaseResponse> {
 
     if (Util.isArray(data)) {
       data = data.map(element => {
-        return Util.parseDataToNameConvention(nameConvention, element);
+        return NameConvention.parseDataToNameConvention(nameConvention, element);
       });
     } else if (Util.isObject(data)) {
-      return Util.parseDataToNameConvention(nameConvention, data);
+      return NameConvention.parseDataToNameConvention(nameConvention, data);
     }
 
     return data;
