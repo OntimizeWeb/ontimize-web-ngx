@@ -16,10 +16,12 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   public path: string = '';
   protected _startSessionPath: string;
   protected config: AppConfig;
+  protected nameConvention: string;
 
   constructor(protected injector: Injector) {
     super(injector);
     this.config = this.injector.get(AppConfig);
+    this.nameConvention = this._appConfig.nameConvention;
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
@@ -131,16 +133,18 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
     if (Util.isDefined(queryParams.fields)) {
       const keyFields = Object.keys(queryParams.fields)[0];
-      queryParams.fields[keyFields] = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, queryParams.fields);
+      queryParams.fields[keyFields] = NameConvention.parseColumnsToNameConvention(this.nameConvention, this._appConfig.serviceType, queryParams.fields);
     }
     if (Util.isDefined(queryParams.sort)) {
-      queryParams.sort = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, queryParams.sort);
+      queryParams.sort = NameConvention.parseColumnsToNameConvention(this.nameConvention, this._appConfig.serviceType, queryParams.sort);
     }
+
     if (Util.isDefined(queryParams.filter)) {
-      queryParams.filter = Object.values(queryParams.filter).map(filter =>
-        NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, filter));
-    } else {
-      queryParams.filter = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, queryParams.filter);
+      let filters = {};
+      for (const filter in queryParams.filter) {
+        Object.assign(filters, NameConvention.parseDataToNameConvention(this.nameConvention, { [filter]: queryParams.filter[filter] }));
+      }
+      queryParams.filter = filters;
     }
 
     return queryParams;
@@ -149,7 +153,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   insert(av: object, entity: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}`;
 
-    av = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, av);
+    av = NameConvention.parseDataToNameConvention(this.nameConvention, av);
 
     let attributes = { attributes: av, type: entity };
     const body = JSON.stringify({
@@ -169,7 +173,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
-    av = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, av);
+    av = NameConvention.parseDataToNameConvention(this.nameConvention, av);
 
     let attributes = { ...{ attributes: av }, ...{ id: id }, ...{ type: entity } };
 
