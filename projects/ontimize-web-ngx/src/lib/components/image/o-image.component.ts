@@ -128,7 +128,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   }
 
   public isEmpty(): boolean {
-    return !this.getValue() || this.getValue().length === 0;
+    return this.getValue()?.length === 0;
   }
 
   public createFormControl(cfg?: { value: any, disabled: boolean }, validators?: ValidatorFn[]): OFormControl {

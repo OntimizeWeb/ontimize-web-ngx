@@ -5,11 +5,11 @@ import { from, isObservable, Observable, of } from 'rxjs';
 import { IDataService } from '../interfaces/data-service.interface';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
-import { ODateValueType } from '../types/o-date-value.type';
+import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
+import { ODateValueType } from '../types/o-date-value.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
-import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
 
 export class Util {
 
@@ -559,7 +559,13 @@ export class Util {
       if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
         prev.push(Object.keys(val).map(itemfilter => {
           const filterKey = `filter[${itemfilter}]`;
-          return `${encodeURIComponent(filterKey)}=${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+          if (Util.isObject(val[itemfilter])) {
+            /** In case filter and basic expresion*/
+            return `${encodeURIComponent(filterKey)}=${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+          } else {
+            /** In case the simple filter to espape quotes*/
+            return `${encodeURIComponent(filterKey)}=${encodeURIComponent(val[itemfilter])}`;
+          }
         }).join('&'));
 
         return prev;
@@ -583,38 +589,6 @@ export class Util {
     return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&');
   };
 
-  static parseColumnsToNameConvention(convention: string, value: object | string) {
-    let parsedColumns = value;
-    if (Util.isObject(value)) {
-      parsedColumns = Object.values(value)[0].split(',');
-    }
-    let parsedValues;
-    switch (convention) {
-      case 'lower':
-        parsedValues = Util.parseToLowerCase(parsedColumns);
-        if (Util.isArray(parsedValues)) {
-          parsedValues = parsedValues.join();
-        }
-        break;
-      case 'upper':
-        parsedValues = Util.parseToUpperCase(parsedColumns);
-        if (Util.isArray(parsedValues)) {
-          parsedValues = parsedValues.join();
-        }
-        break;
-      default:
-        parsedValues = parsedColumns;
-    }
-    return parsedValues;
-  }
-
-  static parseDataToNameConvention(convention: string, data: any): any {
-    if (convention === 'database') {
-      return data;
-    }
-    return Util.mapKeys(data, (val, key) => convention === 'lower' ? Util.toLowerCase(key) : Util.toUpperCase(key));
-  }
-
   /**
    * Map keys of object
    * For example: converting the keys of an object to uppercase
@@ -625,12 +599,24 @@ export class Util {
       return acc;
     }, {});
 
+  static readonly mapValues = (obj, fn) =>
+    Object.keys(obj).reduce((acc, k) => ({ ...acc, [k]: fn(obj[k]) }), {});
+
+
   static toLowerCase(value: string) {
-    return value.toLocaleLowerCase();
+    if (typeof value === 'string') {
+      return value.toLocaleLowerCase();
+    } else {
+      return value;
+    }
   }
 
   static toUpperCase(value: string) {
-    return value.toUpperCase();
+    if (typeof value === 'string') {
+      return value.toUpperCase();
+    } else {
+      return value;
+    }
   }
 
 
