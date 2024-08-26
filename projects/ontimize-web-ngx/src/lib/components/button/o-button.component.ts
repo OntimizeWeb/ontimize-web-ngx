@@ -1,8 +1,13 @@
-import { Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Injector, OnInit, Type, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { Codes } from '../../util/codes';
+
+import { ActivatedRoute } from '@angular/router';
+import { PermissionsService } from '../../services';
+import { OPermissions } from '../../types';
+import { Util } from '../../util';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -32,7 +37,7 @@ export const DEFAULT_OUTPUTS_O_BUTTON = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-button]': 'true',
-    '[class.o-button-icon-position-top]':'iconPosition==="top"',
+    '[class.o-button-icon-position-top]': 'iconPosition==="top"',
     '[class.o-button-icon-position-bottom]': 'iconPosition==="bottom"'
 
   }
@@ -50,18 +55,27 @@ export class OButtonComponent implements OnInit {
   public image: string;
   @BooleanInputConverter() enabled: boolean = true;
   public color: ThemePalette;
+  public visible: boolean = true;
 
   /* Outputs */
   public onClick: EventEmitter<Event> = new EventEmitter<Event>();
   public click: EventEmitter<Event> = new EventEmitter<Event>();
+  protected permissionsService: PermissionsService;
+  protected permissions: OPermissions;
 
-  constructor() {
+  constructor(protected injector: Injector, protected actRoute: ActivatedRoute) {
     this.otype = OButtonComponent.DEFAULT_TYPE;
+    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
   }
 
   ngOnInit(): void {
     if (this.otype) {
       this.otype = this.otype.toUpperCase();
+    }
+    this.permissions = this.permissionsService.getOButtonPermissions(this.oattr, this.actRoute);
+    if (Util.isDefined(this.permissions)) {
+      this.enabled = this.permissions.enabled;
+      this.visible = this.permissions.visible;
     }
   }
 
@@ -103,5 +117,8 @@ export class OButtonComponent implements OnInit {
 
   isIconButton(): boolean {
     return this.otype === 'ICON';
+  }
+  isVisible(): boolean {
+    return this.visible;
   }
 }

@@ -7,7 +7,7 @@
     <mat-select [value]="getValue()" #selectModel [id]="getAttribute()" fxFill [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [multiple]="getMultiple()" [required]="isRequired" [panelClass]="{ 'o-combo-panel': true, 'o-combo-panel-search': searchable }"
       (selectionChange)="onSelectionChange($event)" (closed)="innerOnBlur($event)">
-      <o-combo-search *ngIf="searchable" [formControl]="searchControl"></o-combo-search>
+      <o-combo-search #comboSearch *ngIf="searchable" [formControl]="searchControl"></o-combo-search>
 
       <mat-select-trigger *ngIf="multiple && multipleTriggerLabel">
         {{ selectModel.selected[0] ? getFirstSelectedValue(): '' }}

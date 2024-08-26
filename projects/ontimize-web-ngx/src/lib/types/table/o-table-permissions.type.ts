@@ -1,11 +1,9 @@
 import { OPermissions } from '../o-permissions.type';
+import { OServiceBasePermissions } from '../o-service-base-permissions.type';
 import { OTableMenuPermissions } from './o-table-menu-permissions.type';
 
-export type OTablePermissions = {
-  attr: string;
-  selector: string;
+export type OTablePermissions = OServiceBasePermissions & {
   menu?: OTableMenuPermissions;
   columns?: OPermissions[];
-  actions?: OPermissions[];
   contextMenu?: OPermissions[];
 };

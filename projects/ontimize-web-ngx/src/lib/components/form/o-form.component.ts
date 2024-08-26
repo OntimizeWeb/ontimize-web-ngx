@@ -48,6 +48,7 @@ import { OFormCacheClass } from './cache/o-form.cache.class';
 import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-can-deactivate.guard';
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormBase } from './o-form-base.class';
+import { O_FORM_GLOBAL_CONFIG } from './o-form-tokens';
 import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
@@ -155,7 +156,9 @@ export const DEFAULT_INPUTS_O_FORM = [
 
   'messageServiceType : message-service-type',
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
-  'configureServiceArgs: configure-service-args'
+  'configureServiceArgs: configure-service-args',
+  //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
+  'setValueOrder: set-value-order'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -206,11 +209,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   headerPosition: 'top' | 'bottom' = 'top';
   labelheader: string = '';
   labelHeaderAlign: string = 'center';
-  headeractions: string = '';
+  headeractions: string = 'all';
   showHeaderActionsText: string = 'yes';
   entity: string;
   keys: string = '';
   columns: string = '';
+  setValueOrder: string = '';
   service: string;
   @BooleanInputConverter()
   stayInRecordAfterEdit: boolean = false;
@@ -241,6 +245,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @BooleanInputConverter()
   confirmExit: boolean = true;
   queryArgumentAdapter: any;
+  setValueOrderArray: string[];
+
   set ignoreOnExit(val: string[]) {
     if (typeof val === 'string') {
       val = Util.parseArray(val, true);
@@ -383,6 +389,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.formContainer.setForm(this);
     } catch (e) {
       //
+    }
+    this.getGlobalConfig();
+  }
+
+  private getGlobalConfig() {
+    try {
+      const oFormGlobalConfig = this.injector.get(O_FORM_GLOBAL_CONFIG);
+      if (Util.isDefined(oFormGlobalConfig.headerActions)) {
+        this.headeractions = oFormGlobalConfig.headerActions;
+      };
+
+    } catch (error) {
+      // Do nothing because is optional
     }
   }
 
@@ -687,6 +706,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const pkArray = Util.parseArray(this.parentKeys);
     this._pKeysEquiv = Util.parseParentKeysEquivalences(pkArray);
     this.keysSqlTypesArray = Util.parseArray(this.keysSqlTypes);
+    this.setValueOrderArray = Util.parseArray(this.setValueOrder);
 
     this.configureService();
     this.configureAdapter();
@@ -1687,22 +1707,35 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.zone.run(() => {
       this.formData = newFormData;
       const components = this.getComponents();
-      if (components) {
-        Object.keys(components).forEach(key => {
+      const keyComponents = [...Object.keys(components)];
+      if (!Util.isArrayEmpty(this.setValueOrderArray)) {
+        keyComponents.sort((a, b) => {
+          const indexA = this.setValueOrderArray.indexOf(a) === -1 ? 1 : 0;
+          const indexB = this.setValueOrderArray.indexOf(b) === -1 ? 1 : 0;
+          return indexA - indexB;
+        });
+      }
+
+      if (!Util.isArrayEmpty(keyComponents)) {
+        keyComponents.forEach(key => {
           const comp = components[key];
-          if (Util.isFormDataComponent(comp)) {
-            try {
-              if (comp.isAutomaticBinding()) {
-                comp.data = self.getDataValue(key);
-              }
-            } catch (error) {
-              console.error(error);
-            }
-          }
+          this.setDataInFormDataComponent(comp, key);
         });
         self.initializeFields();
       }
     });
+  }
+
+  private setDataInFormDataComponent(comp: IFormDataComponent, attr: string) {
+    if (Util.isFormDataComponent(comp)) {
+      try {
+        if (comp.isAutomaticBinding()) {
+          comp.data = this.getDataValue(attr);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
   protected initializeFields(): void {

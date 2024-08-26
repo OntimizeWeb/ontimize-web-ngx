@@ -9,7 +9,6 @@ import { OAppSidenavBase } from '../../components/app-sidenav/o-app-sidenav-base
 import { OAppHeaderBase } from '../../components/app-header/o-app-header-base.class';
 import { OAppLayoutBase } from './o-app-layout-base.class';
 
-
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'mode',
   'sidenavMode: sidenav-mode',
@@ -25,7 +24,6 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'showTitle: show-title',
   'staticTitle: static-title',
   'showStaticTitle: show-static-title'
-
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [

@@ -77,7 +77,7 @@
     <ng-container [matColumnDef]="oTableOptions.selectColumn.name" *ngIf="oTableOptions.selectColumn.visible">
       <ng-container *ngIf="!tableColumnSelectAllContentChild; else customHeaderSelectAllTemplate">
         <th mat-header-cell *matHeaderCellDef>
-          <div class="content">
+          <div class="content" *ngIf="isSelectionModeMultiple()">
             <o-table-header-select-all [column]="oTableOptions.selectColumn"></o-table-header-select-all>
           </div>
         </th>
