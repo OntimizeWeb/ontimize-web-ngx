@@ -1321,8 +1321,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.queryRows = this.state.queryRows;
       }
     }
-    this.selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
   }
+
+  get selection() {
+    if (!Util.isDefined(this._selection)) {
+      this._selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
+    }
+    return this._selection;
+  }
+
   updateStateExpandedColumn() {
     if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
     if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {

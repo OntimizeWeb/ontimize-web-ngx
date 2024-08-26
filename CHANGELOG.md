@@ -1,7 +1,7 @@
 ## 15.1.0-SNAPSHOT-6
 * New `JSONAPIPreferencesService` and `OntimizePreferencesService` services
 * Add nameConvention
-* Parse the values ​​to the format according to their sqltype
+* Parse the values to the format according to their sqltype
 
 ## 15.1.0-SNAPSHOT-5(2024-05-28)
 ### Bugfix
@@ -26,6 +26,14 @@
 ## 15.1.0-SNAPSHOT-0(2024-04-30)
 ### Features
 * Added CRUD operations for JSON API
+
+## 15.1.3 (2024-07-19)
+### Bug fixes
+* **o-table**: Fixed onRowSelected and onRowDeselect events are not emitted with `select-all-checkbox-visible ="yes"` ([a2ac0da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2ac0da)) Closes [#1658](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1658)
+
+## 15.1.2 (2024-07-18)
+### Bug fixes
+* **o-table**: Fixed onRowSelected and onRowDeselect events are not emitted ([4d605be](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4d605be)) Closes [#1654](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1654)
 
 ## 15.1.1 (2024-07-12)
 ### Features
