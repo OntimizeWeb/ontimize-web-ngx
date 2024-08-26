@@ -133,10 +133,10 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
     if (Util.isDefined(queryParams.fields)) {
       const keyFields = Object.keys(queryParams.fields)[0];
-      queryParams.fields[keyFields] = NameConvention.parseColumnsToNameConvention(this.nameConvention, this._appConfig.serviceType, queryParams.fields);
+      queryParams.fields[keyFields] = NameConvention.parseColumnsToNameConvention(this.nameConvention, 'JSONAPI', queryParams.fields);
     }
     if (Util.isDefined(queryParams.sort)) {
-      queryParams.sort = NameConvention.parseColumnsToNameConvention(this.nameConvention, this._appConfig.serviceType, queryParams.sort);
+      queryParams.sort = NameConvention.parseColumnsToNameConvention(this.nameConvention, 'JSONAPI', queryParams.sort);
     }
 
     if (Util.isDefined(queryParams.filter)) {
@@ -211,4 +211,5 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   getStandartEntity(entity: string) {
     return entity.charAt(0).toUpperCase() + entity.slice(1);
   }
+
 }

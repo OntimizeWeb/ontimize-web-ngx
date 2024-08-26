@@ -31,6 +31,9 @@ import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-resp
 import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { BaseServiceResponse } from './base-service-response.class';
 import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
+import { OntimizePreferencesService } from './ontimize/ontimize-preferences.service';
+import { JSONAPIPreferencesService } from './jsonapi/jsonapi-preferences.service';
+import { IPreferencesService } from '../interfaces/prefereces-service.interface';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -193,6 +196,21 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
     return new OntimizePermissionsService(injector);
   }
   return Util.createServiceInstance(config.permissionsServiceType, injector);
+}
+
+/**
+ * Creates a new instance of the preferences service.
+ */
+export function preferencesServiceFactory(injector: Injector): IPreferencesService {
+
+  const config = injector.get(AppConfig).getConfiguration();
+
+  if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
+    return new OntimizePreferencesService(injector);
+  } else if ('JSONAPI' === config.serviceType) {
+    return new JSONAPIPreferencesService(injector);
+  }
+  return new JSONAPIPreferencesService(injector);
 }
 
 /**
