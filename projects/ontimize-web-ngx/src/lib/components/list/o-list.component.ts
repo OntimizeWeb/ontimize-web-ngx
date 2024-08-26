@@ -37,6 +37,7 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { ListItem } from './list-item/o-list-item';
 import { OListItemDirective } from './list-item/o-list-item.directive';
+import { OQueryParams } from '../../types/query-params.type';
 
 export const DEFAULT_INPUTS_O_LIST = [
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
@@ -300,10 +301,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     this.sortColArray = ServiceUtils.parseSortColumns(sortColumnsParam);
   }
 
-  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
+  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     if (this.pageable) {
-      queryArguments[6] = this.sortColArray;
+      queryArguments.sort = this.sortColArray;
     }
     return queryArguments;
   }

@@ -7,6 +7,7 @@ import { IDataService } from '../../interfaces/data-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { Util } from '../../util/util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
+import { NameConvention } from '../../util/name-convention.utils';
 
 @Injectable()
 export class OntimizeEEService extends OntimizeBaseService implements IDataService {
@@ -29,14 +30,16 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
       observe: 'response'
     };
     const dataObservable: Observable<string | number> = new Observable(observer => {
-      this.httpClient.post(url, null, options).subscribe((resp: any) => {
-        if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
-          observer.next(resp.headers.get('X-Auth-Token'));
-        } else {
-          // Invalid sessionId ...
-          observer.error('Invalid user or password');
-        }
-      }, error => observer.error(error));
+      this.httpClient.post(url, null, options).subscribe({
+        next: (resp: any) => {
+          if (Util.isDefined(resp) && Util.isDefined(resp.headers) && Util.isDefined(resp.headers.get('X-Auth-Token'))) {
+            observer.next(resp.headers.get('X-Auth-Token'));
+          } else {
+            // Invalid sessionId ...
+            observer.error('Invalid user or password');
+          }
+        }, error: (error) => observer.error(error)
+      });
     });
     return dataObservable.pipe(share());
   }
@@ -63,6 +66,10 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
+    kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+
     const url = `${this.urlBase}${this.path}/${entity}/search`;
 
     const body = JSON.stringify({
@@ -80,6 +87,11 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     });
   }
 
+  queryById(kv?: object, av?: string[], entity?: string, sqltypes?: object): Observable<ServiceResponse> {
+    return this.query(kv, av, entity, sqltypes);
+  }
+
+
   public advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object,
     offset?: number, pagesize?: number, orderby?: Array<object>): Observable<ServiceResponse> {
 
@@ -90,6 +102,17 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     orderby = (Util.isDefined(orderby)) ? orderby : this.orderby;
     offset = (Util.isDefined(offset)) ? offset : this.offset;
     pagesize = (Util.isDefined(pagesize)) ? pagesize : this.pagesize;
+
+    if (Util.isDefined(kv) && !Util.isObjectEmpty(kv)) {
+      Object.keys(kv).map(filter =>
+        NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv[filter]));
+    }
+
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+
+    orderby = orderby.map(orderByItem => NameConvention.parseValuesDataToNameConvention(this._appConfig.nameConvention, orderByItem));
+
 
     const url = `${this.urlBase}${this.path}/${entity}/advancedsearch`;
 
@@ -115,6 +138,9 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+
     const body = JSON.stringify({
       data: av,
       sqltypes: sqltypes
@@ -132,6 +158,10 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
   public update(kv: object = {}, av: object = {}, entity?: string, sqltypes?: object): Observable<ServiceResponse> {
 
     const url = `${this.urlBase}${this.path}/${entity}`;
+
+    kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
+    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, this._appConfig.serviceType, av);
+    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
 
     const body = JSON.stringify({
       filter: kv,
@@ -151,6 +181,9 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
   public delete(kv: object = {}, entity?: string, sqltypes?: object): Observable<ServiceResponse> {
 
     const url = `${this.urlBase}${this.path}/${entity}`;
+
+    kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
+    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
 
     const body = JSON.stringify({
       filter: kv,

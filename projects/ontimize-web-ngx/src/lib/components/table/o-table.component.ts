@@ -102,6 +102,7 @@ import type { OTableOptions } from '../../interfaces/o-table-options.interface';
 import type { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OQueryParams } from '../../types/query-params.type';
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
@@ -1677,13 +1678,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return columns;
   }
 
-  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
+  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    Object.assign(queryArguments[3], this.getSqlTypesForFilter(queryArguments[1]));
-    Object.assign(queryArguments[3], ovrrArgs ? ovrrArgs.sqltypes || {} : {});
+    queryArguments.sqlTypes = ovrrArgs ? ovrrArgs.sqltypes || {} : {};
+
     if (this.pageable) {
-      queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
-      queryArguments[6] = this.sortColArray;
+      queryArguments.sort = this.sortColArray;
+      if (this.state.totalQueryRecordsNumber) {
+        queryArguments.ovrrArgs.length = this.state.totalQueryRecordsNumber;
+      }
     }
     return queryArguments;
   }

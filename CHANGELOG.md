@@ -1,3 +1,27 @@
+## 15.1.0-SNAPSHOT-5(2024-05-28)
+### Bugfix
+* Removed space in the filter
+
+## 15.1.0-SNAPSHOT-4(2024-05-22)
+### Features
+* Adapt table cell renderer
+
+## 15.1.0-SNAPSHOT-3 (2024-05-21)
+### Features
+* Added complex filtering
+
+## 15.1.0-SNAPSHOT-2 (2024-05-08)
+### Features
+* Added management JSON API errors
+
+## 15.1.0-SNAPSHOT-1 (2024-05-08)
+### Features
+* Added sorting JSON API
+
+## 15.1.0-SNAPSHOT-0(2024-04-30)
+### Features
+* Added CRUD operations for JSON API
+
 ## 15.1.3 (2024-07-19)
 ### Bug fixes
 * **o-table**: Fixed onRowSelected and onRowDeselect events are not emitted with `select-all-checkbox-visible ="yes"` ([a2ac0da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2ac0da)) Closes [#1658](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1658)

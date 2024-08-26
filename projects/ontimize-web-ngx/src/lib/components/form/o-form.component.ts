@@ -19,6 +19,7 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IComponent } from '../../interfaces/component.interface';
+import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
 import { IFormDataTypeComponent } from '../../interfaces/form-data-type-component.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
@@ -28,6 +29,7 @@ import { OntimizeServiceProvider } from '../../services/factories';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
+import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
@@ -36,6 +38,7 @@ import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
+import { OQueryParams } from '../../types/query-params.type';
 import { Codes } from '../../util/codes';
 import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
@@ -51,9 +54,6 @@ import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 
-interface IFormDataComponentHash {
-  [attr: string]: IFormDataComponent;
-}
 
 export const DEFAULT_INPUTS_O_FORM = [
   // show-header [boolean]: visibility of form toolbar. Default: yes.
@@ -156,6 +156,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   'ignoreDefaultNavigation: ignore-default-navigation',
 
   'messageServiceType : message-service-type',
+
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args',
   //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
   'setValueOrder: set-value-order'
 ];
@@ -222,7 +225,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @BooleanInputConverter()
   protected queryOnInit: boolean = true;
   protected parentKeys: string;
-  protected queryMethod: string = Codes.QUERY_METHOD;
+  protected getMethod: string = ""
+  protected queryMethod: string = Codes.QUERYBYID_METHOD;
   protected insertMethod: string = Codes.INSERT_METHOD;
   protected updateMethod: string = Codes.UPDATE_METHOD;
   protected deleteMethod: string = Codes.DELETE_METHOD;
@@ -242,6 +246,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
+
+  queryArgumentAdapter: any;
+
   setValueOrderArray: string[];
 
   set ignoreOnExit(val: string[]) {
@@ -345,6 +352,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     return m;
   }
+  protected configureServiceArgs: OConfigureServiceArgs;
 
   constructor(
     protected router: Router,
@@ -521,6 +529,11 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   getComponents(): IFormDataComponentHash {
     return this._components;
   }
+
+  getComponentByAttr(attr:string): IFormDataComponent {
+    return this._components[attr];
+  }
+
 
   public load(): any {
     const self = this;
@@ -700,6 +713,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.setValueOrderArray = Util.parseArray(this.setValueOrder);
 
     this.configureService();
+    this.configureAdapter();
 
     this.formNavigation.subscribeToQueryParams();
     this.formNavigation.subscribeToUrlParams();
@@ -749,10 +763,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   configureService() {
-    const msgConfigureServiceArgs: OConfigureMessageServiceArgs = { injector: this.injector, baseService: OFormMessageService, serviceType: this.messageServiceType }
+    const msgConfigureServiceArgs: OConfigureMessageServiceArgs = { injector: this.injector, baseService: OFormMessageService, serviceType: this.messageServiceType };
     this._messageService = Util.configureMessageService(msgConfigureServiceArgs);
 
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType };
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
     this.dataService = Util.configureService(configureServiceArgs);
   }
 
@@ -926,11 +943,24 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    * Reload the form data
    */
   reload(useFilter: boolean = false) {
+    let queryArguments = this.getQueryArguments(useFilter);
+    this.queryData(queryArguments);
+  }
+
+  public configureAdapter() {
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
+  }
+
+
+  getQueryArguments(useFilter: boolean): OQueryParams {
+    const av = this.getAttributesToQuery();
+    const sqlTypes = this.getAttributesSQLTypes();
     let filter = {};
     if (useFilter) {
       filter = this.getCurrentKeysValues();
     }
-    this.queryData(filter);
+
+    return { filter: filter, columns: av, entity: this.entity, sqlTypes: sqlTypes };
   }
 
   /**
@@ -1092,14 +1122,15 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   /**
    * Allow to manage the call to the service data
-   * @param filter
+   * @param OQueryParams
    */
-  queryData(filter: any) {
+  queryData(queryDataArgs: OQueryParams) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
       return;
     }
-    if (!Util.isDefined(filter) || Object.keys(filter).length === 0) {
+
+    if (!Util.isDefined(queryDataArgs.filter) || Object.keys(queryDataArgs.filter).length === 0) {
       console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
@@ -1112,9 +1143,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.loaderSubscription.unsubscribe();
     }
     this.loaderSubscription = this.load();
-    const av = this.getAttributesToQuery();
-    const sqlTypes = this.getAttributesSQLTypes();
-    this.querySubscription = this.dataService[this.queryMethod](filter, av, this.entity, sqlTypes)
+
+    const queryParameter = this.queryArgumentAdapter.parseQueryParameters(queryDataArgs);
+
+    this.querySubscription = this.queryArgumentAdapter.request(this.queryMethod, this.dataService, queryParameter)
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);
@@ -1263,7 +1295,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     ).forEach((item) => {
       const control = self.formGroup.controls[item];
       if (control instanceof OFormControl) {
-        values[item] = control.getValue();
+        const comp = this.getComponentByAttr(item);
+        /** Parse the values ​​to the format according to their sqltype to send to the update request */
+        values[item] = SQLTypes.parseUsingSQLType(control.getValue(), SQLTypes.getSQLTypeKey(comp.getSQLType())); ;
       } else {
         values[item] = control.value;
       }
@@ -1530,7 +1564,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const componentsKeys = Object.keys(components).filter(key => self.ignoreFormCacheKeys.indexOf(key) === -1);
     componentsKeys.forEach(compKey => {
       const comp: IFormDataComponent = components[compKey];
-      values[compKey] = comp.getValue();
+      /** Parse the values ​​to the format according to their sqltype to send to the insert request */
+      values[compKey] = SQLTypes.parseUsingSQLType(comp.getValue(), SQLTypes.getSQLTypeKey(comp.getSQLType()));
     });
     return values;
   }
