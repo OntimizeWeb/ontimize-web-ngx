@@ -336,12 +336,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
-
-  public configureAdapter() {
-    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
-  }
-
-
   configureService() {
     let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     if (Util.isDefined(this.configureServiceArgs)) {
