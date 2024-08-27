@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import {
-  ORealInputComponent
-} from '../real-input/o-real-input.component';
-import { CurrencyUtil } from '../../../util';
+import { CurrencyUtil } from '../../../util/currencyUtil';
+import { ORealInputComponent } from '../real-input/o-real-input.component';
 
 export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   'currencySymbol: currency-symbol',

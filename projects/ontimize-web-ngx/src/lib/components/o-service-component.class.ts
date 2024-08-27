@@ -10,6 +10,7 @@ import { OSearchInputComponent } from '../components/input/search-input/o-search
 import { BooleanConverter, BooleanInputConverter } from '../decorators/input-converter';
 import { IServiceDataComponent } from '../interfaces/service-data-component.interface';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
+import { OFormLayoutManagerBase } from '../layouts/form-layout/o-form-layout-manager-base.class';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutTabGroupComponent } from '../layouts/form-layout/tabgroup/o-form-layout-tabgroup.component';
 import { NavigationService } from '../services/navigation.service';
@@ -23,14 +24,13 @@ import { O_GLOBAL_CONFIG } from '../types/o-global-config.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
 import { OQueryDataArgs } from '../types/query-data-args.type';
 import { OTableInitializationOptions } from '../types/table/o-table-initialization-options.type';
-import { PermissionsUtils } from '../util';
 import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { FilterExpressionUtils } from '../util/filter-expression.utils';
+import { PermissionsUtils } from '../util/permissions';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
-import { OFormLayoutManagerBase } from '../layouts/form-layout/o-form-layout-manager-base.class';
 
 interface ItemClick {
   getItemData(): any

@@ -5,7 +5,7 @@ import { BaseService } from '../base-service.class';
 import { BaseResponse } from '../../interfaces/base-response.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppConfig } from '../../config/app-config';
-import { Util } from '../../util';
+import { Util } from '../../util/util';
 import { NameConvention } from '../../util/name-convention.utils';
 
 @Injectable({
