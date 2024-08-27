@@ -32,3 +32,4 @@ export * from './translate/index';
 export * from './ontimize-export-data-provider-3x.service';
 export * from './ontimize-export-data-provider.service';
 export * from './appearance.service';
+export * from './query-arguments/index';

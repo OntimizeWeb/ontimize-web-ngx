@@ -156,7 +156,7 @@ export const DEFAULT_INPUTS_O_FORM = [
   'ignoreDefaultNavigation: ignore-default-navigation',
 
   'messageServiceType : message-service-type',
-
+  
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
   'configureServiceArgs: configure-service-args',
   //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
@@ -246,7 +246,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
-
   queryArgumentAdapter: any;
 
   setValueOrderArray: string[];

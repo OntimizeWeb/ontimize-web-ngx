@@ -6,10 +6,17 @@ import { IExportDataProvider } from '../interfaces/export-data-provider.interfac
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
+import { IPreferencesService } from '../interfaces/prefereces-service.interface';
 import { IReportService } from '../interfaces/report-on-demand-service.interface';
+import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { OMatErrorOptions } from '../types/o-mat-error.type';
+import { ServiceType } from '../types/service-type.type';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
+import { BaseServiceResponse } from './base-service-response.class';
+import { JSONAPIPreferencesService } from './jsonapi/jsonapi-preferences.service';
+import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
+import { JSONAPIService } from './jsonapi/jsonapi.service';
 import { OntimizeAuthService } from './o-auth.service';
 import { OErrorDialogManager } from './o-error-dialog-manager.service';
 import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
@@ -18,19 +25,15 @@ import { OntimizeEEService } from './ontimize/ontimize-ee.service';
 import { OntimizeExportService3X } from './ontimize/ontimize-export-3xx.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
+import { OntimizePreferencesService } from './ontimize/ontimize-preferences.service';
+import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
-import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
-import { JSONAPIService } from './jsonapi/jsonapi.service';
-
-import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
-import { JSONAPIQueryArgumentsAdapter } from './query-arguments/jsonapi-query-arguments.adapter';
 import { IBaseQueryArgument } from './query-arguments/base-query-argument.interface';
-import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
-import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
-import { BaseServiceResponse } from './base-service-response.class';
-import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
+import { JSONAPIQueryArgumentsAdapter } from './query-arguments/jsonapi-query-arguments.adapter';
+import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
+import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -101,11 +104,11 @@ export function dataServiceFactory(injector: Injector): any {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType) || ServiceType.OntimizeEE === config.serviceType) {
     return new OntimizeEEService(injector);
-  } else if ('Ontimize' === config.serviceType) {
+  } else if (ServiceType.Ontimize === config.serviceType) {
     return new OntimizeService(injector);
-  } else if ('JSONAPI' === config.serviceType) {
+  } else if (ServiceType.JSONAPI === config.serviceType) {
     return new JSONAPIService(injector);
   } else
     return Util.createServiceInstance(config.serviceType, injector);
@@ -158,9 +161,10 @@ export function exportDataFactory(injector: Injector): IExportDataProvider {
 }
 export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgument {
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
+  if (!Util.isDefined(config.serviceType) ||
+    (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {
     return new OntimizeQueryArgumentsAdapter();
-  } else if ('JSONAPI' === config.serviceType) {
+  } else if (ServiceType.JSONAPI === config.serviceType) {
     return new JSONAPIQueryArgumentsAdapter();
   }
   return new JSONAPIQueryArgumentsAdapter();
@@ -168,9 +172,10 @@ export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgu
 
 export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || ('OntimizeEE' === config.serviceType || 'Ontimize' === config.serviceType)) {
+  if (!Util.isDefined(config.serviceType) ||
+    (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {
     return new OntimizeServiceResponseAdapter();
-  } else if ('JSONAPI' === config.serviceType) {
+  } else if (ServiceType.JSONAPI === config.serviceType) {
     return new JSONAPIServiceResponseAdapter();
   }
   return new JSONAPIServiceResponseAdapter();
@@ -193,6 +198,21 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
     return new OntimizePermissionsService(injector);
   }
   return Util.createServiceInstance(config.permissionsServiceType, injector);
+}
+
+/**
+ * Creates a new instance of the preferences service.
+ */
+export function preferencesServiceFactory(injector: Injector): IPreferencesService {
+
+  const config = injector.get(AppConfig).getConfiguration();
+
+  if (!Util.isDefined(config.serviceType) || (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {
+    return new OntimizePreferencesService(injector);
+  } else if (ServiceType.JSONAPI === config.serviceType) {
+    return new JSONAPIPreferencesService(injector);
+  }
+  return new JSONAPIPreferencesService(injector);
 }
 
 /**

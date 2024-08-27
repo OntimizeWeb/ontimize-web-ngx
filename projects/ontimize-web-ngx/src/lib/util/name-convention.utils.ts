@@ -1,3 +1,4 @@
+import { ServiceType } from "../types/service-type.type";
 import { FilterExpressionUtils } from "./filter-expression.utils";
 import { Util } from "./util";
 
@@ -12,13 +13,13 @@ export class NameConvention {
     switch (convention) {
       case 'lower':
         parsedValues = Util.parseToLowerCase(parsedColumns);
-        if (Util.isArray(parsedValues) && serviceType === 'JSONAPI') {
+        if (Util.isArray(parsedValues) && serviceType === ServiceType.JSONAPI) {
           parsedValues = parsedValues.join();
         }
         break;
       case 'upper':
         parsedValues = Util.parseToUpperCase(parsedColumns);
-        if (Util.isArray(parsedValues) && serviceType === 'JSONAPI') {
+        if (Util.isArray(parsedValues) && serviceType === ServiceType.JSONAPI) {
           parsedValues = parsedValues.join();
         }
         break;
