@@ -15,16 +15,22 @@ export class JSONAPIPreferencesService extends JSONAPIService {
   }
 
   public saveAsPreferences(preferencesparams: object): Observable<any> {
-    preferencesparams['preferencepreferences'] = btoa(JSON.stringify(preferencesparams['preferencepreferences']));
-    preferencesparams['preferenceentity'] = preferencesparams['preferenceentity'] + '-' + preferencesparams['preferenceservice'];
-    preferencesparams['preferencetype'] = preferencesparams['preferencetype'] === 'REPORT' ? 0 : 1;
-    delete preferencesparams['preferenceservice'];
+    preferencesparams = this.parseObjectToPreference(preferencesparams);
     return super.insert(preferencesparams, 'Preference');
   }
 
   public savePreferences(id: number, preferencesparams: object): Observable<any> {
-    preferencesparams['preferencetype'] = preferencesparams['type'] === 'REPORT' ? 0 : 1;
+    preferencesparams = this.parseObjectToPreference(preferencesparams);
     return super.update({ id: id }, preferencesparams, 'Preference');
+  }
+
+  protected parseObjectToPreference(preferencesparams: object) {
+    preferencesparams['preferencepreferences'] = btoa(JSON.stringify(preferencesparams['preferenceparameters']));
+    preferencesparams['preferenceentity'] = preferencesparams['preferenceentity'] + '-' + preferencesparams['preferenceservice'];
+    preferencesparams['preferencetype'] = preferencesparams['preferencetype'] === 'REPORT' ? 0 : 1;
+    delete preferencesparams['preferenceparameters'];
+    delete preferencesparams['preferenceservice'];
+    return preferencesparams;
   }
 
   public getPreferences(entity: string, service: string, type: string): Observable<any> {
