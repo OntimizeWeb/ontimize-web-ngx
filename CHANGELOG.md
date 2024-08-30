@@ -1,3 +1,6 @@
+## 15.1.0-SNAPSHOT-7
+* Fixed errors in `JSONAPIPreferencesService` and `OntimizePreferencesService` services that were not saving preferences correctly
+
 ## 15.1.0-SNAPSHOT-6
 * New `JSONAPIPreferencesService` and `OntimizePreferencesService` services
 * Add nameConvention
