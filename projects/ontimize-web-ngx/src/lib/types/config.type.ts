@@ -44,7 +44,7 @@ export type Config = {
   applicationLocales?: string[];
   defaultLocale?: string;
 
-  // serviceType [ undefined | '' | class ]: The service type used (Ontimize REST standart, Ontimize REST JEE or custom implementation) in the whole application. By default 'undefined', that is, Ontimize REST standard service.
+  // serviceType [ undefined | '' | class ]: The service type used (Ontimize REST standart, Ontimize REST JEE, JSON API or custom implementation) in the whole application. By default 'undefined', that is, Ontimize REST standard service.
   serviceType?: any;
 
   // exportServiceType [ undefined | '' | class ]: The service used for exportation in the whole application. It shold implement `IExportService` interface. By default 'undefined' OntimizeExportService.
@@ -62,5 +62,7 @@ export type Config = {
   // permissionsServiceType [ undefined | '' | class ]: The permissions service type used (Ontimize REST standart 'OntimizePermissions', Ontimize REST JEE 'OntimizeEEPermissions' or custom implementation) in the whole application. By default 'OntimizePermissions'.
   permissionsServiceType?: any;
 
-  exportConfiguration?: OExportConfiguration
+  exportConfiguration?: OExportConfiguration,
+
+  nameConvention?: 'upper' | 'lower' | 'database'
 };

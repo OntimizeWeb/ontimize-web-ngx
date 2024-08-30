@@ -1,24 +1,36 @@
 import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
-import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { BaseService } from '../base-service.class';
+import { BaseResponse } from '../../interfaces/base-response.interface';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AppConfig } from '../../config/app-config';
+import { Util } from '../../util/util';
+import { NameConvention } from '../../util/name-convention.utils';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OntimizeServiceResponseParser {
+export class OntimizeServiceResponseParser<T extends BaseResponse> {
+  appConfig: AppConfig;
+  nameConvention: string;
 
   constructor(
     protected injector: Injector
-  ) { }
+  ) {
+    this.appConfig = this.injector.get(AppConfig);
+    this.nameConvention = this.appConfig.getNameConvention();
+  }
 
-  parseSuccessfulResponse(resp: ServiceResponse, subscriber: Subscriber<ServiceResponse>, service: BaseService) {
+  parseSuccessfulResponse(resp: T, subscriber: Subscriber<T>, service: BaseService<T>) {
     if (resp && resp.isUnauthorized()) {
       service.clientErrorFallback(401);
     } else if (resp && resp.isFailed()) {
       subscriber.error(resp.message);
     } else if (resp && resp.isSuccessful()) {
+      if (this.nameConvention !== 'database') {
+        resp.data = this.parseData(resp.data);
+      }
       subscriber.next(resp);
     } else {
       // Unknow state -> error
@@ -26,7 +38,27 @@ export class OntimizeServiceResponseParser {
     }
   }
 
-  parseUnsuccessfulResponse(error, subscriber: Subscriber<ServiceResponse>, service: BaseService) {
+  parseData(data: any) {
+    let nameConvention = this.appConfig.getNameConvention();
+
+    if (nameConvention === 'lower') {
+      nameConvention = 'upper'
+    } else if (nameConvention === 'upper') {
+      nameConvention = 'lower';
+    }
+
+    if (Util.isArray(data)) {
+      data = data.map(element => {
+        return NameConvention.parseDataToNameConvention(nameConvention, element);
+      });
+    } else if (Util.isObject(data)) {
+      return NameConvention.parseDataToNameConvention(nameConvention, data);
+    }
+
+    return data;
+  }
+
+  parseUnsuccessfulResponse(error: HttpErrorResponse, subscriber: Subscriber<T>, service: BaseService<T>) {
     if (error) {
       switch (error.status) {
         case 401:

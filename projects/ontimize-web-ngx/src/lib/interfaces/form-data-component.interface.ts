@@ -7,7 +7,7 @@ import { IFormControlComponent } from './form-control-component.interface';
 export interface IFormDataComponent extends IFormControlComponent {
   onChange: EventEmitter<object>;
   onValueChange: EventEmitter<OValueChangeEvent>;
-
+  getSQLType(): number;
   data(value: any): void;
   isAutomaticBinding(): boolean;
   isAutomaticRegistering(): boolean;

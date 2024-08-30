@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-variable */
+import { ServiceRequestAdapter } from './../../../services/factories';
 import { HttpClientModule } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -19,6 +19,7 @@ import {
 import { TestUtils } from '../../input/test/test-utils';
 import { OTreeDao } from '../o-tree-dao.service';
 import { OTreeNodeComponent } from './tree-node.component';
+
 
 
 describe('OTreeNodeComponent', () => {
@@ -42,6 +43,7 @@ describe('OTreeNodeComponent', () => {
         OntimizeAuthServiceProvider,
         AbstractComponentStateService,
         PermissionsService,
+        ServiceRequestAdapter,
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
       ]
