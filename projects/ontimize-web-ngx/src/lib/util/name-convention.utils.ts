@@ -13,18 +13,16 @@ export class NameConvention {
     switch (convention) {
       case 'lower':
         parsedValues = Util.parseToLowerCase(parsedColumns);
-        if (Util.isArray(parsedValues) && serviceType === ServiceType.JSONAPI) {
-          parsedValues = parsedValues.join();
-        }
         break;
       case 'upper':
         parsedValues = Util.parseToUpperCase(parsedColumns);
-        if (Util.isArray(parsedValues) && serviceType === ServiceType.JSONAPI) {
-          parsedValues = parsedValues.join();
-        }
         break;
       default:
         parsedValues = parsedColumns;
+    }
+
+    if (Util.isArray(parsedValues) && serviceType === ServiceType.JSONAPI) {
+      parsedValues = parsedValues.join();
     }
     return parsedValues;
   }
