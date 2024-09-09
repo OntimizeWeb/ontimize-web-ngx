@@ -6,6 +6,10 @@ export class NameConvention {
 
   static parseColumnsToNameConvention(convention: string, serviceType: string, value: object | string) {
     let parsedColumns = value;
+    if (convention === 'database') {
+      return parsedColumns;
+    }
+
     if (!Util.isArray(value) && Util.isObject(value)) {
       parsedColumns = Object.values(value)[0].split(',');
     }
@@ -54,10 +58,16 @@ export class NameConvention {
   }
 
   static parseFilterExpresionNameConvention(convention: string, data: any): any {
+    if (convention === 'database') {
+      return data;
+    }
+
     if (Util.isObject(data['rop'])) {
       return { 'lop': NameConvention.parseFilterExpresionNameConvention(convention, data['lop']), 'op': data['op'], 'rop': NameConvention.parseDataToNameConvention(convention, data['rop']) };
     } else {
+      console.log(data);
       return { 'lop': (convention === 'lower' ? Util.toLowerCase(data['lop']) : Util.toUpperCase(data['lop'])), 'op': data['op'], 'rop': data['rop'] };
     }
+
   }
 }
