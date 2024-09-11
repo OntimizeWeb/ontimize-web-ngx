@@ -28,8 +28,8 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit {
   @ContentChildren(OMatPrefix) _prefixChildren: QueryList<OMatPrefix>;
   @ContentChildren(OMatSuffix) _suffixChildren: QueryList<OMatSuffix>;
 
-  protected _minLength: number = -1;
-  protected _maxLength: number = -1;
+  protected _minLength: number;
+  protected _maxLength: number;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
