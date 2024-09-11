@@ -44,7 +44,8 @@ export class OntimizeExportDataBaseProviderService {
   }
 
   protected getFilterWithBasicExpression(): any {
-    let filter = this.table.getComponentFilter();
+    let filter = {};
+    let parentKeysfilter = this.table.getComponentFilter();
 
     if (Object.keys(filter).length > 0) {
       const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
@@ -60,19 +61,23 @@ export class OntimizeExportDataBaseProviderService {
         FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
 
     }
-    const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent) ? this.table.oTableQuickFilterComponent.filterExpression : undefined;
+    filter = Object.assign(filter || {}, parentKeysfilter);
+    if (!this.table.pageable) {
+      const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent) ? this.table.oTableQuickFilterComponent.filterExpression : undefined;
 
-    const filterBuilderExpr = Util.isDefined(this.table.filterBuilder) ? this.table.filterBuilder.getExpression() : undefined;
-    let complexExpr = quickFilterExpr || filterBuilderExpr;
-    if (quickFilterExpr && filterBuilderExpr) {
-      complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
-    }
+      const filterBuilderExpr = Util.isDefined(this.table.filterBuilder) ? this.table.filterBuilder.getExpression() : undefined;
+      let complexExpr = quickFilterExpr || filterBuilderExpr;
+      if (quickFilterExpr && filterBuilderExpr) {
+        complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
+      }
 
-    if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
-      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
-    } else if (complexExpr) {
-      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
-        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], complexExpr, FilterExpressionUtils.OP_AND);
+      if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
+        filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
+      } else if (complexExpr) {
+        filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
+          FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], complexExpr, FilterExpressionUtils.OP_AND);
+      }
+
     }
 
     return filter;
