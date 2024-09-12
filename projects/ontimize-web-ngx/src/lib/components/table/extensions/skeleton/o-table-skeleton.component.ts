@@ -21,7 +21,12 @@ export class OTableSkeletonComponent extends OSkeletonComponent implements OnDes
   get count() {
     const parentElement = this.elRef.nativeElement.parentElement;
     /* available parentHeight = parentElement height  - (header table header height + margin bottom)*/
+
+    console.log(parentElement);
     const parentHeight = parentElement.offsetHeight - 60;
+    if (parentHeight < 0) {
+      return 0;
+    }
     return Array.from(new Array(Math.floor(parentHeight / 30)), (x, i) => i + 1);
   }
 

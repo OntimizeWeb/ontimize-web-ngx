@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OTableSkeletonComponent } from './o-table-skeleton.component';
@@ -32,10 +33,12 @@ describe('OTableSkeletonComponent', () => {
 
     fixture = TestBed.createComponent(OTableSkeletonComponent);
     component = fixture.componentInstance;
+    fixture.elementRef.nativeElement.parentElement.style.height = "300px";
     fixture.detectChanges();
   });
 
   it('should create', () => {
+
     expect(component).toBeTruthy();
   });
 });

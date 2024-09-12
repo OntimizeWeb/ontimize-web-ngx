@@ -8,13 +8,14 @@ import { appConfigFactory, LocalStorageService } from '../../../services';
 import { TestUtils } from '../../input/test/test-utils';
 import { AuthService } from '../../../services/auth.service';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 describe('OListSkeletonComponent', () => {
   let component: OListSkeletonComponent;
   let fixture: ComponentFixture<OListSkeletonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, NgxSkeletonLoaderModule],
       declarations: [OListSkeletonComponent],
       providers: [
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
