@@ -43,10 +43,10 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit, O
   @ContentChildren(OMatPrefix) _prefixChildren: QueryList<OMatPrefix>;
   @ContentChildren(OMatSuffix) _suffixChildren: QueryList<OMatSuffix>;
 
-  public stringCase: string;
 
-  protected _minLength: number = -1;
-  protected _maxLength: number = -1;
+  public stringCase: string;
+  protected _minLength: number;
+  protected _maxLength: number;
   protected upperSubscription: Subscription;
 
   constructor(

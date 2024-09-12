@@ -8,7 +8,7 @@ import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OTextInputComponent } from '../text-input/o-text-input.component';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 const INPUT_TYPE_TEXT = 'text'
 const INPUT_TYPE_NUMBER = 'number'
@@ -31,7 +31,7 @@ export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   inputs: DEFAULT_INPUTS_O_INTEGER_INPUT,
   encapsulation: ViewEncapsulation.None
 })
-export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
+export class OIntegerInputComponent extends OFormDataComponent implements AfterViewInit, OnInit {
 
   inputType: HTMLInputType = INPUT_TYPE_NUMBER;
 
