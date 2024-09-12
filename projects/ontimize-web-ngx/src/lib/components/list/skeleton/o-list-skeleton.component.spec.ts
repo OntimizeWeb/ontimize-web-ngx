@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OListSkeletonComponent } from './o-list-skeleton.component';
 import { Injector } from '@angular/core';
 import { APP_CONFIG, AppConfig } from '../../../config/app-config';
-import { appConfigFactory } from '../../../services';
+import { appConfigFactory, LocalStorageService } from '../../../services';
 import { TestUtils } from '../../input/test/test-utils';
 import { AuthService } from '../../../services/auth.service';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,7 +20,8 @@ describe('OListSkeletonComponent', () => {
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
         AppearanceService,
-        AuthService
+        AuthService,
+        LocalStorageService
         // ...INTERNAL_ONTIMIZE_MODULES
       ]
     })
