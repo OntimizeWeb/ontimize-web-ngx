@@ -190,4 +190,7 @@ export class LocalStorageService {
     }
   }
 
+  removeStoredData() {
+    localStorage.removeItem(this._config.uuid);
+  }
 }
