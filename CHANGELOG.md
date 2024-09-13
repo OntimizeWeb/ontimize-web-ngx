@@ -1,3 +1,13 @@
+## 15.2.0
+### Features
+* **LocalStorageService** ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1682](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1682)
+  * New injection token `O_LOCALSTORAGE_SERVICE` to allow extends LocalStorageService
+  * New method `removeStoredData()`
+
+* **o-text-input, o-textarea, o-email, o-nif** ([7e11ed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e11ed3)) Closes [#1674](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1674)
+  * New input `string-case`
+  * New property `stringCase` in `O_INPUTS_OPTIONS` injection token that can be used to set input string-case in inputs
+
 ## 15.1.3 (2024-07-19)
 ### Bug fixes
 * **o-table**: Fixed onRowSelected and onRowDeselect events are not emitted with `select-all-checkbox-visible ="yes"` ([a2ac0da](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a2ac0da)) Closes [#1658](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1658)
