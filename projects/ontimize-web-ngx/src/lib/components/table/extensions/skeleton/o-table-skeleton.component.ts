@@ -22,7 +22,6 @@ export class OTableSkeletonComponent extends OSkeletonComponent implements OnDes
     const parentElement = this.elRef.nativeElement.parentElement;
     /* available parentHeight = parentElement height  - (header table header height + margin bottom)*/
 
-    console.log(parentElement);
     const parentHeight = parentElement.offsetHeight - 60;
     if (parentHeight < 0) {
       return 0;
