@@ -25,7 +25,6 @@ export class ONIFInputComponent extends OTextInputComponent implements OnInit {
     const validators: ValidatorFn[] = super.resolveValidators();
     // Inject NIF validator
     validators.push(OValidators.nifValidator);
-    console.log('validators ', validators)
     return validators;
   }
 
