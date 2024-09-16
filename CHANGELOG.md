@@ -5,7 +5,7 @@
   * New injection token `O_LOCALSTORAGE_SERVICE` to allow extends LocalStorageService
   * New method `removeStoredData()`
 * **o-text-input, o-textarea, o-email, o-nif, o-password** ([7e11ed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e11ed3)) Closes [#1674](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1674)
-  * New input `string-case`
+  * New input `string-case` to shows the characters always in *lowercase* or *uppercase*
   * New property `stringCase` in `O_INPUTS_OPTIONS` injection token that can be used to set input string-case in inputs
 * **o-html-input, o-text-input, o-textarea, o-email, o-nif, o-password**
   * Truncate the text with `max-length` input ([b40059e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40059e)) Closes [#1675](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1675)
