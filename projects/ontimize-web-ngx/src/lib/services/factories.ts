@@ -22,6 +22,8 @@ import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
+import { LocalStorageService } from './local-storage.service';
+import { ILocalStorageService } from '../interfaces/local-service.interface';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -41,6 +43,11 @@ export const O_TRANSLATE_SERVICE = new InjectionToken('Translate service');
  * Injection token that can be used to replace the file service `OntimizeFileService`.
  */
 export const O_FILE_SERVICE = new InjectionToken<IFileService>('File uploader service');
+
+/**
+ * Injection token that can be used to replace the localstorage service `LocalStorageService`.
+ */
+export const O_LOCALSTORAGE_SERVICE = new InjectionToken<ILocalStorageService>('Local storage service');
 
 /**
  * Injection token that can be used to replace the exportation service `OntimizeExportService`.
@@ -109,6 +116,14 @@ export function fileServiceFactory(injector: Injector): IFileService {
   return Util.isDefined(service) ? service : new OntimizeFileService(injector);
 }
 
+/**
+ * Creates a new instance of the local storage service.
+ */
+export function localStorageServiceFactory(injector: Injector): ILocalStorageService {
+  const serviceClass = _getInjectionTokenValue(O_LOCALSTORAGE_SERVICE, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
+  return Util.isDefined(service) ? service : new LocalStorageService(injector);
+}
 /**
  * Creates a new instance of the exportation service.
  */
@@ -196,6 +211,7 @@ export const ComponentStateServiceProvider = { provide: AbstractComponentStateSe
 
 export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
+export const OntimizeLocalStorageServiceProvider = { provide: LocalStorageService, useFactory: localStorageServiceFactory, deps: [Injector] };
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
  * ---------------------------------------------------------------------------------------------------- */

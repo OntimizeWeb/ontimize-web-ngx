@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OTableSkeletonComponent } from './o-table-skeleton.component';
@@ -8,6 +9,8 @@ import { appConfigFactory } from '../../../../services/app-config.provider';
 import { AppearanceService } from '../../../../services/appearance.service';
 import { AuthService } from '../../../../services/auth.service';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LocalStorageService } from '../../../../services/local-storage.service';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 describe('OTableSkeletonComponent', () => {
   let component: OTableSkeletonComponent;
@@ -15,13 +18,14 @@ describe('OTableSkeletonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, NgxSkeletonLoaderModule],
       declarations: [OTableSkeletonComponent],
       providers: [
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
         AppearanceService,
-        AuthService
+        AuthService,
+        LocalStorageService
         // ...INTERNAL_ONTIMIZE_MODULES
       ]
     })
@@ -29,10 +33,12 @@ describe('OTableSkeletonComponent', () => {
 
     fixture = TestBed.createComponent(OTableSkeletonComponent);
     component = fixture.componentInstance;
+    fixture.elementRef.nativeElement.parentElement.style.height = "300px";
     fixture.detectChanges();
   });
 
   it('should create', () => {
+
     expect(component).toBeTruthy();
   });
 });

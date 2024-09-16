@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/local-storage.service';
 /* tslint:disable:no-unused-variable */
 import { HttpClientModule } from '@angular/common/http';
 import { Injector } from '@angular/core';
@@ -42,6 +43,7 @@ describe('OTreeNodeComponent', () => {
         OntimizeAuthServiceProvider,
         AbstractComponentStateService,
         PermissionsService,
+        LocalStorageService,
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
       ]
