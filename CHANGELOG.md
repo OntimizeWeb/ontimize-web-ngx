@@ -2,7 +2,7 @@
 
 ### Features
 * **LocalStorageService** ([5689c19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5689c19)) Closes [#1682](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1682)
-  * New injection token `O_LOCALSTORAGE_SERVICE` to allow extends LocalStorageService
+  * New injection token `O_LOCALSTORAGE_SERVICE` for allowing LocalStorageService extension
   * New method `removeStoredData()`
 * **o-text-input, o-textarea, o-email, o-nif, o-password** ([7e11ed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e11ed3)) Closes [#1674](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1674)
   * New input `string-case` to shows the characters always in *lowercase* or *uppercase*
