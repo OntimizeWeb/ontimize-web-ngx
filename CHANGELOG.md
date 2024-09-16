@@ -1,4 +1,7 @@
 ## 15.2.0
+### Bug fixes
+* **o-table**: Fixed bug with exportation with parent keys ([d6d91cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d6d91cc)) Closes [#1673](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1673)
+
 ### Features
 * **LocalStorageService** ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1682](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1682)
   * New injection token `O_LOCALSTORAGE_SERVICE` to allow extends LocalStorageService
