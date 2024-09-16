@@ -1,9 +1,7 @@
-## 15.2.0
-### Bug fixes
-* **o-table**: Fixed bug with exportation with parent keys ([d6d91cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d6d91cc)) Closes [#1673](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1673)
+## 15.2.0 (2024-09-16)
 
 ### Features
-* **LocalStorageService** ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1682](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1682)
+* **LocalStorageService** ([5689c19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5689c19)) Closes [#1682](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1682)
   * New injection token `O_LOCALSTORAGE_SERVICE` to allow extends LocalStorageService
   * New method `removeStoredData()`
 * **o-text-input, o-textarea, o-email, o-nif, o-password** ([7e11ed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e11ed3)) Closes [#1674](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1674)
@@ -12,6 +10,10 @@
 * **o-html-input, o-text-input, o-textarea, o-email, o-nif, o-password**
   * Truncate the text with `max-length` input ([b40059e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40059e)) Closes [#1675](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1675)
 
+### Bug fixes
+* **o-table**:
+  * Fixed bug with exportation with parent keys ([d6d91cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d6d91cc)) Closes [#1673](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1673)
+  * Fixed translation of value `TABLE_CONTEXT_MENU.COPY_ROW` in the spanish bundle ([9829fe4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9829fe4)) Closes [#1665](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1665)
 
 
 ## 15.1.3 (2024-07-19)
