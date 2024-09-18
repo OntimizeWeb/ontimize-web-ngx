@@ -19,6 +19,7 @@ import { NumberConverter } from '../../../decorators/input-converter';
 import { OMatPrefix } from '../../../directives/o-mat-prefix.directive';
 import { OMatSuffix } from '../../../directives/o-mat-suffix.directive';
 import { Util } from '../../../util/util';
+import { OFormValue } from '../../form';
 import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
@@ -63,19 +64,31 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit, O
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    this.initializeStringCase();
   }
 
-  protected initializeStringCase() {
+  onFormControlChange(value: any) {
+    /*
+    It is overridden to manage data entry with string-case
+    1. The value is transformed if necessary
+    2. This transformed value is set to the control so that the change is seen in the view
+    3. The onFormControlChange event is emitted with the transformed value
+    */
+    value = this.transformStringCase(value);
+    this._fControl.setValue(value, { emitEvent: false });
+    super.onFormControlChange(value);
+  }
+
+  protected transformStringCase(value) {
     const stringCaseVariant = this.stringCase || this.oInputsOptions?.stringCase;
-    if (Util.isDefined(stringCaseVariant) && stringCaseVariant !== 'default') {
-      this.upperSubscription = this.getFormControl().valueChanges.subscribe((x: string) => {
-        if (Util.isDefined(x)) {
-          const value = stringCaseVariant === 'lowercase' ? x.toLowerCase() : x.toUpperCase();
-          this.setFormValue(value, { emitEvent: false })
-        }
-      })
+
+    if (Util.isDefined(value) && Util.isDefined(stringCaseVariant) && stringCaseVariant !== 'default') {
+      if (value instanceof OFormValue && typeof value.value === 'string') {
+        value.value = stringCaseVariant === 'lowercase' ? value.value.toLowerCase() : value.value.toUpperCase();
+      } else if (typeof value === 'string') {
+        value = stringCaseVariant === 'lowercase' ? value.toLowerCase() : value.toUpperCase();;
+      }
     }
+    return value;
   }
 
 
