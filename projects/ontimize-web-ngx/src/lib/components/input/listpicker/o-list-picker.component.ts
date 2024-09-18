@@ -268,13 +268,25 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     dataArray.forEach((item, itemIndex) => {
       const newItem = Object.assign({}, item);
       if (!this.renderer) {
-        newItem._parsedVisibleColumnText = this.getOptionDescriptionValue(item);
+        newItem._parsedVisibleColumnText = this.getVisibleColumnText(item);
       }
       newItem._parsedIndex = itemIndex;
       result.push(newItem);
     });
     return result;
   }
+
+  protected getVisibleColumnText(item: any) {
+    let element = '';
+    this.visibleColArray.forEach((visibleCol, index) => {
+      element += item[visibleCol];
+      if ((index + 1) < this.visibleColArray.length) {
+        element += this.separator;
+      }
+    });
+    return element;
+  }
+
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
