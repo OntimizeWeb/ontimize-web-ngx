@@ -15,25 +15,21 @@ import { Util } from '../../../../util/util';
 
 })
 export class OTableSkeletonComponent extends OSkeletonComponent implements OnInit {
-  rows$: Observable<Number[]>;
+  rows$: Observable<number[]>;
 
   constructor(protected elRef: ElementRef, protected injector: Injector) {
     super(injector);
   }
 
-
   ngOnInit(): void {
     this.rows$ = of(this.getRows());
   }
-
-
 
   getRows() {
 
     const parentElement = this.elRef.nativeElement.parentElement;
 
     /* available parentHeight = parentElement height  - (header table header height + margin bottom)*/
-
     const parentHeight = parentElement?.offsetHeight - 60;
     if (!Util.isDefined(parentHeight) || parentHeight < 0) {
       return [];
