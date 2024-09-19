@@ -96,7 +96,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.matDialog = this.injector.get<MatDialog>(MatDialog);
     this.stateCtrl = new UntypedFormControl();
 
-    this.stateCtrl.valueChanges.subscribe((e) => { console.log('stateControl ', e)});
     /* overwritte clearButton to true */
     this.clearButton = true;
   }
