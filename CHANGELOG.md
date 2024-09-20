@@ -1,5 +1,13 @@
-## 15.2.0 (2024-09-16)
+## 15.2.1
+### Bug fixes
+* **o-list-picker**:
+  * Fixed an unknown error being displayed when focusing out ([56561af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/56561af)) Closes [#1685](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1685)
+  * Fixed horizontal scroll showing in the modal because the text is very long ([c3db0f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c3db0f3)) Closes [#1695](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1695)
+  * Fixed not emitting the onDataLoaded event ([fbdf1ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fbdf1ac)) Closes [#1693](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1693)
+  * Fixed visible-columns input not working ([4b0ae2f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b0ae2f)) Closes [#1691](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1691)
 
+
+## 15.2.0 (2024-09-16)
 ### Features
 * **LocalStorageService** ([5689c19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5689c19)) Closes [#1682](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1682)
   * New injection token `O_LOCALSTORAGE_SERVICE` for allowing LocalStorageService extension
