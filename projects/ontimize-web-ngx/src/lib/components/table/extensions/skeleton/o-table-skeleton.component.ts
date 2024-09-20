@@ -1,5 +1,7 @@
-import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { OSkeletonComponent } from '../../../o-skeleton.component';
+import { Observable, of } from 'rxjs';
+import { Util } from '../../../../util/util';
 
 
 @Component({
@@ -12,23 +14,30 @@ import { OSkeletonComponent } from '../../../o-skeleton.component';
   }
 
 })
-export class OTableSkeletonComponent extends OSkeletonComponent implements OnDestroy {
+export class OTableSkeletonComponent extends OSkeletonComponent implements OnInit {
+  rows$: Observable<number[]>;
 
   constructor(protected elRef: ElementRef, protected injector: Injector) {
-    super(injector)
+    super(injector);
   }
 
-  get count() {
+  ngOnInit(): void {
+    this.rows$ = of(this.getRows());
+  }
+
+  getRows() {
+
     const parentElement = this.elRef.nativeElement.parentElement;
+
     /* available parentHeight = parentElement height  - (header table header height + margin bottom)*/
-
-    const parentHeight = parentElement.offsetHeight - 60;
-    if (parentHeight < 0) {
-      return 0;
+    const parentHeight = parentElement?.offsetHeight - 60;
+    if (!Util.isDefined(parentHeight) || parentHeight < 0) {
+      return [];
     }
-    return Array.from(new Array(Math.floor(parentHeight / 30)), (x, i) => i + 1);
-  }
 
+    return Array.from(new Array(Math.floor(parentHeight / 30)), (x, i) => i + 1);
+
+  }
 
 
 }
