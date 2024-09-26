@@ -117,6 +117,19 @@ export class OTableColumnsFilterComponent implements OnInit {
     return startView;
   }
 
+  getQueryMethodOfFilterColumn(attr: string): string {
+    let queryMethod = '';
+    if (Util.isDefined(this.columnsArray)) {
+      this.columnsArray.forEach(column => {
+        if (column.attr == attr) {
+          queryMethod = column.queryMethod;
+        }
+      });
+    }
+    return queryMethod;
+  }
+
+
   getColumnComparisonValue(column: OColumn, val: any): any {
     if (!column || this.columnsComparisonProperty[column.attr] === OTableColumnsFilterComponent.MODEL_COMPARISON_TYPE) {
       return val;
@@ -156,6 +169,7 @@ export class OTableColumnsFilterComponent implements OnInit {
         obj.attr = x.attr;
         obj.sort = x.sort;
         obj.startView = x.startView;
+        obj.queryMethod = x.queryMethod
         return obj;
       });
   }

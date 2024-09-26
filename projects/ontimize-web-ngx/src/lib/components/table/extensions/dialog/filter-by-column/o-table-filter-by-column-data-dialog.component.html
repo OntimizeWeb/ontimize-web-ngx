@@ -10,6 +10,13 @@
         <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
         <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
       </mat-form-field>
+      <div class="inner-subheader" mat-subheader>
+        {{'TABLE.FILTER_BY_COLUMN.LABEL_DATA' | oTranslate}}
+      </div>
+      <mat-radio-group aria-label="Data" fxLayoutAlign="space-around center" [(ngModel)]="sourceData" (change)="onChangeDataSource($event)">
+        <mat-radio-button value="1">{{'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE' | oTranslate}}</mat-radio-button>
+        <mat-radio-button value="2">{{'TABLE.FILTER_BY_COLUMN.ALL_PAGE' | oTranslate}}</mat-radio-button>
+      </mat-radio-group>
       <div *ngIf="(listData | async).length > 0; else emptyListData" fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="row" fxLayoutAlign="start start">
           <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"

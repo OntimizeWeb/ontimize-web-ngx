@@ -2315,7 +2315,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         tableData: this.dataSource.getCurrentData(),
         preloadValues: this.oTableColumnsFilterComponent ? this.oTableColumnsFilterComponent.preloadValues : true,
         mode: this.oTableColumnsFilterComponent ? this.oTableColumnsFilterComponent.mode : 'default',
-        startView: this.getStartViewFilterColumn(column)
+        startView: this.getStartViewFilterColumn(column),
+        table:this
       },
       minWidth: '380px',
       disableClose: true,
