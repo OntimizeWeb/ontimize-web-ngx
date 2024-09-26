@@ -34,12 +34,12 @@ import { PermissionsUtils } from '../../../../../util/permissions';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
 import { OTableBase } from '../../../o-table-base.class';
-import { OTableGroupByColumnsDialogComponent } from '../../dialog';
 import { OTableApplyConfigurationDialogComponent } from '../../dialog/apply-configuration/o-table-apply-configuration-dialog.component';
 import { OTableExportDialogComponent } from '../../dialog/export/o-table-export-dialog.component';
 import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-configuration/o-table-store-configuration-dialog.component';
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
+import { OTableGroupByColumnsDialogComponent } from '../../dialog/group-by-columns/o-table-group-by-columns-dialog.component';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [
