@@ -539,7 +539,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public oTableFilterByColumnDataDialogComponent: OTableFilterByColumnDataDialogComponent;
   public oTableColumnsFilterComponent: OTableColumnsFilterComponent;
 
-  private showTotalsSubject = new BehaviorSubject<boolean>(false);
+  private readonly showTotalsSubject = new BehaviorSubject<boolean>(false);
   public showTotals: Observable<boolean> = this.showTotalsSubject.asObservable();
   private readonly loadingSortingSubject = new BehaviorSubject<boolean>(false);
   protected loadingSorting: Observable<boolean> = this.loadingSortingSubject.asObservable();

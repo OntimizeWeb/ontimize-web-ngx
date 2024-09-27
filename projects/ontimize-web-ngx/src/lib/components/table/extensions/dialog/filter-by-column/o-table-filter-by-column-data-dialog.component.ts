@@ -392,21 +392,20 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       /*Get filter values on the current page*/
       this.tableData = this.table.dataSource.getCurrentData();
       this.parseDataAndInitializeDataList(null);
-    } else {
+
+    } else if (this.table.pageable) {
       /*Get filter values on the all pages*/
-      if (this.table.pageable) {
-        this.queryByFilterColumnSubscription = this.queryByFilterColumn(this.column.attr).subscribe((res: ServiceResponse) => {
-          let data = [];
-          if (res.isSuccessful()) {
-            data = res.data;
-          }
-          this.tableData = data;
-          this.parseDataAndInitializeDataList(null);
-        });
-      } else {
-        this.tableData = this.table.getAllValues();
+      this.queryByFilterColumnSubscription = this.queryByFilterColumn(this.column.attr).subscribe((res: ServiceResponse) => {
+        let data = [];
+        if (res.isSuccessful()) {
+          data = res.data;
+        }
+        this.tableData = data;
         this.parseDataAndInitializeDataList(null);
-      }
+      });
+    } else {
+      this.tableData = this.table.getAllValues();
+      this.parseDataAndInitializeDataList(null);
     }
   }
 
@@ -426,10 +425,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       return service[queryMethodName](...columnQueryArgs)
     }
     return of({});
-  }
-
-  getSqlTypesForQueryData() {
-
   }
 
   protected getColumnDataUsingRenderer() {
