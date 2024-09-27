@@ -75,7 +75,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   sourceData;
   queryByFilterColumnSubscription: any;
   table: OTableComponent;
-  readonly showFilterValuesOption: boolean;
+  showFilterValuesOption: boolean;
   queryMethodName: string;
 
   constructor(
