@@ -10,13 +10,6 @@
         <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
         <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
       </mat-form-field>
-      <div class="inner-subheader" mat-subheader>
-        {{'TABLE.FILTER_BY_COLUMN.LABEL_DATA' | oTranslate}}
-      </div>
-      <mat-radio-group aria-label="Data" fxLayoutAlign="space-around center" [(ngModel)]="sourceData" (change)="onChangeDataSource($event)">
-        <mat-radio-button value="1">{{'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE' | oTranslate}}</mat-radio-button>
-        <mat-radio-button value="2">{{'TABLE.FILTER_BY_COLUMN.ALL_PAGE' | oTranslate}}</mat-radio-button>
-      </mat-radio-group>
       <div *ngIf="(listData | async).length > 0; else emptyListData" fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="row" fxLayoutAlign="start start">
           <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"
@@ -27,10 +20,28 @@
             {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' | oTranslate }}
           </span>
         </div>
-        <button type="button" mat-icon-button (click)="onClickSortValues()">
-          <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
-        </button>
+        <div fxLayout="row" fxLayoutAlign="start start">
+          <button type="button" mat-icon-button (click)="onClickSortValues()">
+            <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
+          </button>
+          <button type="button" mat-icon-button [matMenuTriggerFor]="menu" *ngIf="showFilterValuesOption">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <div fxLayout="column" class="filtervalues-container">
+              <div mat-subheader>
+                {{'TABLE.FILTER_BY_COLUMN.LABEL_DATA' | oTranslate}}
+              </div>
+              <mat-divider></mat-divider>
+              <mat-radio-group aria-label="Data" fxLayout="column" fxLayoutGap="12px" [(ngModel)]="sourceData" (change)="onChangeDataSource($event)">
+                <mat-radio-button value="current-page">{{'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE' | oTranslate}}</mat-radio-button>
+                <mat-radio-button value="all-data">{{'TABLE.FILTER_BY_COLUMN.ALL_PAGE' | oTranslate}}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </mat-menu>
+        </div>
       </div>
+
 
       <ng-template #emptyListData>
         <span class="column-filter-empty-list">

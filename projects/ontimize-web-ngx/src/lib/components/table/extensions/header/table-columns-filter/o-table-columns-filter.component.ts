@@ -13,7 +13,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // preloadValues [true|false|yes|no]: indicates whether or not to show the list values when the filter dialog is opened. Default: true.
   'preloadValues: preload-values',
   // mode [default | selection |  custom]
-  'mode'
+  'mode',
+   // filter-values-in-data [all | current]
+  'filterValuesInData: filter-values-in-data'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
@@ -37,6 +39,7 @@ export class OTableColumnsFilterComponent implements OnInit {
   protected _mode: string = 'default';
   @BooleanInputConverter()
   preloadValues: boolean = true;
+  filterValuesInData = 'current-page';
 
   get mode(): string {
     return this._mode;
@@ -129,6 +132,17 @@ export class OTableColumnsFilterComponent implements OnInit {
     return queryMethod;
   }
 
+  getFilterValuesInData(attr: string): string {
+    let filterValuesInData = '';
+    if (Util.isDefined(this.columnsArray)) {
+      this.columnsArray.forEach(column => {
+        if (column.attr == attr) {
+          filterValuesInData = column.filterValuesInData;
+        }
+      });
+    }
+    return filterValuesInData;
+  }
 
   getColumnComparisonValue(column: OColumn, val: any): any {
     if (!column || this.columnsComparisonProperty[column.attr] === OTableColumnsFilterComponent.MODEL_COMPARISON_TYPE) {
@@ -165,11 +179,12 @@ export class OTableColumnsFilterComponent implements OnInit {
   parseFilterColumns(columns: QueryList<OTableColumnsFilterColumnComponent>) {
     return columns
       .map(x => {
-        let obj: OFilterColumn = { attr: '', sort: '', startView: '' };
+        let obj: OFilterColumn = { attr: '', sort: '', startView: '', queryMethod: void 0, filterValuesInData:'current-page' };
         obj.attr = x.attr;
         obj.sort = x.sort;
         obj.startView = x.startView;
-        obj.queryMethod = x.queryMethod
+        obj.queryMethod = x.queryMethod;
+        obj.filterValuesInData= x.filterValuesInData;
         return obj;
       });
   }

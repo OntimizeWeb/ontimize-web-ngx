@@ -6,6 +6,7 @@ export type OFilterColumn = {
   sort: 'asc' | 'desc' | '';
   startView: 'month' | 'year' | 'multi-year' | '';
   queryMethod?: string;
+  filterValuesInData?: 'current-page' | 'all-data';
 };
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
@@ -15,7 +16,9 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
   'sort',
   // startView [month|year|multi-year]: Datepicker initial view in case of date column.
   'startView:start-view',
-  'queryMethod:query-method'
+  'queryMethod:query-method',
+  //filter-values-in-data 'current-page' | 'all-data': Default current
+  'filterValuesInData: filter-values-in-data'
 ];
 
 @Component({
@@ -31,5 +34,6 @@ export class OTableColumnsFilterColumnComponent {
   public sort: 'asc' | 'desc' | '' = '';
   public startView: 'month' | 'year' | 'multi-year' | '' = 'month';
   public queryMethod: string;
+  public filterValuesInData: 'current-page' | 'all-data';
 
 }

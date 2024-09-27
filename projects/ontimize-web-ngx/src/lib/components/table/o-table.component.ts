@@ -13,6 +13,7 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
+  forwardRef,
   HostListener,
   Inject,
   Injector,
@@ -27,8 +28,7 @@ import {
   ViewChildren,
   ViewContainerRef,
   ViewEncapsulation,
-  ViewRef,
-  forwardRef
+  ViewRef
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,7 +37,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
 import moment from 'moment';
-import { BehaviorSubject, Observable, Subscription, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
@@ -541,9 +541,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   private showTotalsSubject = new BehaviorSubject<boolean>(false);
   public showTotals: Observable<boolean> = this.showTotalsSubject.asObservable();
-  private loadingSortingSubject = new BehaviorSubject<boolean>(false);
+  private readonly loadingSortingSubject = new BehaviorSubject<boolean>(false);
   protected loadingSorting: Observable<boolean> = this.loadingSortingSubject.asObservable();
-  private loadingScrollSubject = new BehaviorSubject<boolean>(false);
+  private readonly loadingScrollSubject = new BehaviorSubject<boolean>(false);
   public loadingScroll: Observable<boolean> = this.loadingScrollSubject.asObservable();
 
   public showLoading: Observable<boolean> = combineLatest([
@@ -674,8 +674,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     public injector: Injector,
     elRef: ElementRef,
     protected dialog: MatDialog,
-    private _viewContainerRef: ViewContainerRef,
-    private appRef: ApplicationRef,
+    private readonly _viewContainerRef: ViewContainerRef,
+    private readonly appRef: ApplicationRef,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
@@ -2309,14 +2309,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     event.preventDefault();
     const dialogRef = this.dialog.open(OTableFilterByColumnDataDialogComponent, {
       data: {
-        previousFilter: this.dataSource.getColumnValueFilterByAttr(column.attr),
         column: column,
-        activeSortDirection: this.getSortFilterColumn(column),
-        tableData: this.dataSource.getCurrentData(),
-        preloadValues: this.oTableColumnsFilterComponent ? this.oTableColumnsFilterComponent.preloadValues : true,
-        mode: this.oTableColumnsFilterComponent ? this.oTableColumnsFilterComponent.mode : 'default',
-        startView: this.getStartViewFilterColumn(column),
-        table:this
+        table: this
       },
       minWidth: '380px',
       disableClose: true,
@@ -2355,7 +2349,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.state.filterColumns = this.filterColumns;
   }
 
-  getStartViewFilterColumn(column: OColumn): string {
+  getStartViewFilterColumn(column: OColumn): 'month' | 'year' | 'multi-year' | '' {
     let startView;
     // at first, get state in localstorage
     if (this.state.filterColumns) {
@@ -2373,7 +2367,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return startView;
   }
 
-  getSortFilterColumn(column: OColumn): string {
+  getSortFilterColumn(column: OColumn):  'asc' | 'desc' | '' {
     let sortColumn;
     // at first, get state in localstorage
     if (this.state.filterColumns) {
@@ -3307,5 +3301,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     return disable;
 
+  }
+
+  getService() {
+    return this.dataService;
   }
 }
