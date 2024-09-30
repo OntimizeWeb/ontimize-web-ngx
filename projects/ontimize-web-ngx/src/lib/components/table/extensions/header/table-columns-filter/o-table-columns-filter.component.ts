@@ -14,7 +14,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   'preloadValues: preload-values',
   // mode [default | selection |  custom]
   'mode',
-   // filter-values-in-data [all | current]
+  //filter-values-in-data: 'current-page' | 'all-data': set mode to filter by. Default 'current-page'
   'filterValuesInData: filter-values-in-data'
 ];
 
@@ -179,12 +179,12 @@ export class OTableColumnsFilterComponent implements OnInit {
   parseFilterColumns(columns: QueryList<OTableColumnsFilterColumnComponent>) {
     return columns
       .map(x => {
-        let obj: OFilterColumn = { attr: '', sort: '', startView: '', queryMethod: void 0, filterValuesInData:'current-page' };
+        let obj: OFilterColumn = { attr: '', sort: '', startView: '', queryMethod: void 0, filterValuesInData: 'current-page' };
         obj.attr = x.attr;
         obj.sort = x.sort;
         obj.startView = x.startView;
         obj.queryMethod = x.queryMethod;
-        obj.filterValuesInData= x.filterValuesInData;
+        obj.filterValuesInData = x.filterValuesInData;
         return obj;
       });
   }

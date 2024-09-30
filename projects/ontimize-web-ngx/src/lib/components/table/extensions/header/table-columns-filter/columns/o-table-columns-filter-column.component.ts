@@ -17,7 +17,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
   // startView [month|year|multi-year]: Datepicker initial view in case of date column.
   'startView:start-view',
   'queryMethod:query-method',
-  //filter-values-in-data 'current-page' | 'all-data': Default current
+  //filter-values-in-data:  'current-page' | 'all-data': set mode to filter by. Default 'current-page'
   'filterValuesInData: filter-values-in-data'
 ];
 
