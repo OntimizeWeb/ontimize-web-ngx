@@ -1,6 +1,6 @@
 ## 15.2.1(2024-10-02)
 ### Features
-* **o-table**: Column filter can filter for current page and all pages in the table([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
+* **o-table**: Filter column feature can now filter by current page or all data in the table([dcb9fbf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dcb9fbf7c83217608903e351bc31811f0fde6d74)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
 
 ### Bug fixes
 * **o-list-picker**:
