@@ -86,7 +86,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (data.column) {
       this.column = data.column;
     }
-
     this.table = data.table;
 
     this.initialize();
@@ -126,11 +125,14 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   private parseDataAndInitializeDataList(previousFilter: OColumnValueFilter) {
-    this.getDistinctValues(previousFilter);
+
+    this.parseListData(previousFilter);
+
     if (Util.isDefined(previousFilter)) {
       this.initializeCustomFilterValues(previousFilter);
     }
     this.initializeDataList(previousFilter);
+
   }
 
   ngAfterViewInit() {
@@ -219,7 +221,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  protected getDistinctValues(filter: OColumnValueFilter): void {
+  protected parseListData(filter: OColumnValueFilter): void {
     this.columnData = [];
     if (Util.isDefined(filter?.availableValues)) {
       this.columnData = filter.availableValues;
@@ -227,20 +229,32 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       const colRenderedValues = this.getColumnDataUsingRenderer();
       const colValues: any[] = this.tableData.map(elem => elem[this.column.attr]);
 
-      colRenderedValues.forEach((renderedValue, i) => {
-        if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
-          this.columnData.push({
-            renderedValue: renderedValue,
-            value: colValues[i],
-            rowValue: this.tableData[i],
-            selected: filter?.operator === ColumnValueFilterOperator.IN && (filter?.values || []).indexOf(colValues[i]) !== -1,
-            // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
-            // row value of this index
-            tableIndex: i
-          });
-        }
-      });
+      if (this.sourceData === 'current-page') {
+        colRenderedValues.forEach((renderedValue, i) => {
+          /*Selection distint values */
+          if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
+            this.addIntoColumnData(renderedValue, colValues, i, filter);
+          }
+        });
+      } else {
+        colRenderedValues.forEach((renderedValue, i) => {
+          this.addIntoColumnData(renderedValue, colValues, i, filter);
+
+        });
+      }
     }
+  }
+
+  private addIntoColumnData(renderedValue: any, colValues: any[], i: number, filter: OColumnValueFilter) {
+    this.columnData.push({
+      renderedValue: renderedValue,
+      value: colValues[i],
+      rowValue: this.tableData[i],
+      selected: filter?.operator === ColumnValueFilterOperator.IN && (filter?.values || []).indexOf(colValues[i]) !== -1,
+      // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
+      // row value of this index
+      tableIndex: i
+    });
   }
 
   getColumnValuesFilter(): OColumnValueFilter {
