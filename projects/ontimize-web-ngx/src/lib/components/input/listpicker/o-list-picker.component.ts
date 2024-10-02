@@ -18,7 +18,6 @@ import { MatInput } from '@angular/material/input';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';
-import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
@@ -96,6 +95,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     super(form, elRef, injector);
     this.matDialog = this.injector.get<MatDialog>(MatDialog);
     this.stateCtrl = new UntypedFormControl();
+
     /* overwritte clearButton to true */
     this.clearButton = true;
   }
@@ -232,11 +232,6 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     this.openDialog();
   }
 
-  protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
-    super.setFormValue(val, options, setDirty);
-    this.setStateCtrlValue();
-  }
-
   protected openDialog(): void {
     const cfg: MatDialogConfig = {
       role: 'dialog',
@@ -268,13 +263,25 @@ export class OListPickerComponent extends OFormServiceComponent implements After
     dataArray.forEach((item, itemIndex) => {
       const newItem = Object.assign({}, item);
       if (!this.renderer) {
-        newItem._parsedVisibleColumnText = this.getOptionDescriptionValue(item);
+        newItem._parsedVisibleColumnText = this.getVisibleColumnText(item);
       }
       newItem._parsedIndex = itemIndex;
       result.push(newItem);
     });
     return result;
   }
+
+  protected getVisibleColumnText(item: any) {
+    let element = '';
+    this.visibleColArray.forEach((visibleCol, index) => {
+      element += item[visibleCol];
+      if ((index + 1) < this.visibleColArray.length) {
+        element += this.separator;
+      }
+    });
+    return element;
+  }
+
 
   public registerRenderer(renderer: any) {
     this.renderer = renderer;
@@ -287,6 +294,11 @@ export class OListPickerComponent extends OFormServiceComponent implements After
       descriptionValue = null;
     }
     this.stateCtrl.setValue(descriptionValue);
+  }
+
+  syncDataIndex(queryIfNotFound?: boolean): void {
+    super.syncDataIndex(queryIfNotFound);
+    this.setStateCtrlValue();
   }
 
   public selectValue() {
