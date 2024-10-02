@@ -17,6 +17,10 @@ import { BaseServiceResponse } from './base-service-response.class';
 import { JSONAPIPreferencesService } from './jsonapi/jsonapi-preferences.service';
 import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
 import { JSONAPIService } from './jsonapi/jsonapi.service';
+import { NameConventionLower } from './name-convention/name-convention-lower.service';
+import { NameConventionUpper } from './name-convention/name-convention-upper.service';
+import { INameConvention } from '../interfaces/name-convention.interface';
+import { NameConvention } from './name-convention/name-convention.service';
 import { OntimizeAuthService } from './o-auth.service';
 import { OErrorDialogManager } from './o-error-dialog-manager.service';
 import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
@@ -249,6 +253,8 @@ export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderSe
 export const ServiceRequestAdapter = { provide: OntimizeQueryArgumentsAdapter, useFactory: serviceRequestAdapterFactory, deps: [Injector] };
 
 export const ServiceResponseAdapter = { provide: OntimizeServiceResponseAdapter, useFactory: serviceResponseAdapterFactory, deps: [Injector] };
+
+export const NameConventionProvider = { provide: NameConvention, useFactory: nameConventionServiceFactory, deps: [Injector] };
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- Utility methods ------------------------------------------
  * ---------------------------------------------------------------------------------------------------- */
@@ -268,6 +274,21 @@ export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: I
   return service;
 }
 
+
+/**
+ * Creates a new instance of the preferences service.
+ */
+export function nameConventionServiceFactory(injector: Injector): INameConvention {
+
+  const config = injector.get(AppConfig).getConfiguration();
+
+  if (config?.nameConvention === 'lower') {
+    return new NameConventionLower();
+  } else if (config?.nameConvention === 'upper') {
+    return new NameConventionUpper();
+  }
+  return new NameConvention();
+}
 
 
 

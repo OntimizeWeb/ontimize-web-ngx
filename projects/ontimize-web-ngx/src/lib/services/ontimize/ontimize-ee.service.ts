@@ -5,10 +5,9 @@ import { share } from 'rxjs/operators';
 
 import { IDataService } from '../../interfaces/data-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { ServiceType } from '../../types/service-type.type';
 import { Util } from '../../util/util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
-import { NameConvention } from '../../util/name-convention.utils';
-import { ServiceType } from '../../types/service-type.type';
 
 @Injectable()
 export class OntimizeEEService extends OntimizeBaseService implements IDataService {
@@ -67,9 +66,9 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
-    kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, ServiceType.OntimizeEE, av);
-    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+    kv = this.nameConvention.parseDataToNameConvention(kv);
+    av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
+    sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
     const url = `${this.urlBase}${this.path}/${entity}/search`;
 
@@ -106,13 +105,13 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     if (Util.isDefined(kv) && !Util.isObjectEmpty(kv)) {
       Object.keys(kv).map(filter =>
-        NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv[filter]));
+        this.nameConvention.parseDataToNameConvention(kv[filter]));
     }
 
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, ServiceType.OntimizeEE, av);
-    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+    av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
+    sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
-    orderby = orderby.map(orderByItem => NameConvention.parseValuesDataToNameConvention(this._appConfig.nameConvention, orderByItem));
+    orderby = orderby.map(orderByItem => this.nameConvention.parseValuesDataToNameConvention(orderByItem));
 
 
     const url = `${this.urlBase}${this.path}/${entity}/advancedsearch`;
@@ -139,8 +138,8 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, ServiceType.OntimizeEE, av);
-    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+    av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
+    sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
     const body = JSON.stringify({
       data: av,
@@ -160,9 +159,9 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
-    kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
-    av = NameConvention.parseColumnsToNameConvention(this._appConfig.nameConvention, ServiceType.OntimizeEE, av);
-    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+    kv = this.nameConvention.parseDataToNameConvention(kv);
+    av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
+    sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
     const body = JSON.stringify({
       filter: kv,
@@ -183,8 +182,8 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
-    kv = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, kv);
-    sqltypes = NameConvention.parseDataToNameConvention(this._appConfig.nameConvention, sqltypes);
+    kv = this.nameConvention.parseDataToNameConvention(kv);
+    sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
     const body = JSON.stringify({
       filter: kv,

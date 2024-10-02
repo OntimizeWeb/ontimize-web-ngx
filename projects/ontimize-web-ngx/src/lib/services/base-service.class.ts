@@ -17,6 +17,7 @@ import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-resp
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 import { HttpRequestOptions } from '../types/http-request-options.type';
 import { BaseResponse } from '../interfaces/base-response.interface';
+import { NameConvention } from './name-convention/name-convention.service';
 
 
 export class BaseService<T extends BaseResponse> {
@@ -32,6 +33,8 @@ export class BaseService<T extends BaseResponse> {
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
   private _context: any;
+  nameConvention: NameConvention;
+
   protected get context(): any {
     return this._context;
   }
@@ -47,7 +50,8 @@ export class BaseService<T extends BaseResponse> {
     this._appConfig = this._config.getConfiguration();
     this.responseParser = this.injector.get<OntimizeServiceResponseParser<T>>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser<T>>);
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
-    this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService)
+    this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService);
+    this.nameConvention = this.injector.get(NameConvention);
   }
 
   public configureResponseAdapter() {
