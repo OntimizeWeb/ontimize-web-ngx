@@ -9,7 +9,7 @@
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
 
     <input #visibleInput matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"
-      [formControl]="stateCtrl" [placeholder]="placeHolder" [value]="getDescriptionValue()"
+      [formControl]="stateCtrl" [placeholder]="placeHolder"
       (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly || !textInputEnabled" [required]="isRequired"
       (keydown.enter)="onKeydownEnter(visibleInput.value)" (change)="onChangeEvent($event)">

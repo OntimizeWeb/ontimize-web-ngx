@@ -33,7 +33,6 @@ describe('OTableSkeletonComponent', () => {
 
     fixture = TestBed.createComponent(OTableSkeletonComponent);
     component = fixture.componentInstance;
-    fixture.elementRef.nativeElement.parentElement.style.height = "300px";
     fixture.detectChanges();
   });
 
