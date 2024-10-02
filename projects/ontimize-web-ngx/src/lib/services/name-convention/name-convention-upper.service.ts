@@ -54,7 +54,7 @@ export class NameConventionUpper implements INameConvention {
       return { 'lop': this.parseFilterExpresionNameConvention(data['lop']), 'op': data['op'], 'rop': this.parseDataToNameConvention(data['rop']) };
     } else {
       console.log(data);
-      return { 'lop': Util.toLowerCase(data['lop']), 'op': data['op'], 'rop': data['rop'] };
+      return { 'lop': Util.toUpperCase(data['lop']), 'op': data['op'], 'rop': data['rop'] };
     }
 
   }
