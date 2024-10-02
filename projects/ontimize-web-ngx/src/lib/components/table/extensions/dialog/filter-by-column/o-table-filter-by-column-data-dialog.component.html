@@ -4,7 +4,7 @@
     <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)" *ngIf="isDefaultFilter | async">
       {{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}
     </mat-slide-toggle>
-    <div fxFill *ngIf="!(isCustomFilter | async);else customFilterTemplate" fxLayout="column">
+    <div fxFlex="1 1 100%" *ngIf="!(isCustomFilter | async);else customFilterTemplate" fxLayout="column">
       <mat-form-field class="hinted">
         <mat-icon matPrefix svgIcon="ontimize:search"></mat-icon>
         <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
@@ -20,9 +20,26 @@
             {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY_FILTER' | oTranslate }}
           </span>
         </div>
-        <button type="button" mat-icon-button (click)="onClickSortValues()">
-          <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
-        </button>
+        <div fxLayout="row" fxLayoutAlign="start start">
+          <button type="button" mat-icon-button (click)="onClickSortValues()">
+            <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
+          </button>
+          <button type="button" mat-icon-button [matMenuTriggerFor]="menu" *ngIf="showFilterValuesOption">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <div fxLayout="column" class="filtervalues-container">
+              <div mat-subheader>
+                {{'TABLE.FILTER_BY_COLUMN.LABEL_DATA' | oTranslate}}
+              </div>
+              <mat-divider></mat-divider>
+              <mat-radio-group aria-label="Data" fxLayout="column" fxLayoutGap="12px" [(ngModel)]="sourceData" (change)="onChangeDataSource($event)">
+                <mat-radio-button value="current-page">{{'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE' | oTranslate}}</mat-radio-button>
+                <mat-radio-button value="all-data">{{'TABLE.FILTER_BY_COLUMN.ALL_PAGE' | oTranslate}}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </mat-menu>
+        </div>
       </div>
 
       <ng-template #emptyListData>
@@ -31,17 +48,22 @@
         </span>
       </ng-template>
 
-      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList class="select-values-list" (selectionChange)="onSelect($event)">
-        <mat-list-option *ngFor="let record of (listData | async); let i = index" checkboxPosition="before" [selected]="record.selected"
-          [value]="record">
-          <ng-container *ngIf="!column.renderer">
-            {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
+      <cdk-virtual-scroll-viewport itemSize="25" fxFlex>
+        <mat-selection-list *ngIf="preloadValues || listData" #filterValueList class="select-values-list" (selectionChange)="onSelect($event)">
+
+          <ng-container *cdkVirtualFor="let record of (listData | async); let i = index">
+            <mat-list-option checkboxPosition="before" [selected]="record.selected" [value]="record">
+              <ng-container *ngIf="!column.renderer">
+                {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
+              </ng-container>
+              <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
+                [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
+              </ng-template>
+            </mat-list-option>
           </ng-container>
-          <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
-            [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
-          </ng-template>
-        </mat-list-option>
-      </mat-selection-list>
+        </mat-selection-list>
+      </cdk-virtual-scroll-viewport>
+
     </div>
   </div>
 </div>
