@@ -1,7 +1,6 @@
-import { ServiceType } from "../../types/service-type.type";
-import { FilterExpressionUtils } from "../../util/filter-expression.utils";
-import { Util } from "../../util/util";
-import { INameConvention } from "../../interfaces/name-convention.interface";
+import { INameConvention } from '../../interfaces/name-convention.interface';
+import { FilterExpressionUtils } from '../../util/filter-expression.utils';
+import { Util } from '../../util/util';
 
 export class NameConventionLower implements INameConvention {
   parseColumnsToNameConventionForOntimize(value: object | string) {

@@ -5,7 +5,6 @@ import { share } from 'rxjs/operators';
 
 import { IDataService } from '../../interfaces/data-service.interface';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { ServiceType } from '../../types/service-type.type';
 import { Util } from '../../util/util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
 
