@@ -1,6 +1,5 @@
-import { Directive, forwardRef, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, forwardRef, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
 import { Util } from '../util/util';
 
 @Directive({
@@ -20,6 +19,13 @@ export class InputRegulateDirective implements ControlValueAccessor, OnInit {
   oInputRegulatePattern: string;
   regExpattern: RegExp;
 
+
+  constructor(
+    private readonly elementRef: ElementRef,
+    private readonly renderer: Renderer2
+  ) {
+
+  }
   ngOnInit(): void {
     if (Util.isDefined(this.oInputRegulatePattern)) {
       this.regExpattern = new RegExp(this.oInputRegulatePattern,'g');
