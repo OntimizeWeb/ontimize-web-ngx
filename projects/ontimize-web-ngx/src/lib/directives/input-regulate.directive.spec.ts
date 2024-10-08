@@ -1,7 +1,6 @@
-import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
 import { InputRegulateDirective } from './input-regulate.directive';
 
 @Component({
@@ -18,10 +17,6 @@ describe('InputRegulateDirective', () => {
   let bareElement: DebugElement;
 
   beforeEach(() => {
-    const elementRefStub = () => ({ nativeElement: {} });
-    const renderer2Stub = () => ({
-      setProperty: (nativeElement, string, value) => ({})
-    });
     TestBed.configureTestingModule({
       declarations: [InputRegulateDirective, TestComponent]
     });
