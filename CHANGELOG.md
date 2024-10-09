@@ -1,3 +1,9 @@
+## 15.2.2 (2024-10-10)
+### Features
+* **o-text-input**: New attribute `regulate-pattern` to restrict input ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1704](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1704)
+* **o-integer-input, o-real-input, o-percent-input, o-currency-input**:Fixed not work min and max validators  ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1705)
+
+
 ## 15.2.1(2024-10-02)
 ### Features
 * **o-table**: Filter column feature can now filter by current page or all data in the table([dcb9fbf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dcb9fbf7c83217608903e351bc31811f0fde6d74)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
