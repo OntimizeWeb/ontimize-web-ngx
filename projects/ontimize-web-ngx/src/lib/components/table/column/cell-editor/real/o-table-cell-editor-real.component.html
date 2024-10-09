@@ -14,10 +14,10 @@
         {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>
       <mat-error *oMatError="hasError('min')">
-        {{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'min') }}
+        {{ 'FORM_VALIDATION.MIN_VALUE' | oTranslate }}: {{ getErrorValue('min', 'requiredMin') }}
       </mat-error>
       <mat-error *oMatError="hasError('max')">
-        {{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'max') }}
+        {{ 'FORM_VALIDATION.MAX_VALUE' | oTranslate }}: {{ getErrorValue('max', 'requiredMax') }}
       </mat-error>
       <mat-error *ngFor="let oError of getActiveOErrors()">
         {{ getErrorText(oError) }}

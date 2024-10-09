@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormControl, ValidatorFn } from '@angular/forms';
 
-import { BooleanInputConverter, NumberConverter, NumberInputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
@@ -166,10 +166,10 @@ export class OIntegerInputComponent extends OFormDataComponent implements AfterV
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
     if (Util.isDefined(this.min)) {
-      validators.push(Validators.min(this.min));
+      validators.push(OValidators.createMinValidator(this.min));
     }
     if (Util.isDefined(this.max)) {
-      validators.push(Validators.max(this.max));
+      validators.push(OValidators.createMaxValidator(this.max));
     }
     return validators;
   }
