@@ -42,10 +42,10 @@ export class OntimizeServiceResponseParser<T extends BaseResponse> {
 
     if (Util.isArray(data)) {
       data = data.map(element => {
-        return this.nameConvention.parseDataToNameConvention(element);
+        return this.nameConvention.parseResultToNameConvention(element);
       });
     } else if (Util.isObject(data)) {
-      return this.nameConvention.parseDataToNameConvention(data);
+      return this.nameConvention.parseResultToNameConvention(data);
     }
 
     return data;

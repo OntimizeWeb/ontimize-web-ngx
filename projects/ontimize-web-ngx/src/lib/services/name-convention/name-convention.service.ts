@@ -22,4 +22,8 @@ export class NameConvention implements INameConvention {
   parseFilterExpresionNameConvention(data: any): any {
     return data;
   }
+
+  parseResultToNameConvention(data: any): any {
+    return data;
+  }
 }

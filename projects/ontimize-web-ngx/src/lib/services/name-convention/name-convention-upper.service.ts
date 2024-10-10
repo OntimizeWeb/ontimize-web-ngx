@@ -13,12 +13,9 @@ export class NameConventionUpper implements INameConvention {
     return parsedValues;
   }
 
-  parseColumnsToNameConventionForJSONAPI( value: object | string) {
-    let parsedColumns = value;
+  parseColumnsToNameConventionForJSONAPI( value: string) {
+    let parsedColumns = value.split(',');;
 
-    if (!Util.isArray(value) && Util.isObject(value)) {
-      parsedColumns = Object.values(value)[0].split(',');
-    }
     let parsedValues = Util.parseToUpperCase(parsedColumns);
 
     if (Util.isArray(parsedValues)) {
@@ -38,6 +35,13 @@ export class NameConventionUpper implements INameConvention {
         return Util.toUpperCase(key);
       });
     }
+  }
+
+  parseResultToNameConvention(data: any): any {
+    return Util.mapKeys(data, (val, key) => {
+      return Util.toLowerCase(key);
+    });
+
   }
 
   parseValuesDataToNameConvention(data: any): any {
