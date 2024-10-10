@@ -27,7 +27,8 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   'minLength: min-length',
   'maxLength: max-length',
   //uppercase | lowercase | default
-  'stringCase: string-case'
+  'stringCase: string-case',
+  'regulatePattern: regulate-pattern'
 ];
 
 
@@ -49,6 +50,7 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit, O
   protected _minLength: number;
   protected _maxLength: number;
   protected upperSubscription: Subscription;
+  public regulatePattern: string;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

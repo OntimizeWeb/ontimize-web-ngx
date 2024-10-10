@@ -6,3 +6,4 @@ export * from './o-tab-group.directive';
 export * from './o-file-drag-and-drop.directive';
 export * from './o-mat-prefix.directive';
 export * from './o-mat-suffix.directive';
+export * from './input-regulate.directive';
