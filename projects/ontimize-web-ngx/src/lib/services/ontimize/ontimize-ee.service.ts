@@ -65,7 +65,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     av = (Util.isDefined(av)) ? av : this.av;
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
-    kv = this.nameConvention.parseDataToNameConvention(kv);
+    kv = this.nameConvention.parseFilterToNameConvention(kv);
     av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
     sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
@@ -103,15 +103,13 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     pagesize = (Util.isDefined(pagesize)) ? pagesize : this.pagesize;
 
     if (Util.isDefined(kv) && !Util.isObjectEmpty(kv)) {
-      Object.keys(kv).map(filter =>
-        this.nameConvention.parseDataToNameConvention(kv[filter]));
+      kv= this.nameConvention.parseFilterToNameConvention(kv);
     }
 
     av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
     sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
     orderby = orderby.map(orderByItem => this.nameConvention.parseValuesDataToNameConvention(orderByItem));
-
 
     const url = `${this.urlBase}${this.path}/${entity}/advancedsearch`;
 

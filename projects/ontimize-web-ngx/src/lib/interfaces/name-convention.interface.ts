@@ -6,7 +6,7 @@ export interface INameConvention {
   parseDataToNameConvention(data: any): any;
 
   parseValuesDataToNameConvention(data: any): any;
-
+  parseFilterToNameConvention(data: any, filter: any): any;
   parseFilterExpresionNameConvention(data: any): any;
   /**
    *

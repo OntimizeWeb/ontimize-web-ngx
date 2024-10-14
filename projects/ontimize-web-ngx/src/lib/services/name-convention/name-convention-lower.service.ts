@@ -3,6 +3,22 @@ import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
 
 export class NameConventionLower implements INameConvention {
+
+  parseFilterToNameConvention(data: any) {
+    let filter = {};
+    Object.keys(data).forEach(filterKey => {
+      if (FilterExpressionUtils.instanceofExpression(data[filterKey])) {
+        Object.assign(filter, { [filterKey]: this.parseFilterExpresionNameConvention(data[filterKey])});
+      } else {
+        const mapfilter = Util.mapKeys(data, (val, key) => {
+          return Util.toLowerCase(key);
+        });
+        Object.assign(filter, mapfilter);
+      }
+    });
+    return filter;
+  }
+
   parseColumnsToNameConventionForOntimize(value: object | string) {
     let parsedColumns = value;
 
@@ -15,7 +31,9 @@ export class NameConventionLower implements INameConvention {
 
   parseColumnsToNameConventionForJSONAPI(value: string) {
     let parsedColumns = value.split(',');
+
     let parsedValues = Util.parseToLowerCase(parsedColumns);
+
     if (Util.isArray(parsedValues)) {
       parsedValues = parsedValues.join();
     }
@@ -23,16 +41,10 @@ export class NameConventionLower implements INameConvention {
   }
 
   parseDataToNameConvention(data: any): any {
+    return Util.mapKeys(data, (val, key) => {
+      return Util.toLowerCase(key);
+    });
 
-    if (Util.isDefined(data) && Util.isObject(data) &&
-      FilterExpressionUtils.instanceofExpression(data)) {
-      return this.parseFilterExpresionNameConvention(data);
-
-    } else {
-      return Util.mapKeys(data, (val, key) => {
-        return Util.toLowerCase(key);
-      });
-    }
   }
 
   parseResultToNameConvention(data: any): any {
@@ -49,11 +61,9 @@ export class NameConventionLower implements INameConvention {
   }
 
   parseFilterExpresionNameConvention(data: any): any {
-
     if (Util.isObject(data['rop'])) {
-      return { 'lop': this.parseFilterExpresionNameConvention(data['lop']), 'op': data['op'], 'rop': this.parseDataToNameConvention(data['rop']) };
+      return { 'lop': this.parseFilterExpresionNameConvention(data['lop']), 'op': data['op'], 'rop': this.parseFilterExpresionNameConvention(data['rop']) };
     } else {
-      console.log(data);
       return { 'lop': Util.toLowerCase(data['lop']), 'op': data['op'], 'rop': data['rop'] };
     }
 
