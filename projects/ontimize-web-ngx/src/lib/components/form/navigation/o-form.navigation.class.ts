@@ -292,7 +292,7 @@ export class OFormNavigationClass {
           this.navigationService.removeLastItem();
           navData = this.navigationService.getLastItem();
         }
-        let extras: NavigationExtras = {};
+        const extras: NavigationExtras = {};
         extras.queryParams = navData.queryParams;
         if (options && options.exitWithoutConfirmation) {
           extras.queryParams[Codes.IGNORE_CAN_DEACTIVATE] = options.exitWithoutConfirmation;
