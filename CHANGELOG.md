@@ -1,3 +1,12 @@
+## 15.2.2 (2024-10-10)
+### Features
+* **o-text-input**: New attribute `regulate-pattern` to restrict input ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1704](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1704)
+
+### Bug fixes
+* **o-integer-input, o-real-input, o-percent-input, o-currency-input**: Fixed not working min and max validators ([2bdc22c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bdc22c)) Closes [#1705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1705)
+* **o-table**: Column renderer numeric not working `decimal-separator` and `thousand-separator` inputs ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1711](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1711)
+* **o-form**: Fixed a new form form with `after-insert-mode= 'close'` not working ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1712](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1712)
+
 ## 15.2.1(2024-10-02)
 ### Features
 * **o-table**: Filter column feature can now filter by current page or all data in the table([dcb9fbf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dcb9fbf7c83217608903e351bc31811f0fde6d74)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
