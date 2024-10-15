@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { ValidatorFn } from '@angular/forms';
+import { ValidatorFn, Validators } from '@angular/forms';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
-import { OValidators } from '../../../../../validators/o-validators';
 import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 
 @Component({
@@ -36,10 +35,10 @@ export class OTableCellEditorRealComponent extends OTableCellEditorIntegerCompon
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
     if (Util.isDefined(this.min)) {
-      validators.push(OValidators.createMinValidator(this.min));
+      validators.push(Validators.min(this.min));
     }
     if (Util.isDefined(this.max)) {
-      validators.push(OValidators.createMaxValidator(this.max));
+      validators.push(Validators.max(this.max));
     }
     return validators;
   }
