@@ -19,7 +19,6 @@ export class InputRegulateDirective implements ControlValueAccessor, OnInit {
   oInputRegulatePattern: string;
   regExpattern: RegExp;
 
-
   constructor(
     private readonly elementRef: ElementRef,
     private readonly renderer: Renderer2
@@ -28,9 +27,8 @@ export class InputRegulateDirective implements ControlValueAccessor, OnInit {
   }
   ngOnInit(): void {
     if (Util.isDefined(this.oInputRegulatePattern)) {
-      this.regExpattern = new RegExp(this.oInputRegulatePattern,'g');
+      this.regExpattern = new RegExp(this.oInputRegulatePattern);
     }
-
   }
 
   @HostListener('input', ['$event.target.value'])
