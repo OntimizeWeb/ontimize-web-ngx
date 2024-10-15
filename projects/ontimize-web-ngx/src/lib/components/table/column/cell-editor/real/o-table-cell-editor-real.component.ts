@@ -3,7 +3,6 @@ import { ValidatorFn, Validators } from '@angular/forms';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
-import { OValidators } from '../../../../../validators/o-validators';
 import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 
 @Component({
