@@ -1680,7 +1680,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    queryArguments.sqlTypes = ovrrArgs ? ovrrArgs.sqltypes || {} : {};
+    Object.assign(queryArguments.sqlTypes, this.getSqlTypesForFilter(queryArguments.columns));
+    Object.assign(queryArguments.sqlTypes, ovrrArgs ? ovrrArgs.sqltypes || {} : {});
 
     if (this.pageable) {
       queryArguments.sort = this.sortColArray;
@@ -1694,11 +1695,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   getSqlTypesForFilter(filter): object {
     const allSqlTypes = this.getSqlTypes();
     const sqlTypes = {};
-    Object.keys(allSqlTypes).forEach(key => {
-      if (filter.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
-        sqlTypes[key] = allSqlTypes[key];
-      }
-    });
+    if (!Util.isObjectEmpty(filter)) {
+      Object.keys(allSqlTypes).forEach(key => {
+        if (filter.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
+          sqlTypes[key] = allSqlTypes[key];
+        }
+      });
+    }
     return sqlTypes;
   }
 
