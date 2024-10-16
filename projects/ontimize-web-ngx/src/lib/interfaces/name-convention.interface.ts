@@ -1,19 +1,11 @@
 export interface INameConvention {
 
-  parseColumnsToNameConventionForOntimize(value: object | string);
-  parseColumnsToNameConventionForJSONAPI(value: object | string);
+  parseColumnsToNameConventionForOntimize(columns: object | string): any[];
 
+  parseColumnsToNameConventionForJSONAPI(columns: object | string): string;
   parseDataToNameConvention(data: any): any;
-
   parseValuesDataToNameConvention(data: any): any;
-  parseFilterToNameConvention(data: any, filter: any): any;
-  parseFilterExpresionNameConvention(data: any): any;
-  /**
-   *
-   * @param data
-   * @returns result to name convention,
-   *  if nameConvention is uppercase return result keys in lowercase
-   *  if nameConvention is lowercase return result keys in uppercase
-   */
+  parseFilterToNameConvention(filter: any): any;
+  parseFilterExpresionNameConvention(filterExpresion: any): any;
   parseResultToNameConvention(data: any): any;
 }

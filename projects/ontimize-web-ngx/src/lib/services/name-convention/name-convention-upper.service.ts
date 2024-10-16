@@ -53,6 +53,13 @@ export class NameConventionUpper implements INameConvention {
     }
   }
 
+  /**
+   *
+   * @param data
+   * @returns result to name convention,
+   *  if nameConvention is uppercase return result keys in lowercase
+   *  if nameConvention is lowercase return result keys in uppercase
+   */
   parseResultToNameConvention(data: any): any {
     return Util.mapKeys(data, (val, key) => {
       return Util.toLowerCase(key);

@@ -31,9 +31,7 @@ export class NameConventionLower implements INameConvention {
 
   parseColumnsToNameConventionForJSONAPI(value: string) {
     let parsedColumns = value.split(',');
-
     let parsedValues = Util.parseToLowerCase(parsedColumns);
-
     if (Util.isArray(parsedValues)) {
       parsedValues = parsedValues.join();
     }
@@ -47,6 +45,13 @@ export class NameConventionLower implements INameConvention {
 
   }
 
+  /**
+ *
+ * @param data
+ * @returns result to name convention,
+ *  if nameConvention is uppercase return result keys in lowercase
+ *  if nameConvention is lowercase return result keys in uppercase
+ */
   parseResultToNameConvention(data: any): any {
     return Util.mapKeys(data, (val, key) => {
       return Util.toUpperCase(key);
