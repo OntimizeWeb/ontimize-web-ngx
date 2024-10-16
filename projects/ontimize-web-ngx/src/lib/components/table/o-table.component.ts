@@ -1680,8 +1680,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    Object.assign(queryArguments.sqlTypes, this.getSqlTypesForFilter(queryArguments.columns));
-    Object.assign(queryArguments.sqlTypes, ovrrArgs ? ovrrArgs.sqltypes || {} : {});
+    queryArguments.sqlTypes = {
+      ...this.getSqlTypesForFilter(queryArguments.columns),
+      ...ovrrArgs ? ovrrArgs.sqltypes || {} : {}
+    };
 
     if (this.pageable) {
       queryArguments.sort = this.sortColArray;
