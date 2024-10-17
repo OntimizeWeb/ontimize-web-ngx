@@ -140,7 +140,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
 
     if (Util.isDefined(queryParams.filter)) {
       const filter = this.nameConvention.parseFilterToNameConvention(queryParams.filter);
-      queryParams.filter = Object.assign({}, filter);
+      queryParams.filter = { ...filter };
     }
 
     return queryParams;
