@@ -1,25 +1,27 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
-import { BaseService } from '../base-service.class';
-import { BaseResponse } from '../../interfaces/base-response.interface';
-import { HttpErrorResponse } from '@angular/common/http';
 import { AppConfig } from '../../config/app-config';
+import { BaseResponse } from '../../interfaces/base-response.interface';
 import { Util } from '../../util/util';
-import { NameConvention } from '../../util/name-convention.utils';
+import { BaseService } from '../base-service.class';
+import { NameConvention } from '../name-convention/name-convention.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class OntimizeServiceResponseParser<T extends BaseResponse> {
   appConfig: AppConfig;
-  nameConvention: string;
+  nameConvention: NameConvention;
+
 
   constructor(
     protected injector: Injector
   ) {
     this.appConfig = this.injector.get(AppConfig);
-    this.nameConvention = this.appConfig.getNameConvention();
+    this.nameConvention = this.injector.get(NameConvention);
   }
 
   parseSuccessfulResponse(resp: T, subscriber: Subscriber<T>, service: BaseService<T>) {
@@ -28,9 +30,7 @@ export class OntimizeServiceResponseParser<T extends BaseResponse> {
     } else if (resp && resp.isFailed()) {
       subscriber.error(resp.message);
     } else if (resp && resp.isSuccessful()) {
-      if (this.nameConvention !== 'database') {
-        resp.data = this.parseData(resp.data);
-      }
+      resp.data = this.parseData(resp.data);
       subscriber.next(resp);
     } else {
       // Unknow state -> error
@@ -39,20 +39,13 @@ export class OntimizeServiceResponseParser<T extends BaseResponse> {
   }
 
   parseData(data: any) {
-    let nameConvention = this.appConfig.getNameConvention();
-
-    if (nameConvention === 'lower') {
-      nameConvention = 'upper'
-    } else if (nameConvention === 'upper') {
-      nameConvention = 'lower';
-    }
 
     if (Util.isArray(data)) {
       data = data.map(element => {
-        return NameConvention.parseDataToNameConvention(nameConvention, element);
+        return this.nameConvention.parseResultToNameConvention(element);
       });
     } else if (Util.isObject(data)) {
-      return NameConvention.parseDataToNameConvention(nameConvention, data);
+      return this.nameConvention.parseResultToNameConvention(data);
     }
 
     return data;

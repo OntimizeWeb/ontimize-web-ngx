@@ -30,14 +30,10 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
     }
 
     if (!Util.isArrayEmpty(args.sort)) {
-      let sort = '';
-      args.sort.forEach((sortElement: SQLOrder, idx: number, array: SQLOrder[]) => {
-        sort += sortElement.ascendent ? sortElement.columnName : ('-' + sortElement.columnName);
-        if (idx + 1 !== array.length) {
-          sort += ',';
-        }
-      })
-      queryargs.sort = sort;
+
+      queryargs.sort = args.sort.map((sortElement: SQLOrder, idx: number, array: SQLOrder[]) => {
+        return sortElement.ascendent ? sortElement.columnName : ('-' + sortElement.columnName);
+      }).join(',');
     }
 
     if (Util.isDefined(args.filter)) {

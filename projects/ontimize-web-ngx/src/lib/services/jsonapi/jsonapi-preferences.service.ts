@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
-import { NameConvention } from '../../util/name-convention.utils';
 import { JSONAPIService } from './jsonapi.service';
 import { ServiceType } from '../../types/service-type.type';
 
@@ -37,7 +36,7 @@ export class JSONAPIPreferencesService extends JSONAPIService {
     let queryParams: JSONAPIQueryParameter = { fields: {}, filter: {} };
 
     let fields = { preference: 'preferenceid,preferencename,preferencedescription,preferencepreferences,preferenceentity,preferencetype' };
-    queryParams.fields['Preference'] = NameConvention.parseColumnsToNameConvention(this.nameConvention, ServiceType.JSONAPI, fields);
+    queryParams.fields['Preference'] = this.nameConvention.parseColumnsToNameConventionForJSONAPI(fields);
     queryParams.filter = { preferenceentity: entity + '-' + service, preferencetype: (type === 'REPORT' ? 0 : 1) };
     return super.query(queryParams);
   }

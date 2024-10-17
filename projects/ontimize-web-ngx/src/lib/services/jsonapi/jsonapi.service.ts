@@ -6,10 +6,8 @@ import { AppConfig } from '../../config/app-config';
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
-import { NameConvention } from '../../util/name-convention.utils';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
-import { ServiceType } from '../../types/service-type.type';
 
 
 @Injectable()
@@ -17,12 +15,11 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   public path: string = '';
   protected _startSessionPath: string;
   protected config: AppConfig;
-  protected nameConvention: string;
+
 
   constructor(protected injector: Injector) {
     super(injector);
     this.config = this.injector.get(AppConfig);
-    this.nameConvention = this._appConfig.nameConvention;
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
@@ -133,19 +130,17 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
 
   protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
     if (Util.isDefined(queryParams.fields)) {
-      const keyFields = Object.keys(queryParams.fields)[0];
-      queryParams.fields[keyFields] = NameConvention.parseColumnsToNameConvention(this.nameConvention, ServiceType.JSONAPI, queryParams.fields);
+      const entity = Object.keys(queryParams.fields)[0];
+      const fields = Object.values(queryParams.fields)[0];
+      queryParams.fields[entity] = this.nameConvention.parseColumnsToNameConventionForJSONAPI(fields);
     }
     if (Util.isDefined(queryParams.sort)) {
-      queryParams.sort = NameConvention.parseColumnsToNameConvention(this.nameConvention, ServiceType.JSONAPI, queryParams.sort);
+      queryParams.sort = this.nameConvention.parseColumnsToNameConventionForJSONAPI(queryParams.sort);
     }
 
     if (Util.isDefined(queryParams.filter)) {
-      let filters = {};
-      for (const filter in queryParams.filter) {
-        Object.assign(filters, NameConvention.parseDataToNameConvention(this.nameConvention, { [filter]: queryParams.filter[filter] }));
-      }
-      queryParams.filter = filters;
+      const filter = this.nameConvention.parseFilterToNameConvention(queryParams.filter);
+      queryParams.filter = { ...filter };
     }
 
     return queryParams;
@@ -154,7 +149,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
   insert(av: object, entity: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}`;
 
-    av = NameConvention.parseDataToNameConvention(this.nameConvention, av);
+    av = this.nameConvention.parseDataToNameConvention(av);
 
     let attributes = { attributes: av, type: entity };
     const body = JSON.stringify({
@@ -174,7 +169,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     const id = Object.values(kv)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
-    av = NameConvention.parseDataToNameConvention(this.nameConvention, av);
+    av = this.nameConvention.parseDataToNameConvention(av);
 
     let attributes = { ...{ attributes: av }, ...{ id: id }, ...{ type: entity } };
 
