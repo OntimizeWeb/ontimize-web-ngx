@@ -27,10 +27,6 @@
     font-weight: 500;
   }
 
-  .type_toggle_group {
-    margin-bottom: 20px;
-  }
-
   .acordion.mat-expansion-panel {
     box-shadow: none;
 
@@ -73,6 +69,7 @@
     justify-content: space-around;
     flex-wrap: nowrap;
     flex-shrink: 0;
+    margin-bottom: 20px;
   }
 
   .o-table-export-button {
