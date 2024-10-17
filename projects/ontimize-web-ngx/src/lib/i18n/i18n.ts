@@ -165,7 +165,7 @@ export const MAP = {
     'TABLE.BUTTONS.EXCEL': 'Excel',
     'TABLE.BUTTONS.HTML': 'HTML',
     'TABLE.BUTTONS.PDF': 'PDF',
-    'TABLE.BUTTONS.CSV':'CSV',
+    'TABLE.BUTTONS.CSV': 'CSV',
     'TABLE.BUTTONS.GROUP_ROWS': 'Group rows',
     'TABLE.BUTTONS.RESIZE_COLUMNS': 'Resize columns',
     'TABLE.BUTTONS.FILTER': 'Filter',
@@ -301,7 +301,16 @@ export const MAP = {
     'OIMAGE.BUTTON.BROWSEFILE': 'Select image',
     'TREE.BUTTONS.SELECT': 'Select...',
     'REPORT.COLUMN.TRUEVALUE': 'Yes',
-    'REPORT.COLUMN.FALSEVALUE': 'No'
+    'REPORT.COLUMN.FALSEVALUE': 'No',
+    'EXPORT.DIALOG.COLUMNS': 'Columns',
+    'EXPORT.DIALOG.EXPORT_FORMAT': 'Export format',
+    'EXPORT.DIALOG.ORIENTATION': 'Orientation',
+    'EXPORT.DIALOG.VERTICAL': 'Vertical',
+    'EXPORT.DIALOG.HORIZONTAL': 'Horizontal',
+    'EXPORT.DIALOG.FILE_NAME': 'File name',
+    'EXPORT.DIALOG.EXPORT_BUTTON': "Export",
+    'EXPORT.DIALOG.ADVANCED_OPTIONS': " Advanced options",
+    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "You can indicate a file name"
   },
 
   // Spanish
@@ -499,7 +508,7 @@ export const MAP = {
     'TABLE.DIALOG.FILTER_DESCRIPTION': 'Descripción',
     'TABLE.DIALOG.LOAD_FILTER': 'Seleccione un filtro para aplicar a los datos',
     'TABLE.DIALOG.CONFIRM_CLEAR_FILTER': 'Esta acción limpiará todos los filtros aplicados a la tabla. ¿Desea continuar?',
-    'TABLE.DIALOG.CONFIRM_RESET_WIDTH' : 'Esta acción reseteará el ancho de todas las columnas de la tabla. ¿Desea continuar?',
+    'TABLE.DIALOG.CONFIRM_RESET_WIDTH': 'Esta acción reseteará el ancho de todas las columnas de la tabla. ¿Desea continuar?',
     'TABLE.DIALOG.CONFIRM_REMOVE_FILTER': '¿Está seguro de que quiere eliminar el filtro seleccionado?',
     'TABLE.DIALOG.EMPTY_FILTER_LIST': 'No hay filtros almacenados',
     'TABLE.DIALOG.FILTER_NAME_ALREADY_EXISTS': 'Ya existe un filtro con ese nombre',
@@ -597,7 +606,16 @@ export const MAP = {
     'OIMAGE.BUTTON.BROWSEFILE': 'Seleccionar imagen',
     'TREE.BUTTONS.SELECT': 'Seleccionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Si',
-    'REPORT.COLUMN.FALSEVALUE': 'No'
+    'REPORT.COLUMN.FALSEVALUE': 'No',
+    'EXPORT.DIALOG.COLUMNS': 'Columnas',
+    'EXPORT.DIALOG.EXPORT_FORMAT': 'Formato de exportación',
+    'EXPORT.DIALOG.ORIENTATION': 'Orientación',
+    'EXPORT.DIALOG.VERTICAL': 'Vertical',
+    'EXPORT.DIALOG.HORIZONTAL': 'Horizontal',
+    'EXPORT.DIALOG.FILE_NAME': 'Nombre del fichero',
+    'EXPORT.DIALOG.EXPORT_BUTTON': "Exportar",
+    'EXPORT.DIALOG.ADVANCED_OPTIONS': " Opciones Avanzadas",
+    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "Puede indicar un nombre para el fichero"
   },
   // Portuguese - BRAZIL
   pt: {
