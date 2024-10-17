@@ -37,7 +37,7 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
     return headers;
   }
 
-  public exportData(format: string, columns?: string[], landscape?: Boolean, filename?: string): Observable<any> {
+  public exportData(format: string, columns?: string[], landscape?: boolean, filename?: string): Observable<any> {
 
     const url = `${this.urlBase}${this.exportPath}/${format}`;
 
@@ -67,7 +67,7 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
 
           const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
           const matches = fileNameRegex.exec(contentDisposition);
-          if (!filename && matches != null && matches[1]) {
+          if (!filename && matches?.[1]) {
             fileName = matches[1].replace(/['"]/g, '');
           }
 

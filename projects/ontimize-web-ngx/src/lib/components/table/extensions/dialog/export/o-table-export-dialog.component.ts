@@ -2,9 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { AppConfig } from '../../../../../config/app-config';
 
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { IExportService } from '../../../../../interfaces/export-service.interface';
 import { OntimizeExportServiceProvider } from '../../../../../services/factories';
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
@@ -14,7 +14,6 @@ import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'o-table-export-dialog',

@@ -49,17 +49,10 @@
   }
 
   .dialog_content {
-    padding-bottom: 0;
-  }
-
-  .dialog_content {
     display: flex;
     flex-direction: column;
     height: 100%;
-  }
-
-  .type_toggle_group {
-    flex-shrink: 0;
+    padding-bottom: 0;
   }
 
   .acordion {
@@ -79,6 +72,7 @@
     display: flex;
     justify-content: space-around;
     flex-wrap: nowrap;
+    flex-shrink: 0;
   }
 
   .o-table-export-button {
