@@ -14,6 +14,7 @@ import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'o-table-export-dialog',
@@ -37,7 +38,13 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   protected visibleButtons: string[];
   private subscription: Subscription = new Subscription();
   private appConfig: AppConfig;
-
+  columns: string[];
+  columnsData: string[];
+  public orientations = [{ text: "EXPORT.DIALOG.VERTICAL", value: true }, { text: "EXPORT.DIALOG.HORIZONTAL", value: false }];
+  vertical: boolean = true;
+  selectedExportFormat: string = 'xlsx';
+  filename: string = '';
+  isExpanded: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<OTableExportDialogComponent>,
     protected injector: Injector,
@@ -62,10 +69,9 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   }
 
   initialize(): void {
+    this.columnsData = this.config.columns;
+    this.columns = [...this.columnsData];
     this.configureService();
-    this.subscription.add(
-      this.oTableExportButtonService.export$.pipe(filter(type => ['xlsx', 'html', 'pdf'].indexOf(type) === -1)).subscribe(e => this.export(e))
-    );
   }
 
   configureService(): void {
@@ -77,15 +83,24 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     const serviceCfg = this.exportService.getDefaultServiceConfiguration(this.config.service);
     this.exportService.configureService(serviceCfg);
   }
+  updateColumnsSort() {
+    this.columns.sort((a: any, b: any) => {
+      let indexA = this.columnsData.findIndex(x => x === a);
+      let indexB = this.columnsData.findIndex(x => x === b);
+      return indexA - indexB;
+    });
+  }
+  dropColumns(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
+    this.updateColumnsSort();
+  }
+  columnsCompareFunction(co1: any, co2: any) {
+    return co1.id === co2.id;
+  }
 
-  export(exportType: string, button?: any): void {
-
-    if (button) {
-      button.disabled = true;
-    }
-
+  export(): void {
     this.dialogRef.close(true);
-    this.exportService.exportData(exportType).subscribe(
+    this.exportService.exportData(this.selectedExportFormat, this.columns, !this.vertical, this.filename).subscribe(
       res => {
         this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
       },

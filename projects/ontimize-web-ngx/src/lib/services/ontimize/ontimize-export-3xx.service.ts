@@ -37,7 +37,7 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
     return headers;
   }
 
-  public exportData(format: string): Observable<any> {
+  public exportData(format: string, columns?: string[], landscape?: Boolean, filename?: string): Observable<any> {
 
     const url = `${this.urlBase}${this.exportPath}/${format}`;
 
@@ -49,11 +49,12 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
 
     let paramExport = {
       format: format,
-      path: this.servicePath
-    }
+      path: this.servicePath,
+      columns: columns,
+      landscape: landscape
+    };
 
     let exportData: any = this.exportDataProvider.getExportConfiguration(paramExport);
-
 
     const body = JSON.stringify(exportData);
 
@@ -62,12 +63,14 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
         (resp: any) => {
           const fileData = resp.body;
           const contentDisposition = resp.headers.get('content-disposition');
-          let fileName = 'file.' + format;
+          let fileName = filename && filename.trim() !== '' ? filename + '.' + format : 'file.' + format;
+
           const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
           const matches = fileNameRegex.exec(contentDisposition);
-          if (matches != null && matches[1]) {
+          if (!filename && matches != null && matches[1]) {
             fileName = matches[1].replace(/['"]/g, '');
           }
+
           const fileURL = URL.createObjectURL(fileData);
           const a = document.createElement('a');
           document.body.appendChild(a);
@@ -77,11 +80,12 @@ export class OntimizeExportService3X extends OntimizeBaseService implements IExp
           document.body.removeChild(a);
           observer.next(fileData);
           URL.revokeObjectURL(fileURL);
-        }, error => observer.error(error),
+        },
+        error => observer.error(error),
         () => observer.complete()
       );
     });
+
     return dataObservable.pipe(share());
   }
-
 }
