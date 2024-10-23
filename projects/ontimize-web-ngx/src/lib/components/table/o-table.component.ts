@@ -23,7 +23,6 @@ import {
   Optional,
   QueryList,
   SimpleChange,
-  TemplateRef,
   ViewChild,
   ViewChildren,
   ViewContainerRef,
@@ -71,6 +70,7 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
+import { OTableExportButtonComponent } from './extensions';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
 import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
@@ -102,7 +102,6 @@ import type { OTableOptions } from '../../interfaces/o-table-options.interface';
 import type { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
-import { OTableExportButtonComponent } from './extensions';
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
