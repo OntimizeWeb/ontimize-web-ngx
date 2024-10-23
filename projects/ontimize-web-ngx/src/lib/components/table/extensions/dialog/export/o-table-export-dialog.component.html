@@ -18,36 +18,38 @@
         {{ 'EXPORT.DIALOG.ADVANCED_OPTIONS' | oTranslate }}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <mat-label class="dialog-titles">{{'EXPORT.DIALOG.FILE_NAME'|oTranslate}}</mat-label>
-    <mat-form-field subscriptSizing="dynamic" class="filename_input">
-      <input matInput [(ngModel)]="filename" placeholder="{{ 'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER' | oTranslate }}" />
-    </mat-form-field>
-    <span class="dialog-titles">{{'EXPORT.DIALOG.COLUMNS'|oTranslate}}</span>
-    <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)" class="columns"
-      [(ngModel)]="columns" [compareWith]="columnsCompareFunction">
-      <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
-        <div fxLayout="row" fxLayoutAlign="space-around center">
-          <span matListItemLine fxFlex>
-            {{column | oTranslate}}
-          </span>
-          <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
-        </div>
-      </mat-list-option>
-    </mat-selection-list>
-    <span class="dialog-titles">{{'EXPORT.DIALOG.ORIENTATION'|oTranslate}}</span>
-    <mat-radio-group name="Orientation" [(ngModel)]="vertical" fxLayout="row" fxLayoutGap="12px" [disabled]="selectedExportFormat !== 'pdf'">
-      <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation.value"
-        [checked]="vertical === orientation.value">
-        {{ orientation.text | oTranslate}}
-      </mat-radio-button>
-    </mat-radio-group>
+    <div class="inputs_container">
+      <mat-label class="dialog-titles">{{'EXPORT.DIALOG.FILE_NAME'|oTranslate}}</mat-label>
+      <mat-form-field subscriptSizing="dynamic" class="filename_input">
+        <input matInput [(ngModel)]="filename" placeholder="{{ 'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER' | oTranslate }}" />
+      </mat-form-field>
+      <span class="dialog-titles">{{'EXPORT.DIALOG.COLUMNS'|oTranslate}}</span>
+      <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)" class="columns"
+        [(ngModel)]="columns" [compareWith]="columnsCompareFunction">
+        <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
+          <div fxLayout="row" fxLayoutAlign="space-around center">
+            <span matListItemLine fxFlex>
+              {{column | oTranslate}}
+            </span>
+            <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+          </div>
+        </mat-list-option>
+      </mat-selection-list>
+      <span class="dialog-titles">{{'EXPORT.DIALOG.ORIENTATION'|oTranslate}}</span>
+      <mat-radio-group name="Orientation" [(ngModel)]="vertical" fxLayout="row" fxLayoutGap="12px" [disabled]="selectedExportFormat !== 'pdf'">
+        <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation.value"
+          [checked]="vertical === orientation.value">
+          {{ orientation.text | oTranslate}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
   </mat-expansion-panel>
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayoutAlign="end center">
   <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default cancel">{{ 'CANCEL' | oTranslate }}</button>
   <button type="button" mat-stroked-button class="export_button" (click)="export()">
-    <mat-icon svgIcon="ontimize:export"></mat-icon>
+    <mat-icon>ios_share</mat-icon>
     <span>{{ 'EXPORT.DIALOG.EXPORT_BUTTON' | oTranslate }}</span>
   </button>
 </mat-dialog-actions>
