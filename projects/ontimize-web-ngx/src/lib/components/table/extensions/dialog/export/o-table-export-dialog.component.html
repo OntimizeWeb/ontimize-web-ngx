@@ -1,7 +1,7 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
 <mat-dialog-content class="dialog_content">
   <div mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</div>
-  <mat-button-toggle-group class="type_toggle_group" #group="matButtonToggleGroup" [(ngModel)]="selectedExportFormat">
+  <mat-button-toggle-group class="type_toggle_group" [(ngModel)]="selectedExportFormat">
     <o-table-export-button #excelButton *ngIf="isButtonVisible('xlsx')" svg-icon="ontimize:EXCEL" label="TABLE.BUTTONS.EXCEL" export-type="xlsx"
       class="excel-button"></o-table-export-button>
     <o-table-export-button #htmlButton *ngIf="isButtonVisible('html')" svg-icon="ontimize:HTML" label="TABLE.BUTTONS.HTML" export-type="html"
@@ -10,7 +10,11 @@
       class="pdf-button"></o-table-export-button>
     <o-table-export-button #csvButton *ngIf="isButtonVisible('csv')" svg-icon="ontimize:CSV" label="TABLE.BUTTONS.CSV" export-type="csv"
       class="csv-button"></o-table-export-button>
-    <ng-container *ngTemplateOutlet="config.options"></ng-container>
+
+    <ng-container *ngFor="let customButton of config.options">
+      <o-table-export-button [svg-icon]="customButton.svgIcon" [icon]="customButton.icon" [label]="customButton.olabel"
+        [export-type]="customButton.exportType"></o-table-export-button>
+    </ng-container>
   </mat-button-toggle-group>
   <mat-expansion-panel class="acordion" [expanded]="isExpanded">
     <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">

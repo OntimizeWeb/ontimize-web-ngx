@@ -102,6 +102,7 @@ import type { OTableOptions } from '../../interfaces/o-table-options.interface';
 import type { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OTableExportButtonComponent } from './extensions';
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
@@ -623,8 +624,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   quickfilterContentChild: OTableQuickfilter;
 
 
-  @ViewChild('exportOptsTemplate')
-  exportOptsTemplate: TemplateRef<any>;
+  @ContentChildren(OTableExportButtonComponent)
+  exportOptsTemplate: QueryList<OTableExportButtonComponent>
 
   @ContentChild(OTableColumnSelectAllDirective)
   tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
