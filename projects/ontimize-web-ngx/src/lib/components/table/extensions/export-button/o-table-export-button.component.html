@@ -1,7 +1,0 @@
-<button type="button" mat-raised-button (click)="click()">
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <mat-icon class="material-icons o-button-icon" *ngIf="icon!==undefined" style="vertical-align:middle">{{ icon }}</mat-icon>
-    <mat-icon class="material-icons o-button-icon" *ngIf="svgIcon!==undefined" style="vertical-align:middle" [svgIcon]="svgIcon"></mat-icon>
-    <span>{{ olabel | oTranslate }}</span>
-  </div>
-</button>

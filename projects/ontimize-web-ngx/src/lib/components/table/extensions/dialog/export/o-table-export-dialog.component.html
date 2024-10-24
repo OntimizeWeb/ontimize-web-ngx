@@ -1,19 +1,65 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
-<mat-dialog-content>
+<mat-dialog-content class="dialog_content">
   <div mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</div>
-  <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxLayoutGap="8px">
-    <o-table-export-button #excelButton *ngIf="isButtonVisible('xlsx')" svg-icon="ontimize:EXCEL" label="TABLE.BUTTONS.EXCEL" export-type="xlsx"
-      (onClick)="export('xlsx', excelButton)" class="excel-button"></o-table-export-button>
-    <o-table-export-button #htmlButton *ngIf="isButtonVisible('html')" svg-icon="ontimize:HTML" label="TABLE.BUTTONS.HTML" export-type="html"
-      (onClick)="export('html', htmlButton)" class="html-button"></o-table-export-button>
-    <o-table-export-button #pdfButton *ngIf="isButtonVisible('pdf')" svg-icon="ontimize:PDF" label="TABLE.BUTTONS.PDF" export-type="pdf"
-      (onClick)="export('pdf', pdfButton)" class="pdf-button"></o-table-export-button>
-    <o-table-export-button #csvButton *ngIf="isButtonVisible('csv')" svg-icon="ontimize:CSV" label="TABLE.BUTTONS.CSV" export-type="pdf"
-      (onClick)="export('csv', csvButton)" class="pdf-button"></o-table-export-button>
-    <ng-container *ngTemplateOutlet="config.options"></ng-container>
-  </div>
+  <mat-button-toggle-group class="type_toggle_group" #group="matButtonToggleGroup" [(ngModel)]="selectedExportFormat">
+    <ng-container *ngFor="let button of exportTypes">
+      <mat-button-toggle [value]="button.exportType" *ngIf="isButtonVisible(button.exportType)" class="button.className">
+        <ng-container *ngTemplateOutlet="buttonTemplate;context:{button:button}"></ng-container>
+      </mat-button-toggle>
+    </ng-container>
+
+    <ng-container *ngFor="let customButton of config.options">
+      <mat-button-toggle [value]="customButton.exportType">
+        <ng-container *ngTemplateOutlet="buttonTemplate;context:{button:customButton}"></ng-container>
+      </mat-button-toggle>
+    </ng-container>
+  </mat-button-toggle-group>
+  <mat-expansion-panel class="acordion" [expanded]="isExpanded">
+    <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+      <mat-panel-title>
+        {{ 'EXPORT.DIALOG.ADVANCED_OPTIONS' | oTranslate }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="inputs_container">
+      <mat-label class="dialog-titles">{{'EXPORT.DIALOG.FILE_NAME'|oTranslate}}</mat-label>
+      <mat-form-field subscriptSizing="dynamic" class="filename_input">
+        <input matInput [(ngModel)]="filename" placeholder="{{ 'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER' | oTranslate }}" />
+      </mat-form-field>
+      <span class="dialog-titles">{{'EXPORT.DIALOG.ORIENTATION'|oTranslate}}</span>
+      <mat-radio-group name="Orientation" [(ngModel)]="vertical" fxLayout="row" fxLayoutGap="12px" [disabled]="selectedExportFormat !== 'pdf'">
+        <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation.value"
+          [checked]="vertical === orientation.value">
+          {{ orientation.text | oTranslate}}
+        </mat-radio-button>
+      </mat-radio-group>
+      <span class="dialog-titles">{{'EXPORT.DIALOG.COLUMNS'|oTranslate}}</span>
+      <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)" class="columns"
+        [(ngModel)]="columns" [compareWith]="columnsCompareFunction">
+        <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
+          <div fxLayout="row" fxLayoutAlign="space-around center">
+            <span matListItemLine fxFlex>
+              {{column | oTranslate}}
+            </span>
+            <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+          </div>
+        </mat-list-option>
+      </mat-selection-list>
+
+    </div>
+  </mat-expansion-panel>
 </mat-dialog-content>
 
 <mat-dialog-actions fxLayoutAlign="end center">
   <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button-default cancel">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="export_button" (click)="export()">
+    <mat-icon>ios_share</mat-icon>
+    <span>{{ 'EXPORT.DIALOG.EXPORT_BUTTON' | oTranslate }}</span>
+  </button>
 </mat-dialog-actions>
+
+<ng-template #buttonTemplate let-button="button">
+  <mat-icon class="material-icons o-button-icon" *ngIf="button.icon!==undefined" style="vertical-align:middle">{{ button.icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="button.svgIcon!==undefined" style="vertical-align:middle"
+    [svgIcon]="button.svgIcon"></mat-icon>
+  {{ button.olabel | oTranslate }}
+</ng-template>
