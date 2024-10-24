@@ -25,10 +25,10 @@ export class OTableExportButtonComponent {
   public olabel: string;
   public onClick: EventEmitter<any> = new EventEmitter();
   protected exportType: string;
-  protected readonly oTableExportButtonService: OTableExportButtonService;
+  protected oTableExportButtonService: OTableExportButtonService;
 
   constructor(
-    private injector: Injector
+    private readonly injector: Injector
   ) {
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
   }
