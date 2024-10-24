@@ -57,10 +57,8 @@
 </mat-dialog-actions>
 
 <ng-template #buttonTemplate let-button="button">
-  <mat-button-toggle [value]="button.exportType">
-    <mat-icon class="material-icons o-button-icon" *ngIf="button.icon!==undefined" style="vertical-align:middle">{{ button.icon }}</mat-icon>
-    <mat-icon class="material-icons o-button-icon" *ngIf="button.svgIcon!==undefined" style="vertical-align:middle"
-      [svgIcon]="button.svgIcon"></mat-icon>
-    {{ button.olabel | oTranslate }}
-  </mat-button-toggle>
+  <mat-icon class="material-icons o-button-icon" *ngIf="button.icon!==undefined" style="vertical-align:middle">{{ button.icon }}</mat-icon>
+  <mat-icon class="material-icons o-button-icon" *ngIf="button.svgIcon!==undefined" style="vertical-align:middle"
+    [svgIcon]="button.svgIcon"></mat-icon>
+  {{ button.olabel | oTranslate }}
 </ng-template>
