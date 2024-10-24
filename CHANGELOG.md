@@ -1,5 +1,6 @@
-## 15.2.2 (2024-10-21)
+## 15.2.2 (2024-10-24)
 ### Features
+* **o-table**: Modified export dialog that allows to select the columns, file name and orientation ([c934baa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c934baa)) Closes [#1715](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1715)
 * **o-text-input**: New attribute `regulate-pattern` to restrict input ([2bdc22c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bdc22c)) Closes [#1704](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1704)
 
 ### Bug fixes
