@@ -357,15 +357,25 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
     this.dialog.open(OTableExportDialogComponent, {
       data: {
         visibleButtons: this.table.visibleExportDialogButtons,
+        columns:this.parseColumnsVisible(),
         service: this.table.service,
         serviceType: this.table.exportServiceType,
         options: this.table.exportOptsTemplate
       },
+      maxWidth: '65vw',
+      minWidth: '25vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog']
     });
   }
-
+  protected parseColumnsVisible() {
+    const columnsArray = Util.parseArray(this.table.columns);
+    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && oCol.type !== "action" && oCol.visible && columnsArray.findIndex(column => column === oCol.attr) > -1).map(
+      (x: OColumn) => {
+        return x.attr;
+      }
+    )
+  }
   onChangeColumnsVisibilityClicked() {
     const dialogRef = this.dialog.open(OTableVisibleColumnsDialogComponent, {
       data: {
