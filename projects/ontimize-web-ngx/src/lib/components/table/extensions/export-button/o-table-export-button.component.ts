@@ -25,7 +25,7 @@ export class OTableExportButtonComponent {
   public olabel: string;
   public onClick: EventEmitter<any> = new EventEmitter();
   protected exportType: string;
-  protected oTableExportButtonService: OTableExportButtonService;
+  protected readonly oTableExportButtonService: OTableExportButtonService;
 
   constructor(
     private injector: Injector
