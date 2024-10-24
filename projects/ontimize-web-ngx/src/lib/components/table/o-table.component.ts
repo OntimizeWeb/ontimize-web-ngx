@@ -23,7 +23,6 @@ import {
   Optional,
   QueryList,
   SimpleChange,
-  TemplateRef,
   ViewChild,
   ViewChildren,
   ViewContainerRef,
@@ -71,6 +70,7 @@ import { OTableColumnCalculatedComponent } from './column/calculated/o-table-col
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
 import { OTableColumnComponent } from './column/o-table-column.component';
+import { OTableExportButtonComponent } from './extensions';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
 import { OTableFilterByColumnDataDialogComponent } from './extensions/dialog/filter-by-column/o-table-filter-by-column-data-dialog.component';
@@ -623,8 +623,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   quickfilterContentChild: OTableQuickfilter;
 
 
-  @ViewChild('exportOptsTemplate')
-  exportOptsTemplate: TemplateRef<any>;
+  @ContentChildren(OTableExportButtonComponent)
+  exportOptsTemplate: QueryList<OTableExportButtonComponent>
 
   @ContentChild(OTableColumnSelectAllDirective)
   tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;

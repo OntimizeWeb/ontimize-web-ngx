@@ -155,6 +155,9 @@ export class OValidators {
 
   }
 
+  /**
+ * @deprecated Use `Validator.min` instead
+ */
   public static createMinValidator(min: number): ValidatorFn {
     const validator: ValidatorFn = (control: UntypedFormControl) => {
       let val = control.value;
@@ -176,7 +179,9 @@ export class OValidators {
     }
     return validator;
   }
-
+  /**
+ * @deprecated Use `Validator.max` instead
+ */
   public static createMaxValidator(max: number): ValidatorFn {
     const validator: ValidatorFn = (control: UntypedFormControl) => {
       let val = control.value;
