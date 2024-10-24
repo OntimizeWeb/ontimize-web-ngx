@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 
-import { BooleanInputConverter, NumberConverter, NumberInputConverter } from '../../../decorators/input-converter';
+import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
