@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector } from '@angular/core';
+import { Directive, EventEmitter, Injector } from '@angular/core';
 
 import { OTableExportButtonService } from './o-table-export-button.service';
 
@@ -13,9 +13,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON = [
   'onClick'
 ];
 
-@Component({
+@Directive({
   selector: 'o-table-export-button',
-  templateUrl: './o-table-export-button.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_EXPORT_BUTTON,
   outputs: DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON
 })
