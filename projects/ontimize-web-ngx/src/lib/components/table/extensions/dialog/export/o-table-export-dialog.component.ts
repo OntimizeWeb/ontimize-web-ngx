@@ -14,6 +14,7 @@ import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableExportButtonService } from '../../export-button/o-table-export-button.service';
 import { OTableExportConfiguration } from '../../header/table-menu/o-table-export-configuration.class';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'o-table-export-dialog',
@@ -40,8 +41,29 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   columns: string[];
   columnsData: string[];
   public orientations = [{ text: "EXPORT.DIALOG.VERTICAL", value: true }, { text: "EXPORT.DIALOG.HORIZONTAL", value: false }];
+  public exportTypes = [{
+    exportType: 'xlsx',
+    svgIcon: 'ontimize:EXCEL',
+    olabel: 'TABLE.BUTTONS.EXCEL',
+    className: 'excel-button'
+  }, {
+    exportType: 'html',
+    svgIcon: 'ontimize:HTML',
+    olabel: 'TABLE.BUTTONS.HTML',
+    className: 'html-button'
+  }, {
+    exportType: 'pdf',
+    svgIcon: 'ontimize:PDF',
+    olabel: 'TABLE.BUTTONS.PDF',
+    className: 'pdf-button'
+  }, {
+    exportType: 'csv',
+    svgIcon: 'ontimize:CSV',
+    olabel: 'TABLE.BUTTONS.CSV',
+    className: 'csv-button'
+  }];
   vertical: boolean = true;
-  selectedExportFormat: string = 'xlsx';
+  selectedExportFormat: string;
   filename: string = '';
   isExpanded: boolean = false;
   constructor(
@@ -52,7 +74,8 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     this.snackBarService = injector.get(SnackBarService);
     this.translateService = this.injector.get(OTranslateService);
     this.oTableExportButtonService = this.injector.get(OTableExportButtonService);
-    this.appConfig = this.injector.get(AppConfig)
+    this.appConfig = this.injector.get(AppConfig);
+    this.selectedExportFormat = this.getDefaultSelection();
 
     if (config && Util.isDefined(config.visibleButtons)) {
       this.visibleButtons = Util.parseArray(config.visibleButtons.toLowerCase(), true);
@@ -99,13 +122,14 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
 
   export(): void {
     this.dialogRef.close(true);
-    this.exportService.exportData(this.selectedExportFormat, this.columns, !this.vertical, this.filename).subscribe(
-      res => {
+    this.exportService.exportData(this.selectedExportFormat, this.columns, !this.vertical, this.filename).subscribe({
+      next: () => {
         this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
       },
-      err => {
+      error: (err: any) => {
         this.handleError(err);
       }
+    }
     );
   }
 
@@ -126,11 +150,27 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     return isVisible;
   }
 
+  getDefaultSelection() {
+    const useExportConfiguration3X = this.appConfig.useExportConfiguration();
+
+    if (useExportConfiguration3X) {
+      return Codes.VISIBLE_EXPORT_BUTTONS3X[0];
+    } else {
+      return Codes.VISIBLE_EXPORT_BUTTONS[0];
+    }
+
+  }
+
   protected handleError(err): void {
     if (err instanceof HttpErrorResponse) {
       this.snackBarService.open(err.message, { icon: 'error' });
     } else {
       this.snackBarService.open('MESSAGES.ERROR_EXPORT_TABLE_DATA', { icon: 'error' });
     }
+  }
+
+  onChangeMatButtonToggleGroup(event: MatButtonToggleChange) {
+    event.source.buttonToggleGroup.value = event.value;
+    this.selectedExportFormat = event.value;
   }
 }

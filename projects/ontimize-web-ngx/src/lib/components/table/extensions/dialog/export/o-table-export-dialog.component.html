@@ -1,19 +1,17 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.EXPORT' | oTranslate }}</span>
 <mat-dialog-content class="dialog_content">
   <div mat-subheader>{{ 'TABLE.DIALOG.EXPORT.DESCRIPTION' | oTranslate }}</div>
-  <mat-button-toggle-group class="type_toggle_group" [(ngModel)]="selectedExportFormat">
-    <o-table-export-button #excelButton *ngIf="isButtonVisible('xlsx')" svg-icon="ontimize:EXCEL" label="TABLE.BUTTONS.EXCEL" export-type="xlsx"
-      class="excel-button"></o-table-export-button>
-    <o-table-export-button #htmlButton *ngIf="isButtonVisible('html')" svg-icon="ontimize:HTML" label="TABLE.BUTTONS.HTML" export-type="html"
-      class="html-button"></o-table-export-button>
-    <o-table-export-button #pdfButton *ngIf="isButtonVisible('pdf')" svg-icon="ontimize:PDF" label="TABLE.BUTTONS.PDF" export-type="pdf"
-      class="pdf-button"></o-table-export-button>
-    <o-table-export-button #csvButton *ngIf="isButtonVisible('csv')" svg-icon="ontimize:CSV" label="TABLE.BUTTONS.CSV" export-type="csv"
-      class="csv-button"></o-table-export-button>
+  <mat-button-toggle-group class="type_toggle_group" #group="matButtonToggleGroup" [(ngModel)]="selectedExportFormat">
+    <ng-container *ngFor="let button of exportTypes">
+      <mat-button-toggle [value]="button.exportType" *ngIf="isButtonVisible(button.exportType)" class="button.className">
+        <ng-container *ngTemplateOutlet="buttonTemplate;context:{button:button}"></ng-container>
+      </mat-button-toggle>
+    </ng-container>
 
     <ng-container *ngFor="let customButton of config.options">
-      <o-table-export-button [svg-icon]="customButton.svgIcon" [icon]="customButton.icon" [label]="customButton.olabel"
-        [export-type]="customButton.exportType"></o-table-export-button>
+      <mat-button-toggle [value]="customButton.exportType">
+        <ng-container *ngTemplateOutlet="buttonTemplate;context:{button:customButton}"></ng-container>
+      </mat-button-toggle>
     </ng-container>
   </mat-button-toggle-group>
   <mat-expansion-panel class="acordion" [expanded]="isExpanded">
@@ -57,3 +55,12 @@
     <span>{{ 'EXPORT.DIALOG.EXPORT_BUTTON' | oTranslate }}</span>
   </button>
 </mat-dialog-actions>
+
+<ng-template #buttonTemplate let-button="button">
+  <mat-button-toggle [value]="button.exportType">
+    <mat-icon class="material-icons o-button-icon" *ngIf="button.icon!==undefined" style="vertical-align:middle">{{ button.icon }}</mat-icon>
+    <mat-icon class="material-icons o-button-icon" *ngIf="button.svgIcon!==undefined" style="vertical-align:middle"
+      [svgIcon]="button.svgIcon"></mat-icon>
+    {{ button.olabel | oTranslate }}
+  </mat-button-toggle>
+</ng-template>
