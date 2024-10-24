@@ -25,6 +25,13 @@
       <mat-form-field subscriptSizing="dynamic" class="filename_input">
         <input matInput [(ngModel)]="filename" placeholder="{{ 'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER' | oTranslate }}" />
       </mat-form-field>
+      <span class="dialog-titles">{{'EXPORT.DIALOG.ORIENTATION'|oTranslate}}</span>
+      <mat-radio-group name="Orientation" [(ngModel)]="vertical" fxLayout="row" fxLayoutGap="12px" [disabled]="selectedExportFormat !== 'pdf'">
+        <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation.value"
+          [checked]="vertical === orientation.value">
+          {{ orientation.text | oTranslate}}
+        </mat-radio-button>
+      </mat-radio-group>
       <span class="dialog-titles">{{'EXPORT.DIALOG.COLUMNS'|oTranslate}}</span>
       <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)" class="columns"
         [(ngModel)]="columns" [compareWith]="columnsCompareFunction">
@@ -37,13 +44,7 @@
           </div>
         </mat-list-option>
       </mat-selection-list>
-      <span class="dialog-titles">{{'EXPORT.DIALOG.ORIENTATION'|oTranslate}}</span>
-      <mat-radio-group name="Orientation" [(ngModel)]="vertical" fxLayout="row" fxLayoutGap="12px" [disabled]="selectedExportFormat !== 'pdf'">
-        <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation.value"
-          [checked]="vertical === orientation.value">
-          {{ orientation.text | oTranslate}}
-        </mat-radio-button>
-      </mat-radio-group>
+
     </div>
   </mat-expansion-panel>
 </mat-dialog-content>
