@@ -1687,7 +1687,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.pageable) {
       queryArguments.sort = this.sortColArray;
-      if (this.state.totalQueryRecordsNumber) {
+      if (this.paginator.isShowingAllRows(ovrrArgs?.offset) && this.state?.totalQueryRecordsNumber) {
         queryArguments.ovrrArgs.length = this.state.totalQueryRecordsNumber;
       }
     }
