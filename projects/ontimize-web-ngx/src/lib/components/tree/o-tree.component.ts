@@ -31,6 +31,7 @@ import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
 import { OPermissions } from '../../types';
 import { OTreePermissions } from '../../types/o-tree-permissions.type';
+import { OntimizeServiceProvider } from '../../services/factories';
 
 export type OTreeFlatNode = {
   id: string | number,
@@ -115,7 +116,8 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
   host: {
     '[class.o-tree]': 'true'
   },
-  providers: [OTreeDao]
+  providers: [OTreeDao, OntimizeServiceProvider]
+
 })
 export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
 
@@ -153,7 +155,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
     } else {
-      return this.childQueryData(node);
+      return node.treeNode.childQueryData(node);
     }
 
   }
@@ -653,24 +655,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
 
-  public childQueryData(node: OTreeFlatNode): Observable<ServiceResponse> | Observable<any> {
-    let queryMethodName = this.queryMethod;
-    if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
-      return of({ data: [] });
-    }
-    const parentItem = ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form);
-    let filter
-    if (this.recursive) {
-      filter = parentItem ?? {};
-      filter[this.parentColumn] = node.data[this.keysArray[0]]
-    } else {
-      filter = ServiceUtils.getFilterUsingParentKeys(node.data, node.treeNode._pKeysEquiv);
-    }
 
-    let queryArguments = [filter, this.colArray, this.entity];
-
-    return this.dataService[queryMethodName](...queryArguments) as Observable<ServiceResponse>;
-  }
 
   protected navigateToViewDetail(node: OTreeFlatNode) {
     if (Util.isDefined(node.route)) {
