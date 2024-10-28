@@ -15,23 +15,22 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { Observable, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OntimizeServiceProvider } from '../../services/factories';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
+import { OPermissions } from '../../types';
+import { OTreePermissions } from '../../types/o-tree-permissions.type';
 import { Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
-import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
-import { OPermissions } from '../../types';
-import { OTreePermissions } from '../../types/o-tree-permissions.type';
-import { OntimizeServiceProvider } from '../../services/factories';
 
 export type OTreeFlatNode = {
   id: string | number,
