@@ -415,13 +415,14 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       params: childRoute.params,
       queryParams: childRoute.queryParams,
       urlSegments: childRoute.url,
-      component: childRoute.routeConfig.component,
+      component: Util.findRouteComponent(childRoute),
       url: url,
       id: Util.randomNumber().toString(),
       label: '',
       innerFormsInfo: {},
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'
     };
+
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
     } else {
@@ -537,8 +538,11 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     if (this.isDialogMode()) {
       return !comp.oFormLayoutDialog;
     }
+
     const compRef = this.getLayoutModeComponent();
-    return Util.isDefined(compRef) && compRef.isMainComponent(comp);
+    return (Util.isDefined(compRef)
+      && (compRef.isMainComponent(comp)
+        || (Util.isDefined(comp.parentComponent)) && compRef.isMainComponent(comp.parentComponent)));
   }
 
   public getRouteForComponent(comp: ILayoutManagerComponent): any[] {

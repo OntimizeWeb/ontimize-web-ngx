@@ -96,6 +96,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   componentStateService: T;
   protected dialogService: DialogService;
   protected oErrorDialogManager: OErrorDialogManager;
+  parentComponent: AbstractOServiceBaseComponent<T>;
 
   /* inputs variables */
   oattr: string;

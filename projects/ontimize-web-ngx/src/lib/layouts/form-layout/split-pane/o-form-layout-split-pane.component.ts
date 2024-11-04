@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { ResizeEvent } from 'angular-resizable-element';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { OTreeNodeComponent } from '../../../components/tree/tree-node/tree-node.component';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
@@ -172,10 +171,6 @@ export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayout
   }
 
   isMainComponent(comp: ILayoutManagerComponent): boolean {
-
-    if (comp instanceof OTreeNodeComponent) {
-      comp = comp.oTree;
-    }
     return this.mainWrapper && this.mainWrapper.nativeElement
       && comp.elementRef && this.mainWrapper.nativeElement.contains(comp.elementRef.nativeElement);
   }
