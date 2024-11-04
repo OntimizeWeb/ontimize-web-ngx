@@ -10,6 +10,7 @@ import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
 import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 export class Util {
 
@@ -565,4 +566,11 @@ export class Util {
     return clonedArray;
   }
 
+  static findRouteComponent(routeSnapshot: ActivatedRouteSnapshot): any {
+    let child = routeSnapshot;
+    while (child.firstChild) {
+      child = child.firstChild;
+    }
+    return child.routeConfig?.component;
+  }
 }
