@@ -566,11 +566,11 @@ export class Util {
     return clonedArray;
   }
 
-  static findRouteComponent(routeSnapshot: ActivatedRouteSnapshot): any {
+  static getLastActivateRoute(routeSnapshot: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
     let child = routeSnapshot;
     while (child.firstChild) {
       child = child.firstChild;
     }
-    return child.routeConfig?.component;
+    return child;
   }
 }

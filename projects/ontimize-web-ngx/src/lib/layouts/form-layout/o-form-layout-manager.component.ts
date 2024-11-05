@@ -411,11 +411,12 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   }
 
   public addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string): void {
+    childRoute = Util.getLastActivateRoute(childRoute);
     const newDetailComp: FormLayoutDetailComponentData = {
       params: childRoute.params,
       queryParams: childRoute.queryParams,
       urlSegments: childRoute.url,
-      component: Util.findRouteComponent(childRoute),
+      component: childRoute.routeConfig.component ,
       url: url,
       id: Util.randomNumber().toString(),
       label: '',
