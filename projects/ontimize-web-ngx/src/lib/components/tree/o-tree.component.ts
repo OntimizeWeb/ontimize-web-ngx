@@ -325,11 +325,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     this.onNodeClick.emit(node);
     this.selectedNode = node;
     if (this.detailMode !== Codes.DETAIL_MODE_NONE && !this.isRootNode(node)) {
-      /*
-      Se podria mejorar llamando this.viewDetail(node.data);
-      si almacenamos el nodo, actualmente se esta almacenando si existe un tree-node hijo
-      */
-      node.node.viewDetail(node.data);
+      node.node.viewDetail(node.data, { label: node.label });
     }
   }
 

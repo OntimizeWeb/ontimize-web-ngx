@@ -35,6 +35,7 @@ import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
+import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -386,6 +387,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       return;
     }
     this.oFormLayoutManagerService.activeFormLayoutManager = undefined;
+    this.oFormLayoutManagerService.context = void 0;
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
       for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
@@ -410,7 +412,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return this.mode === OFormLayoutManagerComponent.SPLIT_PANE_MODE;
   }
 
-  public addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string): void {
+  public addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string, context?: OFormLayoutManagerContext): void {
     childRoute = Util.getLastActivateRoute(childRoute);
     const newDetailComp: FormLayoutDetailComponentData = {
       params: childRoute.params,
@@ -419,7 +421,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       component: childRoute.routeConfig.component,
       url: url,
       id: Util.randomNumber().toString(),
-      label: '',
+      label: context?.label || '',
       innerFormsInfo: {},
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'
     };

@@ -1,6 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerContext } from '../types/form-layout-manager-context.type';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,9 @@ import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layou
 export class OFormLayoutManagerService {
   protected registeredFormLayoutManagers = {};
   protected _activeFormLayoutManager: OFormLayoutManagerComponent;
+  private _context: OFormLayoutManagerContext;
 
-  constructor(protected injector: Injector) {
-  }
+  constructor(protected injector: Injector) { }
 
   registerFormLayoutManager(comp: OFormLayoutManagerComponent) {
     this.registeredFormLayoutManagers[comp.getAttribute()] = comp;
@@ -26,5 +27,13 @@ export class OFormLayoutManagerService {
 
   set activeFormLayoutManager(arg: OFormLayoutManagerComponent) {
     this._activeFormLayoutManager = arg;
+  }
+
+  set context(value: OFormLayoutManagerContext) {
+    this._context = value;
+  }
+
+  get context(): OFormLayoutManagerContext {
+    return this._context;
   }
 }
