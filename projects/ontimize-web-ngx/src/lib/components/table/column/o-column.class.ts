@@ -87,7 +87,7 @@ export class OColumn {
     if (Util.isDefined(column.searchable)) {
       this.searchable = column.searchable;
     } else {
-      this.searchable = Util.isDefined(column.type) && column.type === 'date' ? false : true;
+      this.searchable = column?.type !== 'date';
     }
     if (Util.isDefined(column.groupable)) {
       this.groupable = column.groupable;
