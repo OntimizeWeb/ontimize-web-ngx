@@ -229,7 +229,8 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
       column.type === 'real' ||
       column.type === 'percentage' ||
       column.type === 'currency' ||
-      column.type === 'service'
+      column.type === 'service' ||
+      column.type === 'date'
     );
   }
 

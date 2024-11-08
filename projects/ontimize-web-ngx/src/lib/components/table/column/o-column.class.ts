@@ -83,8 +83,11 @@ export class OColumn {
     if (Util.isDefined(column.resizable)) {
       this.resizable = column.resizable;
     }
+
     if (Util.isDefined(column.searchable)) {
       this.searchable = column.searchable;
+    } else {
+      this.searchable = Util.isDefined(column.type) && column.type === 'date' ? false : true;
     }
     if (Util.isDefined(column.groupable)) {
       this.groupable = column.groupable;
@@ -99,9 +102,11 @@ export class OColumn {
       this.type = column.type;
       this.className = 'o-column-' + (this.type) + ' ';
     }
+
     if (Util.isDefined(column.getSQLType)) {
       this.sqlType = column.getSQLType();
     }
+
     if (Util.isDefined(column.class)) {
       this.className = Util.isDefined(this.className) ? (this.className + ' ' + column.class) : column.class;
     }
