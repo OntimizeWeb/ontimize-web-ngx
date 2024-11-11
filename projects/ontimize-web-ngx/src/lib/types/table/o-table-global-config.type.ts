@@ -6,5 +6,7 @@ export type OTableGlobalConfig = {
   filterColumnActiveByDefault: boolean;
   editionMode: OTableEditionMode;
   detailMode: OTableDetailMode;
-  rowHeight: ORowHeight
+  rowHeight: ORowHeight,
+  showChartsOnDemandOption: boolean;
+  showReportOnDemandOption: boolean;
 }
