@@ -1331,7 +1331,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   get selection() {
     if (!Util.isDefined(this._selection)) {
-      this._selection = new SelectionModel<Element>(this.isSelectionModeMultiple(), []);
+      this._selection = new SelectionModel<any>(this.isSelectionModeMultiple(), [], true, this.compareRow());
     }
     return this._selection;
   }
@@ -3304,7 +3304,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public isDisableCheckbox(item: any): boolean {
     let disable = false;
     if (Util.isDefined(this.disableSelectionFunction)) {
-      return this.disableSelectionFunction(item);
+      return this.disableSelectionFunction({ ...item });
     }
     return disable;
 

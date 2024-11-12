@@ -234,11 +234,11 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   /* end of outputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
-  protected _selection: SelectionModel<Element>;
+  protected _selection: SelectionModel<any>;
 
   get selection() {
     if (!Util.isDefined(this._selection)) {
-      this._selection = new SelectionModel<Element>(true, []);
+      this._selection = new SelectionModel<any>(true, [], true, this.compareRow());
     }
     return this._selection;
   }
@@ -409,7 +409,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
       const zone = this.injector.get(NgZone);
       if (!this.formLayoutManager?.isSplitPaneMode()) {
-        formLayoutManagerService.context = context ;
+        formLayoutManagerService.context = context;
       }
       zone.run(() =>
         this.navigateToDetail(route, qParams, relativeTo)
@@ -1005,6 +1005,18 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
   }
 
+  compareRow(): ((o1: any, o2: any) => boolean) | undefined {
+    return (o1: any, o2: any) => {
+      let isEqual = true;
+      this.keysArray.forEach(key => {
+        if (o1[key] !== o2[key]) {
+          isEqual = false;
+        };
+      });
+
+      return isEqual;
+    };
+  }
 }
 
 /*This class is definied to mantain bacwards compatibility */
