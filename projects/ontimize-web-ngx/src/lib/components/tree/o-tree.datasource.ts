@@ -5,7 +5,8 @@ import { BehaviorSubject, map, merge, Observable } from 'rxjs';
 
 import { OTranslateService } from '../../services/translate';
 import { OTreeDao } from './o-tree-dao.service';
-import { OTreeComponent, OTreeFlatNode } from './o-tree.component';
+import { OTreeComponent } from './o-tree.component';
+import { OTreeFlatNode } from '../../types/tree-flat-node.type';
 
 export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   dataChange = new BehaviorSubject<OTreeFlatNode[]>([]);

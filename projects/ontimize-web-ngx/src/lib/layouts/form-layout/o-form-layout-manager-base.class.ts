@@ -27,6 +27,8 @@ export abstract class OFormLayoutManagerBase {
   abstract getRouteOfActiveItem(): any[];
   abstract isMainComponent(comp: ILayoutManagerComponent): boolean;
   abstract isTabMode(): boolean;
+  abstract isSplitPaneMode(): boolean;
+  abstract isDialogMode(): boolean;
   abstract setAsActiveFormLayoutManager();
   abstract hasToConfirmExit(data: FormLayoutDetailComponentData, options?: FormLayoutCloseDetailOptions): boolean
   abstract setModifiedState(formAttr: string, modified: boolean, confirmExit: boolean);
@@ -35,5 +37,4 @@ export abstract class OFormLayoutManagerBase {
   abstract getDataToStore(): any;
   abstract getComponentKey(): string;
   abstract closeDetails(detailsKeysData: any[], options?: FormLayoutCloseDetailOptions): void;
-
 }

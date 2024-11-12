@@ -27,6 +27,7 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
+import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -301,7 +302,11 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       index = this.data.findIndex((item: any) => Object.keys(keysValues).every(key => keysValues[key] == item.params[key]));
     }
     if (index >= 0) {
-      let label = this.formLayoutManager.getLabelFromData(data);
+      const oFormLayoutManagerService = this.injector.get(OFormLayoutManagerService);
+      /** In case of the tree, the label shown in the dialog or in the tab is the label of the node that
+       *  is stored in oFormLayoutManagerService.context */
+      const context = oFormLayoutManagerService.context;
+      let label = context?.label || this.formLayoutManager.getLabelFromData(data);
       this.tabGroup.selectedIndex = (index + 1);
       label = label.length ? label : this.formLayoutManager.getLabelFromUrlParams(this.data[index].params);
       this.data[index].label = label;

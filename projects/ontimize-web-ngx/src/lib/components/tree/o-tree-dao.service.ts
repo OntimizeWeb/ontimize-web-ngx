@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
+import { OTreeFlatNode } from '../../types/tree-flat-node.type';
 
-import { OTreeFlatNode } from './o-tree.component';
 
 @Injectable()
 export class OTreeDao {

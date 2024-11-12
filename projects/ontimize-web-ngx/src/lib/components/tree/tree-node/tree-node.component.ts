@@ -7,7 +7,8 @@ import { OntimizeServiceProvider } from '../../../services/factories';
 import { ServiceUtils } from '../../../util/service.utils';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form';
-import { OTreeComponent, OTreeFlatNode } from '../o-tree.component';
+import { OTreeComponent } from '../o-tree.component';
+import { OTreeFlatNode } from '../../../types/tree-flat-node.type';
 
 @Component({
   selector: 'o-tree-node',
@@ -16,15 +17,14 @@ import { OTreeComponent, OTreeFlatNode } from '../o-tree.component';
 })
 export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterViewInit {
 
-
   constructor(
     public injector: Injector,
-    elRef: ElementRef,
+    elementRef: ElementRef,
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
-    @Optional() @Inject(forwardRef(() => OTreeComponent)) public oTree: OTreeComponent,
+    @Optional() @Inject(forwardRef(() => OTreeComponent)) public parentComponent: OTreeComponent,
     @SkipSelf() @Optional() public parentNode: OTreeNodeComponent
   ) {
-    super(injector, elRef, form);
+    super(injector, elementRef, form);
   }
 
   ngOnInit() {

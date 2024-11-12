@@ -31,6 +31,8 @@ import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
 import { OFormLayoutManagerBase } from '../layouts/form-layout/o-form-layout-manager-base.class';
+import { OFormLayoutManagerContext } from '../types/form-layout-manager-context.type';
+import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 
 interface ItemClick {
   getItemData(): any
@@ -392,7 +394,10 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     }
   }
 
-  public viewDetail(item: any): void {
+  public viewDetail(item: any, context?: OFormLayoutManagerContext): void {
+    const formLayoutManagerService = this.injector.get(OFormLayoutManagerService);
+    formLayoutManagerService.context = void 0;
+
     if (this.oFormLayoutDialog) {
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
       return;
@@ -403,6 +408,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       const qParams = Codes.getIsDetailObject();
       const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
       const zone = this.injector.get(NgZone);
+      if (!this.formLayoutManager?.isSplitPaneMode()) {
+        formLayoutManagerService.context = context ;
+      }
       zone.run(() =>
         this.navigateToDetail(route, qParams, relativeTo)
       );
