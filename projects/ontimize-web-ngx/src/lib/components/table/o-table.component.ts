@@ -716,6 +716,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
         this.rowHeight = oTableGlobalConfig.rowHeight;
       };
+
+      if (Util.isDefined(oTableGlobalConfig.showChartsOnDemandOption)) {
+        this.showReportOnDemandOption = oTableGlobalConfig.showChartsOnDemandOption;
+      };
+      if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
+        this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
+      };
     } catch (error) {
       // Do nothing because is optional
     }
