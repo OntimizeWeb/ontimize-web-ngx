@@ -229,7 +229,8 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'disableSelectionFunction: disable-selection-function',
 
   'nonHidableColumns: non-hidable-columns',
-  'readOnly: read-only'
+  'readOnly: read-only',
+  'readOnlyFuncion: read-only-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -365,6 +366,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
+
+  readOnlyFunction: (configuration: any) => true;
 
   protected _oTableOptions: OTableOptions;
 
@@ -2387,7 +2390,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return startView;
   }
 
-  getSortFilterColumn(column: OColumn):  'asc' | 'desc' | '' {
+  getSortFilterColumn(column: OColumn): 'asc' | 'desc' | '' {
     let sortColumn;
     // at first, get state in localstorage
     if (this.state.filterColumns) {
