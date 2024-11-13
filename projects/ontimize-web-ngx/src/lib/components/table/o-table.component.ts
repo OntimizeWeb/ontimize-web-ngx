@@ -1909,7 +1909,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
 
-    if (this.readOnly) { }
+    if (this.readOnly) {
+      return;
+    }
     if (this.oenabled && column.editor
       && (!Codes.isDoubleClickMode(this.detailMode))
       && (Codes.isDoubleClickMode(this.editionMode))) {
@@ -2560,7 +2562,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   insertRecord(recordData: any, sqlTypes?: object): Observable<any> {
     if (this.readOnly) {
-      return;
+      throw new Error(`Insert operation is not allowed because the table is read-only.`)
     }
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
       return undefined;
@@ -2577,7 +2579,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   updateRecord(filter: any, updateData: any, sqlTypes?: object): Observable<any> {
     if (this.readOnly) {
-      return;
+      throw new Error(`Update operation is not allowed because the table is read-only.`)
     }
 
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
@@ -2868,7 +2870,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns detail
    */
   viewDetail(item: any): void {
-    if (!this.checkEnabledActionPermission('detail')) {
+    if (!this.checkEnabledActionPermission('detail') || this.readOnly) {
       return;
     }
     this.destroyActivedTooltips();
@@ -2882,7 +2884,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns detail
    */
   editDetail(item: any): void {
-    if (!this.checkEnabledActionPermission('edit')) {
+    if (!this.checkEnabledActionPermission('edit') || this.readOnly) {
       return;
     }
     super.editDetail(item);
