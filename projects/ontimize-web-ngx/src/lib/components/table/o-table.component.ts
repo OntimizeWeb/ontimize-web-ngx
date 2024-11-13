@@ -2081,7 +2081,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.isDisableCheckbox(item)) {
       return;
     }
-    if (Util.isDefined(item) && !this.isRowSelected(item)) {
+    if (this.isRowSelected(item)) {
+      /**The selected item is cleared if the item changes value*/
+      this.selection.clear(item);
+     }
+    if (Util.isDefined(item)) {
       this.selection.select(item);
     }
   }
@@ -2441,7 +2445,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         const foundItem = this.dataSource.renderedData.find(data =>
           selectedItemKeys.every(key => data[key] === selectedItem[key])
         );
-        if (foundItem && !this.isRowSelected(foundItem)) {
+        if (foundItem) {
           this.setSelected(foundItem);
         }
       });
@@ -2904,8 +2908,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   isRowSelected(row: any): boolean {
-    const keys = Object.keys(row);
-    return !this.isSelectionModeNone() && this.selection.selected.some((element: any) => keys.every(key => row[key] === element[key]));
+    return !this.isSelectionModeNone() && this.selection.isSelected(row);
   }
 
   public getColumnWidthFromState(colDef: OColumn): string {
