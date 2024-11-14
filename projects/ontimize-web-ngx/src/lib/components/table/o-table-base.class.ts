@@ -115,4 +115,6 @@ export abstract class OTableBase {
   abstract columns: string;
   abstract getParentKeysValues();
   abstract filterBuilder: OFilterBuilderComponent;
+  abstract readOnlyFunction: (configuration: any) => boolean;
+  abstract isComponentReadOnly(selector: string, attr: string): boolean;
 }

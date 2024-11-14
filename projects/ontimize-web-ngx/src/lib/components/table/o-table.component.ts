@@ -230,7 +230,7 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'nonHidableColumns: non-hidable-columns',
   'readOnly: read-only',
-  'readOnlyFuncion: read-only-function'
+  'readOnlyConfiguration: read-only-configuration'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -367,8 +367,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
 
-  readOnlyFunction: (configuration: any) => true;
+  readOnlyFunction: (configuration: any) => boolean;
+  readOnlyConfiguration: any;
 
+  isComponentReadOnly(selector: string, attr: string) {
+    return this.readOnlyConfiguration && this.readOnlyConfiguration[selector] && this.readOnlyConfiguration[selector][attr];
+  }
   protected _oTableOptions: OTableOptions;
 
   get oTableOptions(): OTableOptions {

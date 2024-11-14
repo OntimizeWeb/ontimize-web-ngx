@@ -59,7 +59,13 @@ export class OTableButtonComponent implements OTableButton, OnInit {
 
   public innerOnClick(event): void {
     event.stopPropagation();
-    this.onClick.emit();
+    if (!this.isReadOnly()) {
+      this.onClick.emit();
+    }
+  }
+
+  isReadOnly(): boolean {
+    return this._table.isComponentReadOnly('o-table-button', this.oattr)
   }
 
   public isIconPositionLeft(): boolean {
