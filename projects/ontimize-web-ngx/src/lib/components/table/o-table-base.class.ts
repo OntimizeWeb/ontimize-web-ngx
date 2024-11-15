@@ -115,4 +115,7 @@ export abstract class OTableBase {
   abstract columns: string;
   abstract getParentKeysValues();
   abstract filterBuilder: OFilterBuilderComponent;
+  abstract setSelectedByKeys(keyValues: Array<any>): void;
+  abstract setSelectedByMultipleKeys(keyValues: Array<Object>): void;
+  abstract setSelectedByRowIds(rowIds: Array<number>): void;
 }

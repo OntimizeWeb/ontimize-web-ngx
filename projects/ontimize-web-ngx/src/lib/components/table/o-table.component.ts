@@ -2084,10 +2084,30 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.isRowSelected(item)) {
       /**The selected item is cleared if the item changes value*/
       this.selection.clear(item);
-     }
+    }
     if (Util.isDefined(item)) {
       this.selection.select(item);
     }
+  }
+
+  setSelectedByKeys(keyValues: Array<any>) {
+    const rowsToSelect = this.getDataArray().filter(row => {
+      return keyValues.findIndex(keyValue => row[this.keys] === keyValue) > -1;
+    });
+    this.selection.select(...rowsToSelect);
+  }
+
+  setSelectedByMultipleKeys(keyValues: Array<Object>) {
+    const rowsToSelect = this.getDataArray().filter(row => {
+      return keyValues.filter(keyValue =>
+        Object.keys(keyValue).every(key => keyValue[key] === row[key])
+      );
+    });
+    rowsToSelect.every(rowToSelect => this.selection.select(rowToSelect));
+  }
+
+  setSelectedByRowIds(rowIds: Array<number>) {
+    rowIds.forEach(rowId => this.selectedRow(this.getDataArray()[rowId]));
   }
 
   get showDeleteButton(): boolean {
@@ -2378,7 +2398,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return startView;
   }
 
-  getSortFilterColumn(column: OColumn):  'asc' | 'desc' | '' {
+  getSortFilterColumn(column: OColumn): 'asc' | 'desc' | '' {
     let sortColumn;
     // at first, get state in localstorage
     if (this.state.filterColumns) {
