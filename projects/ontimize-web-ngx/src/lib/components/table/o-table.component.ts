@@ -230,7 +230,8 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'nonHidableColumns: non-hidable-columns',
   'readOnly: read-only',
-  'readOnlyConfiguration: read-only-configuration'
+  'readOnlyConfiguration: read-only-configuration',
+  'showNotificationOfReadOnly: show-notification-of-read-only'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -363,6 +364,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   showResetWidthOption: boolean = true;
   @BooleanInputConverter()
   readOnly: boolean = false;
+  @BooleanInputConverter()
+  showNotificationOfReadOnly: boolean = false;
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
@@ -1737,6 +1740,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   add() {
     if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
       return;
     }
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
@@ -1751,6 +1757,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   remove(clearSelectedItems: boolean = false) {
     if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
       return;
     }
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_DELETE)) {
@@ -1866,6 +1875,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
+    if (this.readOnly && this.showNotificationOfReadOnly) {
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+    }
+
     if (!this.oenabled || this.readOnly) {
       return;
     }
@@ -1917,6 +1930,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.clickPrevent = true;
 
     if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
       return;
     }
     if (this.oenabled && column.editor
@@ -2569,6 +2585,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   insertRecord(recordData: any, sqlTypes?: object): Observable<any> {
     if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
       throw new Error(`Insert operation is not allowed because the table is read-only.`)
     }
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
@@ -2586,6 +2605,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   updateRecord(filter: any, updateData: any, sqlTypes?: object): Observable<any> {
     if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
       throw new Error(`Update operation is not allowed because the table is read-only.`)
     }
 
@@ -2877,6 +2899,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns detail
    */
   viewDetail(item: any): void {
+    if (this.readOnly && this.showNotificationOfReadOnly) {
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+    }
+
     if (!this.checkEnabledActionPermission('detail') || this.readOnly) {
       return;
     }
@@ -2891,6 +2917,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns detail
    */
   editDetail(item: any): void {
+    if (this.readOnly && this.showNotificationOfReadOnly) {
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+    }
+
     if (!this.checkEnabledActionPermission('edit') || this.readOnly) {
       return;
     }
@@ -3339,5 +3369,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getService() {
     return this.dataService;
+  }
+
+  getSnackService() {
+    return this.snackBarService;
   }
 }
