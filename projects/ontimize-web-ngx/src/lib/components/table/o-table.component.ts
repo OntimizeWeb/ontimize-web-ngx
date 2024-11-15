@@ -2099,9 +2099,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   setSelectedByMultipleKeys(keyValues: Array<Object>) {
     const rowsToSelect = this.getDataArray().filter(row => {
-      return keyValues.filter(keyValue =>
+      return keyValues.findIndex(keyValue =>
         Object.keys(keyValue).every(key => keyValue[key] === row[key])
-      );
+      )>-1;
     });
     rowsToSelect.every(rowToSelect => this.selection.select(rowToSelect));
   }
