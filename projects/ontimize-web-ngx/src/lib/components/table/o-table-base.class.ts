@@ -122,4 +122,7 @@ export abstract class OTableBase {
   abstract readOnlyFunction: (configuration: any) => boolean;
   abstract isComponentReadOnly(selector: string, attr: string): boolean;
   abstract getSnackService(): SnackBarService;
+  abstract setSelectedByKeys(keyValues: Array<any>): void;
+  abstract setSelectedByMultipleKeys(keyValues: Array<Object>): void;
+  abstract setSelectedByRowIds(rowIds: Array<number>): void;
 }
