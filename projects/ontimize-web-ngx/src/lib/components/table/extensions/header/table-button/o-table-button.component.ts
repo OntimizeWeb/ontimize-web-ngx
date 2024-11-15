@@ -61,10 +61,9 @@ export class OTableButtonComponent implements OTableButton, OnInit {
     event.stopPropagation();
     if (!this.isReadOnly()) {
       this.onClick.emit();
-    } else {
-      if (this._table.showNotificationOfReadOnly) {
+    } else if (this._table.showNotificationOfReadOnly) {
         this.table.getSnackService().open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
-      }
+
     }
   }
 
