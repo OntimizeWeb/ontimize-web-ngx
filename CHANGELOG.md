@@ -3,7 +3,8 @@
 * **o-tree**: Now it works with `o-form-layout-manager` ([c6c24a8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c6c24a8)) Closes [#1564](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1564)
 * **o-table**:
   * Added new input `showChartsOnDemandOption` and `showReportOnDemandOption` in injection token `O_TABLE_GLOBAL_CONFIG` ([40c08bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40c08bd)) Closes [#1731](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1731)
-  * New state `read-only` ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1732](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1732)
+  * New methods `setSelectedByKeys`, `setSelectedByMultipleKeys` and `setSelectedByRowIds` ([26c88c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26c88c7)) Closes [#1737](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1737)
+  * New state `read-only` ([21cd395](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/21cd395)) Closes [#1732](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1732)
 
 ### Bug fixes
 * **o-tree**: Fixed that o-tree with nodes with different service does not load data ([d3637ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d3637ec)) Closes [#1723](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1723)
