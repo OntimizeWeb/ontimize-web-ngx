@@ -1,3 +1,17 @@
+## 15.3.0 (2024-11-18)
+### Features
+* **o-tree**: Now it works with `o-form-layout-manager` ([c6c24a8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c6c24a8)) Closes [#1564](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1564)
+* **o-table**:
+  * Added new input `showChartsOnDemandOption` and `showReportOnDemandOption` in injection token `O_TABLE_GLOBAL_CONFIG` ([40c08bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40c08bd)) Closes [#1731](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1731)
+  * New state `read-only` ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1732](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1732)
+
+### Bug fixes
+* **o-tree**: Fixed that o-tree with nodes with different service does not load data ([d3637ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d3637ec)) Closes [#1723](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1723)
+* **o-table**:
+  * Fixed that it is not possible to search by value of o-table-column type='date' in o-table pageable ([f9245ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f9245ea)) Closes [#1723](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1723)
+  * Fixed that the method `selectedRow` method does not work after refresh the otable ([26c88c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26c88c7)) Closes [#1737](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1737)
+
+
 ## 15.2.2 (2024-10-24)
 ### Features
 * **o-table**: Modified export dialog that allows to select the columns, file name and orientation ([c934baa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c934baa)) Closes [#1715](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1715)
