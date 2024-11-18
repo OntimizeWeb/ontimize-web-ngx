@@ -4,7 +4,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
-import { SnackBarService } from './../../services/snackbar.service';
+import type { SnackBarService } from './../../services/snackbar.service';
 
 import type { QuickFilterFunction } from "../../types/quick-filter-function.type";
 import type { OColumn } from "./column/o-column.class";
