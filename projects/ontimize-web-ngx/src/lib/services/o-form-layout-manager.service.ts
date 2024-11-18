@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 
-import type { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
+import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutManagerContext } from '../types/form-layout-manager-context.type';
 
 @Injectable({

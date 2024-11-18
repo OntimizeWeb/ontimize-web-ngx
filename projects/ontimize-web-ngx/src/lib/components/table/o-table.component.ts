@@ -374,7 +374,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   readOnlyConfiguration: any;
 
   isComponentReadOnly(selector: string, attr: string) {
-    return this.readOnlyConfiguration?.[selector]?.[attr];
+    return  this.readOnlyConfiguration?.[selector] && this.readOnlyConfiguration?.[selector][attr];
   }
   protected _oTableOptions: OTableOptions;
 
