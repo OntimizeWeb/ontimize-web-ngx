@@ -228,7 +228,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
 
   'disableSelectionFunction: disable-selection-function',
 
-  'nonHidableColumns: non-hidable-columns'
+  'nonHidableColumns: non-hidable-columns',
+  'readOnly: read-only',
+  'readOnlyConfiguration: read-only-configuration',
+  'showNotificationOfReadOnly: show-notification-of-read-only'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -359,10 +362,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   filterColumnActiveByDefault: boolean = true;
   @BooleanInputConverter()
   showResetWidthOption: boolean = true;
+  @BooleanInputConverter()
+  readOnly: boolean = false;
+  @BooleanInputConverter()
+  showNotificationOfReadOnly: boolean = false;
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
 
+  readOnlyFunction: (configuration: any) => boolean;
+  readOnlyConfiguration: any;
+
+  isComponentReadOnly(selector: string, attr: string) {
+    return  this.readOnlyConfiguration?.[selector] && this.readOnlyConfiguration?.[selector][attr];
+  }
   protected _oTableOptions: OTableOptions;
 
   get oTableOptions(): OTableOptions {
@@ -1726,6 +1739,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Triggers navigation to new item insertion
    */
   add() {
+    if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
+      return;
+    }
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
       return;
     }
@@ -1737,6 +1756,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @param [clearSelectedItems]
    */
   remove(clearSelectedItems: boolean = false) {
+    if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
+      return;
+    }
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_DELETE)) {
       return;
     }
@@ -1833,9 +1858,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   handleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, event: MouseEvent) {
+
     this.clickTimer = setTimeout(() => {
       if (!this.clickPrevent) {
-        if (this.oenabled && column.editor
+        if (this.oenabled && !this.readOnly && column.editor
           && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
           && (this.editionMode === Codes.EDITION_MODE_CLICK)) {
           this.activateColumnEdition(column, row, cellRef);
@@ -1849,7 +1875,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
-    if (!this.oenabled) {
+    if (this.readOnly && this.showNotificationOfReadOnly) {
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+    }
+
+    if (!this.oenabled || this.readOnly) {
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
@@ -1899,6 +1929,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     clearTimeout(this.clickTimer);
     this.clickPrevent = true;
 
+    if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
+      return;
+    }
     if (this.oenabled && column.editor
       && (!Codes.isDoubleClickMode(this.detailMode))
       && (Codes.isDoubleClickMode(this.editionMode))) {
@@ -2572,6 +2608,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   insertRecord(recordData: any, sqlTypes?: object): Observable<any> {
+    if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
+      throw new Error(`Insert operation is not allowed because the table is read-only.`)
+    }
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_INSERT)) {
       return undefined;
     }
@@ -2586,6 +2628,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateRecord(filter: any, updateData: any, sqlTypes?: object): Observable<any> {
+    if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
+      throw new Error(`Update operation is not allowed because the table is read-only.`)
+    }
+
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_UPDATE)) {
       return of(this.dataSource.data);
     }
@@ -2874,7 +2923,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns detail
    */
   viewDetail(item: any): void {
-    if (!this.checkEnabledActionPermission('detail')) {
+    if (this.readOnly && this.showNotificationOfReadOnly) {
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+    }
+
+    if (!this.checkEnabledActionPermission('detail') || this.readOnly) {
       return;
     }
     this.destroyActivedTooltips();
@@ -2888,7 +2941,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @returns detail
    */
   editDetail(item: any): void {
-    if (!this.checkEnabledActionPermission('edit')) {
+    if (this.readOnly && this.showNotificationOfReadOnly) {
+      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+    }
+
+    if (!this.checkEnabledActionPermission('edit') || this.readOnly) {
       return;
     }
     super.editDetail(item);
@@ -3335,5 +3392,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getService() {
     return this.dataService;
+  }
+
+  getSnackService() {
+    return this.snackBarService;
   }
 }
