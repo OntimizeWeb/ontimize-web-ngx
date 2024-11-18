@@ -1006,16 +1006,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   compareRow(): ((o1: any, o2: any) => boolean) | undefined {
-    return (o1: any, o2: any) => {
-      let isEqual = false;
-      this.keysArray.forEach(key => {
-        if (o1[key] === o2[key]) {
-          isEqual = true;
-        };
-      });
-
-      return isEqual;
-    };
+    return (o1: any, o2: any) =>  this.keysArray.every(key => o1[key] === o2[key]);
   }
 }
 
