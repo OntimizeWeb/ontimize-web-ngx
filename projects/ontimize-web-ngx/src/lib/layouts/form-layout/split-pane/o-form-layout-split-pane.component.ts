@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  Renderer2,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResizeEvent } from 'angular-resizable-element';
 import { BehaviorSubject, Observable } from 'rxjs';

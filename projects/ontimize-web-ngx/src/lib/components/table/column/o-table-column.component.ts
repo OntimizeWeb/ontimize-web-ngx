@@ -123,7 +123,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _orderable: boolean;
   protected _resizable: boolean;
-  protected _searchable: boolean = true;
+  protected _searchable: boolean;
   protected _groupable: boolean;
   @BooleanInputConverter()
   public editable: boolean = false;
