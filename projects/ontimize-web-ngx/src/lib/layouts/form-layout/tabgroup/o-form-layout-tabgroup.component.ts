@@ -61,7 +61,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public showLoading = new BehaviorSubject<boolean>(false);
   @BooleanInputConverter()
   public stretchTabs: boolean = false;
-  public processingStateTab = false;
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
