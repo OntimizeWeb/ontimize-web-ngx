@@ -248,7 +248,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
 
   protected getSortState() {
     const sortColumns = [];
-    this.component.sort.getSortColumns().forEach(sortData => {
+    this.component.sort?.getSortColumns().forEach(sortData => {
       sortColumns.push(sortData.id + Codes.COLUMNS_ALIAS_SEPARATOR + sortData.direction);
     });
     return {
