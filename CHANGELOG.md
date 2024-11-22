@@ -1,3 +1,10 @@
+## 15.3.1 (2024-11-21)
+### Bug fixes
+* **o-table**:
+  * Fixed the following error being displayed in the console `Error TypeError: Cannot read properties of undefined (reading 'getSortColumns')` ([6735c84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6735c84)) Closes [#1752](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1752)
+  * Fixed the input `showChartsOnDemandOption` does not work in injection token `O_TABLE_GLOBAL_CONFIG` ([cc95f04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc95f04)) Closes [#1749](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1749)
+* **o-form-layout-tabgroup**: Fixed that pressing f5 did not load a component that would have been created by code ([6639d21](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6639d21)) Closes [#1750](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1750)
+
 ## 15.3.0 (2024-11-18)
 ### Features
 * **o-tree**: Now it works with `o-form-layout-manager` ([c6c24a8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c6c24a8)) Closes [#1564](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1564)

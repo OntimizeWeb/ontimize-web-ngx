@@ -6,6 +6,7 @@ import {
   forwardRef,
   Inject,
   Injector,
+  NgZone,
   OnDestroy,
   QueryList,
   ViewChild,
@@ -14,20 +15,20 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, concatMap, delay, from, of, Subject, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
+import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
 import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../../types/form-layout-detail-component-data.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
-import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP = [
   'title',
@@ -60,7 +61,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   public showLoading = new BehaviorSubject<boolean>(false);
   @BooleanInputConverter()
   public stretchTabs: boolean = false;
-
   @ViewChild('tabGroup') tabGroup: MatTabGroup;
   @ViewChildren(OFormLayoutManagerContentDirective) tabsDirectives: QueryList<OFormLayoutManagerContentDirective>;
 
@@ -76,6 +76,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
   public updateTabComponentsState = new Subject<any>();
   public tabsModificationsCache: any[] = [];
+  actRoute: ActivatedRoute;
 
   constructor(
     protected injector: Injector,
@@ -85,6 +86,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
   ) {
     this.dialogService = injector.get(DialogService);
     this.router = this.injector.get(Router);
+    this.actRoute = this.injector.get(ActivatedRoute);
   }
 
   get state(): OFormLayoutManagerComponentStateClass {
@@ -352,39 +354,25 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
 
     if (this.state.tabsData.length >= 1 && (this.state.tabsData[0].url || '').length > 0) {
       this.showLoading.next(true);
-      const extras = {};
-      extras[Codes.QUERY_PARAMS] = this.state.tabsData[0].queryParams;
-      extras[Codes.QUERY_PARAMS][Codes.INSERTION_MODE] = `${this.state.tabsData[0].insertionMode}`
-      if (this.formLayoutManager) {
-        this.formLayoutManager.setAsActiveFormLayoutManager();
-      }
-      // Triggering first tab navigation
-      this.router.navigate([this.state.tabsData[0].url], extras).then(() => {
-        if (this.data[0] && this.data[0].component && this.state.tabsData.length > 1) {
-          // Triggering rest of the tabs creation
-          setTimeout(() => {
-            this.createTabsFromState();
-          }, 0);
-        } else {
-          this.showLoading.next(false);
-        }
-      });
-    }
-  }
 
-  protected createTabsFromState() {
-    const tabComponent = this.data[0].component;
-    // skipping first element (created in initializeComponentState)
-    const stateTabsData = this.state.tabsData.slice(1);
-    if (stateTabsData.length > 0) {
-      stateTabsData.forEach((tabData: any) => {
-        setTimeout(() => {
-          const newDetailData = this.createDetailComponent(tabComponent, tabData);
-          this.data.push(newDetailData);
-        }, 0);
+      const zone = this.injector.get(NgZone);
+      from(this.state.tabsData).pipe(
+        concatMap(tab => of(tab).pipe(delay(100)))
+      ).subscribe((tab) => {
+        const extras = {}
+        extras['relativeTo'] = this.actRoute;
+        extras[Codes.QUERY_PARAMS] = tab.queryParams;
+        extras[Codes.QUERY_PARAMS][Codes.INSERTION_MODE] = tab.insertionMode;
+
+        if (this.formLayoutManager) {
+          this.formLayoutManager.setAsActiveFormLayoutManager();
+        }
+        zone.run(() =>
+          this.router.navigate([tab.url], extras)
+            .then(() => this.showLoading.next(false))
+            .catch(() => this.showLoading.next(true))
+        )
       });
-    } else {
-      this.showLoading.next(false);
     }
   }
 
