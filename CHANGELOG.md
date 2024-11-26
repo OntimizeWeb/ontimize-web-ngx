@@ -1,3 +1,8 @@
+## 15.3.2 (2024-11-26)
+### Bug fixes
+* **o-table**: Fixed pageSize='' being saved in localstorage ([643108c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/643108c)) Closes [#1758](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1758)
+* **o-radio**: Fixed that the o-radio does not mark the value when changing tabs in a `o-form-layout-manager`([88f7c6c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88f7c6c)) Closes [#1760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1760)
+
 ## 15.3.1 (2024-11-21)
 ### Bug fixes
 * **o-table**:
