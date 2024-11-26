@@ -1,23 +1,13 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  Optional,
-  ViewEncapsulation
-} from '@angular/core';
-import { MatRadioChange } from '@angular/material/radio';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatRadioChange, MatRadioGroup } from '@angular/material/radio';
 
+import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
-import {
-  OFormServiceComponent
-} from '../o-form-service-component.class';
+import { OFormServiceComponent } from '../o-form-service-component.class';
 
 export const DEFAULT_INPUTS_O_RADIO = [
   'layout',
@@ -39,7 +29,7 @@ export const DEFAULT_INPUTS_O_RADIO = [
     '[class.o-radio]': 'true'
   }
 })
-export class ORadioComponent extends OFormServiceComponent implements AfterViewInit {
+export class ORadioComponent extends OFormServiceComponent implements AfterViewInit, OnDestroy {
 
   /* Inputs */
   public layout: 'row' | 'column' = 'column';
@@ -48,6 +38,10 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   /* End inputs*/
 
   value: OFormValue;
+  formLayoutManager: OFormLayoutManagerComponent;
+  tabsSubscriptions: any;
+  @ViewChild(MatRadioGroup) mrg: MatRadioGroup;
+  formLayoutManagerTabIndex: number;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -55,6 +49,13 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
     injector: Injector
   ) {
     super(form, elRef, injector);
+
+    try {
+      this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
+
+    } catch (e) {
+      // no parent form layout manager
+    }
   }
 
   ngAfterViewInit(): void {
@@ -62,7 +63,22 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
     if (this.queryOnInit) {
       this.queryData();
     }
+    this.updateFormLayoutManagerState();
   }
+
+  updateFormLayoutManagerState() {
+    if (this.formLayoutManager && this.formLayoutManager.storeState && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
+      if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
+        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+      }
+      this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
+        if (arg.index === this.formLayoutManagerTabIndex) {
+          this.mrg.value = this.getValue();
+        }
+      });
+    }
+  }
+
 
   onMatRadioGroupChange(e: MatRadioChange): void {
     const newValue = e.value;
@@ -92,6 +108,15 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
       }
     }
     return '';
+  }
+
+  public ngOnDestroy(): void {
+    super.destroy();
+
+    if (this.tabsSubscriptions) {
+      this.tabsSubscriptions.unsubscribe();
+    }
+
   }
 
 }
