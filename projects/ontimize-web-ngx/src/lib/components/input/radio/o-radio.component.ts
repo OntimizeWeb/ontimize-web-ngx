@@ -69,10 +69,11 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   updateFormLayoutManagerState() {
     if (this.formLayoutManager && this.formLayoutManager.storeState && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
       if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
-        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+        const oTabGroupData = this.formLayoutManager.oTabGroup.data
+        this.formLayoutManagerTabIndex = oTabGroupData[oTabGroupData.length-1].id
       }
       this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
-        if (arg.index === this.formLayoutManagerTabIndex) {
+        if (arg.data.id === this.formLayoutManagerTabIndex) {
           this.mrg.value = this.getValue();
         }
       });
