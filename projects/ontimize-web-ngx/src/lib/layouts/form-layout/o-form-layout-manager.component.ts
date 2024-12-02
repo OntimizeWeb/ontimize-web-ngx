@@ -427,6 +427,12 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
       rendererSubject: new BehaviorSubject(false)
     };
+    /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating. */
+    newDetailComp.rendererSubject.subscribe(renderer => {
+      if (renderer) {
+        this.navigationService.isNavigating = !renderer;
+      }
+    });
 
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
@@ -564,9 +570,11 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     if (!this.isMainComponent(comp)) {
       const activeRoute = this.getRouteOfActiveItem();
+
       if (activeRoute && activeRoute.length > 0) {
         result.push(...activeRoute);
       }
+
     }
 
     return result;
