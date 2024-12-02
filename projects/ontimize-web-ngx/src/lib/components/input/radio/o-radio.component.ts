@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatRadioChange, MatRadioGroup } from '@angular/material/radio';
 
-import { OFormLayoutManagerComponent } from '../../../layouts/form-layout/o-form-layout-manager.component';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
@@ -38,7 +37,6 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   /* End inputs*/
 
   value: OFormValue;
-  formLayoutManager: OFormLayoutManagerComponent;
   tabsSubscriptions: any;
   @ViewChild(MatRadioGroup) mrg: MatRadioGroup;
   formLayoutManagerTabIndex: number;
@@ -50,12 +48,12 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   ) {
     super(form, elRef, injector);
 
-    try {
-      this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
+    // try {
+    //   this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
 
-    } catch (e) {
-      // no parent form layout manager
-    }
+    // } catch (e) {
+    //   // no parent form layout manager
+    // }
   }
 
   ngAfterViewInit(): void {
@@ -67,12 +65,22 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   }
 
   updateFormLayoutManagerState() {
-    if (this.formLayoutManager && this.formLayoutManager.storeState && this.formLayoutManager.isTabMode() && this.formLayoutManager.oTabGroup) {
+    const formLayoutManager = this.form.getFormManager();
+
+    // console.log(formLayoutManager);
+    if (formLayoutManager && formLayoutManager.storeState && formLayoutManager.isTabMode() && formLayoutManager.oTabGroup) {
       if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
-        this.formLayoutManagerTabIndex = this.formLayoutManager.oTabGroup.data.length;
+        const tabGroupData = formLayoutManager.oTabGroup.data;
+
+        const keysValues = this.form.getFormNavigation().getCurrentKeysValues();
+        const data = tabGroupData.find(item =>
+          Object.entries(keysValues).every(
+            ([key, value]) => item.params[key] == value
+          ));
+        this.formLayoutManagerTabIndex = data?.id;
       }
-      this.tabsSubscriptions = this.formLayoutManager.onSelectedTabChange.subscribe((arg) => {
-        if (arg.index === this.formLayoutManagerTabIndex) {
+      this.tabsSubscriptions = formLayoutManager.onSelectedTabChange.subscribe((arg) => {
+        if (arg.data.id === this.formLayoutManagerTabIndex) {
           this.mrg.value = this.getValue();
         }
       });
