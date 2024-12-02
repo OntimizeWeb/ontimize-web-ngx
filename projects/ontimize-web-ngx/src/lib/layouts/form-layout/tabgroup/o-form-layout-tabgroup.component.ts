@@ -190,6 +190,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         addNewComp = addNewComp && someDiffParams;
       });
     }
+
     if (addNewComp) {
       this.data.push(compData);
     } else {
@@ -207,6 +208,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
         compIndex = i;
       }
     });
+
     if (compIndex >= 0) {
       this.tabGroup.selectedIndex = (compIndex + 1);
     }
@@ -232,6 +234,7 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
       });
     }
     this.previousSelectedIndex = this.tabGroup.selectedIndex;
+
   }
 
   closeTab(index: number, options?: FormLayoutCloseDetailOptions) {
@@ -376,19 +379,21 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
   }
 
-  protected createDetailComponent(component: any, paramsObj: any) {
-    const newDetailComp: FormLayoutDetailComponentData = {
-      params: paramsObj.params,
-      queryParams: paramsObj.queryParams,
-      urlSegments: paramsObj.urlSegments,
-      component: component,
-      url: paramsObj.url,
-      id: Util.randomNumber().toString(),
-      label: paramsObj.label,
-      innerFormsInfo: {}
-    };
-    return newDetailComp;
-  }
+  // protected createDetailComponent(component: any, paramsObj: any) {
+  //   const newDetailComp: FormLayoutDetailComponentData = {
+  //     params: paramsObj.params,
+  //     queryParams: paramsObj.queryParams,
+  //     urlSegments: paramsObj.urlSegments,
+  //     component: component,
+  //     url: paramsObj.url,
+  //     id: Util.randomNumber().toString(),
+  //     label: paramsObj.label,
+  //     innerFormsInfo: {},
+  //     rendered: false
+
+  //   };
+  //   return newDetailComp;
+  // }
 
   getParams(): any {
     return Util.isDefined(this.data[0]) ? this.data[0].params : undefined;

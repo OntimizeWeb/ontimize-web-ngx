@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
@@ -423,7 +423,9 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       id: Util.randomNumber().toString(),
       label: context?.label || '',
       innerFormsInfo: {},
-      insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'
+      rendered: false,
+      insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
+      rendererSubject: new BehaviorSubject(false)
     };
 
     if (this.isDialogMode()) {
@@ -488,6 +490,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       } else {
         this.reloadMainComponents();
       }
+    });
+    this.dialogRef.afterOpened().subscribe(() => {
+      detailComp.rendered = true;
+      detailComp.rendererSubject.next(true);
     });
   }
 
@@ -562,6 +568,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
         result.push(...activeRoute);
       }
     }
+
     return result;
   }
 
