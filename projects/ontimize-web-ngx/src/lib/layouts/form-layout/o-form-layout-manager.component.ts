@@ -428,7 +428,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       rendererSubject: new BehaviorSubject(false)
     };
     /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating. */
-    newDetailComp.rendererSubject.subscribe(renderer => {
+    newDetailComp.rendererSubject.subscribe((renderer:boolean) => {
       if (renderer) {
         this.navigationService.isNavigating = !renderer;
       }
