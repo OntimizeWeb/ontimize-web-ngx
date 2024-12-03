@@ -47,13 +47,6 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
     injector: Injector
   ) {
     super(form, elRef, injector);
-
-    // try {
-    //   this.formLayoutManager = this.injector.get(OFormLayoutManagerComponent);
-
-    // } catch (e) {
-    //   // no parent form layout manager
-    // }
   }
 
   ngAfterViewInit(): void {
@@ -67,7 +60,6 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   updateFormLayoutManagerState() {
     const formLayoutManager = this.form.getFormManager();
 
-    // console.log(formLayoutManager);
     if (formLayoutManager && formLayoutManager.storeState && formLayoutManager.isTabMode() && formLayoutManager.oTabGroup) {
       if (!Util.isDefined(this.formLayoutManagerTabIndex)) {
         const tabGroupData = formLayoutManager.oTabGroup.data;
