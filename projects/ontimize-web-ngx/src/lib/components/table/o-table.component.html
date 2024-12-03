@@ -54,7 +54,7 @@
   </mat-paginator>
 
   <!--LOADING-->
-  <div #spinnerContainer *ngIf="showLoading | async" fxLayout="column" fxLayoutAlign="center center"
+  <div #spinnerContainer *ngIf="showLoading | async" fxLayout="column" fxLayoutAlign="center center" [ngStyle]="{'top.px': headerHeight}"
     class="spinner-container" [class.spinner-container-scrollable]="loadingScroll | async">
     <o-table-skeleton></o-table-skeleton>
   </div>
