@@ -114,9 +114,9 @@ export class NavigationService implements ILocalStorageComponent {
 
   public navigationEvents$: ReplaySubject<Array<ONavigationItem>> = new ReplaySubject<Array<ONavigationItem>>(1);
 
-  private _titleEmitter: EventEmitter<any> = new EventEmitter();
-  private _visibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
-  private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
+  private readonly _titleEmitter: EventEmitter<any> = new EventEmitter();
+  private readonly _visibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
+  private readonly _sidenavEmitter: EventEmitter<any> = new EventEmitter();
 
 
   protected isNavigationSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);

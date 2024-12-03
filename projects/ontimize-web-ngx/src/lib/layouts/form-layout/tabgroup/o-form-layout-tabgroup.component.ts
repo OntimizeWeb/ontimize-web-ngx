@@ -379,22 +379,6 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     }
   }
 
-  // protected createDetailComponent(component: any, paramsObj: any) {
-  //   const newDetailComp: FormLayoutDetailComponentData = {
-  //     params: paramsObj.params,
-  //     queryParams: paramsObj.queryParams,
-  //     urlSegments: paramsObj.urlSegments,
-  //     component: component,
-  //     url: paramsObj.url,
-  //     id: Util.randomNumber().toString(),
-  //     label: paramsObj.label,
-  //     innerFormsInfo: {},
-  //     rendered: false
-
-  //   };
-  //   return newDetailComp;
-  // }
-
   getParams(): any {
     return Util.isDefined(this.data[0]) ? this.data[0].params : undefined;
   }
