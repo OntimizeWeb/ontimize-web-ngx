@@ -15,6 +15,7 @@ export abstract class OFormLayoutManagerBase {
   parentFormLayoutManager: OFormLayoutManagerBase;
   markForUpdate: boolean;
   navigationService: NavigationService;
+  storeState: boolean;
   public oTabGroup: OFormLayoutManagerMode;
   abstract get ignoreCanDeactivate(): boolean;
   abstract getRouteForComponent(comp: ILayoutManagerComponent): any[];
