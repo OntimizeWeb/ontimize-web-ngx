@@ -2896,6 +2896,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return height;
   }
 
+  get toolBarHeight() {
+    let height = 0;
+
+    if (this.tableToolbarEl && this.tableToolbarEl.nativeElement) {
+      height += this.tableToolbarEl.nativeElement.offsetHeight;
+    }
+    return height;
+  }
+
   isDetailMode(): boolean {
     return this.detailMode !== Codes.DETAIL_MODE_NONE;
   }
