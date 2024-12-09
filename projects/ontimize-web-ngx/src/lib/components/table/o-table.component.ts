@@ -2887,10 +2887,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   get headerHeight() {
     let height = 0;
-    if (this.tableHeaderEl && this.tableHeaderEl.nativeElement) {
+    if (this.tableHeaderEl?.nativeElement) {
       height += this.tableHeaderEl.nativeElement.offsetHeight;
     }
-    if (this.tableToolbarEl && this.tableToolbarEl.nativeElement) {
+    if (this.tableToolbarEl?.nativeElement) {
       height += this.tableToolbarEl.nativeElement.offsetHeight;
     }
     return height;
@@ -2899,7 +2899,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   get toolBarHeight() {
     let height = 0;
 
-    if (this.tableToolbarEl && this.tableToolbarEl.nativeElement) {
+    if (this.tableToolbarEl?.nativeElement) {
       height += this.tableToolbarEl.nativeElement.offsetHeight;
     }
     return height;
