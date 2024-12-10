@@ -57,10 +57,13 @@ export class OntimizeEEPermissionsService extends OntimizeBasePermissionsService
         if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isDefined(res.data)) {
           const response = res.data;
           if ((response.length === 1) && Util.isObject(response[0])) {
+            const rawPermissions = response[0][OntimizeEEPermissionsService.PERMISSIONS_KEY];
             try {
-              permissions = JSON.parse(response[0][OntimizeEEPermissionsService.PERMISSIONS_KEY]);
+              permissions = JSON.parse(rawPermissions);
             } catch (e) {
-              console.warn('[OntimizeEEPermissionsService: permissions parsing failed]');
+              if (Util.isDefined(rawPermissions)) {
+                console.warn('[OntimizeEEPermissionsService: permissions parsing failed]');
+              }
             }
           }
         }
