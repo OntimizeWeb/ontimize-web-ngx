@@ -4,6 +4,8 @@ import { ILayoutManagerComponent } from '../../interfaces/layout-manager-compone
 import { OFormLayoutManagerComponentStateClass } from '../../services/state/o-form-layout-manager-component-state.class';
 import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../types/form-layout-detail-component-data.type';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
+import { NavigationService } from '../../services/navigation.service';
+
 
 export abstract class OFormLayoutManagerBase {
   public onTriggerUpdate: EventEmitter<any>;
@@ -12,6 +14,7 @@ export abstract class OFormLayoutManagerBase {
   state: OFormLayoutManagerComponentStateClass;
   parentFormLayoutManager: OFormLayoutManagerBase;
   markForUpdate: boolean;
+  navigationService: NavigationService;
   storeState: boolean;
   public oTabGroup: OFormLayoutManagerMode;
   abstract get ignoreCanDeactivate(): boolean;
