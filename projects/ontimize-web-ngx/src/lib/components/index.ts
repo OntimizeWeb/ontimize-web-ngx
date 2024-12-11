@@ -1,5 +1,6 @@
 export * from './app-header/o-app-header.component';
 export * from './app-header/o-app-header.module';
+export * from './app-header/o-app-header-base.class';
 export * from './app-sidenav/index';
 export * from './bar-menu/index';
 export * from './breadcrumb/o-breadcrumb.component';
@@ -40,3 +41,5 @@ export * from './expandable-container/o-expandable-container.component';
 export * from './expandable-container/o-expandable-container.module';
 export * from './tree/index';
 export * from './o-skeleton.component';
+export * from './user-info/o-user-info-base.class';
+

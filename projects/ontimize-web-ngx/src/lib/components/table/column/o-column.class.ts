@@ -103,7 +103,7 @@ export class OColumn {
       this.className = 'o-column-' + (this.type) + ' ';
     }
 
-    if (Util.isDefined(column.getSQLType)) {
+    if (Util.isDefined(column.type)) {
       this.sqlType = column.getSQLType();
     }
 
