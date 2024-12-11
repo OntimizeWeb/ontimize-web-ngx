@@ -1,9 +1,11 @@
-## 15.3.3 (2024-12-03)
+## 15.3.3 (2024-12-11)
 ### Bug fixes
 * **o-table**:
   * Prevent multiple clicks in table details ([113cc7b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/113cc7b)) Closes [#1766](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1766)
   * Improved CSS styles in the export modal window ([f8d7e7c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f8d7e7c)) Closes [#1771](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1781)
   * sqltypes sent in responses were overwritten with the value **1111** if the o-table-column did not have sql-type defined ([5b463b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b463b9)) Closes [#1778](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1778)
+  * `filter-values-in-data` input with values ​**​'current-date'** and **'all-data'** was not working on non-pageable o-table([4865154](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4865154)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
+
 * **o-radio**: Fixed that the o-radio does not mark the value when changing tabs in a `o-form-layout-manager`([d80528b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d80528b)) Closes [#1760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1760)
 
 
