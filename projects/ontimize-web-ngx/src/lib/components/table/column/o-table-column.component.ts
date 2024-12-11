@@ -120,7 +120,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   public contentAlign: 'start' | 'center' | 'end';
   public sqlType: string;
   protected _SQLType: number;
-  protected _defaultSQLTypeKey: string = 'OTHER';
   protected _orderable: boolean;
   protected _resizable: boolean;
   protected _searchable: boolean;
@@ -553,8 +552,8 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
           break;
       }
     }
-    const sqlt = this.sqlType && this.sqlType.length > 0 ? this.sqlType : this._defaultSQLTypeKey;
-    this._SQLType = SQLTypes.getSQLTypeValue(sqlt);
+
+    this._SQLType = SQLTypes.getSQLTypeValue(this.sqlType);
     return this._SQLType;
   }
 

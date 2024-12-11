@@ -36,7 +36,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
 import moment from 'moment';
-import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
@@ -293,6 +293,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public paginator: OTablePaginator;
 
   sort: OMatSort;
+  clickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
+  dblclickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -894,12 +896,52 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.registerTabListener();
     }
 
+    this.registerClickListener();
+    this.registerDblClickListener();
     // Initialize params of the table
     this.initializeParams();
 
     this.initializeDao();
 
     this.permissions = this.permissionsService.getTablePermissions(this.oattr, this.actRoute);
+  }
+
+  protected registerClickListener() {
+    this.clickSubject
+      .pipe(debounceTime(this.clickDelay)) // Espera el tiempo configurado antes de ejecutar
+      .subscribe(({ row, column, cellRef, rowIndex, event }) => {
+        if (this.oenabled && !this.readOnly && column.editor
+          && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
+          && (this.editionMode === Codes.EDITION_MODE_CLICK)) {
+          this.activateColumnEdition(column, row, cellRef);
+        } else {
+          this.doHandleClick(row, column.attr, rowIndex, event);
+        }
+      });
+  }
+
+  protected registerDblClickListener() {
+    this.dblclickSubject
+      .pipe(debounceTime(this.clickDelay)) // Espera el tiempo configurado antes de ejecutar
+      .subscribe(({ row, column, cellRef, rowIndex, event }) => {
+        if (this.readOnly) {
+          if (this.showNotificationOfReadOnly) {
+            this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+          }
+          return;
+        }
+        if (this.oenabled && column.editor
+          && (!Codes.isDoubleClickMode(this.detailMode))
+          && (Codes.isDoubleClickMode(this.editionMode))) {
+          this.activateColumnEdition(column, row, cellRef);
+        } else {
+          this.onDoubleClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: event, columnName: column.attr, cell: row[column.attr] });
+          if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
+            this.saveDataNavigationInLocalStorage();
+            this.viewDetail(row);
+          }
+        }
+      })
   }
 
   protected initializeDao() {
@@ -1025,6 +1067,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.scrollStrategy) {
       this.scrollStrategy.destroy();
+    }
+
+    if (this.clickSubject) {
+      this.clickSubject.unsubscribe();
+    }
+
+    if (this.dblclickSubject) {
+      this.dblclickSubject.unsubscribe();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
@@ -1858,20 +1908,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   handleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, event: MouseEvent) {
-
-    this.clickTimer = setTimeout(() => {
-      if (!this.clickPrevent) {
-        if (this.oenabled && !this.readOnly && column.editor
-          && (this.detailMode !== Codes.DETAIL_MODE_CLICK)
-          && (this.editionMode === Codes.EDITION_MODE_CLICK)) {
-          this.activateColumnEdition(column, row, cellRef);
-        } else {
-          this.doHandleClick(row, column.attr, rowIndex, event);
-        }
-      }
-      this.clickPrevent = false;
-    }, this.clickDelay);
-
+    this.clickSubject.next({ row, column, cellRef, rowIndex, event });
   }
 
   doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
@@ -1925,28 +1962,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.storePaginationState = true;
   }
 
-  handleDoubleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, $event: MouseEvent) {
-    clearTimeout(this.clickTimer);
-    this.clickPrevent = true;
-
-    if (this.readOnly) {
-      if (this.showNotificationOfReadOnly) {
-        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
-      }
-      return;
-    }
-    if (this.oenabled && column.editor
-      && (!Codes.isDoubleClickMode(this.detailMode))
-      && (Codes.isDoubleClickMode(this.editionMode))) {
-      this.activateColumnEdition(column, row, cellRef);
-    } else {
-      this.onDoubleClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column.attr, cell: row[column.attr] });
-      if (this.oenabled && Codes.isDoubleClickMode(this.detailMode)) {
-        this.saveDataNavigationInLocalStorage();
-        this.viewDetail(row);
-      }
-    }
+  handleDoubleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, event: MouseEvent) {
+    this.dblclickSubject.next({ row, column, cellRef, rowIndex, event });
   }
+
   get editionEnabled(): boolean {
     return this._oTableOptions.columns.some(item => item.editing);
   }
@@ -2137,7 +2156,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const rowsToSelect = this.getDataArray().filter(row => {
       return keyValues.findIndex(keyValue =>
         Object.keys(keyValue).every(key => keyValue[key] === row[key])
-      )>-1;
+      ) > -1;
     });
     rowsToSelect.every(rowToSelect => this.selection.select(rowToSelect));
   }
@@ -2887,10 +2906,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   get headerHeight() {
     let height = 0;
-    if (this.tableHeaderEl && this.tableHeaderEl.nativeElement) {
+    if (this.tableHeaderEl?.nativeElement) {
       height += this.tableHeaderEl.nativeElement.offsetHeight;
     }
-    if (this.tableToolbarEl && this.tableToolbarEl.nativeElement) {
+    if (this.tableToolbarEl?.nativeElement) {
+      height += this.tableToolbarEl.nativeElement.offsetHeight;
+    }
+    return height;
+  }
+
+  get toolBarHeight() {
+    let height = 0;
+
+    if (this.tableToolbarEl?.nativeElement) {
       height += this.tableToolbarEl.nativeElement.offsetHeight;
     }
     return height;

@@ -6,3 +6,4 @@ export * from './menu-separator/o-bar-menu-separator.component';
 export * from './o-bar-menu.component';
 export * from './o-bar-menu.module';
 export * from './o-base-menu-item.class';
+export * from './o-bar-menu-base.class';

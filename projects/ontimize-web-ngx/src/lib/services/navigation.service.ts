@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { EventEmitter, Injectable, Injector } from '@angular/core';
 import { ActivatedRouteSnapshot, NavigationEnd, Router, UrlSegment } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
@@ -114,9 +114,13 @@ export class NavigationService implements ILocalStorageComponent {
 
   public navigationEvents$: ReplaySubject<Array<ONavigationItem>> = new ReplaySubject<Array<ONavigationItem>>(1);
 
-  private _titleEmitter: EventEmitter<any> = new EventEmitter();
-  private _visibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
-  private _sidenavEmitter: EventEmitter<any> = new EventEmitter();
+  private readonly _titleEmitter: EventEmitter<any> = new EventEmitter();
+  private readonly _visibleEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
+  private readonly _sidenavEmitter: EventEmitter<any> = new EventEmitter();
+
+
+  protected isNavigationSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public isNavigation$: Observable<boolean> = this.isNavigationSubject.asObservable();
 
   constructor(
     protected injector: Injector
@@ -141,6 +145,14 @@ export class NavigationService implements ILocalStorageComponent {
       }
     });
   }
+
+  set isNavigating(value: boolean) {
+    this.isNavigationSubject.next(value);
+  }
+  get isNavigating(): boolean {
+    return this.isNavigationSubject.getValue();
+  }
+
 
   initialize(): void {
     this.router.events.pipe(
