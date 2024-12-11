@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ContentChildren, forwardRef, Inject, Injector, Input, OnInit, QueryList } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, forwardRef, Inject, Injector, Input, OnInit, QueryList } from '@angular/core';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { Codes } from '../../../../../util/codes';
@@ -29,7 +29,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER = [
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN_FILTER
 })
 
-export class OTableColumnsFilterComponent implements OnInit {
+export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
@@ -39,7 +39,7 @@ export class OTableColumnsFilterComponent implements OnInit {
   protected _mode: string = 'default';
   @BooleanInputConverter()
   preloadValues: boolean = true;
-  filterValuesInData = 'current-page';
+  filterValuesInData: 'current-page' | 'all-data';
 
   get mode(): string {
     return this._mode;
@@ -84,6 +84,12 @@ export class OTableColumnsFilterComponent implements OnInit {
     });
 
     this.table.setOTableColumnsFilter(this);
+
+    this.filterValuesInData = this.filterValuesInData ?? this.getFilterValuesInDataByDefault();
+  }
+
+  private getFilterValuesInDataByDefault() {
+    return this.table.pageable ? 'current-page' : 'all-data';
   }
 
   ngAfterContentInit() {
@@ -179,12 +185,12 @@ export class OTableColumnsFilterComponent implements OnInit {
   parseFilterColumns(columns: QueryList<OTableColumnsFilterColumnComponent>) {
     return columns
       .map(x => {
-        let obj: OFilterColumn = { attr: '', sort: '', startView: '', queryMethod: void 0, filterValuesInData: 'current-page' };
+        let obj: OFilterColumn = { attr: '', sort: '', startView: '', queryMethod: void 0 };
         obj.attr = x.attr;
         obj.sort = x.sort;
         obj.startView = x.startView;
         obj.queryMethod = x.queryMethod;
-        obj.filterValuesInData = x.filterValuesInData;
+        obj.filterValuesInData = (x.filterValuesInData || this.filterValuesInData) ?? this.getFilterValuesInDataByDefault();
         return obj;
       });
   }
