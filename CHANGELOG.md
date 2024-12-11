@@ -10,7 +10,7 @@
 
 * **PermissionsService**: Fixed permissionsService warning when user has all permissions ([c958f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c958f8e)) Closes [#1775](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1775)
 
-* Exported all *Base abstract classes ([7ec64ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7ec64ac)) Closes [#1773](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1773)
+* Exported all abstract Base classes as OTableBase, OFormBase to remove circular dependencies and allow component overwriting ([7ec64ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7ec64ac)) Closes [#1773](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1773)
 
 
 
