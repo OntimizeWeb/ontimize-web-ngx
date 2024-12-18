@@ -1,33 +1,22 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { BehaviorSubject, fromEvent, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
-import {
-  TableFilterByColumnData,
-  TableFilterByColumnDialogResult
-} from '../../../../../types/table/o-table-filter-by-column-data.type';
-import { Util } from '../../../../../util/util';
-import type { OColumn } from '../../../column/o-column.class';
-import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
-import { Codes } from '../../../../../util/codes';
-import { MatRadioChange } from '@angular/material/radio';
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
+import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
+import { TableFilterByColumnData, TableFilterByColumnDialogResult } from '../../../../../types/table/o-table-filter-by-column-data.type';
+import { Codes } from '../../../../../util/codes';
+import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
+import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
+
+import type { OColumn } from '../../../column/o-column.class';
 
 const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
 
@@ -95,7 +84,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.showFilterValuesOption = this.table.paginationControls;
     this.sourceData =
       this.table.oTableColumnsFilterComponent?.getFilterValuesInData(this.column.attr) ||
-      this.table.oTableColumnsFilterComponent?.filterValuesInData || 'current-page';
+      this.table.oTableColumnsFilterComponent?.filterValuesInData ||
+      (this.table.pageable ? 'current-page' : 'all-data');
 
     this.mode = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.mode : 'default';
     this.isDefaultFilterSubject.next(this.mode === 'default');
@@ -123,6 +113,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
     this.getData(this.sourceData);
   }
+
 
   private parseDataAndInitializeDataList(previousFilter: OColumnValueFilter) {
 
@@ -229,17 +220,16 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       const colRenderedValues = this.getColumnDataUsingRenderer();
       const colValues: any[] = this.tableData.map(elem => elem[this.column.attr]);
 
-      if (this.sourceData === 'current-page') {
+      if (this.table.pageable && this.sourceData === 'all-data') {
+        colRenderedValues.forEach((renderedValue, i) => {
+          this.addIntoColumnData(renderedValue, colValues, i, filter);
+        });
+      } else {
         colRenderedValues.forEach((renderedValue, i) => {
           /*Selection distint values */
           if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
             this.addIntoColumnData(renderedValue, colValues, i, filter);
           }
-        });
-      } else {
-        colRenderedValues.forEach((renderedValue, i) => {
-          this.addIntoColumnData(renderedValue, colValues, i, filter);
-
         });
       }
     }
