@@ -48,9 +48,13 @@
         color: $underline-color;
       }
 
-      .mdc-line-ripple::after {
-        background-color: $underline-color;
+      .mdc-text-field {
+        .mdc-line-ripple::after,
+        .mdc-line-ripple::before {
+          background-color: $underline-color;
+        }
       }
+
     }
 
     &.mat-form-field-invalid .mat-mdc-form-field-icon-suffix .mat-icon {
