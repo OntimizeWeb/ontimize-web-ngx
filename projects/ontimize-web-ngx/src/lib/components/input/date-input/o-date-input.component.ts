@@ -20,6 +20,7 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
+import { DateUtil } from '../../../util/date';
 
 export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'valueType: value-type',
@@ -256,59 +257,12 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   }
 
   protected ensureODateValueType(val: any): void {
-    if (!Util.isDefined(val)) {
-      return val;
-    }
-    let result = val;
-    switch (this.valueType) {
-      case 'string':
-        if (typeof val === 'string') {
-          const m = moment(val, this.oformat);
-          if (m.isValid()) {
-            this.dateValue = new Date(m.valueOf());
-          }
-        } else {
-          result = undefined;
-        }
-        break;
-      case 'date':
-        if ((val instanceof Date)) {
-          this.dateValue = val;
-        } else {
-          result = undefined;
-        }
-        break;
-      case 'timestamp':
-        if (typeof val === 'number') {
-          this.dateValue = new Date(val);
-        } else {
-          result = undefined;
-        }
-        break;
-      case 'iso-8601':
-        if (typeof val !== 'string') {
-          const acceptTimestamp = typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
-          if (acceptTimestamp) {
-            this.dateValue = new Date(val);
-          } else {
-            result = undefined;
-          }
-        } else {
-          const m = moment(val);
-          if (m.isValid()) {
-            this.dateValue = new Date(m.valueOf());
-          } else {
-            result = undefined;
-          }
-        }
-        break;
-      default:
-        break;
-    }
-    if (!Util.isDefined(result)) {
+    this.dateValue = DateUtil.ensureDateValueType(val, this.valueType, this._oformat, this.getSQLType());
+
+    if (!Util.isDefined(this.dateValue)) {
       console.warn(`ODateInputComponent value (${val}) is not consistent with value-type (${this.valueType})`);
     }
-    return result;
+
   }
 
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
