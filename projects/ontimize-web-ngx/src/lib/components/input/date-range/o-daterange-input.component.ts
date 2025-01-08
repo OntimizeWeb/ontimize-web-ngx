@@ -27,7 +27,6 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   'olocale:locale',
   'startKey',
   'endKey',
-  'valueType: value-type',
   'mode',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
@@ -142,13 +141,16 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     super(form, elRef, injector);
     this.oTranslate = this.injector.get(OTranslateService);
     this.momentSrv = this.injector.get(MomentService);
-    if (!this.olocale) {
-      this.olocale = this.momentSrv.getLocale();
-      moment.locale(this.olocale);
-    }
+
+    this.initializeLocale();
+  }
+
+  private initializeLocale(): void {
+    this.olocale = this.momentSrv.getLocale();
+    moment.locale(this.olocale);
     this._localeOptions = {
       direction: 'ltr',
-      separator: ' - ',
+      separator: this._separator,
       weekLabel: this.oTranslate.get('DATERANGE.W'),
       applyLabel: this.oTranslate.get('DATERANGE.APPLYLABEL'),
       cancelLabel: this.oTranslate.get('CANCEL'),
@@ -156,15 +158,12 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       daysOfWeek: moment.localeData().weekdaysMin(),
       monthNames: moment.localeData().monthsShort(),
       firstDay: moment.localeData().firstDayOfWeek(),
-      format: 'L'
+      format: this.oformat
     };
   }
 
   ngOnInit() {
     super.ngOnInit();
-    if (this.oformat) {
-      this._localeOptions.format = this.oformat;
-    }
   }
 
   public openPicker() {
@@ -317,7 +316,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return {};
   }
 
-  ensureDateRangeValue(val: any, valueType: any): void {
+  ensureDateRangeValue(val: any, valueType: any): moment.Moment {
     if (!Util.isDefined(val)) {
       return val;
     }
@@ -369,12 +368,5 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return result;
   }
 
-  set valueType(val: any) {
-    this._valueType = Util.convertToODateValueType(val);
-  }
-
-  get valueType(): any {
-    return this._valueType;
-  }
 
 }
