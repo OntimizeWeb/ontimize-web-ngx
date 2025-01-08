@@ -295,6 +295,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   sort: OMatSort;
   clickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
   dblclickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
+  protected clickSubjectSubscription: Subscription;
+  protected dbClickSubjectSubscription: Subscription;
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -907,7 +909,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected registerClickListener() {
-    this.clickSubject
+    if (this.clickSubjectSubscription) {
+      this.clickSubjectSubscription.unsubscribe();
+    }
+    this.clickSubjectSubscription = this.clickSubject
       .pipe(debounceTime(this.clickDelay)) // Espera el tiempo configurado antes de ejecutar
       .subscribe(({ row, column, cellRef, rowIndex, event }) => {
         if (this.oenabled && !this.readOnly && column.editor
@@ -921,7 +926,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected registerDblClickListener() {
-    this.dblclickSubject
+    if (this.dbClickSubjectSubscription) {
+      this.dbClickSubjectSubscription.unsubscribe();
+    }
+
+    this.dbClickSubjectSubscription = this.dblclickSubject
       .pipe(debounceTime(this.clickDelay)) // Espera el tiempo configurado antes de ejecutar
       .subscribe(({ row, column, cellRef, rowIndex, event }) => {
         if (this.readOnly) {
@@ -1069,12 +1078,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.scrollStrategy.destroy();
     }
 
-    if (this.clickSubject) {
-      this.clickSubject.unsubscribe();
+    if (this.clickSubjectSubscription) {
+      this.clickSubjectSubscription.unsubscribe();
     }
 
-    if (this.dblclickSubject) {
-      this.dblclickSubject.unsubscribe();
+     if (this.dbClickSubjectSubscription) {
+      this.dbClickSubjectSubscription.unsubscribe();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
