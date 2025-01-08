@@ -1,3 +1,7 @@
+## 15.3.5 (2025-01-08)
+### Bug fixes
+* **o-table**:Fixed error `ObjectUnsubscribedErrorImpl {stack: 'Error\n at _super (http://...…)\n at http://localhost:4800/vendor.js:48762:42', name: 'ObjectUnsubscribedError', message: 'object unsubscribed'}` being displayed in the console ([9e9c147](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e9c147)) Closes [#1796](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1796)
+
 ## 15.3.4 (2024-12-19)
 ### Bug fixes
 * **o-table**: Fixed that in **non-pageable** table all different values ​​are shown by default in the column filtering modal ([e01ff67](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e01ff67)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
