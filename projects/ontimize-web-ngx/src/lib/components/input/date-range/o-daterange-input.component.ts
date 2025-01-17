@@ -20,6 +20,7 @@ import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../..
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_DATE_INPUT } from '../date-input/o-date-input.component';
 import { OFormControl } from '../o-form-control.class';
+import { DateCustomClassFunction } from '../../../types/date-custom-class.type';
 
 export const DEFAULT_OUTPUTS_O_DATERANGE_INPUT = [
   ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
@@ -66,6 +67,15 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   endDateValue: Date;
 
   range: FormGroup<{ [x: string]: OFormControl; }>
+
+  protected _dateClass: DateCustomClassFunction
+  get dateClass(): DateCustomClassFunction {
+    return this._dateClass;
+  }
+
+  set dateClass(val: DateCustomClassFunction) {
+    this._dateClass = val;
+  }
 
   protected _oMinDate: Date;
   set oMinDate(value: any) {
@@ -300,7 +310,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       value = val.value;
     }
 
-    this.range.setValue(this.ensureODateValueType(value));
+    this.range.setValue(this.ensureODateValueType(value), options);
     console.log('setFormvalue ', value);
     super.setFormValue(value, options, setDirty);
   }
@@ -378,6 +388,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public onClickClearValue(event: Event): void {
     super.onClickClearValue(event);
     this.range.setValue({ [this.startKey]: null, [this.endKey]: null });
+    this.range.markAsDirty();
   }
 
   protected getValueAsMoment(val: any): any {
