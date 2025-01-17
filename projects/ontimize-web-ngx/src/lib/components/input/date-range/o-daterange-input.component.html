@@ -5,11 +5,13 @@
     class="icon-field" fxFlexFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <mat-date-range-input #dateRangeInput [rangePicker]="picker" [id]="getAttribute()" [formGroup]="range" [separator]="separator"
-      [required]="isRequired" [min]="oMinDate"  [max]="oMaxDate">
-      <input #startDate matStartDate placeholder="{{'DATERANGE.PLACEHOLDER_STARTDATE' | oTranslate}}" [value]="startDateValue" [formControlName]="startKey"
-        (dateChange)="onChangeEvent($event)" [readonly]="isReadOnly || !textInputEnabled">
-      <input #endDate matEndDate  placeholder="{{'DATERANGE.PLACEHOLDER_ENDDATE' | oTranslate}}" [value]="endDateValue" [formControlName]="endKey" (dateChange)="onChangeEvent($event)"
-        [readonly]="isReadOnly || !textInputEnabled">
+      [required]="isRequired" [min]="oMinDate" [max]="oMaxDate" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)">
+      <input #startDate matStartDate placeholder="{{ placeholderStartDay | oTranslate }}" [value]="startDateValue"
+        [formControlName]="startKey" (dateChange)="onChangeEvent($event)" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
+        (blur)="innerOnBlur($event)" [required]="isRequired">
+      <input #endDate matEndDate placeholder="{{ placeholderEndDay | oTranslate }}" [value]="endDateValue" [formControlName]="endKey"
+        (dateChange)="onChangeEvent($event)" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+        [required]="isRequired">
     </mat-date-range-input>
 
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">

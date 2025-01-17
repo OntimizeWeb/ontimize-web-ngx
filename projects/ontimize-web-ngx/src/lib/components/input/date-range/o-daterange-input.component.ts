@@ -138,8 +138,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
 
-  public placeholderStartDay = '';
-  public placeholderEndDay = '';
+  public placeholderStartDay = 'DATERANGE.PLACEHOLDER_STARTDATE';
+  public placeholderEndDay = 'DATERANGE.PLACEHOLDER_ENDDATE';
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
@@ -300,67 +300,57 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     if (val instanceof OFormValue) {
       value = val.value;
     }
-    this.ensureODateValueType(value);
+
+    this.range.setValue(this.ensureODateValueType(value));
     console.log('setFormvalue ', value);
     super.setFormValue(value, options, setDirty);
   }
 
 
-  protected ensureODateValueType(val: any): void {
+  protected ensureODateValueType(val: any) {
     if (!Util.isDefined(val)) {
-      return val;
+      return { [this.startKey]: null, [this.endKey]: null };
     }
+
     let result = val;
     const startVal = this.convertToDate(val[this.startKey]);
     const endVal = this.convertToDate(val[this.endKey]);
 
     if (!Util.isDefined(result)) {
       console.warn(`ODateRangeInputComponent value (${val}) is not consistent with value-type (${this.valueType})`);
-
     } else {
-      const value = { [this.startKey]: startVal, [this.endKey]: endVal };
-      this.range.setValue(value);
-    }
+      result = { [this.startKey]: startVal, [this.endKey]: endVal };
 
+    }
+    return result;
   }
 
-  protected convertToDate(val: any): Date {
-    if (!Util.isDefined(val)) {
-      return val;
-    }
-    let result: Date = val;
+  protected convertToDate(val: any): Date | null {
+    if (!Util.isDefined(val)) return null;
+
     switch (this.valueType) {
       case 'string':
-        if (typeof val === 'string') {
-          const m = moment(val, this.oformat);
-          result = m.isValid() ? new Date(m.valueOf()) : undefined;
-        }
+        return typeof val === 'string' && moment(val, this.oformat).isValid()
+          ? new Date(moment(val, this.oformat).valueOf())
+          : null;
 
-        break;
       case 'date':
-        result = val instanceof Date ? val : undefined;
-        break;
+        return val instanceof Date ? val : null;
+
       case 'timestamp':
-        result = typeof val === 'number' ? new Date(val) : undefined;
-        break;
+        return typeof val === 'number' ? new Date(val) : null;
+
       case 'iso-8601':
-        if (typeof val !== 'string') {
-          const acceptTimestamp = typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
-
-          result = acceptTimestamp ? new Date(val) : undefined;
-
-        } else {
-          const m = moment(val);
-
-          result = m.isValid() ? new Date(m.valueOf()) : undefined;
-
+        if (typeof val === 'string') {
+          return moment(val).isValid() ? new Date(moment(val).valueOf()) : null;
+        } else if (typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP) {
+          return new Date(val);
         }
-        break;
-      default:
-        break;
-    }
+        return null;
 
-    return result;
+      default:
+        return null;
+    }
   }
 
   public onChangeEvent(event: MatDatepickerInputEvent<Date>): void {
@@ -417,6 +407,13 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
         break;
     }
     return Util.isDefined(result) && result.isValid() ? result : undefined
+  }
+
+  public setValue(val: any, options: FormValueOptions = {}, setDirty: boolean = false): void {
+    if (!val) {
+
+    }
+    super.setValue(val, options, setDirty)
   }
 
 }
