@@ -1,15 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { FormGroup, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { DateRange, MatDatepickerInputEvent, MatDateRangeInput, MatDateRangePicker, MatEndDate, MatStartDate } from '@angular/material/datepicker';
+import { DateRange, MatDatepickerInputEvent, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
-import { OTranslateService } from '../../../services/translate/o-translate.service';
 import { OntimizeMomentDateAdapter } from '../../../shared';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
@@ -22,86 +21,74 @@ import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_DATE_INPUT } from '../date-input/o-date-input.component';
 import { OFormControl } from '../o-form-control.class';
 
-export const DEFAULT_OUTPUTS_O_DATERANGE_LEGACY_INPUT = [
+export const DEFAULT_OUTPUTS_O_DATERANGE_INPUT = [
   ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
-export const DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT = [
+export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   'separator',
-  'showWeekNumbers:show-week-numbers',
-  'showRanges:show-ranges',
   'olocale:locale',
   'startKey',
   'endKey',
   'valueType: value-type',
   'mode',
+  'placeholderStartDay: placeholder-startday',
+  'placeholderEndDay: placeholder-endday',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
 
 @Component({
   selector: 'o-daterange-input',
   templateUrl: './o-daterange-input.component.html',
-  outputs: DEFAULT_OUTPUTS_O_DATERANGE_LEGACY_INPUT,
-  inputs: DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT,
+  outputs: DEFAULT_OUTPUTS_O_DATERANGE_INPUT,
+  inputs: DEFAULT_INPUTS_O_DATERANGE_INPUT,
   providers: [
     { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
-export class ODateRangeInputComponent extends OFormDataComponent implements OnDestroy, OnInit, AfterViewInit {
+export class ODateRangeInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
   @ViewChild('picker', { static: true })
   picker!: MatDateRangePicker<Date>;
-
 
   @BooleanInputConverter()
   public textInputEnabled: boolean = true;
 
   @BooleanInputConverter()
-  public showWeekNumbers: boolean = false;
-
-  @BooleanInputConverter()
   public oTouchUi: boolean = false;
-
-  @BooleanInputConverter()
-  public showRanges: boolean = false;
-
-  @ViewChild('startDate')
-  startDateInput: MatStartDate<Date>;
-
-  @ViewChild('endDate')
-  endDateInput: MatEndDate<Date>;
 
   @ViewChild('dateRangeInput')
   dateRangeInput: MatDateRangeInput<Date>;
 
-  protected _oMinDate: moment.Moment;
-
   public mode: 'mobile' | 'desktop' | 'auto' = 'auto';
+
   startDateValue: Date;
   endDateValue: Date;
 
   range: FormGroup<{ [x: string]: OFormControl; }>
-  public oMinDate;
-  public oMaxDate;
 
-  // set oMinDate(value: string) {
-  //   if (value) {
-  //     const momentD = this.getValueAsMoment(value)
-  //     if (Util.isDefined(momentD)) {
-  //       this.datepickerInput.min = momentD.toDate();
-  //       this.minDateString = momentD.format(this.oformat);
-  //     }
-  //   }
-  // }
-  // set oMaxDate(value: string) {
-  //   if (value) {
-  //     const momentD = this.getValueAsMoment(value)
-  //     if (Util.isDefined(momentD)) {
-  //       this.datepickerInput.max = momentD.toDate();
-  //       this.maxDateString = momentD.format(this.oformat);
-  //     }
-  //   }
-  // }
+  protected _oMinDate: Date;
+  set oMinDate(value: any) {
+    if (value) {
+      const momentD = this.getValueAsMoment(value)
+      if (Util.isDefined(momentD)) {
+        this._oMinDate = this.convertToDate(value);
+      }
+    }
+  }
+  get oMinDate() {
+    return this._oMinDate;
+  }
+
+  protected _oMaxDate: Date;
+  set oMaxDate(value: any) {
+    if (value) {
+      this._oMaxDate = this.convertToDate(value);
+    }
+  }
+  get oMaxDate() {
+    return this._oMaxDate;
+  }
 
   protected _startKey: string = 'startDate';
   get startKey() {
@@ -127,7 +114,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return this.clearButton && !this.isReadOnly && this.enabled && this.getValue();
   }
 
-
   get touchUi(): boolean {
     return this.oTouchUi || false;
   }
@@ -144,18 +130,16 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return this.mode === 'desktop' || (this.mode === 'auto' && !this.breakpointObserver.isMatched(Breakpoints.Handset))
   }
 
-
   public oformat: string = 'L';
-  protected _localeOptions: any;
-  protected olocale: string;
 
+  protected olocale: string;
   private momentSrv: MomentService;
-  private oTranslate: OTranslateService;
   protected media: MediaObserver;
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
-  protected dateValue: DateRange<Date>;
 
+  public placeholderStartDay = '';
+  public placeholderEndDay = '';
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
@@ -164,7 +148,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     protected breakpointObserver: BreakpointObserver
   ) {
     super(form, elRef, injector);
-    this.oTranslate = this.injector.get(OTranslateService);
     this.momentSrv = this.injector.get(MomentService);
     this.media = this.injector.get(MediaObserver);
     this.range = new FormGroup({
@@ -190,7 +173,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
       this.setValue(this.getValue());
     });
-
 
   }
 
@@ -287,7 +269,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       if (!endValue.isValid() || !startValue.isValid()) {
         return {
           dateRangeParse: {
-            format: this.oformat + this._localeOptions.separator + this.oformat
+            format: this.oformat + this.separator + this.oformat
           }
         };
       }
@@ -329,70 +311,60 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       return val;
     }
     let result = val;
-    const startVal = val[this.startKey];
-    const endVal = val[this.endKey];
+    const startVal = this.convertToDate(val[this.startKey]);
+    const endVal = this.convertToDate(val[this.endKey]);
+
+    if (!Util.isDefined(result)) {
+      console.warn(`ODateRangeInputComponent value (${val}) is not consistent with value-type (${this.valueType})`);
+
+    } else {
+      const value = { [this.startKey]: startVal, [this.endKey]: endVal };
+      this.range.setValue(value);
+    }
+
+  }
+
+  protected convertToDate(val: any): Date {
+    if (!Util.isDefined(val)) {
+      return val;
+    }
+    let result: Date = val;
     switch (this.valueType) {
       case 'string':
-
-        if (typeof startVal === 'string' && typeof endVal === 'string') {
-          const mstartVal = moment(startVal, this.oformat);
-          const mendVal = moment(endVal, this.oformat);
-          this.dateValue = mstartVal.isValid() && mendVal.isValid() ? new DateRange(new Date(mstartVal.valueOf()), new Date(mendVal.valueOf())) : undefined;
-        } else {
-          result = undefined;
+        if (typeof val === 'string') {
+          const m = moment(val, this.oformat);
+          result = m.isValid() ? new Date(m.valueOf()) : undefined;
         }
+
         break;
       case 'date':
-        if ((startVal instanceof Date && endVal instanceof Date)) {
-          this.dateValue = new DateRange(startVal, endVal);
-        } else {
-          result = undefined;
-        }
+        result = val instanceof Date ? val : undefined;
         break;
       case 'timestamp':
-        if (typeof startVal === 'number' && typeof endVal === 'number') {
-          this.dateValue = new DateRange(new Date(startVal), new Date(endVal));
-        } else {
-          result = undefined;
-        }
+        result = typeof val === 'number' ? new Date(val) : undefined;
         break;
       case 'iso-8601':
-        if (typeof startVal !== 'string' && typeof endVal !== 'string') {
-          const acceptTimestamp = typeof startVal === 'number' && typeof endVal === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
-          if (acceptTimestamp) {
-            this.dateValue = new DateRange(new Date(startVal), new Date(endVal));
-          } else {
-            result = undefined;
-          }
+        if (typeof val !== 'string') {
+          const acceptTimestamp = typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
+
+          result = acceptTimestamp ? new Date(val) : undefined;
+
         } else {
-          const mstartVal = moment(startVal, this.oformat);
-          const mendVal = moment(endVal, this.oformat);
-          if (mstartVal.isValid() && mendVal.isValid()) {
-            this.dateValue = new DateRange(new Date(mstartVal.valueOf()), new Date(mendVal.valueOf()));
-          } else {
-            result = undefined;
-          }
+          const m = moment(val);
+
+          result = m.isValid() ? new Date(m.valueOf()) : undefined;
+
         }
         break;
       default:
         break;
     }
-    if (!Util.isDefined(result)) {
-      console.warn(`ODateRangeInputComponent value (${val}) is not consistent with value-type (${this.valueType})`);
 
-    } else {
-      const value = { [this.startKey]: this.dateValue.start, [this.endKey]: this.dateValue.end };
-      this.range.setValue(value);
-    }
-
-
+    return result;
   }
 
   public onChangeEvent(event: MatDatepickerInputEvent<Date>): void {
-    console.log(event, event.target, event.value, this.dateRangeInput.value);
     const dateRangeValue: DateRange<Date> = this.dateRangeInput.value;
-    // const startDateValue = moment(dateRangeValue.start.valueOf());
-    // const endDateValue = new Date(dateRangeValue.start.valueOf());
 
     if (dateRangeValue.start && dateRangeValue.end) {
       let value = {
@@ -416,12 +388,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   public onClickClearValue(event: Event): void {
     super.onClickClearValue(event);
-    this.range.setValue({ [this.startKey]: void 0, [this.endKey]: void 0 });
-    this.dateValue = void 0;
-  }
-
-  public getValueAsDate(): any {
-    return this.dateValue;
+    this.range.setValue({ [this.startKey]: null, [this.endKey]: null });
   }
 
   protected getValueAsMoment(val: any): any {

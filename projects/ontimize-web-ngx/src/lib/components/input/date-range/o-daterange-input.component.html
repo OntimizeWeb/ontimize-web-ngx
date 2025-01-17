@@ -6,10 +6,9 @@
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
     <mat-date-range-input #dateRangeInput [rangePicker]="picker" [id]="getAttribute()" [formGroup]="range" [separator]="separator"
       [required]="isRequired" [min]="oMinDate"  [max]="oMaxDate">
-      <!-- [min]="oMinDate" [max]="oMaxDate"  -->
-      <input #startDate matStartDate placeholder="Start date" [value]="startDateValue" [formControlName]="startKey"
+      <input #startDate matStartDate placeholder="{{'DATERANGE.PLACEHOLDER_STARTDATE' | oTranslate}}" [value]="startDateValue" [formControlName]="startKey"
         (dateChange)="onChangeEvent($event)" [readonly]="isReadOnly || !textInputEnabled">
-      <input #endDate matEndDate placeholder="End date" [value]="endDateValue" [formControlName]="endKey" (dateChange)="onChangeEvent($event)"
+      <input #endDate matEndDate  placeholder="{{'DATERANGE.PLACEHOLDER_ENDDATE' | oTranslate}}" [value]="endDateValue" [formControlName]="endKey" (dateChange)="onChangeEvent($event)"
         [readonly]="isReadOnly || !textInputEnabled">
     </mat-date-range-input>
 

@@ -64,7 +64,6 @@ import { Util } from '../util/util';
 import { appInitializerFactory } from './o-providers';
 import { ODateRangeInputModule } from '../components/input/date-range/o-daterange-input.module';
 
-
 @NgModule({
   providers: [{
     provide: APP_INITIALIZER,
