@@ -62,6 +62,8 @@ import { OTranslateService } from '../services/translate/o-translate.service';
 import { OSharedModule } from '../shared/shared.module';
 import { Util } from '../util/util';
 import { appInitializerFactory } from './o-providers';
+import { ODateRangeInputModule } from '../components/input/date-range/o-daterange-input.module';
+
 
 @NgModule({
   providers: [{
@@ -126,6 +128,7 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   OSlideToggleModule,
   OSliderModule,
   ODateRangeLegacyInputModule,
+  ODateRangeInputModule,
   OExpandableContainerModule,
   ODualListSelectorModule,
   ODataToolbarModule,
