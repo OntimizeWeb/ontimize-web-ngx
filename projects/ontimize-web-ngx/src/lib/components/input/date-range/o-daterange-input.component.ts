@@ -157,7 +157,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   ngOnInit() {
-
     super.ngOnInit();
     this.subscribeToMediaChanges();
     if (!this.olocale) {
@@ -409,11 +408,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return Util.isDefined(result) && result.isValid() ? result : undefined
   }
 
-  public setValue(val: any, options: FormValueOptions = {}, setDirty: boolean = false): void {
-    if (!val) {
 
-    }
-    super.setValue(val, options, setDirty)
-  }
 
 }
