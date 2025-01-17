@@ -16,11 +16,11 @@ import { DEFAULT_INPUTS_O_DATE_INPUT } from '../date-input/o-date-input.componen
 import { ODaterangepickerDirective } from './o-daterange-input.directive';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
 
-export const DEFAULT_OUTPUTS_O_DATERANGE_INPUT = [
+export const DEFAULT_OUTPUTS_O_DATERANGE_LEGACY_INPUT = [
   ...DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
 ];
 
-export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
+export const DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT = [
   'separator',
   'showWeekNumbers:show-week-numbers',
   'showRanges:show-ranges',
@@ -36,8 +36,8 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   selector: 'o-daterange-legacy-input',
   templateUrl: './o-daterange-input.component.html',
   styleUrls: ['./o-daterange-input.component.scss'],
-  outputs: DEFAULT_OUTPUTS_O_DATERANGE_INPUT,
-  inputs: DEFAULT_INPUTS_O_DATERANGE_INPUT
+  outputs: DEFAULT_OUTPUTS_O_DATERANGE_LEGACY_INPUT,
+  inputs: DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT
 })
 export class ODateRangeLegacyInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
