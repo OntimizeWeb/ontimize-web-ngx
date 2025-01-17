@@ -35,7 +35,6 @@ export const DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT = [
 @Component({
   selector: 'o-daterange-legacy-input',
   templateUrl: './o-daterange-input.component.html',
-  styleUrls: ['./o-daterange-input.component.scss'],
   outputs: DEFAULT_OUTPUTS_O_DATERANGE_LEGACY_INPUT,
   inputs: DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT
 })
@@ -103,7 +102,7 @@ export class ODateRangeLegacyInputComponent extends OFormDataComponent implement
 
   set separator(value) {
     this._separator = value;
-    if (this.getFormControl() && this.getFormControl().value) {
+    if (this.getFormControl()?.value) {
       this.updateElement();
     }
   }
@@ -129,9 +128,8 @@ export class ODateRangeLegacyInputComponent extends OFormDataComponent implement
   protected _localeOptions: any;
   protected olocale: string;
 
-  private momentSrv: MomentService;
-  private oTranslate: OTranslateService;
-
+  private readonly momentSrv: MomentService;
+  private readonly oTranslate: OTranslateService;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,

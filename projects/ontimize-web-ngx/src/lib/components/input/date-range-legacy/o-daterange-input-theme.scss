@@ -69,7 +69,6 @@
       &.available {
         &:hover {
           background: mat.get-color-from-palette($background, hover, 0.12);
-          //color:  mat.get-color-from-palette($foreground, text);
         }
       }
 
