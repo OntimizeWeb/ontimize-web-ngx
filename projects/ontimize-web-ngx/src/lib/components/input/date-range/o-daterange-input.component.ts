@@ -311,7 +311,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     }
 
     this.range.setValue(this.ensureODateValueType(value), options);
-    console.log('setFormvalue ', value);
     super.setFormValue(value, options, setDirty);
   }
 
@@ -388,9 +387,15 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public onClickClearValue(event: Event): void {
     super.onClickClearValue(event);
     this.range.setValue({ [this.startKey]: null, [this.endKey]: null });
-    this.range.markAsDirty();
+    this.markFormGroupTouched();
   }
 
+  protected markFormGroupTouched() {
+    Object.keys(this.range.controls).forEach((key) => {
+      const control = this.range.get(key);
+      control?.markAsTouched();
+    });
+  }
   protected getValueAsMoment(val: any): any {
     if (!Util.isDefined(val)) {
       return val;
