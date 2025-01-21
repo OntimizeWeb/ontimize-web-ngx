@@ -500,12 +500,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   private updatePaginationContext(paginationContext: PaginationContext) {
-    /**Combinacion del contexto actual con el que se pasa por parametro */
+
     if (!this.pageable) {
       delete paginationContext.offset;
       delete paginationContext.pageSize;
-    } {
-      paginationContext.pageNumber = 0;
     }
     this.dataService.setPaginationContext(paginationContext);
   }
