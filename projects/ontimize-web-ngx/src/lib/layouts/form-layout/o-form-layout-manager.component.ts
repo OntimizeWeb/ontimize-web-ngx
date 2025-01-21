@@ -36,6 +36,7 @@ import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.compon
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
 import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
+import { IOFormLayoutManager } from '../../interfaces/form-layout-manager.interface';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -84,7 +85,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   host: {
     '[class.o-form-layout-manager]': 'true'
   }
-}) export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent {
+})
+export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent,IOFormLayoutManager {
 
   // declaring this property to have acces to static members in the template
   OFormLayoutManagerComponent = OFormLayoutManagerComponent;
