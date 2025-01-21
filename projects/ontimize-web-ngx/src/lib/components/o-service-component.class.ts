@@ -878,7 +878,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
-        if (((arg.previousIndex=== void 0) || arg.previousIndex === 0) && this.formLayoutManager.navigationService.isNavigating) {
+        if (((arg.previousIndex === void 0) || arg.previousIndex === 0) && this.formLayoutManager.navigationService.isNavigating) {
           /* in the form-layout mode=tab, the only way to ensure that the component has been rendered is
            when navigationService.isNavigating and comes previousIndex=0  */
           arg.data.rendererSubject.next(true);
@@ -937,6 +937,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       length: queryLength,
       replace: true
     };
+    this.dataService.setPaginationContext({ pageNumber: this.currentPage })
     this.queryData(void 0, queryArgs);
   }
 

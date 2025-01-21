@@ -1082,7 +1082,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.clickSubjectSubscription.unsubscribe();
     }
 
-     if (this.dbClickSubjectSubscription) {
+    if (this.dbClickSubjectSubscription) {
       this.dbClickSubjectSubscription.unsubscribe();
     }
 
@@ -2627,6 +2627,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       offset: newStartRecord,
       length: queryLength
     };
+    this.dataService.setPaginationContext({ pageNumber: this.currentPage, pageSize: this.queryRows });
     this.finishQuerySubscription = false;
     this.queryData(void 0, queryArgs);
   }

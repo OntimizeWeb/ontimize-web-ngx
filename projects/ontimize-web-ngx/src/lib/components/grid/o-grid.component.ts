@@ -333,6 +333,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
         offset: this.state.queryRecordOffset,
         length: this.queryRows
       };
+      this.dataService.setPaginationContext({ pageNumber: this.dataService.getPaginationContext().pageNumber + 1 });
       this.queryData(void 0, queryArgs);
     } else {
       this.filterData(void 0, true);

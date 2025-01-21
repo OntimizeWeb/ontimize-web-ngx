@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../decorators/input-converter';
+import { PaginationContext } from '../interfaces';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
@@ -329,6 +330,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   configureService() {
     const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
     this.dataService = Util.configureService(configureServiceArgs);
+    this.updatePaginationContext({ pageNumber: 0, pageSize: this.queryRows, offset: 0, totalSize: 0 });
   }
 
   getDataArray() {
@@ -372,6 +374,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     this.state.queryRecordOffset = 0;
     this.state.totalQueryRecordsNumber = 0;
     this.setData([], []);
+    this.dataService.clearPaginationContext();
   }
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
@@ -402,7 +405,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.loadingSubject.next(false);
         return;
       }
-
       this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
         .subscribe((res: ServiceResponse) => {
           let data;
@@ -494,6 +496,18 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (queryRes.totalQueryRecordsNumber !== undefined) {
       this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
     }
+    this.updatePaginationContext({ offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber });
+  }
+
+  private updatePaginationContext(paginationContext: PaginationContext) {
+    /**Combinacion del contexto actual con el que se pasa por parametro */
+    if (!this.pageable) {
+      delete paginationContext.offset;
+      delete paginationContext.pageSize;
+    } {
+      paginationContext.pageNumber = 0;
+    }
+    this.dataService.setPaginationContext(paginationContext);
   }
 
   getTotalRecordsNumber(): number {
