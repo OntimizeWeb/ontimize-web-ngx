@@ -503,7 +503,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
     if (!this.pageable) {
       delete paginationContext.offset;
-      delete paginationContext.pageSize;
     }
     this.dataService.setPaginationContext(paginationContext);
   }
