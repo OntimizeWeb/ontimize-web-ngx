@@ -2597,6 +2597,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   onChangePage(evt: PageEvent) {
     this.finishQuerySubscription = false;
+    this.dataService.setPaginationContext({ pageNumber: evt.pageIndex, pageSize: evt.pageSize });
     if (!this.pageable) {
       this.currentPage = evt.pageIndex;
       return;
@@ -2627,7 +2628,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       offset: newStartRecord,
       length: queryLength
     };
-    this.dataService.setPaginationContext({ pageNumber: this.currentPage, pageSize: this.queryRows });
+
     this.finishQuerySubscription = false;
     this.queryData(void 0, queryArgs);
   }

@@ -906,6 +906,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public onChangePage(e: PageEvent): void {
+    this.dataService.setPaginationContext({ pageNumber: e.pageIndex, pageSize: e.pageSize });
+
     if (!this.pageable) {
       this.currentPage = e.pageIndex;
       this.queryRows = e.pageSize;
@@ -937,7 +939,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       length: queryLength,
       replace: true
     };
-    this.dataService.setPaginationContext({ pageNumber: this.currentPage })
+
     this.queryData(void 0, queryArgs);
   }
 
