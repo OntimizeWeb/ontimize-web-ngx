@@ -416,15 +416,14 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
             const arrData = (res.data !== undefined) ? res.data : [];
             data = Util.isArray(arrData) ? arrData : [];
             this.sqlTypes = res.sqlTypes;
-            if (this.pageable) {
-              this.updatePaginationInfo(res);
-            }
+            this.updatePaginationInfo(res);
           }
 
           this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
           this.loadingSubject.next(false);
         }, err => {
           this.setData([], []);
+          this.updatePaginationContext({ pageNumber:0, totalSize: 0, offset: 0 });
           this.loadingSubject.next(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
@@ -489,14 +488,20 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   updatePaginationInfo(queryRes: ServiceResponse) {
-    const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
-    if (queryRes.startRecordIndex !== undefined) {
-      this.state.queryRecordOffset = resultEndIndex;
+    if (this.pageable) {
+      const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
+      if (queryRes.startRecordIndex !== undefined) {
+        this.state.queryRecordOffset = resultEndIndex;
+      }
+      if (queryRes.totalQueryRecordsNumber !== undefined) {
+        this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
+      }
+      this.updatePaginationContext({ offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber });
+    } else {
+
+      this.updatePaginationContext({ totalSize: queryRes.data.length });
     }
-    if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
-    }
-    this.updatePaginationContext({ offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber });
+
   }
 
   private updatePaginationContext(paginationContext: PaginationContext) {

@@ -1,6 +1,6 @@
 export interface PaginationContext {
   pageSize?: number;
   pageNumber?: number
-  offset: number;
+  offset?: number;
   totalSize?: number;
 }

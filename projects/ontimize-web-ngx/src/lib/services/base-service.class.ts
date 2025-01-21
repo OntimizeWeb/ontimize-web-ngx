@@ -32,7 +32,7 @@ export class BaseService {
   protected authService: AuthService;
   protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
-  paginationContextService: any;
+  protected paginationContextService: PaginationContextService;
 
 
   constructor(protected injector: Injector) {
