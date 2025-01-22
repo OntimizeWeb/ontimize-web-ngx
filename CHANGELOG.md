@@ -1,3 +1,12 @@
+## 15.4.0 (2025-01-23)
+### Features
+* New component `o-daterange-input` based in Angular Material ([7bd8c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd8c47)) Closes [#1789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1789)
+* **o-form-layout-manager**: The method `reloadMainComponents()` has been changed from private to public ([75544c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75544c7)) Closes [#1735](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1735)
+* **BaseService**: new methods `setPaginationContext, getPaginationContext, reinitializePaginationContext` to manage the pagination context. Closes [#1804](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1804)
+
+### Breaking changes
+* Renamed `o-daterange-input` component to `o-daterange-legacy-input`
+
 ## 15.3.5 (2025-01-08)
 ### Bug fixes
 * **o-table**:Fixed error `ObjectUnsubscribedErrorImpl {stack: 'Error\n at _super (http://...)\n at http://.../vendor.js:48762:42', name: 'ObjectUnsubscribedError', message: 'object unsubscribed'}` being displayed in the console ([9e9c147](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e9c147)) Closes [#1796](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1796)
