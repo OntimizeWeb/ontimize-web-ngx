@@ -374,7 +374,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     this.state.queryRecordOffset = 0;
     this.state.totalQueryRecordsNumber = 0;
     this.setData([], []);
-    this.dataService.clearPaginationContext();
   }
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
@@ -423,7 +422,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
           this.loadingSubject.next(false);
         }, err => {
           this.setData([], []);
-          this.updatePaginationContext({ pageNumber:0, totalSize: 0, offset: 0 });
           this.loadingSubject.next(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
@@ -509,7 +507,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     if (!this.pageable) {
       delete paginationContext.offset;
     }
-    this.dataService.setPaginationContext(paginationContext);
+    this.dataService?.setPaginationContext(paginationContext);
   }
 
   getTotalRecordsNumber(): number {
@@ -543,9 +541,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
-    //
+    if(data instanceof Array && data.length === 0){
+      this.dataService?.reinitializePaginationContext(this.queryRows);
+    }
   }
-
 
   protected registerLocalStorageServiceRouteChange() {
     if (this.storeState) {
