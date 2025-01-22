@@ -201,8 +201,8 @@ export class BaseService {
     return this.paginationContextService.getContext();
   }
 
-  clearPaginationContext(): void {
-    this.paginationContextService.clearContext();
+  reinitializePaginationContext(pageSize?:number): void {
+    this.paginationContextService.reinitializeContext(pageSize);
   }
 
 }

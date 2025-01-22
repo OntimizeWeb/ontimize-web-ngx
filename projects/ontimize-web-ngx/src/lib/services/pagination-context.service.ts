@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { PaginationContext } from '../interfaces/pagination-context.interface';
+import { Codes } from '../util/codes';
 
 @Injectable()
 export class PaginationContextService {
-  private context: PaginationContext | null = null;
+  private context: PaginationContext;
+
+  constructor() {
+    this.context = { pageNumber: 0, totalSize: 0, offset: 0, pageSize: Codes.DEFAULT_QUERY_ROWS };
+  }
 
   setContext(context: PaginationContext): void {
     this.context = context;
@@ -13,7 +18,7 @@ export class PaginationContextService {
     return this.context;
   }
 
-  clearContext(): void {
-    this.context = null;
+  reinitializeContext(pageSize?: number): void {
+   this.setContext({ pageNumber: 0, pageSize: pageSize ?? Codes.DEFAULT_QUERY_ROWS, offset: 0, totalSize: 0 });
   }
 }
