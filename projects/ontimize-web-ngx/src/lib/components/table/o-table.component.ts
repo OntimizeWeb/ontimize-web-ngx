@@ -1708,7 +1708,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected setData(data: any, sqlTypes: any) {
-    super.setData(data);
+    /* This code is not put in the super method because it is not called from the class itself */
+    if (data instanceof Array && data.length === 0) {
+      this.dataService?.reinitializePaginationContext(this.queryRows);
+    }
+
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.setDataArray(data);
     if (this.pageable) {

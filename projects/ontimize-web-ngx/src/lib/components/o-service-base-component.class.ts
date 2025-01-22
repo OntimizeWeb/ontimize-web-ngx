@@ -338,6 +338,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   setDataArray(data: any): void {
+    /* The o-table has own implementation of this method */
     if (Util.isArray(data)) {
       this.dataArray = data;
     } else if (Util.isObject(data)) {
@@ -346,6 +347,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       console.warn('Component has received not supported service data. Supported data are Array or Object');
       this.dataArray = [];
     }
+
+    if (this.dataArray instanceof Array && this.dataArray.length === 0) {
+      this.dataService?.reinitializePaginationContext(this.queryRows);
+    }
+
   }
 
   public setFormComponent(form: OFormComponent): void {
@@ -494,19 +500,20 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       if (queryRes.totalQueryRecordsNumber !== undefined) {
         this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
       }
-      this.updatePaginationContext({ offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber });
+      /* pageNumber = 0 is reinitialized when it generates a search  */
+      const pageNumber = this.state.queryRecordOffset == 0 ? 0: this.dataService.getPaginationContext().pageNumber;
+      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber,  });
     } else {
-
       this.updatePaginationContext({ totalSize: queryRes.data.length });
     }
 
   }
 
   private updatePaginationContext(paginationContext: PaginationContext) {
-
     if (!this.pageable) {
       delete paginationContext.offset;
     }
+
     this.dataService?.setPaginationContext(paginationContext);
   }
 
@@ -541,9 +548,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
-    if(data instanceof Array && data.length === 0){
-      this.dataService?.reinitializePaginationContext(this.queryRows);
-    }
+
   }
 
   protected registerLocalStorageServiceRouteChange() {
