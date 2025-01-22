@@ -39,3 +39,4 @@ export * from './query-parameter.interface';
 export * from './form-data-component-hash.interface';
 export * from './local-service.interface';
 export * from './pagination-context.interface'
+export * from './form-layout-manager.interface';

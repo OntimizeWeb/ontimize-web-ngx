@@ -259,6 +259,8 @@ export const MAP = {
     'DATERANGE.this_year': 'This year',
     'DATERANGE.APPLYLABEL': 'Select dates',
     'DATERANGE.W': 'W',
+    'DATERANGE.PLACEHOLDER_STARTDATE': 'Start day',
+    'DATERANGE.PLACEHOLDER_ENDDATE': 'End day',
     'TABLE_CONTEXT_MENU.GROUP_BY': 'Group by',
     'TABLE_CONTEXT_MENU.GROUP_BY_YEAR': 'Group by year',
     'TABLE_CONTEXT_MENU.GROUP_BY_MONTH': 'Group by month',
@@ -617,7 +619,9 @@ export const MAP = {
     'EXPORT.DIALOG.FILE_NAME': 'Nombre del fichero',
     'EXPORT.DIALOG.EXPORT_BUTTON': "Exportar",
     'EXPORT.DIALOG.ADVANCED_OPTIONS': " Opciones Avanzadas",
-    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "Puede indicar un nombre para el fichero"
+    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "Puede indicar un nombre para el fichero",
+    'DATERANGE.PLACEHOLDER_STARTDATE': 'Fecha inicio',
+    'DATERANGE.PLACEHOLDER_ENDDATE': 'Fecha fin'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -900,6 +904,8 @@ export const MAP = {
     'OIMAGE.BUTTON.BROWSEFILE': 'Selecione uma imagem',
     'TREE.BUTTONS.SELECT': 'Selecionar...',
     'REPORT.COLUMN.TRUEVALUE': 'Sim',
-    'REPORT.COLUMN.FALSEVALUE': 'Não'
+    'REPORT.COLUMN.FALSEVALUE': 'Não',
+    'DATERANGE.PLACEHOLDER_STARTDATE': 'Data de início',
+    'DATERANGE.PLACEHOLDER_ENDDATE': 'Data de término'
   }
 }
