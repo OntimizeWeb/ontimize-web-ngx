@@ -1082,7 +1082,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.clickSubjectSubscription.unsubscribe();
     }
 
-     if (this.dbClickSubjectSubscription) {
+    if (this.dbClickSubjectSubscription) {
       this.dbClickSubjectSubscription.unsubscribe();
     }
 
@@ -1708,6 +1708,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected setData(data: any, sqlTypes: any) {
+    /* This code is not put in the super method because it is not called from the class itself */
+    if (data instanceof Array && data.length === 0) {
+      this.dataService?.reinitializePaginationContext(this.queryRows);
+    }
+
     this.daoTable.sqlTypesChange.next(sqlTypes);
     this.daoTable.setDataArray(data);
     if (this.pageable) {
@@ -2597,6 +2602,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   onChangePage(evt: PageEvent) {
     this.finishQuerySubscription = false;
+    this.dataService?.setPaginationContext({ pageNumber: evt.pageIndex, pageSize: evt.pageSize });
     if (!this.pageable) {
       this.currentPage = evt.pageIndex;
       return;
@@ -2627,6 +2633,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       offset: newStartRecord,
       length: queryLength
     };
+
     this.finishQuerySubscription = false;
     this.queryData(void 0, queryArgs);
   }

@@ -17,6 +17,8 @@ import { LoginStorageService } from './login-storage.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 import { HttpRequestOptions } from '../types/http-request-options.type';
+import { PaginationContext } from '../interfaces/pagination-context.interface';
+import { PaginationContextService } from './pagination-context.service';
 
 export class BaseService {
 
@@ -30,6 +32,8 @@ export class BaseService {
   protected authService: AuthService;
   protected adapter: ServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
+  protected paginationContextService: PaginationContextService;
+
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
@@ -39,6 +43,7 @@ export class BaseService {
     this.responseParser = this.injector.get<OntimizeServiceResponseParser>(OntimizeServiceResponseParser as Type<OntimizeServiceResponseParser>);
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService)
+    this.paginationContextService = new PaginationContextService(); //
     this.configureAdapter();
   }
 
@@ -187,6 +192,17 @@ export class BaseService {
     if (Util.isDefined(authToken)) {
       this.loginStorageService.updateSessionId(authToken);
     }
+  }
+  setPaginationContext(context: PaginationContext): void {
+    this.paginationContextService.setContext({ ...this.getPaginationContext(),...context });
+  }
+
+  getPaginationContext(): PaginationContext | null {
+    return this.paginationContextService.getContext();
+  }
+
+  reinitializePaginationContext(pageSize?:number): void {
+    this.paginationContextService.reinitializeContext(pageSize);
   }
 
 }

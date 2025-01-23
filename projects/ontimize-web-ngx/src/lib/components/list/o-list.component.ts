@@ -256,6 +256,7 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
             offset: this.state.queryRecordOffset,
             length: this.queryRows
           };
+          this.dataService?.setPaginationContext({ pageNumber: this.dataService?.getPaginationContext().pageNumber + 1 });
           this.queryData(void 0, queryArgs);
         }
       }
