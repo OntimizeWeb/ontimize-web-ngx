@@ -2,7 +2,7 @@
 ### Features
 * New component `o-daterange-input` based in Angular Material ([7bd8c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd8c47)) Closes [#1789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1789)
 * **o-form-layout-manager**: The method `reloadMainComponents()` has been changed from private to public ([75544c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75544c7)) Closes [#1735](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1735)
-* **BaseService**: new methods `setPaginationContext, getPaginationContext, reinitializePaginationContext` to manage the pagination context. Closes [#1804](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1804)
+* **BaseService**: new methods `setPaginationContext, getPaginationContext, reinitializePaginationContext` to manage the pagination context. ([31917ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/31917ef)) Closes [#1804](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1804)
 
 ### Breaking changes
 * Component Renamed (Legacy):
