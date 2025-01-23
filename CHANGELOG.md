@@ -5,7 +5,22 @@
 * **BaseService**: new methods `setPaginationContext, getPaginationContext, reinitializePaginationContext` to manage the pagination context. Closes [#1804](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1804)
 
 ### Breaking changes
-* Renamed `o-daterange-input` component to `o-daterange-legacy-input`
+* Component Renamed (Legacy):
+  The `ODateRangeInputComponent` has been renamed to `ODateRangeLegacyInputComponent` and marked as deprecated.
+
+  * **Deprecation Notice**: The `ODateRangeLegacyInputComponent` is now considered a legacy component and will be removed in a future version. We recommend migrating to `ODateRangeInputComponent` as soon as possible to avoid breaking changes.
+  * **Migration Guide**:
+  Update all instances of <o-daterange-input> in your templates to <o-daterange-legacy-input>.
+  If imported directly in your TypeScript files, replace `ODateRangeInputComponent` with `ODateRangeLegacyInputComponent`.
+    * Before (using ODateRangeInputComponent):
+    ```html
+    <o-daterange-input></o-daterange-input>
+    ```
+    * After (using ODateRangeLegacyInputComponent):
+    ```html
+    <o-daterange-legacy-input></o-daterange-legacy-input>
+    ```
+
 
 ## 15.3.5 (2025-01-08)
 ### Bug fixes
