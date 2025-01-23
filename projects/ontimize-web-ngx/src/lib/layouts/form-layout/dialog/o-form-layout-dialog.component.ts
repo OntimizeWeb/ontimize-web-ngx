@@ -7,6 +7,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
+import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
 
 @Component({
   selector: 'o-form-layout-dialog',
@@ -64,7 +65,10 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
   }
 
   updateNavigation(data: any) {
-    this.label = this.formLayoutManager.getLabelFromData(data);
+    const formLayoutManagerService = this.injector.get(OFormLayoutManagerService);
+    const context = formLayoutManagerService.context;
+
+    this.label = context?.label || this.formLayoutManager.getLabelFromData(data);
   }
 
   updateActiveData(data: any) {

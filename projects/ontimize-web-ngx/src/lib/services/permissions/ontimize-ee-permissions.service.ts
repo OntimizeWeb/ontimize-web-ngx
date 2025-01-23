@@ -51,27 +51,38 @@ export class OntimizeEEPermissionsService extends OntimizeBasePermissionsService
       headers: this.buildHeaders()
     };
     const self = this;
+
     const dataObservable: Observable<any> = new Observable(_innerObserver => {
-      self.httpClient.get(url, options).subscribe((res: any) => {
-        let permissions = {};
-        if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isDefined(res.data)) {
-          const response = res.data;
-          if ((response.length === 1) && Util.isObject(response[0])) {
-            try {
-              permissions = JSON.parse(response[0][OntimizeEEPermissionsService.PERMISSIONS_KEY]);
-            } catch (e) {
-              console.warn('[OntimizeEEPermissionsService: permissions parsing failed]');
+      self.httpClient.get(url, options).subscribe({
+        next: (res: any) => {
+          let permissions = {};
+          if ((res.code === Codes.ONTIMIZE_SUCCESSFUL_CODE) && Util.isDefined(res.data)) {
+            const response = res.data;
+            if ((response.length === 1) && Util.isObject(response[0])) {
+              const rawPermissions = response[0][OntimizeEEPermissionsService.PERMISSIONS_KEY];
+              try {
+                permissions = JSON.parse(rawPermissions);
+              } catch (e) {
+                if (Util.isDefined(rawPermissions)) {
+                  console.warn('[OntimizeEEPermissionsService: permissions parsing failed]');
+                }
+              }
             }
           }
+          _innerObserver.next(permissions);
+        },
+        error: (error: any) => {
+          _innerObserver.error(error);
+        },
+        complete: () => {
+          _innerObserver.complete();
         }
-        _innerObserver.next(permissions);
-
-      }, error => {
-        _innerObserver.error(error);
-      }, () => _innerObserver.complete());
+      });
     });
+
     return dataObservable.pipe(share());
   }
+
 
   protected buildHeaders(): HttpHeaders {
     let headers = new HttpHeaders({

@@ -8,6 +8,8 @@ import { appConfigFactory } from '../../../services/app-config.provider';
 import { AppearanceService } from '../../../services/appearance.service';
 import { AuthService } from '../../../services/auth.service';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 
 describe('OGridSkeletonComponent', () => {
@@ -17,12 +19,13 @@ describe('OGridSkeletonComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [OGridSkeletonComponent],
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, NgxSkeletonLoaderModule],
       providers: [
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
         AppearanceService,
-        AuthService
+        AuthService,
+        LocalStorageService
         // ...INTERNAL_ONTIMIZE_MODULES
       ]
     })

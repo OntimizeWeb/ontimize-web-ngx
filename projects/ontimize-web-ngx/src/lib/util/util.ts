@@ -10,6 +10,7 @@ import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { ODateValueType } from '../types/o-date-value.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 export class Util {
 
@@ -662,4 +663,11 @@ export class Util {
     return clonedArray;
   }
 
+  static getLastActivateRoute(routeSnapshot: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
+    let child = routeSnapshot;
+    while (child.firstChild) {
+      child = child.firstChild;
+    }
+    return child;
+  }
 }

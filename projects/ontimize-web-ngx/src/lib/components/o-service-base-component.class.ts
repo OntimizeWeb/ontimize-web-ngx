@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../decorators/input-converter';
+import { PaginationContext } from '../interfaces';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { DialogService } from '../services/dialog.service';
@@ -101,6 +102,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   componentStateService: T;
   protected dialogService: DialogService;
   protected oErrorDialogManager: OErrorDialogManager;
+  parentComponent: AbstractOServiceBaseComponent<T>;
 
   /* inputs variables */
   oattr: string;
@@ -343,6 +345,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
 
     this.dataService = Util.configureService(configureServiceArgs);
+    this.updatePaginationContext({ pageNumber: 0, pageSize: this.queryRows, offset: 0, totalSize: 0 });
   }
 
   getDataArray() {
@@ -350,6 +353,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   setDataArray(data: any): void {
+    /* The o-table has own implementation of this method */
     if (Util.isArray(data)) {
       this.dataArray = data;
     } else if (Util.isObject(data)) {
@@ -358,6 +362,11 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       console.warn('Component has received not supported service data. Supported data are Array or Object');
       this.dataArray = [];
     }
+
+    if (this.dataArray instanceof Array && this.dataArray.length === 0) {
+      this.dataService?.reinitializePaginationContext(this.queryRows);
+    }
+
   }
 
   public setFormComponent(form: OFormComponent): void {
@@ -419,7 +428,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       }
 
       this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter, ovrrArgs));
-      this.dataService.context = { ovrrArgs };
       this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [queryMethodName, this.dataService, this.queryArguments])
         .subscribe((res: ServiceResponse) => {
           let data;
@@ -431,9 +439,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
             const arrData = (res.data !== undefined) ? res.data : [];
             data = Util.isArray(arrData) ? arrData : [];
             this.sqlTypes = res.sqlTypes;
-            if (this.pageable) {
-              this.updatePaginationInfo(res);
-            }
+            this.updatePaginationInfo(res);
           }
 
           this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
@@ -514,13 +520,29 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   updatePaginationInfo(queryRes: ServiceResponse) {
-    const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
-    if (queryRes.startRecordIndex !== undefined) {
-      this.state.queryRecordOffset = resultEndIndex;
+    if (this.pageable) {
+      const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
+      if (queryRes.startRecordIndex !== undefined) {
+        this.state.queryRecordOffset = resultEndIndex;
+      }
+      if (queryRes.totalQueryRecordsNumber !== undefined) {
+        this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
+      }
+      /* pageNumber = 0 is reinitialized when it generates a search  */
+      const pageNumber = this.state.queryRecordOffset == 0 ? 0: this.dataService?.getPaginationContext().pageNumber;
+      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber,  });
+    } else {
+      this.updatePaginationContext({ totalSize: queryRes.data.length });
     }
-    if (queryRes.totalQueryRecordsNumber !== undefined) {
-      this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
+
+  }
+
+  private updatePaginationContext(paginationContext: PaginationContext) {
+    if (!this.pageable) {
+      delete paginationContext.offset;
     }
+
+    this.dataService?.setPaginationContext(paginationContext);
   }
 
   getTotalRecordsNumber(): number {
@@ -554,9 +576,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   protected setData(data: any, sqlTypes?: any, replace?: boolean): void {
-    //
-  }
 
+  }
 
   protected registerLocalStorageServiceRouteChange() {
     if (this.storeState) {

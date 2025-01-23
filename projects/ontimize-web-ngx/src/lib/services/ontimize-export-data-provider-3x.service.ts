@@ -20,7 +20,7 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
     let exportData: any = {
       type: param.format,
       queryParam: {
-        columns: this.columns,
+        columns: param.columns,
         sqltypes: this.sqlTypes,
         offset: this.table.pageable ? currentPage * this.table.queryRows : -1,
         pageSize: this.table.queryRows,
@@ -34,13 +34,16 @@ export class OntimizeExportDataProviderService3X extends OntimizeExportDataBaseP
     };
 
     if (param.format === 'xlsx' || 'pdf') {
-      exportData.columns = this.parseColumns(this.columns);
+      exportData.columns = this.parseColumns(param.columns);
       exportData.columnTitles = this.columnNames;
       exportData.styles = {};
       exportData.rowStyles = {};
       exportData.columnStyles = {};
       exportData.columnTypes = {};
       exportData.cellStyles = {};
+    }
+    if (param.format === 'pdf') {
+      exportData.landscape = param.landscape;
     }
 
     return exportData;

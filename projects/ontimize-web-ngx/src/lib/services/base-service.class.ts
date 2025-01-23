@@ -18,6 +18,8 @@ import { OntimizeServiceResponseParser } from './parser/o-service-response.parse
 import { HttpRequestOptions } from '../types/http-request-options.type';
 import { BaseResponse } from '../interfaces/base-response.interface';
 import { NameConvention } from './name-convention/name-convention.service';
+import { PaginationContext } from '../interfaces/pagination-context.interface';
+import { PaginationContextService } from './pagination-context.service';
 
 
 export class BaseService<T extends BaseResponse> {
@@ -32,16 +34,9 @@ export class BaseService<T extends BaseResponse> {
   protected authService: AuthService;
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
-  private _context: any;
   nameConvention: NameConvention;
+  protected paginationContextService: PaginationContextService;
 
-  protected get context(): any {
-    return this._context;
-  }
-  protected set context(value: any) {
-    this.adapter.setContext(value);
-    this._context = value;
-  }
 
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
@@ -52,19 +47,17 @@ export class BaseService<T extends BaseResponse> {
     this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService);
     this.nameConvention = this.injector.get(NameConvention);
+    this.paginationContextService = new PaginationContextService(); //
   }
 
   public configureResponseAdapter() {
     this.adapter = this.injector.get(OntimizeServiceResponseAdapter);
-    this.adapter.setContext(this.context);
   }
 
 
   public configureService(config: any): void {
     this.configureResponseAdapter();
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
-    this.context = config.context;
-
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): any {
@@ -215,6 +208,17 @@ export class BaseService<T extends BaseResponse> {
     if (Util.isDefined(authToken)) {
       this.loginStorageService.updateSessionId(authToken);
     }
+  }
+  setPaginationContext(context: PaginationContext): void {
+    this.paginationContextService.setContext({ ...this.getPaginationContext(),...context });
+  }
+
+  getPaginationContext(): PaginationContext | null {
+    return this.paginationContextService.getContext();
+  }
+
+  reinitializePaginationContext(pageSize?:number): void {
+    this.paginationContextService.reinitializeContext(pageSize);
   }
 
 }

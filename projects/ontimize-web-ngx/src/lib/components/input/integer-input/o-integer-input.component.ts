@@ -1,14 +1,13 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, ValidatorFn } from '@angular/forms';
+import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
-import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
-import { OTextInputComponent } from '../text-input/o-text-input.component';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 
 const INPUT_TYPE_TEXT = 'text'
 const INPUT_TYPE_NUMBER = 'number'
@@ -31,7 +30,7 @@ export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   inputs: DEFAULT_INPUTS_O_INTEGER_INPUT,
   encapsulation: ViewEncapsulation.None
 })
-export class OIntegerInputComponent extends OTextInputComponent implements AfterViewInit, OnInit {
+export class OIntegerInputComponent extends OFormDataComponent implements AfterViewInit, OnInit {
 
   inputType: HTMLInputType = INPUT_TYPE_NUMBER;
 
@@ -166,10 +165,10 @@ export class OIntegerInputComponent extends OTextInputComponent implements After
   resolveValidators(): ValidatorFn[] {
     const validators: ValidatorFn[] = super.resolveValidators();
     if (Util.isDefined(this.min)) {
-      validators.push(OValidators.createMinValidator(this.min));
+      validators.push(Validators.min(this.min));
     }
     if (Util.isDefined(this.max)) {
-      validators.push(OValidators.createMaxValidator(this.max));
+      validators.push(Validators.max(this.max));
     }
     return validators;
   }

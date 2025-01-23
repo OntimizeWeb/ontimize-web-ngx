@@ -1,4 +1,5 @@
 import { ServiceRequestAdapter } from './../../../services/factories';
+import { LocalStorageService } from './../../../services/local-storage.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -44,6 +45,7 @@ describe('OTreeNodeComponent', () => {
         AbstractComponentStateService,
         PermissionsService,
         ServiceRequestAdapter,
+        LocalStorageService,
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
       ]
