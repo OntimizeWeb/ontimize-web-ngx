@@ -11,7 +11,9 @@ export class PaginationContextService {
   }
 
   setContext(context: PaginationContext): void {
-    this.context = context;
+    if (context == null || context == undefined) {
+      this.context = context;
+    }
   }
 
   getContext(): PaginationContext | null {
@@ -19,6 +21,6 @@ export class PaginationContextService {
   }
 
   reinitializeContext(pageSize?: number): void {
-   this.setContext({ pageNumber: 0, pageSize: pageSize ?? Codes.DEFAULT_QUERY_ROWS, offset: 0, totalSize: 0 });
+    this.setContext({ pageNumber: 0, pageSize: pageSize ?? Codes.DEFAULT_QUERY_ROWS, offset: 0, totalSize: 0 });
   }
 }
