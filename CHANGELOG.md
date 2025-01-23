@@ -1,3 +1,27 @@
+## 15.4.0 (2025-01-23)
+### Features
+* New component `o-daterange-input` based in Angular Material ([7bd8c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd8c47)) Closes [#1789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1789)
+* **o-form-layout-manager**: The method `reloadMainComponents()` has been changed from private to public ([75544c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75544c7)) Closes [#1735](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1735)
+* **BaseService**: new methods `setPaginationContext, getPaginationContext, reinitializePaginationContext` to manage the pagination context. ([31917ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/31917ef)) Closes [#1804](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1804)
+
+### Breaking changes
+* Component Renamed (Legacy):
+  The `ODateRangeInputComponent` has been renamed to `ODateRangeLegacyInputComponent` and marked as deprecated.
+
+  * **Deprecation Notice**: The `ODateRangeLegacyInputComponent` is now considered a legacy component and will be removed in a future version. We recommend migrating to `ODateRangeInputComponent` as soon as possible to avoid breaking changes.
+  * **Migration Guide**:
+  Update all instances of <o-daterange-input> in your templates to <o-daterange-legacy-input>.
+  If imported directly in your TypeScript files, replace `ODateRangeInputComponent` with `ODateRangeLegacyInputComponent`.
+    * Before (using ODateRangeInputComponent):
+    ```html
+    <o-daterange-input></o-daterange-input>
+    ```
+    * After (using ODateRangeLegacyInputComponent):
+    ```html
+    <o-daterange-legacy-input></o-daterange-legacy-input>
+    ```
+
+
 ## 15.3.5 (2025-01-08)
 ### Bug fixes
 * **o-table**:Fixed error `ObjectUnsubscribedErrorImpl {stack: 'Error\n at _super (http://...)\n at http://.../vendor.js:48762:42', name: 'ObjectUnsubscribedError', message: 'object unsubscribed'}` being displayed in the console ([9e9c147](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e9c147)) Closes [#1796](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1796)
