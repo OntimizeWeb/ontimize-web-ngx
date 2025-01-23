@@ -31,7 +31,9 @@ export const DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT = [
   'mode',
   ...DEFAULT_INPUTS_O_DATE_INPUT
 ];
-
+/**
+ * @deprecated Use `ODateRangeInputComponent` instead. This component will be removed in a future version.
+ */
 @Component({
   selector: 'o-daterange-legacy-input',
   templateUrl: './o-daterange-input.component.html',
