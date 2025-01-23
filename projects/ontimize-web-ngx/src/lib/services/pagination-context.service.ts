@@ -11,7 +11,7 @@ export class PaginationContextService {
   }
 
   setContext(context: PaginationContext): void {
-    if (context == null || context == undefined) {
+    if (context !== null && context !== undefined) {
       this.context = context;
     }
   }
@@ -20,6 +20,10 @@ export class PaginationContextService {
     return this.context;
   }
 
+  /**
+   * Reset the component to its initial state, just before making any REST requests.
+   * @param [pageSize]
+   */
   reinitializeContext(pageSize?: number): void {
     this.setContext({ pageNumber: 0, pageSize: pageSize ?? Codes.DEFAULT_QUERY_ROWS, offset: 0, totalSize: 0 });
   }

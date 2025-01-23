@@ -906,7 +906,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public onChangePage(e: PageEvent): void {
-    this.dataService.setPaginationContext({ pageNumber: e.pageIndex, pageSize: e.pageSize });
+    this.dataService?.setPaginationContext({ pageNumber: e.pageIndex, pageSize: e.pageSize });
 
     if (!this.pageable) {
       this.currentPage = e.pageIndex;

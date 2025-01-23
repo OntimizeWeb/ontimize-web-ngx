@@ -501,7 +501,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
       }
       /* pageNumber = 0 is reinitialized when it generates a search  */
-      const pageNumber = this.state.queryRecordOffset == 0 ? 0: this.dataService.getPaginationContext().pageNumber;
+      const pageNumber = this.state.queryRecordOffset == 0 ? 0: this.dataService?.getPaginationContext().pageNumber;
       this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber,  });
     } else {
       this.updatePaginationContext({ totalSize: queryRes.data.length });
