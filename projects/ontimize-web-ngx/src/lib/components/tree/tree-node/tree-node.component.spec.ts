@@ -12,6 +12,7 @@ import {
   AbstractComponentStateService,
   appConfigFactory,
   AuthService,
+  NameConvention,
   OntimizeAuthServiceProvider,
   OntimizeService,
   OntimizeServiceResponseAdapter,
@@ -46,6 +47,7 @@ describe('OTreeNodeComponent', () => {
         PermissionsService,
         ServiceRequestAdapter,
         LocalStorageService,
+        NameConvention,
         { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
         { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
       ]
