@@ -1,5 +1,6 @@
 ## 15.1.0-SNAPSHOT-8
-Merge 15.4.0 into JSONAPI
+* Integrated changes from version 15.1.3 to version 15.4.0
+* For detailed information, please check the changelogs of the intermediate versions.
 
 ## 15.1.0-SNAPSHOT-7
 * Fixed errors in `JSONAPIPreferencesService` and `OntimizePreferencesService` services that were not saving preferences correctly
