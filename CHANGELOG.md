@@ -1,6 +1,9 @@
-## 15.1.0-SNAPSHOT-8
+## 15.1.0-SNAPSHOT-9
 * Integrated changes from version 15.1.3 to version 15.4.0
 * For detailed information, please check the changelogs of the intermediate versions.
+
+## 15.1.0-SNAPSHOT-8
+* Fixed columns being sent as an array Closes [#1672](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1672)
 
 ## 15.1.0-SNAPSHOT-7
 * Fixed errors in `JSONAPIPreferencesService` and `OntimizePreferencesService` services that were not saving preferences correctly
