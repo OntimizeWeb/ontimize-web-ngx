@@ -1,4 +1,5 @@
 import { OListItemDirective } from '../components/list/list-item/o-list-item.directive';
+import { InputRegulateDirective } from '../directives/input-regulate.directive';
 import { OKeyboardListenerDirective } from '../directives/keyboard-listener.directive';
 import { OLockerDirective } from '../directives/locker.directive';
 import { OFileDragAndDropDirective } from '../directives/o-file-drag-and-drop.directive';
@@ -18,5 +19,6 @@ export const ONTIMIZE_DIRECTIVES = [
   OMatErrorDirective,
   OFileDragAndDropDirective,
   OMatPrefix,
-  OMatSuffix
+  OMatSuffix,
+  InputRegulateDirective
 ];

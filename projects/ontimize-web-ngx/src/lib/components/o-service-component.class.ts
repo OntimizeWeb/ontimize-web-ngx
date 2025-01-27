@@ -10,7 +10,6 @@ import { OSearchInputComponent } from '../components/input/search-input/o-search
 import { BooleanConverter, BooleanInputConverter } from '../decorators/input-converter';
 import { IServiceDataComponent } from '../interfaces/service-data-component.interface';
 import { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o-form-layout-dialog.component';
-import { OFormLayoutManagerBase } from '../layouts/form-layout/o-form-layout-manager-base.class';
 import { OFormLayoutManagerComponent } from '../layouts/form-layout/o-form-layout-manager.component';
 import { OFormLayoutTabGroupComponent } from '../layouts/form-layout/tabgroup/o-form-layout-tabgroup.component';
 import { NavigationService } from '../services/navigation.service';
@@ -31,6 +30,9 @@ import { PermissionsUtils } from '../util/permissions';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
+import { OFormLayoutManagerBase } from '../layouts/form-layout/o-form-layout-manager-base.class';
+import { OFormLayoutManagerContext } from '../types/form-layout-manager-context.type';
+import { OFormLayoutManagerService } from '../services/o-form-layout-manager.service';
 
 interface ItemClick {
   getItemData(): any
@@ -232,11 +234,11 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   /* end of outputs variables */
 
   public filterBuilder: OFilterBuilderComponent;
-  protected _selection: SelectionModel<Element>;
+  protected _selection: SelectionModel<any>;
 
   get selection() {
     if (!Util.isDefined(this._selection)) {
-      this._selection = new SelectionModel<Element>(true, []);
+      this._selection = new SelectionModel<any>(true, [], true, this.compareRow());
     }
     return this._selection;
   }
@@ -363,7 +365,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     }
   }
 
-  protected navigateToDetail(route: any[], qParams: any, relativeTo: ActivatedRoute): void {
+  protected async navigateToDetail(route: any[], qParams: any, relativeTo: ActivatedRoute): Promise<void> {
     const extras = {
       relativeTo: relativeTo
     };
@@ -372,7 +374,17 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       this.formLayoutManager.setAsActiveFormLayoutManager();
     }
     extras[Codes.QUERY_PARAMS] = qParams;
-    this.router.navigate(route, extras);
+
+    this.router.navigate(route, extras).
+      then(() => {
+        if (!this.formLayoutManager) {
+          this.navigationService.isNavigating = false;
+        }
+      })
+      .catch(() => {
+        console.error('Cannot match any routes. URL Segment: ', route);
+        this.navigationService.isNavigating = false
+      });
   }
 
   public insertDetail(): void {
@@ -392,21 +404,34 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     }
   }
 
-  public viewDetail(item: any): void {
+  public viewDetail(item: any, context?: OFormLayoutManagerContext): void {
+    const formLayoutManagerService = this.injector.get(OFormLayoutManagerService);
+    formLayoutManagerService.context = void 0;
+
     if (this.oFormLayoutDialog) {
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
       return;
     }
-    const route = this.getItemModeRoute(item, 'detailFormRoute');
-    this.addFormLayoutManagerRoute(route);
-    if (route.length > 0) {
-      const qParams = Codes.getIsDetailObject();
-      const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
-      const zone = this.injector.get(NgZone);
-      zone.run(() =>
-        this.navigateToDetail(route, qParams, relativeTo)
-      );
+    if (this.navigationService.isNavigating) {
+      return;
+
     }
+    const zone = this.injector.get(NgZone);
+    zone.run(async () => {
+      const route = this.getItemModeRoute(item, 'detailFormRoute');
+      this.addFormLayoutManagerRoute(route);
+      if (route.length > 0) {
+        const qParams = Codes.getIsDetailObject();
+        const relativeTo = this.recursiveDetail ? this.actRoute.parent : this.actRoute;
+
+        if (!this.formLayoutManager?.isSplitPaneMode()) {
+          formLayoutManagerService.context = context;
+        }
+        this.navigationService.isNavigating = true;
+        await this.navigateToDetail(route, qParams, relativeTo)
+      }
+    });
+
   }
 
   public editDetail(item: any): void {
@@ -414,25 +439,28 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
       return;
     }
-    const route = this.getItemModeRoute(item, 'editFormRoute');
-    this.addFormLayoutManagerRoute(route);
-    if (route.length > 0) {
-      const qParams = Codes.getIsDetailObject();
-      const relativeTo = this.recursiveEdit ? this.actRoute.parent : this.actRoute;
-      const zone = this.injector.get(NgZone);
-      zone.run(() =>
-        this.navigateToDetail(route, qParams, relativeTo)
-      );
-    }
+    const zone = this.injector.get(NgZone);
+    zone.run(async () => {
+      const route = this.getItemModeRoute(item, 'editFormRoute');
+      this.addFormLayoutManagerRoute(route);
+      if (route.length > 0) {
+        const qParams = Codes.getIsDetailObject();
+        const relativeTo = this.recursiveEdit ? this.actRoute.parent : this.actRoute;
+
+        await this.navigateToDetail(route, qParams, relativeTo)
+
+      }
+    });
   }
 
-  protected addFormLayoutManagerRoute(routeArr: any[]): void {
+  protected addFormLayoutManagerRoute(routeArr: any[]): any[] {
     if (this.formLayoutManager && routeArr.length > 0) {
       const compRoute = this.formLayoutManager.getRouteForComponent(this);
       if (compRoute && compRoute.length > 0) {
         routeArr.unshift(...compRoute);
       }
     }
+    return routeArr;
   }
   protected setButtonPermissions(actionsPermissions): void {
     if (Util.isDefined(actionsPermissions)) {
@@ -850,6 +878,11 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
+        if (((arg.previousIndex === void 0) || arg.previousIndex === 0) && this.formLayoutManager.navigationService.isNavigating) {
+          /* in the form-layout mode=tab, the only way to ensure that the component has been rendered is
+           when navigationService.isNavigating and comes previousIndex=0  */
+          arg.data.rendererSubject.next(true);
+        }
         this.checkViewPortSubject.next(true);
       });
 
@@ -873,6 +906,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public onChangePage(e: PageEvent): void {
+    this.dataService?.setPaginationContext({ pageNumber: e.pageIndex, pageSize: e.pageSize });
+
     if (!this.pageable) {
       this.currentPage = e.pageIndex;
       this.queryRows = e.pageSize;
@@ -904,6 +939,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       length: queryLength,
       replace: true
     };
+
     this.queryData(void 0, queryArgs);
   }
 
@@ -997,6 +1033,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
   }
 
+  compareRow(): ((o1: any, o2: any) => boolean) | undefined {
+    return (o1: any, o2: any) => this.keysArray.every(key => o1[key] === o2[key]);
+  }
 }
 
 /*This class is definied to mantain bacwards compatibility */

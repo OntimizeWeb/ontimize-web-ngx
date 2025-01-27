@@ -8,12 +8,10 @@ import { SessionInfo } from '../types/session-info.type';
 import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
+import { ILocalStorageService } from '../interfaces/local-service.interface';
 
-
-@Injectable({
-  providedIn: 'root'
-})
-export class LocalStorageService {
+@Injectable()
+export class LocalStorageService implements ILocalStorageService {
   static COMPONENTS_STORAGE_KEY: string = 'components';
   static USERS_STORAGE_KEY: string = 'users';
   static SESSION_STORAGE_KEY: string = 'session';
@@ -190,4 +188,7 @@ export class LocalStorageService {
     }
   }
 
+  removeStoredData() {
+    localStorage.removeItem(this._config.uuid);
+  }
 }

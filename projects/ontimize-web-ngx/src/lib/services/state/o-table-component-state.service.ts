@@ -190,9 +190,16 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
   }
 
   protected getPageState(): any {
-    const result: any = {
-      'query-rows': this.component.matpaginator ? this.component.matpaginator.pageSize : ''
+    const result: any = {};
+
+    if (this.component.matpaginator) {
+      result['query-rows'] = this.component.matpaginator.pageSize;
+    } else if (this.component.state.queryRows) {
+      result['query-rows'] = this.component.state.queryRows;
+    } else {
+      result['query-rows'] = this.component.originalQueryRows;
     };
+
     if (this.component.currentPage > 0 && this.component.storePaginationState) {
       result.currentPage = this.component.currentPage;
     }
@@ -248,7 +255,7 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
 
   protected getSortState() {
     const sortColumns = [];
-    this.component.sort.getSortColumns().forEach(sortData => {
+    this.component.sort?.getSortColumns().forEach(sortData => {
       sortColumns.push(sortData.id + Codes.COLUMNS_ALIAS_SEPARATOR + sortData.direction);
     });
     return {

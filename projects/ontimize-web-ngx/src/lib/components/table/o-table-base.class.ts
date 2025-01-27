@@ -1,20 +1,23 @@
-import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+import { SelectionModel } from '@angular/cdk/collections';
+import { ChangeDetectorRef, EventEmitter, TemplateRef } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+
+import type { SnackBarService } from './../../services/snackbar.service';
+
 import type { QuickFilterFunction } from "../../types/quick-filter-function.type";
 import type { OColumn } from "./column/o-column.class";
-import { ChangeDetectorRef, EventEmitter, TemplateRef } from "@angular/core";
 import type { OPermissions } from "../../types/o-permissions.type";
-import { SelectionModel } from "@angular/cdk/collections";
 import type { OTableButtons } from "../../interfaces/o-table-buttons.interface";
 import type { OTableQuickfilter } from "../../interfaces/o-table-quickfilter.interface";
 import type { OTableMenu } from "../../interfaces/o-table-menu.interface";
 import type { OColumnValueFilter } from "../../types/table/o-column-value-filter.type";
 import type { OContextMenuComponent } from "../contextmenu/o-context-menu.component";
 import type { Expression, OFilterDefinition, OGroupedColumnTypes, OTableMenuPermissions, SQLOrder } from "../../types";
-import { Observable } from "rxjs";
 import type { OTableComponentStateClass } from "../../services/state/o-table-component-state.class";
 import type { OTableHeaderComponent } from "./extensions/header/table-header/o-table-header.component";
 import type { MatPaginator } from "@angular/material/paginator";
-import { MatCheckboxChange } from "@angular/material/checkbox";
 import type { OTableColumnSelectAllDirective } from "./extensions/header/table-column-select-all/o-table-column-select-all.directive";
 import type { OFilterBuilderComponent } from "../filter-builder/o-filter-builder.component";
 
@@ -28,6 +31,7 @@ export abstract class OTableBase {
   exportServiceType: TemplateRef<any>;
   exportOptsTemplate: any;
   visibleColArray: string[];
+  showNotificationOfReadOnly: boolean;
   abstract reinitializeSortColumns(sortColumns?: SQLOrder[]);
   abstract setGroupColumns(value: any[]);
   abstract clearColumnFilters(triggerDatasourceUpdate?: boolean, columnsAttr?: string[]): void
@@ -115,4 +119,10 @@ export abstract class OTableBase {
   abstract columns: string;
   abstract getParentKeysValues();
   abstract filterBuilder: OFilterBuilderComponent;
+  abstract readOnlyFunction: (configuration: any) => boolean;
+  abstract isComponentReadOnly(selector: string, attr: string): boolean;
+  abstract getSnackService(): SnackBarService;
+  abstract setSelectedByKeys(keyValues: Array<any>): void;
+  abstract setSelectedByMultipleKeys(keyValues: Array<Object>): void;
+  abstract setSelectedByRowIds(rowIds: Array<number>): void;
 }

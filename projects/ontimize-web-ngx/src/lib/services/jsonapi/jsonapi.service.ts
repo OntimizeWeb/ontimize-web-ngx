@@ -88,7 +88,6 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
-    this.context = config.context;
     // TODO init other params
   }
 

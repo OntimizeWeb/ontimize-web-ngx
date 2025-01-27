@@ -15,36 +15,24 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { Observable, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OntimizeServiceProvider } from '../../services/factories';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
+import { OPermissions } from '../../types';
+import { OTreePermissions } from '../../types/o-tree-permissions.type';
+import { OTreeFlatNode } from '../../types/tree-flat-node.type';
 import { Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
-import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
-import { OPermissions } from '../../types';
-import { OTreePermissions } from '../../types/o-tree-permissions.type';
-import { OntimizeServiceProvider } from '../../services/factories';
 
-export type OTreeFlatNode = {
-  id: string | number,
-  label: string;
-  level: number,
-  rootNode?: boolean,
-  expandable: boolean,
-  treeNode?: OTreeNodeComponent,
-  data: any;
-  isLoading?: boolean;
-  route?: string
-
-}
 
 export const DEFAULT_INPUTS_O_TREE = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -116,9 +104,12 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
   host: {
     '[class.o-tree]': 'true'
   },
-  providers: [OTreeDao, OntimizeServiceProvider]
-
+  providers: [
+    OTreeDao,
+    OntimizeServiceProvider
+  ]
 })
+
 export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
 
   getLevel = (node: OTreeFlatNode) => node.level;
@@ -334,11 +325,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     this.onNodeClick.emit(node);
     this.selectedNode = node;
     if (this.detailMode !== Codes.DETAIL_MODE_NONE && !this.isRootNode(node)) {
-      /*
-      Se podria mejorar llamando this.viewDetail(node.data);
-      si almacenamos el nodo, actualmente se esta almacenando si existe un tree-node hijo
-      */
-      this.navigateToViewDetail(node);
+      node.node.viewDetail(node.data, { label: node.label });
     }
   }
 
@@ -579,6 +566,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       'id': this.getNodeId(node, parentNode),
       'label': this.getItemText(node),
       'level': level,
+      'node': this,
       treeNode: this.treeNode,
       'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length || this.recursive,
       'data': node,
@@ -678,7 +666,12 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       }
     }
   }
+
   isSelectedNode(node: OTreeFlatNode) {
     return this.selectedNode == node;
+  }
+
+  public onItemDetailClick(node: OTreeFlatNode): void {
+    this.handleItemClick(node.data);
   }
 }

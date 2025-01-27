@@ -1,12 +1,11 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
-  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay">
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
-    [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill [subscriptSizing]="subscriptSizing">
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
+    class="icon-field" fxFlexFill [subscriptSizing]="subscriptSizing">
     <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
-    <input matInput type="email" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [required]="isRequired"
-      (change)="onChangeEvent($event)" >
+    <input matInput type="email" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)="innerOnFocus($event)"
+      (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [required]="isRequired" (change)="onChangeEvent($event)" [maxlength]="maxLength"
+      [minlength]="minLength">
     <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>

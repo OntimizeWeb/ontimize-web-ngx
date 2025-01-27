@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Injector,
-  Renderer2,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResizeEvent } from 'angular-resizable-element';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -115,6 +105,7 @@ export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayout
   setDetailComponent(compData: FormLayoutDetailComponentData) {
     this.data = compData;
     this.createComponent();
+    this.data.rendererSubject.next(true);
   }
 
   onResizeEnd(property: string, event: ResizeEvent, el: any): void {

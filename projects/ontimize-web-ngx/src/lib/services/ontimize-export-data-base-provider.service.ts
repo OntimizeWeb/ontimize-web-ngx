@@ -44,37 +44,73 @@ export class OntimizeExportDataBaseProviderService {
   }
 
   protected getFilterWithBasicExpression(): any {
-    let filter = this.table.getComponentFilter();
+    let filter = {};
+    let parentKeysfilter = this.table.getComponentFilter();
 
+    filter = this.applyParentItemExpression(filter);
+    filter = this.applyColumnFilters(filter);
+
+    filter = Object.assign(filter || {}, parentKeysfilter);
+
+    if (!this.table.pageable) {
+      filter = this.applyQuickAndBuilderFilters(filter);
+    }
+
+    return filter;
+  }
+
+  private applyParentItemExpression(filter: any): any {
     if (Object.keys(filter).length > 0) {
       const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
       filter = {};
       filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = parentItemExpr;
     }
+    return filter;
+  }
+
+  private applyColumnFilters(filter: any): any {
     const beColFilter = this.table.getColumnFiltersExpression();
-    // Add column filters basic expression to current filter
-    if (beColFilter && !Util.isDefined(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
-      filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
-    } else if (beColFilter) {
-      filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] =
-        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
 
+    if (beColFilter) {
+      const currentFilterExpr = filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY];
+
+      if (!Util.isDefined(currentFilterExpr)) {
+        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
+      } else {
+        filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] =
+          FilterExpressionUtils.buildComplexExpression(currentFilterExpr, beColFilter, FilterExpressionUtils.OP_AND);
+      }
     }
-    const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent) ? this.table.oTableQuickFilterComponent.filterExpression : undefined;
 
-    const filterBuilderExpr = Util.isDefined(this.table.filterBuilder) ? this.table.filterBuilder.getExpression() : undefined;
+    return filter;
+  }
+
+  private applyQuickAndBuilderFilters(filter: any): any {
+    const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent)
+      ? this.table.oTableQuickFilterComponent.filterExpression
+      : undefined;
+
+    const filterBuilderExpr = Util.isDefined(this.table.filterBuilder)
+      ? this.table.filterBuilder.getExpression()
+      : undefined;
+
     let complexExpr = quickFilterExpr || filterBuilderExpr;
     if (quickFilterExpr && filterBuilderExpr) {
       complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
     }
 
-    if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
-      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
-    } else if (complexExpr) {
-      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
-        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], complexExpr, FilterExpressionUtils.OP_AND);
+    if (complexExpr) {
+      const currentBasicExpr = filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY];
+
+      if (!Util.isDefined(currentBasicExpr)) {
+        filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
+      } else {
+        filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
+          FilterExpressionUtils.buildComplexExpression(currentBasicExpr, complexExpr, FilterExpressionUtils.OP_AND);
+      }
     }
 
     return filter;
   }
+
 }

@@ -1,3 +1,21 @@
+.filtervalues-container {
+  padding: 12px;
+
+  .mat-divider {
+    margin: 8px;
+  }
+
+  .mdc-list-group__subheader {
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  mat-radio-group.mat-mdc-radio-group {
+    margin: 12px 12px 0 12px;
+  }
+}
+
 .o-filter-by-column-dialog {
   .mat-mdc-slide-toggle {
     padding-bottom: 24px;
@@ -5,7 +23,7 @@
   }
 
   .content-wrapper {
-    padding: 24px 0 12px;
+    padding-top: 12px;
     margin: 0;
 
     &.content-wrapper-fixed-dimension {

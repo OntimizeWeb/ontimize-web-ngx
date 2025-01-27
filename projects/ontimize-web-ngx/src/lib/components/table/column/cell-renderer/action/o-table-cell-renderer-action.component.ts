@@ -61,6 +61,12 @@ export class OTableCellRendererActionComponent extends OBaseTableCellRenderer im
       event.stopPropagation();
       event.preventDefault();
     }
+    if (this.table.readOnly) {
+      if (this.table.showNotificationOfReadOnly) {
+        this.table.getSnackService().open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
+      return;
+    }
     if (Util.isDefined(this.action)) {
       switch (this.action.toLowerCase()) {
         case 'detail':

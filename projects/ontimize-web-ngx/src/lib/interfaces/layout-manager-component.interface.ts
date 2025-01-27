@@ -5,4 +5,5 @@ import type { OFormLayoutDialogComponent } from '../layouts/form-layout/dialog/o
 export interface ILayoutManagerComponent {
   oFormLayoutDialog: OFormLayoutDialogComponent;
   elementRef: ElementRef;
+  parentComponent: any;
 }

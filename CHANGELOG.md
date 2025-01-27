@@ -1,3 +1,7 @@
+## 15.1.0-SNAPSHOT-8
+* Integrated changes from version 15.1.3 to version 15.4.0
+* For detailed information, please check the changelogs of the intermediate versions.
+
 ## 15.1.0-SNAPSHOT-7
 * Fixed errors in `JSONAPIPreferencesService` and `OntimizePreferencesService` services that were not saving preferences correctly
 
@@ -29,6 +33,123 @@
 ## 15.1.0-SNAPSHOT-0(2024-04-30)
 ### Features
 * Added CRUD operations for JSON API
+## 15.4.0 (2025-01-23)
+### Features
+* New component `o-daterange-input` based in Angular Material ([7bd8c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd8c47)) Closes [#1789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1789)
+* **o-form-layout-manager**: The method `reloadMainComponents()` has been changed from private to public ([75544c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/75544c7)) Closes [#1735](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1735)
+* **BaseService**: new methods `setPaginationContext, getPaginationContext, reinitializePaginationContext` to manage the pagination context. ([31917ef](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/31917ef)) Closes [#1804](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1804)
+
+### Breaking changes
+* Component Renamed (Legacy):
+  The `ODateRangeInputComponent` has been renamed to `ODateRangeLegacyInputComponent` and marked as deprecated.
+
+  * **Deprecation Notice**: The `ODateRangeLegacyInputComponent` is now considered a legacy component and will be removed in a future version. We recommend migrating to `ODateRangeInputComponent` as soon as possible to avoid breaking changes.
+  * **Migration Guide**:
+  Update all instances of <o-daterange-input> in your templates to <o-daterange-legacy-input>.
+  If imported directly in your TypeScript files, replace `ODateRangeInputComponent` with `ODateRangeLegacyInputComponent`.
+    * Before (using ODateRangeInputComponent):
+    ```html
+    <o-daterange-input></o-daterange-input>
+    ```
+    * After (using ODateRangeLegacyInputComponent):
+    ```html
+    <o-daterange-legacy-input></o-daterange-legacy-input>
+    ```
+
+
+## 15.3.5 (2025-01-08)
+### Bug fixes
+* **o-table**:Fixed error `ObjectUnsubscribedErrorImpl {stack: 'Error\n at _super (http://...)\n at http://.../vendor.js:48762:42', name: 'ObjectUnsubscribedError', message: 'object unsubscribed'}` being displayed in the console ([9e9c147](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9e9c147)) Closes [#1796](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1796)
+
+## 15.3.4 (2024-12-19)
+### Bug fixes
+* **o-table**: Fixed that in **non-pageable** table all different values ​​are shown by default in the column filtering modal ([e01ff67](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e01ff67)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
+* **o-combo**: Fixed in **read-only** state not having the same appearance as disabled state ([96e50a6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/96e50a6)) Closes [#1786](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1786)
+* **o-search-input**: Fixed when you press enter in the input, the dropdown opens to select columns ([f9f6ce3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f9f6ce3)) Closes [#1785](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1785)
+
+## 15.3.3 (2024-12-11)
+### Bug fixes
+* **o-table**:
+  * Prevent multiple clicks in table details ([113cc7b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/113cc7b)) Closes [#1766](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1766)
+  * Improved CSS styles in the export modal window ([f8d7e7c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f8d7e7c)) Closes [#1771](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1781)
+  * sqltypes sent in responses were overwritten with the value **1111** if the o-table-column did not have sql-type defined ([5b463b9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5b463b9)) Closes [#1778](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1778)
+  * `filter-values-in-data` input with values ​**​'current-page'** and **'all-data'** was not working on non-pageable o-table([4865154](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4865154)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
+
+* **o-radio**: Fixed that the o-radio does not mark the value when changing tabs in a `o-form-layout-manager`([d80528b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d80528b)) Closes [#1760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1760)
+
+* **PermissionsService**: Fixed permissionsService warning when user has all permissions ([c958f8e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c958f8e)) Closes [#1775](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1775)
+
+* Exported all abstract Base classes as OTableBase, OFormBase to remove circular dependencies and allow component overwriting ([7ec64ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7ec64ac)) Closes [#1773](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1773)
+
+
+
+## 15.3.2 (2024-11-26)
+### Bug fixes
+* **o-table**: Fixed pageSize='' being saved in localstorage ([643108c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/643108c)) Closes [#1758](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1758)
+* **o-radio**: Fixed that the o-radio does not mark the value when changing tabs in a `o-form-layout-manager`([88f7c6c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/88f7c6c)) Closes [#1760](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1760)
+
+## 15.3.1 (2024-11-21)
+### Bug fixes
+* **o-table**:
+  * Fixed the following error being displayed in the console `Error TypeError: Cannot read properties of undefined (reading 'getSortColumns')` ([6735c84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6735c84)) Closes [#1752](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1752)
+  * Fixed the input `showChartsOnDemandOption` does not work in injection token `O_TABLE_GLOBAL_CONFIG` ([cc95f04](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cc95f04)) Closes [#1749](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1749)
+* **o-form-layout-tabgroup**: Fixed that pressing f5 did not load a component that would have been created by code ([6639d21](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6639d21)) Closes [#1750](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1750)
+
+## 15.3.0 (2024-11-18)
+### Features
+* **o-tree**: Now it works with `o-form-layout-manager` ([c6c24a8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c6c24a8)) Closes [#1564](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1564)
+* **o-table**:
+  * Added new input `showChartsOnDemandOption` and `showReportOnDemandOption` in injection token `O_TABLE_GLOBAL_CONFIG` ([40c08bd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/40c08bd)) Closes [#1731](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1731)
+  * New methods `setSelectedByKeys`, `setSelectedByMultipleKeys` and `setSelectedByRowIds` ([26c88c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26c88c7)) Closes [#1737](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1737)
+  * New state `read-only` ([21cd395](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/21cd395)) Closes [#1732](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1732)
+
+### Bug fixes
+* **o-tree**: Fixed that o-tree with nodes with different service does not load data ([d3637ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d3637ec)) Closes [#1723](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1723)
+* **o-table**:
+  * Fixed that it is not possible to search by value of o-table-column type='date' in o-table pageable ([f9245ea](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f9245ea)) Closes [#1723](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1723)
+  * Fixed that the method `selectedRow` method does not work after refresh the otable ([26c88c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/26c88c7)) Closes [#1737](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1737)
+
+
+## 15.2.2 (2024-10-24)
+### Features
+* **o-table**: Modified export dialog that allows to select the columns, file name and orientation ([c934baa](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c934baa)) Closes [#1715](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1715)
+* **o-text-input**: New attribute `regulate-pattern` to restrict input ([2bdc22c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bdc22c)) Closes [#1704](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1704)
+
+### Bug fixes
+* **o-integer-input, o-real-input, o-percent-input, o-currency-input**: Fixed not working min and max validators ([2bdc22c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bdc22c)) Closes [#1705](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1705)
+* **o-table**: Column renderer numeric not working `decimal-separator` and `thousand-separator` inputs ([785023d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/785023d)) Closes [#1711](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1711)
+* **o-form**: Fixed a new form form with `after-insert-mode= 'close'` not working ([1c6a5db](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1c6a5db)) Closes [#1712](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1712)
+
+## 15.2.1(2024-10-02)
+### Features
+* **o-table**: Filter column feature can now filter by current page or all data in the table([dcb9fbf](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dcb9fbf7c83217608903e351bc31811f0fde6d74)) Closes [#264](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/264)
+
+### Bug fixes
+* **o-list-picker**:
+  * Fixed an unknown error being displayed when focusing out ([56561af](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/56561af)) Closes [#1685](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1685)
+  * Fixed horizontal scroll showing in the modal because the text is very long ([c3db0f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c3db0f3)) Closes [#1695](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1695)
+  * Fixed not emitting the `onDataLoaded` event ([fbdf1ac](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fbdf1ac)) Closes [#1693](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1693)
+  * Fixed `visible-columns` input not working ([4b0ae2f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4b0ae2f)) Closes [#1691](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1691)
+* **o-text-input**: Fixed not detecting changes with string-case="uppercase" or "lowercase" in detail form ([2306170](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2306170)) Closes [#1692](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1692)
+* **o-radio**: Fixed label covering the radios when there is no default value ([1625d0d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1625d0d)) Closes [#1670](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1670)
+* **o-table**: Fixed `parentHeight is not defined` error being displayed in the console ([1323e7f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1323e7f)) Closes [#1697](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1697)
+
+## 15.2.0 (2024-09-16)
+### Features
+* **LocalStorageService** ([5689c19](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5689c19)) Closes [#1682](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1682)
+  * New injection token `O_LOCALSTORAGE_SERVICE` for allowing LocalStorageService extension
+  * New method `removeStoredData()`
+* **o-text-input, o-textarea, o-email, o-nif, o-password** ([7e11ed3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7e11ed3)) Closes [#1674](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1674)
+  * New input `string-case` to shows the characters always in *lowercase* or *uppercase*
+  * New property `stringCase` in `O_INPUTS_OPTIONS` injection token that can be used to set input string-case in inputs
+* **o-html-input, o-text-input, o-textarea, o-email, o-nif, o-password**
+  * Truncate the text with `max-length` input ([b40059e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b40059e)) Closes [#1675](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1675)
+
+### Bug fixes
+* **o-table**:
+  * Fixed bug with exportation with parent keys ([d6d91cc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d6d91cc)) Closes [#1673](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1673)
+  * Fixed translation of value `TABLE_CONTEXT_MENU.COPY_ROW` in the spanish bundle ([9829fe4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9829fe4)) Closes [#1665](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1665)
+
 
 ## 15.1.3 (2024-07-19)
 ### Bug fixes

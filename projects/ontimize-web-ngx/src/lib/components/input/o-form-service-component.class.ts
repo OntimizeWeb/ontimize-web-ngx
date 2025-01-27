@@ -72,7 +72,7 @@ export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
 
 @Directive({
   inputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
-  outputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT
+  outputs: DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 })
 export class OFormServiceComponent extends OFormDataComponent {
 

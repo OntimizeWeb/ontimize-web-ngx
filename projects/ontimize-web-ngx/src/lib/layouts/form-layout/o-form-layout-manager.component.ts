@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
@@ -35,6 +35,8 @@ import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
+import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
+import { IOFormLayoutManager } from '../../interfaces/form-layout-manager.interface';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -83,7 +85,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
   host: {
     '[class.o-form-layout-manager]': 'true'
   }
-}) export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent {
+})
+export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent,IOFormLayoutManager {
 
   // declaring this property to have acces to static members in the template
   OFormLayoutManagerComponent = OFormLayoutManagerComponent;
@@ -386,6 +389,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       return;
     }
     this.oFormLayoutManagerService.activeFormLayoutManager = undefined;
+    this.oFormLayoutManagerService.context = void 0;
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
       for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
@@ -410,7 +414,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     return this.mode === OFormLayoutManagerComponent.SPLIT_PANE_MODE;
   }
 
-  public addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string): void {
+  public addDetailComponent(childRoute: ActivatedRouteSnapshot, url: string, context?: OFormLayoutManagerContext): void {
+    childRoute = Util.getLastActivateRoute(childRoute);
     const newDetailComp: FormLayoutDetailComponentData = {
       params: childRoute.params,
       queryParams: childRoute.queryParams,
@@ -418,10 +423,19 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
       component: childRoute.routeConfig.component,
       url: url,
       id: Util.randomNumber().toString(),
-      label: '',
+      label: context?.label || '',
       innerFormsInfo: {},
-      insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true'
+      rendered: false,
+      insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
+      rendererSubject: new BehaviorSubject(false)
     };
+    /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating. */
+    newDetailComp.rendererSubject.subscribe((renderer:boolean) => {
+      if (renderer) {
+        this.navigationService.isNavigating = !renderer;
+      }
+    });
+
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
     } else {
@@ -485,6 +499,10 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
         this.reloadMainComponents();
       }
     });
+    this.dialogRef.afterOpened().subscribe(() => {
+      detailComp.rendered = true;
+      detailComp.rendererSubject.next(true);
+    });
   }
 
   public getFormCacheData(): FormLayoutDetailComponentData {
@@ -537,8 +555,11 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     if (this.isDialogMode()) {
       return !comp.oFormLayoutDialog;
     }
+
     const compRef = this.getLayoutModeComponent();
-    return Util.isDefined(compRef) && compRef.isMainComponent(comp);
+    return (Util.isDefined(compRef)
+      && (compRef.isMainComponent(comp)
+        || (Util.isDefined(comp.parentComponent)) && compRef.isMainComponent(comp.parentComponent)));
   }
 
   public getRouteForComponent(comp: ILayoutManagerComponent): any[] {
@@ -551,10 +572,13 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     }
     if (!this.isMainComponent(comp)) {
       const activeRoute = this.getRouteOfActiveItem();
+
       if (activeRoute && activeRoute.length > 0) {
         result.push(...activeRoute);
       }
+
     }
+
     return result;
   }
 

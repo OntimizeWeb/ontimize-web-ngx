@@ -10,3 +10,5 @@ export * from './components/validation/o-validator.component';
 export * from './components/filter/load-filter/o-load-filter-dialog.component';
 export * from './components/filter/store-filter/o-store-filter-dialog.component';
 export * from './shared.module';
+export * from './components/dialog/o-dialog-base.class';
+export * from './components/snackbar/o-snackbar-base.class';

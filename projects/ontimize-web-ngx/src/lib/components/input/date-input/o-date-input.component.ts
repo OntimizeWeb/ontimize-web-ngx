@@ -17,9 +17,9 @@ import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
+import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
-import { OTextInputComponent } from '../text-input/o-text-input.component';
 
 export const DEFAULT_INPUTS_O_DATE_INPUT = [
   'valueType: value-type',
@@ -44,7 +44,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
     { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
   ]
 })
-export class ODateInputComponent extends OTextInputComponent implements OnDestroy, OnInit {
+export class ODateInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
 
   @BooleanInputConverter()
   public textInputEnabled: boolean = true;

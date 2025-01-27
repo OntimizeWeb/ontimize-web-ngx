@@ -3,9 +3,9 @@ import { OTableCellRendererBooleanComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERE
 import { OTableCellRendererCurrencyComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY } from './currency/o-table-cell-renderer-currency.component';
 import { OTableCellRendererDateComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE } from './date/o-table-cell-renderer-date.component';
 import { OTableCellRendererImageComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE, DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE } from './image/o-table-cell-renderer-image.component';
-import { OTableCellRendererIntegerComponent } from './integer/o-table-cell-renderer-integer.component';
+import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER, OTableCellRendererIntegerComponent } from './integer/o-table-cell-renderer-integer.component';
 import { OTableCellRendererPercentageComponent } from './percentage/o-table-cell-renderer-percentage.component';
-import { OTableCellRendererRealComponent } from './real/o-table-cell-renderer-real.component';
+import { OTableCellRendererRealComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL } from './real/o-table-cell-renderer-real.component';
 import { OTableCellRendererServiceComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE, DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE } from './service/o-table-cell-renderer-service.component';
 import { OTableCellRendererTimeComponent } from './time/o-table-cell-renderer-time.component';
 import { OTableCellRendererTranslateComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE } from './translate/o-table-cell-renderer-translate.component';
@@ -26,7 +26,9 @@ export const O_TABLE_CELL_RENDERERS = [
 
 export const O_TABLE_CELL_RENDERERS_INPUTS = [
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN,
-  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY, // includes Integer and Real
+  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER,
+  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
+  ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY,
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE,
   ...DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_ACTION,
