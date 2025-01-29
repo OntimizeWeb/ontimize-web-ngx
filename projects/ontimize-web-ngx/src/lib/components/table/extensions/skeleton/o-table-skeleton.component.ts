@@ -16,7 +16,7 @@ import { Util } from '../../../../util/util';
 })
 export class OTableSkeletonComponent extends OSkeletonComponent implements OnInit, AfterViewInit {
   rows$: Observable<number[]>;
-  private cd: ChangeDetectorRef;
+  private readonly cd: ChangeDetectorRef;
   constructor(protected elRef: ElementRef, protected injector: Injector) {
     super(injector);
     this.cd = injector.get(ChangeDetectorRef);
