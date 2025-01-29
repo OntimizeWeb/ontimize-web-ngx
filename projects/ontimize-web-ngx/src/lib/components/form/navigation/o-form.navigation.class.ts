@@ -265,8 +265,14 @@ export class OFormNavigationClass {
       }
       const navData: ONavigationItem = this.navigationService.getLastItem();
       if (navData) {
-        const extras = {};
+        let extras:NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
+        if (options && options.exitWithoutConfirmation) {
+          const ignore = { [Codes.IGNORE_CAN_DEACTIVATE]: options.exitWithoutConfirmation };
+          extras.queryParams = {
+            ...extras.queryParams, ...ignore
+          };
+        }
         this.router.navigate([navData.url], extras);
       }
     }
