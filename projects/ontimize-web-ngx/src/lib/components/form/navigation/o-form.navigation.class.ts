@@ -267,7 +267,7 @@ export class OFormNavigationClass {
       if (navData) {
         let extras:NavigationExtras = {};
         extras[Codes.QUERY_PARAMS] = navData.queryParams;
-        if (options && options.exitWithoutConfirmation) {
+        if (options?.exitWithoutConfirmation) {
           const ignore = { [Codes.IGNORE_CAN_DEACTIVATE]: options.exitWithoutConfirmation };
           extras.queryParams = {
             ...extras.queryParams, ...ignore
