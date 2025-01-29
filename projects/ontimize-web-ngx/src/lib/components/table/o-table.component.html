@@ -37,7 +37,7 @@
   </o-data-toolbar>
 
   <div #tableBody class="o-table-body o-scroll" [class.horizontal-scroll]="horizontalScroll" [class.scrolled]="horizontalScrolled"
-        [ngStyle]="{'visibility': spinnerContainer ? 'hidden' : 'visible'}">>
+        [ngStyle]="{'visibility': spinnerContainer ? 'hidden' : 'visible'}">
     <ng-container *ngIf="!enabledVirtualScroll; else tableWithVirtualScroll">
       <div class="o-table-overflow o-scroll">
         <ng-template *ngTemplateOutlet="table"></ng-template>
