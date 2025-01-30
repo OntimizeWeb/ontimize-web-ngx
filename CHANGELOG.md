@@ -1,8 +1,7 @@
-
 ## 15.4.1 (2025-01-30)
 ### Bug fixes
-*  Fixed the issue of double confirmation when exiting without inserting a record in the insertion form. ([ab8589a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab8589a)) Closes [#1801](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1801)
-* **o-table**: Fixed that the scroll would be displayed when the table skekeleton was displayed when data requests were executed ([ae248b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae248b6)) Closes [#1812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1812)
+* **OFormNavigationClass**: Fixed the issue of double confirmation when exiting without inserting a record in the insertion form when the form is not included in `o-form-layout-manager`. ([ab8589a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab8589a)) Closes [#1801](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1801)
+* **o-table**: Fixed that the scroll would be displayed when the table skeleton was displayed when data requests were executed ([ae248b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae248b6)) Closes [#1812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1812)
 
 ## 15.4.0 (2025-01-23)
 ### Features
