@@ -1,3 +1,9 @@
+
+## 15.4.1(2025-01-30)
+### Bug fixes
+*  Fixed the issue of double confirmation when exiting without inserting a record in the insertion form. [#1801](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1801)
+* Fixed that the scroll would be displayed when the table skekeleton was displayed when data requests were executed [#1812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1812)
+
 ## 15.4.0 (2025-01-23)
 ### Features
 * New component `o-daterange-input` based in Angular Material ([7bd8c47](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7bd8c47)) Closes [#1789](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1789)
