@@ -66,7 +66,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
     sqltypes = (Util.isDefined(sqltypes)) ? sqltypes : this.sqltypes;
 
     kv = this.nameConvention.parseFilterToNameConvention(kv);
-    av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
+    av = this.nameConvention.parseDataToNameConvention(av);
     sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
     const url = `${this.urlBase}${this.path}/${entity}/search`;
@@ -135,7 +135,7 @@ export class OntimizeEEService extends OntimizeBaseService implements IDataServi
 
     const url = `${this.urlBase}${this.path}/${entity}`;
 
-    av = this.nameConvention.parseColumnsToNameConventionForOntimize(av);
+    av = this.nameConvention.parseDataToNameConvention(av);
     sqltypes = this.nameConvention.parseDataToNameConvention(sqltypes);
 
     const body = JSON.stringify({
