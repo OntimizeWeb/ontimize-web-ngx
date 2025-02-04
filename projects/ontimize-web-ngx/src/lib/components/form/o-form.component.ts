@@ -262,7 +262,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @BooleanInputConverter()
   public ignoreDefaultNavigation: boolean = false;
   messageServiceType: string;
-  public formDataValidationFunction: (mode:number, data: any) => OFormValidation;
+  public formDataValidationFunction: (data: any) => OFormValidation;
 
   /* end of inputs variables */
 
@@ -989,7 +989,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const sqlTypes = this.getAttributesSQLTypes();
 
     // validation before insert
-    if (!(this.validateBeforeAction( values))) {
+    if (!(this.validateBeforeAction(values))) {
       return;
     }
 
@@ -1012,9 +1012,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     });
   }
 
-   validateBeforeAction(values: object) :boolean{
+  validateBeforeAction(values: object): boolean {
     if (this.formDataValidationFunction) {
-      const result = this.formDataValidationFunction(this.mode, values);
+      const result = this.formDataValidationFunction(values);
       if (!result.valid) {
         this.dialogService.alert(
           result.title ?? this._messageService.getValidationErrorDialogTitle(),
