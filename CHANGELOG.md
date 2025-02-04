@@ -1,3 +1,11 @@
+## 15.4.2
+### Feature
+* **o-form**: new input `form-data-validation-function` to execute the before-save validation callback for insert and update operations ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1819](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1819)
+* **o-table-export-button**: new input `export-function`, which allows defining a custom function to be executed when the export button is clicked ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
+
+### Bug fixes
+* **o-table-export-button**: Fixed issue where the `onClick` output was not working properly. ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
+
 ## 15.4.1 (2025-01-30)
 ### Bug fixes
 * **OFormNavigationClass**: Fixed the issue of double confirmation when exiting without inserting a record in the insertion form when the form is not included in `o-form-layout-manager`. ([ab8589a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab8589a)) Closes [#1801](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1801)
