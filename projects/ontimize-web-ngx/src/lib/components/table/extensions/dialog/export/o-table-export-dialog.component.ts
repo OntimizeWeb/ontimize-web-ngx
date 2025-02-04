@@ -112,16 +112,36 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
       return indexA - indexB;
     });
   }
+
   dropColumns(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
     this.updateColumnsSort();
   }
+
   columnsCompareFunction(co1: any, co2: any) {
     return co1.id === co2.id;
   }
 
   export(): void {
     this.dialogRef.close(true);
+
+    const exportFunction = this.getCustomExportButton(this.selectedExportFormat)?.exportFunction;
+
+    if (exportFunction) {
+      exportFunction(this.columns, !this.vertical, this.filename);
+      return;
+    }
+
+    const onClickEvent = this.getCustomExportButton(this.selectedExportFormat)?.onClick;
+    if (onClickEvent) {
+      console.warn(
+        '⚠️ [DEPRECATED] The onClick event is deprecated. Use the input export-function instead.'
+      );
+      this.getCustomExportButton(this.selectedExportFormat)?.onClick.emit();
+      return;
+    }
+
+
     this.exportService.exportData(this.selectedExportFormat, this.columns, !this.vertical, this.filename).subscribe({
       next: () => {
         this.snackBarService.open('MESSAGES.SUCCESS_EXPORT_TABLE_DATA', { icon: 'check_circle' });
@@ -172,5 +192,9 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
   onChangeMatButtonToggleGroup(event: MatButtonToggleChange) {
     event.source.buttonToggleGroup.value = event.value;
     this.selectedExportFormat = event.value;
+  }
+
+  getCustomExportButton(type: string) {
+    return this.config.options.find(x => x.exportType === type);
   }
 }
