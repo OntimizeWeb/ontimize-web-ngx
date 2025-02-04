@@ -159,7 +159,8 @@ export const DEFAULT_INPUTS_O_FORM = [
   'messageServiceType : message-service-type',
   //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
   'setValueOrder: set-value-order',
-  //form-data-validation: form data validation
+
+  //form-data-validation: Executes the before-save validation callback for insert and update operations
   'formDataValidationFunction: form-data-validation-function'
 ];
 
