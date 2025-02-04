@@ -133,7 +133,7 @@ export class OTableExportDialogComponent implements OnInit, OnDestroy {
     }
 
     const onClickEvent = this.getCustomExportButton(this.selectedExportFormat)?.onClick;
-    if (onClickEvent) {
+    if (onClickEvent.observers.length > 0) {
       console.warn(
         '⚠️ [DEPRECATED] The onClick event is deprecated. Use the input export-function instead.'
       );
