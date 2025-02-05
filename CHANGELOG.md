@@ -1,10 +1,10 @@
-## 15.4.2
+## 15.4.2 (2025-02-05)
 ### Feature
-* **o-form**: new input `form-data-validation-function` to execute the before-save validation callback for insert and update operations ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1819](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1819)
-* **o-table-export-button**: new input `export-function`, which allows defining a custom function to be executed when the export button is clicked ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
-
+* **o-form**: new input `form-data-validation-function` to execute the before-save validation callback for insert and update operations ([a4e6201](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a4e6201)) Closes [#1819](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1819)
+* **o-table-export-button**: new input `export-function`, which allows defining a custom function to be executed when the export button is clicked ([bdb242e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bdb242e)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
+* **o-table**: Fixed the pagination not working with `pageable='no'` ([11b70e9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/11b70e9)) Closes [#1826](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1826)
 ### Bug fixes
-* **o-table-export-button**: Fixed issue where the `onClick` output was not working properly. ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
+* **o-table-export-button**: Fixed issue where the `onClick` output was not working properly. ([bdb242e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bdb242e)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
 
 ## 15.4.1 (2025-01-30)
 ### Bug fixes
