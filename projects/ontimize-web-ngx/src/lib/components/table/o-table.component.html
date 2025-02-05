@@ -50,8 +50,9 @@
     </ng-template>
   </div>
   <!--TABLE PAGINATOR-->
-  <mat-paginator *ngIf="paginator && !(showLoading | async)" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
-    [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons">
+  <mat-paginator *ngIf="paginator" #matpaginator [length]="dataSource?.resultsLength" [pageIndex]="paginator.pageIndex" [pageSize]="queryRows"
+    [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)" [showFirstLastButtons]="paginator.showFirstLastButtons"
+     [ngStyle]="{'visibility': spinnerContainer ? 'hidden' : 'visible'}">
   </mat-paginator>
 
   <!--LOADING-->
