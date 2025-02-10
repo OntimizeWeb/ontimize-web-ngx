@@ -8,3 +8,4 @@ export * from './o-currency.pipe';
 export * from './o-percentage.pipe';
 export * from './o-icon.pipe';
 export * from './o-safe.pipe';
+export * from './is-empty-value.pipe';
