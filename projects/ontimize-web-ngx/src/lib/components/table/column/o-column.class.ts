@@ -58,7 +58,7 @@ export class OColumn {
     this.orderable = args.orderable;
     this.resizable = args.resizable;
     this.groupable = args.groupable;
-    this.searchable = this.type === 'date' && args.pageable ? false : true;
+    this.searchable = !(this.type === 'date' && args.pageable);
     this.searching = true;
     // column without 'attr' should contain only renderers that do not depend on cell data, but row data (e.g. actions)
     this.name = this.attr;
