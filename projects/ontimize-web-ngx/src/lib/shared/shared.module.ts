@@ -1,3 +1,4 @@
+import { IsEmptyValuePipe } from './../pipes/is-empty-value.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -43,6 +44,7 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OPercentPipe,
     OIconPipe,
     OSafePipe,
+    IsEmptyValuePipe,
     ONTIMIZE_DIRECTIVES,
     Error403Component,
     ODialogComponent,
@@ -67,6 +69,7 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OPercentPipe,
     OIconPipe,
     OSafePipe,
+    IsEmptyValuePipe,
     ONTIMIZE_DIRECTIVES,
     OCustomMaterialModule,
     Error403Component,

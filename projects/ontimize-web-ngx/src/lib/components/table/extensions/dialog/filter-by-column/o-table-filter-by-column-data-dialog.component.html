@@ -53,11 +53,16 @@
 
           <ng-container *cdkVirtualFor="let record of (listData | async); let i = index">
             <mat-list-option checkboxPosition="before" [selected]="record.selected" [value]="record">
-              <ng-container *ngIf="!column.renderer">
-                {{ record.value || ('TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate) }}
+              <ng-container *ngIf="record.value | isEmptyValue; else showValue">
+                {{ 'TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate }}
               </ng-container>
-              <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
-                [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
+              <ng-template #showValue>
+                <ng-container *ngIf="!column.renderer">
+                  {{ record.value }}
+                </ng-container>
+                <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
+                  [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
+                </ng-template>
               </ng-template>
             </mat-list-option>
           </ng-container>
