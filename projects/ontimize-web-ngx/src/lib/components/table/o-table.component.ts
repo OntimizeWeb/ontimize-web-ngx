@@ -1521,7 +1521,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * @param item
    * @param event
    */
-  public toogleRowExpandable(item: any, event?: Event): void {
+  public toggleRowExpandable(item: any, event?: Event): void {
     if (event) {
       event.stopPropagation();
       event.preventDefault();
@@ -1551,22 +1551,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
   /**
-   * Toogles row expandable by row index
+   * Toggles row expandable by row index
    * @param rowIndex
    * @param [event]
    */
-  public toogleRowExpandableByRowIndex(rowIndex: number, event?: Event) {
+  public toggleRowExpandableByRowIndex(rowIndex: number, event?: Event) {
     const item = this.getValue()[rowIndex];
-    this.toogleRowExpandable(item, event);
+    this.toggleRowExpandable(item, event);
   }
 
-  /**
-   * Toogles all rows expandable
-   */
-  public toogleAllRowsExpandable() {
-    this.getValue().forEach((item) => { this.toogleRowExpandable(item) });
 
-  }
 
   private emitTableRowExpandableChangeEvent(data, rowIndex) {
     const event = new OTableRowExpandedChange();
