@@ -1,4 +1,4 @@
-## 15.4.3 (2025-02-11)
+## 15.4.3 (2025-02-12)
 ***o-table**:
 * Fixed bug that did not show the column filter icon by default when the column is type='date' ([7b27082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b27082)) Closes [#1830](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
 * **o-table-columns-filter**:
