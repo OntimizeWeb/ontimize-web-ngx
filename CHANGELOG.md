@@ -2,7 +2,8 @@
 ### Bug fixes
 **o-table**:
 * Fixed that the export data stopped working ([6fd089e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fd089e)) Closes [#1841](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1841)
-* Fixed `toogleRowExpandable` method not working ([ee26acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee26acc)) Closes [#1834](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1834)
+* Fixed `toggleRowExpandable` method not working ([ee26acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee26acc)) Closes [#1834](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1834)
+* New method `toggleRowExpandableByRowIndex` ([ee26acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee26acc)) Closes [#1834](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1834)
 
 ### Breaking changes
 * Renamed `toogleRowExpandable` to `toggleRowExpandable`.
