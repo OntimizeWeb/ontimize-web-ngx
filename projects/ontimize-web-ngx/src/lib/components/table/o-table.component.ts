@@ -3082,7 +3082,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       instance.setDefaultProperties({
         orderable: this.orderable,
         resizable: this.resizable,
-        groupable: this.groupable
+        groupable: this.groupable,
+        pageable: this.pageable
       });
     }
     if (column) {
