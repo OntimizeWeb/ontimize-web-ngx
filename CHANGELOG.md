@@ -1,4 +1,26 @@
 ## 15.4.3 (2025-02-12)
+### Bug fixes
+**o-table**:
+* Fixed that the export data stopped working ([6fd089e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fd089e)) Closes [#1841](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1841)
+* Fixed `toggleRowExpandable` method not working ([ee26acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee26acc)) Closes [#1834](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1834)
+* New method `toggleRowExpandableByRowIndex` ([ee26acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee26acc)) Closes [#1834](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1834)
+
+### Breaking changes
+* Renamed `toogleRowExpandable` to `toggleRowExpandable`.
+* The `toggleRowExpandable` signature has changed: it now accepts (item: any, event?: Event) instead of (item: any, rowIndex: number, event?: Event).
+
+  **Before**
+  ```ts
+  toggleRowExpandable(item, rowIndex, event);
+  ```
+
+  **After**
+  ```ts
+  toggleRowExpandable(item, event);
+  ```
+
+## 15.4.3 (2025-02-12)
+### Bug fixes
 ***o-table**:
 * Fixed bug that did not show the column filter icon by default when the column is type='date' ([7b27082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b27082)) Closes [#1830](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
 * **o-table-columns-filter**:
