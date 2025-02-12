@@ -1519,23 +1519,23 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /**
    * Allow to expand or collapse the expandable row.
    * @param item
-   * @param rowIndex
    * @param event
    */
-  public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
+  public toogleRowExpandable(item: any, event?: Event): void {
     if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
 
     this.expandableItem.toggle(item);
+    const rowIndex = this.getValue().findIndex((row) => this.keysArray.every(key => row[key] === item[key]));
 
     if (this.portalHost[rowIndex]) {
       this.portalHost[rowIndex].detach();
     }
-
-    if (this.getStateExpand(item) === 'collapsed') {
-      const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+    const isCollapsed = this.getStateExpand(item) === 'collapsed';
+    const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+    if (isCollapsed) {
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
       this.portalHost[rowIndex] = new DomPortalOutlet(
@@ -1547,9 +1547,25 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
       this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
-      const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
+  }
+  /**
+   * Toogles row expandable by row index
+   * @param rowIndex
+   * @param [event]
+   */
+  public toogleRowExpandableByRowIndex(rowIndex: number, event?: Event) {
+    const item = this.getValue()[rowIndex];
+    this.toogleRowExpandable(item, event);
+  }
+
+  /**
+   * Toogles all rows expandable
+   */
+  public toogleAllRowsExpandable() {
+    this.getValue().forEach((item) => { this.toogleRowExpandable(item) });
+
   }
 
   private emitTableRowExpandableChangeEvent(data, rowIndex) {
