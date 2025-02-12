@@ -2,8 +2,8 @@
 ***o-table**:
 * Fixed bug that did not show the column filter icon by default when the column is type='date' ([7b27082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b27082)) Closes [#1830](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
 * **o-table-columns-filter**:
-  * Fixed empty values ​​not being displayed in the modal column filter when the column type is other than string.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1832](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
-  * Fixed the 'empty value' message being displayed several times in the column filtering modal.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1832](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
+  * Fixed empty values ​​not being displayed in the modal column filter when the column type is other than string.([d7e0e84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7e0e84)) Closes [#1832](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
+  * Fixed the 'empty value' message being displayed several times in the column filtering modal.([d7e0e84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7e0e84)) Closes [#1832](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
 
 ## 15.4.2 (2025-02-05)
 ### Feature
