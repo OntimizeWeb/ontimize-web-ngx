@@ -3,10 +3,8 @@ import { INameConvention } from '../../interfaces/name-convention.interface';
 
 export class NameConvention implements INameConvention {
 
-  /**[{key:value}...] */
   parseColumnsToNameConventionForOntimize(value: any): any[] {
     return value;
-    //return Object.values(value);
   }
 
   parseColumnsToNameConventionForJSONAPI(value: any): string {
