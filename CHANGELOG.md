@@ -40,6 +40,44 @@
 ### Features
 * Added CRUD operations for JSON API
 
+## 15.4.4 (2025-02-12)
+### Bug fixes
+**o-table**:
+* Fixed that the export data stopped working ([6fd089e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fd089e)) Closes [#1841](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1841)
+* Fixed `toggleRowExpandable` method not working ([ee26acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee26acc)) Closes [#1834](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1834)
+* New method `toggleRowExpandableByRowIndex` ([ee26acc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ee26acc)) Closes [#1834](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1834)
+
+### Breaking changes
+* Renamed `toogleRowExpandable` to `toggleRowExpandable`.
+* The `toggleRowExpandable` signature has changed: it now accepts (item: any, event?: Event) instead of (item: any, rowIndex: number, event?: Event).
+
+  **Before**
+  ```ts
+  toggleRowExpandable(item, rowIndex, event);
+  ```
+
+  **After**
+  ```ts
+  toggleRowExpandable(item, event);
+  ```
+
+## 15.4.3 (2025-02-12)
+### Bug fixes
+***o-table**:
+* Fixed bug that did not show the column filter icon by default when the column is type='date' ([7b27082](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b27082)) Closes [#1830](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
+* **o-table-columns-filter**:
+  * Fixed empty values ​​not being displayed in the modal column filter when the column type is other than string.([d7e0e84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7e0e84)) Closes [#1832](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
+  * Fixed the 'empty value' message being displayed several times in the column filtering modal.([d7e0e84](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7e0e84)) Closes [#1832](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1830)
+
+## 15.4.2 (2025-02-05)
+### Feature
+* **o-form**: new input `form-data-validation-function` to execute the validation data callback into insert and update operations ([a4e6201](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a4e6201)) Closes [#1819](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1819)
+* **o-table-export-button**: new input `export-function`, which allows defining a custom function to be executed when the export button is clicked ([bdb242e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bdb242e)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
+* **o-table**: Fixed local pagination not working with `pageable='no'` ([11b70e9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/11b70e9)) Closes [#1826](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1826)
+### Bug fixes
+* **o-table-export-button**: Fixed issue where the `onClick` output was not working properly. ([bdb242e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bdb242e)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
+
+
 ## 15.4.1 (2025-01-30)
 ### Bug fixes
 * **OFormNavigationClass**: Fixed the issue of double confirmation when exiting without inserting a record in the insertion form when the form is not included in `o-form-layout-manager`. ([ab8589a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab8589a)) Closes [#1801](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1801)

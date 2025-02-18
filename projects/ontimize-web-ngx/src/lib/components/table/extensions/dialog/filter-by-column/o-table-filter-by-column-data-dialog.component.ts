@@ -227,6 +227,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       } else {
         colRenderedValues.forEach((renderedValue, i) => {
           /*Selection distint values */
+          if (renderedValue === null || renderedValue === undefined) {
+            renderedValue = '';
+          }
           if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
             this.addIntoColumnData(renderedValue, colValues, i, filter);
           }

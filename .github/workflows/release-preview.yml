@@ -15,7 +15,7 @@ jobs:
   release-preview:
     name: Release Preview
     if: contains(join(github.event.pull_request.labels.*.name, ', '), 'release')
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout merge commit
         uses: actions/checkout@v4

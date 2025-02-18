@@ -53,6 +53,7 @@ import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
+import { OFormValidation } from '../../types/error-form-validation.type';
 
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -160,7 +161,10 @@ export const DEFAULT_INPUTS_O_FORM = [
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
   'configureServiceArgs: configure-service-args',
   //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
-  'setValueOrder: set-value-order'
+  'setValueOrder: set-value-order',
+
+  //form-data-validation: Executes the before-save validation callback for insert and update operations
+  'formDataValidationFunction: form-data-validation-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -261,12 +265,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
   protected _ignoreOnExit: string[];
   public queryFallbackFunction: (error: any) => void;
-  // public insertFallbackFunction: Function;
-  // public updateFallbackFunction: Function;
-  // public deleteFallbackFunction: Function;
+
   @BooleanInputConverter()
   public ignoreDefaultNavigation: boolean = false;
   messageServiceType: string;
+  public formDataValidationFunction: (data: any) => OFormValidation;
+
   /* end of inputs variables */
 
   /*parsed inputs variables */
@@ -1013,6 +1017,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const self = this;
     const values = this.getAttributesValuesToInsert();
     const sqlTypes = this.getAttributesSQLTypes();
+
+    // validation before insert
+    if (!(this.validateBeforeAction(values))) {
+      return;
+    }
+
     this.onBeforeInsert.emit(values);
     this.insertData(values, sqlTypes).subscribe(resp => {
       self.postCorrectInsert(resp);
@@ -1030,6 +1040,19 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }, error => {
       self.postIncorrectInsert(error);
     });
+  }
+
+  validateBeforeAction(values: object): boolean {
+    if (this.formDataValidationFunction) {
+      const result = this.formDataValidationFunction(values);
+      if (!result.valid) {
+        this.dialogService.alert(
+          result.title ?? this._messageService.getValidationErrorDialogTitle(),
+          result.messages ? result.messages.join('</br>') : this._messageService.getValidationError());
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -1085,6 +1108,12 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       this.dialogService.alert('INFO', this._messageService.getNothingToUpdateMessage());
       return;
     }
+
+    // validation before update
+    if (!(this.validateBeforeAction(values))) {
+      return;
+    }
+
     this.onBeforeUpdate.emit(values);
     // invoke update method...
     this.updateData(filter, values, sqlTypes).subscribe(resp => {
