@@ -157,7 +157,6 @@ export const DEFAULT_INPUTS_O_FORM = [
   'ignoreDefaultNavigation: ignore-default-navigation',
 
   'messageServiceType : message-service-type',
-  
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
   'configureServiceArgs: configure-service-args',
   //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
@@ -947,7 +946,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   reload(useFilter: boolean = false) {
     let queryArguments = this.getQueryArguments(useFilter);
-    this.queryData(queryArguments);
+    this.queryData(queryArguments.filter);
   }
 
   public configureAdapter() {
@@ -955,10 +954,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
 
-  getQueryArguments(useFilter: boolean): OQueryParams {
+  getQueryArguments(useFilter: boolean, filter: any = {}): OQueryParams {
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
-    let filter = {};
+
     if (useFilter) {
       filter = this.getCurrentKeysValues();
     }
@@ -1148,17 +1147,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.deleteData(filter);
   }
 
-  /**
-   * Allow to manage the call to the service data
-   * @param OQueryParams
-   */
-  queryData(queryDataArgs: OQueryParams) {
+
+  queryData(filter: any) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
       return;
     }
 
-    if (!Util.isDefined(queryDataArgs.filter) || Object.keys(queryDataArgs.filter).length === 0) {
+    if (!Util.isDefined(filter) || Object.keys(filter).length === 0) {
       console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
@@ -1172,7 +1168,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     this.loaderSubscription = this.load();
 
-    const queryParameter = this.queryArgumentAdapter.parseQueryParameters(queryDataArgs);
+    const queryParameter = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(false,filter));
 
     this.querySubscription = this.queryArgumentAdapter.request(this.queryMethod, this.dataService, queryParameter)
       .subscribe((resp: ServiceResponse) => {
