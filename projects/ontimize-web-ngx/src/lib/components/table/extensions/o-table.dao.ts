@@ -27,7 +27,7 @@ export class OTableDao {
    */
   getQuery(queryArgs: OQueryDataArgs): Observable<any> {
     this.isLoadingResults = true;
-    return this.dataService[this.methods.query].apply(this.dataService, queryArgs);
+    return this.dataService[this.methods.query](this.dataService.queryArgumentAdapter.parseQueryParameters(queryArgs));
   }
 
   removeQuery(filters: any, sqlTypes?: object): Observable<any> {

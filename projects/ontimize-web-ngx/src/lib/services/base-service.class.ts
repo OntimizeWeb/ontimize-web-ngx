@@ -21,6 +21,7 @@ import { NameConvention } from './name-convention/name-convention.service';
 import { PaginationContext } from '../interfaces/pagination-context.interface';
 import { PaginationContextService } from './pagination-context.service';
 import { BaseQueryArgument } from './query-arguments/base-query-argument.adapter';
+import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
 
 
 export class BaseService<T extends BaseResponse> {
@@ -50,6 +51,7 @@ export class BaseService<T extends BaseResponse> {
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService);
     this.nameConvention = this.injector.get(NameConvention);
     this.paginationContextService = new PaginationContextService(); //
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
   public configureResponseAdapter() {

@@ -2246,7 +2246,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.asyncLoadSubscriptions[rowIndex].unsubscribe();
       }
       this.asyncLoadSubscriptions[rowIndex] = this.dataService[queryMethodName]
-        .apply(this.dataService, columnQueryArgs)
+        (...columnQueryArgs)
         .subscribe((res: ServiceResponse) => {
           if (res.isSuccessful()) {
             let data;
