@@ -20,6 +20,7 @@ import { BaseResponse } from '../interfaces/base-response.interface';
 import { NameConvention } from './name-convention/name-convention.service';
 import { PaginationContext } from '../interfaces/pagination-context.interface';
 import { PaginationContextService } from './pagination-context.service';
+import { BaseQueryArgument } from './query-arguments/base-query-argument.adapter';
 
 
 export class BaseService<T extends BaseResponse> {
@@ -35,6 +36,7 @@ export class BaseService<T extends BaseResponse> {
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
   nameConvention: NameConvention;
+  queryArgumentAdapter: BaseQueryArgument;
   protected paginationContextService: PaginationContextService;
 
 

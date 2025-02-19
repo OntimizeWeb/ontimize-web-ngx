@@ -29,10 +29,10 @@ import { OntimizeServiceProvider } from '../../services/factories';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
-import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
+import { OFormValidation } from '../../types/error-form-validation.type';
 import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
@@ -53,7 +53,6 @@ import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { OFormValidation } from '../../types/error-form-validation.type';
 
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -249,7 +248,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
-  queryArgumentAdapter: any;
 
   setValueOrderArray: string[];
 
@@ -715,7 +713,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.setValueOrderArray = Util.parseArray(this.setValueOrder);
 
     this.configureService();
-    this.configureAdapter();
 
     this.formNavigation.subscribeToQueryParams();
     this.formNavigation.subscribeToUrlParams();
@@ -949,11 +946,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.queryData(queryArguments.filter);
   }
 
-  public configureAdapter() {
-    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
-  }
-
-
   getQueryArguments(useFilter: boolean, filter: any = {}): OQueryParams {
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
@@ -1168,9 +1160,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     this.loaderSubscription = this.load();
 
-    const queryParameter = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(false,filter));
+    const queryParameter = this.getQueryArguments(false, filter);
 
-    this.querySubscription = this.queryArgumentAdapter.request(this.queryMethod, this.dataService, queryParameter)
+    this.querySubscription = this.dataService[this.queryMethod].apply(this.dataService, this.dataService.queryArgumentAdapter.parseQueryParameters(queryParameter))
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);

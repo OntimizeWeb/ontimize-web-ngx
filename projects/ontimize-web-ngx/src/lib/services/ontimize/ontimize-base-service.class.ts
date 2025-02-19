@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { IAuthService } from '../../interfaces/auth-service.interface';
 import { BaseService } from '../base-service.class';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OntimizeQueryArgumentsAdapter } from '../query-arguments/ontimize-query-arguments.adapter';
 
 @Injectable()
 export class OntimizeBaseService extends BaseService<ServiceResponse> implements IAuthService {
@@ -24,6 +25,7 @@ export class OntimizeBaseService extends BaseService<ServiceResponse> implements
 
   public configureService(config: any): void {
     super.configureService(config);
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
   public startsession(user: string, password: string): Observable<any> {

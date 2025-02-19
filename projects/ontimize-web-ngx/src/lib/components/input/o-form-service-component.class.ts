@@ -5,7 +5,6 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
-import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -128,7 +127,6 @@ export class OFormServiceComponent extends OFormDataComponent {
   protected subscriptionDataLoad: Subscription = new Subscription();
   public delayLoad = 250;
   public loadingSubject = new BehaviorSubject<boolean>(false);
-  queryArgumentAdapter: any;
 
   public oContextMenu: OContextMenuComponent;
   queryArguments: any;
@@ -185,7 +183,6 @@ export class OFormServiceComponent extends OFormDataComponent {
       this.setDataArray(this.staticData);
     } else {
       this.configureService();
-      this.configureAdapter();
     }
 
     if (this.queryOnEvent !== undefined && this.queryOnEvent.subscribe !== undefined) {
@@ -247,10 +244,6 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   }
 
-  public configureAdapter() {
-    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
-  }
-
   getAttributesValuesToQuery(columns?: Array<any>) {
     const result = Util.isDefined(columns) ? columns : this.colArray;
     if (result.indexOf(this.valueColumn) === -1) {
@@ -277,9 +270,8 @@ export class OFormServiceComponent extends OFormDataComponent {
 
       this.loaderSubscription = this.load();
 
-      this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter));
-
-      this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [this.queryMethod, this.dataService, this.queryArguments])
+      this.queryArguments = this.getQueryArguments(filter);
+      this.querySubscription = this.dataService[this.queryMethod].apply(this.dataService, this.dataService.queryArgumentAdapter.parseQueryParameters(this.queryArguments))
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             this.cacheQueried = true;

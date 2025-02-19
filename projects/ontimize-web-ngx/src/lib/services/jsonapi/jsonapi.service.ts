@@ -8,6 +8,7 @@ import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
+import { JSONAPIQueryArgumentsAdapter } from '../query-arguments';
 
 
 @Injectable()
@@ -89,6 +90,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
     // TODO init other params
+    this.queryArgumentAdapter = this.injector.get(JSONAPIQueryArgumentsAdapter);
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {

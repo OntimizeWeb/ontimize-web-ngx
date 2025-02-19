@@ -14,14 +14,14 @@ import { AbstractServiceComponentStateClass } from '../services/state/o-componen
 import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { OQueryDataArgs } from '../types/query-data-args.type';
+import { OQueryParams } from '../types/query-params.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
-import { OQueryParams } from '../types/query-params.type';
-import { OntimizeQueryArgumentsAdapter } from '../services/query-arguments/ontimize-query-arguments.adapter';
-import { BaseQueryArgument } from '../services/query-arguments/base-query-argument.adapter';
+import { BaseService } from '../services';
+import { BaseResponse } from '../interfaces/base-response.interface';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -125,7 +125,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
-  queryArgumentAdapter: BaseQueryArgument;
 
   set oQueryRows(value: number) {
     if (Util.isDefined(value)) {
@@ -169,7 +168,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected onFormDataSubscribe: any;
 
   protected querySubscription: Subscription;
-  protected dataService: any;
+  protected dataService: BaseService<BaseResponse>;
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
@@ -234,7 +233,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       this.setDataArray(this.staticData);
     } else {
       this.configureService();
-      this.configureAdapter();
     }
 
     if (this.form && Util.isDefined(this.dataService)) {
@@ -334,9 +332,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   getKeys(): string[] {
     return this.keysArray;
   }
-  public configureAdapter() {
-    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
-  }
 
   configureService() {
     let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
@@ -427,8 +422,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         return;
       }
 
-      this.queryArguments = this.queryArgumentAdapter.parseQueryParameters(this.getQueryArguments(filter, ovrrArgs));
-      this.querySubscription = this.queryArgumentAdapter.request.apply(this.queryArgumentAdapter, [queryMethodName, this.dataService, this.queryArguments])
+      this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
+
+      this.querySubscription = this.dataService[queryMethodName].apply(this.dataService, this.dataService.queryArgumentAdapter.parseQueryParameters(this.queryArguments))
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;
