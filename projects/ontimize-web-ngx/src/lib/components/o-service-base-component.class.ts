@@ -4,8 +4,10 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../decorators/input-converter';
 import { PaginationContext } from '../interfaces';
+import { BaseResponse } from '../interfaces/base-response.interface';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
+import { BaseService } from '../services/base-service.class';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { OErrorDialogManager } from '../services/o-error-dialog-manager.service';
@@ -20,8 +22,6 @@ import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
-import { BaseService } from '../services';
-import { BaseResponse } from '../interfaces/base-response.interface';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -525,8 +525,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
       }
       /* pageNumber = 0 is reinitialized when it generates a search  */
-      const pageNumber = this.state.queryRecordOffset == 0 ? 0: this.dataService?.getPaginationContext().pageNumber;
-      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber,  });
+      const pageNumber = this.state.queryRecordOffset == 0 ? 0 : this.dataService?.getPaginationContext().pageNumber;
+      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber });
     } else {
       this.updatePaginationContext({ totalSize: queryRes.data.length });
     }

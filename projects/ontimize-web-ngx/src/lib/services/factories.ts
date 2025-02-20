@@ -115,14 +115,22 @@ export function dataServiceFactory(injector: Injector): any {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || ServiceType.OntimizeEE === config.serviceType) {
-    return new OntimizeEEService(injector);
-  } else if (ServiceType.Ontimize === config.serviceType) {
-    return new OntimizeService(injector);
-  } else if (ServiceType.JSONAPI === config.serviceType) {
-    return new JSONAPIService(injector);
-  } else
-    return Util.createServiceInstance(config.serviceType, injector);
+  const serviceType = config.serviceType;
+  return createServiceInstance(serviceType, injector);
+}
+
+export function createServiceInstance(serviceType: ServiceType, injector: Injector): any {
+    if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
+      return new OntimizeEEService(injector);
+    }
+    if (ServiceType.Ontimize === serviceType) {
+      return new OntimizeService(injector);
+    }
+    if (ServiceType.JSONAPI === serviceType) {
+      return new JSONAPIService(injector);
+    }
+    return Util.createServiceInstance(serviceType, injector);
+
 }
 
 /**
