@@ -98,8 +98,7 @@ export class OFormNavigationComponent implements OnDestroy {
       queryArgs[4] = offset;
       queryArgs[5] = length ? length : conf.queryRows;
 
-      self.querySubscription = self.dataService[conf.queryMethod]
-        (...self.dataService.queryArgumentAdapter.parseQueryParameters(queryArgs))
+      self.querySubscription = self.dataService[conf.queryMethod](...self.dataService.queryArgumentAdapter.parseQueryParameters(queryArgs))
         .subscribe(res => {
         if (res.isSuccessful()) {
           self.navigationData = res.data;
