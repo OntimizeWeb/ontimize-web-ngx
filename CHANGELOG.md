@@ -1,3 +1,12 @@
+## 15.1.0-SNAPSHOT-11
+### Breaking changes
+* **Config**: Updated the `servicesConfiguration` property in the Config type:
+
+**Before**:
+```ts servicesConfiguration?: object ```
+**Now**:
+```ts servicesConfiguration?: ServiceConfigType ```
+
 ## 15.1.0-SNAPSHOT-10
 * Integrated changes from the 15.4.1 version
 
