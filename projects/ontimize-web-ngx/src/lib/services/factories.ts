@@ -50,6 +50,8 @@ import { ILocalStorageService } from '../interfaces/local-service.interface';
  */
 export const O_DATA_SERVICE = new InjectionToken('Ontimize data service');
 
+export const O_RESPONSE_ADAPTER = new InjectionToken<IServiceResponseAdapter<BaseServiceResponse>>('Service response adapter');
+
 /**
  * Injection token that can be used to replace the translate service `OTranslateService`.
  */
@@ -198,6 +200,12 @@ export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgu
 }
 
 export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
+  const serviceClass = _getInjectionTokenValue(O_RESPONSE_ADAPTER, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
+
+  if (Util.isDefined(service)) {
+    return service;
+  }
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
     (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {

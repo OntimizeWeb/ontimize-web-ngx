@@ -1,29 +1,29 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Injector, Type } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
 import { AppConfig } from '../config/app-config';
+import { BaseResponse } from '../interfaces/base-response.interface';
+import { PaginationContext } from '../interfaces/pagination-context.interface';
 import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { Config } from '../types/config.type';
+import { HttpRequestOptions } from '../types/http-request-options.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
-import { Util } from '../util/util';
 import { Codes } from '../util/codes';
+import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { BaseServiceResponse } from './base-service-response.class';
 import { LoginStorageService } from './login-storage.service';
-import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
-import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
-import { HttpRequestOptions } from '../types/http-request-options.type';
-import { BaseResponse } from '../interfaces/base-response.interface';
 import { NameConvention } from './name-convention/name-convention.service';
-import { PaginationContext } from '../interfaces/pagination-context.interface';
+import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { PaginationContextService } from './pagination-context.service';
+import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 import { BaseQueryArgument } from './query-arguments/base-query-argument.adapter';
 import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
 
-
+@Injectable()
 export class BaseService<T extends BaseResponse> {
 
   protected httpClient: HttpClient;

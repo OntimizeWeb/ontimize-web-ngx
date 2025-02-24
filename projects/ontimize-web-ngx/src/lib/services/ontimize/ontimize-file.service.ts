@@ -5,10 +5,12 @@ import { share } from 'rxjs/operators';
 
 import { IFileService } from '../../interfaces/file-service.interface';
 import { Util } from '../../util/util';
-import { OntimizeBaseService } from './ontimize-base-service.class';
+import { BaseService } from '../base-service.class';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
+
 
 @Injectable()
-export class OntimizeFileService extends OntimizeBaseService implements IFileService {
+export class OntimizeFileService extends BaseService<ServiceResponse> implements IFileService {
 
   public path: string = '';
 

@@ -41,3 +41,5 @@ export * from './name-convention.interface';
 export * from './local-service.interface';
 export * from './pagination-context.interface'
 export * from './form-layout-manager.interface';
+export * from './base-response.interface';
+export * from './service-response.interface';
