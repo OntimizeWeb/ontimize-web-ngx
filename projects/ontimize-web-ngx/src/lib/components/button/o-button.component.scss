@@ -4,6 +4,7 @@
 
   &.o-button-icon-position-bottom,
   &.o-button-icon-position-top {
+
     .mat-mdc-button,
     .mat-mdc-unelevated-button,
     .mat-mdc-raised-button,
@@ -26,10 +27,16 @@
     * {
       pointer-events: none;
     }
-    .o-button-image{
+
+    .o-button-image {
       max-height: 24px;
       vertical-align: middle;
     }
-  }
 
+    .mdc-button__label {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
 }
