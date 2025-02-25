@@ -142,14 +142,16 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
   }
 
   restoreMenuGroupState(): void {
-    let menuState: { id: string, opened: boolean }[] = this.state.menu ?? [];
+    if (this.localStorageService && this.storeState) {
+      let menuState: { id: string, opened: boolean }[] = this.state.menu ?? [];
 
-    this.menuRootArray.forEach((group: MenuGroup) => {
-      const savedState = menuState.find(menuOption => menuOption.id === group.id);
-      if (savedState) {
-        group.opened = savedState.opened;
-      }
-    });
+      this.menuRootArray.forEach((group: MenuGroup) => {
+        const savedState = menuState.find(menuOption => menuOption.id === group.id);
+        if (savedState) {
+          group.opened = savedState.opened;
+        }
+      });
+    }
   }
 
   getComponentKey(): string {
