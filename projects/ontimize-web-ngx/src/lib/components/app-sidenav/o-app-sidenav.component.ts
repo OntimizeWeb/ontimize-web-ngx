@@ -5,13 +5,13 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  forwardRef,
   HostListener,
   Injector,
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation,
-  forwardRef
+  ViewEncapsulation
 } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -22,6 +22,7 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { MenuGroup, MenuItemUserInfo } from '../../interfaces/app-menu.interface';
 import { AppMenuService } from '../../services/app-menu.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
+import { OAppSidenavComponentStateService } from '../../services/state/o-app-menu-component-state.service';
 import { MenuRootItem } from '../../types/menu-root-item.type';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
@@ -34,7 +35,8 @@ export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'openedSidenavImg: opened-sidenav-image',
   'closedSidenavImg: closed-sidenav-image',
   'layoutMode: layout-mode',
-  'sidenavMode: sidenav-mode'
+  'sidenavMode: sidenav-mode',
+  'storeState: store-state'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
@@ -60,7 +62,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
+export class OAppSidenavComponent extends OAppSidenavComponentStateService implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(MatSidenav)
   sidenav: MatSidenav;
@@ -89,6 +91,8 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected mediaWatch: Subscription;
   protected manuallyClosed: boolean = false;
+  onRouteChangeStorageSubscription: Subscription;
+  storeState: boolean = true;
 
   constructor(
     protected injector: Injector,
@@ -97,6 +101,7 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     protected cd: ChangeDetectorRef,
     protected media: MediaObserver
   ) {
+    super(injector);
     this.appMenuService = this.injector.get(AppMenuService);
     this.menuRootArray = this.appMenuService.getMenuRoots();
     this.permissionSubscription = this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots());
@@ -107,6 +112,71 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
         self.sidenav.close();
       }
     });
+    this.registerLocalStorageServiceRouteChange();
+  }
+  ngOnInit() {
+    this.routerSubscription = this.router.events.subscribe(() => {
+      if (this.isScreenSmall()) {
+        this.sidenav.close();
+      }
+    });
+
+    this.initialize(this);
+    this.restoreMenuGroupState();
+  }
+
+  ngAfterViewInit() {
+    if (this.showUserInfo && this.showToggleButton) {
+      this.userInfo = this.oUserInfoService.getUserInfo();
+      this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
+        this.userInfo = res;
+        this.refreshMenuItemUserInfo();
+      });
+    }
+    this.refreshMenuItemUserInfo();
+  }
+
+  getDataToStore(): any {
+    return this.state;
+
+  }
+
+  restoreMenuGroupState(): void {
+    let menuState: { id: string, opened: boolean }[] = this.state.menu ?? [];
+
+    this.menuRootArray.forEach((group: MenuGroup) => {
+      const savedState = menuState.find(menuOption => menuOption.id === group.id);
+      if (savedState) {
+        group.opened = savedState.opened;
+      }
+    });
+  }
+
+  getComponentKey(): string {
+    return 'OAppSidenavComponent';
+  }
+
+  getRouteKey(): string {
+    return undefined;
+  }
+
+  @HostListener('window:beforeunload', [])
+  beforeunloadHandler() {
+    this.updateStateStorage();
+  }
+
+  protected registerLocalStorageServiceRouteChange() {
+    if (this.storeState) {
+      this.onRouteChangeStorageSubscription = this.localStorageService.onRouteChange.subscribe(res => {
+        this.updateStateStorage();
+      });
+    }
+  }
+
+  protected updateStateStorage(): void {
+    if (this.localStorageService && this.storeState) {
+      this.storeMenu();
+    }
   }
 
   refreshMenuRoots(): void {
@@ -121,24 +191,6 @@ export class OAppSidenavComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnInit() {
-    this.routerSubscription = this.router.events.subscribe(() => {
-      if (this.isScreenSmall()) {
-        this.sidenav.close();
-      }
-    });
-  }
-
-  ngAfterViewInit() {
-    if (this.showUserInfo && this.showToggleButton) {
-      this.userInfo = this.oUserInfoService.getUserInfo();
-      this.userInfoSubscription = this.oUserInfoService.getUserInfoObservable().subscribe(res => {
-        this.userInfo = res;
-        this.refreshMenuItemUserInfo();
-      });
-    }
-    this.refreshMenuItemUserInfo();
-  }
 
   get layoutMode(): OAppLayoutMode {
     return this._layoutMode;
