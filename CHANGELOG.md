@@ -1,6 +1,6 @@
 ## 15.5.0 (2025-02-26)
 ### Features
-* **o-app-layout**: Closes [#1856](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1856)
+* **o-app-layout**: ([f3e67f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3e67f3)) Closes [#1856](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1856)
   * New input `store-state`
   * When an option is selected in a submenu, refreshing the page (F5) caused the menu to collapse, making it unclear which option was selected. Now, the menu remains expanded to indicate the active selection.
 
