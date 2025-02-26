@@ -69,7 +69,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: any
+    @Inject(MAT_DIALOG_DATA) data: { column: OColumn; table: OTableComponent }
   ) {
 
     if (data.column) {
@@ -391,6 +391,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return value;
   }
   onChangeDataSource(event: MatRadioChange) {
+    this.table.clearColumnFilter(this.column.attr);
     this.getData(event.value);
   }
 
