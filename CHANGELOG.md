@@ -1,6 +1,36 @@
 ## 15.1.0-SNAPSHOT-11
 ### Breaking changes
-* **Config**: Updated the `servicesConfiguration` property in the Config type:
+* **Config**: Updated the `servicesConfiguration` property in the Config type.
+
+  **Before**
+  ```ts
+  export const SERVICE_CONFIG: Object ={
+  'Category': { 'path': '/Category' }
+  ...
+  ```
+
+  ```ts app.config.ts
+  export const CONFIG: Config = {
+  ...
+  // Configuration parameters of application services.
+  servicesConfiguration: SERVICE_CONFIG,
+  ```
+
+  **After**
+  ```ts
+  export const SERVICE_CONFIG ={
+   'Category': { 'path': '/Category' }
+   ...
+
+  ```
+
+  ```ts
+    app.config.ts
+    export const CONFIG: Config = {
+    ...
+    // Configuration parameters of application services.
+    servicesConfiguration: SERVICE_CONFIG,
+  ```
 
 **Before**:
 ```ts servicesConfiguration?: object ```
