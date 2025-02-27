@@ -213,6 +213,7 @@ export class BaseService<T extends BaseResponse> {
       this.loginStorageService.updateSessionId(authToken);
     }
   }
+
   setPaginationContext(context: PaginationContext): void {
     this.paginationContextService.setContext({ ...this.getPaginationContext(),...context });
   }

@@ -18,10 +18,6 @@ export class OntimizeServiceResponseAdapter implements IServiceResponseAdapter<O
     );
   }
 
-  setContext(context:any) {
-    this.context = context;
-  }
-
   adaptError(error: HttpErrorResponse) {
     return error;
   }
