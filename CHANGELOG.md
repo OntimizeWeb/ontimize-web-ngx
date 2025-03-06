@@ -1,5 +1,7 @@
 ## 15.1.0-SNAPSHOT-11
 ### Breaking changes
+* Remplace ServiceResponseAdapter by IServiceResponseAdapter
+* OntimizeBaseService is now an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
 * **Config**: Updated the `servicesConfiguration` property in the Config type.
 
   **Before**
