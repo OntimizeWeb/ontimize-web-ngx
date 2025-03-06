@@ -196,7 +196,7 @@ export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgu
   } else if (ServiceType.JSONAPI === config.serviceType) {
     return new JSONAPIQueryArgumentsAdapter();
   }
-  return new JSONAPIQueryArgumentsAdapter();
+  return new OntimizeQueryArgumentsAdapter();
 }
 
 export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
