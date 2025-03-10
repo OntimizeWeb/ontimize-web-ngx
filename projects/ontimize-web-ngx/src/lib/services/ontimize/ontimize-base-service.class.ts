@@ -38,10 +38,6 @@ export abstract class OntimizeBaseService extends BaseDataService<ServiceRespons
     return null;
   }
 
-  public clientErrorFallback(errorCode: number) {
-    if (errorCode === 401) {
-      this.authService.logout();
-    }
-  }
+
 
 }
