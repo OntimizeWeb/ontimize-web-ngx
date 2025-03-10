@@ -53,6 +53,7 @@ import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
+import { BaseService } from '../../services/base-service.class';
 
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -274,7 +275,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   isDetailForm: boolean = false;
   keysArray: string[] = [];
   colsArray: string[] = [];
-  dataService: any;
+  dataService: BaseService<ServiceResponse>;
   _pKeysEquiv = {};
   keysSqlTypesArray: Array<string> = [];
   protected _messageService: OFormMessageService;

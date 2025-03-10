@@ -12,7 +12,7 @@ import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
 import { OFormNavigationClass } from './o-form.navigation.class';
 import { BaseService } from '../../../services/base-service.class';
-import { BaseResponse } from '../../../interfaces/base-response.interface';
+import { ServiceResponse } from '../../../interfaces/service-response.interface';
 
 export type QueryConfiguration = {
   serviceType: string;
@@ -47,7 +47,7 @@ export class OFormNavigationComponent implements OnDestroy {
   protected formLayoutManager: OFormLayoutManagerBase;
 
   protected querySubscription: Subscription;
-  protected dataService: BaseService<BaseResponse>;
+  protected dataService: BaseService<ServiceResponse>;
   protected queryConf: QueryConfiguration;
 
   constructor(

@@ -17,6 +17,7 @@ import { Util } from '../../../../../util/util';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 import type { OColumn } from '../../o-column.class';
+import { BaseService } from '../../../../../services/base-service.class';
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
   'service',
@@ -75,7 +76,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   /* Internal variables */
   protected colArray: string[] = [];
-  protected dataService: any;
+  protected dataService: BaseService<ServiceResponse>;
   protected _pKeysEquiv = {};
   protected dialogService: DialogService;
 
