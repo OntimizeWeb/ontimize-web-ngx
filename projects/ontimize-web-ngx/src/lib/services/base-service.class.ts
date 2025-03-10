@@ -5,9 +5,9 @@ import { Observable, Subscriber } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
 import { AppConfig } from '../config/app-config';
-import { BaseResponse } from '../interfaces/base-response.interface';
 import { PaginationContext } from '../interfaces/pagination-context.interface';
 import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
+import { ServiceResponse } from '../interfaces/service-response.interface';
 import { Config } from '../types/config.type';
 import { HttpRequestOptions } from '../types/http-request-options.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
@@ -24,7 +24,7 @@ import { BaseQueryArgument } from './query-arguments/base-query-argument.adapter
 import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
 
 @Injectable()
-export class BaseService<T extends BaseResponse> {
+export class BaseService<T extends ServiceResponse> {
 
   protected httpClient: HttpClient;
   protected router: Router;
@@ -54,13 +54,13 @@ export class BaseService<T extends BaseResponse> {
     this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
-  public configureResponseAdapter() {
+  public configureAdapter() {
     this.adapter = this.injector.get(OntimizeServiceResponseAdapter);
   }
 
 
   public configureService(config: any): void {
-    this.configureResponseAdapter();
+    this.configureAdapter();
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
   }
 
@@ -183,8 +183,13 @@ export class BaseService<T extends BaseResponse> {
    * User can overwrite the chosen methods parsers or the common parser
    */
   protected parseUnsuccessfulResponse(error: HttpErrorResponse, observer: Subscriber<T>) {
-    const adaptedError = this.adapter.adaptError(error);
-    this.responseParser.parseUnsuccessfulResponse(adaptedError, observer, this);
+    if (this.adapter?.adaptError) {
+      const adaptedError = this.adapter.adaptError(error);
+      if (Util.isDefined(adaptedError)) {
+        error = adaptedError;
+      }
+    }
+    this.responseParser.parseUnsuccessfulResponse(error, observer, this);
   }
 
   protected parseUnsuccessfulQueryResponse(resp: HttpErrorResponse, observer: Subscriber<T>) {
@@ -215,14 +220,14 @@ export class BaseService<T extends BaseResponse> {
   }
 
   setPaginationContext(context: PaginationContext): void {
-    this.paginationContextService.setContext({ ...this.getPaginationContext(),...context });
+    this.paginationContextService.setContext({ ...this.getPaginationContext(), ...context });
   }
 
   getPaginationContext(): PaginationContext | null {
     return this.paginationContextService.getContext();
   }
 
-  reinitializePaginationContext(pageSize?:number): void {
+  reinitializePaginationContext(pageSize?: number): void {
     this.paginationContextService.reinitializeContext(pageSize);
   }
 

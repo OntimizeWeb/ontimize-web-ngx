@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../decorators/input-converter';
 import { PaginationContext } from '../interfaces';
-import { BaseResponse } from '../interfaces/base-response.interface';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { BaseService } from '../services/base-service.class';
@@ -168,7 +167,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected onFormDataSubscribe: any;
 
   protected querySubscription: Subscription;
-  protected dataService: BaseService<BaseResponse>;
+  protected dataService: BaseService<ServiceResponse>;
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
@@ -517,8 +516,8 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   updatePaginationInfo(queryRes: ServiceResponse) {
     if (this.pageable) {
-      const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
       if (queryRes.startRecordIndex !== undefined) {
+        const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
         this.state.queryRecordOffset = resultEndIndex;
       }
       if (queryRes.totalQueryRecordsNumber !== undefined) {

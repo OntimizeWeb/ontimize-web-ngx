@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
 import { AppConfig } from '../../config/app-config';
-import { BaseResponse } from '../../interfaces/base-response.interface';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { Util } from '../../util/util';
 import { BaseService } from '../base-service.class';
 import { NameConvention } from '../name-convention/name-convention.service';
@@ -12,7 +12,7 @@ import { NameConvention } from '../name-convention/name-convention.service';
 @Injectable({
   providedIn: 'root'
 })
-export class OntimizeServiceResponseParser<T extends BaseResponse> {
+export class OntimizeServiceResponseParser<T extends ServiceResponse> {
   appConfig: AppConfig;
   nameConvention: NameConvention;
 
