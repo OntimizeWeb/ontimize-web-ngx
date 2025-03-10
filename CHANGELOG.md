@@ -4,40 +4,12 @@
 * OntimizeBaseService is now an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
 * **Config**: Updated the `servicesConfiguration` property in the Config type.
 
-  **Before**
-  ```ts
-  export const SERVICE_CONFIG: Object ={
-  'Category': { 'path': '/Category' }
-  ...
-  ```
+  **Before**:
+  ```ts servicesConfiguration?: Object ```
+  **Now**:
+  ```ts servicesConfiguration?: ServiceConfigType ```
 
-  ```ts app.config.ts
-  export const CONFIG: Config = {
-  ...
-  // Configuration parameters of application services.
-  servicesConfiguration: SERVICE_CONFIG,
-  ```
 
-  **After**
-  ```ts
-  export const SERVICE_CONFIG ={
-   'Category': { 'path': '/Category' }
-   ...
-
-  ```
-
-  ```ts
-    app.config.ts
-    export const CONFIG: Config = {
-    ...
-    // Configuration parameters of application services.
-    servicesConfiguration: SERVICE_CONFIG,
-  ```
-
-**Before**:
-```ts servicesConfiguration?: object ```
-**Now**:
-```ts servicesConfiguration?: ServiceConfigType ```
 
 ## 15.1.0-SNAPSHOT-10
 * Integrated changes from the 15.4.1 version
