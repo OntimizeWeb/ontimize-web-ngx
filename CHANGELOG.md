@@ -53,6 +53,18 @@
 ### Features
 * Added CRUD operations for JSON API
 
+
+## 15.5.0 (2025-02-26)
+### Features
+* **o-app-layout**: ([f3e67f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3e67f3)) Closes [#1856](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1856)
+  * New input `store-state`
+  * When an option is selected in a submenu, refreshing the page (F5) caused the menu to collapse, making it unclear which option was selected. Now, the menu remains expanded to indicate the active selection.
+
+### Bug fixes
+* **o-button**: Fixed that when the text is too long it shows ellipsis instead of line break ([ebbed6f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ebbed6f)) Closes [#1855](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1855)
+* **o-table-columns-filter, o-table-columns-filter-column**: Fixed that *All pages* does not work if there is a previously selected option ([d1cd95b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1cd95b)) Closes [#1849](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1849)
+
+
 ## 15.4.4 (2025-02-12)
 ### Bug fixes
 **o-table**:
