@@ -19,7 +19,7 @@ export class OTableDao {
   get sqlTypes(): object { return this.sqlTypesChange.value; }
 
   constructor(
-    private dataService: BaseService<ServiceResponse>,
+    private readonly dataService: BaseService<ServiceResponse>,
     private entity: string,
     private methods: any
   ) { }
