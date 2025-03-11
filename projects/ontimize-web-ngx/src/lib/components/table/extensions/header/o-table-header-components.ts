@@ -49,5 +49,6 @@ export const O_TABLE_HEADER_COMPONENTS_EXPORTED = [
   OTableQuickfilterComponent,
   OTableColumnsFilterColumnComponent,
   OTableHeaderComponent,
-  OTableColumnSelectAllDirective
+  OTableColumnSelectAllDirective,
+  OTableHeaderSelectAllComponent
 ];
