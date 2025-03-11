@@ -1,4 +1,5 @@
 ## 15.1.0-SNAPSHOT-11
+ Integrated changes version 15.5.0
 ### Breaking changes
 * Remplace ServiceResponseAdapter by IServiceResponseAdapter
 * OntimizeBaseService is now an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
@@ -8,8 +9,34 @@
   ```ts servicesConfiguration?: Object ```
   **Now**:
   ```ts servicesConfiguration?: ServiceConfigType ```
+* **o-table**:
+  - **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
+    - The parameter `ovrrArgs` is now of type `OQueryDataArgs` instead of `any`.
+    - The method now returns an `OQueryParams` instead of `any[]`.
+    - **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
 
+    **Before:**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: any): any[]
+    ```
 
+    **Now**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams
+    ```
+
+  ** Response Adapter Interface Change **
+  - Response adapters previously implemented `ServiceResponseAdapter`, but now they must implement `IServiceResponseAdapter`.
+
+  **Before:**
+  ```ts
+    export class MyAdapter implements ServiceResponseAdapter<BaseServiceResponse>  { ... }
+  ```
+
+  **Now:**
+  ```ts
+   export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
+  ```
 
 ## 15.1.0-SNAPSHOT-10
 * Integrated changes from the 15.4.1 version
