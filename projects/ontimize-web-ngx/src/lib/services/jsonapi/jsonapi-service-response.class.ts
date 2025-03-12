@@ -1,8 +1,7 @@
 import { HttpHeaders } from "@angular/common/http";
 import { ServiceResponse } from "../../interfaces/service-response.interface";
 import { Util } from "../../util/util";
-import { PaginationContext } from "../../interfaces";
-
+import { PaginationContext } from "../../interfaces/pagination-context.interface";
 
 export class JSONAPIServiceResponse implements ServiceResponse {
   public code: number;
