@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx",
-  "version": "15.1.0-JSONAPI-SNAPSHOT-10",
+  "version": "15.1.0-JSONAPI-SNAPSHOT-11",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
