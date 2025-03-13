@@ -1,3 +1,7 @@
+## 15.5.1 (2025-03-12)
+### Bug fixes
+* **o-table**: Fixed after calling the `reinitialize()` method, sorting no longer works as expected([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1886](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1886)
+
 ## 15.5.0 (2025-02-26)
 ### Features
 * **o-app-layout**: ([f3e67f3](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/f3e67f3)) Closes [#1856](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1856)
@@ -9,7 +13,7 @@
 * **o-table-columns-filter, o-table-columns-filter-column**: Fixed that *All pages* does not work if there is a previously selected option ([d1cd95b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d1cd95b)) Closes [#1849](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1849)
 
 
-## 15.4.3 (2025-02-12)
+## 15.4.4 (2025-02-12)
 ### Bug fixes
 **o-table**:
 * Fixed that the export data stopped working ([6fd089e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6fd089e)) Closes [#1841](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1841)
