@@ -1474,7 +1474,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
     });
     if (this.pageable) {
-      console.log('entra en onSortChange ', sortArray);
       this.reloadData();
     } else {
       this.updateSortingSubject(true);
