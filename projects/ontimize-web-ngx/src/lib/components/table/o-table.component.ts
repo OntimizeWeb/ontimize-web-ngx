@@ -303,7 +303,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (Util.isDefined(_sort) &&
       (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && Util.stringify(this.sort) !== Util.stringify(_sort)))) {
       this.sort = _sort;
-      this.registerSortListener();
       this.setDatasource();
     }
   };
@@ -1447,8 +1446,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
     }
-
-
   }
 
   public updateSortingSubject(value: boolean) {
@@ -1491,6 +1488,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const dataSourceService = this.injector.get(OTableDataSourceService);
     this.dataSource = dataSourceService.getInstance(this);
     this.registerDataSourceListeners();
+    this.registerSortListener();
   }
 
   protected registerDataSourceListeners() {
