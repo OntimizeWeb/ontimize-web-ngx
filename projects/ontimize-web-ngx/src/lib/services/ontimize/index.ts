@@ -7,3 +7,5 @@ export * from './ontimize-service-response.adapter';
 export * from './ontimize-service-response.class';
 export * from './ontimize.service';
 export * from './ontimize-preferences.service';
+export * from './o-preference-query-argument.adapter';
+export * from './o-preference-response.adapter';
