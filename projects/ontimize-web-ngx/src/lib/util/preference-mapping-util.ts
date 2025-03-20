@@ -33,7 +33,7 @@ export class OPreferenceMappingUtils {
   };
 
 
-  static ONTIMIZEREPORTMAPPING = {
+  static readonly ONTIMIZEREPORTMAPPING = {
     "preferenceid": "id",
     "preferencename": "name",
     "preferencedescription": "description",
