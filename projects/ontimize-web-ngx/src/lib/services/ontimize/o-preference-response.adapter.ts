@@ -15,7 +15,6 @@ export class OPreferenceResponseAdapter extends OntimizeServiceResponseAdapter {
     if (res.body.sqlTypes) {
       res.body.sqlTypes = OPreferenceMappingUtils.standarDataMapping(res.body.sqlTypes);
     }
-    console.log(' OPreferenceResponseAdapter res.body', res.body);
 
     return new OntimizeServiceResponse(
       res.body.code,
