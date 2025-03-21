@@ -1,3 +1,7 @@
+## 15.1.0-SNAPSHOT-12
+ Integrated changes version 15.5.1
+ Added preferense adaptar and query argument sercices to ontimize report service
+
 ## 15.1.0-SNAPSHOT-11
  Integrated changes version 15.5.0
 ### Breaking changes
