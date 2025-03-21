@@ -43,3 +43,4 @@ export * from './preferences.type';
 export * from './query-params.type';
 export * from './json-query-parameter.type';
 export * from './error-form-validation.type';
+export * from './service-configuration.type';

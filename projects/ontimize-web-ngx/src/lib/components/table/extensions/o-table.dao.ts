@@ -1,6 +1,8 @@
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
 
 import { OQueryDataArgs } from '../../../types/query-data-args.type';
+import { BaseService } from '../../../services/base-service.class';
+import { ServiceResponse } from '../../../interfaces/service-response.interface';
 
 
 export class OTableDao {
@@ -17,7 +19,7 @@ export class OTableDao {
   get sqlTypes(): object { return this.sqlTypesChange.value; }
 
   constructor(
-    private dataService: any,
+    private readonly dataService: BaseService<ServiceResponse>,
     private entity: string,
     private methods: any
   ) { }
@@ -27,7 +29,7 @@ export class OTableDao {
    */
   getQuery(queryArgs: OQueryDataArgs): Observable<any> {
     this.isLoadingResults = true;
-    return this.dataService[this.methods.query].apply(this.dataService, queryArgs);
+    return this.dataService[this.methods.query](this.dataService.queryArgumentAdapter.parseQueryParameters(queryArgs));
   }
 
   removeQuery(filters: any, sqlTypes?: object): Observable<any> {

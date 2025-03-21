@@ -16,6 +16,8 @@ import { Error403Component } from '../shared/components/error403/o-error-403.com
 import { Config } from '../types/config.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
+import { OPreferenceResponseAdapter } from '../services/ontimize/o-preference-response.adapter';
+import { OPreferenceQueryArgumentsAdapter } from '../services/ontimize/o-preference-query-argument.adapter';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -84,6 +86,8 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   OntimizeExportServiceProvider,
   NameConventionProvider,
   OntimizeLocalStorageServiceProvider,
+  OPreferenceQueryArgumentsAdapter,
+  OPreferenceResponseAdapter,
   // disabled global ripple
   { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },
   { provide: O_MAT_ERROR_OPTIONS, useValue: {} },

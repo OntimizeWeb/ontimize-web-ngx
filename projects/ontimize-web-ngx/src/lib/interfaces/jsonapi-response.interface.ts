@@ -1,6 +1,6 @@
-import { BaseResponse } from "./base-response.interface";
+import { ServiceResponse } from "./service-response.interface";
 
-export interface JSONAPIResponse extends BaseResponse {
+export interface JSONAPIResponse extends ServiceResponse {
   error?: {
     errors: {
       title?: string,

@@ -9,9 +9,11 @@ import { OntimizeExportDataProviderService } from '../ontimize-export-data-provi
 import { OntimizeBaseService } from './ontimize-base-service.class';
 import { Util } from '../../util/util';
 import { HttpRequestOptions } from '../../types/http-request-options.type';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { BaseService } from '../base-service.class';
 
 @Injectable()
-export class OntimizeExportService3X extends OntimizeBaseService implements IExportService {
+export class OntimizeExportService3X extends BaseService<ServiceResponse> implements IExportService {
 
   public exportPath: string;
   public servicePath: string;

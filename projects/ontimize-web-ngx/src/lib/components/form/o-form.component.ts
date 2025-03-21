@@ -29,10 +29,10 @@ import { OntimizeServiceProvider } from '../../services/factories';
 import { NavigationService, ONavigationItem } from '../../services/navigation.service';
 import { OntimizeService } from '../../services/ontimize/ontimize.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
-import { OntimizeQueryArgumentsAdapter } from '../../services/query-arguments/ontimize-query-arguments.adapter';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
+import { OFormValidation } from '../../types/error-form-validation.type';
 import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
@@ -53,7 +53,7 @@ import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { OFormValidation } from '../../types/error-form-validation.type';
+import { BaseService } from '../../services/base-service.class';
 
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -157,7 +157,6 @@ export const DEFAULT_INPUTS_O_FORM = [
   'ignoreDefaultNavigation: ignore-default-navigation',
 
   'messageServiceType : message-service-type',
-  
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
   'configureServiceArgs: configure-service-args',
   //set-value-order: order of the field attributes by which the value will be set, separated by '; '. Default: no value.
@@ -250,7 +249,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   detectChangesOnBlur: boolean = true;
   @BooleanInputConverter()
   confirmExit: boolean = true;
-  queryArgumentAdapter: any;
 
   setValueOrderArray: string[];
 
@@ -277,7 +275,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   isDetailForm: boolean = false;
   keysArray: string[] = [];
   colsArray: string[] = [];
-  dataService: any;
+  dataService: BaseService<ServiceResponse>;
   _pKeysEquiv = {};
   keysSqlTypesArray: Array<string> = [];
   protected _messageService: OFormMessageService;
@@ -716,7 +714,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.setValueOrderArray = Util.parseArray(this.setValueOrder);
 
     this.configureService();
-    this.configureAdapter();
 
     this.formNavigation.subscribeToQueryParams();
     this.formNavigation.subscribeToUrlParams();
@@ -947,18 +944,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
    */
   reload(useFilter: boolean = false) {
     let queryArguments = this.getQueryArguments(useFilter);
-    this.queryData(queryArguments);
+    this.queryData(queryArguments.filter);
   }
 
-  public configureAdapter() {
-    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
-  }
-
-
-  getQueryArguments(useFilter: boolean): OQueryParams {
+  getQueryArguments(useFilter: boolean, filter: any = {}): OQueryParams {
     const av = this.getAttributesToQuery();
     const sqlTypes = this.getAttributesSQLTypes();
-    let filter = {};
+
     if (useFilter) {
       filter = this.getCurrentKeysValues();
     }
@@ -1148,17 +1140,14 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this.deleteData(filter);
   }
 
-  /**
-   * Allow to manage the call to the service data
-   * @param OQueryParams
-   */
-  queryData(queryDataArgs: OQueryParams) {
+
+  queryData(filter: any) {
     if (!Util.isDefined(this.dataService)) {
       console.warn('OFormComponent: no service configured! aborting query');
       return;
     }
 
-    if (!Util.isDefined(queryDataArgs.filter) || Object.keys(queryDataArgs.filter).length === 0) {
+    if (!Util.isDefined(filter) || Object.keys(filter).length === 0) {
       console.warn('OFormComponent: no filter configured! aborting query');
       return;
     }
@@ -1172,9 +1161,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     this.loaderSubscription = this.load();
 
-    const queryParameter = this.queryArgumentAdapter.parseQueryParameters(queryDataArgs);
+    const queryParameter = this.getQueryArguments(false, filter);
 
-    this.querySubscription = this.queryArgumentAdapter.request(this.queryMethod, this.dataService, queryParameter)
+    this.querySubscription = this.dataService[this.queryMethod](...this.dataService.queryArgumentAdapter.parseQueryParameters(queryParameter))
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);

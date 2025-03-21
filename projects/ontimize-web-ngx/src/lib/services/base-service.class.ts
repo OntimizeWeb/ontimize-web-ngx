@@ -1,28 +1,30 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Injector, Type } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscriber } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
 import { AppConfig } from '../config/app-config';
+import { PaginationContext } from '../interfaces/pagination-context.interface';
 import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
+import { ServiceResponse } from '../interfaces/service-response.interface';
 import { Config } from '../types/config.type';
+import { HttpRequestOptions } from '../types/http-request-options.type';
 import { ServiceRequestParam } from '../types/service-request-param.type';
-import { Util } from '../util/util';
 import { Codes } from '../util/codes';
+import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { BaseServiceResponse } from './base-service-response.class';
 import { LoginStorageService } from './login-storage.service';
-import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
-import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
-import { HttpRequestOptions } from '../types/http-request-options.type';
-import { BaseResponse } from '../interfaces/base-response.interface';
 import { NameConvention } from './name-convention/name-convention.service';
-import { PaginationContext } from '../interfaces/pagination-context.interface';
+import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { PaginationContextService } from './pagination-context.service';
+import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
+import { BaseQueryArgument } from './query-arguments/base-query-argument.adapter';
+import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
 
-
-export class BaseService<T extends BaseResponse> {
+@Injectable()
+export class BaseService<T extends ServiceResponse> {
 
   protected httpClient: HttpClient;
   protected router: Router;
@@ -35,6 +37,7 @@ export class BaseService<T extends BaseResponse> {
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
   nameConvention: NameConvention;
+  queryArgumentAdapter: BaseQueryArgument;
   protected paginationContextService: PaginationContextService;
 
 
@@ -48,15 +51,16 @@ export class BaseService<T extends BaseResponse> {
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService);
     this.nameConvention = this.injector.get(NameConvention);
     this.paginationContextService = new PaginationContextService(); //
+    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
-  public configureResponseAdapter() {
+  public configureAdapter() {
     this.adapter = this.injector.get(OntimizeServiceResponseAdapter);
   }
 
 
   public configureService(config: any): void {
-    this.configureResponseAdapter();
+    this.configureAdapter();
     this._urlBase = config.urlBase ? config.urlBase : this._appConfig.apiEndpoint;
   }
 
@@ -179,8 +183,13 @@ export class BaseService<T extends BaseResponse> {
    * User can overwrite the chosen methods parsers or the common parser
    */
   protected parseUnsuccessfulResponse(error: HttpErrorResponse, observer: Subscriber<T>) {
-    const adaptedError = this.adapter.adaptError(error);
-    this.responseParser.parseUnsuccessfulResponse(adaptedError, observer, this);
+    if (this.adapter?.adaptError) {
+      const adaptedError = this.adapter.adaptError(error);
+      if (Util.isDefined(adaptedError)) {
+        error = adaptedError;
+      }
+    }
+    this.responseParser.parseUnsuccessfulResponse(error, observer, this);
   }
 
   protected parseUnsuccessfulQueryResponse(resp: HttpErrorResponse, observer: Subscriber<T>) {
@@ -209,15 +218,16 @@ export class BaseService<T extends BaseResponse> {
       this.loginStorageService.updateSessionId(authToken);
     }
   }
+
   setPaginationContext(context: PaginationContext): void {
-    this.paginationContextService.setContext({ ...this.getPaginationContext(),...context });
+    this.paginationContextService.setContext({ ...this.getPaginationContext(), ...context });
   }
 
   getPaginationContext(): PaginationContext | null {
     return this.paginationContextService.getContext();
   }
 
-  reinitializePaginationContext(pageSize?:number): void {
+  reinitializePaginationContext(pageSize?: number): void {
     this.paginationContextService.reinitializeContext(pageSize);
   }
 

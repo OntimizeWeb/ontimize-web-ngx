@@ -7,11 +7,10 @@ import { IAuthService } from '../../interfaces/auth-service.interface';
 import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { Util } from '../../util/util';
-import { BaseService } from '../base-service.class';
-
+import { BaseDataService } from '../base-data-service.class';
 
 @Injectable()
-export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAuthService {
+export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements IAuthService {
   public path: string = '';
   protected _startSessionPath: string;
   protected config: AppConfig;
@@ -89,6 +88,7 @@ export class JSONAPIService extends BaseService<JSONAPIResponse> implements IAut
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
     // TODO init other params
+
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {

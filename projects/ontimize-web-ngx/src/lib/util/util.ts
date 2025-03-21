@@ -11,6 +11,9 @@ import { ODateValueType } from '../types/o-date-value.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
 import { ActivatedRouteSnapshot } from '@angular/router';
+import { createServiceInstance } from '../services/factories';
+import { AppConfig } from '../config/app-config';
+import { ServiceType } from '../types/service-type.type';
 
 export class Util {
 
@@ -457,20 +460,19 @@ export class Util {
 
 
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
-    let dataService = configureServiceArgs.baseService;
+    const baseService = configureServiceArgs.baseService;
     const entity = configureServiceArgs.entity;
     const service = configureServiceArgs.service;
-    const serviceType = configureServiceArgs.serviceType;
     const injector = configureServiceArgs.injector;
 
-    if (serviceType) {
-      dataService = serviceType;
-    }
+    const config = injector.get(AppConfig);
+    const serviceConfiguration = config.getServiceConfiguration();
+    const serviceConfigurationType = serviceConfiguration[service]?.serviceType;
+    const serviceType = configureServiceArgs.serviceType || serviceConfigurationType;
+
     try {
-      dataService = injector.get<any>(dataService);
-      if (serviceType) {
-        dataService = Util.createServiceInstance(dataService, injector)
-      }
+      let dataService = this.getDataServiceInstance(serviceType, baseService, injector);
+
       if (Util.isDataService(dataService)) {
         const serviceCfg = dataService.getDefaultServiceConfiguration(service);
         if (entity) {
@@ -478,10 +480,24 @@ export class Util {
         }
         dataService.configureService(serviceCfg);
       }
+      return dataService;
     } catch (e) {
       console.error(e);
+      return null;
     }
-    return dataService;
+
+  }
+
+  private static getDataServiceInstance(serviceType: any, baseService: any, injector: Injector): any {
+    if (!serviceType) {
+      return injector.get<any>(baseService);
+    }
+
+    if (![ServiceType.Ontimize,ServiceType.OntimizeEE, ServiceType.JSONAPI].includes(serviceType)) {
+      return createServiceInstance(injector.get<any>(serviceType), injector);
+    }
+
+    return createServiceInstance(serviceType, injector);
   }
 
   /**

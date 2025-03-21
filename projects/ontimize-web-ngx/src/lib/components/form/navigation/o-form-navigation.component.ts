@@ -11,6 +11,8 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
 import { OFormNavigationClass } from './o-form.navigation.class';
+import { BaseService } from '../../../services/base-service.class';
+import { ServiceResponse } from '../../../interfaces/service-response.interface';
 
 export type QueryConfiguration = {
   serviceType: string;
@@ -45,7 +47,7 @@ export class OFormNavigationComponent implements OnDestroy {
   protected formLayoutManager: OFormLayoutManagerBase;
 
   protected querySubscription: Subscription;
-  protected dataService: any;
+  protected dataService: BaseService<ServiceResponse>;
   protected queryConf: QueryConfiguration;
 
   constructor(
@@ -96,7 +98,8 @@ export class OFormNavigationComponent implements OnDestroy {
       queryArgs[4] = offset;
       queryArgs[5] = length ? length : conf.queryRows;
 
-      self.querySubscription = self.dataService[conf.queryMethod].apply(self.dataService, queryArgs).subscribe(res => {
+      self.querySubscription = self.dataService[conf.queryMethod](...self.dataService.queryArgumentAdapter.parseQueryParameters(queryArgs))
+        .subscribe(res => {
         if (res.isSuccessful()) {
           self.navigationData = res.data;
           self.queryConf.queryRecordOffset = offset;

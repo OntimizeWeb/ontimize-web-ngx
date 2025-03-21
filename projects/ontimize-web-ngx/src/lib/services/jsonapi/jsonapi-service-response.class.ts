@@ -1,7 +1,7 @@
 import { HttpHeaders } from "@angular/common/http";
 import { ServiceResponse } from "../../interfaces/service-response.interface";
 import { Util } from "../../util/util";
-
+import { PaginationContext } from "../../interfaces/pagination-context.interface";
 
 export class JSONAPIServiceResponse implements ServiceResponse {
   public code: number;
@@ -17,7 +17,7 @@ export class JSONAPIServiceResponse implements ServiceResponse {
     public headers: HttpHeaders,
     public ok: boolean,
     public body: any,
-    public context: any
+    public context: PaginationContext
   ) {
 
     if (body?.data) {
@@ -31,7 +31,7 @@ export class JSONAPIServiceResponse implements ServiceResponse {
     }
     if (body?.meta) {
       this.totalQueryRecordsNumber = body.meta.total;
-      this.startRecordIndex = this.context?.ovrrArgs?.offset ? this.context.ovrrArgs.offset : 0;
+      this.startRecordIndex =  this.context.pageNumber * this.context.pageSize;
     }
 
     if (this.status >= 200 || this.status < 300) {

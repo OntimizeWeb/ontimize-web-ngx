@@ -1,3 +1,47 @@
+## 15.1.0-SNAPSHOT-12
+ Integrated changes version 15.5.1
+ Added preferense adaptar and query argument sercices to ontimize report service
+
+## 15.1.0-SNAPSHOT-11
+ Integrated changes version 15.5.0
+### Breaking changes
+* Remplace ServiceResponseAdapter by IServiceResponseAdapter
+* OntimizeBaseService is now an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
+* **Config**: Updated the `servicesConfiguration` property in the Config type.
+
+  **Before**:
+  ```ts servicesConfiguration?: Object ```
+  **Now**:
+  ```ts servicesConfiguration?: ServiceConfigType ```
+* **o-table**:
+  - **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
+    - The parameter `ovrrArgs` is now of type `OQueryDataArgs` instead of `any`.
+    - The method now returns an `OQueryParams` instead of `any[]`.
+    - **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
+
+    **Before:**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: any): any[]
+    ```
+
+    **Now**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams
+    ```
+
+  ** Response Adapter Interface Change **
+  - Response adapters previously implemented `ServiceResponseAdapter`, but now they must implement `IServiceResponseAdapter`.
+
+  **Before:**
+  ```ts
+    export class MyAdapter implements ServiceResponseAdapter<BaseServiceResponse>  { ... }
+  ```
+
+  **Now:**
+  ```ts
+   export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
+  ```
+
 ## 15.1.0-SNAPSHOT-10
 * Integrated changes from the 15.4.1 version
 
@@ -92,10 +136,12 @@
 ### Bug fixes
 * **o-table-export-button**: Fixed issue where the `onClick` output was not working properly. ([bdb242e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bdb242e)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
 
+
 ## 15.4.1 (2025-01-30)
 ### Bug fixes
 * **OFormNavigationClass**: Fixed the issue of double confirmation when exiting without inserting a record in the insertion form when the form is not included in `o-form-layout-manager`. ([ab8589a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab8589a)) Closes [#1801](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1801)
 * **o-table**: Fixed that the scroll would be displayed when the table skeleton was displayed when data requests were executed ([ae248b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae248b6)) Closes [#1812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1812)
+
 
 ## 15.4.0 (2025-01-23)
 ### Features

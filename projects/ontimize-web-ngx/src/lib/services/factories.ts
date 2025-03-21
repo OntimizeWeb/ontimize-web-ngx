@@ -50,6 +50,8 @@ import { ILocalStorageService } from '../interfaces/local-service.interface';
  */
 export const O_DATA_SERVICE = new InjectionToken('Ontimize data service');
 
+export const O_RESPONSE_ADAPTER = new InjectionToken<IServiceResponseAdapter<BaseServiceResponse>>('Service response adapter');
+
 /**
  * Injection token that can be used to replace the translate service `OTranslateService`.
  */
@@ -115,14 +117,22 @@ export function dataServiceFactory(injector: Injector): any {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || ServiceType.OntimizeEE === config.serviceType) {
-    return new OntimizeEEService(injector);
-  } else if (ServiceType.Ontimize === config.serviceType) {
-    return new OntimizeService(injector);
-  } else if (ServiceType.JSONAPI === config.serviceType) {
-    return new JSONAPIService(injector);
-  } else
-    return Util.createServiceInstance(config.serviceType, injector);
+  const serviceType = config.serviceType;
+  return createServiceInstance(serviceType, injector);
+}
+
+export function createServiceInstance(serviceType: ServiceType, injector: Injector): any {
+    if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
+      return new OntimizeEEService(injector);
+    }
+    if (ServiceType.Ontimize === serviceType) {
+      return new OntimizeService(injector);
+    }
+    if (ServiceType.JSONAPI === serviceType) {
+      return new JSONAPIService(injector);
+    }
+    return Util.createServiceInstance(serviceType, injector);
+
 }
 
 /**
@@ -186,10 +196,16 @@ export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgu
   } else if (ServiceType.JSONAPI === config.serviceType) {
     return new JSONAPIQueryArgumentsAdapter();
   }
-  return new JSONAPIQueryArgumentsAdapter();
+  return new OntimizeQueryArgumentsAdapter();
 }
 
 export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
+  const serviceClass = _getInjectionTokenValue(O_RESPONSE_ADAPTER, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
+
+  if (Util.isDefined(service)) {
+    return service;
+  }
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
     (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {
