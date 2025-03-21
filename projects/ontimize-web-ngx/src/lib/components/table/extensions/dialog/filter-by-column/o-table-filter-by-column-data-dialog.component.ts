@@ -69,7 +69,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: any
+    @Inject(MAT_DIALOG_DATA) data: { column: OColumn; table: OTableComponent }
   ) {
 
     if (data.column) {
@@ -227,6 +227,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       } else {
         colRenderedValues.forEach((renderedValue, i) => {
           /*Selection distint values */
+          if (renderedValue === null || renderedValue === undefined) {
+            renderedValue = '';
+          }
           if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
             this.addIntoColumnData(renderedValue, colValues, i, filter);
           }
@@ -388,6 +391,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return value;
   }
   onChangeDataSource(event: MatRadioChange) {
+    this.table.clearColumnFilter(this.column.attr);
     this.getData(event.value);
   }
 

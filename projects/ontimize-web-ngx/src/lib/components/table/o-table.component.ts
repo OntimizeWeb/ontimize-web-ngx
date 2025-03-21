@@ -304,7 +304,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (Util.isDefined(_sort) &&
       (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && Util.stringify(this.sort) !== Util.stringify(_sort)))) {
       this.sort = _sort;
-      this.registerSortListener();
       this.setDatasource();
     }
   };
@@ -1448,8 +1447,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
     }
-
-
   }
 
   public updateSortingSubject(value: boolean) {
@@ -1492,6 +1489,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const dataSourceService = this.injector.get(OTableDataSourceService);
     this.dataSource = dataSourceService.getInstance(this);
     this.registerDataSourceListeners();
+    this.registerSortListener();
   }
 
   protected registerDataSourceListeners() {
@@ -1520,23 +1518,23 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /**
    * Allow to expand or collapse the expandable row.
    * @param item
-   * @param rowIndex
    * @param event
    */
-  public toogleRowExpandable(item: any, rowIndex: number, event?: Event): void {
+  public toggleRowExpandable(item: any, event?: Event): void {
     if (event) {
       event.stopPropagation();
       event.preventDefault();
     }
 
     this.expandableItem.toggle(item);
+    const rowIndex = this.getValue().findIndex((row) => this.keysArray.every(key => row[key] === item[key]));
 
     if (this.portalHost[rowIndex]) {
       this.portalHost[rowIndex].detach();
     }
-
-    if (this.getStateExpand(item) === 'collapsed') {
-      const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+    const isCollapsed = this.getStateExpand(item) === 'collapsed';
+    const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
+    if (isCollapsed) {
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
       this.portalHost[rowIndex] = new DomPortalOutlet(
@@ -1548,10 +1546,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
       this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
-      const eventTableRowExpandableChange = this.emitTableRowExpandableChangeEvent(item, rowIndex);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
   }
+  /**
+   * Toggles row expandable by row index
+   * @param rowIndex
+   * @param [event]
+   */
+  public toggleRowExpandableByRowIndex(rowIndex: number, event?: Event) {
+    const item = this.getValue()[rowIndex];
+    this.toggleRowExpandable(item, event);
+  }
+
+
 
   private emitTableRowExpandableChangeEvent(data, rowIndex) {
     const event = new OTableRowExpandedChange();
@@ -3090,7 +3098,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       instance.setDefaultProperties({
         orderable: this.orderable,
         resizable: this.resizable,
-        groupable: this.groupable
+        groupable: this.groupable,
+        pageable: this.pageable
       });
     }
     if (column) {
