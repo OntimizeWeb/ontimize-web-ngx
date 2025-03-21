@@ -84,6 +84,9 @@
 ### Features
 * Added CRUD operations for JSON API
 
+## 15.5.1 (2025-03-12)
+### Bug fixes
+* **o-table**: Fixed after calling the `reinitialize()` method, sorting no longer works as expected([0ab326a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0ab326a)) Closes [#1886](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1886)
 
 ## 15.5.0 (2025-02-26)
 ### Features
