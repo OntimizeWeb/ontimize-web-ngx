@@ -1,13 +1,13 @@
 ## 15.6.0
 ### Feature
 * Adapted to the [JSON:API](https://jsonapi.org/) specification for improved interoperability.
-* Implemented a **naming convention** for data access, enforcing consistent uppercase/lowercase usage.
+* Implemented a **naming convention** for data access, enforcing consistent **uppercase/lowercase** usage.
 * **o-table, o-grid, o-list, o-tree, o-form, o-table-cell-renderer-service,o-file-input, o-combo, o-list-picker, o-radio**: New input `configure-service-args` to allow configure service
 
 ### Breaking changes
 > [!NOTE]
 > The library has been fully adapted to JSON API, requiring adjustments in API requests and responses.
-* Remplaced `ServiceResponseAdapter` by `IServiceResponseAdapter`
+
 * `OntimizeBaseService` is **now** an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
 * **Config**: `servicesConfiguration` property type has changed from `Object` to `ServiceConfigType`
 
