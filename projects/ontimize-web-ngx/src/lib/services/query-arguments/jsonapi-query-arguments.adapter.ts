@@ -65,11 +65,10 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
 
   deComposeExpresion(expresion: any, columns: Array<string>, kv: Object) {
     if (FilterExpressionUtils.instanceofExpression(expresion)) {
-      if (!(typeof expresion.lop === 'string')) {
+      if (typeof expresion.lop !== 'string') {
         kv = this.deComposeExpresion(expresion.lop, columns, kv);
         return this.deComposeExpresion(expresion.rop, columns, kv);
       } else {
-        const key = expresion.lop as string;
         return kv;
       }
     }
