@@ -87,8 +87,6 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
-    // TODO init other params
-
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
