@@ -38,6 +38,7 @@ jobs:
           exit 1
       - name: obtain last NEXT published version
         id: next
+        continue-on-error: true
         run: |
           VERSION=$(npm view ontimize-web-ngx@next version)
           echo $VERSION
