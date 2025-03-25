@@ -1,0 +1,58 @@
+name: Deploy 'next' version
+
+on:
+  workflow_dispatch:
+
+env:
+  NEXUS_REGISTRY: https://registry.npmjs.org/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: 'Cache node modules'
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Node 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.10.0
+          registry-url: ${{ env.NPM_REGISTRY }}
+      - name: obtain package.json version
+        id: project
+        run: |
+          echo "version=$(node -pe "require('./package.json')['version']")" >> "$GITHUB_OUTPUT"
+      - name: abort if not NEXT
+        if: "!contains(steps.project.outputs.version, 'next')"
+        run: |
+          echo "Version ${{ steps.project.outputs.version }} is not a properly named NEXT"
+          exit 1
+      - name: obtain last NEXT published version
+        id: next
+        run: |
+          VERSION=$(npm view ontimize-web-ngx@next version)
+          echo $VERSION
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: abort if already published
+        if: "steps.next.outputs.version == steps.project.outputs.version"
+        run: |
+          echo "Version ${{ steps.project.outputs.version }} is already published"
+          exit 1
+      - name: npm install and npm run build
+        run: |
+          npm i
+          npm run build-prod
+      - name: Publish
+        run: |
+          cd dist
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.OWEB_NPM_AUTOMATION_TOKEN }}" >> .npmrc
+          npm publish --tag next
