@@ -297,7 +297,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   getQueryArguments(filter: object, ovrrArgs: OQueryDataArgs = {}): OQueryParams {
     const compFilter = filter;
     const queryCols = this.getAttributesValuesToQuery();
-    const sqlTypes = (ovrrArgs?.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
+    const sqlTypes = ovrrArgs?.sqltypes ?? this.form?.getAttributesSQLTypes() ?? {};
 
     return { filter: compFilter, columns: queryCols, entity: this.entity, sqlTypes: sqlTypes };
   }
