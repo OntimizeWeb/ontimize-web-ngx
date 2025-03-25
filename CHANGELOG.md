@@ -1,3 +1,55 @@
+## 15.6.0
+### Feature
+* Adapted to the [JSON:API](https://jsonapi.org/) specification for improved interoperability.
+* Implemented a **naming convention** for data access, enforcing consistent uppercase/lowercase usage.
+* **o-table, o-grid, o-list, o-tree, o-form, o-table-cell-renderer-service,o-file-input, o-combo, o-list-picker, o-radio**: New input `configure-service-args` to allow configure service
+
+### Breaking changes
+> [!NOTE]
+> The library has been fully adapted to JSON API, requiring adjustments in API requests and responses.
+* Remplaced `ServiceResponseAdapter` by `IServiceResponseAdapter`
+* `OntimizeBaseService` is **now** an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
+* **Config**: `servicesConfiguration` property type has changed from `Object` to `ServiceConfigType`
+
+  **Before**:
+
+  ```ts
+   servicesConfiguration?: Object
+  ```
+
+  **Now**:
+  ```ts
+  servicesConfiguration?: ServiceConfigType
+  ```
+
+* **o-table**:
+  - **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
+    - The parameter `ovrrArgs` is **now** of type `OQueryDataArgs` instead of `any`.
+    - The method now returns an `OQueryParams` instead of `any[]`.
+    - **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
+
+    **Before:**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: any): any[]
+    ```
+
+    **Now**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams
+    ```
+
+ * Response adapters previously implemented `ServiceResponseAdapter`, but now they must implement `IServiceResponseAdapter`.
+
+    **Before:**
+    ```ts
+    export class MyAdapter implements ServiceResponseAdapter<BaseServiceResponse>  { ... }
+    ```
+
+    **Now:**
+    ```ts
+    export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
+    ```
+
 ## 15.1.0-SNAPSHOT-12
  Integrated changes version 15.5.1
  Added preferense adaptar and query argument sercices to ontimize report service
