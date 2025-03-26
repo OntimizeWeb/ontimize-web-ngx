@@ -35,3 +35,4 @@ export * from './appearance.service';
 export * from './query-arguments/index';
 export * from './name-convention/index';
 export * from './pagination-context.service';
+export * from './base-data-service.class';
