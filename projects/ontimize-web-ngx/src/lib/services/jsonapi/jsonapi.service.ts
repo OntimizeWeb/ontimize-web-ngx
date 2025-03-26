@@ -11,10 +11,8 @@ import { BaseDataService } from '../base-data-service.class';
 
 @Injectable()
 export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements IAuthService {
-  public path: string = '';
   protected _startSessionPath: string;
   protected config: AppConfig;
-
 
   constructor(protected injector: Injector) {
     super(injector);

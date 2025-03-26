@@ -11,8 +11,6 @@ import { OntimizeBaseService } from './ontimize-base-service.class';
 @Injectable()
 export class OntimizeEEService extends OntimizeBaseService implements IDataService {
 
-  public path: string = '';
-
   public configureService(config: any): void {
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/users/login';
