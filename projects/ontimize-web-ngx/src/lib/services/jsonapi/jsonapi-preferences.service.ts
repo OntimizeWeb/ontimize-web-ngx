@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { JSONAPIService } from './jsonapi.service';
-import { ServiceType } from '../../types/service-type.type';
 
 @Injectable()
 export class JSONAPIPreferencesService extends JSONAPIService {

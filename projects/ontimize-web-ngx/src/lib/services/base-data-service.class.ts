@@ -9,6 +9,7 @@ export abstract class BaseDataService<T> extends BaseService<ServiceResponse> {
   constructor(protected injector: Injector) {
     super(injector);
   }
+  public path: string = '';
   abstract query(...args:  [any, ...any[]]): Observable<T>;
   abstract queryById(...args:  [any, ...any[]]): Observable<T>;
   abstract advancedQuery(...args:  [any, ...any[]]): Observable<T>;

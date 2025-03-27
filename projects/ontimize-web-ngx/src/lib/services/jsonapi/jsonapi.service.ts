@@ -11,10 +11,8 @@ import { BaseDataService } from '../base-data-service.class';
 
 @Injectable()
 export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements IAuthService {
-  public path: string = '';
   protected _startSessionPath: string;
   protected config: AppConfig;
-
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -87,8 +85,6 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
-    // TODO init other params
-
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {

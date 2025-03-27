@@ -20,8 +20,8 @@ export class OTableDao {
 
   constructor(
     private readonly dataService: BaseService<ServiceResponse>,
-    private entity: string,
-    private methods: any
+    private readonly entity: string,
+    private readonly methods: any
   ) { }
 
   /**
@@ -60,7 +60,7 @@ export class OTableDao {
    */
   setDataArray(data: Array<any>) {
     this.dataChange.next(data);
-    this.isLoadingResults = false;
+    this.notLoadingResults = false;
     return of(data);
   }
 
@@ -83,15 +83,16 @@ export class OTableDao {
   }
 
   set isLoadingResults(val: boolean) {
-    if (val) {
-      this.cleanTimer();
-      this.loadingTimer = setTimeout(() => {
-        this._isLoadingResults = val;
-      }, 500);
-    } else {
-      this.cleanTimer();
+    this.cleanTimer();
+    this.loadingTimer = setTimeout(() => {
       this._isLoadingResults = val;
-    }
+    }, 500);
+
+  }
+
+  set notLoadingResults(val: boolean) {
+    this.cleanTimer();
+    this._isLoadingResults = val;
   }
 
   protected cleanTimer() {
