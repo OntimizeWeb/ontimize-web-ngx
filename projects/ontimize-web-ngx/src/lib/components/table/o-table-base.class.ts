@@ -28,6 +28,7 @@ export abstract class OTableBase {
   abstract initializeCheckboxColumn();
   visibleExportDialogButtons: string;
   service: string;
+  serviceType: string;
   exportServiceType: TemplateRef<any>;
   exportOptsTemplate: any;
   visibleColArray: string[];
