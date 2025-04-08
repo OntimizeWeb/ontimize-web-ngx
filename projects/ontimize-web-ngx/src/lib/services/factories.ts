@@ -5,6 +5,8 @@ import { IChartOnDemandService } from '../interfaces/chart-on-demand.interface';
 import { IExportDataProvider } from '../interfaces/export-data-provider.interface';
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
+import { ILocalStorageService } from '../interfaces/local-service.interface';
+import { INameConvention } from '../interfaces/name-convention.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { IPreferencesService } from '../interfaces/prefereces-service.interface';
 import { IReportService } from '../interfaces/report-on-demand-service.interface';
@@ -17,9 +19,9 @@ import { BaseServiceResponse } from './base-service-response.class';
 import { JSONAPIPreferencesService } from './jsonapi/jsonapi-preferences.service';
 import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
 import { JSONAPIService } from './jsonapi/jsonapi.service';
+import { LocalStorageService } from './local-storage.service';
 import { NameConventionLower } from './name-convention/name-convention-lower.service';
 import { NameConventionUpper } from './name-convention/name-convention-upper.service';
-import { INameConvention } from '../interfaces/name-convention.interface';
 import { NameConvention } from './name-convention/name-convention.service';
 import { OntimizeAuthService } from './o-auth.service';
 import { OErrorDialogManager } from './o-error-dialog-manager.service';
@@ -38,8 +40,6 @@ import { IBaseQueryArgument } from './query-arguments/base-query-argument.interf
 import { JSONAPIQueryArgumentsAdapter } from './query-arguments/jsonapi-query-arguments.adapter';
 import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
-import { LocalStorageService } from './local-storage.service';
-import { ILocalStorageService } from '../interfaces/local-service.interface';
 
 /* ----------------------------------------------------------------------------------------------------
  * ----------------------------------------- INJECTION TOKENS -----------------------------------------
@@ -191,9 +191,9 @@ export function exportDataFactory(injector: Injector): IExportDataProvider {
 export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgument {
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
-    (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {
+    Util.isOntimizeEEService(injector)) {
     return new OntimizeQueryArgumentsAdapter();
-  } else if (ServiceType.JSONAPI === config.serviceType) {
+  } else if (Util.isJsonApiService(injector)) {
     return new JSONAPIQueryArgumentsAdapter();
   }
   return new OntimizeQueryArgumentsAdapter();
@@ -208,9 +208,10 @@ export function serviceResponseAdapterFactory(injector: Injector): IServiceRespo
   }
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
-    (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {
+    (Util.isOntimizeEEService(injector))) {
     return new OntimizeServiceResponseAdapter();
-  } else if (ServiceType.JSONAPI === config.serviceType) {
+  } else if (Util.isJsonApiService(injector)) {
+
     return new JSONAPIServiceResponseAdapter();
   }
   return new JSONAPIServiceResponseAdapter();
@@ -242,7 +243,7 @@ export function preferencesServiceFactory(injector: Injector): IPreferencesServi
 
   const config = injector.get(AppConfig).getConfiguration();
 
-  if (!Util.isDefined(config.serviceType) || (ServiceType.OntimizeEE === config.serviceType || ServiceType.Ontimize === config.serviceType)) {
+  if (!Util.isDefined(config.serviceType) || Util.isOntimizeEEService(injector)) {
     return new OntimizePreferencesService(injector);
   } else if (ServiceType.JSONAPI === config.serviceType) {
     return new JSONAPIPreferencesService(injector);

@@ -6,18 +6,28 @@ import { combineLatest } from 'rxjs';
 
 import { AppConfig, O_INPUTS_OPTIONS } from '../config/app-config';
 import { appConfigFactory } from '../services/app-config.provider';
-import { ComponentStateServiceProvider, ExportDataServiceProvider, NameConventionProvider, O_MAT_ERROR_OPTIONS, OntimizeAuthServiceProvider, OntimizeExportServiceProvider, OntimizeServiceProvider, ServiceRequestAdapter, ServiceResponseAdapter, OntimizeLocalStorageServiceProvider } from '../services/factories';
+import {
+  ComponentStateServiceProvider,
+  ExportDataServiceProvider,
+  NameConventionProvider,
+  O_MAT_ERROR_OPTIONS,
+  OntimizeAuthServiceProvider,
+  OntimizeExportServiceProvider,
+  OntimizeLocalStorageServiceProvider,
+  OntimizeServiceProvider,
+  ServiceRequestAdapter,
+  ServiceResponseAdapter
+} from '../services/factories';
 import { LocalStorageService } from '../services/local-storage.service';
 import { NavigationService } from '../services/navigation.service';
 import { OntimizeMatIconRegistry } from '../services/ontimize-icon-registry.service';
+import { OPreferenceResponseAdapter } from '../services/ontimize/o-preference-response.adapter';
 import { ORemoteConfigurationService } from '../services/remote-config.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
 import { Error403Component } from '../shared/components/error403/o-error-403.component';
 import { Config } from '../types/config.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
-import { OPreferenceResponseAdapter } from '../services/ontimize/o-preference-response.adapter';
-import { OPreferenceQueryArgumentsAdapter } from '../services/ontimize/o-preference-query-argument.adapter';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -86,7 +96,6 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   OntimizeExportServiceProvider,
   NameConventionProvider,
   OntimizeLocalStorageServiceProvider,
-  OPreferenceQueryArgumentsAdapter,
   OPreferenceResponseAdapter,
   // disabled global ripple
   { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },

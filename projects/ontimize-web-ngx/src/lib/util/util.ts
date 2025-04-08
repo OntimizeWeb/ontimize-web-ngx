@@ -16,6 +16,7 @@ import { AppConfig } from '../config/app-config';
 import { ServiceType } from '../types/service-type.type';
 import { JSONAPIService } from '../services/jsonapi/jsonapi.service';
 import { OntimizeEEService } from '../services/ontimize/ontimize-ee.service';
+import { OntimizeService } from '../services/ontimize/ontimize.service';
 
 export class Util {
 
@@ -469,8 +470,10 @@ export class Util {
 
   static isOntimizeEEService(injector: Injector): boolean {
     const config = injector.get(AppConfig);
-    return config.getConfiguration().serviceType === 'OntimizeEE' ||
-      config.getConfiguration().serviceType instanceof OntimizeEEService;
+    return (config.getConfiguration().serviceType === 'OntimizeEE' ||
+      config.getConfiguration().serviceType instanceof OntimizeEEService) ||
+      (config.getConfiguration().serviceType === 'Ontimize' ||
+        config.getConfiguration().serviceType instanceof OntimizeService);
   }
 
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {

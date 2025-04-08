@@ -33,7 +33,7 @@ export class OPreferenceMappingUtils {
   };
 
 
-  static readonly ONTIMIZEREPORTMAPPING = {
+  static readonly ONTIMIZEPREFERENCESMAPPING = {
     "preferenceid": "id",
     "preferencename": "name",
     "preferencedescription": "description",
@@ -41,6 +41,16 @@ export class OPreferenceMappingUtils {
     "preferenceservice": "service",
     "preferencetype": "type",
     "preferenceparameters": "params"
+  };
+
+  static readonly JSONAPIPREFERENCESMAPPING = {
+    "preferenceid": "PREFERENCEID",
+    "preferencename": "PREFERENCENAME",
+    "preferencedescription": "PREFERENCEDESCRIPTION",
+    "preferenceentity": "PREFERENCEENTITY",
+    "preferenceservice": "PREFERENCESERVICE",
+    "preferencetype": "PREFERENCETYPE",
+    "preferenceparameters": "PREFERENCEPREFERENCES"
   };
 
   static transformKeys(data: string[], keyMapping: { [key: string]: string }): string[] {
@@ -77,6 +87,7 @@ export class OPreferenceMappingUtils {
     }, {});
   }
 
+
   /**
    * Transforma los datos, ya sea un solo objeto o un array de objetos, aplicando los mapeos de claves.
    */
@@ -97,13 +108,22 @@ export class OPreferenceMappingUtils {
     return OPreferenceMappingUtils.transformKeys(array, OPreferenceMappingUtils.STANDARDREPORTMAPPING);
   }
 
-  static ontimizeMappingKeys(array: string[]): string[] {
-    return OPreferenceMappingUtils.transformKeys(array, OPreferenceMappingUtils.ONTIMIZEREPORTMAPPING);
+  static ontimizePreferencesMappingKeys(array: string[]): string[] {
+    return OPreferenceMappingUtils.transformKeys(array, OPreferenceMappingUtils.ONTIMIZEPREFERENCESMAPPING);
   }
 
-  static ontimizeDataMapping(array: { [key: string]: any } | { [key: string]: any }[]): { [key: string]: any }[] | { [key: string]: any } {
-    return OPreferenceMappingUtils.transformData(array, OPreferenceMappingUtils.ONTIMIZEREPORTMAPPING, OPreferenceMappingUtils.ONTIMIZEPARAMETERMAPPING);
+  static ontimizePreferencesDataMapping(array: { [key: string]: any } | { [key: string]: any }[]): { [key: string]: any }[] | { [key: string]: any } {
+    return OPreferenceMappingUtils.transformData(array, OPreferenceMappingUtils.ONTIMIZEPREFERENCESMAPPING, OPreferenceMappingUtils.ONTIMIZEPARAMETERMAPPING);
   }
+
+  static jsonApiPreferencesMappingKeys(array: string[]): string[] {
+    return OPreferenceMappingUtils.transformKeys(array, OPreferenceMappingUtils.JSONAPIPREFERENCESMAPPING);
+  }
+
+  static jsonApiPreferencesDataMapping(array: { [key: string]: any } | { [key: string]: any }[]): { [key: string]: any }[] | { [key: string]: any } {
+    return OPreferenceMappingUtils.transformData(array, OPreferenceMappingUtils.JSONAPIPREFERENCESMAPPING);
+  }
+
 
 
 
