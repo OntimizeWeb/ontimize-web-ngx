@@ -14,6 +14,9 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { createServiceInstance } from '../services/factories';
 import { AppConfig } from '../config/app-config';
 import { ServiceType } from '../types/service-type.type';
+import { JSONAPIService } from '../services/jsonapi/jsonapi.service';
+import { OntimizeEEService } from '../services/ontimize/ontimize-ee.service';
+import { OntimizeService } from '../services/ontimize/ontimize.service';
 
 export class Util {
 
@@ -459,6 +462,20 @@ export class Util {
   }
 
 
+  static isJsonApiService(injector: Injector): boolean {
+    const config = injector.get(AppConfig);
+    return config.getConfiguration().serviceType === 'JSONAPI' ||
+      config.getConfiguration().serviceType instanceof JSONAPIService;
+  }
+
+  static isOntimizeEEService(injector: Injector): boolean {
+    const config = injector.get(AppConfig);
+    return (config.getConfiguration().serviceType === 'OntimizeEE' ||
+      config.getConfiguration().serviceType instanceof OntimizeEEService) ||
+      (config.getConfiguration().serviceType === 'Ontimize' ||
+        config.getConfiguration().serviceType instanceof OntimizeService);
+  }
+
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
     const baseService = configureServiceArgs.baseService;
     const entity = configureServiceArgs.entity;
@@ -493,7 +510,7 @@ export class Util {
       return injector.get<any>(baseService);
     }
 
-    if (![ServiceType.Ontimize,ServiceType.OntimizeEE, ServiceType.JSONAPI].includes(serviceType)) {
+    if (![ServiceType.Ontimize, ServiceType.OntimizeEE, ServiceType.JSONAPI].includes(serviceType)) {
       return createServiceInstance(injector.get<any>(serviceType), injector);
     }
 

@@ -1,15 +1,14 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import { OPreferenceMappingUtils } from '../../util/preference-mapping-util';
 import { OntimizeEEService } from './ontimize-ee.service';
 import { OPreferenceResponseAdapter } from './o-preference-response.adapter';
-import { OPreferenceQueryArgumentsAdapter } from './o-preference-query-argument.adapter';
-import { OPreferenceMappingUtils } from '../../util/preference-mapping-util';
 
 @Injectable()
 export class OntimizePreferencesService extends OntimizeEEService {
   constructor(injector:Injector) {
     super(injector);
-    this.queryArgumentAdapter = this.injector.get(OPreferenceQueryArgumentsAdapter);
   }
 
   public path: string = '';
@@ -25,7 +24,7 @@ export class OntimizePreferencesService extends OntimizeEEService {
   public saveAsPreferences(preferencesparams?: object): Observable<any> {
 
     const body = JSON.stringify(
-      OPreferenceMappingUtils.ontimizeDataMapping(preferencesparams)
+      OPreferenceMappingUtils.ontimizePreferencesDataMapping(preferencesparams)
     )
 
     const url = `${this.urlBase}${this.path}/save`;
@@ -40,7 +39,7 @@ export class OntimizePreferencesService extends OntimizeEEService {
   public savePreferences(id: number, preferencesparams?: object): Observable<any> {
 
     const body = JSON.stringify(
-      OPreferenceMappingUtils.ontimizeDataMapping(preferencesparams)
+      OPreferenceMappingUtils.ontimizePreferencesDataMapping(preferencesparams)
     )
     const url = `${this.urlBase}${this.path}/update/${id}`;
 
