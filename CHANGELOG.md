@@ -1,6 +1,13 @@
+## 15.5.2 (2025-04-16)
+### Features
+* **o-list**: Add new `onItemSelected` and `onItemDeselected` outputs ([58f5d68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/58f5d68)) Closes [#1877](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1877)
+
+### Bug fixes
+* **o-list**: Fixed an issue where `getSelectedItems` always returned an empty array([2138305](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2138305)) Closes [#1875](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1875)
+
 ## 15.5.1 (2025-03-12)
 ### Bug fixes
-* **o-table**: Fixed after calling the `reinitialize()` method, sorting no longer works as expected([0ab326a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0ab326a)) Closes [#1886](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1886)
+* **o-table**: Fixed after calling the `reinitialize()` method, sorting no longer works as expected([0ab326a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0ab326a)) Closes [#1866](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1866)
 
 ## 15.5.0 (2025-02-26)
 ### Features
