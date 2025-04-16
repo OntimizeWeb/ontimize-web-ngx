@@ -37,6 +37,7 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { ListItem } from './list-item/o-list-item';
 import { OListItemDirective } from './list-item/o-list-item.directive';
+import { SelectionChange } from '@angular/cdk/collections';
 
 export const DEFAULT_INPUTS_O_LIST = [
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
@@ -69,7 +70,9 @@ export const DEFAULT_INPUTS_O_LIST = [
 
 export const DEFAULT_OUTPUTS_O_LIST = [
   'onInsertButtonClick',
-  'onItemDeleted'
+  'onItemDeleted',
+  'onItemSelected',
+  'onItemDeselected'
 ];
 
 @Component({
@@ -129,6 +132,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   protected oMatSort: OMatSort;
   protected actionsPermissions: OPermissions[];
 
+  public onItemSelected: EventEmitter<any[]> = new EventEmitter();
+  public onItemDeselected: EventEmitter<any[]> = new EventEmitter();
 
   constructor(
     injector: Injector,
@@ -192,6 +197,16 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       this.state.totalQueryRecordsNumber = 0;
     }
     this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
+
+    const selectionSubscription = this.selection.changed.subscribe(({ added, removed }: SelectionChange<any>) => {
+        if (added?.length) {
+          ObservableWrapper.callEmit(this.onItemSelected, added);
+        }
+        if (removed?.length) {
+          ObservableWrapper.callEmit(this.onItemDeselected, removed);
+        }
+    });
+    this.subscription.add(selectionSubscription)
   }
 
   public reinitialize(options: OListInitializationOptions): void {

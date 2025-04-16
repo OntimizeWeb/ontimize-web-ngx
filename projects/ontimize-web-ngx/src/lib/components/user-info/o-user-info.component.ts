@@ -11,7 +11,8 @@ import { OUserInfoConfigurationDirective } from './user-info-configuration/o-use
 export const DEFAULT_INPUTS_O_USER_INFO = [
   'showProfile: show-profile',
   'showSettings: show-settings',
-  'showLogout: show-logout'
+  'showLogout: show-logout',
+  'id'
 ];
 
 export const DEFAULT_OUTPUTS_O_USER_INFO = [];
@@ -44,6 +45,8 @@ export class OUserInfoComponent implements OnDestroy {
 
   @BooleanInputConverter()
   public showProfile: boolean = false;
+
+  public id: string;
 
   public userInfoConfiguration: OUserInfoConfigurationDirective;
 

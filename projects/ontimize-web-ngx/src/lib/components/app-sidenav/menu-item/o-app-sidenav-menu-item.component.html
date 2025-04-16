@@ -1,5 +1,5 @@
 <ng-container *ngIf="sidenavOpened">
-  <li *ngIf="!hidden" class="o-app-sidenav-menuitem o-app-sidenav-item" [class.o-user-info]="isUserInfoItem()">
+  <li *ngIf="!hidden" class="o-app-sidenav-menuitem o-app-sidenav-item" [class.o-user-info]="isUserInfoItem()" [id]="menuItem.id">
 
     <a mat-button *ngIf="!isUserInfoItem() && !isLocaleItem()" (click)="triggerClick($event)"
       [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
