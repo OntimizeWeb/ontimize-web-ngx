@@ -24,6 +24,9 @@ import { ListItem } from './o-list-item';
   templateUrl: './o-list-item.component.html',
   styleUrls: ['./o-list-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    { provide: ListItem, useExisting: forwardRef(() => OListItemComponent) }
+  ],
   host: {
     '[class.o-list-item]': 'true'
   }
