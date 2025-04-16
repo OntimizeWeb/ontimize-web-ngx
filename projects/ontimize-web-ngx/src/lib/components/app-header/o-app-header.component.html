@@ -12,7 +12,7 @@
       <div class="layout-header-projection-end">
         <ng-content select="o-app-layout-header-projection-end"></ng-content>
       </div>
-      <o-user-info #userInfo *ngIf="showUserInfo"></o-user-info>
+      <o-user-info #userInfo id="userInfo" *ngIf="showUserInfo"></o-user-info>
       <o-language-selector *ngIf="showLanguageSelector" [use-flag-icons]="useFlagIcons"></o-language-selector>
     </div>
   </div>
