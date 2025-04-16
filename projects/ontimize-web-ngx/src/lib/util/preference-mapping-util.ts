@@ -76,7 +76,7 @@ export class OPreferenceMappingUtils {
       if (Array.isArray(value) && value.every((item) => typeof item === "object" && !Array.isArray(item))) {
         // Transformar claves de objetos dentro de arrays
         newObj[newKey] = value.map((item) => this.mapObjectKeys(item, parameterKeyMapping || {}));
-      } else if (typeof value === "object" && value !== null) {
+      } else if (typeof value === "object" && value !== null && newKey !== "params") {
         // Transformar claves de objetos anidados
         newObj[newKey] = this.mapObjectKeys(value, parameterKeyMapping || {});
       } else {
