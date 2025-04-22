@@ -141,14 +141,14 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     return queryParams;
   }
 
-  insert(av: object, entity: string): Observable<JSONAPIResponse> {
+  insert(attributes: object, type: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}`;
 
-    av = this.nameConvention.parseDataToNameConvention(av);
+    attributes = this.nameConvention.parseDataToNameConvention(attributes);
 
-    let attributes = { attributes: av, type: entity };
+    let data = { attributes: attributes, type: type };
     const body = JSON.stringify({
-      data: attributes
+      data:  data
     });
 
     return this.doRequest({
@@ -160,16 +160,16 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  update(kv: object, av: object, entity?: string): Observable<JSONAPIResponse> {
-    const id = Object.values(kv)[0];
+  update(ids: object, attributes: object, type?: string): Observable<JSONAPIResponse> {
+    const id = Object.values(ids)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
-    av = this.nameConvention.parseDataToNameConvention(av);
+    attributes = this.nameConvention.parseDataToNameConvention(attributes);
 
-    let attributes = { ...{ attributes: av }, ...{ id: id }, ...{ type: entity } };
+    let data = { ...{ attributes: attributes }, ...{ id: id }, ...{ type: type } };
 
     const body = JSON.stringify({
-      data: attributes
+      data: data
     });
 
     return this.doRequest({
@@ -181,8 +181,8 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  delete(kv: object = {}): Observable<JSONAPIResponse> {
-    const id = Object.values(kv)[0];
+  delete(ids: object = {}): Observable<JSONAPIResponse> {
+    const id = Object.values(ids)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
     return this.doRequest({
@@ -193,14 +193,5 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  /**
-  * Gets standart entity
-  * @param entity
-  * @returns  return the first chart of the entity in uppercase
-  */
-
-  getStandartEntity(entity: string) {
-    return entity.charAt(0).toUpperCase() + entity.slice(1);
-  }
 
 }
