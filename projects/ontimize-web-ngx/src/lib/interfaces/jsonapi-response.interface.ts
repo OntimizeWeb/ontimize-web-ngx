@@ -1,6 +1,3 @@
-import { ServiceResponse } from "./service-response.interface";
-
-
 // Interface for describing errors
 interface JSONAPIError {
   id?: string;                         // Unique identifier for this particular error occurrence
@@ -9,7 +6,7 @@ interface JSONAPIError {
   title?: string;                      // Short, human-readable summary of the problem
   detail?: string;                     // Detailed explanation of the error
   source?: {
-    pointer?: string;                 // JSON Pointer to the offending part of the document
+    pointer?: string;                  // JSON Pointer to the offending part of the document
     parameter?: string;
     header?: string                    // a string indicating the name of a single request header which caused the error
   };
@@ -17,7 +14,7 @@ interface JSONAPIError {
     about?: string;                   // A link that leads to further details about this error
     type?: string;                    // Optional additional links
   };
-  meta?: Record<string, any>;     // Optional additional information
+  meta?: Record<string, any>;         // Optional additional information
 }
 
 type JsonApiLinkValue =
@@ -41,20 +38,20 @@ interface JsonApiLinkObject {
 
 // Interface for resources
 interface JSONAPIResource {
-  type: string;          // Resource type (e.g., "articles", "users")
-  id: string;            // Unique identifier of the resource
-  attributes?: Record<string, any>;  // Attributes of the resource
-  relationships?: Record<string, any>;  // Relationships with other resources (optional)
-  links?: JSONAPILinks;  // Links related to the resource (optional)
-  meta?: Record<string, any>;   // Metadata (optional)
+  type: string;                           // Resource type (e.g., "articles", "users")
+  id: string;                             // Unique identifier of the resource
+  attributes?: Record<string, any>;       // Attributes of the resource
+  relationships?: Record<string, any>;    // Relationships with other resources (optional)
+  links?: JSONAPILinks;                   // Links related to the resource (optional)
+  meta?: Record<string, any>;             // Metadata (optional)
 }
 
 // Interface for successful responses
 interface JSONAPISuccessfulResponse {
   data?: JSONAPIResource | JSONAPIResource[]; // Can be a single resource or a collection
-  included?: JSONAPIResource[];  // Related resources (optional)
-  meta?: Record<string, any>;   // Metadata (optional)
-  links?: JSONAPILinks;         // Links (optional)
+  included?: JSONAPIResource[];               // Related resources (optional)
+  meta?: Record<string, any>;                 // Metadata (optional)
+  links?: JSONAPILinks;                       // Links (optional)
 }
 
 // Interface for error responses
