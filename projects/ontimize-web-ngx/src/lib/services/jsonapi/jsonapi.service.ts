@@ -160,8 +160,8 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  update(ids: object, attributes: object, type: string): Observable<JSONAPIResponse> {
-    const id = Object.values(ids)[0];
+  update(id: string, attributes: object, type: string): Observable<JSONAPIResponse> {
+
     const url = `${this.urlBase}${this.path}/${id}`;
 
     attributes = this.nameConvention.parseDataToNameConvention(attributes);
@@ -181,8 +181,7 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  delete(ids: object = {}): Observable<JSONAPIResponse> {
-    const id = Object.values(ids)[0];
+  delete(id: string): Observable<JSONAPIResponse> {
     const url = `${this.urlBase}${this.path}/${id}`;
 
     return this.doRequest({

@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 
 import { Expression } from '../../types/expression.type';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
-import { BaseQueryArgument } from './base-query-argument.adapter';
-import { IBaseQueryArgument } from './base-query-argument.interface';
+import { BaseRequestArgument } from './base-request-argument.adapter';
+import { IBaseRequestArgument } from './base-request-argument.interface';
 import { OQueryParams } from '../../types/query-params.type';
 import { Util } from '../../util/util';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 
 @Injectable()
-export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements IBaseQueryArgument {
+export class JSONAPIRequestArgumentsAdapter extends BaseRequestArgument implements IBaseRequestArgument {
 
   parseQueryParameters(args: OQueryParams): JSONAPIQueryParameter[] {
 
@@ -73,5 +73,13 @@ export class JSONAPIQueryArgumentsAdapter extends BaseQueryArgument implements I
       }
     }
   }
+  getIdFromFilter(filter: any): string {
+    if (Util.isDefined(filter)) {
+      return Object.values(filter)[0] as string;
+    } else {
+      return null;
+    }
+  }
+
 
 }

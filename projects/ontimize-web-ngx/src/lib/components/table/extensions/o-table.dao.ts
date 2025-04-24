@@ -29,11 +29,12 @@ export class OTableDao {
    */
   getQuery(queryArgs: OQueryDataArgs): Observable<any> {
     this.isLoadingResults = true;
-    return this.dataService[this.methods.query](this.dataService.queryArgumentAdapter.parseQueryParameters(queryArgs));
+    return this.dataService[this.methods.query](this.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs));
   }
 
   removeQuery(filters: any, sqlTypes?: object): Observable<any> {
-    return merge(...filters.map((kv => this.dataService[this.methods.delete](kv, this.entity, sqlTypes))));
+    const id = this.dataService.requestArgumentAdapter.getIdFromFilter(filters);
+    return merge(...filters.map((kv => this.dataService[this.methods.delete](id, this.entity, sqlTypes))));
   }
 
   insertQuery(av: object, sqlTypes?: object): Observable<any> {
@@ -50,7 +51,8 @@ export class OTableDao {
       // Only to simulate the service response, the model change is done in the editor
       return of([]);
     } else {
-      return this.dataService[this.methods.update](kv, av, this.entity, sqlTypes);
+      const id = this.dataService.requestArgumentAdapter.getIdFromFilter(kv);
+      return this.dataService[this.methods.update](id, av, this.entity, sqlTypes);
     }
   }
 
