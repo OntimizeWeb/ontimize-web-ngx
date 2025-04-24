@@ -5,5 +5,7 @@ export interface ServiceResponse extends BaseResponse{
   sqlTypes?: { [key: string]: number; };
   startRecordIndex?: number;
   totalQueryRecordsNumber?: number;
+  data: any;
+  message: string;
 
 }

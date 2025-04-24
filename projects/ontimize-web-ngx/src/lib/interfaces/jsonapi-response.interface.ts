@@ -1,3 +1,4 @@
+import { BaseResponse } from './base-response.interface';
 // Interface for describing errors
 interface JSONAPIError {
   id?: string;                         // Unique identifier for this particular error occurrence
@@ -60,4 +61,4 @@ interface JSONAPIErrorResponse {
 }
 
 // Generic interface that can be used for any API response, either successful or error
-export interface JSONAPIResponse extends JSONAPISuccessfulResponse, JSONAPIErrorResponse { };
+export interface JSONAPIResponse extends JSONAPISuccessfulResponse, JSONAPIErrorResponse, BaseResponse { };
