@@ -20,7 +20,7 @@ import { NameConvention } from './name-convention/name-convention.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { PaginationContextService } from './pagination-context.service';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
-import { BaseQueryArgument } from './query-arguments/base-query-argument.adapter';
+import { BaseRequestArgument } from './query-arguments/base-request-argument.adapter';
 import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class BaseService<T extends ServiceResponse> {
   protected adapter: IServiceResponseAdapter<BaseServiceResponse>;
   protected loginStorageService: LoginStorageService;
   nameConvention: NameConvention;
-  queryArgumentAdapter: BaseQueryArgument;
+  requestArgumentAdapter: BaseRequestArgument;
   protected paginationContextService: PaginationContextService;
 
 
@@ -51,7 +51,7 @@ export class BaseService<T extends ServiceResponse> {
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService);
     this.nameConvention = this.injector.get(NameConvention);
     this.paginationContextService = new PaginationContextService(); //
-    this.queryArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
+    this.requestArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
   }
 
   public configureAdapter() {

@@ -36,8 +36,8 @@ import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-resp
 import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
-import { IBaseQueryArgument } from './query-arguments/base-query-argument.interface';
-import { JSONAPIQueryArgumentsAdapter } from './query-arguments/jsonapi-query-arguments.adapter';
+import { IBaseRequestArgument } from './query-arguments/base-request-argument.interface';
+import { JSONAPIRequestArgumentsAdapter } from './query-arguments/jsonapi-query-arguments.adapter';
 import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 
@@ -188,13 +188,13 @@ export function exportDataFactory(injector: Injector): IExportDataProvider {
   }
 
 }
-export function serviceRequestAdapterFactory(injector: Injector): IBaseQueryArgument {
+export function serviceRequestAdapterFactory(injector: Injector): IBaseRequestArgument {
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
     Util.isOntimizeEEService(injector)) {
     return new OntimizeQueryArgumentsAdapter();
   } else if (Util.isJsonApiService(injector)) {
-    return new JSONAPIQueryArgumentsAdapter();
+    return new JSONAPIRequestArgumentsAdapter();
   }
   return new OntimizeQueryArgumentsAdapter();
 }

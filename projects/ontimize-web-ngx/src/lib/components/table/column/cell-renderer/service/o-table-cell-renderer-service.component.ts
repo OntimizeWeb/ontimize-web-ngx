@@ -144,7 +144,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       filter[this.column] = cellvalue;
     }
     const queryArguments = this.getQueryArguments(filter);
-    this.dataService[this.queryMethod](...this.dataService.queryArgumentAdapter.parseQueryParameters(queryArguments))
+    this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryArguments))
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           let respData;
@@ -252,7 +252,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
 
       const queryArguments = this.getQueryArguments({});
 
-      this.dataService[this.queryMethod](...this.dataService.queryArgumentAdapter.parseQueryParameters(queryArguments))
+      this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryArguments))
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             let respData = [];

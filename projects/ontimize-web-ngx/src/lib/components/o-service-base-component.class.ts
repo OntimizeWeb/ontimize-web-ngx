@@ -423,7 +423,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
       this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
 
-      this.querySubscription = this.dataService[queryMethodName](...this.dataService.queryArgumentAdapter.parseQueryParameters(this.queryArguments))
+      this.querySubscription = this.dataService[queryMethodName](...this.dataService.requestArgumentAdapter.parseQueryParameters(this.queryArguments))
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;
