@@ -160,7 +160,7 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  update(ids: object, attributes: object, type?: string): Observable<JSONAPIResponse> {
+  update(ids: object, attributes: object, type: string): Observable<JSONAPIResponse> {
     const id = Object.values(ids)[0];
     const url = `${this.urlBase}${this.path}/${id}`;
 
