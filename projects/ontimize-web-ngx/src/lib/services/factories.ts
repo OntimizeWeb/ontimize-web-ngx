@@ -47,6 +47,7 @@ import { IBaseRequestArgument } from './request-adapter/base-request-argument.in
 import { JSONAPIRequestArgumentsAdapter } from './request-adapter/jsonapi-request-arguments.adapter';
 import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
+import { _getInjectionTokenValue } from '../util/injection-token.utils';
 
 
 /* ----------------------------------------------------------------------------------------------------
@@ -64,9 +65,22 @@ export function dataServiceFactory(injector: Injector): any {
   }
   const config = injector.get(AppConfig).getConfiguration();
   const serviceType = config.serviceType;
-  return Util.createServiceInstanceByServiceType(serviceType, injector);
+  return createServiceInstance(serviceType, injector);
 }
 
+export function createServiceInstance(serviceType: ServiceType, injector: Injector): any {
+    if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
+      return new OntimizeEEService(injector);
+    }
+    if (ServiceType.Ontimize === serviceType) {
+      return new OntimizeService(injector);
+    }
+    if (ServiceType.JSONAPI === serviceType) {
+      return new JSONAPIService(injector);
+    }
+    return Util.createServiceInstance(serviceType, injector);
+
+}
 
 /**
  * Creates a new instance of the file service.
@@ -221,25 +235,6 @@ export const ServiceResponseAdapter = { provide: OntimizeServiceResponseAdapter,
 
 export const NameConventionProvider = { provide: NameConvention, useFactory: nameConventionServiceFactory, deps: [Injector] };
 export const OntimizeLocalStorageServiceProvider = { provide: LocalStorageService, useFactory: localStorageServiceFactory, deps: [Injector] };
-/* ----------------------------------------------------------------------------------------------------
- * ----------------------------------------- Utility methods ------------------------------------------
- * ---------------------------------------------------------------------------------------------------- */
-
-/**
- * Returns the value for the provided injection token
- * @param token the injection token
- * @param injector the injector
- */
-export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: Injector): T {
-  let service: T;
-  try {
-    service = injector.get(token);
-  } catch (e) {
-    // No value provided for the injection token
-  }
-  return service;
-}
-
 
 /**
  * Creates a new instance of the preferences service.

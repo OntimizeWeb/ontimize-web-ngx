@@ -11,6 +11,7 @@ import { ODateValueType } from '../types/o-date-value.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
 import { ActivatedRouteSnapshot } from '@angular/router';
+import { createServiceInstance } from '../services/factories';
 import { AppConfig } from '../config/app-config';
 import { ServiceType } from '../types/service-type.type';
 import { JSONAPIService } from '../services/jsonapi/jsonapi.service';
@@ -510,25 +511,12 @@ export class Util {
     }
 
     if (![ServiceType.Ontimize, ServiceType.OntimizeEE, ServiceType.JSONAPI].includes(serviceType)) {
-      return Util.createServiceInstance(injector.get<any>(serviceType), injector);
+      return createServiceInstance(injector.get<any>(serviceType), injector);
     }
 
-    return Util.createServiceInstance(serviceType, injector);
+    return createServiceInstance(serviceType, injector);
   }
 
-  static createServiceInstanceByServiceType(serviceType: ServiceType, injector: Injector): any {
-      if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
-        return new OntimizeEEService(injector);
-      }
-      if (ServiceType.Ontimize === serviceType) {
-        return new OntimizeService(injector);
-      }
-      if (ServiceType.JSONAPI === serviceType) {
-        return new JSONAPIService(injector);
-      }
-      return Util.createServiceInstance(serviceType, injector);
-
-  }
   /**
  * Returns an instance of the provided service class
  * @param clazz the class reference
