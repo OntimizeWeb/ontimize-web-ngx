@@ -20,7 +20,7 @@ import { merge, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IList } from '../../interfaces/o-list.interface';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
@@ -39,6 +39,7 @@ import { ListItem } from './list-item/o-list-item';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 import { OQueryParams } from '../../types/query-params.type';
 import { SelectionChange } from '@angular/cdk/collections';
+import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 
 export const DEFAULT_INPUTS_O_LIST = [
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.

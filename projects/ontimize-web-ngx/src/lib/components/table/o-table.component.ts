@@ -40,7 +40,7 @@ import { BehaviorSubject, combineLatest, Observable, of, Subject, Subscription }
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
@@ -103,6 +103,7 @@ import type { OTablePaginator } from '../../interfaces/o-table-paginator.interfa
 import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OQueryParams } from '../../types/query-params.type';
+import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',

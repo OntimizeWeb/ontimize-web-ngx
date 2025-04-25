@@ -10,7 +10,6 @@ import {
   ComponentStateServiceProvider,
   ExportDataServiceProvider,
   NameConventionProvider,
-  O_MAT_ERROR_OPTIONS,
   OntimizeAuthServiceProvider,
   OntimizeExportServiceProvider,
   OntimizeLocalStorageServiceProvider,
@@ -28,6 +27,7 @@ import { Error403Component } from '../shared/components/error403/o-error-403.com
 import { Config } from '../types/config.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
+import { O_MAT_ERROR_OPTIONS } from '../injection-tokens';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);

@@ -40,68 +40,8 @@ import { IBaseRequestArgument } from './query-arguments/base-request-argument.in
 import { JSONAPIRequestArgumentsAdapter } from './query-arguments/jsonapi-request-arguments.adapter';
 import { OntimizeRequestArgumentsAdapter } from './query-arguments/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
+import { O_AUTH_SERVICE, O_COMPONENT_STATE_SERVICE, O_DATA_SERVICE, O_EXPORT_DATA_SERVICE, O_EXPORT_SERVICE, O_FILE_SERVICE, O_LOCALSTORAGE_SERVICE, O_PERMISSION_SERVICE, O_RESPONSE_ADAPTER } from '../injection-tokens';
 
-/* ----------------------------------------------------------------------------------------------------
- * ----------------------------------------- INJECTION TOKENS -----------------------------------------
- * ---------------------------------------------------------------------------------------------------- */
-
-/**
- * Injection token that can be used to replace the data service `OntimizeService` or `OntimizeEEService`.
- */
-export const O_DATA_SERVICE = new InjectionToken('Ontimize data service');
-
-export const O_RESPONSE_ADAPTER = new InjectionToken<IServiceResponseAdapter<BaseServiceResponse>>('Service response adapter');
-
-/**
- * Injection token that can be used to replace the translate service `OTranslateService`.
- */
-export const O_TRANSLATE_SERVICE = new InjectionToken('Translate service');
-
-/**
- * Injection token that can be used to replace the file service `OntimizeFileService`.
- */
-export const O_FILE_SERVICE = new InjectionToken<IFileService>('File uploader service');
-
-/**
- * Injection token that can be used to replace the localstorage service `LocalStorageService`.
- */
-export const O_LOCALSTORAGE_SERVICE = new InjectionToken<ILocalStorageService>('Local storage service');
-
-/**
- * Injection token that can be used to replace the exportation service `OntimizeExportService`.
- */
-export const O_EXPORT_SERVICE = new InjectionToken<IExportService>('Export service');
-
-/**
- * Injection token that can be used to replace the permission service `OntimizePermissionsService or OntimizeEEPermissionsService`.
- */
-export const O_PERMISSION_SERVICE = new InjectionToken<IPermissionsService>('Permission service');
-
-/**
- * Injection token that can be used to replace the authentication service `AuthService`.
- */
-export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication service');
-
-/**
-* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
-*/
-export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
-
-
-/**
-* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
-*/
-export const O_CHART_ON_DEMAND_SERVICE = new InjectionToken<IChartOnDemandService>('Chart on demand service');
-
-export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report service');
-
-export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
-
-export const O_EXPORT_DATA_SERVICE = new InjectionToken<IExportDataProvider>('Export data provider');
-
-export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
-
-export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
