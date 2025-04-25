@@ -1,7 +1,17 @@
 import { InjectionToken, Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
-import { IChartOnDemandService } from '../interfaces/chart-on-demand.interface';
+import {
+  O_AUTH_SERVICE,
+  O_COMPONENT_STATE_SERVICE,
+  O_DATA_SERVICE,
+  O_EXPORT_DATA_SERVICE,
+  O_EXPORT_SERVICE,
+  O_FILE_SERVICE,
+  O_LOCALSTORAGE_SERVICE,
+  O_PERMISSION_SERVICE,
+  O_RESPONSE_ADAPTER
+} from '../injection-tokens';
 import { IExportDataProvider } from '../interfaces/export-data-provider.interface';
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
@@ -9,9 +19,7 @@ import { ILocalStorageService } from '../interfaces/local-service.interface';
 import { INameConvention } from '../interfaces/name-convention.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { IPreferencesService } from '../interfaces/prefereces-service.interface';
-import { IReportService } from '../interfaces/report-on-demand-service.interface';
 import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
-import { OMatErrorOptions } from '../types/o-mat-error.type';
 import { ServiceType } from '../types/service-type.type';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
@@ -24,7 +32,6 @@ import { NameConventionLower } from './name-convention/name-convention-lower.ser
 import { NameConventionUpper } from './name-convention/name-convention-upper.service';
 import { NameConvention } from './name-convention/name-convention.service';
 import { OntimizeAuthService } from './o-auth.service';
-import { OErrorDialogManager } from './o-error-dialog-manager.service';
 import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
 import { OntimizeExportDataProviderService } from './ontimize-export-data-provider.service';
 import { OntimizeEEService } from './ontimize/ontimize-ee.service';
@@ -40,7 +47,6 @@ import { IBaseRequestArgument } from './request-adapter/base-request-argument.in
 import { JSONAPIRequestArgumentsAdapter } from './request-adapter/jsonapi-request-arguments.adapter';
 import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
-import { O_AUTH_SERVICE, O_COMPONENT_STATE_SERVICE, O_DATA_SERVICE, O_EXPORT_DATA_SERVICE, O_EXPORT_SERVICE, O_FILE_SERVICE, O_LOCALSTORAGE_SERVICE, O_PERMISSION_SERVICE, O_RESPONSE_ADAPTER } from '../injection-tokens';
 
 
 /* ----------------------------------------------------------------------------------------------------
