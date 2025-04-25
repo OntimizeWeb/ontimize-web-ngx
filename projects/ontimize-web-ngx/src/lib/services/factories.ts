@@ -64,22 +64,9 @@ export function dataServiceFactory(injector: Injector): any {
   }
   const config = injector.get(AppConfig).getConfiguration();
   const serviceType = config.serviceType;
-  return createServiceInstance(serviceType, injector);
+  return Util.createServiceInstanceByServiceType(serviceType, injector);
 }
 
-export function createServiceInstance(serviceType: ServiceType, injector: Injector): any {
-    if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
-      return new OntimizeEEService(injector);
-    }
-    if (ServiceType.Ontimize === serviceType) {
-      return new OntimizeService(injector);
-    }
-    if (ServiceType.JSONAPI === serviceType) {
-      return new JSONAPIService(injector);
-    }
-    return Util.createServiceInstance(serviceType, injector);
-
-}
 
 /**
  * Creates a new instance of the file service.
