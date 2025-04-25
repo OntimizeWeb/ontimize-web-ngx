@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IBaseRequestArgument } from './base-request-argument.interface';
 
 @Injectable()
-export class OntimizeQueryArgumentsAdapter extends BaseRequestArgument implements IBaseRequestArgument {
+export class OntimizeRequestArgumentsAdapter extends BaseRequestArgument implements IBaseRequestArgument {
 
   parseQueryParameters(args: any) {
     let queryargs = [args.filter, args.columns, args.entity, args.sqlTypes];

@@ -37,8 +37,8 @@ import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
 import { IBaseRequestArgument } from './query-arguments/base-request-argument.interface';
-import { JSONAPIRequestArgumentsAdapter } from './query-arguments/jsonapi-query-arguments.adapter';
-import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
+import { JSONAPIRequestArgumentsAdapter } from './query-arguments/jsonapi-request-arguments.adapter';
+import { OntimizeRequestArgumentsAdapter } from './query-arguments/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 
 /* ----------------------------------------------------------------------------------------------------
@@ -192,11 +192,11 @@ export function serviceRequestAdapterFactory(injector: Injector): IBaseRequestAr
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
     Util.isOntimizeEEService(injector)) {
-    return new OntimizeQueryArgumentsAdapter();
+    return new OntimizeRequestArgumentsAdapter();
   } else if (Util.isJsonApiService(injector)) {
     return new JSONAPIRequestArgumentsAdapter();
   }
-  return new OntimizeQueryArgumentsAdapter();
+  return new OntimizeRequestArgumentsAdapter();
 }
 
 export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
@@ -282,7 +282,7 @@ export const ComponentStateServiceProvider = { provide: AbstractComponentStateSe
 
 export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
-export const ServiceRequestAdapter = { provide: OntimizeQueryArgumentsAdapter, useFactory: serviceRequestAdapterFactory, deps: [Injector] };
+export const ServiceRequestAdapter = { provide: OntimizeRequestArgumentsAdapter, useFactory: serviceRequestAdapterFactory, deps: [Injector] };
 
 export const ServiceResponseAdapter = { provide: OntimizeServiceResponseAdapter, useFactory: serviceResponseAdapterFactory, deps: [Injector] };
 

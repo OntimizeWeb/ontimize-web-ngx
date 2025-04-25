@@ -1,4 +1,4 @@
-import { SQLOrder } from './../../types/sql-order.type';
+import { SQLOrder } from '../../types/sql-order.type';
 import { Injectable } from '@angular/core';
 
 import { Expression } from '../../types/expression.type';

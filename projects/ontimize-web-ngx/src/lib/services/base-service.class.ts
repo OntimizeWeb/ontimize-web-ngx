@@ -21,7 +21,7 @@ import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-resp
 import { PaginationContextService } from './pagination-context.service';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
 import { BaseRequestArgument } from './query-arguments/base-request-argument.adapter';
-import { OntimizeQueryArgumentsAdapter } from './query-arguments/ontimize-query-arguments.adapter';
+import { OntimizeRequestArgumentsAdapter } from './query-arguments/ontimize-request-arguments.adapter';
 
 @Injectable()
 export class BaseService<T extends ServiceResponse> {
@@ -51,7 +51,7 @@ export class BaseService<T extends ServiceResponse> {
     this.loginStorageService = this.injector.get<LoginStorageService>(LoginStorageService);
     this.nameConvention = this.injector.get(NameConvention);
     this.paginationContextService = new PaginationContextService(); //
-    this.requestArgumentAdapter = this.injector.get(OntimizeQueryArgumentsAdapter);
+    this.requestArgumentAdapter = this.injector.get(OntimizeRequestArgumentsAdapter);
   }
 
   public configureAdapter() {
