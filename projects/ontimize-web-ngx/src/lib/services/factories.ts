@@ -36,9 +36,9 @@ import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-resp
 import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
-import { IBaseRequestArgument } from './query-arguments/base-request-argument.interface';
-import { JSONAPIRequestArgumentsAdapter } from './query-arguments/jsonapi-request-arguments.adapter';
-import { OntimizeRequestArgumentsAdapter } from './query-arguments/ontimize-request-arguments.adapter';
+import { IBaseRequestArgument } from './request-adapter/base-request-argument.interface';
+import { JSONAPIRequestArgumentsAdapter } from './request-adapter/jsonapi-request-arguments.adapter';
+import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 import { O_AUTH_SERVICE, O_COMPONENT_STATE_SERVICE, O_DATA_SERVICE, O_EXPORT_DATA_SERVICE, O_EXPORT_SERVICE, O_FILE_SERVICE, O_LOCALSTORAGE_SERVICE, O_PERMISSION_SERVICE, O_RESPONSE_ADAPTER } from '../injection-tokens';
 

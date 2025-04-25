@@ -73,6 +73,7 @@ export class JSONAPIRequestArgumentsAdapter extends BaseRequestArgument implemen
       }
     }
   }
+
   getIdFromFilter(filter: any): string {
     if (Util.isDefined(filter)) {
       return Object.values(filter)[0] as string;

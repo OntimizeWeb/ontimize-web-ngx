@@ -32,7 +32,7 @@ export * from './translate/index';
 export * from './ontimize-export-data-provider-3x.service';
 export * from './ontimize-export-data-provider.service';
 export * from './appearance.service';
-export * from './query-arguments/index';
+export * from './request-adapter/index';
 export * from './name-convention/index';
 export * from './pagination-context.service';
 export * from './base-data-service.class';

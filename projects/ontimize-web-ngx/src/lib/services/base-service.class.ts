@@ -20,8 +20,8 @@ import { NameConvention } from './name-convention/name-convention.service';
 import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { PaginationContextService } from './pagination-context.service';
 import { OntimizeServiceResponseParser } from './parser/o-service-response.parser';
-import { BaseRequestArgument } from './query-arguments/base-request-argument.adapter';
-import { OntimizeRequestArgumentsAdapter } from './query-arguments/ontimize-request-arguments.adapter';
+import { BaseRequestArgument } from './request-adapter/base-request-argument.adapter';
+import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 
 @Injectable()
 export class BaseService<T extends ServiceResponse> {
