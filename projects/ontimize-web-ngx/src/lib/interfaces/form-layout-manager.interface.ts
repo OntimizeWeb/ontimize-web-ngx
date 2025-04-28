@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../types';
 import { OFormLayoutManagerContext } from '../types/form-layout-manager-context.type';
+import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../types/form-layout-detail-component-data.type';
 
 export interface IOFormLayoutManager {
   oattr: string;
