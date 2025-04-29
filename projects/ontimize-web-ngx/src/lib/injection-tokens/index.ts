@@ -9,13 +9,13 @@ import { IFileService } from "../interfaces/file-service.interface";
 import { ILocalStorageService } from "../interfaces/local-service.interface";
 import { IExportService } from "../interfaces/export-service.interface";
 import { IPermissionsService } from "../interfaces/permissions-service.interface";
-import { AuthService } from "../services/auth.service";
 import { DefaultComponentStateService } from "../services/state/o-component-state.service";
 import { IChartOnDemandService } from "../interfaces/chart-on-demand.interface";
 import { IReportService } from "../interfaces/report-on-demand-service.interface";
 import { OErrorDialogManager } from "../services/o-error-dialog-manager.service";
 import { OMatErrorOptions } from "../types/o-mat-error.type";
 import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
+import { IAuthService } from "../interfaces/auth-service.interface";
 
 
 /**
@@ -53,7 +53,7 @@ export const O_PERMISSION_SERVICE = new InjectionToken<IPermissionsService>('Per
 /**
  * Injection token that can be used to replace the authentication service `AuthService`.
  */
-export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication service');
+export const O_AUTH_SERVICE = new InjectionToken<IAuthService>('Authentication service');
 
 /**
 * Injection token that can be used to replace the component state service `DefaultComponentStateService`.
