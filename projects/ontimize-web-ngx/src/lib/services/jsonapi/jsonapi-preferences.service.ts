@@ -30,7 +30,7 @@ export class JSONAPIPreferencesService extends JSONAPIService {
   public savePreferences(id: number, preferencesparams: object): Observable<any> {
     preferencesparams = this.parseObjectToPreference(preferencesparams);
     preferencesparams = OPreferenceMappingUtils.jsonApiPreferencesDataMapping(preferencesparams);
-    return super.update({ PREFERENCEID: id }, preferencesparams, 'Preference');
+    return super.update(id.toString(), preferencesparams, 'Preference');
   }
 
   public getPreferences(entity: string, service: string, type: string): Observable<any> {

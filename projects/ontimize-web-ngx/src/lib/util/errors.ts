@@ -1,6 +1,6 @@
 import { Injector, QueryList } from '@angular/core';
 
-import { O_MAT_ERROR_OPTIONS } from '../services/factories';
+import { O_MAT_ERROR_OPTIONS } from '../injection-tokens';
 import { OMatErrorOptions, OMatErrorType } from '../types/o-mat-error.type';
 import { Codes } from './codes';
 import { Util } from './util';

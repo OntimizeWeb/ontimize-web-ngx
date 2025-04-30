@@ -1,3 +1,3 @@
-export interface IBaseQueryArgument {
+export interface IBaseRequestArgument {
   parseQueryParameters(params: any): any;
 }

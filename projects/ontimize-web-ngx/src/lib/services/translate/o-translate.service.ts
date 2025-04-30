@@ -10,7 +10,9 @@ import { MomentService } from '../../services/moment.service';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
 import { Util } from '../../util/util';
-import { _getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
+
+import { O_TRANSLATE_SERVICE } from '../../injection-tokens';
+import { _getInjectionTokenValue } from '../../util/injection-token.utils';
 
 /**
  * `OTranslateService` factory.

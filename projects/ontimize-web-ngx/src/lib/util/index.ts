@@ -8,3 +8,4 @@ export * from './filter-expression.utils';
 export * from './service.utils';
 export * from './currencyUtil';
 export * from './preference-mapping-util';
+export * from './injection-token.utils';

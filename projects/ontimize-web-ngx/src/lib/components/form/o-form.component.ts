@@ -1163,7 +1163,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     const queryParameter = this.getQueryArguments(false, filter);
 
-    this.querySubscription = this.dataService[this.queryMethod](...this.dataService.queryArgumentAdapter.parseQueryParameters(queryParameter))
+    this.querySubscription = this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryParameter))
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);
@@ -1284,7 +1284,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     const self = this;
     const observable = new Observable(observer => {
-      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
+      const id = this.dataService.requestArgumentAdapter.getIdFromFilter(filter);
+      this.dataService[this.updateMethod](id, values, this.entity, sqlTypes).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             observer.next(resp.data);
@@ -1339,7 +1340,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const sqlTypes = this.getAttributesSQLTypes();
     const observable = new Observable(observer => {
       this.canDiscardChanges = true;
-      this.dataService[this.deleteMethod](filter, this.entity, sqlTypes).subscribe(
+      const id = this.dataService.requestArgumentAdapter.getIdFromFilter(filter);
+      this.dataService[this.deleteMethod](id, this.entity, sqlTypes).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             self.formCache.setCacheSnapshot();

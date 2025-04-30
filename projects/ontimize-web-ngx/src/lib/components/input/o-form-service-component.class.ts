@@ -272,7 +272,7 @@ export class OFormServiceComponent extends OFormDataComponent {
       this.loaderSubscription = this.load();
 
       this.queryArguments = this.getQueryArguments(filter);
-      this.querySubscription = this.dataService[this.queryMethod](...this.dataService.queryArgumentAdapter.parseQueryParameters(this.queryArguments))
+      this.querySubscription = this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(this.queryArguments))
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             this.cacheQueried = true;

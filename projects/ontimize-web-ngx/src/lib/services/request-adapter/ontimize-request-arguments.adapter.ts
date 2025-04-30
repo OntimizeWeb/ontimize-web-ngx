@@ -1,9 +1,9 @@
-import { BaseQueryArgument } from './base-query-argument.adapter';
+import { BaseRequestArgument } from './base-request-argument.adapter';
 import { Injectable } from '@angular/core';
-import { IBaseQueryArgument } from './base-query-argument.interface';
+import { IBaseRequestArgument } from './base-request-argument.interface';
 
 @Injectable()
-export class OntimizeQueryArgumentsAdapter extends BaseQueryArgument implements IBaseQueryArgument {
+export class OntimizeRequestArgumentsAdapter extends BaseRequestArgument implements IBaseRequestArgument {
 
   parseQueryParameters(args: any) {
     let queryargs = [args.filter, args.columns, args.entity, args.sqlTypes];
