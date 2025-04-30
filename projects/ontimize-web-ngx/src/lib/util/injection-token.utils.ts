@@ -6,12 +6,6 @@ import { InjectionToken, Injector } from '@angular/core';
  * @param injector the injector
  */
 export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: Injector): T {
-  let service: T;
-  try {
-    service = injector.get(token);
-  } catch (e) {
-    // No value provided for the injection token
-    return null;
-  }
-  return service;
+  return injector.get(token, null);
+
 }
