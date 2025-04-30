@@ -11,6 +11,7 @@ export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: I
     service = injector.get(token);
   } catch (e) {
     // No value provided for the injection token
+    return null;
   }
   return service;
 }
