@@ -1,4 +1,4 @@
-import { InjectionToken, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
 import {
@@ -21,12 +21,12 @@ import { IPermissionsService } from '../interfaces/permissions-service.interface
 import { IPreferencesService } from '../interfaces/prefereces-service.interface';
 import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
 import { ServiceType } from '../types/service-type.type';
+import { _getInjectionTokenValue } from '../util/injection-token.utils';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
 import { BaseServiceResponse } from './base-service-response.class';
 import { JSONAPIPreferencesService } from './jsonapi/jsonapi-preferences.service';
 import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
-import { JSONAPIService } from './jsonapi/jsonapi.service';
 import { LocalStorageService } from './local-storage.service';
 import { NameConventionLower } from './name-convention/name-convention-lower.service';
 import { NameConventionUpper } from './name-convention/name-convention-upper.service';
@@ -34,7 +34,6 @@ import { NameConvention } from './name-convention/name-convention.service';
 import { OntimizeAuthService } from './o-auth.service';
 import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
 import { OntimizeExportDataProviderService } from './ontimize-export-data-provider.service';
-import { OntimizeEEService } from './ontimize/ontimize-ee.service';
 import { OntimizeExportService3X } from './ontimize/ontimize-export-3xx.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
@@ -47,7 +46,6 @@ import { IBaseRequestArgument } from './request-adapter/base-request-argument.in
 import { JSONAPIRequestArgumentsAdapter } from './request-adapter/jsonapi-request-arguments.adapter';
 import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
-import { _getInjectionTokenValue } from '../util/injection-token.utils';
 
 
 /* ----------------------------------------------------------------------------------------------------
@@ -68,6 +66,9 @@ export function dataServiceFactory(injector: Injector): any {
   return Util.createServiceInstanceByType(serviceType, injector);
 }
 
+export function createServiceInstance(serviceClass: any, injector: Injector): any {
+  return Util.createServiceInstance(serviceClass, injector);
+}
 
 /**
  * Creates a new instance of the file service.
