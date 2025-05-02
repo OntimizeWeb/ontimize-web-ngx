@@ -94,7 +94,7 @@ export class OFormNavigationComponent implements OnDestroy {
     const queryArguments = this.queryConf.queryArguments;
     queryArguments.columns = this.getKeysArray();
     queryArguments.ovrrArgs.offset = offset;
-    queryArguments.ovrrArgs.length = length;
+    queryArguments.ovrrArgs.length = length ? length : this.queryConf.queryRows;
     return queryArguments;
   }
 
@@ -213,7 +213,8 @@ export class OFormNavigationComponent implements OnDestroy {
   isLast() {
     let result: boolean = this.currentIndex === (this.navigationData.length - 1);
     if (result && this.queryConf) {
-      result = (this.queryConf.queryRecordOffset + this.currentIndex + 1) >= this.queryConf.totalRecordsNumber;
+      result = (this.queryConf.queryRecordOffset + this.queryConf.queryRows)
+        >= this.queryConf.totalRecordsNumber;
     }
     return result;
   }
