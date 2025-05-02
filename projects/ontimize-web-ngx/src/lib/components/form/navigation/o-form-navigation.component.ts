@@ -13,10 +13,12 @@ import { OFormBase } from '../o-form-base.class';
 import { OFormNavigationClass } from './o-form.navigation.class';
 import { BaseService } from '../../../services/base-service.class';
 import { ServiceResponse } from '../../../interfaces/service-response.interface';
+import { OQueryParams } from '../../../types/query-params.type';
+
 
 export type QueryConfiguration = {
   serviceType: string;
-  queryArguments: any[];
+  queryArguments: OQueryParams;
   entity: string;
   service: string;
   queryMethod: string;
@@ -88,26 +90,28 @@ export class OFormNavigationComponent implements OnDestroy {
     this.dataService = Util.configureService(configureService);
   }
 
+  getQueryArguments(offset:number, length:number): OQueryParams {
+    const queryArguments = this.queryConf.queryArguments;
+    queryArguments.columns = this.getKeysArray();
+    queryArguments.ovrrArgs.offset = offset;
+    queryArguments.ovrrArgs.length = length;
+    return queryArguments;
+  }
+
   protected queryNavigationData(offset: number, length?: number): Promise<any> {
     const self = this;
     return new Promise<any>((resolve: any, reject: any) => {
-      const conf = self.queryConf;
-      const queryArgs = conf.queryArguments;
-
-      queryArgs[1] = self.getKeysArray();
-      queryArgs[4] = offset;
-      queryArgs[5] = length ? length : conf.queryRows;
-
-      self.querySubscription = self.dataService[conf.queryMethod](...self.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs))
+      const queryArgs = this.getQueryArguments(offset, length);
+      self.querySubscription = self.dataService[this.queryConf.queryMethod](...self.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs))
         .subscribe(res => {
-        if (res.isSuccessful()) {
-          self.navigationData = res.data;
-          self.queryConf.queryRecordOffset = offset;
-        }
-        resolve();
-      }, () => {
-        reject();
-      });
+          if (res.isSuccessful()) {
+            self.navigationData = res.data;
+            self.queryConf.queryRecordOffset = offset;
+          }
+          resolve();
+        }, () => {
+          reject();
+        });
     });
   }
 
@@ -209,8 +213,7 @@ export class OFormNavigationComponent implements OnDestroy {
   isLast() {
     let result: boolean = this.currentIndex === (this.navigationData.length - 1);
     if (result && this.queryConf) {
-      result = (this.queryConf.queryRecordOffset + this.queryConf.queryRows)
-        >= this.queryConf.totalRecordsNumber;
+      result = (this.queryConf.queryRecordOffset + this.currentIndex + 1) >= this.queryConf.totalRecordsNumber;
     }
     return result;
   }
