@@ -1,19 +1,19 @@
-import { OConfigureServiceArgs } from './../../../types/configure-service-args.type';
 import { Component, forwardRef, Inject, Injector, OnDestroy, Type, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { ServiceResponse } from '../../../interfaces/service-response.interface';
 import { OFormLayoutManagerBase } from '../../../layouts/form-layout/o-form-layout-manager-base.class';
+import { BaseService } from '../../../services/base-service.class';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize/ontimize.service';
+import { OQueryParams } from '../../../types/query-params.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
+import { OConfigureServiceArgs } from './../../../types/configure-service-args.type';
 import { OFormNavigationClass } from './o-form.navigation.class';
-import { BaseService } from '../../../services/base-service.class';
-import { ServiceResponse } from '../../../interfaces/service-response.interface';
-import { OQueryParams } from '../../../types/query-params.type';
 
 
 export type QueryConfiguration = {
@@ -100,14 +100,14 @@ export class OFormNavigationComponent implements OnDestroy {
 
   protected queryNavigationData(offset: number, length?: number): Promise<void> {
     if (!this.queryConf) {
-      return Promise.reject(`Invalid query parameters: ${this.queryConf.queryMethod}`);
+      return Promise.reject(new Error(`Invalid query parameters: ${this.queryConf.queryMethod}`));
     }
     const queryArgs = this.getQueryArguments(offset, length);
 
     const serviceMethod = this.dataService[this.queryConf.queryMethod];
 
     if (typeof serviceMethod !== 'function') {
-      return Promise.reject(`Invalid query method: ${this.queryConf.queryMethod}`);
+      return Promise.reject(new Error(`Invalid query method: ${this.queryConf.queryMethod}`));
     }
 
     const adaptedParams = this.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs);
@@ -122,7 +122,7 @@ export class OFormNavigationComponent implements OnDestroy {
             }
             resolve();
           },
-          error: err => reject(err)
+          error: err => reject(new Error(err))
         });
     });
   }
