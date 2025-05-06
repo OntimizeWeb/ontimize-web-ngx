@@ -15,29 +15,35 @@ import { OSkeletonComponent } from '../../o-skeleton.component';
 export class OListSkeletonComponent extends OSkeletonComponent  {
 
   getRows() {
-
     const parentElement = this.elRef.nativeElement.parentElement;
 
+    // Find the skeleton item element inside the parent
     const item = parentElement.querySelector('div.o-list-skeleton-item');
 
     let totalHeightItem: number = 0;
 
     if (item) {
-      // Obtén las dimensiones y estilos computados del elemento
+      // Get the element's dimensions and computed styles
       const itemComputedStyle = getComputedStyle(item);
-      const height = item.offsetHeight; // Altura incluyendo padding
-      const marginBottom = parseFloat(itemComputedStyle.marginBottom); // Margen inferior
-      const marginTop = parseFloat(itemComputedStyle.marginTop);
+      const height = item.offsetHeight; // Height including padding
+      const marginBottom = parseFloat(itemComputedStyle.marginBottom); // Bottom margin
+      const marginTop = parseFloat(itemComputedStyle.marginTop); // Top margin
 
-      // Calcula la altura total
+      // Calculate the total vertical space taken by the item
       totalHeightItem = height + marginBottom + marginTop;
     }
 
+    // Calculate the available height in the parent container (excluding one item height)
     const availableHeight = parentElement?.offsetHeight - totalHeightItem;
     if (!Util.isDefined(availableHeight) || availableHeight < 0) {
       return [];
     }
 
-    return Array.from(new Array(Math.ceil(parentElement?.offsetHeight / totalHeightItem)), (x, i) => i + 1);
+    // Return an array with the number of items that can fit within the parent's height
+    return Array.from(
+      new Array(Math.ceil(parentElement?.offsetHeight / totalHeightItem)),
+      (x, i) => i + 1
+    );
   }
+
 }
