@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import { ORepetableSkeletonComponent } from '../../o-repetable-skeleton.component';
+import { ORepeatableSkeletonComponent } from '../../o-repeatable-skeleton.component';
 
 @Component({
   selector: 'o-list-skeleton',
@@ -12,7 +12,7 @@ import { ORepetableSkeletonComponent } from '../../o-repetable-skeleton.componen
   }
 })
 
-export class OListSkeletonComponent extends ORepetableSkeletonComponent {
+export class OListSkeletonComponent extends ORepeatableSkeletonComponent {
   getParentElement(): HTMLElement {
     return this.elRef.nativeElement.parentElement;
   }

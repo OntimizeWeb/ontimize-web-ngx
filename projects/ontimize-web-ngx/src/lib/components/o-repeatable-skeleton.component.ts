@@ -4,7 +4,7 @@ import { OSkeletonComponent } from './o-skeleton.component';
 import { Util } from '../util/util';
 
 @Directive({})
-export abstract class ORepetableSkeletonComponent extends OSkeletonComponent  {
+export abstract class ORepeatableSkeletonComponent extends OSkeletonComponent  {
 
   abstract getParentElement(): HTMLElement;
   abstract getSkeletonItemElement(parentElement: HTMLElement): HTMLElement;
