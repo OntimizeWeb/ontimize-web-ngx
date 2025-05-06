@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, Injector, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, Injector, OnDestroy } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
 
 import { AppearanceService } from '../services/appearance.service';
