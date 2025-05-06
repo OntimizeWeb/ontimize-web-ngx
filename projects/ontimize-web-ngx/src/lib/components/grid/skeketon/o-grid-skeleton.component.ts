@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
-import { Util } from '../../../util/util';
-import { OSkeletonComponent } from '../../o-skeleton.component';
+import { ORepetableSkeletonComponent } from '../../o-repetable-skeleton.component';
 
 @Component({
   selector: 'o-grid-skeleton',
@@ -13,35 +12,14 @@ import { OSkeletonComponent } from '../../o-skeleton.component';
   }
 
 })
-export class OGridSkeletonComponent extends OSkeletonComponent implements AfterViewInit {
+export class OGridSkeletonComponent extends ORepetableSkeletonComponent {
 
-
-  getRows() {
-
-    const parentElement = this.elRef.nativeElement.parentElement;
-
-    /* available parentHeight = parentElement height  - (header table header height + margin bottom)*/
-    const item = parentElement.querySelector('div.o-grid-skeleton-item');
-
-    let totalHeightItem: number = 0;
-
-    if (item) {
-      // Obtén las dimensiones y estilos computados del elemento
-      const itemComputedStyle = getComputedStyle(item);
-      const height = item.offsetHeight; // Altura incluyendo padding
-      const marginBottom = parseFloat(itemComputedStyle.marginBottom); // Margen inferior
-      const marginTop = parseFloat(itemComputedStyle.marginTop);
-
-      // Calcula la altura total
-      totalHeightItem = height + marginBottom + marginTop;
-    }
-
-    const availableHeight = parentElement?.offsetHeight - totalHeightItem;
-    if (!Util.isDefined(availableHeight) || availableHeight < 0) {
-      return [];
-    }
-
-    return Array.from(new Array(Math.ceil(parentElement?.offsetHeight / totalHeightItem)), (x, i) => i + 1);
-
+  getParentElement(): HTMLElement {
+    return this.elRef.nativeElement.parentElement;
   }
+  getSkeletonItemElement(parentElement: HTMLElement): HTMLElement {
+    return parentElement.querySelector('div.o-grid-skeleton-item');
+  }
+
+
 }

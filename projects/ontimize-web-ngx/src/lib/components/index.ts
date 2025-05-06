@@ -41,5 +41,6 @@ export * from './expandable-container/o-expandable-container.component';
 export * from './expandable-container/o-expandable-container.module';
 export * from './tree/index';
 export * from './o-skeleton.component';
+export * from './o-repetable-skeleton.component';
 export * from './user-info/o-user-info-base.class';
 
