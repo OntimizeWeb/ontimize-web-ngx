@@ -49,8 +49,7 @@
       </o-search-input>
     </ng-container>
   </o-data-toolbar>
-  <ng-container *ngIf="(loading | async) === false">
-  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%" >
+  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%" [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
     <!--MAT-LIST-->
     <mat-list (scroll)="onScroll($event)" [class.selectable]="selectable"
       [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)">
@@ -74,5 +73,5 @@
     [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
     <mat-icon svgIcon="ontimize:add"></mat-icon>
   </button>
-</ng-container>
+
 </div>
