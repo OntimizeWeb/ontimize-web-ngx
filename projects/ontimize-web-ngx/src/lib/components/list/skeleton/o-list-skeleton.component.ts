@@ -16,7 +16,7 @@ export class OListSkeletonComponent extends OSkeletonComponent  {
 
   getRows() {
 
-    const parentElement = this.elRef.nativeElement.closest('o-list');
+    const parentElement = this.elRef.nativeElement.parentElement;
 
     const item = parentElement.querySelector('div.o-list-skeleton-item');
 

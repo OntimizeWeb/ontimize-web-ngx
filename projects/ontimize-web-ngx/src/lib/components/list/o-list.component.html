@@ -1,9 +1,9 @@
 <div class="o-list-container" [style.display]="isVisible()? '' : 'none'" fxFill>
   <div *ngIf="loading | async" fxLayoutAlign="center center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0"
-    class="spinner-container">
+    class="spinner-container" [ngStyle]="{'top.px': toolBarHeight}">
     <o-list-skeleton></o-list-skeleton>
   </div>
-  <o-data-toolbar *ngIf="hasControls()" [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
+  <o-data-toolbar #toolbar *ngIf="hasControls()" [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
     <ng-container o-data-toolbar-projection-start>
       <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
         <button *ngIf="insertButton && !insertButtonFloatable" [disabled]="!enabledInsertButton" class="o-list-button text" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
@@ -49,10 +49,10 @@
       </o-search-input>
     </ng-container>
   </o-data-toolbar>
-  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%" [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
+  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%">
     <!--MAT-LIST-->
     <mat-list (scroll)="onScroll($event)" [class.selectable]="selectable"
-      [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)">
+      [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)"  [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
 
       <mat-list-item *ngIf="!getDataArray().length" fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
         <h3 matListItemTitle fxLayout="row" fxLayoutAlign="center center">
@@ -66,7 +66,8 @@
     </mat-list>
   </div>
   <mat-paginator fxFlex="0 1 auto" class="o-mat-paginator" #paginator *ngIf="paginationControls" [length]="totalRecords" [pageSize]="queryRows"
-    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"></mat-paginator>
+    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"
+     [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}"></mat-paginator>
 
   <!--INSERT BUTTON -->
   <button type="button" *ngIf="insertButton && insertButtonFloatable" mat-fab (click)="add($event)" class="add-button add-button-bottom"
