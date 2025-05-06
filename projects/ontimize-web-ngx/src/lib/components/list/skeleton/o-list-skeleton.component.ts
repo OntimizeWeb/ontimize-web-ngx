@@ -1,5 +1,6 @@
-import { Component, ElementRef, Injector, ViewEncapsulation } from '@angular/core';
-import { OSkeletonComponent } from '../../o-skeleton.component';
+import { Component, ViewEncapsulation } from '@angular/core';
+
+import { ORepeatableSkeletonComponent } from '../../o-repeatable-skeleton.component';
 
 @Component({
   selector: 'o-list-skeleton',
@@ -10,15 +11,13 @@ import { OSkeletonComponent } from '../../o-skeleton.component';
     '[class.o-list-skeleton]': 'true'
   }
 })
-export class OListSkeletonComponent extends OSkeletonComponent {
 
-  constructor(protected elRef: ElementRef, protected injector: Injector) {
-    super(injector)
+export class OListSkeletonComponent extends ORepeatableSkeletonComponent {
+  getParentElement(): HTMLElement {
+    return this.elRef.nativeElement.parentElement;
+  }
+  getSkeletonItemElement(parentElement: HTMLElement): HTMLElement {
+    return parentElement.querySelector('div.o-list-skeleton-item');
   }
 
-  get count() {
-    const parentElement = this.elRef.nativeElement.parentElement;
-    return Array(Math.floor(parentElement.offsetHeight / 150));
-
-  }
 }
