@@ -90,27 +90,39 @@ export class OFormNavigationComponent implements OnDestroy {
     this.dataService = Util.configureService(configureService);
   }
 
-  getQueryArguments(offset:number, length:number): OQueryParams {
-    const queryArguments = this.queryConf.queryArguments;
+  getQueryArguments(offset: number, length: number): OQueryParams {
+    const queryArguments = { ...this.queryConf.queryArguments };
     queryArguments.columns = this.getKeysArray();
     queryArguments.ovrrArgs.offset = offset;
     queryArguments.ovrrArgs.length = length ? length : this.queryConf.queryRows;
     return queryArguments;
   }
 
-  protected queryNavigationData(offset: number, length?: number): Promise<any> {
-    const self = this;
+  protected queryNavigationData(offset: number, length?: number): Promise<void> {
+    if (!this.queryConf) {
+      return Promise.reject(`Invalid query parameters: ${this.queryConf.queryMethod}`);
+    }
+    const queryArgs = this.getQueryArguments(offset, length);
+
+    const serviceMethod = this.dataService[this.queryConf.queryMethod];
+
+    if (typeof serviceMethod !== 'function') {
+      return Promise.reject(`Invalid query method: ${this.queryConf.queryMethod}`);
+    }
+
+    const adaptedParams = this.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs);
+
     return new Promise<any>((resolve: any, reject: any) => {
-      const queryArgs = this.getQueryArguments(offset, length);
-      self.querySubscription = self.dataService[this.queryConf.queryMethod](...self.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs))
-        .subscribe(res => {
-          if (res.isSuccessful()) {
-            self.navigationData = res.data;
-            self.queryConf.queryRecordOffset = offset;
-          }
-          resolve();
-        }, () => {
-          reject();
+      this.querySubscription = this.dataService[this.queryConf.queryMethod](...adaptedParams)
+        .subscribe({
+          next: res => {
+            if (res.isSuccessful()) {
+              this.navigationData = res.data;
+              this.queryConf.queryRecordOffset = offset;
+            }
+            resolve();
+          },
+          error: err => reject(err)
         });
     });
   }
