@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnInit, ViewEncapsulation } from '@angular/core';
-import { OSkeletonComponent } from '../../../o-skeleton.component';
-import { Observable, of } from 'rxjs';
+import { Component, ViewEncapsulation } from '@angular/core';
+
 import { Util } from '../../../../util/util';
+import { OSkeletonComponent } from '../../../o-skeleton.component';
 
 
 @Component({
@@ -14,22 +14,7 @@ import { Util } from '../../../../util/util';
   }
 
 })
-export class OTableSkeletonComponent extends OSkeletonComponent implements OnInit, AfterViewInit {
-  rows$: Observable<number[]>;
-  private readonly cd: ChangeDetectorRef;
-  constructor(protected elRef: ElementRef, protected injector: Injector) {
-    super(injector);
-    this.cd = injector.get(ChangeDetectorRef);
-  }
-
-  ngOnInit(): void {
-    this.rows$ = of([1]);
-  }
-
-  ngAfterViewInit(): void {
-    this.cd.detectChanges();// sure detect changes
-    this.rows$ = of(this.getRows());
-  }
+export class OTableSkeletonComponent extends OSkeletonComponent  {
 
   getRows() {
 

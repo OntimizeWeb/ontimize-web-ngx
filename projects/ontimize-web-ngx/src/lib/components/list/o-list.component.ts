@@ -13,6 +13,7 @@ import {
   OnInit,
   Optional,
   QueryList,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
@@ -95,6 +96,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
+  @ViewChild('toolbar', { read: ElementRef })
+  toolbarEl: ElementRef;
 
   /* Inputs */
   @BooleanInputConverter()
@@ -142,6 +145,15 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   ) {
     super(injector, elRef, form);
     this.oMatSort = new OMatSort();
+  }
+
+  get toolBarHeight() {
+    let height = 0;
+
+    if (this.toolbarEl?.nativeElement) {
+      height += this.toolbarEl.nativeElement.offsetHeight;
+    }
+    return height;
   }
 
   get state(): OListComponentStateClass {
