@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../decorators/input-converter';
-import { PaginationContext } from '../interfaces';
+import { PaginationContext } from '../interfaces/pagination-context.interface';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
 import { BaseService } from '../services/base-service.class';
@@ -525,7 +525,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       }
       /* pageNumber = 0 is reinitialized when it generates a search  */
       const pageNumber = this.state.queryRecordOffset == 0 ? 0 : this.dataService?.getPaginationContext().pageNumber;
-      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber });
+      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber, pageSize: this.state.queryRows });
     } else {
       this.updatePaginationContext({ totalSize: queryRes.data.length });
     }
