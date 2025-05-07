@@ -135,6 +135,12 @@
 ## 15.1.0-SNAPSHOT-0(2024-04-30)
 ### Features
 * Added CRUD operations for JSON API
+
+## 15.5.3 (2025-05-06)
+### Bug fixes
+* **o-list**: Fixed scroll reset when showing skeleton ([6e552d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6e552d0)) Closes [#1888](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1888)
+* **o-grid**: Fixed scroll reset when showing skeleton ([6e552d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6e552d0)) Closes [#1888](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1888)
+
 ## 15.5.2 (2025-04-16)
 ### Features
 * **o-list**: Add new `onItemSelected` and `onItemDeselected` outputs ([58f5d68](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/58f5d68)) Closes [#1877](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1877)
