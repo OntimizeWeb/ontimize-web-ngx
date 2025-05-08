@@ -49,6 +49,19 @@
     ```ts
     export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
     ```
+## 15.6.0-next.4
+* Fixed error in form navigation
+
+## 15.6.0-next.3
+* Improved JSONResponse interface
+* Renamed IBaseQueryArgumnent to IBaseRequestArgument
+* Renamed OntimizeQueryArgumentsAdapter to OntimizeRequestArgumentsAdapter
+* Renamed JSONAPIQueryArgumentsAdapter to JSONAPIRequestArgumentsAdapter
+* Added new method getIdFromFilter in JSONAPIRequestArgumentsAdapter
+
+## 15.6.0-next.2
+* Fixed bug in preference mapping
+
 
 ## 15.1.0-SNAPSHOT-12
  Integrated changes version 15.5.1
