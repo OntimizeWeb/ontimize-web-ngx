@@ -108,12 +108,10 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   }
 
   queryById(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
-
+    console.log('queryById ', queryParams);
     queryParams = this.parseNameConventionQueryParams(queryParams);
 
-    const id = Object.values(queryParams.filter)[0];
-
-    const url = `${this.urlBase}${this.path}/${id}?${Util.objectToQueryString(queryParams)}`;
+    const url = this.getURL(queryParams.filter);
 
     return this.doRequest({
       method: 'GET',
@@ -121,6 +119,17 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
       successCallback: this.parseSuccessfulQueryResponse,
       errorCallBack: this.parseUnsuccessfulQueryResponse,
     });
+  }
+
+  private getURL(filter: object) {
+    const id = Object.values(filter)[0];
+    let url = `${this.urlBase}${this.path}/`;
+    if (Object.keys(filter).length === 1) {
+      url += `${id}?${Util.objectToQueryString(filter)}`;
+    } else {
+      url += `?${Util.objectToQueryString(filter)}`;
+    }
+    return url;
   }
 
   protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
@@ -181,8 +190,8 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  delete(id: string): Observable<JSONAPIResponse> {
-    const url = `${this.urlBase}${this.path}/${id}`;
+  delete(id: object): Observable<JSONAPIResponse> {
+    const url = this.getURL(id)
 
     return this.doRequest({
       method: 'DELETE',
