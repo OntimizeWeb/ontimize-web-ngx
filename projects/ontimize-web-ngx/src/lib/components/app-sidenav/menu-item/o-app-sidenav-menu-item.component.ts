@@ -112,12 +112,28 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     this.active = this.appMenuService.isItemActive(this.menuItem as MenuItemRoute);
   }
 
+  get shouldShowTooltip() {
+    switch (this.oAppLayoutComponent.tooltipDisplayMode) {
+      case 'always':
+        return true;
+      case 'never':
+        return false;
+      case 'only-collapsed':
+        return !this.sidenavOpened;
+      case 'only-expanded':
+        return this.sidenavOpened;
+      default:
+        return false;
+    }
+  }
+
   ngAfterViewInit() {
     if (this.isUserInfoItem() && this.sidenav) {
       this.setUserInfoImage();
       this.appSidenavToggleSubscription.add(this.sidenav.onSidenavOpenedChange.subscribe(() => {
+        // console.log('sidenav opened change', this.sidenav.sidenav.opened);
+        // this.shouldShowTooltip = this.getShowTooltip();
         if (this.sidenav.sidenav.opened) {
-          this.setUserInfoImage();
           this.setUserInfoImage();
         }
       }));

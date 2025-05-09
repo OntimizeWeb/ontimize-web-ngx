@@ -5,6 +5,8 @@ export type CHANGE_EVENTS = 'onValueChange' | 'onChange';
 export type ORowHeight = 'small' | 'medium' | 'large';
 export type OTableEditionMode = 'none' | 'click' | 'dblclick' | 'doubleclick';
 export type OTableDetailMode = 'none' | 'click' | 'dblclick' | 'doubleclick';
+export type OTooltipDisplayMode = 'always'| 'never' | 'only-collapsed'| 'only-expanded';
+
 export class Codes {
 
   public static PAGINATED_QUERY_METHOD = 'advancedQuery';
@@ -128,6 +130,8 @@ export class Codes {
 
   public static DEFAULT_CHANGE_EVENT: CHANGE_EVENTS = 'onValueChange';
   public static TYPES_DATE_GROUPS = ["YEAR", "MONTH", "YEAR_MONTH", "YEAR_MONTH_DAY"];
+  public static TOOLTIP_DISPLAY_MODE = ['always', 'never', 'only-collapsed', 'only-expanded'];
+  public static TOOLTIP_DISPLAY_COLLAPSED = 'only-collapsed';
 
 
   static isDoubleClickMode(value: string): boolean {

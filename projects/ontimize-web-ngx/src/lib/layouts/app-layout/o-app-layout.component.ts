@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, ContentChild, EventEmitter, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, EventEmitter, forwardRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
+import { OAppHeaderBase } from '../../components/app-header/o-app-header-base.class';
+import { OAppSidenavBase } from '../../components/app-sidenav/o-app-sidenav-base.class';
 import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { Codes, OAppLayoutMode, OSidenavMode } from '../../util/codes';
 import { Util } from '../../util/util';
-import { OAppSidenavBase } from '../../components/app-sidenav/o-app-sidenav-base.class';
-import { OAppHeaderBase } from '../../components/app-header/o-app-header-base.class';
 import { OAppLayoutBase } from './o-app-layout-base.class';
 
 export const DEFAULT_INPUTS_O_APP_LAYOUT = [
@@ -23,7 +23,8 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'headerHeight: header-height',
   'showTitle: show-title',
   'staticTitle: static-title',
-  'showStaticTitle: show-static-title'
+  'showStaticTitle: show-static-title',
+  'tooltipDisplayMode: tooltip-display-mode'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -85,6 +86,7 @@ export class OAppLayoutComponent implements AfterViewInit {
   afterOpenSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
   beforeCloseSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
   afterCloseSidenav: EventEmitter<boolean> = new EventEmitter<boolean>();
+  private _tooltipDisplayMode: string = Codes.TOOLTIP_DISPLAY_COLLAPSED
 
   get showHeader(): boolean {
     return this._showHeader;
@@ -120,6 +122,17 @@ export class OAppLayoutComponent implements AfterViewInit {
       this._sidenavMode = m;
     } else {
       console.error('Invalid `o-app-layout` sidenav-mode (' + val + ')');
+    }
+  }
+
+  get tooltipDisplayMode(): string {
+    return this._tooltipDisplayMode;
+  }
+
+  set tooltipDisplayMode(val: string) {
+    const m = Codes.TOOLTIP_DISPLAY_MODE.find(e => e.toLocaleLowerCase() === val);
+    if (Util.isDefined(m)) {
+      this._tooltipDisplayMode = m;
     }
   }
 
