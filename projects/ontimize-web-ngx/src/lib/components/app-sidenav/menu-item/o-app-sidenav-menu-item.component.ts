@@ -131,8 +131,6 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     if (this.isUserInfoItem() && this.sidenav) {
       this.setUserInfoImage();
       this.appSidenavToggleSubscription.add(this.sidenav.onSidenavOpenedChange.subscribe(() => {
-        // console.log('sidenav opened change', this.sidenav.sidenav.opened);
-        // this.shouldShowTooltip = this.getShowTooltip();
         if (this.sidenav.sidenav.opened) {
           this.setUserInfoImage();
         }
