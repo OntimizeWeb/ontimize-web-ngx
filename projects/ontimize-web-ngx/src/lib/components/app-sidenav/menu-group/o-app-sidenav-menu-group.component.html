@@ -2,7 +2,7 @@
   <ng-container *ngIf="shouldShowTooltip; else noTooltip">
     <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
       [class.o-app-sidenav-viewer-sidenav-item-selected]="active" [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip"
-      matTooltipPosition="right"  matTooltipShowDelay="500">
+      matTooltipPosition="right" [matTooltipShowDelay]="sidenavOpened?500:0">
       <ng-container *ngTemplateOutlet="contentButton"></ng-container>
     </a>
   </ng-container>
@@ -27,7 +27,7 @@
 </ng-container>
 
 <ng-template #noTooltip>
-   <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+  <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
     [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
     <ng-container *ngTemplateOutlet="contentButton"></ng-container>
   </a>
@@ -48,8 +48,7 @@
       </ng-template>
     </ng-container>
     <ng-container *ngIf="!sidenavOpened">
-      <mat-icon  *ngIf="menuGroup.svgIcon"
-        [svgIcon]="menuGroup.svgIcon"></mat-icon> <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
+      <mat-icon *ngIf="menuGroup.svgIcon" [svgIcon]="menuGroup.svgIcon"></mat-icon> <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
     </ng-container>
   </div>
 </ng-template>

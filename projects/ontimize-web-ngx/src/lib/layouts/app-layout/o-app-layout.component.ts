@@ -24,7 +24,8 @@ export const DEFAULT_INPUTS_O_APP_LAYOUT = [
   'showTitle: show-title',
   'staticTitle: static-title',
   'showStaticTitle: show-static-title',
-  'tooltipDisplayMode: tooltip-display-mode'
+  'tooltipDisplayMode: tooltip-display-mode',
+  'showEllipsisMenu: show-ellipsis-menu'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
@@ -63,6 +64,8 @@ export class OAppLayoutComponent implements AfterViewInit {
   public staticTitle: string;
   @BooleanInputConverter()
   public showStaticTitle: boolean = false;
+  @BooleanInputConverter()
+  public showEllipsisMenu: boolean = false;
 
   public headerColor: ThemePalette;
   public headerHeight = Codes.DEFAULT_ROW_HEIGHT;
