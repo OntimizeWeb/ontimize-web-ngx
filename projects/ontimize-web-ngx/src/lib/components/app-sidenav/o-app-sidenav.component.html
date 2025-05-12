@@ -8,7 +8,7 @@
     (closedStart)="sidenavClosedStart()" (openedStart)="sidenavOpenedStart()">
     <div fxLayout="column" class="sidenav-wrapper">
       <div fxLayout="row" fxLayoutAlign="end center" class="sidenav-toggle-container" *ngIf="isDesktopMode()">
-        <mat-icon class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
+        <mat-icon id="sidenav-menu" class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
       </div>
 
       <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg"> </o-app-sidenav-image>
