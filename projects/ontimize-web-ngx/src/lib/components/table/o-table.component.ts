@@ -339,6 +339,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   _filterColumns: Array<OFilterColumn>;
   portalHost: Array<DomPortalOutlet> = [];
+  portalContainers:Array<any> = [];
   onDataLoadedCellRendererSubscription: Subscription;
 
 
@@ -1536,17 +1537,32 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (isCollapsed) {
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
+      const containerElement = this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex));
       this.portalHost[rowIndex] = new DomPortalOutlet(
-        this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
+        containerElement,
         null,
         this.appRef,
         this.injector
       );
-
+      this.portalContainers.push(containerElement);
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
       this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
+  }
+
+  destroyAllPortalHosts(): void {
+    this.portalHost.forEach(host => {
+      if (host.hasAttached()) {
+        host.detach();   // Detach the portal content
+      }
+      host.dispose();  // Clean up the host
+    });
+
+    this.portalContainers.forEach(el => el.remove());
+
+    this.portalHost = [];
+    this.portalContainers = [];
   }
   /**
    * Toggles row expandable by row index
@@ -1557,6 +1573,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const item = this.getValue()[rowIndex];
     this.toggleRowExpandable(item, event);
   }
+
 
 
 
@@ -1608,6 +1625,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.pendingQueryFilter = undefined;
 
     this.queryCellRenderers().subscribe(() => {
+      this.destroyAllPortalHosts();
       super.queryData(filter, ovrrArgs);
     });
   }
