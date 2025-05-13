@@ -1,10 +1,10 @@
 ## 15.5.4 (2025-05-16)
 ### Features
-* **o-app-layout**: new inputs `tooltip-display-mode` and `show-ellipsis-menu`
+* **o-app-layout**: new inputs `tooltip-display-mode` and `show-ellipsis-menu` ([fa6d517](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fa6d517)) Closes [#1892](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1892)
 
 ### Bug fixes
 * **o-table-row-expandable**: Resolved an issue where actions performed with the last table row expanded resulted in duplicate component instantiation on page reload.
-
+([fa6d517](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/14ac630)) Closes [#1897](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1897)
 
 ## 15.5.3 (2025-05-06)
 ### Bug fixes
