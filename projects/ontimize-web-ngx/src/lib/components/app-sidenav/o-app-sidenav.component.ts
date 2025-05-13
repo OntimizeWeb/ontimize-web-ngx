@@ -36,7 +36,8 @@ export const DEFAULT_INPUTS_O_APP_SIDENAV = [
   'closedSidenavImg: closed-sidenav-image',
   'layoutMode: layout-mode',
   'sidenavMode: sidenav-mode',
-  'storeState: store-state'
+  'storeState: store-state',
+  'showEllipsisMenu: show-ellipsis-menu'
 ];
 
 export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
@@ -74,6 +75,8 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
   protected _sidenavMode: OSidenavMode;
   @BooleanInputConverter()
   protected opened: boolean = true;
+
+  showEllipsisMenu: boolean = false;
   _showUserInfo: boolean = true;
   _showToggleButton: boolean = true;
   openedSidenavImg: string;
