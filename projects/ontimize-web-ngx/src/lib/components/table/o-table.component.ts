@@ -339,10 +339,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   _filterColumns: Array<OFilterColumn>;
   portalHost: Array<DomPortalOutlet> = [];
-  portalContainers:Array<any> = [];
   onDataLoadedCellRendererSubscription: Subscription;
-
-
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -1544,26 +1541,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.appRef,
         this.injector
       );
-      this.portalContainers.push(containerElement);
+
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
-      this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
+      const ref = this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
   }
 
   destroyAllPortalHosts(): void {
     this.portalHost.forEach(host => {
+      console.log('host ', host);
       if (host.hasAttached()) {
         host.detach();   // Detach the portal content
       }
-      host.dispose();  // Clean up the host
     });
-
-    this.portalContainers.forEach(el => el.remove());
-
-    this.portalHost = [];
-    this.portalContainers = [];
   }
+
   /**
    * Toggles row expandable by row index
    * @param rowIndex
