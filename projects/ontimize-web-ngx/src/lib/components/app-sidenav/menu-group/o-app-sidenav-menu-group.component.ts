@@ -24,6 +24,7 @@ import { OPermissions } from '../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../util/permissions';
 import { Util } from '../../../util/util';
 import { OAppSidenavBase } from '../o-app-sidenav-base.class';
+import { OAppLayoutBase } from '../../../layouts/app-layout/o-app-layout-base.class';
 
 export const DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP = [
   'menuGroup : menu-group',
@@ -84,6 +85,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
   protected router: Router;
   routerSubscription: Subscription;
   active: boolean;
+  oAppLayoutComponent: OAppLayoutBase;
 
   constructor(
     protected injector: Injector,
@@ -95,6 +97,7 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
     this.permissionsService = this.injector.get(PermissionsService);
     this.sidenav = this.injector.get(OAppSidenavBase);
     this.router = this.injector.get<Router>(Router as Type<Router>);
+    this.oAppLayoutComponent = this.injector.get<OAppLayoutBase>(OAppLayoutBase as Type<OAppLayoutBase>);
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd && this.appMenuService.isRouteItem(this.menuGroup)) {
         this.active = this.appMenuService.isItemActive(this.menuGroup as MenuGroupRoute);
@@ -105,6 +108,21 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
 
   ngOnInit() {
     this.parsePermissions();
+  }
+
+  get shouldShowTooltip() {
+    switch (this.oAppLayoutComponent.tooltipDisplayMode) {
+      case 'always':
+        return true;
+      case 'never':
+        return false;
+      case 'only-collapsed':
+        return !this.sidenavOpened;
+      case 'only-expanded':
+        return this.sidenavOpened;
+      default:
+        return false;
+    }
   }
 
   ngAfterViewInit() {
