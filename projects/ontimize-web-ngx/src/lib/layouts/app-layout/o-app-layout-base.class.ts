@@ -1,3 +1,4 @@
 export abstract class OAppLayoutBase{
-  abstract useFlagIcons: boolean;F
+  abstract useFlagIcons: boolean;
+  abstract tooltipDisplayMode: string;
 }

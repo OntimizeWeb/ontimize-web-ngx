@@ -1,28 +1,12 @@
 <ng-container *ngIf="!hidden">
-  <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
-    [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
-    <div fxLayout="row" fxLayoutAlign="start center" fxFill>
-      <ng-container *ngIf="sidenavOpened">
-        <mat-icon *ngIf="menuGroup.svgIcon" [svgIcon]="menuGroup.svgIcon"></mat-icon>
-        <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
-        <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
-        <span class="fill-remaining"></span>
-        <ng-container *ngIf="appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened; else arrowMenuGroupTemplate">
-          <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"
-            (click)="toggle($event)"></mat-icon>
-        </ng-container>
-        <ng-template #arrowMenuGroupTemplate>
-          <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
-        </ng-template>
-      </ng-container>
-      <ng-container *ngIf="!sidenavOpened">
-        <mat-icon [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip" matTooltipPosition="right" *ngIf="menuGroup.svgIcon"
-          [svgIcon]="menuGroup.svgIcon"></mat-icon>
-        <mat-icon [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip" matTooltipPosition="right" *ngIf="menuGroup.icon">{{
-          menuGroup.icon }}</mat-icon>
-      </ng-container>
-    </div>
-  </a>
+  <ng-container *ngIf="shouldShowTooltip; else noTooltip">
+    <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+      [class.o-app-sidenav-viewer-sidenav-item-selected]="active" [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip"
+      matTooltipPosition="right" [matTooltipShowDelay]="sidenavOpened?500:0">
+      <ng-container *ngTemplateOutlet="contentButton"></ng-container>
+    </a>
+  </ng-container>
+
 
   <div class="o-app-sidenav-menugroup-items-container">
     <ul [@contentExpansion]="contentExpansion" class="o-app-sidenav-menugroup-ul">
@@ -41,3 +25,32 @@
     </ul>
   </div>
 </ng-container>
+
+<ng-template #noTooltip>
+  <a mat-button mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+    [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+    <ng-container *ngTemplateOutlet="contentButton"></ng-container>
+  </a>
+</ng-template>
+
+<ng-template #contentButton>
+  <div fxLayout="row" fxLayoutAlign="start center" fxFill>
+    <ng-container *ngIf="sidenavOpened">
+      <mat-icon *ngIf="menuGroup.svgIcon" [svgIcon]="menuGroup.svgIcon"></mat-icon>
+      <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
+      <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
+      <span class="fill-remaining"></span>
+      <ng-container *ngIf="appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened; else arrowMenuGroupTemplate">
+        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"
+        (click)="toggle($event)"
+        (keydown)="toggle($event)"></mat-icon>
+      </ng-container>
+      <ng-template #arrowMenuGroupTemplate>
+        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngIf="!sidenavOpened">
+      <mat-icon *ngIf="menuGroup.svgIcon" [svgIcon]="menuGroup.svgIcon"></mat-icon> <mat-icon *ngIf="menuGroup.icon">{{ menuGroup.icon }}</mat-icon>
+    </ng-container>
+  </div>
+</ng-template>
