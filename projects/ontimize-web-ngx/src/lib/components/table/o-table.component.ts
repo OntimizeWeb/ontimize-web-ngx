@@ -1543,14 +1543,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       );
 
       const templatePortal = new TemplatePortal(this.tableRowExpandable.templateRef, this._viewContainerRef, { $implicit: item });
-      const ref = this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
+      this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
   }
 
   destroyAllPortalHosts(): void {
     this.portalHost.forEach(host => {
-      console.log('host ', host);
       if (host.hasAttached()) {
         host.detach();   // Detach the portal content
       }
@@ -1618,6 +1617,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.pendingQueryFilter = undefined;
 
     this.queryCellRenderers().subscribe(() => {
+      // Clean up existing portal hosts before re-rendering to prevent duplicate or orphaned components
       this.destroyAllPortalHosts();
       super.queryData(filter, ovrrArgs);
     });
