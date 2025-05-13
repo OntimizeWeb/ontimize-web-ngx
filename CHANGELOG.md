@@ -1,4 +1,4 @@
-## 15.5.4 (2025-05-16)
+## 15.5.4 (2025-05-13)
 ### Features
 * **o-app-layout**: new inputs `tooltip-display-mode` and `show-ellipsis-menu` ([fa6d517](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fa6d517)) Closes [#1892](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1892)
 
