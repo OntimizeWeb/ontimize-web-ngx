@@ -41,7 +41,9 @@
       <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
       <span class="fill-remaining"></span>
       <ng-container *ngIf="appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened; else arrowMenuGroupTemplate">
-        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right" (click)="toggle($event)"></mat-icon>
+        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"
+        (click)="toggle($event)"
+        (keydown)="toggle($event)"></mat-icon>
       </ng-container>
       <ng-template #arrowMenuGroupTemplate>
         <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
