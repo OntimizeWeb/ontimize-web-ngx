@@ -343,8 +343,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   portalHost: Array<DomPortalOutlet> = [];
   onDataLoadedCellRendererSubscription: Subscription;
 
-
-
   public tableContextMenu: OContextMenuComponent;
 
   @BooleanInputConverter()
@@ -1538,8 +1536,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (isCollapsed) {
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
+      const containerElement = this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex));
       this.portalHost[rowIndex] = new DomPortalOutlet(
-        this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
+        containerElement,
         null,
         this.appRef,
         this.injector
@@ -1550,6 +1549,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
   }
+
+  destroyAllPortalHosts(): void {
+    this.portalHost.forEach(host => {
+      if (host.hasAttached()) {
+        host.detach();   // Detach the portal content
+      }
+    });
+  }
+
   /**
    * Toggles row expandable by row index
    * @param rowIndex
@@ -1559,6 +1567,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const item = this.getValue()[rowIndex];
     this.toggleRowExpandable(item, event);
   }
+
 
 
 
@@ -1610,6 +1619,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.pendingQueryFilter = undefined;
 
     this.queryCellRenderers().subscribe(() => {
+      // Clean up existing portal hosts before re-rendering to prevent duplicate or orphaned components
+      this.destroyAllPortalHosts();
       super.queryData(filter, ovrrArgs);
     });
   }
