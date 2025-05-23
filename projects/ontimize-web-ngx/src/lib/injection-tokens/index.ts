@@ -16,6 +16,7 @@ import { OErrorDialogManager } from "../services/o-error-dialog-manager.service"
 import { OMatErrorOptions } from "../types/o-mat-error.type";
 import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { IAuthService } from "../interfaces/auth-service.interface";
+import { IBaseRequestArgument } from "../services/request-adapter";
 
 
 /**
@@ -24,6 +25,8 @@ import { IAuthService } from "../interfaces/auth-service.interface";
 export const O_DATA_SERVICE = new InjectionToken('Ontimize data service');
 
 export const O_RESPONSE_ADAPTER = new InjectionToken<IServiceResponseAdapter<BaseServiceResponse>>('Service response adapter');
+
+export const O_REQUEST_ADAPTER = new InjectionToken<IBaseRequestArgument>('Service request adapter');
 
 /**
  * Injection token that can be used to replace the translate service `OTranslateService`.

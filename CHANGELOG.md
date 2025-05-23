@@ -48,7 +48,10 @@
     **Now:**
     ```ts
     export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
-    ```
+
+## 15.6.0-next.5
+New injection token `O_REQUEST_ADAPTER`
+
 ## 15.6.0-next.4
 * Fixed error in form navigation
 
