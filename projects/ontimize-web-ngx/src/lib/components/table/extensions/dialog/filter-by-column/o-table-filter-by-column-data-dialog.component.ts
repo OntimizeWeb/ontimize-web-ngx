@@ -17,6 +17,7 @@ import { OTableComponent } from '../../../o-table.component';
 import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 import type { OColumn } from '../../../column/o-column.class';
+import { OQueryParams } from '../../../../../types/query-params.type';
 
 const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
 
@@ -419,19 +420,37 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   queryByFilterColumn(attr: string): Observable<ServiceResponse> | Observable<any> {
 
-    const kv = this.table.getComponentFilter();
-    const av = [attr];
-    let sqlTypes = {};
-    if (Util.isDefined(kv) && !Util.isObjectEmpty(kv)) {
-      sqlTypes = this.table.getSqlTypes();
+    const filter = this.table.getComponentFilter();
+    const columns = [attr];
+    const service = this.table.getService();
+    const queryMethodName = this.queryMethodName || Codes.QUERY_METHOD;
+
+    const sqlTypes = (Util.isDefined(filter) && !Util.isObjectEmpty(filter))
+      ? this.table.getSqlTypes()
+      : {};
+
+    const sortColumns = this.activeSortDirection
+      ? [{ columnName: attr, ascendent: this.activeSortDirection === 'asc' }]
+      : [];
+
+    const queryParams: OQueryParams = {
+      filter,
+      columns,
+      entity: this.table.entity,
+      sqlTypes,
+      pageable: false,
+      sort: sortColumns
+    };
+
+    if (
+      service &&
+      typeof service[queryMethodName] === 'function' &&
+      this.table.entity
+    ) {
+      const adaptedParams = service.requestArgumentAdapter.parseQueryParameters(queryParams);
+      return service[queryMethodName](...adaptedParams);
     }
 
-    const columnQueryArgs = [kv, av, this.table.entity, sqlTypes, undefined, undefined, undefined];
-    const queryMethodName = this.queryMethodName || Codes.QUERY_METHOD;
-    const service = this.table.getService();
-    if (service && (queryMethodName in service) && this.table.entity) {
-      return service[queryMethodName](...columnQueryArgs)
-    }
     return of({});
   }
 
