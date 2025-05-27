@@ -433,8 +433,12 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
         case 'percentage':
         case 'currency':
         case 'real':
-          editor.min = propsOrigin.min;
-          editor.max = propsOrigin.max;
+          if (Util.isDefined(propsOrigin.min)) {
+            editor.min = propsOrigin.min;
+          }
+          if (Util.isDefined(propsOrigin.max)) {
+            editor.max = propsOrigin.max;
+          }
           editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
           break;
         case 'image':
@@ -477,6 +481,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
 
   public registerEditor(editor: any) {
+    console.log('registerEditor ->', this.attr, ' -- ',editor);
     this.editor = editor;
     const oCol = this.table.getOColumn(this.attr);
     if (oCol !== undefined) {
