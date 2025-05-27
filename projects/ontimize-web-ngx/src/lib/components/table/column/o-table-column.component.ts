@@ -481,7 +481,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
 
   public registerEditor(editor: any) {
-    console.log('registerEditor ->', this.attr, ' -- ',editor);
     this.editor = editor;
     const oCol = this.table.getOColumn(this.attr);
     if (oCol !== undefined) {
