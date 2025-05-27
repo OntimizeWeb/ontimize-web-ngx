@@ -261,7 +261,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   }
 
   public getErrorValue(error: string, prop: string): string {
-    return this._fControl && this._fControl.hasError(error) ? this._fControl.getError(error)[prop] || '' : '';
+    return this._fControl && this._fControl.hasError(error) ? this._fControl.getError(error)[prop] ?? '' : '';
   }
 
   public getActiveOErrors(): ErrorData[] {
