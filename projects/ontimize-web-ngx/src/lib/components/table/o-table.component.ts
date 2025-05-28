@@ -498,8 +498,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   set visibleColArray(arg: any[]) {
-    const permissionsBlocked = this.permissions && this.permissions.columns ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
+    const permissionsBlocked = this.permissions?.columns?.filter(col => col.visible === false).map(col => col.attr) ?? [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
+
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
       const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(Codes.NAME_COLUMN_SELECT) !== -1;
@@ -1216,6 +1217,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   parseVisibleColumns(defaultConfiguration: boolean = false) {
     if (this.state.columnsDisplay) {
+
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols: OColumnDisplay[] = [];
       this.state.columnsDisplay.forEach((oCol, index) => {
@@ -1240,6 +1242,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       });
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
+
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
@@ -1406,12 +1409,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateStateExpandedColumn() {
-    if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
-    if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
-      this._oTableOptions.visibleColumns = [this._oTableOptions.visibleColumns[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._oTableOptions.visibleColumns.splice(1));
+    if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) {
+      return;
+    }
+
+    if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT &&
+      this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
+      this._oTableOptions.visibleColumns.splice(1, 0, Codes.NAME_COLUMN_EXPANDABLE);
     } else if (this._oTableOptions.visibleColumns[0] !== Codes.NAME_COLUMN_EXPANDABLE) {
       this._oTableOptions.visibleColumns.unshift(Codes.NAME_COLUMN_EXPANDABLE);
     }
+
   }
 
   registerTabListener() {
