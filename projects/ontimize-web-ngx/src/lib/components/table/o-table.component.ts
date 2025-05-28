@@ -1409,7 +1409,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateStateExpandedColumn() {
-    if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) {
+    if (!this.tableRowExpandable?.expandableColumnVisible) {
       return;
     }
 
