@@ -11,6 +11,7 @@ import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-tab
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { Util } from '../../util/util';
 import { OGroupedColumnTypes } from '../../types';
+import { OTableExpandableRowState } from '../../types/table/o-table-expandable-row-state.type';
 
 export class OTableComponentStateClass extends DefaultServiceComponentStateClass {
   // sort
@@ -130,6 +131,14 @@ export class OTableComponentStateClass extends DefaultServiceComponentStateClass
 
   get storedFilters(): OTableFiltersStatus[] {
     return this['user-stored-filters'] || [];
+  }
+
+  set expandableRows(value: OTableExpandableRowState[]) {
+    this['expandable-rows'] = value;
+  }
+
+  get expandableRows(): OTableExpandableRowState[] {
+    return this['expandable-rows'];
   }
 
   addStoredFilter(filter: OTableFiltersStatus) {
