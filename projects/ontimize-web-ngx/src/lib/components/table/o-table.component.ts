@@ -301,6 +301,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected dbClickSubjectSubscription: Subscription;
   subscriptionOnDataLoaded: Subscription;
   subscriptionOnPaginationDataLoaded: any;
+  refreshExpandableRowState = false;
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -1821,6 +1822,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
       this.checkSelectedItemData();
+
+      if (this.refreshExpandableRowState) {
+        this.refreshExpandableRowState = false;
+        this.restoreExpandableRowState();
+      }
     }
 
   }
@@ -1994,9 +2000,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Reloads data
    */
   reloadData(clearSelectedItems: boolean = true) {
+    this.reloadDataWithClearExpandableRows(clearSelectedItems, clearSelectedItems)
+  }
+
+  reloadDataWithClearExpandableRows(clearSelectedItems: boolean = true, clearExpandableItems: boolean = true) {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
+    this.refreshExpandableRowState = !clearExpandableItems;
     this.componentStateService.refreshSelection();
     if (clearSelectedItems) {
       this.clearSelection();
