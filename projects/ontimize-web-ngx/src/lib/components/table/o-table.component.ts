@@ -1815,16 +1815,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.refreshExpandableRowState) {
       this.refreshExpandableRowState = false;
-      const selectionItems = this.expandableItem.selected;
+      const selectionItems = this.state.expandableRows?.slice()||[]
       this.expandableItem.clear();
-      this.expandableItem.setSelection(selectionItems);
+      this.state.expandableRows = selectionItems;
       this.restoreExpandableRowState();
     }
 
   }
 
   restoreExpandableRowState(): void {
-
     if (this.tableRowExpandable && this.state?.expandableRows) {
       this.state.expandableRows.forEach(expandableRow => {
         const data = this.getRenderedValue();;
