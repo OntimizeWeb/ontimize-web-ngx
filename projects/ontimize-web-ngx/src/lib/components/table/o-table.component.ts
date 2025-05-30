@@ -299,8 +299,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   dblclickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
   protected clickSubjectSubscription: Subscription;
   protected dbClickSubjectSubscription: Subscription;
-  subscriptionOnDataLoaded: Subscription;
-  subscriptionOnPaginationDataLoaded: any;
   refreshExpandableRowState = false;
 
   @ViewChild(OMatSort)
@@ -613,6 +611,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableHeaderEl: ElementRef;
   @ViewChild('tableToolbar', { read: ElementRef })
   tableToolbarEl: ElementRef;
+
+  @ViewChildren(MatRow) rows!: QueryList<MatRow>;
 
   horizontalScrolled: boolean;
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
@@ -1097,14 +1097,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.dbClickSubjectSubscription) {
       this.dbClickSubjectSubscription.unsubscribe();
-    }
-
-    if (this.subscriptionOnDataLoaded) {
-      this.subscriptionOnDataLoaded.unsubscribe();
-    }
-
-    if (this.subscriptionOnPaginationDataLoaded) {
-      this.subscriptionOnPaginationDataLoaded.unsubscribe();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
@@ -1624,9 +1616,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.toggleRowExpandable(item, event);
   }
 
-
-  @ViewChildren(MatRow) rows!: QueryList<MatRow>;
-
   private emitTableRowExpandableChangeEvent(data, rowIndex) {
     const event = new OTableRowExpandedChange();
     event.rowIndex = rowIndex;
@@ -1822,18 +1811,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
       this.checkSelectedItemData();
-
-      if (this.refreshExpandableRowState) {
-        this.refreshExpandableRowState = false;
-        this.restoreExpandableRowState();
-      }
     }
+
+    if (this.refreshExpandableRowState) {
+      this.refreshExpandableRowState = false;
+      this.restoreExpandableRowState();
+    }
+
 
   }
 
   restoreExpandableRowState(): void {
 
-    if (this.tableRowExpandable && this.state.expandableRows) {
+    if (this.tableRowExpandable && this.state?.expandableRows) {
       this.state.expandableRows.forEach(expandableRow => {
         const data = this.getRenderedValue();;
         if (data.length > 0) {
