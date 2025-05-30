@@ -10,3 +10,4 @@ export * from './o-table-initialization-options.type';
 export * from './o-table-menu-permissions.type';
 export * from './o-table-permissions.type';
 export * from './o-table-global-config.type';
+export * from './o-table-expandable-row-state.type';
