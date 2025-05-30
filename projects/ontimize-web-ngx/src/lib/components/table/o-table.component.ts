@@ -2022,12 +2022,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.queryData(void 0, queryArgs);
   }
 
-  clearSelectionSilently() {
-    //Using a control flag to ignore events
-    //this.suppressSelectionChange = true;
-    console.log('clearSelectionSilently ', this.expandableItem);
-  }
-
   handleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, event: MouseEvent) {
     this.clickSubject.next({ row, column, cellRef, rowIndex, event });
   }
