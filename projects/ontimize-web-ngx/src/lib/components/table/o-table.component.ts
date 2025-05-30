@@ -1815,9 +1815,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.refreshExpandableRowState) {
       this.refreshExpandableRowState = false;
+      const selectionItems = this.expandableItem.selected;
+      this.expandableItem.clear();
+      this.expandableItem.setSelection(selectionItems);
       this.restoreExpandableRowState();
     }
-
 
   }
 
@@ -1997,7 +1999,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
-    this.refreshExpandableRowState = !clearExpandableItems;
+
+    if (clearExpandableItems) {
+      this.expandableItem.clear();
+    } else {
+      this.refreshExpandableRowState = true;
+    }
+
     this.componentStateService.refreshSelection();
     if (clearSelectedItems) {
       this.clearSelection();
@@ -2013,6 +2021,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.stopEdition(false);
     this.queryData(void 0, queryArgs);
+  }
+
+  clearSelectionSilently() {
+    //Using a control flag to ignore events
+    //this.suppressSelectionChange = true;
+    console.log('clearSelectionSilently ', this.expandableItem);
   }
 
   handleClick(row: any, column: OColumn, rowIndex: number, cellRef: ElementRef, event: MouseEvent) {
