@@ -46,7 +46,8 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
       'grouped-columns',
       'grouped-column-types',
       'user-stored-filters',
-      'user-stored-configurations'
+      'user-stored-configurations',
+      'expandable-rows'
     ];
     Object.assign(dataToStore, this.getTablePropertiesToStore(propertiesKeys));
     return dataToStore;
@@ -128,6 +129,11 @@ export class OTableComponentStateService extends AbstractComponentStateService<O
       case 'filter-builder':
         if (this.component.filterBuilder) {
           result['filter-builder'] = this.component.filterBuilder.getFilterValues();
+        }
+        break;
+      case 'expandable-rows':
+        if (this.component.isColumnExpandable()) {
+          result['expandable-rows'] = this.state.expandableRows;
         }
         break;
     }

@@ -152,6 +152,16 @@ New injection token `O_REQUEST_ADAPTER`
 ### Features
 * Added CRUD operations for JSON API
 
+## 15.5.5 (2025-05-30)
+### Features
+* **o-table**: The expandable state of rows is now preserved after reloading the table or changing paths ([826908e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/826908e)) Closes [#1906](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1906)
+
+### Bug fixes
+* **o-table**: Fixed an issue when using with both the `o-table-row-expandable` the `select-all-checkbox="true"` attribute, a misleading “No results found” message appeared in the checkbox column. This issue only occurred when both features were used together, and has now been resolved.([ab0e9f9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab0e9f9)) Closes [#1901](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1901)
+* **o-table-insertable-row**: Fixed input fields in the insertable row are now visually aligned with those in editable rows ([d7b4048](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d7b4048)) Closes [#1905](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1905)
+* **o-table-cell-editor-real**: Fixed an issue where any value other than 0 could not be inserted, incorrectly displaying a "Maximum value:" message. ([66078a1](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/66078a1)) Closes [#1904](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1904)
+* **validators**: Validation error message now shows min/max values even when the input value is 0 ([cdbe047](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cdbe047)) Closes [#1911](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1911)
+
 ## 15.5.4 (2025-05-13)
 ### Features
 * **o-app-layout**: new inputs `tooltip-display-mode` and `show-ellipsis-menu` ([fa6d517](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fa6d517)) Closes [#1892](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1892)

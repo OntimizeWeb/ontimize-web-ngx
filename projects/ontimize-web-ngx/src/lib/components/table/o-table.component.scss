@@ -124,7 +124,8 @@ $o_table_row_padding: 24px;
 
         .mat-mdc-header-row,
         .mat-mdc-row {
-                .mat-mdc-cell,
+
+          .mat-mdc-cell,
           .mat-mdc-header-cell {
             .image-avatar {
               width: 24px;
@@ -152,6 +153,24 @@ $o_table_row_padding: 24px;
 
       tr.o-table-insertable td {
         height: 1px;
+      }
+
+
+      .mat-mdc-footer-cell {
+        padding: 0 12px;
+
+        &.o-start {
+          text-align: start;
+        }
+
+        &.o-center {
+          text-align: center;
+        }
+
+        &.o-end {
+          text-align: end;
+        }
+
       }
 
       .mat-mdc-row {
