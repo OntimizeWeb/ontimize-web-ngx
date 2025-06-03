@@ -2014,7 +2014,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.tableRowExpandable) {
       clearExpandableItems
         ? this.expandableItem?.clear()
-        : this.refreshExpandableRowState = true;
+        : (this.refreshExpandableRowState = true);
     }
 
     this.componentStateService.refreshSelection();
