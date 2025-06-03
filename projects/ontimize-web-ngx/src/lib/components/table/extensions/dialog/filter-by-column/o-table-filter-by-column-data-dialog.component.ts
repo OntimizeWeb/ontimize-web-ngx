@@ -66,6 +66,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   table: OTableComponent;
   showFilterValuesOption: boolean;
   queryMethodName: string;
+  previousFilter: OColumnValueFilter;
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
@@ -91,15 +92,15 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.isDefaultFilterSubject.next(this.mode === 'default');
     this.isCustomFilterSubject.next(this.mode === 'custom');
 
-    let previousFilter: OColumnValueFilter = this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) || {
+    this.previousFilter = this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) || {
       attr: undefined,
       operator: undefined,
       values: undefined,
       availableValues: undefined
     };
 
-    if (Util.isDefined(previousFilter.operator)) {
-      this.isCustomFilterSubject.next(CUSTOM_FILTERS_OPERATORS.indexOf(previousFilter.operator) !== -1);
+    if (Util.isDefined(this.previousFilter.operator)) {
+      this.isCustomFilterSubject.next(CUSTOM_FILTERS_OPERATORS.indexOf(this.previousFilter.operator) !== -1);
     }
 
     this.preloadValues = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.preloadValues : true;
@@ -399,7 +400,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (sourceData === 'current-page') {
       /*Get filter values on the current page*/
       this.tableData = this.table.dataSource.getCurrentData();
-      this.parseDataAndInitializeDataList(null);
+      this.parseDataAndInitializeDataList(this.previousFilter);
 
     } else if (this.table.pageable) {
       /*Get filter values on the all pages*/
@@ -409,11 +410,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
           data = res.data;
         }
         this.tableData = data;
-        this.parseDataAndInitializeDataList(null);
+        this.parseDataAndInitializeDataList(this.previousFilter);
       });
     } else {
       this.tableData = this.table.getAllValues();
-      this.parseDataAndInitializeDataList(null);
+      this.parseDataAndInitializeDataList(this.previousFilter);
     }
   }
 
