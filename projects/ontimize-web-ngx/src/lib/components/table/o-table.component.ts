@@ -299,7 +299,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   dblclickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
   protected clickSubjectSubscription: Subscription;
   protected dbClickSubjectSubscription: Subscription;
+  protected rowChangeSubscription: Subscription;
   refreshExpandableRowState = false;
+
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -775,7 +777,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.saveRowExpandState(change.added, change.removed);
       });
     }
-    this.rows.changes.subscribe(() => {
+    this.rowChangeSubscription = this.rows.changes.subscribe(() => {
       this.handleTableDataChange();
     });
 
@@ -1098,6 +1100,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.dbClickSubjectSubscription) {
       this.dbClickSubjectSubscription.unsubscribe();
+    }
+    if (this.rowChangeSubscription) {
+      this.rowChangeSubscription.unsubscribe();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
@@ -1823,8 +1828,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.refreshExpandableRowState) {
       this.refreshExpandableRowState = false;
-      const selectionItems = this.state.expandableRows?.slice()||[]
-      this.expandableItem.clear();
+      const selectionItems = this.state.expandableRows?.slice() || []
+      this.expandableItem?.clear();
       this.state.expandableRows = selectionItems;
       this.restoreExpandableRowState();
     }
@@ -2006,14 +2011,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
-
-    if (clearExpandableItems) {
-      this.expandableItem.clear();
-    } else {
-      this.refreshExpandableRowState = true;
+    if (this.tableRowExpandable) {
+      clearExpandableItems
+        ? this.expandableItem?.clear()
+        : this.refreshExpandableRowState = true;
     }
 
     this.componentStateService.refreshSelection();
+
     if (clearSelectedItems) {
       this.clearSelection();
     }
