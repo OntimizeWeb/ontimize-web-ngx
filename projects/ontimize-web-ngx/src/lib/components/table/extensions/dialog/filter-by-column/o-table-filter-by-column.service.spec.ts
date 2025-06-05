@@ -6,7 +6,9 @@ describe('OTableFilterByColumnService', () => {
   let service: OTableFilterByColumnService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [OTableFilterByColumnService]
+    });
     service = TestBed.inject(OTableFilterByColumnService);
   });
 
