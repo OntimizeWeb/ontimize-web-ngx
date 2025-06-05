@@ -484,6 +484,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   addColumnFilter(filter: OColumnValueFilter) {
+    console.log('addColumnFilter' , filter);
     const existingFilterIndex = this.columnValueFilters.findIndex(item => item.attr === filter.attr);
     if (existingFilterIndex > -1) {
       this.columnValueFilters.splice(existingFilterIndex, 1, filter);

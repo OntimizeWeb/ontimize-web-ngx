@@ -48,9 +48,8 @@
         </span>
       </ng-template>
 
-      <cdk-virtual-scroll-viewport itemSize="25" fxFlex>
-        <mat-selection-list *ngIf="preloadValues || listData" #filterValueList class="select-values-list" (selectionChange)="onSelect($event)">
-
+      <mat-selection-list *ngIf="preloadValues || listData" #filterValueList class="select-values-list" (selectionChange)="onSelect($event)">
+        <cdk-virtual-scroll-viewport itemSize="25" fxFlex>
           <ng-container *cdkVirtualFor="let record of (listData | async); let i = index">
             <mat-list-option checkboxPosition="before" [selected]="record.selected" [value]="record">
               <ng-container *ngIf="record.value | isEmptyValue; else showValue">
@@ -66,8 +65,8 @@
               </ng-template>
             </mat-list-option>
           </ng-container>
-        </mat-selection-list>
-      </cdk-virtual-scroll-viewport>
+        </cdk-virtual-scroll-viewport>
+      </mat-selection-list>
 
     </div>
   </div>

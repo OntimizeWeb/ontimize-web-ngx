@@ -30,6 +30,7 @@ import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 import { OTableComponent } from './o-table.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
+import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.
   ],
   providers: [
     OTableExportButtonService,
+    OTableFilterByColumnService,
     { provide: MatPaginatorIntl, useClass: OTableMatPaginatorIntl }
   ]
 })

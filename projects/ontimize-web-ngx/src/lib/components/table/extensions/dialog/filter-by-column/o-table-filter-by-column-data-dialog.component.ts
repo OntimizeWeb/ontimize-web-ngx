@@ -17,6 +17,7 @@ import { OTableComponent } from '../../../o-table.component';
 import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 import type { OColumn } from '../../../column/o-column.class';
+import { OTableFilterByColumnService } from './o-table-filter-by-column.service';
 
 const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
 
@@ -61,7 +62,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('filterValueList') filterValueList: MatSelectionList;
   public activeSortDirection: 'asc' | 'desc' | '';
-  sourceData;
+  sourceData: 'current-page' | 'all-data';
   queryByFilterColumnSubscription: any;
   table: OTableComponent;
   showFilterValuesOption: boolean;
@@ -70,6 +71,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
+    private filterService: OTableFilterByColumnService,
     @Inject(MAT_DIALOG_DATA) data: { column: OColumn; table: OTableComponent }
   ) {
 
@@ -83,10 +85,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   private initialize() {
     this.showFilterValuesOption = this.table.paginationControls;
-    this.sourceData =
-      this.table.oTableColumnsFilterComponent?.getFilterValuesInData(this.column.attr) ||
-      this.table.oTableColumnsFilterComponent?.filterValuesInData ||
-      (this.table.pageable ? 'current-page' : 'all-data');
+    this.sourceData = this.table.getSourceDataByFilterColumn(this.column);
+
+
 
     this.mode = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.mode : 'default';
     this.isDefaultFilterSubject.next(this.mode === 'default');
@@ -96,7 +97,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       attr: undefined,
       operator: undefined,
       values: undefined,
-      availableValues: undefined
+      availableValues: undefined,
+      filterExpresion: undefined,
+      filterValuesInData: this.sourceData
     };
 
     if (Util.isDefined(this.previousFilter.operator)) {
@@ -118,7 +121,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   private parseDataAndInitializeDataList(previousFilter: OColumnValueFilter) {
 
-    this.parseListData(previousFilter);
+    this.columnData = this.filterService.parseListData(previousFilter, this.column, this.tableData, this.table.pageable, this.sourceData);
 
     if (Util.isDefined(previousFilter)) {
       this.initializeCustomFilterValues(previousFilter);
@@ -213,58 +216,21 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  protected parseListData(filter: OColumnValueFilter): void {
-    this.columnData = [];
-    if (Util.isDefined(filter?.availableValues)) {
-      this.columnData = filter.availableValues;
-    } else {
-      const colRenderedValues = this.getColumnDataUsingRenderer();
-      const colValues: any[] = this.tableData.map(elem => elem[this.column.attr]);
-
-      if (this.table.pageable && this.sourceData === 'all-data') {
-        colRenderedValues.forEach((renderedValue, i) => {
-          this.addIntoColumnData(renderedValue, colValues, i, filter);
-        });
-      } else {
-        colRenderedValues.forEach((renderedValue, i) => {
-          /*Selection distint values */
-          if (renderedValue === null || renderedValue === undefined) {
-            renderedValue = '';
-          }
-          if (!this.columnData.find(item => item.renderedValue === renderedValue)) {
-            this.addIntoColumnData(renderedValue, colValues, i, filter);
-          }
-        });
-      }
-    }
-  }
-
-  private addIntoColumnData(renderedValue: any, colValues: any[], i: number, filter: OColumnValueFilter) {
-    this.columnData.push({
-      renderedValue: renderedValue,
-      value: colValues[i],
-      rowValue: this.tableData[i],
-      selected: filter?.operator === ColumnValueFilterOperator.IN && (filter?.values || []).indexOf(colValues[i]) !== -1,
-      // storing the first index where this renderedValue is obtained. In the template of this component the column renderer will obtain the
-      // row value of this index
-      tableIndex: i
-    });
-  }
-
   getColumnValuesFilter(): OColumnValueFilter {
     const filter: OColumnValueFilter = {
       attr: this.column.attr,
       operator: undefined,
       values: undefined,
-      availableValues: undefined
+      availableValues: undefined,
+      filterExpresion: undefined,
+      filterValuesInData: this.sourceData
     };
 
     if (!this.isCustomFilterSubject.getValue()) {
       const selectedValues = this.selectedValues;
       if (selectedValues.length) {
-        filter.operator = ColumnValueFilterOperator.IN;
-        filter.values = selectedValues.map((item) => item.value);
-        filter.availableValues = this.columnData;
+        this.filterService.applySelectedValuesToFilter(this.column, this.tableData, filter, selectedValues, this.sourceData, this.table.pageable,() => this.table.getComponentFilter());
+
       }
     } else {
       if (this.fcText.value) {
@@ -287,6 +253,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         }
       }
     }
+    console.log('getColumnValuesFilter =>', filter);
     return filter;
   }
 
@@ -399,7 +366,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private getData(sourceData: string) {
     if (sourceData === 'current-page') {
       /*Get filter values on the current page*/
-      this.tableData = this.table.dataSource.getCurrentData();
+      this.tableData = this.table.getValue();
       this.parseDataAndInitializeDataList(this.previousFilter);
 
     } else if (this.table.pageable) {
@@ -420,7 +387,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   queryByFilterColumn(attr: string): Observable<ServiceResponse> | Observable<any> {
 
-    const kv = this.table.getComponentFilter();
+    const kv = this.previousFilter.filterExpresion || this.table.getComponentFilter();
     const av = [attr];
     let sqlTypes = {};
     if (Util.isDefined(kv) && !Util.isObjectEmpty(kv)) {
@@ -430,14 +397,11 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     const columnQueryArgs = [kv, av, this.table.entity, sqlTypes, undefined, undefined, undefined];
     const queryMethodName = this.queryMethodName || Codes.QUERY_METHOD;
     const service = this.table.getService();
+
     if (service && (queryMethodName in service) && this.table.entity) {
       return service[queryMethodName](...columnQueryArgs)
     }
     return of({});
   }
 
-  protected getColumnDataUsingRenderer() {
-    const useRenderer = this.column.renderer && this.column.renderer.getCellData;
-    return this.tableData.map((row) => useRenderer ? this.column.renderer.getCellData(row[this.column.attr], row) : row[this.column.attr]);
-  }
 }
