@@ -206,19 +206,13 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   onSelect(event: MatSelectionListChange) {
 
-    // event.options.forEach(option => option.value.selected = option.selected);
     event.options.forEach(option => {
       const value = option.value;
 
-      // Actualizar el estado manualmente si lo necesitas
       value.selected = option.selected;
-
-      // Actualizar el SelectionModel
       if (option.selected) {
-        value.selected = true;
         this.selection.select(value);
       } else {
-        value.selected = false;
         this.selection.deselect(value);
       }
     });
