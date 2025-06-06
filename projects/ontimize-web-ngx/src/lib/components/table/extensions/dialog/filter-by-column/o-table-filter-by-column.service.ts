@@ -57,7 +57,7 @@ export class OTableFilterByColumnService {
       // Avoid duplicates unless we're in pageable mode and processing all-data
       if (!alreadyExists || (isPageable && sourceData === 'all-data')) {
         const selected = filter?.operator === ColumnValueFilterOperator.IN &&
-          (filter?.values || []).includes(colValues[i]);
+          (filter?.values ?? []).includes(colValues[i]);
 
         columnData.push({
           renderedValue,
