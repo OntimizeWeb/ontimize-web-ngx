@@ -125,7 +125,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if(previousFilter.values && previousFilter.values.length > 0) {
       this.selection.select(...this.columnData.filter(item => previousFilter.values.indexOf(item.value) !== -1));
     }
-    console.log('elmentos preseleccionados', this.selection.selected);
+
     if (Util.isDefined(previousFilter)) {
       this.initializeCustomFilterValues(previousFilter);
     }
