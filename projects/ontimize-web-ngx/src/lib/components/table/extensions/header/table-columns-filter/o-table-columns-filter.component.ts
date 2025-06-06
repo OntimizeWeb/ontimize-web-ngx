@@ -156,7 +156,7 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
   }
 
   getFilterValuesInData(attr: string): 'current-page' | 'all-data' {
-    let filterValuesInData: 'current-page' | 'all-data' = 'current-page';
+    let filterValuesInData: 'current-page' | 'all-data' = this.filterValuesInData;
     if (Util.isDefined(this.columnsArray)) {
       this.columnsArray.forEach(column => {
         if (column.attr == attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
