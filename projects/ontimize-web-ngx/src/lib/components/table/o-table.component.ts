@@ -104,6 +104,7 @@ import type { OTablePaginator } from '../../interfaces/o-table-paginator.interfa
 import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
 import { MatRow } from '@angular/material/table';
+import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
@@ -258,6 +259,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     OTableDataSourceService,
+    OTableFilterByColumnService,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
     { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) }
@@ -3558,5 +3560,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getSnackService() {
     return this.snackBarService;
+  }
+
+  /**
+ * Resolves the data source type for filtering based on table filter component state.
+ * It prioritizes specific component values and falls back to pageable state.
+ *
+ * @returns 'current-page' | 'all-data'
+ */
+  getSourceDataByFilterColumn(column:OColumn): 'current-page' | 'all-data' {
+    return (
+      this.oTableColumnsFilterComponent?.getFilterValuesInData(column.attr) ||
+      (this.oTableColumnsFilterComponent?.filterValuesInData  ||
+       'current-page')
+    );
   }
 }
