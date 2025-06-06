@@ -9,6 +9,8 @@ import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.compo
 import type { OColumn } from '../../column/o-column.class';
 import { OTableGroupedRow } from '../row/o-table-row-group.class';
 import { OTableBase } from '../../o-table-base.class';
+import { OTableFilterByColumnService } from '../dialog/filter-by-column/o-table-filter-by-column.service';
+import { TableFilterByColumnData } from '../../../../types/table/o-table-filter-by-column-data.type';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -237,15 +239,46 @@ export class OTableContextMenuComponent implements AfterViewInit {
   }
 
   public filterByValue(): void {
-    const columValueFilter: OColumnValueFilter = {
-      attr: this.column.attr,
-      operator: ColumnValueFilterOperator.IN,
-      values: [this.row[this.column.attr]],
-      availableValues: undefined
-    };
-    this.table.filterByColumn(columValueFilter);
+    const filterService = this.injector.get(OTableFilterByColumnService);
+
+    const columnAttr = this.column.attr;
+    const sourceDataType = this.table.getSourceDataByFilterColumn(this.column);
+    const tableData = this.table.getValue();
+    const selectedValue = this.row[columnAttr];
+
+    const filter: OColumnValueFilter =
+      this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) ??
+      this.createColumnValueFilter(columnAttr, selectedValue, sourceDataType);
+
+    let columnData = filterService.parseListData(filter, this.column, tableData, this.table.pageable, sourceDataType);
+    const selectedValues = this.getSelectedValues(columnData, selectedValue);
+    filterService.applySelectedValuesToFilter(
+      this.column,
+      tableData,
+      filter,
+      selectedValues,
+      sourceDataType,
+      this.table.pageable,
+      () => this.table.getComponentFilter()
+    );
+
+    this.table.filterByColumn(filter);
   }
 
+  private createColumnValueFilter(attr: string, value: any, sourceData: 'current-page' | 'all-data'): OColumnValueFilter {
+    return {
+      attr,
+      operator: ColumnValueFilterOperator.IN,
+      values: [value],
+      availableValues: null,
+      filterValuesInData: sourceData,
+      filterExpresion: this.table.getComponentFilter() ?? undefined
+    };
+  }
+
+  private getSelectedValues(columnData: TableFilterByColumnData[], targetValue: any): TableFilterByColumnData[] {
+    return columnData.filter(item => item.value === targetValue && item.selected);
+  }
 
   public groupByColumn(dateType?: string): void {
     this.table.groupByColumn(this.column, dateType);
