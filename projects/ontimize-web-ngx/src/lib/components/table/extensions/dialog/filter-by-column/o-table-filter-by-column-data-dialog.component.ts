@@ -73,7 +73,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
-    private filterService: OTableFilterByColumnService,
+    private readonly filterService: OTableFilterByColumnService,
     @Inject(MAT_DIALOG_DATA) data: { column: OColumn; table: OTableComponent }
   ) {
 
@@ -194,9 +194,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  // get selectedValues(): TableFilterByColumnData[] {
-  //   return this.filterValueList ? this.filterValueList.selectedOptions.selected.map(selected => selected.value) : [];
-  // }
 
   areAllSelected(): boolean {
     return this.selection.selected.length === this.columnData.length;
@@ -232,7 +229,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       this.listDataSubject.getValue().forEach(item => {
         item.selected = true;
       });
-      //this.filterValueList.selectAll();
       this.selection.select(...this.listDataSubject.getValue());
     } else {
       this.listDataSubject.getValue().forEach(item => {

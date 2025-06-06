@@ -49,9 +49,8 @@ export class OTableFilterByColumnService {
     }
 
     colRenderedValues.forEach((renderedValue, i) => {
-      if (renderedValue === null || renderedValue === undefined) {
-        renderedValue = '';
-      }
+
+      renderedValue = renderedValue ?? '';
 
       const alreadyExists = columnData.find(item => item.renderedValue === renderedValue);
 
@@ -95,7 +94,7 @@ export class OTableFilterByColumnService {
     filter.values = selectedValues.map(item => item.value);
 
     if (sourceData === 'current-page') {
-      filter.availableValues = this.parseListData(filter, column, filter.availableValues??tableData, isPageable, sourceData);
+      filter.availableValues = this.parseListData(filter, column, filter.availableValues ?? tableData, isPageable, sourceData);
     } else {
       filter.filterExpresion = filter.filterExpresion || getComponentFilterFn();
     }
