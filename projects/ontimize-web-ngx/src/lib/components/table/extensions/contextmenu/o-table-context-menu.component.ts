@@ -247,7 +247,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
     const selectedValue = this.row[columnAttr];
 
     const filter: OColumnValueFilter =
-      this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) ||
+      this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) ??
       this.createColumnValueFilter(columnAttr, selectedValue, sourceDataType);
 
     let columnData = filterService.parseListData(filter, this.column, tableData, this.table.pageable, sourceDataType);
