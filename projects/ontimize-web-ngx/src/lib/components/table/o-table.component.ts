@@ -3572,7 +3572,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return (
       this.oTableColumnsFilterComponent?.getFilterValuesInData(column.attr) ||
       (this.oTableColumnsFilterComponent?.filterValuesInData  ||
-      (this.pageable ? 'current-page' : 'all-data'))
+       'current-page')
     );
   }
 }
