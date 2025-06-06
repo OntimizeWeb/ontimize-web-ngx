@@ -1,3 +1,9 @@
+## 15.5.6 (2025-06-06)
+### Bug fixes
+* **o-table**:
+  * Added a null-check in OTableComponent.projectContentChanged to prevent a TypeError when invoking clear on an undefined reference. ([fe75c53](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/fe75c53)) Closes [#1919](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1919)
+  * Resolved an issue where the filter modal in o-table would reset selected filters on the second open when filter-values-in-data="all-data".([8affb83](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8affb83)) Closes [#1918](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1918)
+
 ## 15.5.5 (2025-05-30)
 ### Features
 * **o-table**: The expandable state of rows is now preserved after reloading the table or changing paths ([826908e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/826908e)) Closes [#1906](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1906)
