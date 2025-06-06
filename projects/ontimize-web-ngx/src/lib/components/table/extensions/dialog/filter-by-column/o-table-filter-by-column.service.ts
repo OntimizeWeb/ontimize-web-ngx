@@ -95,9 +95,9 @@ export class OTableFilterByColumnService {
     filter.values = selectedValues.map(item => item.value);
 
     if (sourceData === 'current-page') {
-      filter.availableValues = this.parseListData(null, column, tableData, isPageable, sourceData);
+      filter.availableValues = this.parseListData(filter, column, filter.availableValues??tableData, isPageable, sourceData);
     } else {
-      filter.filterExpresion = getComponentFilterFn();
+      filter.filterExpresion = filter.filterExpresion || getComponentFilterFn();
     }
   }
 

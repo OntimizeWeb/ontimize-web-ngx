@@ -18,6 +18,7 @@ import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table
 
 import type { OColumn } from '../../../column/o-column.class';
 import { OTableFilterByColumnService } from './o-table-filter-by-column.service';
+import { SelectionModel } from '@angular/cdk/collections';
 
 const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
 
@@ -68,6 +69,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   showFilterValuesOption: boolean;
   queryMethodName: string;
   previousFilter: OColumnValueFilter;
+  selection = new SelectionModel<TableFilterByColumnData>(true, [], true, this.compareOptions());
 
   constructor(
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
@@ -86,8 +88,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private initialize() {
     this.showFilterValuesOption = this.table.paginationControls;
     this.sourceData = this.table.getSourceDataByFilterColumn(this.column);
-
-
 
     this.mode = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.mode : 'default';
     this.isDefaultFilterSubject.next(this.mode === 'default');
@@ -122,7 +122,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private parseDataAndInitializeDataList(previousFilter: OColumnValueFilter) {
 
     this.columnData = this.filterService.parseListData(previousFilter, this.column, this.tableData, this.table.pageable, this.sourceData);
-
+    if(previousFilter.values && previousFilter.values.length > 0) {
+      this.selection.select(...this.columnData.filter(item => previousFilter.values.indexOf(item.value) !== -1));
+    }
+    console.log('elmentos preseleccionados', this.selection.selected);
     if (Util.isDefined(previousFilter)) {
       this.initializeCustomFilterValues(previousFilter);
     }
@@ -191,28 +194,51 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     }
   }
 
-  get selectedValues(): TableFilterByColumnData[] {
-    return this.filterValueList ? this.filterValueList.selectedOptions.selected.map(selected => selected.value) : [];
-  }
+  // get selectedValues(): TableFilterByColumnData[] {
+  //   return this.filterValueList ? this.filterValueList.selectedOptions.selected.map(selected => selected.value) : [];
+  // }
 
   areAllSelected(): boolean {
-    return this.selectedValues.length === this.columnData.length;
+    return this.selection.selected.length === this.columnData.length;
   }
 
   isIndeterminate(): boolean {
-    const selectedValues = this.selectedValues;
+    const selectedValues = this.selection.selected;
     return selectedValues.length > 0 && selectedValues.length !== this.columnData.length;
   }
 
   onSelect(event: MatSelectionListChange) {
-    event.options.forEach(option => option.value.selected = option.selected);
+
+    // event.options.forEach(option => option.value.selected = option.selected);
+    event.options.forEach(option => {
+      const value = option.value;
+
+      // Actualizar el estado manualmente si lo necesitas
+      value.selected = option.selected;
+
+      // Actualizar el SelectionModel
+      if (option.selected) {
+        value.selected = true;
+        this.selection.select(value);
+      } else {
+        value.selected = false;
+        this.selection.deselect(value);
+      }
+    });
   }
 
   onSelectAllChange(event: MatCheckboxChange) {
     if (event.checked) {
-      this.filterValueList.selectAll();
+      this.listDataSubject.getValue().forEach(item => {
+        item.selected = true;
+      });
+      //this.filterValueList.selectAll();
+      this.selection.select(...this.listDataSubject.getValue());
     } else {
-      this.filterValueList.deselectAll();
+      this.listDataSubject.getValue().forEach(item => {
+        item.selected = false;
+      });
+      this.selection.clear();
     }
   }
 
@@ -221,13 +247,13 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       attr: this.column.attr,
       operator: undefined,
       values: undefined,
-      availableValues: undefined,
-      filterExpresion: undefined,
+      availableValues: this.previousFilter?.availableValues || undefined,
+      filterExpresion: this.previousFilter?.filterExpresion || undefined,
       filterValuesInData: this.sourceData
     };
 
     if (!this.isCustomFilterSubject.getValue()) {
-      const selectedValues = this.selectedValues;
+      const selectedValues:TableFilterByColumnData[] = this.selection.selected;
       if (selectedValues.length) {
         this.filterService.applySelectedValuesToFilter(this.column, this.tableData, filter, selectedValues, this.sourceData, this.table.pageable,() => this.table.getComponentFilter());
 
@@ -253,7 +279,6 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
         }
       }
     }
-    console.log('getColumnValuesFilter =>', filter);
     return filter;
   }
 
@@ -384,6 +409,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       this.parseDataAndInitializeDataList(this.previousFilter);
     }
   }
+  isSelected(item: TableFilterByColumnData) {
+    return item.selected;
+  }
 
   queryByFilterColumn(attr: string): Observable<ServiceResponse> | Observable<any> {
 
@@ -404,4 +432,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return of({});
   }
 
+  compareOptions(): ((o1: TableFilterByColumnData, o2: TableFilterByColumnData) => boolean) | undefined {
+    return (o1: TableFilterByColumnData, o2: TableFilterByColumnData) => o1?.value === o2?.value;
+  };
 }
