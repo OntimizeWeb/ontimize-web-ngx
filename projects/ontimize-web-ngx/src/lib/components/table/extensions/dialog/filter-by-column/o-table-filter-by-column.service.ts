@@ -16,7 +16,7 @@ export class OTableFilterByColumnService {
  */
   getColumnDataUsingRenderer(column: OColumn, tableData: any[]): any[] {
     return tableData.map(row => {
-      return column.renderer?.getCellData?.(row, column.attr) ?? row[column.attr];
+      return column.renderer?.getCellData?.(row[column.attr], row) ?? row[column.attr];
     });
   }
 
