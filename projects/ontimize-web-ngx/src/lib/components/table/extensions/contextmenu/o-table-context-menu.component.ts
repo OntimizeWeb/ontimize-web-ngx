@@ -270,7 +270,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
       values: [value],
       availableValues: null,
       filterValuesInData: sourceData,
-      filterExpresion: this.table.getComponentFilter() || undefined
+      filterExpresion: this.table.getComponentFilter() ?? undefined
     };
   }
 
