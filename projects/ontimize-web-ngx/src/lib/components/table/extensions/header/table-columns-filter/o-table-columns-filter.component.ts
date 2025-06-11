@@ -94,7 +94,24 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     if (Util.isDefined(this.filterColumns)) {
-      this.columnsArray = this.columnsArray.concat(this.parseFilterColumns(this.filterColumns));
+      const newColumns = this.parseFilterColumns(this.filterColumns);
+
+      // Create a map to merge arrays based on the "attr" property
+      const mergedMap = new Map<string, any>();
+
+      // Add existing columns to the map
+      this.columnsArray.forEach(col => {
+        mergedMap.set(col.attr, col);
+      });
+
+      // Add new columns to the map, overriding existing ones with the same "attr"
+      newColumns.forEach(col => {
+        mergedMap.set(col.attr, col);
+      });
+
+      // Convert the map values back to an array
+      this.columnsArray = Array.from(mergedMap.values());
+
     }
   }
 
@@ -138,11 +155,11 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     return queryMethod;
   }
 
-  getFilterValuesInData(attr: string): string {
-    let filterValuesInData = '';
+  getFilterValuesInData(attr: string): 'current-page' | 'all-data' {
+    let filterValuesInData: 'current-page' | 'all-data' = this.filterValuesInData;
     if (Util.isDefined(this.columnsArray)) {
       this.columnsArray.forEach(column => {
-        if (column.attr == attr) {
+        if (column.attr == attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
           filterValuesInData = column.filterValuesInData;
         }
       });

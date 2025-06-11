@@ -106,6 +106,7 @@ import type { ServiceResponse } from '../../interfaces/service-response.interfac
 import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 import { MatRow } from '@angular/material/table';
+import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -261,6 +262,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     OTableDataSourceService,
+    OTableFilterByColumnService,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
     { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) }
@@ -302,7 +304,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   dblclickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
   protected clickSubjectSubscription: Subscription;
   protected dbClickSubjectSubscription: Subscription;
+  protected rowChangeSubscription: Subscription;
   refreshExpandableRowState = false;
+
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -778,7 +782,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.saveRowExpandState(change.added, change.removed);
       });
     }
-    this.rows.changes.subscribe(() => {
+    this.rowChangeSubscription = this.rows.changes.subscribe(() => {
       this.handleTableDataChange();
     });
 
@@ -1101,6 +1105,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.dbClickSubjectSubscription) {
       this.dbClickSubjectSubscription.unsubscribe();
+    }
+    if (this.rowChangeSubscription) {
+      this.rowChangeSubscription.unsubscribe();
     }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
@@ -1826,8 +1833,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.refreshExpandableRowState) {
       this.refreshExpandableRowState = false;
-      const selectionItems = this.state.expandableRows?.slice()||[]
-      this.expandableItem.clear();
+      const selectionItems = this.state.expandableRows?.slice() || []
+      this.expandableItem?.clear();
       this.state.expandableRows = selectionItems;
       this.restoreExpandableRowState();
     }
@@ -2017,13 +2024,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return;
     }
 
-    if (clearExpandableItems) {
-      this.expandableItem.clear();
-    } else {
-      this.refreshExpandableRowState = true;
+    if (this.tableRowExpandable) {
+      if (clearExpandableItems) {
+        this.expandableItem?.clear();
+      } else {
+        this.refreshExpandableRowState = true;
+      }
     }
 
     this.componentStateService.refreshSelection();
+
     if (clearSelectedItems) {
       this.clearSelection();
     }
@@ -3559,5 +3569,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getSnackService() {
     return this.snackBarService;
+  }
+
+  /**
+ * Resolves the data source type for filtering based on table filter component state.
+ * It prioritizes specific component values and falls back to pageable state.
+ *
+ * @returns 'current-page' | 'all-data'
+ */
+  getSourceDataByFilterColumn(column:OColumn): 'current-page' | 'all-data' {
+    return (
+      this.oTableColumnsFilterComponent?.getFilterValuesInData(column.attr) ||
+      (this.oTableColumnsFilterComponent?.filterValuesInData  ||
+       'current-page')
+    );
   }
 }

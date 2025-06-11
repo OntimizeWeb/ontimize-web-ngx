@@ -126,4 +126,6 @@ export abstract class OTableBase {
   abstract setSelectedByKeys(keyValues: Array<any>): void;
   abstract setSelectedByMultipleKeys(keyValues: Array<Object>): void;
   abstract setSelectedByRowIds(rowIds: Array<number>): void;
+  abstract getSourceDataByFilterColumn(column: OColumn): 'current-page' | 'all-data';
+  abstract getValue(): any[];
 }
