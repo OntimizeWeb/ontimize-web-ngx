@@ -37,7 +37,6 @@ export class OTableFilterByColumnService {
     isPageable: boolean,
     sourceData: 'current-page' | 'all-data'
   ): TableFilterByColumnData[] {
-    const columnAttr = column.attr;
     const columnData: TableFilterByColumnData[] = [];
     const colRenderedValues = this.getColumnDataUsingRenderer(column, tableData);
     const colValues = tableData.map((elem) => Util.getValueFromPath(elem, column.valueColumn));
