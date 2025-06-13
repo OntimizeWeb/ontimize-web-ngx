@@ -573,4 +573,14 @@ export class Util {
     }
     return child;
   }
+
+  static getValueFromPath(obj: any, path: string): any {
+    if (!obj || !path) return undefined;
+    return path.split('.').reduce((acc, key) => {
+      if (acc && typeof acc === 'object') {
+        return acc[key];
+      }
+      return undefined;
+    }, obj);
+  }
 }
