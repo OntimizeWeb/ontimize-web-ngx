@@ -34,6 +34,7 @@ export class OColumn {
   tooltip: OColumnTooltip;
   resizable: boolean;
   DOMWidth: number;
+  valueColumn: string;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
   private multilineSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.multiline);
@@ -123,6 +124,8 @@ export class OColumn {
     if (Util.isDefined(column.filterExpressionFunction)) {
       this.filterExpressionFunction = column.filterExpressionFunction;
     }
+    this.valueColumn = column.valueColumn ?? this.attr;
+
   }
 
   set searchable(val: boolean) {

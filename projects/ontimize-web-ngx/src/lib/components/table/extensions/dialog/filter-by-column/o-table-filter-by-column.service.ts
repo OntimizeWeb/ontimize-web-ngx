@@ -7,7 +7,6 @@ import { OColumn } from '../../../column/o-column.class';
 
 @Injectable()
 export class OTableFilterByColumnService {
-
   constructor() { }
 
   /**
@@ -41,7 +40,7 @@ export class OTableFilterByColumnService {
     const columnAttr = column.attr;
     const columnData: TableFilterByColumnData[] = [];
     const colRenderedValues = this.getColumnDataUsingRenderer(column, tableData);
-    const colValues = tableData.map(elem => elem[columnAttr]);
+    const colValues = tableData.map((elem) => Util.getValueFromPath(elem, column.valueColumn));
 
     // Use predefined values if available in the filter configuration
     if (Util.isDefined(filter?.availableValues)) {
@@ -99,6 +98,4 @@ export class OTableFilterByColumnService {
       filter.filterExpresion = filter.filterExpresion || getComponentFilterFn();
     }
   }
-
-
 }

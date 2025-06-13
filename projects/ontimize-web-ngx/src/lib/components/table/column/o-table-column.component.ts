@@ -9,90 +9,101 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef
-} from '@angular/core';
-import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
-import { Subscription } from 'rxjs';
+  ViewContainerRef,
+} from "@angular/core";
+import { AsyncValidatorFn, ValidatorFn } from "@angular/forms";
+import { Subscription } from "rxjs";
 
-import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
-import { OTableColumn } from '../../../interfaces/o-table-column.interface';
-import { OPercentageValueBaseType } from '../../../pipes/o-percentage.pipe';
-import { DateFilterFunction } from '../../../types/date-filter-function.type';
-import { ErrorData } from '../../../types/error-data.type';
-import { Expression } from '../../../types/expression.type';
-import { ODateValueType } from '../../../types/o-date-value.type';
-import { Codes } from '../../../util/codes';
-import { SQLTypes } from '../../../util/sqltypes';
-import { Util } from '../../../util/util';
-import { OTableComponent } from '../o-table.component';
-import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor';
-import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
+import {
+  BooleanInputConverter,
+  NumberInputConverter,
+} from "../../../decorators/input-converter";
+import { OTableColumn } from "../../../interfaces/o-table-column.interface";
+import { OPercentageValueBaseType } from "../../../pipes/o-percentage.pipe";
+import { DateFilterFunction } from "../../../types/date-filter-function.type";
+import { ErrorData } from "../../../types/error-data.type";
+import { Expression } from "../../../types/expression.type";
+import { ODateValueType } from "../../../types/o-date-value.type";
+import { Codes } from "../../../util/codes";
+import { SQLTypes } from "../../../util/sqltypes";
+import { Util } from "../../../util/util";
+import { OTableComponent } from "../o-table.component";
+import {
+  editorsMapping,
+  O_TABLE_CELL_EDITORS_INPUTS,
+  O_TABLE_CELL_EDITORS_OUTPUTS,
+} from "./cell-editor/cell-editor";
+import {
+  O_TABLE_CELL_RENDERERS_INPUTS,
+  O_TABLE_CELL_RENDERERS_OUTPUTS,
+  renderersMapping,
+} from "./cell-renderer/cell-renderer";
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
-
   // attr [string]: column name.
-  'attr',
+  "attr",
 
   // title [string]: column title. Default: no value.
-  'title',
+  "title",
 
   // title-align [start | center | end]: column title alignment. Default: center.
-  'titleAlign: title-align',
+  "titleAlign: title-align",
 
   // content-align [start | center | end]: column content alignment.
-  'contentAlign: content-align',
+  "contentAlign: content-align",
 
   // orderable [no|yes]: column can be sorted. Default: yes.
-  'orderable',
+  "orderable",
 
   // searchable [no|yes]: searchings are performed into column content. Default: yes.
-  'searchable',
+  "searchable",
 
   // groupable [no|yes|true|false]: Indicates whether or not the column can be groupable
-  'groupable',
+  "groupable",
 
   // type [boolean|integer|real|currency|date|image]: column type. Default: no value (string).
-  'type',
+  "type",
 
   // editable [no|yes]: column can be edited directly over the table. Default: no.
-  'editable',
+  "editable",
 
-  'width',
-
-  // only in pixels
-  'minWidth: min-width',
+  "width",
 
   // only in pixels
-  'maxWidth: max-width',
+  "minWidth: min-width",
+
+  // only in pixels
+  "maxWidth: max-width",
 
   // async-load [no|yes|true|false]: asynchronous query. Default: no
-  'asyncLoad : async-load',
+  "asyncLoad : async-load",
 
   // sqltype[string]: Data type according to Java standard. See SQLType class. Default: 'OTHER'
-  'sqlType: sql-type',
+  "sqlType: sql-type",
 
-  'tooltip',
+  "tooltip",
 
-  'tooltipValue: tooltip-value',
+  "tooltipValue: tooltip-value",
 
-  'tooltipFunction: tooltip-function',
+  "tooltipFunction: tooltip-function",
 
-  'multiline',
+  "multiline",
 
-  'resizable',
+  "resizable",
 
-  'filterExpressionFunction: filter-expression-function',
+  "filterExpressionFunction: filter-expression-function",
 
-  'class',
+  "class",
 
-  'angularValidatorsFn: validators',
+  "angularValidatorsFn: validators",
 
-  'angularValidatorsFnErrors: validators-errors',
+  "angularValidatorsFnErrors: validators-errors",
 
-  'angularAsyncValidatorsFn: async-validators',
+  "angularAsyncValidatorsFn: async-validators",
+  "valueColumn: value-column",
 
   ...O_TABLE_CELL_RENDERERS_INPUTS,
-  ...O_TABLE_CELL_EDITORS_INPUTS
+  ...O_TABLE_CELL_EDITORS_INPUTS,
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
@@ -101,15 +112,16 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
 ];
 
 @Component({
-  selector: 'o-table-column',
-  templateUrl: './o-table-column.component.html',
-  styleUrls: ['./o-table-column.component.scss'],
+  selector: "o-table-column",
+  templateUrl: "./o-table-column.component.html",
+  styleUrls: ["./o-table-column.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
+  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
 })
-export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, AfterViewInit {
-
+export class OTableColumnComponent
+  implements OTableColumn, OnDestroy, OnInit, AfterViewInit
+{
   public renderer: any;
   public editor: any;
 
@@ -117,7 +129,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   public attr: string;
   public title: string;
   public titleAlign: string;
-  public contentAlign: 'start' | 'center' | 'end';
+  public contentAlign: "start" | "center" | "end";
   public sqlType: string;
   protected _SQLType: number;
   protected _orderable: boolean;
@@ -134,6 +146,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   tooltipValue: string;
   tooltipFunction: (rowData: any) => any;
   public class: string;
+  public valueColumn: string;
 
   set multiline(val: boolean) {
     val = Util.parseBoolean(String(val));
@@ -149,18 +162,25 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
 
   public angularAsyncValidatorsFn: AsyncValidatorFn[] = [];
 
-  filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
+  filterExpressionFunction: (
+    columnAttr: string,
+    quickFilter?: string
+  ) => Expression;
 
   /* input renderer base */
-  public _filterSource: 'render' | 'data' | 'both' = 'render';
-  public filterFunction: (cellValue: any, rowValue: any, quickFilter?: string) => boolean;
+  public _filterSource: "render" | "data" | "both" = "render";
+  public filterFunction: (
+    cellValue: any,
+    rowValue: any,
+    quickFilter?: string
+  ) => boolean;
   /* input renderer date */
   protected format: string;
   /* input renderer integer */
   protected grouping: any = true;
-  protected thousandSeparator: string = ',';
+  protected thousandSeparator: string = ",";
   /* input renderer real */
-  protected decimalSeparator: string = '.';
+  protected decimalSeparator: string = ".";
 
   /* input renderer currency */
   protected currencySymbol: string;
@@ -171,8 +191,8 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected falseValue: any;
   protected renderTrueValue: any;
   protected renderFalseValue: any;
-  protected renderType: string = 'string';
-  protected booleanType: string = 'boolean';
+  protected renderType: string = "string";
+  protected booleanType: string = "boolean";
 
   /* input image */
   protected imageType: string;
@@ -189,7 +209,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected entity: string;
   protected service: string;
   protected columns: string;
-  protected valueColumn: string;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
@@ -198,7 +217,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
   /* input time */
-  oDateFormat = 'L';
+  oDateFormat = "L";
   oHourFormat = 24;
 
   /* input renderer percentage */
@@ -217,14 +236,14 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
 
   /* input editor date */
   protected locale: string;
-  protected oStartView: 'month' | 'year' = 'month';
+  protected oStartView: "month" | "year" = "month";
   protected oMinDate: string;
   protected oMaxDate: string;
   @BooleanInputConverter()
   protected oTouchUi: boolean = false;
   protected oStartAt: string;
   protected filterDate: DateFilterFunction;
-  protected dateValueType: ODateValueType = 'timestamp';
+  protected dateValueType: ODateValueType = "timestamp";
 
   /* input editor integer */
   @NumberInputConverter()
@@ -256,7 +275,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   @BooleanInputConverter()
   asyncLoad: boolean = false;
 
-  @ViewChild('container', { read: ViewContainerRef, static: true })
+  @ViewChild("container", { read: ViewContainerRef, static: true })
   container: ViewContainerRef;
 
   private subscriptions = new Subscription();
@@ -264,11 +283,13 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   constructor(
     @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
     protected injector: Injector
-  ) {
-  }
+  ) {}
 
   static addEditor(type: string, editorClassReference: any) {
-    if (!editorsMapping.hasOwnProperty(type) && Util.isDefined(editorClassReference)) {
+    if (
+      !editorsMapping.hasOwnProperty(type) &&
+      Util.isDefined(editorClassReference)
+    ) {
       editorsMapping[type] = editorClassReference;
     }
   }
@@ -277,7 +298,9 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     this.grouping = Util.parseBoolean(this.grouping, true);
     this.titleAlign = this.parseTitleAlign();
     this.table.registerColumn(this);
-    this.subscriptions.add(this.table.onReinitialize.subscribe(() => this.table.registerColumn(this)));
+    this.subscriptions.add(
+      this.table.onReinitialize.subscribe(() => this.table.registerColumn(this))
+    );
   }
 
   ngAfterViewInit(): void {
@@ -290,16 +313,17 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
 
   parseTitleAlign(): string {
-    const align = (this.titleAlign || '').toLowerCase();
-    return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1 ? align : undefined;
+    const align = (this.titleAlign || "").toLowerCase();
+    return Codes.AVAILABLE_COLUMN_TITLE_ALIGNS.indexOf(align) !== -1
+      ? align
+      : undefined;
   }
 
   get originalWidth() {
     let originalWidth = this.width;
     const pxVal = Util.extractPixelsValue(originalWidth);
     if (Util.isDefined(pxVal)) {
-      originalWidth = pxVal + '';
-
+      originalWidth = pxVal + "";
     }
     return originalWidth;
   }
@@ -314,7 +338,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
         newRenderer.filterSource = this.filterSource;
         newRenderer.filterFunction = this.filterFunction;
         switch (this.type) {
-          case 'currency':
+          case "currency":
             newRenderer.currencySymbol = this.currencySymbol;
             newRenderer.currencySymbolPosition = this.currencySymbolPosition;
             newRenderer.decimalSeparator = this.decimalSeparator;
@@ -323,17 +347,17 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
             newRenderer.grouping = this.grouping;
             newRenderer.thousandSeparator = this.thousandSeparator;
             break;
-          case 'date':
+          case "date":
             newRenderer.format = this.format;
             break;
-          case 'time':
+          case "time":
             newRenderer.format = this.format;
             break;
-          case 'integer':
+          case "integer":
             newRenderer.grouping = this.grouping;
             newRenderer.thousandSeparator = this.thousandSeparator;
             break;
-          case 'boolean':
+          case "boolean":
             newRenderer.trueValue = this.trueValue;
             newRenderer.falseValue = this.falseValue;
             newRenderer.renderTrueValue = this.renderTrueValue;
@@ -341,29 +365,29 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
             newRenderer.renderType = this.renderType;
             newRenderer.booleanType = this.booleanType;
             break;
-          case 'percentage':
+          case "percentage":
             newRenderer.valueBase = this.valueBase;
           // eslint-disable-next-line no-fallthrough
-          case 'real':
+          case "real":
             newRenderer.decimalSeparator = this.decimalSeparator;
             newRenderer.minDecimalDigits = this.minDecimalDigits;
             newRenderer.maxDecimalDigits = this.maxDecimalDigits;
             newRenderer.grouping = this.grouping;
             newRenderer.thousandSeparator = this.thousandSeparator;
             break;
-          case 'image':
+          case "image":
             newRenderer.imageType = this.imageType;
             newRenderer.avatar = this.avatar;
             newRenderer.emptyImage = this.emptyImage;
             break;
-          case 'action':
+          case "action":
             newRenderer.icon = this.icon;
             newRenderer.action = this.action;
             newRenderer.text = this.text;
             newRenderer.iconPosition = this.iconPosition;
             newRenderer.onClick = this.onClick;
             break;
-          case 'service':
+          case "service":
             newRenderer.entity = this.entity;
             newRenderer.service = this.service;
             newRenderer.columns = this.columns;
@@ -373,17 +397,21 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
             newRenderer.serviceType = this.serviceType;
             newRenderer.translate = this.translate;
             break;
-          case 'translate':
+          case "translate":
             newRenderer.translateArgsFn = this.translateArgsFn;
             break;
         }
         this.registerRenderer(newRenderer);
-
       }
     }
   }
 
-  buildCellEditor(type: string, container: ViewContainerRef, propsOrigin: any, registerInColumn: boolean = true) {
+  buildCellEditor(
+    type: string,
+    container: ViewContainerRef,
+    propsOrigin: any,
+    registerInColumn: boolean = true
+  ) {
     let editor;
     const componentRef = editorsMapping[type] || editorsMapping.text;
     if (componentRef === undefined) {
@@ -394,7 +422,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     editor = ref.instance;
     if (propsOrigin !== undefined) {
       switch (type) {
-        case 'date':
+        case "date":
           editor.format = propsOrigin.format;
           editor.locale = propsOrigin.locale;
           editor.oStartView = propsOrigin.oStartView;
@@ -405,7 +433,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
           editor.filterDate = propsOrigin.filterDate;
           editor.dateValueType = propsOrigin.dateValueType;
           break;
-        case 'time':
+        case "time":
           editor.oDateFormat = propsOrigin.oDateFormat;
           editor.oHourFormat = propsOrigin.oHourFormat;
           editor.oDateLocale = propsOrigin.oDateLocale;
@@ -422,26 +450,28 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
           editor.oHourPlaceholder = propsOrigin.oHourPlaceholder;
           editor.oDatePlaceholder = propsOrigin.oDatePlaceholder;
           break;
-        case 'boolean':
+        case "boolean":
           editor.booleanType = propsOrigin.booleanType;
           editor.indeterminateOnNull = propsOrigin.indeterminateOnNull;
           editor.autoCommit = propsOrigin.autoCommit;
           editor.trueValue = propsOrigin.trueValue;
           editor.falseValue = propsOrigin.falseValue;
           break;
-        case 'integer':
-        case 'percentage':
-        case 'currency':
-        case 'real':
+        case "integer":
+        case "percentage":
+        case "currency":
+        case "real":
           if (Util.isDefined(propsOrigin.min)) {
             editor.min = propsOrigin.min;
           }
           if (Util.isDefined(propsOrigin.max)) {
             editor.max = propsOrigin.max;
           }
-          editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
+          editor.step = Util.isDefined(propsOrigin.step)
+            ? propsOrigin.step
+            : editor.step;
           break;
-        case 'image':
+        case "image":
           break;
         default:
           break;
@@ -490,7 +520,8 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
 
   set orderable(val: any) {
-    this._orderable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    this._orderable =
+      typeof val === "boolean" ? val : Util.parseBoolean(val, true);
     const oCol = this.table.getOColumn(this.attr);
     if (oCol) {
       oCol.orderable = this._orderable;
@@ -502,7 +533,8 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
 
   set resizable(val: any) {
-    this._resizable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    this._resizable =
+      typeof val === "boolean" ? val : Util.parseBoolean(val, true);
     const oCol = this.table.getOColumn(this.attr);
     if (oCol) {
       oCol.resizable = this._resizable;
@@ -514,7 +546,8 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
 
   set searchable(val: any) {
-    this._searchable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    this._searchable =
+      typeof val === "boolean" ? val : Util.parseBoolean(val, true);
     const oCol = this.table.getOColumn(this.attr);
     if (oCol) {
       oCol.searchable = this._searchable;
@@ -526,7 +559,8 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   }
 
   set groupable(val: any) {
-    this._groupable = typeof val === 'boolean' ? val : Util.parseBoolean(val, true);
+    this._groupable =
+      typeof val === "boolean" ? val : Util.parseBoolean(val, true);
     const oCol = this.table.getOColumn(this.attr);
     if (oCol) {
       oCol.groupable = this._groupable;
@@ -549,10 +583,10 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
         case 'boolean':
           this.sqlType = 'BOOLEAN';
           break;
-        case 'real':
-        case 'percentage':
-        case 'currency':
-          this.sqlType = 'DOUBLE';
+        case "real":
+        case "percentage":
+        case "currency":
+          this.sqlType = "DOUBLE";
           break;
       }
     }
