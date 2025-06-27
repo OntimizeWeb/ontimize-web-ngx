@@ -517,16 +517,16 @@ export class Util {
   }
 
   static createServiceInstanceByType(serviceType: ServiceType, injector: Injector): any {
-      if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
-        return new OntimizeEEService(injector);
-      }
-      if (ServiceType.Ontimize === serviceType) {
-        return new OntimizeService(injector);
-      }
-      if (ServiceType.JSONAPI === serviceType) {
-        return new JSONAPIService(injector);
-      }
-      return Util.createServiceInstance(serviceType, injector);
+    if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
+      return new OntimizeEEService(injector);
+    }
+    if (ServiceType.Ontimize === serviceType) {
+      return new OntimizeService(injector);
+    }
+    if (ServiceType.JSONAPI === serviceType) {
+      return new JSONAPIService(injector);
+    }
+    return Util.createServiceInstance(serviceType, injector);
 
   }
   /**
@@ -724,5 +724,24 @@ export class Util {
       }
       return undefined;
     }, obj);
+  }
+
+  static deepMerge(target: any, source: any): any {
+    const result = { ...target };
+
+    for (const key in source) {
+      if (
+        source.hasOwnProperty(key) &&
+        typeof source[key] === 'object' &&
+        !Array.isArray(source[key]) &&
+        source[key] !== null
+      ) {
+        result[key] = Util.deepMerge(target[key] || {}, source[key]);
+      } else {
+        result[key] = source[key];
+      }
+    }
+
+    return result;
   }
 }

@@ -6,7 +6,7 @@ export type OColumnValueFilter = {
   attr: string;
   operator: ColumnValueFilterOperator;
   values: any;
-  availableValues: any[];
-  filterValuesInData: 'current-page' | 'all-data';
-  filterExpresion :Expression
+  availableValues?: any[];
+  filterValuesInData?: 'current-page' | 'all-data';
+  filterExpresion? :Expression
 };

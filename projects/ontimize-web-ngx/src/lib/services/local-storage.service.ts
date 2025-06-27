@@ -2,13 +2,13 @@ import { EventEmitter, Injectable, Injector, Type } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
 import { AppConfig } from '../config/app-config';
+import { ILocalStorageService } from '../interfaces/local-service.interface';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { Config } from '../types/config.type';
 import { SessionInfo } from '../types/session-info.type';
 import { ObservableWrapper } from '../util/async';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
-import { ILocalStorageService } from '../interfaces/local-service.interface';
 
 @Injectable()
 export class LocalStorageService implements ILocalStorageService {
@@ -37,34 +37,48 @@ export class LocalStorageService implements ILocalStorageService {
   }
 
   getComponentStorage(comp: ILocalStorageComponent, routeKey?: string): any {
-    const componentKey = comp.getComponentKey();
-    let completeKey = componentKey;
-    if (routeKey) {
-      completeKey += '_' + routeKey;
-    }
-    return this.getAppComponentData(completeKey) || {};
+    const key = this.getComponentKey(comp.getComponentKey(), routeKey);
+    return this.getAppComponentData(key) ?? {};
+  }
+
+  getComponentKey(baseKey: string, routeKey?: string): string {
+    return routeKey ? `${baseKey}_${routeKey}` : baseKey;
   }
 
   updateComponentStorage(comp: ILocalStorageComponent, routeKey?: string) {
-    const dataToStore = comp.getDataToStore();
-    const componentKey = comp.getComponentKey();
-    if (!Util.isDefined(componentKey)) {
-      return;
-    }
-    let completeKey = componentKey;
-    if (routeKey) {
-      completeKey += '_' + routeKey;
-    }
-    const storedObject = {};
-    for (const prop in dataToStore) {
-      if (dataToStore.hasOwnProperty(prop)) {
-        storedObject[prop] = dataToStore[prop];
-      }
-    }
-    this.updateAppComponentStorage(completeKey, storedObject);
+    const data = comp.getDataToStore();
+    const key = this.getComponentKey(comp.getComponentKey(), routeKey);
+    this.updateAppComponentStorage(key, { ...data });
   }
 
-  private getAppComponentData(key: string): object {
+  updateAppComponentStorageByPrefix(prefix: string, componentData: object) {
+    this.getAppComponentDataByPrefix(prefix).forEach((component) => {
+      const data = Util.deepMerge(component.data, componentData);
+      this.updateAppComponentStorage(component.id, { ...data });
+    });
+  }
+
+  public getAppComponentDataByPrefix(prefix: string): { id: string; data: any }[] {
+    const storedComponents = this.getSessionUserComponentsData() || {};
+    const keyPrefix = `${prefix}_`;
+
+    return Object.entries(storedComponents)
+      .filter(([key]) => key.startsWith(keyPrefix))
+      .map(([key, encodedValue]) => {
+        try {
+          const decoded = atob(encodedValue);
+          const parsed = JSON.parse(decoded);
+          return { id: key, data: parsed };
+        } catch (error) {
+          console.warn(`Error decoding value for key "${key}":`, error);
+          return null;
+        }
+      })
+      .filter((item): item is { id: string; data: any } => item !== null);
+
+  }
+
+  public getAppComponentData(key: string): object {
     let componentData;
     const storedComponents: object = this.getSessionUserComponentsData() || {};
     if (storedComponents[key]) {
