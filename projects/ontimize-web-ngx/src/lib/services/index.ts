@@ -36,3 +36,4 @@ export * from './request-adapter/index';
 export * from './name-convention/index';
 export * from './pagination-context.service';
 export * from './base-data-service.class';
+export * from './filter-manager.service';

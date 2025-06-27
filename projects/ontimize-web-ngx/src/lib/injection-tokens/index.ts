@@ -17,6 +17,7 @@ import { OMatErrorOptions } from "../types/o-mat-error.type";
 import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { IAuthService } from "../interfaces/auth-service.interface";
 import { IBaseRequestArgument } from "../services/request-adapter";
+import { IFilterManagerService } from "../interfaces/filter-manager.interface";
 
 
 /**
@@ -63,6 +64,7 @@ export const O_AUTH_SERVICE = new InjectionToken<IAuthService>('Authentication s
 */
 export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
 
+export const O_FILTER_MANAGER_SERVICE = new InjectionToken<IFilterManagerService>('o-table filter service');
 
 /**
 * Injection token that can be used to replace the component state service `DefaultComponentStateService`.
