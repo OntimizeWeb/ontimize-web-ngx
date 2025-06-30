@@ -121,4 +121,12 @@ export class OBooleanFormDataComponent extends OFormDataComponent {
   onClickBlocker(evt: Event) {
     evt.stopPropagation();
   }
+
+  getValue(): any {
+    if (Util.isDefined(this.value) && this.value.value !== undefined) {
+      return this.value.value ? this.trueValue : this.falseValue;
+    } else {
+      return this.defaultValue;
+    }
+  }
 }
