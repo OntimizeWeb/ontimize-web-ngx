@@ -1,3 +1,7 @@
+## 15.5.7 (2025-06-30)
+### Bug Fixes
+- **o-checkbox:** fixed value emission when using `boolean-type="string"`. The checkbox now correctly emits `"S"` and `"N"` as defined by `true-value`/`false-value`, instead of `true`/`false`. ([9f8033b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9f8033b)) Closes [#1929](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1929)
+
 ## 15.5.6 (2025-06-06)
 ### Bug fixes
 * **o-table**:
