@@ -111,7 +111,8 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     console.log('queryById ', queryParams);
     queryParams = this.parseNameConventionQueryParams(queryParams);
 
-    const url = this.getURL(queryParams.filter);
+    const serializedId = this.serializeCompositeKey(queryParams.filter);
+    const url = `${this.urlBase}${this.path}/${serializedId}`;
 
     return this.doRequest({
       method: 'GET',
@@ -121,15 +122,12 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  private getURL(filter: object) {
-    const id = Object.values(filter)[0];
-    let url = `${this.urlBase}${this.path}/`;
-    if (Object.keys(filter).length === 1) {
-      url += `${id}?${Util.objectToQueryString(filter)}`;
-    } else {
-      url += `?${Util.objectToQueryString(filter)}`;
+
+  private serializeCompositeKey(keyObj: string | object, delimiter: string = '_'): string {
+    if (typeof keyObj === 'string') {
+      return keyObj; // If it's already a string, return it as is
     }
-    return url;
+    return Object.values(keyObj).join(delimiter);
   }
 
   protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
@@ -169,13 +167,15 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  update(id: string, attributes: object, type: string): Observable<JSONAPIResponse> {
+  update(id: string | object, attributes: object, type: string): Observable<JSONAPIResponse> {
 
-    const url = `${this.urlBase}${this.path}/${id}`;
+    const serializedId = this.serializeCompositeKey(id);
+    const url = `${this.urlBase}${this.path}/${serializedId}`;
+
 
     attributes = this.nameConvention.parseDataToNameConvention(attributes);
 
-    let data = { ...{ attributes: attributes }, ...{ id: id }, ...{ type: type } };
+    let data = { ...{ attributes: attributes }, ...{ id: serializedId }, ...{ type: type } };
 
     const body = JSON.stringify({
       data: data
@@ -190,8 +190,9 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  delete(id: object): Observable<JSONAPIResponse> {
-    const url = this.getURL(id)
+  delete(id:  object): Observable<JSONAPIResponse> {
+    const serializedId = this.serializeCompositeKey(id);
+    const url = `${this.urlBase}${this.path}/${serializedId}`;
 
     return this.doRequest({
       method: 'DELETE',
@@ -200,6 +201,4 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
       errorCallBack: this.parseUnsuccessfulDeleteResponse
     });
   }
-
-
 }

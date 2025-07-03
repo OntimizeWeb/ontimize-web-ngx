@@ -1284,8 +1284,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     const self = this;
     const observable = new Observable(observer => {
-      const id = this.dataService.requestArgumentAdapter.getIdFromFilter(filter);
-      this.dataService[this.updateMethod](id, values, this.entity, sqlTypes).subscribe(
+      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             observer.next(resp.data);
@@ -1340,8 +1339,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const sqlTypes = this.getAttributesSQLTypes();
     const observable = new Observable(observer => {
       this.canDiscardChanges = true;
-      const id = this.dataService.requestArgumentAdapter.getIdFromFilter(filter);
-      this.dataService[this.deleteMethod](id, this.entity, sqlTypes).subscribe(
+      this.dataService[this.deleteMethod](filter, this.entity, sqlTypes).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             self.formCache.setCacheSnapshot();
