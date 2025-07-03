@@ -6,3 +6,9 @@ export type ServiceConfigType = {
     serviceType?: string;
   };
 };
+export type OntimizeServiceConfigType = ServiceConfigType;
+
+export type JSONAPIServiceConfigType = ServiceConfigType & {
+  delimiter?: string;
+};
+

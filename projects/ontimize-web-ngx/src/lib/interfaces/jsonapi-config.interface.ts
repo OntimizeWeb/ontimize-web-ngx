@@ -1,4 +1,4 @@
 
 export type IJsonApiConfig = {
-  delimiter: string;
+  multipleKeyDelimiter: string;
 };

@@ -15,6 +15,7 @@ import { IJsonApiConfig } from '../../interfaces/jsonapi-config.interface';
 export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements IAuthService {
   protected _startSessionPath: string;
   protected config: AppConfig;
+  private readonly DEFAULT_DELIMITER = '_';
   delimiter: string;
 
 
@@ -22,7 +23,7 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     super(injector);
     this.config = this.injector.get(AppConfig);
     const config = inject<IJsonApiConfig>(O_JSON_API_CONFIG);
-    this.delimiter = config?.delimiter || '_';
+    this.delimiter = config?.multipleKeyDelimiter || this.DEFAULT_DELIMITER;
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
@@ -91,6 +92,17 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
+    this.delimiter = this.getValidDelimiter(config.multipleKeyDelimiter || this.delimiter);
+  }
+
+
+  private getValidDelimiter(delimiter?: string): string {
+
+    if (!delimiter || !/^[_-]$/.test(delimiter)) {
+      console.warn(`Delimiter '${delimiter}' is not valid for URL, defaulting to '${this.DEFAULT_DELIMITER}'.`);
+      return this.DEFAULT_DELIMITER
+    }
+    return delimiter;
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
@@ -160,7 +172,7 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
 
     let data = { attributes: attributes, type: type };
     const body = JSON.stringify({
-      data:  data
+      data: data
     });
 
     return this.doRequest({
@@ -195,7 +207,7 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  delete(id:  object): Observable<JSONAPIResponse> {
+  delete(id: object): Observable<JSONAPIResponse> {
     const serializedId = this.serializeCompositeKey(id);
     const url = `${this.urlBase}${this.path}/${serializedId}`;
 
