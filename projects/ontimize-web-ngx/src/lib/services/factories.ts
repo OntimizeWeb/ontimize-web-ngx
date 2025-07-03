@@ -10,7 +10,8 @@ import {
   O_FILE_SERVICE,
   O_LOCALSTORAGE_SERVICE,
   O_PERMISSION_SERVICE,
-  O_RESPONSE_ADAPTER
+  O_RESPONSE_ADAPTER,
+  O_REQUEST_ADAPTER
 } from '../injection-tokens';
 import { IExportDataProvider } from '../interfaces/export-data-provider.interface';
 import { IExportService } from '../interfaces/export-service.interface';
@@ -124,6 +125,14 @@ export function exportDataFactory(injector: Injector): IExportDataProvider {
 
 }
 export function serviceRequestAdapterFactory(injector: Injector): IBaseRequestArgument {
+
+  const serviceClass = _getInjectionTokenValue(O_REQUEST_ADAPTER, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
+
+  if (Util.isDefined(service)) {
+    return service;
+  }
+
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
     Util.isOntimizeEEService(injector)) {

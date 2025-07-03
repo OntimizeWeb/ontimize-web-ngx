@@ -29,7 +29,6 @@ import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPU
 import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
-
   // attr [string]: column name.
   'attr',
 
@@ -90,6 +89,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   'angularValidatorsFnErrors: validators-errors',
 
   'angularAsyncValidatorsFn: async-validators',
+  'valueColumn: value-column',
 
   ...O_TABLE_CELL_RENDERERS_INPUTS,
   ...O_TABLE_CELL_EDITORS_INPUTS
@@ -106,10 +106,9 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   styleUrls: ['./o-table-column.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
-  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN
+  outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
 })
 export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, AfterViewInit {
-
   public renderer: any;
   public editor: any;
 
@@ -134,6 +133,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   tooltipValue: string;
   tooltipFunction: (rowData: any) => any;
   public class: string;
+  public valueColumn: string;
 
   set multiline(val: boolean) {
     val = Util.parseBoolean(String(val));
@@ -189,7 +189,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   protected entity: string;
   protected service: string;
   protected columns: string;
-  protected valueColumn: string;
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
@@ -299,7 +298,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
     const pxVal = Util.extractPixelsValue(originalWidth);
     if (Util.isDefined(pxVal)) {
       originalWidth = pxVal + '';
-
     }
     return originalWidth;
   }
@@ -378,7 +376,6 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
             break;
         }
         this.registerRenderer(newRenderer);
-
       }
     }
   }
@@ -433,8 +430,12 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
         case 'percentage':
         case 'currency':
         case 'real':
-          editor.min = propsOrigin.min;
-          editor.max = propsOrigin.max;
+          if (Util.isDefined(propsOrigin.min)) {
+            editor.min = propsOrigin.min;
+          }
+          if (Util.isDefined(propsOrigin.max)) {
+            editor.max = propsOrigin.max;
+          }
           editor.step = Util.isDefined(propsOrigin.step) ? propsOrigin.step : editor.step;
           break;
         case 'image':

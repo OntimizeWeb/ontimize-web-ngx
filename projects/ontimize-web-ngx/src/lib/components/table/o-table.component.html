@@ -194,7 +194,7 @@
       </ng-container>
       <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="column.name+ getSuffixColumnInsertable()">
 
-        <td mat-footer-cell *matFooterCellDef [ngClass]="column.className">
+        <td mat-footer-cell *matFooterCellDef [ngClass]="[column.className, getCellAlignClass(column)]">
           <ng-container *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
             <mat-form-field class="insertable-form-field o-table-cell-editor-text o-table-cell-editor" [hideRequiredMarker]="false">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"
@@ -222,7 +222,7 @@
       </ng-container>
       <ng-container *ngFor="let column of oTableOptions.columns" [matColumnDef]="getColumnInsertable(column.name)">
 
-        <td mat-header-cell *matHeaderCellDef [ngClass]="column.className">
+        <td mat-header-cell *matHeaderCellDef [ngClass]="[column.className, getCellAlignClass(column)]">
           <ng-container *ngIf="oTableInsertableRowComponent.isColumnInsertable(column) && !oTableInsertableRowComponent.useCellEditor(column)">
             <mat-form-field class="insertable-form-field" [hideRequiredMarker]="false">
               <input matInput type="text" [placeholder]="oTableInsertableRowComponent.getPlaceholder(column)" [id]="column.attr"

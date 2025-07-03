@@ -377,7 +377,7 @@ export class OBaseTableCellEditor implements OnInit, ComponentWithValidatorsAndE
   }
 
   getErrorValue(error: string, prop: string): string {
-    return this.formControl.hasError(error) ? this.formControl.getError(error)[prop] || '' : '';
+    return this.formControl.hasError(error) ? this.formControl.getError(error)[prop] ?? '' : '';
   }
 
   onEscClicked() {

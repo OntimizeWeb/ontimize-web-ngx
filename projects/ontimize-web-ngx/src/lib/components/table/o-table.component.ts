@@ -5,6 +5,7 @@ import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import {
   AfterContentInit,
+  AfterViewChecked,
   AfterViewInit,
   ApplicationRef,
   ChangeDetectionStrategy,
@@ -104,6 +105,9 @@ import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.int
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
+import { MatRow } from '@angular/material/table';
+import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
+
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
@@ -258,6 +262,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     OTableDataSourceService,
+    OTableFilterByColumnService,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
     { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) }
@@ -281,7 +286,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     '(document:click)': 'handleDOMClick($event)'
   }
 })
-export class OTableComponent extends AbstractOServiceComponent<OTableComponentStateService> implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
+export class OTableComponent extends AbstractOServiceComponent<OTableComponentStateService> implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit, AfterContentInit {
   public static DEFAULT_BASE_SIZE_SPINNER = 100;
   public static FIRST_LAST_CELL_PADDING = 24;
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
@@ -299,6 +304,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   dblclickSubject = new Subject<{ row: any, column: any, cellRef: any, rowIndex: number, event: MouseEvent }>();
   protected clickSubjectSubscription: Subscription;
   protected dbClickSubjectSubscription: Subscription;
+  protected rowChangeSubscription: Subscription;
+  refreshExpandableRowState = false;
+
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -342,8 +350,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   _filterColumns: Array<OFilterColumn>;
   portalHost: Array<DomPortalOutlet> = [];
   onDataLoadedCellRendererSubscription: Subscription;
-
-
 
   public tableContextMenu: OContextMenuComponent;
 
@@ -502,8 +508,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   set visibleColArray(arg: any[]) {
-    const permissionsBlocked = this.permissions && this.permissions.columns ? this.permissions.columns.filter(col => col.visible === false).map(col => col.attr) : [];
+    const permissionsBlocked = this.permissions?.columns?.filter(col => col.visible === false).map(col => col.attr) ?? [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
+
     this._visibleColArray = permissionsChecked;
     if (this._oTableOptions) {
       const containsSelectionCol = this._oTableOptions.visibleColumns.indexOf(Codes.NAME_COLUMN_SELECT) !== -1;
@@ -612,6 +619,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableHeaderEl: ElementRef;
   @ViewChild('tableToolbar', { read: ElementRef })
   tableToolbarEl: ElementRef;
+
+  @ViewChildren(MatRow) rows!: QueryList<MatRow>;
 
   horizontalScrolled: boolean;
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
@@ -767,16 +776,27 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
 
     if (this.tableRowExpandable) {
-      this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, []);
+      this.expandableItem = new SelectionModel<any>(this.tableRowExpandable.multiple, [], true, this.compareRow());
       this.createExpandableColumn();
+      this.expandableItem.changed.subscribe((change) => {
+        this.saveRowExpandState(change.added, change.removed);
+      });
     }
+    this.rowChangeSubscription = this.rows.changes.subscribe(() => {
+      this.handleTableDataChange();
+    });
+
+
   }
 
   ngAfterContentInit() {
     if (this.tableColumnSelectAllContentChild) {
-      //
       this.setCustomDefinitionInSelectColumn(this.tableColumnSelectAllContentChild)
     }
+  }
+
+  handleTableDataChange() {
+    this.restoreExpandableRowState();
   }
 
   setCustomDefinitionInSelectColumn(definition: OTableColumnSelectAllDirective) {
@@ -1086,6 +1106,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.dbClickSubjectSubscription) {
       this.dbClickSubjectSubscription.unsubscribe();
     }
+    if (this.rowChangeSubscription) {
+      this.rowChangeSubscription.unsubscribe();
+    }
 
     Object.keys(this.asyncLoadSubscriptions).forEach(idx => {
       if (this.asyncLoadSubscriptions[idx]) {
@@ -1220,6 +1243,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   parseVisibleColumns(defaultConfiguration: boolean = false) {
     if (this.state.columnsDisplay) {
+
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols: OColumnDisplay[] = [];
       this.state.columnsDisplay.forEach((oCol, index) => {
@@ -1244,6 +1268,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       });
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
+
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
@@ -1410,12 +1435,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateStateExpandedColumn() {
-    if (!this.tableRowExpandable || !this.tableRowExpandable.expandableColumnVisible) { return; }
-    if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT && this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
-      this._oTableOptions.visibleColumns = [this._oTableOptions.visibleColumns[0]].concat(Codes.NAME_COLUMN_EXPANDABLE, this._oTableOptions.visibleColumns.splice(1));
+    if (!this.tableRowExpandable?.expandableColumnVisible) {
+      return;
+    }
+
+    if (this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT &&
+      this._oTableOptions.visibleColumns[1] !== Codes.NAME_COLUMN_EXPANDABLE) {
+      this._oTableOptions.visibleColumns.splice(1, 0, Codes.NAME_COLUMN_EXPANDABLE);
     } else if (this._oTableOptions.visibleColumns[0] !== Codes.NAME_COLUMN_EXPANDABLE) {
       this._oTableOptions.visibleColumns.unshift(Codes.NAME_COLUMN_EXPANDABLE);
     }
+
   }
 
   registerTabListener() {
@@ -1538,8 +1568,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (isCollapsed) {
       this.tableRowExpandable.onCollapsed.emit(eventTableRowExpandableChange);
     } else {
+      const containerElement = this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex));
       this.portalHost[rowIndex] = new DomPortalOutlet(
-        this.elRef.nativeElement.querySelector('.' + this.getExpandedRowContainerClass(rowIndex)),
+        containerElement,
         null,
         this.appRef,
         this.injector
@@ -1549,7 +1580,50 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.portalHost[rowIndex].attachTemplatePortal(templatePortal);
       this.tableRowExpandable.onExpanded.emit(eventTableRowExpandableChange);
     }
+
   }
+
+  saveRowExpandState(added: any[], removed: any[]) {
+    let state = this.state.expandableRows ?? [];
+
+    const extractKeys = (item: any) =>
+      Object.fromEntries(Object.entries(item).filter(([key]) => this.keysArray.includes(key)));
+
+    const isSameRow = this.compareRow();
+
+    // Add expandable items
+    if (added?.length) {
+      added.forEach(item => {
+        const rowIndex = this.getValue().findIndex(row => isSameRow(row, item));
+        const alreadyExists = state.some(stateItem => isSameRow(stateItem.keys, item));
+
+        if (rowIndex !== -1 && !alreadyExists) {
+          state.push({ keys: extractKeys(item) });
+        }
+      });
+    }
+
+    // Delete expandable items
+    if (removed?.length) {
+      removed.forEach(item => {
+        const indexToRemove = state.findIndex(stateItem => isSameRow(stateItem.keys, item));
+        if (indexToRemove !== -1) {
+          state.splice(indexToRemove, 1);
+        }
+      });
+    }
+
+    this.state.expandableRows = state;
+  }
+
+  destroyAllPortalHosts(): void {
+    this.portalHost.forEach(host => {
+      if (host.hasAttached()) {
+        host.detach();   // Detach the portal content
+      }
+    });
+  }
+
   /**
    * Toggles row expandable by row index
    * @param rowIndex
@@ -1559,8 +1633,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const item = this.getValue()[rowIndex];
     this.toggleRowExpandable(item, event);
   }
-
-
 
   private emitTableRowExpandableChangeEvent(data, rowIndex) {
     const event = new OTableRowExpandedChange();
@@ -1610,6 +1682,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.pendingQueryFilter = undefined;
 
     this.queryCellRenderers().subscribe(() => {
+      // Clean up existing portal hosts before re-rendering to prevent duplicate or orphaned components
+      this.destroyAllPortalHosts();
       super.queryData(filter, ovrrArgs);
     });
   }
@@ -1755,6 +1829,30 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
       this.checkSelectedItemData();
+    }
+
+    if (this.refreshExpandableRowState) {
+      this.refreshExpandableRowState = false;
+      const selectionItems = this.state.expandableRows?.slice() || []
+      this.expandableItem?.clear();
+      this.state.expandableRows = selectionItems;
+      this.restoreExpandableRowState();
+    }
+
+  }
+
+  restoreExpandableRowState(): void {
+    if (this.tableRowExpandable && this.state?.expandableRows) {
+      this.state.expandableRows.forEach(expandableRow => {
+        const data = this.getRenderedValue();;
+        if (data.length > 0) {
+
+          const rowIndex = data.findIndex((row) => this.keysArray.every(key => row[key] === expandableRow.keys[key]));
+          if (data.length > rowIndex) {
+            this.toggleRowExpandable(data[rowIndex]);
+          }
+        }
+      });
     }
   }
 
@@ -1918,10 +2016,24 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Reloads data
    */
   reloadData(clearSelectedItems: boolean = true) {
+    this.reloadDataWithClearExpandableRows(clearSelectedItems, clearSelectedItems)
+  }
+
+  reloadDataWithClearExpandableRows(clearSelectedItems: boolean = true, clearExpandableItems: boolean = true) {
     if (!this.checkEnabledActionPermission(PermissionsUtils.ACTION_REFRESH)) {
       return;
     }
+
+    if (this.tableRowExpandable) {
+      if (clearExpandableItems) {
+        this.expandableItem?.clear();
+      } else {
+        this.refreshExpandableRowState = true;
+      }
+    }
+
     this.componentStateService.refreshSelection();
+
     if (clearSelectedItems) {
       this.clearSelection();
     }
@@ -3457,5 +3569,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   getSnackService() {
     return this.snackBarService;
+  }
+
+  /**
+ * Resolves the data source type for filtering based on table filter component state.
+ * It prioritizes specific component values and falls back to pageable state.
+ *
+ * @returns 'current-page' | 'all-data'
+ */
+  getSourceDataByFilterColumn(column:OColumn): 'current-page' | 'all-data' {
+    return (
+      this.oTableColumnsFilterComponent?.getFilterValuesInData(column.attr) ||
+      (this.oTableColumnsFilterComponent?.filterValuesInData  ||
+       'current-page')
+    );
   }
 }

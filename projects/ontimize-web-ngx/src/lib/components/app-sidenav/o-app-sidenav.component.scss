@@ -32,6 +32,7 @@ $transition-duration: 500ms;
   .o-app-sidenav-menu-item {
     a {
       margin-left: $margin-left-buttom;
+
       .mat-icon {
         svg {
           display: flex;
@@ -100,6 +101,8 @@ $transition-duration: 500ms;
       bottom: 0;
       overflow: auto;
       height: 100%;
+      display: flex;
+
 
       &:not(.mat-drawer-closed) {
         .o-app-sidenav-menugroup {
@@ -220,110 +223,136 @@ $transition-duration: 500ms;
         }
       }
 
-      .mat-drawer-inner-container {
-        padding-bottom: 16px;
 
-        .sidenav-toggle-container {
-          height: 48px;
+
+
+      &.ellipsis-menu-items {
+        display: block;
+
+        .mat-drawer-inner-container {
+          display: block;
         }
 
-        nav {
-          a {
-            border-radius: 0;
-            box-sizing: border-box;
-            display: block;
-            line-height: 48px;
-            height: auto;
-            font-size: 14px;
-
-
-            >.mat-icon {
-              vertical-align: middle;
-              height: 24px;
-              width: 24px;
-              font-size: 24px;
-            }
-          }
-        }
-
-        ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-
-          li {
-            margin: 0;
-            padding: 0;
-          }
-        }
-
-        .sidenav-toggle {
-          padding: 4px 12px 8px;
-          cursor: pointer;
-        }
-
-        /* Side Navigation Level Styles */
-        .o-app-sidenav-menu-group-level-1 a {
-          font-size: 14px;
-          line-height: 48px;
-          height: 48px;
-
-          +.o-app-sidenav-menugroup-items-container {
-
-            .o-app-sidenav-menu-group,
-            .o-app-sidenav-menu-item {
-              a {
-                font-size: 12px;
-                line-height: 40px;
-                height: 40px;
-
-                .mat-mdc-button-touch-target {
-                  height: 40px;
-                }
-              }
-            }
-          }
-        }
-
-        .o-app-sidenav-menu-group-level-2 a {
-          font-size: 12px;
-          line-height: 40px;
-          height: 40px;
-
-          .mat-mdc-button-touch-target {
-            height: 40px;
-          }
-
-          +.o-app-sidenav-menugroup-items-container {
-
-            .o-app-sidenav-menu-group,
-            .o-app-sidenav-menu-item {
-              a {
-                font-size: 11px;
-                line-height: 40px;
-                height: 40px;
-
-                .mat-mdc-button-touch-target {
-                  height: 40px;
-                }
-
-                .mat-icon {
-                  font-size: 20px;
-                  height: 20px;
-                  width: 20px;
-                }
-              }
-            }
-          }
-        }
-
-        .o-app-sidenav-menugroup-arrow {
-          display: flex;
+        .sidenav-wrapper {
+          height: 100%;
+          width: 100%;
+          padding-bottom: 16px;
         }
       }
 
+      .mat-drawer-inner-container {
 
+        display: flex;
+
+        .sidenav-wrapper {
+          flex: 1;
+        }
+      }
+
+      .o-app-sidenav-content-container {
+        padding-bottom: 16px;
+      }
+
+      .sidenav-toggle-container {
+        height: 48px;
+      }
+
+      nav {
+        a {
+          border-radius: 0;
+          box-sizing: border-box;
+          display: block;
+          line-height: 48px;
+          height: auto;
+          font-size: 14px;
+
+
+          >.mat-icon {
+            vertical-align: middle;
+            height: 24px;
+            width: 24px;
+            font-size: 24px;
+          }
+        }
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .sidenav-toggle {
+        padding: 4px 12px 8px;
+        cursor: pointer;
+      }
+
+      /* Side Navigation Level Styles */
+      .o-app-sidenav-menu-group-level-1 a {
+        font-size: 14px;
+        line-height: 48px;
+        height: 48px;
+
+        +.o-app-sidenav-menugroup-items-container {
+
+          .o-app-sidenav-menu-group,
+          .o-app-sidenav-menu-item {
+            a {
+              font-size: 12px;
+              line-height: 40px;
+              height: 40px;
+
+              .mat-mdc-button-touch-target {
+                height: 40px;
+              }
+            }
+          }
+        }
+      }
+
+      .o-app-sidenav-menu-group-level-2 a {
+        font-size: 12px;
+        line-height: 40px;
+        height: 40px;
+
+        .mat-mdc-button-touch-target {
+          height: 40px;
+        }
+
+        +.o-app-sidenav-menugroup-items-container {
+
+          .o-app-sidenav-menu-group,
+          .o-app-sidenav-menu-item {
+            a {
+              font-size: 11px;
+              line-height: 40px;
+              height: 40px;
+
+              .mat-mdc-button-touch-target {
+                height: 40px;
+              }
+
+              .mat-icon {
+                font-size: 20px;
+                height: 20px;
+                width: 20px;
+              }
+            }
+          }
+        }
+      }
+
+      .o-app-sidenav-menugroup-arrow {
+        display: flex;
+      }
     }
-  }
 
+
+  }
 }
+
