@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable, Injector } from '@angular/core';
 import { Observable, share } from 'rxjs';
 
 import { AppConfig } from '../../config/app-config';
@@ -8,15 +8,21 @@ import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { Util } from '../../util/util';
 import { BaseDataService } from '../base-data-service.class';
+import { O_JSON_API_CONFIG } from '../../injection-tokens';
+import { IJsonApiConfig } from '../../interfaces/jsonapi-config.interface';
 
 @Injectable()
 export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements IAuthService {
   protected _startSessionPath: string;
   protected config: AppConfig;
+  delimiter: string;
+
 
   constructor(protected injector: Injector) {
     super(injector);
     this.config = this.injector.get(AppConfig);
+    const config = inject<IJsonApiConfig>(O_JSON_API_CONFIG);
+    this.delimiter = config?.delimiter || '_';
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
@@ -108,7 +114,6 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   }
 
   queryById(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
-    console.log('queryById ', queryParams);
     queryParams = this.parseNameConventionQueryParams(queryParams);
 
     const serializedId = this.serializeCompositeKey(queryParams.filter);
@@ -123,11 +128,11 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   }
 
 
-  private serializeCompositeKey(keyObj: string | object, delimiter: string = '_'): string {
+  private serializeCompositeKey(keyObj: string | object): string {
     if (typeof keyObj === 'string') {
       return keyObj; // If it's already a string, return it as is
     }
-    return Object.values(keyObj).join(delimiter);
+    return Object.values(keyObj).join(this.delimiter);
   }
 
   protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {

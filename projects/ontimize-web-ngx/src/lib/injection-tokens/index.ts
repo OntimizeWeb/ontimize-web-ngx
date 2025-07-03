@@ -16,6 +16,7 @@ import { OErrorDialogManager } from "../services/o-error-dialog-manager.service"
 import { OMatErrorOptions } from "../types/o-mat-error.type";
 import { IExportDataProvider } from "../interfaces/export-data-provider.interface";
 import { IAuthService } from "../interfaces/auth-service.interface";
+import { IJsonApiConfig } from "../interfaces/jsonapi-config.interface";
 
 
 /**
@@ -75,3 +76,5 @@ export const O_EXPORT_DATA_SERVICE = new InjectionToken<IExportDataProvider>('Ex
 export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
 
 export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
+
+export const O_JSON_API_CONFIG = new InjectionToken<IJsonApiConfig>('JsonApiConfig');

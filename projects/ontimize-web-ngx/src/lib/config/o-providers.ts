@@ -27,7 +27,7 @@ import { Error403Component } from '../shared/components/error403/o-error-403.com
 import { Config } from '../types/config.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
-import { O_MAT_ERROR_OPTIONS } from '../injection-tokens';
+import { O_JSON_API_CONFIG, O_MAT_ERROR_OPTIONS } from '../injection-tokens';
 
 function addPermissionsRouteGuard(injector: Injector) {
   const route = injector.get(Router);
@@ -100,5 +100,6 @@ export const ONTIMIZE_PROVIDERS: Provider[] = [
   // disabled global ripple
   { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: { disabled: true } },
   { provide: O_MAT_ERROR_OPTIONS, useValue: {} },
-  { provide: O_INPUTS_OPTIONS, useValue: {} }
+  { provide: O_INPUTS_OPTIONS, useValue: {} },
+  { provide: O_JSON_API_CONFIG, useValue: {} }
 ];
