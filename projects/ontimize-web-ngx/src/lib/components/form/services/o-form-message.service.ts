@@ -24,13 +24,13 @@ export class OFormMessageService {
   }
 
   getDeleteConfirmationMessage(): string {
-    return 'MESSAGES.CONFIRM_DELETE';
+    return 'MESSAGES.CONFIRM_DELETE_ITEM';
   }
 
   getDeleteConfirmationDialogTitle(): string {
     return 'CONFIRM';
   }
-  
+
   getInsertSuccessMessage(): string {
     return 'MESSAGES.INSERTED';
   }
