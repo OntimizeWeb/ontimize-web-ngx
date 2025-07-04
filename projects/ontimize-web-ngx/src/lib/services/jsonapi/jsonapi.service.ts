@@ -15,7 +15,7 @@ import { IJsonApiConfig } from '../../interfaces/jsonapi-config.interface';
 export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements IAuthService {
   protected _startSessionPath: string;
   protected config: AppConfig;
-  private readonly DEFAULT_DELIMITER = '_';
+  protected readonly DEFAULT_DELIMITER = '_';
   delimiter: string;
 
 
@@ -96,7 +96,7 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   }
 
 
-  private getValidDelimiter(delimiter?: string): string {
+  protected getValidDelimiter(delimiter?: string): string {
 
     if (!delimiter || !/^[_-]$/.test(delimiter)) {
       console.warn(`Delimiter '${delimiter}' is not valid for URL, defaulting to '${this.DEFAULT_DELIMITER}'.`);
@@ -140,10 +140,33 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   }
 
 
-  private serializeCompositeKey(keyObj: string | object): string {
-    if (typeof keyObj === 'string') {
-      return keyObj; // If it's already a string, return it as is
+  protected serializeCompositeKey(keyObj: string | object): string {
+    if (keyObj == null) {
+      console.warn('JSONAPI Service: Key object is null or undefined.');
+      return '';
     }
+
+    if (typeof keyObj === 'string') {
+      if (keyObj.trim() === '') {
+        console.warn('JSONAPI Service: Key string is empty.');
+      }
+      return keyObj;
+    }
+
+    const values = Object.values(keyObj);
+
+    if (values.length === 0) {
+      console.warn('JSONAPI Service: Key object has no properties.');
+      return '';
+    }
+
+    for (const val of values) {
+      if (val == null) {
+        console.warn('JSONAPI Service: Key object contains null or undefined value.');
+      }
+    }
+
+
     return Object.values(keyObj).join(this.delimiter);
   }
 

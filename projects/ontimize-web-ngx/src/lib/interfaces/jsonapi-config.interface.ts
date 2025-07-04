@@ -1,4 +1,4 @@
 
-export type IJsonApiConfig = {
+export interface IJsonApiConfig  {
   multipleKeyDelimiter: string;
 };
