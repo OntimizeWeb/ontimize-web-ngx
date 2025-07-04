@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable, Injector } from '@angular/core';
 import { Observable, share } from 'rxjs';
 
 import { AppConfig } from '../../config/app-config';
@@ -8,15 +8,22 @@ import { JSONAPIResponse } from '../../interfaces/jsonapi-response.interface';
 import { JSONAPIQueryParameter } from '../../types/json-query-parameter.type';
 import { Util } from '../../util/util';
 import { BaseDataService } from '../base-data-service.class';
+import { O_JSON_API_CONFIG } from '../../injection-tokens';
+import { IJsonApiConfig } from '../../interfaces/jsonapi-config.interface';
 
 @Injectable()
 export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements IAuthService {
   protected _startSessionPath: string;
   protected config: AppConfig;
+  protected readonly DEFAULT_DELIMITER = '_';
+  delimiter: string;
+
 
   constructor(protected injector: Injector) {
     super(injector);
     this.config = this.injector.get(AppConfig);
+    const config = inject<IJsonApiConfig>(O_JSON_API_CONFIG);
+    this.delimiter = config?.multipleKeyDelimiter || this.DEFAULT_DELIMITER;
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
@@ -85,6 +92,17 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path;
+    this.delimiter = this.getValidDelimiter(config.multipleKeyDelimiter ?? this.delimiter);
+  }
+
+
+  protected getValidDelimiter(delimiter?: string): string {
+
+    if (!delimiter || !/^[_-]$/.test(delimiter)) {
+      console.warn(`Delimiter '${delimiter}' is not valid for URL, defaulting to '${this.DEFAULT_DELIMITER}'.`);
+      return this.DEFAULT_DELIMITER
+    }
+    return delimiter;
   }
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
@@ -108,12 +126,10 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   }
 
   queryById(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
-
     queryParams = this.parseNameConventionQueryParams(queryParams);
 
-    const id = Object.values(queryParams.filter)[0];
-
-    const url = `${this.urlBase}${this.path}/${id}?${Util.objectToQueryString(queryParams)}`;
+    const serializedId = this.serializeCompositeKey(queryParams.filter);
+    const url = `${this.urlBase}${this.path}/${serializedId}`;
 
     return this.doRequest({
       method: 'GET',
@@ -121,6 +137,37 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
       successCallback: this.parseSuccessfulQueryResponse,
       errorCallBack: this.parseUnsuccessfulQueryResponse,
     });
+  }
+
+
+  protected serializeCompositeKey(keyObj: string | object): string {
+    if (keyObj == null) {
+      console.warn('JSONAPI Service: Key object is null or undefined.');
+      return '';
+    }
+
+    if (typeof keyObj === 'string') {
+      if (keyObj.trim() === '') {
+        console.warn('JSONAPI Service: Key string is empty.');
+      }
+      return keyObj;
+    }
+
+    const values = Object.values(keyObj);
+
+    if (values.length === 0) {
+      console.warn('JSONAPI Service: Key object has no properties.');
+      return '';
+    }
+
+    for (const val of values) {
+      if (val == null) {
+        console.warn('JSONAPI Service: Key object contains null or undefined value.');
+      }
+    }
+
+
+    return Object.values(keyObj).join(this.delimiter);
   }
 
   protected parseNameConventionQueryParams(queryParams: JSONAPIQueryParameter): JSONAPIQueryParameter {
@@ -148,7 +195,7 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
 
     let data = { attributes: attributes, type: type };
     const body = JSON.stringify({
-      data:  data
+      data: data
     });
 
     return this.doRequest({
@@ -160,13 +207,15 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  update(id: string, attributes: object, type: string): Observable<JSONAPIResponse> {
+  update(id: string | object, attributes: object, type: string): Observable<JSONAPIResponse> {
 
-    const url = `${this.urlBase}${this.path}/${id}`;
+    const serializedId = this.serializeCompositeKey(id);
+    const url = `${this.urlBase}${this.path}/${serializedId}`;
+
 
     attributes = this.nameConvention.parseDataToNameConvention(attributes);
 
-    let data = { ...{ attributes: attributes }, ...{ id: id }, ...{ type: type } };
+    let data = { ...{ attributes: attributes }, ...{ id: serializedId }, ...{ type: type } };
 
     const body = JSON.stringify({
       data: data
@@ -181,8 +230,9 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
     });
   }
 
-  delete(id: string): Observable<JSONAPIResponse> {
-    const url = `${this.urlBase}${this.path}/${id}`;
+  delete(id: object): Observable<JSONAPIResponse> {
+    const serializedId = this.serializeCompositeKey(id);
+    const url = `${this.urlBase}${this.path}/${serializedId}`;
 
     return this.doRequest({
       method: 'DELETE',
@@ -191,6 +241,4 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
       errorCallBack: this.parseUnsuccessfulDeleteResponse
     });
   }
-
-
 }

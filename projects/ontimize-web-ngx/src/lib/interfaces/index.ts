@@ -43,4 +43,5 @@ export * from './pagination-context.interface'
 export * from './form-layout-manager.interface';
 export * from './base-response.interface';
 export * from './service-response.interface';
+export * from './jsonapi-config.interface'
 export * from './jsonapi-response.interface';

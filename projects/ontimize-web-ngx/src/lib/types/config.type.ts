@@ -3,7 +3,7 @@ import { MenuRootItem } from './menu-root-item.type';
 import { OntimizeEEPermissionsConfig } from './ontimize-ee-permissions-config.type';
 import { OntimizePermissionsConfig } from './ontimize-permissions-config.type';
 import { ORemoteConfiguration } from './remote-configuration.type';
-import { ServiceConfigType } from './service-configuration.type';
+import { JSONAPIServiceConfigType, OntimizeServiceConfigType } from './service-configuration.type';
 
 export type Config = {
   // apiEndpoint [string]: The base path of the URL used by app services.
@@ -52,7 +52,7 @@ export type Config = {
   exportServiceType?: any;
 
   // servicesConfiguration: [Object]: Configuration parameters of application services.
-  servicesConfiguration?: ServiceConfigType;
+  servicesConfiguration?: OntimizeServiceConfigType | JSONAPIServiceConfigType;
 
   // appMenuConfiguration?: MenuGroup[];
   appMenuConfiguration?: MenuRootItem[];
