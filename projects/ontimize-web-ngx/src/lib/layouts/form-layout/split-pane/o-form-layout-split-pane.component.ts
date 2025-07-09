@@ -105,7 +105,6 @@ export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayout
   setDetailComponent(compData: FormLayoutDetailComponentData) {
     this.data = compData;
     this.createComponent();
-    this.data.rendererSubject.next(true);
   }
 
   onResizeEnd(property: string, event: ResizeEvent, el: any): void {

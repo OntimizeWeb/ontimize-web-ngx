@@ -377,9 +377,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
     this.router.navigate(route, extras).
       then(() => {
-        if (!this.formLayoutManager) {
-          this.navigationService.isNavigating = false;
-        }
+        this.navigationService.isNavigating = false;
       })
       .catch(() => {
         console.error('Cannot match any routes. URL Segment: ', route);
@@ -412,10 +410,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
       return;
     }
-    if (this.navigationService.isNavigating) {
-      return;
 
-    }
     const zone = this.injector.get(NgZone);
     zone.run(async () => {
       const route = this.getItemModeRoute(item, 'detailFormRoute');
@@ -878,11 +873,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
-        if (((arg.previousIndex === void 0) || arg.previousIndex === 0) && this.formLayoutManager.navigationService.isNavigating) {
-          /* in the form-layout mode=tab, the only way to ensure that the component has been rendered is
-           when navigationService.isNavigating and comes previousIndex=0  */
-          arg.data.rendererSubject.next(true);
-        }
+
         this.checkViewPortSubject.next(true);
       });
 

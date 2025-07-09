@@ -425,16 +425,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       id: Util.randomNumber().toString(),
       label: context?.label || '',
       innerFormsInfo: {},
-      rendered: false,
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
-      rendererSubject: new BehaviorSubject(false)
     };
-    /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating. */
-    newDetailComp.rendererSubject.subscribe((renderer:boolean) => {
-      if (renderer) {
-        this.navigationService.isNavigating = !renderer;
-      }
-    });
 
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
@@ -498,10 +490,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       } else {
         this.reloadMainComponents();
       }
-    });
-    this.dialogRef.afterOpened().subscribe(() => {
-      detailComp.rendered = true;
-      detailComp.rendererSubject.next(true);
     });
   }
 
