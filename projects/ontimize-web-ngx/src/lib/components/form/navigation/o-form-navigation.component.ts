@@ -204,14 +204,26 @@ export class OFormNavigationComponent implements OnDestroy {
 
   last() {
     if (!this.queryConf || this.isLast()) {
-      const index = this.navigationData.length - 1;
-      this.move(index);
-    } else {
-      const offset = this.queryConf.totalRecordsNumber - this.queryConf.queryRows;
-      this.queryNavigationData(offset, this.queryConf.queryRows).then(() => {
-        this.move(this.navigationData.length - 1);
-      });
+      this.moveToLast();
+      return;
     }
+
+    const offset = this.queryConf.totalRecordsNumber - this.queryConf.queryRows;
+
+    if (offset < 0 || offset === this.queryConf.queryRecordOffset) {
+      // if the offset is negative or equal to the current offset, it means we are already at the last page
+      this.moveToLast();
+      return;
+    }
+
+    this.queryNavigationData(offset, this.queryConf.queryRows).then(() => {
+      this.moveToLast();
+    });
+  }
+
+  private moveToLast(): void {
+    const index = this.navigationData.length - 1;
+    this.move(index);
   }
 
   isFirst() {
