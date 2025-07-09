@@ -1,5 +1,3 @@
-import { BehaviorSubject } from "rxjs";
-
 export type FormLayoutInnerFormInfo = {
   modified: boolean;
   confirmOnExit: boolean;
