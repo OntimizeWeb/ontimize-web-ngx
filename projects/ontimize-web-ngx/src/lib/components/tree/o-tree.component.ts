@@ -194,7 +194,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   childreNodes: OTreeFlatNode[] = [];
   nodesArray: OTreeFlatNode[] = [];
   ancestors: any[] = [];
-  checklistSelection = new SelectionModel<OTreeFlatNode>(true, [], true, (sm1, sm2) => sm1.id === sm2.id);
 
   onNodeSelected: EventEmitter<any> = new EventEmitter();
   onNodeExpanded: EventEmitter<any> = new EventEmitter();
@@ -386,15 +385,15 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   /** Toggle the to-do item selection. Select/deselect all the descendants node */
   todoItemSelectionToggle(node: OTreeFlatNode): void {
-    this.checklistSelection.toggle(node);
+    this.selection.toggle(node);
 
     const descendants = this.treeControl.getDescendants(node);
-    this.checklistSelection.isSelected(node)
-      ? this.checklistSelection.select(...descendants)
-      : this.checklistSelection.deselect(...descendants);
+    this.selection.isSelected(node)
+      ? this.selection.select(...descendants)
+      : this.selection.deselect(...descendants);
 
     // Force update for the parent
-    descendants.every((child) => this.checklistSelection.isSelected(child));
+    descendants.every((child) => this.selection.isSelected(child));
     this.onNodeSelected.emit(node.data);
 
 
@@ -409,16 +408,16 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
       if (this.treeControl.isExpanded(node) && descendants.length > 0) {
         descAllSelected = descendants.every((child) =>
-          this.checklistSelection.isSelected(child)
+          this.selection.isSelected(child)
         );
-        descAllSelected ? this.checklistSelection.select(node) : this.checklistSelection.deselect(node);
+        descAllSelected ? this.selection.select(node) : this.selection.deselect(node);
         return descAllSelected;
       } else {
-        return this.checklistSelection.isSelected(node);
+        return this.selection.isSelected(node);
       }
 
     } else {
-      return this.checklistSelection.isSelected(node);
+      return this.selection.isSelected(node);
     }
 
   }
@@ -431,7 +430,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (node.expandable) {
       if (descendants.length > 0) {
         result = descendants.some((child) =>
-          this.checklistSelection.isSelected(child)
+          this.selection.isSelected(child)
         );
       }
     }
@@ -673,5 +672,82 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   public onItemDetailClick(node: OTreeFlatNode): void {
     this.handleItemClick(node.data);
+  }
+
+  get selection() {
+    if (!Util.isDefined(this._selection)) {
+      this._selection = new SelectionModel<any>(true, [], true, (sm1, sm2) => sm1.id === sm2.id);
+    }
+    return this._selection;
+  }
+
+  getSelectedItems(): any[] {
+    const selectedFlatNodes = this.selection.selected;
+
+    const getItemKey = (flatNode: OTreeFlatNode): string => {
+      if (flatNode.node?.getItemKey) {
+        return flatNode.node.getItemKey(flatNode.data);
+      } else if (flatNode.id != null) {
+        return flatNode.id.toString();
+      } else {
+        return flatNode.label;
+      }
+    };
+
+    const selectedKeys = new Set<string>(
+      selectedFlatNodes.map(flatNode => getItemKey(flatNode))
+    );
+
+    const nodeMap = new Map<string, any>();
+    const rootNodes: any[] = [];
+
+    for (const flatNode of selectedFlatNodes) {
+      const itemKey = getItemKey(flatNode);
+
+      const treeNode: any = flatNode.node
+        ? { ...flatNode.data }
+        : { label: flatNode.label };
+
+      nodeMap.set(itemKey, treeNode);
+
+      const parent = this.daoTree.flatNodeMap.get(flatNode);
+      if (parent) {
+        const parentKey = getItemKey(parent);
+
+        if (selectedKeys.has(parentKey)) {
+          if (!nodeMap.has(parentKey)) {
+            const parentTreeNode: any = parent.node
+              ? { ...parent.data }
+              : { label: parent.label };
+            nodeMap.set(parentKey, parentTreeNode);
+          }
+          const parentNode = nodeMap.get(parentKey);
+          if (!parentNode.children) {
+            parentNode.children = [];
+          }
+          parentNode.children.push(treeNode);
+
+          // Ensure it is added to rootNodes if its parent is not selected
+          const grandParent = this.daoTree.flatNodeMap.get(parent);
+          const grandParentKey = grandParent ? getItemKey(grandParent) : null;
+          if (!grandParent || !selectedKeys.has(grandParentKey)) {
+            if (!rootNodes.includes(nodeMap.get(parentKey))) {
+              rootNodes.push(nodeMap.get(parentKey));
+            }
+          }
+
+        } else {
+          rootNodes.push(treeNode);
+        }
+      } else {
+        rootNodes.push(treeNode);
+      }
+    }
+
+    return rootNodes;
+  }
+
+  getSelectedFlatNodes(): OTreeFlatNode[] {
+    return this.selection.selected;
   }
 }
