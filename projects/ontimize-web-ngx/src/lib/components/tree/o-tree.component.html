@@ -66,7 +66,7 @@
       <ng-container *ngIf="selectAllCheckboxVisible; else simpleLeafNodeTpl">
         <div class="node-wrapper">
           <mat-checkbox *ngIf="selectAllCheckboxVisible; else simpleLeafNodeTpl" [checked]="selection.isSelected(node)"
-            (click)="checkboxClicked($event)" (change)="todoLeafItemSelectionToggle(node)">
+            (click)="checkboxClicked($event)" (change)="todoLeafItemSelectionToggle(node)" (keyDown)="checkboxClicked($event)">
           </mat-checkbox>
           <ng-container [ngTemplateOutlet]="leafNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
           </ng-container>

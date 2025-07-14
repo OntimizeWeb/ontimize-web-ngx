@@ -683,42 +683,27 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   getSelectedItems(): any[] {
     const selectedFlatNodes = this.selection.selected;
-
-    const getItemKey = (flatNode: OTreeFlatNode): string => {
-      if (flatNode.node?.getItemKey) {
-        return flatNode.node.getItemKey(flatNode.data);
-      } else if (flatNode.id != null) {
-        return flatNode.id.toString();
-      } else {
-        return flatNode.label;
-      }
-    };
-
     const selectedKeys = new Set<string>(
-      selectedFlatNodes.map(flatNode => getItemKey(flatNode))
+      selectedFlatNodes.map(flatNode => this.getFlatNodeIdentifier(flatNode))
     );
 
     const nodeMap = new Map<string, any>();
     const rootNodes: any[] = [];
 
     for (const flatNode of selectedFlatNodes) {
-      const itemKey = getItemKey(flatNode);
+      const itemKey = this.getFlatNodeIdentifier(flatNode);
 
-      const treeNode: any = flatNode.node
-        ? { ...flatNode.data }
-        : { label: flatNode.label };
+      const treeNode: any = this.createTreeNode(flatNode);
 
       nodeMap.set(itemKey, treeNode);
 
       const parent = this.daoTree.flatNodeMap.get(flatNode);
       if (parent) {
-        const parentKey = getItemKey(parent);
+        const parentKey = this.getFlatNodeIdentifier(parent);
 
         if (selectedKeys.has(parentKey)) {
           if (!nodeMap.has(parentKey)) {
-            const parentTreeNode: any = parent.node
-              ? { ...parent.data }
-              : { label: parent.label };
+            const parentTreeNode: any = this.createTreeNode(parent);
             nodeMap.set(parentKey, parentTreeNode);
           }
           const parentNode = nodeMap.get(parentKey);
@@ -729,7 +714,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
           // Ensure it is added to rootNodes if its parent is not selected
           const grandParent = this.daoTree.flatNodeMap.get(parent);
-          const grandParentKey = grandParent ? getItemKey(grandParent) : null;
+          const grandParentKey = grandParent ? this.getFlatNodeIdentifier(grandParent) : null;
           if (!grandParent || !selectedKeys.has(grandParentKey)) {
             if (!rootNodes.includes(nodeMap.get(parentKey))) {
               rootNodes.push(nodeMap.get(parentKey));
@@ -745,6 +730,24 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
 
     return rootNodes;
+  }
+
+  protected createTreeNode(flatNode: OTreeFlatNode): any {
+    return flatNode.node
+      ? { ...flatNode.data }
+      : { label: flatNode.label };
+  }
+
+
+  protected getFlatNodeIdentifier(flatNode: OTreeFlatNode): string {
+    if (flatNode.node?.getItemKey) {
+      return flatNode.node.getItemKey(flatNode.data);
+    } else if (flatNode.id != null) {
+      return flatNode.id.toString();
+    }
+    return flatNode.label;
+
+
   }
 
   getSelectedFlatNodes(): OTreeFlatNode[] {
