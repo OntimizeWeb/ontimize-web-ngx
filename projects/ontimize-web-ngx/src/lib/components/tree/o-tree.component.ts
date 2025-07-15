@@ -683,53 +683,45 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   getSelectedItems(): any[] {
     const selectedFlatNodes = this.selection.selected;
-    const selectedKeys = new Set<string>(
-      selectedFlatNodes.map(flatNode => this.getFlatNodeIdentifier(flatNode))
-    );
+    const selectedKeys = this.getSelectedNodeKeys(selectedFlatNodes);
 
     const nodeMap = new Map<string, any>();
     const rootNodes: any[] = [];
 
     for (const flatNode of selectedFlatNodes) {
-      const itemKey = this.getFlatNodeIdentifier(flatNode);
-
-      const treeNode: any = this.createTreeNode(flatNode);
-
-      nodeMap.set(itemKey, treeNode);
+      const key = this.getFlatNodeIdentifier(flatNode);
+      const treeNode = this.createTreeNode(flatNode);
+      nodeMap.set(key, treeNode);
 
       const parent = this.daoTree.flatNodeMap.get(flatNode);
-      if (parent) {
-        const parentKey = this.getFlatNodeIdentifier(parent);
-
-        if (selectedKeys.has(parentKey)) {
-          if (!nodeMap.has(parentKey)) {
-            const parentTreeNode: any = this.createTreeNode(parent);
-            nodeMap.set(parentKey, parentTreeNode);
-          }
-          const parentNode = nodeMap.get(parentKey);
-          if (!parentNode.children) {
-            parentNode.children = [];
-          }
-          parentNode.children.push(treeNode);
-
-          // Ensure it is added to rootNodes if its parent is not selected
-          const grandParent = this.daoTree.flatNodeMap.get(parent);
-          const grandParentKey = grandParent ? this.getFlatNodeIdentifier(grandParent) : null;
-          if (!grandParent || !selectedKeys.has(grandParentKey)) {
-            if (!rootNodes.includes(nodeMap.get(parentKey))) {
-              rootNodes.push(nodeMap.get(parentKey));
-            }
-          }
-
-        } else {
-          rootNodes.push(treeNode);
-        }
-      } else {
+      if (!parent) {
         rootNodes.push(treeNode);
+        continue;
+      }
+
+      const parentKey = this.getFlatNodeIdentifier(parent);
+      if (!selectedKeys.has(parentKey)) {
+        rootNodes.push(treeNode);
+        continue;
+      }
+
+      const parentNode = this.ensureNodeInMap(parent, nodeMap);
+      this.addChildToParent(parentNode, treeNode);
+
+      if (this.shouldBeRoot(parent, selectedKeys) && !rootNodes.includes(parentNode)) {
+        rootNodes.push(parentNode);
       }
     }
 
     return rootNodes;
+  }
+
+  private shouldBeRoot(parent: OTreeFlatNode, selectedKeys: Set<string>): boolean {
+    const grandParent = this.daoTree.flatNodeMap.get(parent);
+    if (!grandParent) return true;
+
+    const grandParentKey = this.getFlatNodeIdentifier(grandParent);
+    return !selectedKeys.has(grandParentKey);
   }
 
   protected createTreeNode(flatNode: OTreeFlatNode): any {
@@ -747,7 +739,41 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
     return flatNode.label;
 
+  }
+  private addChildToParent(parentNode: any, childNode: any): void {
+    if (!parentNode.children) {
+      parentNode.children = [];
+    }
+    parentNode.children.push(childNode);
+  }
 
+  addParentToRootIfNoGrandparentSelected(
+    parent: OTreeFlatNode,
+    parentKey: string,
+    selectedKeys: Set<string>,
+    nodeMap: Map<string, any>,
+    rootNodes: any[]
+  ): void {
+    const grandParent = this.daoTree.flatNodeMap.get(parent);
+    const grandParentKey = grandParent ? this.getFlatNodeIdentifier(grandParent) : null;
+
+    if (!grandParent || !selectedKeys.has(grandParentKey)) {
+      const parentNode = nodeMap.get(parentKey);
+      if (!rootNodes.includes(parentNode)) {
+        rootNodes.push(parentNode);
+      }
+    }
+  }
+  private ensureNodeInMap(flatNode: OTreeFlatNode, map: Map<string, any>): any {
+    const key = this.getFlatNodeIdentifier(flatNode);
+    if (!map.has(key)) {
+      map.set(key, this.createTreeNode(flatNode));
+    }
+    return map.get(key);
+  }
+
+  private getSelectedNodeKeys(nodes: OTreeFlatNode[]): Set<string> {
+    return new Set(nodes.map(node => this.getFlatNodeIdentifier(node)));
   }
 
   getSelectedFlatNodes(): OTreeFlatNode[] {
