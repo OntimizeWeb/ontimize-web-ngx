@@ -1,3 +1,7 @@
+## 15.5.8 (2025-07-15)
+### Bug Fixes
+* **o-tree**: Fixed getSelectedItems to return selected nodes as expected ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1942](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1942)
+
 ## 15.5.7 (2025-06-30)
 ### Bug Fixes
 - **o-checkbox:** fixed value emission when using `boolean-type="string"`. The checkbox now correctly emits `"S"` and `"N"` as defined by `true-value`/`false-value`, instead of `true`/`false`. ([9f8033b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9f8033b)) Closes [#1929](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1929)
