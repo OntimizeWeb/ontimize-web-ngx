@@ -88,8 +88,8 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
       this.data.splice(index + 1, 0, ...nodes);
 
       //If parentNode is selected, the children also are selected
-      if (this.oTree.checklistSelection.isSelected(parentNode)) {
-        this.oTree.checklistSelection.select(...nodes)
+      if (this.oTree.selection.isSelected(parentNode)) {
+        this.oTree.selection.select(...nodes)
       }
     } else {
       let count = 0;
