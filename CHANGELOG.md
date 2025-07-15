@@ -1,6 +1,6 @@
 ## 15.5.8 (2025-07-15)
 ### Bug Fixes
-* **o-tree**: Fixed getSelectedItems to return selected nodes as expected ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1942](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1942)
+* **o-tree**: Fixed `getSelectedItems` method returning selected nodes as expected ([d311a4d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d311a4d)) Closes [#1942](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1942)
 
 ## 15.5.7 (2025-06-30)
 ### Bug Fixes
