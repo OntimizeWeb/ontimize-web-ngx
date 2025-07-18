@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
@@ -425,6 +425,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       id: Util.randomNumber().toString(),
       label: context?.label || '',
       innerFormsInfo: {},
+      rendered:false,
+      rendererSubject: new BehaviorSubject(false),
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
     };
 
@@ -490,6 +492,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       } else {
         this.reloadMainComponents();
       }
+    });
+
+    /* Once the modal is opened, the component is rendered and the rendererSubject is emitted to enable navigation*/
+    this.dialogRef.afterOpened().subscribe(() => {
+      detailComp.rendered = true;
+      detailComp.rendererSubject.next(true);
     });
   }
 

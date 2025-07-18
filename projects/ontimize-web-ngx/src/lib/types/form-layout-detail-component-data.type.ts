@@ -1,3 +1,5 @@
+import { BehaviorSubject } from "rxjs";
+
 export type FormLayoutInnerFormInfo = {
   modified: boolean;
   confirmOnExit: boolean;
@@ -15,6 +17,7 @@ export type FormLayoutDetailComponentData = {
   rendered?: boolean;
   insertionMode?: boolean;
   formDataByLabelColumns?: any;
+  rendererSubject: BehaviorSubject<boolean>;
 };
 
 export type FormLayoutCloseDetailOptions = {

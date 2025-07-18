@@ -122,6 +122,7 @@ export class OFormLayoutSplitPaneComponent implements AfterViewInit, OFormLayout
       const viewContainerRef = this.contentDirective.viewContainerRef;
       viewContainerRef.clear();
       viewContainerRef.createComponent(component);
+      this.data.rendererSubject.next(true);
     }
   }
 

@@ -269,6 +269,16 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     viewContainerRef.clear();
     viewContainerRef.createComponent(component);
     tabData.rendered = true;
+    /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating.
+      It is necessary to wait until the component inside the tab is fully rendered
+       before disabling table navigation. Otherwise, race conditions or errors
+       may occur if the user clicks multiple times before the detail form is ready.
+    */
+    tabData.rendererSubject.subscribe((renderer: boolean) => {
+      if (renderer) {
+        this.formLayoutManager.navigationService.isNavigating = !renderer;
+      }
+    });
   }
 
   getFormCacheData(): FormLayoutDetailComponentData {
