@@ -430,6 +430,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
     };
 
+    /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating. */
+    newDetailComp.rendererSubject.subscribe((renderer: boolean) => {
+      if (renderer) {
+        this.navigationService.isNavigating = !renderer;
+      }
+    });
+
     if (this.isDialogMode()) {
       this.openFormLayoutDialog(newDetailComp);
     } else {

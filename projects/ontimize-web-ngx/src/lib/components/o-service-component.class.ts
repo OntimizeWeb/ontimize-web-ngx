@@ -379,11 +379,10 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
     this.router.navigate(route, extras).
       then(() => {
-        //si no tiene formlayoutmanager, la variable se gestiona aqui
+        // Handle the variable this.navigationService.isNavigating here if there's no FormLayoutManager
         if (!isFormLayoutActive) {
           this.navigationService.isNavigating = false;
         }
-
       })
       .catch((e) => {
         console.error('Cannot match any routes. URL Segment: ', route,e);
@@ -432,7 +431,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
         if (!this.formLayoutManager?.isSplitPaneMode()) {
           formLayoutManagerService.context = context;
         }
-        // this.navigationService.isNavigating = true;
+
         await this.navigateToDetail(route, qParams, relativeTo)
       }
     });
@@ -883,7 +882,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
-
         if (this.formLayoutManager.navigationService.isNavigating) {
           /* in the form-layout mode=tab, the only way to ensure that the component has been rendered is
            when navigationService.isNavigating */
