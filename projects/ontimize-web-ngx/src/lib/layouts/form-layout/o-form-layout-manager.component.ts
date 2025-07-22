@@ -86,7 +86,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     '[class.o-form-layout-manager]': 'true'
   }
 })
-export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent,IOFormLayoutManager {
+export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent, IOFormLayoutManager {
 
   // declaring this property to have acces to static members in the template
   OFormLayoutManagerComponent = OFormLayoutManagerComponent;
@@ -425,12 +425,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       id: Util.randomNumber().toString(),
       label: context?.label || '',
       innerFormsInfo: {},
-      rendered: false,
+      rendered:false,
+      rendererSubject: new BehaviorSubject(false),
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
-      rendererSubject: new BehaviorSubject(false)
     };
+
     /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating. */
-    newDetailComp.rendererSubject.subscribe((renderer:boolean) => {
+    newDetailComp.rendererSubject.subscribe((renderer: boolean) => {
       if (renderer) {
         this.navigationService.isNavigating = !renderer;
       }
@@ -499,6 +500,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         this.reloadMainComponents();
       }
     });
+
+    /* Once the modal is opened, the component is rendered and the rendererSubject is emitted to enable navigation*/
     this.dialogRef.afterOpened().subscribe(() => {
       detailComp.rendered = true;
       detailComp.rendererSubject.next(true);
