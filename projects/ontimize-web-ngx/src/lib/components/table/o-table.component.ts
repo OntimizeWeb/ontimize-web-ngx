@@ -2063,6 +2063,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return;
     }
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
+
+      if (this.navigationService.isNavigating) return;
+      this.navigationService.isNavigating = true;
+
       this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
       this.saveDataNavigationInLocalStorage();
       this.clearSelection();
@@ -3577,11 +3581,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
  *
  * @returns 'current-page' | 'all-data'
  */
-  getSourceDataByFilterColumn(column:OColumn): 'current-page' | 'all-data' {
+  getSourceDataByFilterColumn(column: OColumn): 'current-page' | 'all-data' {
     return (
       this.oTableColumnsFilterComponent?.getFilterValuesInData(column.attr) ||
-      (this.oTableColumnsFilterComponent?.filterValuesInData  ||
-       'current-page')
+      (this.oTableColumnsFilterComponent?.filterValuesInData ||
+        'current-page')
     );
   }
 }

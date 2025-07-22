@@ -369,21 +369,24 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     const extras = {
       relativeTo: relativeTo
     };
+    let isFormLayoutActive = false;
     if (this.formLayoutManager && this.formLayoutManager.isMainComponent(this)) {
       qParams[Codes.IGNORE_CAN_DEACTIVATE] = this.formLayoutManager.ignoreCanDeactivate;
+      isFormLayoutActive = true;
       this.formLayoutManager.setAsActiveFormLayoutManager();
     }
     extras[Codes.QUERY_PARAMS] = qParams;
 
     this.router.navigate(route, extras).
       then(() => {
-        if (!this.formLayoutManager) {
+        // Handle the variable this.navigationService.isNavigating here if there's no FormLayoutManager
+        if (!isFormLayoutActive) {
           this.navigationService.isNavigating = false;
         }
       })
-      .catch(() => {
-        console.error('Cannot match any routes. URL Segment: ', route);
-        this.navigationService.isNavigating = false
+      .catch((e) => {
+        console.error('Cannot match any routes. URL Segment: ', route,e);
+        this.navigationService.isNavigating = false;
       });
   }
 
@@ -410,12 +413,13 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
     if (this.oFormLayoutDialog) {
       console.warn('Navigation is not available yet in a form layout manager with mode="dialog"');
-      return;
-    }
-    if (this.navigationService.isNavigating) {
-      return;
+      if (this.formLayoutManager.navigationService) {
+        this.formLayoutManager.navigationService.isNavigating = false;
+      }
 
+      return;
     }
+
     const zone = this.injector.get(NgZone);
     zone.run(async () => {
       const route = this.getItemModeRoute(item, 'detailFormRoute');
@@ -427,7 +431,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
         if (!this.formLayoutManager?.isSplitPaneMode()) {
           formLayoutManagerService.context = context;
         }
-        this.navigationService.isNavigating = true;
+
         await this.navigateToDetail(route, qParams, relativeTo)
       }
     });
@@ -878,11 +882,12 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
             updateComponentStateSubject.next(arg);
           }
         }
-        if (((arg.previousIndex === void 0) || arg.previousIndex === 0) && this.formLayoutManager.navigationService.isNavigating) {
+        if (this.formLayoutManager.navigationService.isNavigating) {
           /* in the form-layout mode=tab, the only way to ensure that the component has been rendered is
-           when navigationService.isNavigating and comes previousIndex=0  */
+           when navigationService.isNavigating */
           arg.data.rendererSubject.next(true);
         }
+
         this.checkViewPortSubject.next(true);
       });
 

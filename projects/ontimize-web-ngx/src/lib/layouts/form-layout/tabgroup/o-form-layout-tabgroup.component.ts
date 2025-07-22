@@ -212,6 +212,8 @@ export class OFormLayoutTabGroupComponent implements OFormLayoutManagerMode, Aft
     if (compIndex >= 0) {
       this.tabGroup.selectedIndex = (compIndex + 1);
     }
+    /* when a tab is reloaded, its neccesary change */
+    compData.rendererSubject.next(true);
   }
 
   onTabSelectChange(arg: MatTabChangeEvent) {
