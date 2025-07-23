@@ -95,7 +95,7 @@ export class OFormNavigationComponent implements OnDestroy {
     const queryArguments = { ...this.queryConf.queryArguments };
     queryArguments.columns = this.getKeysArray();
     queryArguments.ovrrArgs.offset = offset;
-    queryArguments.ovrrArgs.length = length ? length : this.queryConf.queryRows;
+    queryArguments.ovrrArgs.length = length || this.queryConf.queryRows;
     return queryArguments;
   }
 
