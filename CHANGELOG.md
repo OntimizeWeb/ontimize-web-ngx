@@ -1,14 +1,17 @@
-## 15.6.0
+## 15.6.0 (2025-07-24)
 ### Feature
-* Adapted to the [JSON:API](https://jsonapi.org/) specification for improved interoperability.
+* Full adaptation to [JSON:API](https://jsonapi.org/) specification for improved interoperability. ([da5e1a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da5e1a5)) Closes [#1525](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/#1525)
+* Support for for **multiple keys** adaptation in CRUD operations, enhancing compatibility and flexibility in data handling to the [JSON:API](https://jsonapi.org/) Closes[#20](https://github.com/OntimizeWeb/northwind-jsonapi/issues/20)
+* New injection token `O_REQUEST_ADAPTER` to allow request customization.
 * Implemented a **naming convention** for data access, enforcing consistent **uppercase/lowercase** usage.
 * **o-table, o-grid, o-list, o-tree, o-form, o-table-cell-renderer-service,o-file-input, o-combo, o-list-picker, o-radio**: New input `configure-service-args` to allow configure service
 
 ### Breaking changes
 > [!NOTE]
-> The library has been fully adapted to JSON API, requiring adjustments in API requests and responses.
+>  The library has been fully adapted to [JSON:API](https://jsonapi.org/), which requires updates to both API request/response formats and certain APIs within the library.
 
 * `OntimizeBaseService` is **now** an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
+* Renamed `OntimizeQueryArgumentsAdapter` to `OntimizeRequestArgumentsAdapter`
 * **Config**: `servicesConfiguration` property type has changed from `Object` to `ServiceConfigType`
 
   **Before**:
@@ -23,10 +26,10 @@
   ```
 
 * **o-table**:
-  - **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
-    - The parameter `ovrrArgs` is **now** of type `OQueryDataArgs` instead of `any`.
-    - The method now returns an `OQueryParams` instead of `any[]`.
-    - **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
+  * **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
+    * The parameter `ovrrArgs` is **now** of type `OQueryDataArgs` instead of `any`.
+    * The method now returns an `OQueryParams` instead of `any[]`.
+    * **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
 
     **Before:**
     ```ts
@@ -49,115 +52,93 @@
     ```ts
     export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
 
-## 15.6.0-next.5
-New injection token `O_REQUEST_ADAPTER`
+## 15.6.0-next.7 (2025-07-09)
+### Features
+*  Added support for **multiple keys** adaptation in CRUD operations, enhancing compatibility and flexibility in data handling to the [JSON:API](https://jsonapi.org/) Closes[#20](https://github.com/OntimizeWeb/northwind-jsonapi/issues/20)
 
-## 15.6.0-next.4
-* Fixed error in form navigation
+## 15.6.0-next.6 (2025-06-13)
+### Bug fixes
+* **o-table-filter-by-column**: Fixed an issue with the request argument adaptation for the *get all data* operation.
 
-## 15.6.0-next.3
+## 15.6.0-next.5 (2025-05-23)
+### Features
+* New injection token `O_REQUEST_ADAPTER`
+
+## 15.6.0-next.4 (2025-05-08)
+### Bug fixes
+* Fixed navigation issues in an *o-form-layout* dialog using an o-table component with `pageable="yes"` enabled. Closes[#22](https://github.com/OntimizeWeb/northwind-jsonapi/issues/22)
+
+## 15.6.0-next.3 (2025-04-30)
+### Features
 * Improved JSONResponse interface
 * Renamed IBaseQueryArgumnent to IBaseRequestArgument
 * Renamed OntimizeQueryArgumentsAdapter to OntimizeRequestArgumentsAdapter
 * Renamed JSONAPIQueryArgumentsAdapter to JSONAPIRequestArgumentsAdapter
 * Added new method getIdFromFilter in JSONAPIRequestArgumentsAdapter
 
-## 15.6.0-next.2
+## 15.6.0-next.2 (2025-04-16)
 * Fixed bug in preference mapping
 
-
-## 15.1.0-SNAPSHOT-12
- Integrated changes version 15.5.1
- Added preferense adaptar and query argument sercices to ontimize report service
-
-## 15.1.0-SNAPSHOT-11
- Integrated changes version 15.5.0
-### Breaking changes
-* Remplace ServiceResponseAdapter by IServiceResponseAdapter
-* OntimizeBaseService is now an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
-* **Config**: Updated the `servicesConfiguration` property in the Config type.
-
-  **Before**:
-  ```ts servicesConfiguration?: Object ```
-  **Now**:
-  ```ts servicesConfiguration?: ServiceConfigType ```
-* **o-table**:
-  - **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
-    - The parameter `ovrrArgs` is now of type `OQueryDataArgs` instead of `any`.
-    - The method now returns an `OQueryParams` instead of `any[]`.
-    - **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
-
-    **Before:**
-    ```ts
-    getQueryArguments(filter: object, ovrrArgs?: any): any[]
-    ```
-
-    **Now**
-    ```ts
-    getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams
-    ```
-
-  ** Response Adapter Interface Change **
-  - Response adapters previously implemented `ServiceResponseAdapter`, but now they must implement `IServiceResponseAdapter`.
-
-  **Before:**
-  ```ts
-    export class MyAdapter implements ServiceResponseAdapter<BaseServiceResponse>  { ... }
-  ```
-
-  **Now:**
-  ```ts
-   export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
-  ```
-
-## 15.1.0-SNAPSHOT-10
-* Integrated changes from the 15.4.1 version
-
-## 15.1.0-SNAPSHOT-9
-* Integrated changes from version 15.1.3 to version 15.4.0
-* For detailed information, please check the changelogs of the intermediate versions.
-
-## 15.1.0-SNAPSHOT-8
-* Fixed columns being sent as an array Closes [#1672](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1672)
-
-## 15.1.0-SNAPSHOT-7
-* Fixed errors in `JSONAPIPreferencesService` and `OntimizePreferencesService` services that were not saving preferences correctly
-
-## 15.1.0-SNAPSHOT-6
-* New `JSONAPIPreferencesService` and `OntimizePreferencesService` services
-* Add nameConvention
-* Parse the values to the format according to their sqltype
-
-## 15.1.0-SNAPSHOT-5(2024-05-28)
+## 15.6.0-next.1 (2025-04-10)
 ### Bugfix
-* Removed space in the filter
+* Fixed several bug with preferences adapter
 
-## 15.1.0-SNAPSHOT-4(2024-05-22)
-### Features
-* Adapt table cell renderer
+## 15.6.0-next.0 (2025-03-25)
 
-## 15.1.0-SNAPSHOT-3 (2024-05-21)
 ### Features
-* Added complex filtering
+* Integrated changes from versions **15.1.3** to **15.5.1**.
+* Introduced new services: `JSONAPIPreferencesService` and `OntimizePreferencesService`.
+* Added **preferences adapter** and **query argument services** to `OntimizeReportService`.
+* Added support for **CRUD operations**, **sorting**, and **complex filtering** in **JSON API**.
+* Implemented **value parsing based on SQL type** and added **naming convention** support.
+* Improved table cell rendering.
+* Fixed columns now properly sent as array ([#1672](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1672)).
 
-## 15.1.0-SNAPSHOT-2 (2024-05-08)
-### Features
-* Added management JSON API errors
+### Bugfixes
+* Fixed preference saving in `JSONAPIPreferencesService` and `OntimizePreferencesService`.
+* Removed unwanted space in filters.
 
-## 15.1.0-SNAPSHOT-1 (2024-05-08)
-### Features
-* Added sorting JSON API
+### Breaking Changes
+* Replaced `ServiceResponseAdapter` with `IServiceResponseAdapter`.
+  * **Before:**
+    ```ts
+    export class MyAdapter implements ServiceResponseAdapter<BaseServiceResponse> { ... }
+    ```
+  * **Now:**
+    ```ts
+    export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse> { ... }
+    ```
+* `OntimizeBaseService` is now an abstract class.
+  * You must subclass it using one of: `OntimizeService`, `OntimizeEEService`, or `JSONApiService`.
+* `servicesConfiguration` type updated in `Config`:
+  * **Before:**
+    ```ts
+    servicesConfiguration?: Object;
+    ```
+  * **Now:**
+    ```ts
+    servicesConfiguration?: ServiceConfigType;
+    ```
+* `o-table.getQueryArguments` method updated:
+  * `ovrrArgs` type changed from `any` to `OQueryDataArgs`.
+  * Return type changed from `any[]` to `OQueryParams`.
+  * **Before:**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: any): any[];
+    ```
+  * **Now:**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams;
+    ```
 
-## 15.1.0-SNAPSHOT-0(2024-04-30)
-### Features
-* Added CRUD operations for JSON API
+
 ## 15.5.8 (2025-07-15)
 ### Bug Fixes
 * **o-tree**: Fixed `getSelectedItems` method returning selected nodes as expected ([d311a4d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d311a4d)) Closes [#1942](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1942)
 
 ## 15.5.7 (2025-06-30)
 ### Bug Fixes
-- **o-checkbox:** fixed value emission when using `boolean-type="string"`. The checkbox now correctly emits `"S"` and `"N"` as defined by `true-value`/`false-value`, instead of `true`/`false`. ([9f8033b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9f8033b)) Closes [#1929](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1929)
+* **o-checkbox:** fixed value emission when using `boolean-type="string"`. The checkbox now correctly emits `"S"` and `"N"` as defined by `true-value`/`false-value`, instead of `true`/`false`. ([9f8033b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9f8033b)) Closes [#1929](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1929)
 
 ## 15.5.6 (2025-06-06)
 ### Bug fixes
@@ -603,8 +584,8 @@ New injection token `O_REQUEST_ADAPTER`
 * **o-table, o-list, o-grid**: Fixed the placeholder being shown in quickfilter ([9622593](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9622593)) Closes [#1298](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1298)
 * **o-user-info**: Exported `o-user-info-configuration` and `o-user-info-configuration-item` directive ([dc6820f](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/dc6820f))  Closes [#1307](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1307)
 * **o-table**:
-  - Fix appearance outline in table quickfilter ([1906d9d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1906d9d))  Closes [#1315](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1315)
-  - Improved styles in filter by column modal ([42a7b1a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42a7b1a)) Closes [#1334](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1334)
+  * Fix appearance outline in table quickfilter ([1906d9d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1906d9d))  Closes [#1315](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1315)
+  * Improved styles in filter by column modal ([42a7b1a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/42a7b1a)) Closes [#1334](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1334)
 *  Removed deprecated ComponentFactory and ComponentFactoryResolver ([5f1eaf2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5f1eaf2)) Closes [#1317](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1317)
 * **o-form-layout-manager**: Fixed a new detail not opening from the detail in mode=tab.([3618287](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3618287)) Closes [#1316](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1316)
 *  Fixed `untitled inputs` having a higher height than the others.([33d184c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/33d184c)) Closes [#1328](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1328)
@@ -640,8 +621,8 @@ The code related to **Ontimize themes** has been refactored with the aim of impr
 * Renamed `ontimize-web-ngx/theming/themes/ontimize.scss` to `ontimize-web-ngx/theming/themes/ontimize-blue.scss` with old style.
 * Renamed `ontimize-web-ngx/theming/themes/implatform-fashion-default-theme.scss` to `ontimize-web-ngx/theming/themes/fashion.scss`
 * Mixins `fashion-mat-light-theme` and `fashion-mat-dark-theme`:
-  - has been renamed to `o-mat-light-theme` and `o-mat-dark-theme`.
-  - has been moved to `ontimize-web-ngx/theming/ontimize-styles.scss`.
+  * has been renamed to `o-mat-light-theme` and `o-mat-dark-theme`.
+  * has been moved to `ontimize-web-ngx/theming/ontimize-styles.scss`.
 * Mixin `o-material-theme` has been included in `ontimize-styles.scss``
 * Mixins `o-mat-light-theme` and `o-mat-dark-theme` has been moved to `ontimize-web-ngx/theming/ontimize-styles-v8.scss`.
 * Removed old themes based on material
@@ -655,7 +636,7 @@ The code related to **Ontimize themes** has been refactored with the aim of impr
 
 
 Below is an example of how the ontimize themes were applied before and now.
-- Before
+* Before
 ```scss
 /*Import the file who have the theme functions and the ontimize-theme-styles mixin.*/
 @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme.scss';
@@ -717,7 +698,7 @@ https://update.angular.io/?l=3&v=8.2-15.0.
 https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15.
 ### BREAKING CHANGES
 * **app.module**: The ONTIMIZE_MODULES import should be replaced by BrowserModule, BrowserAnimationsModule, OntimizeWebModule.forRoot(CONFIG).
-  - Before
+  * Before
     ```ts
     @NgModule({
       imports: [
@@ -725,7 +706,7 @@ https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15
       ]
     })
     ```
-  - After
+  * After
     ```ts
     @NgModule({
       imports: [
@@ -736,14 +717,14 @@ https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15
     })
     ```
 * **ontimize-web-ngx-theming**: The theming library is now integrated into `ontimize-web-ngx` so the library import must be removed.
-  - Before
+  * Before
     ```css
 
     @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme.scss';
     @import 'node_modules/ontimize-web-ngx-theming/ontimize-theme-lite.scss';
 
     ```
-  - After
+  * After
     ```css
     @use 'ontimize-web-ngx/theming/ontimize-theme.scss';
     @use 'ontimize-web-ngx/theming/ontimize-theme-lite.scss';
@@ -761,14 +742,14 @@ https://material.angular.io/guide/mdc-migration#1-update-to-angular-material-v15
 
 * **app-routing.module**: the opt object that is included in forRoot is now of type ExtraOptions.
 
-  - Before
+  * Before
     ```ts
     const opt = {
       enableTracing: false
     };
     ```
 
-  - After
+  * After
     ```ts
     const opt: ExtraOptions = {
       enableTracing: false
@@ -983,7 +964,7 @@ export class MyModule { }
 * `O_EXPORT_SERVICE` used to extend  `OntimizeExportService` but now extends  `OntimizeExportService` or `OntimizeExportService3X` depending on back server.
 
 | Ontimize server | Service |
-| ------- | ------- |
+| ------* | ------* |
 | Ontimize EE, Ontimize Boot 2.X.X or lower version | `OntimizeExportService` |
 | Ontimize Boot 3.9.0 or higher |  `OntimizeExportService3X` |
 
@@ -2937,11 +2918,11 @@ import { CONFIG } from './app.config';
 ### Features
 
 * **Components:** it is no longer necessary to set *'data'* attribute parameter on form data components, the form will set values automatically.
-- Example:
+* Example:
   * Before: `<o-text-input attr="NAME" flex  [data]="oForm.getDataValue('NAME')"></o-text-input>`
   * After: `<o-text-input attr="NAME" flex  ></o-text-input>`
 * **Components:** new parameter *'automatic-binding'* for specifying custom data value on form data components.
-- Example:
+* Example:
   `<o-text-input attr="NAME" flex automatic-binding="yes" [data]="myCustomFn()" ></o-text-input>`
 
 ### Bug Fixes
@@ -2979,7 +2960,7 @@ import { CONFIG } from './app.config';
 * **configuration** application configuration parameters (app.config) perform camelCase standard.
 * **services** IDataService interface change the *'entity'* argument position in CRUD methods (query, insert, delete, update).
   Now it is not always necessary to pass *'entity'* argument, simply configure it once in service.
-- Example:
+* Example:
   * Before: `query('ECustomers', filter, columns)`
   * After: `query(filter, columns, 'ECustomers')`
 
@@ -3016,5 +2997,4 @@ import { CONFIG } from './app.config';
 ### Features
 
 * **build:** first commit
-
 
