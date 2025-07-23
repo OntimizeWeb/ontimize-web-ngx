@@ -107,9 +107,9 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
 
   query(queryParams: JSONAPIQueryParameter): Observable<JSONAPIResponse> {
     queryParams = this.parseNameConventionQueryParams(queryParams);
-    queryParams = Util.objectToQueryString(queryParams);
+    const queryParamsToString = Util.objectToQueryString(queryParams);
 
-    const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParams : '';
+    const queryParamsString = Util.isDefined(queryParams) ? '?' + queryParamsToString : '';
 
     const url = `${this.urlBase}${this.path}${queryParamsString}`;
 

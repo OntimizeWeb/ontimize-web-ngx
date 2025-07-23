@@ -17,7 +17,6 @@ import { OTableComponent } from '../../../o-table.component';
 import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 import type { OColumn } from '../../../column/o-column.class';
-import { OQueryParams } from '../../../../../types/query-params.type';
 import { OTableFilterByColumnService } from './o-table-filter-by-column.service';
 import { SelectionModel } from '@angular/cdk/collections';
 

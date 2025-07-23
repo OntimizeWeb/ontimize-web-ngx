@@ -551,7 +551,7 @@ export class SQLTypes {
           break;
       }
     } catch (err) {
-      console.error('SQLTypes.parseUsingSQLType error');
+      console.error('SQLTypes.parseUsingSQLType error:', err, '| value:', arg, '| type:', type);
     }
     return value;
   }

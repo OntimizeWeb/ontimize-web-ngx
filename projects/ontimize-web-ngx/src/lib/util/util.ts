@@ -460,21 +460,6 @@ export class Util {
     return !!obj && typeof obj.then === 'function';
   }
 
-
-  static isJsonApiService(injector: Injector): boolean {
-    const config = injector.get(AppConfig);
-    return config.getConfiguration().serviceType === 'JSONAPI' ||
-      config.getConfiguration().serviceType instanceof JSONAPIService;
-  }
-
-  static isOntimizeEEService(injector: Injector): boolean {
-    const config = injector.get(AppConfig);
-    return (config.getConfiguration().serviceType === 'OntimizeEE' ||
-      config.getConfiguration().serviceType instanceof OntimizeEEService) ||
-      (config.getConfiguration().serviceType === 'Ontimize' ||
-        config.getConfiguration().serviceType instanceof OntimizeService);
-  }
-
   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
     const baseService = configureServiceArgs.baseService;
     const entity = configureServiceArgs.entity;

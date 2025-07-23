@@ -9,3 +9,4 @@ export * from './service.utils';
 export * from './currencyUtil';
 export * from './preference-mapping-util';
 export * from './injection-token.utils';
+export * from './factory.util';

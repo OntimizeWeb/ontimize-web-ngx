@@ -47,6 +47,7 @@ import { IBaseRequestArgument } from './request-adapter/base-request-argument.in
 import { JSONAPIRequestArgumentsAdapter } from './request-adapter/jsonapi-request-arguments.adapter';
 import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
+import { FactoryUtil } from '../util/factory.util';
 
 
 /* ----------------------------------------------------------------------------------------------------
@@ -135,9 +136,9 @@ export function serviceRequestAdapterFactory(injector: Injector): IBaseRequestAr
 
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
-    Util.isOntimizeEEService(injector)) {
+    FactoryUtil.isOntimizeEEService(injector)) {
     return new OntimizeRequestArgumentsAdapter();
-  } else if (Util.isJsonApiService(injector)) {
+  } else if (FactoryUtil.isJsonApiService(injector)) {
     return new JSONAPIRequestArgumentsAdapter();
   }
   return new OntimizeRequestArgumentsAdapter();
@@ -152,9 +153,9 @@ export function serviceResponseAdapterFactory(injector: Injector): IServiceRespo
   }
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) ||
-    (Util.isOntimizeEEService(injector))) {
+    (FactoryUtil.isOntimizeEEService(injector))) {
     return new OntimizeServiceResponseAdapter();
-  } else if (Util.isJsonApiService(injector)) {
+  } else if (FactoryUtil.isJsonApiService(injector)) {
 
     return new JSONAPIServiceResponseAdapter();
   }
@@ -187,9 +188,9 @@ export function preferencesServiceFactory(injector: Injector): IPreferencesServi
 
   const config = injector.get(AppConfig).getConfiguration();
 
-  if (!Util.isDefined(config.serviceType) || Util.isOntimizeEEService(injector)) {
+  if (!Util.isDefined(config.serviceType) || FactoryUtil.isOntimizeEEService(injector)) {
     return new OntimizePreferencesService(injector);
-  } else if (ServiceType.JSONAPI === config.serviceType) {
+  } else if (FactoryUtil.isJsonApiService(injector)) {
     return new JSONAPIPreferencesService(injector);
   }
   return new JSONAPIPreferencesService(injector);
