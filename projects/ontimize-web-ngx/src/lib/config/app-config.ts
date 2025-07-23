@@ -17,7 +17,7 @@ export const O_INPUTS_OPTIONS = new InjectionToken<OInputsOptions>('o-inputs-opt
 export const APP_CONFIG = new InjectionToken<Config>('app.config');
 
 export class AppConfig {
-  private _config: Config;
+  private readonly _config: Config;
 
   constructor(config?) {
     this._config = (config && Util.isObject(config) && !Array.isArray(config)) ? config : {};
@@ -112,4 +112,7 @@ export class AppConfig {
     return result;
   }
 
+  getNameConvention() {
+    return this._config.nameConvention || 'database';
+  }
 }

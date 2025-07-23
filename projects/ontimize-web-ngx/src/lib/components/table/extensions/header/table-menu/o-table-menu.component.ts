@@ -22,7 +22,6 @@ import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand
 import type { OTableMenu } from '../../../../../interfaces/o-table-menu.interface';
 import { IReportService } from '../../../../../interfaces/report-on-demand-service.interface';
 import { DialogService } from '../../../../../services/dialog.service';
-import { O_CHART_ON_DEMAND_SERVICE, O_REPORT_SERVICE } from '../../../../../services/factories';
 import { OntimizeExportDataProviderService } from '../../../../../services/ontimize-export-data-provider.service';
 import { SnackBarService } from '../../../../../services/snackbar.service';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
@@ -40,6 +39,7 @@ import { OTableStoreConfigurationDialogComponent } from '../../dialog/store-conf
 import { OTableVisibleColumnsDialogComponent } from '../../dialog/visible-columns/o-table-visible-columns-dialog.component';
 import { OTableOptionComponent } from '../table-option/o-table-option.component';
 import { OTableGroupByColumnsDialogComponent } from '../../dialog/group-by-columns/o-table-group-by-columns-dialog.component';
+import { O_CHART_ON_DEMAND_SERVICE, O_REPORT_SERVICE } from '../../../../../injection-tokens';
 
 
 export const DEFAULT_INPUTS_O_TABLE_MENU = [

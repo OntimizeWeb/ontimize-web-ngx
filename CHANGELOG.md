@@ -1,3 +1,156 @@
+## 15.6.0
+### Feature
+* Adapted to the [JSON:API](https://jsonapi.org/) specification for improved interoperability.
+* Implemented a **naming convention** for data access, enforcing consistent **uppercase/lowercase** usage.
+* **o-table, o-grid, o-list, o-tree, o-form, o-table-cell-renderer-service,o-file-input, o-combo, o-list-picker, o-radio**: New input `configure-service-args` to allow configure service
+
+### Breaking changes
+> [!NOTE]
+> The library has been fully adapted to JSON API, requiring adjustments in API requests and responses.
+
+* `OntimizeBaseService` is **now** an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
+* **Config**: `servicesConfiguration` property type has changed from `Object` to `ServiceConfigType`
+
+  **Before**:
+
+  ```ts
+   servicesConfiguration?: Object
+  ```
+
+  **Now**:
+  ```ts
+  servicesConfiguration?: ServiceConfigType
+  ```
+
+* **o-table**:
+  - **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
+    - The parameter `ovrrArgs` is **now** of type `OQueryDataArgs` instead of `any`.
+    - The method now returns an `OQueryParams` instead of `any[]`.
+    - **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
+
+    **Before:**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: any): any[]
+    ```
+
+    **Now**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams
+    ```
+
+ * Response adapters previously implemented `ServiceResponseAdapter`, but now they must implement `IServiceResponseAdapter`.
+
+    **Before:**
+    ```ts
+    export class MyAdapter implements ServiceResponseAdapter<BaseServiceResponse>  { ... }
+    ```
+
+    **Now:**
+    ```ts
+    export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
+
+## 15.6.0-next.5
+New injection token `O_REQUEST_ADAPTER`
+
+## 15.6.0-next.4
+* Fixed error in form navigation
+
+## 15.6.0-next.3
+* Improved JSONResponse interface
+* Renamed IBaseQueryArgumnent to IBaseRequestArgument
+* Renamed OntimizeQueryArgumentsAdapter to OntimizeRequestArgumentsAdapter
+* Renamed JSONAPIQueryArgumentsAdapter to JSONAPIRequestArgumentsAdapter
+* Added new method getIdFromFilter in JSONAPIRequestArgumentsAdapter
+
+## 15.6.0-next.2
+* Fixed bug in preference mapping
+
+
+## 15.1.0-SNAPSHOT-12
+ Integrated changes version 15.5.1
+ Added preferense adaptar and query argument sercices to ontimize report service
+
+## 15.1.0-SNAPSHOT-11
+ Integrated changes version 15.5.0
+### Breaking changes
+* Remplace ServiceResponseAdapter by IServiceResponseAdapter
+* OntimizeBaseService is now an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
+* **Config**: Updated the `servicesConfiguration` property in the Config type.
+
+  **Before**:
+  ```ts servicesConfiguration?: Object ```
+  **Now**:
+  ```ts servicesConfiguration?: ServiceConfigType ```
+* **o-table**:
+  - **`getQueryArguments(filter: object, ovrrArgs?: any): any[]`**
+    - The parameter `ovrrArgs` is now of type `OQueryDataArgs` instead of `any`.
+    - The method now returns an `OQueryParams` instead of `any[]`.
+    - **Impact:** Any code relying on the previous type of `ovrrArgs` or expecting an array as output will need to be updated.
+
+    **Before:**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: any): any[]
+    ```
+
+    **Now**
+    ```ts
+    getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams
+    ```
+
+  ** Response Adapter Interface Change **
+  - Response adapters previously implemented `ServiceResponseAdapter`, but now they must implement `IServiceResponseAdapter`.
+
+  **Before:**
+  ```ts
+    export class MyAdapter implements ServiceResponseAdapter<BaseServiceResponse>  { ... }
+  ```
+
+  **Now:**
+  ```ts
+   export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
+  ```
+
+## 15.1.0-SNAPSHOT-10
+* Integrated changes from the 15.4.1 version
+
+## 15.1.0-SNAPSHOT-9
+* Integrated changes from version 15.1.3 to version 15.4.0
+* For detailed information, please check the changelogs of the intermediate versions.
+
+## 15.1.0-SNAPSHOT-8
+* Fixed columns being sent as an array Closes [#1672](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1672)
+
+## 15.1.0-SNAPSHOT-7
+* Fixed errors in `JSONAPIPreferencesService` and `OntimizePreferencesService` services that were not saving preferences correctly
+
+## 15.1.0-SNAPSHOT-6
+* New `JSONAPIPreferencesService` and `OntimizePreferencesService` services
+* Add nameConvention
+* Parse the values to the format according to their sqltype
+
+## 15.1.0-SNAPSHOT-5(2024-05-28)
+### Bugfix
+* Removed space in the filter
+
+## 15.1.0-SNAPSHOT-4(2024-05-22)
+### Features
+* Adapt table cell renderer
+
+## 15.1.0-SNAPSHOT-3 (2024-05-21)
+### Features
+* Added complex filtering
+
+## 15.1.0-SNAPSHOT-2 (2024-05-08)
+### Features
+* Added management JSON API errors
+
+## 15.1.0-SNAPSHOT-1 (2024-05-08)
+### Features
+* Added sorting JSON API
+
+## 15.1.0-SNAPSHOT-0(2024-04-30)
+### Features
+* Added CRUD operations for JSON API
 ## 15.5.8 (2025-07-15)
 ### Bug Fixes
 * **o-tree**: Fixed `getSelectedItems` method returning selected nodes as expected ([d311a4d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d311a4d)) Closes [#1942](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1942)
@@ -94,10 +247,12 @@
 ### Bug fixes
 * **o-table-export-button**: Fixed issue where the `onClick` output was not working properly. ([bdb242e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/bdb242e)) Closes [#1824](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1824)
 
+
 ## 15.4.1 (2025-01-30)
 ### Bug fixes
 * **OFormNavigationClass**: Fixed the issue of double confirmation when exiting without inserting a record in the insertion form when the form is not included in `o-form-layout-manager`. ([ab8589a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ab8589a)) Closes [#1801](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1801)
 * **o-table**: Fixed that the scroll would be displayed when the table skeleton was displayed when data requests were executed ([ae248b6](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ae248b6)) Closes [#1812](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1812)
+
 
 ## 15.4.0 (2025-01-23)
 ### Features

@@ -11,7 +11,6 @@ import { IServiceDataComponent } from '../../interfaces/service-data-component.i
 import { LocalStorageService } from '../../services/local-storage.service';
 import { OFilterBuilderComponentStateClass } from '../../services/state/o-filter-builder-component-state.class';
 import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
-import { OFilterDefinition } from '../../types';
 import { BasicExpression } from '../../types/basic-expression.type';
 import { Expression } from '../../types/expression.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
@@ -19,6 +18,7 @@ import { CHANGE_EVENTS, Codes } from '../../util/codes';
 import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
 import { OFilterBuilderBase } from './o-filter-builder-base.class';
+import { OFilterDefinition } from '../../types/o-filter-definition.type';
 
 export const DEFAULT_INPUTS_O_FILTER_BUILDER = [
   // filters: [string] List of pairs of form component attributes and target component colums (targetColumn1:componentAttr1;targetColumn2:componentAttr2;...). Separated by ';'.

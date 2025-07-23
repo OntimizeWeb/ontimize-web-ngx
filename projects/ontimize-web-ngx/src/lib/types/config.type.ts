@@ -3,6 +3,7 @@ import { MenuRootItem } from './menu-root-item.type';
 import { OntimizeEEPermissionsConfig } from './ontimize-ee-permissions-config.type';
 import { OntimizePermissionsConfig } from './ontimize-permissions-config.type';
 import { ORemoteConfiguration } from './remote-configuration.type';
+import { JSONAPIServiceConfigType, OntimizeServiceConfigType } from './service-configuration.type';
 
 export type Config = {
   // apiEndpoint [string]: The base path of the URL used by app services.
@@ -44,14 +45,14 @@ export type Config = {
   applicationLocales?: string[];
   defaultLocale?: string;
 
-  // serviceType [ undefined | '' | class ]: The service type used (Ontimize REST standart, Ontimize REST JEE or custom implementation) in the whole application. By default 'undefined', that is, Ontimize REST standard service.
+  // serviceType [ undefined | '' | class ]: The service type used (Ontimize REST standart, Ontimize REST JEE, JSON API or custom implementation) in the whole application. By default 'undefined', that is, Ontimize REST standard service.
   serviceType?: any;
 
   // exportServiceType [ undefined | '' | class ]: The service used for exportation in the whole application. It shold implement `IExportService` interface. By default 'undefined' OntimizeExportService.
   exportServiceType?: any;
 
   // servicesConfiguration: [Object]: Configuration parameters of application services.
-  servicesConfiguration?: object;
+  servicesConfiguration?: OntimizeServiceConfigType | JSONAPIServiceConfigType;
 
   // appMenuConfiguration?: MenuGroup[];
   appMenuConfiguration?: MenuRootItem[];
@@ -62,5 +63,7 @@ export type Config = {
   // permissionsServiceType [ undefined | '' | class ]: The permissions service type used (Ontimize REST standart 'OntimizePermissions', Ontimize REST JEE 'OntimizeEEPermissions' or custom implementation) in the whole application. By default 'OntimizePermissions'.
   permissionsServiceType?: any;
 
-  exportConfiguration?: OExportConfiguration
+  exportConfiguration?: OExportConfiguration,
+
+  nameConvention?: 'upper' | 'lower' | 'database'
 };

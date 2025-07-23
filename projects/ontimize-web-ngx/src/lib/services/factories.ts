@@ -1,89 +1,53 @@
-import { InjectionToken, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
-import { IChartOnDemandService } from '../interfaces/chart-on-demand.interface';
+import {
+  O_AUTH_SERVICE,
+  O_COMPONENT_STATE_SERVICE,
+  O_DATA_SERVICE,
+  O_EXPORT_DATA_SERVICE,
+  O_EXPORT_SERVICE,
+  O_FILE_SERVICE,
+  O_LOCALSTORAGE_SERVICE,
+  O_PERMISSION_SERVICE,
+  O_RESPONSE_ADAPTER,
+  O_REQUEST_ADAPTER
+} from '../injection-tokens';
 import { IExportDataProvider } from '../interfaces/export-data-provider.interface';
 import { IExportService } from '../interfaces/export-service.interface';
 import { IFileService } from '../interfaces/file-service.interface';
+import { ILocalStorageService } from '../interfaces/local-service.interface';
+import { INameConvention } from '../interfaces/name-convention.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
-import { IReportService } from '../interfaces/report-on-demand-service.interface';
-import { OMatErrorOptions } from '../types/o-mat-error.type';
+import { IPreferencesService } from '../interfaces/prefereces-service.interface';
+import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
+import { _getInjectionTokenValue } from '../util/injection-token.utils';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
+import { BaseServiceResponse } from './base-service-response.class';
+import { JSONAPIPreferencesService } from './jsonapi/jsonapi-preferences.service';
+import { JSONAPIServiceResponseAdapter } from './jsonapi/jsonapi-service-response.adapter';
+import { LocalStorageService } from './local-storage.service';
+import { NameConventionLower } from './name-convention/name-convention-lower.service';
+import { NameConventionUpper } from './name-convention/name-convention-upper.service';
+import { NameConvention } from './name-convention/name-convention.service';
 import { OntimizeAuthService } from './o-auth.service';
-import { OErrorDialogManager } from './o-error-dialog-manager.service';
 import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
 import { OntimizeExportDataProviderService } from './ontimize-export-data-provider.service';
-import { OntimizeEEService } from './ontimize/ontimize-ee.service';
 import { OntimizeExportService3X } from './ontimize/ontimize-export-3xx.service';
 import { OntimizeExportService } from './ontimize/ontimize-export.service';
 import { OntimizeFileService } from './ontimize/ontimize-file.service';
+import { OntimizePreferencesService } from './ontimize/ontimize-preferences.service';
+import { OntimizeServiceResponseAdapter } from './ontimize/ontimize-service-response.adapter';
 import { OntimizeService } from './ontimize/ontimize.service';
 import { OntimizeEEPermissionsService } from './permissions/ontimize-ee-permissions.service';
 import { OntimizePermissionsService } from './permissions/ontimize-permissions.service';
+import { IBaseRequestArgument } from './request-adapter/base-request-argument.interface';
+import { JSONAPIRequestArgumentsAdapter } from './request-adapter/jsonapi-request-arguments.adapter';
+import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
-import { LocalStorageService } from './local-storage.service';
-import { ILocalStorageService } from '../interfaces/local-service.interface';
+import { FactoryUtil } from '../util/factory.util';
 
-/* ----------------------------------------------------------------------------------------------------
- * ----------------------------------------- INJECTION TOKENS -----------------------------------------
- * ---------------------------------------------------------------------------------------------------- */
-
-/**
- * Injection token that can be used to replace the data service `OntimizeService` or `OntimizeEEService`.
- */
-export const O_DATA_SERVICE = new InjectionToken('Ontimize data service');
-
-/**
- * Injection token that can be used to replace the translate service `OTranslateService`.
- */
-export const O_TRANSLATE_SERVICE = new InjectionToken('Translate service');
-
-/**
- * Injection token that can be used to replace the file service `OntimizeFileService`.
- */
-export const O_FILE_SERVICE = new InjectionToken<IFileService>('File uploader service');
-
-/**
- * Injection token that can be used to replace the localstorage service `LocalStorageService`.
- */
-export const O_LOCALSTORAGE_SERVICE = new InjectionToken<ILocalStorageService>('Local storage service');
-
-/**
- * Injection token that can be used to replace the exportation service `OntimizeExportService`.
- */
-export const O_EXPORT_SERVICE = new InjectionToken<IExportService>('Export service');
-
-/**
- * Injection token that can be used to replace the permission service `OntimizePermissionsService or OntimizeEEPermissionsService`.
- */
-export const O_PERMISSION_SERVICE = new InjectionToken<IPermissionsService>('Permission service');
-
-/**
- * Injection token that can be used to replace the authentication service `AuthService`.
- */
-export const O_AUTH_SERVICE = new InjectionToken<AuthService>('Authentication service');
-
-/**
-* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
-*/
-export const O_COMPONENT_STATE_SERVICE = new InjectionToken<DefaultComponentStateService>('Component state service');
-
-
-/**
-* Injection token that can be used to replace the component state service `DefaultComponentStateService`.
-*/
-export const O_CHART_ON_DEMAND_SERVICE = new InjectionToken<IChartOnDemandService>('Chart on demand service');
-
-export const O_REPORT_SERVICE = new InjectionToken<IReportService>('Report service');
-
-export const O_ERROR_DIALOG_MANAGER = new InjectionToken<OErrorDialogManager>('Error dialog manager');
-
-export const O_EXPORT_DATA_SERVICE = new InjectionToken<IExportDataProvider>('Export data provider');
-
-export const O_MAT_ERROR_OPTIONS = new InjectionToken<OMatErrorOptions>('o-mat-error-options');
-
-export const O_FORM_MESSAGE_SERVICE = new InjectionToken('Ontimize o-form message service');
 
 /* ----------------------------------------------------------------------------------------------------
  * --------------------------------------------- FACTORIES --------------------------------------------
@@ -99,12 +63,12 @@ export function dataServiceFactory(injector: Injector): any {
     return service;
   }
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
-    return new OntimizeEEService(injector);
-  } else if ('Ontimize' === config.serviceType) {
-    return new OntimizeService(injector);
-  }
-  return Util.createServiceInstance(config.serviceType, injector);
+  const serviceType = config.serviceType;
+  return FactoryUtil.createServiceInstanceByType(serviceType, injector);
+}
+
+export function createServiceInstance(serviceClass: any, injector: Injector): any {
+  return Util.createServiceInstance(serviceClass, injector);
 }
 
 /**
@@ -160,6 +124,42 @@ export function exportDataFactory(injector: Injector): IExportDataProvider {
   }
 
 }
+export function serviceRequestAdapterFactory(injector: Injector): IBaseRequestArgument {
+
+  const serviceClass = _getInjectionTokenValue(O_REQUEST_ADAPTER, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
+
+  if (Util.isDefined(service)) {
+    return service;
+  }
+
+  const config = injector.get(AppConfig).getConfiguration();
+  if (!Util.isDefined(config.serviceType) ||
+    FactoryUtil.isOntimizeEEService(injector)) {
+    return new OntimizeRequestArgumentsAdapter();
+  } else if (FactoryUtil.isJsonApiService(injector)) {
+    return new JSONAPIRequestArgumentsAdapter();
+  }
+  return new OntimizeRequestArgumentsAdapter();
+}
+
+export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
+  const serviceClass = _getInjectionTokenValue(O_RESPONSE_ADAPTER, injector);
+  const service = Util.createServiceInstance(serviceClass, injector);
+
+  if (Util.isDefined(service)) {
+    return service;
+  }
+  const config = injector.get(AppConfig).getConfiguration();
+  if (!Util.isDefined(config.serviceType) ||
+    (FactoryUtil.isOntimizeEEService(injector))) {
+    return new OntimizeServiceResponseAdapter();
+  } else if (FactoryUtil.isJsonApiService(injector)) {
+
+    return new JSONAPIServiceResponseAdapter();
+  }
+  return new JSONAPIServiceResponseAdapter();
+}
 
 /**
  * Creates a new instance of the permission service.
@@ -178,6 +178,21 @@ export function permissionsServiceFactory(injector: Injector): IPermissionsServi
     return new OntimizePermissionsService(injector);
   }
   return Util.createServiceInstance(config.permissionsServiceType, injector);
+}
+
+/**
+ * Creates a new instance of the preferences service.
+ */
+export function preferencesServiceFactory(injector: Injector): IPreferencesService {
+
+  const config = injector.get(AppConfig).getConfiguration();
+
+  if (!Util.isDefined(config.serviceType) || FactoryUtil.isOntimizeEEService(injector)) {
+    return new OntimizePreferencesService(injector);
+  } else if (FactoryUtil.isJsonApiService(injector)) {
+    return new JSONAPIPreferencesService(injector);
+  }
+  return new JSONAPIPreferencesService(injector);
 }
 
 /**
@@ -211,24 +226,27 @@ export const ComponentStateServiceProvider = { provide: AbstractComponentStateSe
 
 export const ExportDataServiceProvider = { provide: OntimizeExportDataProviderService, useFactory: exportDataFactory, deps: [Injector] };
 
+export const ServiceRequestAdapter = { provide: OntimizeRequestArgumentsAdapter, useFactory: serviceRequestAdapterFactory, deps: [Injector] };
+
+export const ServiceResponseAdapter = { provide: OntimizeServiceResponseAdapter, useFactory: serviceResponseAdapterFactory, deps: [Injector] };
+
+export const NameConventionProvider = { provide: NameConvention, useFactory: nameConventionServiceFactory, deps: [Injector] };
 export const OntimizeLocalStorageServiceProvider = { provide: LocalStorageService, useFactory: localStorageServiceFactory, deps: [Injector] };
-/* ----------------------------------------------------------------------------------------------------
- * ----------------------------------------- Utility methods ------------------------------------------
- * ---------------------------------------------------------------------------------------------------- */
 
 /**
- * Returns the value for the provided injection token
- * @param token the injection token
- * @param injector the injector
+ * Creates a new instance of the preferences service.
  */
-export function _getInjectionTokenValue<T>(token: InjectionToken<T>, injector: Injector): T {
-  let service: T;
-  try {
-    service = injector.get(token);
-  } catch (e) {
-    // No value provided for the injection token
+export function nameConventionServiceFactory(injector: Injector): INameConvention {
+
+  const config = injector.get(AppConfig).getConfiguration();
+
+  if (config?.nameConvention === 'lower') {
+    return new NameConventionLower();
+  } else if (config?.nameConvention === 'upper') {
+    return new NameConventionUpper();
   }
-  return service;
+  return new NameConvention();
 }
+
 
 

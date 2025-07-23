@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
 import { OPermissions } from '../../types';
@@ -38,6 +38,8 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
+import { OQueryParams } from '../../types/query-params.type';
+import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 
 export const DEFAULT_INPUTS_O_GRID = [
   // cols: Amount of columns in the grid list. Default in extra small and small screen is 1, in medium screen is 2, in large screen is 3 and extra large screen is 4.
@@ -341,10 +343,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
 
-  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
+  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
+
     if (this.pageable && Util.isDefined(this.sortColumn)) {
-      queryArguments[6] = this.sortColumnOrder ? [this.sortColumnOrder] : this.sortColumnOrder;
+      queryArguments.sort = this.sortColumnOrder ? [this.sortColumnOrder] : [];
     }
     return queryArguments;
   }

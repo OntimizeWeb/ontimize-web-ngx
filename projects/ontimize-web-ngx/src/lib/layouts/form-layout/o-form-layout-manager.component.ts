@@ -20,7 +20,7 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
+import { ComponentStateServiceProvider } from '../../services/factories';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
@@ -37,6 +37,7 @@ import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-acti
 import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
 import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
 import { IOFormLayoutManager } from '../../interfaces/form-layout-manager.interface';
+import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',

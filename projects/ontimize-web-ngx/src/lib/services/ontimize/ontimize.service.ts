@@ -5,6 +5,7 @@ import { share } from 'rxjs/operators';
 import { IDataService } from '../../interfaces/data-service.interface';
 import { Util } from '../../util/util';
 import { OntimizeBaseService } from './ontimize-base-service.class';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 
 @Injectable()
 export class OntimizeService extends OntimizeBaseService implements IDataService {
@@ -27,14 +28,16 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
     const encodedPassword = encodeURIComponent(password);
     const url = this.urlBase + this._startSessionPath + '?user=' + user + '&password=' + encodedPassword;
     const dataObservable: Observable<string | number> = new Observable(_startSessionObserver => {
-      this.httpClient.get(url).subscribe((resp: number) => {
-        if (resp >= 0) {
-          _startSessionObserver.next(resp);
-        } else {
-          // Invalid sessionId...
-          _startSessionObserver.error('Invalid user or password');
-        }
-      }, error => _startSessionObserver.error(error));
+      this.httpClient.get(url).subscribe({
+        next: (resp: number) => {
+          if (resp >= 0) {
+            _startSessionObserver.next(resp);
+          } else {
+            // Invalid sessionId...
+            _startSessionObserver.error('Invalid user or password');
+          }
+        }, error: (error) => _startSessionObserver.error(error)
+      });
     });
     return dataObservable.pipe(share());
   }
@@ -42,13 +45,15 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
   public endsession(user: string, sessionId: number): Observable<number> {
     const url = this.urlBase + '/endsession?user=' + user + '&sessionid=' + sessionId;
     const dataObservable: Observable<any> = new Observable(_closeSessionObserver => {
-      this.httpClient.get(url).subscribe(resp => {
-        _closeSessionObserver.next(resp);
-      }, error => {
-        if (error.status === 401 || error.status === 0 || !error.ok) {
-          _closeSessionObserver.next(0);
-        } else {
-          _closeSessionObserver.error(error);
+      this.httpClient.get(url).subscribe({
+        next: (resp) => {
+          _closeSessionObserver.next(resp);
+        }, error: (error) => {
+          if (error.status === 401 || error.status === 0 || !error.ok) {
+            _closeSessionObserver.next(0);
+          } else {
+            _closeSessionObserver.error(error);
+          }
         }
       });
     });
@@ -58,9 +63,11 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
   public hassession(user: string, sessionId: number): Observable<boolean> {
     const dataObservable: Observable<any> = new Observable(observer => {
       const url = this.urlBase + '/hassession?user=' + user + '&sessionid=' + sessionId;
-      this.httpClient.get(url).subscribe(resp => {
-        observer.next(resp);
-      }, error => observer.error(error));
+      this.httpClient.get(url).subscribe({
+        next: (resp) => {
+          observer.next(resp);
+        }, error: (error) => observer.error(error)
+      });
     });
     return dataObservable.pipe(share());
   }
@@ -91,6 +98,10 @@ export class OntimizeService extends OntimizeBaseService implements IDataService
       successCallback: this.parseSuccessfulQueryResponse,
       errorCallBack: this.parseUnsuccessfulQueryResponse
     });
+  }
+
+  queryById(kv?: object, av?: string[], entity?: string, sqltypes?: object): Observable<ServiceResponse> {
+    return this.query(kv, av, entity, sqltypes);
   }
 
   public advancedQuery(kv?: object, av?: Array<string>, entity?: string, sqltypes?: object,

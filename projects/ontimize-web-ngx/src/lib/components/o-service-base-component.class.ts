@@ -3,9 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../decorators/input-converter';
-import { PaginationContext } from '../interfaces';
+import { PaginationContext } from '../interfaces/pagination-context.interface';
 import { ILocalStorageComponent } from '../interfaces/local-storage-component.interface';
 import { ServiceResponse } from '../interfaces/service-response.interface';
+import { BaseService } from '../services/base-service.class';
 import { DialogService } from '../services/dialog.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { OErrorDialogManager } from '../services/o-error-dialog-manager.service';
@@ -14,11 +15,13 @@ import { AbstractServiceComponentStateClass } from '../services/state/o-componen
 import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
 import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { OQueryDataArgs } from '../types/query-data-args.type';
+import { OQueryParams } from '../types/query-params.type';
 import { Codes } from '../util/codes';
 import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
+import { FactoryUtil } from '../util/factory.util';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -78,14 +81,16 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   'queryWithNullParentKeys: query-with-null-parent-keys',
 
   // [function]: function to execute on query error. Default: no value.
-  'queryFallbackFunction: query-fallback-function'
+  'queryFallbackFunction: query-fallback-function',
   // ,
 
   // 'insertFallbackFunction: insert-fallback-function',
 
   // 'updateFallbackFunction: update-fallback-function',
 
-  // 'deleteFallbackFunction: delete-fallback-function'
+  // 'deleteFallbackFunction: delete-fallback-function',
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args'
 ];
 
 @Directive({
@@ -163,7 +168,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected onFormDataSubscribe: any;
 
   protected querySubscription: Subscription;
-  protected dataService: any;
+  protected dataService: BaseService<ServiceResponse>;
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
   public loading: Observable<boolean> = this.loadingSubject.asObservable();
@@ -174,7 +179,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   protected queryOnEventSubscription: Subscription;
   public cd: ChangeDetectorRef; // borrar
-  protected queryArguments: any[];
+  protected queryArguments: OQueryParams;
 
   protected router: Router;
   protected actRoute: ActivatedRoute;
@@ -182,6 +187,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   protected sqlTypes = undefined;
 
   public abortQuery: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  protected configureServiceArgs: OConfigureServiceArgs;
 
   constructor(
     protected injector: Injector
@@ -328,8 +334,12 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   configureService() {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
-    this.dataService = Util.configureService(configureServiceArgs);
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
+
+    this.dataService = FactoryUtil.configureService(configureServiceArgs);
     this.updatePaginationContext({ pageNumber: 0, pageSize: this.queryRows, offset: 0, totalSize: 0 });
   }
 
@@ -383,7 +393,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   }
 
   public queryData(filter?: any, ovrrArgs?: OQueryDataArgs): void {
+
     const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return;
     }
@@ -399,7 +411,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       // ensuring false value
       this.abortQuery.next(false);
 
-      this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
 
       if (this.abortQuery.value) {
         this.clearData();
@@ -410,7 +421,10 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.loadingSubject.next(false);
         return;
       }
-      this.querySubscription = (this.dataService[queryMethodName].apply(this.dataService, this.queryArguments) as Observable<ServiceResponse>)
+
+      this.queryArguments = this.getQueryArguments(filter, ovrrArgs);
+
+      this.querySubscription = this.dataService[queryMethodName](...this.dataService.requestArgumentAdapter.parseQueryParameters(this.queryArguments))
         .subscribe((res: ServiceResponse) => {
           let data;
           this.sqlTypes = undefined;
@@ -477,32 +491,42 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     return result;
   }
 
-  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
+
+  getQueryArguments(filter: object, ovrrArgs: OQueryDataArgs = {}): OQueryParams {
     const compFilter = this.getComponentFilter(filter);
     const queryCols = this.getAttributesValuesToQuery();
     const sqlTypes = (ovrrArgs && ovrrArgs.hasOwnProperty('sqltypes')) ? ovrrArgs.sqltypes : this.form ? this.form.getAttributesSQLTypes() : {};
 
-    let queryArguments = [compFilter, queryCols, this.entity, sqlTypes];
     if (this.pageable) {
-      const queryOffset = (ovrrArgs && ovrrArgs.hasOwnProperty('offset')) ? ovrrArgs.offset : this.state.queryRecordOffset;
-      const queryRowsN = (ovrrArgs && ovrrArgs.hasOwnProperty('length')) ? ovrrArgs.length : this.queryRows;
-      queryArguments = queryArguments.concat([queryOffset, queryRowsN, undefined]);
+      const queryRecordOffset = this.state.queryRecordOffset ? this.state.queryRecordOffset : 0;
+      ovrrArgs.offset = ovrrArgs?.hasOwnProperty('offset') ? ovrrArgs.offset : queryRecordOffset;
+      ovrrArgs.length = ovrrArgs?.hasOwnProperty('length') ? ovrrArgs.length : this.queryRows;
+
     }
-    return queryArguments;
+
+    return {
+      filter: compFilter,
+      columns: queryCols,
+      entity: this.entity,
+      pageable: this.pageable,
+      sqlTypes: sqlTypes,
+      ovrrArgs: ovrrArgs,
+      sort: null
+    };
   }
 
   updatePaginationInfo(queryRes: ServiceResponse) {
     if (this.pageable) {
-      const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
       if (queryRes.startRecordIndex !== undefined) {
+        const resultEndIndex = queryRes.startRecordIndex + (queryRes.data ? queryRes.data.length : 0);
         this.state.queryRecordOffset = resultEndIndex;
       }
       if (queryRes.totalQueryRecordsNumber !== undefined) {
         this.state.totalQueryRecordsNumber = queryRes.totalQueryRecordsNumber;
       }
       /* pageNumber = 0 is reinitialized when it generates a search  */
-      const pageNumber = this.state.queryRecordOffset == 0 ? 0: this.dataService?.getPaginationContext().pageNumber;
-      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber,  });
+      const pageNumber = this.state.queryRecordOffset == 0 ? 0 : this.dataService?.getPaginationContext().pageNumber;
+      this.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber, pageSize: this.state.queryRows });
     } else {
       this.updatePaginationContext({ totalSize: queryRes.data.length });
     }
@@ -527,7 +551,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   getComponentFilter(existingFilter: any = {}): any {
     const filterParentKeys = this.getParentKeysFromContext(this._pKeysEquiv, this.getContextComponent());
-    existingFilter = Object.assign(existingFilter || {}, filterParentKeys);
+    existingFilter = { ...existingFilter || {}, ...filterParentKeys };
     return existingFilter;
   }
 

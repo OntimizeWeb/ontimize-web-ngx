@@ -41,7 +41,7 @@ import { BehaviorSubject, combineLatest, Observable, of, Subject, Subscription }
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
@@ -103,8 +103,11 @@ import type { OTableOptions } from '../../interfaces/o-table-options.interface';
 import type { OTablePaginator } from '../../interfaces/o-table-paginator.interface';
 import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.interface';
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OQueryParams } from '../../types/query-params.type';
+import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 import { MatRow } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
+
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
   'visibleColumns: visible-columns',
@@ -1866,13 +1869,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return columns;
   }
 
-  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): Array<any> {
+  getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    Object.assign(queryArguments[3], this.getSqlTypesForFilter(queryArguments[1]));
-    Object.assign(queryArguments[3], ovrrArgs ? ovrrArgs.sqltypes || {} : {});
+    queryArguments.sqlTypes = {
+      ...this.getSqlTypesForFilter(queryArguments.columns),
+      ...ovrrArgs ? ovrrArgs.sqltypes || {} : {}
+    };
+
     if (this.pageable) {
-      queryArguments[5] = this.paginator.isShowingAllRows(queryArguments[5]) ? this.state.totalQueryRecordsNumber : queryArguments[5];
-      queryArguments[6] = this.sortColArray;
+      queryArguments.sort = this.sortColArray;
+      if (this.paginator.isShowingAllRows(ovrrArgs?.offset) && this.state?.totalQueryRecordsNumber) {
+        queryArguments.ovrrArgs.length = this.state.totalQueryRecordsNumber;
+      }
     }
     return queryArguments;
   }
@@ -1880,11 +1888,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   getSqlTypesForFilter(filter): object {
     const allSqlTypes = this.getSqlTypes();
     const sqlTypes = {};
-    Object.keys(allSqlTypes).forEach(key => {
-      if (filter.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
-        sqlTypes[key] = allSqlTypes[key];
-      }
-    });
+    if (!Util.isObjectEmpty(filter)) {
+      Object.keys(allSqlTypes).forEach(key => {
+        if (filter.indexOf(key) !== -1 && allSqlTypes[key] !== SQLTypes.OTHER) {
+          sqlTypes[key] = allSqlTypes[key];
+        }
+      });
+    }
     return sqlTypes;
   }
 
@@ -2350,8 +2360,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (this.asyncLoadSubscriptions[rowIndex]) {
         this.asyncLoadSubscriptions[rowIndex].unsubscribe();
       }
-      this.asyncLoadSubscriptions[rowIndex] = this.dataService[queryMethodName]
-        .apply(this.dataService, columnQueryArgs)
+      this.asyncLoadSubscriptions[rowIndex] = this.dataService[queryMethodName](...columnQueryArgs)
         .subscribe((res: ServiceResponse) => {
           if (res.isSuccessful()) {
             let data;

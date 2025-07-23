@@ -1,5 +1,7 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
-export interface ServiceResponseAdapter<T> {
+export interface IServiceResponseAdapter<T> {
+  context?: any;
   adapt(res: HttpResponse<any>): T;
+  adaptError?(error: HttpErrorResponse): any
 }
