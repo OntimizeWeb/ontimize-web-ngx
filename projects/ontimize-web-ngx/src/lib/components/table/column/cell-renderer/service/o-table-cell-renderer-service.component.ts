@@ -18,6 +18,7 @@ import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 import type { OColumn } from '../../o-column.class';
 import { BaseService } from '../../../../../services/base-service.class';
+import { FactoryUtil } from '../../../../../util/factory.util';
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
   'service',
@@ -199,7 +200,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     if (Util.isDefined(this.configureServiceArgs)) {
       configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
     }
-    this.dataService = Util.configureService(configureServiceArgs);
+    this.dataService = FactoryUtil.configureService(configureServiceArgs);
   }
 
   public getCellData(cellvalue: any, rowvalue?: any): string {

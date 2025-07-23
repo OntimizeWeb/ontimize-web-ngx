@@ -21,6 +21,7 @@ import { ServiceUtils } from '../util/service.utils';
 import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
+import { FactoryUtil } from '../util/factory.util';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -338,7 +339,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
     }
 
-    this.dataService = Util.configureService(configureServiceArgs);
+    this.dataService = FactoryUtil.configureService(configureServiceArgs);
     this.updatePaginationContext({ pageNumber: 0, pageSize: this.queryRows, offset: 0, totalSize: 0 });
   }
 

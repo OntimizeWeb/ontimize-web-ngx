@@ -16,6 +16,7 @@ import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent } from '../o-form-data-component.class';
 import { BaseService } from '../../services/base-service.class';
+import { FactoryUtil } from '../../util/factory.util';
 
 export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // static-data [Array<any>] : way to populate with static data. Default: no value.
@@ -241,7 +242,7 @@ export class OFormServiceComponent extends OFormDataComponent {
     if (Util.isDefined(this.configureServiceArgs)) {
       configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
     }
-    this.dataService = Util.configureService(configureServiceArgs);
+    this.dataService = FactoryUtil.configureService(configureServiceArgs);
 
   }
 

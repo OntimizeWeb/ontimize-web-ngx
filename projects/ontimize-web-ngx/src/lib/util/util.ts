@@ -460,60 +460,7 @@ export class Util {
     return !!obj && typeof obj.then === 'function';
   }
 
-  static configureService(configureServiceArgs: OConfigureServiceArgs): any {
-    const baseService = configureServiceArgs.baseService;
-    const entity = configureServiceArgs.entity;
-    const service = configureServiceArgs.service;
-    const injector = configureServiceArgs.injector;
 
-    const config = injector.get(AppConfig);
-    const serviceConfiguration = config.getServiceConfiguration();
-    const serviceConfigurationType = serviceConfiguration[service]?.serviceType;
-    const serviceType = configureServiceArgs.serviceType || serviceConfigurationType;
-
-    try {
-      let dataService = this.getDataServiceInstance(serviceType, baseService, injector);
-
-      if (Util.isDataService(dataService)) {
-        const serviceCfg = dataService.getDefaultServiceConfiguration(service);
-        if (entity) {
-          serviceCfg.entity = entity;
-        }
-        dataService.configureService(serviceCfg);
-      }
-      return dataService;
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
-
-  }
-
-  private static getDataServiceInstance(serviceType: any, baseService: any, injector: Injector): any {
-    if (!serviceType) {
-      return injector.get<any>(baseService);
-    }
-
-    if (![ServiceType.Ontimize, ServiceType.OntimizeEE, ServiceType.JSONAPI].includes(serviceType)) {
-      return Util.createServiceInstanceByType(injector.get<any>(serviceType), injector);
-    }
-
-    return Util.createServiceInstanceByType(serviceType, injector);
-  }
-
-  static createServiceInstanceByType(serviceType: ServiceType, injector: Injector): any {
-      if (!Util.isDefined(serviceType) || ServiceType.OntimizeEE === serviceType) {
-        return new OntimizeEEService(injector);
-      }
-      if (ServiceType.Ontimize === serviceType) {
-        return new OntimizeService(injector);
-      }
-      if (ServiceType.JSONAPI === serviceType) {
-        return new JSONAPIService(injector);
-      }
-      return Util.createServiceInstance(serviceType, injector);
-
-  }
   /**
  * Returns an instance of the provided service class
  * @param clazz the class reference

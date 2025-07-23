@@ -13,6 +13,7 @@ import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
+import { FactoryUtil } from '../../../util';
 
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
 
@@ -155,7 +156,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     if (Util.isDefined(this.configureServiceArgs)) {
       configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
     }
-    this.fileService = Util.configureService(configureServiceArgs);
+    this.fileService = FactoryUtil.configureService(configureServiceArgs);
 
   }
 

@@ -21,7 +21,6 @@ import { INameConvention } from '../interfaces/name-convention.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
 import { IPreferencesService } from '../interfaces/prefereces-service.interface';
 import { IServiceResponseAdapter } from '../interfaces/service-response-adapter.interface';
-import { ServiceType } from '../types/service-type.type';
 import { _getInjectionTokenValue } from '../util/injection-token.utils';
 import { Util } from '../util/util';
 import { AuthService } from './auth.service';
@@ -65,7 +64,7 @@ export function dataServiceFactory(injector: Injector): any {
   }
   const config = injector.get(AppConfig).getConfiguration();
   const serviceType = config.serviceType;
-  return Util.createServiceInstanceByType(serviceType, injector);
+  return FactoryUtil.createServiceInstanceByType(serviceType, injector);
 }
 
 export function createServiceInstance(serviceClass: any, injector: Injector): any {

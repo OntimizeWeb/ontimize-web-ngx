@@ -14,6 +14,7 @@ import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
 import { OConfigureServiceArgs } from './../../../types/configure-service-args.type';
 import { OFormNavigationClass } from './o-form.navigation.class';
+import { FactoryUtil } from '../../../util';
 
 
 export type QueryConfiguration = {
@@ -87,7 +88,7 @@ export class OFormNavigationComponent implements OnDestroy {
       service: this.queryConf.service,
       serviceType: this.queryConf.serviceType
     };
-    this.dataService = Util.configureService(configureService);
+    this.dataService = FactoryUtil.configureService(configureService);
   }
 
   getQueryArguments(offset: number, length: number): OQueryParams {

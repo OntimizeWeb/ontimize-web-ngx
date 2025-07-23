@@ -54,6 +54,7 @@ import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { BaseService } from '../../services/base-service.class';
+import { FactoryUtil } from '../../util/factory.util';
 
 
 export const DEFAULT_INPUTS_O_FORM = [
@@ -770,7 +771,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (Util.isDefined(this.configureServiceArgs)) {
       configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
     }
-    this.dataService = Util.configureService(configureServiceArgs);
+    this.dataService = FactoryUtil.configureService(configureServiceArgs);
   }
 
   get messageService(): OFormMessageService {
