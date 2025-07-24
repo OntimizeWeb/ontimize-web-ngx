@@ -14,7 +14,7 @@ import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
 import { OConfigureServiceArgs } from './../../../types/configure-service-args.type';
 import { OFormNavigationClass } from './o-form.navigation.class';
-import { FactoryUtil } from '../../../util';
+import { FactoryUtil } from '../../../util/factory.util';
 
 
 export type QueryConfiguration = {
