@@ -116,7 +116,7 @@ jobs:
       - name: bumping minor version in package.json
         if: ${{ steps.parameters.outputs.isMinor == true }}
         run: |
-          version=$(echo "${{ steps.project.outputs.version }}" | sed 's/-SNAPSHOT-[0-9]//')
+          version=$(echo "${{ steps.project.outputs.version }}" | sed 's/-SNAPSHOT-[0-9]//' | sed 's/-next.[0-9]//')
           npm version $version --no-git-tag-version
           echo "RELEASE_VERSION=$(node -pe "require('./package.json')['version']")" >> $GITHUB_ENV
 
@@ -124,7 +124,7 @@ jobs:
         if: ${{ steps.parameters.outputs.isMinor == true }}
         working-directory: ${{ env.LIBRARY_PATH }}
         run: |
-          version=$(echo "${{ steps.project.outputs.version }}" | sed 's/-SNAPSHOT-[0-9]//')
+          version=$(echo "${{ steps.project.outputs.version }}" | sed 's/-SNAPSHOT-[0-9]//' | sed 's/-next.[0-9]//')
           npm version $version --no-git-tag-version
 
       ## RELEASE CANDIDATE
