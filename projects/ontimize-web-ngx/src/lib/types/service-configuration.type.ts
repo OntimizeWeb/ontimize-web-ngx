@@ -8,9 +8,9 @@ export type ServiceConfig = {
     urlBase?: string;
     /** Session information */
     session?: SessionInfo;
-    /* URL used to generate an export file(e.g., CSV, Excel, PDF) from the o-table.*/
+    /* (Ontimize Boot 2.x or earlier) API endpoint used to generate export files (e.g., CSV, Excel, PDF) from an o-table.*/
     exportPath?: string;
-    /*URL used to retrieve the exported file that was previously generated. */
+    /* (Ontimize Boot 2.x or earlier) API endpoint used to download a previously exported file via its file ID.*/
     downloadPath?:string
   };
 };
