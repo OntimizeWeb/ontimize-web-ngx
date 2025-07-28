@@ -1,4 +1,4 @@
-## 15.6.0 (2025-07-24)
+## 15.6.0
 ### Feature
 * Full adaptation to [JSON:API](https://jsonapi.org/) specification for improved interoperability. ([da5e1a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da5e1a5)) Closes [#1525](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/#1525)
 * Support for for **multiple keys** adaptation in CRUD operations, enhancing compatibility and flexibility in data handling to the [JSON:API](https://jsonapi.org/) Closes[#20](https://github.com/OntimizeWeb/northwind-jsonapi/issues/20)
@@ -12,7 +12,7 @@
 
 * `OntimizeBaseService` is **now** an abstract class and must be subclassed. You can replace by OntimizeService, OntimizeEEService and JSONApiService
 * Renamed `OntimizeQueryArgumentsAdapter` to `OntimizeRequestArgumentsAdapter`
-* **Config**: `servicesConfiguration` property type has changed from `Object` to `ServiceConfigType`
+* **Config**: `servicesConfiguration` property type has changed from `Object` to  `OntimizeServiceConfig` or `JSONAPIServiceConfig`
 
   **Before**:
 
@@ -22,7 +22,7 @@
 
   **Now**:
   ```ts
-  servicesConfiguration?: ServiceConfigType
+  servicesConfiguration?:  OntimizeServiceConfig | JSONAPIServiceConfig
   ```
 
 * **o-table**:
