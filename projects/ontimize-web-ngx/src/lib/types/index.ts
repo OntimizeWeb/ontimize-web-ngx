@@ -27,7 +27,6 @@ export * from './o-permissions.type';
 export * from './o-route-permissions.type';
 export * from './ontimize-ee-permissions-config.type';
 export * from './ontimize-permissions-config.type';
-export * from './ontimize-service-config.type';
 export * from './operation-function.type';
 export * from './query-data-args.type';
 export * from './quick-filter-function.type';
