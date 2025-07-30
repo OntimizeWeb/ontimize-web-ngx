@@ -1,4 +1,14 @@
 ## 15.6.0
+### ℹ️ Notes
+
+- Official migration guide for updating to version `15.6.0`:
+  👉 [https://ontimizeweb.github.io/docs/migration-15.x.x-to-15.6.0/](https://ontimizeweb.github.io/docs/migration-15.x.x-to-15.6.0/)
+
+- The following add-ons require `ontimize-web-ngx@15.6.0` to work properly:
+  - `ontimize-web-ngx-chart@15.1.0`
+  - `ontimize-web-ngx-report@15.2.0`
+  - `ontimize-web-ngx-filemanager@15.1.0`
+
 ### Feature
 * Full adaptation to [JSON:API](https://jsonapi.org/) specification for improved interoperability. ([da5e1a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/da5e1a5)) Closes [#1525](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/#1525)
 * Support for for **multiple keys** adaptation in CRUD operations, enhancing compatibility and flexibility in data handling to the [JSON:API](https://jsonapi.org/) Closes[#20](https://github.com/OntimizeWeb/northwind-jsonapi/issues/20)
