@@ -39,7 +39,8 @@ export class OTableFilterByColumnService {
   ): TableFilterByColumnData[] {
     const columnData: TableFilterByColumnData[] = [];
     const colRenderedValues = this.getColumnDataUsingRenderer(column, tableData);
-    const colValues = tableData.map((elem) => Util.getValueFromPath(elem, column.valueColumn));
+    const valueColumn = column.valueColumn ?? column.attr;
+    const colValues = tableData.map((elem) => Util.getValueFromPath(elem, valueColumn));
 
     // Use predefined values if available in the filter configuration
     if (Util.isDefined(filter?.availableValues)) {
