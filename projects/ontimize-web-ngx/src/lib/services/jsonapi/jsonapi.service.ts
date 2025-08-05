@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { inject, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable, share } from 'rxjs';
 
 import { AppConfig } from '../../config/app-config';
