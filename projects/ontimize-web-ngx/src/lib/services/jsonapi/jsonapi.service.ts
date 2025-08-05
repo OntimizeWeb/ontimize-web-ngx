@@ -22,8 +22,8 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   constructor(protected injector: Injector) {
     super(injector);
     this.config = this.injector.get(AppConfig);
-    const config = inject<IJsonApiConfig>(O_JSON_API_CONFIG);
-    this.delimiter = config?.multipleKeyDelimiter || this.DEFAULT_DELIMITER;
+    const jsonApiConfig = this.injector.get<IJsonApiConfig>(O_JSON_API_CONFIG);
+    this.delimiter = jsonApiConfig?.multipleKeyDelimiter || this.DEFAULT_DELIMITER;
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
