@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { inject, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable, share } from 'rxjs';
 
 import { AppConfig } from '../../config/app-config';
@@ -22,8 +22,8 @@ export class JSONAPIService extends BaseDataService<JSONAPIResponse> implements 
   constructor(protected injector: Injector) {
     super(injector);
     this.config = this.injector.get(AppConfig);
-    const config = inject<IJsonApiConfig>(O_JSON_API_CONFIG);
-    this.delimiter = config?.multipleKeyDelimiter || this.DEFAULT_DELIMITER;
+    const jsonApiConfig = this.injector.get<IJsonApiConfig>(O_JSON_API_CONFIG);
+    this.delimiter = jsonApiConfig?.multipleKeyDelimiter || this.DEFAULT_DELIMITER;
   }
 
   public startsession(user: string, password: string): Observable<string | number> {
