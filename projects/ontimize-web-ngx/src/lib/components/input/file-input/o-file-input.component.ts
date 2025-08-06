@@ -13,6 +13,7 @@ import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFileItem } from './o-file-item.class';
 import { OFileUploader } from './o-file-uploader.class';
+import { FactoryUtil } from '../../../util';
 
 export const DEFAULT_INPUTS_O_FILE_INPUT = [
 
@@ -40,6 +41,8 @@ export const DEFAULT_INPUTS_O_FILE_INPUT = [
   'service',
   'entity',
   'serviceType : service-type',
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args'
 ];
 
 export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
@@ -105,7 +108,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   protected service: string;
   protected entity: string;
   protected serviceType: string;
-
+  protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
@@ -149,8 +152,11 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   }
 
   public configureService(): void {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeFileService, entity: this.entity, service: this.service, serviceType: this.serviceType }
-    this.fileService = Util.configureService(configureServiceArgs);
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeFileService, entity: this.entity, service: this.service, serviceType: this.serviceType };
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
+    this.fileService = FactoryUtil.configureService(configureServiceArgs);
 
   }
 

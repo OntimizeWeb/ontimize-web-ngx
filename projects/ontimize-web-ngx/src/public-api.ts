@@ -21,3 +21,4 @@ export * from './lib/util/index';
 export * from './lib/shared/index';
 export * from './lib/validators/o-validators';
 export * from './lib/types/index';
+export * from './lib/injection-tokens/index';

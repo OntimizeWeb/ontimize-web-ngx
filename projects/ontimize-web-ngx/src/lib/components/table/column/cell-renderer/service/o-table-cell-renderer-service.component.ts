@@ -14,9 +14,11 @@ import { FilterExpressionUtils } from '../../../../../util/filter-expression.uti
 import { ServiceUtils } from '../../../../../util/service.utils';
 import { SQLTypes } from '../../../../../util/sqltypes';
 import { Util } from '../../../../../util/util';
-import type { OColumn } from '../../o-column.class';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
+import type { OColumn } from '../../o-column.class';
+import { BaseService } from '../../../../../services/base-service.class';
+import { FactoryUtil } from '../../../../../util/factory.util';
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'entity',
   'service',
@@ -27,7 +29,9 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   'parentKeys: parent-keys',
   'queryMethod: query-method',
   'serviceType : service-type',
-  'translateArgsFn: translate-params'
+  'translateArgsFn: translate-params',
+  //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
+  'configureServiceArgs: configure-service-args'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
@@ -67,12 +71,13 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected parentKeys: string;
   protected queryMethod: string = Codes.QUERY_METHOD;
   protected serviceType: string;
+  protected configureServiceArgs: OConfigureServiceArgs;
 
   /* Outputs */
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   /* Internal variables */
   protected colArray: string[] = [];
-  protected dataService: any;
+  protected dataService: BaseService<ServiceResponse>;
   protected _pKeysEquiv = {};
   protected dialogService: DialogService;
 
@@ -139,8 +144,8 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     } else {
       filter[this.column] = cellvalue;
     }
-    const sqlTypes = this.getSqlTypesForFilter(filter);
-    this.dataService[this.queryMethod](filter, this.colArray, this.entity, sqlTypes)
+    const queryArguments = this.getQueryArguments(filter);
+    this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryArguments))
       .subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           let respData;
@@ -167,6 +172,17 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
       });
   }
 
+  getQueryArguments(filter: {}): any {
+    const sqlTypes = this.getSqlTypesForFilter(filter);
+
+    return {
+      filter: filter,
+      columns: this.colArray,
+      entity: this.entity,
+      sqlTypes: sqlTypes
+    };
+  }
+
   getSqlTypesForFilter(filter: Object) {
     const sqlType = {};
     const tableSqlTypes = this.table.getSqlTypes();
@@ -180,8 +196,11 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return sqlType;
   }
   public configureService(): void {
-    const configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
-    this.dataService = Util.configureService(configureServiceArgs);
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: this.entity, service: this.service, serviceType: this.serviceType }
+    if (Util.isDefined(this.configureServiceArgs)) {
+      configureServiceArgs = { ...configureServiceArgs, ...this.configureServiceArgs };
+    }
+    this.dataService = FactoryUtil.configureService(configureServiceArgs);
   }
 
   public getCellData(cellvalue: any, rowvalue?: any): string {
@@ -231,7 +250,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
         console.warn('Service not properly configured! aborting query');
         observer.next();
       }
-      this.dataService[this.queryMethod]({}, this.colArray, this.entity)
+
+      const queryArguments = this.getQueryArguments({});
+
+      this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryArguments))
         .subscribe((resp: ServiceResponse) => {
           if (resp.isSuccessful()) {
             let respData = [];

@@ -1,6 +1,8 @@
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
 
 import { OQueryDataArgs } from '../../../types/query-data-args.type';
+import { BaseService } from '../../../services/base-service.class';
+import { ServiceResponse } from '../../../interfaces/service-response.interface';
 
 
 export class OTableDao {
@@ -17,9 +19,9 @@ export class OTableDao {
   get sqlTypes(): object { return this.sqlTypesChange.value; }
 
   constructor(
-    private dataService: any,
-    private entity: string,
-    private methods: any
+    private readonly dataService: BaseService<ServiceResponse>,
+    private readonly entity: string,
+    private readonly methods: any
   ) { }
 
   /**
@@ -27,11 +29,12 @@ export class OTableDao {
    */
   getQuery(queryArgs: OQueryDataArgs): Observable<any> {
     this.isLoadingResults = true;
-    return this.dataService[this.methods.query].apply(this.dataService, queryArgs);
+    return this.dataService[this.methods.query](this.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs));
   }
 
   removeQuery(filters: any, sqlTypes?: object): Observable<any> {
-    return merge(...filters.map((kv => this.dataService[this.methods.delete](kv, this.entity, sqlTypes))));
+    const id = this.dataService.requestArgumentAdapter.getIdFromFilter(filters);
+    return merge(...filters.map((kv => this.dataService[this.methods.delete](id, this.entity, sqlTypes))));
   }
 
   insertQuery(av: object, sqlTypes?: object): Observable<any> {
@@ -48,7 +51,8 @@ export class OTableDao {
       // Only to simulate the service response, the model change is done in the editor
       return of([]);
     } else {
-      return this.dataService[this.methods.update](kv, av, this.entity, sqlTypes);
+      const id = this.dataService.requestArgumentAdapter.getIdFromFilter(kv);
+      return this.dataService[this.methods.update](id, av, this.entity, sqlTypes);
     }
   }
 
@@ -58,7 +62,7 @@ export class OTableDao {
    */
   setDataArray(data: Array<any>) {
     this.dataChange.next(data);
-    this.isLoadingResults = false;
+    this.notLoadingResults = false;
     return of(data);
   }
 
@@ -81,15 +85,16 @@ export class OTableDao {
   }
 
   set isLoadingResults(val: boolean) {
-    if (val) {
-      this.cleanTimer();
-      this.loadingTimer = setTimeout(() => {
-        this._isLoadingResults = val;
-      }, 500);
-    } else {
-      this.cleanTimer();
+    this.cleanTimer();
+    this.loadingTimer = setTimeout(() => {
       this._isLoadingResults = val;
-    }
+    }, 500);
+
+  }
+
+  set notLoadingResults(val: boolean) {
+    this.cleanTimer();
+    this._isLoadingResults = val;
   }
 
   protected cleanTimer() {

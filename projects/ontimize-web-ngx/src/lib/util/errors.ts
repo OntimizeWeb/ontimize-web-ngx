@@ -1,6 +1,6 @@
 import { Injector, QueryList } from '@angular/core';
 
-import { O_MAT_ERROR_OPTIONS } from '../services/factories';
+import { O_MAT_ERROR_OPTIONS } from '../injection-tokens';
 import { OMatErrorOptions, OMatErrorType } from '../types/o-mat-error.type';
 import { Codes } from './codes';
 import { Util } from './util';
@@ -23,12 +23,8 @@ export interface ComponentWithValidatorsAndErrorsData {
 
 export class ErrorsUtils {
   static getErrorOptions(injector: Injector): OMatErrorOptions {
-    let result: OMatErrorOptions
-    try {
-      result = injector.get(O_MAT_ERROR_OPTIONS) || {};
-    } catch (e) {
-      result = {};
-    }
+    const result = injector.get(O_MAT_ERROR_OPTIONS, {});
+
     if (!Util.isDefined(result.type)) {
       result.type = Codes.O_MAT_ERROR_STANDARD as OMatErrorType;
     }

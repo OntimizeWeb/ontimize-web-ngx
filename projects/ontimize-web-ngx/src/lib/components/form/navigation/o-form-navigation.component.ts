@@ -1,20 +1,25 @@
-import { OConfigureServiceArgs } from './../../../types/configure-service-args.type';
 import { Component, forwardRef, Inject, Injector, OnDestroy, Type, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { ServiceResponse } from '../../../interfaces/service-response.interface';
 import { OFormLayoutManagerBase } from '../../../layouts/form-layout/o-form-layout-manager-base.class';
+import { BaseService } from '../../../services/base-service.class';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { OntimizeService } from '../../../services/ontimize/ontimize.service';
+import { OQueryParams } from '../../../types/query-params.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
+import { OConfigureServiceArgs } from './../../../types/configure-service-args.type';
 import { OFormNavigationClass } from './o-form.navigation.class';
+import { FactoryUtil } from '../../../util/factory.util';
+
 
 export type QueryConfiguration = {
   serviceType: string;
-  queryArguments: any[];
+  queryArguments: OQueryParams;
   entity: string;
   service: string;
   queryMethod: string;
@@ -45,7 +50,7 @@ export class OFormNavigationComponent implements OnDestroy {
   protected formLayoutManager: OFormLayoutManagerBase;
 
   protected querySubscription: Subscription;
-  protected dataService: any;
+  protected dataService: BaseService<ServiceResponse>;
   protected queryConf: QueryConfiguration;
 
   constructor(
@@ -83,28 +88,43 @@ export class OFormNavigationComponent implements OnDestroy {
       service: this.queryConf.service,
       serviceType: this.queryConf.serviceType
     };
-    this.dataService = Util.configureService(configureService);
+    this.dataService = FactoryUtil.configureService(configureService);
   }
 
-  protected queryNavigationData(offset: number, length?: number): Promise<any> {
-    const self = this;
+  getQueryArguments(offset: number, length: number): OQueryParams {
+    const queryArguments = { ...this.queryConf.queryArguments };
+    queryArguments.columns = this.getKeysArray();
+    queryArguments.ovrrArgs.offset = offset;
+    queryArguments.ovrrArgs.length = length || this.queryConf.queryRows;
+    return queryArguments;
+  }
+
+  protected queryNavigationData(offset: number, length?: number): Promise<void> {
+    if (!this.queryConf) {
+      return Promise.reject(new Error(`Invalid query parameters: ${this.queryConf.queryMethod}`));
+    }
+    const queryArgs = this.getQueryArguments(offset, length);
+
+    const serviceMethod = this.dataService[this.queryConf.queryMethod];
+
+    if (typeof serviceMethod !== 'function') {
+      return Promise.reject(new Error(`Invalid query method: ${this.queryConf.queryMethod}`));
+    }
+
+    const adaptedParams = this.dataService.requestArgumentAdapter.parseQueryParameters(queryArgs);
+
     return new Promise<any>((resolve: any, reject: any) => {
-      const conf = self.queryConf;
-      const queryArgs = conf.queryArguments;
-
-      queryArgs[1] = self.getKeysArray();
-      queryArgs[4] = offset;
-      queryArgs[5] = length ? length : conf.queryRows;
-
-      self.querySubscription = self.dataService[conf.queryMethod].apply(self.dataService, queryArgs).subscribe(res => {
-        if (res.isSuccessful()) {
-          self.navigationData = res.data;
-          self.queryConf.queryRecordOffset = offset;
-        }
-        resolve();
-      }, () => {
-        reject();
-      });
+      this.querySubscription = this.dataService[this.queryConf.queryMethod](...adaptedParams)
+        .subscribe({
+          next: res => {
+            if (res.isSuccessful()) {
+              this.navigationData = res.data;
+              this.queryConf.queryRecordOffset = offset;
+            }
+            resolve();
+          },
+          error: err => reject(new Error(err))
+        });
     });
   }
 
@@ -185,14 +205,26 @@ export class OFormNavigationComponent implements OnDestroy {
 
   last() {
     if (!this.queryConf || this.isLast()) {
-      const index = this.navigationData.length - 1;
-      this.move(index);
-    } else {
-      const offset = this.queryConf.totalRecordsNumber - this.queryConf.queryRows;
-      this.queryNavigationData(offset, this.queryConf.queryRows).then(() => {
-        this.move(this.navigationData.length - 1);
-      });
+      this.moveToLast();
+      return;
     }
+
+    const offset = this.queryConf.totalRecordsNumber - this.queryConf.queryRows;
+
+    if (offset < 0 || offset === this.queryConf.queryRecordOffset) {
+      // if the offset is negative or equal to the current offset, it means we are already at the last page
+      this.moveToLast();
+      return;
+    }
+
+    this.queryNavigationData(offset, this.queryConf.queryRows).then(() => {
+      this.moveToLast();
+    });
+  }
+
+  private moveToLast(): void {
+    const index = this.navigationData.length - 1;
+    this.move(index);
   }
 
   isFirst() {

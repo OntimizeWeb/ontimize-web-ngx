@@ -419,6 +419,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (service && (queryMethodName in service) && this.table.entity) {
       return service[queryMethodName](...columnQueryArgs)
     }
+
     return of({});
   }
 

@@ -5,11 +5,10 @@ import { from, isObservable, Observable, of } from 'rxjs';
 import { IDataService } from '../interfaces/data-service.interface';
 import { IFormDataComponent } from '../interfaces/form-data-component.interface';
 import { IPermissionsService } from '../interfaces/permissions-service.interface';
+import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
 import { ODateValueType } from '../types/o-date-value.type';
-import { OConfigureServiceArgs } from '../types/configure-service-args.type';
 import { Base64 } from './base64';
 import { Codes } from './codes';
-import { OConfigureMessageServiceArgs } from '../types/configure-message-service-args.type';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
 export class Util {
@@ -93,7 +92,7 @@ export class Util {
   }
 
   static isArrayEmpty(array: any[]): boolean {
-    if (array && array.length === 0) {
+    if (!Util.isDefined(array) || array.length === 0) {
       return true;
     }
     return false;
@@ -456,34 +455,6 @@ export class Util {
   }
 
 
-  static configureService(configureServiceArgs: OConfigureServiceArgs): any {
-    let dataService = configureServiceArgs.baseService;
-    const entity = configureServiceArgs.entity;
-    const service = configureServiceArgs.service;
-    const serviceType = configureServiceArgs.serviceType;
-    const injector = configureServiceArgs.injector;
-
-    if (serviceType) {
-      dataService = serviceType;
-    }
-    try {
-      dataService = injector.get<any>(dataService);
-      if (serviceType) {
-        dataService = Util.createServiceInstance(dataService, injector)
-      }
-      if (Util.isDataService(dataService)) {
-        const serviceCfg = dataService.getDefaultServiceConfiguration(service);
-        if (entity) {
-          serviceCfg.entity = entity;
-        }
-        dataService.configureService(serviceCfg);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    return dataService;
-  }
-
   /**
  * Returns an instance of the provided service class
  * @param clazz the class reference
@@ -546,6 +517,103 @@ export class Util {
     return str;
   }
 
+  static readonly objectToQueryString = (initialObj) => {
+    const reducer = (obj, parentPrefix = null) => (prev, key) => {
+      const val = obj[key];
+      key = encodeURIComponent(key);
+      let prefix: string;
+      if (key === 'filterParentKeys') {
+        prefix = parentPrefix;
+      } else {
+        prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
+      }
+
+      if (key === 'filter' && !Util.isObjectEmpty(obj[key])) {
+        prev.push(Object.keys(val).map(itemfilter => {
+          const filterKey = `filter[${itemfilter}]`;
+          if (Util.isObject(val[itemfilter])) {
+            /** In case filter and basic expresion*/
+            return `${encodeURIComponent(filterKey)}=${encodeURIComponent(JSON.stringify(val[itemfilter]))}`;
+          } else {
+            /** In case the simple filter to espape quotes*/
+            return `${encodeURIComponent(filterKey)}=${encodeURIComponent(val[itemfilter])}`;
+          }
+        }).join('&'));
+
+        return prev;
+      }
+
+
+      if (val == null || typeof val === 'function') {
+        prev.push(`${encodeURIComponent(prefix)}=`);
+        return prev;
+      }
+
+      if (['number', 'boolean', 'string'].includes(typeof val)) {
+        prev.push(`${encodeURIComponent(prefix)}=${encodeURIComponent(val)}`);
+        return prev;
+      }
+
+      prev.push(Object.keys(val).reduce(reducer(val, prefix), []).join('&'));
+      return prev;
+    };
+
+    return Object.keys(initialObj).reduce(reducer(initialObj), []).join('&');
+  };
+
+  /**
+   * Map keys of object
+   * For example: converting the keys of an object to uppercase
+   */
+  static readonly mapKeys = (obj, fn) =>
+    Object.keys(obj).reduce((acc, k) => {
+      acc[fn(obj[k], k, obj)] = obj[k];
+      return acc;
+    }, {});
+
+  static readonly mapValues = (obj, fn) =>
+    Object.keys(obj).reduce((acc, k) => ({ ...acc, [k]: fn(obj[k]) }), {});
+
+
+  static toLowerCase(value: string) {
+    if (typeof value === 'string') {
+      return value.toLocaleLowerCase();
+    } else {
+      return value;
+    }
+  }
+
+  static toUpperCase(value: string) {
+    if (typeof value === 'string') {
+      return value.toUpperCase();
+    } else {
+      return value;
+    }
+  }
+
+
+  static parseToLowerCase(value: any) {
+    if (Util.isArray(value)) {
+      return value.map((x: string) => x.toLocaleLowerCase());
+    } else if (typeof value === 'string') {
+      return value.toLocaleLowerCase();
+    } else if (typeof value === 'object') {
+      return Util.mapKeys(value, Util.toLowerCase);
+    }
+    return value;
+  }
+
+  static parseToUpperCase(value: any) {
+    if (Util.isArray(value)) {
+      return value.map((x: string) => x.toLocaleUpperCase());
+    } else if (typeof value === 'string') {
+      return value.toLocaleUpperCase();
+    } else if (typeof value === 'object') {
+      return Util.mapKeys(value, Util.toUpperCase);
+    }
+    return value;
+  }
+
   static sortFunction(propertyA: string | number, propertyB: string | number, activeSortDirection: string) {
 
     let valueA: string | number = '';
@@ -572,5 +640,15 @@ export class Util {
       child = child.firstChild;
     }
     return child;
+  }
+
+  static getValueFromPath(obj: any, path: string): any {
+    if (!obj || !path) return undefined;
+    return path.split('.').reduce((acc, key) => {
+      if (acc && typeof acc === 'object') {
+        return acc[key];
+      }
+      return undefined;
+    }, obj);
   }
 }

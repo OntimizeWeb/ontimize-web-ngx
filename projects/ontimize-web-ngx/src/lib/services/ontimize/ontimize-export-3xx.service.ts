@@ -2,16 +2,18 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
+
 import { AppConfig } from '../../config/app-config';
 import { IExportDataProvider } from '../../interfaces/export-data-provider.interface';
 import { IExportService } from '../../interfaces/export-service.interface';
-import { OntimizeExportDataProviderService } from '../ontimize-export-data-provider.service';
-import { OntimizeBaseService } from './ontimize-base-service.class';
-import { Util } from '../../util/util';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { HttpRequestOptions } from '../../types/http-request-options.type';
+import { Util } from '../../util/util';
+import { BaseService } from '../base-service.class';
+import { OntimizeExportDataProviderService } from '../ontimize-export-data-provider.service';
 
 @Injectable()
-export class OntimizeExportService3X extends OntimizeBaseService implements IExportService {
+export class OntimizeExportService3X extends BaseService<ServiceResponse> implements IExportService {
 
   public exportPath: string;
   public servicePath: string;

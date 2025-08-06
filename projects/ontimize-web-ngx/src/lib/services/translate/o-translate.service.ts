@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Injector } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subscriber } from 'rxjs';
 
@@ -7,10 +8,11 @@ import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
 import { MomentService } from '../../services/moment.service';
 import { ObservableWrapper } from '../../util/async';
-import { _getInjectionTokenValue, O_TRANSLATE_SERVICE } from '../factories';
-import { Util } from '../../util/util';
 import { Codes } from '../../util/codes';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Util } from '../../util/util';
+
+import { O_TRANSLATE_SERVICE } from '../../injection-tokens';
+import { _getInjectionTokenValue } from '../../util/injection-token.utils';
 
 /**
  * `OTranslateService` factory.
@@ -167,6 +169,10 @@ export class OTranslateService {
     if (observer) {
       observer.next(langRes);
     }
+  }
+
+  public getNgxTranslateService() {
+    return this.ngxTranslateService;
   }
 
   public getCurrentLang() {

@@ -20,7 +20,7 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ILayoutManagerComponent } from '../../interfaces/layout-manager-component.interface';
 import { ILocalStorageComponent } from '../../interfaces/local-storage-component.interface';
 import { OFormLayoutManagerMode } from '../../interfaces/o-form-layout-manager-mode.interface';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE } from '../../services/factories';
+import { ComponentStateServiceProvider } from '../../services/factories';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
@@ -37,6 +37,7 @@ import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-acti
 import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
 import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
 import { IOFormLayoutManager } from '../../interfaces/form-layout-manager.interface';
+import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -86,7 +87,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
     '[class.o-form-layout-manager]': 'true'
   }
 })
-export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent,IOFormLayoutManager {
+export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDestroy, ILocalStorageComponent, IOFormLayoutManager {
 
   // declaring this property to have acces to static members in the template
   OFormLayoutManagerComponent = OFormLayoutManagerComponent;
@@ -425,12 +426,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       id: Util.randomNumber().toString(),
       label: context?.label || '',
       innerFormsInfo: {},
-      rendered: false,
+      rendered:false,
+      rendererSubject: new BehaviorSubject(false),
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
-      rendererSubject: new BehaviorSubject(false)
     };
+
     /** listening for the components to be rendered to determine that the form-layout-manager is finished navigating. */
-    newDetailComp.rendererSubject.subscribe((renderer:boolean) => {
+    newDetailComp.rendererSubject.subscribe((renderer: boolean) => {
       if (renderer) {
         this.navigationService.isNavigating = !renderer;
       }
@@ -499,6 +501,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         this.reloadMainComponents();
       }
     });
+
+    /* Once the modal is opened, the component is rendered and the rendererSubject is emitted to enable navigation*/
     this.dialogRef.afterOpened().subscribe(() => {
       detailComp.rendered = true;
       detailComp.rendererSubject.next(true);
