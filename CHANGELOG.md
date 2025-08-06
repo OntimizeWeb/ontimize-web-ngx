@@ -1,4 +1,4 @@
-## 15.6.0
+## 15.6.0 (2025-08-06)
 > [!NOTE]
 > Official migration guide for updating to version `15.6.0`:
   👉 [https://ontimizeweb.github.io/docs/migration-15.x.x-to-15.6.0/](https://ontimizeweb.github.io/docs/migration-15.x.x-to-15.6.0/)
@@ -66,6 +66,18 @@
     **Now:**
     ```ts
     export class MyAdapter implements IServiceResponseAdapter<BaseServiceResponse>  { ... }
+
+## 15.6.0-next.11 (2025-08-05)
+* Fixed error to extend JSONAPIService ([3470753](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3470753))
+
+## 15.6.0-next.10 (2025-07-31)
+* **o-table**: Fixed empty values in `Filter by column` modal ([cd71bb4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cd71bb4))
+
+## 15.6.0-next.9 (2025-07-29)
+* Improved `serviceConfiguration` type in `config.type.ts` ([81c938b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/81c938b))
+
+## 15.6.0-next.8 (2025-07-29)
+* Resolved import cycles ([ecabcdb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ecabcdb))
 
 ## 15.6.0-next.7 (2025-07-09)
 ### Features
