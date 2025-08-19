@@ -47,6 +47,8 @@ import { JSONAPIRequestArgumentsAdapter } from './request-adapter/jsonapi-reques
 import { OntimizeRequestArgumentsAdapter } from './request-adapter/ontimize-request-arguments.adapter';
 import { AbstractComponentStateService, DefaultComponentStateService } from './state/o-component-state.service';
 import { FactoryUtil } from '../util/factory.util';
+import { BaseRequestArgument } from './request-adapter/base-request-argument.adapter';
+import { BaseServiceResponseAdapter } from './base-service-response.adapter';
 
 
 /* ----------------------------------------------------------------------------------------------------
@@ -134,13 +136,12 @@ export function serviceRequestAdapterFactory(injector: Injector): IBaseRequestAr
   }
 
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) ||
-    FactoryUtil.isOntimizeEEService(injector)) {
+  if (!Util.isDefined(config.serviceType) || FactoryUtil.isOntimizeEEService(injector)) {
     return new OntimizeRequestArgumentsAdapter();
   } else if (FactoryUtil.isJsonApiService(injector)) {
     return new JSONAPIRequestArgumentsAdapter();
   }
-  return new OntimizeRequestArgumentsAdapter();
+  return new BaseRequestArgument();
 }
 
 export function serviceResponseAdapterFactory(injector: Injector): IServiceResponseAdapter<BaseServiceResponse> {
@@ -150,15 +151,14 @@ export function serviceResponseAdapterFactory(injector: Injector): IServiceRespo
   if (Util.isDefined(service)) {
     return service;
   }
+
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) ||
-    (FactoryUtil.isOntimizeEEService(injector))) {
+  if (!Util.isDefined(config.serviceType) || FactoryUtil.isOntimizeEEService(injector)) {
     return new OntimizeServiceResponseAdapter();
   } else if (FactoryUtil.isJsonApiService(injector)) {
-
     return new JSONAPIServiceResponseAdapter();
   }
-  return new JSONAPIServiceResponseAdapter();
+  return new BaseServiceResponseAdapter();
 }
 
 /**
