@@ -13,16 +13,35 @@ export class FactoryUtil {
 
   static isJsonApiService(injector: Injector): boolean {
     const config = injector.get(AppConfig);
-    return config.getConfiguration().serviceType === 'JSONAPI' ||
-      config.getConfiguration().serviceType instanceof JSONAPIService;
+    const serviceType = config.getConfiguration().serviceType;
+
+    return serviceType === 'JSONAPI' ||
+      FactoryUtil.isJSONAPISubclass(serviceType);
   }
 
   static isOntimizeEEService(injector: Injector): boolean {
     const config = injector.get(AppConfig);
-    return (config.getConfiguration().serviceType === 'OntimizeEE' ||
-      config.getConfiguration().serviceType instanceof OntimizeEEService) ||
-      (config.getConfiguration().serviceType === 'Ontimize' ||
-        config.getConfiguration().serviceType instanceof OntimizeService);
+    const serviceType = config.getConfiguration().serviceType;
+    return (serviceType === 'OntimizeEE' ||
+      FactoryUtil.isOntimizeEESubclass(serviceType)) ||
+      (serviceType === 'Ontimize' ||
+        FactoryUtil.isOntimizeSubclass(serviceType));
+  }
+
+  static isOntimizeSubclass(cls: any): boolean {
+    return typeof cls === 'function' &&
+      OntimizeService.prototype.isPrototypeOf(cls.prototype);
+  }
+
+  static isOntimizeEESubclass(cls: any): boolean {
+    return typeof cls === 'function' &&
+      OntimizeEEService.prototype.isPrototypeOf(cls.prototype);
+  }
+
+
+  static isJSONAPISubclass(cls: any): boolean {
+    return typeof cls === 'function' &&
+      JSONAPIService.prototype.isPrototypeOf(cls.prototype);
   }
 
   static createServiceInstanceByType(serviceType: ServiceType, injector: Injector): any {
@@ -51,34 +70,34 @@ export class FactoryUtil {
     return FactoryUtil.createServiceInstanceByType(serviceType, injector);
   }
 
-   static configureService(configureServiceArgs: OConfigureServiceArgs): any {
-      const baseService = configureServiceArgs.baseService;
-      const entity = configureServiceArgs.entity;
-      const service = configureServiceArgs.service;
-      const injector = configureServiceArgs.injector;
+  static configureService(configureServiceArgs: OConfigureServiceArgs): any {
+    const baseService = configureServiceArgs.baseService;
+    const entity = configureServiceArgs.entity;
+    const service = configureServiceArgs.service;
+    const injector = configureServiceArgs.injector;
 
-      const config = injector.get(AppConfig);
-      const serviceConfiguration = config.getServiceConfiguration();
-      const serviceConfigurationType = serviceConfiguration[service]?.serviceType;
-      const serviceType = configureServiceArgs.serviceType || serviceConfigurationType;
+    const config = injector.get(AppConfig);
+    const serviceConfiguration = config.getServiceConfiguration();
+    const serviceConfigurationType = serviceConfiguration[service]?.serviceType;
+    const serviceType = configureServiceArgs.serviceType || serviceConfigurationType;
 
-      try {
-        let dataService = this.getDataServiceInstance(serviceType, baseService, injector);
+    try {
+      let dataService = this.getDataServiceInstance(serviceType, baseService, injector);
 
-        if (Util.isDataService(dataService)) {
-          const serviceCfg = dataService.getDefaultServiceConfiguration(service);
-          if (entity) {
-            serviceCfg.entity = entity;
-          }
-          dataService.configureService(serviceCfg);
+      if (Util.isDataService(dataService)) {
+        const serviceCfg = dataService.getDefaultServiceConfiguration(service);
+        if (entity) {
+          serviceCfg.entity = entity;
         }
-        return dataService;
-      } catch (e) {
-        console.error(e);
-        return null;
+        dataService.configureService(serviceCfg);
       }
-
+      return dataService;
+    } catch (e) {
+      console.error(e);
+      return null;
     }
+
+  }
 
 
 }
