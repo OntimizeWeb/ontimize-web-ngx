@@ -1,6 +1,6 @@
 ## 15.6.1 (2025-08-20)
-### Bug fixes
-* Fixed `serviceResponseAdapterFactory` returning `JSONAPIServiceResponseAdapter` for services extending `OntimizeService`.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/#1959)
+### Bug Fixes
+* Fixed `serviceResponseAdapterFactory` returning `JSONAPIServiceResponseAdapter` for services extending `OntimizeService`.([0daad3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0daad3a)) Closes [#1959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1959)
 
 ## 15.6.0 (2025-08-06)
 > [!NOTE]
