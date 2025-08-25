@@ -19,9 +19,8 @@ import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
-import { OPermissions } from '../../types';
 import { OTreePermissions } from '../../types/o-tree-permissions.type';
 import { OTreeFlatNode } from '../../types/tree-flat-node.type';
 import { Codes } from '../../util/codes';
@@ -32,6 +31,10 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
+import { ServiceUtils } from '../../util';
+import { OPermissions } from '../../types/o-permissions.type';
+import { SQLOrder } from '../../types/sql-order.type';
+import { OQueryDataArgs } from '../../types/query-data-args.type';
 
 
 export const DEFAULT_INPUTS_O_TREE = [
@@ -106,7 +109,9 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
   },
   providers: [
     OTreeDao,
-    OntimizeServiceProvider
+    OntimizeServiceProvider,
+    ComponentStateServiceProvider,
+    { provide: O_COMPONENT_STATE_SERVICE, useClass: OTreeComponentStateService },
   ]
 })
 
@@ -229,6 +234,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   public enabledDeleteButton: boolean = false;
   protected subscription: Subscription = new Subscription();
   public route: string;
+  public sortColumnArray: SQLOrder[];
+
   get showTreeMenuButton(): boolean {
     const staticOpt = this.selectAllCheckbox;
     return staticOpt;
@@ -284,6 +291,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (!Util.isDefined(this.quickFilterColumns)) {
       this.quickFilterColumns = this.visibleColumns;
     }
+    this.parseSortColumn();
   }
 
   ngAfterViewInit(): void {
@@ -641,9 +649,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     return this.keys + ':' + id;
   }
 
-
-
-
   protected navigateToViewDetail(node: OTreeFlatNode) {
     if (Util.isDefined(node.route)) {
       let route = undefined;
@@ -714,6 +719,21 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
 
     return rootNodes;
+  }
+
+  public parseSortColumn(): void {
+    this.sortColumnArray = ServiceUtils.parseSortColumns(this.sortColumn) || [];
+  }
+
+  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
+    const queryArguments = super.getQueryArguments(filter, ovrrArgs);
+    if (this.pageable) {
+      queryArguments[4] = 0;
+      if (Util.isDefined(this.sortColumnArray)) {
+        queryArguments[6] = this.sortColumnArray;
+      }
+    }
+    return queryArguments;
   }
 
   private shouldBeRoot(parent: OTreeFlatNode, selectedKeys: Set<string>): boolean {
