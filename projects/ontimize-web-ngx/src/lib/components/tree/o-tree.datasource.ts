@@ -7,11 +7,14 @@ import { OTranslateService } from '../../services/translate';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeComponent } from './o-tree.component';
 import { OTreeFlatNode } from '../../types/tree-flat-node.type';
+import { MatPaginator } from '@angular/material/paginator';
 
 export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   dataChange = new BehaviorSubject<OTreeFlatNode[]>([]);
   translateService: any;
   protected _database: OTreeDao;
+  resultsLength: number = 0;
+  protected _paginator: MatPaginator;
 
   get data(): OTreeFlatNode[] {
     return this.dataChange.value;
@@ -28,6 +31,13 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this._database = this.oTree.daoTree;
+    if (this._database) {
+      this.resultsLength = this._database.data.length;
+    }
+    if (oTree.matpaginator) {
+      this._paginator = oTree.matpaginator;
+    }
+    console.log(' constructor datasource ', oTree, this._database);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<OTreeFlatNode[]> {
@@ -41,13 +51,36 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     });
 
     return merge(collectionViewer.viewChange, this.dataChange).pipe(map(() => {
+      let data = Object.assign([], this.data);
+
+      if (this.oTree.pageable) {
+        const totalRecordsNumber = this.oTree.getTotalRecordsNumber();
+        console.log('[tree datasource] totalRecordsNumber ', totalRecordsNumber);
+        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+      } else {
+        this.resultsLength = data.length;
+        data = this.getPaginationData(data);
+      }
+      console.log('[tree datasource] resultslength ', this.resultsLength);
       return this.data;
     }));
   }
 
+  getPaginationData(data: any[]): any[] {
+    if (!this._paginator || isNaN(this._paginator.pageSize)) {
+      return data;
+    }
+    let startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
+    if (data.length > 0 && data.length < startIndex) {
+      startIndex = 0;
+      this._paginator.pageIndex = 0;
+    }
+    return data.splice(startIndex, this._paginator.pageSize);
+  }
+
   disconnect(collectionViewer: CollectionViewer): void {
     this.dataChange.complete();
-   }
+  }
 
   /** Handle expand/collapse behaviors */
   handleTreeControl(change: SelectionChange<OTreeFlatNode>) {
@@ -66,30 +99,50 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     return 'level' in value && 'label' in value;
   }
 
-  updateTree(parentNode: OTreeFlatNode, children: Array<any>, expand: boolean) {
-    const treeNode = parentNode.treeNode ? parentNode.treeNode : this.oTree;
+  updateTree(parentNode: OTreeFlatNode, children: Array<any>, expand: boolean): void {
     const index = this.data.findIndex(node => node.id === parentNode.id);
 
     if (!children || index < 0) {
-      // If no children, or cannot find the node, no op
+      parentNode.isLoading = false;
       return;
     }
 
-    if (expand) {
-      let level = parentNode.level + 1;
-      let nodes: Array<OTreeFlatNode>;
-      nodes = children.map(child => {
-        if (this.isTreeFlatNode(child)) {
-          return child;
-        } else {
-          return treeNode.transformer(child, level, parentNode);
-        }
-      });
-      this.data.splice(index + 1, 0, ...nodes);
+    const level = parentNode.level + 1;
+    const treeNode = parentNode.treeNode ? parentNode.treeNode : this.oTree;
 
-      //If parentNode is selected, the children also are selected
+    // Transformar hijos nuevos
+    const newNodes: OTreeFlatNode[] = children.map(child =>
+      this.isTreeFlatNode(child) ? child : treeNode.transformer(child, level, parentNode)
+    );
+
+    // // Filtrar duplicados por id
+    // const existingChildIds = new Set<string | number>();
+    // for (let i = index + 1; i < this.data.length && this.data[i].level > parentNode.level; i++) {
+    //   existingChildIds.add(this.data[i].id);
+    // }
+
+    // const uniqueNewNodes = newNodes.filter(node => !existingChildIds.has(node.id));
+
+    if (expand) {
+      // Insertar después de los hijos existentes
+      let insertIndex = index + 1;
+      while (
+        insertIndex < this.data.length &&
+        this.data[insertIndex].level > parentNode.level
+      ) {
+        insertIndex++;
+      }
+
+      this.data.splice(insertIndex, 0, ...newNodes);
+
+      // Expandir si aún no lo está
+      if (!this._treeControl.isExpanded(parentNode)) {
+        this._treeControl.expand(parentNode);
+      }
+
+      // Seleccionar hijos si el padre está seleccionado
       if (this.oTree.selection.isSelected(parentNode)) {
-        this.oTree.selection.select(...nodes)
+        this.oTree.selection.select(...newNodes);
       }
     } else {
       let count = 0;
@@ -101,7 +154,10 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
       this.data.splice(index + 1, count);
     }
 
-    // notify the change
+    // Refrescar nodos del tree control
+    this._treeControl.dataNodes = this.data;
+
+    // Notificar cambio
     this.dataChange.next(this.data);
     parentNode.isLoading = false;
 

@@ -13,9 +13,10 @@ import {
   OnInit,
   Optional,
   TemplateRef,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { isObservable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
@@ -35,6 +36,7 @@ import { ServiceUtils } from '../../util';
 import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 export const DEFAULT_INPUTS_O_TREE = [
@@ -171,6 +173,23 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
 
+  //hasLoadMore = (node: OTreeFlatNode) => node.level > 0 && node.hasMore;
+  hasLoadMore = (node: OTreeFlatNode) => node.level > 0 && node.hasMore && this.treeControl.isExpanded(node) && this.paginationControls;
+  onLoadMore(node: OTreeFlatNode) {
+    if (!node || node.isLoading) return;
+
+    node.isLoading = true;
+    node.offset = Math.min((node.offset ?? 0) + node.treeNode.queryRows, node.totalQueryRecordsNumber);
+    node.hasMore = node.offset + node.treeNode.queryRows < node.totalQueryRecordsNumber;
+    this.getChildren(node).subscribe((res: ServiceResponse) => {
+        if (res.isSuccessful()) {
+          const newData = res.data || [];
+
+          this.dataSource.updateTree(node, newData, true);
+        }
+      });
+
+  }
 
   dataSource: OTreeDataSource;
 
@@ -216,7 +235,9 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   parentNodeTemplate: TemplateRef<any>;
 
   treeFlattener: any;
-  treeControl: FlatTreeControl<OTreeFlatNode, OTreeFlatNode>;
+  treeControl: FlatTreeControl<OTreeFlatNode, OTreeFlatNode>
+
+  @ViewChild(MatPaginator) matpaginator: MatPaginator;
 
   @ContentChild('nodeTemplate', { read: TemplateRef, static: false })
   set nodeTemplate(value: TemplateRef<any>) {
@@ -373,6 +394,9 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         const arrData = (res.data !== undefined) ? res.data : [];
         data = Util.isArray(arrData) ? arrData : [];
       }
+
+      node.totalQueryRecordsNumber = node.treeNode.pageable? res.totalQueryRecordsNumber : data.length
+      node.hasMore = Util.isDefined(res.startRecordIndex) ? (node.treeNode.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber):(this.queryRows<data.length);
       this.dataSource.updateTree(node, data, expand);
     }, err => {
       node.isLoading = false;
@@ -578,8 +602,13 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length || this.recursive,
       'data': node,
       'isLoading': false,
-      'route': this.route
+      'route': this.route,
+      'offset': this.parentComponent?.queryRows
     };
+
+    // if (parentNode?.hasMore) {
+    //   parentNode.hasMore = parentNode.hasMore && (offset < parentNode.totalQueryRecordsNumber); //añadir que si los resultados son menores o igual a resultLength
+    // }
 
     this.daoTree.flatNodeMap.set(flatNode, parentNode);
 
@@ -727,8 +756,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
+    console.log(' queryArguments: ', queryArguments);
     if (this.pageable) {
-      queryArguments[4] = 0;
       if (Util.isDefined(this.sortColumnArray)) {
         queryArguments[6] = this.sortColumnArray;
       }
@@ -799,4 +828,40 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   getSelectedFlatNodes(): OTreeFlatNode[] {
     return this.selection.selected;
   }
+
+  shouldShowLoadMore(node: any, index: number): boolean {
+    const parent = this.getParentNode(node);
+    if (!parent || !parent.hasMore) {
+      return false;
+    }
+
+    const currentLevel = this.getLevel(node);
+
+    // Verifica si el siguiente nodo es de menor o igual nivel o no existe
+    const nextNode = this.treeControl.dataNodes[index + 1];
+    if (!nextNode || this.getLevel(nextNode) <= currentLevel) {
+      return true;
+    }
+
+    return false;
+  }
+
+  getParentNode(node: any): any {
+    const currentLevel = this.getLevel(node);
+    if (currentLevel < 1) {
+      return null;
+    }
+
+    const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
+    for (let i = startIndex; i >= 0; i--) {
+      const currentNode = this.treeControl.dataNodes[i];
+      if (this.getLevel(currentNode) === currentLevel - 1) {
+        return currentNode;
+      }
+    }
+    return null;
+  }
+
+
+
 }

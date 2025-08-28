@@ -12,4 +12,8 @@ export type OTreeFlatNode = {
   data: any;
   isLoading?: boolean;
   route?: string;
+  hasMore?: boolean;
+  startIndex?: number;// to load pageable items
+  offset?: number;
+  totalQueryRecordsNumber?: number;
 }

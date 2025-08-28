@@ -37,11 +37,12 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterV
   ngAfterViewInit(): void {
     this.visibleColumnsArray = Util.parseArray(this.visibleColumns, true);
     this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
+    this.setDatasource();
   }
 
 
   public childQueryData(node: OTreeFlatNode): Observable<ServiceResponse> | Observable<any> {
-    let queryMethodName = this.queryMethod;
+    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return of({ data: [] });
     }
@@ -54,7 +55,7 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterV
       filter = ServiceUtils.getFilterUsingParentKeys(node.data, node.treeNode._pKeysEquiv);
     }
 
-    let queryArguments = [filter, this.colArray, this.entity];
+    let queryArguments = [filter, this.colArray, this.entity, null, node.offset??0, node.treeNode.queryRows];
 
     return this.dataService[queryMethodName](...queryArguments) as Observable<ServiceResponse>;
   }
