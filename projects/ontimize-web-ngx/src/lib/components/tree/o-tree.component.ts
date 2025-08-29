@@ -37,6 +37,7 @@ import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatTreeNode } from '@angular/material/tree';
 
 
 export const DEFAULT_INPUTS_O_TREE = [
@@ -173,22 +174,42 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
 
-  //hasLoadMore = (node: OTreeFlatNode) => node.level > 0 && node.hasMore;
   hasLoadMore = (node: OTreeFlatNode) => node.level > 0 && node.hasMore && this.treeControl.isExpanded(node) && this.paginationControls;
-  onLoadMore(node: OTreeFlatNode) {
-    if (!node || node.isLoading) return;
 
-    node.isLoading = true;
-    node.offset = Math.min((node.offset ?? 0) + node.treeNode.queryRows, node.totalQueryRecordsNumber);
-    node.hasMore = node.offset + node.treeNode.queryRows < node.totalQueryRecordsNumber;
-    this.getChildren(node).subscribe((res: ServiceResponse) => {
+  onLoadMore(event: Event, node: OTreeFlatNode) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const parentNode = this.getParentNode(node);
+
+    if (!parentNode || parentNode.isLoading) return;
+
+
+    parentNode.isLoading = true;
+    parentNode.offset = Math.min((parentNode.offset ?? 0) + parentNode.treeNode.queryRows, parentNode.totalQueryRecordsNumber);
+    parentNode.hasMore = parentNode.offset + parentNode.treeNode.queryRows < parentNode.totalQueryRecordsNumber;
+    this.getChildren(parentNode).subscribe((res: ServiceResponse) => {
         if (res.isSuccessful()) {
           const newData = res.data || [];
 
-          this.dataSource.updateTree(node, newData, true);
+          this.dataSource.updateTree(parentNode, newData, true);
         }
       });
 
+  }
+
+  isLastChildAndHasMore(node: OTreeFlatNode): boolean {
+
+    let parent = this.daoTree.flatNodeMap.get(node);
+    if (!parent || !parent.hasMore) return false;
+
+    const siblings = this.treeControl.getDescendants(parent)
+      .filter(child => child.level === node.level);
+
+    if (!siblings || siblings.length === 0) return false;
+
+    const lastSibling = siblings[siblings.length - 1];
+    return node.id === lastSibling.id;
   }
 
   dataSource: OTreeDataSource;

@@ -10,7 +10,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { OTreeMenuComponent } from './header/tree-menu/o-tree-menu.component';
 
 @NgModule({
-  declarations: [OTreeNodeComponent,OTreeComponent, OTreeMenuComponent],
+  declarations: [OTreeNodeComponent, OTreeComponent, OTreeMenuComponent],
   imports: [CommonModule, OSearchInputModule, OSharedModule, CdkTreeModule, MatTreeModule],
   exports: [OTreeComponent, OTreeNodeComponent],
 })
