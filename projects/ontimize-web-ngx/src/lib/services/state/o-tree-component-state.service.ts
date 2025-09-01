@@ -43,7 +43,6 @@ export class OTreeComponentStateService extends AbstractComponentStateService<OT
         result = this.getQuickFilterState();
         break;
 
-        break;
       case 'page':
         result = this.getPageState();
         break;
@@ -69,7 +68,7 @@ export class OTreeComponentStateService extends AbstractComponentStateService<OT
       result['query-rows'] = this.component.state.queryRows;
     } else {
       result['query-rows'] = this.component.originalQueryRows;
-    };
+    }
 
     if (this.component.currentPage > 0) {
       result.currentPage = this.component.currentPage;

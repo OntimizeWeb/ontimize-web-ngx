@@ -174,7 +174,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
 
-  hasLoadMore = (node: OTreeFlatNode) => this.getLogicalLevel(node) > 0 && node.hasMore && this.treeControl.isExpanded(node) && this.paginationControls;
+  hasLoadMore = (node: OTreeFlatNode) => this.getLogicalLevel(node) > 0 && node.hasMore && this.treeControl.isExpanded(node) && this.pageable;
 
   onLoadMore(event: Event, node: OTreeFlatNode) {
     event.stopPropagation();
@@ -207,7 +207,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   isLastChildAndHasMore(node: OTreeFlatNode): boolean {
 
     let parent = this.daoTree.flatNodeMap.get(node);
-    if (!parent || !parent.hasMore) return false;
+    if (!parent?.hasMore) return false;
 
     const siblings = this.treeControl.getDescendants(parent)
       .filter(child => child.level === node.level);
@@ -639,7 +639,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       'data': node,
       'isLoading': false,
       'route': this.route,
-      'offset': this.parentComponent?.queryRows??0
+      'offset': this.parentComponent?.queryRows ?? 0
     };
 
     this.daoTree.flatNodeMap.set(flatNode, parentNode);
@@ -915,7 +915,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   }
 
   hasFakeRoot(): boolean {
-    return this.rootTitle ? true : false;
+    return !!this.rootTitle;
   }
 
 }

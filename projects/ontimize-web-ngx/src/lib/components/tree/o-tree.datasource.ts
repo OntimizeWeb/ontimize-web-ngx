@@ -54,7 +54,7 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
 
       if (this.oTree.pageable) {
         const totalRecordsNumber = this.oTree.getTotalRecordsNumber();
-        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+        this.resultsLength = totalRecordsNumber ?? data.length;
       }
 
       return this.data;
