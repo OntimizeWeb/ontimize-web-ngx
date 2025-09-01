@@ -16,7 +16,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
@@ -143,7 +143,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         this.daoTree.flatNodeMap.set(rootNode, node);
         return [rootNode];
       } else {
-        return node.childNode.childQueryData(node);
+        return this.childQueryData(node);
       }
     } else {
       return this.childreNodes.filter((item) => item[this.parentKeys] === node[this.keys]);
@@ -154,7 +154,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
     } else {
-      return node.childNode.childQueryData(node);
+      return this.childQueryData(node);
     }
 
   }
@@ -423,7 +423,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   }
 
-  private updateAsyncTree(children: any, node: OTreeFlatNode, expand: boolean) {
+  private updateAsyncTree(children: any, flatNode: OTreeFlatNode, expand: boolean) {
     children.subscribe((res: ServiceResponse) => {
       let data;
       if (res.isSuccessful()) {
@@ -431,16 +431,19 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         data = Util.isArray(arrData) ? arrData : [];
       }
 
-      node.totalQueryRecordsNumber = node.childNode.pageable ? res.totalQueryRecordsNumber : data.length;
+      const node = this.recursive ? flatNode.node : flatNode.childNode;
+      flatNode.hasMore = false;
 
-      const canLoadMore = this.hasLoadMore(node);
-      node.hasMore = false;
+      flatNode.totalQueryRecordsNumber = node.pageable ? res.totalQueryRecordsNumber : data.length;
+
+      const canLoadMore = this.hasLoadMore(flatNode);
+      flatNode.hasMore = false;
       if (canLoadMore) {
-        node.hasMore = Util.isDefined(res.startRecordIndex) ? (node.childNode.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber) : (this.queryRows < data.length);
+        flatNode.hasMore = Util.isDefined(res.startRecordIndex) ? (node.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber) : (this.queryRows < data.length);
       }
-      this.dataSource.updateTree(node, data, expand);
+      this.dataSource.updateTree(flatNode, data, expand);
     }, err => {
-      node.isLoading = false;
+      flatNode.isLoading = false;
       if (Util.isDefined(this.queryFallbackFunction)) {
         this.queryFallbackFunction(err);
       } else {
@@ -904,6 +907,10 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   hasFakeRoot(): boolean {
     return !!this.rootTitle;
+  }
+
+  public childQueryData(flatNode: OTreeFlatNode): Observable<ServiceResponse> | Observable<any> {
+    return this.daoTree.queryNodeChildren(flatNode, this.recursive);
   }
 
 }
