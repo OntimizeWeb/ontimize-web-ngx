@@ -37,7 +37,6 @@ import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { MatPaginator } from '@angular/material/paginator';
-import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
 import { OTreeComponentStateClass } from '../../services/state/o-tree-component-state.class';
 
 
@@ -266,7 +265,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   treeControl: FlatTreeControl<OTreeFlatNode, OTreeFlatNode>
 
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
-  @ViewChild(OSearchInputComponent) quickFilterComponent: OSearchInputComponent;
 
   @ContentChild('nodeTemplate', { read: TemplateRef, static: false })
   set nodeTemplate(value: TemplateRef<any>) {
@@ -357,6 +355,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     this.setDatasource();
     this.afterViewInit();
+    this.registerQuickFilter(this.searchInputComponent);
     if (this.queryOnInit) {
       this.queryData();
     }

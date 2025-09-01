@@ -55,26 +55,12 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
       if (this.oTree.pageable) {
         const totalRecordsNumber = this.oTree.getTotalRecordsNumber();
         this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
-      } else {
-        this.resultsLength = data.length;
-        data = this.getPaginationData(data);
       }
 
       return this.data;
     }));
   }
 
-  getPaginationData(data: any[]): any[] {
-    if (!this._paginator || isNaN(this._paginator.pageSize)) {
-      return data;
-    }
-    let startIndex = isNaN(this._paginator.pageSize) ? 0 : this._paginator.pageIndex * this._paginator.pageSize;
-    if (data.length > 0 && data.length < startIndex) {
-      startIndex = 0;
-      this._paginator.pageIndex = 0;
-    }
-    return data.splice(startIndex, this._paginator.pageSize);
-  }
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.dataChange.complete();
