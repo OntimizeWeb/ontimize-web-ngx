@@ -38,6 +38,7 @@ import { SQLOrder } from '../../types/sql-order.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { MatPaginator } from '@angular/material/paginator';
 import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
+import { OTreeComponentStateClass } from '../../services/state/o-tree-component-state.class';
 
 
 export const DEFAULT_INPUTS_O_TREE = [
