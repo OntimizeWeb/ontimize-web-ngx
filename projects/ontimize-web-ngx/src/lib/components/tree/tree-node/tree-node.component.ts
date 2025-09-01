@@ -42,7 +42,7 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterV
 
 
   public childQueryData(flatNode: OTreeFlatNode): Observable<ServiceResponse> | Observable<any> {
-    const queryMethodName = flatNode.node.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    const queryMethodName = flatNode.childNode.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return of({ data: [] });
     }
