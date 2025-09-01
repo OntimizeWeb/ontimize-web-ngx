@@ -16,7 +16,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { isObservable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
@@ -37,7 +37,7 @@ import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTreeNode } from '@angular/material/tree';
+import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
 
 
 export const DEFAULT_INPUTS_O_TREE = [
@@ -135,15 +135,15 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   getTreeNodeChildren(node: OTreeFlatNode): any {
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
-    } else if (node.treeNode) {
-      if (Util.isDefined(node.treeNode.rootTitle) && !Util.isDefined(node.rootNode)) {
+    } else if (node.childNode) {
+      if (Util.isDefined(node.childNode.rootTitle) && !Util.isDefined(node.rootNode)) {
         let rootNode: OTreeFlatNode = {
-          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.treeNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, treeNode: node.treeNode
+          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.childNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, childNode: node.childNode
         };
         this.daoTree.flatNodeMap.set(rootNode, node);
         return [rootNode];
       } else {
-        return node.treeNode.childQueryData(node);
+        return node.childNode.childQueryData(node);
       }
     } else {
       return this.childreNodes.filter((item) => item[this.parentKeys] === node[this.keys]);
@@ -154,7 +154,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
     } else {
-      return node.treeNode.childQueryData(node);
+      return node.childNode.childQueryData(node);
     }
 
   }
@@ -189,12 +189,11 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     parentNode.offset = Math.min((parentNode.offset ?? 0) + parentNode.treeNode.queryRows, parentNode.totalQueryRecordsNumber);
     parentNode.hasMore = parentNode.offset + parentNode.treeNode.queryRows < parentNode.totalQueryRecordsNumber;
     this.getChildren(parentNode).subscribe((res: ServiceResponse) => {
-        if (res.isSuccessful()) {
-          const newData = res.data || [];
-
-          this.dataSource.updateTree(parentNode, newData, true);
-        }
-      });
+      if (res.isSuccessful()) {
+        const newData = res.data || [];
+        this.dataSource.updateTree(parentNode, newData, true);
+      }
+    });
 
   }
 
@@ -259,6 +258,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   treeControl: FlatTreeControl<OTreeFlatNode, OTreeFlatNode>
 
   @ViewChild(MatPaginator) matpaginator: MatPaginator;
+  @ViewChild(OSearchInputComponent) quickFilterComponent: OSearchInputComponent;
 
   @ContentChild('nodeTemplate', { read: TemplateRef, static: false })
   set nodeTemplate(value: TemplateRef<any>) {
@@ -310,6 +310,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   public initialize(): void {
     super.initialize();
+    this.state.queryRecordOffset = 0;
     this.initializeDao();
   }
 
@@ -330,10 +331,17 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       this.visibleColumns = this.columns;
     }
 
+    if (this.state.currentPage) {
+      this.currentPage = this.state.currentPage;
+    }
     if (!Util.isDefined(this.quickFilterColumns)) {
       this.quickFilterColumns = this.visibleColumns;
     }
     this.parseSortColumn();
+  }
+
+  get state(): OTreeComponentStateClass {
+    return this.componentStateService.state;
   }
 
   ngAfterViewInit(): void {
@@ -416,8 +424,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         data = Util.isArray(arrData) ? arrData : [];
       }
 
-      node.totalQueryRecordsNumber = node.treeNode.pageable? res.totalQueryRecordsNumber : data.length
-      node.hasMore = Util.isDefined(res.startRecordIndex) ? (node.treeNode.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber):(this.queryRows<data.length);
+      node.totalQueryRecordsNumber = node.childNode.pageable ? res.totalQueryRecordsNumber : data.length
+      node.hasMore = Util.isDefined(res.startRecordIndex) ? (node.childNode.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber) : (this.queryRows < data.length);
       this.dataSource.updateTree(node, data, expand);
     }, err => {
       node.isLoading = false;
@@ -619,7 +627,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       'label': this.getItemText(node),
       'level': level,
       'node': this,
-      treeNode: this.treeNode,
+      childNode: this.treeNode,
       'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length || this.recursive,
       'data': node,
       'isLoading': false,
@@ -883,6 +891,21 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     return null;
   }
 
+  reloadData(clearSelectedItems: boolean = true) {
+
+    if (clearSelectedItems) {
+      this.clearSelection();
+    }
+
+    let queryArgs: OQueryDataArgs;
+    if (this.pageable) {
+      queryArgs = {
+        offset: this.currentPage * this.queryRows,
+        length: this.queryRows
+      };
+    }
+    this.queryData(void 0, queryArgs);
+  }
 
 
 }

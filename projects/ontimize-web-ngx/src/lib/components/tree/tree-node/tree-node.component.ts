@@ -52,10 +52,10 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterV
       filter = parentItem ?? {};
       filter[this.parentColumn] = node.data[this.keysArray[0]]
     } else {
-      filter = ServiceUtils.getFilterUsingParentKeys(node.data, node.treeNode._pKeysEquiv);
+      filter = ServiceUtils.getFilterUsingParentKeys(node.data, node.childNode._pKeysEquiv);
     }
 
-    let queryArguments = [filter, this.colArray, this.entity, null, node.offset??0, node.treeNode.queryRows];
+    let queryArguments = [filter, this.colArray, this.entity, null, node.offset??0, node.childNode.queryRows];
 
     return this.dataService[queryMethodName](...queryArguments) as Observable<ServiceResponse>;
   }

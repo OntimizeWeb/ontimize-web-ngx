@@ -37,7 +37,6 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     if (oTree.matpaginator) {
       this._paginator = oTree.matpaginator;
     }
-    console.log(' constructor datasource ', oTree, this._database);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<OTreeFlatNode[]> {
@@ -55,13 +54,12 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
 
       if (this.oTree.pageable) {
         const totalRecordsNumber = this.oTree.getTotalRecordsNumber();
-        console.log('[tree datasource] totalRecordsNumber ', totalRecordsNumber);
         this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
       } else {
         this.resultsLength = data.length;
         data = this.getPaginationData(data);
       }
-      console.log('[tree datasource] resultslength ', this.resultsLength);
+      console.log('[tree datasource] data  ', this.data);
       return this.data;
     }));
   }
@@ -108,7 +106,7 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     }
 
     const level = parentNode.level + 1;
-    const treeNode = parentNode.treeNode ? parentNode.treeNode : this.oTree;
+    const treeNode = parentNode.childNode ? parentNode.childNode : this.oTree;
 
     // Transformar hijos nuevos
     const newNodes: OTreeFlatNode[] = children.map(child =>
