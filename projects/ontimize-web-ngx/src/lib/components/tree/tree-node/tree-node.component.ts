@@ -41,8 +41,8 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterV
   }
 
 
-  public childQueryData(node: OTreeFlatNode): Observable<ServiceResponse> | Observable<any> {
-    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+  public childQueryData(flatNode: OTreeFlatNode): Observable<ServiceResponse> | Observable<any> {
+    const queryMethodName = flatNode.node.pageable ? this.paginatedQueryMethod : this.queryMethod;
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
       return of({ data: [] });
     }
@@ -50,12 +50,12 @@ export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterV
     let filter
     if (this.recursive) {
       filter = parentItem ?? {};
-      filter[this.parentColumn] = node.data[this.keysArray[0]]
+      filter[this.parentColumn] = flatNode.data[this.keysArray[0]]
     } else {
-      filter = ServiceUtils.getFilterUsingParentKeys(node.data, node.childNode._pKeysEquiv);
+      filter = ServiceUtils.getFilterUsingParentKeys(flatNode.data, flatNode.childNode._pKeysEquiv);
     }
 
-    let queryArguments = [filter, this.colArray, this.entity, null, node.offset??0, node.childNode.queryRows];
+    let queryArguments = [filter, this.colArray, this.entity, null, flatNode.offset??0, flatNode.childNode.queryRows];
 
     return this.dataService[queryMethodName](...queryArguments) as Observable<ServiceResponse>;
   }

@@ -138,7 +138,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     } else if (node.childNode) {
       if (Util.isDefined(node.childNode.rootTitle) && !Util.isDefined(node.rootNode)) {
         let rootNode: OTreeFlatNode = {
-          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.childNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, childNode: node.childNode
+          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.childNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, node: node.childNode, childNode: node.childNode
         };
         this.daoTree.flatNodeMap.set(rootNode, node);
         return [rootNode];
@@ -174,7 +174,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
 
-  hasLoadMore = (node: OTreeFlatNode) => this.getLogicalLevel(node) > 0 && node.hasMore && this.treeControl.isExpanded(node) && this.pageable;
+  hasLoadMore = (node: OTreeFlatNode) => this.getLogicalLevel(node) > 0 && this.treeControl.isExpanded(node) && node.node.pageable;
 
   onLoadMore(event: Event, node: OTreeFlatNode) {
     event.stopPropagation();
@@ -431,8 +431,13 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
         data = Util.isArray(arrData) ? arrData : [];
       }
 
-      node.totalQueryRecordsNumber = node.childNode.pageable ? res.totalQueryRecordsNumber : data.length
-      node.hasMore = Util.isDefined(res.startRecordIndex) ? (node.childNode.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber) : (this.queryRows < data.length);
+      node.totalQueryRecordsNumber = node.childNode.pageable ? res.totalQueryRecordsNumber : data.length;
+
+      const canLoadMore = this.hasLoadMore(node);
+      node.hasMore = false;
+      if (canLoadMore) {
+        node.hasMore = Util.isDefined(res.startRecordIndex) ? (node.childNode.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber) : (this.queryRows < data.length);
+      }
       this.dataSource.updateTree(node, data, expand);
     }, err => {
       node.isLoading = false;
@@ -858,23 +863,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   getSelectedFlatNodes(): OTreeFlatNode[] {
     return this.selection.selected;
-  }
-
-  shouldShowLoadMore(node: any, index: number): boolean {
-    const parent = this.getParentNode(node);
-    if (!parent?.hasMore) {
-      return false;
-    }
-
-    const currentLevel = this.getLevel(node);
-
-    // Verifica si el siguiente nodo es de menor o igual nivel o no existe
-    const nextNode = this.treeControl.dataNodes[index + 1];
-    if (!nextNode || this.getLevel(nextNode) <= currentLevel) {
-      return true;
-    }
-
-    return false;
   }
 
   getParentNode(node: any): OTreeFlatNode {
