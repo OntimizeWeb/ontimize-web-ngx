@@ -118,7 +118,7 @@
   </div>
 
   <!-- mat pagination-->
-  <mat-paginator *ngIf="paginationControls" #matpaginator [length]="dataSource?.resultsLength" [pageSize]="queryRows"
+  <mat-paginator *ngIf="paginationControls && pageable" #matpaginator [length]="dataSource?.resultsLength" [pageSize]="queryRows"
     [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"
     [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}"></mat-paginator>
 

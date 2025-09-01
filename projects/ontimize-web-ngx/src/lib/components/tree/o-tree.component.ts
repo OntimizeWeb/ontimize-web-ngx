@@ -175,7 +175,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
 
-  hasLoadMore = (node: OTreeFlatNode) => node.level > 0 && node.hasMore && this.treeControl.isExpanded(node) && this.paginationControls;
+  hasLoadMore = (node: OTreeFlatNode) => this.getLogicalLevel(node) > 0 && node.hasMore && this.treeControl.isExpanded(node) && this.paginationControls;
 
   onLoadMore(event: Event, node: OTreeFlatNode) {
     event.stopPropagation();
@@ -187,7 +187,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
     parentNode.isLoading = true;
     parentNode.offset = Math.min(
-      parentNode.offset + parentNode.childNode.queryRows,
+      (parentNode.offset ?? 0) + parentNode.childNode.queryRows,
       parentNode.totalQueryRecordsNumber);
     parentNode.hasMore = parentNode.offset + parentNode.childNode.queryRows < parentNode.totalQueryRecordsNumber;
 
@@ -910,5 +910,13 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     this.queryData(void 0, queryArgs);
   }
 
+  getLogicalLevel(node: OTreeFlatNode): number {
+    const hasFakeRoot = this.hasFakeRoot(); // Lo defines según tu estructura
+    return hasFakeRoot ? node.level - 1 : node.level;
+  }
+
+  hasFakeRoot(): boolean {
+    return this.rootTitle ? true : false;
+  }
 
 }
