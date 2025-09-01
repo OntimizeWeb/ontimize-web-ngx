@@ -138,7 +138,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     } else if (node.childNode) {
       if (Util.isDefined(node.childNode.rootTitle) && !Util.isDefined(node.rootNode)) {
         let rootNode: OTreeFlatNode = {
-          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.childNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, childNode: node.childNode
+          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.childNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, node: node.childNode, childNode: node.childNode
         };
         this.daoTree.flatNodeMap.set(rootNode, node);
         return [rootNode];
