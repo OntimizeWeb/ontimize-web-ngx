@@ -862,7 +862,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   shouldShowLoadMore(node: any, index: number): boolean {
     const parent = this.getParentNode(node);
-    if (!parent || !parent.hasMore) {
+    if (!parent?.hasMore) {
       return false;
     }
 
