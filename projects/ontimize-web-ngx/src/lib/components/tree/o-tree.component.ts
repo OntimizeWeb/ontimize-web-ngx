@@ -13,6 +13,7 @@ import {
   OnInit,
   Optional,
   TemplateRef,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -35,6 +36,8 @@ import { ServiceUtils } from '../../util';
 import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
+import { MatPaginator } from '@angular/material/paginator';
+import { OTreeComponentStateClass } from '../../services/state/o-tree-component-state.class';
 
 
 export const DEFAULT_INPUTS_O_TREE = [
@@ -132,15 +135,15 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   getTreeNodeChildren(node: OTreeFlatNode): any {
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
-    } else if (node.treeNode) {
-      if (Util.isDefined(node.treeNode.rootTitle) && !Util.isDefined(node.rootNode)) {
+    } else if (node.childNode) {
+      if (Util.isDefined(node.childNode.rootTitle) && !Util.isDefined(node.rootNode)) {
         let rootNode: OTreeFlatNode = {
-          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.treeNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, treeNode: node.treeNode
+          id: this.dataSource.data.length + 1, rootNode: true, label: this.translateService.get(node.childNode.rootTitle), level: node.level + 1, expandable: true, data: node.data, isLoading: false, node: node.childNode, childNode: node.childNode
         };
         this.daoTree.flatNodeMap.set(rootNode, node);
         return [rootNode];
       } else {
-        return node.treeNode.childQueryData(node);
+        return node.childNode.childQueryData(node);
       }
     } else {
       return this.childreNodes.filter((item) => item[this.parentKeys] === node[this.keys]);
@@ -151,7 +154,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     if (node.level === 0 && Util.isDefined(this.rootTitle)) {
       return this.rootNodes;
     } else {
-      return node.treeNode.childQueryData(node);
+      return node.childNode.childQueryData(node);
     }
 
   }
@@ -171,6 +174,49 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   hasNoContent = (_: number, _nodeData: OTreeFlatNode) => _nodeData.label === '';
 
+  hasLoadMore = (node: OTreeFlatNode) => this.getLogicalLevel(node) > 0 && this.treeControl.isExpanded(node) && node.node.pageable;
+
+  onLoadMore(event: Event, node: OTreeFlatNode) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const parentNode = this.getParentNode(node);
+
+    if (!parentNode || parentNode.isLoading) return;
+
+    parentNode.isLoading = true;
+    parentNode.offset = Math.min(
+      (parentNode.offset ?? 0) + parentNode.childNode.queryRows,
+      parentNode.totalQueryRecordsNumber);
+    parentNode.hasMore = parentNode.offset + parentNode.childNode.queryRows < parentNode.totalQueryRecordsNumber;
+
+    this.getChildren(parentNode).subscribe({
+      next: (res: ServiceResponse) => {
+        if (res.isSuccessful()) {
+          const newData = res.data || [];
+          this.dataSource.updateTree(parentNode, newData, true);
+        }
+      },
+      error: (err) => {
+        this.dialogService.error('ERROR', 'MESSAGES.ERROR_QUERY');
+        parentNode.isLoading = false;
+      }
+    });
+  }
+
+  isLastChildAndHasMore(node: OTreeFlatNode): boolean {
+
+    let parent = this.daoTree.flatNodeMap.get(node);
+    if (!parent?.hasMore) return false;
+
+    const siblings = this.treeControl.getDescendants(parent)
+      .filter(child => child.level === node.level);
+
+    if (!siblings || siblings.length === 0) return false;
+
+    const lastSibling = siblings[siblings.length - 1];
+    return node.id === lastSibling.id;
+  }
 
   dataSource: OTreeDataSource;
 
@@ -216,7 +262,9 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   parentNodeTemplate: TemplateRef<any>;
 
   treeFlattener: any;
-  treeControl: FlatTreeControl<OTreeFlatNode, OTreeFlatNode>;
+  treeControl: FlatTreeControl<OTreeFlatNode, OTreeFlatNode>
+
+  @ViewChild(MatPaginator) matpaginator: MatPaginator;
 
   @ContentChild('nodeTemplate', { read: TemplateRef, static: false })
   set nodeTemplate(value: TemplateRef<any>) {
@@ -288,10 +336,18 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       this.visibleColumns = this.columns;
     }
 
+    if (this.state) {
+      this.state.queryRecordOffset = 0;
+      this.currentPage = this.state.currentPage ?? 0;
+    }
     if (!Util.isDefined(this.quickFilterColumns)) {
       this.quickFilterColumns = this.visibleColumns;
     }
     this.parseSortColumn();
+  }
+
+  get state(): OTreeComponentStateClass {
+    return this.componentStateService.state;
   }
 
   ngAfterViewInit(): void {
@@ -299,6 +355,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     this.quickFilterColArray = Util.parseArray(this.quickFilterColumns, true);
     this.setDatasource();
     this.afterViewInit();
+    this.registerQuickFilter(this.searchInputComponent);
     if (this.queryOnInit) {
       this.queryData();
     }
@@ -372,6 +429,14 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       if (res.isSuccessful()) {
         const arrData = (res.data !== undefined) ? res.data : [];
         data = Util.isArray(arrData) ? arrData : [];
+      }
+
+      node.totalQueryRecordsNumber = node.childNode.pageable ? res.totalQueryRecordsNumber : data.length;
+
+      const canLoadMore = this.hasLoadMore(node);
+      node.hasMore = false;
+      if (canLoadMore) {
+        node.hasMore = Util.isDefined(res.startRecordIndex) ? (node.childNode.queryRows + res.startRecordIndex < res.totalQueryRecordsNumber) : (this.queryRows < data.length);
       }
       this.dataSource.updateTree(node, data, expand);
     }, err => {
@@ -574,11 +639,12 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       'label': this.getItemText(node),
       'level': level,
       'node': this,
-      treeNode: this.treeNode,
+      childNode: this.treeNode,
       'expandable': Util.isDefined(this.treeNode) || !!nodeChildren?.length || this.recursive,
       'data': node,
       'isLoading': false,
-      'route': this.route
+      'route': this.route,
+      'offset': this.parentComponent?.queryRows ?? 0
     };
 
     this.daoTree.flatNodeMap.set(flatNode, parentNode);
@@ -728,7 +794,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     if (this.pageable) {
-      queryArguments[4] = 0;
       if (Util.isDefined(this.sortColumnArray)) {
         queryArguments[6] = this.sortColumnArray;
       }
@@ -799,4 +864,46 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
   getSelectedFlatNodes(): OTreeFlatNode[] {
     return this.selection.selected;
   }
+
+  getParentNode(node: any): OTreeFlatNode {
+    const currentLevel = this.getLevel(node);
+    if (currentLevel < 1) {
+      return null;
+    }
+
+    const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
+    for (let i = startIndex; i >= 0; i--) {
+      const currentNode = this.treeControl.dataNodes[i];
+      if (this.getLevel(currentNode) === currentLevel - 1) {
+        return currentNode;
+      }
+    }
+    return null;
+  }
+
+  reloadData(clearSelectedItems: boolean = true) {
+
+    if (clearSelectedItems) {
+      this.clearSelection();
+    }
+
+    let queryArgs: OQueryDataArgs;
+    if (this.pageable) {
+      queryArgs = {
+        offset: this.currentPage * this.queryRows,
+        length: this.queryRows
+      };
+    }
+    this.queryData(void 0, queryArgs);
+  }
+
+  getLogicalLevel(node: OTreeFlatNode): number {
+    const hasFakeRoot = this.hasFakeRoot(); // Lo defines según tu estructura
+    return hasFakeRoot ? node.level - 1 : node.level;
+  }
+
+  hasFakeRoot(): boolean {
+    return !!this.rootTitle;
+  }
+
 }
