@@ -318,7 +318,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   public initialize(): void {
     super.initialize();
-    this.state.queryRecordOffset = 0;
     this.initializeDao();
   }
 
@@ -339,8 +338,9 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       this.visibleColumns = this.columns;
     }
 
-    if (this.state.currentPage) {
-      this.currentPage = this.state.currentPage;
+    if (this.state) {
+      this.state.queryRecordOffset = 0;
+      this.currentPage = this.state.currentPage ?? 0;
     }
     if (!Util.isDefined(this.quickFilterColumns)) {
       this.quickFilterColumns = this.visibleColumns;
