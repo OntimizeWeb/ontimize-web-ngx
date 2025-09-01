@@ -185,17 +185,24 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
     if (!parentNode || parentNode.isLoading) return;
 
-
     parentNode.isLoading = true;
-    parentNode.offset = Math.min((parentNode.offset ?? 0) + parentNode.treeNode.queryRows, parentNode.totalQueryRecordsNumber);
-    parentNode.hasMore = parentNode.offset + parentNode.treeNode.queryRows < parentNode.totalQueryRecordsNumber;
-    this.getChildren(parentNode).subscribe((res: ServiceResponse) => {
-      if (res.isSuccessful()) {
-        const newData = res.data || [];
-        this.dataSource.updateTree(parentNode, newData, true);
+    parentNode.offset = Math.min(
+      parentNode.offset + parentNode.childNode.queryRows,
+      parentNode.totalQueryRecordsNumber);
+    parentNode.hasMore = parentNode.offset + parentNode.childNode.queryRows < parentNode.totalQueryRecordsNumber;
+
+    this.getChildren(parentNode).subscribe({
+      next: (res: ServiceResponse) => {
+        if (res.isSuccessful()) {
+          const newData = res.data || [];
+          this.dataSource.updateTree(parentNode, newData, true);
+        }
+      },
+      error: (err) => {
+        this.dialogService.error('ERROR', 'MESSAGES.ERROR_QUERY');
+        parentNode.isLoading = false;
       }
     });
-
   }
 
   isLastChildAndHasMore(node: OTreeFlatNode): boolean {
@@ -633,12 +640,8 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
       'data': node,
       'isLoading': false,
       'route': this.route,
-      'offset': this.parentComponent?.queryRows
+      'offset': this.parentComponent?.queryRows??0
     };
-
-    // if (parentNode?.hasMore) {
-    //   parentNode.hasMore = parentNode.hasMore && (offset < parentNode.totalQueryRecordsNumber); //añadir que si los resultados son menores o igual a resultLength
-    // }
 
     this.daoTree.flatNodeMap.set(flatNode, parentNode);
 
@@ -786,7 +789,6 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
-    console.log(' queryArguments: ', queryArguments);
     if (this.pageable) {
       if (Util.isDefined(this.sortColumnArray)) {
         queryArguments[6] = this.sortColumnArray;
@@ -876,7 +878,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     return false;
   }
 
-  getParentNode(node: any): any {
+  getParentNode(node: any): OTreeFlatNode {
     const currentLevel = this.getLevel(node);
     if (currentLevel < 1) {
       return null;

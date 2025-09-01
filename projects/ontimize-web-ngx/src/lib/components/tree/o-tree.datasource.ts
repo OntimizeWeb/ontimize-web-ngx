@@ -59,7 +59,7 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
         this.resultsLength = data.length;
         data = this.getPaginationData(data);
       }
-      console.log('[tree datasource] data  ', this.data);
+
       return this.data;
     }));
   }
@@ -112,14 +112,6 @@ export class OTreeDataSource implements DataSource<OTreeFlatNode> {
     const newNodes: OTreeFlatNode[] = children.map(child =>
       this.isTreeFlatNode(child) ? child : treeNode.transformer(child, level, parentNode)
     );
-
-    // // Filtrar duplicados por id
-    // const existingChildIds = new Set<string | number>();
-    // for (let i = index + 1; i < this.data.length && this.data[i].level > parentNode.level; i++) {
-    //   existingChildIds.add(this.data[i].id);
-    // }
-
-    // const uniqueNewNodes = newNodes.filter(node => !existingChildIds.has(node.id));
 
     if (expand) {
       // Insertar después de los hijos existentes
