@@ -1,3 +1,13 @@
+## 15.5.9 (2025-09-02)
+### Features
+* **o-tree**: Added pagination controls for improved data navigation (`pageable=yes` only) ([3c5c689](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3c5c689)) Closes [#1966](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1966)
+
+### Bug Fixes
+* **o-tree**:
+  * Fixed an issue where the parameters `offset`, `pageSize`, and `orderBy` were not being sent correctly to the server when `pageable="yes"`. ([6c206f9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c206f9)) Closes [#1963](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1963)
+  * Fixed an issue where the parameter `kv` was not being sent correctly to the server when `pageable="yes"`. Closes [#1965](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1965)
+  * Fixed a request failure when expanding a recursive node, which caused broken navigation in trees with recursive references. Closes [#1970](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1970)
+
 ## 15.5.8 (2025-07-15)
 ### Bug Fixes
 * **o-tree**: Fixed `getSelectedItems` method returning selected nodes as expected ([d311a4d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d311a4d)) Closes [#1942](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1942)
