@@ -5,8 +5,8 @@
 ### Bug Fixes
 * **o-tree**:
   * Fixed an issue where the parameters `offset`, `pageSize`, and `orderBy` were not being sent correctly to the server when `pageable="yes"`. ([6c206f9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c206f9)) Closes [#1963](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1963)
-  * Fixed an issue where the parameter `kv` was not being sent correctly to the server when `pageable="yes"`. Closes [#1965](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1965)
-  * Fixed a request failure when expanding a recursive node, which caused broken navigation in trees with recursive references. Closes [#1970](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1970)
+  * Fixed an issue where the parameter `kv` was not being sent correctly to the server when `pageable="yes"`. ([940d150](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/940d150)) Closes [#1965](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1965)
+  * Fixed a request failure when expanding a recursive node, which caused broken navigation in trees with recursive references. ([05345a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/05345a5)) Closes [#1970](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1970)
 
 ## 15.5.8 (2025-07-15)
 ### Bug Fixes
