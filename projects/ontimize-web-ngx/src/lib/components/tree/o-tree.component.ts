@@ -549,6 +549,16 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   filterData(value?: string, loadMore?: boolean): void {
 
+    if (this.pageable) {
+      const queryArgs: OQueryDataArgs = {
+        offset: 0,
+        length: this.queryRows,
+        replace: true
+      };
+      this.queryData(void 0, queryArgs);
+      return;
+    }
+
     let filteredTreeData = [];
     if (value) {
       for (let [nestedNode] of this.daoTree.flatNodeMap) {
