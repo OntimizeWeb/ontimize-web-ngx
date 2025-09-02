@@ -8,3 +8,5 @@ export * from './o-list-component-state.class';
 export * from './o-list-component-state.service';
 export * from './o-table-component-state.service';
 export * from './o-table-component-state.class';
+export * from './o-tree-component-state.class';
+export * from './o-tree-component-state.service';

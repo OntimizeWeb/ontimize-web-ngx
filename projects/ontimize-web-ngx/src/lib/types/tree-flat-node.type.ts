@@ -8,8 +8,12 @@ export type OTreeFlatNode = {
   rootNode?: boolean,
   expandable: boolean,
   node?: OTreeComponent | OTreeNodeComponent,
-  treeNode?: OTreeNodeComponent,
+  childNode?: OTreeNodeComponent,
   data: any;
   isLoading?: boolean;
   route?: string;
+  hasMore?: boolean;
+  startIndex?: number;// to load pageable items
+  offset?: number;
+  totalQueryRecordsNumber?: number;
 }

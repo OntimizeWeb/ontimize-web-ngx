@@ -314,7 +314,8 @@ export const MAP = {
     'EXPORT.DIALOG.FILE_NAME': 'File name',
     'EXPORT.DIALOG.EXPORT_BUTTON': "Export",
     'EXPORT.DIALOG.ADVANCED_OPTIONS': " Advanced options",
-    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "You can indicate a file name"
+    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "You can indicate a file name",
+    'O_TREE.LOAD_MORE': 'Load more ...'
   },
 
   // Spanish
@@ -623,7 +624,8 @@ export const MAP = {
     'EXPORT.DIALOG.ADVANCED_OPTIONS': " Opciones Avanzadas",
     'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "Puede indicar un nombre para el fichero",
     'DATERANGE.PLACEHOLDER_STARTDATE': 'Fecha inicio',
-    'DATERANGE.PLACEHOLDER_ENDDATE': 'Fecha fin'
+    'DATERANGE.PLACEHOLDER_ENDDATE': 'Fecha fin',
+    'O_TREE.LOAD_MORE': 'Ver más ...'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -909,6 +911,8 @@ export const MAP = {
     'REPORT.COLUMN.TRUEVALUE': 'Sim',
     'REPORT.COLUMN.FALSEVALUE': 'Não',
     'DATERANGE.PLACEHOLDER_STARTDATE': 'Data de início',
-    'DATERANGE.PLACEHOLDER_ENDDATE': 'Data de término'
+    'DATERANGE.PLACEHOLDER_ENDDATE': 'Data de término',
+    'O_TREE.LOAD_MORE': 'Carregar mais ...'
+
   }
 }
