@@ -564,6 +564,17 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     return this.getParentKeysFromContext(this._pKeysEquiv, context);
   }
 
+  getForm() {
+    return this.form;
+  }
+  getParentKeysEquivalence() {
+    return this._pKeysEquiv;
+  }
+  getDataService() {
+    return this.dataService;
+  }
+
+
   protected updateStateStorage(): void {
     if (this.localStorageService && this.storeState && !this.alreadyStored) {
       this.alreadyStored = true;
