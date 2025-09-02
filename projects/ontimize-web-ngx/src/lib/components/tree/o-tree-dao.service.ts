@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { OTreeFlatNode } from '../../types/tree-flat-node.type';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { ServiceUtils } from '../../util/service.utils';
+import { Util } from '../../util/util';
 
 
 @Injectable()
@@ -42,4 +45,43 @@ export class OTreeDao {
       clearTimeout(this.loadingTimer);
     }
   }
+
+  queryNodeChildren(flatNode: OTreeFlatNode, recursive:boolean): Observable<ServiceResponse> {
+    const component = recursive ? flatNode.node : flatNode.childNode;
+    const queryMethodName = component.pageable
+      ? component.paginatedQueryMethod
+      : component.queryMethod;
+
+
+    const entity = component.entity;
+    const service: any = component.getDataService();
+
+    if (!service || !(queryMethodName in service) || !entity) {
+      return of({ data: [] } as ServiceResponse);
+    }
+
+    let filter;
+    if (component.recursive) {
+      const parentItem = ServiceUtils.getParentKeysFromForm(component.getParentKeysEquivalence(), component.getForm());
+      filter = parentItem ?? {};
+      filter[component.parentColumn] = flatNode.data[component.getKeys()[0]];
+    } else {
+      filter = ServiceUtils.getFilterUsingParentKeys(
+        flatNode.data,
+        flatNode.childNode.getParentKeysEquivalence()
+      );
+    }
+
+    const queryArgs = [
+      filter,
+      Util.parseArray(component.columns, true),
+      component.entity,
+      null,
+      flatNode.offset ?? 0,
+      component.recursive ? component.queryRows : flatNode.childNode.queryRows
+    ];
+
+    return service[queryMethodName](...queryArgs) as Observable<ServiceResponse>;
+  }
+
 }
