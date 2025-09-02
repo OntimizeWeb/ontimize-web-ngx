@@ -20,7 +20,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
-import { ComponentStateServiceProvider, O_COMPONENT_STATE_SERVICE, OntimizeServiceProvider } from '../../services/factories';
+import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
 import { OTreePermissions } from '../../types/o-tree-permissions.type';
 import { OTreeFlatNode } from '../../types/tree-flat-node.type';
@@ -32,12 +32,14 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import { OTreeNodeComponent } from './tree-node/tree-node.component';
-import { ServiceUtils } from '../../util';
+import { ServiceUtils } from '../../util/service.utils';
 import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { MatPaginator } from '@angular/material/paginator';
 import { OTreeComponentStateClass } from '../../services/state/o-tree-component-state.class';
+import { OQueryParams } from '../../types/query-params.type';
+import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 
 
 export const DEFAULT_INPUTS_O_TREE = [
@@ -804,7 +806,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     this.sortColumnArray = ServiceUtils.parseSortColumns(this.sortColumn) || [];
   }
 
-  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): any[] {
+  public getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams {
     const queryArguments = super.getQueryArguments(filter, ovrrArgs);
     if (this.pageable) {
       if (Util.isDefined(this.sortColumnArray)) {
