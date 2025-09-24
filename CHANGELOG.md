@@ -1,3 +1,12 @@
+## 15.6.2 (2025-09-24)
+### Features
+* **o-table**: Added new method `updateColumnTitles`([ebf5186](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ebf5186)) Closes [#1978](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1978)
+
+### Bug Fixes
+* **o-table**: Fixed an error that occurred when deleting records from the `o-table` component.([4082102](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4082102)) Closes [#1979](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1979)
+* **o-list**: Fixed an issue where the delete button was not enabled when items were selected.([97e8a60](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/97e8a60)) Closes [#1981](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1981)
+
+
 ## 15.6.1 (2025-08-20)
 ### Bug Fixes
 * Fixed `serviceResponseAdapterFactory` returning `JSONAPIServiceResponseAdapter` for services extending `OntimizeService`.([0daad3a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0daad3a)) Closes [#1959](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1959)
