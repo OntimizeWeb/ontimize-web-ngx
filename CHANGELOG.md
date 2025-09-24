@@ -1,3 +1,7 @@
+## 15.7.0
+> [!NOTE]
+> In this version, the features and bugfixes of versions [15.5.9](#1559-2025-09-02) were integrated
+
 ## 15.6.2 (2025-09-24)
 ### Features
 * **o-table**: Added new method `updateColumnTitles`([ebf5186](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ebf5186)) Closes [#1978](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1978)
@@ -5,7 +9,6 @@
 ### Bug Fixes
 * **o-table**: Fixed an error that occurred when deleting records from the `o-table` component.([4082102](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4082102)) Closes [#1979](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1979)
 * **o-list**: Fixed an issue where the delete button was not enabled when items were selected.([97e8a60](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/97e8a60)) Closes [#1981](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1981)
-
 
 ## 15.6.1 (2025-08-20)
 ### Bug Fixes
@@ -171,6 +174,15 @@
     getQueryArguments(filter: object, ovrrArgs?: OQueryDataArgs): OQueryParams;
     ```
 
+## 15.5.9 (2025-09-02)
+### Features
+* **o-tree**: Added pagination controls for improved data navigation (`pageable=yes` only) ([3c5c689](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3c5c689)) Closes [#1966](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1966)
+
+### Bug Fixes
+* **o-tree**:
+  * Fixed an issue where the parameters `offset`, `pageSize`, and `orderBy` were not being sent correctly to the server when `pageable="yes"`. ([6c206f9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/6c206f9)) Closes [#1963](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1963)
+  * Fixed an issue where the parameter `kv` was not being sent correctly to the server when `pageable="yes"`. ([940d150](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/940d150)) Closes [#1965](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1965)
+  * Fixed a request failure when expanding a recursive node, which caused broken navigation in trees with recursive references. ([05345a5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/05345a5)) Closes [#1970](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1970)
 
 ## 15.5.8 (2025-07-15)
 ### Bug Fixes
