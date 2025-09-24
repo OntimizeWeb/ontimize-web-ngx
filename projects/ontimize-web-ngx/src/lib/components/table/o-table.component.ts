@@ -105,7 +105,7 @@ import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.int
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
-import { MatRow } from '@angular/material/table';
+import { MatRow, MatTable } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 
 export const DEFAULT_INPUTS_O_TABLE = [
@@ -621,6 +621,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   tableToolbarEl: ElementRef;
 
   @ViewChildren(MatRow) rows!: QueryList<MatRow>;
+  @ViewChild(MatTable) protected matTable: MatTable<any>;
 
   horizontalScrolled: boolean;
   public onUpdateScrolledState: EventEmitter<any> = new EventEmitter();
@@ -3587,5 +3588,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       (this.oTableColumnsFilterComponent?.filterValuesInData ||
         'current-page')
     );
+  }
+
+  updateColumnTitles(columns: { attr: string; title: string }[]): void {
+    if (!this.matTable || !this.oTableOptions?.columns) return;
+
+    // Updates the titles of existing columns
+    for (const col of this.oTableOptions.columns) {
+      const updated = columns.find(c => c.attr === col.attr);
+      if (updated) {
+        col.title = this.translateService.get(updated.title);
+      }
+    };
+
+    this.matTable?.removeHeaderRowDef(null);
   }
 }
