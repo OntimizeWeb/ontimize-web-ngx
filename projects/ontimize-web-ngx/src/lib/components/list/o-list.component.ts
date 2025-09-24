@@ -164,9 +164,29 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
 
   public ngOnInit(): void {
     this.initialize();
+    this.loadPermissions();
+    this.setupDeleteButtonSubscription();
+  }
+
+  private loadPermissions(): void {
     this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
     this.actionsPermissions = this.getActionsPermissions(this.permissions);
     this.setButtonPermissions(this.actionsPermissions);
+  }
+
+  private setupDeleteButtonSubscription(): void {
+    const deletePermission = this.getPermissionByAttr('delete', this.actionsPermissions);
+    const shouldSubscribe =
+      !Util.isDefined(deletePermission) || (deletePermission.visible && deletePermission.enabled);
+
+    if (shouldSubscribe) {
+      const subscription = this.selection.changed.subscribe(() => {
+        this.enabledDeleteButton = !this.selection.isEmpty();
+      });
+
+      this.subscription.add(subscription);
+    }
+
   }
 
   public ngAfterViewInit(): void {
@@ -213,12 +233,12 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
     this.permissions = this.permissionsService.getListPermissions(this.oattr, this.actRoute);
 
     const selectionSubscription = this.selection.changed.subscribe(({ added, removed }: SelectionChange<any>) => {
-        if (added?.length) {
-          ObservableWrapper.callEmit(this.onItemSelected, added);
-        }
-        if (removed?.length) {
-          ObservableWrapper.callEmit(this.onItemDeselected, removed);
-        }
+      if (added?.length) {
+        ObservableWrapper.callEmit(this.onItemSelected, added);
+      }
+      if (removed?.length) {
+        ObservableWrapper.callEmit(this.onItemDeselected, removed);
+      }
     });
     this.subscription.add(selectionSubscription)
   }
