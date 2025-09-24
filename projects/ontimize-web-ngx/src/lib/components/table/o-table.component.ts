@@ -3591,7 +3591,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   updateColumnTitles(columns: { attr: string; title: string }[]): void {
-    if (!this.matTable || !this.oTableOptions) return;
+    if (!this.matTable || !this.oTableOptions?.columns) return;
 
     // Updates the titles of existing columns
     for (const col of this.oTableOptions.columns) {
