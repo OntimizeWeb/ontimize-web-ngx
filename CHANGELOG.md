@@ -1,6 +1,6 @@
 ## 15.6.2 (2025-09-24)
 ### Features
-* **o-table**: Added new method `updateColumnTitles` ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1978](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1978)
+* **o-table**: Added new method `updateColumnTitles`([ebf5186](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ebf5186)) Closes [#1978](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1978)
 
 ### Bug Fixes
 * **o-table**: Fixed an error that occurred when deleting records from the `o-table` component.([4082102](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/4082102)) Closes [#1979](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1979)
