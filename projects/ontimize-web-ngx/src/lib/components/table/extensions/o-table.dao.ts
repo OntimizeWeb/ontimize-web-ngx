@@ -33,8 +33,12 @@ export class OTableDao {
   }
 
   removeQuery(filters: any, sqlTypes?: object): Observable<any> {
-    const id = this.dataService.requestArgumentAdapter.getIdFromFilter(filters);
-    return merge(...filters.map((kv => this.dataService[this.methods.delete](id, this.entity, sqlTypes))));
+
+    const deleteRequests = filters.map((kv => {
+      const id = this.dataService.requestArgumentAdapter.getIdFromFilter(kv);
+      return this.dataService[this.methods.delete](id, this.entity, sqlTypes);
+    }));
+    return merge(...deleteRequests);
   }
 
   insertQuery(av: object, sqlTypes?: object): Observable<any> {
