@@ -3594,12 +3594,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.matTable || !this.oTableOptions) return;
 
     // Updates the titles of existing columns
-    this.oTableOptions.columns.forEach(col => {
+    for (const col of this.oTableOptions.columns) {
       const updated = columns.find(c => c.attr === col.attr);
       if (updated) {
         col.title = this.translateService.get(updated.title);
       }
-    });
+    };
 
     this.matTable?.removeHeaderRowDef(null);
   }
