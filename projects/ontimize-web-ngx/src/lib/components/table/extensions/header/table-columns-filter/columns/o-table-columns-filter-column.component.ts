@@ -18,7 +18,11 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
   'startView:start-view',
   'queryMethod:query-method',
   //filter-values-in-data:  'current-page' | 'all-data': set mode to filter by. Default 'current-page'
-  'filterValuesInData: filter-values-in-data'
+  'filterValuesInData: filter-values-in-data',
+  //filter-locked
+  'filterLocked:filter-locked',
+  //filter-locked-message
+  'filterLockedMessage:filter-locked-message'
 ];
 
 @Component({
@@ -35,5 +39,8 @@ export class OTableColumnsFilterColumnComponent {
   public startView: 'month' | 'year' | 'multi-year' | '' = 'month';
   public queryMethod: string;
   public filterValuesInData: 'current-page' | 'all-data';
+
+  public filterLocked: boolean = false;
+  public filterLockedMessage: string = 'O_TABLE_COLUMN_FILTER_COLUMN.DEFAULT_LOCKED_MESSAGE';
 
 }
