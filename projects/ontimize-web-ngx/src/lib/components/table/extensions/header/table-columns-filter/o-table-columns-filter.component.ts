@@ -88,6 +88,10 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     this.filterValuesInData = this.filterValuesInData ?? this.getFilterValuesInDataByDefault();
   }
 
+  getFilterColumnByAttr(attr:string) {
+    return this.filterColumns.find(filterColumn => filterColumn.attr === attr);
+  }
+
   private getFilterValuesInDataByDefault() {
     return this.table.pageable ? 'current-page' : 'all-data';
   }

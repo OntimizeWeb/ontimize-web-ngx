@@ -20,12 +20,14 @@ import type { OTableHeaderComponent } from "./extensions/header/table-header/o-t
 import type { MatPaginator } from "@angular/material/paginator";
 import type { OTableColumnSelectAllDirective } from "./extensions/header/table-column-select-all/o-table-column-select-all.directive";
 import type { OFilterBuilderComponent } from "../filter-builder/o-filter-builder.component";
+import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 
 
 export abstract class OTableBase {
   abstract getMenuPermissions(): OTableMenuPermissions;
   abstract rowHeightObservable: Observable<string>;
   abstract initializeCheckboxColumn();
+  oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   visibleExportDialogButtons: string;
   service: string;
   serviceType: string;
