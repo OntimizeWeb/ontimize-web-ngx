@@ -1043,6 +1043,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.destroy();
     this.initialize();
     this.state.reset(this.pageable);
+    if (options?.res) {
+      this.setData(options.res.data, options.res?.sqlTypes);
+      this.updatePaginationInfo(options.res);
+    }
+
     this.initTableAfterViewInit();
     this.onReinitialize.emit(null);
   }

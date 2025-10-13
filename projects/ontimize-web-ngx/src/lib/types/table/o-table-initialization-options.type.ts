@@ -8,4 +8,5 @@ export type OTableInitializationOptions = {
   sortColumns?: string;
   parentKeys?: string;
   filterColumns?: string;
+  res?: any;
 };
