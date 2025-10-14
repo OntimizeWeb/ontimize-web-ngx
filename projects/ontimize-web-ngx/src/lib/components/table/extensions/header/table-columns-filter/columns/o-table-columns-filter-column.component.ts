@@ -7,6 +7,9 @@ export type OFilterColumn = {
   startView: 'month' | 'year' | 'multi-year' | '';
   queryMethod?: string;
   filterValuesInData?: 'current-page' | 'all-data';
+  service?: string;
+  entity?: string;
+  serviceType?: string;
 };
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
@@ -22,7 +25,13 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
   //filter-locked
   'filterLocked:filter-locked',
   //filter-locked-message
-  'filterLockedMessage:filter-locked-message'
+  'filterLockedMessage:filter-locked-message',
+  //service
+  'service',
+  //service-type
+  'serviceType:service-type',
+  //entity
+  'entity'
 ];
 
 @Component({
@@ -42,5 +51,9 @@ export class OTableColumnsFilterColumnComponent {
 
   public filterLocked: boolean = false;
   public filterLockedMessage: string = 'O_TABLE_COLUMN_FILTER_COLUMN.DEFAULT_LOCKED_MESSAGE';
+  public service: string;
+  public serviceType: string;
+  public entity:string;
+
 
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -14,11 +14,15 @@ import { TableFilterByColumnData, TableFilterByColumnDialogResult } from '../../
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
-import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
+import { OFilterColumn, OTableColumnsFilterColumnComponent } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 import type { OColumn } from '../../../column/o-column.class';
 import { OTableFilterByColumnService } from './o-table-filter-by-column.service';
 import { SelectionModel } from '@angular/cdk/collections';
+import { BaseService } from '../../../../../services/base-service.class';
+import { OntimizeService } from '../../../../../services';
+import { OConfigureServiceArgs } from '../../../../../types';
+import { FactoryUtil } from '../../../../../util';
 
 const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
 
@@ -59,6 +63,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   private readonly listDataSubject = new BehaviorSubject<TableFilterByColumnData[]>([]);
   protected _listData: Observable<TableFilterByColumnData[]> = this.listDataSubject.asObservable();
+  protected service: BaseService<ServiceResponse>;
 
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('filterValueList') filterValueList: MatSelectionList;
@@ -72,6 +77,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   selection = new SelectionModel<TableFilterByColumnData>(true, [], true, this.compareOptions());
 
   constructor(
+    protected injector: Injector,
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
     private readonly filterService: OTableFilterByColumnService,
     @Inject(MAT_DIALOG_DATA) data: { column: OColumn; table: OTableComponent }
@@ -83,6 +89,19 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.table = data.table;
 
     this.initialize();
+  }
+
+  configureService(filterColumnDefinition: OTableColumnsFilterColumnComponent) {
+    const service = filterColumnDefinition.service;
+    const serviceType = filterColumnDefinition.serviceType;
+    const entity = filterColumnDefinition.entity ?? this.table.entity;
+    if ((service || serviceType)) {
+      let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizeService, entity: entity, service: service, serviceType: serviceType };
+      this.service = FactoryUtil.configureService(configureServiceArgs);
+    } else {
+      this.service = this.table.getDataService();
+    }
+
   }
 
   private initialize() {
@@ -108,13 +127,18 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
     this.preloadValues = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.preloadValues : true;
     this.activeSortDirection = this.table.getSortFilterColumn(this.column) || '';
-    this.startView = this.table.getStartViewFilterColumn(this.column) || 'month'
+    this.startView = this.table.getStartViewFilterColumn(this.column) || 'month';
 
-    const queryMethod = this.table.oTableColumnsFilterComponent?.getQueryMethodOfFilterColumn(this.column.attr);
-    if (Util.isDefined(queryMethod)) {
-      this.queryMethodName = queryMethod;
-      this.sourceData = 'all-data';
+    const filterColumnDefinition = this.table.oTableColumnsFilterComponent?.getFilterColumnByAttr(this.column.attr);
+    if (filterColumnDefinition) {
+      this.configureService(filterColumnDefinition);
+      const queryMethod = this.table.oTableColumnsFilterComponent?.getQueryMethodOfFilterColumn(this.column.attr);
+      if (Util.isDefined(queryMethod)) {
+        this.queryMethodName = queryMethod;
+        this.sourceData = 'all-data';
+      }
     }
+
     this.getData(this.sourceData);
   }
 
@@ -122,7 +146,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private parseDataAndInitializeDataList(previousFilter: OColumnValueFilter) {
 
     this.columnData = this.filterService.parseListData(previousFilter, this.column, this.tableData, this.table.pageable, this.sourceData);
-    if(previousFilter.values && previousFilter.values.length > 0) {
+    if (previousFilter.values && previousFilter.values.length > 0) {
       this.selection.select(...this.columnData.filter(item => previousFilter.values.indexOf(item.value) !== -1));
     }
 
@@ -243,10 +267,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     };
 
     if (!this.isCustomFilterSubject.getValue()) {
-      const selectedValues:TableFilterByColumnData[] = this.selection.selected;
+      const selectedValues: TableFilterByColumnData[] = this.selection.selected;
       if (selectedValues.length) {
-        this.filterService.applySelectedValuesToFilter(this.column, this.tableData, filter, selectedValues, this.sourceData, this.table.pageable,() => this.table.getComponentFilter());
-
+        this.filterService.applySelectedValuesToFilter(this.column, this.tableData, filter, selectedValues, this.sourceData, this.table.pageable, () => this.table.getComponentFilter());
       }
     } else {
       if (this.fcText.value) {
@@ -414,7 +437,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
     const columnQueryArgs = [kv, av, this.table.entity, sqlTypes, undefined, undefined, undefined];
     const queryMethodName = this.queryMethodName || Codes.QUERY_METHOD;
-    const service = this.table.getService();
+    const service = this.service;
 
     if (service && (queryMethodName in service) && this.table.entity) {
       return service[queryMethodName](...columnQueryArgs)

@@ -77,8 +77,8 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
   }
 
   public openColumnFilterDialog(event) {
-    const filterByColumnComponent = this.table.oTableColumnsFilterComponent.getFilterColumnByAttr(this.column.attr)
-    if (filterByColumnComponent.filterLocked) {
+    const filterByColumnComponent = this.table.oTableColumnsFilterComponent?.getFilterColumnByAttr(this.column.attr)
+    if (filterByColumnComponent?.filterLocked) {
       this.dialogService.alert(this.translateService.get('TABLE.FILTER_LOCKED'), this.translateService.get(filterByColumnComponent.filterLockedMessage));
     } else {
       this.table.openColumnFilterDialog(this.column, event);

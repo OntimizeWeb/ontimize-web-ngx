@@ -211,6 +211,12 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
         obj.sort = x.sort;
         obj.startView = x.startView;
         obj.queryMethod = x.queryMethod;
+        if (x.service) {
+          obj.service = x.service
+        }
+        if (x.serviceType) {
+          obj.serviceType = x.serviceType
+        }
         obj.filterValuesInData = (x.filterValuesInData || this.filterValuesInData) ?? this.getFilterValuesInDataByDefault();
         return obj;
       });
