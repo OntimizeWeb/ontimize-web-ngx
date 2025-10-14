@@ -107,6 +107,7 @@ import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 import { MatRow, MatTable } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
+import { PaginationData } from '../../interfaces/pagination-data.interface';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -1043,13 +1044,35 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.destroy();
     this.initialize();
     this.state.reset(this.pageable);
-    if (options?.res) {
-      this.setData(options.res.data, options.res?.sqlTypes);
-      this.updatePaginationInfo(options.res);
+    if (options?.data) {
+      this.setData(options.data.data, options.data?.sqlTypes);
+      this.updatePaginationInfo(options.data.data);
+      this.currentPage = 0;
     }
-
+    if (options?.paginationData) {
+      this.reinitializePaginationInfo(options.paginationData);
+    }
     this.initTableAfterViewInit();
     this.onReinitialize.emit(null);
+  }
+
+  reinitializePaginationInfo(paginationData: PaginationData) {
+    this.currentPage = paginationData.pageNumber;
+    this.queryRows = paginationData.pageSize;
+    if (this.pageable) {
+      if (paginationData.startRecordIndex !== undefined) {
+        const resultEndIndex = paginationData.startRecordIndex + (this.getDataArray() ? this.getDataArray().length : 0);
+        this.state.queryRecordOffset = resultEndIndex;
+      }
+      if (paginationData.totalQueryRecordsNumber !== undefined) {
+        this.state.totalQueryRecordsNumber = paginationData.totalQueryRecordsNumber;
+      }
+      const pageNumber = this.state.queryRecordOffset == 0 ? 0 : this.dataService?.getPaginationContext().pageNumber;
+      super.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber, pageSize: this.state.queryRows });
+    } else {
+      this.updatePaginationContext({ totalSize: this.getDataArray().length });
+    }
+
   }
 
   protected initTableAfterViewInit() {
@@ -1774,7 +1797,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return beColFilter;
   }
 
-  updatePaginationInfo(queryRes: any) {
+  updatePaginationInfo(queryRes: ServiceResponse) {
     super.updatePaginationInfo(queryRes);
   }
 
