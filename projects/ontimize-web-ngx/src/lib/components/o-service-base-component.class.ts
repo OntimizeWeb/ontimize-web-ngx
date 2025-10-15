@@ -533,7 +533,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   }
 
-  private updatePaginationContext(paginationContext: PaginationContext) {
+  protected updatePaginationContext(paginationContext: PaginationContext) {
     if (!this.pageable) {
       delete paginationContext.offset;
     }
