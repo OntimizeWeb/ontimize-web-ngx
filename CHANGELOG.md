@@ -1,6 +1,8 @@
 ## 15.7.0
 > [!NOTE]
 > In this version, the features and bugfixes of versions [15.5.9](#1559-2025-09-02) were integrated
+### Features
+* **o-table**: Updated `reinitialize` method to accept new optional parameters `data` of type `ServiceResponse` and `paginationData` of type `PaginationData`, allowing table and pagination reinitialization without a new query ([071b13a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/071b13a)) Closes [#1990](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1990).
 
 ## 15.6.2 (2025-09-24)
 ### Features
