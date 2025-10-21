@@ -88,7 +88,7 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     this.filterValuesInData = this.filterValuesInData ?? this.getFilterValuesInDataByDefault();
   }
 
-  getFilterColumnByAttr(attr:string) {
+  getFilterColumnByAttr(attr: string) {
     return this.filterColumns.find(filterColumn => filterColumn.attr === attr);
   }
 
@@ -120,7 +120,8 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
   }
 
   isColumnFilterable(attr: string): boolean {
-    return Util.isDefined(this.columnsArray.find(x => x.attr === attr));
+    const filterColumnDefinition = this.columnsArray.find(x => x.attr === attr);
+    return Util.isDefined(filterColumnDefinition) && (filterColumnDefinition.filterLocked ?? true);
   }
 
   getSortValueOfFilterColumn(attr: string): string {
@@ -161,8 +162,8 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   getFilterValuesInData(attr: string): 'current-page' | 'all-data' {
     let filterValuesInData: 'current-page' | 'all-data' = this.filterValuesInData;
-    if (Util.isDefined(this.columnsArray)) {
-      this.columnsArray.forEach(column => {
+    if (Util.isDefined(this.filterColumns)) {
+      this.filterColumns.forEach(column => {
         if (column.attr == attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
           filterValuesInData = column.filterValuesInData;
         }
@@ -216,6 +217,12 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
         }
         if (x.serviceType) {
           obj.serviceType = x.serviceType
+        }
+        if (x.separator) {
+          obj.separator = x.separator
+        }
+        if (x.visibleColumns) {
+          obj.visibleColumns = Util.parseArray(x.visibleColumns, true)
         }
         obj.filterValuesInData = (x.filterValuesInData || this.filterValuesInData) ?? this.getFilterValuesInDataByDefault();
         return obj;
