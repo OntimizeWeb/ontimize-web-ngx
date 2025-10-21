@@ -177,11 +177,12 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
   getFilterValuesInData(attr: string): 'current-page' | 'all-data' {
     let filterValuesInData: 'current-page' | 'all-data' = this.filterValuesInData;
     if (Util.isDefined(this.filterColumns)) {
-      this.filterColumns.forEach(column => {
-        if (column.attr == attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
+      for (const column of this.filterColumns) {
+        if (column.attr === attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
           filterValuesInData = column.filterValuesInData;
+          break; // salimos del bucle una vez encontrada la coincidencia
         }
-      });
+      }
     }
     return filterValuesInData;
   }

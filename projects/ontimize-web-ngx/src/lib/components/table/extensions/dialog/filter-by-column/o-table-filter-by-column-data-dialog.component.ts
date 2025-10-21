@@ -21,7 +21,7 @@ import { OTableFilterByColumnService } from './o-table-filter-by-column.service'
 import { SelectionModel } from '@angular/cdk/collections';
 import { BaseService } from '../../../../../services/base-service.class';
 
-const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
+const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL]);
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',
@@ -114,7 +114,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.startView = this.table.getStartViewFilterColumn(this.column) ?? 'month';
     this.previousFilter = dataSource.getColumnValueFilterByAttr(this.column.attr) ?? this.createEmptyFilter();
 
-    const isCustom = CUSTOM_FILTERS_OPERATORS.includes(this.previousFilter.operator);
+    const isCustom = CUSTOM_FILTERS_OPERATORS.has(this.previousFilter.operator);
     this.isCustomFilterSubject.next(isCustom);
     this.isDefaultFilterSubject.next(!isCustom);
 
