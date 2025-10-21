@@ -92,41 +92,44 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.getData();
   }
 
-
-
   private initialize() {
-    this.showFilterValuesOption = this.table.paginationControls;
+    const {
+      paginationControls,
+      oTableColumnsFilterComponent,
+      dataSource
+    } = this.table;
+
+    this.showFilterValuesOption = paginationControls;
     this.filterColumnDefinition = this.table.getFilterColumnByAttr(this.column.attr);
+    const { filterValuesInData, separator, visibleColumns } = this.filterColumnDefinition;
 
-    this.sourceData = this.filterColumnDefinition.filterValuesInData;
-    this.separator = this.filterColumnDefinition.separator;
+    this.sourceData = filterValuesInData;
+    this.separator = separator;
+    this.visibleColumnsArray = visibleColumns;
 
-    this.mode = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.mode : 'default';
-    const filterColumnDefinition = this.table.getFilterColumnByAttr(this.column.attr);
-    this.separator = filterColumnDefinition.separator;
-    this.visibleColumnsArray = filterColumnDefinition?.visibleColumns;
-    this.isDefaultFilterSubject.next(this.mode === 'default');
-    this.isCustomFilterSubject.next(this.mode === 'custom');
+    this.mode = oTableColumnsFilterComponent?.mode ?? 'default';
+    this.preloadValues = oTableColumnsFilterComponent?.preloadValues ?? true;
 
-    this.previousFilter = this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) || {
-      attr: undefined,
+    this.activeSortDirection = this.table.getSortFilterColumn(this.column) ?? '';
+    this.startView = this.table.getStartViewFilterColumn(this.column) ?? 'month';
+    this.previousFilter = dataSource.getColumnValueFilterByAttr(this.column.attr) ?? this.createEmptyFilter();
+
+    const isCustom = CUSTOM_FILTERS_OPERATORS.includes(this.previousFilter.operator);
+    this.isCustomFilterSubject.next(isCustom);
+    this.isDefaultFilterSubject.next(!isCustom);
+
+  }
+
+  private createEmptyFilter(): OColumnValueFilter {
+    return {
+      attr: this.column.attr,
       operator: undefined,
       values: undefined,
       availableValues: undefined,
       filterExpresion: undefined,
       filterValuesInData: this.sourceData
     };
-
-    if (Util.isDefined(this.previousFilter.operator)) {
-      this.isCustomFilterSubject.next(CUSTOM_FILTERS_OPERATORS.indexOf(this.previousFilter.operator) !== -1);
-    }
-
-    this.preloadValues = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.preloadValues : true;
-    this.activeSortDirection = this.table.getSortFilterColumn(this.column) || '';
-    this.startView = this.table.getStartViewFilterColumn(this.column) || 'month';
-
   }
-
 
   private parseDataAndInitializeDataList(previousFilter: OColumnValueFilter) {
 
