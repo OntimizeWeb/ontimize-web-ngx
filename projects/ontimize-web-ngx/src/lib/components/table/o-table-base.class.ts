@@ -21,6 +21,7 @@ import type { MatPaginator } from "@angular/material/paginator";
 import type { OTableColumnSelectAllDirective } from "./extensions/header/table-column-select-all/o-table-column-select-all.directive";
 import type { OFilterBuilderComponent } from "../filter-builder/o-filter-builder.component";
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 
 export abstract class OTableBase {
@@ -128,6 +129,6 @@ export abstract class OTableBase {
   abstract setSelectedByKeys(keyValues: Array<any>): void;
   abstract setSelectedByMultipleKeys(keyValues: Array<Object>): void;
   abstract setSelectedByRowIds(rowIds: Array<number>): void;
-  abstract getSourceDataByFilterColumn(column: OColumn): 'current-page' | 'all-data';
+  abstract getFilterColumnByAttr(attr: string): OFilterColumn;
   abstract getValue(): any[];
 }

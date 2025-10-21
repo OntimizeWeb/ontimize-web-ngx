@@ -3604,18 +3604,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return this.snackBarService;
   }
 
-  /**
- * Resolves the data source type for filtering based on table filter component state.
- * It prioritizes specific component values and falls back to pageable state.
- *
- * @returns 'current-page' | 'all-data'
- */
-  getSourceDataByFilterColumn(column: OColumn): 'current-page' | 'all-data' {
-    return (
-      this.oTableColumnsFilterComponent?.getFilterValuesInData(column.attr) ||
-      (this.oTableColumnsFilterComponent?.filterValuesInData ||
-        'current-page')
-    );
+
+  getFilterColumnByAttr(attr: string): OFilterColumn {
+    // If the columns filter component exists, use its column definitions
+    if (this.oTableColumnsFilterComponent?.columnsArray?.length) {
+      return this.oTableColumnsFilterComponent?.columnsArray.find(filterColumn => filterColumn.attr === attr);
+    }
+
+    // If there is no columns filter component, fall back to the table’s visible columns
+    const visibleColumn = this.oTableOptions.columns?.find(col => col.attr === attr && col.visible);
+    if (visibleColumn) {
+      return {
+        attr: visibleColumn.attr,
+        title: visibleColumn.title,
+        filterValuesInData:'current-page',
+        sort: '',
+        startView:''
+
+      } as OFilterColumn;
+    }
+    return undefined;
   }
 
   updateColumnTitles(columns: { attr: string; title: string }[]): void {
