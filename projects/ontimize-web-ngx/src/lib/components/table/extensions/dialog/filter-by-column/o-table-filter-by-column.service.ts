@@ -110,8 +110,10 @@ export class OTableFilterByColumnService {
   ): void {
     filter.operator = ColumnValueFilterOperator.IN;
     filter.values = selectedValues.map(item => item.value);
+
     const sourceData = filterByColumnDefinition.filterValuesInData;
-    if (sourceData === 'current-page') {
+    const effectiveSourceData = sourceData ?? 'current-page';
+    if (effectiveSourceData) {
       filter.availableValues = this.parseListData(filter, column, filter.availableValues ?? tableData, isPageable, filterByColumnDefinition);
     } else {
       filter.filterExpresion = filter.filterExpresion || getComponentFilterFn();
