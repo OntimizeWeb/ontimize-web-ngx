@@ -55,7 +55,12 @@
                 {{ 'TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate }}
               </ng-container>
               <ng-template #showValue>
-                  {{ record.renderedValue }}
+                <ng-container *ngIf="!column.renderer">
+                  {{ record.value }}
+                </ng-container>
+                <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
+                  [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
+                </ng-template>
               </ng-template>
             </mat-list-option>
           </ng-container>
