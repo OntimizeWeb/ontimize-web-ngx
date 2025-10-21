@@ -249,7 +249,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
     filterService.getDataForColumnFilter(this.injector, this.table, this.column, filterByColumnDefinition).subscribe(
       tableData => {
         let selectedValue = this.row[columnAttr];
-        if (sourceDataType !== 'current-page' && visibleColumns.length > 0) {
+        if (sourceDataType !== 'current-page' && visibleColumns?.length > 0) {
           selectedValue = tableData.filter(registro =>
             visibleColumns.some(prop => registro[prop] === selectedValue)
           );
