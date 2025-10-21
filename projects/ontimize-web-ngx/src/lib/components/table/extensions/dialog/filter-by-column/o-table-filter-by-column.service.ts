@@ -132,7 +132,7 @@ export class OTableFilterByColumnService {
     if (table.pageable) {
       const previousFilter = table.dataSource.getColumnValueFilterByAttr(column.attr);
       // Get all paginated data using the remote service
-      const kv = previousFilter.filterExpresion || table.getComponentFilter();
+      const kv = previousFilter?.filterExpresion || table.getComponentFilter();
       const av = [column.attr];
       const sqlTypes = Util.isDefined(kv) && !Util.isObjectEmpty(kv)
         ? table.getSqlTypes()
@@ -193,10 +193,9 @@ export class OTableFilterByColumnService {
     const columnData = this.parseListData(filter, column, tableData, isPageable, filterColumnDefinition);
 
     const selectedValues = filter?.values ?? [];
-
-    columnData.forEach(item => {
+    for (const item of columnData) {
       item.selected = selectedValues.includes(item.value);
-    });
+    }
 
     return columnData;
   }

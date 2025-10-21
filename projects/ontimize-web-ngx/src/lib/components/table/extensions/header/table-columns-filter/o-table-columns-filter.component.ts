@@ -109,9 +109,9 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
       });
 
       // Add new columns to the map, overriding existing ones with the same "attr"
-      newColumns.forEach(col => {
+      for (const col of this.columnsArray) {
         mergedMap.set(col.attr, col);
-      });
+      }
 
       // Convert the map values back to an array
       this.columnsArray = Array.from(mergedMap.values());
