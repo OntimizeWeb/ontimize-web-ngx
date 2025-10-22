@@ -1,4 +1,4 @@
-## 15.7.0 (2025-10-25)
+## 15.7.0 (2025-10-22)
 > [!NOTE]
 > In this version, the features and bugfixes of versions [15.5.9](#1559-2025-09-02) were integrated
 
