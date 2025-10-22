@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Injector, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../../decorators/input-converter';
@@ -10,7 +10,7 @@ import type { OColumn } from '../../column/o-column.class';
 import { OTableGroupedRow } from '../row/o-table-row-group.class';
 import { OTableFilterByColumnService } from '../dialog/filter-by-column/o-table-filter-by-column.service';
 import { TableFilterByColumnData } from '../../../../types/table/o-table-filter-by-column-data.type';
-import { OTableComponent } from '../../o-table.component';
+import { OTableBase } from '../../o-table-base.class';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -160,7 +160,7 @@ export class OTableContextMenuComponent implements AfterViewInit {
   public isDateColumn: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor(
     protected injector: Injector,
-    public table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase
   ) {
     this.translateService = this.injector.get(OTranslateService);
   }

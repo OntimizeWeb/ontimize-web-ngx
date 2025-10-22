@@ -22,6 +22,8 @@ import type { OTableColumnSelectAllDirective } from "./extensions/header/table-c
 import type { OFilterBuilderComponent } from "../filter-builder/o-filter-builder.component";
 import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
+import { BaseService } from '../../services/base-service.class';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 
 
 export abstract class OTableBase {
@@ -32,9 +34,10 @@ export abstract class OTableBase {
   visibleExportDialogButtons: string;
   service: string;
   serviceType: string;
-  exportServiceType: TemplateRef<any>;
+  exportServiceType: string;
   exportOptsTemplate: any;
   visibleColArray: string[];
+  queryMethod: string;
   showNotificationOfReadOnly: boolean;
   abstract reinitializeSortColumns(sortColumns?: SQLOrder[]);
   abstract setGroupColumns(value: any[]);
@@ -131,4 +134,7 @@ export abstract class OTableBase {
   abstract setSelectedByRowIds(rowIds: Array<number>): void;
   abstract getFilterColumnByAttr(attr: string): OFilterColumn;
   abstract getValue(): any[];
+  abstract setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent);
+  abstract getAllValues(): any[];
+  abstract getDataService(): BaseService<ServiceResponse>;
 }
