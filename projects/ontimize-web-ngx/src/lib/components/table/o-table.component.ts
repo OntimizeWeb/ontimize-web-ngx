@@ -107,6 +107,7 @@ import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 import { MatRow, MatTable } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
+import { PaginationData } from '../../interfaces/pagination-data.interface';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -1043,8 +1044,35 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.destroy();
     this.initialize();
     this.state.reset(this.pageable);
+    if (options?.data) {
+      this.setData(options.data.data, options.data?.sqlTypes);
+      this.updatePaginationInfo(options.data.data);
+      this.currentPage = 0;
+    }
+    if (options?.paginationData) {
+      this.reinitializePaginationInfo(options.paginationData);
+    }
     this.initTableAfterViewInit();
     this.onReinitialize.emit(null);
+  }
+
+  reinitializePaginationInfo(paginationData: PaginationData) {
+    this.currentPage = paginationData.pageNumber;
+    this.queryRows = paginationData.pageSize;
+    if (this.pageable) {
+      if (paginationData.startRecordIndex !== undefined) {
+        const resultEndIndex = paginationData.startRecordIndex + (this.getDataArray() ? this.getDataArray().length : 0);
+        this.state.queryRecordOffset = resultEndIndex;
+      }
+      if (paginationData.totalQueryRecordsNumber !== undefined) {
+        this.state.totalQueryRecordsNumber = paginationData.totalQueryRecordsNumber;
+      }
+      const pageNumber = this.state.queryRecordOffset == 0 ? 0 : this.dataService?.getPaginationContext().pageNumber;
+      super.updatePaginationContext({ pageNumber: pageNumber, offset: this.state.queryRecordOffset, totalSize: this.state.totalQueryRecordsNumber, pageSize: this.state.queryRows });
+    } else {
+      this.updatePaginationContext({ totalSize: this.getDataArray().length });
+    }
+
   }
 
   protected initTableAfterViewInit() {
@@ -1769,7 +1797,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return beColFilter;
   }
 
-  updatePaginationInfo(queryRes: any) {
+  updatePaginationInfo(queryRes: ServiceResponse) {
     super.updatePaginationInfo(queryRes);
   }
 
@@ -3576,18 +3604,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return this.snackBarService;
   }
 
-  /**
- * Resolves the data source type for filtering based on table filter component state.
- * It prioritizes specific component values and falls back to pageable state.
- *
- * @returns 'current-page' | 'all-data'
- */
-  getSourceDataByFilterColumn(column: OColumn): 'current-page' | 'all-data' {
-    return (
-      this.oTableColumnsFilterComponent?.getFilterValuesInData(column.attr) ||
-      (this.oTableColumnsFilterComponent?.filterValuesInData ||
-        'current-page')
-    );
+
+  getFilterColumnByAttr(attr: string): OFilterColumn {
+    // If the columns filter component exists, use its column definitions
+    if (this.oTableColumnsFilterComponent?.columnsArray?.length) {
+      return this.oTableColumnsFilterComponent?.columnsArray.find(filterColumn => filterColumn.attr === attr);
+    }
+
+    // If there is no columns filter component, fall back to the table’s visible columns
+    const visibleColumn = this.oTableOptions.columns?.find(col => col.attr === attr && col.visible);
+    if (visibleColumn) {
+      return {
+        attr: visibleColumn.attr,
+        title: visibleColumn.title,
+        filterValuesInData:'current-page',
+        sort: '',
+        startView:''
+
+      } as OFilterColumn;
+    }
+    return undefined;
   }
 
   updateColumnTitles(columns: { attr: string; title: string }[]): void {

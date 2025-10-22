@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectorRef, EventEmitter, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
@@ -20,18 +20,24 @@ import type { OTableHeaderComponent } from "./extensions/header/table-header/o-t
 import type { MatPaginator } from "@angular/material/paginator";
 import type { OTableColumnSelectAllDirective } from "./extensions/header/table-column-select-all/o-table-column-select-all.directive";
 import type { OFilterBuilderComponent } from "../filter-builder/o-filter-builder.component";
+import { OTableColumnsFilterComponent } from './extensions/header/table-columns-filter/o-table-columns-filter.component';
+import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
+import { BaseService } from '../../services/base-service.class';
+import { ServiceResponse } from '../../interfaces/service-response.interface';
 
 
 export abstract class OTableBase {
   abstract getMenuPermissions(): OTableMenuPermissions;
   abstract rowHeightObservable: Observable<string>;
   abstract initializeCheckboxColumn();
+  oTableColumnsFilterComponent: OTableColumnsFilterComponent;
   visibleExportDialogButtons: string;
   service: string;
   serviceType: string;
-  exportServiceType: TemplateRef<any>;
+  exportServiceType: string;
   exportOptsTemplate: any;
   visibleColArray: string[];
+  queryMethod: string;
   showNotificationOfReadOnly: boolean;
   abstract reinitializeSortColumns(sortColumns?: SQLOrder[]);
   abstract setGroupColumns(value: any[]);
@@ -126,6 +132,9 @@ export abstract class OTableBase {
   abstract setSelectedByKeys(keyValues: Array<any>): void;
   abstract setSelectedByMultipleKeys(keyValues: Array<Object>): void;
   abstract setSelectedByRowIds(rowIds: Array<number>): void;
-  abstract getSourceDataByFilterColumn(column: OColumn): 'current-page' | 'all-data';
+  abstract getFilterColumnByAttr(attr: string): OFilterColumn;
   abstract getValue(): any[];
+  abstract setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent);
+  abstract getAllValues(): any[];
+  abstract getDataService(): BaseService<ServiceResponse>;
 }

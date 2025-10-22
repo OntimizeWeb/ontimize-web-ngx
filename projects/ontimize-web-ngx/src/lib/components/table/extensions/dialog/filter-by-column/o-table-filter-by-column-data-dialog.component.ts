@@ -1,11 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { BehaviorSubject, fromEvent, Observable, of } from 'rxjs';
+import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
@@ -19,8 +19,9 @@ import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table
 import type { OColumn } from '../../../column/o-column.class';
 import { OTableFilterByColumnService } from './o-table-filter-by-column.service';
 import { SelectionModel } from '@angular/cdk/collections';
+import { BaseService } from '../../../../../services/base-service.class';
 
-const CUSTOM_FILTERS_OPERATORS = [ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL];
+const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL]);
 
 @Component({
   selector: 'o-table-filter-by-column-data-dialog',
@@ -59,6 +60,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   private readonly listDataSubject = new BehaviorSubject<TableFilterByColumnData[]>([]);
   protected _listData: Observable<TableFilterByColumnData[]> = this.listDataSubject.asObservable();
+  protected service: BaseService<ServiceResponse>;
 
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('filterValueList') filterValueList: MatSelectionList;
@@ -70,59 +72,76 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   queryMethodName: string;
   previousFilter: OColumnValueFilter;
   selection = new SelectionModel<TableFilterByColumnData>(true, [], true, this.compareOptions());
+  visibleColumnsArray: string[];
+  separator: string
+  filterColumnDefinition: OFilterColumn;
 
   constructor(
+    protected injector: Injector,
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
     private readonly filterService: OTableFilterByColumnService,
     @Inject(MAT_DIALOG_DATA) data: { column: OColumn; table: OTableComponent }
   ) {
+    this.initFromData(data);
+  }
 
-    if (data.column) {
-      this.column = data.column;
-    }
+  private initFromData(data: { column: OColumn; table: OTableComponent }) {
+    this.column = data.column;
     this.table = data.table;
-
     this.initialize();
+    this.getData();
   }
 
   private initialize() {
-    this.showFilterValuesOption = this.table.paginationControls;
-    this.sourceData = this.table.getSourceDataByFilterColumn(this.column);
+    const {
+      paginationControls,
+      oTableColumnsFilterComponent,
+      dataSource
+    } = this.table;
 
-    this.mode = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.mode : 'default';
-    this.isDefaultFilterSubject.next(this.mode === 'default');
-    this.isCustomFilterSubject.next(this.mode === 'custom');
+    this.showFilterValuesOption = paginationControls;
+    this.filterColumnDefinition = this.table.getFilterColumnByAttr(this.column.attr);
+    const { filterValuesInData, separator, visibleColumns } = this.filterColumnDefinition;
 
-    this.previousFilter = this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) || {
-      attr: undefined,
+    this.sourceData = filterValuesInData;
+    this.separator = separator;
+    this.visibleColumnsArray = visibleColumns;
+
+    this.mode = oTableColumnsFilterComponent?.mode ?? 'default';
+    this.preloadValues = oTableColumnsFilterComponent?.preloadValues ?? true;
+
+    this.activeSortDirection = this.table.getSortFilterColumn(this.column) ?? '';
+    this.startView = this.table.getStartViewFilterColumn(this.column) ?? 'month';
+    this.previousFilter = dataSource.getColumnValueFilterByAttr(this.column.attr) ?? this.createEmptyFilter();
+
+    const isCustom = CUSTOM_FILTERS_OPERATORS.has(this.previousFilter.operator);
+    this.isCustomFilterSubject.next(isCustom);
+    this.isDefaultFilterSubject.next(!isCustom);
+
+  }
+
+  private createEmptyFilter(): OColumnValueFilter {
+    return {
+      attr: this.column.attr,
       operator: undefined,
       values: undefined,
       availableValues: undefined,
       filterExpresion: undefined,
       filterValuesInData: this.sourceData
     };
-
-    if (Util.isDefined(this.previousFilter.operator)) {
-      this.isCustomFilterSubject.next(CUSTOM_FILTERS_OPERATORS.indexOf(this.previousFilter.operator) !== -1);
-    }
-
-    this.preloadValues = this.table.oTableColumnsFilterComponent ? this.table.oTableColumnsFilterComponent.preloadValues : true;
-    this.activeSortDirection = this.table.getSortFilterColumn(this.column) || '';
-    this.startView = this.table.getStartViewFilterColumn(this.column) || 'month'
-
-    const queryMethod = this.table.oTableColumnsFilterComponent?.getQueryMethodOfFilterColumn(this.column.attr);
-    if (Util.isDefined(queryMethod)) {
-      this.queryMethodName = queryMethod;
-      this.sourceData = 'all-data';
-    }
-    this.getData(this.sourceData);
   }
-
 
   private parseDataAndInitializeDataList(previousFilter: OColumnValueFilter) {
 
-    this.columnData = this.filterService.parseListData(previousFilter, this.column, this.tableData, this.table.pageable, this.sourceData);
-    if(previousFilter.values && previousFilter.values.length > 0) {
+    this.columnData = this.filterService.initializeColumnFilterData(
+      this.previousFilter,
+      this.column,
+      this.tableData,
+      this.table.pageable,
+      this.filterColumnDefinition
+    );
+
+    if (previousFilter.values && previousFilter.values.length > 0) {
       this.selection.select(...this.columnData.filter(item => previousFilter.values.indexOf(item.value) !== -1));
     }
 
@@ -243,10 +262,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     };
 
     if (!this.isCustomFilterSubject.getValue()) {
-      const selectedValues:TableFilterByColumnData[] = this.selection.selected;
+      const selectedValues: TableFilterByColumnData[] = this.selection.selected;
       if (selectedValues.length) {
-        this.filterService.applySelectedValuesToFilter(this.column, this.tableData, filter, selectedValues, this.sourceData, this.table.pageable,() => this.table.getComponentFilter());
-
+        this.filterService.applySelectedValuesToFilter(this.column, this.tableData, filter, selectedValues, this.filterColumnDefinition, this.table.pageable, () => this.table.getComponentFilter());
       }
     } else {
       if (this.fcText.value) {
@@ -378,50 +396,26 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.getData(event.value);
   }
 
-  private getData(sourceData: string) {
-    if (sourceData === 'current-page') {
-      /*Get filter values on the current page*/
-      this.tableData = this.table.getValue();
-      this.parseDataAndInitializeDataList(this.previousFilter);
-
-    } else if (this.table.pageable) {
-      /*Get filter values on the all pages*/
-      this.queryByFilterColumnSubscription = this.queryByFilterColumn(this.column.attr).subscribe((res: ServiceResponse) => {
-        let data = [];
-        if (res.isSuccessful()) {
-          data = res.data;
-        }
-        this.tableData = data;
-        this.parseDataAndInitializeDataList(this.previousFilter);
-      });
-    } else {
-      this.tableData = this.table.getAllValues();
-      this.parseDataAndInitializeDataList(this.previousFilter);
+  private getData(sourceData?: 'current-page' | 'all-data') {
+    if (sourceData) {
+      this.filterColumnDefinition.filterValuesInData = sourceData;
     }
+    this.filterService.getDataForColumnFilter(
+      this.injector,
+      this.table,
+      this.column,
+      this.filterColumnDefinition
+    ).subscribe(data => {
+      this.tableData = data;
+      this.parseDataAndInitializeDataList(this.previousFilter);
+    });
   }
+
+
   isSelected(item: TableFilterByColumnData) {
     return item.selected;
   }
 
-  queryByFilterColumn(attr: string): Observable<ServiceResponse> | Observable<any> {
-
-    const kv = this.previousFilter.filterExpresion || this.table.getComponentFilter();
-    const av = [attr];
-    let sqlTypes = {};
-    if (Util.isDefined(kv) && !Util.isObjectEmpty(kv)) {
-      sqlTypes = this.table.getSqlTypes();
-    }
-
-    const columnQueryArgs = [kv, av, this.table.entity, sqlTypes, undefined, undefined, undefined];
-    const queryMethodName = this.queryMethodName || Codes.QUERY_METHOD;
-    const service = this.table.getService();
-
-    if (service && (queryMethodName in service) && this.table.entity) {
-      return service[queryMethodName](...columnQueryArgs)
-    }
-
-    return of({});
-  }
 
   compareOptions(): ((o1: TableFilterByColumnData, o2: TableFilterByColumnData) => boolean) | undefined {
     return (o1: TableFilterByColumnData, o2: TableFilterByColumnData) => o1?.value === o2?.value;

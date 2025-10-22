@@ -501,7 +501,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       const queryRecordOffset = this.state.queryRecordOffset ? this.state.queryRecordOffset : 0;
       ovrrArgs.offset = ovrrArgs?.hasOwnProperty('offset') ? ovrrArgs.offset : queryRecordOffset;
       ovrrArgs.length = ovrrArgs?.hasOwnProperty('length') ? ovrrArgs.length : this.queryRows;
-
     }
 
     return {
@@ -533,7 +532,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   }
 
-  private updatePaginationContext(paginationContext: PaginationContext) {
+  protected updatePaginationContext(paginationContext: PaginationContext) {
     if (!this.pageable) {
       delete paginationContext.offset;
     }
@@ -563,6 +562,17 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     const context = this.getContextComponent();
     return this.getParentKeysFromContext(this._pKeysEquiv, context);
   }
+
+  getForm() {
+    return this.form;
+  }
+  getParentKeysEquivalence() {
+    return this._pKeysEquiv;
+  }
+  getDataService() {
+    return this.dataService;
+  }
+
 
   protected updateStateStorage(): void {
     if (this.localStorageService && this.storeState && !this.alreadyStored) {

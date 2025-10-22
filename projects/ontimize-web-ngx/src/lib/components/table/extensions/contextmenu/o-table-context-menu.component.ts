@@ -8,9 +8,9 @@ import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
 import type { OColumn } from '../../column/o-column.class';
 import { OTableGroupedRow } from '../row/o-table-row-group.class';
-import { OTableBase } from '../../o-table-base.class';
 import { OTableFilterByColumnService } from '../dialog/filter-by-column/o-table-filter-by-column.service';
 import { TableFilterByColumnData } from '../../../../types/table/o-table-filter-by-column-data.type';
+import { OTableBase } from '../../o-table-base.class';
 
 export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
   'contextMenu: context-menu',
@@ -242,27 +242,40 @@ export class OTableContextMenuComponent implements AfterViewInit {
     const filterService = this.injector.get(OTableFilterByColumnService);
 
     const columnAttr = this.column.attr;
-    const sourceDataType = this.table.getSourceDataByFilterColumn(this.column);
-    const tableData = this.table.getValue();
-    const selectedValue = this.row[columnAttr];
+    const filterByColumnDefinition = this.table.getFilterColumnByAttr(this.column.attr);
+    const sourceDataType = filterByColumnDefinition.filterValuesInData;
+    const visibleColumns = filterByColumnDefinition.visibleColumns;
 
-    const filter: OColumnValueFilter =
-      this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) ??
-      this.createColumnValueFilter(columnAttr, selectedValue, sourceDataType);
+    filterService.getDataForColumnFilter(this.injector, this.table, this.column, filterByColumnDefinition).subscribe(
+      tableData => {
+        let selectedValue = this.row[columnAttr];
+        if (sourceDataType !== 'current-page' && visibleColumns?.length > 0) {
+          selectedValue = tableData.filter(registro =>
+            visibleColumns.some(prop => registro[prop] === selectedValue)
+          );
+        }
 
-    let columnData = filterService.parseListData(filter, this.column, tableData, this.table.pageable, sourceDataType);
-    const selectedValues = this.getSelectedValues(columnData, selectedValue);
-    filterService.applySelectedValuesToFilter(
-      this.column,
-      tableData,
-      filter,
-      selectedValues,
-      sourceDataType,
-      this.table.pageable,
-      () => this.table.getComponentFilter()
-    );
+        const filter: OColumnValueFilter =
+          this.table.dataSource.getColumnValueFilterByAttr(this.column.attr) ??
+          this.createColumnValueFilter(columnAttr, selectedValue, sourceDataType);
 
-    this.table.filterByColumn(filter);
+        let columnData = filterService.parseListData(filter, this.column, tableData, this.table.pageable, filterByColumnDefinition);
+        const selectedValues = this.getSelectedValues(columnData, selectedValue);
+        filterService.applySelectedValuesToFilter(
+          this.column,
+          tableData,
+          filter,
+          selectedValues,
+          filterByColumnDefinition,
+          this.table.pageable,
+          () => this.table.getComponentFilter()
+        );
+
+        this.table.filterByColumn(filter);
+      }
+    )
+
+
   }
 
   private createColumnValueFilter(attr: string, value: any, sourceData: 'current-page' | 'all-data'): OColumnValueFilter {

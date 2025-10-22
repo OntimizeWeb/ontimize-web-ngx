@@ -7,6 +7,9 @@ import { OColumnValueFilter } from '../../../../../types/table/o-column-value-fi
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column';
 import { OTableBase } from '../../../o-table-base.class';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogService } from '../../../../../services/dialog.service';
+import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_ICON = [
   'column'
@@ -42,7 +45,10 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
 
 
   constructor(
-    @Inject(forwardRef(() => OTableBase)) public table: OTableBase
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase,
+    protected dialog: MatDialog,
+    protected dialogService: DialogService,
+    protected translateService: OTranslateService
   ) {
     this.subscription.add(this.table.onFilterByColumnChange.subscribe(() => {
       this.updateStateColumnFilter();
@@ -71,7 +77,12 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
   }
 
   public openColumnFilterDialog(event) {
-    this.table.openColumnFilterDialog(this.column, event);
+    const filterByColumnComponent = this.table.oTableColumnsFilterComponent?.getFilterColumnByAttr(this.column.attr)
+    if (filterByColumnComponent?.filterLocked) {
+      this.dialogService.alert(this.translateService.get('TABLE.FILTER_LOCKED'), this.translateService.get(filterByColumnComponent.filterLockedMessage));
+    } else {
+      this.table.openColumnFilterDialog(this.column, event);
+    }
   }
 
   public getFilterIndicatorNumbered(): string {

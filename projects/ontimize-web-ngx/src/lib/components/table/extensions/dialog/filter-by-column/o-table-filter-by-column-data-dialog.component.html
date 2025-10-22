@@ -55,11 +55,25 @@
                 {{ 'TABLE.FILTER_BY_COLUMN.EMPTY_VALUE' | oTranslate }}
               </ng-container>
               <ng-template #showValue>
-                <ng-container *ngIf="!column.renderer">
-                  {{ record.value }}
+                <!--  if there are visible columns, show rendererValue -->
+                <ng-container *ngIf="visibleColumnsArray?.length > 0; else noVisibleColumns">
+                  {{ record.renderedValue }}
                 </ng-container>
-                <ng-template *ngIf="column.renderer" [ngTemplateOutlet]="column.renderer.templateref"
-                  [ngTemplateOutletContext]="{ cellvalue: record.value, rowvalue: record.rowValue }">
+
+                <!-- If there are no visible columns, use the previous behavior -->
+                <ng-template #noVisibleColumns>
+                  <!-- If there is no column renderer, show the raw value -->
+                  <ng-container *ngIf="!column.renderer; else withRenderer">
+                    {{ record.value }}
+                  </ng-container>
+
+                  <!-- If there is a renderer, use its template reference -->
+                  <ng-template #withRenderer>
+                    <ng-template [ngTemplateOutlet]="column.renderer.templateref" [ngTemplateOutletContext]="{
+                        cellvalue: record.value,
+                        rowvalue: record.rowValue
+                      }"></ng-template>
+                  </ng-template>
                 </ng-template>
               </ng-template>
             </mat-list-option>

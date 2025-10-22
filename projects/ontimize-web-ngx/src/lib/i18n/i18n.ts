@@ -136,6 +136,8 @@ export const MAP = {
     'TABLE.FILTER_BY_COLUMN.LABEL_DATA': 'Filter values',
     'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE': 'Current page',
     'TABLE.FILTER_BY_COLUMN.ALL_PAGE': 'All pages',
+    'TABLE.FILTER_BY_COLUMN.DEFAULT_LOCKED_MESSAGE': 'Filtering is not available for this column',
+    'TABLE.FILTER_LOCKED':'Filter locked',
     'TABLE.FILTER': 'Filter',
     'TABLE.FILTER.CASE_SENSITIVE': 'Match uppercase and lowercase',
     'TABLE.EMPTY': 'No results found',
@@ -314,7 +316,8 @@ export const MAP = {
     'EXPORT.DIALOG.FILE_NAME': 'File name',
     'EXPORT.DIALOG.EXPORT_BUTTON': "Export",
     'EXPORT.DIALOG.ADVANCED_OPTIONS': " Advanced options",
-    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "You can indicate a file name"
+    'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "You can indicate a file name",
+    'O_TREE.LOAD_MORE': 'Load more ...'
   },
 
   // Spanish
@@ -453,6 +456,8 @@ export const MAP = {
     'TABLE.FILTER_BY_COLUMN.LABEL_DATA': 'Filtrar valores sobre',
     'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE': 'Página actual',
     'TABLE.FILTER_BY_COLUMN.ALL_PAGE': 'Todos los datos',
+    'TABLE.FILTER_BY_COLUMN.DEFAULT_LOCKED_MESSAGE': 'No está disponible el filtrado para esta columna',
+    'TABLE.FILTER_LOCKED': 'Filtro bloqueado',
     'TABLE.FILTER': 'Filtrar',
     'TABLE.FILTER.CASE_SENSITIVE': 'Coincidir mayúsculas y minúsculas',
     'TABLE.EMPTY': 'No se han obtenido resultados',
@@ -623,7 +628,8 @@ export const MAP = {
     'EXPORT.DIALOG.ADVANCED_OPTIONS': " Opciones Avanzadas",
     'EXPORT.DIALOG.FILE_NAME.PLACEHOLDER': "Puede indicar un nombre para el fichero",
     'DATERANGE.PLACEHOLDER_STARTDATE': 'Fecha inicio',
-    'DATERANGE.PLACEHOLDER_ENDDATE': 'Fecha fin'
+    'DATERANGE.PLACEHOLDER_ENDDATE': 'Fecha fin',
+    'O_TREE.LOAD_MORE': 'Ver más ...'
   },
   // Portuguese - BRAZIL
   pt: {
@@ -759,6 +765,8 @@ export const MAP = {
     'TABLE.FILTER_BY_COLUMN.LABEL_DATA': 'Filtrar valores ativados',
     'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE': 'Página atual',
     'TABLE.FILTER_BY_COLUMN.ALL_PAGE': 'Todos os dados',
+    'TABLE.FILTER_BY_COLUMN.DEFAULT_LOCKED_MESSAGE': 'A filtragem não está disponível para esta coluna',
+    'TABLE.FILTER_LOCKED': 'Filtro bloqueado',
     'TABLE.FILTER': 'Filtrar',
     'TABLE.FILTER.CASE_SENSITIVE': 'Coincidir maiúsculas e minúsculas',
     'TABLE.EMPTY': 'Nenhum resultado encontrado.',
@@ -909,6 +917,8 @@ export const MAP = {
     'REPORT.COLUMN.TRUEVALUE': 'Sim',
     'REPORT.COLUMN.FALSEVALUE': 'Não',
     'DATERANGE.PLACEHOLDER_STARTDATE': 'Data de início',
-    'DATERANGE.PLACEHOLDER_ENDDATE': 'Data de término'
+    'DATERANGE.PLACEHOLDER_ENDDATE': 'Data de término',
+    'O_TREE.LOAD_MORE': 'Carregar mais ...'
+
   }
 }

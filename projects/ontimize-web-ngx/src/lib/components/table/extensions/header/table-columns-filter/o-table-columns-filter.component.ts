@@ -4,8 +4,8 @@ import { BooleanInputConverter } from '../../../../../decorators/input-converter
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
-import { OTableComponent } from '../../../o-table.component';
 import { OFilterColumn, OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-column.component';
+import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -41,6 +41,62 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
   preloadValues: boolean = true;
   filterValuesInData: 'current-page' | 'all-data';
 
+  protected _columnsArray: Array<OFilterColumn> = [];
+  protected columnsComparisonProperty: object = {};
+
+  @ContentChildren(OTableColumnsFilterColumnComponent, { descendants: true }) filterColumns: QueryList<OTableColumnsFilterColumnComponent>;
+
+  constructor(
+    protected injector: Injector,
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase
+  ) { }
+
+  ngOnInit() {
+    if (this.columnsArray.length === 0) {
+      this.columnsArray = this.table.oTableOptions.visibleColumns;
+    }
+    let columns = Util.parseArray(this._columns, true);
+
+    columns.forEach((colData, i, arr) => {
+      const colDef = colData.split(Codes.TYPE_SEPARATOR);
+      const colName = colDef[0];
+      let compType = (colDef[1] || '').toUpperCase();
+      if ([OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE, OTableColumnsFilterComponent.MODEL_COMPARISON_TYPE].indexOf(compType) === -1) {
+        compType = OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE;
+      }
+      arr[i] = colName;
+      this.columnsComparisonProperty[colName] = compType;
+    });
+
+    this.table.setOTableColumnsFilter(this);
+
+    this.filterValuesInData = this.filterValuesInData ?? this.getFilterValuesInDataByDefault();
+  }
+
+  ngAfterContentInit() {
+    if (!Util.isDefined(this.filterColumns)) return;
+
+    const newColumns = this.parseFilterColumns(this.filterColumns);
+
+    // Create a map to merge arrays based on the "attr" property
+    const mergedMap = new Map<string, any>();
+
+    // Add existing columns to the map
+    for (const col of this.columnsArray) {
+      mergedMap.set(col.attr, col);
+    };
+
+    // Add new columns to the map, overriding existing ones with the same "attr"
+    for (const col of newColumns) {
+      mergedMap.set(col.attr, col);
+    }
+
+    // Convert the map values back to an array
+    this.columnsArray = Array.from(mergedMap.values());
+  }
+
+  // -------------------- Getters / Setters --------------------
+
   get mode(): string {
     return this._mode;
   }
@@ -55,68 +111,31 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     }
   }
 
-  protected _columnsArray: Array<OFilterColumn> = [];
-  protected columnsComparisonProperty: object = {};
+  set columns(arg: string) {
+    this._columns = arg;
+    this._columnsArray = this.parseColumns(this._columns);
+  }
 
-  @ContentChildren(OTableColumnsFilterColumnComponent, { descendants: true }) filterColumns: QueryList<OTableColumnsFilterColumnComponent>;
+  set columnsArray(arg: OFilterColumn[]) {
+    this._columnsArray = arg;
+  }
 
-  constructor(
-    protected injector: Injector,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
-  ) { }
+  get columnsArray(): OFilterColumn[] {
+    return this._columnsArray;
+  }
 
-  ngOnInit() {
-    if (this.columnsArray.length === 0) {
-      this.columnsArray = this.table.oTableOptions.visibleColumns;
-    }
-    const self = this;
-    let columns = Util.parseArray(this._columns, true);
-
-    columns.forEach((colData, i, arr) => {
-      const colDef = colData.split(Codes.TYPE_SEPARATOR);
-      const colName = colDef[0];
-      let compType = (colDef[1] || '').toUpperCase();
-      if ([OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE, OTableColumnsFilterComponent.MODEL_COMPARISON_TYPE].indexOf(compType) === -1) {
-        compType = OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE;
-      }
-      arr[i] = colName;
-      self.columnsComparisonProperty[colName] = compType;
-    });
-
-    this.table.setOTableColumnsFilter(this);
-
-    this.filterValuesInData = this.filterValuesInData ?? this.getFilterValuesInDataByDefault();
+  //---------------- METHODS -----------------
+  getFilterColumnByAttr(attr: string) {
+    return this.filterColumns.find(filterColumn => filterColumn.attr === attr);
   }
 
   private getFilterValuesInDataByDefault() {
     return this.table.pageable ? 'current-page' : 'all-data';
   }
 
-  ngAfterContentInit() {
-    if (Util.isDefined(this.filterColumns)) {
-      const newColumns = this.parseFilterColumns(this.filterColumns);
-
-      // Create a map to merge arrays based on the "attr" property
-      const mergedMap = new Map<string, any>();
-
-      // Add existing columns to the map
-      this.columnsArray.forEach(col => {
-        mergedMap.set(col.attr, col);
-      });
-
-      // Add new columns to the map, overriding existing ones with the same "attr"
-      newColumns.forEach(col => {
-        mergedMap.set(col.attr, col);
-      });
-
-      // Convert the map values back to an array
-      this.columnsArray = Array.from(mergedMap.values());
-
-    }
-  }
-
   isColumnFilterable(attr: string): boolean {
-    return Util.isDefined(this.columnsArray.find(x => x.attr === attr));
+    const filterColumnDefinition = this.columnsArray.find(x => x.attr === attr);
+    return Util.isDefined(filterColumnDefinition) && (filterColumnDefinition.filterLocked ?? true);
   }
 
   getSortValueOfFilterColumn(attr: string): string {
@@ -157,12 +176,13 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   getFilterValuesInData(attr: string): 'current-page' | 'all-data' {
     let filterValuesInData: 'current-page' | 'all-data' = this.filterValuesInData;
-    if (Util.isDefined(this.columnsArray)) {
-      this.columnsArray.forEach(column => {
-        if (column.attr == attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
+    if (Util.isDefined(this.filterColumns)) {
+      for (const column of this.filterColumns) {
+        if (column.attr === attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
           filterValuesInData = column.filterValuesInData;
+          break; // salimos del bucle una vez encontrada la coincidencia
         }
-      });
+      }
     }
     return filterValuesInData;
   }
@@ -175,18 +195,7 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     }
   }
 
-  set columns(arg: string) {
-    this._columns = arg;
-    this._columnsArray = this.parseColumns(this._columns);
-  }
-
-  set columnsArray(arg: OFilterColumn[]) {
-    this._columnsArray = arg;
-  }
-
-  get columnsArray(): OFilterColumn[] {
-    return this._columnsArray;
-  }
+  // -------------------- Parsing --------------------
 
   parseColumns(columns: string) {
     return columns.split(';')
@@ -207,6 +216,18 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
         obj.sort = x.sort;
         obj.startView = x.startView;
         obj.queryMethod = x.queryMethod;
+        if (x.service) {
+          obj.service = x.service
+        }
+        if (x.serviceType) {
+          obj.serviceType = x.serviceType
+        }
+        if (x.separator) {
+          obj.separator = x.separator
+        }
+        if (x.visibleColumns) {
+          obj.visibleColumns = Util.parseArray(x.visibleColumns, true)
+        }
         obj.filterValuesInData = (x.filterValuesInData || this.filterValuesInData) ?? this.getFilterValuesInDataByDefault();
         return obj;
       });
