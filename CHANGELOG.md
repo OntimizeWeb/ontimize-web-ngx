@@ -12,7 +12,7 @@
   * Allow configuration of visible columns in the modal when `filter-values-in-data="all-data"`.([28937f0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/28937f0)) Closes [#1988](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1988).
 
 ### Bug Fixes
-* **o-table**: Fixed issue where scrolling was not displayed in "Show/Hide Columns" mode when there were too many columns.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1991](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1991).
+* **o-table**: Fixed issue where scrolling was not displayed in "Show/Hide Columns" mode when there were too many columns.([0a109ce](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0a109ce)) Closes [#1991](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1991).
 
 ## 15.6.2 (2025-09-24)
 ### Features
