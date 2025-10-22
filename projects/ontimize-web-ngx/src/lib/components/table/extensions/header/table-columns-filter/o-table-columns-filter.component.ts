@@ -4,8 +4,8 @@ import { BooleanInputConverter } from '../../../../../decorators/input-converter
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
-import { OTableComponent } from '../../../o-table.component';
 import { OFilterColumn, OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-column.component';
+import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
   // columns [string]: columns that might be filtered, separated by ';'. Default: all visible columns.
@@ -48,7 +48,7 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   constructor(
     protected injector: Injector,
-    @Inject(forwardRef(() => OTableComponent)) protected table: OTableComponent
+    @Inject(forwardRef(() => OTableBase)) public table: OTableBase
   ) { }
 
   ngOnInit() {

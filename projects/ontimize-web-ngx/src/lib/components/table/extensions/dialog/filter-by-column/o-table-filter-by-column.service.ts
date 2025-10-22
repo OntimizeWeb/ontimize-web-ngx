@@ -6,11 +6,11 @@ import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
 import { Observable, of } from 'rxjs';
 import { ServiceResponse } from '../../../../../interfaces';
-import { OTableComponent } from '../../../o-table.component';
 import { FactoryUtil } from '../../../../../util/factory.util';
 import { OConfigureServiceArgs } from '../../../../../types/configure-service-args.type';
 import { OntimizeService } from '../../../../../services/ontimize/ontimize.service';
-import { OFilterColumn } from '../../header';
+import { OTableBase } from '../../../o-table-base.class';
+import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 @Injectable()
 export class OTableFilterByColumnService {
@@ -122,7 +122,7 @@ export class OTableFilterByColumnService {
 
   getDataForColumnFilter(
     injector: Injector,
-    table: OTableComponent,
+    table: OTableBase,
     column: OColumn,
     filterColumnDefinition: OFilterColumn
   ): Observable<any[]> {
@@ -169,7 +169,7 @@ export class OTableFilterByColumnService {
     return of(table.getAllValues());
   }
 
-  configureService(injector: Injector, filterColumnDefinition: OFilterColumn, tableEntity: OTableComponent,) {
+  configureService(injector: Injector, filterColumnDefinition: OFilterColumn, tableEntity: OTableBase) {
     const service = filterColumnDefinition.service;
     const serviceType = filterColumnDefinition.serviceType;
     const entity = filterColumnDefinition.entity ?? tableEntity.entity;
