@@ -501,7 +501,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
       const queryRecordOffset = this.state.queryRecordOffset ? this.state.queryRecordOffset : 0;
       ovrrArgs.offset = ovrrArgs?.hasOwnProperty('offset') ? ovrrArgs.offset : queryRecordOffset;
       ovrrArgs.length = ovrrArgs?.hasOwnProperty('length') ? ovrrArgs.length : this.queryRows;
-
     }
 
     return {

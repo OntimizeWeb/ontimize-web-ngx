@@ -41,20 +41,6 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
   preloadValues: boolean = true;
   filterValuesInData: 'current-page' | 'all-data';
 
-  get mode(): string {
-    return this._mode;
-  }
-
-  @Input()
-  set mode(val: string) {
-    const m = OTableColumnsFilterComponent.OTableColumnsFilterModes.find(e => e === val);
-    if (Util.isDefined(m)) {
-      this._mode = m;
-    } else {
-      console.error('Invalid `o-table-columns-filter` mode (' + val + ')');
-    }
-  }
-
   protected _columnsArray: Array<OFilterColumn> = [];
   protected columnsComparisonProperty: object = {};
 
@@ -69,7 +55,6 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     if (this.columnsArray.length === 0) {
       this.columnsArray = this.table.oTableOptions.visibleColumns;
     }
-    const self = this;
     let columns = Util.parseArray(this._columns, true);
 
     columns.forEach((colData, i, arr) => {
@@ -80,7 +65,7 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
         compType = OTableColumnsFilterComponent.DEFAULT_COMPARISON_TYPE;
       }
       arr[i] = colName;
-      self.columnsComparisonProperty[colName] = compType;
+      this.columnsComparisonProperty[colName] = compType;
     });
 
     this.table.setOTableColumnsFilter(this);
@@ -88,7 +73,59 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     this.filterValuesInData = this.filterValuesInData ?? this.getFilterValuesInDataByDefault();
   }
 
-  getFilterColumnByAttr(attr:string) {
+  ngAfterContentInit() {
+    if (!Util.isDefined(this.filterColumns)) return;
+
+    const newColumns = this.parseFilterColumns(this.filterColumns);
+
+    // Create a map to merge arrays based on the "attr" property
+    const mergedMap = new Map<string, any>();
+
+    // Add existing columns to the map
+    for (const col of this.columnsArray) {
+      mergedMap.set(col.attr, col);
+    };
+
+    // Add new columns to the map, overriding existing ones with the same "attr"
+    for (const col of newColumns) {
+      mergedMap.set(col.attr, col);
+    }
+
+    // Convert the map values back to an array
+    this.columnsArray = Array.from(mergedMap.values());
+  }
+
+  // -------------------- Getters / Setters --------------------
+
+  get mode(): string {
+    return this._mode;
+  }
+
+  @Input()
+  set mode(val: string) {
+    const m = OTableColumnsFilterComponent.OTableColumnsFilterModes.find(e => e === val);
+    if (Util.isDefined(m)) {
+      this._mode = m;
+    } else {
+      console.error('Invalid `o-table-columns-filter` mode (' + val + ')');
+    }
+  }
+
+  set columns(arg: string) {
+    this._columns = arg;
+    this._columnsArray = this.parseColumns(this._columns);
+  }
+
+  set columnsArray(arg: OFilterColumn[]) {
+    this._columnsArray = arg;
+  }
+
+  get columnsArray(): OFilterColumn[] {
+    return this._columnsArray;
+  }
+
+  //---------------- METHODS -----------------
+  getFilterColumnByAttr(attr: string) {
     return this.filterColumns.find(filterColumn => filterColumn.attr === attr);
   }
 
@@ -96,31 +133,9 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     return this.table.pageable ? 'current-page' : 'all-data';
   }
 
-  ngAfterContentInit() {
-    if (Util.isDefined(this.filterColumns)) {
-      const newColumns = this.parseFilterColumns(this.filterColumns);
-
-      // Create a map to merge arrays based on the "attr" property
-      const mergedMap = new Map<string, any>();
-
-      // Add existing columns to the map
-      this.columnsArray.forEach(col => {
-        mergedMap.set(col.attr, col);
-      });
-
-      // Add new columns to the map, overriding existing ones with the same "attr"
-      newColumns.forEach(col => {
-        mergedMap.set(col.attr, col);
-      });
-
-      // Convert the map values back to an array
-      this.columnsArray = Array.from(mergedMap.values());
-
-    }
-  }
-
   isColumnFilterable(attr: string): boolean {
-    return Util.isDefined(this.columnsArray.find(x => x.attr === attr));
+    const filterColumnDefinition = this.columnsArray.find(x => x.attr === attr);
+    return Util.isDefined(filterColumnDefinition) && (filterColumnDefinition.filterLocked ?? true);
   }
 
   getSortValueOfFilterColumn(attr: string): string {
@@ -161,12 +176,13 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   getFilterValuesInData(attr: string): 'current-page' | 'all-data' {
     let filterValuesInData: 'current-page' | 'all-data' = this.filterValuesInData;
-    if (Util.isDefined(this.columnsArray)) {
-      this.columnsArray.forEach(column => {
-        if (column.attr == attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
+    if (Util.isDefined(this.filterColumns)) {
+      for (const column of this.filterColumns) {
+        if (column.attr === attr && (column.filterValuesInData === 'current-page' || column.filterValuesInData === 'all-data')) {
           filterValuesInData = column.filterValuesInData;
+          break; // salimos del bucle una vez encontrada la coincidencia
         }
-      });
+      }
     }
     return filterValuesInData;
   }
@@ -179,18 +195,7 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
     }
   }
 
-  set columns(arg: string) {
-    this._columns = arg;
-    this._columnsArray = this.parseColumns(this._columns);
-  }
-
-  set columnsArray(arg: OFilterColumn[]) {
-    this._columnsArray = arg;
-  }
-
-  get columnsArray(): OFilterColumn[] {
-    return this._columnsArray;
-  }
+  // -------------------- Parsing --------------------
 
   parseColumns(columns: string) {
     return columns.split(';')
@@ -216,6 +221,12 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
         }
         if (x.serviceType) {
           obj.serviceType = x.serviceType
+        }
+        if (x.separator) {
+          obj.separator = x.separator
+        }
+        if (x.visibleColumns) {
+          obj.visibleColumns = Util.parseArray(x.visibleColumns, true)
         }
         obj.filterValuesInData = (x.filterValuesInData || this.filterValuesInData) ?? this.getFilterValuesInDataByDefault();
         return obj;

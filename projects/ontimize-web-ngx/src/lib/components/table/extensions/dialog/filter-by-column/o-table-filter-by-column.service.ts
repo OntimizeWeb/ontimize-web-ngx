@@ -1,9 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
 import { TableFilterByColumnData } from '../../../../../types/table/o-table-filter-by-column-data.type';
 import { Util } from '../../../../../util/util';
 import { OColumn } from '../../../column/o-column.class';
+import { Observable, of } from 'rxjs';
+import { ServiceResponse } from '../../../../../interfaces';
+import { OTableComponent } from '../../../o-table.component';
+import { FactoryUtil } from '../../../../../util/factory.util';
+import { OConfigureServiceArgs } from '../../../../../types/configure-service-args.type';
+import { OntimizeService } from '../../../../../services/ontimize/ontimize.service';
+import { OFilterColumn } from '../../header';
 
 @Injectable()
 export class OTableFilterByColumnService {
@@ -13,9 +20,16 @@ export class OTableFilterByColumnService {
  * Returns the displayed (rendered) values for a column from the given table data.
  * Falls back to raw value if no renderer is defined.
  */
-  getColumnDataUsingRenderer(column: OColumn, tableData: any[]): any[] {
+  getColumnDataUsingRenderer(column: OColumn, tableData: any[], visibleColumns: string[], separator: string): any[] {
+    const useCustomRender = Array.isArray(visibleColumns) && visibleColumns.length > 0;
+
     return tableData.map(row => {
-      return column.renderer?.getCellData?.(row[column.attr], row) ?? row[column.attr];
+      if (useCustomRender) {
+        return visibleColumns.map(attr => row[attr] ?? '').join(separator);
+      } else {
+        const rawValue = row[column.attr];
+        return column.renderer?.getCellData?.(rawValue, row) ?? rawValue;
+      }
     });
   }
 
@@ -35,11 +49,16 @@ export class OTableFilterByColumnService {
     column: OColumn,
     tableData: any[],
     isPageable: boolean,
-    sourceData: 'current-page' | 'all-data'
+    filterColumnDefinition: OFilterColumn
   ): TableFilterByColumnData[] {
     const columnData: TableFilterByColumnData[] = [];
-    const colRenderedValues = this.getColumnDataUsingRenderer(column, tableData);
-    const valueColumn = column.valueColumn ?? column.attr;
+    const visibleColumns = filterColumnDefinition.visibleColumns;
+    const separator = filterColumnDefinition.separator;
+    const sourceData = filterColumnDefinition.filterValuesInData;
+    const colRenderedValues = this.getColumnDataUsingRenderer(column, tableData, visibleColumns, separator);
+
+    // Differentiated logic: use column.attr if called from the context menu, otherwise use valueColumn
+    const valueColumn =column.valueColumn ?? column.attr;
     const colValues = tableData.map((elem) => Util.getValueFromPath(elem, valueColumn));
 
     // Use predefined values if available in the filter configuration
@@ -85,17 +104,101 @@ export class OTableFilterByColumnService {
     tableData: any[],
     filter: OColumnValueFilter,
     selectedValues: TableFilterByColumnData[],
-    sourceData: 'current-page' | 'all-data',
+    filterByColumnDefinition: OFilterColumn,
     isPageable: boolean,
     getComponentFilterFn: () => any
   ): void {
     filter.operator = ColumnValueFilterOperator.IN;
     filter.values = selectedValues.map(item => item.value);
 
-    if (sourceData === 'current-page') {
-      filter.availableValues = this.parseListData(filter, column, filter.availableValues ?? tableData, isPageable, sourceData);
+    const sourceData = filterByColumnDefinition.filterValuesInData;
+    const effectiveSourceData = sourceData ?? 'current-page';
+    if (effectiveSourceData) {
+      filter.availableValues = this.parseListData(filter, column, filter.availableValues ?? tableData, isPageable, filterByColumnDefinition);
     } else {
       filter.filterExpresion = filter.filterExpresion || getComponentFilterFn();
     }
+  }
+
+  getDataForColumnFilter(
+    injector: Injector,
+    table: OTableComponent,
+    column: OColumn,
+    filterColumnDefinition: OFilterColumn
+  ): Observable<any[]> {
+    if (filterColumnDefinition.filterValuesInData === 'current-page') {
+      // Get data only from the current page
+      return of(table.getValue());
+    }
+
+    if (table.pageable) {
+      const previousFilter = table.dataSource.getColumnValueFilterByAttr(column.attr);
+      // Get all paginated data using the remote service
+      const kv = previousFilter?.filterExpresion || table.getComponentFilter();
+      const av = [column.attr];
+      const sqlTypes = Util.isDefined(kv) && !Util.isObjectEmpty(kv)
+        ? table.getSqlTypes()
+        : {};
+      const entity = filterColumnDefinition.entity ?? table.entity;
+
+      const columnQueryArgs = [kv, av, entity, sqlTypes];
+      const service = this.configureService(injector, filterColumnDefinition, table);
+      const queryMethodName = filterColumnDefinition.queryMethod ??  table.queryMethod;
+
+
+      if (service && queryMethodName && typeof service[queryMethodName] === 'function') {
+        const result$ = service[queryMethodName](...columnQueryArgs) as Observable<ServiceResponse>;
+
+        // Convert ServiceResponse into a data array
+        return new Observable<any[]>(observer => {
+          result$.subscribe({
+            next: res => observer.next(res?.isSuccessful() ? res.data : []),
+            error: err => {
+              console.error('[FilterService] Error al consultar datos del filtro:', err);
+              observer.next([]);
+            },
+            complete: () => observer.complete()
+          });
+        });
+      }
+
+      return of([]); // fallback
+    }
+
+    // Si la tabla no es pageable, devuelve todos los valores en memoria
+    return of(table.getAllValues());
+  }
+
+  configureService(injector: Injector, filterColumnDefinition: OFilterColumn, tableEntity: OTableComponent,) {
+    const service = filterColumnDefinition.service;
+    const serviceType = filterColumnDefinition.serviceType;
+    const entity = filterColumnDefinition.entity ?? tableEntity.entity;
+    if ((service || serviceType)) {
+      let configureServiceArgs: OConfigureServiceArgs = { injector: injector, baseService: OntimizeService, entity: entity, service: service, serviceType: serviceType };
+      return FactoryUtil.configureService(configureServiceArgs);
+    } else {
+      return tableEntity.getDataService();
+    }
+
+  }
+
+
+  initializeColumnFilterData(
+    filter: OColumnValueFilter,
+    column: OColumn,
+    tableData: any[],
+    isPageable: boolean,
+    filterColumnDefinition: OFilterColumn
+    //contextSource: 'modal' | 'context-menu' = 'modal'
+  ): TableFilterByColumnData[] {
+
+    const columnData = this.parseListData(filter, column, tableData, isPageable, filterColumnDefinition);
+
+    const selectedValues = filter?.values ?? [];
+    for (const item of columnData) {
+      item.selected = selectedValues.includes(item.value);
+    }
+
+    return columnData;
   }
 }
