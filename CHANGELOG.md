@@ -1,8 +1,18 @@
-## 15.7.0
+## 15.7.0 (2025-10-25)
 > [!NOTE]
 > In this version, the features and bugfixes of versions [15.5.9](#1559-2025-09-02) were integrated
+
 ### Features
 * **o-table**: Updated `reinitialize` method to accept new optional parameters `data` of type `ServiceResponse` and `paginationData` of type `PaginationData`, allowing table and pagination reinitialization without a new query ([071b13a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/071b13a)) Closes [#1990](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1990).
+
+
+* **o-table-columns-filter-column**:
+  * Allow configuration of a custom service, service-type or entity for advanced or customized data retrieval. ([520cae7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/520cae7)) Closes [#1989](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1989).
+  * Add support to disable filter icon and show a configurable info message on click ([0509fc7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0509fc7)) Closes [#1986](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1986).
+  * Allow configuration of visible columns in the modal when `filter-values-in-data="all-data"`.([28937f0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/28937f0)) Closes [#1988](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1988).
+
+### Bug Fixes
+* **o-table**: Fixed issue where scrolling was not displayed in "Show/Hide Columns" mode when there were too many columns.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#1991](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/1991).
 
 ## 15.6.2 (2025-09-24)
 ### Features
