@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OTableCellRendererImageComponent } from './o-table-cell-renderer-image.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OTableCellRendererImageComponent', () => {
   let component: OTableCellRendererImageComponent;

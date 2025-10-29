@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OBarMenuNestedComponent } from './o-bar-menu-nested.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 describe('OBarMenuNestedComponent', () => {
   let component: OBarMenuNestedComponent;

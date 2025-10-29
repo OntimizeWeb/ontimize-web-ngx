@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { ODialogInternalComponent } from './o-dialog-internal.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../testing/o-testing-utils';
 
 describe('ODialogInternalComponent', () => {
   let component: ODialogInternalComponent;

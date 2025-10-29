@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { RemoteConfigService } from './remote-config.service';
+import { ORemoteConfigurationService } from './remote-config.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
-describe('RemoteConfigService', () => {
-  let service: RemoteConfigService;
+describe('ORemoteConfigurationService', () => {
+  let service: ORemoteConfigurationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        RemoteConfigService,
+        ORemoteConfigurationService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(RemoteConfigService);
+    service = TestBed.inject(ORemoteConfigurationService);
   });
 
   it('should be created', () => {

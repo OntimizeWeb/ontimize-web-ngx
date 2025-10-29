@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OTableCellEditorBooleanComponent } from './o-table-cell-editor-boolean.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OTableCellEditorBooleanComponent', () => {
   let component: OTableCellEditorBooleanComponent;

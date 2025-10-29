@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OFormNavigationComponent } from './o-form-navigation.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 describe('OFormNavigationComponent', () => {
   let component: OFormNavigationComponent;

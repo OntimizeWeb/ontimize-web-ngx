@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { NameConventionLowerService } from './name-convention-lower.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { NameConventionLower } from './name-convention-lower.service';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
-describe('NameConventionLowerService', () => {
-  let service: NameConventionLowerService;
+describe('NameConventionLower', () => {
+  let service: NameConventionLower;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        NameConventionLowerService,
+        NameConventionLower,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(NameConventionLowerService);
+    service = TestBed.inject(NameConventionLower);
   });
 
   it('should be created', () => {

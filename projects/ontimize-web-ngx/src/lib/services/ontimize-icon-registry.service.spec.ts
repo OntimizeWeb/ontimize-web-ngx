@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OntimizeIconRegistryService } from './ontimize-icon-registry.service';
+import { OntimizeMatIconRegistry } from './ontimize-icon-registry.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
-describe('OntimizeIconRegistryService', () => {
-  let service: OntimizeIconRegistryService;
+describe('OntimizeMatIconRegistry', () => {
+  let service: OntimizeMatIconRegistry;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OntimizeIconRegistryService,
+        OntimizeMatIconRegistry,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OntimizeIconRegistryService);
+    service = TestBed.inject(OntimizeMatIconRegistry);
   });
 
   it('should be created', () => {

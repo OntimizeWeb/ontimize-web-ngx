@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { JsonapiService } from './jsonapi.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { JSONAPIService } from './jsonapi.service';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
-describe('JsonapiService', () => {
-  let service: JsonapiService;
+describe('JSONAPIService', () => {
+  let service: JSONAPIService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        JsonapiService,
+        JSONAPIService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(JsonapiService);
+    service = TestBed.inject(JSONAPIService);
   });
 
   it('should be created', () => {

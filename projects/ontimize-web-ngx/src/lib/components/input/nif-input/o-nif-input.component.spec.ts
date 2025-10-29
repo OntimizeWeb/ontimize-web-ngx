@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ONifInputComponent } from './o-nif-input.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { ONIFInputComponent } from './o-nif-input.component';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
-describe('ONifInputComponent', () => {
-  let component: ONifInputComponent;
-  let fixture: ComponentFixture<ONifInputComponent>;
+describe('ONIFInputComponent', () => {
+  let component: ONIFInputComponent;
+  let fixture: ComponentFixture<ONIFInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ONifInputComponent],
+      declarations: [ONIFInputComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('ONifInputComponent', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ONifInputComponent);
+    fixture = TestBed.createComponent(ONIFInputComponent);
     component = fixture.componentInstance;
   });
 

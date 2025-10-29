@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OAppMenuComponentStateService } from './o-app-menu-component-state.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { OAppSidenavComponentStateService } from './o-app-menu-component-state.service';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
-describe('OAppMenuComponentStateService', () => {
-  let service: OAppMenuComponentStateService;
+describe('OAppSidenavComponentStateService', () => {
+  let service: OAppSidenavComponentStateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OAppMenuComponentStateService,
+        OAppSidenavComponentStateService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OAppMenuComponentStateService);
+    service = TestBed.inject(OAppSidenavComponentStateService);
   });
 
   it('should be created', () => {

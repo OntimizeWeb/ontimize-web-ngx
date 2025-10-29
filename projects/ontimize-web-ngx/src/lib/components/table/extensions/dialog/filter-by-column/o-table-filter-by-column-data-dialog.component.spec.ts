@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OTableFilterByColumnDataDialogComponent } from './o-table-filter-by-column-data-dialog.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OTableFilterByColumnDataDialogComponent', () => {
   let component: OTableFilterByColumnDataDialogComponent;

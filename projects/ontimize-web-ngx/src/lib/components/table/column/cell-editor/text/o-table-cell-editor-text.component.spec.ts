@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OTableCellEditorTextComponent } from './o-table-cell-editor-text.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OTableCellEditorTextComponent', () => {
   let component: OTableCellEditorTextComponent;

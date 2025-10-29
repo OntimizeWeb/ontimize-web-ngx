@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OComboRendererBooleanComponent } from './o-combo-renderer-boolean.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OComboRendererBooleanComponent', () => {
   let component: OComboRendererBooleanComponent;

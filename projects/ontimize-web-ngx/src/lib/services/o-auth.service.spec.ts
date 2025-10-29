@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OAuthService } from './o-auth.service';
+import { OntimizeAuthService } from './o-auth.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
-describe('OAuthService', () => {
-  let service: OAuthService;
+describe('OntimizeAuthService', () => {
+  let service: OntimizeAuthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OAuthService,
+        OntimizeAuthService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OAuthService);
+    service = TestBed.inject(OntimizeAuthService);
   });
 
   it('should be created', () => {

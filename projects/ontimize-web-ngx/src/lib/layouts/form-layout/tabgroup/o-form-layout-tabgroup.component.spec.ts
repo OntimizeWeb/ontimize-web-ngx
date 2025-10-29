@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { OFormLayoutTabgroupComponent } from './o-form-layout-tabgroup.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OFormLayoutTabGroupComponent } from './o-form-layout-tabgroup.component';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
-describe('OFormLayoutTabgroupComponent', () => {
-  let component: OFormLayoutTabgroupComponent;
-  let fixture: ComponentFixture<OFormLayoutTabgroupComponent>;
+describe('OFormLayoutTabGroupComponent', () => {
+  let component: OFormLayoutTabGroupComponent;
+  let fixture: ComponentFixture<OFormLayoutTabGroupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OFormLayoutTabgroupComponent],
+      declarations: [OFormLayoutTabGroupComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('OFormLayoutTabgroupComponent', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OFormLayoutTabgroupComponent);
+    fixture = TestBed.createComponent(OFormLayoutTabGroupComponent);
     component = fixture.componentInstance;
   });
 

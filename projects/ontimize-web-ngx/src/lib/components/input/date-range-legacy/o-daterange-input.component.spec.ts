@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ODaterangeInputComponent } from './o-daterange-input.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { ODateRangeInputComponent } from './o-daterange-input.component';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
-describe('ODaterangeInputComponent', () => {
-  let component: ODaterangeInputComponent;
-  let fixture: ComponentFixture<ODaterangeInputComponent>;
+describe('ODateRangeInputComponent', () => {
+  let component: ODateRangeInputComponent;
+  let fixture: ComponentFixture<ODateRangeInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ODaterangeInputComponent],
+      declarations: [ODateRangeInputComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('ODaterangeInputComponent', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ODaterangeInputComponent);
+    fixture = TestBed.createComponent(ODateRangeInputComponent);
     component = fixture.componentInstance;
   });
 

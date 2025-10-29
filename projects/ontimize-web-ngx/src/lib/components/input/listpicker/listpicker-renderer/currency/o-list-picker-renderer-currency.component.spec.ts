@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OListPickerRendererCurrencyComponent } from './o-list-picker-renderer-currency.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OListPickerRendererCurrencyComponent', () => {
   let component: OListPickerRendererCurrencyComponent;

@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OAppHeaderComponent } from './o-app-header.component';
-import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
 describe('OAppHeaderComponent', () => {
   let component: OAppHeaderComponent;

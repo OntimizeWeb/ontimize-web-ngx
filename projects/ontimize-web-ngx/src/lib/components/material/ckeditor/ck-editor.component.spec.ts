@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { CkEditorComponent } from './ck-editor.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { CKEditorComponent } from './ck-editor.component';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
-describe('CkEditorComponent', () => {
-  let component: CkEditorComponent;
-  let fixture: ComponentFixture<CkEditorComponent>;
+describe('CKEditorComponent', () => {
+  let component: CKEditorComponent;
+  let fixture: ComponentFixture<CKEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CkEditorComponent],
+      declarations: [CKEditorComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('CkEditorComponent', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CkEditorComponent);
+    fixture = TestBed.createComponent(CKEditorComponent);
     component = fixture.componentInstance;
   });
 

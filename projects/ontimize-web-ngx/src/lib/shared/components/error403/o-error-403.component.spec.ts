@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { OError403Component } from './o-error-403.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { Error403Component } from './o-error-403.component';
+import { OTestingUtils } from '../../../../testing/o-testing-utils';
 
-describe('OError403Component', () => {
-  let component: OError403Component;
-  let fixture: ComponentFixture<OError403Component>;
+describe('Error403Component', () => {
+  let component: Error403Component;
+  let fixture: ComponentFixture<Error403Component>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OError403Component],
+      declarations: [Error403Component],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('OError403Component', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OError403Component);
+    fixture = TestBed.createComponent(Error403Component);
     component = fixture.componentInstance;
   });
 

@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OErrorDialogManagerService } from './o-error-dialog-manager.service';
+import { OErrorDialogManager } from './o-error-dialog-manager.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
-describe('OErrorDialogManagerService', () => {
-  let service: OErrorDialogManagerService;
+describe('OErrorDialogManager', () => {
+  let service: OErrorDialogManager;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OErrorDialogManagerService,
+        OErrorDialogManager,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OErrorDialogManagerService);
+    service = TestBed.inject(OErrorDialogManager);
   });
 
   it('should be created', () => {

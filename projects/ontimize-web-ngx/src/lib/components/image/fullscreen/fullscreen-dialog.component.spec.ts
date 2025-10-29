@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FullscreenDialogComponent } from './fullscreen-dialog.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OFullScreenDialogComponent } from './fullscreen-dialog.component';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
-describe('FullscreenDialogComponent', () => {
-  let component: FullscreenDialogComponent;
-  let fixture: ComponentFixture<FullscreenDialogComponent>;
+describe('OFullScreenDialogComponent', () => {
+  let component: OFullScreenDialogComponent;
+  let fixture: ComponentFixture<OFullScreenDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FullscreenDialogComponent],
+      declarations: [OFullScreenDialogComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('FullscreenDialogComponent', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FullscreenDialogComponent);
+    fixture = TestBed.createComponent(OFullScreenDialogComponent);
     component = fixture.componentInstance;
   });
 

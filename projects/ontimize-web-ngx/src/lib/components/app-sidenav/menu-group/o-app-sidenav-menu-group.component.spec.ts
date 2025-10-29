@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OAppSidenavMenuGroupComponent } from './o-app-sidenav-menu-group.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 describe('OAppSidenavMenuGroupComponent', () => {
   let component: OAppSidenavMenuGroupComponent;

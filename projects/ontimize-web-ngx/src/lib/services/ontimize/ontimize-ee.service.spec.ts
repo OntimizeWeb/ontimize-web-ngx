@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OntimizeEeService } from './ontimize-ee.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { OntimizeEEService } from './ontimize-ee.service';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
-describe('OntimizeEeService', () => {
-  let service: OntimizeEeService;
+describe('OntimizeEEService', () => {
+  let service: OntimizeEEService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OntimizeEeService,
+        OntimizeEEService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OntimizeEeService);
+    service = TestBed.inject(OntimizeEEService);
   });
 
   it('should be created', () => {

@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { SnackbarService } from './snackbar.service';
+import { SnackBarService } from './snackbar.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
-describe('SnackbarService', () => {
-  let service: SnackbarService;
+describe('SnackBarService', () => {
+  let service: SnackBarService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        SnackbarService,
+        SnackBarService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(SnackbarService);
+    service = TestBed.inject(SnackBarService);
   });
 
   it('should be created', () => {

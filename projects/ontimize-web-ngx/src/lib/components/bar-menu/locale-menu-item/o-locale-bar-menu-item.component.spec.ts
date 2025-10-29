@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OLocaleBarMenuItemComponent } from './o-locale-bar-menu-item.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 describe('OLocaleBarMenuItemComponent', () => {
   let component: OLocaleBarMenuItemComponent;

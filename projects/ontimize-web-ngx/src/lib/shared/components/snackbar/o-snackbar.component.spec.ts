@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { OSnackbarComponent } from './o-snackbar.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OSnackBarComponent } from './o-snackbar.component';
+import { OTestingUtils } from '../../../../testing/o-testing-utils';
 
-describe('OSnackbarComponent', () => {
-  let component: OSnackbarComponent;
-  let fixture: ComponentFixture<OSnackbarComponent>;
+describe('OSnackBarComponent', () => {
+  let component: OSnackBarComponent;
+  let fixture: ComponentFixture<OSnackBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OSnackbarComponent],
+      declarations: [OSnackBarComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('OSnackbarComponent', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OSnackbarComponent);
+    fixture = TestBed.createComponent(OSnackBarComponent);
     component = fixture.componentInstance;
   });
 

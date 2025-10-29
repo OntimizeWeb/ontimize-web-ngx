@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OntimizeEePermissionsService } from './ontimize-ee-permissions.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
-describe('OntimizeEePermissionsService', () => {
-  let service: OntimizeEePermissionsService;
+describe('OntimizeEEPermissionsService', () => {
+  let service: OntimizeEEPermissionsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OntimizeEePermissionsService,
+        OntimizeEEPermissionsService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OntimizeEePermissionsService);
+    service = TestBed.inject(OntimizeEEPermissionsService);
   });
 
   it('should be created', () => {

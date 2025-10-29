@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { OTableComponentStateService } from './o-table-component-state.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
 describe('OTableComponentStateService', () => {
   let service: OTableComponentStateService;

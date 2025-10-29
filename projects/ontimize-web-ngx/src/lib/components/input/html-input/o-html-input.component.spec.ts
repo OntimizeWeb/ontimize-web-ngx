@@ -2,16 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { OHtmlInputComponent } from './o-html-input.component';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OHTMLInputComponent } from './o-html-input.component';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
-describe('OHtmlInputComponent', () => {
-  let component: OHtmlInputComponent;
-  let fixture: ComponentFixture<OHtmlInputComponent>;
+describe('OHTMLInputComponent', () => {
+  let component: OHTMLInputComponent;
+  let fixture: ComponentFixture<OHTMLInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OHtmlInputComponent],
+      declarations: [OHTMLInputComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot()
@@ -19,7 +19,7 @@ describe('OHtmlInputComponent', () => {
       providers: OTestingUtils.getCommonTestingModuleConfig().providers
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OHtmlInputComponent);
+    fixture = TestBed.createComponent(OHTMLInputComponent);
     component = fixture.componentInstance;
   });
 

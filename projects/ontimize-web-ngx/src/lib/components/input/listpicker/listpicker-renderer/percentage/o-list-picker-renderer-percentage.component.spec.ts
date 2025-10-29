@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OListPickerRendererPercentageComponent } from './o-list-picker-renderer-percentage.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OListPickerRendererPercentageComponent', () => {
   let component: OListPickerRendererPercentageComponent;

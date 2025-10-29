@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OntimizeExportDataProvider3xService } from './ontimize-export-data-provider-3x.service';
+import { OntimizeExportDataProviderService3X } from './ontimize-export-data-provider-3x.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
-describe('OntimizeExportDataProvider3xService', () => {
-  let service: OntimizeExportDataProvider3xService;
+describe('OntimizeExportDataProviderService3X', () => {
+  let service: OntimizeExportDataProviderService3X;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OntimizeExportDataProvider3xService,
+        OntimizeExportDataProviderService3X,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OntimizeExportDataProvider3xService);
+    service = TestBed.inject(OntimizeExportDataProviderService3X);
   });
 
   it('should be created', () => {

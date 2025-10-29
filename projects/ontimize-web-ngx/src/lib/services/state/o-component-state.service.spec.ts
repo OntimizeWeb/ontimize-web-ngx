@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { OComponentStateService } from './o-component-state.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { DefaultComponentStateService } from './o-component-state.service';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
-describe('OComponentStateService', () => {
-  let service: OComponentStateService;
+describe('DefaultComponentStateService', () => {
+  let service: DefaultComponentStateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        OComponentStateService,
+        DefaultComponentStateService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
-    service = TestBed.inject(OComponentStateService);
+    service = TestBed.inject(DefaultComponentStateService);
   });
 
   it('should be created', () => {

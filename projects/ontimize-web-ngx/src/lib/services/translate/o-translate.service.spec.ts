@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { OTranslateService } from './o-translate.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
 describe('OTranslateService', () => {
   let service: OTranslateService;

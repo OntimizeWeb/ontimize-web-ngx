@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OTableColumnsGroupingColumnComponent } from './o-table-columns-grouping-column.component';
-import { OTestingUtils } from '../../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OTableColumnsGroupingColumnComponent', () => {
   let component: OTableColumnsGroupingColumnComponent;

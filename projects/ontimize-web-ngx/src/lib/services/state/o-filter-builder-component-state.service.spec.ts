@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { OFilterBuilderComponentStateService } from './o-filter-builder-component-state.service';
-import { OTestingUtils } from '../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
 describe('OFilterBuilderComponentStateService', () => {
   let service: OFilterBuilderComponentStateService;

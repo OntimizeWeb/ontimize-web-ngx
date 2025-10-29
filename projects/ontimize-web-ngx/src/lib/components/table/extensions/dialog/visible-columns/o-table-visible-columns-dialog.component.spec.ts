@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OTableVisibleColumnsDialogComponent } from './o-table-visible-columns-dialog.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../../../../../shared/testing/o-testing-utils';
 
 describe('OTableVisibleColumnsDialogComponent', () => {
   let component: OTableVisibleColumnsDialogComponent;

@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OFormLayoutManagerComponent } from './o-form-layout-manager.component';
-import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
 describe('OFormLayoutManagerComponent', () => {
   let component: OFormLayoutManagerComponent;
