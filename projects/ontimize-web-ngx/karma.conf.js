@@ -20,9 +20,20 @@ module.exports = function (config) {
       dir: require('path').join(__dirname, '../../coverage/ontimize-web-ngx'),
       subdir: '.',
       reporters: [
-        { type: 'lcovonly' }
+        { type: 'html' },
+        { type: 'lcovonly' },
+        { type: 'text-summary' },
+        { type: 'cobertura' }
       ],
-      fixWebpackSourcePaths: true
+      fixWebpackSourcePaths: true,
+      check: {
+        global: {
+          statements: 70,
+          branches: 70,
+          functions: 70,
+          lines: 70
+        }
+      }
     },
     sonarQubeUnitReporter: {
       sonarQubeVersion: 'LATEST',
