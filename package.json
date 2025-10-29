@@ -17,6 +17,8 @@
     "coverage-report": "echo Coverage report generated at coverage/ontimize-web-ngx/index.html",
     "generate-tests": "node scripts/generate-tests.js",
     "fix-tests": "node scripts/fix-tests.js",
+    "improve-tests": "node scripts/improve-tests.js",
+    "final-fix-tests": "node scripts/final-fix-tests.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "rimraf": "rimraf",

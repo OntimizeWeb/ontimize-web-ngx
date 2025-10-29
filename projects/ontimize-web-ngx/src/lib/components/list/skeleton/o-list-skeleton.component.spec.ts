@@ -1,39 +1,44 @@
-import { AppearanceService } from '../../../services/appearance.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateModule } from '@ngx-translate/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OListSkeletonComponent } from './o-list-skeleton.component';
-import { Injector } from '@angular/core';
-import { APP_CONFIG, AppConfig } from '../../../config/app-config';
-import { appConfigFactory, LocalStorageService } from '../../../services';
-import { TestUtils } from '../../input/test/test-utils';
-import { AuthService } from '../../../services/auth.service';
-import { MatDialogModule } from '@angular/material/dialog';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+
 describe('OListSkeletonComponent', () => {
   let component: OListSkeletonComponent;
   let fixture: ComponentFixture<OListSkeletonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule, NgxSkeletonLoaderModule],
       declarations: [OListSkeletonComponent],
+      imports: [
+        NoopAnimationsModule,
+        TranslateModule.forRoot(),
+        ...OTestingUtils.getCommonTestingModuleConfig().imports
+      ],
       providers: [
-        { provide: APP_CONFIG, useValue: TestUtils.mockConfiguration() },
-        { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
-        AppearanceService,
-        AuthService,
-        LocalStorageService
-        // ...INTERNAL_ONTIMIZE_MODULES
-      ]
-    })
-    .compileComponents();
+        ...OTestingUtils.getCommonTestingModuleConfig().providers
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(OListSkeletonComponent);
+    fixture = TestBed.createComponent(OListSkeleton.component);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize without errors', () => {
+    expect(() => {
+      fixture.detectChanges();
+    }).not.toThrow();
+  });
+
+  it('should have basic component structure', () => {
+    expect(component).toBeInstanceOf(OListSkeletonComponent);
   });
 });

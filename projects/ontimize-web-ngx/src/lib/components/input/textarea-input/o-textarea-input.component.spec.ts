@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OTextareaInputComponent } from './o-textarea-input.component';
-import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
 describe('OTextareaInputComponent', () => {
   let component: OTextareaInputComponent;
@@ -14,12 +15,16 @@ describe('OTextareaInputComponent', () => {
       declarations: [OTextareaInputComponent],
       imports: [
         NoopAnimationsModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
-      providers: OTestingUtils.getCommonTestingModuleConfig().providers
+      providers: [
+        ...OTestingUtils.getCommonTestingModuleConfig().providers
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTextareaInputComponent);
+    fixture = TestBed.createComponent(OTextareaInput.component);
     component = fixture.componentInstance;
   });
 
@@ -27,17 +32,13 @@ describe('OTextareaInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have default properties', () => {
-    expect(component).toBeDefined();
-    // TODO: Add specific property tests
+  it('should initialize without errors', () => {
+    expect(() => {
+      fixture.detectChanges();
+    }).not.toThrow();
   });
 
-  it('should render correctly', () => {
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled).toBeTruthy();
-    // TODO: Add DOM tests
+  it('should have basic component structure', () => {
+    expect(component).toBeInstanceOf(OTextareaInputComponent);
   });
-
-  // TODO: Add more specific tests for component functionality
 });

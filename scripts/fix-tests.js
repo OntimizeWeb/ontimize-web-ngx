@@ -59,8 +59,24 @@ const SPECIAL_CASES = [
  * Calcular la ruta correcta para OTestingUtils
  */
 function getCorrectTestingUtilsPath(filePath) {
-  const relativePath = path.relative(path.dirname(filePath), path.join(BASE_DIR, 'shared/testing'));
-  return relativePath.replace(/\\/g, '/') + '/o-testing-utils';
+  // Ruta absoluta del archivo de test
+  const testFileDir = path.dirname(path.resolve(filePath));
+  
+  // Ruta absoluta del archivo OTestingUtils
+  const testingUtilsPath = path.resolve(process.cwd(), BASE_DIR, 'shared/testing/o-testing-utils');
+  
+  // Calcular ruta relativa
+  let relativePath = path.relative(testFileDir, testingUtilsPath);
+  
+  // Normalizar separadores para compatibilidad cross-platform
+  relativePath = relativePath.replace(/\\/g, '/');
+  
+  // Asegurar que la ruta comience con './' si no comienza con '../'
+  if (!relativePath.startsWith('.')) {
+    relativePath = './' + relativePath;
+  }
+  
+  return relativePath;
 }
 
 /**
@@ -84,9 +100,14 @@ function fixTestFile(filePath) {
 
   // Corregir rutas de OTestingUtils
   const correctPath = getCorrectTestingUtilsPath(filePath);
-  const oldPath = '../shared/testing/o-testing-utils';
-  if (content.includes(oldPath)) {
-    content = content.replace(new RegExp(oldPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), correctPath);
+  
+  // Buscar todas las variaciones posibles de rutas incorrectas con regex más flexible
+  const testingUtilsRegex = /import\s*{\s*OTestingUtils\s*}\s*from\s*['"]([^'"]+o-testing-utils)['"];?/g;
+  
+  if (testingUtilsRegex.test(content)) {
+    // Reset regex para el replace
+    testingUtilsRegex.lastIndex = 0;
+    content = content.replace(testingUtilsRegex, `import { OTestingUtils } from '${correctPath}';`);
     hasChanges = true;
   }
 
