@@ -15,7 +15,7 @@
     "test-watch": "ng test --watch --code-coverage",
     "test-coverage": "ng test --no-watch --code-coverage --browsers ChromeHeadless && npm run coverage-report",
     "coverage-report": "echo Coverage report generated at coverage/ontimize-web-ngx/index.html",
-    "generate-tests": "node scripts/generate-tests.bat",
+    "generate-tests": "node scripts/generate-tests.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "rimraf": "rimraf",
