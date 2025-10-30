@@ -24,7 +24,7 @@ describe('CKEditorComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CkEditor.component);
+    fixture = TestBed.createComponent(CKEditorComponent);
     component = fixture.componentInstance;
   });
 

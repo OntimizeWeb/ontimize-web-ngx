@@ -24,7 +24,7 @@ describe('OPercentInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OPercentInput.component);
+    fixture = TestBed.createComponent(OPercentInputComponent);
     component = fixture.componentInstance;
   });
 

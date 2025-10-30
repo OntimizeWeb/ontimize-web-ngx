@@ -24,7 +24,7 @@ describe('OTableStoreConfigurationDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableStoreConfigurationDialog.component);
+    fixture = TestBed.createComponent(OTableStoreConfigurationDialogComponent);
     component = fixture.componentInstance;
   });
 

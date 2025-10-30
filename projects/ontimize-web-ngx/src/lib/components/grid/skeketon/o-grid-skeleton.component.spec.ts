@@ -24,7 +24,7 @@ describe('OGridSkeletonComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OGridSkeleton.component);
+    fixture = TestBed.createComponent(OGridSkeletonComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('OListSkeletonComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListSkeleton.component);
+    fixture = TestBed.createComponent(OListSkeletonComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('OBarMenuNestedComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OBarMenuNested.component);
+    fixture = TestBed.createComponent(OBarMenuNestedComponent);
     component = fixture.componentInstance;
   });
 

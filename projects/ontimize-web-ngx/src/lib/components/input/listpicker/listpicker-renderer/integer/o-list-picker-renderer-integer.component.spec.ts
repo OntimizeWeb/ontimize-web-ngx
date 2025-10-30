@@ -24,7 +24,7 @@ describe('OListPickerRendererIntegerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListPickerRendererInteger.component);
+    fixture = TestBed.createComponent(OListPickerRendererIntegerComponent);
     component = fixture.componentInstance;
   });
 

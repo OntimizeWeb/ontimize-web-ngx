@@ -24,7 +24,7 @@ describe('OLocaleBarMenuItemComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OLocaleBarMenuItem.component);
+    fixture = TestBed.createComponent(OLocaleBarMenuItemComponent);
     component = fixture.componentInstance;
   });
 

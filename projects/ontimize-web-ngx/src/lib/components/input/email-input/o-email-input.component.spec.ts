@@ -24,7 +24,7 @@ describe('OEmailInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OEmailInput.component);
+    fixture = TestBed.createComponent(OEmailInputComponent);
     component = fixture.componentInstance;
   });
 

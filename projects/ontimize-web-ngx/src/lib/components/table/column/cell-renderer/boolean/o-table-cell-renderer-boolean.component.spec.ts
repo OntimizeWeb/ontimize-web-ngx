@@ -24,7 +24,7 @@ describe('OTableCellRendererBooleanComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellRendererBoolean.component);
+    fixture = TestBed.createComponent(OTableCellRendererBooleanComponent);
     component = fixture.componentInstance;
   });
 

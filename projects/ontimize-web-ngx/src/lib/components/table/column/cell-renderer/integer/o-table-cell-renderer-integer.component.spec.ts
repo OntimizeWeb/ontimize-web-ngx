@@ -24,7 +24,7 @@ describe('OTableCellRendererIntegerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellRendererInteger.component);
+    fixture = TestBed.createComponent(OTableCellRendererIntegerComponent);
     component = fixture.componentInstance;
   });
 

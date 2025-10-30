@@ -24,7 +24,7 @@ describe('OAppLayoutComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OAppLayout.component);
+    fixture = TestBed.createComponent(OAppLayoutComponent);
     component = fixture.componentInstance;
   });
 

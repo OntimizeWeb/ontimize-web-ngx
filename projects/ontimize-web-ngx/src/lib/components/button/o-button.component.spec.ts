@@ -24,7 +24,7 @@ describe('OButtonComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OButton.component);
+    fixture = TestBed.createComponent(OButtonComponent);
     component = fixture.componentInstance;
   });
 

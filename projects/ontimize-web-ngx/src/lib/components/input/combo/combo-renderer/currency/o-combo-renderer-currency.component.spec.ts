@@ -24,7 +24,7 @@ describe('OComboRendererCurrencyComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OComboRendererCurrency.component);
+    fixture = TestBed.createComponent(OComboRendererCurrencyComponent);
     component = fixture.componentInstance;
   });
 

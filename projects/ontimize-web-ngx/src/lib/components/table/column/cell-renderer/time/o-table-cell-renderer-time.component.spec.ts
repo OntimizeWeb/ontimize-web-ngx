@@ -24,7 +24,7 @@ describe('OTableCellRendererTimeComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellRendererTime.component);
+    fixture = TestBed.createComponent(OTableCellRendererTimeComponent);
     component = fixture.componentInstance;
   });
 

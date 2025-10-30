@@ -24,7 +24,7 @@ describe('OComboRendererPercentageComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OComboRendererPercentage.component);
+    fixture = TestBed.createComponent(OComboRendererPercentageComponent);
     component = fixture.componentInstance;
   });
 

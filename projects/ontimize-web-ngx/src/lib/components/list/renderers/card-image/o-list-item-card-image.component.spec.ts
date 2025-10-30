@@ -24,7 +24,7 @@ describe('OListItemCardImageComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListItemCardImage.component);
+    fixture = TestBed.createComponent(OListItemCardImageComponent);
     component = fixture.componentInstance;
   });
 

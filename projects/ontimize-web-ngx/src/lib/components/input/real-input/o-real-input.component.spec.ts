@@ -24,7 +24,7 @@ describe('ORealInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ORealInput.component);
+    fixture = TestBed.createComponent(ORealInputComponent);
     component = fixture.componentInstance;
   });
 

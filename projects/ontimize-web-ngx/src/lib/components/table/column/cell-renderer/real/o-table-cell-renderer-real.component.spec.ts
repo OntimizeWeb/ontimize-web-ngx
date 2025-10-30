@@ -24,7 +24,7 @@ describe('OTableCellRendererRealComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellRendererReal.component);
+    fixture = TestBed.createComponent(OTableCellRendererRealComponent);
     component = fixture.componentInstance;
   });
 

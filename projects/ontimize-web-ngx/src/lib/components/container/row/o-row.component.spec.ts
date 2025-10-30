@@ -24,7 +24,7 @@ describe('ORowComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ORow.component);
+    fixture = TestBed.createComponent(ORowComponent);
     component = fixture.componentInstance;
   });
 

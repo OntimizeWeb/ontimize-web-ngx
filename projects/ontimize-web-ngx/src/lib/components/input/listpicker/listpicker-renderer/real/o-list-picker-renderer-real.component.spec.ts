@@ -24,7 +24,7 @@ describe('OListPickerRendererRealComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListPickerRendererReal.component);
+    fixture = TestBed.createComponent(OListPickerRendererRealComponent);
     component = fixture.componentInstance;
   });
 

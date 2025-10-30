@@ -24,7 +24,7 @@ describe('OTableGroupByColumnsDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableGroupByColumnsDialog.component);
+    fixture = TestBed.createComponent(OTableGroupByColumnsDialogComponent);
     component = fixture.componentInstance;
   });
 

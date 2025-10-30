@@ -24,7 +24,7 @@ describe('OAppSidenavMenuItemComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OAppSidenavMenuItem.component);
+    fixture = TestBed.createComponent(OAppSidenavMenuItemComponent);
     component = fixture.componentInstance;
   });
 

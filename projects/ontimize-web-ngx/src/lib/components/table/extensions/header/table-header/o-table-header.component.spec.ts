@@ -24,7 +24,7 @@ describe('OTableHeaderComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableHeader.component);
+    fixture = TestBed.createComponent(OTableHeaderComponent);
     component = fixture.componentInstance;
   });
 

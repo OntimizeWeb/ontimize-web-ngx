@@ -24,7 +24,7 @@ describe('OAppHeaderComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OAppHeader.component);
+    fixture = TestBed.createComponent(OAppHeaderComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('OTableColumnResizerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableColumnResizer.component);
+    fixture = TestBed.createComponent(OTableColumnResizerComponent);
     component = fixture.componentInstance;
   });
 

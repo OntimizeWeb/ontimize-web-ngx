@@ -24,7 +24,7 @@ describe('OTableCellEditorTextComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellEditorText.component);
+    fixture = TestBed.createComponent(OTableCellEditorTextComponent);
     component = fixture.componentInstance;
   });
 

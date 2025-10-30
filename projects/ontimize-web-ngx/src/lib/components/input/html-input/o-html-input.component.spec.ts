@@ -24,7 +24,7 @@ describe('OHTMLInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OHtmlInput.component);
+    fixture = TestBed.createComponent(OHTMLInputComponent);
     component = fixture.componentInstance;
   });
 

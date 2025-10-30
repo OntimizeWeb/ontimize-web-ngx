@@ -24,7 +24,7 @@ describe('OTableCellEditorBooleanComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellEditorBoolean.component);
+    fixture = TestBed.createComponent(OTableCellEditorBooleanComponent);
     component = fixture.componentInstance;
   });
 

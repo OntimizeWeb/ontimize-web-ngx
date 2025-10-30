@@ -24,7 +24,7 @@ describe('ORowCollapsibleComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ORowCollapsible.component);
+    fixture = TestBed.createComponent(ORowCollapsibleComponent);
     component = fixture.componentInstance;
   });
 

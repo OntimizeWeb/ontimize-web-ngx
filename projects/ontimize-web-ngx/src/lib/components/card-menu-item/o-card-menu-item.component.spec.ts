@@ -24,7 +24,7 @@ describe('OCardMenuItemComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OCardMenuItem.component);
+    fixture = TestBed.createComponent(OCardMenuItemComponent);
     component = fixture.componentInstance;
   });
 

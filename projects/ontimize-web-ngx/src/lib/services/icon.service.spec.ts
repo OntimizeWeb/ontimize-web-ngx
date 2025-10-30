@@ -13,14 +13,14 @@ describe('IconService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        Icon.service,
+        IconService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     });
     
     try {
-      service = TestBed.inject(Icon.service);
+      service = TestBed.inject(IconService);
     } catch (error) {
       // Si el servicio no se puede inyectar, créalo manualmente
       service = new IconService();

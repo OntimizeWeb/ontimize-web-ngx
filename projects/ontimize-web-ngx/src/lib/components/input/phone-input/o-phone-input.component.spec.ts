@@ -24,7 +24,7 @@ describe('OPhoneInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OPhoneInput.component);
+    fixture = TestBed.createComponent(OPhoneInputComponent);
     component = fixture.componentInstance;
   });
 

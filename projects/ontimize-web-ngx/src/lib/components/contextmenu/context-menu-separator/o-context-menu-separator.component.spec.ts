@@ -24,7 +24,7 @@ describe('OContextMenuSeparatorComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OContextMenuSeparator.component);
+    fixture = TestBed.createComponent(OContextMenuSeparatorComponent);
     component = fixture.componentInstance;
   });
 

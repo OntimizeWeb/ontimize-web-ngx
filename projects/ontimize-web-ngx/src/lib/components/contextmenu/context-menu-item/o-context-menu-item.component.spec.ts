@@ -24,7 +24,7 @@ describe('OContextMenuItemComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OContextMenuItem.component);
+    fixture = TestBed.createComponent(OContextMenuItemComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('OComboComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OCombo.component);
+    fixture = TestBed.createComponent(OComboComponent);
     component = fixture.componentInstance;
   });
 

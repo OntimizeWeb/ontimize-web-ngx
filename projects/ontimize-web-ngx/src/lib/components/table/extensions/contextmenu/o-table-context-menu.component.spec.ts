@@ -24,7 +24,7 @@ describe('OTableContextMenuComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableContextMenu.component);
+    fixture = TestBed.createComponent(OTableContextMenuComponent);
     component = fixture.componentInstance;
   });
 

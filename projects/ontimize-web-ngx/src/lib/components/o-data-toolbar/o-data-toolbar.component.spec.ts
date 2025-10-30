@@ -24,7 +24,7 @@ describe('ODataToolbarComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ODataToolbar.component);
+    fixture = TestBed.createComponent(ODataToolbarComponent);
     component = fixture.componentInstance;
   });
 

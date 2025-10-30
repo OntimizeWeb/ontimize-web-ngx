@@ -24,7 +24,7 @@ describe('OFormLayoutSplitPaneComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OFormLayoutSplitPane.component);
+    fixture = TestBed.createComponent(OFormLayoutSplitPaneComponent);
     component = fixture.componentInstance;
   });
 

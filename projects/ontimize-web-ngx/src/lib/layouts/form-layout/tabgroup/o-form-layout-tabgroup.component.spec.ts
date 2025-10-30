@@ -24,7 +24,7 @@ describe('OFormLayoutTabGroupComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OFormLayoutTabgroup.component);
+    fixture = TestBed.createComponent(OFormLayoutTabGroupComponent);
     component = fixture.componentInstance;
   });
 

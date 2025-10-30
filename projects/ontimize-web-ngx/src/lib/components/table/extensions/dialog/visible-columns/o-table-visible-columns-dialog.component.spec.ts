@@ -24,7 +24,7 @@ describe('OTableVisibleColumnsDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableVisibleColumnsDialog.component);
+    fixture = TestBed.createComponent(OTableVisibleColumnsDialogComponent);
     component = fixture.componentInstance;
   });
 

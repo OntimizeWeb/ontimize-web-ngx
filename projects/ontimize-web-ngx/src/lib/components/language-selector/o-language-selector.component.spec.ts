@@ -24,7 +24,7 @@ describe('OLanguageSelectorComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OLanguageSelector.component);
+    fixture = TestBed.createComponent(OLanguageSelectorComponent);
     component = fixture.componentInstance;
   });
 

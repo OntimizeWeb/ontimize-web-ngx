@@ -24,7 +24,7 @@ describe('OComboRendererDateComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OComboRendererDate.component);
+    fixture = TestBed.createComponent(OComboRendererDateComponent);
     component = fixture.componentInstance;
   });
 

@@ -19,6 +19,7 @@
     "fix-tests": "node scripts/fix-tests.js",
     "improve-tests": "node scripts/improve-tests.js",
     "final-fix-tests": "node scripts/final-fix-tests.js",
+    "fix-fixture-creation": "node scripts/fix-fixture-creation.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "rimraf": "rimraf",

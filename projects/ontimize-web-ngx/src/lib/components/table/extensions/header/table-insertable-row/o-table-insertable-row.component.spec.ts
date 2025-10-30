@@ -24,7 +24,7 @@ describe('OTableInsertableRowComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableInsertableRow.component);
+    fixture = TestBed.createComponent(OTableInsertableRowComponent);
     component = fixture.componentInstance;
   });
 

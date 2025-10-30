@@ -24,7 +24,7 @@ describe('ORadioComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ORadio.component);
+    fixture = TestBed.createComponent(ORadioComponent);
     component = fixture.componentInstance;
   });
 

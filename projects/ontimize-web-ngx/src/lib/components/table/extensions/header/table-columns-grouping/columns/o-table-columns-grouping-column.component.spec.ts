@@ -24,7 +24,7 @@ describe('OTableColumnsGroupingColumnComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableColumnsGroupingColumn.component);
+    fixture = TestBed.createComponent(OTableColumnsGroupingColumnComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('OComboRendererIconComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OComboRendererIcon.component);
+    fixture = TestBed.createComponent(OComboRendererIconComponent);
     component = fixture.componentInstance;
   });
 

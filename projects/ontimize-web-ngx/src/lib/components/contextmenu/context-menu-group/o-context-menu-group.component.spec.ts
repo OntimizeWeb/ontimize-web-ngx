@@ -24,7 +24,7 @@ describe('OContextMenuGroupComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OContextMenuGroup.component);
+    fixture = TestBed.createComponent(OContextMenuGroupComponent);
     component = fixture.componentInstance;
   });
 

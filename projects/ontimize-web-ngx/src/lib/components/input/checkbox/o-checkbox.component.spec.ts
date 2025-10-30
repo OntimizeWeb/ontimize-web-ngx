@@ -24,7 +24,7 @@ describe('OCheckboxComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OCheckbox.component);
+    fixture = TestBed.createComponent(OCheckboxComponent);
     component = fixture.componentInstance;
   });
 

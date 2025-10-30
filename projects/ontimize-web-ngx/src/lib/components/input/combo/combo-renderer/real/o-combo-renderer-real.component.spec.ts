@@ -24,7 +24,7 @@ describe('OComboRendererRealComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OComboRendererReal.component);
+    fixture = TestBed.createComponent(OComboRendererRealComponent);
     component = fixture.componentInstance;
   });
 

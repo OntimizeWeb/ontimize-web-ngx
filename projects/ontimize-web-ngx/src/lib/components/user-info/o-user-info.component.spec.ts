@@ -24,7 +24,7 @@ describe('OUserInfoComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OUserInfo.component);
+    fixture = TestBed.createComponent(OUserInfoComponent);
     component = fixture.componentInstance;
   });
 

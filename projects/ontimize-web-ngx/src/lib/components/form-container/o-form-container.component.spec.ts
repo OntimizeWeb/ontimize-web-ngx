@@ -24,7 +24,7 @@ describe('OFormContainerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OFormContainer.component);
+    fixture = TestBed.createComponent(OFormContainerComponent);
     component = fixture.componentInstance;
   });
 

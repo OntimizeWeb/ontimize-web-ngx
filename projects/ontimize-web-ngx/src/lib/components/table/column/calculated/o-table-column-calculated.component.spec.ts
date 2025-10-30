@@ -24,7 +24,7 @@ describe('OTableColumnCalculatedComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableColumnCalculated.component);
+    fixture = TestBed.createComponent(OTableColumnCalculatedComponent);
     component = fixture.componentInstance;
   });
 

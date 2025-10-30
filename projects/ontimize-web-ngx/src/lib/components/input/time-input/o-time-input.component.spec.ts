@@ -24,7 +24,7 @@ describe('OTimeInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTimeInput.component);
+    fixture = TestBed.createComponent(OTimeInputComponent);
     component = fixture.componentInstance;
   });
 

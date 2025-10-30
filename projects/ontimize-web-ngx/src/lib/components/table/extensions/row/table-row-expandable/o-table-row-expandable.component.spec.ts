@@ -24,7 +24,7 @@ describe('OTableRowExpandedChange', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableRowExpandable.component);
+    fixture = TestBed.createComponent(OTableRowExpandedChange);
     component = fixture.componentInstance;
   });
 

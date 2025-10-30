@@ -24,7 +24,7 @@ describe('ODateInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ODateInput.component);
+    fixture = TestBed.createComponent(ODateInputComponent);
     component = fixture.componentInstance;
   });
 

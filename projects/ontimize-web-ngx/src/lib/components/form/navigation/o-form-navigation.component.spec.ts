@@ -24,7 +24,7 @@ describe('OFormNavigationComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OFormNavigation.component);
+    fixture = TestBed.createComponent(OFormNavigationComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('ODialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ODialog.component);
+    fixture = TestBed.createComponent(ODialogComponent);
     component = fixture.componentInstance;
   });
 

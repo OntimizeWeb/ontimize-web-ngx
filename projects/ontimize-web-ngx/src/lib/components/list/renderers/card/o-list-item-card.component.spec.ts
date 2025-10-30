@@ -24,7 +24,7 @@ describe('OListItemCardComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListItemCard.component);
+    fixture = TestBed.createComponent(OListItemCardComponent);
     component = fixture.componentInstance;
   });
 

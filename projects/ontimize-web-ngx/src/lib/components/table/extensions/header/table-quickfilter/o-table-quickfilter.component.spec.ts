@@ -24,7 +24,7 @@ describe('OTableQuickfilterComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableQuickfilter.component);
+    fixture = TestBed.createComponent(OTableQuickfilterComponent);
     component = fixture.componentInstance;
   });
 

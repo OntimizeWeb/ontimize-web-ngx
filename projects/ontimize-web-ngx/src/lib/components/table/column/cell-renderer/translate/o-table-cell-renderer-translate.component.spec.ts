@@ -24,7 +24,7 @@ describe('OTableCellRendererTranslateComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellRendererTranslate.component);
+    fixture = TestBed.createComponent(OTableCellRendererTranslateComponent);
     component = fixture.componentInstance;
   });
 

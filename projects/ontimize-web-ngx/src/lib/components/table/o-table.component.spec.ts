@@ -24,7 +24,7 @@ describe('OTableComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTable.component);
+    fixture = TestBed.createComponent(OTableComponent);
     component = fixture.componentInstance;
   });
 

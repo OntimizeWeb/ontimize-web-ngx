@@ -24,7 +24,7 @@ describe('OTableHeaderColumnFilterIconComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableHeaderColumnFilterIcon.component);
+    fixture = TestBed.createComponent(OTableHeaderColumnFilterIconComponent);
     component = fixture.componentInstance;
   });
 

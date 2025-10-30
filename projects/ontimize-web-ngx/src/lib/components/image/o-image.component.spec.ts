@@ -24,7 +24,7 @@ describe('OImageComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OImage.component);
+    fixture = TestBed.createComponent(OImageComponent);
     component = fixture.componentInstance;
   });
 

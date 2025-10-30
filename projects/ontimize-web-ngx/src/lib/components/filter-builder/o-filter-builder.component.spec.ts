@@ -24,7 +24,7 @@ describe('OFilterBuilderComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OFilterBuilder.component);
+    fixture = TestBed.createComponent(OFilterBuilderComponent);
     component = fixture.componentInstance;
   });
 

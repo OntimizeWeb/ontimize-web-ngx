@@ -24,7 +24,7 @@ describe('OLoadFilterDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OLoadFilterDialog.component);
+    fixture = TestBed.createComponent(OLoadFilterDialogComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('OFullScreenDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FullscreenDialog.component);
+    fixture = TestBed.createComponent(OFullScreenDialogComponent);
     component = fixture.componentInstance;
   });
 

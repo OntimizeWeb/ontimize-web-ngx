@@ -24,7 +24,7 @@ describe('DaterangepickerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ODaterangePicker.component);
+    fixture = TestBed.createComponent(DaterangepickerComponent);
     component = fixture.componentInstance;
   });
 

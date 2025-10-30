@@ -24,7 +24,7 @@ describe('OListPickerDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListPickerDialog.component);
+    fixture = TestBed.createComponent(OListPickerDialogComponent);
     component = fixture.componentInstance;
   });
 

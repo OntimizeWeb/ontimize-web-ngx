@@ -24,7 +24,7 @@ describe('OAppSidenavComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OAppSidenav.component);
+    fixture = TestBed.createComponent(OAppSidenavComponent);
     component = fixture.componentInstance;
   });
 

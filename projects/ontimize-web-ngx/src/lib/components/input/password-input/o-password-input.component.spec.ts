@@ -24,7 +24,7 @@ describe('OPasswordInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OPasswordInput.component);
+    fixture = TestBed.createComponent(OPasswordInputComponent);
     component = fixture.componentInstance;
   });
 

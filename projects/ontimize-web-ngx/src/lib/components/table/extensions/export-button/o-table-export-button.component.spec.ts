@@ -24,7 +24,7 @@ describe('OTableExportButtonComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableExportButton.component);
+    fixture = TestBed.createComponent(OTableExportButtonComponent);
     component = fixture.componentInstance;
   });
 

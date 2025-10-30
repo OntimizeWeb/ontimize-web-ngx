@@ -24,7 +24,7 @@ describe('OColumnCollapsibleComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OColumnCollapsible.component);
+    fixture = TestBed.createComponent(OColumnCollapsibleComponent);
     component = fixture.componentInstance;
   });
 

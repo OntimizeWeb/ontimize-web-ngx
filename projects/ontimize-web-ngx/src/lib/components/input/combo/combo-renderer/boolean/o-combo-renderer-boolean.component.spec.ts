@@ -24,7 +24,7 @@ describe('OComboRendererBooleanComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OComboRendererBoolean.component);
+    fixture = TestBed.createComponent(OComboRendererBooleanComponent);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('Error403Component', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OError403.component);
+    fixture = TestBed.createComponent(Error403Component);
     component = fixture.componentInstance;
   });
 

@@ -24,7 +24,7 @@ describe('OValidatorComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OValidator.component);
+    fixture = TestBed.createComponent(OValidatorComponent);
     component = fixture.componentInstance;
   });
 

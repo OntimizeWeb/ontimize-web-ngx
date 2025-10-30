@@ -24,7 +24,7 @@ describe('OTableCellRendererImageComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellRendererImage.component);
+    fixture = TestBed.createComponent(OTableCellRendererImageComponent);
     component = fixture.componentInstance;
   });
 

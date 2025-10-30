@@ -24,7 +24,7 @@ describe('OTableCellEditorIntegerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellEditorInteger.component);
+    fixture = TestBed.createComponent(OTableCellEditorIntegerComponent);
     component = fixture.componentInstance;
   });
 

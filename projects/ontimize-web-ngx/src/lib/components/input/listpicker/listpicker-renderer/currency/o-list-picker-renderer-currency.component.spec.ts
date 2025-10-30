@@ -24,7 +24,7 @@ describe('OListPickerRendererCurrencyComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListPickerRendererCurrency.component);
+    fixture = TestBed.createComponent(OListPickerRendererCurrencyComponent);
     component = fixture.componentInstance;
   });
 

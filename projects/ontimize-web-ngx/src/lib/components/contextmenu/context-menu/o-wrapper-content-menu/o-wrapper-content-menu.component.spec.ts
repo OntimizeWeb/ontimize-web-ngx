@@ -24,7 +24,7 @@ describe('OWrapperContentMenuComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OWrapperContentMenu.component);
+    fixture = TestBed.createComponent(OWrapperContentMenuComponent);
     component = fixture.componentInstance;
   });
 

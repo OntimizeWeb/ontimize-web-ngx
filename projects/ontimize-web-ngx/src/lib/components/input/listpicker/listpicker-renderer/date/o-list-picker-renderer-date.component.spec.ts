@@ -24,7 +24,7 @@ describe('OListPickerRendererDateComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListPickerRendererDate.component);
+    fixture = TestBed.createComponent(OListPickerRendererDateComponent);
     component = fixture.componentInstance;
   });
 

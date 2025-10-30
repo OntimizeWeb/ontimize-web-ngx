@@ -3,16 +3,16 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { OSnackBarConfig } from './o-snackbar.component';
+import { OSnackBarComponent } from './o-snackbar.component';
 import { OTestingUtils } from '../../testing/o-testing-utils';
 
 describe('OSnackBarConfig', () => {
-  let component: OSnackBarConfig;
-  let fixture: ComponentFixture<OSnackBarConfig>;
+  let component: OSnackBarComponent;
+  let fixture: ComponentFixture<OSnackBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OSnackBarConfig],
+      declarations: [OSnackBarComponent],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -24,7 +24,7 @@ describe('OSnackBarConfig', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OSnackbar.component);
+    fixture = TestBed.createComponent(OSnackBarComponent);
     component = fixture.componentInstance;
   });
 
@@ -39,6 +39,6 @@ describe('OSnackBarConfig', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component).toBeInstanceOf(OSnackBarConfig);
+    expect(component).toBeInstanceOf(OSnackBarComponent);
   });
 });

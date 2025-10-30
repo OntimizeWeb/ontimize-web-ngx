@@ -24,7 +24,7 @@ describe('OListItemAvatarComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OListItemAvatar.component);
+    fixture = TestBed.createComponent(OListItemAvatarComponent);
     component = fixture.componentInstance;
   });
 

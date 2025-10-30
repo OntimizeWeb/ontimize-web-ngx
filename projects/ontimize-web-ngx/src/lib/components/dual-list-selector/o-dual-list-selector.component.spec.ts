@@ -24,7 +24,7 @@ describe('ODualListSelectorComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ODualListSelector.component);
+    fixture = TestBed.createComponent(ODualListSelectorComponent);
     component = fixture.componentInstance;
   });
 

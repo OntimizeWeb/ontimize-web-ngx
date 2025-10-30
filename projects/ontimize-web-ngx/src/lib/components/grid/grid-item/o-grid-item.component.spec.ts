@@ -24,7 +24,7 @@ describe('OGridItemComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OGridItem.component);
+    fixture = TestBed.createComponent(OGridItemComponent);
     component = fixture.componentInstance;
   });
 

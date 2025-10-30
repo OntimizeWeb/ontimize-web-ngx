@@ -24,7 +24,7 @@ describe('OFileInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OFileInput.component);
+    fixture = TestBed.createComponent(OFileInputComponent);
     component = fixture.componentInstance;
   });
 

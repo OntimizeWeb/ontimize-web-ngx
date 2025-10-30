@@ -24,7 +24,7 @@ describe('ONIFInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ONifInput.component);
+    fixture = TestBed.createComponent(ONIFInputComponent);
     component = fixture.componentInstance;
   });
 

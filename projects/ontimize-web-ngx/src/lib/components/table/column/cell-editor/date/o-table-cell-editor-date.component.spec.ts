@@ -24,7 +24,7 @@ describe('OTableCellEditorDateComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellEditorDate.component);
+    fixture = TestBed.createComponent(OTableCellEditorDateComponent);
     component = fixture.componentInstance;
   });
 

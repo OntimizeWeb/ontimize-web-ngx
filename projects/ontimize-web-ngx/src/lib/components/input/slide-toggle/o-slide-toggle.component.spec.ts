@@ -24,7 +24,7 @@ describe('OSlideToggleComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OSlideToggle.component);
+    fixture = TestBed.createComponent(OSlideToggleComponent);
     component = fixture.componentInstance;
   });
 

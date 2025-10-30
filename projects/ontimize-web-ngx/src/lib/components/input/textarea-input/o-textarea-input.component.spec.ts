@@ -24,7 +24,7 @@ describe('OTextareaInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTextareaInput.component);
+    fixture = TestBed.createComponent(OTextareaInputComponent);
     component = fixture.componentInstance;
   });
 

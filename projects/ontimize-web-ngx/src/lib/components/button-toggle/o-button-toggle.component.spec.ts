@@ -24,7 +24,7 @@ describe('OButtonToggleComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OButtonToggle.component);
+    fixture = TestBed.createComponent(OButtonToggleComponent);
     component = fixture.componentInstance;
   });
 

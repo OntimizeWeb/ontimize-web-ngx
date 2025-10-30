@@ -24,7 +24,7 @@ describe('OTableCellRendererCurrencyComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellRendererCurrency.component);
+    fixture = TestBed.createComponent(OTableCellRendererCurrencyComponent);
     component = fixture.componentInstance;
   });
 

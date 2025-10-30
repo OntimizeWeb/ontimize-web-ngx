@@ -24,7 +24,7 @@ describe('OHourInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OHourInput.component);
+    fixture = TestBed.createComponent(OHourInputComponent);
     component = fixture.componentInstance;
   });
 

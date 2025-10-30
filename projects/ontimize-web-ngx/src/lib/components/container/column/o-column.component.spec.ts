@@ -24,7 +24,7 @@ describe('OColumnComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OColumn.component);
+    fixture = TestBed.createComponent(OColumnComponent);
     component = fixture.componentInstance;
   });
 

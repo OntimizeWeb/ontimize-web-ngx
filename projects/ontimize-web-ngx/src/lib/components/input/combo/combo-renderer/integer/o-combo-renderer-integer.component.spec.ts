@@ -24,7 +24,7 @@ describe('OComboRendererIntegerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OComboRendererInteger.component);
+    fixture = TestBed.createComponent(OComboRendererIntegerComponent);
     component = fixture.componentInstance;
   });
 

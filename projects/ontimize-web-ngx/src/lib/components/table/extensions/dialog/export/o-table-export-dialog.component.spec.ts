@@ -24,7 +24,7 @@ describe('OTableExportDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableExportDialog.component);
+    fixture = TestBed.createComponent(OTableExportDialogComponent);
     component = fixture.componentInstance;
   });
 

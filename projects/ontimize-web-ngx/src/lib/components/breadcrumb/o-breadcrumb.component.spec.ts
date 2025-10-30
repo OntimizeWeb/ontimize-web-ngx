@@ -24,7 +24,7 @@ describe('OBreadcrumbComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OBreadcrumb.component);
+    fixture = TestBed.createComponent(OBreadcrumbComponent);
     component = fixture.componentInstance;
   });
 

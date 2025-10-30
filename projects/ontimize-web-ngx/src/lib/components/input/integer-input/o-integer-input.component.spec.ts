@@ -24,7 +24,7 @@ describe('OIntegerInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OIntegerInput.component);
+    fixture = TestBed.createComponent(OIntegerInputComponent);
     component = fixture.componentInstance;
   });
 

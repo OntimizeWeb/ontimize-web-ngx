@@ -24,7 +24,7 @@ describe('OBarMenuSeparatorComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OBarMenuSeparator.component);
+    fixture = TestBed.createComponent(OBarMenuSeparatorComponent);
     component = fixture.componentInstance;
   });
 

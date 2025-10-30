@@ -24,7 +24,7 @@ describe('OTableCellEditorEmailComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OTableCellEditorEmail.component);
+    fixture = TestBed.createComponent(OTableCellEditorEmailComponent);
     component = fixture.componentInstance;
   });
 
