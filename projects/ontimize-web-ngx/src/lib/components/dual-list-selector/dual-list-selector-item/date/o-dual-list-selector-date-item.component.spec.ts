@@ -26,6 +26,10 @@ describe('ODualListSelectorDateItemComponent', () => {
 
     fixture = TestBed.createComponent(ODualListSelectorDateItemComponent);
     component = fixture.componentInstance;
+    
+    // Initialize arrays to prevent 'Cannot read properties of undefined (reading findIndex)'
+    component.groupedDateColumns = [];
+    component.dateTypes = [];
   });
 
   it('should create', () => {

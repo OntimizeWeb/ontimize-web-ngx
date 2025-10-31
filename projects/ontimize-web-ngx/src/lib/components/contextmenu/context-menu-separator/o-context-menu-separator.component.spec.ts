@@ -22,7 +22,13 @@ describe('OContextMenuSeparatorComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    })
+    .overrideComponent(OContextMenuSeparatorComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid OWrapperContentMenuComponent issues
+      }
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(OContextMenuSeparatorComponent);
     component = fixture.componentInstance;

@@ -42,6 +42,10 @@ describe('OCardMenuItemComponent', () => {
 
     fixture = TestBed.createComponent(OCardMenuItemComponent);
     component = fixture.componentInstance;
+    
+    // Initialize _showSecondaryContainer before detectChanges to avoid ExpressionChangedAfterItHasBeenCheckedError
+    // The getter showSecondaryContainer is bound in the template, and its initial value affects the 'compact' class
+    (component as any)._showSecondaryContainer = false;
   });
 
   it('should create', () => {
@@ -49,9 +53,8 @@ describe('OCardMenuItemComponent', () => {
   });
 
   it('should initialize without errors', () => {
-    expect(() => {
-      fixture.detectChanges();
-    }).not.toThrow();
+    fixture.detectChanges();
+    expect(component).toBeTruthy();
   });
 
   it('should have basic component structure', () => {

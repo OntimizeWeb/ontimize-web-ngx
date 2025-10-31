@@ -47,6 +47,9 @@ describe('OAppSidenavMenuItemComponent', () => {
 
     fixture = TestBed.createComponent(OAppSidenavMenuItemComponent);
     component = fixture.componentInstance;
+    
+    // Initialize menuItem to prevent 'Cannot read properties of undefined (reading id)'
+    component.menuItem = { id: 'test-menu-item' } as any;
   });
 
   it('should create', () => {

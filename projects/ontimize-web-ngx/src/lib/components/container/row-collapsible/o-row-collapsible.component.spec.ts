@@ -11,7 +11,7 @@ describe('ORowCollapsibleComponent', () => {
   let fixture: ComponentFixture<ORowCollapsibleComponent>;
 
   beforeEach(async () => {
-    const testBed = TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [ORowCollapsibleComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -22,15 +22,13 @@ describe('ORowCollapsibleComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    });
-    
-    testBed.overrideComponent(ORowCollapsibleComponent, {
+    })
+    .overrideComponent(ORowCollapsibleComponent, {
       set: {
-        template: '<div></div>' // Override template to avoid nativeElement issues
+        template: '<div></div>' // Override template to avoid OWrapperContentMenuComponent issues
       }
-    });
-
-    await testBed.compileComponents();
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(ORowCollapsibleComponent);
     component = fixture.componentInstance;
