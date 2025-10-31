@@ -5,6 +5,8 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OComboRendererIntegerComponent } from './o-combo-renderer-integer.component';
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OComboModule } from '../../o-combo.module';
+import { OContextMenuModule } from '../../../../contextmenu';
 
 describe('OComboRendererIntegerComponent', () => {
   let component: OComboRendererIntegerComponent;
@@ -12,11 +14,13 @@ describe('OComboRendererIntegerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OComboRendererIntegerComponent],
+      declarations: [OComboRendererIntegerComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
-        ...OTestingUtils.getCommonTestingModuleConfig().imports
+        ...OTestingUtils.getCommonTestingModuleConfig().imports,
+        OContextMenuModule,
+        OComboModule
       ],
       providers: [
         ...OTestingUtils.getCommonTestingModuleConfig().providers

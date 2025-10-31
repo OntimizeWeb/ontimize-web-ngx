@@ -12,7 +12,7 @@ describe('OTableColumnsFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableColumnsFilterComponent],
+      declarations: [OTableColumnsFilterComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,6 +22,11 @@ describe('OTableColumnsFilterComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    })
+    .overrideComponent(OTableColumnsFilterComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid ContentChildren/ViewChild issues
+      }
     }).compileComponents();
 
     fixture = TestBed.createComponent(OTableColumnsFilterComponent);

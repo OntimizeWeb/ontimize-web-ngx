@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { JSONAPIService } from './jsonapi.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('JSONAPIService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        Jsonapi.service,
+        JSONAPIService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(Jsonapi.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new JSONAPIService();
-    }
+    service = TestBed.inject(JSONAPIService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of Jsonapi.service', () => {
+  it('should be instance of JSONAPIService', () => {
     expect(service).toBeInstanceOf(JSONAPIService);
   });
 

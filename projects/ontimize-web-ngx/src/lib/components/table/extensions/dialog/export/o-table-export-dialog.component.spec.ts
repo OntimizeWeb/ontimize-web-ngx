@@ -12,7 +12,7 @@ describe('OTableExportDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableExportDialogComponent],
+      declarations: [OTableExportDialogComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -12,7 +12,7 @@ describe('ONIFInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ONIFInputComponent],
+      declarations: [ONIFInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

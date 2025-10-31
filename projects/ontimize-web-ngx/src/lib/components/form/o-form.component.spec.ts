@@ -5,6 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OFormComponent } from './o-form.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+import { OContextMenuModule } from '../contextmenu';
 
 describe('OFormComponent', () => {
   let component: OFormComponent;
@@ -12,7 +13,7 @@ describe('OFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OFormComponent],
+      declarations: [OFormComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

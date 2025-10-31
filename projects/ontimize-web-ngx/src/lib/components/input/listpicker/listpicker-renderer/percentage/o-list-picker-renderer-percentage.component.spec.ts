@@ -12,7 +12,7 @@ describe('OListPickerRendererPercentageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListPickerRendererPercentageComponent],
+      declarations: [OListPickerRendererPercentageComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

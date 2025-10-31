@@ -12,7 +12,7 @@ describe('OEmailInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OEmailInputComponent],
+      declarations: [OEmailInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

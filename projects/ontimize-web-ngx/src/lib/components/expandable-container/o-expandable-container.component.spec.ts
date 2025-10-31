@@ -12,7 +12,7 @@ describe('OExpandableContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OExpandableContainerComponent],
+      declarations: [OExpandableContainerComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -26,6 +26,9 @@ describe('OExpandableContainerComponent', () => {
 
     fixture = TestBed.createComponent(OExpandableContainerComponent);
     component = fixture.componentInstance;
+    
+    // Mock the targets array to avoid forEach error in ngAfterViewInit
+    component.targets = [];
   });
 
   it('should create', () => {

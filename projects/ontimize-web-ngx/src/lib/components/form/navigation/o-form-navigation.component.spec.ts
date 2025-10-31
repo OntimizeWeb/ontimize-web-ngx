@@ -5,20 +5,41 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OFormNavigationComponent } from './o-form-navigation.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OFormBase } from '../o-form-base.class';
 
 describe('OFormNavigationComponent', () => {
   let component: OFormNavigationComponent;
   let fixture: ComponentFixture<OFormNavigationComponent>;
+  let mockOFormBase: jasmine.SpyObj<OFormBase>;
 
   beforeEach(async () => {
+    // Create mock for OFormBase
+    mockOFormBase = jasmine.createSpyObj('OFormBase', [
+      'getFormNavigation',
+      'getFormManager',
+      'showConfirmDiscardChanges',
+      'setUrlParamsAndReload'
+    ]);
+    mockOFormBase.keysArray = [];
+    mockOFormBase.canDiscardChanges = false;
+    
+    // Create mock for OFormNavigationClass
+    const mockFormNavigation = jasmine.createSpyObj('OFormNavigationClass', ['getUrlParams']);
+    mockFormNavigation.getUrlParams.and.returnValue({});
+    
+    mockOFormBase.getFormNavigation.and.returnValue(mockFormNavigation);
+    mockOFormBase.getFormManager.and.returnValue(null);
+    mockOFormBase.showConfirmDiscardChanges.and.returnValue(Promise.resolve(true));
+
     await TestBed.configureTestingModule({
-      declarations: [OFormNavigationComponent],
+      declarations: [OFormNavigationComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
+        { provide: OFormBase, useValue: mockOFormBase },
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

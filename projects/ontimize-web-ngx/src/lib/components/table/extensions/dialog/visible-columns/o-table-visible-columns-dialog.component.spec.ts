@@ -12,7 +12,7 @@ describe('OTableVisibleColumnsDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableVisibleColumnsDialogComponent],
+      declarations: [OTableVisibleColumnsDialogComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

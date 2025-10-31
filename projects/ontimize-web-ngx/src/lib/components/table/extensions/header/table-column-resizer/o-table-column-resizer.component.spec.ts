@@ -12,7 +12,7 @@ describe('OTableColumnResizerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableColumnResizerComponent],
+      declarations: [OTableColumnResizerComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

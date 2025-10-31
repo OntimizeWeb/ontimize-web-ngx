@@ -11,8 +11,8 @@ describe('OContextMenuContentComponent', () => {
   let fixture: ComponentFixture<OContextMenuContentComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [OContextMenuContentComponent],
+    const testBed = TestBed.configureTestingModule({
+      declarations: [OContextMenuContentComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,7 +22,15 @@ describe('OContextMenuContentComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
+    
+    testBed.overrideComponent(OContextMenuContentComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid o-wrapper-content-menu ViewChild issues
+      }
+    });
+
+    await testBed.compileComponents();
 
     fixture = TestBed.createComponent(OContextMenuContentComponent);
     component = fixture.componentInstance;

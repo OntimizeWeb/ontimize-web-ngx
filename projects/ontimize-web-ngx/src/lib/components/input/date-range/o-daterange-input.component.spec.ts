@@ -5,6 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ODateRangeInputComponent } from './o-daterange-input.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OTranslateModule } from '../../../../public-api';
 
 describe('ODateRangeInputComponent', () => {
   let component: ODateRangeInputComponent;
@@ -12,10 +13,11 @@ describe('ODateRangeInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ODateRangeInputComponent],
+      declarations: [ODateRangeInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
+        OTranslateModule.forRoot(),
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [

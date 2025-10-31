@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { LocalStorageService } from './local-storage.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('LocalStorageService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        LocalStorage.service,
+        LocalStorageService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(LocalStorage.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new LocalStorageService();
-    }
+    service = TestBed.inject(LocalStorageService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of LocalStorage.service', () => {
+  it('should be instance of LocalStorageService', () => {
     expect(service).toBeInstanceOf(LocalStorageService);
   });
 

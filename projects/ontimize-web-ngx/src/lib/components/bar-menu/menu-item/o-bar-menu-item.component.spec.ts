@@ -5,21 +5,35 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OBarMenuItemComponent } from './o-bar-menu-item.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OBarMenuBase } from '../o-bar-menu-base.class';
 
 describe('OBarMenuItemComponent', () => {
   let component: OBarMenuItemComponent;
   let fixture: ComponentFixture<OBarMenuItemComponent>;
+  let mockBarMenu: jasmine.SpyObj<OBarMenuBase>;
 
   beforeEach(async () => {
+    // Create mock for OBarMenuBase
+    mockBarMenu = jasmine.createSpyObj('OBarMenuBase', 
+      ['getPermissionsService', 'collapseAll', 'ngOnInit', 'setDOMTitle'], 
+      {
+        menuTitle: 'Test Menu',
+        tooltip: 'Test Tooltip',
+        id: 'test-menu',
+        menuItems: []
+      }
+    );
+
     await TestBed.configureTestingModule({
-      declarations: [OBarMenuItemComponent],
+      declarations: [OBarMenuItemComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
+        ...OTestingUtils.getCommonTestingModuleConfig().providers,
+        { provide: OBarMenuBase, useValue: mockBarMenu }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();

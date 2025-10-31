@@ -12,7 +12,7 @@ describe('OTableHeaderColumnFilterIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableHeaderColumnFilterIconComponent],
+      declarations: [OTableHeaderColumnFilterIconComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

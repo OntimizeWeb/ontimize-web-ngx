@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { AuthGuardService } from './auth-guard.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('AuthGuardService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        AuthGuard.service,
+        AuthGuardService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(AuthGuard.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new AuthGuardService();
-    }
+    service = TestBed.inject(AuthGuardService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of AuthGuard.service', () => {
+  it('should be instance of AuthGuardService', () => {
     expect(service).toBeInstanceOf(AuthGuardService);
   });
 

@@ -5,6 +5,8 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OComboRendererBooleanComponent } from './o-combo-renderer-boolean.component';
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OComboModule } from '../../o-combo.module';
+import { OContextMenuModule } from '../../../..';
 
 describe('OComboRendererBooleanComponent', () => {
   let component: OComboRendererBooleanComponent;
@@ -12,11 +14,13 @@ describe('OComboRendererBooleanComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OComboRendererBooleanComponent],
+      declarations: [OComboRendererBooleanComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
-        ...OTestingUtils.getCommonTestingModuleConfig().imports
+        ...OTestingUtils.getCommonTestingModuleConfig().imports,
+        OContextMenuModule,
+        OComboModule
       ],
       providers: [
         ...OTestingUtils.getCommonTestingModuleConfig().providers

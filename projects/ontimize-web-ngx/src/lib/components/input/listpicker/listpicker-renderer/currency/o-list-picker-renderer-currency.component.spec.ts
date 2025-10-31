@@ -12,7 +12,7 @@ describe('OListPickerRendererCurrencyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListPickerRendererCurrencyComponent],
+      declarations: [OListPickerRendererCurrencyComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

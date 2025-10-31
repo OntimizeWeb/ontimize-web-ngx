@@ -12,7 +12,7 @@ describe('OGridSkeletonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OGridSkeletonComponent],
+      declarations: [OGridSkeletonComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

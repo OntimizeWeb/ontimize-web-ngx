@@ -12,7 +12,7 @@ describe('OListItemTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListItemTextComponent],
+      declarations: [OListItemTextComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

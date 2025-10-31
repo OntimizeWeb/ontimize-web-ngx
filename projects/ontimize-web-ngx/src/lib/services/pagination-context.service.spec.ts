@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { PaginationContextService } from './pagination-context.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('PaginationContextService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        PaginationContext.service,
+        PaginationContextService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(PaginationContext.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new PaginationContextService();
-    }
+    service = TestBed.inject(PaginationContextService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of PaginationContext.service', () => {
+  it('should be instance of PaginationContextService', () => {
     expect(service).toBeInstanceOf(PaginationContextService);
   });
 

@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { OntimizeMatIconRegistry } from './ontimize-icon-registry.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('OntimizeMatIconRegistry', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OntimizeIconRegistry.service,
+        OntimizeMatIconRegistry,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(OntimizeIconRegistry.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new OntimizeMatIconRegistry();
-    }
+    service = TestBed.inject(OntimizeMatIconRegistry);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of OntimizeIconRegistry.service', () => {
+  it('should be instance of OntimizeMatIconRegistry', () => {
     expect(service).toBeInstanceOf(OntimizeMatIconRegistry);
   });
 

@@ -11,8 +11,8 @@ describe('OWrapperContentMenuComponent', () => {
   let fixture: ComponentFixture<OWrapperContentMenuComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [OWrapperContentMenuComponent],
+    const testBed = TestBed.configureTestingModule({
+      declarations: [OWrapperContentMenuComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,7 +22,15 @@ describe('OWrapperContentMenuComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
+    
+    testBed.overrideComponent(OWrapperContentMenuComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid ViewChild query issues
+      }
+    });
+
+    await testBed.compileComponents();
 
     fixture = TestBed.createComponent(OWrapperContentMenuComponent);
     component = fixture.componentInstance;

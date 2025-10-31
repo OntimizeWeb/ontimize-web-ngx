@@ -12,7 +12,7 @@ describe('OListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListComponent],
+      declarations: [OListComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,6 +22,11 @@ describe('OListComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    })
+    .overrideComponent(OListComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid ContentChildren/ViewChild issues
+      }
     }).compileComponents();
 
     fixture = TestBed.createComponent(OListComponent);

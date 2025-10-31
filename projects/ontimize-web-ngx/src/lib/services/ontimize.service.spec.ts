@@ -1,11 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
-import { Ontimize.service } from './ontimize.service';
+import { OntimizeService } from './ontimize';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
-describe('Ontimize.service', () => {
-  let service: Ontimize.service;
+describe('OntimizeService', () => {
+  let service: OntimizeService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -13,26 +11,19 @@ describe('Ontimize.service', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        Ontimize.service,
+        OntimizeService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(Ontimize.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new Ontimize.service();
-    }
+    service = TestBed.inject(OntimizeService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of Ontimize.service', () => {
-    expect(service).toBeInstanceOf(Ontimize.service);
+  it('should be instance of OntimizeService', () => {
+    expect(service).toBeInstanceOf(OntimizeService);
   });
 
   it('should have expected methods', () => {

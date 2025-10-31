@@ -12,7 +12,7 @@ describe('OBarMenuNestedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OBarMenuNestedComponent],
+      declarations: [OBarMenuNestedComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

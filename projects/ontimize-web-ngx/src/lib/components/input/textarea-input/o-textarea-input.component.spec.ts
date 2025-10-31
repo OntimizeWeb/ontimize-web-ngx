@@ -12,7 +12,7 @@ describe('OTextareaInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTextareaInputComponent],
+      declarations: [OTextareaInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

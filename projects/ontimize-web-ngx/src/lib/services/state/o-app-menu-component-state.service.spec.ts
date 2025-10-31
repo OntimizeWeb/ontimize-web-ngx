@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { OAppSidenavComponentStateService } from './o-app-menu-component-state.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('OAppSidenavComponentStateService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OAppMenuComponentState.service,
+        OAppSidenavComponentStateService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(OAppMenuComponentState.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new OAppSidenavComponentStateService();
-    }
+    service = TestBed.inject(OAppSidenavComponentStateService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of OAppMenuComponentState.service', () => {
+  it('should be instance of OAppSidenavComponentStateService', () => {
     expect(service).toBeInstanceOf(OAppSidenavComponentStateService);
   });
 

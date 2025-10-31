@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { ShareCanActivateChildService } from './share-can-activate-child.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('ShareCanActivateChildService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ShareCanActivateChild.service,
+        ShareCanActivateChildService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(ShareCanActivateChild.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new ShareCanActivateChildService();
-    }
+    service = TestBed.inject(ShareCanActivateChildService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of ShareCanActivateChild.service', () => {
+  it('should be instance of ShareCanActivateChildService', () => {
     expect(service).toBeInstanceOf(ShareCanActivateChildService);
   });
 

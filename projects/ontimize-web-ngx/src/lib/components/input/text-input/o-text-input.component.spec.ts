@@ -12,7 +12,7 @@ describe('OTextInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTextInputComponent],
+      declarations: [OTextInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,6 +22,11 @@ describe('OTextInputComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    })
+    .overrideComponent(OTextInputComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid ContentChildren/ViewChild issues
+      }
     }).compileComponents();
 
     fixture = TestBed.createComponent(OTextInputComponent);

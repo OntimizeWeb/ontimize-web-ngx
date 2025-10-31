@@ -12,7 +12,7 @@ describe('ODateRangeLegacyInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ODateRangeLegacyInputComponent],
+      declarations: [ODateRangeLegacyInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

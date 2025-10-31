@@ -12,7 +12,7 @@ describe('ODualListSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ODualListSelectorComponent],
+      declarations: [ODualListSelectorComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

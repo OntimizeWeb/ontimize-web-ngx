@@ -12,7 +12,7 @@ describe('OTableInsertableRowComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableInsertableRowComponent],
+      declarations: [OTableInsertableRowComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

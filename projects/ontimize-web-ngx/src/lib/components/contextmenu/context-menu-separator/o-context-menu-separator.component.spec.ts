@@ -12,7 +12,7 @@ describe('OContextMenuSeparatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OContextMenuSeparatorComponent],
+      declarations: [OContextMenuSeparatorComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

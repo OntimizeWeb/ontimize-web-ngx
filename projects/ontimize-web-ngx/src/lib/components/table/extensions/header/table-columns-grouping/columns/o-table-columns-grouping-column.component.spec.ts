@@ -12,7 +12,7 @@ describe('OTableColumnsGroupingColumnComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableColumnsGroupingColumnComponent],
+      declarations: [OTableColumnsGroupingColumnComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

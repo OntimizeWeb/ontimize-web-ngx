@@ -12,7 +12,7 @@ describe('OHTMLInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OHTMLInputComponent],
+      declarations: [OHTMLInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

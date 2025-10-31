@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('OntimizeEEPermissionsService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OntimizeEePermissions.service,
+        OntimizeEEPermissionsService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(OntimizeEePermissions.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new OntimizeEEPermissionsService();
-    }
+    service = TestBed.inject(OntimizeEEPermissionsService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of OntimizeEePermissions.service', () => {
+  it('should be instance of OntimizeEEPermissionsService', () => {
     expect(service).toBeInstanceOf(OntimizeEEPermissionsService);
   });
 

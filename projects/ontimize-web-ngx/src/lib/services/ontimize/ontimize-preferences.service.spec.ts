@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { OntimizePreferencesService } from './ontimize-preferences.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('OntimizePreferencesService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OntimizePreferences.service,
+        OntimizePreferencesService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(OntimizePreferences.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new OntimizePreferencesService();
-    }
+    service = TestBed.inject(OntimizePreferencesService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of OntimizePreferences.service', () => {
+  it('should be instance of OntimizePreferencesService', () => {
     expect(service).toBeInstanceOf(OntimizePreferencesService);
   });
 

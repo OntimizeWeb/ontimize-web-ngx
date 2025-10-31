@@ -12,7 +12,7 @@ describe('OPhoneInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OPhoneInputComponent],
+      declarations: [OPhoneInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

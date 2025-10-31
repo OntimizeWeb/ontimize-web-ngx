@@ -12,7 +12,7 @@ describe('OTableFilterByColumnDataDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableFilterByColumnDataDialogComponent],
+      declarations: [OTableFilterByColumnDataDialogComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

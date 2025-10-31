@@ -7,9 +7,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UntypedFormGroup, UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
 import { APP_CONFIG } from '../../config/app-config';
 import { AppConfig } from '../../config/app-config';
-import { appConfigFactory } from '../../services';
+import { appConfigFactory, AuthService, LocalStorageService } from '../../services';
 import { Config } from '../../types/config.type';
 import { Injector } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 
 /**
  * Common testing utilities for Ontimize Web NGX components
@@ -28,6 +30,15 @@ export class OTestingUtils {
   }
 
   /**
+   * Get common declarations (pipes, directives) for testing
+   */
+  static getCommonDeclarations() {
+    return [
+      OTranslatePipe
+    ];
+  }
+
+  /**
    * Common testing module configuration
    */
   static getCommonTestingModuleConfig() {
@@ -36,12 +47,23 @@ export class OTestingUtils {
         HttpClientTestingModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        MatDialogModule
       ],
       providers: [
         {
           provide: TranslateService,
           useClass: TranslateService,
+          deps: [Injector]
+        },
+        {
+          provide: AuthService,
+          useClass: AuthService,
+          deps: [Injector]
+        },
+        {
+          provide: LocalStorageService,
+          useClass: LocalStorageService,
           deps: [Injector]
         },
         { provide: APP_CONFIG, useValue: OTestingUtils.mockConfiguration() },

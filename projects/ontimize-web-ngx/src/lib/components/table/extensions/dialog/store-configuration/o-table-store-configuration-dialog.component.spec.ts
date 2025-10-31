@@ -12,7 +12,7 @@ describe('OTableStoreConfigurationDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableStoreConfigurationDialogComponent],
+      declarations: [OTableStoreConfigurationDialogComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

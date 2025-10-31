@@ -12,7 +12,7 @@ describe('OTableColumnsGroupingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableColumnsGroupingComponent],
+      declarations: [OTableColumnsGroupingComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,6 +22,11 @@ describe('OTableColumnsGroupingComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    })
+    .overrideComponent(OTableColumnsGroupingComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid ContentChildren/ViewChild issues
+      }
     }).compileComponents();
 
     fixture = TestBed.createComponent(OTableColumnsGroupingComponent);

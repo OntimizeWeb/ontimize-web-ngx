@@ -12,7 +12,7 @@ describe('OTableCellRendererDateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellRendererDateComponent],
+      declarations: [OTableCellRendererDateComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

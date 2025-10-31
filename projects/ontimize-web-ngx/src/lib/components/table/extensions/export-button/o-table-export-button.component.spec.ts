@@ -12,7 +12,7 @@ describe('OTableExportButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableExportButtonComponent],
+      declarations: [OTableExportButtonComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

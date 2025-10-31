@@ -12,7 +12,7 @@ describe('OBarMenuSeparatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OBarMenuSeparatorComponent],
+      declarations: [OBarMenuSeparatorComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -12,7 +12,7 @@ describe('OFullScreenDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OFullScreenDialogComponent],
+      declarations: [OFullScreenDialogComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

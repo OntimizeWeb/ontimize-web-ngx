@@ -12,7 +12,7 @@ describe('OTableCellRendererTranslateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellRendererTranslateComponent],
+      declarations: [OTableCellRendererTranslateComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -12,7 +12,7 @@ describe('OListPickerRendererDateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListPickerRendererDateComponent],
+      declarations: [OListPickerRendererDateComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -6,7 +6,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { OSnackBarComponent } from './o-snackbar.component';
 import { OTestingUtils } from '../../testing/o-testing-utils';
 
-describe('OSnackBarConfig', () => {
+describe('OSnackBarComponent', () => {
   let component: OSnackBarComponent;
   let fixture: ComponentFixture<OSnackBarComponent>;
 

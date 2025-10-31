@@ -12,7 +12,7 @@ describe('OTableCellRendererBooleanComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellRendererBooleanComponent],
+      declarations: [OTableCellRendererBooleanComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

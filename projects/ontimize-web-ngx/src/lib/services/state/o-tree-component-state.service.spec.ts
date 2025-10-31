@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { OTreeComponentStateService } from './o-tree-component-state.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('OTreeComponentStateService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OTreeComponentState.service,
+        OTreeComponentStateService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(OTreeComponentState.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new OTreeComponentStateService();
-    }
+    service = TestBed.inject(OTreeComponentStateService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of OTreeComponentState.service', () => {
+  it('should be instance of OTreeComponentStateService', () => {
     expect(service).toBeInstanceOf(OTreeComponentStateService);
   });
 

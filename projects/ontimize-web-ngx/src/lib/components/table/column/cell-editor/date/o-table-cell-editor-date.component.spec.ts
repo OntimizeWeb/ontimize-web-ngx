@@ -12,7 +12,7 @@ describe('OTableCellEditorDateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellEditorDateComponent],
+      declarations: [OTableCellEditorDateComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

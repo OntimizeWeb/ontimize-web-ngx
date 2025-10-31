@@ -12,7 +12,7 @@ describe('OTablePaginatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTablePaginatorComponent],
+      declarations: [OTablePaginatorComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

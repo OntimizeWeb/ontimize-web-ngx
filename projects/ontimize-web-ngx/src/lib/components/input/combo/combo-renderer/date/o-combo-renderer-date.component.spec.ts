@@ -5,6 +5,8 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OComboRendererDateComponent } from './o-combo-renderer-date.component';
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OComboModule } from '../../o-combo.module';
+import { OContextMenuModule } from '../../../../contextmenu';
 
 describe('OComboRendererDateComponent', () => {
   let component: OComboRendererDateComponent;
@@ -12,11 +14,13 @@ describe('OComboRendererDateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OComboRendererDateComponent],
+      declarations: [OComboRendererDateComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
-        ...OTestingUtils.getCommonTestingModuleConfig().imports
+        ...OTestingUtils.getCommonTestingModuleConfig().imports,
+        OContextMenuModule,
+        OComboModule
       ],
       providers: [
         ...OTestingUtils.getCommonTestingModuleConfig().providers

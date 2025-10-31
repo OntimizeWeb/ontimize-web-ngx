@@ -12,7 +12,7 @@ describe('OListItemCardImageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListItemCardImageComponent],
+      declarations: [OListItemCardImageComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

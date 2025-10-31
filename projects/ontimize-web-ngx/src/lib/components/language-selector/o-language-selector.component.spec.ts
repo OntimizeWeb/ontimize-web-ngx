@@ -12,7 +12,7 @@ describe('OLanguageSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OLanguageSelectorComponent],
+      declarations: [OLanguageSelectorComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

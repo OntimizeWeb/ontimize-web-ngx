@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { IconService } from './icon.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -15,23 +13,16 @@ describe('IconService', () => {
       providers: [
         IconService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(IconService);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new IconService();
-    }
+    service = TestBed.inject(IconService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of Icon.service', () => {
+  it('should be instance of IconService', () => {
     expect(service).toBeInstanceOf(IconService);
   });
 

@@ -12,7 +12,7 @@ describe('OIntegerInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OIntegerInputComponent],
+      declarations: [OIntegerInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

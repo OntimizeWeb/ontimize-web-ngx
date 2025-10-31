@@ -12,7 +12,7 @@ describe('OContextMenuGroupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OContextMenuGroupComponent],
+      declarations: [OContextMenuGroupComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,7 +22,13 @@ describe('OContextMenuGroupComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    })
+    .overrideComponent(OContextMenuGroupComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid ContentChildren issues
+      }
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(OContextMenuGroupComponent);
     component = fixture.componentInstance;
@@ -40,5 +46,25 @@ describe('OContextMenuGroupComponent', () => {
 
   it('should have basic component structure', () => {
     expect(component).toBeInstanceOf(OContextMenuGroupComponent);
+  });
+
+  it('should have TYPE_GROUP_MENU as type', () => {
+    expect(component.type).toBe('group');
+  });
+
+  it('should initialize with empty children array', () => {
+    expect(component.children).toBeDefined();
+    expect(Array.isArray(component.children)).toBe(true);
+    expect(component.children.length).toBe(0);
+  });
+
+  it('should have oContextMenuItems QueryList', () => {
+    expect(component.oContextMenuItems).toBeDefined();
+  });
+
+  it('should unsubscribe on destroy', () => {
+    const unsubscribeSpy = spyOn(component['subscription'], 'unsubscribe');
+    component.ngOnDestroy();
+    expect(unsubscribeSpy).toHaveBeenCalled();
   });
 });

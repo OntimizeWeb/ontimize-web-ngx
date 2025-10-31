@@ -12,7 +12,7 @@ describe('OTableCellRendererCurrencyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellRendererCurrencyComponent],
+      declarations: [OTableCellRendererCurrencyComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

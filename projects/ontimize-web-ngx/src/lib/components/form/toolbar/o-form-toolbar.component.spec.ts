@@ -12,7 +12,7 @@ describe('OFormToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OFormToolbarComponent],
+      declarations: [OFormToolbarComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

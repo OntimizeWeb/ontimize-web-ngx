@@ -12,7 +12,7 @@ describe('OTableRowExpandedChange', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableRowExpandedChange],
+      declarations: [OTableRowExpandedChange, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

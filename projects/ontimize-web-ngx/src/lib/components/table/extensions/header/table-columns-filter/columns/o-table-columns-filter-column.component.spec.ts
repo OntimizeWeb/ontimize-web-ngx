@@ -12,7 +12,7 @@ describe('OTableColumnsFilterColumnComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableColumnsFilterColumnComponent],
+      declarations: [OTableColumnsFilterColumnComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

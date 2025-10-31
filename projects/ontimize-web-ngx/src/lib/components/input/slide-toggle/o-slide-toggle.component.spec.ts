@@ -12,7 +12,7 @@ describe('OSlideToggleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OSlideToggleComponent],
+      declarations: [OSlideToggleComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -12,7 +12,7 @@ describe('OButtonToggleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OButtonToggleComponent],
+      declarations: [OButtonToggleComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

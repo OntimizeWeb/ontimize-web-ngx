@@ -12,7 +12,7 @@ describe('OTableQuickfilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableQuickfilterComponent],
+      declarations: [OTableQuickfilterComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

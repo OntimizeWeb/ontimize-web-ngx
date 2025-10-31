@@ -12,7 +12,7 @@ describe('OListItemAvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListItemAvatarComponent],
+      declarations: [OListItemAvatarComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

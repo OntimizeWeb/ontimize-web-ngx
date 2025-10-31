@@ -5,6 +5,8 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OComboRendererPercentageComponent } from './o-combo-renderer-percentage.component';
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
+import { OComboModule } from '../../o-combo.module';
+import { OContextMenuModule } from '../../../../contextmenu';
 
 describe('OComboRendererPercentageComponent', () => {
   let component: OComboRendererPercentageComponent;
@@ -12,11 +14,13 @@ describe('OComboRendererPercentageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OComboRendererPercentageComponent],
+      declarations: [OComboRendererPercentageComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
-        ...OTestingUtils.getCommonTestingModuleConfig().imports
+        ...OTestingUtils.getCommonTestingModuleConfig().imports,
+        OContextMenuModule,
+        OComboModule
       ],
       providers: [
         ...OTestingUtils.getCommonTestingModuleConfig().providers

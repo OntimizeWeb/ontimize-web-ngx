@@ -12,7 +12,7 @@ describe('ODataToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ODataToolbarComponent],
+      declarations: [ODataToolbarComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

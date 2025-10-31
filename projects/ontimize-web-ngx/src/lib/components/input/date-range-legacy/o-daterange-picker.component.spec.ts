@@ -12,7 +12,7 @@ describe('DaterangepickerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DaterangepickerComponent],
+      declarations: [DaterangepickerComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

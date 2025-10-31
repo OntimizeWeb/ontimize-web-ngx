@@ -12,7 +12,7 @@ describe('OContextMenuItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OContextMenuItemComponent],
+      declarations: [OContextMenuItemComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

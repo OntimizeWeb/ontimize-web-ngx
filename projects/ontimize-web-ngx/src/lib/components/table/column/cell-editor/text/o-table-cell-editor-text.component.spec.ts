@@ -12,7 +12,7 @@ describe('OTableCellEditorTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellEditorTextComponent],
+      declarations: [OTableCellEditorTextComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

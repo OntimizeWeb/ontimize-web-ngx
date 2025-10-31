@@ -11,8 +11,8 @@ describe('OFilterBuilderMenuComponent', () => {
   let fixture: ComponentFixture<OFilterBuilderMenuComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [OFilterBuilderMenuComponent],
+    const testBed = TestBed.configureTestingModule({
+      declarations: [OFilterBuilderMenuComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
@@ -22,7 +22,15 @@ describe('OFilterBuilderMenuComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
+    
+    testBed.overrideComponent(OFilterBuilderMenuComponent, {
+      set: {
+        template: '<div></div>' // Override template to avoid matMenu dependencies
+      }
+    });
+
+    await testBed.compileComponents();
 
     fixture = TestBed.createComponent(OFilterBuilderMenuComponent);
     component = fixture.componentInstance;

@@ -12,7 +12,7 @@ describe('OTableCellEditorBooleanComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellEditorBooleanComponent],
+      declarations: [OTableCellEditorBooleanComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -12,7 +12,7 @@ describe('OTableCellRendererPercentageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableCellRendererPercentageComponent],
+      declarations: [OTableCellRendererPercentageComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

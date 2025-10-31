@@ -12,7 +12,7 @@ describe('OTableColumnCalculatedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableColumnCalculatedComponent],
+      declarations: [OTableColumnCalculatedComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

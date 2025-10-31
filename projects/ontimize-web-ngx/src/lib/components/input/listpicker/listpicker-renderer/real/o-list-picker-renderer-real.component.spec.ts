@@ -12,7 +12,7 @@ describe('OListPickerRendererRealComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OListPickerRendererRealComponent],
+      declarations: [OListPickerRendererRealComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -12,7 +12,7 @@ describe('OTableHeaderSelectAllComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OTableHeaderSelectAllComponent],
+      declarations: [OTableHeaderSelectAllComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

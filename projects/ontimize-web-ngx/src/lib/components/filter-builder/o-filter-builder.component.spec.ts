@@ -5,20 +5,30 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { OFilterBuilderComponent } from './o-filter-builder.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+import { OFormComponent } from '../form/o-form.component';
 
 describe('OFilterBuilderComponent', () => {
   let component: OFilterBuilderComponent;
   let fixture: ComponentFixture<OFilterBuilderComponent>;
+  let mockOFormComponent: jasmine.SpyObj<OFormComponent>;
 
   beforeEach(async () => {
+    // Create mock for OFormComponent
+    mockOFormComponent = jasmine.createSpyObj('OFormComponent', [
+      'registerFormComponent',
+      'unregisterFormComponent',
+      'setFormData'
+    ]);
+
     await TestBed.configureTestingModule({
-      declarations: [OFilterBuilderComponent],
+      declarations: [OFilterBuilderComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
+        { provide: OFormComponent, useValue: mockOFormComponent },
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

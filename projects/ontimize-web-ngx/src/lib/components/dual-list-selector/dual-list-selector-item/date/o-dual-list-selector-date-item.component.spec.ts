@@ -12,7 +12,7 @@ describe('ODualListSelectorDateItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ODualListSelectorDateItemComponent],
+      declarations: [ODualListSelectorDateItemComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

@@ -12,7 +12,7 @@ describe('OCurrencyInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OCurrencyInputComponent],
+      declarations: [OCurrencyInputComponent, ...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
         TranslateModule.forRoot(),

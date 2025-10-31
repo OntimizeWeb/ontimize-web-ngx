@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { OFilterBuilderComponentStateService } from './o-filter-builder-component-state.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
@@ -13,25 +11,18 @@ describe('OFilterBuilderComponentStateService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OFilterBuilderComponentState.service,
+        OFilterBuilderComponentStateService,
         ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      ]
     });
-    
-    try {
-      service = TestBed.inject(OFilterBuilderComponentState.service);
-    } catch (error) {
-      // Si el servicio no se puede inyectar, créalo manualmente
-      service = new OFilterBuilderComponentStateService();
-    }
+    service = TestBed.inject(OFilterBuilderComponentStateService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be instance of OFilterBuilderComponentState.service', () => {
+  it('should be instance of OFilterBuilderComponentStateService', () => {
     expect(service).toBeInstanceOf(OFilterBuilderComponentStateService);
   });
 
