@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { OErrorDialogManager } from './o-error-dialog-manager.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -11,8 +12,12 @@ describe('OErrorDialogManager', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
+        // Provide the actual service class instead of spy
         OErrorDialogManager,
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
+        // Include other providers except the OErrorDialogManager spy
+        ...OTestingUtils.getCommonTestingModuleConfig().providers.filter(
+          provider => !(provider && provider.provide === OErrorDialogManager)
+        )
       ]
     });
     service = TestBed.inject(OErrorDialogManager);

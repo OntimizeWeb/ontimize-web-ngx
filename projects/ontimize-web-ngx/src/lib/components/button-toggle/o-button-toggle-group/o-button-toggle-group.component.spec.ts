@@ -3,13 +3,19 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { OButtonToggleGroupComponent } from './o-button-toggle-group.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let OButtonToggleGroupComponent: any;
+
 describe('OButtonToggleGroupComponent', () => {
-  let component: OButtonToggleGroupComponent;
+  let component: any;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-button-toggle-group.component');
+    OButtonToggleGroupComponent = module.OButtonToggleGroupComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [

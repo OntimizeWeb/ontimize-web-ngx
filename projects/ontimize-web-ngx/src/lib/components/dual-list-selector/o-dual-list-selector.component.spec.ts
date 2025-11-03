@@ -3,13 +3,20 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { ODualListSelectorComponent } from './o-dual-list-selector.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let ODualListSelectorComponent: any;
+
+
 describe('ODualListSelectorComponent', () => {
-  let component: ODualListSelectorComponent;
+  let component: any;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-dual-list-selector.component');
+    ODualListSelectorComponent = module.ODualListSelectorComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [

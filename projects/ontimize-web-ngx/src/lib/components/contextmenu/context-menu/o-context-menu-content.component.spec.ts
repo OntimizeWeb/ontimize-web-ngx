@@ -3,14 +3,21 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
 
-import { OContextMenuContentComponent } from './o-context-menu-content.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let OContextMenuContentComponent: any;
+
+
 describe('OContextMenuContentComponent', () => {
-  let component: OContextMenuContentComponent;
+  let component: any;
   let injector: Injector;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-context-menu-content.component');
+    OContextMenuContentComponent = module.OContextMenuContentComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [

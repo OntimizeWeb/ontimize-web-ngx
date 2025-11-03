@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { ONavigationItem } from './navigation.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -11,7 +12,13 @@ describe('ONavigationItem', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ONavigationItem,
+        // Provide ONavigationItem with custom factory that supplies constructor parameter
+        {
+          provide: ONavigationItem,
+          useFactory: () => new ONavigationItem({}),
+          deps: []
+        },
+        // Include all other providers from OTestingUtils
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });

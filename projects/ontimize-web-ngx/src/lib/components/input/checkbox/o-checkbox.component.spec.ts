@@ -4,17 +4,24 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, ElementRef, Injector } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { OCheckboxComponent } from './o-checkbox.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+
+// Import component dynamically to avoid compilation
+let OCheckboxComponent: any;
+
 import { OFormComponent } from '../../form/o-form.component';
 
 describe('OCheckboxComponent', () => {
-  let component: OCheckboxComponent;
+  let component: any;
   let mockFormComponent: any;
   let mockElementRef: ElementRef;
   let injector: Injector;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-checkbox.component');
+    OCheckboxComponent = module.OCheckboxComponent;
+    
     // Create mock OFormComponent with formGroup
     mockFormComponent = jasmine.createSpyObj('OFormComponent', [
       'registerFormComponent',

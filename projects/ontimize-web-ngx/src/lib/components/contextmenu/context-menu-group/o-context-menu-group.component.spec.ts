@@ -1,9 +1,14 @@
-import { OContextMenuGroupComponent } from './o-context-menu-group.component';
+// Import component dynamically to avoid compilation
+let OContextMenuGroupComponent: any;
 
 describe('OContextMenuGroupComponent', () => {
-  let component: OContextMenuGroupComponent;
+  let component: any;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-context-menu-group.component');
+    OContextMenuGroupComponent = module.OContextMenuGroupComponent;
+    
     // Create component manually without TestBed to avoid OWrapperContentMenuComponent issues
     component = new OContextMenuGroupComponent();
     

@@ -3,17 +3,24 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, ElementRef, Injector } from '@angular/core';
 
-import { OBarMenuGroupComponent } from './o-bar-menu-group.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+
+// Import component dynamically to avoid compilation
+let OBarMenuGroupComponent: any;
+
 import { OBarMenuBase } from '../o-bar-menu-base.class';
 
 describe('OBarMenuGroupComponent', () => {
-  let component: OBarMenuGroupComponent;
+  let component: any;
   let mockBarMenu: jasmine.SpyObj<OBarMenuBase>;
   let mockElementRef: ElementRef;
   let injector: Injector;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-bar-menu-group.component');
+    OBarMenuGroupComponent = module.OBarMenuGroupComponent;
+    
     // Create mock permissions service
     const mockPermissionsService = jasmine.createSpyObj('PermissionsService', ['getMenuPermissions']);
     mockPermissionsService.getMenuPermissions.and.returnValue(undefined);

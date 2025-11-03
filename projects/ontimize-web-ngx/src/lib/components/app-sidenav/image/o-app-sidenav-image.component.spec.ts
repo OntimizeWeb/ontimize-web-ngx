@@ -4,17 +4,24 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { OAppSidenavImageComponent } from './o-app-sidenav-image.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+
+// Import component dynamically to avoid compilation
+let OAppSidenavImageComponent: any;
+
 import { OAppSidenavBase } from '../o-app-sidenav-base.class';
 
 describe('OAppSidenavImageComponent', () => {
-  let component: OAppSidenavImageComponent;
+  let component: any;
   let injector: Injector;
   let mockSidenav: jasmine.SpyObj<OAppSidenavBase>;
   let mockChangeDetectorRef: jasmine.SpyObj<ChangeDetectorRef>;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-app-sidenav-image.component');
+    OAppSidenavImageComponent = module.OAppSidenavImageComponent;
+    
     // Create mock for OAppSidenavBase
     mockSidenav = jasmine.createSpyObj('OAppSidenavBase', [], {
       onSidenavClosedStart: new Subject(),

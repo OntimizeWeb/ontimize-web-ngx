@@ -5,15 +5,22 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/cor
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { OButtonComponent } from './o-button.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let OButtonComponent: any;
+
+
 describe('OButtonComponent', () => {
-  let component: OButtonComponent;
+  let component: any;
   let injector: Injector;
   let mockActivatedRoute: jasmine.SpyObj<ActivatedRoute>;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-button.component');
+    OButtonComponent = module.OButtonComponent;
+    
     // Create mock for ActivatedRoute
     mockActivatedRoute = jasmine.createSpyObj('ActivatedRoute', [], {
       params: of({}),

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ChangeDetectorRef } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -11,7 +11,26 @@ import { appConfigFactory, AuthService, LocalStorageService } from '../../servic
 import { Config } from '../../types/config.type';
 import { Injector } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { of, Subject } from 'rxjs';
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+
+import { OTableExportButtonService } from '../../components/table/extensions/export-button/o-table-export-button.service';
+import { NameConvention } from '../../services/name-convention/name-convention.service';
+import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
+import { DialogService } from '../../services/dialog.service';
+import { OntimizeRequestArgumentsAdapter } from '../../services/request-adapter/ontimize-request-arguments.adapter';
+import { NavigationService } from '../../services/navigation.service';
+import { O_JSON_API_CONFIG } from '../../injection-tokens';
+import { OntimizeExportDataProviderService } from '../../services/ontimize-export-data-provider.service';
+import { OErrorDialogManager } from '../../services/o-error-dialog-manager.service';
+import { LoginStorageService } from '../../services/login-storage.service';
+import { OntimizeServiceResponseParser } from '../../services/parser/o-service-response.parser';
+import { OntimizeServiceResponseAdapter } from '../../services/ontimize/ontimize-service-response.adapter';
+import { PaginationContextService } from '../../services/pagination-context.service';
+import { OntimizeService } from '../../services/ontimize/ontimize.service';
+
 
 /**
  * Common testing utilities for Ontimize Web NGX components
@@ -48,7 +67,8 @@ export class OTestingUtils {
         NoopAnimationsModule,
         ReactiveFormsModule,
         TranslateModule.forRoot(),
-        MatDialogModule
+        MatDialogModule,
+        MatSnackBarModule
       ],
       providers: [
         {
@@ -67,7 +87,77 @@ export class OTestingUtils {
           deps: [Injector]
         },
         { provide: APP_CONFIG, useValue: OTestingUtils.mockConfiguration() },
-        { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] }
+        { provide: AppConfig, useFactory: appConfigFactory, deps: [Injector] },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({}),
+            queryParams: of({}),
+            snapshot: { params: {}, queryParams: {}, data: {} }
+          }
+        },
+        {
+          provide: ChangeDetectorRef,
+          useValue: jasmine.createSpyObj('ChangeDetectorRef', ['markForCheck', 'detectChanges', 'detach', 'reattach'])
+        },
+        {
+          provide: OTableExportButtonService,
+          useValue: {
+            export$: new Subject<string>()
+          }
+        },
+        {
+          provide: NameConvention,
+          useClass: NameConvention
+        },
+        {
+          provide: OFilterBuilderComponentStateService,
+          useClass: OFilterBuilderComponentStateService
+        },
+        {
+          provide: DialogService,
+          useClass: DialogService
+        },
+        {
+          provide: OntimizeRequestArgumentsAdapter,
+          useValue: jasmine.createSpyObj('OntimizeRequestArgumentsAdapter', ['parseQueryParameters', 'getIdFromFilter'])
+        },
+        {
+          provide: NavigationService,
+          useValue: jasmine.createSpyObj('NavigationService', ['navigate', 'getPreviousRouteData', 'getLastItem'])
+        },
+        {
+          provide: O_JSON_API_CONFIG,
+          useValue: {}
+        },
+        {
+          provide: OntimizeExportDataProviderService,
+          useValue: jasmine.createSpyObj('OntimizeExportDataProviderService', ['getExportOptions', 'getColumnDataTypes', 'arrangeColumns'])
+        },
+        {
+          provide: OErrorDialogManager,
+          useValue: jasmine.createSpyObj('OErrorDialogManager', ['openErrorDialog', 'showError'])
+        },
+        {
+          provide: LoginStorageService,
+          useClass: LoginStorageService
+        },
+        {
+          provide: OntimizeServiceResponseParser,
+          useValue: jasmine.createSpyObj('OntimizeServiceResponseParser', ['parseSuccessfulResponse', 'parseUnsuccessfulResponse'])
+        },
+        {
+          provide: OntimizeServiceResponseAdapter,
+          useValue: jasmine.createSpyObj('OntimizeServiceResponseAdapter', ['adapt', 'handleError'])
+        },
+        {
+          provide: PaginationContextService,
+          useValue: jasmine.createSpyObj('PaginationContextService', ['setContext', 'getContext'])
+        },
+        {
+          provide: OntimizeService,
+          useValue: jasmine.createSpyObj('OntimizeService', ['configureService', 'query', 'advancedQuery', 'insert', 'update', 'delete'])
+        }
       ]
     };
   }

@@ -4,16 +4,23 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { OContextMenuComponent } from './o-context-menu.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+
+// Import component dynamically to avoid compilation
+let OContextMenuComponent: any;
+
 import { OContextMenuService } from './o-context-menu.service';
 
 describe('OContextMenuComponent', () => {
-  let component: OContextMenuComponent;
+  let component: any;
   let injector: Injector;
   let mockOContextMenuService: jasmine.SpyObj<OContextMenuService>;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-context-menu.component');
+    OContextMenuComponent = module.OContextMenuComponent;
+    
     mockOContextMenuService = jasmine.createSpyObj('OContextMenuService', ['closeAllContextMenus'], {
       showContextMenu: new Subject(),
       closeContextMenu: new Subject()

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { PaginationContextService } from './pagination-context.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -11,8 +12,9 @@ describe('PaginationContextService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        PaginationContextService,
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
+        ...OTestingUtils.getCommonTestingModuleConfig().providers,
+        // Override the spy with real service for this test
+        { provide: PaginationContextService, useClass: PaginationContextService }
       ]
     });
     service = TestBed.inject(PaginationContextService);

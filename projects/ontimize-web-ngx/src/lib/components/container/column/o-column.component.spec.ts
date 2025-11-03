@@ -3,15 +3,22 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, ElementRef, Injector } from '@angular/core';
 
-import { OColumnComponent } from './o-column.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let OColumnComponent: any;
+
+
 describe('OColumnComponent', () => {
-  let component: OColumnComponent;
+  let component: any;
   let mockElementRef: ElementRef;
   let injector: Injector;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-column.component');
+    OColumnComponent = module.OColumnComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [

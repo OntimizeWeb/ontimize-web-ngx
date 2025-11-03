@@ -3,15 +3,22 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
 
-import { OAppHeaderComponent } from './o-app-header.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+
+// Import component dynamically to avoid compilation
+let OAppHeaderComponent: any;
+
 import { of } from 'rxjs';
 
 describe('OAppHeaderComponent', () => {
-  let component: OAppHeaderComponent;
+  let component: any;
   let injector: Injector;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-app-header.component');
+    OAppHeaderComponent = module.OAppHeaderComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [

@@ -3,13 +3,20 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { OFormContainerComponent } from './o-form-container.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let OFormContainerComponent: any;
+
+
 describe('OFormContainerComponent', () => {
-  let component: OFormContainerComponent;
+  let component: any;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-form-container.component');
+    OFormContainerComponent = module.OFormContainerComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [

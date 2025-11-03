@@ -6,13 +6,16 @@ import { Router } from '@angular/router';
 import { MediaObserver } from '@angular/flex-layout';
 import { of, Subject } from 'rxjs';
 
-import { OAppSidenavComponent } from './o-app-sidenav.component';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+
+// Import component dynamically to avoid compilation
+let OAppSidenavComponent: any;
+
 import { AppMenuService } from '../../services/app-menu.service';
 import { OUserInfoService } from '../../services/o-user-info.service';
 
 describe('OAppSidenavComponent', () => {
-  let component: OAppSidenavComponent;
+  let component: any;
   let injector: Injector;
   let mockRouter: jasmine.SpyObj<Router>;
   let mockElementRef: ElementRef;
@@ -22,6 +25,10 @@ describe('OAppSidenavComponent', () => {
   let mockOUserInfoService: jasmine.SpyObj<OUserInfoService>;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-app-sidenav.component');
+    OAppSidenavComponent = module.OAppSidenavComponent;
+    
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockChangeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges', 'markForCheck']);
     mockMediaObserver = jasmine.createSpyObj('MediaObserver', ['asObservable', 'isActive']);

@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { Injector } from '@angular/core';
+import { of } from 'rxjs';
 import { OntimizeService } from './ontimize.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
@@ -11,8 +13,16 @@ describe('OntimizeService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OntimizeService,
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
+        // Include other providers from OTestingUtils first
+        ...OTestingUtils.getCommonTestingModuleConfig().providers.filter(
+          provider => !(provider && provider.provide === OntimizeService)
+        ),
+        // Then provide OntimizeService with custom factory to override any spy
+        {
+          provide: OntimizeService,
+          useFactory: (injector: Injector) => new OntimizeService(injector),
+          deps: [Injector]
+        }
       ]
     });
     service = TestBed.inject(OntimizeService);

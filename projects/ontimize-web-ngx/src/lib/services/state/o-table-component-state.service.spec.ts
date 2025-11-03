@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { OTableComponentStateService } from './o-table-component-state.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 

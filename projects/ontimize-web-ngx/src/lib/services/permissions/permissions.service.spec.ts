@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { PermissionsService } from './permissions.service';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 

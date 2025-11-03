@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { Injector } from '@angular/core';
+import { of } from 'rxjs';
 import { OntimizeExportDataProviderService } from './ontimize-export-data-provider.service';
 import { OTestingUtils } from '../shared/testing/o-testing-utils';
 
@@ -11,8 +13,16 @@ describe('OntimizeExportDataProviderService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        OntimizeExportDataProviderService,
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
+        // Include other providers from OTestingUtils first
+        ...OTestingUtils.getCommonTestingModuleConfig().providers.filter(
+          provider => !(provider && provider.provide === OntimizeExportDataProviderService)
+        ),
+        // Then provide OntimizeExportDataProviderService with custom factory to override any spy
+        {
+          provide: OntimizeExportDataProviderService,
+          useFactory: (injector: Injector) => new OntimizeExportDataProviderService(injector),
+          deps: [Injector]
+        }
       ]
     });
     service = TestBed.inject(OntimizeExportDataProviderService);

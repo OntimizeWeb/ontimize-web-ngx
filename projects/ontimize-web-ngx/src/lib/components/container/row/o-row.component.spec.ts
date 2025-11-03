@@ -3,15 +3,22 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, ElementRef, Injector } from '@angular/core';
 
-import { ORowComponent } from './o-row.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let ORowComponent: any;
+
+
 describe('ORowComponent', () => {
-  let component: ORowComponent;
+  let component: any;
   let mockElementRef: ElementRef;
   let injector: Injector;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-row.component');
+    ORowComponent = module.ORowComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [

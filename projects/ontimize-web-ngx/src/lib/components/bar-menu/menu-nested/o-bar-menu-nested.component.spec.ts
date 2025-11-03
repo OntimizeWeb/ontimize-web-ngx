@@ -2,15 +2,20 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
-
-import { OBarMenuNestedComponent } from './o-bar-menu-nested.component';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 
+// Import component dynamically to avoid compilation
+let OBarMenuNestedComponent: any;
+
 describe('OBarMenuNestedComponent', () => {
-  let component: OBarMenuNestedComponent;
+  let component: any;
   let injector: Injector;
 
   beforeEach(async () => {
+    // Dynamically import to avoid early compilation
+    const module = await import('./o-bar-menu-nested.component');
+    OBarMenuNestedComponent = module.OBarMenuNestedComponent;
+    
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
