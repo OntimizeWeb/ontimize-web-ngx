@@ -4,14 +4,6 @@
     padding-left: 0px;
   }
 
-  &:has(.mat-sort-header-arrow) {
-    padding-right: 6px;
-  }
-
-  &:has(.o-table-column-resizer) {
-    padding-right: 0px;
-  }
-
   .o-table-column-filter-icon {
     position: relative;
     display: flex;
