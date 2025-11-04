@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { FormComponentMockUtil } from '../test/form-component-mock.util';
 
 // Import component dynamically to avoid compilation
 let OPhoneInputComponent: any;
@@ -28,18 +29,15 @@ describe('OPhoneInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockCountryCode: any = {
-      allCountries: [
-        ['United States', 'us', '1'],
-        ['United Kingdom', 'gb', '44'],
-        ['Spain', 'es', '34']
-      ]
-    };
-    const mockOFormComponent: any = {};
-    const mockElementRef: any = { nativeElement: document.createElement('div') };
+    // Create component manually using utility for consistent mocking
     const mockInjector = TestBed.inject(Injector);
-    component = new OPhoneInputComponent(mockCountryCode, mockOFormComponent, mockElementRef, mockInjector);
+    const mockCountryCode = FormComponentMockUtil.createMockCountryCodeService();
+    const testSetup = FormComponentMockUtil.createSpecialInputComponentTestSetup(
+      OPhoneInputComponent, 
+      mockInjector, 
+      [mockCountryCode]
+    );
+    component = testSetup.component;
   });
 
   it('should create', () => {

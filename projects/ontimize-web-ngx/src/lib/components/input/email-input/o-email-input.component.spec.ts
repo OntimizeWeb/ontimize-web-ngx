@@ -1,14 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { FormComponentMockUtil } from '../test/form-component-mock.util';
 
 // Import component dynamically to avoid compilation
 let OEmailInputComponent: any;
 
 describe('OEmailInputComponent', () => {
   let component: any;
+  let fixture: any;
 
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
@@ -28,21 +30,14 @@ describe('OEmailInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
-    const mockElementRef: any = { nativeElement: document.createElement('div') };
+    // Create component manually using utility for consistent mocking
     const mockInjector = TestBed.inject(Injector);
-    component = new OEmailInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    const testSetup = FormComponentMockUtil.createInputComponentTestSetup(OEmailInputComponent, mockInjector);
+    component = testSetup.component;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should initialize without errors', () => {
-    expect(() => {
-      // detectChanges not needed with manual instantiation
-    }).not.toThrow();
   });
 
   it('should have basic component structure', () => {
