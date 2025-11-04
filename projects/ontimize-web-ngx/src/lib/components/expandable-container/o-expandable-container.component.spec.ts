@@ -46,4 +46,74 @@ describe('OExpandableContainerComponent', () => {
   it('should have basic component structure', () => {
     expect(component.constructor).toBe(OExpandableContainerComponent);
   });
+
+  it('should have default property values', () => {
+    expect(component.targets).toBeUndefined();
+    expect(component.data).toBeUndefined();
+  });
+
+  it('should set targets property', () => {
+    const mockTargets = [
+      { queryData: jasmine.createSpy('queryData1') },
+      { queryData: jasmine.createSpy('queryData2') }
+    ];
+    component.targets = mockTargets;
+    expect(component.targets).toBe(mockTargets);
+    expect(component.targets.length).toBe(2);
+  });
+
+  it('should set data property', () => {
+    const testData = { id: 1, name: 'test' };
+    component.data = testData;
+    expect(component.data).toBe(testData);
+  });
+
+  it('should set data property with different types', () => {
+    // Test with string
+    component.data = 'test string';
+    expect(component.data).toBe('test string');
+    
+    // Test with number
+    component.data = 123;
+    expect(component.data).toBe(123);
+    
+    // Test with array
+    const testArray = [1, 2, 3];
+    component.data = testArray;
+    expect(component.data).toBe(testArray);
+  });
+
+  it('should handle ngAfterViewInit when targets is undefined', () => {
+    component.targets = undefined;
+    expect(() => {
+      component.ngAfterViewInit();
+    }).toThrow();
+  });
+
+  it('should handle ngAfterViewInit when targets is empty array', () => {
+    component.targets = [];
+    expect(() => {
+      component.ngAfterViewInit();
+    }).not.toThrow();
+  });
+
+  it('should call queryData on all targets in ngAfterViewInit', () => {
+    const mockTarget1 = { queryData: jasmine.createSpy('queryData1') };
+    const mockTarget2 = { queryData: jasmine.createSpy('queryData2') };
+    component.targets = [mockTarget1, mockTarget2];
+    
+    component.ngAfterViewInit();
+    
+    expect(mockTarget1.queryData).toHaveBeenCalled();
+    expect(mockTarget2.queryData).toHaveBeenCalled();
+  });
+
+  it('should handle single target in ngAfterViewInit', () => {
+    const mockTarget = { queryData: jasmine.createSpy('queryData') };
+    component.targets = [mockTarget];
+    
+    component.ngAfterViewInit();
+    
+    expect(mockTarget.queryData).toHaveBeenCalledTimes(1);
+  });
 });
