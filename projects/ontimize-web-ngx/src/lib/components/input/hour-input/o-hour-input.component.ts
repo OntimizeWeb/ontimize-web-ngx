@@ -188,6 +188,18 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         this.onKeyboardInputDone = true;
       });
     }
+    if (this.picker.closed) {
+      this.picker.closed.subscribe(() => {
+        setTimeout(() => {
+          const input: HTMLInputElement = this.elRef.nativeElement.querySelector('input');
+
+          // Focus only if the input exists, is not readonly, and is not disabled
+          if (input && !this.isReadOnly && this.enabled !== false) {
+            input.focus();
+          }
+        }, 0);
+      });
+    }
   }
 
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
@@ -197,6 +209,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
       let value = val instanceof OFormValue ? val.value : val;
       stringValue = this.getValueAsString(value);
     }
+
     this.ensureOFormValue(val);
     if (!this._fControl) {
       // ensuring _fControl creation
