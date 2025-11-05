@@ -17,7 +17,7 @@ export class OHourTimepickerDirective extends TimepickerDirective {
   //register new input oNgxTimepicker instead of ngxTimepicker
   @Input('oNgxTimepicker')
   override set timepicker(picker: NgxMaterialTimepickerComponent) {
-    super['registerTimepicker'](picker); // llamamos al método privado de la clase base
+    super['registerTimepicker'](picker);
   }
 
   override updateValue(value: string) {
