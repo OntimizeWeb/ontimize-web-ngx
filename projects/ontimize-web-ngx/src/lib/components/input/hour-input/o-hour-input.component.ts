@@ -49,7 +49,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   public picker: NgxMaterialTimepickerComponent;
 
   private pickerClosedSub?: Subscription;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   private skipNextBlur = false;
 
   constructor(
