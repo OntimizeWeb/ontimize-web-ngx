@@ -31,6 +31,7 @@ import { OTableComponent } from './o-table.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
+import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { OTableFilterByColumnService } from './extensions/dialog/filter-by-colum
     OMatSortModule,
     NgxMaterialTimepickerModule,
     ODualListSelectorModule,
-    ODataToolbarModule
+    ODataToolbarModule,
+    OHourInputModule
   ],
   exports: [
     OTableComponent,
