@@ -27,6 +27,11 @@ export class OHourTimepickerDirective extends TimepickerDirective {
       let minutes = value.slice(-2);
       value = `${hours}:${minutes}`;
     }
+    //Setting for 12 hour format
+    const is12 = this.format === 12;
+    if (is12 && !/(AM|PM)$/i.test(value)) {
+      value += ' AM';
+    }
     super.updateValue(value);
   }
 }
