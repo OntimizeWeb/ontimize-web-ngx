@@ -1,11 +1,11 @@
 import {
   AfterViewChecked,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
-  Injector,
-  OnInit,
+  Injector, OnInit,
   TemplateRef,
   ViewChild,
   ViewEncapsulation
@@ -23,6 +23,7 @@ import { FormValueOptions } from '../../../../../types/form-value-options.type';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellEditor } from '../o-base-table-cell-editor.class';
+import { takeUntil } from 'rxjs';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
   'oDateFormat: date-format',
@@ -94,6 +95,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   // only true when hour input is focused
   public enabledCommitOnTabPress: boolean = false;
   protected activeKeys: object = {};
+  cd: ChangeDetectorRef;
 
   @HostListener('document:keydown', ['$event'])
   onDocumentKeydown(event: KeyboardEvent) {
@@ -105,6 +107,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     private adapter: DateAdapter<any>
   ) {
     super(injector);
+    this.cd = this.injector.get(ChangeDetectorRef);
     this.momentSrv = this.injector.get(MomentService);
   }
 
@@ -320,12 +323,27 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
         this.onKeyboardInputDone = true;
       });
     }
-    // if (this.picker) {
-    //   const ngxTimepicker = this.picker.timepickerInput;
-    //   if (ngxTimepicker && ngxTimepicker.onInput) {
-    //     ngxTimepicker.onInput = (value: string) => this.onKeyboardInputDone = true;
-    //   }
-    // }
+
+
+    this.picker.closed
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.cd.detectChanges();
+
+        // Another solution was to add a 200ms delay, but the following is a better solution as it doesn't add any delays.
+        setTimeout(() => {
+          queueMicrotask(() => {
+            const input: HTMLInputElement | null =
+              this.hourInput?.nativeElement?.querySelector?.('input') ||
+              this.hourInput?.nativeElement;
+
+            if (input && !input.disabled) {
+              input.focus({ preventScroll: true });
+            }
+          });
+        }, 0);
+      });
+
   }
 
   hasErrorDate(error: string): boolean {
@@ -427,12 +445,9 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   onDatepickerClosed() {
-    this.dateInput.nativeElement.focus();
+    this.dateInput?.nativeElement.focus();
   }
 
-  onTimepickerClosed() {
-    this.hourInput.nativeElement.focus();
-  }
 
   commitEdition() {
     if (!this.formGroup.invalid) {

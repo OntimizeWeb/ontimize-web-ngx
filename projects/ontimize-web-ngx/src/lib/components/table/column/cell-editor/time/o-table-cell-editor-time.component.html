@@ -1,19 +1,13 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div [formGroup]="formGroup" class="o-table-cell-editor-time o-table-cell-editor" fxLayout="row" fxLayoutAlign="space-between center"
-    fxLayoutGap="8px"
-    [matTooltip]="tooltip"
-    [matTooltipClass]="tooltipClass"
-    [matTooltipPosition]="tooltipPosition"
-    [matTooltipShowDelay]="tooltipShowDelay"
-    [matTooltipHideDelay]="tooltipHideDelay">
-    <mat-form-field>
+    fxLayoutGap="8px" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
+    [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+    <mat-form-field floatLabel="always">
 
-      <input #dateInput matInput [placeholder]="getPlaceholderDate()" [formControl]="formControlDate"
-        [required]="orequired" [matDatepicker]="d" (dateChange)="onDateChange($event)" [min]="minDate" [max]="maxDate"
-        (focus)="enabledCommitOnTabPress = false">
+      <input #dateInput matInput [placeholder]="getPlaceholderDate()" [formControl]="formControlDate" [required]="orequired" [matDatepicker]="d"
+        (dateChange)="onDateChange($event)" [min]="minDate" [max]="maxDate" (focus)="enabledCommitOnTabPress = false">
 
-      <mat-datepicker #d [startView]="oStartView" [startAt]="oDateStartAt" [touchUi]="oDateTouchUi"
-        (closed)="onDatepickerClosed()">
+      <mat-datepicker #d [startView]="oStartView" [startAt]="oDateStartAt" [touchUi]="oDateTouchUi" (closed)="onDatepickerClosed()">
       </mat-datepicker>
 
       <span class="icon-btn" (click)="openDatepicker(d)" matSuffix>
@@ -45,9 +39,8 @@
 
     <mat-form-field>
 
-      <input #hourInput matInput [ngxTimepicker]="picker" [placeholder]="getPlaceholderHour()"
-        [formControl]="formControlHour" [required]="orequired" (change)="onHourChange($event)" [min]="oHourMin"
-        [max]="oHourMax" (keydown)="onKeyDown($event)" [disableClick]="true" [format]="oHourFormat"
+      <input #hourInput matInput [oNgxTimepicker]="picker" [placeholder]="getPlaceholderHour()" [formControl]="formControlHour" [required]="orequired"
+        (change)="onHourChange($event)" [min]="oHourMin" [max]="oHourMax" (keydown)="onKeyDown($event)" [disableClick]="true" [format]="oHourFormat"
         (blur)="enabledCommitOnTabPress = true">
 
       <button type="button" matSuffix mat-icon-button (click)="open($event)">
@@ -63,8 +56,7 @@
 
     </mat-form-field>
 
-    <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn"
-      [cancelBtnTmpl]="cancelBtn" (closed)="onTimepickerClosed()"></ngx-material-timepicker>
+    <ngx-material-timepicker #picker (timeSet)="onHourChange($event)" [confirmBtnTmpl]="confirmBtn" [cancelBtnTmpl]="cancelBtn"></ngx-material-timepicker>
     <ng-template #confirmBtn>
       <button mat-stroked-button type="button"><span>{{'OK' | oTranslate}}</span></button>
     </ng-template>
