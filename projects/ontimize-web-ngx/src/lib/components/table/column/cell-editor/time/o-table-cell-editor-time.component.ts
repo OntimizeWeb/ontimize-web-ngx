@@ -322,7 +322,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       this.picker.inputElement.addEventListener('change', () => {
         this.onKeyboardInputDone = true;
       });
-    }
+
 
 
     this.picker.closed
@@ -343,7 +343,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
           });
         }, 0);
       });
-
+    }
   }
 
   hasErrorDate(error: string): boolean {
