@@ -14,6 +14,7 @@ import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
 import { OTableGroupedRow } from './row/o-table-row-group.class';
 import { OMatSort } from './sort/o-mat-sort';
+import { AggregateFunction } from '../../../types';
 
 export class OnRangeChangeVirtualScroll {
   public range: ListRange;
@@ -571,7 +572,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return totalValue;
   }
 
-  protected calculateAggregate(data: any[], columnAttr: string, operator: string | Function): any {
+  protected calculateAggregate(data: any[], columnAttr: string, operator: string | AggregateFunction): any {
     let resultAggregate;
     if (typeof operator === 'string') {
       switch (operator.toLowerCase()) {
@@ -594,7 +595,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     } else {
       const columnData: any[] = this.getColumnData(columnAttr);
       if (typeof operator === 'function') {
-        resultAggregate = operator(columnData);
+        resultAggregate = operator(columnData, this.getAllData(false,false));
       }
     }
     return resultAggregate;

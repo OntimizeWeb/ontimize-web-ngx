@@ -1,1 +1,1 @@
-export type AggregateFunction = (value: any[]) => number;
+export type AggregateFunction = (value: any[], allTableData?:any[]) => number;
