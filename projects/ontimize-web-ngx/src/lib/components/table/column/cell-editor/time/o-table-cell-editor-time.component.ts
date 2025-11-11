@@ -322,28 +322,27 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
       this.picker.inputElement.addEventListener('change', () => {
         this.onKeyboardInputDone = true;
       });
+
+
+      this.picker.closed
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.cd.detectChanges();
+
+          // Another solution was to add a 200ms delay, but the following is a better solution as it doesn't add any delays.
+          setTimeout(() => {
+            queueMicrotask(() => {
+              const input: HTMLInputElement | null =
+                this.hourInput?.nativeElement?.querySelector?.('input') ||
+                this.hourInput?.nativeElement;
+
+              if (input && !input.disabled) {
+                input.focus({ preventScroll: true });
+              }
+            });
+          }, 0);
+        });
     }
-
-
-    this.picker.closed
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.cd.detectChanges();
-
-        // Another solution was to add a 200ms delay, but the following is a better solution as it doesn't add any delays.
-        setTimeout(() => {
-          queueMicrotask(() => {
-            const input: HTMLInputElement | null =
-              this.hourInput?.nativeElement?.querySelector?.('input') ||
-              this.hourInput?.nativeElement;
-
-            if (input && !input.disabled) {
-              input.focus({ preventScroll: true });
-            }
-          });
-        }, 0);
-      });
-
   }
 
   hasErrorDate(error: string): boolean {
