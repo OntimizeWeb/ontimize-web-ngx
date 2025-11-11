@@ -15,8 +15,8 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   // aggregate [sum | count | avg | min |max]
   'aggregate',
 
-  // function-aggregate [ (value: any[]) => number] Function that calculates a value on the values of the column 'attr'
-  'functionAggregate: function-aggregate'
+  // aggregate-function [ AggregateFunction ] Function that calculates a value on the values of the column 'attr'
+  'functionAggregate: aggregate-function'
 ];
 
 @Component({

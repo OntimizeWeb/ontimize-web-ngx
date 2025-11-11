@@ -10,7 +10,7 @@ import { OTableConfiguration } from '../../types/table/o-table-configuration.typ
 import { OTableFiltersStatus, OTableStoredFilter } from '../../types/table/o-table-filter-status.type';
 import { OFilterBuilderValues } from '../../types/o-filter-builder-values.type';
 import { Util } from '../../util/util';
-import { OGroupedColumnTypes } from '../../types';
+import { OGroupedColumnTypes } from '../../types/o-grouped-column-types.type';
 import { OTableExpandableRowState } from '../../types/table/o-table-expandable-row-state.type';
 
 export class OTableComponentStateClass extends DefaultServiceComponentStateClass {
