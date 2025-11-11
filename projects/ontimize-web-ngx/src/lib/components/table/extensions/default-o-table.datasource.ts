@@ -202,7 +202,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   getAggregatesData(data: any[]): any {
     const obj = {};
 
-    if (typeof this._tableOptions === 'undefined' || data.length === 0) {
+    if (this._tableOptions === undefined || data.length === 0) {
       return obj;
     }
 
@@ -604,7 +604,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     } else {
       const columnData: any[] = this.getColumnData(columnAttr);
-      resultAggregate = operator(columnData, columnAttr, this.table);
+      if (typeof operator === 'function') {
+        resultAggregate = operator(columnData, columnAttr, this.table);
+      }
     }
     return resultAggregate;
   }
@@ -806,7 +808,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
                 })
                 .catch(err => console.error(`o-table-columns-grouping-column: Async aggregate error in column "${columnAttr}" using aggregate function "${aggregateConf.aggregateFunction}":`, err));
             } else {
-              // Si es un resultado síncrono, lo asignamos directamente
+              // If it's a synchronous result, we assign it directly
               row.setColumnAggregateValue(columnAttr, valueOrPromise);
             }
           }
