@@ -1,1 +1,3 @@
-export type AggregateFunction = (value: any[], allTableData?:any[]) => number;
+import { OTableComponent } from '../components/table/o-table.component';
+
+export type AggregateFunction = (value: any[], columnAttr?: string, table?: OTableComponent) => number | Promise<number>;

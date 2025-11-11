@@ -202,17 +202,27 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   getAggregatesData(data: any[]): any {
     const obj = {};
 
-    if (typeof this._tableOptions === 'undefined') {
+    if (typeof this._tableOptions === 'undefined' || data.length === 0) {
       return obj;
     }
 
+
     this._tableOptions.columns.forEach((column: OColumn) => {
-      let totalValue = '';
+
       if (column.aggregate && column.visible) {
-        totalValue = this.calculateAggregate(data, column.attr, column.aggregate.operator);
+        const valueOrPromise = this.calculateAggregate(data, column.attr, column.aggregate.operator);
+
+        if (valueOrPromise instanceof Promise) {
+          valueOrPromise
+            .then(resolvedValue => {
+              obj[column.attr] = resolvedValue;
+            })
+            .catch(err => console.error(`o-table-column-aggregate: Async aggregate error in column "${column.attr}" using aggregate function "${column.aggregate.operator}":`, err));
+        } else {
+          obj[column.attr] = valueOrPromise;
+        }
       }
-      const key = column.attr;
-      obj[key] = totalValue;
+
     });
 
     return obj;
@@ -572,7 +582,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return totalValue;
   }
 
-  protected calculateAggregate(data: any[], columnAttr: string, operator: string | AggregateFunction): any {
+  protected calculateAggregate(data: any[], columnAttr: string, operator: string | AggregateFunction): number | Promise<number> {
     let resultAggregate;
     if (typeof operator === 'string') {
       switch (operator.toLowerCase()) {
@@ -594,9 +604,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     } else {
       const columnData: any[] = this.getColumnData(columnAttr);
-      if (typeof operator === 'function') {
-        resultAggregate = operator(columnData, this.getAllData(false,false));
-      }
+      resultAggregate = operator(columnData, columnAttr, this.table);
     }
     return resultAggregate;
   }
@@ -724,8 +732,18 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   private recalculateColumnAggregate(columnAttr: string, row: OTableGroupedRow) {
     const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
     const data = row.getColumnAggregateData(columnAttr);
-    const value = this.calculateAggregate(data, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
-    row.setColumnAggregateValue(columnAttr, value);
+    const valueOrPromise = this.calculateAggregate(data, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
+
+    if (valueOrPromise instanceof Promise) {
+      valueOrPromise
+        .then(value => {
+          row.setColumnAggregateValue(columnAttr, value);
+        })
+        .catch(err => console.error(`o-table-column-aggregate: Async aggregate error in column "${columnAttr}" using aggregate function "${aggregateConf.aggregateFunction}":`, err));
+
+    } else {
+      row.setColumnAggregateValue(columnAttr, valueOrPromise);
+    }
   }
 
   private getSublevel(data: any[], level: number, parent?: OTableGroupedRow): any[] {
@@ -774,8 +792,23 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
             row.setColumnAggregateData(columnAttr, aggregateData);
 
             const aggregateConf = row.getActiveColumnAggregateConfiguration(columnAttr);
-            const value = this.calculateAggregate(aggregateData, aggregateConf.attr, aggregateConf.aggregateFunction || aggregateConf.aggregate);
-            row.setColumnAggregateValue(columnAttr, value);
+            const valueOrPromise = this.calculateAggregate(
+              aggregateData,
+              aggregateConf.attr,
+              aggregateConf.aggregateFunction || aggregateConf.aggregate
+            );
+
+            if (valueOrPromise instanceof Promise) {
+              // If it returns a Promise, we wait for its resolution without blocking execution.
+              valueOrPromise
+                .then(value => {
+                  row.setColumnAggregateValue(columnAttr, value);
+                })
+                .catch(err => console.error(`o-table-columns-grouping-column: Async aggregate error in column "${columnAttr}" using aggregate function "${aggregateConf.aggregateFunction}":`, err));
+            } else {
+              // Si es un resultado síncrono, lo asignamos directamente
+              row.setColumnAggregateValue(columnAttr, valueOrPromise);
+            }
           }
         }
       });
