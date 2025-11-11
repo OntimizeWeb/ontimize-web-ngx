@@ -69,7 +69,7 @@ export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
       ocolumnaggregate.title = this.title;
     }
 
-    ocolumnaggregate.operator = this.aggregate ? this.aggregate : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
+    ocolumnaggregate.operator = this.aggregate ? this.aggregate.toLocaleLowerCase() : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
     this.table.registerColumnAggregate(ocolumnaggregate);
 
     this.subscription.add(this.table.onReinitialize.subscribe(() => this.table.registerColumnAggregate(ocolumnaggregate)));
