@@ -14,7 +14,7 @@ import { OTableComponent } from '../o-table.component';
 import { OTableDao } from './o-table.dao';
 import { OTableGroupedRow } from './row/o-table-row-group.class';
 import { OMatSort } from './sort/o-mat-sort';
-import { AggregateFunction } from '../../../types';
+import { AggregateFunction } from '../../../types/aggregate-function.type';
 
 export class OnRangeChangeVirtualScroll {
   public range: ListRange;
