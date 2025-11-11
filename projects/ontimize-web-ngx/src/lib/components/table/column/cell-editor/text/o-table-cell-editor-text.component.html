@@ -6,7 +6,7 @@
     [matTooltipShowDelay]="tooltipShowDelay"
     [matTooltipHideDelay]="tooltipHideDelay">
 
-    <mat-form-field cdkFocusInitial>
+    <mat-form-field cdkFocusInitial subscriptSizing="dynamic">
       <input #input matInput type="text" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId"
         [required]="orequired">
       <mat-error *oMatError="hasError('required')">
