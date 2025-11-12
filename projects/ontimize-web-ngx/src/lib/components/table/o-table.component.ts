@@ -1316,7 +1316,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     // Find values in visible-columns that they arent in original-visible-columns in localstorage
     // in this case you have to add this column to this.visibleColArray
     const colToAddInVisibleCol = Util.differenceArrays(currentVisibleColArray, originalVisibleColArray);
-    colToAddInVisibleCol.forEach((newColAttr) => {
+    for (const newColAttr of colToAddInVisibleCol) {
       const columnExists = this._oTableOptions.columns.some(col => col.attr === newColAttr);
 
       if (columnExists) {
@@ -1333,7 +1333,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         }
       }
       stateCols.sort((a: OColumn, b: OColumn) => currentVisibleColArray.indexOf(a.attr) - currentVisibleColArray.indexOf(b.attr));
-    });
+    }
 
     // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
     // in this case you have to delete this column to this.visibleColArray
@@ -1345,10 +1345,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     //If the columns in originalVisibleColArray has changed the sorting
     const changeSortVisibleColumns = JSON.stringify(currentVisibleColArray) !== JSON.stringify(originalVisibleColArray);
     if (changeSortVisibleColumns && currentVisibleColArray.length === originalVisibleColArray.length) {
-      currentVisibleColArray.forEach((col, toIndex) => {
+      for (const [toIndex, col] of currentVisibleColArray.entries()) {
         const fromIndexToChange = stateCols.findIndex(stateCol => stateCol.attr === col);
         moveItemInArray(stateCols, fromIndexToChange, toIndex);
-      });
+      }
 
     }
 
