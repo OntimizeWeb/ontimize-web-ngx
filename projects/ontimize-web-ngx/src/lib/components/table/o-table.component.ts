@@ -1304,41 +1304,54 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   checkChangesVisibleColummnsInInitialConfiguration(stateCols: OColumnDisplay[]): OColumnDisplay[] {
-    if (this.state.initialConfiguration.columnsDisplay) {
-      const originalVisibleColArray =
-        this.state.initialConfiguration.columnsDisplay.filter(x => x.visible).map(x => x.attr);
+    if (!this.state.initialConfiguration.columnsDisplay) {
+      return stateCols;
+    }
+    // Get the original visible columns from localStorage
+    const originalVisibleColArray =
+      this.state.initialConfiguration.columnsDisplay.filter(x => x.visible).map(x => x.attr);
 
-      const visibleColArray = Util.parseArray(this.visibleColumns, true);
+    const currentVisibleColArray = Util.parseArray(this.visibleColumns, true);
 
-      // Find values in visible-columns that they arent in original-visible-columns in localstorage
-      // in this case you have to add this column to this.visibleColArray
-      const colToAddInVisibleCol = Util.differenceArrays(visibleColArray, originalVisibleColArray);
-      colToAddInVisibleCol.forEach((colAdd) => {
-        let indexCol = stateCols.findIndex(col => col.attr === colAdd);
+    // Find values in visible-columns that they arent in original-visible-columns in localstorage
+    // in this case you have to add this column to this.visibleColArray
+    const colToAddInVisibleCol = Util.differenceArrays(currentVisibleColArray, originalVisibleColArray);
+    for (const newColAttr of colToAddInVisibleCol) {
+      const columnExists = this._oTableOptions.columns.some(col => col.attr === newColAttr);
+
+      if (columnExists) {
+        let indexCol = stateCols.findIndex(col => col.attr === newColAttr);
         if (indexCol > -1) {
           stateCols[indexCol].visible = true;
+        } else {
+          // The column does not exist in the state, add it as visible
+          stateCols.push({
+            attr: newColAttr,
+            visible: true,
+            width: undefined
+          } as OColumnDisplay);
         }
-        stateCols.sort((a: OColumn, b: OColumn) => visibleColArray.indexOf(a.attr) - visibleColArray.indexOf(b.attr));
-      });
-
-
-      // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
-      // in this case you have to delete this column to this.visibleColArray
-      const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, visibleColArray);
-      if (colToDeleteInVisibleCol.length > 0) {
-        stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) === -1);
       }
-
-      //If the columns in originalVisibleColArray has changed the sorting
-      const changeSortVisibleColumns = JSON.stringify(visibleColArray) !== JSON.stringify(originalVisibleColArray);
-      if (changeSortVisibleColumns && visibleColArray.length === originalVisibleColArray.length) {
-        visibleColArray.forEach((col, toIndex) => {
-          const fromIndexToChange = stateCols.findIndex(stateCol => stateCol.attr === col);
-          moveItemInArray(stateCols, fromIndexToChange, toIndex);
-        });
-
-      }
+      stateCols.sort((a: OColumn, b: OColumn) => currentVisibleColArray.indexOf(a.attr) - currentVisibleColArray.indexOf(b.attr));
     }
+
+    // Find values in original-visible-columns in localstorage that they arent in this.visibleColArray
+    // in this case you have to delete this column to this.visibleColArray
+    const colToDeleteInVisibleCol = Util.differenceArrays(originalVisibleColArray, currentVisibleColArray);
+    if (colToDeleteInVisibleCol.length > 0) {
+      stateCols = stateCols.filter(col => colToDeleteInVisibleCol.indexOf(col.attr) === -1);
+    }
+
+    //If the columns in originalVisibleColArray has changed the sorting
+    const changeSortVisibleColumns = JSON.stringify(currentVisibleColArray) !== JSON.stringify(originalVisibleColArray);
+    if (changeSortVisibleColumns && currentVisibleColArray.length === originalVisibleColArray.length) {
+      for (const [toIndex, col] of currentVisibleColArray.entries()) {
+        const fromIndexToChange = stateCols.findIndex(stateCol => stateCol.attr === col);
+        moveItemInArray(stateCols, fromIndexToChange, toIndex);
+      }
+
+    }
+
     return stateCols;
   }
 
@@ -3617,9 +3630,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return {
         attr: visibleColumn.attr,
         title: visibleColumn.title,
-        filterValuesInData:'current-page',
+        filterValuesInData: 'current-page',
         sort: '',
-        startView:''
+        startView: ''
 
       } as OFilterColumn;
     }
