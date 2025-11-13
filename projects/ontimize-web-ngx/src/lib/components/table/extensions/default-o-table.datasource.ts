@@ -144,7 +144,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           */
           if (!this.table.pageable) {
             this.table.loadingService.setLoadingLocal(true);
-            this.table.cd.detectChanges();
+            this.table.cd.detectChanges();//its necessary to show the skeleton before processing data
           }
           if (Array.isArray(data) && data.length > 0) {
             if (this.existsAnyCalculatedColumn()) {
