@@ -108,6 +108,8 @@ import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 import { MatRow, MatTable } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 import { PaginationData } from '../../interfaces/pagination-data.interface';
+import { OTableLoadingService } from './o-table-loading.service';
+import { OLoadingService } from '../../services/loading.service';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -266,7 +268,8 @@ type DisableSelectionFunction = (item: any) => boolean;
     OTableFilterByColumnService,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
-    { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) }
+    { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) },
+    { provide: OLoadingService, useClass: OTableLoadingService }
   ],
   animations: [
     trigger('detailExpand', [
@@ -308,6 +311,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected rowChangeSubscription: Subscription;
   refreshExpandableRowState = false;
 
+  loadingService: OTableLoadingService;
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -572,14 +576,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   private readonly loadingScrollSubject = new BehaviorSubject<boolean>(false);
   public loadingScroll: Observable<boolean> = this.loadingScrollSubject.asObservable();
 
-  public showLoading: Observable<boolean> = combineLatest([
-    this.loading.pipe(debounceTime(200)), // avoid displaying loading spinner for a very short time
-    this.loadingSorting,
-    this.loadingScroll
-  ]).pipe(
-    distinctUntilChanged((prev, curr) => prev[0] === curr[0] && prev[1] === curr[1] && prev[2] === curr[2]), // avoid emitting same value multiple times
-    map((res: boolean[]) => res.some(r => r))
-  );
+  public showLoading: Observable<boolean>;
 
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
@@ -709,7 +706,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
-
+    this.showLoading = this.loadingService.showLoading$;
     this._oTableOptions = new DefaultOTableOptions();
 
     try {
@@ -1514,10 +1511,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     because change detection not working with virtual scrolling */
     const ngZone = this.injector.get(NgZone);
     if (ngZone) {
-      ngZone.run(() => this.loadingSortingSubject.next(value)
+      ngZone.run(() => this.loadingService.setLoadingSorting(value)
       );
     } else {
-      this.loadingSortingSubject.next(value);
+      this.loadingService.setLoadingSorting(value);
       if (this.cd && !(this.cd as ViewRef).destroyed) {
         this.cd.detectChanges();
       }
@@ -1847,7 +1844,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   projectContentChanged() {
-    this.loadingScrollSubject.next(false);
+    this.loadingService.setLoadingScroll(false);
 
     this.initViewPort(this.dataSource.renderedData);
 
@@ -3639,4 +3636,5 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     this.matTable?.removeHeaderRowDef(null);
   }
+
 }

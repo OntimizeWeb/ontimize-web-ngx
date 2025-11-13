@@ -142,6 +142,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
             it is necessary to first calculate the calculated columns and
             then filter and sort the data
           */
+          if (!this.table.pageable) {
+            this.table.loadingService.setLoadingLocal(true);
+            this.table.cd.detectChanges();
+          }
           if (Array.isArray(data) && data.length > 0) {
             if (this.existsAnyCalculatedColumn()) {
               data = this.getColumnCalculatedData(data);
@@ -177,6 +181,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           }
 
           this.aggregateData = this.getAggregatesData(this.renderedData);
+          if (!this.table.pageable) {
+            this.table.loadingService.setLoadingLocal(true);
+          }
         }
 
         return data;
