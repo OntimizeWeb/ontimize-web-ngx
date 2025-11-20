@@ -33,7 +33,7 @@ import { OTableLoadingService } from '../../o-table-loading.service';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class OMatSortHeader extends MatSortHeader {
-  private loadingService: OTableLoadingService
+  private readonly loadingService: OTableLoadingService
 
   constructor(public _intl: MatSortHeaderIntl,
     changeDetectorRef: ChangeDetectorRef,

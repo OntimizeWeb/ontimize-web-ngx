@@ -11,19 +11,19 @@ export class OTableLoadingService implements OnDestroy  {
      * - `true`: an async operation is in progress.
      * - `false`: no loading is occurring.
      */
-  private loading$ = new BehaviorSubject(false);
+  private readonly loading$ = new BehaviorSubject(false);
 
   /**
    * Minimum delay (ms) required before the skeleton can be displayed.
    * Prevents flickering when operations resolve quickly.
    */
-  private THRESHOLD: number = 300;
+  private readonly THRESHOLD: number = 300;
 
   /**
    * Minimum amount of time (ms) the skeleton must remain visible once shown.
    * Ensures consistent UX when operations finish quickly.
    */
-  private MIN_VISIBLE: number = 300;
+  private readonly MIN_VISIBLE: number = 300;
 
   /**
    * Timestamp indicating when the skeleton was made visible.
@@ -34,21 +34,21 @@ export class OTableLoadingService implements OnDestroy  {
   /**
    * Tracks the actual skeleton visibility state.
    */
-  private showSkeleton$ = new BehaviorSubject<boolean>(false);
+  private readonly showSkeleton$ = new BehaviorSubject<boolean>(false);
 
   /**
    * Indicates whether UI interaction is blocked during processing.
    */
-  private processingBlocked$ = new BehaviorSubject<boolean>(false);
+  private readonly processingBlocked$ = new BehaviorSubject<boolean>(false);
 
   /**
    * Emits when the service is destroyed, used to clean up subscriptions.
    */
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     @Optional() @Inject(O_TABLE_GLOBAL_CONFIG) private config: OTableGlobalConfig,
-    private ngZone: NgZone
+    private readonly ngZone: NgZone
   ) {
 
     // Load configurable defaults if provided
@@ -89,7 +89,7 @@ export class OTableLoadingService implements OnDestroy  {
   /**
   * Internal stream that handles immediate UI blocking whenever loading starts.
   */
-  private handleProcessingBlock$ = this.isLoading$.pipe(
+  private readonly handleProcessingBlock$ = this.isLoading$.pipe(
     tap(state => {
       const shouldBlock = state.shouldShow;
 
@@ -116,7 +116,7 @@ export class OTableLoadingService implements OnDestroy  {
      * If loading is still active once the threshold expires,
      * the skeleton becomes visible.
      */
-  private handleShow$ = this.isLoading$.pipe(
+  private readonly handleShow$ = this.isLoading$.pipe(
     filter(state => state.shouldShow),
     tap(() => {
       timer(this.THRESHOLD).subscribe(() => {
@@ -131,7 +131,7 @@ export class OTableLoadingService implements OnDestroy  {
      * Internal stream that manages hiding the skeleton while enforcing
      * the minimum visible duration.
      */
-  private handleHide$ = this.isLoading$.pipe(
+  private readonly handleHide$ = this.isLoading$.pipe(
     filter(state => !state.shouldShow),
     tap(() => {
       const now = performance.now();

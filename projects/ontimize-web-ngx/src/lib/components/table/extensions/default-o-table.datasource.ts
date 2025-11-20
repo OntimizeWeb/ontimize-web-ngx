@@ -58,7 +58,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   private activeAggregates = {};
   private groupedRowsSubscription = new Subscription();
   private levelsExpansionState = {};
-  private ngZone: NgZone;
+  private readonly ngZone: NgZone;
 
   constructor(protected table: OTableComponent) {
     super();
@@ -166,74 +166,86 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
           return of([]);
         }
 
-        // -------------------------------------------------------------
-        // Heavy Processing (outside Angular Zone)
-        // -------------------------------------------------------------
-        // Avoid triggering Angular change detection in expensive operations.
-        return new Observable<any[]>(observer => {
-          this.ngZone.runOutsideAngular(() => {
-            // setTimeout(0) allows the browser to paint skeleton/loading state
-            setTimeout(() => {
-              try {
+        return this.processDataOutsideAngular(data);
 
-                if (this.existsAnyCalculatedColumn()) {
-                  data = this.getColumnCalculatedData(data);
-                }
-
-                if (!this.table.pageable) {
-                  data = this.getColumnValueFilterData(data);
-                  data = this.getQuickFilterData(data);
-                  data = this.getSortedData(data);
-                }
-
-                this.filteredData = Object.assign([], data);
-
-                if (this.table.pageable) {
-                  const totalRecordsNumber = this.table.getTotalRecordsNumber();
-                  this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
-                } else {
-                  this.resultsLength = data.length;
-                  data = this.getPaginationData(data);
-                }
-
-                if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
-                  data = this.getGroupedData(data);
-                }
-
-                this.renderedData = data;
-
-                if (this.table.virtualScrollViewport && !this._paginator) {
-                  data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
-                }
-
-                this.aggregateData = this.getAggregatesData(this.renderedData);
-
-                console.log('✅ Procesamiento completado');
-
-
-                // -------------------------------------------------------------
-                //  Re-enter Angular Zone to update UI
-                // -------------------------------------------------------------
-                this.ngZone.run(() => {
-                  this.table.loadingService.setLoading(false);
-                  this.table.cd.markForCheck();
-                  observer.next(data);
-                  observer.complete();
-                });
-
-              } catch (error) {
-                console.error('❌ Error while processing data:', error);
-                this.ngZone.run(() => {
-                  this.table.loadingService.setLoading(false);
-                  this.table.cd.markForCheck();
-                  observer.error(error);
-                });
-              }
-            }, 0); // Ensures UI has a frame to paint skeletons before processing
-          });
-        });
       })
     );
+  }
+
+  /**
+ * Processes heavy data operations outside Angular Zone to avoid blocking UI.
+ * Wraps operations in setTimeout(0) to allow browser rendering before processing.
+ */
+  private processDataOutsideAngular(data): Observable<any[]> {
+    return new Observable<any[]>(observer => {
+      this.ngZone.runOutsideAngular(() => {
+        // setTimeout(0) allows the browser to paint skeleton/loading state
+        setTimeout(() => {
+          data = this.executeDataProcessing(data, observer);
+        }, 0);
+      });
+    });
+  }
+
+  /**
+ * Executes the actual data processing pipeline.
+ * Handles: calculated columns, filtering, sorting, pagination, grouping, aggregates.
+ * Catches errors and returns to Angular Zone for UI updates.
+ */
+  private executeDataProcessing(data: any, observer) {
+    try {
+
+      if (this.existsAnyCalculatedColumn()) {
+        data = this.getColumnCalculatedData(data);
+      }
+
+      if (!this.table.pageable) {
+        data = this.getColumnValueFilterData(data);
+        data = this.getQuickFilterData(data);
+        data = this.getSortedData(data);
+      }
+
+      this.filteredData = Object.assign([], data);
+
+      if (this.table.pageable) {
+        const totalRecordsNumber = this.table.getTotalRecordsNumber();
+        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+      } else {
+        this.resultsLength = data.length;
+        data = this.getPaginationData(data);
+      }
+
+      if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
+        data = this.getGroupedData(data);
+      }
+
+      this.renderedData = data;
+
+      if (this.table.virtualScrollViewport && !this._paginator) {
+        data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+      }
+
+      this.aggregateData = this.getAggregatesData(this.renderedData);
+
+      // -------------------------------------------------------------
+      //  Re-enter Angular Zone to update UI
+      // -------------------------------------------------------------
+      this.ngZone.run(() => {
+        this.table.loadingService.setLoading(false);
+        this.table.cd.markForCheck();
+        observer.next(data);
+        observer.complete();
+      });
+
+    } catch (error) {
+      console.error('❌ Error while processing data:', error);
+      this.ngZone.run(() => {
+        this.table.loadingService.setLoading(false);
+        this.table.cd.markForCheck();
+        observer.error(error);
+      });
+    }
+    return data;
   }
 
   getGroupedData(data: any[]) {
