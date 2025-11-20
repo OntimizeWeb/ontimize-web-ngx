@@ -27,8 +27,7 @@ import {
   ViewChild,
   ViewChildren,
   ViewContainerRef,
-  ViewEncapsulation,
-  ViewRef
+  ViewEncapsulation
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,7 +37,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
 import moment from 'moment';
 import { BehaviorSubject, combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
 import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
@@ -109,7 +108,6 @@ import { MatRow, MatTable } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 import { PaginationData } from '../../interfaces/pagination-data.interface';
 import { OTableLoadingService } from './o-table-loading.service';
-import { OLoadingService } from '../../services/loading.service';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -269,7 +267,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
     { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) },
-    { provide: OLoadingService, useClass: OTableLoadingService }
+    OTableLoadingService
   ],
   animations: [
     trigger('detailExpand', [
@@ -706,7 +704,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY) public readonly scrollStrategy: OTableVirtualScrollStrategy
   ) {
     super(injector, elRef, form);
+    this.loadingService = this.injector.get(OTableLoadingService);
+    this.loadingSubject.subscribe((loading: boolean) => {
+      this.loadingService.setLoading(loading);
+    });
     this.showLoading = this.loadingService.showLoading$;
+
     this._oTableOptions = new DefaultOTableOptions();
 
     try {
@@ -1141,6 +1144,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         this.asyncLoadSubscriptions[idx].unsubscribe();
       }
     });
+
+    if (this.loadingService) {
+      this.loadingService.ngOnDestroy?.();
+    }
   }
 
   /**
@@ -1158,6 +1165,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (Util.isDefined(this.oTableQuickFilterComponent)) {
       this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
       this.quickFilterSubscription = this.oTableQuickFilterComponent.onChange.subscribe(val => {
+        this.loadingService.handleProtected();
         this.onSearch.emit(val);
       });
     }
@@ -1519,21 +1527,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  public updateSortingSubject(value: boolean) {
-    /* the loadingSortingSubject not refresh in the template
-    because change detection not working with virtual scrolling */
-    const ngZone = this.injector.get(NgZone);
-    if (ngZone) {
-      ngZone.run(() => this.loadingService.setLoadingSorting(value)
-      );
-    } else {
-      this.loadingService.setLoadingSorting(value);
-      if (this.cd && !(this.cd as ViewRef).destroyed) {
-        this.cd.detectChanges();
-      }
-    }
-  }
-
   protected onSortChange(sortArray: any[]) {
     this.sortColArray = [];
     sortArray.forEach((sort) => {
@@ -1546,8 +1539,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     });
     if (this.pageable) {
       this.reloadData();
-    } else {
-      this.updateSortingSubject(true);
     }
   }
 
@@ -1566,14 +1557,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.onRenderedDataChange = this.dataSource.onRenderedDataChange.subscribe(() => {
       this.stopEdition();
       this.checkSelectedItemData();
-      if (!this.pageable) {
-        setTimeout(() => {
-          this.updateSortingSubject(false);
-          if (this.cd && !(this.cd as ViewRef).destroyed) {
-            this.cd.detectChanges();
-          }
-        }, 500);
-      }
     });
   }
 
@@ -1857,7 +1840,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   projectContentChanged() {
-    this.loadingService.setLoadingScroll(false);
 
     this.initViewPort(this.dataSource.renderedData);
 
@@ -1993,6 +1975,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         if (this.dataService && (this.deleteMethod in this.dataService) && this.entity && (this.keysArray.length > 0)) {
           const filters = ServiceUtils.getArrayProperties(selectedItems, this.keysArray);
           const sqlTypesArg = this.getSqlTypesOfKeys();
+          this.loadingService.setLoading(true);
           this.daoTable.removeQuery(filters, sqlTypesArg).subscribe(
             {
               next: (v) => {
@@ -2055,6 +2038,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Reloads data
    */
   reloadData(clearSelectedItems: boolean = true) {
+    this.loadingService.setLoading(true);
     this.reloadDataWithClearExpandableRows(clearSelectedItems, clearSelectedItems)
   }
 
@@ -2545,12 +2529,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   clearColumnFilter(attr: string, triggerDatasourceUpdate: boolean = true): void {
+    this.loadingService.setLoading(true);
     this.dataSource.clearColumnFilter(attr, triggerDatasourceUpdate);
     this.onFilterByColumnChange.emit();
     this.reloadPaginatedDataFromStart(false);
   }
 
   filterByColumn(columnValueFilter: OColumnValueFilter) {
+    this.loadingService.setLoading(true);
     this.dataSource.addColumnFilter(columnValueFilter);
     this.onFilterByColumnChange.emit();
     if (this.pageable) {
@@ -2772,6 +2758,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   onChangePage(evt: PageEvent) {
+    if (!this.loadingService.handleProtected(evt as any)) {
+      return;
+    }
     this.finishQuerySubscription = false;
     this.dataService?.setPaginationContext({ pageNumber: evt.pageIndex, pageSize: evt.pageSize });
     if (!this.pageable) {
@@ -3510,6 +3499,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       });
     } else {
       if (value && value.length) {
+        //this.loadingService.setLoadingLocal(true)
         this.dataSource.quickFilter = value;
       }
     }

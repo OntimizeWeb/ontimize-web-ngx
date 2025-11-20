@@ -1,8 +1,8 @@
 import { DataSource, ListRange } from '@angular/cdk/collections';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, NgZone } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { asyncScheduler, BehaviorSubject, merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { distinctUntilChanged, observeOn, switchMap } from 'rxjs/operators';
 
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
@@ -58,9 +58,11 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   private activeAggregates = {};
   private groupedRowsSubscription = new Subscription();
   private levelsExpansionState = {};
+  private ngZone: NgZone;
 
   constructor(protected table: OTableComponent) {
     super();
+    this.ngZone = table.injector.get(NgZone);
     this._database = table.daoTable;
     if (this._database) {
       this.resultsLength = this._database.data.length;
@@ -130,64 +132,108 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       displayDataChanges.push(this.groupByColumnChange);
     }
 
+    /**
+ * Processes table data reactively whenever any display-related event occurs.
+ * Handles:
+ *  - Virtual scroll range changes
+ *  - Filtering, sorting, grouping, calculated columns
+ *  - Pagination (client or server)
+ *  - Heavy data processing outside Angular's zone for performance
+ *  - Returning processed data back into Angular for UI update
+ *
+ * This pipeline ensures optimal performance by:
+ *  - Preventing unnecessary change detection during heavy operations
+ *  - Allowing the browser to render first (via setTimeout)
+ *  - Running expensive logic outside Angular Zone
+ *  - Re-entering Angular Zone only when UI must update
+ *
+ * @returns Observable<any[]> Emits the processed dataset to be rendered.
+ */
     return merge(...displayDataChanges).pipe(
-      map((x: any) => {
-        let data = Object.assign([], this._database.data);
-
+      /**
+  * Forces asynchronous scheduling to avoid blocking synchronous UI events.
+  */
+      observeOn(asyncScheduler),
+      switchMap((x: any) => {
         if (x instanceof OnRangeChangeVirtualScroll) {
-          // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
-          data = this.getVirtualScrollData(this.renderedData, x);
-        } else {
-          /*
-            it is necessary to first calculate the calculated columns and
-            then filter and sort the data
-          */
-          if (!this.table.pageable) {
-            this.table.loadingService.setLoadingLocal(true);
-            this.table.cd.detectChanges();//its necessary to show the skeleton before processing data
-          }
-          if (Array.isArray(data) && data.length > 0) {
-            if (this.existsAnyCalculatedColumn()) {
-              data = this.getColumnCalculatedData(data);
-            }
-
-            if (!this.table.pageable) {
-              data = this.getColumnValueFilterData(data);
-              data = this.getQuickFilterData(data);
-              data = this.getSortedData(data);
-            }
-          }
-          this.filteredData = Object.assign([], data);
-
-          if (this.table.pageable) {
-            const totalRecordsNumber = this.table.getTotalRecordsNumber();
-            this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
-          } else {
-            this.resultsLength = data.length;
-            data = this.getPaginationData(data);
-          }
-          if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
-            data = this.getGroupedData(data);
-          }
-
-          this.renderedData = data;
-
-          /*
-            when the data is very large, the application crashes so it gets a limited range of data the first time
-            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll
-          */
-          if (this.table.virtualScrollViewport && !this._paginator) {
-            data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
-          }
-
-          this.aggregateData = this.getAggregatesData(this.renderedData);
-          if (!this.table.pageable) {
-            this.table.loadingService.setLoadingLocal(true);
-          }
+          return of(this.getVirtualScrollData(this.renderedData, x));
         }
 
-        return data;
-      }));
+        let data = Object.assign([], this._database.data);
+
+        if (!Array.isArray(data) || data.length === 0) {
+          this.table.loadingService.setLoading(false);
+          return of([]);
+        }
+
+        // -------------------------------------------------------------
+        // Heavy Processing (outside Angular Zone)
+        // -------------------------------------------------------------
+        // Avoid triggering Angular change detection in expensive operations.
+        return new Observable<any[]>(observer => {
+          this.ngZone.runOutsideAngular(() => {
+            // setTimeout(0) allows the browser to paint skeleton/loading state
+            setTimeout(() => {
+              try {
+
+                if (this.existsAnyCalculatedColumn()) {
+                  data = this.getColumnCalculatedData(data);
+                }
+
+                if (!this.table.pageable) {
+                  data = this.getColumnValueFilterData(data);
+                  data = this.getQuickFilterData(data);
+                  data = this.getSortedData(data);
+                }
+
+                this.filteredData = Object.assign([], data);
+
+                if (this.table.pageable) {
+                  const totalRecordsNumber = this.table.getTotalRecordsNumber();
+                  this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+                } else {
+                  this.resultsLength = data.length;
+                  data = this.getPaginationData(data);
+                }
+
+                if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
+                  data = this.getGroupedData(data);
+                }
+
+                this.renderedData = data;
+
+                if (this.table.virtualScrollViewport && !this._paginator) {
+                  data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+                }
+
+                this.aggregateData = this.getAggregatesData(this.renderedData);
+
+                console.log('✅ Procesamiento completado');
+
+
+                // -------------------------------------------------------------
+                //  Re-enter Angular Zone to update UI
+                // -------------------------------------------------------------
+                this.ngZone.run(() => {
+                  this.table.loadingService.setLoading(false);
+                  this.table.cd.markForCheck();
+                  observer.next(data);
+                  observer.complete();
+                });
+
+              } catch (error) {
+                console.error('❌ Error while processing data:', error);
+                this.ngZone.run(() => {
+                  this.table.loadingService.setLoading(false);
+                  this.table.cd.markForCheck();
+                  observer.error(error);
+                });
+              }
+            }, 0); // Ensures UI has a frame to paint skeletons before processing
+          });
+        });
+      })
+    );
   }
 
   getGroupedData(data: any[]) {
@@ -351,7 +397,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         i++;
       }
     });
-    this.table.updateSortingSubject(false);
     return originalDataSorted;
 
   }
@@ -858,6 +903,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   updateGroupedColumns() {
+    this.table.loadingService.setLoading(true);
     this.groupByColumnChange.next();
   }
 

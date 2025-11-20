@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
-export class OLoadingService {
+export abstract class OLoadingService {
 
   // State global loading
   loading$ = new BehaviorSubject<boolean>(false);

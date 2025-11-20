@@ -22,7 +22,6 @@ import { Util } from '../util/util';
 import { OExpandableContainerComponent } from './expandable-container/o-expandable-container.component';
 import { OFormComponent } from './form/o-form.component';
 import { FactoryUtil } from '../util/factory.util';
-import { OLoadingService } from '../services/loading.service';
 
 export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
   // attr [string]: list identifier. It is mandatory if data are provided through the data attribute. Default: entity (if set).
@@ -126,7 +125,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
   originalQueryRows: number = Codes.DEFAULT_QUERY_ROWS;
   protected _queryRows = this.originalQueryRows;
-  protected loadingService: OLoadingService;
 
   set oQueryRows(value: number) {
     if (Util.isDefined(value)) {
@@ -199,7 +197,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     this.localStorageService = this.injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
     this.componentStateService = this.injector.get<T>(AbstractComponentStateService as Type<T>);
     this.router = this.injector.get<Router>(Router as Type<Router>);
-    this.loadingService = this.injector.get(OLoadingService);
     this.actRoute = this.injector.get<ActivatedRoute>(ActivatedRoute as Type<ActivatedRoute>);
     try {
       this.cd = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
@@ -410,7 +407,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
         this.querySubscription.unsubscribe();
       }
       this.loadingSubject.next(true);
-      this.loadingService.setLoading(true);
 
       // ensuring false value
       this.abortQuery.next(false);
@@ -423,7 +419,6 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
          * that there are no results when the query is aborted*/
         this.cd.detectChanges();
         this.loadingSubject.next(false);
-        this.loadingService.setLoading(false);
         return;
       }
 
@@ -445,11 +440,9 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
 
           this.setData(data, this.sqlTypes, (ovrrArgs && ovrrArgs.replace));
           this.loadingSubject.next(false);
-          this.loadingService.setLoading(false);
         }, err => {
           this.setData([], []);
           this.loadingSubject.next(false);
-          this.loadingService.setLoading(false);
           if (Util.isDefined(this.queryFallbackFunction)) {
             this.queryFallbackFunction(err);
           } else {
