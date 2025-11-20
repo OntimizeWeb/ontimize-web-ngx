@@ -47,7 +47,7 @@ export class OTableLoadingService implements OnDestroy  {
   private readonly destroy$ = new Subject<void>();
 
   constructor(
-    @Optional() @Inject(O_TABLE_GLOBAL_CONFIG) private config: OTableGlobalConfig,
+    @Optional() @Inject(O_TABLE_GLOBAL_CONFIG) private readonly config: OTableGlobalConfig,
     private readonly ngZone: NgZone
   ) {
 
@@ -77,10 +77,9 @@ export class OTableLoadingService implements OnDestroy  {
     );
   }
 
-  private isLoading$ = this.loading$.pipe(
+  private readonly isLoading$ = this.loading$.pipe(
     distinctUntilChanged(),
     map(loading => ({ loading, shouldShow: loading })),
-    tap(state => console.log("🟡 isLoading$:", state, "t=", performance.now().toFixed(0))),
     shareReplay(1)
   );
 
@@ -105,7 +104,6 @@ export class OTableLoadingService implements OnDestroy  {
  */
   readonly isProcessing$ = this.processingBlocked$.pipe(
     distinctUntilChanged(),
-    tap(blocked => console.log(blocked ? "🔒 BLOQUEADO" : "🔓 DESBLOQUEADO")),
     shareReplay(1)
   );
 
