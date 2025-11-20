@@ -3499,7 +3499,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       });
     } else {
       if (value && value.length) {
-        //this.loadingService.setLoadingLocal(true)
         this.dataSource.quickFilter = value;
       }
     }
