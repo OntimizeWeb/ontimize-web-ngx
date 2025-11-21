@@ -222,7 +222,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       let resultsLength: number;
       if (this.table.pageable) {
         const totalRecordsNumber = this.table.getTotalRecordsNumber();
-        resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+        resultsLength = totalRecordsNumber ?? data.length;
       } else {
         resultsLength = data.length;
         data = this.getPaginationData(data);
