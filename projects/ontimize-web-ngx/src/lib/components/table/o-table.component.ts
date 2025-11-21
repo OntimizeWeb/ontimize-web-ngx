@@ -1165,8 +1165,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (Util.isDefined(this.oTableQuickFilterComponent)) {
       this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
       this.quickFilterSubscription = this.oTableQuickFilterComponent.onChange.subscribe(val => {
-        this.loadingService.handleProtected();
-        this.onSearch.emit(val);
+        if (this.loadingService.handleProtected()) {
+          this.onSearch.emit(val);
+        }
       });
     }
   }

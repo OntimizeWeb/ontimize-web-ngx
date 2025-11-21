@@ -65,10 +65,9 @@
 </div>
 
 <ng-template #table>
-
   <table mat-table #table [class.autoadjusted]="autoAdjust" [trackBy]="getTrackByFunction()" [dataSource]="dataSource" oMatSort
     [oMatSortColumns]="sortColArray" [ngClass]="rowHeightObservable | async" (cdkObserveContent)="projectContentChanged()"
-    [oTableExpandedFooter]="(showLoading | async) === false" [oTableExpandedFooterColspan]="visibleColArray.length"
+    oTableExpandedFooter [oTableExpandedFooterColspan]="visibleColArray.length"
     [multiTemplateDataRows]="showExpandableRow()" aria-describedby="ontimize-web table">
 
     <!--Checkbox Column -->

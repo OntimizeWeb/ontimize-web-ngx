@@ -1,6 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, Injector, Input, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Util } from '../../../../../util/util';
@@ -16,14 +16,6 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private tableBody: any;
   private tdTableWithMessage: any;
   private subscription = new Subscription();
-
-  /**
-   * Show/Hide message when the query is launched/callbacked
-   */
-  @Input('oTableExpandedFooter')
-  set display(val: boolean) {
-    this.showMessage(val);
-  }
 
   @Input('oTableExpandedFooterColspan')
   set colspan(value: number) {
@@ -64,9 +56,10 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
 
     /* Show/Hide message When the renderer data is changed with static data*/
     this.subscription.add(this.table.onContentChange.pipe(
-      distinctUntilChanged((prev, curr) => prev.length === curr.length),
-      filter(() => !!this.table.staticData)
-    ).subscribe(() => this.showMessage(true)));
+      distinctUntilChanged((prev, curr) => prev.length === curr.length)
+    ).subscribe(() => {
+      this.showMessage(true);
+    }));
 
     /*  Show/Hide message when the quickfilter is changed */
     if (this.table.oTableQuickFilterComponent) {
@@ -77,13 +70,13 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   public showMessage(display: boolean): void {
     // reset span message
     this.removeMessageSpan();
+    this.table.cd.detectChanges();
 
     if (display && this.table && this.table.dataSource && this.table.dataSource.renderedData.length === 0) {
       // generate new message
       this.createMessageSpan();
     }
   }
-
 
   removeMessageSpan() {
     if (this.spanMessageNotResults) {
