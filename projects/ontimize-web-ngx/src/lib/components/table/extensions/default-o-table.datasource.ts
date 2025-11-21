@@ -162,6 +162,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         let data = Object.assign([], this._database.data);
 
         if (!Array.isArray(data) || data.length === 0) {
+          this.updateTableState([], this.getAggregatesData([]), {});
           this.table.loadingService.setLoading(false);
           return of([]);
         }
@@ -188,6 +189,17 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   /**
+ * CENTRALIZED STATE UPDATE
+ * Updates all table state properties in one place.
+ * Prevents scattered modifications throughout the code.
+ */
+  private updateTableState(renderedData: any[], resultsLength: number, aggregateData: any = {}): void {
+    this.renderedData = renderedData;
+    this.resultsLength = resultsLength;
+    this.aggregateData = aggregateData;
+  }
+
+  /**
  * Executes the actual data processing pipeline.
  * Handles: calculated columns, filtering, sorting, pagination, grouping, aggregates.
  * Catches errors and returns to Angular Zone for UI updates.
@@ -207,11 +219,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
       this.filteredData = Object.assign([], data);
 
+      let resultsLength: number;
       if (this.table.pageable) {
         const totalRecordsNumber = this.table.getTotalRecordsNumber();
-        this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
+        resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
       } else {
-        this.resultsLength = data.length;
+        resultsLength = data.length;
         data = this.getPaginationData(data);
       }
 
@@ -219,13 +232,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         data = this.getGroupedData(data);
       }
 
-      this.renderedData = data;
+      const renderedData = data;
 
       if (this.table.virtualScrollViewport && !this._paginator) {
         data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
       }
 
-      this.aggregateData = this.getAggregatesData(this.renderedData);
+      const aggregateData = this.getAggregatesData(this.renderedData);
+      this.updateTableState(renderedData, resultsLength, aggregateData);
 
       // -------------------------------------------------------------
       //  Re-enter Angular Zone to update UI
