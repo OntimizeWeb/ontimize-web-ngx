@@ -1,3 +1,20 @@
+## 15.7.1 (2025-11-21)
+### Features
+* **o-hour-input**: Improved time input formatting ([db78c7b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db78c7b))([8c82f97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8c82f97)) Closes [#2007](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2007)
+* **o-table**:Added skeleton loader support for sorting and pagination when pageable="no".([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#2001](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2001)
+* **o-table-column-aggregate**: The `aggregate-function` callback now receives two additional optional parameters: the column attribute (columnAttr) and a reference to the table instance ([2bb94c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bb94c8)) Closes [#2013](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2013)
+
+### Bug Fixes
+* **o-table**:
+  * Fixed text misalignment in columns that are neither sortable nor filterable ([7348394](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7348394)) Closes [#2004](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2004)
+  * Fixed the new columns were not visible after updating both columns and visible-columns ([cfd0245](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cfd0245)) Closes [#2012](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2012)
+* **o-table-cell-editor-time**: Fixed focus timing after the time picker closes ([20215c5](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/20215c5)) Closes [#2009](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2009)
+* **o-table-column-aggregate**:
+  * Fixed the `count` operation failed when the source column used a custom renderer (e.g., date, service, and other formatted values). ([3b0a746](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b0a746)) Closes [#2015](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2015)
+
+### Breaking changes
+* **o-table-column-aggregate**: Renamed `function-aggregate` to `aggregate-function`.([2bb94c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bb94c8)) Closes [#2013](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2013)
+
 ## 15.7.0 (2025-10-22)
 > [!NOTE]
 > In this version, the features and bugfixes of versions [15.5.9](#1559-2025-09-02) were integrated
