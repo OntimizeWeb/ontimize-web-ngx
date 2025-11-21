@@ -44,8 +44,8 @@ export class OTableSkeletonComponent extends OSkeletonComponent  {
 
     const styles = getComputedStyle(element);
     const height = element.offsetHeight || 0;
-    const marginTop = parseFloat(styles.marginTop) || 0;
-    const marginBottom = parseFloat(styles.marginBottom) || 0;
+    const marginTop = Number.parseFloat(styles.marginTop) || 0;
+    const marginBottom = Number.parseFloat(styles.marginBottom) || 0;
 
     return height + marginTop + marginBottom;
   }
