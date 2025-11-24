@@ -156,17 +156,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       observeOn(asyncScheduler),
       switchMap((x: any) => {
         if (x instanceof OnRangeChangeVirtualScroll) {
-          return new Observable<any[]>(observer => {
-            this.ngZone.runOutsideAngular(() => {
-              setTimeout(() => {
-                const virtualData = this.getVirtualScrollData(this.renderedData, x);
-                this.ngZone.run(() => {
-                  observer.next(virtualData);
-                  observer.complete();
-                });
-              }, 0);
-            });
-          });
+          return this.processVirtualScrollChange(x);
         }
 
         let data = Object.assign([], this._database.data);
@@ -183,6 +173,20 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     );
   }
 
+  private processVirtualScrollChange(x: OnRangeChangeVirtualScroll): Observable<any[]> {
+    return new Observable<any[]>(observer => {
+      this.ngZone.runOutsideAngular(() => {
+        setTimeout(() => {
+          const virtualData = this.getVirtualScrollData(this.renderedData, x);
+          this.ngZone.run(() => {
+            this.table.cd.markForCheck();
+            observer.next(virtualData);
+            observer.complete();
+          });
+        }, 0);
+      });
+    });
+  }
   /**
  * Processes heavy data operations outside Angular Zone to avoid blocking UI.
  * Wraps operations in setTimeout(0) to allow browser rendering before processing.
@@ -290,7 +294,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   getAggregatesData(data: any[]): any {
     const obj = {};
 
-    if (this._tableOptions === undefined || data.length === 0) {
+    if (this._tableOptions === undefined) {
       return obj;
     }
 
