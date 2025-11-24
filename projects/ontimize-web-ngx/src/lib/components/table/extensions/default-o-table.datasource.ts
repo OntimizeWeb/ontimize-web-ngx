@@ -156,7 +156,17 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       observeOn(asyncScheduler),
       switchMap((x: any) => {
         if (x instanceof OnRangeChangeVirtualScroll) {
-          return of(this.getVirtualScrollData(this.renderedData, x));
+          return new Observable<any[]>(observer => {
+            this.ngZone.runOutsideAngular(() => {
+              setTimeout(() => {
+                const virtualData = this.getVirtualScrollData(this.renderedData, x);
+                this.ngZone.run(() => {
+                  observer.next(virtualData);
+                  observer.complete();
+                });
+              }, 0);
+            });
+          });
         }
 
         let data = Object.assign([], this._database.data);
@@ -206,7 +216,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
  */
   private executeDataProcessing(data: any, observer) {
     try {
-
       if (this.existsAnyCalculatedColumn()) {
         data = this.getColumnCalculatedData(data);
       }
@@ -238,13 +247,13 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
       }
 
-      const aggregateData = this.getAggregatesData(this.renderedData);
-      this.updateTableState(renderedData, resultsLength, aggregateData);
+      const aggregateData = this.getAggregatesData(renderedData);
 
       // -------------------------------------------------------------
       //  Re-enter Angular Zone to update UI
       // -------------------------------------------------------------
       this.ngZone.run(() => {
+        this.updateTableState(renderedData, resultsLength, aggregateData);
         this.table.loadingService.setLoading(false);
         this.table.cd.markForCheck();
         observer.next(data);
@@ -284,7 +293,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     if (this._tableOptions === undefined || data.length === 0) {
       return obj;
     }
-
 
     this._tableOptions.columns.forEach((column: OColumn) => {
 
