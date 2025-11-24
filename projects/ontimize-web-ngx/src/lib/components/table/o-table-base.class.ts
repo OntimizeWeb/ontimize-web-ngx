@@ -39,6 +39,7 @@ export abstract class OTableBase {
   visibleColArray: string[];
   queryMethod: string;
   showNotificationOfReadOnly: boolean;
+  showLoading: Observable<boolean>;
   abstract reinitializeSortColumns(sortColumns?: SQLOrder[]);
   abstract setGroupColumns(value: any[]);
   abstract clearColumnFilters(triggerDatasourceUpdate?: boolean, columnsAttr?: string[]): void
