@@ -1,4 +1,4 @@
-## 15.7.1 (2025-11-21)
+## 15.7.1 (2025-11-24)
 ### Features
 * **o-hour-input**: Improved time input formatting ([db78c7b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db78c7b))([8c82f97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8c82f97)) Closes [#2007](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2007)
 * **o-table**:Added skeleton loader support for sorting and pagination when pageable="no".([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#2001](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2001)
@@ -14,6 +14,11 @@
 
 ### Breaking changes
 * **o-table-column-aggregate**: Renamed `function-aggregate` to `aggregate-function`.([2bb94c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bb94c8)) Closes [#2013](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2013)
+
+
+> [!NOTE]
+Passing function calls directly to static-data (e.g. `[static-data]="getData()"`) is a bad practice that causes continuous re-evaluation and leads to malfunctioning behavior in components such as o-list, mat-table, o-grid and o-tree.
+Always pass a static reference instead (e.g. `[static-data]="data"`).
 
 ## 15.7.0 (2025-10-22)
 > [!NOTE]
