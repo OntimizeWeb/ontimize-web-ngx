@@ -1,7 +1,7 @@
 import { DataSource, ListRange } from '@angular/cdk/collections';
 import { EventEmitter, NgZone } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { asyncScheduler, BehaviorSubject, merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { asyncScheduler, BehaviorSubject, EMPTY, merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, observeOn, switchMap } from 'rxjs/operators';
 
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
@@ -122,10 +122,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       }
     }
 
-    if (this.table.virtualScrollViewport) {
-      displayDataChanges.push(this._virtualPageChange);
-    }
-
     displayDataChanges.push(this._columnValueFilterChange);
 
     if (this.table.groupable) {
@@ -149,43 +145,41 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
  *
  * @returns Observable<any[]> Emits the processed dataset to be rendered.
  */
-    return merge(...displayDataChanges).pipe(
-      /**
-  * Forces asynchronous scheduling to avoid blocking synchronous UI events.
-  */
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STREAM 1:  Main data stream (executed with asyncScheduler for heavy tasks)
+    // ═══════════════════════════════════════════════════════════════════════════
+    const mainDataStream = merge(...displayDataChanges).pipe(
+      // Ensures heavy operations are performed asynchronously
       observeOn(asyncScheduler),
       switchMap((x: any) => {
-        if (x instanceof OnRangeChangeVirtualScroll) {
-          return this.processVirtualScrollChange(x);
-        }
-
         let data = Object.assign([], this._database.data);
 
         if (!Array.isArray(data) || data.length === 0) {
-          this.updateTableState([], this.getAggregatesData([]), {});
+          this.updateTableState([], 0, this.getAggregatesData([]));
           this.table.loadingService.setLoading(false);
           return of([]);
         }
 
         return this.processDataOutsideAngular(data);
-
       })
     );
-  }
 
-  private processVirtualScrollChange(x: OnRangeChangeVirtualScroll): Observable<any[]> {
-    return new Observable<any[]>(observer => {
-      this.ngZone.runOutsideAngular(() => {
-        setTimeout(() => {
-          const virtualData = this.getVirtualScrollData(this.renderedData, x);
-          this.ngZone.run(() => {
-            this.table.cd.markForCheck();
-            observer.next(virtualData);
-            observer.complete();
-          });
-        }, 0);
-      });
-    });
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  STREAM 2: Virtual scroll stream (synchronous with scroll events)
+    // ═══════════════════════════════════════════════════════════════════════════
+    const virtualScrollStream = this.table.virtualScrollViewport
+      ? this._virtualPageChange.pipe(
+        //  STREAM 2: Virtual scroll stream (synchronous with scroll events)
+        switchMap((x: OnRangeChangeVirtualScroll) => {
+          return of(this.getVirtualScrollData(this.renderedData, x));
+        })
+      )
+      : EMPTY;// No virtual scroll → no stream
+
+    // ==========================================================================
+    // COMBINE both streams into one unified output
+    // =======================================================================
+    return merge(mainDataStream, virtualScrollStream);
   }
   /**
  * Processes heavy data operations outside Angular Zone to avoid blocking UI.
