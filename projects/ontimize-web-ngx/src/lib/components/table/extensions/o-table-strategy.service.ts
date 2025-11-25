@@ -13,7 +13,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   private readonly indexChange = new Subject<number>();
   public scrolledIndexChange: Observable<number> = this.indexChange.pipe(distinctUntilChanged());
   public readonly stickyChange = new Subject<number>();
-  private bufferMultiplier: number = 1;
+  private readonly bufferMultiplier: number = 1;
   private lastRenderedRange = { start: 0, end: 0 };
 
   get dataLength(): number {
