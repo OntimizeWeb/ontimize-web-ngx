@@ -2,7 +2,7 @@ import { DataSource, ListRange } from '@angular/cdk/collections';
 import { EventEmitter, NgZone } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { asyncScheduler, BehaviorSubject, EMPTY, merge, Observable, of, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, observeOn, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, observeOn, switchMap } from 'rxjs/operators';
 
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
@@ -25,9 +25,9 @@ export class OnRangeChangeVirtualScroll {
 }
 
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
-  dataTotalsChange = new BehaviorSubject<any[]>([]);
+  dataTotalsChange = new BehaviorSubject<any[]>(null);
 
-  get data(): any[] { return this.dataTotalsChange.value; }
+  get data(): any[] { return this.dataTotalsChange.value ?? []; }
 
   protected _database: OTableDao;
   protected _paginator: MatPaginator;
@@ -45,7 +45,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
 
-  protected _renderedData: any[] = [];
+  protected _renderedData: any[] = null;
   resultsLength: number = 0;
 
   get quickFilter(): string { return this._quickFilterChange.value || ''; }
@@ -102,63 +102,73 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
    * Connect function called by the table to retrieve one stream containing the data to render.
    */
   connect(): Observable<any[]> {
-    const displayDataChanges: any[] = [
-      this._database.dataChange
-    ];
+    const tag = (type: string, obs: Observable<any>) =>
+      obs.pipe(map(value => ({ type, value })));
+
+    const displayDataChanges: any[] = [];
+    displayDataChanges.push(tag('DATACHANGE', this._database.dataChange));
+
 
     if (!this.table.pageable) {
 
 
       if (this._sort) {
-        displayDataChanges.push(this._sort.oSortChange);
+        displayDataChanges.push(tag('SORTCHANGE', this._sort.oSortChange));
       }
 
       if (this._tableOptions.filter) {
-        displayDataChanges.push(this._quickFilterChange);
+        displayDataChanges.push(tag('QUICKFILTERCHANGE', this._quickFilterChange))
       }
 
       if (this._paginator) {
-        displayDataChanges.push(this._paginator.page);
+        displayDataChanges.push(tag('PAGINATOR', this._paginator.page));
       }
     }
 
-    displayDataChanges.push(this._columnValueFilterChange);
+    displayDataChanges.push(tag('FILTERBYCOLUMN', this._columnValueFilterChange).pipe(filter(event => {
+      if (event.value === null) {
+        return false;
+      }
+      return true;
+    })));
 
     if (this.table.groupable) {
-      displayDataChanges.push(this.groupByColumnChange);
+      displayDataChanges.push(tag('GROUP_BY', this.groupByColumnChange));
     }
 
     /**
- * Processes table data reactively whenever any display-related event occurs.
- * Handles:
- *  - Virtual scroll range changes
- *  - Filtering, sorting, grouping, calculated columns
- *  - Pagination (client or server)
- *  - Heavy data processing outside Angular's zone for performance
- *  - Returning processed data back into Angular for UI update
- *
- * This pipeline ensures optimal performance by:
- *  - Preventing unnecessary change detection during heavy operations
- *  - Allowing the browser to render first (via setTimeout)
- *  - Running expensive logic outside Angular Zone
- *  - Re-entering Angular Zone only when UI must update
- *
- * @returns Observable<any[]> Emits the processed dataset to be rendered.
- */
+    * Processes table data reactively whenever any display-related event occurs.
+    * Handles:
+    *  - Virtual scroll range changes
+    *  - Filtering, sorting, grouping, calculated columns
+    *  - Pagination (client or server)
+    *  - Heavy data processing outside Angular's zone for performance
+    *  - Returning processed data back into Angular for UI update
+    *
+    * This pipeline ensures optimal performance by:
+    *  - Preventing unnecessary change detection during heavy operations
+    *  - Allowing the browser to render first (via setTimeout)
+    *  - Running expensive logic outside Angular Zone
+    *  - Re-entering Angular Zone only when UI must update
+    *
+    * @returns Observable<any[]> Emits the processed dataset to be rendered.
+    */
     // ═══════════════════════════════════════════════════════════════════════════
     // STREAM 1:  Main data stream (executed with asyncScheduler for heavy tasks)
     // ═══════════════════════════════════════════════════════════════════════════
     const mainDataStream = merge(...displayDataChanges).pipe(
+      //  debounceTime(50), // Reduce ráfagas de eventos
       // Ensures heavy operations are performed asynchronously
       observeOn(asyncScheduler),
-      switchMap((x: any) => {
+      switchMap((event: any) => {
         let data = Object.assign([], this._database.data);
 
-        if (!Array.isArray(data) || data.length === 0) {
-          this.updateTableState([], 0, this.getAggregatesData([]));
-          this.table.loadingService.setLoading(false);
-          return of([]);
+        if (!Array.isArray(data) || this.renderedData === null ) {
+          // Aún no se han cargado datos
+          this.renderedData = [];
+          return of(null);
         }
+
 
         return this.processDataOutsideAngular(data);
       })
@@ -169,6 +179,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     // ═══════════════════════════════════════════════════════════════════════════
     const virtualScrollStream = this.table.virtualScrollViewport
       ? this._virtualPageChange.pipe(
+        filter(() => {
+          return this.renderedData !== null &&
+            this.renderedData !== undefined &&
+            Array.isArray(this.renderedData) &&
+            this.renderedData.length > 0;
+        }),
         //  STREAM 2: Virtual scroll stream (synchronous with scroll events)
         switchMap((x: OnRangeChangeVirtualScroll) => {
           return of(this.getVirtualScrollData(this.renderedData, x));
@@ -543,8 +559,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     filters.forEach(filter => {
       this.columnValueFilters.push(filter);
     });
-    if (!this.table.pageable) {
-      this._columnValueFilterChange.next(null);
+    if (!this.table.pageable && this.columnValueFilters.length > 0) {
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 
@@ -567,14 +583,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       this.columnValueFilters = [];
     }
     if (trigger) {
-      this._columnValueFilterChange.next(null);
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 
   clearColumnFilter(attr: string, trigger: boolean = true) {
     this.columnValueFilters = this.columnValueFilters.filter(x => x.attr !== attr);
     if (trigger) {
-      this._columnValueFilterChange.next(null);
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 
@@ -607,7 +623,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     }
     // If the table is paginated, filter will be applied on remote query
     if (!this.table.pageable) {
-      this._columnValueFilterChange.next(null);
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 

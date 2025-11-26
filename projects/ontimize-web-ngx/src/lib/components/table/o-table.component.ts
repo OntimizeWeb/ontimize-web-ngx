@@ -931,6 +931,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.permissions = this.permissionsService.getTablePermissions(this.oattr, this.actRoute);
   }
 
+  initializeLoadingSubject() {
+    this.loadingService.setLoading(true);
+  }
+
   protected registerClickListener() {
     if (this.clickSubjectSubscription) {
       this.clickSubjectSubscription.unsubscribe();
@@ -1841,7 +1845,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   projectContentChanged() {
-
     this.initViewPort(this.dataSource.renderedData);
 
     if (this.previousRendererData !== this.dataSource.renderedData) {
@@ -1849,7 +1852,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
 
-    if (this.state.selection && this.dataSource.renderedData.length > 0 && this.getSelectedItems().length === 0) {
+    if (this.state.selection && this.dataSource?.renderedData?.length > 0 && this.getSelectedItems().length === 0) {
       this.checkSelectedItemData();
     }
 
@@ -2258,18 +2261,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public getNumRowSelectedInCurrentData(): number {
-    return this.dataSource ? this.dataSource.renderedData.filter(x => !this.isDisableCheckbox(x) && this.isRowSelected(x)).length : 0;
+    return this.dataSource?.renderedData ? this.dataSource.renderedData.filter(x => !this.isDisableCheckbox(x) && this.isRowSelected(x)).length : 0;
   }
 
   public isAllSelected(): boolean {
     const numSelected = this.getNumRowSelectedInCurrentData();
-    const numRows = this.dataSource ? this.dataSource.renderedData.length : 0;
+    const numRows = this.dataSource?.renderedData?.length ?? 0;
     return numSelected > 0 && numSelected === numRows;
   }
 
   public isIndeterminate(): boolean {
     const numSelected = this.getNumRowSelectedInCurrentData();
-    const numRows = this.dataSource ? this.dataSource.renderedData.length : 0;
+    const numRows = this.dataSource?.renderedData?.length ?? 0;
     return numSelected > 0 && numRows > 0 && numSelected !== numRows;
   }
 

@@ -1,6 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, Injector, Input, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { delay, distinctUntilChanged } from 'rxjs/operators';
 
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Util } from '../../../../../util/util';
@@ -56,7 +56,8 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
 
     /* Show/Hide message When the renderer data is changed with static data*/
     this.subscription.add(this.table.onContentChange.pipe(
-      distinctUntilChanged((prev, curr) => prev.length === curr.length)
+      distinctUntilChanged((prev, curr) => (prev?.length ?? 0) === (curr?.length ?? 0)),
+      delay(100)
     ).subscribe(() => {
       this.showMessage(true);
     }));
@@ -72,7 +73,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     this.removeMessageSpan();
     this.table.cd.detectChanges();
 
-    if (display && this.table && this.table.dataSource && this.table.dataSource.renderedData.length === 0) {
+    if (display && (this.table?.dataSource?.renderedData?.length ?? 0) === 0) {
       // generate new message
       this.createMessageSpan();
     }

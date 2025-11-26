@@ -1,7 +1,8 @@
-import { Inject, Injectable, NgZone, OnDestroy, Optional } from "@angular/core";
+import { Inject, Injectable, OnDestroy, Optional } from "@angular/core";
 import { BehaviorSubject, timer, tap, shareReplay, distinctUntilChanged, filter, map, merge, Subject, takeUntil } from "rxjs";
-import { OTableGlobalConfig } from "../../types";
+
 import { O_TABLE_GLOBAL_CONFIG } from "./utils/o-table.tokens";
+import { OTableGlobalConfig } from "../../types/table/o-table-global-config.type";
 
 @Injectable()
 export class OTableLoadingService implements OnDestroy  {
@@ -11,7 +12,7 @@ export class OTableLoadingService implements OnDestroy  {
      * - `true`: an async operation is in progress.
      * - `false`: no loading is occurring.
      */
-  private readonly loading$ = new BehaviorSubject(false);
+  private readonly loading$ = new BehaviorSubject(true);
 
   /**
    * Minimum delay (ms) required before the skeleton can be displayed.
@@ -46,9 +47,10 @@ export class OTableLoadingService implements OnDestroy  {
    */
   private readonly destroy$ = new Subject<void>();
 
+  private readonly isInitialLoad$ = new BehaviorSubject<boolean>(true);
+
   constructor(
-    @Optional() @Inject(O_TABLE_GLOBAL_CONFIG) private readonly config: OTableGlobalConfig,
-    private readonly ngZone: NgZone
+    @Optional() @Inject(O_TABLE_GLOBAL_CONFIG) private readonly config: OTableGlobalConfig
   ) {
 
     // Load configurable defaults if provided
@@ -84,7 +86,6 @@ export class OTableLoadingService implements OnDestroy  {
   );
 
 
-
   /**
   * Internal stream that handles immediate UI blocking whenever loading starts.
   */
@@ -117,7 +118,9 @@ export class OTableLoadingService implements OnDestroy  {
   private readonly handleShow$ = this.isLoading$.pipe(
     filter(state => state.shouldShow),
     tap(() => {
-      timer(this.THRESHOLD).subscribe(() => {
+      const threshold = this.isInitialLoad$.value ? 0 : this.THRESHOLD;
+
+      timer(threshold).subscribe(() => {
         if (this.loading$.value) {
           this.visibleSince = performance.now();
           this.showSkeleton$.next(true);
@@ -134,10 +137,13 @@ export class OTableLoadingService implements OnDestroy  {
     tap(() => {
       const now = performance.now();
 
+      if (this.isInitialLoad$.value) {
+        this.isInitialLoad$.next(false);
+      }
+
       // Only enforce delay if the skeleton was actually shown
       if (this.visibleSince !== null) {
         const elapsed = now - this.visibleSince;
-
         if (elapsed < this.MIN_VISIBLE) {
           const remaining = this.MIN_VISIBLE - elapsed;
           timer(remaining).subscribe(() => {
@@ -242,6 +248,7 @@ export class OTableLoadingService implements OnDestroy  {
     this.loading$.complete();
     this.showSkeleton$.complete();
     this.processingBlocked$.complete();
+    this.isInitialLoad$.complete();
   }
 
 }
