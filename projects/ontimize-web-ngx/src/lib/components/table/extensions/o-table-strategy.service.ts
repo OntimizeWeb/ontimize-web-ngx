@@ -13,7 +13,8 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   private readonly indexChange = new Subject<number>();
   public scrolledIndexChange: Observable<number> = this.indexChange.pipe(distinctUntilChanged());
   public readonly stickyChange = new Subject<number>();
-  private bufferMultiplier: number = 1;
+  private readonly bufferMultiplier: number = 1;
+  private lastRenderedRange = { start: 0, end: 0 };
 
   get dataLength(): number {
     return this._dataLength;
@@ -99,12 +100,20 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
     this.indexChange.next(displayed);
 
     const rowsToMove = Math.sign(rowsScrolled) * Math.floor(Math.abs(rowsScrolled));
-
     const adjustedRenderedOffset = Math.max(0, renderedOffset + rowsToMove * this.rowHeight);
     this.viewport.setRenderedContentOffset(adjustedRenderedOffset);
 
     const adjustedStart = Math.max(0, start + rowsToMove);
     const adjustedEnd = adjustedStart + itemsDisplayed + bufferItems;
+
+    if (
+      this.lastRenderedRange.start === adjustedStart &&
+      this.lastRenderedRange.end === adjustedEnd
+    ) {
+      return;// No change in rendered range
+    }
+    this.lastRenderedRange = { start: adjustedStart, end: adjustedEnd };
+
     this.viewport.setRenderedRange({ start: adjustedStart, end: adjustedEnd });
     this.stickyChange.next(adjustedRenderedOffset);
   }

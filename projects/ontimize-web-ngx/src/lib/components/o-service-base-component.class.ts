@@ -211,11 +211,16 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     }
   }
 
+  initializeLoadingSubject() {
+    this.loadingSubject.next(false);
+  }
+
   get state(): AbstractServiceComponentStateClass {
     return this.componentStateService.state;
   }
 
   initialize(): void {
+    this.initializeLoadingSubject();
     if (!Util.isDefined(this.oattr) && Util.isDefined(this.entity)) {
       this.oattr = this.entity.replace('.', '_');
       this.oattrFromEntity = true;
@@ -397,6 +402,7 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
 
     if (!this.dataService || !(queryMethodName in this.dataService) || !this.entity) {
+      this.loadingSubject.next(false);
       return;
     }
     const filterParentKeys = this.getParentKeysValues();

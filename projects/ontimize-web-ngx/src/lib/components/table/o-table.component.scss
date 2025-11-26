@@ -43,11 +43,6 @@ $o_table_row_padding: 24px;
 
     &.block-events {
       pointer-events: none;
-
-      >.o-table-toolbar,
-      >.o-table-body .mat-mdc-header-row {
-        opacity: .75;
-      }
     }
 
     position: relative;

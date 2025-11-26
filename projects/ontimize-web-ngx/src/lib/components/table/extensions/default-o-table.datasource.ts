@@ -1,8 +1,8 @@
 import { DataSource, ListRange } from '@angular/cdk/collections';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, NgZone } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { BehaviorSubject, merge, Observable, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { asyncScheduler, BehaviorSubject, EMPTY, merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { distinctUntilChanged, filter, map, observeOn, switchMap } from 'rxjs/operators';
 
 import { OTableDataSource } from '../../../interfaces/o-table-datasource.interface';
 import { OTableOptions } from '../../../interfaces/o-table-options.interface';
@@ -25,9 +25,9 @@ export class OnRangeChangeVirtualScroll {
 }
 
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
-  dataTotalsChange = new BehaviorSubject<any[]>([]);
+  dataTotalsChange = new BehaviorSubject<any[]>(null);
 
-  get data(): any[] { return this.dataTotalsChange.value; }
+  get data(): any[] { return this.dataTotalsChange.value ?? []; }
 
   protected _database: OTableDao;
   protected _paginator: MatPaginator;
@@ -45,7 +45,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   onRenderedDataChange: EventEmitter<any> = new EventEmitter<any>();
 
 
-  protected _renderedData: any[] = [];
+  protected _renderedData: any[] = null;
   resultsLength: number = 0;
 
   get quickFilter(): string { return this._quickFilterChange.value || ''; }
@@ -58,9 +58,11 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   private activeAggregates = {};
   private groupedRowsSubscription = new Subscription();
   private levelsExpansionState = {};
+  private readonly ngZone: NgZone;
 
   constructor(protected table: OTableComponent) {
     super();
+    this.ngZone = table.injector.get(NgZone);
     this._database = table.daoTable;
     if (this._database) {
       this.resultsLength = this._database.data.length;
@@ -100,87 +102,187 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
    * Connect function called by the table to retrieve one stream containing the data to render.
    */
   connect(): Observable<any[]> {
-    const displayDataChanges: any[] = [
-      this._database.dataChange
-    ];
+    const tag = (type: string, obs: Observable<any>) =>
+      obs.pipe(map(value => ({ type, value })));
+
+    const displayDataChanges: any[] = [];
+    displayDataChanges.push(tag('DATACHANGE', this._database.dataChange));
+
 
     if (!this.table.pageable) {
 
 
       if (this._sort) {
-        displayDataChanges.push(this._sort.oSortChange);
+        displayDataChanges.push(tag('SORTCHANGE', this._sort.oSortChange));
       }
 
       if (this._tableOptions.filter) {
-        displayDataChanges.push(this._quickFilterChange);
+        displayDataChanges.push(tag('QUICKFILTERCHANGE', this._quickFilterChange))
       }
 
       if (this._paginator) {
-        displayDataChanges.push(this._paginator.page);
+        displayDataChanges.push(tag('PAGINATOR', this._paginator.page));
       }
     }
 
-    if (this.table.virtualScrollViewport) {
-      displayDataChanges.push(this._virtualPageChange);
-    }
-
-    displayDataChanges.push(this._columnValueFilterChange);
+    displayDataChanges.push(tag('FILTERBYCOLUMN', this._columnValueFilterChange).pipe(filter(event => {
+      if (event.value === null) {
+        return false;
+      }
+      return true;
+    })));
 
     if (this.table.groupable) {
-      displayDataChanges.push(this.groupByColumnChange);
+      displayDataChanges.push(tag('GROUP_BY', this.groupByColumnChange));
     }
 
-    return merge(...displayDataChanges).pipe(
-      map((x: any) => {
+    /**
+    * Processes table data reactively whenever any display-related event occurs.
+    * Handles:
+    *  - Virtual scroll range changes
+    *  - Filtering, sorting, grouping, calculated columns
+    *  - Pagination (client or server)
+    *  - Heavy data processing outside Angular's zone for performance
+    *  - Returning processed data back into Angular for UI update
+    *
+    * This pipeline ensures optimal performance by:
+    *  - Preventing unnecessary change detection during heavy operations
+    *  - Allowing the browser to render first (via setTimeout)
+    *  - Running expensive logic outside Angular Zone
+    *  - Re-entering Angular Zone only when UI must update
+    *
+    * @returns Observable<any[]> Emits the processed dataset to be rendered.
+    */
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STREAM 1:  Main data stream (executed with asyncScheduler for heavy tasks)
+    // ═══════════════════════════════════════════════════════════════════════════
+    const mainDataStream = merge(...displayDataChanges).pipe(
+      //  debounceTime(50), // Reduce ráfagas de eventos
+      // Ensures heavy operations are performed asynchronously
+      observeOn(asyncScheduler),
+      switchMap((event: any) => {
         let data = Object.assign([], this._database.data);
 
-        if (x instanceof OnRangeChangeVirtualScroll) {
-          // render subset (range) of renderedData when new OnRangeChangeVirtualScroll event is emitted
-          data = this.getVirtualScrollData(this.renderedData, x);
-        } else {
-          /*
-            it is necessary to first calculate the calculated columns and
-            then filter and sort the data
-          */
-          if (Array.isArray(data) && data.length > 0) {
-            if (this.existsAnyCalculatedColumn()) {
-              data = this.getColumnCalculatedData(data);
-            }
-
-            if (!this.table.pageable) {
-              data = this.getColumnValueFilterData(data);
-              data = this.getQuickFilterData(data);
-              data = this.getSortedData(data);
-            }
-          }
-          this.filteredData = Object.assign([], data);
-
-          if (this.table.pageable) {
-            const totalRecordsNumber = this.table.getTotalRecordsNumber();
-            this.resultsLength = totalRecordsNumber !== undefined ? totalRecordsNumber : data.length;
-          } else {
-            this.resultsLength = data.length;
-            data = this.getPaginationData(data);
-          }
-          if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
-            data = this.getGroupedData(data);
-          }
-
-          this.renderedData = data;
-
-          /*
-            when the data is very large, the application crashes so it gets a limited range of data the first time
-            because at next the CustomVirtualScrollStrategy will emit event OnRangeChangeVirtualScroll
-          */
-          if (this.table.virtualScrollViewport && !this._paginator) {
-            data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
-          }
-
-          this.aggregateData = this.getAggregatesData(this.renderedData);
+        if (!Array.isArray(data) || this.renderedData === null ) {
+          // Aún no se han cargado datos
+          this.renderedData = [];
+          return of(null);
         }
 
-        return data;
-      }));
+
+        return this.processDataOutsideAngular(data);
+      })
+    );
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  STREAM 2: Virtual scroll stream (synchronous with scroll events)
+    // ═══════════════════════════════════════════════════════════════════════════
+    const virtualScrollStream = this.table.virtualScrollViewport
+      ? this._virtualPageChange.pipe(
+        filter(() => {
+          return this.renderedData !== null &&
+            this.renderedData !== undefined &&
+            Array.isArray(this.renderedData) &&
+            this.renderedData.length > 0;
+        }),
+        //  STREAM 2: Virtual scroll stream (synchronous with scroll events)
+        switchMap((x: OnRangeChangeVirtualScroll) => {
+          return of(this.getVirtualScrollData(this.renderedData, x));
+        })
+      )
+      : EMPTY;// No virtual scroll → no stream
+
+    // ==========================================================================
+    // COMBINE both streams into one unified output
+    // =======================================================================
+    return merge(mainDataStream, virtualScrollStream);
+  }
+  /**
+ * Processes heavy data operations outside Angular Zone to avoid blocking UI.
+ * Wraps operations in setTimeout(0) to allow browser rendering before processing.
+ */
+  private processDataOutsideAngular(data): Observable<any[]> {
+    return new Observable<any[]>(observer => {
+      this.ngZone.runOutsideAngular(() => {
+        // setTimeout(0) allows the browser to paint skeleton/loading state
+        setTimeout(() => {
+          data = this.executeDataProcessing(data, observer);
+        }, 0);
+      });
+    });
+  }
+
+  /**
+ * CENTRALIZED STATE UPDATE
+ * Updates all table state properties in one place.
+ * Prevents scattered modifications throughout the code.
+ */
+  private updateTableState(renderedData: any[], resultsLength: number, aggregateData: any = {}): void {
+    this.renderedData = renderedData;
+    this.resultsLength = resultsLength;
+    this.aggregateData = aggregateData;
+  }
+
+  /**
+ * Executes the actual data processing pipeline.
+ * Handles: calculated columns, filtering, sorting, pagination, grouping, aggregates.
+ * Catches errors and returns to Angular Zone for UI updates.
+ */
+  private executeDataProcessing(data: any, observer) {
+    try {
+      if (this.existsAnyCalculatedColumn()) {
+        data = this.getColumnCalculatedData(data);
+      }
+
+      if (!this.table.pageable) {
+        data = this.getColumnValueFilterData(data);
+        data = this.getQuickFilterData(data);
+        data = this.getSortedData(data);
+      }
+
+      this.filteredData = Object.assign([], data);
+
+      let resultsLength: number;
+      if (this.table.pageable) {
+        const totalRecordsNumber = this.table.getTotalRecordsNumber();
+        resultsLength = totalRecordsNumber ?? data.length;
+      } else {
+        resultsLength = data.length;
+        data = this.getPaginationData(data);
+      }
+
+      if (this.table.groupable && !Util.isArrayEmpty(this.table.groupedColumnsArray) && data.length > 0) {
+        data = this.getGroupedData(data);
+      }
+
+      const renderedData = data;
+
+      if (this.table.virtualScrollViewport && !this._paginator) {
+        data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+      }
+
+      const aggregateData = this.getAggregatesData(renderedData);
+
+      // -------------------------------------------------------------
+      //  Re-enter Angular Zone to update UI
+      // -------------------------------------------------------------
+      this.ngZone.run(() => {
+        this.updateTableState(renderedData, resultsLength, aggregateData);
+        this.table.loadingService.setLoading(false);
+        this.table.cd.markForCheck();
+        observer.next(data);
+        observer.complete();
+      });
+
+    } catch (error) {
+      console.error('❌ Error while processing data:', error);
+      this.ngZone.run(() => {
+        this.table.loadingService.setLoading(false);
+        this.table.cd.markForCheck();
+        observer.error(error);
+      });
+    }
+    return data;
   }
 
   getGroupedData(data: any[]) {
@@ -202,10 +304,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   getAggregatesData(data: any[]): any {
     const obj = {};
 
-    if (this._tableOptions === undefined || data.length === 0) {
+    if (this._tableOptions === undefined) {
       return obj;
     }
-
 
     this._tableOptions.columns.forEach((column: OColumn) => {
 
@@ -344,7 +445,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
         i++;
       }
     });
-    this.table.updateSortingSubject(false);
     return originalDataSorted;
 
   }
@@ -459,8 +559,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     filters.forEach(filter => {
       this.columnValueFilters.push(filter);
     });
-    if (!this.table.pageable) {
-      this._columnValueFilterChange.next(null);
+    if (!this.table.pageable && this.columnValueFilters.length > 0) {
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 
@@ -483,14 +583,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       this.columnValueFilters = [];
     }
     if (trigger) {
-      this._columnValueFilterChange.next(null);
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 
   clearColumnFilter(attr: string, trigger: boolean = true) {
     this.columnValueFilters = this.columnValueFilters.filter(x => x.attr !== attr);
     if (trigger) {
-      this._columnValueFilterChange.next(null);
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 
@@ -523,7 +623,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     }
     // If the table is paginated, filter will be applied on remote query
     if (!this.table.pageable) {
-      this._columnValueFilterChange.next(null);
+      this._columnValueFilterChange.next(this.columnValueFilters);
     }
   }
 
@@ -851,6 +951,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   updateGroupedColumns() {
+    this.table.loadingService.setLoading(true);
     this.groupByColumnChange.next();
   }
 
