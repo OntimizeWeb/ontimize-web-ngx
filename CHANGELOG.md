@@ -1,7 +1,7 @@
-## 15.7.1 (2025-11-24)
+## 15.7.1 (2025-11-27)
 ### Features
 * **o-hour-input**: Improved time input formatting ([db78c7b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db78c7b))([8c82f97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8c82f97)) Closes [#2007](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2007)
-* **o-table**:Added skeleton loader support for sorting and pagination when pageable="no".([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#2001](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2001)
+* **o-table**:Added skeleton loader support for sorting and pagination when pageable="no".([3b6b93b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b6b93b)) Closes [#2001](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2001)
 * **o-table-column-aggregate**: The `aggregate-function` callback now receives two additional optional parameters: the column attribute (columnAttr) and a reference to the table instance ([2bb94c8](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2bb94c8)) Closes [#2013](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2013)
 
 ### Bug Fixes
