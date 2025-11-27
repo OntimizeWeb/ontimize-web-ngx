@@ -43,11 +43,6 @@ $o_table_row_padding: 24px;
 
     &.block-events {
       pointer-events: none;
-
-      >.o-table-toolbar,
-      >.o-table-body .mat-mdc-header-row {
-        opacity: .75;
-      }
     }
 
     position: relative;
@@ -197,7 +192,6 @@ $o_table_row_padding: 24px;
           white-space: nowrap;
           text-overflow: ellipsis;
 
-
           &.grouping-row {
             padding-top: 30px;
             cursor: pointer;
@@ -306,6 +300,10 @@ $o_table_row_padding: 24px;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
+        }
+
+        &:has(.o-table-column-resizer) {
+          padding-right: 0px;
         }
 
         .o-table-header-indicator-numbered {

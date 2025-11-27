@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx",
-  "version": "15.7.0",
+  "version": "15.7.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -47,7 +47,7 @@
     "@ngx-translate/http-loader": "~6.0.0",
     "angular-resizable-element": "3.3.4",
     "moment": "2.29.2",
-    "ngx-material-timepicker": "5.4.3",
+    "ngx-material-timepicker": "12.1.0",
     "ngx-skeleton-loader": "7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

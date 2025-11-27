@@ -1,6 +1,6 @@
-import { ContentChildren, Directive, EventEmitter, HostListener, Injector, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
 import { AsyncValidatorFn, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../../decorators/input-converter';
 import { OMatErrorDirective } from '../../../../directives/o-mat-error.directive';
@@ -38,7 +38,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR = [
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_EDITOR,
   outputs: DEFAULT_OUTPUTS_O_TABLE_CELL_EDITOR
 })
-export class OBaseTableCellEditor implements OnInit, ComponentWithValidatorsAndErrorsData {
+export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, OnDestroy, ComponentWithValidatorsAndErrorsData {
 
   protected translateService: OTranslateService;
 
@@ -87,6 +87,8 @@ export class OBaseTableCellEditor implements OnInit, ComponentWithValidatorsAndE
   validatorChildren: QueryList<OValidatorComponent>;
   protected renderer: Renderer2;
 
+  protected destroy$ = new Subject<void>();
+
   @HostListener('document:keyup', ['$event'])
   onDocumentKeyup(event: KeyboardEvent) {
     this.handleKeyup(event);
@@ -112,7 +114,7 @@ export class OBaseTableCellEditor implements OnInit, ComponentWithValidatorsAndE
     this.initialize();
   }
 
-  public ngOnChanges(): void {
+  ngOnChanges(): void {
     this.updateValidators();
   }
 
@@ -125,6 +127,11 @@ export class OBaseTableCellEditor implements OnInit, ComponentWithValidatorsAndE
         this.updateValidators();
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
