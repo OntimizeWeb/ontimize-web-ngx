@@ -24,6 +24,7 @@ import { OTableColumnsFilterComponent } from './extensions/header/table-columns-
 import { OFilterColumn } from './extensions/header/table-columns-filter/columns/o-table-columns-filter-column.component';
 import { BaseService } from '../../services/base-service.class';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
+import { OTableDataSource } from '../../interfaces/o-table-datasource.interface';
 
 
 export abstract class OTableBase {
@@ -39,6 +40,7 @@ export abstract class OTableBase {
   visibleColArray: string[];
   queryMethod: string;
   showNotificationOfReadOnly: boolean;
+  showLoading: Observable<boolean>;
   abstract reinitializeSortColumns(sortColumns?: SQLOrder[]);
   abstract setGroupColumns(value: any[]);
   abstract clearColumnFilters(triggerDatasourceUpdate?: boolean, columnsAttr?: string[]): void
@@ -63,7 +65,7 @@ export abstract class OTableBase {
   abstract getColumnNames(columns: string[]): { [columnId: string]: string; };
   abstract showCaseSensitiveCheckbox(): boolean;
   abstract pageable: boolean;
-  abstract dataSource: any;
+  abstract dataSource: OTableDataSource | null;
   abstract quickFilterCallback: QuickFilterFunction;
   abstract abortQuery: BehaviorSubject<boolean>;
   abstract oTableOptions: any;

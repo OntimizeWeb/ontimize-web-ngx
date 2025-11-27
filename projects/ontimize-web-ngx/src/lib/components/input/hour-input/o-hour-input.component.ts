@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgZone, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import moment from 'moment';
 import { NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
@@ -13,6 +13,7 @@ import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
+import { Subject, Subscription, take, takeUntil } from 'rxjs';
 
 export type OHourValueType = 'string' | 'timestamp';
 
@@ -34,7 +35,7 @@ export const DEFAULT_INPUTS_O_HOUR_INPUT = [
     '[class.o-hour-input]': 'true'
   }
 })
-export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit {
+export class OHourInputComponent extends OFormDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @BooleanInputConverter()
   public textInputEnabled: boolean = true;
@@ -46,6 +47,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   @ViewChild('picker')
   public picker: NgxMaterialTimepickerComponent;
+
+  private pickerClosedSub?: Subscription;
+  private readonly destroy$ = new Subject<void>();
+  private skipNextBlur = false;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -72,6 +77,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     this.modifyPickerMethods();
   }
 
+  ngOnDestroy(): void {
+    this.pickerClosedSub?.unsubscribe();
+  }
+
   public onKeyDown(e: KeyboardEvent): void {
     if (!Codes.isHourInputAllowed(e)) {
       e.preventDefault();
@@ -79,6 +88,12 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   }
 
   public innerOnBlur(event: any): void {
+    // Skip this blur event if it happens right after the picker closes
+    if (this.skipNextBlur) {
+      this.skipNextBlur = false;
+      return;
+    }
+
     if (this.onKeyboardInputDone) {
       this.updateValeOnInputChange(event);
     }
@@ -188,6 +203,30 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
         this.onKeyboardInputDone = true;
       });
     }
+
+    if (this.picker?.closed) {
+      const zone = this.injector.get(NgZone);
+      this.pickerClosedSub = this.picker.closed
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          // Wait until Angular finishes stabilizing the view
+          zone.onStable
+            .pipe(take(1), takeUntil(this.destroy$))
+            .subscribe(() => {
+              setTimeout(() => {
+                // Prevent the immediate blur event from removing focus
+                this.skipNextBlur = true;
+
+                const input: HTMLInputElement = this.elRef.nativeElement.querySelector('input');
+
+                // Focus the input only if it is available, not readonly, and enabled
+                if (input && !this.isReadOnly && this.enabled !== false) {
+                  input.focus();
+                }
+              }, 50); // small delay to ensure overlay is fully closed
+            });
+        });
+    }
   }
 
   protected setFormValue(val: any, options?: FormValueOptions, setDirty: boolean = false): void {
@@ -197,6 +236,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
       let value = val instanceof OFormValue ? val.value : val;
       stringValue = this.getValueAsString(value);
     }
+
     this.ensureOFormValue(val);
     if (!this._fControl) {
       // ensuring _fControl creation

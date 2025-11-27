@@ -1,9 +1,10 @@
 
 import { CdkColumnDef } from '@angular/cdk/table';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Optional, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
 import { ArrowViewStateTransition, matSortAnimations, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { OMatSort } from './o-mat-sort';
+import { OTableLoadingService } from '../../o-table-loading.service';
 
 @Component({
   selector: '[o-mat-sort-header]',
@@ -32,6 +33,7 @@ import { OMatSort } from './o-mat-sort';
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class OMatSortHeader extends MatSortHeader {
+  private readonly loadingService: OTableLoadingService
 
   constructor(public _intl: MatSortHeaderIntl,
     changeDetectorRef: ChangeDetectorRef,
@@ -39,13 +41,21 @@ export class OMatSortHeader extends MatSortHeader {
     @Inject('MAT_SORT_HEADER_COLUMN_DEF') @Optional()
     public _cdkColumnDef: CdkColumnDef,
     _focusMonitor: FocusMonitor,
-    _elementRef: ElementRef<HTMLElement>){
+    _elementRef: ElementRef<HTMLElement>,
+    public injector: Injector) {
 
     super(_intl, changeDetectorRef, _sort, _cdkColumnDef, _focusMonitor, _elementRef);
+    this.loadingService = injector.get(OTableLoadingService);
   }
 
-  _handleClick() {
+  _handleClick(): void {
     if (this._isDisabled()) { return; }
+
+    const event = (arguments[0] as MouseEvent | undefined);
+
+    if (!this.loadingService.handleProtected(event)) {
+      return;
+    }
 
     this._sort.addSortColumn(this);
 
@@ -101,4 +111,5 @@ export class OMatSortHeader extends MatSortHeader {
   getSortIndicatorNumberedClass() {
     return 'o-table-header-indicator-numbered o-mat-sort-indicator-numbered-' + this._arrowDirection;
   }
+
 }

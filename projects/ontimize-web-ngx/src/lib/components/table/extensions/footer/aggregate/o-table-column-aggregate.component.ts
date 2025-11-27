@@ -15,8 +15,8 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
   // aggregate [sum | count | avg | min |max]
   'aggregate',
 
-  // function-aggregate [ (value: any[]) => number] Function that calculates a value on the values of the column 'attr'
-  'functionAggregate: function-aggregate'
+  // aggregate-function [ AggregateFunction ] Function that calculates a value on the values of the column 'attr'
+  'functionAggregate: aggregate-function'
 ];
 
 @Component({
@@ -69,7 +69,7 @@ export class OTableColumnAggregateComponent implements OnDestroy, OnInit {
       ocolumnaggregate.title = this.title;
     }
 
-    ocolumnaggregate.operator = this.aggregate ? this.aggregate : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
+    ocolumnaggregate.operator = this.aggregate ? this.aggregate.toLocaleLowerCase() : (this.functionAggregate ? this.functionAggregate : OTableColumnAggregateComponent.DEFAULT_AGGREGATE);
     this.table.registerColumnAggregate(ocolumnaggregate);
 
     this.subscription.add(this.table.onReinitialize.subscribe(() => this.table.registerColumnAggregate(ocolumnaggregate)));
