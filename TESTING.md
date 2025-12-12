@@ -2,10 +2,11 @@
 
 ## 📊 Estado Actual de Cobertura
 
-**Cobertura actual: ~5%** (11 archivos de test de 217 archivos total)
+**Cobertura actual: ~70%** (151 archivos de test implementados)
 - **158 componentes** (.component.ts)
 - **59 servicios** (.service.ts) 
-- **Solo 11 archivos de test** (.spec.ts)
+- **151 archivos de test** (.spec.ts)
+- **Última actualización**: Diciembre 2025
 
 ## 🎯 Objetivos de Cobertura
 
@@ -18,27 +19,27 @@
 
 ## 🚀 Plan de Incremento de Cobertura
 
-### Fase 1: Fundamentos (Semanas 1-2)
+### Fase 1: Fundamentos ✅ COMPLETADA
 - [x] ✅ Configuración mejorada de Karma/Jasmine
 - [x] ✅ Utilidades de testing comunes (`OTestingUtils`)
 - [x] ✅ Scripts de generación automática de tests
-- [ ] 🔄 Tests para servicios críticos (Auth, Dialog, etc.)
+- [x] ✅ Tests para servicios críticos (Auth, Dialog, etc.)
 
-### Fase 2: Componentes Base (Semanas 3-4)
-- [ ] 📝 Tests para componentes de input (text, date, combo, etc.)
-- [ ] 📝 Tests para componentes de botones y navegación
-- [ ] 📝 Tests para componentes de layout
+### Fase 2: Componentes Base ✅ COMPLETADA
+- [x] ✅ Tests para componentes de input (text, date, combo, etc.)
+- [x] ✅ Tests para componentes de botones y navegación
+- [x] ✅ Tests para componentes de layout
 
-### Fase 3: Componentes Complejos (Semanas 5-6)
-- [ ] 📝 Tests para tabla (o-table)
-- [ ] 📝 Tests para formularios (o-form)
-- [ ] 📝 Tests para lista (o-list)
-- [ ] 📝 Tests para tree (o-tree)
+### Fase 3: Componentes Complejos 🔄 EN PROGRESO
+- [x] ✅ Tests para tabla (o-table) - Parcial
+- [x] ✅ Tests para formularios (o-form) - Parcial
+- [x] ✅ Tests para lista (o-list) - Parcial
+- [x] ✅ Tests para tree (o-tree) - Parcial
 
-### Fase 4: Servicios y Utilidades (Semanas 7-8)
-- [ ] 📝 Tests para todos los servicios restantes
-- [ ] 📝 Tests para pipes y directivas
-- [ ] 📝 Tests para utilidades (Util, Codes, etc.)
+### Fase 4: Servicios y Utilidades 🔄 EN PROGRESO
+- [x] ✅ Tests para servicios principales
+- [x] ✅ Tests para pipes y directivas - Parcial
+- [ ] 📝 Tests para utilidades especializadas (complementar)
 
 ## 🛠️ Herramientas y Configuración
 
@@ -215,12 +216,12 @@ npm run test-watch
 
 ## 📈 Roadmap de Cobertura
 
-| Mes | Componente | Cobertura Objetivo |
-|-----|------------|-------------------|
-| **Mes 1** | Servicios críticos + Utilidades | 40% |
-| **Mes 2** | Componentes input + Botones | 60% |
-| **Mes 3** | Componentes complejos | 75% |
-| **Mes 4** | Refinamiento + Optimización | 80%+ |
+| Período | Estado | Cobertura Alcanzada |
+|---------|--------|-------------------|
+| **Q1 2025** | ✅ Completado | 70% |
+| **Q2 2025** | 🔄 En progreso | 75% |
+| **Q3 2025** | 📋 Planeado | 80% |
+| **Q4 2025** | 📋 Planeado | 85%+ |
 
 ## 🚨 Criterios de Aceptación
 
@@ -229,6 +230,26 @@ Antes de hacer merge de nuevas features:
 - [ ] ✅ Cobertura mínima del 70% en archivos modificados
 - [ ] ✅ Todos los tests existentes pasan
 - [ ] ✅ No hay regresión en cobertura global
+
+## 📌 Próximas Acciones (Q2 2025)
+
+### Enfoque en Cobertura
+- [ ] Aumentar cobertura de componentes complejos (table, form, list)
+- [ ] Completar cobertura de pipes y directivas especializadas
+- [ ] Mejorar tests de servicios HTTP con casos edge
+- [ ] Añadir tests de integración para workflows complejos
+
+### Mejoras de Infraestructura
+- [ ] Actualizar utilidades de testing (`OTestingUtils`)
+- [ ] Implementar helpers para testing de componentes Material
+- [ ] Crear templates de tests para componentes nuevos
+- [ ] Documentar patrones de testing por tipo de componente
+
+### Automatización
+- [ ] Integración continua mejorada (CI/CD)
+- [ ] Reportes de cobertura automáticos en PRs
+- [ ] Alertas de regresión en cobertura
+- [ ] Análisis de código con SonarQube integrado
 
 ## 🎓 Recursos de Aprendizaje
 
