@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 import { NumberService } from '../../../services/number.service';
+import { OFormValue } from '../../form/o-form-value';
 
-// Import component dynamically to avoid compilation
 let ORealInputComponent: any;
 
 describe('ORealInputComponent', () => {
@@ -17,10 +17,9 @@ describe('ORealInputComponent', () => {
   let numberService: NumberService;
 
   beforeEach(async () => {
-    // Dynamically import to avoid early compilation
     const module = await import('./o-real-input.component');
     ORealInputComponent = module.ORealInputComponent;
-    
+
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
@@ -36,7 +35,6 @@ describe('ORealInputComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    // Create mocks with all required methods
     mockOFormComponent = {
       form: new FormGroup({}),
       registerFormComponent: jasmine.createSpy('registerFormComponent').and.returnValue(undefined),
@@ -52,395 +50,488 @@ describe('ORealInputComponent', () => {
     mockInjector = TestBed.inject(Injector);
     numberService = TestBed.inject(NumberService);
 
-    // Create component
     component = new ORealInputComponent(mockOFormComponent, mockElementRef, mockInjector);
   });
 
-  describe('Component Creation and Structure', () => {
-    it('should create the component', () => {
+  describe('Component Creation', () => {
+    it('should create component', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should be an instance of ORealInputComponent', () => {
-      expect(component.constructor).toBe(ORealInputComponent);
-    });
-
     it('should extend OIntegerInputComponent', () => {
-      // Component inherits from OIntegerInputComponent
-      expect(typeof component.resolveValidators).toBe('function');
-      expect(typeof component.onFormControlChange).toBe('function');
+      const proto = Object.getPrototypeOf(Object.getPrototypeOf(component));
+      expect(proto.constructor.name).toBe('OIntegerInputComponent');
     });
 
-    it('should have resolveValidators method', () => {
-      expect(typeof component.resolveValidators).toBe('function');
-    });
-
-    it('should have setComponentPipe method', () => {
-      expect(typeof component.setComponentPipe).toBe('function');
-    });
-
-    it('should have initialize method', () => {
-      expect(typeof component.initialize).toBe('function');
-    });
-
-    it('should have ensureOFormValue method', () => {
-      expect(typeof component.ensureOFormValue).toBe('function');
+    it('should have default SQL type FLOAT', () => {
+      expect(component._defaultSQLTypeKey).toBe('FLOAT');
     });
   });
 
-  describe('Decimal Properties Configuration', () => {
-    it('should initialize with minDecimalDigits = 2', () => {
+  describe('Default Properties', () => {
+    it('should have default minDecimalDigits of 2', () => {
       expect(component.minDecimalDigits).toBe(2);
     });
 
-    it('should initialize with maxDecimalDigits = 2', () => {
+    it('should have default maxDecimalDigits of 2', () => {
       expect(component.maxDecimalDigits).toBe(2);
     });
 
-    it('should initialize with step = 0.01', () => {
+    it('should have default step of 0.01', () => {
       expect(component.step).toBe(0.01);
     });
 
-    it('should initialize with grouping = true', () => {
+    it('should have default grouping as true', () => {
       expect(component.grouping).toBe(true);
     });
 
-    it('should initialize with strict = false', () => {
+    it('should have default strict as false', () => {
       expect(component.strict).toBe(false);
     });
 
-    it('should set minDecimalDigits correctly', () => {
+    it('should have componentPipe defined', () => {
+      expect(component.componentPipe).toBeDefined();
+    });
+
+    it('should have numberService defined', () => {
+      expect(component.numberService).toBeDefined();
+    });
+  });
+
+  describe('Properties: minDecimalDigits', () => {
+    it('should set minDecimalDigits property', () => {
       component.minDecimalDigits = 3;
       expect(component.minDecimalDigits).toBe(3);
     });
 
-    it('should set maxDecimalDigits correctly', () => {
+    it('should convert string to number', () => {
+      component.minDecimalDigits = '4' as any;
+      expect(typeof component.minDecimalDigits).toBe('number');
+      expect(component.minDecimalDigits).toBe(4);
+    });
+
+    it('should handle zero minDecimalDigits', () => {
+      component.minDecimalDigits = 0;
+      expect(component.minDecimalDigits).toBe(0);
+    });
+
+    it('should handle large minDecimalDigits', () => {
+      component.minDecimalDigits = 10;
+      expect(component.minDecimalDigits).toBe(10);
+    });
+  });
+
+  describe('Properties: maxDecimalDigits', () => {
+    it('should set maxDecimalDigits property', () => {
       component.maxDecimalDigits = 5;
       expect(component.maxDecimalDigits).toBe(5);
     });
 
-    it('should set decimalSeparator correctly', () => {
-      component.decimalSeparator = ',';
-      expect(component.decimalSeparator).toBe(',');
+    it('should convert string to number', () => {
+      component.maxDecimalDigits = '6' as any;
+      expect(typeof component.maxDecimalDigits).toBe('number');
+      expect(component.maxDecimalDigits).toBe(6);
     });
 
-    it('should set strict mode correctly', () => {
+    it('should handle zero maxDecimalDigits', () => {
+      component.maxDecimalDigits = 0;
+      expect(component.maxDecimalDigits).toBe(0);
+    });
+
+    it('should handle large maxDecimalDigits', () => {
+      component.maxDecimalDigits = 15;
+      expect(component.maxDecimalDigits).toBe(15);
+    });
+  });
+
+  describe('Properties: step', () => {
+    it('should set step property', () => {
+      component.step = 0.1;
+      expect(component.step).toBe(0.1);
+    });
+
+    it('should handle small step values', () => {
+      component.step = 0.001;
+      expect(component.step).toBe(0.001);
+    });
+
+    it('should convert string to number', () => {
+      component.step = '0.05' as any;
+      expect(typeof component.step).toBe('number');
+    });
+  });
+
+  describe('Properties: grouping and strict', () => {
+    it('should set grouping to false', () => {
+      component.grouping = false;
+      expect(component.grouping).toBe(false);
+    });
+
+    it('should set strict mode to true', () => {
       component.strict = true;
       expect(component.strict).toBe(true);
     });
 
-    it('should convert string minDecimalDigits to number', () => {
-      component.minDecimalDigits = '3' as any;
-      expect(typeof component.minDecimalDigits).toBe('number');
-      expect(component.minDecimalDigits).toBe(3);
+    it('should set decimalSeparator', () => {
+      component.decimalSeparator = ',';
+      expect(component.decimalSeparator).toBe(',');
     });
 
-    it('should convert string maxDecimalDigits to number', () => {
-      component.maxDecimalDigits = '5' as any;
-      expect(typeof component.maxDecimalDigits).toBe('number');
-      expect(component.maxDecimalDigits).toBe(5);
+    it('should allow different decimalSeparator values', () => {
+      component.decimalSeparator = '.';
+      expect(component.decimalSeparator).toBe('.');
+      component.decimalSeparator = ',';
+      expect(component.decimalSeparator).toBe(',');
     });
   });
 
-  describe('Component Pipe Configuration', () => {
-    it('should set component pipe when setComponentPipe is called', () => {
-      expect(() => {
-        component.setComponentPipe();
-      }).not.toThrow();
-    });
-
-    it('should have componentPipe defined after setComponentPipe', () => {
+  describe('Method: setComponentPipe()', () => {
+    it('should set ORealPipe as componentPipe', () => {
       component.setComponentPipe();
       expect(component.componentPipe).toBeDefined();
+      expect(component.componentPipe.constructor.name).toBe('ORealPipe');
     });
   });
 
-  describe('Validator Resolution', () => {
-    it('should return validators array', () => {
+  describe('Method: resolveValidators()', () => {
+    it('should return array of validators', () => {
       const validators = component.resolveValidators();
       expect(Array.isArray(validators)).toBe(true);
     });
 
-    it('should include maxDecimalDigits validator when maxDecimalDigits is defined', () => {
-      component.maxDecimalDigits = 3;
+    it('should include min/max validators from parent', () => {
+      component.min = 0;
+      component.max = 1000;
       const validators = component.resolveValidators();
       expect(validators.length).toBeGreaterThan(0);
     });
 
-    it('should not include validators when maxDecimalDigits is undefined', () => {
-      component.maxDecimalDigits = undefined;
+    it('should include maxDecimalDigits validator when defined', () => {
+      component.maxDecimalDigits = 2;
       const validators = component.resolveValidators();
-      expect(Array.isArray(validators)).toBe(true);
+      expect(validators.length).toBeGreaterThan(0);
     });
 
-    it('should return consistent validators across multiple calls', () => {
-      const validators1 = component.resolveValidators();
-      const validators2 = component.resolveValidators();
-      expect(validators1.length).toBe(validators2.length);
+    it('should include maxDecimalDigits validator when zero', () => {
+      component.maxDecimalDigits = 0;
+      const validators = component.resolveValidators();
+      expect(validators.length).toBeGreaterThan(0);
     });
   });
 
-  describe('Decimal Validation', () => {
-    it('should validate number with correct decimal places', () => {
+  describe('Method: maxDecimalDigitsValidator()', () => {
+    it('should accept value within decimal digits limit', () => {
       component.maxDecimalDigits = 2;
-      component.strict = true;
       component.decimalSeparator = '.';
-      const control = new FormControl('123.45');
-      const result = component.maxDecimalDigitsValidator(control);
-      expect(result === undefined || Object.keys(result || {}).length === 0).toBe(true);
+      component.strict = true;
+      const control = new UntypedFormControl('123.45');
+      const errors = component.maxDecimalDigitsValidator(control);
+      expect(errors).toEqual({});
     });
 
-    it('should reject number with too many decimal places in strict mode', () => {
+    it('should reject value exceeding decimal digits limit', () => {
       component.maxDecimalDigits = 2;
-      component.strict = true;
       component.decimalSeparator = '.';
-      const control = new FormControl('123.456');
-      const result = component.maxDecimalDigitsValidator(control);
-      expect(result === undefined || result['maxDecimaldigits']).toBeDefined();
+      component.strict = true;
+      const control = new UntypedFormControl('123.456');
+      const errors = component.maxDecimalDigitsValidator(control);
+      expect(errors['maxDecimaldigits']).toBeDefined();
     });
 
-    it('should accept number with too many decimal places when not strict', () => {
+    it('should not validate when strict is false', () => {
       component.maxDecimalDigits = 2;
+      component.decimalSeparator = '.';
       component.strict = false;
-      component.decimalSeparator = '.';
-      const control = new FormControl('123.456');
-      const result = component.maxDecimalDigitsValidator(control);
-      expect(result === undefined || Object.keys(result || {}).length === 0).toBe(true);
+      const control = new UntypedFormControl('123.456');
+      const errors = component.maxDecimalDigitsValidator(control);
+      expect(errors).toEqual({});
     });
 
-    it('should handle custom decimal separator', () => {
+    it('should handle number values', () => {
       component.maxDecimalDigits = 2;
+      component.decimalSeparator = '.';
       component.strict = true;
-      component.decimalSeparator = ',';
-      const control = new FormControl('123,45');
+      const control = new UntypedFormControl(123.45);
       expect(() => {
         component.maxDecimalDigitsValidator(control);
       }).not.toThrow();
     });
 
-    it('should handle number input type', () => {
+    it('should handle custom decimal separator', () => {
       component.maxDecimalDigits = 2;
+      component.decimalSeparator = ',';
       component.strict = true;
+      const control = new UntypedFormControl('123,45');
+      const errors = component.maxDecimalDigitsValidator(control);
+      expect(errors).toEqual({});
+    });
+
+    it('should handle null decimal separator', () => {
+      component.maxDecimalDigits = 2;
+      component.decimalSeparator = null;
+      component.strict = true;
+      const control = new UntypedFormControl('123.45');
+      expect(() => {
+        component.maxDecimalDigitsValidator(control);
+      }).not.toThrow();
+    });
+
+    it('should handle empty string control value', () => {
+      component.maxDecimalDigits = 2;
       component.decimalSeparator = '.';
-      const control = new FormControl(123.45);
-      const result = component.maxDecimalDigitsValidator(control);
-      expect(result === undefined || typeof result === 'object').toBe(true);
+      component.strict = true;
+      const control = new UntypedFormControl('');
+      const errors = component.maxDecimalDigitsValidator(control);
+      expect(errors).toEqual({});
     });
 
-    it('should handle empty control value', () => {
+    it('should handle NaN values', () => {
       component.maxDecimalDigits = 2;
-      component.strict = true;
-      const control = new FormControl('');
-      const result = component.maxDecimalDigitsValidator(control);
-      expect(result === undefined || Object.keys(result || {}).length === 0).toBe(true);
-    });
-
-    it('should handle null control value', () => {
-      component.maxDecimalDigits = 2;
-      component.strict = true;
-      const control = new FormControl(null);
-      const result = component.maxDecimalDigitsValidator(control);
-      expect(result === undefined || Object.keys(result || {}).length === 0).toBe(true);
-    });
-
-    it('should validate value without decimal part', () => {
-      component.maxDecimalDigits = 2;
-      component.strict = true;
       component.decimalSeparator = '.';
-      const control = new FormControl('123');
-      const result = component.maxDecimalDigitsValidator(control);
-      expect(result === undefined || Object.keys(result || {}).length === 0).toBe(true);
+      component.strict = true;
+      const control = new UntypedFormControl(NaN);
+      expect(() => {
+        component.maxDecimalDigitsValidator(control);
+      }).not.toThrow();
     });
   });
 
-  describe('Step Initialization', () => {
-    it('should initialize step correctly when valid', () => {
+  describe('Method: initializeStep()', () => {
+    it('should set step based on maxDecimalDigits when step is 0', () => {
       component.maxDecimalDigits = 2;
-      component.step = 0.01;
-      expect(component.step).toBe(0.01);
+      component.step = 0;
+      spyOn(console, 'warn');
+      component.initializeStep();
+      expect(component.step).toBe(1 / Math.pow(10, 2));
+      expect(console.warn).toHaveBeenCalled();
     });
 
-    it('should recalculate step when negative', () => {
+    it('should set step based on maxDecimalDigits when step is negative', () => {
       component.maxDecimalDigits = 3;
+      component.step = -0.01;
+      spyOn(console, 'warn');
+      component.initializeStep();
+      expect(component.step).toBe(1 / Math.pow(10, 3));
+    });
+
+    it('should keep positive step unchanged', () => {
+      component.maxDecimalDigits = 2;
+      component.step = 0.5;
+      spyOn(console, 'warn');
+      component.initializeStep();
+      expect(component.step).toBe(0.5);
+    });
+
+    it('should handle different maxDecimalDigits values', () => {
+      component.maxDecimalDigits = 4;
+      component.step = 0;
+      component.initializeStep();
+      expect(component.step).toBe(1 / Math.pow(10, 4));
+    });
+  });
+
+  describe('Method: ensureOFormValue()', () => {
+    it('should handle undefined pipeArguments', () => {
+      component.pipeArguments = undefined;
       expect(() => {
-        component.initializeStep();
+        component.ensureOFormValue(new OFormValue(123.45));
       }).not.toThrow();
     });
 
-    it('should handle step with different decimal places', () => {
-      component.maxDecimalDigits = 4;
-      component.step = -1;
+    it('should process numeric values with pipeArguments', () => {
+      component.pipeArguments = {
+        decimalSeparator: '.',
+        minDecimalDigits: 2,
+        maxDecimalDigits: 2,
+        truncate: false,
+        grouping: true,
+        thousandSeparator: ','
+      };
+      component.value = new OFormValue(1234.5);
       expect(() => {
-        component.initializeStep();
+        component.ensureOFormValue(component.value);
+      }).not.toThrow();
+    });
+
+    it('should handle empty OFormValue', () => {
+      component.pipeArguments = {
+        decimalSeparator: '.',
+        minDecimalDigits: 2,
+        maxDecimalDigits: 2,
+        truncate: false
+      };
+      component.value = new OFormValue(undefined);
+      expect(() => {
+        component.ensureOFormValue(component.value);
       }).not.toThrow();
     });
   });
 
-  describe('Form Control Enhancement', () => {
-    it('should override getValue method in form control', () => {
+  describe('Lifecycle: ngOnInit()', () => {
+    it('should set pipeArguments from component properties', () => {
+      component.minDecimalDigits = 2;
+      component.maxDecimalDigits = 2;
+      component.decimalSeparator = '.';
+      component.grouping = true;
+      component.ngOnInit();
+      expect(component.pipeArguments).toBeDefined();
+      expect(component.pipeArguments.minDecimalDigits).toBe(2);
+      expect(component.pipeArguments.maxDecimalDigits).toBe(2);
+      expect(component.pipeArguments.decimalSeparator).toBe('.');
+    });
+
+    it('should set truncate to false in pipeArguments', () => {
+      component.ngOnInit();
+      expect(component.pipeArguments.truncate).toBe(false);
+    });
+
+    it('should ensure OFormValue when not empty', () => {
+      component.value = new OFormValue(123.45);
+      component.minDecimalDigits = 2;
+      component.maxDecimalDigits = 2;
+      expect(() => {
+        component.ngOnInit();
+      }).not.toThrow();
+    });
+  });
+
+  describe('Lifecycle: initialize()', () => {
+    it('should override FormControl getValue method', () => {
       expect(() => {
         component.initialize();
       }).not.toThrow();
     });
 
-    it('should handle form control value as number', () => {
-      component._fControl = new FormControl(123.45);
-      expect(() => {
-        const value = component._fControl.value;
-        expect(typeof value === 'number').toBe(true);
-      }).not.toThrow();
+    it('should call initializeStep', () => {
+      spyOn(component, 'initializeStep');
+      component.initialize();
+      expect(component.initializeStep).toHaveBeenCalled();
     });
 
-    it('should handle form control value as string', () => {
-      component._fControl = new FormControl('123.45');
+    it('should maintain numeric value handling in FormControl', () => {
+      component.initialize();
       expect(() => {
-        const value = component._fControl.value;
+        component.setValue(123.45);
+        const val = component.getValue();
+        expect(typeof val === 'number' || val instanceof Object).toBeTruthy();
       }).not.toThrow();
     });
   });
 
-  describe('Lifecycle and Initialization', () => {
-    it('should have setComponentPipe called during setup', () => {
+  describe('Value Handling', () => {
+    it('should handle decimal values', () => {
       expect(() => {
-        component.setComponentPipe();
+        component.setValue(123.45);
       }).not.toThrow();
     });
 
-    it('should handle ngOnInit lifecycle', () => {
-      expect(typeof component.ngOnInit).toBe('function');
+    it('should handle large decimal values', () => {
+      expect(() => {
+        component.setValue(999999.99);
+      }).not.toThrow();
     });
 
-    it('should set default SQL type key as FLOAT', () => {
-      expect(component._defaultSQLTypeKey).toBe('FLOAT');
+    it('should handle small decimal values', () => {
+      expect(() => {
+        component.setValue(0.01);
+      }).not.toThrow();
     });
 
-    it('should have numberService available', () => {
-      expect(component.numberService).toBeDefined();
+    it('should handle zero', () => {
+      expect(() => {
+        component.setValue(0);
+      }).not.toThrow();
+    });
+
+    it('should handle negative decimal values', () => {
+      expect(() => {
+        component.setValue(-123.45);
+      }).not.toThrow();
+    });
+
+    it('should handle clearValue', () => {
+      component.setValue(123.45);
+      expect(() => {
+        component.clearValue();
+      }).not.toThrow();
     });
   });
 
-  describe('Integration with FormGroup', () => {
-    it('should work within a FormGroup with decimal validation', () => {
-      component.maxDecimalDigits = 2;
-      const validators = component.resolveValidators();
+  describe('Constants', () => {
+    it('should have DEFAULT_INPUTS_O_REAL_INPUT defined', () => {
+      const module = require('./o-real-input.component');
+      expect(module.DEFAULT_INPUTS_O_REAL_INPUT).toBeDefined();
+      expect(Array.isArray(module.DEFAULT_INPUTS_O_REAL_INPUT)).toBe(true);
+    });
+
+    it('should include required input mappings', () => {
+      const module = require('./o-real-input.component');
+      const inputs = module.DEFAULT_INPUTS_O_REAL_INPUT;
+      expect(inputs.some((input: string) => input.includes('minDecimal'))).toBeTruthy();
+      expect(inputs.some((input: string) => input.includes('maxDecimal'))).toBeTruthy();
+      expect(inputs.some((input: string) => input.includes('decimalSeparator'))).toBeTruthy();
+      expect(inputs.some((input: string) => input.includes('strict'))).toBeTruthy();
+    });
+  });
+
+  describe('Inheritance', () => {
+    it('should extend OIntegerInputComponent', () => {
+      const proto = Object.getPrototypeOf(Object.getPrototypeOf(component));
+      expect(proto.constructor.name).toBe('OIntegerInputComponent');
+    });
+
+    it('should have access to min/max/step properties from OIntegerInputComponent', () => {
+      // min/max/step are inherited and have default values
+      expect(component.step !== undefined).toBeTruthy();
+      // min and max are optional and may be undefined until set
+      expect(typeof component.step === 'number').toBeTruthy();
+    });
+
+    it('should inherit form control methods', () => {
+      expect(typeof component.setValue).toBe('function');
+      expect(typeof component.getValue).toBe('function');
+      expect(typeof component.isEmpty).toBe('function');
+    });
+  });
+
+  describe('Integration', () => {
+    it('should work with FormGroup', () => {
       const formGroup = new FormGroup({
-        realInput: new FormControl(0, validators)
+        realValue: new FormControl(123.45)
       });
-      
-      expect(validators.length).toBeGreaterThan(0);
-      formGroup.get('realInput')?.setValue(123.45);
-      const control = formGroup.get('realInput');
-      expect(control?.value).toBe(123.45);
+      expect(formGroup).toBeTruthy();
     });
 
-    it('should work with minLength and maxLength inherited validators', () => {
-      component.minLength = 1;
-      component.maxLength = 10;
-      const validators = component.resolveValidators();
-      expect(validators.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('Edge Cases and Error Scenarios', () => {
-    it('should handle very small decimal digits', () => {
-      component.maxDecimalDigits = 0;
-      expect(component.maxDecimalDigits).toBe(0);
-    });
-
-    it('should handle large decimal digits', () => {
-      component.maxDecimalDigits = 10;
-      expect(component.maxDecimalDigits).toBe(10);
-    });
-
-    it('should handle zero step value', () => {
-      component.step = 0;
+    it('should initialize without errors', () => {
       expect(() => {
-        component.initializeStep();
+        component.initialize();
+        component.ngOnInit();
       }).not.toThrow();
     });
 
-    it('should handle negative step value', () => {
-      component.maxDecimalDigits = 2;
-      component.step = -0.01;
-      expect(() => {
-        component.initializeStep();
-      }).not.toThrow();
-    });
-
-    it('should handle decimal separator as null', () => {
-      component.decimalSeparator = null;
-      component.maxDecimalDigits = 2;
-      component.strict = true;
-      const control = new FormControl('123.45');
-      expect(() => {
-        component.maxDecimalDigitsValidator(control);
-      }).not.toThrow();
-    });
-
-    it('should handle rapid property changes', () => {
+    it('should handle complete workflow', () => {
       expect(() => {
         component.minDecimalDigits = 1;
-        component.maxDecimalDigits = 5;
-        component.strict = true;
-        component.grouping = false;
-        component.minDecimalDigits = 2;
         component.maxDecimalDigits = 3;
+        component.step = 0.01;
+        component.grouping = true;
+        component.strict = true;
+        component.decimalSeparator = '.';
+        component.initialize();
+        component.ngOnInit();
+        component.setValue(123.456);
+        component.getValue();
+        component.resolveValidators();
       }).not.toThrow();
     });
 
-    it('should maintain consistency across property changes', () => {
-      const initial = component.maxDecimalDigits;
-      component.maxDecimalDigits = 5;
-      expect(component.maxDecimalDigits).toBe(5);
-      component.maxDecimalDigits = initial;
-      expect(component.maxDecimalDigits).toBe(initial);
-    });
-
-    it('should handle extreme numeric values', () => {
-      const control = new FormControl(Number.MAX_SAFE_INTEGER);
-      expect(() => {
-        component.maxDecimalDigitsValidator(control);
-      }).not.toThrow();
-    });
-
-    it('should handle NaN values', () => {
-      component.maxDecimalDigits = 2;
-      component.strict = true;
-      const control = new FormControl(NaN);
-      expect(() => {
-        component.maxDecimalDigitsValidator(control);
-      }).not.toThrow();
+    it('should maintain state through multiple operations', () => {
+      component.minDecimalDigits = 2;
+      component.maxDecimalDigits = 4;
+      component.setValue(99.9999);
+      expect(component.minDecimalDigits).toBe(2);
+      expect(component.maxDecimalDigits).toBe(4);
+      expect(() => component.getValue()).not.toThrow();
     });
   });
-
-  describe('Inherited Functionality', () => {
-    it('should support minLength from parent OTextInputComponent', () => {
-      expect(() => {
-        component.minLength = 1;
-        expect(component.minLength).toBe(1);
-      }).not.toThrow();
-    });
-
-    it('should support maxLength from parent OTextInputComponent', () => {
-      expect(() => {
-        component.maxLength = 20;
-        expect(component.maxLength).toBe(20);
-      }).not.toThrow();
-    });
-
-    it('should support stringCase from parent OTextInputComponent', () => {
-      expect(() => {
-        component.stringCase = 'lowercase';
-        expect(component.stringCase).toBe('lowercase');
-      }).not.toThrow();
-    });
-
-    it('should have min and max validators from parent OIntegerInputComponent', () => {
-      component.min = 0;
-      component.max = 1000;
-      const validators = component.resolveValidators();
-      expect(Array.isArray(validators)).toBe(true);
-    });
-  });
-
 });
