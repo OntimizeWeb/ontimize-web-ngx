@@ -1,6 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { OntimizeAuthService } from "./o-auth.service";
 import { OTestingUtils } from "../shared/testing/o-testing-utils";
+import { Codes } from "../util/codes";
 
 describe("OntimizeAuthService", () => {
   let service: OntimizeAuthService;
@@ -13,6 +14,17 @@ describe("OntimizeAuthService", () => {
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ]
     });
+
+    // Mock localStorage with a valid session
+    const mockSessionInfo = {
+      user: 'testUser',
+      id: '12345'
+    };
+    const storedData = {};
+    storedData[Codes.SESSION_KEY] = mockSessionInfo;
+    
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(storedData));
+    
     service = TestBed.inject(OntimizeAuthService);
   });
 
