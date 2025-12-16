@@ -55,5 +55,6 @@ export const renderersMapping = {
   real: OTableCellRendererRealComponent,
   service: OTableCellRendererServiceComponent,
   translate: OTableCellRendererTranslateComponent,
-  time: OTableCellRendererTimeComponent
+  time: OTableCellRendererTimeComponent,
+  chip: OTableCellRendererChipComponent
 };
