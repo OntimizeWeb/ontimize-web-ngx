@@ -1,0 +1,8 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+  <div class="o-table-cell-renderer-chip__container">
+    <div class="o-table-cell-renderer-chip__content"
+         [ngClass]="'o-table-cell-renderer-chip--' + cellvalue">
+      {{ getCellData(cellvalue) | oTranslate }}
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,10 @@
+.o-table-cell-renderer-chip__container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .o-table-cell-renderer-chip__content .status {
+    border-radius: 30px;
+    padding: 2px 8px;
+  }
+}
