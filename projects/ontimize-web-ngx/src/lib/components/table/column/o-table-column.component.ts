@@ -203,6 +203,9 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   /* input renderer percentage */
   valueBase: OPercentageValueBaseType = 1;
 
+  /* input renderer action */
+  protected svgIcon: string;
+
   /* input editor */
   @BooleanInputConverter()
   protected orequired: boolean = false;
@@ -373,6 +376,12 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
             break;
           case 'translate':
             newRenderer.translateArgsFn = this.translateArgsFn;
+            break;
+          case 'chip':
+            newRenderer.icon = this.icon;
+            newRenderer.svgOcon = this.svgIcon;
+            newRenderer.iconPosition = this.iconPosition;
+            newRenderer.translate = this.translate;
             break;
         }
         this.registerRenderer(newRenderer);
