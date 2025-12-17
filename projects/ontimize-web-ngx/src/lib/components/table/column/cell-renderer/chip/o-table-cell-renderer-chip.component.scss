@@ -1,7 +1,8 @@
 .o-table-cell-renderer-chip__container {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   width: 100%;
+  gap: 4px;
 
   .o-table-cell-renderer-chip__content {
     border-radius: 30px;

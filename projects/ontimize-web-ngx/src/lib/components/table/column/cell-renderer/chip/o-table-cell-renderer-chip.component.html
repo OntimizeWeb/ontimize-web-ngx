@@ -1,8 +1,33 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <div class="o-table-cell-renderer-chip__container">
-    <div class="o-table-cell-renderer-chip__content"
-         [ngClass]="'o-table-cell-renderer-chip--' + cellvalue">
-      {{ getCellData(cellvalue) | oTranslate }}
-    </div>
+    <ng-container *ngIf="isArray(cellvalue); else notArray">
+      <ng-container *ngFor="let value of cellvalue">
+        <ng-container *ngTemplateOutlet="simpleChip; context: { cellvalue: value }">
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
   </div>
+
+  <ng-template #notArray>
+    <ng-container *ngTemplateOutlet="simpleChip; context: { cellvalue: cellvalue }">
+    </ng-container>
+  </ng-template>
+
+  <ng-template #simpleChip let-cellvalue="cellvalue">
+    <div class="o-table-cell-renderer-chip__content" [ngClass]="'o-table-cell-renderer-chip-' + cellvalue">
+      <mat-icon *ngIf="isIconPositionLeft()">{{ icon }}</mat-icon>
+      <mat-icon *ngIf="isSvgIconPositionLeft()" [svgIcon]="svgIcon"></mat-icon>
+      <span class="o-chip__label">
+        <ng-container *ngIf="shouldTranslate(); else noTranslate">
+          {{ getCellData(cellvalue) | oTranslate }}
+        </ng-container>
+        <ng-template #noTranslate>
+          {{ getCellData(cellvalue) }}
+        </ng-template>
+      </span>
+      <mat-icon *ngIf="isIconPositionRight()">{{ icon }}</mat-icon>
+      <mat-icon *ngIf="isSvgIconPositionRight()" [svgIcon]="svgIcon"></mat-icon>
+    </div>
+  </ng-template>
 </ng-template>
