@@ -293,10 +293,13 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
     this.componentStateService.storeFilter(arg);
     this.updateStateStorage();
   }
+
   /**
-   * Method update store localstorage, call of the ILocalStorage
+   * Persists the current component state in local storage when enabled.
+   *
+   * Stores filter-build component-related state only if the state persistence is enabled.
    */
-  protected updateStateStorage(): void {
+   updateStateStorage(): void {
     if (this.localStorageService) {
       this.localStorageService.updateComponentStorage(this, this.getRouteKey());
     }

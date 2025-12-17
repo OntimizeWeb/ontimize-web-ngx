@@ -579,8 +579,12 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
     return this.dataService;
   }
 
-
-  protected updateStateStorage(): void {
+  /**
+   * Persists the current component state in local storage when enabled.
+   *
+   * Stores data component-related state only if the state persistence is enabled.
+   */
+  public updateStateStorage(): void {
     if (this.localStorageService && this.storeState && !this.alreadyStored) {
       this.alreadyStored = true;
       this.localStorageService.updateComponentStorage(this, this.getRouteKey());
