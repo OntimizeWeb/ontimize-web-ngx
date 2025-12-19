@@ -108,6 +108,7 @@ import { MatRow, MatTable } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 import { PaginationData } from '../../interfaces/pagination-data.interface';
 import { OTableLoadingService } from './o-table-loading.service';
+import { ColumnFilterChangeEvent } from '../../interfaces/column-filter-change-event.interface';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -244,7 +245,10 @@ export const DEFAULT_INPUTS_O_TABLE = [
 export const DEFAULT_OUTPUTS_O_TABLE = [
   'onRowSelected',
   'onRowDeselected',
-  'onRowDeleted'
+  'onRowDeleted',
+  'onFilterByColumnChange',
+  'onSortChange',
+  'onSearch'
 ];
 
 const stickyHeaderSelector = '.mat-mdc-header-row .mat-mdc-table-sticky';
@@ -560,7 +564,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public onRowDeleted: EventEmitter<any> = new EventEmitter();
   public onReinitialize: EventEmitter<any> = new EventEmitter();
   public onContentChange: EventEmitter<any> = new EventEmitter();
-  public onFilterByColumnChange: EventEmitter<any> = new EventEmitter();
+  public onFilterByColumnChange: EventEmitter<ColumnFilterChangeEvent> = new EventEmitter();
+  public onSortChange: EventEmitter<SQLOrder[]> = new EventEmitter();
 
   protected selectionChangeSubscription: Subscription;
 
@@ -1169,9 +1174,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (Util.isDefined(this.oTableQuickFilterComponent)) {
       this.oTableQuickFilterComponent.setValue(this.state.quickFilterValue, false);
       this.quickFilterSubscription = this.oTableQuickFilterComponent.onChange.subscribe(val => {
-        if (this.loadingService.handleProtected()) {
-          this.onSearch.emit(val);
-        }
+        this.onSearch.emit(val);
       });
     }
   }
@@ -1527,12 +1530,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   registerSortListener() {
     if (Util.isDefined(this.sort)) {
       this.sortSubscription?.unsubscribe();
-      this.sortSubscription = this.sort.oSortChange.subscribe(this.onSortChange.bind(this));
+      this.sortSubscription = this.sort.oSortChange.subscribe(this.handleSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
     }
   }
 
-  protected onSortChange(sortArray: any[]) {
+  protected handleSortChange(sortArray: any[]) {
     this.sortColArray = [];
     sortArray.forEach((sort) => {
       if (sort.direction !== '') {
@@ -1542,6 +1545,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         });
       }
     });
+    this.onSortChange.emit(this.sortColArray);
     if (this.pageable) {
       this.reloadData();
     }
@@ -2520,7 +2524,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.oTableMenu && this.oTableMenu.columnFilterOption) {
       this.oTableMenu.columnFilterOption.setActive(this.isColumnFiltersActive);
     }
-    this.onFilterByColumnChange.emit();
+    this.onFilterByColumnChange.emit({ action: 'remove' });
     if (this.oTableQuickFilterComponent) {
       this.oTableQuickFilterComponent.setValue(void 0);
     }
@@ -2535,14 +2539,24 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   clearColumnFilter(attr: string, triggerDatasourceUpdate: boolean = true): void {
     this.loadingService.setLoading(true);
     this.dataSource.clearColumnFilter(attr, triggerDatasourceUpdate);
-    this.onFilterByColumnChange.emit();
+    this.onFilterByColumnChange.emit({
+      action: 'remove',
+      columns: [attr]
+    });
     this.reloadPaginatedDataFromStart(false);
   }
 
   filterByColumn(columnValueFilter: OColumnValueFilter) {
     this.loadingService.setLoading(true);
+    const existingFilter = this.getColumnValueFilterByAttr(columnValueFilter.attr);
+    const action = existingFilter ? 'update' : 'add';
+
     this.dataSource.addColumnFilter(columnValueFilter);
-    this.onFilterByColumnChange.emit();
+    this.onFilterByColumnChange.emit({
+      action: action,
+      columns: [columnValueFilter.attr],
+      filters: [columnValueFilter]
+    });
     if (this.pageable) {
       this.reloadPaginatedDataFromStart(false);
     }
@@ -2550,7 +2564,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   clearColumnFilters(triggerDatasourceUpdate: boolean = true, columnsAttr?: string[]): void {
     this.dataSource.clearColumnFilters(triggerDatasourceUpdate, columnsAttr);
-    this.onFilterByColumnChange.emit();
+    this.onFilterByColumnChange.emit({
+      action: 'remove',
+      columns: columnsAttr
+    }
+    );
     this.reloadPaginatedDataFromStart(false);
   }
 
@@ -2929,7 +2947,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (Util.isDefined(storage.columnValueFilters)) {
       this.dataSource.initializeColumnsFilters(this.state.columnValueFilters);
-      this.onFilterByColumnChange.emit();
+      this.onFilterByColumnChange.emit({
+        action: 'add',
+        columns: this.state.columnValueFilters.map(filter => filter.attr),
+        filters: this.state.columnValueFilters
+      });
     }
 
     if (this.oTableQuickFilterComponent) {
@@ -2946,6 +2968,19 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.filterBuilder.setFilterValues(storage.filterBuilderValues);
       this.filterBuilder.triggerReload();
     }
+  }
+
+  /**
+   * Returns the currently applied column value filters
+   *
+   * @returns Array of column value filters applied to the table.
+   */
+  public getColumnValueFilters(): OColumnValueFilter[] {
+    return this.dataSource.getColumnValueFilters();
+  }
+
+  public getColumnValueFilterByAttr(attr:string): OColumnValueFilter {
+    return this.dataSource.getColumnValueFilterByAttr(attr);
   }
 
   onStoreConfigurationClicked() {
@@ -3470,6 +3505,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.parseSortColumns();
     }
     this.sort.setSortColumns(this.sortColArray);
+    this.onSortChange.emit(sortColumns);
     this.refreshSortHeaders();
   }
 
