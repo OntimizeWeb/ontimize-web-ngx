@@ -2979,6 +2979,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return this.dataSource.getColumnValueFilters();
   }
 
+  /**
+ * Returns the column value filter associated with the given column attribute.
+ *
+ * @param attr Column attribute identifier.
+ * @returns The column value filter for the specified attribute, or undefined if not found.
+ */
   public getColumnValueFilterByAttr(attr:string): OColumnValueFilter {
     return this.dataSource.getColumnValueFilterByAttr(attr);
   }
