@@ -45,3 +45,4 @@ export * from './base-response.interface';
 export * from './service-response.interface';
 export * from './jsonapi-config.interface'
 export * from './jsonapi-response.interface';
+export * from './column-filter-change-event.interface';
