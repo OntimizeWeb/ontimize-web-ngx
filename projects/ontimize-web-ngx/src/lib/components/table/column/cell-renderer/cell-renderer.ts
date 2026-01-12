@@ -5,6 +5,7 @@ import { OTableCellRendererCurrencyComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDER
 import { OTableCellRendererDateComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE } from './date/o-table-cell-renderer-date.component';
 import { OTableCellRendererImageComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_IMAGE, DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE } from './image/o-table-cell-renderer-image.component';
 import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER, OTableCellRendererIntegerComponent } from './integer/o-table-cell-renderer-integer.component';
+import { OTableCellRendererListComponent } from './list/o-table-cell-renderer-list.component';
 import { DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE, OTableCellRendererPercentageComponent } from './percentage/o-table-cell-renderer-percentage.component';
 import { OTableCellRendererRealComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL } from './real/o-table-cell-renderer-real.component';
 import { OTableCellRendererServiceComponent, DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_SERVICE, DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE } from './service/o-table-cell-renderer-service.component';
@@ -23,7 +24,8 @@ export const O_TABLE_CELL_RENDERERS = [
   OTableCellRendererServiceComponent,
   OTableCellRendererTranslateComponent,
   OTableCellRendererTimeComponent,
-  OTableCellRendererChipComponent
+  OTableCellRendererChipComponent,
+  OTableCellRendererListComponent
 ];
 
 export const O_TABLE_CELL_RENDERERS_INPUTS = [
@@ -57,5 +59,6 @@ export const renderersMapping = {
   service: OTableCellRendererServiceComponent,
   translate: OTableCellRendererTranslateComponent,
   time: OTableCellRendererTimeComponent,
-  chip: OTableCellRendererChipComponent
+  chip: OTableCellRendererChipComponent,
+  list: OTableCellRendererListComponent
 };
