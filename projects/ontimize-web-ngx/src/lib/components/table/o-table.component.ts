@@ -2093,6 +2093,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.oenabled || this.readOnly) {
       return;
     }
+
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
 
       if (this.navigationService.isNavigating) return;
@@ -2105,22 +2106,33 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.viewDetail(row);
       return;
     }
+
+    // Handle MULTIPLE selection with Ctrl / Cmd key
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
       this.selectedRow(row);
       this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
-    } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
+      return;
+    }
+
+    // Handle MULTIPLE selection with Shift key
+    if (this.isSelectionModeMultiple() && $event.shiftKey) {
       this.handleMultipleSelection(row);
-    } else if (!this.isSelectionModeNone()) {
+      return;
+    }
+
+    // Handle selection modes OTHER than 'none'
+    if (!this.isSelectionModeNone()) {
       const selectedItems = this.getSelectedItems();
       if (this.isRowSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
         return;
-      } else {
-        this.clearSelectionAndEditing();
       }
+      this.clearSelectionAndEditing();
       this.selectedRow(row);
-      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
     }
+    // Emit onClick event even when selection is disabled
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+
   }
 
   handleMultipleSelection(item: any) {
