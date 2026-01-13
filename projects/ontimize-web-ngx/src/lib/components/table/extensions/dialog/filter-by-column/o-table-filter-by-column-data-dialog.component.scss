@@ -37,22 +37,26 @@
       margin-bottom: 24px;
     }
 
-    .select-values-list {
-      padding-top: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      outline: none;
+    .cdk-virtual-scroll-content-wrapper {
+      width: 100%;
 
-      .mat-mdc-list-item {
-        height: 30px;
+      .select-values-list {
+        padding-top: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        outline: none;
 
         .mat-mdc-list-item {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          height: 30px;
 
-          .mat-icon {
-            font-size: 24px;
+          .mat-mdc-list-item {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            .mat-icon {
+              font-size: 24px;
+            }
           }
         }
       }
