@@ -757,6 +757,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
         this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
       };
+
+      if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
+        this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
+      }
+
     } catch (error) {
       // Do nothing because is optional
     }
@@ -2985,7 +2990,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
  * @param attr Column attribute identifier.
  * @returns The column value filter for the specified attribute, or undefined if not found.
  */
-  public getColumnValueFilterByAttr(attr:string): OColumnValueFilter {
+  public getColumnValueFilterByAttr(attr: string): OColumnValueFilter {
     return this.dataSource.getColumnValueFilterByAttr(attr);
   }
 

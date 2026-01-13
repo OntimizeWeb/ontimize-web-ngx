@@ -32,12 +32,12 @@ $o_table_row_padding: 24px;
 
       .cdk-virtual-scrollable {
         overflow: hidden;
-        contain: none;
       }
 
       &.horizontal-scroll {
         .cdk-virtual-scrollable {
           overflow: visible;
+          contain: none;
         }
 
         .o-table-overflow {
