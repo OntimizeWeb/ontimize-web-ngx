@@ -47,7 +47,7 @@
           {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' | oTranslate }}
         </span>
       </ng-template>
-      <cdk-virtual-scroll-viewport itemSize="30" fxFlex>
+      <cdk-virtual-scroll-viewport itemSize="30" fxFlex class="virtual-scroll-viewport">
         <mat-selection-list *ngIf="preloadValues || listData" #filterValueList class="select-values-list" (selectionChange)="onSelect($event)">
           <ng-container *cdkVirtualFor="let record of (listData | async); let i = index;templateCacheSize: 0">
             <mat-list-option checkboxPosition="before" [selected]="selection.isSelected(record)" [value]="record">
