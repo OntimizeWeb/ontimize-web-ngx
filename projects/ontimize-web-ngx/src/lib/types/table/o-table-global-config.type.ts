@@ -66,5 +66,10 @@ export type OTableGlobalConfig = {
   * Ensures a smooth visual experience and avoids abrupt hiding.
   */
     minVisible: number
-  }
+  },
+  /**
+    * Enables or disables horizontal scrolling for tables that exceed the viewport width.
+    */
+  horizontalScroll: boolean;
+
 }
