@@ -2097,59 +2097,78 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
-    if (this.readOnly && this.showNotificationOfReadOnly) {
-      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+    if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
+      }
+      return;
     }
 
-    if (!this.oenabled || this.readOnly) {
+    if (!this.oenabled) {
       return;
     }
 
     if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-
-      if (this.navigationService.isNavigating) return;
-      this.navigationService.isNavigating = true;
-
-      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
-      this.saveDataNavigationInLocalStorage();
-      this.clearSelection();
-      this.selectedRow(row);
-      this.viewDetail(row);
+      this.handleDetailModeClick(row, column, rowIndex, $event);
       return;
     }
 
-    // Handle MULTIPLE selection with Ctrl / Cmd key
-    if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
-      // TODO: test $event.metaKey on MAC
-      if (this.selectionOnRowClick) {
-        this.selectedRow(row);
+    // Handle multiple selection (Ctrl/Cmd or Shift)
+    if (this.isSelectionModeMultiple()) {
+      if ($event.ctrlKey || $event.metaKey) {
+        this.handleMultipleSelectionCtrl(row, column, rowIndex, $event);
+        return;
       }
-      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
-      return;
-    }
 
-    // Handle MULTIPLE selection with Shift key
-    if (this.isSelectionModeMultiple() && $event.shiftKey) {
-      if (this.selectionOnRowClick) {
-        this.handleMultipleSelection(row);
+      if ($event.shiftKey) {
+        this.handleMultipleSelectionShift(row, column, rowIndex, $event);
+        return;
       }
-      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
-      return;
     }
 
     // Handle selection modes OTHER than 'none'
     if (!this.isSelectionModeNone()) {
-      const selectedItems = this.getSelectedItems();
-      if (this.isRowSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
-        return;
-      }
-      if (this.selectionOnRowClick) {
-        this.toggleRowSelection(row);
-      }
+      this.handleOtherSelectionModes(row);
+
     }
     // Emit onClick event even when selection is disabled
     this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
 
+  }
+
+  private handleOtherSelectionModes(row: any) {
+    const selectedItems = this.getSelectedItems();
+    if (this.isRowSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
+      return;
+    }
+    if (this.selectionOnRowClick) {
+      this.toggleRowSelection(row);
+    }
+  }
+
+  private handleDetailModeClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
+    if (this.navigationService.isNavigating) return;
+    this.navigationService.isNavigating = true;
+
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+    this.saveDataNavigationInLocalStorage();
+    this.clearSelection();
+    this.selectedRow(row);
+    this.viewDetail(row);
+  }
+
+  private handleMultipleSelectionCtrl(row: any, column: string, rowIndex: number, $event: MouseEvent) {
+    if (this.selectionOnRowClick) {
+      this.selectedRow(row);
+    }
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+  }
+
+  private handleMultipleSelectionShift(row: any, column: string, rowIndex: number, $event: MouseEvent) {
+    if (this.selectionOnRowClick) {
+      this.handleMultipleSelection(row);
+    }
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
   }
 
   /**
