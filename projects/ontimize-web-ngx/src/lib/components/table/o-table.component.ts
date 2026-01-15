@@ -2136,6 +2136,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   }
 
+  /**
+ * Handles multiple selection with Shift key (range selection)
+ * */
   handleMultipleSelection(item: any) {
     // Exit if multiple selection mode is not enabled
     if (!this.isSelectionModeMultiple()) {
@@ -2144,7 +2147,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     // If there is no previous selection, select the current row
     if (this.selection.selected.length === 0) {
-      this.selectedRow(item);
+      this.selectedMultiplesRows([item]);
       return;
     }
     // Get the index of the first selected row and the current row
@@ -2159,18 +2162,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     // Get all rows within the selected range
     const rowsInRange = this.dataSource.renderedData.slice(indexFrom, indexTo + 1);
 
-    // Store the previous selection before clearing it
-    const previousSelection = [...this.selection.selected];
-
     // Temporarily disable selection events while clearing
     this.triggerSelectionEvents = false;
     this.selection.clear();
     this.triggerSelectionEvents = true;
-
-    // Emit deselection event for previously selected rows
-    if (previousSelection.length > 0) {
-      ObservableWrapper.callEmit(this.onRowDeselected, previousSelection);
-    }
 
     // Select all valid rows within the range
     this.selectedMultiplesRows(rowsInRange);
@@ -2293,7 +2288,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected updateSelectionColumnState() {
-    if (this.isSelectionModeNone() ) {
+    if (this.isSelectionModeNone()) {
       this.clearSelection();
     }
     if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible
@@ -2353,46 +2348,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.selectedMultiplesRows([row]);
   }
 
-  public selectedMultipleRows(item: any): void {
-    if (!this.isSelectionModeMultiple()) {
-      return;
-    }
-
-    if (this.selection.selected.length === 0) {
-      this.selectedRow(item);
-      return;
-    }
-
-    const first = this.dataSource.renderedData.indexOf(this.selection.selected[0]);
-    const last = this.dataSource.renderedData.indexOf(item);
-
-    if (first === -1 || last === -1) {
-      return;
-    }
-
-    const indexFrom = Math.min(first, last);
-    const indexTo = Math.max(first, last);
-
-    // Get all rows in the range
-    const rowsInRange = this.dataSource.renderedData.slice(indexFrom, indexTo + 1);
-
-    // Clear previous selection
-    const previousSelection = [...this.selection.selected];
-
-    this.triggerSelectionEvents = false;
-    this.selection.clear();
-    this.triggerSelectionEvents = true;
-
-    if (previousSelection.length > 0) {
-      ObservableWrapper.callEmit(this.onRowDeselected, previousSelection);
-    }
-
-    this.selectedMultiplesRows(rowsInRange);
-
-    // Emit onClick with the final selection
-    ObservableWrapper.callEmit(this.onClick, this.selection.selected);
-  }
-
   /**
    * Internal method to set multiple items as selected
    * Triggers only ONE event with all items
@@ -2402,36 +2357,29 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return;
     }
 
-    // En modo single, limpiar selección anterior
+    // In single mode, clear the previous selection
     if (this.isSelectionModeSingle() && this.selection.selected.length > 0) {
-      const previousSelection = [...this.selection.selected];
       this.triggerSelectionEvents = false;
       this.selection.clear();
       this.triggerSelectionEvents = true;
-
-      if (previousSelection.length > 0) {
-        ObservableWrapper.callEmit(this.onRowDeselected, previousSelection);
-      }
     }
 
-    // Deshabilitar eventos temporalmente
+    // Temporarily disable events
     this.triggerSelectionEvents = false;
 
-    try {
-      // Seleccionar todos los items de una vez
-      this.selection.select(...items);
+    // Select all items at once
+    this.selection.select(...items);
 
-      // Actualizar el state
-      if (Util.isDefined(this.state)) {
-        this.state.selection = this.selection.selected;
-      }
-
-    } finally {
-      // Reactivar eventos
-      this.triggerSelectionEvents = true;
+    // Update the state
+    if (Util.isDefined(this.state)) {
+      this.state.selection = this.selection.selected;
     }
 
-    // Emitir UN SOLO evento con todos los items seleccionados
+    // Re-enable events
+    this.triggerSelectionEvents = true;
+
+
+    // Emit a SINGLE event with all selected items
     ObservableWrapper.callEmit(this.onRowSelected, items);
   }
 
