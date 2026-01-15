@@ -3915,8 +3915,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   /**
-* Guarda la posición actual del scroll
-*/
+  * Saves the current scroll position
+  */
   private saveScrollPosition(): void {
     if (this.virtualScrollViewport) {
       // Para virtual scroll
@@ -3928,7 +3928,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   /**
-   * Restaura la posición guardada del scroll
+   * Restores the saved scroll position
    */
   private restoreScrollPosition(): void {
     setTimeout(() => {
