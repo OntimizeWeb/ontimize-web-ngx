@@ -163,7 +163,6 @@
             }
 
             .mdc-list-item__content {
-              display: table;
               align-self: center;
               width: 100%;
 
@@ -180,7 +179,6 @@
                 }
 
                 &.mat-mdc-list-item-unscoped-content {
-                  display: table-cell;
                   vertical-align: middle;
                   width: 100%;
                 }

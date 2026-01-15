@@ -72,4 +72,10 @@ export type OTableGlobalConfig = {
    * Enables or disables row selection when clicking on a row.
    */
   selectionOnRowClick?: boolean;
+ 
+  /**
+    * Enables or disables horizontal scrolling for tables that exceed the viewport width.
+    */
+  horizontalScroll: boolean;
+
 }

@@ -764,6 +764,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.selectionOnRowClick)) {
         this.selectionOnRowClick = oTableGlobalConfig.selectionOnRowClick;
       }
+      if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
+        this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
+      }
+
     } catch (error) {
       // Do nothing because is optional
     }
