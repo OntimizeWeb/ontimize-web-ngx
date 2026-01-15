@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewEncapsulation } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Inject, ViewEncapsulation } from "@angular/core";
 import { DEFAULT_INPUTS_O_TABLE_HEADER, OTableHeaderComponent } from "../table-header/o-table-header.component";
 import { BehaviorSubject, merge, Subscription } from "rxjs";
 import type { OColumn } from "../../../column/o-column.class";
@@ -14,7 +14,7 @@ import { OTableBase } from "../../../o-table-base.class";
     '[class.o-table-header-select-all]': 'true'
   }
 })
-export class OTableHeaderSelectAllComponent extends OTableHeaderComponent {
+export class OTableHeaderSelectAllComponent extends OTableHeaderComponent implements AfterViewInit {
 
   public column: OColumn;
   public resizable: boolean;
@@ -36,6 +36,8 @@ export class OTableHeaderSelectAllComponent extends OTableHeaderComponent {
     if (this.table.matpaginator) {
       dataChanges.push(this.table.matpaginator.page);
     }
+    this.isAllSelected.next(this.table.isAllSelected());
+    this.isIndeterminate.next(this.table.isIndeterminate());
 
     this.selectionChangeSubscription = merge(...dataChanges).subscribe(x => {
       this.isAllSelected.next(this.table.isAllSelected());
