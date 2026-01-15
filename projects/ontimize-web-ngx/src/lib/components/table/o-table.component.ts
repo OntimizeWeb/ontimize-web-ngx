@@ -239,7 +239,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'nonHidableColumns: non-hidable-columns',
   'readOnly: read-only',
   'readOnlyConfiguration: read-only-configuration',
-  'showNotificationOfReadOnly: show-notification-of-read-only'
+  'showNotificationOfReadOnly: show-notification-of-read-only',
+  // selection-on-row-click [yes|no|true|false]: . Default: yes.
+  'selectionOnRowClick: selection-on-row-click'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -384,6 +386,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   readOnly: boolean = false;
   @BooleanInputConverter()
   showNotificationOfReadOnly: boolean = false;
+  @BooleanInputConverter()
+  selectionOnRowClick: boolean = true;
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
@@ -757,6 +761,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
         this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
       };
+      if (Util.isDefined(oTableGlobalConfig.selectionOnRowClick)) {
+        this.selectionOnRowClick = oTableGlobalConfig.selectionOnRowClick;
+      }
     } catch (error) {
       // Do nothing because is optional
     }
@@ -2110,14 +2117,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     // Handle MULTIPLE selection with Ctrl / Cmd key
     if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
       // TODO: test $event.metaKey on MAC
-      this.selectedRow(row);
+      if (this.selectionOnRowClick) {
+        this.selectedRow(row);
+      }
       this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
       return;
     }
 
     // Handle MULTIPLE selection with Shift key
     if (this.isSelectionModeMultiple() && $event.shiftKey) {
-      this.handleMultipleSelection(row);
+      if (this.selectionOnRowClick) {
+        this.handleMultipleSelection(row);
+      }
       this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
       return;
     }
@@ -2128,8 +2139,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (this.isRowSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
         return;
       }
-
-      this.toggleRowSelection(row);
+      if (this.selectionOnRowClick) {
+        this.toggleRowSelection(row);
+      }
     }
     // Emit onClick event even when selection is disabled
     this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
@@ -2334,11 +2346,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public selectionCheckboxToggle(event: MatCheckboxChange, row: any): void {
-    if (this.isSelectionModeSingle()) {
-      this.clearSelection();
-    }
-    event.checked ? this.selectedRow(row) : this.selection.deselect(row);
-    this.state.selection = this.selection.selected;
+    this.toggleRowSelection(row);
   }
 
   public selectedRow(row: any): void {
@@ -3366,13 +3374,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     if (this.isRowSelected(row)) {
       this.removeFromSelection([row]);
+    } else if (this.isSelectionModeSingle()) {
+      this.selectedRow(row); // Replaces selection
     } else {
-      if (this.isSelectionModeSingle()) {
-        this.selectedRow(row); // Reemplaza la selección
-      } else {
-        this.addToSelection([row]); // Agrega a la selección
-      }
+      this.addToSelection([row]); // Added to selection
     }
+
   }
 
   /**
@@ -3814,11 +3821,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public isDisableCheckbox(item: any): boolean {
-    let disable = false;
+    if (this.isSelectionModeNone()) {
+      return true;
+    }
     if (Util.isDefined(this.disableSelectionFunction)) {
       return this.disableSelectionFunction({ ...item });
     }
-    return disable;
+    return false;
 
   }
 
