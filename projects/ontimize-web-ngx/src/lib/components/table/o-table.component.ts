@@ -239,7 +239,9 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'nonHidableColumns: non-hidable-columns',
   'readOnly: read-only',
   'readOnlyConfiguration: read-only-configuration',
-  'showNotificationOfReadOnly: show-notification-of-read-only'
+  'showNotificationOfReadOnly: show-notification-of-read-only',
+  // selection-on-row-click [yes|no|true|false]: . Default: yes.
+  'selectionOnRowClick: selection-on-row-click'
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -384,6 +386,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   readOnly: boolean = false;
   @BooleanInputConverter()
   showNotificationOfReadOnly: boolean = false;
+  @BooleanInputConverter()
+  selectionOnRowClick: boolean = true;
 
   // Expandable input callback function
   showExpandableIconFunction: (row: any, rowIndex: number) => boolean | Promise<boolean> | Observable<boolean>;
@@ -757,7 +761,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
         this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
       };
-
+      if (Util.isDefined(oTableGlobalConfig.selectionOnRowClick)) {
+        this.selectionOnRowClick = oTableGlobalConfig.selectionOnRowClick;
+      }
       if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
         this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
       }
@@ -2091,53 +2097,114 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   doHandleClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
-    if (this.readOnly && this.showNotificationOfReadOnly) {
-      this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
-    }
-
-    if (!this.oenabled || this.readOnly) {
-      return;
-    }
-    if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
-
-      if (this.navigationService.isNavigating) return;
-      this.navigationService.isNavigating = true;
-
-      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
-      this.saveDataNavigationInLocalStorage();
-      this.clearSelection();
-      this.selectedRow(row);
-      this.viewDetail(row);
-      return;
-    }
-    if (this.isSelectionModeMultiple() && ($event.ctrlKey || $event.metaKey)) {
-      // TODO: test $event.metaKey on MAC
-      this.selectedRow(row);
-      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
-    } else if (this.isSelectionModeMultiple() && $event.shiftKey) {
-      this.handleMultipleSelection(row);
-    } else if (!this.isSelectionModeNone()) {
-      const selectedItems = this.getSelectedItems();
-      if (this.isRowSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
-        return;
-      } else {
-        this.clearSelectionAndEditing();
+    if (this.readOnly) {
+      if (this.showNotificationOfReadOnly) {
+        this.snackBarService.open('MESSAGES.OPERATION_NOT_ALLOWED_READONLY');
       }
-      this.selectedRow(row);
-      this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+      return;
+    }
+
+    if (!this.oenabled) {
+      return;
+    }
+
+    if ((this.detailMode === Codes.DETAIL_MODE_CLICK)) {
+      this.handleDetailModeClick(row, column, rowIndex, $event);
+      return;
+    }
+
+    // Handle multiple selection (Ctrl/Cmd or Shift)
+    if (this.isSelectionModeMultiple()) {
+      if ($event.ctrlKey || $event.metaKey) {
+        this.handleMultipleSelectionCtrl(row, column, rowIndex, $event);
+        return;
+      }
+
+      if ($event.shiftKey) {
+        this.handleMultipleSelectionShift(row, column, rowIndex, $event);
+        return;
+      }
+    }
+
+    // Handle selection modes OTHER than 'none'
+    if (!this.isSelectionModeNone()) {
+      this.handleOtherSelectionModes(row);
+
+    }
+    // Emit onClick event even when selection is disabled
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+
+  }
+
+  private handleOtherSelectionModes(row: any) {
+    const selectedItems = this.getSelectedItems();
+    if (this.isRowSelected(row) && selectedItems.length === 1 && this.editionEnabled) {
+      return;
+    }
+    if (this.selectionOnRowClick) {
+      this.toggleRowSelection(row);
     }
   }
 
-  handleMultipleSelection(item: any) {
-    if (this.selection.selected.length > 0) {
-      const first = this.dataSource.renderedData.indexOf(this.selection.selected[0]);
-      const last = this.dataSource.renderedData.indexOf(item);
-      const indexFrom = Math.min(first, last);
-      const indexTo = Math.max(first, last);
-      this.clearSelection();
-      this.dataSource.renderedData.slice(indexFrom, indexTo + 1).forEach(e => this.selectedRow(e));
-      ObservableWrapper.callEmit(this.onClick, this.selection.selected);
+  private handleDetailModeClick(row: any, column: string, rowIndex: number, $event: MouseEvent) {
+    if (this.navigationService.isNavigating) return;
+    this.navigationService.isNavigating = true;
+
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+    this.saveDataNavigationInLocalStorage();
+    this.clearSelection();
+    this.selectedRow(row);
+    this.viewDetail(row);
+  }
+
+  private handleMultipleSelectionCtrl(row: any, column: string, rowIndex: number, $event: MouseEvent) {
+    if (this.selectionOnRowClick) {
+      this.selectedRow(row);
     }
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+  }
+
+  private handleMultipleSelectionShift(row: any, column: string, rowIndex: number, $event: MouseEvent) {
+    if (this.selectionOnRowClick) {
+      this.handleMultipleSelection(row);
+    }
+    this.onClick.emit({ row: row, rowIndex: rowIndex, mouseEvent: $event, columnName: column, cell: row[column] });
+  }
+
+  /**
+ * Handles multiple selection with Shift key (range selection)
+ * */
+  handleMultipleSelection(item: any) {
+    // Exit if multiple selection mode is not enabled
+    if (!this.isSelectionModeMultiple()) {
+      return;
+    }
+
+    // If there is no previous selection, select the current row
+    if (this.selection.selected.length === 0) {
+      this.selectedMultiplesRows([item]);
+      return;
+    }
+    // Get the index of the first selected row and the current row
+    const first = this.dataSource.renderedData.indexOf(this.selection.selected[0]);
+    const last = this.dataSource.renderedData.indexOf(item);
+
+    // Determine the range of indices to select
+    const indexFrom = Math.min(first, last);
+    const indexTo = Math.max(first, last);
+
+
+    // Get all rows within the selected range
+    const rowsInRange = this.dataSource.renderedData.slice(indexFrom, indexTo + 1);
+
+    // Temporarily disable selection events while clearing
+    this.triggerSelectionEvents = false;
+    this.selection.clear();
+    this.triggerSelectionEvents = true;
+
+    // Select all valid rows within the range
+    this.selectedMultiplesRows(rowsInRange);
+
   }
 
   protected saveDataNavigationInLocalStorage() {
@@ -2240,7 +2307,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   initializeCheckboxColumn() {
     // Initializing row selection listener
-    if (!this.selectionChangeSubscription && this._oTableOptions.selectColumn.visible) {
+    if (!this.selectionChangeSubscription && !this.isSelectionModeNone()) {
       this.selectionChangeSubscription = this.selection.changed.subscribe((selectionData: SelectionChange<any>) => {
         if (this.triggerSelectionEvents && selectionData) {
           if (selectionData.added.length > 0) {
@@ -2256,7 +2323,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected updateSelectionColumnState() {
-    if (!this._oTableOptions.selectColumn.visible) {
+    if (this.isSelectionModeNone()) {
       this.clearSelection();
     }
     if (this._oTableOptions.visibleColumns && this._oTableOptions.selectColumn.visible
@@ -2270,19 +2337,27 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public getNumRowSelectedInCurrentData(): number {
-    return this.dataSource?.renderedData ? this.dataSource.renderedData.filter(x => !this.isDisableCheckbox(x) && this.isRowSelected(x)).length : 0;
+    if (!this.dataSource?.renderedData) {
+      return 0;
+    }
+    return this.dataSource.renderedData.filter(x => !this.isDisableCheckbox(x) && this.isRowSelected(x))
+      .length;
   }
 
   public isAllSelected(): boolean {
     const numSelected = this.getNumRowSelectedInCurrentData();
-    const numRows = this.dataSource?.renderedData?.length ?? 0;
-    return numSelected > 0 && numSelected === numRows;
+    const numSelectableRows = this.dataSource?.renderedData?.filter(
+      row => !this.isDisableCheckbox(row)
+    ).length ?? 0;
+    return numSelected > 0 && numSelected === numSelectableRows;
   }
 
   public isIndeterminate(): boolean {
     const numSelected = this.getNumRowSelectedInCurrentData();
-    const numRows = this.dataSource?.renderedData?.length ?? 0;
-    return numSelected > 0 && numRows > 0 && numSelected !== numRows;
+    const numSelectableRows = this.dataSource?.renderedData?.filter(
+      row => !this.isDisableCheckbox(row)
+    ).length ?? 0;
+    return numSelected > 0 && numSelected < numSelectableRows;
   }
 
   public masterToggle(event: MatCheckboxChange): void {
@@ -2290,19 +2365,70 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public selectAll(): void {
-    this.dataSource.renderedData.forEach(row => this.setSelected(row));
+    this.selectedMultiplesRows(this.dataSource.renderedData);
   }
 
   public selectionCheckboxToggle(event: MatCheckboxChange, row: any): void {
-    if (this.isSelectionModeSingle()) {
-      this.clearSelection();
-    }
-    event.checked ? this.selectedRow(row) : this.selection.deselect(row);
-    this.state.selection = this.selection.selected;
+    this.toggleRowSelection(row);
   }
 
   public selectedRow(row: any): void {
-    this.setSelected(row);
+    if (!this.canSelectRow(row)) {
+      return;
+    }
+    this.selectedMultiplesRows([row]);
+  }
+
+  /**
+   * Internal method to set multiple items as selected
+   * Triggers only ONE event with all items
+   */
+  private setSelectedMultiple(items: any[]): void {
+    if (this.isSelectionModeNone() || !items || items.length === 0) {
+      return;
+    }
+
+    // In single mode, clear the previous selection
+    if (this.isSelectionModeSingle() && this.selection.selected.length > 0) {
+      this.triggerSelectionEvents = false;
+      this.selection.clear();
+      this.triggerSelectionEvents = true;
+    }
+
+    // Temporarily disable events
+    this.triggerSelectionEvents = false;
+
+    // Select all items at once
+    this.selection.select(...items);
+
+    // Update the state
+    if (Util.isDefined(this.state)) {
+      this.state.selection = this.selection.selected;
+    }
+
+    // Re-enable events
+    this.triggerSelectionEvents = true;
+
+
+    // Emit a SINGLE event with all selected items
+    ObservableWrapper.callEmit(this.onRowSelected, items);
+  }
+
+  /**
+  * Selects multiple rows at once with proper validation
+  * Emits a single onRowSelected event with all selected rows
+  */
+  public selectedMultiplesRows(rows: any[]): void {
+    if (!rows || rows.length === 0) {
+      return;
+    }
+
+    const validRows = this.filterValidRowsForSelection(rows);
+    if (validRows.length === 0) {
+      return;
+    }
+
+    this.setSelectedMultiple(validRows);
     this.cd.detectChanges();
   }
 
@@ -2316,15 +2442,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public setSelected(item: any): void {
-    if (this.isDisableCheckbox(item)) {
+    if (this.isSelectionModeNone()) {
       return;
     }
-    if (this.isRowSelected(item)) {
-      /**The selected item is cleared if the item changes value*/
-      this.selection.clear(item);
-    }
     if (Util.isDefined(item)) {
-      this.selection.select(item);
+      if (this.isRowSelected(item)) {
+        /**The selected item is cleared if the item changes value*/
+        this.selection.clear(item);
+      } else {
+        this.selection.select(item);
+      }
     }
   }
 
@@ -2351,6 +2478,27 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   get showDeleteButton(): boolean {
     return this.deleteButton;
   }
+
+  private canSelectRow(row: any): boolean {
+    if (!Util.isDefined(row)) {
+      return false;
+    }
+
+    if (this.isSelectionModeNone()) {
+      return false;
+    }
+
+    if (this.isDisableCheckbox(row)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private filterValidRowsForSelection(rows: any[]): any[] {
+    return rows.filter(row => this.canSelectRow(row));
+  }
+
 
   getTrackByFunction(): (index: number, item: any) => string {
     const self = this;
@@ -3242,6 +3390,64 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return !this.isSelectionModeNone() && this.selection.isSelected(row);
   }
 
+  public toggleRowSelection(row: any): void {
+    if (!this.canSelectRow(row)) {
+      return;
+    }
+
+    if (this.isRowSelected(row)) {
+      this.removeFromSelection([row]);
+    } else if (this.isSelectionModeSingle()) {
+      this.selectedRow(row); // Replaces selection
+    } else {
+      this.addToSelection([row]); // Added to selection
+    }
+
+  }
+
+  /**
+ * Removes rows from the current selection
+ */
+  public removeFromSelection(rows: any[]): void {
+    if (this.isSelectionModeNone() || !rows || rows.length === 0) {
+      return;
+    }
+
+    const rowsToRemove = rows.filter(row =>
+      Util.isDefined(row) && this.isRowSelected(row)
+    );
+
+    if (rowsToRemove.length === 0) {
+      return;
+    }
+
+    this.selection.deselect(...rowsToRemove);
+
+    if (Util.isDefined(this.state)) {
+      this.state.selection = this.selection.selected;
+    }
+
+  }
+  public addToSelection(rows: any[]): void {
+    if (this.isSelectionModeNone() || this.isSelectionModeSingle()) {
+      return;
+    }
+
+    const validRows = this.filterValidRowsForSelection(rows);
+    const rowsToAdd = validRows.filter(row => !this.isRowSelected(row));
+
+    if (rowsToAdd.length === 0) {
+      return;
+    }
+
+    this.selection.select(...rowsToAdd);
+
+    if (Util.isDefined(this.state)) {
+      this.state.selection = this.selection.selected;
+    }
+
+  }
+
   public getColumnWidthFromState(colDef: OColumn): string {
     //1. By default, set width definition
     let columnWidth = colDef.definition && colDef.definition.width ? colDef.definition.width : void 0;
@@ -3638,11 +3844,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   public isDisableCheckbox(item: any): boolean {
-    let disable = false;
+    if (this.isSelectionModeNone()) {
+      return true;
+    }
     if (Util.isDefined(this.disableSelectionFunction)) {
       return this.disableSelectionFunction({ ...item });
     }
-    return disable;
+    return false;
 
   }
 

@@ -66,7 +66,13 @@ export type OTableGlobalConfig = {
   * Ensures a smooth visual experience and avoids abrupt hiding.
   */
     minVisible: number
-  },
+
+  }
+  /**
+   * Enables or disables row selection when clicking on a row.
+   */
+  selectionOnRowClick?: boolean;
+ 
   /**
     * Enables or disables horizontal scrolling for tables that exceed the viewport width.
     */
