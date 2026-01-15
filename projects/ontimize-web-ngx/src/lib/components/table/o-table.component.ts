@@ -661,8 +661,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ContentChild(OTableColumnSelectAllDirective)
   tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
-
-
+// To save scroll position when reloading data
+  private savedScrollPosition: number = 0;
 
   public groupedColumnsArray: string[] = [];
   @HostListener('window:resize', [])
@@ -2277,10 +2277,26 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.stopEdition();
     if (saveChanges && column.editor.updateRecordOnEdit) {
+      this.saveScrollPosition();
       const toUpdate = {};
       toUpdate[column.attr] = data[column.attr];
       const kv = this.extractKeysFromRecord(data);
-      return this.updateRecord(kv, toUpdate);
+      const updateObservable = this.updateRecord(kv, toUpdate);
+
+      if (updateObservable) {
+        updateObservable.subscribe({
+          next: (response) => {
+            // ✅ Restaurar posición del scroll DESPUÉS de actualizar
+            this.restoreScrollPosition();
+          },
+          error: (error) => {
+            console.error('Error updating cell:', error);
+            // También restaurar en caso de error
+            this.restoreScrollPosition();
+          }
+        });
+      }
+      return updateObservable;
     }
     return undefined;
   }
@@ -3896,6 +3912,35 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     };
 
     this.matTable?.removeHeaderRowDef(null);
+  }
+
+  /**
+* Guarda la posición actual del scroll
+*/
+  private saveScrollPosition(): void {
+    if (this.virtualScrollViewport) {
+      // Para virtual scroll
+      this.savedScrollPosition = this.virtualScrollViewport.measureScrollOffset();
+    } else if (this.tableBodyEl?.nativeElement) {
+      // Para scroll normal
+      this.savedScrollPosition = this.tableBodyEl.nativeElement.scrollTop;
+    }
+  }
+
+  /**
+   * Restaura la posición guardada del scroll
+   */
+  private restoreScrollPosition(): void {
+    setTimeout(() => {
+      if (this.virtualScrollViewport && this.savedScrollPosition > 0) {
+        // Para virtual scroll
+        this.virtualScrollViewport.scrollToOffset(this.savedScrollPosition);
+      } else if (this.tableBodyEl?.nativeElement && this.savedScrollPosition > 0) {
+        // Para scroll normal
+        this.tableBodyEl.nativeElement.scrollTop = this.savedScrollPosition;
+      }
+      this.savedScrollPosition = 0;
+    }, 0);
   }
 
 }
