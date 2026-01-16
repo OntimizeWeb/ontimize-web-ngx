@@ -230,7 +230,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   public onDoubleClick: EventEmitter<any> = new EventEmitter();
   public onDataLoaded: EventEmitter<any> = new EventEmitter();
   public onPaginatedDataLoaded: EventEmitter<any> = new EventEmitter();
-  public onSearch: EventEmitter<any> = new EventEmitter();
+  public onSearch: EventEmitter<string> = new EventEmitter();
   /* end of outputs variables */
 
   public filterBuilder: OFilterBuilderComponent;

@@ -600,6 +600,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       true;
   }
 
+  /**
+  * Persists the current component state in local storage when enabled.
+  *
+  * Stores form layout manager-related state only if the state persistence is enabled.
+  */
   public updateStateStorage(): void {
     if (!this.localStorageService || !this.storeState) {
       return;
