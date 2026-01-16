@@ -178,7 +178,12 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
     }
   }
 
-  protected updateStateStorage(): void {
+  /**
+   * Persists the current component state in local storage when enabled.
+   *
+   * Stores menu-related state only if the state persistence is enabled.
+   */
+  public updateStateStorage(): void {
     if (this.localStorageService && this.storeState) {
       this.storeMenu();
     }

@@ -30,7 +30,16 @@ $o_table_row_padding: 24px;
         min-width: 100%;
       }
 
+      .cdk-virtual-scrollable {
+        overflow: hidden;
+      }
+
       &.horizontal-scroll {
+        .cdk-virtual-scrollable {
+          overflow: visible;
+          contain: none;
+        }
+
         .o-table-overflow {
           overflow-x: auto;
         }

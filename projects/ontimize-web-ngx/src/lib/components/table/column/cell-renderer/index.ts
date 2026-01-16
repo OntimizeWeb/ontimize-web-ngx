@@ -10,3 +10,5 @@ export * from './real/o-table-cell-renderer-real.component';
 export * from './service/o-table-cell-renderer-service.component';
 export * from './time/o-table-cell-renderer-time.component';
 export * from './translate/o-table-cell-renderer-translate.component';
+export * from './chip/o-table-cell-renderer-chip.component';
+export * from './list/o-table-cell-renderer-list.component';

@@ -1,3 +1,27 @@
+## 15.8.0 (2026-01-16)
+### Features
+* **o-table**:
+  * Add new events: ([91c5093](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/91c5093)) Closes [#2029](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2029)
+    * `onFilterByColummChange`:  Emitted when column filters change
+    * `onSearch`:Emitted when quick filter changes
+    * `OnSortChange`: Emitted when sorting changes
+  * Now `updateStateStorage` method is public ([7fac51d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fac51d)) Closes [#2030](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2030)
+  * New cell renderers:
+    * `o-table-cell-renderer-list` ([767b7c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/767b7c2)) Closes [#2028](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2028)
+    * `o-table-cell-renderer-chip` ([a65a6fd](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/a65a6fd)) Closes [#2027](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2027)
+  * Extended `O_TABLE_GLOBAL_CONFIG` injection token with new properties:
+    * `selectionOnRowClick`: Control row selection behavior on click ([5207991](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5207991)) Closes [#2043](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2043)
+    * `horizontalScroll`: Enable horizontal scrolling globally ([36dacb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/36dacb9)) Closes [#2039](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2024)
+
+
+### Bug Fixes
+* **o-table**:
+  * Fixed `horizontal-scroll` not working when virtual-scroll is enabled ([36dacb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/36dacb9)) Closes [#2039](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2024)
+  * Fixed missing `onClick` event when `detail-mode="none"` and `selection-mode="no"` ([5207991](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/5207991)) Closes [#2037](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2037)
+  * Fixed unwanted horizontal scroll in column filter dialog ([7b595b4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7b595b4)) Closes [#2031](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2031)
+* **o-table-colum**: Fixed `value-base` not working with `type=percentage` ([2e1e01b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/2e1e01b)) Closes [#2034](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2034)
+
+
 ## 15.7.1 (2025-11-27)
 ### Features
 * **o-hour-input**: Improved time input formatting ([db78c7b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/db78c7b))([8c82f97](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/8c82f97)) Closes [#2007](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2007)
