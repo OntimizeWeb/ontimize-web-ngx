@@ -31,12 +31,12 @@ $o_table_row_padding: 24px;
       }
 
       .cdk-virtual-scrollable {
-        overflow: hidden;
+        overflow-x: hidden;
       }
 
       &.horizontal-scroll {
         .cdk-virtual-scrollable {
-          overflow: visible;
+          overflow-x: visible;
           contain: none;
         }
 
