@@ -1,3 +1,7 @@
+## 15.8.1 (2026-01-21)
+### Bug Fixes
+* **o-table**: Fixed a regression introduced in version **15.8.0** that caused vertical scrollbars to disappear ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#2050](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2050)
+
 ## 15.8.0 (2026-01-16)
 ### Features
 * **o-table**:
