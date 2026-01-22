@@ -662,7 +662,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @ContentChild(OTableColumnSelectAllDirective)
   tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
 // To save scroll position when reloading data
-  private savedScrollPosition: number = 0;
+  public savedScrollPosition: number = 0;
 
   public groupedColumnsArray: string[] = [];
   @HostListener('window:resize', [])
@@ -1815,7 +1815,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   initViewPort(data: any[]) {
-
     if (this.virtualScrollViewport && data) {
       const headerElRef = this.elRef.nativeElement.querySelector(headerSelector);
       const footerElRef = this.elRef.nativeElement.querySelector(footerSelector);
@@ -1845,6 +1844,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       ObservableWrapper.callEmit(this.onPaginatedDataLoaded, data);
     }
     ObservableWrapper.callEmit(this.onDataLoaded, this.daoTable.data);
+    if (this.virtualScrollViewport && data.length > 0) {
+      setTimeout(() => {
+        this.initViewPort(data);
+      }, 0);
+    }
   }
 
   protected canSetStaticData(staticData): boolean {
@@ -1860,10 +1864,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   projectContentChanged() {
-    this.initViewPort(this.dataSource.renderedData);
+    const dataChanged = this.previousRendererData !== this.dataSource.renderedData;
 
-    if (this.previousRendererData !== this.dataSource.renderedData) {
+    if (dataChanged) {
       this.previousRendererData = this.dataSource.renderedData;
+
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
     }
 
@@ -1878,7 +1883,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.state.expandableRows = selectionItems;
       this.restoreExpandableRowState();
     }
-
   }
 
   restoreExpandableRowState(): void {
@@ -2277,7 +2281,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.stopEdition();
     if (saveChanges && column.editor.updateRecordOnEdit) {
-      this.saveScrollPosition();
       const toUpdate = {};
       toUpdate[column.attr] = data[column.attr];
       const kv = this.extractKeysFromRecord(data);
@@ -2286,13 +2289,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (updateObservable) {
         updateObservable.subscribe({
           next: (response) => {
-            // ✅ Restaurar posición del scroll DESPUÉS de actualizar
-            this.restoreScrollPosition();
+            // Restore scroll position AFTER the update
+            this.saveScrollPosition();
           },
           error: (error) => {
             console.error('Error updating cell:', error);
-            // También restaurar en caso de error
-            this.restoreScrollPosition();
           }
         });
       }
@@ -3919,28 +3920,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   */
   private saveScrollPosition(): void {
     if (this.virtualScrollViewport) {
-      // Para virtual scroll
       this.savedScrollPosition = this.virtualScrollViewport.measureScrollOffset();
-    } else if (this.tableBodyEl?.nativeElement) {
-      // Para scroll normal
-      this.savedScrollPosition = this.tableBodyEl.nativeElement.scrollTop;
+      this.scrollStrategy.setSavedScrollPosition(this.savedScrollPosition);
     }
-  }
-
-  /**
-   * Restores the saved scroll position
-   */
-  private restoreScrollPosition(): void {
-    setTimeout(() => {
-      if (this.virtualScrollViewport && this.savedScrollPosition > 0) {
-        // Para virtual scroll
-        this.virtualScrollViewport.scrollToOffset(this.savedScrollPosition);
-      } else if (this.tableBodyEl?.nativeElement && this.savedScrollPosition > 0) {
-        // Para scroll normal
-        this.tableBodyEl.nativeElement.scrollTop = this.savedScrollPosition;
-      }
-      this.savedScrollPosition = 0;
-    }, 0);
   }
 
 }
