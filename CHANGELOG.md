@@ -2,7 +2,7 @@
 ### Bug Fixes
 * **o-table**:
   * Fixed a regression introduced in version **15.8.0** that caused vertical scrollbars to disappear ([0b1cae0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b1cae0)) Closes [#2050](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2050)
-  * Fixed preserved vertical scroll position in `o-table` after editing cell values.([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#2005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2005)
+  * Fixed preserved vertical scroll position in `o-table` after editing cell values.([89d174e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89d174e)) Closes [#2005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2005)
 * **o-radio**: Fixed incorrect radio label behavior when multiple `o-radio` components were used in the same view due to duplicated input IDs.([83cbfb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/83cbfb9)) Closes [#2048](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2048)
 
 ## 15.8.0 (2026-01-16)
