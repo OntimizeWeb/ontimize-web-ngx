@@ -163,8 +163,8 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       switchMap((event: any) => {
         let data = Object.assign([], this._database.data);
 
-        if (!Array.isArray(data) || this.renderedData === null ) {
-          // Aún no se han cargado datos
+        if (!Array.isArray(data) || this.renderedData === null) {
+          // No data has been loaded yet
           this.renderedData = [];
           return of(null);
         }
@@ -258,7 +258,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       const renderedData = data;
 
       if (this.table.virtualScrollViewport && !this._paginator) {
-        data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+        if (this.table.savedScrollPosition === 0) {
+          data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
+        }
       }
 
       const aggregateData = this.getAggregatesData(renderedData);
