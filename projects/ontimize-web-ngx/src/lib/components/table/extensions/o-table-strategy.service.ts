@@ -62,7 +62,11 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
     this.updateContent();
   }
 
-  setSavedScrollPosition(value: number) {
+  /**
+   * Sets the saved scroll position for the table.
+   * @param value - The scroll position value to be saved
+   */
+  public setSavedScrollPosition(value: number) {
     this.savedScrollPosition = value;
   }
 
