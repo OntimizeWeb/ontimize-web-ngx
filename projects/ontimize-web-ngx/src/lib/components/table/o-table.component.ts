@@ -1323,7 +1323,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     } else {
 
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
-      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
   }
 
