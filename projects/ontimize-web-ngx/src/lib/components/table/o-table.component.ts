@@ -661,7 +661,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ContentChild(OTableColumnSelectAllDirective)
   tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
-// To save scroll position when reloading data
+  // To save scroll position when reloading data
   public savedScrollPosition: number = 0;
 
   public groupedColumnsArray: string[] = [];
@@ -3271,7 +3271,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     return classNameArray;
   }
 
-  protected addDefaultRowButtons() {
+  public addDefaultRowButtons() {
     // check permissions
     if (this.editButtonInRow) {
       this.addButtonInRow('editButtonInRow');
@@ -3281,7 +3281,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  protected addButtonInRow(name: string) {
+  public addButtonInRow(name: string) {
     const colDef: OColumn = this.createOColumn(name, this);
     colDef.type = name;
     colDef.visible = true;
