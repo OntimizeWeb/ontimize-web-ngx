@@ -17,7 +17,9 @@ const THEMES_STYLES_CONF = {
 gulp.task('copy.themes.files', (callback) => {
   copyfiles(['projects/ontimize-web-ngx/src/lib/theming/themes/*.scss', 'tmp/theming'],5, callback);
 });
-
+gulp.task('copy.themes.main.files', (callback) => {
+  copyfiles(['projects/ontimize-web-ngx/src/lib/theming/themes/*.scss', 'dist/theming'], 5, callback);
+});
 gulp.task('delete.angular.imports', () => {
   return gulp.src([THEMES_STYLES_CONF.STYLES_SRC])
     .pipe(replace(THEMES_STYLES_CONF.MATERIAL_IMPORT, ''))
@@ -37,9 +39,11 @@ gulp.task('concat.themes', (callback) => {
     .pipe(gulp.dest(THEMES_STYLES_CONF.DIST));
 });
 
-gulp.task('concat.themes.scss', gulp.series('copy.themes.files', 'delete.angular.imports', 'copy.styles.files', 'concat.themes'));
+gulp.task('concat.themes.scss', gulp.series('copy.themes.files', 'delete.angular.imports', 'copy.styles.files', 'copy.themes.main.files', 'concat.themes'));
 const FILES = [
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style.scss',
+  'projects/ontimize-web-ngx/src/lib/theming/ontimize-oxygen-style.scss',
+  'projects/ontimize-web-ngx/src/lib/theming/ontimize-style-base.scss',
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style-v8.scss',
   'dist/theming/'
 ];

@@ -1,5 +1,6 @@
 @use "sass:map";
 @use 'styles/ontimize/variables.scss';
+@use 'styles/ontimize/typography-ontimize.scss' as typography-ontimize;
 @use '@angular/material' as mat;
 @use 'ontimize-style-base.scss' as base;
 @use 'typography/ontimize.scss' as ontimize;
@@ -24,7 +25,9 @@ $variables-map: (
   'light-theme-status-bar-mix': variables.$light-theme-status-bar-mix,
   'light-theme-app-bar-mix': variables.$light-theme-app-bar-mix,
   'light-theme-background-mix': variables.$light-theme-background-mix,
-  'dark-theme-mix': variables.$dark-theme-mix
+  'dark-theme-mix': variables.$dark-theme-mix,
+  'border-radius': variables.$border-radius,
+  'button-line-height-width-border': variables.$button-line-height-width-border
 );
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
@@ -58,10 +61,18 @@ $variables-map: (
   // Apply v8 styles
   @include ontimize-style.ontimize-theme-styles($theme-or-color-config);
   
+  // Apply typography styles
+  $typography: mat.get-typography-config($theme-or-color-config);
+  @if($typography) {
+    @include typography-ontimize.o-table-typography-fashion($typography);
+    @include typography-ontimize.o-common-typography-fashion($typography);
+    @include typography-ontimize.o-form-theme-fashion($typography);
+  }
+  
   // Apply new styles using common base implementation
   @include mat-checkbox-theme($theme-or-color-config);
   @include mat-pseudo-checkbox-theme($theme-or-color-config);
-  @include base.common-theme-styles($theme-or-color-config, typography-ontimize, variables);
+  @include base.common-theme-styles($theme-or-color-config, $variables-map);
 }
 
 /*

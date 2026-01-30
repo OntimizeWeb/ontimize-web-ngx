@@ -630,8 +630,8 @@ $ontimize-dark-theme-foreground: (
       border-color: mat.get-color-from-palette($foreground, text, 0.32);
       border-style: solid;
       border-width: 1px;
-      border-radius: $variables.$border-radius;
-      line-height: $variables.$button-line-height-width-border;
+      border-radius: map.get($variables, 'border-radius');
+      line-height: map.get($variables, 'button-line-height-width-border');
     }
   }
 }
@@ -642,7 +642,7 @@ $ontimize-dark-theme-foreground: (
   o-column.o-column,
   o-row.o-row {
     background: mat.get-color-from-palette($background, card);
-    border-radius: $variables.$border-radius;
+    border-radius: map.get($variables, 'border-radius');
 
     .o-container {
       .o-container-title {
@@ -738,20 +738,14 @@ $ontimize-dark-theme-foreground: (
 
   .o-list-skeleton-item {
     background-color: mat.get-color-from-palette($background, level-08);
-    border-radius: $variables.$border-radius;
+    border-radius: map.get($variables, 'border-radius');
   }
 }
 
 // Main common theme styles mixin that calls all component-specific mixins
-@mixin common-theme-styles($theme-or-color-config, $typography-module, $variables) {
+@mixin common-theme-styles($theme-or-color-config, $variables) {
 
   $typography: mat.get-typography-config($theme-or-color-config);
-
-  @if($typography) {
-    @include $typography-module.o-table-typography-fashion($typography);
-    @include $typography-module.o-common-typography-fashion($typography);
-    @include $typography-module.o-form-theme-fashion($typography);
-  }
 
   $theme: map.get($theme-or-color-config, color);
   $background: map.get($theme, background);
@@ -773,4 +767,3 @@ $ontimize-dark-theme-foreground: (
   @include o-background-levels-theme($theme, $background);
   @include o-skeleton-theme($theme, $background, $variables);
 }
-

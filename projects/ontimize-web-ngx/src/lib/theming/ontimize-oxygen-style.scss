@@ -1,5 +1,6 @@
 @use "sass:map";
 @use 'styles/oxygen/variables.scss';
+@use 'styles/oxygen/typography-oxygen.scss' as typography-oxygen;
 @use '@angular/material' as mat;
 @use 'ontimize-style-base.scss' as base;
 @use 'typography/oxygen.scss' as oxygen;
@@ -24,7 +25,9 @@ $variables-map: (
   'light-theme-status-bar-mix': variables.$light-theme-status-bar-mix,
   'light-theme-app-bar-mix': variables.$light-theme-app-bar-mix,
   'light-theme-background-mix': variables.$light-theme-background-mix,
-  'dark-theme-mix': variables.$dark-theme-mix
+  'dark-theme-mix': variables.$dark-theme-mix,
+  'border-radius': variables.$border-radius,
+  'button-line-height-width-border': variables.$button-line-height-width-border
 );
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
@@ -58,10 +61,18 @@ $variables-map: (
   // Apply v8 styles
   @include ontimize-style.ontimize-theme-styles($theme-or-color-config);
   
+  // Apply typography styles
+  $typography: mat.get-typography-config($theme-or-color-config);
+  @if($typography) {
+    @include typography-oxygen.o-table-typography-fashion($typography);
+    @include typography-oxygen.o-common-typography-fashion($typography);
+    @include typography-oxygen.o-form-theme-fashion($typography);
+  }
+  
   // Apply new styles using common base implementation
   @include mat-checkbox-theme($theme-or-color-config);
   @include mat-pseudo-checkbox-theme($theme-or-color-config);
-  @include base.common-theme-styles($theme-or-color-config, typography-oxygen, variables);
+  @include base.common-theme-styles($theme-or-color-config, $variables-map);
 }
 
 /*
@@ -83,11 +94,19 @@ $variables-map: (
  * // 2. Replace ontimize-theme-styles mixin implementation:
  * @mixin ontimize-theme-styles($theme-or-color-config) {
  *   @include ontimize-style.ontimize-theme-styles($theme-or-color-config);
+ *   
+ *   // Apply typography styles
+ *   $typography: mat.get-typography-config($theme-or-color-config);
+ *   @if($typography) {
+ *     @include typography-oxygen.o-table-typography-fashion($typography);
+ *     @include typography-oxygen.o-common-typography-fashion($typography);
+ *     @include typography-oxygen.o-form-theme-fashion($typography);
+ *   }
+ *   
  *   @include mat-checkbox-theme($theme-or-color-config);
  *   @include mat-pseudo-checkbox-theme($theme-or-color-config);
  *   
  *   // Extract theme variables
- *   $typography: mat.get-typography-config($theme-or-color-config);
  *   $theme: map.get($theme-or-color-config, color);
  *   $background: map.get($theme, background);
  *   $foreground: map.get($theme, foreground);
@@ -102,10 +121,10 @@ $variables-map: (
  *   @include base.o-app-sidenav-theme($theme, $background, $foreground, $primary, $sidenav-background-color);
  *   @include base.o-common-theme($theme, $background, $foreground, $primary);
  *   @include base.o-form-theme($theme, $background, $foreground);
- *   @include base.o-button-theme($theme, $background, $foreground, $primary, $accent, $warn, $is-dark-theme, variables);
- *   @include base.o-container-theme($theme, $background, $foreground, $typography, variables);
+ *   @include base.o-button-theme($theme, $background, $foreground, $primary, $accent, $warn, $is-dark-theme, $variables-map);
+ *   @include base.o-container-theme($theme, $background, $foreground, $typography, $variables-map);
  *   @include base.o-background-levels-theme($theme, $background);
- *   @include base.o-skeleton-theme($theme, $background, variables);
+ *   @include base.o-skeleton-theme($theme, $background, $variables-map);
  *   
  *   // Call YOUR custom table mixin instead of base
  *   @include o-table-theme($theme, $background, $foreground, $primary);
