@@ -9,3 +9,27 @@ $foreground-title-color: #363636;
 $foreground-color: #525252;
 $border-radius: 2px;
 $button-line-height-width-border: 30px;
+
+/* Background levels - Light theme */
+$light-level-04: #f2f2f2;
+$light-level-06: #f6f6f6;
+$light-level-08: #fafafa;
+$light-level-1: white;
+
+/* Background levels - Dark theme */
+$dark-level-0-base: #171717;
+$dark-level-04-base: #1E1E1E;
+$dark-level-06-base: #2C2C2C;
+$dark-level-08-base: #333333;
+$dark-level-1-base: #383838;
+$dark-status-bar-base: #272727;
+
+/* Overlays */
+$sidenav-overlay: #525252;
+
+/* Mix percentages for theme backgrounds */
+$light-theme-level-0-mix: 98%;
+$light-theme-status-bar-mix: 97.2%;
+$light-theme-app-bar-mix: 97.2%;
+$light-theme-background-mix: 97.2%;
+$dark-theme-mix: 94%;
