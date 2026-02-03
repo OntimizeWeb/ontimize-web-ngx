@@ -665,9 +665,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   // To save scroll position when reloading data
   public savedScrollPosition: number = 0;
 
-  private readonly originalRegisteredColumns: OColumn[] = [];
-  private originalNonHidableColumns: string;
-
   /** Active column filters */
   private readonly columnFiltersSubject =
     new BehaviorSubject<OColumnValueFilter[]>([]);
@@ -1627,8 +1624,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.registerDataSourceListeners();
     this.registerSortListener();
 
-    // Inicializar el subject de filtros con el estado actual
-    //this.updateColumnFiltersSubject();
   }
 
   protected registerDataSourceListeners() {
@@ -2808,9 +2803,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   isSearcheableColumn(column: OColumn): boolean {
     return this.searcheableColumns.includes(column.attr);
   }
-  // isColumnFilterActive(column: OColumn): boolean {
-  //   return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
-  // }
 
   openColumnFilterDialog(column: OColumn, event: Event) {
     event.stopPropagation();

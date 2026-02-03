@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, forwardRef, Inject, Input, ViewChild, ViewEncapsulation } from "@angular/core";
+import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
 import type { OColumn } from "../../../column/o-column.class";
 import { OTableBase } from "../../../o-table-base.class";
 import { OMatSortHeader } from "../../sort/o-mat-sort-header";
