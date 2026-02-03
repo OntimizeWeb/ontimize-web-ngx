@@ -1,3 +1,10 @@
+## 15.8.2 (2026-02-03)
+### Bug Fixes
+* **o-table**:
+  * Fixed `quick-filter-placeholder` input not working ([024a85a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/024a85a)) Closes [#2057](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2057)
+  * Fixed the column filter icon state is not updated when all columns are disabled. Closes [#2069](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2069)
+  * Fixed that in *Show/Hide Columns* modal does not respect the original columns order. Closes [#2059](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2059)
+
 ## 15.8.1 (2026-01-22)
 ### Bug Fixes
 * **o-table**:
