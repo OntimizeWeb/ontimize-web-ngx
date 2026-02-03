@@ -316,6 +316,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   refreshExpandableRowState = false;
 
   loadingService: OTableLoadingService;
+  protected subscriptionOnFilterChanges: any;
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
@@ -749,7 +750,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   /** Subscribes to filter change events */
   private subscribeToFilterChanges(): void {
-    this.onFilterByColumnChange.subscribe(event => {
+    this.subscriptionOnFilterChanges = this.onFilterByColumnChange.subscribe(event => {
       this.updateColumnFiltersSubject(event);
     });
   }
@@ -1214,6 +1215,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.loadingService) {
       this.loadingService.ngOnDestroy?.();
     }
+    this.subscriptionOnFilterChanges?.unsubscribe()
   }
 
   /**
