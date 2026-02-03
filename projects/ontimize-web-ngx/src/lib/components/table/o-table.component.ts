@@ -664,7 +664,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 // To save scroll position when reloading data
   public savedScrollPosition: number = 0;
 
-  private originalRegisteredColumns: OColumn[] = [];
+  private readonly originalRegisteredColumns: OColumn[] = [];
   private originalNonHidableColumns: string;
 
   public groupedColumnsArray: string[] = [];
@@ -1258,7 +1258,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected pushOColumnDefinition(colDef: OColumn) {
-    colDef.visible = (this.visibleColArray.indexOf(colDef.attr) !== -1);
+    colDef.visible = this.visibleColArray.includes(colDef.attr);
     // Find column definition by name
     const alreadyExisting = this.getOColumn(colDef.attr);
     if (alreadyExisting !== undefined) {
