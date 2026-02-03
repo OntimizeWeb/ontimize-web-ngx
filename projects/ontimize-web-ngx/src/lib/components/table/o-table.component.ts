@@ -664,6 +664,18 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   // To save scroll position when reloading data
   public savedScrollPosition: number = 0;
 
+  private readonly originalRegisteredColumns: OColumn[] = [];
+  private originalNonHidableColumns: string;
+
+  /** Active column filters */
+  private readonly columnFiltersSubject =
+    new BehaviorSubject<OColumnValueFilter[]>([]);
+
+  public columnFilters$ = this.columnFiltersSubject.asObservable();
+
+  /** Active column filters (no async pipe) */
+  public columnFiltersArray: OColumnValueFilter[] = [];
+
   public groupedColumnsArray: string[] = [];
   @HostListener('window:resize', [])
   updateScrolledState(): void {
@@ -730,7 +742,38 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     this.snackBarService = this.injector.get(SnackBarService);
     this.getInjectionTokenConfig();
+
+    // Subscribe to column filter change events
+    this.subscribeToFilterChanges();
   }
+
+  /** Subscribes to filter change events */
+  private subscribeToFilterChanges(): void {
+    this.onFilterByColumnChange.subscribe(event => {
+      this.updateColumnFiltersSubject(event);
+    });
+  }
+
+  /**
+   * Updates the BehaviorSubject and array with a NEW filters reference
+   * Required for Angular change detection
+   */
+  private updateColumnFiltersSubject(event: ColumnFilterChangeEvent): void {
+    const currentFilters = event.filters || [];
+
+    // Create a NEW array reference
+    const newFilters = [...currentFilters];
+
+    // Update BehaviorSubject (async pipe)
+    this.columnFiltersSubject.next(newFilters);
+
+    // Update array (direct binding)
+    this.columnFiltersArray = newFilters;
+
+    // Force change detection
+    this.cd.detectChanges();
+  }
+
 
   private getInjectionTokenConfig() {
     try {
@@ -882,6 +925,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.portalHost.forEach(x => x.detach());
     }
     this.destroy();
+
+    // Completar el subject al destruir el componente
+    this.columnFiltersSubject.complete();
   }
 
   getSuffixColumnInsertable() {
@@ -1546,6 +1592,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
+  /**
+  * Gets current active column filters
+  */
+  get currentColumnFilters(): OColumnValueFilter[] {
+    return this.dataSource?.getColumnValueFilters() || [];
+  }
+
   protected handleSortChange(sortArray: any[]) {
     this.sortColArray = [];
     sortArray.forEach((sort) => {
@@ -1571,6 +1624,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.dataSource = dataSourceService.getInstance(this);
     this.registerDataSourceListeners();
     this.registerSortListener();
+
+    // Inicializar el subject de filtros con el estado actual
+    //this.updateColumnFiltersSubject();
   }
 
   protected registerDataSourceListeners() {
@@ -2722,6 +2778,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     const action = existingFilter ? 'update' : 'add';
 
     this.dataSource.addColumnFilter(columnValueFilter);
+
     this.onFilterByColumnChange.emit({
       action: action,
       columns: [columnValueFilter.attr],
@@ -2749,9 +2806,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   isSearcheableColumn(column: OColumn): boolean {
     return this.searcheableColumns.includes(column.attr);
   }
-  isColumnFilterActive(column: OColumn): boolean {
-    return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
-  }
+  // isColumnFilterActive(column: OColumn): boolean {
+  //   return this.isColumnFiltersActive && Util.isDefined(this.dataSource.getColumnValueFilterByAttr(column.attr));
+  // }
 
   openColumnFilterDialog(column: OColumn, event: Event) {
     event.stopPropagation();

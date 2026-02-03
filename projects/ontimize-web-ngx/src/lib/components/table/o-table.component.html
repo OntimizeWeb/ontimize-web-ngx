@@ -126,7 +126,7 @@
         [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
 
         <div class="content">
-          <o-table-header [column]="column"></o-table-header>
+          <o-table-header [column]="column" [column-filters]="columnFilters$ | async" ></o-table-header>
         </div>
       </th>
 
