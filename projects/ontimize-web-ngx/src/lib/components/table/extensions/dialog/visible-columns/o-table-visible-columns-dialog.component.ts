@@ -144,61 +144,68 @@ export class OTableVisibleColumnsDialogComponent {
     });
   }
 
-
   /**
-   * Obtiene las columnas visibles incluyendo las nonHidable
-   * y respetando el orden de this.columns
+   * Returns the visible columns, including non-hidable ones,
+   * preserving the order defined in oTableOptions.columns.
    */
   private getVisibleColumns(): string[] {
     const nonHidableColumns = Util.parseArray(this.table.nonHidableColumns, true);
 
-    // Columnas visibles del diálogo
+    // Visible columns selected in the dialog
     const visibleFromDialog = this.columns
       .filter(col => col.visible)
       .map(col => col.attr);
 
-    // Combinar: columnas visibles del diálogo + nonHidable (siempre visibles)
+    // Merge: visible columns from the dialog + non-hidable (always visible)
     const allVisibleAttrs = new Set([...visibleFromDialog, ...nonHidableColumns]);
 
-    // Ordenar según el orden actualizado en oTableOptions.columns
+    // Sort according to the updated order in oTableOptions.columns
     return this.table.oTableOptions.columns
       .filter(oCol => allVisibleAttrs.has(oCol.attr))
       .map(oCol => oCol.attr);
   }
 
+  /**
+   * Returns the final columns order, preserving the order defined in the dialog
+   * and keeping non-hidable and hidden columns in their original positions.
+   */
   private getColumnsOrder(): string[] {
     const originalOrder = this.table.oTableOptions.columns.map(col => col.attr);
 
-    // Columnas del diálogo en su nuevo orden
+    // Columns from the dialog in their new order
     const dialogColumnsOrder = this.columns.map(col => col.attr);
 
-    // Columnas que NO están en el diálogo (nonHidable + ocultas)
+    // Columns not present in the dialog (non-hidable + hidden ones)
     const columnsNotInDialog = originalOrder.filter(attr =>
       !dialogColumnsOrder.includes(attr)
     );
 
-    // Construir nuevo orden
+    // Build the new order
     const newOrder: string[] = [];
 
     for (const dialogAttr of dialogColumnsOrder) {
-      // Antes de añadir esta columna del diálogo,
-      // añadir las columnas (nonHidable u ocultas) que estaban antes en el orden original
+      // Before adding this dialog column,
+      // add the columns (non-hidable or hidden) that were placed before it
+      // in the original order
       const dialogOriginalPos = originalOrder.indexOf(dialogAttr);
 
       for (const notInDialogAttr of columnsNotInDialog) {
         const notInDialogOriginalPos = originalOrder.indexOf(notInDialogAttr);
 
-        // Si estaba antes Y aún no la hemos añadido
-        if (notInDialogOriginalPos < dialogOriginalPos && !newOrder.includes(notInDialogAttr)) {
+        // If it was before and has not been added yet
+        if (
+          notInDialogOriginalPos < dialogOriginalPos &&
+          !newOrder.includes(notInDialogAttr)
+        ) {
           newOrder.push(notInDialogAttr);
         }
       }
 
-      // Añadir la columna del diálogo
+      // Add the dialog column
       newOrder.push(dialogAttr);
     }
 
-    // Añadir columnas restantes que estaban después de todas las del diálogo
+    // Add remaining columns that were placed after all dialog columns
     for (const notInDialogAttr of columnsNotInDialog) {
       if (!newOrder.includes(notInDialogAttr)) {
         newOrder.push(notInDialogAttr);
