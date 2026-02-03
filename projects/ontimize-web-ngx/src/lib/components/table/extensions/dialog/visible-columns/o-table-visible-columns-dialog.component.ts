@@ -134,7 +134,7 @@ export class OTableVisibleColumnsDialogComponent {
       undefined;
 
     const columnsOrder = this.getColumnsOrder();
-    this.table.oTableOptions.columns.sort((a: OColumn, b: OColumn) => columnsOrder.indexOf(a.attr) - columnsOrder.indexOf(b.attr));
+
     this.dialogRef.close({
       visibleColArray: this.getVisibleColumns().sort((a, b) => columnsOrder.indexOf(a) - columnsOrder.indexOf(b)),
       columnsOrder: columnsOrder,
