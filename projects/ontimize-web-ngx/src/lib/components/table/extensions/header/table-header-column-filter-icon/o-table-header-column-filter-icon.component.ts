@@ -46,7 +46,7 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
    * Updated by parent component when filters change
    */
   set columnFilters(filters: OColumnValueFilter[]) {
-    this._columnFilters = filters || [];
+    this._columnFilters = filters?.filter(value=>value.values) || [];
     this.updateStateColumnFilter();
   }
   get columnFilters(): OColumnValueFilter[] {
@@ -102,8 +102,7 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
    * Get the filter for this column from the array of filters
    */
   protected getColumnValueFilterByAttr(): OColumnValueFilter {
-    const columnValueFilters = this.table.dataSource?.getColumnValueFilters();
-    return columnValueFilters?.find(item => item.attr === this.column.attr);
+    return this._columnFilters?.find(item => item.attr === this.column.attr);
   }
 
 
@@ -124,7 +123,7 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
    * Gets the filter indicator number (position in the active filters list)
    */
   public getFilterIndicatorNumbered(): string {
-    const filters = this.table.dataSource?.getColumnValueFilters() ?? [];
+    const filters = this._columnFilters ?? [];
     const index = filters.length > 1
       ? filters.findIndex(f => f.attr === this.column.attr)
       : -1;

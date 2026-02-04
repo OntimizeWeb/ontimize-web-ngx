@@ -669,10 +669,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   private readonly columnFiltersSubject =
     new BehaviorSubject<OColumnValueFilter[]>([]);
 
-  public columnFilters$ = this.columnFiltersSubject.asObservable();
+  protected columnFilters$ = this.columnFiltersSubject.asObservable();
 
-  /** Active column filters (no async pipe) */
-  public columnFiltersArray: OColumnValueFilter[] = [];
   private readonly originalRegisteredColumns: OColumn[] = [];
   private originalNonHidableColumns: string;
 
@@ -759,17 +757,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    * Required for Angular change detection
    */
   private updateColumnFiltersSubject(event: ColumnFilterChangeEvent): void {
-    const currentFilters = event.filters || [];
 
     // Create a NEW array reference
-    const newFilters = [...currentFilters];
+    const newFilters = [...this.dataSource.getColumnValueFilters()];
 
-    // Update BehaviorSubject (async pipe)
     this.columnFiltersSubject.next(newFilters);
-
-    // Update array (direct binding)
-    this.columnFiltersArray = newFilters;
-
     // Force change detection
     this.cd.detectChanges();
   }
@@ -1217,7 +1209,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (this.loadingService) {
       this.loadingService.ngOnDestroy?.();
     }
-    this.subscriptionOnFilterChanges?.unsubscribe()
+    this.subscriptionOnFilterChanges?.unsubscribe();
   }
 
   /**
