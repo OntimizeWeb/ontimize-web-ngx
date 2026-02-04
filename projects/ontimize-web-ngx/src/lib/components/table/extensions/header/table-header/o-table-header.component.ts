@@ -3,9 +3,12 @@ import type { OColumn } from "../../../column/o-column.class";
 import { OTableBase } from "../../../o-table-base.class";
 import { OMatSortHeader } from "../../sort/o-mat-sort-header";
 import type { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
+import { OColumnValueFilter } from "../../../../../types/table/o-column-value-filter.type";
 
 export const DEFAULT_INPUTS_O_TABLE_HEADER = [
-  'column'
+  'column',
+  // columnFilters: Active filters applied to table columns
+  'columnFilters: column-filters'
 ]
 @Component({
   selector: 'o-table-header',
@@ -23,6 +26,9 @@ export const DEFAULT_INPUTS_O_TABLE_HEADER = [
 export class OTableHeaderComponent {
 
   public column: OColumn;
+
+  public columnFilters: OColumnValueFilter[] = [];
+
   public resizable: boolean;
   protected _columnFilterIcon: OTableHeaderColumnFilterIconComponent;
 

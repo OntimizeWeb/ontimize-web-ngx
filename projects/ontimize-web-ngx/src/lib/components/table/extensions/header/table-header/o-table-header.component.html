@@ -1,4 +1,4 @@
-<o-table-header-column-filter-icon #columnFilterIcon *ngIf="isModeColumnFilterable(column)" [column]="column">
+<o-table-header-column-filter-icon #columnFilterIcon *ngIf="isModeColumnFilterable(column)" [column]="column" [column-filters]="columnFilters">
 </o-table-header-column-filter-icon>
 
 <ng-container *ngIf="column.orderable">
