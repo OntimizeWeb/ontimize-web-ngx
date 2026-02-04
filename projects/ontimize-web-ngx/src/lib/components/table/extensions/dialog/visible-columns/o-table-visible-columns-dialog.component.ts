@@ -47,6 +47,7 @@ export class OTableVisibleColumnsDialogComponent {
   protected activeSortColumns: string[] = [];
   protected activeGroupByColumns: string[] = [];
   protected table: OTableBase;
+
   constructor(
     protected injector: Injector,
     public dialogRef: MatDialogRef<OTableVisibleColumnsDialogComponent>,
@@ -62,6 +63,7 @@ export class OTableVisibleColumnsDialogComponent {
       const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
       const nonHidableColumns = Util.parseArray(this.table.nonHidableColumns, true);
 
+      //if it has no definition and is not in visible columns, it is not shown
       this.table.oTableOptions.columns.filter(oCol => (visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined) &&
         nonHidableColumns.indexOf(oCol.attr) === -1
       ).forEach((oCol: OColumn) => {
@@ -83,6 +85,7 @@ export class OTableVisibleColumnsDialogComponent {
     const activeColFilter = this.activeColumnValueFilters.includes(col.attr);
     const activeSorting = this.activeSortColumns.includes(col.attr);
     const activeGrouping = this.activeGroupByColumns.includes(col.attr);
+
     if (col.visible && (activeColFilter || activeSorting || activeGrouping)) {
       const warnArgs = [];
       if (activeColFilter) {
@@ -119,6 +122,7 @@ export class OTableVisibleColumnsDialogComponent {
   }
 
   closeDialog() {
+
     const columnSortingToRemove = this.getColumnSortingToRemove();
     const newSortColumns = columnSortingToRemove.length > 0 ?
       this.table.sortColArray.filter(col => !columnSortingToRemove.includes(col.columnName)) :
@@ -129,21 +133,86 @@ export class OTableVisibleColumnsDialogComponent {
       this.table.groupedColumnsArray.filter(col => !columnGroupingToRemove.includes(col)) :
       undefined;
 
+    const columnsOrder = this.getColumnsOrder();
+
     this.dialogRef.close({
-      visibleColArray: this.getVisibleColumns(),
-      columnsOrder: this.getColumnsOrder(),
+      visibleColArray: this.getVisibleColumns().sort((a, b) => columnsOrder.indexOf(a) - columnsOrder.indexOf(b)),
+      columnsOrder: columnsOrder,
       sortColumns: newSortColumns,
       columnValueFiltersToRemove: this.getColumnValueFiltersToRemove(),
       groupColumns: newGroupColumns
     });
   }
 
+  /**
+   * Returns the visible columns, including non-hidable ones,
+   * preserving the order defined in oTableOptions.columns.
+   */
   private getVisibleColumns(): string[] {
-    return this.columns.filter(col => col.visible).map(col => col.attr);
+    const nonHidableColumns = Util.parseArray(this.table.nonHidableColumns, true);
+
+    // Visible columns selected in the dialog
+    const visibleFromDialog = this.columns
+      .filter(col => col.visible)
+      .map(col => col.attr);
+
+    // Merge: visible columns from the dialog + non-hidable (always visible)
+    const allVisibleAttrs = new Set([...visibleFromDialog, ...nonHidableColumns]);
+
+    // Sort according to the updated order in oTableOptions.columns
+    return this.table.oTableOptions.columns
+      .filter(oCol => allVisibleAttrs.has(oCol.attr))
+      .map(oCol => oCol.attr);
   }
 
+  /**
+   * Returns the final columns order, preserving the order defined in the dialog
+   * and keeping non-hidable and hidden columns in their original positions.
+   */
   private getColumnsOrder(): string[] {
-    return this.columns.map(col => col.attr);
+    const originalOrder = this.table.oTableOptions.columns.map(col => col.attr);
+
+    // Columns from the dialog in their new order
+    const dialogColumnsOrder = this.columns.map(col => col.attr);
+
+    // Columns not present in the dialog (non-hidable + hidden ones)
+    const columnsNotInDialog = originalOrder.filter(attr =>
+      !dialogColumnsOrder.includes(attr)
+    );
+
+    // Build the new order
+    const newOrder: string[] = [];
+
+    for (const dialogAttr of dialogColumnsOrder) {
+      // Before adding this dialog column,
+      // add the columns (non-hidable or hidden) that were placed before it
+      // in the original order
+      const dialogOriginalPos = originalOrder.indexOf(dialogAttr);
+
+      for (const notInDialogAttr of columnsNotInDialog) {
+        const notInDialogOriginalPos = originalOrder.indexOf(notInDialogAttr);
+
+        // If it was before and has not been added yet
+        if (
+          notInDialogOriginalPos < dialogOriginalPos &&
+          !newOrder.includes(notInDialogAttr)
+        ) {
+          newOrder.push(notInDialogAttr);
+        }
+      }
+
+      // Add the dialog column
+      newOrder.push(dialogAttr);
+    }
+
+    // Add remaining columns that were placed after all dialog columns
+    for (const notInDialogAttr of columnsNotInDialog) {
+      if (!newOrder.includes(notInDialogAttr)) {
+        newOrder.push(notInDialogAttr);
+      }
+    }
+
+    return newOrder;
   }
 
   private getColumnValueFiltersToRemove(): string[] {

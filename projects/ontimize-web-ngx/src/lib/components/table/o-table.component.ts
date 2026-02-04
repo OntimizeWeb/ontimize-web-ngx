@@ -515,11 +515,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /*parsed inputs variables */
   protected _visibleColArray: string[] = [];
 
-  get visibleColArray(): any[] {
+  get visibleColArray(): string[] {
     return this._visibleColArray;
   }
 
-  set visibleColArray(arg: any[]) {
+  set visibleColArray(arg: string[]) {
     const permissionsBlocked = this.permissions?.columns?.filter(col => col.visible === false).map(col => col.attr) ?? [];
     const permissionsChecked = arg.filter(value => permissionsBlocked.indexOf(value) === -1);
 
@@ -673,6 +673,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   /** Active column filters (no async pipe) */
   public columnFiltersArray: OColumnValueFilter[] = [];
+  private readonly originalRegisteredColumns: OColumn[] = [];
+  private originalNonHidableColumns: string;
 
   public groupedColumnsArray: string[] = [];
   @HostListener('window:resize', [])
@@ -975,6 +977,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
    */
   initialize(): any {
     super.initialize();
+
+    // Store original non-hidable columns for restoration on reset
+    this.originalNonHidableColumns = this.nonHidableColumns;
 
     this._oTableOptions = new DefaultOTableOptions();
     if (this.tabGroupContainer && this.tabContainer) {
@@ -1297,7 +1302,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   protected pushOColumnDefinition(colDef: OColumn) {
-    colDef.visible = (this._visibleColArray.indexOf(colDef.attr) !== -1);
+    colDef.visible = this.visibleColArray.includes(colDef.attr);
     // Find column definition by name
     const alreadyExisting = this.getOColumn(colDef.attr);
     if (alreadyExisting !== undefined) {
@@ -1305,6 +1310,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this._oTableOptions.columns[replacingIndex] = colDef;
     } else {
       this._oTableOptions.columns.push(colDef);
+      this.originalRegisteredColumns.push(colDef);
     }
     this.ensureColumnsOrder();
     this.refreshEditionModeWarn();
@@ -1340,8 +1346,17 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   parseVisibleColumns(defaultConfiguration: boolean = false) {
-    if (this.state.columnsDisplay) {
+    if (defaultConfiguration) {
+      this.state.columnsDisplay = undefined;
+      const originalColumns = this.originalRegisteredColumns.map(col => col.attr);
+      // setting visible columns according to the initial configuration
+      this.visibleColArray = this.originalRegisteredColumns.filter(item => item.visible).map(item => item.attr);
+      // setting columns order according to the initial configuration
+      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => originalColumns.indexOf(a.attr) - originalColumns.indexOf(b.attr));
+      return;
+    }
 
+    if (this.state.columnsDisplay) {
       // filtering columns that might be in state storage but not in the actual table definition
       let stateCols: OColumnDisplay[] = [];
       this.state.columnsDisplay.forEach((oCol, index) => {
@@ -1353,12 +1368,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
           console.warn('Unable to load the column ' + oCol.attr + ' from the localstorage');
         }
       });
-      if (defaultConfiguration) {
-        stateCols = this.state.initialConfiguration.columnsDisplay;
-      } else {
-        stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
-      }
 
+      stateCols = this.checkChangesVisibleColummnsInInitialConfiguration(stateCols);
       this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
         const indexA = stateCols.findIndex(col => col.attr === a.attr);
         const indexB = stateCols.findIndex(col => col.attr === b.attr);
@@ -1366,9 +1377,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       });
       this.visibleColArray = stateCols.filter(item => item.visible).map(item => item.attr);
     } else {
-
       this.visibleColArray = Util.parseArray(this.defaultVisibleColumns ? this.defaultVisibleColumns : this.visibleColumns, true);
-      this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => this.visibleColArray.indexOf(a.attr) - this.visibleColArray.indexOf(b.attr));
     }
   }
 
@@ -1468,12 +1477,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected ensureColumnsOrder() {
 
     let columnsOrder = [];
-    if (this.state.columnsDisplay) {
-      columnsOrder = this.state.columnsDisplay.map(item => item.attr);
-    } else {
-      columnsOrder = this.colArray.filter(attr => this.visibleColArray.indexOf(attr) === -1);
-      columnsOrder.push(...this.visibleColArray);
+
+    if (!this.state.columnsDisplay) {
+      return;
     }
+
+    columnsOrder = this.state.columnsDisplay.map(item => item.attr);
 
     this._oTableOptions.columns.sort((a: OColumn, b: OColumn) => {
       if (columnsOrder.indexOf(a.attr) === -1) {
@@ -1484,7 +1493,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
     });
 
-
   }
 
   initializeParams(): void {
@@ -1492,10 +1500,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!this.visibleColumns) {
       this.visibleColumns = this.columns;
     }
+    this.visibleColArray = Util.parseArray(this.visibleColumns, true);
+
     if (this.colArray.length) {
       this.colArray.forEach((x: string) => this.registerColumn(x));
       this.ensureColumnsOrder();
     }
+
     // Initialize quickFilter
     this._oTableOptions.filter = this.quickFilter;
 
@@ -1544,6 +1555,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     return this._selection;
   }
+
+
 
   updateStateExpandedColumn() {
     if (!this.tableRowExpandable?.expandableColumnVisible) {
@@ -3222,9 +3235,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
   }
 
-  applyDefaultConfiguration() {
-    this.initializeParams();
+  /**
+   * Applies the default table configuration, resetting all customizations
+   */
+  applyDefaultConfiguration(): void {
+    this.state.reset(this.pageable);
     this.parseVisibleColumns(true);
+    this.initializeParams();
+    this.addDefaultRowButtons();
     this.refreshColumnsWidthFromOriginalDefinition();
     this.reinitializateQuickFilterColumns();
     this.resetQueryRows();
@@ -3234,7 +3252,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.clearFilters(false);
     this.reloadData();
   }
-  resetQueryRows() {
+
+  /**
+   * Resets query rows to their initial configured value
+   */
+  resetQueryRows(): void {
     if (Util.isDefined(this.state.initialConfiguration.queryRows)) {
       this.queryRows = this.state.initialConfiguration.queryRows;
     }
@@ -3342,8 +3364,22 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     colDef.groupable = false;
     colDef.title = undefined;
     colDef.width = '48px';
+
+    this.visibleColArray.push(name);
     this.pushOColumnDefinition(colDef);
-    this._oTableOptions.visibleColumns.push(name);
+    this.addNonHidableColumn(name);
+  }
+
+  /**
+   * Adds a column to the non-hidable columns list, avoiding duplicates
+   * @param columnAttr Column attribute to mark as non-hidable
+   */
+  private addNonHidableColumn(columnAttr: string): void {
+    if (!this.nonHidableColumns) {
+      this.nonHidableColumns = columnAttr;
+    } else if (!this.nonHidableColumns.split(',').map(c => c.trim()).includes(columnAttr)) {
+      this.nonHidableColumns += Codes.ARRAY_INPUT_SEPARATOR + columnAttr;
+    }
   }
 
   get headerHeight() {

@@ -102,7 +102,8 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
    * Get the filter for this column from the array of filters
    */
   protected getColumnValueFilterByAttr(): OColumnValueFilter {
-    return this._columnFilters?.find(item => item.attr === this.column.attr);
+    const columnValueFilters = this.table.dataSource?.getColumnValueFilters();
+    return columnValueFilters?.find(item => item.attr === this.column.attr);
   }
 
 
@@ -123,14 +124,11 @@ export class OTableHeaderColumnFilterIconComponent implements OnInit, OnDestroy 
    * Gets the filter indicator number (position in the active filters list)
    */
   public getFilterIndicatorNumbered(): string {
-    const filters = this._columnFilters ?? [];
+    const filters = this.table.dataSource?.getColumnValueFilters() ?? [];
+    const index = filters.length > 1
+      ? filters.findIndex(f => f.attr === this.column.attr)
+      : -1;
 
-    // Only show number if there is more than one filter
-    if (filters.length <= 1) {
-      return '';
-    }
-
-    const index = filters.findIndex(f => f.attr === this.column.attr);
     return index >= 0 ? `${index + 1}` : '';
   }
 
