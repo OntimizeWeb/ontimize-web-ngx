@@ -18,7 +18,7 @@
       </ng-container>
       <ng-template #defaultQuickFilter>
         <ng-container *ngIf="quickFilter">
-          <o-table-quickfilter (onChange)="tableQuickFilterChanged($event)">
+          <o-table-quickfilter [placeholder]="quickFilterPlaceholder" (onChange)="tableQuickFilterChanged($event)">
           </o-table-quickfilter>
         </ng-container>
       </ng-template>
@@ -126,7 +126,7 @@
         [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
 
         <div class="content">
-          <o-table-header [column]="column"></o-table-header>
+          <o-table-header [column]="column" [column-filters]="columnFilters$ | async" ></o-table-header>
         </div>
       </th>
 

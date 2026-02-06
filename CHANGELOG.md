@@ -1,3 +1,17 @@
+## 15.8.2 (2026-02-04)
+### Bug Fixes
+* **o-table**:
+  * Fixed `quick-filter-placeholder` input not working ([024a85a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/024a85a)) Closes [#2057](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2057)
+  * Fixed the column filter icon state is not updated when all columns are disabled ([c3928d0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c3928d0)) Closes [#2069](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2069)
+  * Fixed that in *Show/Hide Columns* modal does not respect the original columns order ([9748a2a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9748a2a)) Closes [#2059](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2059)
+
+## 15.8.1 (2026-01-22)
+### Bug Fixes
+* **o-table**:
+  * Fixed a regression introduced in version **15.8.0** that caused vertical scrollbars to disappear ([0b1cae0](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/0b1cae0)) Closes [#2050](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2050)
+  * Fixed preserved vertical scroll position in `o-table` after editing cell values.([89d174e](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/89d174e)) Closes [#2005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2005)
+* **o-radio**: Fixed incorrect radio label behavior when multiple `o-radio` components were used in the same view due to duplicated input IDs.([83cbfb9](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/83cbfb9)) Closes [#2048](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2048)
+
 ## 15.8.0 (2026-01-16)
 ### Features
 * **o-table**:

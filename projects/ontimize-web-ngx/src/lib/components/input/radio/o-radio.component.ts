@@ -40,6 +40,7 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   tabsSubscriptions: any;
   @ViewChild(MatRadioGroup) mrg: MatRadioGroup;
   formLayoutManagerTabIndex: number;
+  protected groupId: string;
 
   constructor(
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
@@ -47,6 +48,7 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
     injector: Injector
   ) {
     super(form, elRef, injector);
+    this.groupId = crypto.randomUUID();
   }
 
   ngAfterViewInit(): void {

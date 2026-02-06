@@ -12,7 +12,7 @@
     <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()"
       [value]="getValue()" [required]="isRequired" [labelPosition]="labelPosition"
       (change)="onMatRadioGroupChange($event)" [fxLayout]="layout" [fxLayoutGap]="labelGap">
-      <mat-radio-button [id]="'o-radio-button-'+i" *ngFor="let item of dataArray;let i = index" [value]="getValueColumn(item)"
+      <mat-radio-button [id]="'o-radio-button-'+groupId+'-'+i" *ngFor="let item of dataArray;let i = index" [value]="getValueColumn(item)"
        [disabled]="!enabled">
         {{ getOptionDescriptionValue(item) }}
       </mat-radio-button>
