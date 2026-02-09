@@ -1,0 +1,20 @@
+.title-container {
+  padding: 0 0 8px;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.sidenav-container {
+  padding: 24px 32px;
+  border-radius: 2px;
+}
+
+.sidenav-content {
+  margin-top: 10px;
+}
+.sidenav-container {
+  width: var(--sidenav-width);
+  min-width: var(--sidenav-width);
+  max-width: var(--sidenav-width);
+  flex: 0 0 var(--sidenav-width);
+}

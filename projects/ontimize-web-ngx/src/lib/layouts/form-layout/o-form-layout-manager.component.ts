@@ -63,7 +63,10 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'dialogMinHeight: dialog-min-height',
   'dialogMaxHeight dialog-max-height',
   'dialogClass: dialog-class',
-  'dialogTitleSeparator: dialog-title-separator'
+  'dialogTitleSeparator: dialog-title-separator',
+  'sidenavPosition: sidenav-position',
+  'sidenavWidth: sidenav-width',
+
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -96,6 +99,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public static DIALOG_MODE = 'dialog';
   public static TAB_MODE = 'tab';
   public static SPLIT_PANE_MODE = 'split-pane';
+  public static SIDENAV_MODE = 'sidenav';
+
 
   public oattr: string;
   public _mode: string = OFormLayoutManagerComponent.DIALOG_MODE;
@@ -106,7 +111,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   public set mode(value: string) {
-    const availableModeValues = [OFormLayoutManagerComponent.DIALOG_MODE, OFormLayoutManagerComponent.TAB_MODE, OFormLayoutManagerComponent.SPLIT_PANE_MODE];
+    const availableModeValues = [
+      OFormLayoutManagerComponent.DIALOG_MODE,
+      OFormLayoutManagerComponent.TAB_MODE,
+      OFormLayoutManagerComponent.SPLIT_PANE_MODE,
+      OFormLayoutManagerComponent.SIDENAV_MODE
+    ];
+
     this._mode = (value || '').toLowerCase();
     if (availableModeValues.indexOf(this._mode) === -1) {
       this._mode = OFormLayoutManagerComponent.DIALOG_MODE;
@@ -151,11 +162,19 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public dialogClass: string = '';
   public dialogTitleSeparator = ':';
 
+
+  public sidenavPosition: 'start' | 'end' = 'end';
+  public sidenavWidth: string = '400px';
+
   @ViewChild('tabGroup')
   public oTabGroup: OFormLayoutManagerMode;
   public dialogRef: MatDialogRef<OFormLayoutDialogComponent>;
   @ViewChild('splitPane')
   public oSplitPane: OFormLayoutManagerMode;
+
+  @ViewChild('sidenav')
+  public oSidenav: OFormLayoutManagerMode;
+
 
   public onMainTabSelected: EventEmitter<any> = new EventEmitter<any>();
   public onSelectedTabChange: EventEmitter<any> = new EventEmitter<any>();
@@ -325,6 +344,11 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public getComponentKey(): string {
     return 'OFormLayoutManagerComponent_' + this.oattr;
   }
+
+  public isSidenavMode(): boolean {
+    return this.mode === OFormLayoutManagerComponent.SIDENAV_MODE;
+  }
+
 
   public getRouteKey(): string {
     let route = this.router.url;
@@ -662,7 +686,10 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       compRef = this.dialogRef.componentInstance;
     } else if (this.isSplitPaneMode() && Util.isDefined(this.oSplitPane)) {
       compRef = this.oSplitPane;
+    } else if (this.isSidenavMode() && Util.isDefined(this.oSidenav)) {
+      compRef = this.oSidenav;
     }
+
     return compRef;
   }
 
@@ -696,4 +723,31 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     const compRef = this.getLayoutModeComponent();
     return Util.isDefined(compRef) ? `${this.oattr}-${compRef.getIdOfActiveItem()}-` : '';
   }
+  protected _sidenavOptions: any = {};
+
+  get sidenavOptions(): any {
+    return this._sidenavOptions;
+  }
+
+  addSidenavOptions(value: any): void {
+    Object.assign(this._sidenavOptions, value);
+
+    if (value.hasOwnProperty('labelColumns')) {
+      this.labelColsArray = Util.parseArray(value['labelColumns']);
+    }
+
+    if (value.hasOwnProperty('separator')) {
+      this.separator = value['separator'];
+    }
+
+    if (value.hasOwnProperty('position')) {
+      this.sidenavPosition = value['position'];
+    }
+
+    if (value.hasOwnProperty('width')) {
+      this.sidenavWidth = value['width'];
+    }
+
+  }
+
 }

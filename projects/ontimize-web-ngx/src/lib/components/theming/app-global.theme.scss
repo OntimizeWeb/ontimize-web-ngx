@@ -103,6 +103,12 @@
     }
   }
 
+  .o-form-layout-sidenav-container {
+    .title-container {
+      border-bottom: 1px solid mat.get-color-from-palette($primary);
+    }
+  }
+
   /* MODAL DIALOG IN O-DIALOG, FORM LAYOUT MANAGER AND LIST-PICKER */
 
   .o-dialog-class,

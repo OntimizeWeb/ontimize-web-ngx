@@ -14,31 +14,36 @@ import { OFormLayoutSplitPaneComponent } from './split-pane/o-form-layout-split-
 import { OFormLayoutSplitPaneOptionsDirective } from './split-pane/options/o-form-layout-split-pane-options.directive';
 import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { OFormLayoutTabGroupOptionsDirective } from './tabgroup/options/o-form-layout-tabgroup-options.directive';
+import { OFormLayoutSidenavOptionsDirective } from './sidenav/options/o-form-layout-sidenav-options.directive';
+import { OFormLayoutSidenavComponent } from './sidenav/o-form-layout-sidenav.component';
 
 @NgModule({
-    imports: [CommonModule, OSharedModule, RouterModule, ResizableModule],
-    declarations: [
-        OFormLayoutDialogComponent,
-        OFormLayoutManagerComponent,
-        OFormLayoutTabGroupComponent,
-        OFormLayoutManagerContentDirective,
-        OFormLayoutTabGroupOptionsDirective,
-        OFormLayoutDialogOptionsDirective,
-        OFormLayoutSplitPaneComponent,
-        OFormLayoutSplitPaneOptionsDirective
-    ],
-    exports: [
-        OFormLayoutManagerComponent,
-        OFormLayoutTabGroupOptionsDirective,
-        OFormLayoutDialogOptionsDirective,
-        OFormLayoutSplitPaneOptionsDirective
-    ],
-    providers: [{
-            provide: CanActivateFormLayoutChildGuard,
-            useClass: CanActivateFormLayoutChildGuard
-        },
-        OFormLayoutManagerComponentStateService
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [CommonModule, OSharedModule, RouterModule, ResizableModule],
+  declarations: [
+    OFormLayoutDialogComponent,
+    OFormLayoutManagerComponent,
+    OFormLayoutTabGroupComponent,
+    OFormLayoutManagerContentDirective,
+    OFormLayoutTabGroupOptionsDirective,
+    OFormLayoutDialogOptionsDirective,
+    OFormLayoutSidenavOptionsDirective,
+    OFormLayoutSplitPaneComponent,
+    OFormLayoutSidenavComponent,
+    OFormLayoutSplitPaneOptionsDirective
+  ],
+  exports: [
+    OFormLayoutManagerComponent,
+    OFormLayoutTabGroupOptionsDirective,
+    OFormLayoutDialogOptionsDirective,
+    OFormLayoutSplitPaneOptionsDirective,
+    OFormLayoutSidenavOptionsDirective
+  ],
+  providers: [{
+    provide: CanActivateFormLayoutChildGuard,
+    useClass: CanActivateFormLayoutChildGuard
+  },
+    OFormLayoutManagerComponentStateService
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class OFormLayoutManagerModule { }
