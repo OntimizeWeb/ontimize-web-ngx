@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { AfterViewInit, Directive, Input, OnInit } from '@angular/core';
 
 import { BooleanConverter } from '../../../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
@@ -6,9 +6,13 @@ import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.compone
 @Directive({
   selector: 'o-form-layout-sidenav-options, o-form-layout-manager[mode="sidenav"]'
 })
-export class OFormLayoutSidenavOptionsDirective {
+export class OFormLayoutSidenavOptionsDirective  implements AfterViewInit, OnInit {
 
   constructor(protected formLayoutManager: OFormLayoutManagerComponent) { }
+  ngAfterViewInit(): void {
+  }
+  ngOnInit(): void {
+  }
 
   ngOnChanges(): void {
     if (this.formLayoutManager) {

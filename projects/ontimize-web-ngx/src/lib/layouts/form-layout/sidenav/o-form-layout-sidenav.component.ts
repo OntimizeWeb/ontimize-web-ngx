@@ -24,7 +24,9 @@ import { OFormLayoutManagerService } from '../../../services/o-form-layout-manag
   styleUrls: ['./o-form-layout-sidenav.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.o-form-layout-sidenav]': 'true'
+    '[class.o-form-layout-sidenav]': 'true',
+    '[style.--sidenav-width]': 'width'
+
   }
 })
 export class OFormLayoutSidenavComponent
@@ -35,7 +37,7 @@ export class OFormLayoutSidenavComponent
      =============================== */
 
   @Input() position: 'start' | 'end' = 'end';
-  @Input() width: string = '50%';
+  @Input() width: string = '60%';
 
   @Input() disableClose: boolean = false;
 
