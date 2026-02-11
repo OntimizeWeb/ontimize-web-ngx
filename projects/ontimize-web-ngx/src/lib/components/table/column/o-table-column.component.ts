@@ -165,6 +165,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   /* input renderer currency */
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
+  protected currencySymbolColumn: string;
 
   /* input renderer boolean */
   protected trueValue: any;
@@ -323,6 +324,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
             newRenderer.maxDecimalDigits = this.maxDecimalDigits;
             newRenderer.grouping = this.grouping;
             newRenderer.thousandSeparator = this.thousandSeparator;
+            newRenderer.currencySymbolColumn = this.currencySymbolColumn;
             break;
           case 'date':
             newRenderer.format = this.format;
