@@ -164,11 +164,11 @@
             {{ column.aggregate.title | oTranslate }}
           </div>
           <ng-container *ngIf="!column.renderer || column.aggregate?.operator === 'count'; else rendererTemplate">
-            {{ dataSource.getAggregateData(column) }}
+            {{ dataSource?.getAggregateData(column) }}
           </ng-container>
           <ng-template #rendererTemplate>
             <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref"
-              [ngTemplateOutletContext]="{cellvalue: dataSource.getAggregateData(column)}">
+              [ngTemplateOutletContext]="{cellvalue: dataSource?.getAggregateData(column)}">
             </ng-template>
           </ng-template>
         </td>
