@@ -35,6 +35,7 @@ o-form-layout-sidenav {
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  max-height: calc(100% - 44px);
 }
 
 .sidenav-content {
