@@ -7,10 +7,10 @@
     display: flex;
 
     .o-grid-toolbar {
-      .mat-mdc-form-field-subscript-wrapper {
-        display: none;
-      }
+      .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+        padding-top: 12px;
 
+      }
     }
 
     .o-grid-no-results {

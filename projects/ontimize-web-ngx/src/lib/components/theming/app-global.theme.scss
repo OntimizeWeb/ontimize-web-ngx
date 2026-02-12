@@ -349,6 +349,54 @@
     }
 
   }
+  /** QUICKFILTER */
+  .o-table, .o-list, .o-tree, .o-grid{
+    .quickFilter {
+
+      .mat-mdc-form-field {
+
+        .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+        }
+
+        .mat-mdc-form-field-flex {
+
+
+          .mat-mdc-form-field-infix {
+            align-self: center;
+            padding: 0;
+            min-height: 30px;
+            display: flex;
+          }
+
+          .mat-mdc-form-field-icon-prefix {
+            padding-left: 10px;
+            padding-right: 10px;
+
+            div {
+              align-items: center;
+              display: flex;
+
+              .mat-icon,
+              button {
+                margin-right: 6px;
+              }
+
+              .mat-badge-content {
+                background-color: #3C8500;
+                width: 14px;
+                height: 14px;
+                line-height: 14px;
+                top: -4px;
+                right: -4px;
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
 
   .o-form .o-form-toolbar button,
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {

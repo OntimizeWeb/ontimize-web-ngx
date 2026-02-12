@@ -1,6 +1,6 @@
 .o-data-toolbar {
-  padding: 0 4px;
-  height: 64px;
+  padding: 8px 4px 2px 4px;
+  height: 40px;
   display: flex;
   align-items: center;
   align-content: space-between;
@@ -8,9 +8,6 @@
   flex-direction: row;
   white-space: nowrap;
 
-  &.dense {
-    height: 48px;
-  }
 
   .title {
     font-size: 18px;
