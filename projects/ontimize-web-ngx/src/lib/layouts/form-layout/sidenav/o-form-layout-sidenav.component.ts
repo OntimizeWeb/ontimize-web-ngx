@@ -17,6 +17,7 @@ import { Util } from '../../../util/util';
 import { OFormLayoutManagerContentDirective } from '../directives/o-form-layout-manager-content.directive';
 import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
 import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
+import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../../../types';
 
 @Component({
   selector: 'o-form-layout-sidenav',
@@ -39,7 +40,6 @@ export class OFormLayoutSidenavComponent
   @Input() position: 'start' | 'end' = 'end';
   @Input() width: string = '60%';
 
-  @Input() disableClose: boolean = false;
 
   @ViewChild(MatSidenav)
   sidenav: MatSidenav;
@@ -77,7 +77,7 @@ export class OFormLayoutSidenavComponent
      OFormLayoutManagerMode API
      =============================== */
 
-  openDetail(detail: any): void {
+  openDetail(detail: FormLayoutDetailComponentData): void {
     this.data = detail;
     this.component = detail.component;
     this.params = detail.params;
@@ -99,10 +99,7 @@ export class OFormLayoutSidenavComponent
   }
 
 
-  closeDetail(options?: any): void {
-    if (this.disableClose) {
-      return;
-    }
+  closeDetail(options?: FormLayoutCloseDetailOptions): void {
 
     if (Util.isDefined(options) && Util.isDefined(options?.exitWithoutConfirmation) && options.exitWithoutConfirmation) {
       this.sidenav.close();

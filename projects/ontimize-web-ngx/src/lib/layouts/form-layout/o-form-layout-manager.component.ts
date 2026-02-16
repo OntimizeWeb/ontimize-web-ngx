@@ -38,6 +38,7 @@ import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
 import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
 import { IOFormLayoutManager } from '../../interfaces/form-layout-manager.interface';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
+import { OFormLayoutSidenavOptions } from '../../types/form-layout-sidenav-options.type';
 
 export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'oattr: attr',
@@ -105,6 +106,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public oattr: string;
   public _mode: string = OFormLayoutManagerComponent.DIALOG_MODE;
   public stretchTabs = false;
+  protected _sidenavOptions: OFormLayoutSidenavOptions = {};
 
   public get mode(): string {
     return this._mode;
@@ -723,7 +725,6 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     const compRef = this.getLayoutModeComponent();
     return Util.isDefined(compRef) ? `${this.oattr}-${compRef.getIdOfActiveItem()}-` : '';
   }
-  protected _sidenavOptions: any = {};
 
   get sidenavOptions(): any {
     return this._sidenavOptions;

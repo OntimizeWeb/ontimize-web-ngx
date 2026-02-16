@@ -1,18 +1,13 @@
-import { AfterViewInit, Directive, Input, OnInit } from '@angular/core';
-
-import { BooleanConverter } from '../../../../decorators/input-converter';
+import { Directive, Input } from '@angular/core';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
+import { OFormLayoutSidenavOptions } from '../../../../types/form-layout-sidenav-options.type';
 
 @Directive({
   selector: 'o-form-layout-sidenav-options, o-form-layout-manager[mode="sidenav"]'
 })
-export class OFormLayoutSidenavOptionsDirective  implements AfterViewInit, OnInit {
+export class OFormLayoutSidenavOptionsDirective {
 
   constructor(protected formLayoutManager: OFormLayoutManagerComponent) { }
-  ngAfterViewInit(): void {
-  }
-  ngOnInit(): void {
-  }
 
   ngOnChanges(): void {
     if (this.formLayoutManager) {
@@ -20,29 +15,11 @@ export class OFormLayoutSidenavOptionsDirective  implements AfterViewInit, OnIni
     }
   }
 
-  /* ===============================
-     Layout options
-     =============================== */
-
   @Input()
   public width: string;
 
   @Input()
   public position: 'start' | 'end';
-
-  /* ===============================
-     Behavior options
-     =============================== */
-
-  protected _disableClose: boolean = false;
-  @Input('disable-close')
-  set disableClose(value: boolean) {
-    this._disableClose = BooleanConverter(value);
-  }
-
-  /* ===============================
-     Label / title options
-     =============================== */
 
   @Input('label-columns')
   public labelColumns: string;
@@ -50,16 +27,14 @@ export class OFormLayoutSidenavOptionsDirective  implements AfterViewInit, OnIni
   @Input()
   public separator: string;
 
-  getOptions(): any {
+  getOptions(): OFormLayoutSidenavOptions {
     const result = {
       width: this.width,
       position: this.position,
-      disableClose: this._disableClose,
       labelColumns: this.labelColumns,
       separator: this.separator
     };
 
-    // Remove undefined properties
     Object.keys(result).forEach(
       key => result[key] == null ? delete result[key] : {}
     );

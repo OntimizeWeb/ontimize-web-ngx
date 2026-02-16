@@ -9,7 +9,7 @@ o-form-layout-sidenav {
 
 .o-form-layout-sidenav-container {
 
-  .mat-drawer.custom-sidenav {
+  .mat-drawer.o-form-layout-matsidenav {
     width: var(--sidenav-width) !important;
     min-width: var(--sidenav-width) !important;
     max-width: var(--sidenav-width) !important;
@@ -20,7 +20,7 @@ o-form-layout-sidenav {
   }
 }
 
-.custom-sidenav {
+.o-form-layout-matsidenav {
   padding: 24px 32px;
 }
 
