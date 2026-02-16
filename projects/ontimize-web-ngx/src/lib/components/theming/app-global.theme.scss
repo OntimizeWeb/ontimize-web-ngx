@@ -351,7 +351,8 @@
   }
 
   /** QUICKFILTER */
-  /* Same height en all quickfilters*/
+
+  // Same height in quickfilters in the toolbar
   .o-list,
   .o-tree,
   .o-grid {
@@ -370,6 +371,7 @@
     }
   }
 
+  // Common padding in quickfilter icon
   .o-table,
   .o-list .o-search-input,
   .o-tree .o-search-input,
@@ -380,7 +382,7 @@
     }
   }
 
-
+  // Common styles for .quickfilter
   .o-table,
   .o-list .o-search-input,
   .o-tree .o-search-input,
