@@ -7,7 +7,9 @@
     display: flex;
 
     .o-grid-toolbar {
-      .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+      margin-bottom: 12px;
+
+      .mat-mdc-form-field-type-mat-select .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
         padding-top: 12px;
 
       }
