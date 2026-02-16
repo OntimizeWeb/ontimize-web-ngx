@@ -1,11 +1,11 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, Input, OnChanges } from '@angular/core';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 import { OFormLayoutSidenavOptions } from '../../../../types/form-layout-sidenav-options.type';
 
 @Directive({
   selector: 'o-form-layout-sidenav-options, o-form-layout-manager[mode="sidenav"]'
 })
-export class OFormLayoutSidenavOptionsDirective {
+export class OFormLayoutSidenavOptionsDirective implements OnChanges {
 
   constructor(protected formLayoutManager: OFormLayoutManagerComponent) { }
 
