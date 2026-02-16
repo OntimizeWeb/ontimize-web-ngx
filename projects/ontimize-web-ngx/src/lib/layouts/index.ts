@@ -16,3 +16,5 @@ export * from './form-layout/tabgroup/o-form-layout-tabgroup.component';
 export * from './form-layout/tabgroup/options/o-form-layout-tabgroup-options.directive';
 export * from './form-layout/split-pane/o-form-layout-split-pane.component';
 export * from './form-layout/split-pane/options/o-form-layout-split-pane-options.directive';
+export * from './form-layout/sidenav/o-form-layout-sidenav.component';
+export * from './form-layout/sidenav/options/o-form-layout-sidenav-options.directive';

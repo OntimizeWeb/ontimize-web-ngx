@@ -1,0 +1,27 @@
+<mat-sidenav-container class="o-form-layout-sidenav-container">
+
+  <mat-sidenav #sidenav mode="over" [position]="position" class="o-form-layout-matsidenav" [class.position-end]="position === 'end'"
+    [class.position-start]="position === 'start'">
+
+    <!-- Header -->
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="title-container" mat-dialog-title>
+
+      <span fxFlex fxLayoutAlign="start center">
+        {{ label }}
+      </span>
+
+      <mat-icon (click)="closeDetail()" svgIcon="ontimize:close" (keydown)="closeDetail()"></mat-icon>
+
+    </div>
+
+    <div class="form-layout-sidenav-content">
+      <ng-template o-form-layout-manager-content></ng-template>
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
