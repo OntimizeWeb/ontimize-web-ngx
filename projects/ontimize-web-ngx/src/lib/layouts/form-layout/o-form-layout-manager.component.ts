@@ -66,8 +66,7 @@ export const DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER = [
   'dialogClass: dialog-class',
   'dialogTitleSeparator: dialog-title-separator',
   'sidenavPosition: sidenav-position',
-  'sidenavWidth: sidenav-width',
-
+  'sidenavWidth: sidenav-width'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
@@ -165,7 +164,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
 
 
   public sidenavPosition: 'start' | 'end' = 'end';
-  public sidenavWidth: string = '400px';
+  public sidenavWidth: string = '60%';
 
   @ViewChild('tabGroup')
   public oTabGroup: OFormLayoutManagerMode;
