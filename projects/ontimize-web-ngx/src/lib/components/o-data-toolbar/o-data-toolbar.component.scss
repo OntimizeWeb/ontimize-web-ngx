@@ -1,20 +1,22 @@
 .o-data-toolbar {
-  padding: 0 4px;
-  height: 64px;
+  padding: 8px 4px 0 4px;
+  height: 40px;
   display: flex;
   align-items: center;
   align-content: space-between;
   width: 100%;
   flex-direction: row;
   white-space: nowrap;
+  margin: 0 0 4px;
 
-  &.dense {
-    height: 48px;
-  }
 
   .title {
     font-size: 18px;
     font-weight: 400;
     text-align: center;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
   }
 }
