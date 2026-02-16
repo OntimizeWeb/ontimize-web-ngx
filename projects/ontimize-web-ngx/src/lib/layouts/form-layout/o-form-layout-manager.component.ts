@@ -97,11 +97,10 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   OFormLayoutManagerComponent = OFormLayoutManagerComponent;
 
 
-  public static DIALOG_MODE = 'dialog';
-  public static TAB_MODE = 'tab';
-  public static SPLIT_PANE_MODE = 'split-pane';
-  public static SIDENAV_MODE = 'sidenav';
-
+  public static readonly DIALOG_MODE = 'dialog';
+  public static readonly TAB_MODE = 'tab';
+  public static readonly SPLIT_PANE_MODE = 'split-pane';
+  public static readonly SIDENAV_MODE = 'sidenav';
 
   public oattr: string;
   public _mode: string = OFormLayoutManagerComponent.DIALOG_MODE;
