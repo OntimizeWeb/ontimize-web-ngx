@@ -1,3 +1,9 @@
+## 15.8.2 (2026-02-17)
+### Features
+* `BaseRequestArgument` now has access to `PaginationContextService` to retrieve the current pagination state during request argument parsing. This enables custom request argument adapters to access pagination context directly.([0a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#2075](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2075)
+* **o-table**: new input `initial-filter-function` ([](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/)) Closes [#2073](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2073)
+
+
 ## 15.8.2 (2026-02-04)
 ### Bug Fixes
 * **o-table**:
