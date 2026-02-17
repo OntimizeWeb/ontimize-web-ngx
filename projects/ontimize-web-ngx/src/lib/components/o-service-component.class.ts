@@ -677,7 +677,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
         complexExpr = complexExpr
           ? FilterExpressionUtils.buildComplexExpression(complexExpr, initialFilterExpr as Expression, FilterExpressionUtils.OP_AND)
           : initialFilterExpr as Expression;
-      } else if (initialFilterExpr) {
+      } else {
         filter = { ...filter, ...initialFilterExpr };
       }
     }
