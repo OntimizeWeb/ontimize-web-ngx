@@ -109,7 +109,10 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   //quickFilterAppearance[legacy|standard|fill|outline] Indicates which of the mat-form-field different appearance variants will be used. Default: outline
   'quickFilterAppearance:quick-filter-appearance',
 
-  'disablePageSizeCalculation: disable-page-size-calculation'
+  'disablePageSizeCalculation: disable-page-size-calculation',
+
+  //initialFilterFunction: initial-filter-function
+  'initialFilterFunction: initial-filter-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -270,6 +273,9 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   public enabledInsertButton: boolean = true;
   public enabledRefreshButton: boolean = true;
 
+
+  protected initialFilterFunction: () => Expression | { [key: string]: any };
+
   constructor(
     injector: Injector,
     protected elRef: ElementRef,
@@ -385,7 +391,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
         }
       })
       .catch((e) => {
-        console.error('Cannot match any routes. URL Segment: ', route,e);
+        console.error('Cannot match any routes. URL Segment: ', route, e);
         this.navigationService.isNavigating = false;
       });
   }
@@ -654,14 +660,27 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     this.filterBuilder = filterBuilder;
   }
 
-  public getComponentFilter(existingFilter: any = {}): any {
-    const filter = super.getComponentFilter(existingFilter);
+  public getComponentFilter(existingFilter: any = {}): Expression | { [key: string]: any } {
+
+    let filter = super.getComponentFilter(existingFilter);
 
     const quickFilterExpr = this.getQuickFilterExpression();
     const filterBuilderExpr = this.getFilterBuilderExpression();
+    const initialFilterExpr: Expression | { [key: string]: any } = this.initialFilterFunction ? this.initialFilterFunction() : undefined;
+
     let complexExpr = quickFilterExpr || filterBuilderExpr;
     if (quickFilterExpr && filterBuilderExpr) {
       complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
+    }
+
+    if (initialFilterExpr) {
+      if ( FilterExpressionUtils.instanceofExpression(initialFilterExpr)) {
+        complexExpr = complexExpr
+          ? FilterExpressionUtils.buildComplexExpression(complexExpr, initialFilterExpr as Expression, FilterExpressionUtils.OP_AND)
+          : initialFilterExpr as Expression;
+      } else if (initialFilterExpr) {
+        filter = { ...filter, ...initialFilterExpr };
+      }
     }
 
     if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
