@@ -111,7 +111,7 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
 
   'disablePageSizeCalculation: disable-page-size-calculation',
 
-  //initialFilterFunction: initial-filter-function
+  //initialFilterFunction: initial-filter-function:  Callback function that returns an initial filter to be applied on every query.
   'initialFilterFunction: initial-filter-function'
 ];
 
@@ -661,7 +661,6 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   public getComponentFilter(existingFilter: any = {}): Expression | { [key: string]: any } {
-
     let filter = super.getComponentFilter(existingFilter);
 
     const quickFilterExpr = this.getQuickFilterExpression();
