@@ -52,6 +52,7 @@ export class BaseService<T extends ServiceResponse> {
     this.nameConvention = this.injector.get(NameConvention);
     this.paginationContextService = new PaginationContextService(); //
     this.requestArgumentAdapter = this.injector.get(OntimizeRequestArgumentsAdapter);
+    this.requestArgumentAdapter.setPaginationContextService(this.paginationContextService);
   }
 
   public configureAdapter() {
