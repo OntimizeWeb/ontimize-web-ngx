@@ -71,7 +71,7 @@ export class OntimizeAuthService extends AuthService {
           pendingArray.push(permissionsService.getUserPermissionsAsPromise());
           pendingArray.push(remoteConfigService.initialize());
           combineLatest(pendingArray).subscribe(() => {
-            observer.next();
+            observer.next(undefined);
             observer.complete();
           });
         }, error => {
@@ -106,7 +106,7 @@ export class OntimizeAuthService extends AuthService {
           const remoteConfigService = this.injector.get(ORemoteConfigurationService);
           remoteConfigService.finalize().subscribe(() => {
             this.onLogoutSuccess(resp);
-            innerObserver.next();
+            innerObserver.next(undefined);
             innerObserver.complete();
           });
         }, error => {

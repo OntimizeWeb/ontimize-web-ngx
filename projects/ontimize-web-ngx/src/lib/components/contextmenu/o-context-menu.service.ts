@@ -95,7 +95,7 @@ export class OContextMenuService implements OnDestroy {
     contextMenuContent.instance.data = context.data;
     contextMenuContent.instance.menuClass = context.class;
     this.subscription.add(contextMenuContent.instance.close.subscribe(() => {
-      this.closeContextMenu.next();
+      this.closeContextMenu.next(undefined);
       this.destroyOverlays();
     }));
   }

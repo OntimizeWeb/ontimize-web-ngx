@@ -954,7 +954,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   updateGroupedColumns() {
     this.table.loadingService.setLoading(true);
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next(undefined);
   }
 
   /**
@@ -967,12 +967,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     } else {
       this.updateStateRowGrouped(rowGroup);
     }
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next(undefined);
   }
 
   setRowGroupLevelExpansion(rowGroup: OTableGroupedRow, value: boolean) {
     this.levelsExpansionState[rowGroup.level] = value;
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next(undefined);
   }
 
   private updateStateRowGrouped(rowGroup: OTableGroupedRow) {

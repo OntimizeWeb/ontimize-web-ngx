@@ -93,7 +93,7 @@ export class OMatSortHeader extends MatSortHeader {
       this._showIndicatorHint = false;
     } else {
       this._viewState.toState = 'active';
-      this._intl.changes.next();
+      this._intl.changes.next(undefined);
     }
   }
 

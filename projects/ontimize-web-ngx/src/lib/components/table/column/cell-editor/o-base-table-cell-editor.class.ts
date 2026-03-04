@@ -130,7 +130,7 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
+    this.destroy$.next(undefined);
     this.destroy$.complete();
   }
 

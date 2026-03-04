@@ -47,7 +47,7 @@ export class AppMenuService {
     this.permissionsService = this.injector.get(PermissionsService);
     this.permissionsService.onChangePermissions.subscribe(x => {
       this.mergeMenuItemsWithPermissions();
-      this.onPermissionMenuChanged.next()
+      this.onPermissionMenuChanged.next(undefined)
     });
 
   }

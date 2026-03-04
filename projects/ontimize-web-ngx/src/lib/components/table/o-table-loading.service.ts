@@ -242,7 +242,7 @@ export class OTableLoadingService implements OnDestroy  {
    * Cleans up all internal subscriptions and completes streams.
    */
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(undefined);
     this.destroy$.complete();
 
     this.loading$.complete();
