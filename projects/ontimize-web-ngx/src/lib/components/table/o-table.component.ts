@@ -240,8 +240,11 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'readOnly: read-only',
   'readOnlyConfiguration: read-only-configuration',
   'showNotificationOfReadOnly: show-notification-of-read-only',
+
   // selection-on-row-click [yes|no|true|false]: . Default: yes.
-  'selectionOnRowClick: selection-on-row-click'
+  'selectionOnRowClick: selection-on-row-click',
+  // show-header-tooltip [yes|no|true|false]: Show tooltip with header title text on all columns. Default: no.
+  'showHeaderTooltip: show-header-tooltip',
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -496,6 +499,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @BooleanInputConverter()
   keepSelectedItems: boolean = true;
+
+  @BooleanInputConverter()
+  showHeaderTooltip: boolean = false;
 
   public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
   public exportServiceType: string;
@@ -802,6 +808,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
         this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
       }
+      if (Util.isDefined(oTableGlobalConfig.showHeaderTooltip)) {
+        this.showHeaderTooltip = oTableGlobalConfig.showHeaderTooltip;
+      }
+
 
     } catch (error) {
       // Do nothing because is optional
