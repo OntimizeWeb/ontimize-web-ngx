@@ -4,11 +4,14 @@ import { OTableBase } from "../../../o-table-base.class";
 import { OMatSortHeader } from "../../sort/o-mat-sort-header";
 import type { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
 import { OColumnValueFilter } from "../../../../../types/table/o-column-value-filter.type";
+import { BooleanInputConverter } from "../../../../../decorators/input-converter";
 
 export const DEFAULT_INPUTS_O_TABLE_HEADER = [
   'column',
   // columnFilters: Active filters applied to table columns
-  'columnFilters: column-filters'
+  'columnFilters: column-filters',
+  // show-header-tooltip [yes|no|true|false]: Inherited from o-table, shows column title as tooltip. Default: false.
+  'showHeaderTooltip: show-header-tooltip',
 ]
 @Component({
   selector: 'o-table-header',
@@ -37,6 +40,9 @@ export class OTableHeaderComponent {
   }
 
   @ViewChild(OMatSortHeader) matSortHeader: OMatSortHeader;
+
+  @BooleanInputConverter()
+  showHeaderTooltip: boolean = false;
 
   constructor(
     @Inject(forwardRef(() => OTableBase)) protected table: OTableBase
