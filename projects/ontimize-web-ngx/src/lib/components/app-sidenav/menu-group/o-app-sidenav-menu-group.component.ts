@@ -180,7 +180,10 @@ export class OAppSidenavMenuGroupComponent implements OnInit, AfterViewInit, OnD
       event.preventDefault();
     }
     this.menuGroup.opened = !this.menuGroup.opened;
-    this.appMenuService.onClick.next(undefined);
+    this.appMenuService.onClick.next({
+      idMenu: this.menuGroup.id,
+      opened: this.menuGroup.opened
+    });
     this.updateContentExpansion();
   }
 

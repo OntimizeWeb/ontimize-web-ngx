@@ -248,7 +248,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     return new Observable(observer => {
       if (!this.dataService || !(this.queryMethod in this.dataService) || !this.entity) {
         console.warn('Service not properly configured! aborting query');
-        observer.next(undefined);
+        observer.complete();
       }
 
       const queryArguments = this.getQueryArguments({});
@@ -273,10 +273,10 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
             });
             this.onDataLoaded.emit(this.responseMap);
           }
-          observer.next(undefined);
+          observer.complete();
         }, err => {
           console.error(err);
-          observer.next(undefined);
+          observer.error(err);
         });
     });
   }

@@ -97,7 +97,7 @@ export class OComboSearchComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._onDestroy.next(undefined);
+    this._onDestroy.next(void 0);
     this._onDestroy.complete();
   }
 
