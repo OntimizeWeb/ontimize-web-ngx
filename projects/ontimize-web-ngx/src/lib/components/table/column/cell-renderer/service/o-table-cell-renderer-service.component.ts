@@ -277,6 +277,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
           observer.complete();
         }, err => {
           console.error(err);
+          observer.next([]);
           observer.error(err);
         });
     });
