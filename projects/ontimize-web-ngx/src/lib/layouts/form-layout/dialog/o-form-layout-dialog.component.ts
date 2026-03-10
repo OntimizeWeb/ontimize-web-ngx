@@ -30,7 +30,9 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
 
 
   protected component;
+  protected fullscreen: boolean = false;
   protected dialogService: DialogService;
+  protected showFullscreenButton;
 
   @ViewChild(OFormLayoutManagerContentDirective) contentDirective: OFormLayoutManagerContentDirective;
 
@@ -50,6 +52,7 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
       this.queryParams = data.data.queryParams;
       this.urlSegments = data.data.urlSegments;
       this.dialogTitleSeparator = data.dialogTitleSeparator
+      this.showFullscreenButton = data.showFullscreenButton;
     }
     if (data.layoutManagerComponent) {
       this.formLayoutManager = data.layoutManagerComponent;
@@ -62,6 +65,14 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
       viewContainerRef.clear();
       viewContainerRef.createComponent(this.component);
     }
+  }
+  setFullscreenDialog(): void {
+    if (!this.fullscreen) {
+      this.dialogRef.updateSize("100%", "100%");
+    } else {
+      this.dialogRef.updateSize(this.formLayoutManager.dialogOptions.width, this.formLayoutManager.dialogOptions.height);
+    }
+    this.fullscreen = !this.fullscreen;
   }
 
   updateNavigation(data: any) {

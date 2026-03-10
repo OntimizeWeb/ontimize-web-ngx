@@ -161,6 +161,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   public dialogMaxHeight: string;
   public dialogClass: string = '';
   public dialogTitleSeparator = ':';
+  public showFullscreenButton = false;
 
 
   public sidenavPosition: 'start' | 'end' = 'end';
@@ -243,6 +244,9 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     }
     if (value.hasOwnProperty('dialogTitleSeparator')) {
       this.dialogTitleSeparator = value['dialogTitleSeparator'];
+    }
+    if (value.hasOwnProperty('showFullscreenButton')) {
+      this.showFullscreenButton = value['showFullscreenButton'];
     }
   }
 
@@ -450,7 +454,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
       id: Util.randomNumber().toString(),
       label: context?.label || '',
       innerFormsInfo: {},
-      rendered:false,
+      rendered: false,
       rendererSubject: new BehaviorSubject(false),
       insertionMode: childRoute.queryParams[Codes.INSERTION_MODE] === 'true',
     };
@@ -498,7 +502,8 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         data: detailComp,
         layoutManagerComponent: this,
         title: (this.title || dialogOptions.title),
-        dialogTitleSeparator: this.dialogTitleSeparator
+        dialogTitleSeparator: this.dialogTitleSeparator,
+        showFullscreenButton: this.showFullscreenButton
       },
       width: dialogOptions.width || this.dialogWidth,
       minWidth: dialogOptions.minWidth || this.dialogMinWidth,
