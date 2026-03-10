@@ -88,7 +88,7 @@ export class OMatSort extends MatSort {
       this.directionById[sortable.id] = sortable.start ? sortable.start : this.start;
     }
     const activeData = this.getSortColumns();
-    this._stateChanges.next();
+    this._stateChanges.next(void 0);
     this.oSortChange.emit(activeData);
   }
 
