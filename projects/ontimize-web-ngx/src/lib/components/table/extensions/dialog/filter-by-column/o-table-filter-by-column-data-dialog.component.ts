@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
+import { BehaviorSubject, fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ServiceResponse } from '../../../../../interfaces/service-response.interface';
@@ -14,12 +14,19 @@ import { TableFilterByColumnData, TableFilterByColumnDialogResult } from '../../
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OTableComponent } from '../../../o-table.component';
-import { OFilterColumn } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
+import { OFilterColumn, OTableFilterMode } from '../../header/table-columns-filter/columns/o-table-columns-filter-column.component';
 
 import type { OColumn } from '../../../column/o-column.class';
 import { OTableFilterByColumnService } from './o-table-filter-by-column.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BaseService } from '../../../../../services/base-service.class';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { OntimizeMomentDateAdapter } from '../../../../../shared/material/date/ontimize-moment-date-adapter';
+import { MomentService } from '../../../../../services/moment.service';
+import moment from 'moment';
+import { ODateValueType } from '../../../../../types/o-date-value.type';
+
+
 
 const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL]);
 
@@ -31,7 +38,10 @@ const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, 
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-filter-by-column-dialog]': 'true'
-  }
+  },
+  providers: [
+    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+  ]
 })
 export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
@@ -41,7 +51,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
 
   column: OColumn;
   preloadValues: boolean = true;
-  mode: string;
+  private mode: OTableFilterMode = 'default';
   startView: 'month' | 'year' | 'multi-year' | '';
 
   public onSortFilterValuesChange: EventEmitter<OFilterColumn> = new EventEmitter();
@@ -66,7 +76,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   @ViewChild('filterValueList') filterValueList: MatSelectionList;
   public activeSortDirection: 'asc' | 'desc' | '';
   sourceData: 'current-page' | 'all-data';
-  queryByFilterColumnSubscription: any;
+  queryByFilterColumnSubscription: Subscription;
   table: OTableComponent;
   showFilterValuesOption: boolean;
   queryMethodName: string;
@@ -75,13 +85,20 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   visibleColumnsArray: string[];
   separator: string
   filterColumnDefinition: OFilterColumn;
+  private momentSrv: MomentService;
+  dateAdapter: DateAdapter<OntimizeMomentDateAdapter>;
 
   constructor(
     protected injector: Injector,
     public dialogRef: MatDialogRef<OTableFilterByColumnDataDialogComponent>,
     private readonly filterService: OTableFilterByColumnService,
-    @Inject(MAT_DIALOG_DATA) data: { column: OColumn; table: OTableComponent }
+    @Inject(MAT_DIALOG_DATA) data: {
+      column: OColumn;
+      table: OTableComponent,
+    }
   ) {
+    this.dateAdapter = this.injector.get(DateAdapter<OntimizeMomentDateAdapter>)
+    this.momentSrv = this.injector.get(MomentService);
     this.initFromData(data);
   }
 
@@ -114,10 +131,25 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     this.startView = this.table.getStartViewFilterColumn(this.column) ?? 'month';
     this.previousFilter = dataSource.getColumnValueFilterByAttr(this.column.attr) ?? this.createEmptyFilter();
 
-    const isCustom = CUSTOM_FILTERS_OPERATORS.has(this.previousFilter.operator);
+    const isCustom = this.mode === 'custom' || this.filterColumnDefinition.mode === 'custom' || CUSTOM_FILTERS_OPERATORS.has(this.previousFilter.operator);
     this.isCustomFilterSubject.next(isCustom);
     this.isDefaultFilterSubject.next(!isCustom);
 
+    this.initializeDateAdapter();
+
+  }
+
+  private initializeDateAdapter(): void {
+
+    const renderer = this.column.renderer;
+    //this.column.renderer instanceof OTableCellRendererDateComponent creates a cyclic dependenc
+    if (renderer && typeof (renderer as any).getFormat === 'function') {
+      const format = this.filterColumnDefinition?.dateFormat
+        ?? (renderer as any).getFormat();
+      (this.dateAdapter as unknown as OntimizeMomentDateAdapter).oFormat = format;
+    }
+
+    this.dateAdapter.setLocale(this.momentSrv.getLocale());
   }
 
   private createEmptyFilter(): OColumnValueFilter {
@@ -334,6 +366,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   onSlideChange(e: MatSlideToggleChange): void {
+    if (this.mode === 'custom') return;
     this.isCustomFilterSubject.next(e.checked);
 
     if (!e.checked) {
@@ -369,12 +402,14 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return icon;
   }
 
+
   protected getFilterColumn(): OFilterColumn {
-    let obj: OFilterColumn = { attr: '', sort: '', startView: '' };
-    obj.attr = this.column.attr;
-    obj.sort = this.activeSortDirection;
-    obj.startView = this.startView;
-    return obj;
+    return {
+      attr: this.column.attr,
+      sort: this.activeSortDirection,
+      startView: this.startView,
+      mode: this.mode
+    };
   }
 
   public getStartedViewDatepicker(): string {
@@ -382,15 +417,30 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   }
 
   protected getTypedValue(control: UntypedFormControl): any {
-    let value = control.value;
-    if (this.isNumericType()) {
-      value = control.value;
-    }
+
     if (this.isDateType()) {
-      value = control.value.valueOf();
+      const m = moment(control.value);
+      if (!m.isValid()) return control.value;
+
+      const dateValueType: ODateValueType = this.filterColumnDefinition?.dateValueType ?? 'timestamp';
+
+      switch (dateValueType) {
+        case 'string':
+          return m.format((this.dateAdapter as unknown as OntimizeMomentDateAdapter).oFormat ?? 'L');
+        case 'date':
+          return m.toDate();
+        case 'iso-8601':
+          return m.toISOString();
+        case 'timestamp':
+        default:
+          return m.valueOf();
+      }
     }
-    return value;
+
+    return control.value;
+
   }
+
   onChangeDataSource(event: MatRadioChange) {
     this.table.clearColumnFilter(this.column.attr);
     this.getData(event.value);

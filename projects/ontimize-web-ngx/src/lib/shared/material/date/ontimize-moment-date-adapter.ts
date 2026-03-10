@@ -6,7 +6,7 @@ import moment, { Moment } from 'moment';
 @Injectable()
 export class OntimizeMomentDateAdapter extends MomentDateAdapter {
 
-  oFormat: string;
+  public oFormat: string;
 
   constructor(@Optional() @Inject(MAT_DATE_LOCALE) dateLocale: string) {
     super(dateLocale);
