@@ -67,11 +67,15 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     }
   }
   setFullscreenDialog(): void {
-    if (!this.fullscreen) {
-      this.dialogRef.updateSize("100%", "100%");
+    if (this.fullscreen) {
+      this.dialogRef.updateSize(
+        this.formLayoutManager.dialogOptions.width,
+        this.formLayoutManager.dialogOptions.height
+      );
     } else {
-      this.dialogRef.updateSize(this.formLayoutManager.dialogOptions.width, this.formLayoutManager.dialogOptions.height);
+      this.dialogRef.updateSize("100%", "100%");
     }
+
     this.fullscreen = !this.fullscreen;
   }
 
