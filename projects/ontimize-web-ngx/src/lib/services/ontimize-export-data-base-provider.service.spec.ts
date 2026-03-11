@@ -191,7 +191,7 @@ describe('OntimizeExportDataBaseProviderService', () => {
       expect(service['applyQuickAndBuilderFilters']).toHaveBeenCalled();
     });
 
-    xit('should not apply quick and builder filters when pageable', () => {
+    xit('should not apply quick and builder filters when pageable', () => { // NOSONAR: Pending test - pageable filter suppression behaviour under review
       mockTable.pageable = true;
       const spyObj = spyOn(service, 'applyQuickAndBuilderFilters' as any).and.callThrough();
       spyObj.calls.reset();
@@ -290,7 +290,7 @@ describe('OntimizeExportDataBaseProviderService', () => {
       expect(result).toEqual(filter);
     });
 
-    xit('should apply quick filter when available', () => {
+    xit('should apply quick filter when available', () => { // NOSONAR: Pending test - quick filter mock setup requires refinement
       const quickFilterExpr: Expression = { lop: 'quick', op: '=', rop: 'filter' };
       mockTable.oTableQuickFilterComponent = { filterExpression: quickFilterExpr } as any;
       mockTable.filterBuilder = undefined;
@@ -301,7 +301,7 @@ describe('OntimizeExportDataBaseProviderService', () => {
       expect(result[FilterExpressionUtils.BASIC_EXPRESSION_KEY]).toBe(quickFilterExpr);
     });
 
-    xit('should apply builder filter when available', () => {
+    xit('should apply builder filter when available', () => { // NOSONAR: Pending test - builder filter mock setup requires refinement
       const builderFilterExpr: Expression = { lop: 'builder', op: '=', rop: 'filter' };
       mockTable.oTableQuickFilterComponent = undefined;
       mockTable.filterBuilder = { getExpression: () => builderFilterExpr } as any;
@@ -312,7 +312,7 @@ describe('OntimizeExportDataBaseProviderService', () => {
       expect(result[FilterExpressionUtils.BASIC_EXPRESSION_KEY]).toBe(builderFilterExpr);
     });
 
-    xit('should combine quick and builder filters when both available', () => {
+    xit('should combine quick and builder filters when both available', () => { // NOSONAR: Pending test - combined filter mock setup requires refinement
       const quickFilterExpr: Expression = { lop: 'quick', op: '=', rop: 'filter' };
       const builderFilterExpr: Expression = { lop: 'builder', op: '=', rop: 'filter' };
       const combinedExpr: Expression = { lop: 'combined', op: 'AND', rop: 'expr' };
@@ -332,7 +332,7 @@ describe('OntimizeExportDataBaseProviderService', () => {
       expect(result[FilterExpressionUtils.BASIC_EXPRESSION_KEY]).toBe(combinedExpr);
     });
 
-    xit('should combine with existing basic expression', () => {
+    xit('should combine with existing basic expression', () => { // NOSONAR: Pending test - combined basic expression mock setup requires refinement
       const quickFilterExpr: Expression = { lop: 'quick', op: '=', rop: 'filter' };
       const existingBasicExpr: Expression = { lop: 'existing', op: '=', rop: 'basic' };
       const finalCombinedExpr: Expression = { lop: 'final', op: 'AND', rop: 'combined' };
