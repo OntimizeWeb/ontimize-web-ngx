@@ -8,15 +8,11 @@
       margin-top: -30px;
 
       .o-search-input mat-form-field {
-        .mat-mdc-text-field-wrapper {
-          padding-bottom: 0;
+        .mdc-line-ripple {
 
-          .mdc-line-ripple {
-
-            &::after,
-            &::before {
-              border: none;
-            }
+          &::after,
+          &::before {
+            border: none;
           }
         }
       }

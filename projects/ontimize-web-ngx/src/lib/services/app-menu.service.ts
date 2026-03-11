@@ -18,6 +18,16 @@ import { Codes } from '../util/codes';
 import { Util } from '../util/util';
 import { PermissionsService } from './permissions/permissions.service';
 
+export interface MenuClickEvent {
+  idMenu: string;
+  opened?: boolean; // Only for menu groups, indicates if the group is opened or closed
+}
+
+export interface PermissionMenuChangedEvent {
+  menuRoots: MenuRootItem[];
+  allMenuItems: MenuRootItem[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,8 +40,8 @@ export class AppMenuService {
   protected activeItem: MenuItemRoute;
   protected permissionsService: PermissionsService;
 
-  public onClick: Subject<void> = new Subject<void>;
-  public onPermissionMenuChanged: Subject<void> = new Subject();
+  public onClick: Subject<MenuClickEvent> = new Subject<MenuClickEvent>;
+  public onPermissionMenuChanged: Subject<PermissionMenuChangedEvent> = new Subject<PermissionMenuChangedEvent>();
 
   constructor(protected injector: Injector) {
     this._config = this.injector.get(AppConfig);
@@ -47,7 +57,10 @@ export class AppMenuService {
     this.permissionsService = this.injector.get(PermissionsService);
     this.permissionsService.onChangePermissions.subscribe(x => {
       this.mergeMenuItemsWithPermissions();
-      this.onPermissionMenuChanged.next()
+      this.onPermissionMenuChanged.next({
+        menuRoots: this.MENU_ROOTS,
+        allMenuItems: this.ALL_MENU_ITEMS
+      })
     });
 
   }

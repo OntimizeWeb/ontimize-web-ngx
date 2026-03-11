@@ -24,6 +24,12 @@ export class OnRangeChangeVirtualScroll {
   }
 }
 
+export type GroupByChangeReason =
+  | 'column-update'     // groupByColumn / unGroupByColumn / setGroupColumns
+  | 'toggle'            // toggleGroupByColumn
+  | 'level-expansion';  // setRowGroupLevelExpansion
+
+
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
   dataTotalsChange = new BehaviorSubject<any[]>(null);
 
@@ -37,8 +43,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _virtualPageChange = new BehaviorSubject<OnRangeChangeVirtualScroll>(new OnRangeChangeVirtualScroll({ start: 0, end: 0 }));
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject(null);
-  protected groupByColumnChange: Subject<void> = new Subject<void>;
-
+  protected groupByColumnChange = new Subject<GroupByChangeReason>();
   protected filteredData: any[] = [];
   protected aggregateData: any = {};
 
@@ -952,9 +957,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return Util.isDefined(parent) ? (parent.visible && parent.expanded) : true;
   }
 
-  updateGroupedColumns() {
+  updateGroupedColumns(reason: GroupByChangeReason = 'column-update') {
     this.table.loadingService.setLoading(true);
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next(reason);
   }
 
   /**
@@ -967,12 +972,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     } else {
       this.updateStateRowGrouped(rowGroup);
     }
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next('toggle');
   }
 
   setRowGroupLevelExpansion(rowGroup: OTableGroupedRow, value: boolean) {
     this.levelsExpansionState[rowGroup.level] = value;
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next('level-expansion');
   }
 
   private updateStateRowGrouped(rowGroup: OTableGroupedRow) {

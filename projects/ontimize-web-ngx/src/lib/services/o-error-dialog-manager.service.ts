@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import type { ODialogConfig } from '../shared';
+import type { ODialogConfig } from '../shared/components/dialog/o-dialog.config';
 import { ODialogInternalComponent } from '../shared/components/dialog/o-dialog-internal.component';
 import { Util } from '../util/util';
 

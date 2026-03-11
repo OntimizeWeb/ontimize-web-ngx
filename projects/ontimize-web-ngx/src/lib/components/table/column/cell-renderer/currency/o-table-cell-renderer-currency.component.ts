@@ -10,7 +10,11 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   'currencySymbol: currency-symbol',
 
   // currency-symbol-position [left|right]: position of the currency symbol. Default: left.
-  'currencySymbolPosition: currency-symbol-position'
+  'currencySymbolPosition: currency-symbol-position',
+  // currency-symbol-column [string]: column name containing the currency symbol for each row. Default:$.
+  // Supports nested properties using dot notation (e.g., "currency.symbol")
+  'currencySymbolColumn: currency-symbol-column'
+
 ];
 
 @Component({
@@ -29,6 +33,7 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
   protected decimalSeparator: string = '.';
+  protected currencySymbolColumn: string;
 
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
@@ -46,11 +51,11 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
     this.setComponentPipe();
   }
 
-  setComponentPipe() {
+public setComponentPipe():void {
     this.componentPipe = new OCurrencyPipe(this.injector);
   }
 
-  initialize() {
+  public initialize():void {
     super.initialize();
     if (typeof this.currencySymbol === 'undefined') {
       this.currencySymbol = this.currencyService.symbol;
@@ -69,6 +74,29 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
       thousandSeparator: this.thousandSeparator
     };
 
+  }
+
+  getCellData(cellValue: any, rowValue?: any): string {
+    if (this.currencySymbolColumn) {
+      this.pipeArguments.currencySimbol = this.getNestedProperty(rowValue, this.currencySymbolColumn);
+    }
+    return super.getCellData(cellValue, rowValue);
+  }
+
+  /**
+   * Retrieves a nested property from an object using dot notation.
+   * @param obj - The object to extract the property from
+   * @param path - The property path (e.g., "currency.symbol" or "data.currency.code")
+   * @returns The value of the nested property, or undefined if not found
+   */
+  private getNestedProperty(obj: any, path: string): string {
+    if (!obj || !path) {
+      return undefined;
+    }
+
+    return path.split('.').reduce((current, prop) => {
+      return current?.[prop];
+    }, obj);
   }
 
 }

@@ -35,6 +35,9 @@ export class OColumn {
   resizable: boolean;
   DOMWidth: number;
   valueColumn: string;
+  headerTooltip: string;
+  headerTooltipIcon: string;
+  headerTooltipClass: string;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
 
   private multilineSubject: BehaviorSubject<boolean> = new BehaviorSubject(this.multiline);
@@ -121,6 +124,11 @@ export class OColumn {
         function: column.tooltipFunction
       };
     }
+
+    this.headerTooltip = column.headerTooltip ?? null;
+    this.headerTooltipIcon = column.headerTooltipIcon ?? null;
+    this.headerTooltipClass = column.headerTooltipClass ?? '';
+
     if (Util.isDefined(column.filterExpressionFunction)) {
       this.filterExpressionFunction = column.filterExpressionFunction;
     }

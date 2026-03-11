@@ -90,6 +90,14 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
 
   'angularAsyncValidatorsFn: async-validators',
   'valueColumn: value-column',
+  // header-tooltip [string]: Tooltip text shown in the column header. Default: no value.
+  'headerTooltip: header-tooltip',
+
+  // header-tooltip-icon [string]: Material icon name displayed in the header tooltip. Default: no value.
+  'headerTooltipIcon: header-tooltip-icon',
+
+  // header-tooltip-class [string]: CSS class applied to the header tooltip. Default: 'o-table-header-icon-tooltip'.
+  'headerTooltipClass: header-tooltip-class',
 
   ...O_TABLE_CELL_RENDERERS_INPUTS,
   ...O_TABLE_CELL_EDITORS_INPUTS
@@ -165,6 +173,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   /* input renderer currency */
   protected currencySymbol: string;
   protected currencySymbolPosition: string;
+  protected currencySymbolColumn: string;
 
   /* input renderer boolean */
   protected trueValue: any;
@@ -255,6 +264,11 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   editionCommitted: EventEmitter<object> = new EventEmitter<object>();
   onPostUpdateRecord: EventEmitter<object> = new EventEmitter<object>();
 
+  /* input header tooltip */
+  headerTooltip: string;
+  headerTooltipIcon: string;
+  headerTooltipClass: string = 'o-table-header-icon-tooltip';
+
   @BooleanInputConverter()
   asyncLoad: boolean = false;
 
@@ -323,6 +337,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
             newRenderer.maxDecimalDigits = this.maxDecimalDigits;
             newRenderer.grouping = this.grouping;
             newRenderer.thousandSeparator = this.thousandSeparator;
+            newRenderer.currencySymbolColumn = this.currencySymbolColumn;
             break;
           case 'date':
             newRenderer.format = this.format;

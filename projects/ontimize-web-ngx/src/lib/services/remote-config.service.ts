@@ -106,7 +106,7 @@ export class ORemoteConfigurationService {
     const observable = new Observable((observer: Subscriber<ServiceResponse>) => {
       const sessionInfo = self.authService.getSessionInfo();
       if (!self._appConfig.useRemoteConfiguration() || !self.hasSession(sessionInfo)) {
-        observer.next();
+        observer.next(void 0);
         observer.complete();
         return;
       }
@@ -152,8 +152,9 @@ export class ORemoteConfigurationService {
           } else {
             storedConf = resp.data;
           }
+          let componentsData = {};
           if (Util.isDefined(storedConf)) {
-            let componentsData;
+
             try {
               const decoded = atob(storedConf);
               componentsData = JSON.parse(decoded);
@@ -162,12 +163,12 @@ export class ORemoteConfigurationService {
             }
             self.localStorageService.storeSessionUserComponentsData(componentsData);
           }
-          observer.next();
-        }, () => {
-          observer.next();
+          observer.next(componentsData);
+        }, (error) => {
+          observer.error(error);
         });
       } else {
-        observer.next();
+        observer.next(void 0);
       }
     });
   }

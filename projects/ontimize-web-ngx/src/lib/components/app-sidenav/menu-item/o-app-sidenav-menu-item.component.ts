@@ -234,7 +234,7 @@ export class OAppSidenavMenuItemComponent implements OnInit, AfterViewInit, OnDe
     if (this.disabled) {
       return;
     }
-    this.appMenuService.onClick.next();
+    this.appMenuService.onClick.next({ idMenu: this.menuItem.id });
 
     switch (this.menuItemType) {
       case 'action':

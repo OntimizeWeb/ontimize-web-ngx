@@ -126,7 +126,7 @@
         [style.min-width]="getMinWidthColumn(column)" [style.max-width]="column.maxWidth">
 
         <div class="content">
-          <o-table-header [column]="column" [column-filters]="columnFilters$ | async" ></o-table-header>
+          <o-table-header [column]="column" [column-filters]="columnFilters$ | async"  [show-header-tooltip]="showHeaderTooltip" ></o-table-header>
         </div>
       </th>
 
@@ -164,11 +164,11 @@
             {{ column.aggregate.title | oTranslate }}
           </div>
           <ng-container *ngIf="!column.renderer || column.aggregate?.operator === 'count'; else rendererTemplate">
-            {{ dataSource.getAggregateData(column) }}
+            {{ dataSource?.getAggregateData(column) }}
           </ng-container>
           <ng-template #rendererTemplate>
             <ng-template *ngIf="column.renderer && column.aggregate" [ngTemplateOutlet]="column.renderer.templateref"
-              [ngTemplateOutletContext]="{cellvalue: dataSource.getAggregateData(column)}">
+              [ngTemplateOutletContext]="{cellvalue: dataSource?.getAggregateData(column)}">
             </ng-template>
           </ng-template>
         </td>
