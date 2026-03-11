@@ -120,7 +120,7 @@ export class OTestingUtils {
         },
         {
           provide: OntimizeRequestArgumentsAdapter,
-          useValue: jasmine.createSpyObj('OntimizeRequestArgumentsAdapter', ['parseQueryParameters', 'getIdFromFilter'])
+          useValue: jasmine.createSpyObj('OntimizeRequestArgumentsAdapter', ['parseQueryParameters', 'getIdFromFilter', 'setPaginationContextService'])
         },
         {
           provide: NavigationService,
