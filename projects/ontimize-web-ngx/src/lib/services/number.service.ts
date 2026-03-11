@@ -38,7 +38,7 @@ export class NumberService {
     const thousandSeparator = args ? args.thousandSeparator : undefined;
     const locale = args ? args.locale : undefined;
     // Ensure value is an integer
-    const intValue: any = parseInt(value, 10);
+    const intValue: any = Number.parseInt(value, 10);
     if (isNaN(intValue)) {
       return void 0;
     }
@@ -111,7 +111,7 @@ export class NumberService {
   private parseRealValue(value: any, maxDecimalDigits: number, thousandSeparator: string, decimalSeparator: string, grouping: boolean): string {
     let result = value;
     const realValue = parseFloat(value);
-    if (!isNaN(realValue)) {
+    if (!Number.isNaN(realValue)) {
       result = String(realValue);
       let tmpStr = realValue.toFixed(maxDecimalDigits);
       tmpStr = tmpStr.replace('.', decimalSeparator);
