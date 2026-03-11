@@ -2418,6 +2418,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       && this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
+
+    this._visibleColArray = [...this._oTableOptions.visibleColumns];
+
     this.updateStateExpandedColumn();
   }
 
