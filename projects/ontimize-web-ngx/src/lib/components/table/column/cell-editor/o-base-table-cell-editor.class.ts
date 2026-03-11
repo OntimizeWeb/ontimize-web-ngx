@@ -252,7 +252,11 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
           this.table.cd.detectChanges();
         });
       } else {
+        this.table.saveScrollPosition();
         this.table.cd.detectChanges();
+        setTimeout(() => {
+          this.table.virtualScrollViewport?.scrollToOffset(this.table.savedScrollPosition);
+        }, 0);
       }
     }
   }
