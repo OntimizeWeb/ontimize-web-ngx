@@ -5,7 +5,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { OColumnValueFilter } from '../../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../../util/util';
-import type { OColumn } from '../../../column';
+import type { OColumn } from '../../../column/o-column.class';
 import { OTableBase } from '../../../o-table-base.class';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../../../../../services/dialog.service';
