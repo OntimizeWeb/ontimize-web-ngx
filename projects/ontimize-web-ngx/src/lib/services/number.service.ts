@@ -39,7 +39,7 @@ export class NumberService {
     const locale = args ? args.locale : undefined;
     // Ensure value is an integer
     const intValue: any = Number.parseInt(value, 10);
-    if (isNaN(intValue)) {
+    if (Number.isNaN(intValue)) {
       return void 0;
     }
     // Format value
@@ -110,7 +110,7 @@ export class NumberService {
 
   private parseRealValue(value: any, maxDecimalDigits: number, thousandSeparator: string, decimalSeparator: string, grouping: boolean): string {
     let result = value;
-    const realValue = parseFloat(value);
+    const realValue = Number.parseFloat(value);
     if (!Number.isNaN(realValue)) {
       result = String(realValue);
       let tmpStr = realValue.toFixed(maxDecimalDigits);
