@@ -26,6 +26,10 @@
     padding-top: 12px;
     margin: 0;
 
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
     &.content-wrapper-fixed-dimension {
       max-height: 430px;
       min-height: 430px;

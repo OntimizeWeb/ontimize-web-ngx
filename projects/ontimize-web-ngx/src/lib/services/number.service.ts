@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 
-import { IRealPipeArgument } from '../pipes';
+import { IRealPipeArgument } from '../pipes/o-real.pipe';
 import { Util } from '../util/util';
 import { OTranslateService } from './translate/o-translate.service';
 
@@ -38,8 +38,8 @@ export class NumberService {
     const thousandSeparator = args ? args.thousandSeparator : undefined;
     const locale = args ? args.locale : undefined;
     // Ensure value is an integer
-    const intValue: any = parseInt(value, 10);
-    if (isNaN(intValue)) {
+    const intValue: any = Number.parseInt(value, 10);
+    if (Number.isNaN(intValue)) {
       return void 0;
     }
     // Format value
@@ -110,8 +110,8 @@ export class NumberService {
 
   private parseRealValue(value: any, maxDecimalDigits: number, thousandSeparator: string, decimalSeparator: string, grouping: boolean): string {
     let result = value;
-    const realValue = parseFloat(value);
-    if (!isNaN(realValue)) {
+    const realValue = Number.parseFloat(value);
+    if (!Number.isNaN(realValue)) {
       result = String(realValue);
       let tmpStr = realValue.toFixed(maxDecimalDigits);
       tmpStr = tmpStr.replace('.', decimalSeparator);

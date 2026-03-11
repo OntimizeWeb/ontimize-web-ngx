@@ -68,6 +68,11 @@ export class OFormLayoutDialogOptionsDirective {
   @Input('dialog-title-separator')
   public dialogTitleSeparator;
 
+  protected _showFullscreenButton: boolean;
+  @Input('show-fullscreen-button')
+  set showFullscreenButton(value: boolean) {
+    this._showFullscreenButton = BooleanConverter(value);
+  }
   getOptions() {
     const result = {
       width: this.width,
@@ -84,7 +89,8 @@ export class OFormLayoutDialogOptionsDirective {
       title: this.title,
       labelColumns: this.labelColumns,
       separator: this.separator,
-      dialogTitleSeparator: this.dialogTitleSeparator
+      dialogTitleSeparator: this.dialogTitleSeparator,
+      showFullscreenButton: this._showFullscreenButton
     }
     // Deleting undefined properties
     Object.keys(result).forEach(key => result[key] == null ? delete result[key] : {});

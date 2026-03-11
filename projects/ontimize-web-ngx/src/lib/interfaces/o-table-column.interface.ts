@@ -32,6 +32,9 @@ export interface OTableColumn {
   angularValidatorsFnErrors: ErrorData[];
   angularAsyncValidatorsFn: AsyncValidatorFn[];
   valueColumn: string;
+  headerTooltip: string;
+  headerTooltipIcon: string;
+  headerTooltipClass: string;
   tooltipFunction: (rowData: any) => any;
   filterExpressionFunction: (columnAttr: string, quickFilter?: string) => Expression;
   getSQLType: () => number;
