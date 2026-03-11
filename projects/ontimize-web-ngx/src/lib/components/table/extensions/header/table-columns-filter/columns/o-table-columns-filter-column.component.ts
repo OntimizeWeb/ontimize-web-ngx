@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Util } from '../../../../../../util/util';
 import { Codes } from '../../../../../../util/codes';
+import { ODateValueType } from '../../../../../../types/o-date-value.type';
 
-
+export type OTableFilterMode = 'default' | 'custom' | 'selection';
 export type OFilterColumn = {
   attr: string;
   sort: 'asc' | 'desc' | '';
@@ -16,6 +17,11 @@ export type OFilterColumn = {
   visibleColumns?: string[];
   filterLocked?: boolean;
   filterLockedMessage?: string;
+  mode?: OTableFilterMode;
+  //format for date columns
+  dateFormat?: string;
+  dateValueType?: ODateValueType;
+
 };
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
@@ -39,7 +45,10 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
   //entity
   'entity',
   'visibleColumns: visible-columns',
-  'separator'
+  'separator',
+  'dateFormat: date-format',
+  'dateValueType: date-value-type',
+  'mode'
 ];
 
 @Component({
@@ -66,10 +75,23 @@ export class OTableColumnsFilterColumnComponent implements OnInit {
   public visibleColsArray: string[];
   public visibleColumns: string;
   public separator: string = Codes.SPACE_SEPARATOR;
+  public dateFormat: string;
+  public mode: OTableFilterMode = 'default';
+  private _dateValueType: ODateValueType = 'timestamp';
+
 
   ngOnInit() {
     this.visibleColsArray = Util.parseArray(this.visibleColumns, true);
     this.filterValuesInData = this.filterValuesInData ?? (this.queryMethod ? 'all-data' : 'current-page');
   }
+
+  set dateValueType(val: any) {
+    this._dateValueType = Util.convertToODateValueType(val);
+  }
+
+  get dateValueType(): any {
+    return this._dateValueType;
+  }
+
 
 }
