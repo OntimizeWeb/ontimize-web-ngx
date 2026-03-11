@@ -33,7 +33,7 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
-  public static OTableColumnsFilterModes: OTableFilterMode[] = ['default', 'selection', 'custom'];
+  public readonly static OTableColumnsFilterModes: OTableFilterMode[] = ['default', 'selection', 'custom'];
 
   protected _columns: string;
   protected _mode: OTableFilterMode = 'default';

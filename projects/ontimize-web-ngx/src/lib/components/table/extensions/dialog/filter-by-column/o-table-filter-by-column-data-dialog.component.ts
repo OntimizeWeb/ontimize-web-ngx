@@ -85,8 +85,8 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   visibleColumnsArray: string[];
   separator: string
   filterColumnDefinition: OFilterColumn;
-  private momentSrv: MomentService;
-  dateAdapter: DateAdapter<OntimizeMomentDateAdapter>;
+  private readonly momentSrv: MomentService;
+  private dateAdapter: DateAdapter<OntimizeMomentDateAdapter>;
 
   constructor(
     protected injector: Injector,
