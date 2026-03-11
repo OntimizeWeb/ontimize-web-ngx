@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 
-import { IRealPipeArgument } from '../pipes';
+import { IRealPipeArgument } from '../pipes/o-real.pipe';
 import { Util } from '../util/util';
 import { OTranslateService } from './translate/o-translate.service';
 
