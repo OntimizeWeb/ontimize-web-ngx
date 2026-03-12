@@ -4010,7 +4010,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /**
   * Saves the current scroll position
   */
-  private saveScrollPosition(): void {
+  public saveScrollPosition(): void {
     if (this.virtualScrollViewport) {
       this.savedScrollPosition = this.virtualScrollViewport.measureScrollOffset();
       this.scrollStrategy.setSavedScrollPosition(this.savedScrollPosition);
