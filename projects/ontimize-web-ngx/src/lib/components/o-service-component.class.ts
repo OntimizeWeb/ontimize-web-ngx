@@ -112,7 +112,10 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'disablePageSizeCalculation: disable-page-size-calculation',
 
   //initialFilterFunction: initial-filter-function:  Callback function that returns an initial filter to be applied on every query.
-  'initialFilterFunction: initial-filter-function'
+  'initialFilterFunction: initial-filter-function',
+
+  //filter-builder-function [function]: Callback function that resolves the OFilterBuilderComponent instance
+  'filterBuilderFunction: filter-builder-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -273,8 +276,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   public enabledInsertButton: boolean = true;
   public enabledRefreshButton: boolean = true;
 
-
   protected initialFilterFunction: () => Expression | { [key: string]: any };
+  protected filterBuilderFunction?: () => OFilterBuilderComponent;
 
   constructor(
     injector: Injector,
@@ -701,6 +704,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
   protected getFilterBuilderExpression(): Expression {
     // Add filter from o-filter-builder component
+    this.filterBuilder = this.filterBuilderFunction ? this.filterBuilderFunction() : this.filterBuilder;
     if (Util.isDefined(this.filterBuilder)) {
       return this.filterBuilder.getExpression();
     }
