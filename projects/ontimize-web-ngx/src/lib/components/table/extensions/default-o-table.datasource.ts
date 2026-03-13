@@ -108,9 +108,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
  * instead of discarding it (used when queryOnInit=false or reinitialize)
  */
   public initializeRenderedData(): void {
-    if (this._renderedData === null) {
-      this._renderedData = [];
-    }
+    this._renderedData ??= [];
   }
 
   /**
