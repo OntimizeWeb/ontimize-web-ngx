@@ -1892,9 +1892,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
       // set config viewport
       this.scrollStrategy.setConfig(rowHeight, headerHeight, footerHeight);
-      if (this.previousRendererData !== this.dataSource.renderedData) {
-        this.scrollStrategy.dataLength = data.length;
-      }
     }
   }
 

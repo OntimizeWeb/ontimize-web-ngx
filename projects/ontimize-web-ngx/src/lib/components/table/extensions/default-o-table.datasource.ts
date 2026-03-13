@@ -263,7 +263,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       const renderedData = data;
 
       if (this.table.virtualScrollViewport && !this._paginator) {
-        if (this.table.savedScrollPosition === 0) {
+        if (this.table.scrollStrategy.getSavedScrollPosition() === 0) {
           data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
         }
       }
