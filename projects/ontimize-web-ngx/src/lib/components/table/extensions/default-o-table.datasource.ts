@@ -104,6 +104,16 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   }
 
   /**
+ * Pre-initializes renderedData so the pipeline processes incoming data
+ * instead of discarding it (used when queryOnInit=false or reinitialize)
+ */
+  public initializeRenderedData(): void {
+    if (this._renderedData === null) {
+      this._renderedData = [];
+    }
+  }
+
+  /**
    * Connect function called by the table to retrieve one stream containing the data to render.
    */
   connect(): Observable<any[]> {
@@ -167,7 +177,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       observeOn(asyncScheduler),
       switchMap((event: any) => {
         let data = Object.assign([], this._database.data);
-
         if (!Array.isArray(data) || this.renderedData === null) {
           // No data has been loaded yet
           this.renderedData = [];

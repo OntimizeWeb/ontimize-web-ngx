@@ -928,6 +928,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     }
     this.destroy();
 
+    if (this.loadingService) {
+      this.loadingService.ngOnDestroy?.();
+    }
+
     // Completar el subject al destruir el componente
     this.columnFiltersSubject.complete();
   }
@@ -1114,6 +1118,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     this.destroy();
     this.initialize();
+    this.initTableAfterViewInit();
+
     this.state.reset(this.pageable);
     if (options?.data) {
       this.setData(options.data.data, options.data?.sqlTypes);
@@ -1123,7 +1129,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (options?.paginationData) {
       this.reinitializePaginationInfo(options.paginationData);
     }
-    this.initTableAfterViewInit();
+
     this.onReinitialize.emit(null);
   }
 
@@ -1150,6 +1156,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.parseVisibleColumns();
     this.parseSearcheableColumns();
     this.setDatasource();
+    if (!this.queryOnInit || this.staticData) {
+      this.dataSource.initializeRenderedData();
+    }
+
     this.parseGroupedColumns();
     this.parseGroupedColumnTypes();
     this.parseSortColumns();
@@ -1216,9 +1226,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
     });
 
-    if (this.loadingService) {
-      this.loadingService.ngOnDestroy?.();
-    }
+
     this.subscriptionOnFilterChanges?.unsubscribe();
   }
 
