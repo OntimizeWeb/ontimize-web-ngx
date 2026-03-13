@@ -6,6 +6,8 @@ import { distinctUntilChanged } from "rxjs/operators";
 @Injectable()
 export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   private viewport: CdkVirtualScrollViewport;
+  // To save scroll position when reloading data
+  public savedScrollPosition = 0;
 
   private rowHeight!: number;
   private headerHeight!: number;
@@ -15,7 +17,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   public readonly stickyChange = new Subject<number>();
   private readonly bufferMultiplier: number = 1;
   private lastRenderedRange = { start: 0, end: 0 };
-  private savedScrollPosition = 0;
+
 
   get dataLength(): number {
     return this._dataLength;
@@ -89,7 +91,10 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   public onDataLengthChanged(): void {
     if (this.viewport) {
       this.viewport.setTotalContentSize(this.dataLength * this.rowHeight + this.headerHeight + this.footerHeight);
-      this.viewport.scrollToOffset(0);//set scroll up
+      if (this.savedScrollPosition === 0) {
+        this.viewport.scrollToOffset(0);//set scroll up
+      }
+      this.savedScrollPosition = 0;
       this.updateContent();
     }
   }

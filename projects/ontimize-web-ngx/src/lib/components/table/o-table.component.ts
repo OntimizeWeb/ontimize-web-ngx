@@ -668,8 +668,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ContentChild(OTableColumnSelectAllDirective)
   tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
-  // To save scroll position when reloading data
-  public savedScrollPosition: number = 0;
 
   /** Active column filters */
   private readonly columnFiltersSubject =
@@ -4012,8 +4010,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   */
   public saveScrollPosition(): void {
     if (this.virtualScrollViewport) {
-      this.savedScrollPosition = this.virtualScrollViewport.measureScrollOffset();
-      this.scrollStrategy.setSavedScrollPosition(this.savedScrollPosition);
+      const savedScrollPosition = this.virtualScrollViewport.measureScrollOffset();
+      this.scrollStrategy.setSavedScrollPosition(savedScrollPosition);
     }
   }
 
