@@ -1,0 +1,42 @@
+.o-form-layout-sidenav {
+  display: block;
+  height: 100%;
+
+
+  .o-form-layout-sidenav-container {
+    height: 100%;
+
+    .mat-drawer.o-form-layout-matsidenav {
+      width: var(--sidenav-width);
+      min-width: var(--sidenav-width);
+      max-width: var(--sidenav-width);
+      flex: 0 0 var(--sidenav-width);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .o-form-layout-matsidenav {
+    padding: 24px 32px;
+  }
+
+  .title-container {
+    flex: 0 0 auto;
+    padding: 0 0 8px;
+    margin-bottom: 10px;
+  }
+
+  .form-layout-sidenav-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100% - 44px);
+  }
+
+  .sidenav-content {
+    height: 100%;
+    overflow: auto;
+  }
+}

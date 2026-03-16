@@ -72,10 +72,15 @@ export type OTableGlobalConfig = {
    * Enables or disables row selection when clicking on a row.
    */
   selectionOnRowClick?: boolean;
- 
+
   /**
     * Enables or disables horizontal scrolling for tables that exceed the viewport width.
     */
   horizontalScroll: boolean;
+
+  /**
+   * Enables or disables the display of a tooltip with the column title when hovering over the header.
+   */
+  showHeaderTooltip: boolean;
 
 }

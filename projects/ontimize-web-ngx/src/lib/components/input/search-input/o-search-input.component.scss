@@ -2,10 +2,6 @@
   .quickFilter {
     .mat-mdc-form-field {
 
-      .mat-mdc-form-field-subscript-wrapper {
-        display: none;
-      }
-
       .mat-mdc-text-field-wrapper {
         padding-bottom: 0;
 
@@ -17,36 +13,17 @@
           .mat-mdc-form-field-infix {
             border-top: 0;
             padding: 0 4px;
-            align-self: center;
           }
 
           .mat-mdc-form-field-icon-prefix {
             align-self: stretch;
             display: flex;
+            padding-right: 4px;
 
             div {
-              align-items: center;
-              display: inline-flex;
               margin: 2px 0;
 
-              .mat-badge-content {
-                background-color: #3C8500;
-                width: 14px;
-                height: 14px;
-                line-height: 14px;
-                top: -4px;
-                right: -4px;
-              }
-
-              .mat-icon,
-              button {
-                margin-right: 6px;
-              }
-
               button.mat-mdc-icon-button {
-                height: 100%;
-                width: auto;
-
                 .mat-mdc-button-persistent-ripple {
                   display: none;
                 }
@@ -79,10 +56,6 @@
 
           .mat-mdc-form-field-flex {
             margin: 0;
-
-            .mat-mdc-form-field-icon-prefix {
-              border-right: 1px solid rgba(0, 0, 0, 0.12);
-            }
           }
         }
       }

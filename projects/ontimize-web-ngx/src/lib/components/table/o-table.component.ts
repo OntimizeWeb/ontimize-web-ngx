@@ -240,8 +240,11 @@ export const DEFAULT_INPUTS_O_TABLE = [
   'readOnly: read-only',
   'readOnlyConfiguration: read-only-configuration',
   'showNotificationOfReadOnly: show-notification-of-read-only',
+
   // selection-on-row-click [yes|no|true|false]: . Default: yes.
-  'selectionOnRowClick: selection-on-row-click'
+  'selectionOnRowClick: selection-on-row-click',
+  // show-header-tooltip [yes|no|true|false]: Show tooltip with header title text on all columns. Default: no.
+  'showHeaderTooltip: show-header-tooltip',
 ];
 
 export const DEFAULT_OUTPUTS_O_TABLE = [
@@ -497,6 +500,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   @BooleanInputConverter()
   keepSelectedItems: boolean = true;
 
+  @BooleanInputConverter()
+  showHeaderTooltip: boolean = false;
+
   public exportMode: string = Codes.EXPORT_MODE_VISIBLE;
   public exportServiceType: string;
   public visibleExportDialogButtons: string;
@@ -662,8 +668,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ContentChild(OTableColumnSelectAllDirective)
   tableColumnSelectAllContentChild: OTableColumnSelectAllDirective;
-  // To save scroll position when reloading data
-  public savedScrollPosition: number = 0;
 
   /** Active column filters */
   private readonly columnFiltersSubject =
@@ -802,6 +806,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
         this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
       }
+      if (Util.isDefined(oTableGlobalConfig.showHeaderTooltip)) {
+        this.showHeaderTooltip = oTableGlobalConfig.showHeaderTooltip;
+      }
+
 
     } catch (error) {
       // Do nothing because is optional
@@ -917,6 +925,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.portalHost.forEach(x => x.detach());
     }
     this.destroy();
+
+    if (this.loadingService) {
+      this.loadingService.ngOnDestroy?.();
+    }
 
     // Completar el subject al destruir el componente
     this.columnFiltersSubject.complete();
@@ -1104,6 +1116,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
     this.destroy();
     this.initialize();
+    this.initTableAfterViewInit();
+
     this.state.reset(this.pageable);
     if (options?.data) {
       this.setData(options.data.data, options.data?.sqlTypes);
@@ -1113,7 +1127,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (options?.paginationData) {
       this.reinitializePaginationInfo(options.paginationData);
     }
-    this.initTableAfterViewInit();
+
     this.onReinitialize.emit(null);
   }
 
@@ -1140,6 +1154,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.parseVisibleColumns();
     this.parseSearcheableColumns();
     this.setDatasource();
+    if (!this.queryOnInit || this.staticData) {
+      this.dataSource.initializeRenderedData();
+    }
+
     this.parseGroupedColumns();
     this.parseGroupedColumnTypes();
     this.parseSortColumns();
@@ -1206,9 +1224,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       }
     });
 
-    if (this.loadingService) {
-      this.loadingService.ngOnDestroy?.();
-    }
+
     this.subscriptionOnFilterChanges?.unsubscribe();
   }
 
@@ -1884,9 +1900,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
       // set config viewport
       this.scrollStrategy.setConfig(rowHeight, headerHeight, footerHeight);
-      if (this.previousRendererData !== this.dataSource.renderedData) {
-        this.scrollStrategy.dataLength = data.length;
-      }
     }
   }
 
@@ -2408,6 +2421,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       && this._oTableOptions.visibleColumns[0] === Codes.NAME_COLUMN_SELECT) {
       this._oTableOptions.visibleColumns.shift();
     }
+
+    this._visibleColArray = [...this._oTableOptions.visibleColumns];
+
     this.updateStateExpandedColumn();
   }
 
@@ -3997,10 +4013,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   /**
   * Saves the current scroll position
   */
-  private saveScrollPosition(): void {
+  public saveScrollPosition(): void {
     if (this.virtualScrollViewport) {
-      this.savedScrollPosition = this.virtualScrollViewport.measureScrollOffset();
-      this.scrollStrategy.setSavedScrollPosition(this.savedScrollPosition);
+      const savedScrollPosition = this.virtualScrollViewport.measureScrollOffset();
+      this.scrollStrategy.setSavedScrollPosition(savedScrollPosition);
     }
   }
 

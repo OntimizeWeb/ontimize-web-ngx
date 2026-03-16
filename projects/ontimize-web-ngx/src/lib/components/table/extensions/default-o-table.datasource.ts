@@ -24,6 +24,12 @@ export class OnRangeChangeVirtualScroll {
   }
 }
 
+export type GroupByChangeReason =
+  | 'column-update'     // groupByColumn / unGroupByColumn / setGroupColumns
+  | 'toggle'            // toggleGroupByColumn
+  | 'level-expansion';  // setRowGroupLevelExpansion
+
+
 export class DefaultOTableDataSource extends DataSource<any> implements OTableDataSource {
   dataTotalsChange = new BehaviorSubject<any[]>(null);
 
@@ -37,8 +43,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   protected _virtualPageChange = new BehaviorSubject<OnRangeChangeVirtualScroll>(new OnRangeChangeVirtualScroll({ start: 0, end: 0 }));
   protected _quickFilterChange = new BehaviorSubject('');
   protected _columnValueFilterChange = new BehaviorSubject(null);
-  protected groupByColumnChange: Subject<void> = new Subject<void>;
-
+  protected groupByColumnChange = new Subject<GroupByChangeReason>();
   protected filteredData: any[] = [];
   protected aggregateData: any = {};
 
@@ -96,6 +101,14 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
   set renderedData(arg: any[]) {
     this._renderedData = arg;
     this.onRenderedDataChange.emit();
+  }
+
+  /**
+ * Pre-initializes renderedData so the pipeline processes incoming data
+ * instead of discarding it (used when queryOnInit=false or reinitialize)
+ */
+  public initializeRenderedData(): void {
+    this._renderedData ??= [];
   }
 
   /**
@@ -162,7 +175,6 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       observeOn(asyncScheduler),
       switchMap((event: any) => {
         let data = Object.assign([], this._database.data);
-
         if (!Array.isArray(data) || this.renderedData === null) {
           // No data has been loaded yet
           this.renderedData = [];
@@ -258,7 +270,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       const renderedData = data;
 
       if (this.table.virtualScrollViewport && !this._paginator) {
-        if (this.table.savedScrollPosition === 0) {
+        if (this.table.scrollStrategy.getSavedScrollPosition() === 0) {
           data = this.getVirtualScrollData(data, new OnRangeChangeVirtualScroll({ start: 0, end: Codes.LIMIT_SCROLLVIRTUAL }));
         }
       }
@@ -952,9 +964,9 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     return Util.isDefined(parent) ? (parent.visible && parent.expanded) : true;
   }
 
-  updateGroupedColumns() {
+  updateGroupedColumns(reason: GroupByChangeReason = 'column-update') {
     this.table.loadingService.setLoading(true);
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next(reason);
   }
 
   /**
@@ -967,12 +979,12 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     } else {
       this.updateStateRowGrouped(rowGroup);
     }
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next('toggle');
   }
 
   setRowGroupLevelExpansion(rowGroup: OTableGroupedRow, value: boolean) {
     this.levelsExpansionState[rowGroup.level] = value;
-    this.groupByColumnChange.next();
+    this.groupByColumnChange.next('level-expansion');
   }
 
   private updateStateRowGrouped(rowGroup: OTableGroupedRow) {

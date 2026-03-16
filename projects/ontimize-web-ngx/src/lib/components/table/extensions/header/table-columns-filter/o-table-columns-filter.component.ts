@@ -4,7 +4,7 @@ import { BooleanInputConverter } from '../../../../../decorators/input-converter
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
-import { OFilterColumn, OTableColumnsFilterColumnComponent } from './columns/o-table-columns-filter-column.component';
+import { OFilterColumn, OTableColumnsFilterColumnComponent, OTableFilterMode } from './columns/o-table-columns-filter-column.component';
 import { OTableBase } from '../../../o-table-base.class';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER = [
@@ -33,10 +33,10 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   public static DEFAULT_COMPARISON_TYPE = 'VIEW';
   public static MODEL_COMPARISON_TYPE = 'MODEL';
-  public static OTableColumnsFilterModes = ['default', 'selection', 'custom'];
+  public static readonly OTableColumnsFilterModes: OTableFilterMode[] = ['default', 'selection', 'custom'];
 
   protected _columns: string;
-  protected _mode: string = 'default';
+  protected _mode: OTableFilterMode = 'default';
   @BooleanInputConverter()
   preloadValues: boolean = true;
   filterValuesInData: 'current-page' | 'all-data';
@@ -97,12 +97,12 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
 
   // -------------------- Getters / Setters --------------------
 
-  get mode(): string {
+  get mode(): OTableFilterMode {
     return this._mode;
   }
 
   @Input()
-  set mode(val: string) {
+  set mode(val: OTableFilterMode) {
     const m = OTableColumnsFilterComponent.OTableColumnsFilterModes.find(e => e === val);
     if (Util.isDefined(m)) {
       this._mode = m;
@@ -229,6 +229,10 @@ export class OTableColumnsFilterComponent implements OnInit, AfterContentInit {
           obj.visibleColumns = Util.parseArray(x.visibleColumns, true)
         }
         obj.filterValuesInData = (x.filterValuesInData || this.filterValuesInData) ?? this.getFilterValuesInDataByDefault();
+
+        obj.dateValueType = x.dateValueType;
+        obj.dateFormat = x.dateFormat;
+        obj.mode = x.mode;
         return obj;
       });
   }

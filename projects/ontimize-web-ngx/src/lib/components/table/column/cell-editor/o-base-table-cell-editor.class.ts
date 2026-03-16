@@ -130,7 +130,7 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
+    this.destroy$.next(void 0);
     this.destroy$.complete();
   }
 
@@ -252,6 +252,7 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
           this.table.cd.detectChanges();
         });
       } else {
+        this.table.saveScrollPosition();
         this.table.cd.detectChanges();
       }
     }
