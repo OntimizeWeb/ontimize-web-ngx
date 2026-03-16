@@ -1,4 +1,4 @@
-## 15.9.0 (2026-03-12)
+## 15.9.0 (2026-03-16)
 ### Features
 * **o-form-layout-dialog**: add fullscreen toggle button option ([91c453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/91c453bf623f3ec58ba214d63e27150eeb1665fb)) Closes [#2074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2074)
 * **o-form-layout-manager**: add new `sidenav` mode with configurable inputs `sidenav-position`, `sidenav-width` and `sidenav-backdrop` ([3b9b558](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b9b55888558390190c7fc7a409d19716c085df4)) Closes [#2025](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2025)
