@@ -1,3 +1,23 @@
+## 15.9.0 (2026-03-16)
+### Features
+* **o-form-layout-dialog**: add fullscreen toggle button option ([91c453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/91c453bf623f3ec58ba214d63e27150eeb1665fb)) Closes [#2074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2074)
+* **o-form-layout-manager**: add new `sidenav` mode with configurable inputs `sidenav-position`, `sidenav-width` and `sidenav-backdrop` ([3b9b558](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/3b9b55888558390190c7fc7a409d19716c085df4)) Closes [#2025](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2025)
+* **o-service-component**: add new input `filter-builder-function` to resolve `OFilterBuilderComponent` dynamically at query time ([699563c](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/699563ceb0cd5a1a1920ca2417c50d59252985ba)) Closes [#2101](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2101)
+* **o-table**: add new inputs `tooltip` and `tooltip-icon` in `o-table-column` to display a tooltip and an optional SVG icon in table header ([cb166e4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/cb166e4adb3393b4e99e7bffcca2efdf80922609)) Closes [#2090](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2090)
+* **o-table-columns-filter-column**: add new inputs `date-format`, `date-value-type` and `mode` ([ce6aba4](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/ce6aba49ec1d553ac91601e0c1924167da7b9c53)) Closes [#2088](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2088)
+* **o-table-cell-renderer-currency**: add new input `currency-symbol-column` to support dynamic currency symbol from row data ([9cebb10](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/9cebb103d6c9bb4bb9551ad434ac379135b82e49)) Closes [#2058](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2058)
+
+### Bug Fixes
+* **o-grid**: move and unify common quickfilter styles to fix toolbar height and padding to match `o-table` toolbar ([7a41946](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a41946a8a401776d161ac9059cb68d58e0b4e91)) Closes [#2067](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2067)
+* **o-table**:
+  * Fix group row background color not applied to last column when row selection is enabled ([11a9112](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/11a91121a09419e6ceb7d2e4c13c63fcb6834c62)) Closes [#2093](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2093)
+  * Fix vertical scroll position resetting to top after editing a cell value ([067d127](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/067d127c49e3b08b97416105cae23556af1e1521))([1365feb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1365feb)) Closes [#2005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2005)
+  * Fix `reinitialize` method not hiding the skeleton and not restoring the data pipeline
+  when `query-on-init` is `false` or `static-data` is set.([c52f391](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c52f391)) Closes [#2106](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2106)
+
+### Miscellaneous
+* **deps**: update dependencies to latest compatible versions, replace `observer.next()` with meaningful emission values for RxJS ~7.8.0 compatibility ([beec3c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/beec3c27fed26fe9e3a33d5df5f50d118b10cea3)) Closes [#2081](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2081)
+
 ## 15.8.3 (2026-02-18)
 ### Features
 * `BaseRequestArgument` now has access to `PaginationContextService` to retrieve the current pagination state during request argument parsing. This enables custom request argument adapters to access pagination context directly.([e440c5d](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/e440c5d)) Closes [#2075](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2075)
