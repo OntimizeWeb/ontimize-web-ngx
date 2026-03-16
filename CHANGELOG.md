@@ -11,7 +11,9 @@
 * **o-grid**: move and unify common quickfilter styles to fix toolbar height and padding to match `o-table` toolbar ([7a41946](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7a41946a8a401776d161ac9059cb68d58e0b4e91)) Closes [#2067](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2067)
 * **o-table**:
   * Fix group row background color not applied to last column when row selection is enabled ([11a9112](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/11a91121a09419e6ceb7d2e4c13c63fcb6834c62)) Closes [#2093](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2093)
-  * Fix vertical scroll position resetting to top after editing a cell value ([067d127](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/067d127c49e3b08b97416105cae23556af1e1521)) Closes [#2005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2005)
+  * Fix vertical scroll position resetting to top after editing a cell value ([067d127](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/067d127c49e3b08b97416105cae23556af1e1521))([1365feb](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1365feb)) Closes [#2005](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2005)
+  * Fix `reinitialize` method not hiding the skeleton and not restoring the data pipeline
+  when `query-on-init` is `false` or `static-data` is set.([c52f391](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/c52f391)) Closes [#2106](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2106)
 
 ### Miscellaneous
 * **deps**: update dependencies to latest compatible versions, replace `observer.next()` with meaningful emission values for RxJS ~7.8.0 compatibility ([beec3c2](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/beec3c27fed26fe9e3a33d5df5f50d118b10cea3)) Closes [#2081](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2081)
