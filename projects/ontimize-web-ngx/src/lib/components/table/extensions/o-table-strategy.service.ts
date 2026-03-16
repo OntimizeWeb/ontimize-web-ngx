@@ -15,6 +15,7 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   public readonly stickyChange = new Subject<number>();
   private readonly bufferMultiplier: number = 1;
   private lastRenderedRange = { start: 0, end: 0 };
+  // To save scroll position when reloading data
   private savedScrollPosition = 0;
 
   get dataLength(): number {
@@ -70,6 +71,10 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
     this.savedScrollPosition = value;
   }
 
+  public getSavedScrollPosition(): number {
+    return this.savedScrollPosition;
+  }
+
   public setConfig(rowHeight: number, headerHeight: number, footerHeight: number) {
 
     if (
@@ -89,7 +94,10 @@ export class OTableVirtualScrollStrategy implements VirtualScrollStrategy {
   public onDataLengthChanged(): void {
     if (this.viewport) {
       this.viewport.setTotalContentSize(this.dataLength * this.rowHeight + this.headerHeight + this.footerHeight);
-      this.viewport.scrollToOffset(0);//set scroll up
+      if (this.savedScrollPosition === 0) {
+        this.viewport.scrollToOffset(0);//set scroll up
+      }
+      this.savedScrollPosition = 0;
       this.updateContent();
     }
   }
