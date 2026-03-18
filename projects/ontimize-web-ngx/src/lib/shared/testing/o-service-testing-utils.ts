@@ -1,16 +1,14 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { APP_CONFIG } from '../../config/app-config';
-import { AppConfig } from '../../config/app-config';
+import { APP_CONFIG, AppConfig } from '../../config/app-config';
 import { appConfigFactory, AuthService, LocalStorageService } from '../../services';
 import { Config } from '../../types/config.type';
-import { Injector } from '@angular/core';
+import { Injector, ElementRef, Renderer2, NgZone } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
 
 // Import base testing utils
 import { OTestingUtils } from './o-testing-utils';
@@ -24,10 +22,7 @@ import { OModulesInfoService } from '../../services/o-modules-info.service';
 import { IconService } from '../../services/icon.service';
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { DOCUMENT } from '@angular/common';
-import { ElementRef, Renderer2, NgZone } from '@angular/core';
+import { Location, DOCUMENT } from '@angular/common';
 import { OFormLayoutManagerService } from '../../services/o-form-layout-manager.service';
 
 // Import specific adapter for the NullInjectorError fix

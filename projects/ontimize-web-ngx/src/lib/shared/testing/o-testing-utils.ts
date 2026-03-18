@@ -1,15 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Component, DebugElement, ChangeDetectorRef } from '@angular/core';
+import { Component, DebugElement, ChangeDetectorRef, Injector } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UntypedFormGroup, UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
-import { APP_CONFIG } from '../../config/app-config';
-import { AppConfig } from '../../config/app-config';
+import { APP_CONFIG, AppConfig } from '../../config/app-config';
 import { appConfigFactory, AuthService, LocalStorageService } from '../../services';
 import { Config } from '../../types/config.type';
-import { Injector } from '@angular/core';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
