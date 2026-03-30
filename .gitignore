@@ -6,8 +6,10 @@
 /out-tsc
 /node_modules
 /projects/ontimize-web-ngx/node_modules
+/coverage
 # Only exists if Bazel was run
 /bazel-out
+
 
 # profiling files
 chrome-profiler-events*.json
