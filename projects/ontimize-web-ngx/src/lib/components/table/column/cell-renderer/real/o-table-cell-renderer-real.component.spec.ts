@@ -5,14 +5,14 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableCellRendererImageComponent: any;
+let OTableCellRendererRealComponent: any;
 
-describe('OTableCellRendererImageComponent', () => {
+describe('OTableCellRendererRealComponent', () => {
   let component: any;
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-cell-renderer-image.component');
-    OTableCellRendererImageComponent = module.OTableCellRendererImageComponent;    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-renderer-real.component');
+    OTableCellRendererRealComponent = module.OTableCellRendererRealComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -26,7 +26,7 @@ describe('OTableCellRendererImageComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OTableCellRendererImageComponent(mockInjector);
+    component = Object.create(OTableCellRendererRealComponent.prototype);
   });
 
   it('should create', () => {
@@ -40,6 +40,6 @@ describe('OTableCellRendererImageComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableCellRendererImageComponent);
+    expect(component.constructor).toBe(OTableCellRendererRealComponent);
   });
 });

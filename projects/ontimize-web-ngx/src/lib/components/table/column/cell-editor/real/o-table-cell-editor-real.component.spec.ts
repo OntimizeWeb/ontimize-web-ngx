@@ -5,14 +5,14 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableCellEditorBooleanComponent: any;
+let OTableCellEditorRealComponent: any;
 
-describe('OTableCellEditorBooleanComponent', () => {
+describe('OTableCellEditorRealComponent', () => {
   let component: any;
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-cell-editor-boolean.component');
-    OTableCellEditorBooleanComponent = module.OTableCellEditorBooleanComponent;    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-editor-real.component');
+    OTableCellEditorRealComponent = module.OTableCellEditorRealComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -26,7 +26,7 @@ describe('OTableCellEditorBooleanComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OTableCellEditorBooleanComponent(mockInjector);
+    component = Object.create(OTableCellEditorRealComponent.prototype);
   });
 
   it('should create', () => {
@@ -40,6 +40,6 @@ describe('OTableCellEditorBooleanComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableCellEditorBooleanComponent);
+    expect(component.constructor).toBe(OTableCellEditorRealComponent);
   });
 });

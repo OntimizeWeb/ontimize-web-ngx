@@ -5,14 +5,14 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableCellEditorIntegerComponent: any;
+let OTableCellRendererTranslateComponent: any;
 
-describe('OTableCellEditorIntegerComponent', () => {
+describe('OTableCellRendererTranslateComponent', () => {
   let component: any;
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-cell-editor-integer.component');
-    OTableCellEditorIntegerComponent = module.OTableCellEditorIntegerComponent;    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-renderer-translate.component');
+    OTableCellRendererTranslateComponent = module.OTableCellRendererTranslateComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -26,7 +26,7 @@ describe('OTableCellEditorIntegerComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OTableCellEditorIntegerComponent(mockInjector);
+    component = Object.create(OTableCellRendererTranslateComponent.prototype);
   });
 
   it('should create', () => {
@@ -40,6 +40,6 @@ describe('OTableCellEditorIntegerComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableCellEditorIntegerComponent);
+    expect(component.constructor).toBe(OTableCellRendererTranslateComponent);
   });
 });

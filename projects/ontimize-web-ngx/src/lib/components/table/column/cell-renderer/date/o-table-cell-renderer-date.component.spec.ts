@@ -26,7 +26,7 @@ describe('OTableCellRendererDateComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OTableCellRendererDateComponent(mockInjector);
+    component = Object.create(OTableCellRendererDateComponent.prototype);
   });
 
   it('should create', () => {

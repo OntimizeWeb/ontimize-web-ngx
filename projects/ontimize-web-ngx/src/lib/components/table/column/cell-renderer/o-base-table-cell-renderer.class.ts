@@ -5,7 +5,6 @@ import { Expression } from '../../../../types/expression.type';
 import { FilterExpressionUtils } from '../../../../util/filter-expression.utils';
 import { Util } from '../../../../util/util';
 import type { OTableComponent } from '../../o-table.component';
-import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
   'filterSource: filter-source',
@@ -28,6 +27,8 @@ export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
   protected componentPipe: PipeTransform;
 
   constructor(protected injector: Injector) {
+    // Lazy require to break circular dependency: renderers -> OTableColumnComponent -> renderer barrel -> renderers
+    const { OTableColumnComponent } = require('../o-table-column.component');
     this.tableColumn = this.injector.get(OTableColumnComponent);
   }
 

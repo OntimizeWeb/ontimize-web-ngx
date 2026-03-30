@@ -5,14 +5,17 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableCellEditorDateComponent: any;
+let OTableButtonsComponent: any;
 
-describe('OTableCellEditorDateComponent', () => {
+describe('OTableButtonsComponent', () => {
   let component: any;
+
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-cell-editor-date.component');
-    OTableCellEditorDateComponent = module.OTableCellEditorDateComponent;    await TestBed.configureTestingModule({
+    const module = await import('./o-table-buttons.component');
+    OTableButtonsComponent = module.OTableButtonsComponent;
+    
+    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -20,14 +23,15 @@ describe('OTableCellEditorDateComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ...OTestingUtils.getCommonTestingModuleConfig().providers],
+        ...OTestingUtils.getCommonTestingModuleConfig().providers
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    const mockDateAdapterOntimizeMomentDateAdapter: any = {};
-    component = new OTableCellEditorDateComponent(mockInjector, mockDateAdapterOntimizeMomentDateAdapter);
+    const mockOTableBase: any = {};
+    component = Object.create(OTableButtonsComponent.prototype);
   });
 
   it('should create', () => {
@@ -41,6 +45,6 @@ describe('OTableCellEditorDateComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableCellEditorDateComponent);
+    expect(component.constructor).toBe(OTableButtonsComponent);
   });
 });

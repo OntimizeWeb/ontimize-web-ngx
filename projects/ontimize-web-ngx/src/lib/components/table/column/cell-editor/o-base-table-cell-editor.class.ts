@@ -14,9 +14,8 @@ import { ObservableWrapper } from '../../../../util/async';
 import { Codes } from '../../../../util/codes';
 import { ComponentWithValidatorsAndErrorsData, ErrorsUtils } from '../../../../util/errors';
 import { Util } from '../../../../util/util';
-import { OTableComponent } from '../../o-table.component';
+import type { OTableComponent } from '../../o-table.component';
 import { OColumn } from '../o-column.class';
-import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
   'orequired: required',
@@ -103,7 +102,9 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
 
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
-    this.tableColumn = this.injector.get<OTableColumnComponent>(OTableColumnComponent as Type<OTableColumnComponent>);
+    // Lazy require to break circular dependency: editors -> OTableColumnComponent -> editor barrel -> editors
+    const { OTableColumnComponent } = require('../o-table-column.component');
+    this.tableColumn = this.injector.get(OTableColumnComponent);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
     this.cellEditorId = Util.randomNumber().toString(36);
     this.renderer = this.injector.get<Renderer2>(Renderer2 as Type<Renderer2>);

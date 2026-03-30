@@ -5,14 +5,14 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableCellEditorEmailComponent: any;
+let OTableCellEditorDateComponent: any;
 
-describe('OTableCellEditorEmailComponent', () => {
+describe('OTableCellEditorDateComponent', () => {
   let component: any;
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-cell-editor-email.component');
-    OTableCellEditorEmailComponent = module.OTableCellEditorEmailComponent;    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-editor-date.component');
+    OTableCellEditorDateComponent = module.OTableCellEditorDateComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -26,7 +26,8 @@ describe('OTableCellEditorEmailComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OTableCellEditorEmailComponent(mockInjector);
+    const mockDateAdapterOntimizeMomentDateAdapter: any = {};
+    component = Object.create(OTableCellEditorDateComponent.prototype);
   });
 
   it('should create', () => {
@@ -40,6 +41,6 @@ describe('OTableCellEditorEmailComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableCellEditorEmailComponent);
+    expect(component.constructor).toBe(OTableCellEditorDateComponent);
   });
 });

@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
-import { OTestingUtils } from '../../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableColumnCalculatedComponent: any;
+let OTableFilterByColumnDataDialogComponent: any;
 
-describe('OTableColumnCalculatedComponent', () => {
+describe('OTableFilterByColumnDataDialogComponent', () => {
   let component: any;
 
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-column-calculated.component');
-    OTableColumnCalculatedComponent = module.OTableColumnCalculatedComponent;
+    const module = await import('./o-table-filter-by-column-data-dialog.component');
+    OTableFilterByColumnDataDialogComponent = module.OTableFilterByColumnDataDialogComponent;
     
     await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
@@ -29,9 +29,12 @@ describe('OTableColumnCalculatedComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOTableComponent: any = {};
     const mockInjector = TestBed.inject(Injector);
-    component = new OTableColumnCalculatedComponent(mockOTableComponent, mockInjector);
+    const mockMatDialogRefOTableFilterByColumnDataDialogComponent: any = { close: jasmine.createSpy() };
+    const mockOTableFilterByColumnService: any = {};
+    const mockOColumn: any = {};
+    const mockOTableComponent: any = {};
+    component = Object.create(OTableFilterByColumnDataDialogComponent.prototype);
   });
 
   it('should create', () => {
@@ -45,6 +48,6 @@ describe('OTableColumnCalculatedComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableColumnCalculatedComponent);
+    expect(component.constructor).toBe(OTableFilterByColumnDataDialogComponent);
   });
 });

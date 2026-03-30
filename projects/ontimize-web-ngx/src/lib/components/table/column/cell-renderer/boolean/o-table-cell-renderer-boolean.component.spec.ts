@@ -2,20 +2,17 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
-import { OTestingUtils } from '../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTreeComponent: any;
+let OTableCellRendererBooleanComponent: any;
 
-describe('OTreeComponent', () => {
+describe('OTableCellRendererBooleanComponent', () => {
   let component: any;
-
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-tree.component');
-    OTreeComponent = module.OTreeComponent;
-    
-    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-renderer-boolean.component');
+    OTableCellRendererBooleanComponent = module.OTableCellRendererBooleanComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -23,16 +20,13 @@ describe('OTreeComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
+        ...OTestingUtils.getCommonTestingModuleConfig().providers],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    const mockElementRef: any = { nativeElement: document.createElement('div') };
-    const mockOFormComponent: any = {};
-    component = new OTreeComponent(mockInjector, mockElementRef, mockOFormComponent);
+    component = Object.create(OTableCellRendererBooleanComponent.prototype);
   });
 
   it('should create', () => {
@@ -46,6 +40,6 @@ describe('OTreeComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTreeComponent);
+    expect(component.constructor).toBe(OTableCellRendererBooleanComponent);
   });
 });

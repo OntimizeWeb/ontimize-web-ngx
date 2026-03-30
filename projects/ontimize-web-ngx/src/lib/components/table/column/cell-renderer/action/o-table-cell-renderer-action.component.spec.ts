@@ -2,20 +2,17 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
-import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTreeNodeComponent: any;
+let OTableCellRendererActionComponent: any;
 
-describe('OTreeNodeComponent', () => {
+describe('OTableCellRendererActionComponent', () => {
   let component: any;
-
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./tree-node.component');
-    OTreeNodeComponent = module.OTreeNodeComponent;
-    
-    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-renderer-action.component');
+    OTableCellRendererActionComponent = module.OTableCellRendererActionComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -23,18 +20,13 @@ describe('OTreeNodeComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
+        ...OTestingUtils.getCommonTestingModuleConfig().providers],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    const mockElementRef: any = { nativeElement: document.createElement('div') };
-    const mockOFormComponent: any = {};
-    const mockOTreeComponent: any = {};
-    const mockOTreeNodeComponent: any = {};
-    component = new OTreeNodeComponent(mockInjector, mockElementRef, mockOFormComponent, mockOTreeComponent, mockOTreeNodeComponent);
+    component = Object.create(OTableCellRendererActionComponent.prototype);
   });
 
   it('should create', () => {
@@ -48,6 +40,6 @@ describe('OTreeNodeComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTreeNodeComponent);
+    expect(component.constructor).toBe(OTableCellRendererActionComponent);
   });
 });

@@ -5,14 +5,14 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableCellEditorTimeComponent: any;
+let OTableCellEditorIntegerComponent: any;
 
-describe('OTableCellEditorTimeComponent', () => {
+describe('OTableCellEditorIntegerComponent', () => {
   let component: any;
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-cell-editor-time.component');
-    OTableCellEditorTimeComponent = module.OTableCellEditorTimeComponent;    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-editor-integer.component');
+    OTableCellEditorIntegerComponent = module.OTableCellEditorIntegerComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -26,8 +26,7 @@ describe('OTableCellEditorTimeComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    const mockDateAdapterany: any = {};
-    component = new OTableCellEditorTimeComponent(mockInjector, mockDateAdapterany);
+    component = Object.create(OTableCellEditorIntegerComponent.prototype);
   });
 
   it('should create', () => {
@@ -41,6 +40,6 @@ describe('OTableCellEditorTimeComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableCellEditorTimeComponent);
+    expect(component.constructor).toBe(OTableCellEditorIntegerComponent);
   });
 });

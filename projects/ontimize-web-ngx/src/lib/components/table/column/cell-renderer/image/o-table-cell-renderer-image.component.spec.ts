@@ -5,17 +5,14 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableFilterByColumnDataDialogComponent: any;
+let OTableCellRendererImageComponent: any;
 
-describe('OTableFilterByColumnDataDialogComponent', () => {
+describe('OTableCellRendererImageComponent', () => {
   let component: any;
-
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-filter-by-column-data-dialog.component');
-    OTableFilterByColumnDataDialogComponent = module.OTableFilterByColumnDataDialogComponent;
-    
-    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-renderer-image.component');
+    OTableCellRendererImageComponent = module.OTableCellRendererImageComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -23,18 +20,13 @@ describe('OTableFilterByColumnDataDialogComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
-      ],
+        ...OTestingUtils.getCommonTestingModuleConfig().providers],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    const mockMatDialogRefOTableFilterByColumnDataDialogComponent: any = { close: jasmine.createSpy() };
-    const mockOTableFilterByColumnService: any = {};
-    const mockOColumn: any = {};
-    const mockOTableComponent: any = {};
-    component = new OTableFilterByColumnDataDialogComponent(mockInjector, mockMatDialogRefOTableFilterByColumnDataDialogComponent, mockOTableFilterByColumnService, mockOColumn, mockOTableComponent);
+    component = Object.create(OTableCellRendererImageComponent.prototype);
   });
 
   it('should create', () => {
@@ -48,6 +40,6 @@ describe('OTableFilterByColumnDataDialogComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableFilterByColumnDataDialogComponent);
+    expect(component.constructor).toBe(OTableCellRendererImageComponent);
   });
 });

@@ -24,7 +24,7 @@ import { ODateValueType } from '../../../types/o-date-value.type';
 import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
-import { OTableComponent } from '../o-table.component';
+import type { OTableComponent } from '../o-table.component';
 import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor';
 import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
 
@@ -278,7 +278,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   private subscriptions = new Subscription();
 
   constructor(
-    @Inject(forwardRef(() => OTableComponent)) public table: OTableComponent,
+    @Inject(forwardRef(() => require('../o-table.component').OTableComponent)) public table: OTableComponent,
     protected injector: Injector
   ) {
   }

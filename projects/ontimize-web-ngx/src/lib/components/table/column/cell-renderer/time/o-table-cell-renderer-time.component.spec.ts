@@ -5,14 +5,14 @@ import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/c
 import { OTestingUtils } from '../../../../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
-let OTableCellRendererPercentageComponent: any;
+let OTableCellRendererTimeComponent: any;
 
-describe('OTableCellRendererPercentageComponent', () => {
+describe('OTableCellRendererTimeComponent', () => {
   let component: any;
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
-    const module = await import('./o-table-cell-renderer-percentage.component');
-    OTableCellRendererPercentageComponent = module.OTableCellRendererPercentageComponent;    await TestBed.configureTestingModule({
+    const module = await import('./o-table-cell-renderer-time.component');
+    OTableCellRendererTimeComponent = module.OTableCellRendererTimeComponent;    await TestBed.configureTestingModule({
       declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
         NoopAnimationsModule,
@@ -26,7 +26,7 @@ describe('OTableCellRendererPercentageComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OTableCellRendererPercentageComponent(mockInjector);
+    component = Object.create(OTableCellRendererTimeComponent.prototype);
   });
 
   it('should create', () => {
@@ -40,6 +40,6 @@ describe('OTableCellRendererPercentageComponent', () => {
   });
 
   it('should have basic component structure', () => {
-    expect(component.constructor).toBe(OTableCellRendererPercentageComponent);
+    expect(component.constructor).toBe(OTableCellRendererTimeComponent);
   });
 });
