@@ -69,7 +69,7 @@ import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTableColumnCalculatedComponent } from './column/calculated/o-table-column-calculated.component';
 import { OBaseTableCellRenderer } from './column/cell-renderer/o-base-table-cell-renderer.class';
 import { OColumn } from './column/o-column.class';
-import type { OTableColumnComponent } from './column/o-table-column.component';
+import { OTableColumnComponent } from './column/o-table-column.component';
 import { OTableExportButtonComponent } from './extensions';
 import { OTableContextMenuComponent } from './extensions/contextmenu/o-table-context-menu.component';
 import { DefaultOTableOptions } from './extensions/default-o-table-options.class';
