@@ -1,8 +1,8 @@
 {
   "name": "ontimize-web-ngx",
   "homepage": "https://github.com/OntimizeWeb/ontimize-web-ngx#readme",
-  "version": "15.10.0-SNAPSHOT-0",
-  "description": "Ontimize Web framework using Angular 15",
+  "version": "16.0.0-SNAPSHOT-0",
+  "description": "Ontimize Web framework using Angular 16",
   "bugs": "https://github.com/OntimizeWeb/ontimize-web-ngx/issues",
   "author": "Imatia S.L.",
   "repository": {
@@ -11,8 +11,8 @@
   },
   "keywords": [
     "angular",
-    "angular15",
-    "angular 15",
+    "angular16",
+    "angular 16",
     "framework",
     "web framework",
     "material",
@@ -34,30 +34,30 @@
     "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
-    "@angular/animations": "^15.2.9",
-    "@angular/cdk": "^15.2.9",
-    "@angular/common": "^15.2.9",
-    "@angular/compiler": "^15.2.9",
-    "@angular/core": "^15.2.9",
-    "@angular/flex-layout": "^15.0.0-beta.42",
-    "@angular/forms": "^15.2.9",
-    "@angular/material": "^15.2.9",
-    "@angular/material-moment-adapter": "^15.2.9",
-    "@angular/platform-browser": "^15.2.9",
-    "@angular/platform-browser-dynamic": "^15.2.9",
-    "@angular/router": "^15.2.9",
+    "@angular/animations": "^16.2.0",
+    "@angular/cdk": "^16.2.0",
+    "@angular/common": "^16.2.0",
+    "@angular/compiler": "^16.2.0",
+    "@angular/core": "^16.2.0",
+    "@ngbracket/ngx-layout": "^16.0.0",
+    "@angular/forms": "^16.2.0",
+    "@angular/material": "^16.2.0",
+    "@angular/material-moment-adapter": "^16.2.0",
+    "@angular/platform-browser": "^16.2.0",
+    "@angular/platform-browser-dynamic": "^16.2.0",
+    "@angular/router": "^16.2.0",
     "rxjs": "~7.8.0",
-    "zone.js": "~0.12.0",
+    "zone.js": "~0.13.0",
     "google-libphonenumber": "^3.2.3"
   },
   "dependencies": {
-    "@ngx-translate/core": "~13.0.0",
-    "@ngx-translate/http-loader": "~6.0.0",
-    "angular-resizable-element": "3.3.4",
+    "@ngx-translate/core": "~14.0.0",
+    "@ngx-translate/http-loader": "~7.0.0",
+    "angular-resizable-element": "3.4.0",
     "moment": "2.29.2",
-    "ngx-material-timepicker": "12.1.0",
+    "ngx-material-timepicker": "13.0.0",
     "google-libphonenumber": "^3.2.3",
     "tslib": "^2.3.0",
-    "ngx-skeleton-loader": "7.0.0"
+    "ngx-skeleton-loader": "8.0.0"
   }
 }

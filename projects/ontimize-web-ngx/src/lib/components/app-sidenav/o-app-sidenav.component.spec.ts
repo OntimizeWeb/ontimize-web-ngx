@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { MediaObserver } from '@angular/flex-layout';
+import { MediaObserver } from '@ngbracket/ngx-layout';
 import { of, Subject } from 'rxjs';
 
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';

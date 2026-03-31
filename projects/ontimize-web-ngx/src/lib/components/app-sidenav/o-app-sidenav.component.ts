@@ -13,7 +13,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MediaObserver } from '@angular/flex-layout';
+import { MediaObserver } from '@ngbracket/ngx-layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';

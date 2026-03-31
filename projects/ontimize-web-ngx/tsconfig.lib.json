@@ -15,11 +15,9 @@
     "outDir": "dist",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "types": [
-      "moment"
-    ],
+    "types": [],
     "typeRoots": [
-      "node_modules/moment"
+      "../../node_modules/@types"
     ]
   },
   "exclude": [

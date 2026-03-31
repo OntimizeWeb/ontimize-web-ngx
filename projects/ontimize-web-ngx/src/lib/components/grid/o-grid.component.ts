@@ -15,7 +15,7 @@ import {
   ViewChildren,
   ViewEncapsulation
 } from '@angular/core';
-import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
