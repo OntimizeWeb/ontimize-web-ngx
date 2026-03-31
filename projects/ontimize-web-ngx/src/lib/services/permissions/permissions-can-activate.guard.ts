@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateChild, CanActivateChildFn, Router, RouterStateSnapshot } from '@angular/router';
 
 import { Util } from '../../util/util';
 import { ShareCanActivateChildService } from '../share-can-activate-child.service';
@@ -38,3 +38,8 @@ export class PermissionsGuardService implements CanActivateChild {
   }
 
 }
+
+/** Functional guard wrapper for PermissionsGuardService. Use in route configs: `canActivateChild: [permissionsGuard]` */
+export const permissionsGuard: CanActivateChildFn = (childRoute, state) => {
+  return inject(PermissionsGuardService).canActivateChild(childRoute, state);
+};

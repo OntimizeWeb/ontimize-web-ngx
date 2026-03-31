@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 
 import { OUserInfoService } from '../services/o-user-info.service';
 import { Codes } from '../util/codes';
@@ -42,3 +42,8 @@ export class AuthGuardService implements CanActivate {
   }
 
 }
+
+/** Functional guard wrapper for AuthGuardService. Use in route configs: `canActivate: [authGuard]` */
+export const authGuard: CanActivateFn = (route, state) => {
+  return inject(AuthGuardService).canActivate(route, state);
+};
