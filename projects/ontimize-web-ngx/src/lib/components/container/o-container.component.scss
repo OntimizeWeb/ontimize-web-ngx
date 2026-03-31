@@ -1,0 +1,106 @@
+.o-column,
+.o-row {
+  display: block;
+
+  &[class*="mat-elevation-z"] {
+    margin: 8px 0;
+  }
+
+  &[class*="o-appearance-outline"] {
+    box-shadow: none;
+  }
+
+  &[class*="o-appearance-outline-title"] {
+    margin: 16px 0 8px;
+  }
+
+  > .o-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    .o-container-title {
+      cursor: default;
+      margin: 0 4px;
+      height: 39px;
+      line-height: 39px;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+
+      span {
+        padding-left: 8px;
+      }
+    }
+
+    .o-container-scroll {
+      overflow: auto;
+      height: 100%;
+
+      &.o-container-gap {
+        padding: 24px 30px 8px;
+      }
+    }
+  }
+
+  &.o-appearance-outline {
+    position: relative;
+    > .o-container {
+      .o-container-title {
+        position: absolute;
+        border-bottom: 0;
+        transform: translate(0, -50%);
+        margin-left: 18px;
+      }
+    }
+
+    .o-container-outline {
+      display: flex;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+
+      .o-container-outline-end,
+      .o-container-outline-start {
+        min-width: 5px;
+        border-width: 1px;
+        border-top-style: solid;
+        border-bottom-style: solid;
+      }
+
+      .o-container-outline-start {
+        border-radius: 5px 0 0 5px;
+        border-left-style: solid;
+        border-right-style: none;
+      }
+
+      .o-container-outline-end {
+        flex-grow: 1;
+        border-radius: 0 5px 5px 0;
+        border-left-style: none;
+        border-right-style: solid;
+      }
+
+      .o-container-outline-gap {
+        border-width: 1px;
+        border-top-style: none;
+        border-bottom-style: solid;
+        border-left-style: none;
+        border-right-style: none;
+      }
+    }
+  }
+}
+
+/* Legacy Firefox implementation treats all flex containers as inline-block elements. */
+@-moz-document url-prefix() {
+  .o-column .o-container,
+  .o-row .o-container {
+    width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,7 @@
+<mat-checkbox (click)="$event.stopPropagation()" (change)="table.masterToggle($event)" [checked]="isAllSelected | async" [indeterminate]="isIndeterminate | async">
+  <ng-container *ngIf="table.tableColumnSelectAllContentChild?.title">
+    {{table.tableColumnSelectAllContentChild?.title | oTranslate}}
+  </ng-container>
+</mat-checkbox>
+
+<o-table-column-resizer *ngIf="resizable && table.tableColumnSelectAllContentChild?.title" [column]="column"></o-table-column-resizer>

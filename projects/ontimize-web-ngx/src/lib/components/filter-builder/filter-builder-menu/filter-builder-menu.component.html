@@ -1,0 +1,27 @@
+<button mat-icon-button [attr.aria-label]="'FILTERBUILDERMENU.BUTTONS.ARIALBUTTON' | oTranslate" [matMenuTriggerFor]="filterMenu">
+  <ng-container *ngIf="svgIcon !== undefined; else buttonIconTemplate">
+    <mat-icon [svgIcon]="svgIcon"></mat-icon>
+  </ng-container>
+  <ng-template #buttonIconTemplate>
+    <ng-container *ngIf="icon !== undefined; else defaultButtonTemplate">
+      <mat-icon>{{icon}}</mat-icon>
+    </ng-container>
+  </ng-template>
+  <ng-template #defaultButtonTemplate>
+    <mat-icon [svgIcon]="defaultSvgIcon"></mat-icon>
+  </ng-template>
+</button>
+<mat-menu #filterMenu="matMenu" class="o-mat-menu">
+  <button type="button" mat-menu-item (click)="onFilterClicked()" *ngIf="showFilterOption">
+    {{ 'FILTERBUILDERMENU.BUTTONS.FILTER' | oTranslate }}
+  </button>
+  <button type="button" mat-menu-item (click)="onStoreFilterClicked()">
+    {{ 'FILTERBUILDERMENU.BUTTONS.SAVE_FILTER' | oTranslate }}
+  </button>
+  <button type="button" mat-menu-item (click)="onLoadFilterClicked()">
+    {{ 'FILTERBUILDERMENU.BUTTONS.LOAD_FILTER' | oTranslate}}
+  </button>
+  <button type="button" mat-menu-item (click)="onClearFilterClicked()" *ngIf="showClearFilterOption">
+    {{ 'FILTERBUILDERMENU.BUTTONS.CLEAR_FILTER' | oTranslate}}
+  </button>
+</mat-menu>

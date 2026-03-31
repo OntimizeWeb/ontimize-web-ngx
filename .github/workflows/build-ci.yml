@@ -1,0 +1,38 @@
+name: Build CI
+
+concurrency:
+  group: build-ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [15.x.x, hotfix/15.*]
+    paths: ['projects/ontimize-web-ngx/**']
+  pull_request:
+    types: [opened, synchronize, labeled]
+    paths: ['projects/ontimize-web-ngx/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Cache node modules'
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Node 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.10.0
+
+      - name: npm install and npm run build
+        run: |
+          npm i
+          npm run build-prod

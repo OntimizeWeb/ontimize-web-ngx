@@ -1,0 +1,170 @@
+
+  $font-size-title-container: .75;
+
+  .o-column,
+  .o-row {
+    >.o-container {
+      >.o-container-title {
+        line-height: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  .o-column-collapsible,
+  .o-row-collapsible {
+    >.o-container.mat-expansion-panel .mat-expansion-panel-header {
+      padding-left: 4px;
+    }
+  }
+
+  .o-column-collapsible,
+  .o-row-collapsible {
+    >.o-container.mat-expansion-panel {
+      .mat-expansion-panel-content .mat-expansion-panel-body {
+        >.o-container-scroll {
+          padding: 10px 6px 6px;
+        }
+      }
+    }
+  }
+
+  .o-column>.o-container .o-container-scroll.o-container-gap,
+  .o-row>.o-container .o-container-scroll.o-container-gap {
+    padding: 10px 6px 6px;
+  }
+
+  .o-column.o-appearance-outline>.o-container .o-container-scroll.o-container-gap,
+  .o-row.o-appearance-outline>.o-container .o-container-scroll.o-container-gap {
+    padding: 12px;
+  }
+
+  .o-column-collapsible.o-appearance-outline,
+  .o-row-collapsible.o-appearance-outline {
+    >.o-container.mat-expansion-panel {
+      .mat-expansion-panel-content .mat-expansion-panel-body {
+        >.o-container-scroll {
+          padding: 12px;
+        }
+      }
+
+    }
+  }
+
+  /* O-APP-LAYOUT */
+  .o-app-sidenav.o-app-sidenav {
+    .o-app-header {
+      .sidenav-toggle {
+        padding: 8px;
+      }
+    }
+  }
+
+  /* MD-TAB-GROUP */
+  mat-tab-group.mat-mdc-tab-group {
+    >.mat-mdc-tab-header .mat-mdc-tab {
+      height: 32px;
+    }
+  }
+
+  /* MAT-PAGINATOR */
+  .mat-mdc-paginator-container {
+    min-height: 0;
+
+    .mat-mdc-paginator-page-size {
+      align-items: center;
+
+      /* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version. */
+      /* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version. */
+      .mat-paginator-page-size-select {
+        margin: 6px 0;
+
+        /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
+        .mat-select-arrow-wrapper {
+          transform: initial;
+        }
+
+        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+        .mat-form-field-infix {
+          border-top: 0;
+        }
+      }
+    }
+
+    .mat-mdc-paginator-range-actions {
+      min-height: 0;
+    }
+  }
+
+  .mat-mdc-tooltip-panel {
+    .o-tooltip.mat-mdc-tooltip {
+
+      &.after,
+      &.right {
+        margin-left: 5px;
+      }
+
+      &.before,
+      &.left {
+        margin-right: 5px;
+      }
+
+      &.above {
+        margin-bottom: -15px;
+      }
+
+      &.below {
+        margin-top: 5px;
+      }
+    }
+  }
+
+
+  @media(max-width: 599px) {
+    .o-list-picker-dialog.o-list-picker-dialog .mat-mdc-dialog-content.o-list-picker-has-filter {
+      // 100% - toolbar (56px) - buttons (49px)
+      max-height: calc(100% - 105px);
+      min-height: calc(100% - 105px);
+    }
+  }
+
+
+
+  $mat-toolbar-height-desktop: 36px;
+  $margin-button: 6px;
+  $mat-icon-button-size: 30px;
+  $mat-toolbar-breadcrumb-height-desktop: 72px;
+
+  .o-form {
+    .o-form-toolbar {
+      .o-form-toolbar-header {
+        min-height: $mat-toolbar-height-desktop;
+        max-height: $mat-toolbar-height-desktop;
+        padding: 0 4px;
+        box-shadow: none;
+        font-size: 16px;
+
+        &.breadcrumb {
+          height: 28px;
+          padding: 8px;
+          min-height: $mat-toolbar-breadcrumb-height-desktop;
+          max-height: $mat-toolbar-breadcrumb-height-desktop;
+        }
+
+        .mat-toolbar-tools {
+
+          .o-form-toolbar-button,
+          .o-form-toolbar-button[disabled] {
+            border-radius: 0;
+
+            &.mat-mdc-icon-button {
+              height: $mat-icon-button-size;
+              line-height: $mat-icon-button-size;
+              width: $mat-icon-button-size;
+            }
+          }
+        }
+
+      }
+    }
+  }

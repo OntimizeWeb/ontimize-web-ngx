@@ -1,0 +1,21 @@
+.o-table .o-table-container .mat-mdc-table .mat-mdc-header-cell {
+
+  &:has(.o-table-column-filter-icon) {
+    padding-left: 0px;
+  }
+
+  .o-table-column-filter-icon {
+    position: relative;
+    display: flex;
+    margin-right: 6px;
+
+    .mat-icon {
+      align-self: center;
+    }
+
+    .o-table-header-indicator-numbered {
+      right: -5px;
+      bottom: -6px
+    }
+  }
+}

@@ -1,0 +1,46 @@
+@use "sass:color";
+@use "sass:map";
+@use '@angular/material'as mat;
+@use '../ontimize-style.scss'as ontimize-style;
+
+//Definition primary and accent palettes
+$default-palette: (50: #e8e3f4,
+  100: #c5b9e4,
+  200: #9f8ad2,
+  300: #795bc0,
+  400: #5c37b3,
+  500: #3f14a5,
+  600: #39129d,
+  700: #310e93,
+  800: #290b8a,
+  900: #1b0679,
+  A100: #b3a8ff,
+  A200: #8775ff,
+  A400: #5b42ff,
+  A700: #4428ff,
+  contrast: (50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+// Define a theme.
+$primary: mat.define-palette($default-palette);
+$accent: mat.define-palette($default-palette);
+
+
+/* Light theme */
+$theme: ontimize-style.o-mat-light-theme($primary, $accent);
+/* Dark theme */
+$dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);

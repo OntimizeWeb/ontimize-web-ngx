@@ -1,0 +1,1 @@
+export * from './o-form-global-config.type';

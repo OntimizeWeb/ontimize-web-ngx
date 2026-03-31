@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <nav>
+    <mat-icon class="mat-24 menu-icon toggle" (click)="input.checked = !input.checked" svgIcon="ontimize:menu"></mat-icon>
+    <label [attr.for]="id" class="toggle title-label">{{ menuTitle | oTranslate }}</label>
+    <input #input [attr.id]="id" type="checkbox" />
+    <div class="fake-ul mat-primary menu">
+      <ng-container>
+        <o-bar-menu-nested [items]="menuItems"></o-bar-menu-nested>
+      </ng-container>
+      <ng-content></ng-content>
+    </div>
+  </nav>
+</mat-toolbar>

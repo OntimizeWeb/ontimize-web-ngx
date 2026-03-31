@@ -1,0 +1,13 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="title-container" mat-dialog-title>
+  <span fxFlex fxLayoutAlign="center center"> {{ title | oTranslate }} <span *ngIf="title?.length>0">{{dialogTitleSeparator}}&nbsp;</span>{{ label
+    }}</span>
+  <mat-icon *ngIf="showFullscreenButton" aria-label="fullscreen dialog" (click)="setFullscreenDialog()" (keydown)="setFullscreenDialog()">
+    <ng-container *ngIf="fullscreen">fullscreen_exit</ng-container>
+    <ng-container *ngIf="!fullscreen">fullscreen</ng-container>
+  </mat-icon>
+  <mat-icon (click)="closeDialog()" svgIcon="ontimize:close"></mat-icon>
+</div>
+
+<div mat-dialog-content class="form-layout-dialog-container">
+  <ng-template o-form-layout-manager-content></ng-template>
+</div>

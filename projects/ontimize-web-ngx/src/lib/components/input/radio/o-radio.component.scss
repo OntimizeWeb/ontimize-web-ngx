@@ -1,0 +1,17 @@
+.o-radio {
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+    border: none;
+  }
+
+  .mat-mdc-form-field:not(.custom-width).o-radio-from-field-row .mat-mdc-form-field-infix {
+    width: auto;
+  }
+
+  .read-only-blocker {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}

@@ -1,0 +1,277 @@
+import { Injectable, Injector } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
+import { share } from 'rxjs/operators';
+
+import { AppConfig } from '../../config/app-config';
+import { OComponentPermissionsByRoute } from '../../types/o-component-permissions-by-route.type';
+import { OComponentPermissions } from '../../types/o-component-permissions.type';
+import { OFormPermissions } from '../../types/o-form-permissions.type';
+import { OGridPermissions } from '../../types/o-grid-permissions.type';
+import { OListPermissions } from '../../types/o-list-permissions.type';
+import { OPermissionsDefinition } from '../../types/o-permissions-definition.type';
+import { OPermissions } from '../../types/o-permissions.type';
+import { ORoutePermissions } from '../../types/o-route-permissions.type';
+import { OTableMenuPermissions } from '../../types/table/o-table-menu-permissions.type';
+import { OTablePermissions } from '../../types/table/o-table-permissions.type';
+import { Util } from '../../util/util';
+import { OntimizeEEPermissionsService } from './ontimize-ee-permissions.service';
+import { OntimizePermissionsService } from './ontimize-permissions.service';
+import { OTreePermissions } from '../../types/o-tree-permissions.type';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PermissionsService {
+  public onChangePermissions: Subject<any> = new Subject<[]>();
+
+  protected permissionsService: any;
+  protected ontimizePermissionsConfig: any;
+
+  protected permissions: OPermissionsDefinition;
+
+  constructor(protected injector: Injector) {
+    const appConfig = this.injector.get(AppConfig).getConfiguration();
+
+    if (Util.isDefined(appConfig.permissionsConfiguration)) {
+      this.ontimizePermissionsConfig = appConfig.permissionsConfiguration;
+    }
+  }
+
+  protected configureService() {
+    const loadingService: any = OntimizePermissionsService;
+    try {
+      this.permissionsService = this.injector.get(loadingService);
+      if (Util.isPermissionsService(this.permissionsService)) {
+        if (this.permissionsService instanceof OntimizePermissionsService) {
+          (this.permissionsService as OntimizePermissionsService).configureService(this.ontimizePermissionsConfig);
+        } else if (this.permissionsService instanceof OntimizeEEPermissionsService) {
+          (this.permissionsService as OntimizeEEPermissionsService).configureService(this.ontimizePermissionsConfig);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  restart() {
+    this.permissions = undefined;
+    this.onChangePermissions.next(this.permissions);
+  }
+
+  hasPermissions(): boolean {
+    return this.permissions !== undefined;
+  }
+
+  getUserPermissionsAsPromise(): Promise<boolean> {
+    const self = this;
+    return new Promise((resolve: (value: boolean) => void) => {
+      self.permissions = {};
+      if (Util.isDefined(self.ontimizePermissionsConfig)) {
+        self.configureService();
+        const subscription = self.queryPermissions().subscribe({
+          next: () => {
+            resolve(true);
+          },
+          error: (err) => {
+            console.error(err);
+            resolve(true);
+          },
+          complete: () => {
+            subscription.unsubscribe();
+          }
+        });
+      } else {
+        resolve(true);
+      }
+    });
+  }
+
+  public queryPermissions(): Observable<any> {
+    const self = this;
+    const dataObservable: Observable<any> = new Observable(innerObserver => {
+      self.permissionsService.loadPermissions().subscribe((res: any) => {
+        self.permissions = res;
+        self.onChangePermissions.next(self.permissions);
+        innerObserver.next(res);
+      }, (err: any) => {
+        console.error('[Permissions.queryPermissions]: error', err);
+        innerObserver.error(err);
+      }, () => {
+        innerObserver.complete();
+      });
+    });
+    return dataObservable.pipe(share());
+  }
+
+  protected getPermissionIdFromActRoute(actRoute: ActivatedRoute): string {
+    if (!Util.isDefined(actRoute)) {
+      return undefined;
+    }
+    let result: string;
+    let snapshot: ActivatedRouteSnapshot = actRoute.snapshot;
+    result = ((snapshot.data || {})['oPermission'] || {})['permissionId'];
+    while (Util.isDefined(snapshot.firstChild) && !Util.isDefined(result)) {
+      snapshot = snapshot.firstChild;
+      result = ((snapshot.data || {})['oPermission'] || {})['permissionId'];
+    }
+    return result;
+  }
+
+  protected getComponentPermissionsUsingRoute(attr: string, actRoute: ActivatedRoute): OComponentPermissions {
+    let result: OComponentPermissions;
+    const permissionId = this.getPermissionIdFromActRoute(actRoute);
+    if (Util.isDefined(permissionId)) {
+      const routePermissions: ORoutePermissions = (this.permissions.routes || []).find(route => route.permissionId === permissionId);
+      if (Util.isDefined(routePermissions)) {
+        result = (routePermissions.components || []).find(comp => comp.attr === attr);
+      }
+    }
+    return result;
+  }
+
+  public getOComponentPermissions(attr: string, actRoute: ActivatedRoute, selector: string): OComponentPermissionsByRoute {
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    let routePermissions: any;
+    const genericRoutePerm: OComponentPermissions = this.getComponentPermissionsUsingRoute(attr, actRoute);
+    if (genericRoutePerm && genericRoutePerm.selector === selector) {
+      routePermissions = genericRoutePerm;
+    }
+    let compPermissions: any;
+    const attrPermissions = (this.permissions.components || []).find(comp => comp.attr === attr);
+    if (attrPermissions && attrPermissions.selector === selector) {
+      compPermissions = attrPermissions;
+    }
+    const permissions: OComponentPermissionsByRoute = {
+      route: routePermissions,
+      component: compPermissions
+    };
+    return permissions;
+  }
+
+  getTablePermissions(attr: string, actRoute: ActivatedRoute): OTablePermissions {
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const perm = this.getOComponentPermissions(attr, actRoute, 'o-table');
+    const routePerm: OTablePermissions = <OTablePermissions>perm.route;
+    const compPerm: OTablePermissions = <OTablePermissions>perm.component;
+    if (!Util.isDefined(routePerm) || !Util.isDefined(compPerm)) {
+      return compPerm || routePerm;
+    }
+    const permissions: OTablePermissions = {
+      selector: 'o-table',
+      attr: routePerm.attr,
+      menu: this.mergeOTableMenuPermissions(compPerm.menu, routePerm.menu),
+      columns: this.mergeOPermissionsArrays(compPerm.columns, routePerm.columns),
+      actions: this.mergeOPermissionsArrays(compPerm.actions, routePerm.actions),
+      contextMenu: this.mergeOPermissionsArrays(compPerm.contextMenu, routePerm.contextMenu)
+    };
+    return permissions;
+  }
+  private getServiceBasePermissions(attr: string, actRoute: ActivatedRoute, selector: string): OComponentPermissions {
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const perm = this.getOComponentPermissions(attr, actRoute, selector);
+    const routePerm: OComponentPermissions = perm.route;
+    const compPerm: OComponentPermissions = perm.component;
+
+    if (!Util.isDefined(routePerm) || !Util.isDefined(compPerm)) {
+      return compPerm || routePerm;
+    }
+
+    const permissions: OComponentPermissions = {
+      selector: selector,
+      attr: routePerm.attr,
+      components: this.mergeOPermissionsArrays(compPerm.components, routePerm.components),
+      actions: this.mergeOPermissionsArrays(compPerm.actions, routePerm.actions)
+    };
+
+    return permissions;
+  }
+  getFormPermissions(attr: string, actRoute: ActivatedRoute): OFormPermissions {
+    return <OFormPermissions>this.getServiceBasePermissions(attr, actRoute, 'o-form');
+  }
+
+  getListPermissions(attr: string, actRoute: ActivatedRoute): OListPermissions {
+    return <OListPermissions>this.getServiceBasePermissions(attr, actRoute, 'o-list');
+  }
+
+  getGridPermissions(attr: string, actRoute: ActivatedRoute): OGridPermissions {
+    return <OGridPermissions>this.getServiceBasePermissions(attr, actRoute, 'o-grid');
+  }
+
+  getTreePermissions(attr: string, actRoute: ActivatedRoute): OTreePermissions {
+    return <OTreePermissions>this.getServiceBasePermissions(attr, actRoute, 'o-tree');
+  }
+
+  getMenuPermissions(attr: string): OPermissions {
+    let permissions;
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const allMenu: OPermissions[] = this.permissions.menu || [];
+
+    permissions = allMenu.find(comp => comp.attr === attr);
+
+    return permissions;
+  }
+
+  getAllMenuPermissions(): OPermissions[] {
+
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    const permissions: OPermissions[] = this.permissions.menu || [];
+
+    return permissions;
+  }
+
+
+  getOButtonPermissions(attr: string, actRoute: ActivatedRoute): OPermissions {
+    let permissions;
+    if (!Util.isDefined(this.permissions)) {
+      return undefined;
+    }
+    permissions = this.getOComponentPermissions(attr, actRoute, 'o-button');
+
+    return permissions.component;
+  }
+
+  protected mergeOPermissionsArrays(permissionsA: OPermissions[], permissionsB: OPermissions[]): OPermissions[] {
+    if (!Util.isDefined(permissionsA) || !Util.isDefined(permissionsB)) {
+      return permissionsA || permissionsB;
+    }
+    const result = Object.assign([], permissionsA);
+    permissionsB.forEach((perm: OPermissions) => {
+      const found = result.find(r => r.attr === perm.attr);
+      if (found) {
+        found.visible = perm.visible;
+        found.enabled = perm.enabled;
+      } else {
+        result.push(perm);
+      }
+    });
+    return result;
+  }
+
+  protected mergeOTableMenuPermissions(permissionsA: OTableMenuPermissions, permissionsB: OTableMenuPermissions): OTableMenuPermissions {
+    if (!Util.isDefined(permissionsA) || !Util.isDefined(permissionsB)) {
+      return permissionsA || permissionsB;
+    }
+    const result = {
+      visible: permissionsB.visible,
+      enabled: permissionsB.enabled,
+      items: this.mergeOPermissionsArrays(permissionsA.items, permissionsB.items)
+    };
+    return result;
+  }
+
+  isPermissionIdRouteRestricted(permissionId: string): boolean {
+    const routeData = (this.permissions.routes || []).find(route => route.permissionId === permissionId);
+    return Util.isDefined(routeData) && routeData.enabled === false;
+  }
+}

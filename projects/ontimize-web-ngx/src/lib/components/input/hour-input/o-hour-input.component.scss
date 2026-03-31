@@ -1,0 +1,10 @@
+ngx-material-timepicker-container {
+  button.mat-mdc-outlined-button {
+    margin: 0 6px;
+  }
+
+  .timepicker-backdrop-overlay,
+  .timepicker-overlay {
+    z-index: 1001 !important;
+  }
+}

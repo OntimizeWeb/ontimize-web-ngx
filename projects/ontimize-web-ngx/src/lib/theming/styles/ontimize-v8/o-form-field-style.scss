@@ -1,0 +1,63 @@
+@use '@angular/material' as mat;
+@use 'variables.scss';
+
+.mat-mdc-form-field {
+
+  @include mat.form-field-density(-2);
+
+  &.mat-form-field-appearance-outline .mdc-notched-outline {
+    .mdc-notched-outline__leading {
+      border-top-left-radius: variables.$border-radius;
+      border-bottom-left-radius: variables.$border-radius;
+    }
+
+    .mdc-notched-outline__trailing {
+      border-top-right-radius: variables.$border-radius;
+      border-bottom-right-radius: variables.$border-radius;
+    }
+  }
+
+  &.icon-field .mat-mdc-form-field-icon-suffix .icon-btn,
+  &.icon-field .mat-mdc-form-field-icon-suffix .mat-icon-button,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-suffix .mat-mdc-icon-button,
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix .mat-mdc-icon-button {
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+
+    .mat-mdc-button-touch-target {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        min-height: auto;
+        align-items: center;
+
+        @-moz-document url-prefix() {
+          .mat-mdc-form-field-input-control:not(textarea) {
+            height: 1em;
+          }
+        }
+        .mat-mdc-floating-label {
+          display: block;
+        }
+
+        .mat-mdc-select-arrow-wrapper {
+          height: auto;
+        }
+      }
+    }
+
+  }
+
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix,
+  .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+    padding-bottom: 4px;
+    padding-top: 18px;
+  }
+}

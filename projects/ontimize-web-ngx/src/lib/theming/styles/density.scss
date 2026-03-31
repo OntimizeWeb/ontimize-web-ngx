@@ -1,0 +1,94 @@
+@use '@angular/material'as mat;
+@use "sass:selector";
+
+@mixin checkbox() {
+
+
+  mat-checkbox.mat-mdc-checkbox .mdc-checkbox {
+
+    @include checkbox-size(28px, 16px);
+  }
+
+  .o-table {
+    mat-checkbox.mat-mdc-checkbox .mdc-checkbox {
+      @include checkbox-size(28px, 18px);
+    }
+  }
+
+  .mdc-list-item.mat-mdc-list-option .mdc-checkbox {
+    @include checkbox-size(21px, 15px);
+  }
+
+}
+
+@mixin checkbox-size($ripple-size, $icon-size) {
+  width: $icon-size;
+  height: $icon-size;
+  flex: 0 0 $icon-size;
+  padding: calc(($ripple-size - $icon-size) / 2) + 1;
+
+
+  .mdc-checkbox__background {
+    top: calc(($ripple-size - $icon-size) / 2) + 1;
+    left: calc(($ripple-size - $icon-size) / 2) + 1;
+    width: $icon-size;
+    height: $icon-size;
+  }
+
+  .mdc-checkbox__native-control {
+    width: $ripple-size;
+    height: $ripple-size;
+
+  }
+
+  .mat-mdc-checkbox-touch-target {
+    height: $icon-size;
+    width: $icon-size;
+  }
+
+}
+
+@mixin radio() {
+
+  :root {
+    --mdc-radio-state-layer-size: 20px
+  }
+
+}
+
+@mixin list() {
+  .mdc-list[dense] {
+    @include mat.list-density(-1);
+
+    [mat-list-icon] {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      padding: 4px;
+    }
+
+  }
+}
+
+@mixin o-form-field() {
+  @include mat.form-field-density(-2);
+}
+
+@mixin menu($typography) {
+
+  /*MAT MENU*/
+  .o-mat-menu.mat-mdc-menu-panel {
+    min-height: auto;
+
+    @if($typography) {
+      .mdc-list-item__primary-text {
+        font-size: mat.font-size($typography, body-2);
+
+      }
+    }
+  }
+}
+
+@mixin tree() {
+  @include mat.tree-density(-2);
+}

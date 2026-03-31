@@ -1,0 +1,23 @@
+
+  <div fxLayout="row" class="o-split-pane-row-wrapper">
+    <div #mainWrapper fxFlex fxLayout="row" class="o-split-pane-main-content">
+      <ng-content></ng-content>
+    </div>
+
+    <div #detailWrapper class="o-split-pane-content-wrapper mwlResizable" mwlResizable [enableGhostResize]="true"
+      (resizeEnd)="onResizeEnd('width', $event, detailWrapper)">
+
+      <div class="o-split-pane-resize-handle" mwlResizeHandle [resizeEdges]="{ left: true }">
+        <div class="o-split-pane-resize-border">
+          <div></div>
+        </div>
+      </div>
+
+      <div class="o-split-pane-secondary-content" fxLayout="column" fxLayoutAlign="center stretch" fxFlex>
+        <ng-template o-form-layout-manager-content></ng-template>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showLoading | async" class="spinner-container" fxLayout="column" fxLayoutAlign="center center">
+    <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
+  </div>

@@ -1,0 +1,23 @@
+.o-dialog {
+  cursor: default;
+
+  .alert-content {
+    box-sizing: border-box;
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: row;
+    place-content: center space-between;
+    align-items: center;
+  }
+
+  .alert-content-icon {
+    min-height: 70px;
+  }
+
+  .alert-icon {
+    font-size: 50px;
+    margin-right: 16px;
+    min-height: 50px;
+    min-width: 50px;
+  }
+}

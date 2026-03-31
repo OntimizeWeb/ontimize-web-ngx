@@ -1,0 +1,11 @@
+.separator {
+  cursor: default;
+}
+
+.mat-mdc-form-field:not(.custom-width) .mat-mdc-form-field-infix {
+  width: 84px;
+}
+
+button.mat-mdc-outlined-button{
+  margin:0 6px;
+}

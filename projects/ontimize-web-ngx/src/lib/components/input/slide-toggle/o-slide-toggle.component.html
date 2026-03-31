@@ -1,0 +1,15 @@
+<div [class.custom-width]="hasCustomWidth" [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip"
+  [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
+  [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="start center" fxFill>
+  <mat-slide-toggle [id]="getAttribute()" [formControlName]="getAttribute()" [checked]="isChecked()"
+    [required]="isRequired" [labelPosition]="labelPosition" [color]="color" (change)="onChangeEvent($event)">
+    <ng-container *ngIf="labelVisible">{{ olabel | oTranslate }}</ng-container>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
+  </mat-slide-toggle>
+  <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+</div>

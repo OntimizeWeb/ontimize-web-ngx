@@ -1,0 +1,24 @@
+.sidenav-toggle-container + .o-app-sidenav-image {
+  .o-app-sidenav-image-container {
+    padding-top: 0;
+    text-align: center;
+  }
+}
+
+.mat-drawer-opened {
+  .o-app-sidenav-image .o-app-sidenav-image-container {
+    text-align: center;
+  }
+}
+
+.o-app-sidenav-image {
+  .o-app-sidenav-image-container {
+    max-height: 75px;
+    margin: 24px 0;
+
+    .o-app-sidenav-image {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}

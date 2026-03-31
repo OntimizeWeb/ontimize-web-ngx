@@ -1,0 +1,28 @@
+<o-table-header-column-filter-icon #columnFilterIcon *ngIf="isModeColumnFilterable(column)" [column]="column" [column-filters]="columnFilters">
+</o-table-header-column-filter-icon>
+
+<ng-container *ngIf="column.orderable">
+  <span o-mat-sort-header [matTooltip]="showHeaderTooltip && !column.headerTooltip ? (column.title | oTranslate) :
+                  (column.headerTooltip && !column.headerTooltipIcon) ? (column.headerTooltip | oTranslate) : null" matTooltipPosition="below"
+    [matTooltipClass]="column.headerTooltipClass">
+    {{ column.title | oTranslate }}
+    <mat-icon *ngIf="column.headerTooltip && column.headerTooltipIcon" class="o-table-header-icon" [matTooltip]="column.headerTooltip | oTranslate"
+      matTooltipPosition="below" [matTooltipClass]="column.headerTooltipClass">
+      {{ column.headerTooltipIcon }}
+    </mat-icon>
+  </span>
+</ng-container>
+
+<ng-container *ngIf="!column.orderable">
+  <span class="header-title-container" fxFlex [matTooltip]="showHeaderTooltip && !column.headerTooltip ? (column.title | oTranslate) :
+                  (column.headerTooltip && !column.headerTooltipIcon) ? (column.headerTooltip | oTranslate) : null" matTooltipPosition="below"
+    [matTooltipClass]="column.headerTooltipClass">
+    {{ column.title | oTranslate }}
+    <mat-icon *ngIf="column.headerTooltip && column.headerTooltipIcon" class="o-table-header-icon" [matTooltip]="column.headerTooltip | oTranslate"
+      matTooltipPosition="below" [matTooltipClass]="column.headerTooltipClass">
+      {{ column.headerTooltipIcon }}
+    </mat-icon>
+  </span>
+</ng-container>
+
+<o-table-column-resizer *ngIf="resizable" [column]="column"></o-table-column-resizer>

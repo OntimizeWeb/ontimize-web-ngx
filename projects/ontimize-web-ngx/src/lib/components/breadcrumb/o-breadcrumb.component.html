@@ -1,0 +1,13 @@
+<mat-toolbar class="toolbar-breadcrumb">
+  <ng-container *ngFor="let route of breadcrumbs | async; index as i; last as isLast">
+    <span *ngIf="isCurrentRoute(route); else bredcrumItem" class="breadcrumb-item active" layout-padding>
+      {{ route.displayText ? route.displayText : route.label | uppercase | oTranslate }}
+    </span>
+    <ng-template #bredcrumItem>
+      <a (click)="onRouteClick(route)" class="breadcrumb-item" layout-padding>
+        {{ route.displayText ? route.displayText : route.label | uppercase | oTranslate }}
+      </a>
+    </ng-template>
+    <mat-icon *ngIf="!isLast" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
+  </ng-container>
+</mat-toolbar>

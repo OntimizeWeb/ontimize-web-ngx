@@ -1,0 +1,51 @@
+<ng-template #customFormToolbarButtons>
+  <ng-content select="[o-form-toolbar-buttons]"></ng-content>
+</ng-template>
+
+<o-form-toolbar *ngIf="showFloatingToolbar && headerPosition==='top'" [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
+  [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
+  (onCancel)="onCancel.emit($event)" layout-padding>
+  <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+    <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
+  </div>
+</o-form-toolbar>
+
+<ng-host oKeyboardListener keyboardKeys="17;90" (onKeysPressed)="undoKeyboardPressed()" class="scrolling o-scroll">
+  <div fxFlex="grow">
+    <o-form-toolbar *ngIf="showNotFloatingToolbar && headerPosition==='top'" [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
+      [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
+      (onCancel)="onCancel.emit($event)" layout-padding>
+      <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+        <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+          <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
+        </div>
+      </div>
+    </o-form-toolbar>
+
+    <form #innerForm [formGroup]="formGroup" class="inner-form" [class.form-no-toolbar]="!showHeader" autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false">
+      <div *ngIf="loading | async" class="progress-bar-container">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <div layout-padding [fxLayout]="layoutDirection" [fxLayoutAlign]="layoutAlign" class="o-form-content-wrapper">
+        <ng-content></ng-content>
+      </div>
+    </form>
+
+    <o-form-toolbar *ngIf="showNotFloatingToolbar && headerPosition==='bottom'" [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
+      [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
+      (onCancel)="onCancel.emit($event)" layout-padding>
+      <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+        <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
+      </div>
+    </o-form-toolbar>
+  </div>
+</ng-host>
+
+<o-form-toolbar *ngIf="showFloatingToolbar && headerPosition==='bottom'" [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
+  [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
+  (onCancel)="onCancel.emit($event)" layout-padding>
+  <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+    <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
+  </div>
+</o-form-toolbar>

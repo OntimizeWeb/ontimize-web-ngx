@@ -1,0 +1,48 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+  [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
+    class="icon-field" (click)="!enabled || isReadOnly ? null : inputFile.click()" fxFill [subscriptSizing]="subscriptSizing">
+    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+    <input #inputShowValue matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      [required]="isRequired" readonly (change)="onChangeEvent($event)">
+    <button type="button" *ngIf="showClearButton" matSuffix mat-icon-button (click)="onClickClearValue($event)">
+      <mat-icon svgIcon="ontimize:close"></mat-icon>
+    </button>
+    <button type="button" *ngIf="getValue()" [disabled]="!isValid || uploader.isUploading" matSuffix mat-icon-button (click)="onClickUpload($event)">
+      <mat-icon>file_upload</mat-icon>
+    </button>
+    <mat-error *oMatError="hasError('required')">
+      {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+    </mat-error>
+    <mat-error *oMatError="hasError('fileType')">
+      {{ 'FORM_VALIDATION.FILE_TYPE' | oTranslate}} ({{ getErrorValue('fileType','allowedFileTypes') }})
+    </mat-error>
+    <mat-error *oMatError="hasError('fileSize')">
+      {{ 'FORM_VALIDATION.FILE_MAXSIZE' | oTranslate }}: {{ getErrorValue('fileSize', 'maxFileSize') }} bytes
+    </mat-error>
+    <mat-error *oMatError="hasError('numFile')">
+      {{ 'FORM_VALIDATION.FILE_MAXNUM' | oTranslate }}: {{ getErrorValue('numFile', 'maxFiles') }}
+    </mat-error>
+    <mat-error *ngFor="let oError of getActiveOErrors()">
+      {{ oError.text | oTranslate }}
+    </mat-error>
+  </mat-form-field>
+  <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}"
+    [attr.accept]="acceptFileType ? acceptFileType.replace(arraySeparatorRegExp, ',') : null" (change)="fileSelected($event)" hidden="true"
+    [attr.multiple]="multiple ? '' : null">
+  <div *ngIf="showInfo && files">
+    <mat-progress-bar *ngIf="!splitUpload && uploader.isUploading" color="accent" mode="determinate" [value]="uploader.progress"></mat-progress-bar>
+    <mat-list>
+      <mat-list-item *ngFor="let file of files">
+        <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+        <span mat-line>{{ file.name }}</span>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-progress-spinner *ngIf="splitUpload && file.isUploading" color="accent" mode="determinate" [value]="file.progress" class="uploading"
+            diameter="3" strokeWidth="3"></mat-progress-spinner>
+          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isSuccess" class="uploaded" svgIcon="ontimize:check_circle"></mat-icon>
+          <mat-icon *ngIf="splitUpload && file.isUploaded && file.isError" class="error" svgIcon="ontimize:error_outline"></mat-icon>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>

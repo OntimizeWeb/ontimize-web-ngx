@@ -1,0 +1,29 @@
+.o-table-header {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  .o-table-header-icon {
+      color: rgba(0, 0, 0, 0.6);
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+      cursor: pointer;
+      vertical-align: middle;
+      margin-left: 8px;
+      margin-right: 8px;
+
+  }
+
+  span[o-mat-sort-header] {
+    flex: 1;
+    min-width: 0;
+
+    /* when it has no sibling .o-table-column-resizer sets the padding to the right because the number indicator is being cut off */
+    &:not(:has(+.o-table-column-resizer)) {
+      padding-right: 6px;
+    }
+  }
+
+}

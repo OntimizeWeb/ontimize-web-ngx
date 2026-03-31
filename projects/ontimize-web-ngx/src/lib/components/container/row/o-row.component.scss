@@ -1,0 +1,10 @@
+.o-row {
+  > .o-container {
+    width: 100%;
+
+    .o-container-scroll {
+      overflow: auto;
+      position: relative;
+    }
+  }
+}

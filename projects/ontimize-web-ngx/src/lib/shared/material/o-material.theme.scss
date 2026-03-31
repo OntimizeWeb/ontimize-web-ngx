@@ -1,0 +1,50 @@
+@use '@angular/material'as mat;
+@use "sass:map";
+
+// Create a theme.
+@mixin o-material-theme($theme-or-color-config, $typographyConfig: null) {
+
+  //merge $typographyConfig in $theme-or-color-config
+  @if $typographyConfig !=null {
+    $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
+  }
+
+
+  //Include theme styles for core and each component used in your app.;
+  $typography: map.get($theme-or-color-config, typography);
+
+  @if($typography) {
+    @include mat.core();
+    @include mat.all-component-themes($theme-or-color-config);
+  }
+
+  @else {
+    @include mat.all-component-colors($theme-or-color-config);
+  }
+
+  $typography: mat.get-typography-config($theme-or-color-config);
+
+  @include app-global-theme($theme-or-color-config);
+  @include o-breadcrumb-theme($theme-or-color-config);
+  @include o-container-theme($theme-or-color-config);
+  @include o-form-toolbar-theme($theme-or-color-config);
+  @include input-theme($theme-or-color-config);
+  @include o-date-input-theme($theme-or-color-config);
+  @include o-dialog-theme($theme-or-color-config);
+  @include o-table-theme($theme-or-color-config);
+  @include o-list-theme($theme-or-color-config);
+  @include o-list-picker-theme($theme-or-color-config);
+  @include o-app-header-theme($theme-or-color-config);
+  @include o-app-sidenav-theme($theme-or-color-config);
+  @include o-app-layout-theme($theme-or-color-config);
+  @include o-card-menu-item-theme($theme-or-color-config);
+  @include o-hour-input-theme($theme-or-color-config);
+  @include o-form-layout-split-pane-theme($theme-or-color-config);
+  @include o-form-layout-tabgroup-theme($theme-or-color-config);
+  @include o-bar-menu-theme($theme-or-color-config);
+  @include o-grid-theme($theme-or-color-config);
+  @include o-layout-padding-margin();
+  @include o-daterange-input-theme($theme-or-color-config);
+  @include o-dual-list-selector-theme($theme-or-color-config);
+  @include o-image-theme($theme-or-color-config);
+}

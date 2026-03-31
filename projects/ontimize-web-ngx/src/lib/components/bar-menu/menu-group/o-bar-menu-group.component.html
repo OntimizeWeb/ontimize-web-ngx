@@ -1,0 +1,16 @@
+<div class="fake-li" [class.fake-li-hover]="isHovered">
+  <label [attr.for]="id" class="toggle mat-list-item">
+    <mat-icon class="o-bar-menu-group-icon mat-24">{{ icon }}</mat-icon>
+    {{ title | oTranslate }}
+    <mat-icon class="o-bar-menu-group-icon-arrow" *ngIf="!checkbox.checked">chevron_right</mat-icon>
+    <mat-icon class="o-bar-menu-group-icon-arrow" *ngIf="checkbox.checked">expand_more</mat-icon>
+  </label>
+  <a class="o-bar-menu-group-title">
+    <mat-icon class="o-bar-menu-group-icon mat-24">{{ icon }}</mat-icon> {{ title | oTranslate }}
+    <mat-icon class="o-bar-menu-group-icon-arrow">chevron_right</mat-icon>
+  </a>
+  <input [attr.id]="id" type="checkbox" #checkbox />
+  <div *ngIf="!disabled" class="fake-ul mat-primary mat-elevation-z4">
+    <ng-content></ng-content>
+  </div>
+</div>
