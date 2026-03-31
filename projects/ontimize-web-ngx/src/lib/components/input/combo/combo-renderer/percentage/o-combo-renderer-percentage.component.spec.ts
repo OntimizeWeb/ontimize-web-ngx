@@ -55,7 +55,7 @@ describe('OComboRendererPercentageComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OComboRendererPercentageComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OComboRendererPercentageComponent(mockInjector));
   });
 
   it('should create', () => {

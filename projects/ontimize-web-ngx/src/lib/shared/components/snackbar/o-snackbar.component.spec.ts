@@ -38,7 +38,7 @@ describe('OSnackBarComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OSnackBarComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OSnackBarComponent(mockInjector));
   });
 
   it('should create', () => {

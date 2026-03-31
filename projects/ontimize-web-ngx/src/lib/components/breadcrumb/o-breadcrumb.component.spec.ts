@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
@@ -9,7 +9,6 @@ let OBreadcrumbComponent: any;
 
 describe('OBreadcrumbComponent', () => {
   let component: any;
-  let injector: Injector;
 
   beforeEach(async () => {
     // Dynamically import to avoid early compilation
@@ -29,10 +28,8 @@ describe('OBreadcrumbComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    injector = TestBed.inject(Injector);
-    
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    component = new OBreadcrumbComponent(injector);
+    component = TestBed.runInInjectionContext(() => new OBreadcrumbComponent());
   });
 
   it('should create', () => {
@@ -90,9 +87,9 @@ describe('OBreadcrumbComponent', () => {
   it('should check if route is current route', () => {
     const mockRoute = { route: '/test', displayText: 'Test' };
     
-    // Mock router state
+    // Mock router state (routerState is read-only in Angular 17+)
     const mockSnapshot = { url: '/test?param=value' };
-    component.router.routerState = { snapshot: mockSnapshot } as any;
+    Object.defineProperty(component.router, 'routerState', { value: { snapshot: mockSnapshot }, writable: true });
     
     expect(component.isCurrentRoute(mockRoute)).toBe(true);
     

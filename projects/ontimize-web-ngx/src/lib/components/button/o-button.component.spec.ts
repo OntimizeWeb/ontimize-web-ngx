@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector, EventEmitter } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
@@ -13,7 +13,6 @@ let OButtonComponent: any;
 
 describe('OButtonComponent', () => {
   let component: any;
-  let injector: Injector;
   let mockActivatedRoute: jasmine.SpyObj<ActivatedRoute>;
 
   beforeEach(async () => {
@@ -42,10 +41,8 @@ describe('OButtonComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    injector = TestBed.inject(Injector);
-    
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    component = new OButtonComponent(injector, mockActivatedRoute);
+    component = TestBed.runInInjectionContext(() => new OButtonComponent(mockActivatedRoute));
   });
 
   it('should create', () => {
@@ -275,7 +272,7 @@ describe('OButtonComponent', () => {
 
   // Test ngOnInit with various otype values
   it('should handle ngOnInit with fab type', () => {
-    const testComponent = new OButtonComponent(injector, mockActivatedRoute);
+    const testComponent = TestBed.runInInjectionContext(() => new OButtonComponent(mockActivatedRoute));
     testComponent.otype = 'fab';
     testComponent.oattr = 'test-fab';
     spyOn(testComponent['permissionsService'], 'getOButtonPermissions').and.returnValue(undefined);
@@ -285,7 +282,7 @@ describe('OButtonComponent', () => {
   });
 
   it('should handle ngOnInit with raised type', () => {
-    const testComponent = new OButtonComponent(injector, mockActivatedRoute);
+    const testComponent = TestBed.runInInjectionContext(() => new OButtonComponent(mockActivatedRoute));
     testComponent.otype = 'raised';
     testComponent.oattr = 'test-raised';
     spyOn(testComponent['permissionsService'], 'getOButtonPermissions').and.returnValue(undefined);
@@ -295,7 +292,7 @@ describe('OButtonComponent', () => {
   });
 
   it('should handle ngOnInit with flat type', () => {
-    const testComponent = new OButtonComponent(injector, mockActivatedRoute);
+    const testComponent = TestBed.runInInjectionContext(() => new OButtonComponent(mockActivatedRoute));
     testComponent.otype = 'flat';
     testComponent.oattr = 'test-flat';
     spyOn(testComponent['permissionsService'], 'getOButtonPermissions').and.returnValue(undefined);

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
+import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
@@ -32,12 +32,11 @@ describe('OCardMenuItemComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockInjector = TestBed.inject(Injector);
     const mockRouter: any = { navigate: jasmine.createSpy(), events: of({}) };
     const mockActivatedRoute: any = { params: of({}), queryParams: of({}), snapshot: { params: {}, queryParams: {} } };
     const mockChangeDetectorRef: any = { detectChanges: jasmine.createSpy(), markForCheck: jasmine.createSpy() };
     const mockElementRef: any = { nativeElement: document.createElement('div') };
-    component = new OCardMenuItemComponent(mockInjector, mockRouter, mockActivatedRoute, mockChangeDetectorRef, mockElementRef);
+    component = TestBed.runInInjectionContext(() => new OCardMenuItemComponent(mockRouter, mockActivatedRoute, mockChangeDetectorRef, mockElementRef));
   });
 
   it('should create', () => {

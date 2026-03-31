@@ -13,7 +13,8 @@ describe('OMatSuffix', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OMatSuffix, TestMatSuffixComponent]
+      imports: [OMatSuffix],
+      declarations: [TestMatSuffixComponent]
     });
     fixture = TestBed.createComponent(TestMatSuffixComponent);
     fixture.detectChanges();

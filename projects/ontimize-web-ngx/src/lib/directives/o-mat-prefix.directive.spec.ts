@@ -13,7 +13,8 @@ describe('OMatPrefix', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OMatPrefix, TestMatPrefixComponent]
+      imports: [OMatPrefix],
+      declarations: [TestMatPrefixComponent]
     });
     fixture = TestBed.createComponent(TestMatPrefixComponent);
     fixture.detectChanges();

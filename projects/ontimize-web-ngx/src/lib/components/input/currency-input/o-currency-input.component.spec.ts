@@ -45,7 +45,7 @@ describe('OCurrencyInputComponent', () => {
     mockElementRef = { nativeElement: document.createElement('input') };
     mockInjector = TestBed.inject(Injector);
 
-    component = new OCurrencyInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OCurrencyInputComponent(mockOFormComponent, mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {

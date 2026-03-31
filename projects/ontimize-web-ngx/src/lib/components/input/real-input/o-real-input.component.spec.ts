@@ -50,7 +50,7 @@ describe('ORealInputComponent', () => {
     mockInjector = TestBed.inject(Injector);
     numberService = TestBed.inject(NumberService);
 
-    component = new ORealInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new ORealInputComponent(mockOFormComponent, mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {
