@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { inject, Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
@@ -15,11 +15,9 @@ export class AppearanceService {
   private isDarkModeSubject = new BehaviorSubject<boolean>(false);
   isDarkMode$: Observable<boolean> = this.isDarkModeSubject.asObservable();
   protected _appConfig: AppConfig;
-  protected _document: Document;
-  protected localStorageService: LocalStorageService;
-  constructor(protected injector: Injector) {
-    this.localStorageService = this.injector.get(LocalStorageService);
-    this._document = inject(DOCUMENT);
+  protected _document = inject(DOCUMENT);
+  protected localStorageService = inject(LocalStorageService);
+  constructor() {
     const config = this.localStorageService.getStoredData();
 
     this.isDarkMode$.subscribe(x => this.updateThemeClass(x));

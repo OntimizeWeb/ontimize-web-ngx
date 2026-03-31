@@ -14,7 +14,7 @@ export class IconService {
 
   constructor(protected injector: Injector) {
     this._iconPosition = IconService.DEFAULT_ICON_POSITION;
-    this.oSafePipe = new OSafePipe(this.injector)
+    this.oSafePipe = new OSafePipe(this.injector);
   }
 
   get iconPosition(): string {

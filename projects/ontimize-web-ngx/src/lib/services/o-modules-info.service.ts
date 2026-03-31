@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -9,12 +9,8 @@ import { filter, map } from 'rxjs/operators';
 export class OModulesInfoService {
 
   private subject = new ReplaySubject<string>();
-  constructor(
-    protected injector: Injector,
-    protected router: Router,
-  ) {
-    this.router = this.injector.get(Router);
-
+  protected router = inject(Router);
+  constructor() {
   }
 
   getModuleChangeObservable(): Observable<string> {

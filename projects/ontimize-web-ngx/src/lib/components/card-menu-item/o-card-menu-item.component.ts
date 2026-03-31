@@ -5,7 +5,7 @@ import {
   Component,
   ContentChildren,
   ElementRef,
-  Injector,
+  inject,
   OnDestroy,
   QueryList,
   ViewChild,
@@ -76,7 +76,7 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
     return this._detailComponentContainer;
   }
 
-  protected translateService: OTranslateService;
+  protected translateService = inject(OTranslateService);
   protected translateServiceSubscription: Subscription;
 
   @ContentChildren('.secondary-container')
@@ -85,13 +85,11 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
   protected _showSecondaryContainer: boolean = true;
 
   constructor(
-    protected injector: Injector,
     protected router: Router,
     protected actRoute: ActivatedRoute,
     protected cd: ChangeDetectorRef,
     protected elRef: ElementRef
   ) {
-    this.translateService = this.injector.get(OTranslateService);
     this.translateServiceSubscription = this.translateService.onLanguageChanged.subscribe(() => {
       this.cd.detectChanges();
     });

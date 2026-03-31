@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
@@ -15,25 +15,24 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_INTEGER = [
   selector: 'o-combo-renderer-integer',
   templateUrl: './o-combo-renderer-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_INTEGER
+  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_INTEGER,
+  providers: [OIntegerPipe]
 })
 export class OComboRendererIntegerComponent extends OComboCustomRenderer implements AfterContentInit, OnInit {
 
   @BooleanInputConverter()
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
-  protected componentPipe: OIntegerPipe;
+  protected componentPipe = inject(OIntegerPipe);
   protected pipeArguments: IIntegerPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OIntegerPipe(this.injector);
   }
 
   initialize() {

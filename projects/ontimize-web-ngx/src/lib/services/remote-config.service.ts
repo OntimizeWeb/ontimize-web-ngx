@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HostListener, Injectable, Injector, Type, Directive } from '@angular/core';
+import { HostListener, inject, Injectable, Directive } from '@angular/core';
 import { Observable, Subscriber, Subscription, timer } from 'rxjs';
 
 import { AppConfig } from '../config/app-config';
@@ -22,10 +22,10 @@ export class ORemoteConfigurationService {
   public static DEFAULT_COLUMN_CONFIG = 'CONFIGURATION';
   public static DEFAULT_STORAGE_TIMEOUT = 60000;
 
-  protected localStorageService: LocalStorageService;
-  protected authService: AuthService;
-  protected httpClient: HttpClient;
-  protected _appConfig: AppConfig;
+  protected localStorageService = inject(LocalStorageService);
+  protected authService = inject(AuthService);
+  protected httpClient = inject(HttpClient);
+  protected _appConfig = inject(AppConfig);
   protected _url: string;
   protected _uuid: string;
   protected _timeout: number;
@@ -45,13 +45,7 @@ export class ORemoteConfigurationService {
     });
   }
 
-  constructor(protected injector: Injector) {
-    this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
-    this._appConfig = this.injector.get<AppConfig>(AppConfig as Type<AppConfig>);
-    this.authService = this.injector.get<AuthService>(AuthService as Type<AuthService>);
-    this.localStorageService = this.injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
-
-    this.httpClient = this.injector.get<HttpClient>(HttpClient as Type<HttpClient>);
+  constructor() {
     this._uuid = this._appConfig.getConfiguration().uuid;
 
     if (this._appConfig.useRemoteConfiguration()) {

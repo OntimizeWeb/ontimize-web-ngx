@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 
@@ -12,14 +12,8 @@ export class SnackBarService {
   protected static DEFAULT_DURATION: number = 2000;
   protected static DEFAULT_CONTAINER_CLASS: string = 'o-snackbar-container';
 
-  protected matSnackBar: MatSnackBar;
+  protected matSnackBar = inject(MatSnackBar);
   protected snackBarRef: MatSnackBarRef<OSnackBarComponent>;
-
-  constructor(
-    protected injector: Injector,
-  ) {
-    this.matSnackBar = this.injector.get(MatSnackBar);
-  }
 
   public open(message: string, config?: OSnackBarConfig): Promise<any> {
     const self = this;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
@@ -16,7 +16,8 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_REAL = [
   selector: 'o-combo-renderer-real',
   templateUrl: './o-combo-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_REAL
+  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_REAL,
+  providers: [ORealPipe]
 })
 export class OComboRendererRealComponent extends OComboRendererIntegerComponent implements OnInit {
 
@@ -28,7 +29,7 @@ export class OComboRendererRealComponent extends OComboRendererIntegerComponent 
   protected decimalSeparator: string = '.';
   protected numberService: NumberService;
 
-  protected componentPipe: ORealPipe;
+  protected componentPipe = inject(ORealPipe);
   protected pipeArguments: IRealPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
@@ -36,11 +37,9 @@ export class OComboRendererRealComponent extends OComboRendererIntegerComponent 
   constructor(protected injector: Injector) {
     super(injector);
     this.numberService = this.injector.get(NumberService);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new ORealPipe(this.injector);
   }
 
   initialize() {

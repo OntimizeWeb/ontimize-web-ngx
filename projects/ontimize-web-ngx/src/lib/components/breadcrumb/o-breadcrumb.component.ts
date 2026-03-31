@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -35,7 +35,7 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   public separator: string = ' ';
   public breadcrumbs: BehaviorSubject<OBreadcrumb[]> = new BehaviorSubject([]);
 
-  protected router: Router;
+  protected router = inject(Router);
   set form(value: OFormBase) {
     this._formRef = value;
   }
@@ -43,14 +43,7 @@ export class OBreadcrumbComponent implements AfterViewInit, OnDestroy, OnInit {
   protected labelColsArray: Array<string> = [];
   protected navigationService: NavigationService;
   protected subscription: Subscription = new Subscription();
-  protected oBreadcrumService: OBreadcrumbService;
-
-  constructor(
-    protected injector: Injector
-  ) {
-    this.router = this.injector.get(Router);
-    this.oBreadcrumService = this.injector.get(OBreadcrumbService);
-  }
+  protected oBreadcrumService = inject(OBreadcrumbService);
 
   ngOnInit() {
     this.labelColsArray = Util.parseArray(this.labelColumns);

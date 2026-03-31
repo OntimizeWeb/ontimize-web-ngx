@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { IRealPipeArgument } from '../pipes/o-real.pipe';
 import { Util } from '../util/util';
@@ -15,11 +15,9 @@ export class NumberService {
   protected maxDecimalDigits: number;
   protected locale: string;
 
-  protected translateService: OTranslateService;
+  protected translateService = inject(OTranslateService);
 
-  constructor(protected injector: Injector) {
-
-    this.translateService = this.injector.get(OTranslateService);
+  constructor() {
     // TODO: initialize from config
     this.minDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;
     this.maxDecimalDigits = NumberService.DEFAULT_DECIMAL_DIGITS;

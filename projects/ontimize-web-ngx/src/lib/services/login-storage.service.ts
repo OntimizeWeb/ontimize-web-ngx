@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { AppConfig } from '../config/app-config';
 import { Config } from '../types/config.type';
@@ -11,8 +11,8 @@ export class LoginStorageService {
   private _config: Config;
   public _localStorageKey: string;
 
-  constructor(protected injector: Injector) {
-    this._config = this.injector.get(AppConfig).getConfiguration();
+  constructor() {
+    this._config = inject(AppConfig).getConfiguration();
     this._localStorageKey = this._config.uuid;
   }
 

@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 
 import { Util } from '../../util/util';
@@ -9,16 +9,12 @@ import { PermissionsService } from './permissions.service';
 @Injectable()
 export class PermissionsGuardService implements CanActivateChild {
 
-  protected router: Router;
-  protected permissionsService: PermissionsService;
-  protected snackBarService: SnackBarService;
-  protected shareCanActivateChildService: ShareCanActivateChildService;
+  protected router = inject(Router);
+  protected permissionsService = inject(PermissionsService);
+  protected snackBarService = inject(SnackBarService);
+  protected shareCanActivateChildService = inject(ShareCanActivateChildService);
 
-  constructor(protected injector: Injector) {
-    this.router = this.injector.get(Router);
-    this.permissionsService = this.injector.get(PermissionsService);
-    this.snackBarService = this.injector.get(SnackBarService);
-    this.shareCanActivateChildService = this.injector.get(ShareCanActivateChildService);
+  constructor() {
     this.shareCanActivateChildService.setPermissionsGuard(this);
   }
 

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Subscriber } from 'rxjs';
 
 import { AppConfig } from '../../config/app-config';
@@ -13,16 +13,8 @@ import { NameConvention } from '../name-convention/name-convention.service';
   providedIn: 'root'
 })
 export class OntimizeServiceResponseParser<T extends ServiceResponse> {
-  appConfig: AppConfig;
-  nameConvention: NameConvention;
-
-
-  constructor(
-    protected injector: Injector
-  ) {
-    this.appConfig = this.injector.get(AppConfig);
-    this.nameConvention = this.injector.get(NameConvention);
-  }
+  appConfig = inject(AppConfig);
+  nameConvention = inject(NameConvention);
 
   parseSuccessfulResponse(resp: T, subscriber: Subscriber<T>, service: BaseService<T>) {
     if (resp && resp.isUnauthorized()) {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
 import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL, OListPickerRendererRealComponent } from '../real/o-list-picker-renderer-real.component';
@@ -12,7 +12,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE = [
   selector: 'o-list-picker-renderer-percentage',
   templateUrl: './o-list-picker-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE
+  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE,
+  providers: [OPercentPipe]
 })
 export class OListPickerRendererPercentageComponent extends OListPickerRendererRealComponent implements OnInit {
 
@@ -22,7 +23,7 @@ export class OListPickerRendererPercentageComponent extends OListPickerRendererR
   valueBase: OPercentageValueBaseType = 1;
 
 
-  protected componentPipe: OPercentPipe;
+  protected componentPipe = inject(OPercentPipe);
   protected pipeArguments: IPercentPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
@@ -32,7 +33,6 @@ export class OListPickerRendererPercentageComponent extends OListPickerRendererR
   }
 
   setComponentPipe() {
-    this.componentPipe = new OPercentPipe(this.injector);
   }
 
   initialize() {

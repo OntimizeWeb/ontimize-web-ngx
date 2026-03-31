@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Injector, OnDestroy, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, inject, Injector, OnDestroy, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
@@ -46,7 +46,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_SERVICE = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     // Service renderer must have its own service instance in order to avoid overriding table service configuration
-    OntimizeServiceProvider
+    OntimizeServiceProvider,
+    OTranslatePipe
   ]
 })
 export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer implements OnInit, AfterViewInit, OnDestroy {
@@ -82,7 +83,7 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   protected dialogService: DialogService;
 
   public translateArgsFn: (rowData: any) => any[];
-  protected componentPipe: OTranslatePipe;
+  protected componentPipe = inject(OTranslatePipe);
   protected pipeArguments: ITranslatePipeArgument = {};
 
   protected subscritpions: Subscription = new Subscription();
@@ -91,7 +92,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
     super(injector);
     this.tableColumn.type = 'service';
     this.dialogService = injector.get<DialogService>(DialogService as Type<DialogService>);
-    this.setComponentPipe();
   }
 
   public initialize(): void {
@@ -219,7 +219,6 @@ export class OTableCellRendererServiceComponent extends OBaseTableCellRenderer i
   }
 
   public setComponentPipe(): void {
-    this.componentPipe = new OTranslatePipe(this.injector);
   }
 
   public responseValue(cellvalue: any, rowvalue?: any): string {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../pipes/o-percentage.pipe';
@@ -18,7 +18,8 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
   templateUrl: './o-percent-input.component.html',
   inputs: DEFAULT_INPUTS_O_PERCENT_INPUT,
   outputs: DEFAULT_OUTPUTS_O_PERCENT_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [OPercentPipe]
 })
 export class OPercentInputComponent extends ORealInputComponent implements OnInit {
 
@@ -27,7 +28,7 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
 
   valueBase: OPercentageValueBaseType = 1;
 
-  protected componentPipe: OPercentPipe;
+  protected componentPipe = inject(OPercentPipe);
   protected pipeArguments: IPercentPipeArgument;
 
   public ngOnInit() {
@@ -43,6 +44,5 @@ export class OPercentInputComponent extends ORealInputComponent implements OnIni
   }
 
   setComponentPipe(): void {
-    this.componentPipe = new OPercentPipe(this.injector);
   }
 }

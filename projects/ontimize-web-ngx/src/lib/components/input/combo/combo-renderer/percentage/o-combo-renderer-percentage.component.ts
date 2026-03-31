@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
 import { NumberService } from '../../../../../services/number.service';
@@ -12,7 +12,8 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE = [
   selector: 'o-combo-renderer-percentage',
   templateUrl: './o-combo-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE
+  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE,
+  providers: [OPercentPipe]
 })
 export class OComboRendererPercentageComponent extends OComboRendererRealComponent implements OnInit {
 
@@ -23,7 +24,7 @@ export class OComboRendererPercentageComponent extends OComboRendererRealCompone
 
   protected numberService: NumberService;
 
-  protected componentPipe: OPercentPipe;
+  protected componentPipe = inject(OPercentPipe);
   protected pipeArguments: IPercentPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
@@ -31,12 +32,9 @@ export class OComboRendererPercentageComponent extends OComboRendererRealCompone
   constructor(protected injector: Injector) {
     super(injector);
     this.numberService = this.injector.get(NumberService);
-
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OPercentPipe(this.injector);
   }
 
   initialize() {
