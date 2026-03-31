@@ -1,6 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[oMatSuffix]'
+  selector: '[oMatSuffix]',
+  standalone: true
 })
 export class OMatSuffix { }

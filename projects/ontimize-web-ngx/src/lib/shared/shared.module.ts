@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ONTIMIZE_DIRECTIVES } from '../config/o-directives';
+import { ONTIMIZE_DIRECTIVES, ONTIMIZE_STANDALONE_DIRECTIVES } from '../config/o-directives';
 import { ColumnsFilterPipe } from '../pipes/columns-filter.pipe';
 import { OCurrencyPipe } from '../pipes/o-currency.pipe';
 import { OIconPipe } from '../pipes/o-icon.pipe';
@@ -32,11 +32,15 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     FlexLayoutModule,
     OCustomMaterialModule,
     FormsModule,
-    ReactiveFormsModule
-  ],
-  declarations: [
+    ReactiveFormsModule,
+    // Standalone pipes
     ColumnsFilterPipe,
     OrderByPipe,
+    IsEmptyValuePipe,
+    // Standalone directives
+    ONTIMIZE_STANDALONE_DIRECTIVES,
+  ],
+  declarations: [
     OIntegerPipe,
     ORealPipe,
     OMomentPipe,
@@ -44,7 +48,6 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OPercentPipe,
     OIconPipe,
     OSafePipe,
-    IsEmptyValuePipe,
     ONTIMIZE_DIRECTIVES,
     Error403Component,
     ODialogComponent,
@@ -71,6 +74,7 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OSafePipe,
     IsEmptyValuePipe,
     ONTIMIZE_DIRECTIVES,
+    ONTIMIZE_STANDALONE_DIRECTIVES,
     OCustomMaterialModule,
     Error403Component,
     OErrorComponent,
