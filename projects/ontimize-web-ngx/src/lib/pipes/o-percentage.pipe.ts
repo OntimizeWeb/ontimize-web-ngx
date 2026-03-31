@@ -15,7 +15,8 @@ export interface IPercentPipeArgument {
 
 @Pipe({
   name: 'oPercent',
-  pure: false
+  pure: false,
+  standalone: true
 })
 export class OPercentPipe extends ORealPipe implements PipeTransform {
 

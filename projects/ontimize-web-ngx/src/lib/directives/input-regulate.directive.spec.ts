@@ -21,7 +21,8 @@ describe('InputRegulateDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [InputRegulateDirective, TestComponent]
+      declarations: [TestComponent],
+      imports: [InputRegulateDirective]
     });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;

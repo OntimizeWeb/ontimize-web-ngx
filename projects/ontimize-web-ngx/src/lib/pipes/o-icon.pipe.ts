@@ -9,7 +9,8 @@ export interface IIconPipeArgument {
 
 @Pipe({
   name: 'oIcon',
-  pure: false
+  pure: false,
+  standalone: true
 })
 export class OIconPipe implements PipeTransform {
 

@@ -7,7 +7,8 @@ export interface IMomentPipeArgument {
 }
 
 @Pipe({
-  name: 'oMoment'
+  name: 'oMoment',
+  standalone: true
 })
 
 export class OMomentPipe implements PipeTransform {

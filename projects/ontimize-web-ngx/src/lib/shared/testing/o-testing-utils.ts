@@ -56,11 +56,10 @@ export class OTestingUtils {
 
   /**
    * Get common declarations (pipes, directives) for testing
+   * Note: Standalone pipes/directives should NOT be here — use getCommonTestingModuleConfig().imports instead
    */
   static getCommonDeclarations() {
-    return [
-      OTranslatePipe
-    ];
+    return [];
   }
 
   /**
@@ -74,7 +73,8 @@ export class OTestingUtils {
         ReactiveFormsModule,
         TranslateModule.forRoot(),
         MatDialogModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        OTranslatePipe
       ],
       providers: [
         {

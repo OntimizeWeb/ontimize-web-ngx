@@ -18,7 +18,8 @@ export interface ITranslatePipeArgument {
 
 @Pipe({
   name: 'oTranslate',
-  pure: false // required to update the value when the promise is resolved
+  pure: false, // required to update the value when the promise is resolved
+  standalone: true
 })
 export class OTranslatePipe implements PipeTransform, OnDestroy {
 
@@ -93,8 +94,7 @@ export class OTranslatePipe implements PipeTransform, OnDestroy {
 }
 
 @NgModule({
-  declarations: [OTranslatePipe],
-  imports: [],
+  imports: [OTranslatePipe],
   exports: [OTranslatePipe]
 })
 export class OTranslateModule {

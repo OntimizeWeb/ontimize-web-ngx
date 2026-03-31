@@ -11,7 +11,8 @@ export const DEFAULT_INPUTS_O_LOCKER = [
 
 @Directive({
   selector: '[oLocker]',
-  inputs: DEFAULT_INPUTS_O_LOCKER
+  inputs: DEFAULT_INPUTS_O_LOCKER,
+  standalone: true
 })
 
 export class OLockerDirective implements OnDestroy {
