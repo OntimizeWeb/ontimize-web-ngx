@@ -18,7 +18,7 @@ $mat-custom-primary: (50 : #e5e5e5, 100 : #bdbdbd, 200 : #929292, 300 : #666666,
 $mat-custom-accent: (50 : #fff9e0, 100 : #fff0b3, 200 : #ffe680, 300 : #ffdb4d, 400 : #ffd426, 500 : #ffcc00, 600 : #ffc700, 700 : #ffc000, 800 : #ffb900, 900 : #ffad00, A100 : #fff9e0, A200 : #ffe680, A400 : #ffd426, A700 : #ffc000, contrast: (50: #000000DE, 100: #000000DE, 200: #000000DE, 300: white, 400: white, 500: #FFFFFFDE, 600: #FFFFFFDE, 700: #FFFFFFDE, 800: #FFFFFFDE, 900: #FFFFFFDE, A100: #000000DE, A200: white, A400: white, A700: white, ));
 
 // Define a theme.
-$primary: mat.define-palette($mat-custom-primary);
-$accent: mat.define-palette($mat-custom-accent);
+$primary: mat.m2-define-palette($mat-custom-primary);
+$accent: mat.m2-define-palette($mat-custom-accent);
 $theme: ontimize-style.o-mat-light-theme($primary, $accent);
 $dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);

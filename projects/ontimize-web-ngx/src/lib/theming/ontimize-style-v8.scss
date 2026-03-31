@@ -42,8 +42,8 @@ $app-background-color: #eaeaea;
 }
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
-@function o-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  $mat-theme: mat.define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+@function o-mat-light-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
+  $mat-theme: mat.m2-define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
   @return (color:(primary: $primary,
       accent: $accent,
       warn: $warn,
@@ -54,8 +54,8 @@ $app-background-color: #eaeaea;
 }
 
 // Creates a container object for a dark theme to be given to individual component theme mixins.
-@function o-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  $mat-theme: mat.define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+@function o-mat-dark-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
+  $mat-theme: mat.m2-define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
   @return (color:(primary: $primary,
       accent: $accent,
       warn: $warn,
@@ -68,20 +68,20 @@ $app-background-color: #eaeaea;
 @mixin ontimize-theme-styles($theme-or-color-config) {
 
   $theme: map.get($theme-or-color-config, color);
-  $typography: mat.get-typography-config($theme-or-color-config);
+  $typography: mat.m2-get-typography-config($theme-or-color-config);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
-  $container-background: mat.get-color-from-palette($background, 'card');
+  $container-background: mat.m2-get-color-from-palette($background, 'card');
 
-  $fill-background-input: mat.get-color-from-palette($foreground, base, 0.1);
+  $fill-background-input: mat.m2-get-color-from-palette($foreground, base, 0.1);
   $is-dark-theme: map.get($theme, is-dark);
 
   $background-tab-inactive: if($is-dark-theme, variables.$background-tab-inactive-on-dark, variables.$background-tab-inactive-on-light);
   $background-accent-button: if($is-dark-theme, transparent, #ffffff);
-  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 100));
-  $background-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 100));
+  $background-hover-accent-button: if($is-dark-theme, mat.m2-get-color-from-palette($accent, 500), mat.m2-get-color-from-palette($accent, 100));
+  $background-primary-button: if($is-dark-theme, mat.m2-get-color-from-palette($primary, 500), mat.m2-get-color-from-palette($primary, 100));
   $background-hover-primary-button: if($is-dark-theme, transparent, #ffffff);
 
   @include theme.o-material-theme($theme-or-color-config);
@@ -109,16 +109,16 @@ $app-background-color: #eaeaea;
 
         &:hover,
         .mat-button-focus-overlay {
-          color: mat.get-color-from-palette($primary);
+          color: mat.m2-get-color-from-palette($primary);
           background-color: $background-hover-primary-button;
-          border-color: mat.get-color-from-palette($foreground, divider);
+          border-color: mat.m2-get-color-from-palette($foreground, divider);
         }
       }
 
       &.o-button-default.cancel {
-        color: mat.get-color-from-palette($accent);
+        color: mat.m2-get-color-from-palette($accent);
         background-color: $background-accent-button;
-        border-color: mat.get-color-from-palette($foreground, divider);
+        border-color: mat.m2-get-color-from-palette($foreground, divider);
 
         &:hover,
         .mat-button-focus-overlay {
@@ -182,7 +182,7 @@ $app-background-color: #eaeaea;
   .o-form-toolbar {
     .mat-toolbar {
       box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.24);
-      background-color: mat.get-color-from-palette($background, background);
+      background-color: mat.m2-get-color-from-palette($background, background);
       border-radius: variables.$border-radius;
       min-height: initial;
     }
@@ -227,7 +227,7 @@ $app-background-color: #eaeaea;
 
               +.mdc-tab:not(.mdc-tab--active) {
                 .mdc-tab__content .mdc-tab__text-label {
-                  border-left: 1px solid mat.get-color-from-palette($foreground, divider);
+                  border-left: 1px solid mat.m2-get-color-from-palette($foreground, divider);
 
                 }
               }
@@ -294,31 +294,31 @@ $app-background-color: #eaeaea;
   .bg-level-0,
   o-column.o-column.bg-level-0,
   o-row.o-row.bg-level-0 {
-    background-color: mat.get-color-from-palette($background, level-0);
+    background-color: mat.m2-get-color-from-palette($background, level-0);
   }
 
   .bg-level-04,
   o-column.o-column.bg-level-04,
   o-row.o-row.bg-level-04 {
-    background-color: mat.get-color-from-palette($background, level-04);
+    background-color: mat.m2-get-color-from-palette($background, level-04);
   }
 
   .bg-level-06,
   o-column.o-column.bg-level-06,
   o-row.o-row.bg-level-06 {
-    background-color: mat.get-color-from-palette($background, level-06);
+    background-color: mat.m2-get-color-from-palette($background, level-06);
   }
 
   .bg-level-08,
   o-column.o-column.bg-level-08,
   o-row.o-row.bg-level-08 {
-    background-color: mat.get-color-from-palette($background, level-08);
+    background-color: mat.m2-get-color-from-palette($background, level-08);
   }
 
   .bg-level-1,
   o-column.o-column.bg-level-1,
   o-row.o-row.bg-level-1 {
-    background-color: mat.get-color-from-palette($background, level-1);
+    background-color: mat.m2-get-color-from-palette($background, level-1);
   }
 }
 

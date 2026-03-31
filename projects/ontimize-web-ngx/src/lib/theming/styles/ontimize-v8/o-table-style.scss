@@ -41,7 +41,7 @@
 
       .o-table-menu {
         .o-table-option-active {
-          background: mat.get-color-from-palette($foreground, divider);
+          background: mat.m2-get-color-from-palette($foreground, divider);
         }
       }
 
@@ -57,7 +57,7 @@
       /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
       thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
-        background-color: mat.get-color-from-palette($accent);
+        background-color: mat.m2-get-color-from-palette($accent);
       }
 
       .mat-mdc-header-cell {
@@ -148,10 +148,10 @@
 
 @mixin o-table-size-typography($typography, $size) {
 
-  $header-height: mat.font-size($typography, #{$size}-header-height);
-  $row-height: mat.font-size($typography, #{$size}-row-height);
-  $header-font-size: mat.font-size($typography, #{$size}-header-font-size);
-  $row-font-size: mat.font-size($typography, #{$size}-row-font-size);
+  $header-height: mat.m2-font-size($typography, #{$size}-header-height);
+  $row-height: mat.m2-font-size($typography, #{$size}-row-height);
+  $header-font-size: mat.m2-font-size($typography, #{$size}-header-font-size);
+  $row-font-size: mat.m2-font-size($typography, #{$size}-row-font-size);
 
   .o-table .o-table-container {
     .mat-mdc-table.#{$size} {

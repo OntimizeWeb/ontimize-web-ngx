@@ -6,16 +6,16 @@
   .o-list-container {
 
     .primary-text {
-      color: mat.get-color-from-palette($foreground, text);
+      color: mat.m2-get-color-from-palette($foreground, text);
     }
 
     .secondary-text {
-      color: mat.get-color-from-palette($foreground, secondary-text);
+      color: mat.m2-get-color-from-palette($foreground, secondary-text);
     }
 
     .o-list-row-action .mdc-checkbox,
     .o-list-item-icon {
-      color: mat.get-color-from-palette($foreground, icon);
+      color: mat.m2-get-color-from-palette($foreground, icon);
     }
 
     .spinner-container {

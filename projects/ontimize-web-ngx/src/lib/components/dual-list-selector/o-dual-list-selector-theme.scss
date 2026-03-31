@@ -8,22 +8,22 @@
   .o-dual-list-selector {
     .o-dual-list-selector-list {
       .mat-mdc-selection-list.mat-mdc-list-base {
-        border: 1px solid mat.get-color-from-palette($foreground, divider);
+        border: 1px solid mat.m2-get-color-from-palette($foreground, divider);
 
         .mat-mdc-list-item {
           &:not(.mat-mdc-list-option) {
-            border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
+            border-bottom: 1px solid mat.m2-get-color-from-palette($foreground, divider);
           }
         }
 
         .mat-mdc-list-option {
-          background: mat.get-color-from-palette($background, 'hover');
+          background: mat.m2-get-color-from-palette($background, 'hover');
 
           &[aria-selected="true"] {
-            background-color: mat.get-color-from-palette($primary, 100);
+            background-color: mat.m2-get-color-from-palette($primary, 100);
 
             .mdc-list-item__secondary-text {
-              color: if($is-dark-theme, #121212, mat.get-color-from-palette($foreground, text));
+              color: if($is-dark-theme, #121212, mat.m2-get-color-from-palette($foreground, text));
             }
           }
         }
@@ -38,8 +38,8 @@
         box-shadow: none;
 
         &.mat-accent:not([disabled]) {
-          background-color: mat.get-color-from-palette($foreground, divider);
-          color: mat.get-color-from-palette($foreground, text);
+          background-color: mat.m2-get-color-from-palette($foreground, divider);
+          color: mat.m2-get-color-from-palette($foreground, text);
         }
       }
     }

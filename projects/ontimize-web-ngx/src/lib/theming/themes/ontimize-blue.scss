@@ -8,10 +8,10 @@ $mat-custom-primary: (50 : #e3ecf4, 100 : #b9d1e4, 200 : #8ab2d2, 300 : #5b93c0,
 $mat-custom-primary-dark: (50 : #f1f6fa, 100 : #dce8f2, 200 : #c5d9e9, 300 : #adc9e0, 400 : #9cbed9, 500 : #8ab2d2, 600 : #82abcd, 700 : #77a2c7, 800 : #6d99c1, 900 : #5a8ab6, A100 : #ffffff, A200 : #ebf5ff, A400 : #b8dcff, A700 : #9ed0ff, contrast: (50 : #000000, 100 : #000000, 200 : #000000, 300 : #000000, 400 : #000000, 500 : #000000, 600 : #000000, 700 : #000000, 800 : #000000, 900 : #000000, A100 : #000000, A200 : #000000, A400 : #000000, A700 : #000000, ));
 
 // Define a theme.
-$primary: mat.define-palette($mat-custom-primary);
+$primary: mat.m2-define-palette($mat-custom-primary);
 $accent:$primary;
 
-$primary-dark: mat.define-palette($mat-custom-primary-dark);
+$primary-dark: mat.m2-define-palette($mat-custom-primary-dark);
 $accent-dark: $primary-dark;
 
 /* Light theme */

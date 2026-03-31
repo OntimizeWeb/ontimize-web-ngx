@@ -16,12 +16,12 @@
       >.o-container-header,
       >.o-container-title,
       >.mat-expansion-panel-header {
-        border-color: mat.get-color-from-palette($foreground, divider);
-        color: mat.get-color-from-palette($foreground, text);
+        border-color: mat.m2-get-color-from-palette($foreground, divider);
+        color: mat.m2-get-color-from-palette($foreground, text);
 
         .mdc-tab__text-label,
         .mat-mdc-tab-link {
-          color: mat.get-color-from-palette($foreground, text);
+          color: mat.m2-get-color-from-palette($foreground, text);
         }
 
       }
@@ -31,8 +31,8 @@
         >.mat-expansion-panel-header .o-container-title {
           span {
             font: {
-              size: mat.font-size($typography, body-1);
-              weight: mat.font-weight($typography, body-1);
+              size: mat.m2-font-size($typography, body-1);
+              weight: mat.m2-font-weight($typography, body-1);
             }
           }
         }
@@ -55,7 +55,7 @@
   .o-row.o-appearance-outline {
     >.o-container {
       .o-container-title {
-        color: mat.get-color-from-palette($foreground, text);
+        color: mat.m2-get-color-from-palette($foreground, text);
       }
     }
 
@@ -69,7 +69,7 @@
       .o-container-outline-gap-icon,
       .o-container-outline-gap-title,
       .o-container-outline-start {
-        border-color: mat.get-color-from-palette($foreground, divider);
+        border-color: mat.m2-get-color-from-palette($foreground, divider);
       }
     }
   }

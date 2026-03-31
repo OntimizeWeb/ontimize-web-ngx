@@ -27,7 +27,7 @@
 
       td,
       th {
-        color: mat.get-color-from-palette($foreground, text);
+        color: mat.m2-get-color-from-palette($foreground, text);
 
         &.in-range {
           color: if($is-dark-theme, #000000, #fff);
@@ -45,15 +45,15 @@
       }
     }
 
-    background-color: mat.get-color-from-palette($background, card);
+    background-color: mat.m2-get-color-from-palette($background, card);
 
     &:after,
     &:before {
-      border-bottom-color: mat.get-color-from-palette($foreground, divider);
+      border-bottom-color: mat.m2-get-color-from-palette($foreground, divider);
     }
 
     .calendar-table {
-      border-color: mat.get-color-from-palette($foreground, divider);
+      border-color: mat.m2-get-color-from-palette($foreground, divider);
     }
 
     th {
@@ -64,11 +64,11 @@
     th {
       text-align: center;
 
-      border-color: mat.get-color-from-palette($foreground, divider);
+      border-color: mat.m2-get-color-from-palette($foreground, divider);
 
       &.available {
         &:hover {
-          background: mat.get-color-from-palette($background, hover, 0.12);
+          background: mat.m2-get-color-from-palette($background, hover, 0.12);
         }
       }
 
@@ -85,7 +85,7 @@
         &.end-date,
         &.in-range,
         &.start-date {
-          background-color: mat.get-color-from-palette($background, background);
+          background-color: mat.m2-get-color-from-palette($background, background);
           border-color: transparent;
           color: $color-inactive;
         }
@@ -94,17 +94,17 @@
       //
       // Date Range
       &.in-range {
-        background-color: mat.get-color-from-palette($primary, A200);
+        background-color: mat.m2-get-color-from-palette($primary, A200);
         border-color: transparent;
       }
 
       &.active {
-        background-color: mat.get-color-from-palette($primary);
-        color: mat.get-color-from-palette($primary, default-contrast);
+        background-color: mat.m2-get-color-from-palette($primary);
+        color: mat.m2-get-color-from-palette($primary, default-contrast);
 
         &,
         &:hover {
-          background-color: mat.get-color-from-palette($primary);
+          background-color: mat.m2-get-color-from-palette($primary);
 
         }
       }
@@ -181,13 +181,13 @@
         li {
           button {
             &.active {
-              background: mat.get-color-from-palette($background, hover, 0.12);
+              background: mat.m2-get-color-from-palette($background, hover, 0.12);
             }
           }
         }
 
         li:hover {
-          background: mat.get-color-from-palette($background, hover, 0.12);
+          background: mat.m2-get-color-from-palette($background, hover, 0.12);
 
         }
       }

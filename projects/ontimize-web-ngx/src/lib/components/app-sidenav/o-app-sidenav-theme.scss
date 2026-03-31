@@ -14,22 +14,22 @@
 
         a.o-app-sidenav-viewer-sidenav-item-selected,
         a:hover {
-          color: mat.get-color-from-palette($accent, 900);
-          background-color: mat.get-color-from-palette($primary, 100);
+          color: mat.m2-get-color-from-palette($accent, 900);
+          background-color: mat.m2-get-color-from-palette($primary, 100);
         }
       }
     }
 
     .o-app-sidenav-sidenav {
-      background: mat.get-color-from-palette($primary);
+      background: mat.m2-get-color-from-palette($primary);
 
 
       .sidenav-toggle {
-        color: mat.get-color-from-palette($primary, default-contrast);
+        color: mat.m2-get-color-from-palette($primary, default-contrast);
       }
 
       .o-app-sidenav-item {
-        color: mat.get-color-from-palette($primary, default-contrast);
+        color: mat.m2-get-color-from-palette($primary, default-contrast);
 
         &.o-user-info {
 
@@ -41,7 +41,7 @@
           color: inherit;
 
           .o-user-info-menu-item .o-user-info-item {
-            background: mat.get-color-from-palette($primary, default-contrast, 0.74);
+            background: mat.m2-get-color-from-palette($primary, default-contrast, 0.74);
           }
         }
       }
@@ -51,7 +51,7 @@
         .o-app-sidenav-menugroup {
           &.opened {
             +.o-app-sidenav-menugroup-items-container ul {
-              background: mat.get-color-from-palette($primary, 800);
+              background: mat.m2-get-color-from-palette($primary, 800);
             }
           }
         }
@@ -63,7 +63,7 @@
         .o-app-sidenav-menugroup {
           &.opened {
             +.o-app-sidenav-menugroup-items-container ul {
-              background: mat.get-color-from-palette($primary, 900);
+              background: mat.m2-get-color-from-palette($primary, 900);
             }
           }
         }

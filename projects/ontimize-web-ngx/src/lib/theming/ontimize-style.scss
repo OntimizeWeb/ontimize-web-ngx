@@ -13,7 +13,7 @@ $sidenav-background-color: #f5f5f5;
 
 // Background palette for light themes.
 @function ontimize-light-theme-background($primary, $mat-theme) {
-  $primary-500: mat.get-color-from-palette($primary, 500);
+  $primary-500: mat.m2-get-color-from-palette($primary, 500);
   $background: map.get($mat-theme, background);
   @return map.merge($background,
     (level-0: mix(variables.$app-background-color, $primary-500, 98%),
@@ -22,14 +22,14 @@ $sidenav-background-color: #f5f5f5;
       level-08: #fafafa,
       level-1: white,
       sidenav-overlay: #525252,
-      status-bar: mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
-      app-bar: mix($sidenav-background-color, mat.get-color-from-palette($primary), 97.2%),
-      background: mix(variables.$app-background-color, mat.get-color-from-palette($primary), 97.2%)));
+      status-bar: mix($sidenav-background-color, mat.m2-get-color-from-palette($primary), 97.2%),
+      app-bar: mix($sidenav-background-color, mat.m2-get-color-from-palette($primary), 97.2%),
+      background: mix(variables.$app-background-color, mat.m2-get-color-from-palette($primary), 97.2%)));
 }
 
 // Background palette for dark themes.
 @function ontimize-dark-theme-background($primary, $mat-theme) {
-  $primary-500: mat.get-color-from-palette($primary, 500);
+  $primary-500: mat.m2-get-color-from-palette($primary, 500);
   $background: map.get($mat-theme, background);
   @return map.merge($background,
     (level-0: mix(#171717, $primary-500, 94%),
@@ -85,8 +85,8 @@ $ontimize-dark-theme-foreground: (
 
 
 // Creates a container object for a light theme to be given to individual component theme mixins.
-@function o-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  $mat-theme: mat.define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+@function o-mat-light-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
+  $mat-theme: mat.m2-define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
   $color: map.get($mat-theme, color);
   @return (color:(primary: $primary,
       accent: $accent,
@@ -98,8 +98,8 @@ $ontimize-dark-theme-foreground: (
 }
 
 // Creates a container object for a dark theme to be given to individual component theme mixins.
-@function o-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  $mat-theme: mat.define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+@function o-mat-dark-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
+  $mat-theme: mat.m2-define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
   $color: map.get($mat-theme, color);
   @return (color:(primary: $primary,
       accent: $accent,
@@ -120,7 +120,7 @@ $ontimize-dark-theme-foreground: (
   $foreground: map.get($theme, foreground);
 
   // The color of the checkbox's checkmark / mixedmark.
-  $checkbox-mark-color: mat.get-color-from-palette($background, background);
+  $checkbox-mark-color: mat.m2-get-color-from-palette($background, background);
 
   // NOTE(traviskaufman): While the spec calls for translucent blacks/whites for disabled colors,
   // this does not work well with elements layered on top of one another. To get around this we
@@ -128,11 +128,11 @@ $ontimize-dark-theme-foreground: (
   $white-30pct-opacity-on-dark: #686868;
   $black-26pct-opacity-on-light: #b0b0b0;
   $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
-  $checkbox-background-color: if($is-dark-theme, $black-26pct-opacity-on-light, mat.get-color-from-palette($background, sidenav-overlay));
+  $checkbox-background-color: if($is-dark-theme, $black-26pct-opacity-on-light, mat.m2-get-color-from-palette($background, sidenav-overlay));
 
   /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-frame {
-    border-color: mat.get-color-from-palette($foreground, secondary-text);
+    border-color: mat.m2-get-color-from-palette($foreground, secondary-text);
   }
 
   /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
@@ -169,7 +169,7 @@ $ontimize-dark-theme-foreground: (
     }
 
     &.mat-warn .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-      background-color: mat.get-color-from-palette($warn);
+      background-color: mat.m2-get-color-from-palette($warn);
     }
   }
 
@@ -218,15 +218,15 @@ $ontimize-dark-theme-foreground: (
   .mat-mdc-checkbox-checked:not(.mat-checkbox-disabled),
   .mat-checkbox:active:not(.mat-checkbox-disabled) {
     &.mat-primary .mat-ripple-element {
-      background: mat.get-color-from-palette($foreground, icon);
+      background: mat.m2-get-color-from-palette($foreground, icon);
     }
 
     &.mat-accent .mat-ripple-element {
-      background: mat.get-color-from-palette($foreground, icon);
+      background: mat.m2-get-color-from-palette($foreground, icon);
     }
 
     &.mat-warn .mat-ripple-element {
-      background: mat.get-color-from-palette($warn);
+      background: mat.m2-get-color-from-palette($warn);
     }
   }
 }
@@ -260,10 +260,10 @@ $ontimize-dark-theme-foreground: (
   }
 
   .mat-pseudo-checkbox {
-    color: mat.get-color-from-palette(map.get($theme, foreground), secondary-text);
+    color: mat.m2-get-color-from-palette(map.get($theme, foreground), secondary-text);
 
     &::after {
-      color: mat.get-color-from-palette($background, background);
+      color: mat.m2-get-color-from-palette($background, background);
     }
   }
 
@@ -273,7 +273,7 @@ $ontimize-dark-theme-foreground: (
 
   .mat-primary .mat-pseudo-checkbox-checked,
   .mat-primary .mat-pseudo-checkbox-indeterminate {
-    background: mat.get-color-from-palette($foreground, icon);
+    background: mat.m2-get-color-from-palette($foreground, icon);
   }
 
   // Default to the accent color. Note that the pseudo checkboxes are meant to inherit the
@@ -285,12 +285,12 @@ $ontimize-dark-theme-foreground: (
   .mat-accent .mat-pseudo-checkbox-indeterminate,
   .mat-pseudo-checkbox-checked,
   .mat-pseudo-checkbox-indeterminate {
-    background: mat.get-color-from-palette($foreground, icon);
+    background: mat.m2-get-color-from-palette($foreground, icon);
   }
 
   .mat-warn .mat-pseudo-checkbox-checked,
   .mat-warn .mat-pseudo-checkbox-indeterminate {
-    background: mat.get-color-from-palette(map.get($theme, warn));
+    background: mat.m2-get-color-from-palette(map.get($theme, warn));
   }
 
   .mat-pseudo-checkbox-checked,
@@ -311,7 +311,7 @@ $ontimize-dark-theme-foreground: (
 
 @mixin ontimize-theme-styles($theme-or-color-config) {
 
-  $typography: mat.get-typography-config($theme-or-color-config);
+  $typography: mat.m2-get-typography-config($theme-or-color-config);
   //Apply v8 styles
   @include ontimize-style.ontimize-theme-styles($theme-or-color-config);
   //Apply new styles
@@ -329,14 +329,14 @@ $ontimize-dark-theme-foreground: (
   $foreground: map.get($theme, foreground);
   $primary: map.get($theme, primary);
   $accent: map.get($theme, accent);
-  $warn: mat.get-color-from-palette($theme, warn);
+  $warn: mat.m2-get-color-from-palette($theme, warn);
   $is-dark-theme: map.get($theme, is-dark);
   $background-primary-button: if($is-dark-theme, transparent, #ffffff);
-  $background-hover-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500, 0.04), mat.get-color-from-palette($primary, 100));
+  $background-hover-primary-button: if($is-dark-theme, mat.m2-get-color-from-palette($primary, 500, 0.04), mat.m2-get-color-from-palette($primary, 100));
   $background-accent-button: if($is-dark-theme, transparent, #ffffff);
-  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500, 0.04), mat.get-color-from-palette($accent, 100));
-  $background-hover-warn-button: if($is-dark-theme, mat.get-color-from-palette($warn, 500, 0.04), mat.get-color-from-palette($warn, 100));
-  $sidenav-background-color: if($is-dark-theme, mix(#1e1e1e, mat.get-color-from-palette($primary, 500), 94%), mat.get-color-from-palette($background, status-bar));
+  $background-hover-accent-button: if($is-dark-theme, mat.m2-get-color-from-palette($accent, 500, 0.04), mat.m2-get-color-from-palette($accent, 100));
+  $background-hover-warn-button: if($is-dark-theme, mat.m2-get-color-from-palette($warn, 500, 0.04), mat.m2-get-color-from-palette($warn, 100));
+  $sidenav-background-color: if($is-dark-theme, mix(#1e1e1e, mat.m2-get-color-from-palette($primary, 500), 94%), mat.m2-get-color-from-palette($background, status-bar));
 
   .o-app-header {
     nav {
@@ -349,7 +349,7 @@ $ontimize-dark-theme-foreground: (
       }
 
       .o-app-header-title {
-        color: mat.get-color-from-palette($foreground, button);
+        color: mat.m2-get-color-from-palette($foreground, button);
       }
     }
   }
@@ -368,15 +368,15 @@ $ontimize-dark-theme-foreground: (
         border-left-color: transparent;
 
         a:hover {
-          color: mat.get-color-from-palette($foreground, button);
-          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 96%); //#525252 4%
-          border-left: 8px solid mat.get-color-from-palette($primary);
+          color: mat.m2-get-color-from-palette($foreground, button);
+          background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 96%); //#525252 4%
+          border-left: 8px solid mat.m2-get-color-from-palette($primary);
         }
 
         a.o-app-sidenav-viewer-sidenav-item-selected {
-          color: mat.get-color-from-palette($foreground, button);
-          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 98%); //#525252 2%
-          border-left: 8px solid mat.get-color-from-palette($primary);
+          color: mat.m2-get-color-from-palette($foreground, button);
+          background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 98%); //#525252 2%
+          border-left: 8px solid mat.m2-get-color-from-palette($primary);
         }
       }
     }
@@ -385,11 +385,11 @@ $ontimize-dark-theme-foreground: (
       background: $sidenav-background-color;
 
       .sidenav-toggle {
-        color: mat.get-color-from-palette($foreground, button);
+        color: mat.m2-get-color-from-palette($foreground, button);
       }
 
       .o-app-sidenav-item {
-        color: mat.get-color-from-palette($foreground, button);
+        color: mat.m2-get-color-from-palette($foreground, button);
 
         &.o-user-info {
 
@@ -401,7 +401,7 @@ $ontimize-dark-theme-foreground: (
           color: inherit;
 
           .o-user-info-menu-item .o-user-info-item {
-            background: mat.get-color-from-palette($primary, default-contrast, 0.74);
+            background: mat.m2-get-color-from-palette($primary, default-contrast, 0.74);
           }
         }
       }
@@ -411,7 +411,7 @@ $ontimize-dark-theme-foreground: (
         .o-app-sidenav-menugroup {
           &.opened {
             +.o-app-sidenav-menugroup-items-container ul {
-              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+              background: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
             }
           }
         }
@@ -421,7 +421,7 @@ $ontimize-dark-theme-foreground: (
 
             // a.o-app-sidenav-viewer-sidenav-item-selected,
             a:hover {
-              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+              background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
             }
           }
         }
@@ -433,7 +433,7 @@ $ontimize-dark-theme-foreground: (
         .o-app-sidenav-menugroup {
           &.opened {
             +.o-app-sidenav-menugroup-items-container ul {
-              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+              background: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
             }
           }
         }
@@ -443,14 +443,14 @@ $ontimize-dark-theme-foreground: (
 
             // a.o-app-sidenav-viewer-sidenav-item-selected,
             a:hover {
-              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+              background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
             }
           }
         }
       }
 
       li a {
-        color: mat.get-color-from-palette($foreground, text);
+        color: mat.m2-get-color-from-palette($foreground, text);
       }
     }
   }
@@ -477,7 +477,7 @@ $ontimize-dark-theme-foreground: (
     .o-app-sidenav-container {
       .o-app-header {
         /*box-shadow: none;*/
-        border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
+        border-bottom: 1px solid mat.m2-get-color-from-palette($foreground, divider);
         background-color: $sidenav-background-color;
       }
 
@@ -493,7 +493,7 @@ $ontimize-dark-theme-foreground: (
     }
 
     .mat-mdc-menu-panel {
-      border: 1px solid mat.get-color-from-palette($foreground, divider);
+      border: 1px solid mat.m2-get-color-from-palette($foreground, divider);
     }
 
     .o-app-header {
@@ -507,39 +507,39 @@ $ontimize-dark-theme-foreground: (
   }
 
   .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label {
-    color: mat.get-color-from-palette($foreground, title);
+    color: mat.m2-get-color-from-palette($foreground, title);
   }
 
   /* MAT PAGINATOR*/
   .mat-mdc-paginator {
-    color: mat.get-color-from-palette($foreground, text);
+    color: mat.m2-get-color-from-palette($foreground, text);
   }
 
   .ontimize-table.o-table {
-    background: mat.get-color-from-palette($background, card);
+    background: mat.m2-get-color-from-palette($background, card);
 
     /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
     tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
     thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
-      background-color: mat.get-color-from-palette($foreground, icon);
+      background-color: mat.m2-get-color-from-palette($foreground, icon);
     }
 
   }
 
   .o-tree {
     .selected-node {
-      color: mat.get-color-from-palette($primary, 500);
+      color: mat.m2-get-color-from-palette($primary, 500);
       font-weight: 800;
     }
   }
 
   .o-table {
     .o-table-quickfilter .quickFilter .mat-form-field .mat-mdc-text-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
-      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
     }
 
     .mat-form-field-appearance-outline .mat-form-field-outline {
-      color: mat.get-color-from-palette($foreground, text, 0.32);
+      color: mat.m2-get-color-from-palette($foreground, text, 0.32);
     }
 
     .mat-mdc-table {
@@ -547,7 +547,7 @@ $ontimize-dark-theme-foreground: (
 
 
         .mat-mdc-cell {
-          color: mat.get-color-from-palette($foreground, base);
+          color: mat.m2-get-color-from-palette($foreground, base);
         }
       }
     }
@@ -560,7 +560,7 @@ $ontimize-dark-theme-foreground: (
 
       .o-form-toolbar-header {
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.24);
-        background-color: mat.get-color-from-palette($background, card);
+        background-color: mat.m2-get-color-from-palette($background, card);
 
         .mat-toolbar-tools {
           button.o-form-toolbar-button.o-form-toolbar-back.mat-mdc-icon-button {
@@ -580,57 +580,57 @@ $ontimize-dark-theme-foreground: (
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button:not([disabled]),
   button.mat-mdc-outlined-button:not([disabled]) {
     &.mat-mdc-button-base {
-      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
     }
 
     &.mat-mdc-button-base.mat-primary,
     &.mat-mdc-button-base.o-button-primary {
-      color: mat.get-color-from-palette($primary, 500);
+      color: mat.m2-get-color-from-palette($primary, 500);
       background-color: $background-primary-button;
-      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
 
       .mat-icon {
-        color: mat.get-color-from-palette($primary, 500);
+        color: mat.m2-get-color-from-palette($primary, 500);
 
       }
 
       &:hover {
         background-color: $background-hover-primary-button;
-        border-color: mat.get-color-from-palette($foreground, text, 0.32);
+        border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
       }
 
     }
 
     &.mat-mdc-button-base.mat-accent,
     &.mat-mdc-button-base.o-button-default {
-      color: mat.get-color-from-palette($foreground, text);
-      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      color: mat.m2-get-color-from-palette($foreground, text);
+      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
 
       .mat-icon {
-        color: mat.get-color-from-palette($accent, 500);
+        color: mat.m2-get-color-from-palette($accent, 500);
       }
 
       &:hover {
-        color: mat.get-color-from-palette($accent, 500);
+        color: mat.m2-get-color-from-palette($accent, 500);
         background-color: $background-hover-accent-button;
-        border-color: mat.get-color-from-palette($foreground, text, 0.32);
+        border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
       }
     }
 
     &.mat-mdc-button-base.mat-warn {
-      color: mat.get-color-from-palette($warn);
-      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      color: mat.m2-get-color-from-palette($warn);
+      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
 
       &:hover {
         background-color: $background-hover-warn-button;
-        border-color: mat.get-color-from-palette($foreground, text, 0.32);
+        border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
       }
     }
   }
 
   .o-button button.mat-stroked-button:not([disabled])mat-mdc-button-base {
     &.mat-accent {
-      color: mat.get-color-from-palette($accent, 500);
+      color: mat.m2-get-color-from-palette($accent, 500);
     }
   }
 
@@ -639,7 +639,7 @@ $ontimize-dark-theme-foreground: (
   .o-list .o-list-toolbar button,
   .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button {
     &.mat-mdc-icon-button:not(.mat-mdc-menu-trigger) {
-      border-color: mat.get-color-from-palette($foreground, text, 0.32);
+      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
       border-style: solid;
       border-width: 1px;
       border-radius: variables.$border-radius;
@@ -654,7 +654,7 @@ $ontimize-dark-theme-foreground: (
   // O-ROW, O-COLUMN
   o-column.o-column,
   o-row.o-row {
-    background: mat.get-color-from-palette($background, card);
+    background: mat.m2-get-color-from-palette($background, card);
     border-radius: variables.$border-radius;
 
     .o-container {
@@ -666,11 +666,11 @@ $ontimize-dark-theme-foreground: (
       >.o-container-title,
       >.mat-expansion-panel-header {
         border-bottom: none;
-        color: mat.get-color-from-palette($foreground, title);
+        color: mat.m2-get-color-from-palette($foreground, title);
 
         .mat-mdc-tab,
         .mat-mdc-tab-link {
-          color: mat.get-color-from-palette($foreground, title);
+          color: mat.m2-get-color-from-palette($foreground, title);
         }
       }
 
@@ -680,7 +680,7 @@ $ontimize-dark-theme-foreground: (
         >.mat-expansion-panel-header .o-container-title {
           span {
             font: {
-              size: mat.font-size($typography, headline-6);
+              size: mat.m2-font-size($typography, headline-6);
               weight: bold;
             }
           }
@@ -704,31 +704,31 @@ $ontimize-dark-theme-foreground: (
   .bg-level-0,
   o-column.o-column.bg-level-0,
   o-row.o-row.bg-level-0 {
-    background-color: mat.get-color-from-palette($background, level-0);
+    background-color: mat.m2-get-color-from-palette($background, level-0);
   }
 
   .bg-level-04,
   o-column.o-column.bg-level-04,
   o-row.o-row.bg-level-04 {
-    background-color: mat.get-color-from-palette($background, level-04);
+    background-color: mat.m2-get-color-from-palette($background, level-04);
   }
 
   .bg-level-06,
   o-column.o-column.bg-level-06,
   o-row.o-row.bg-level-06 {
-    background-color: mat.get-color-from-palette($background, level-06);
+    background-color: mat.m2-get-color-from-palette($background, level-06);
   }
 
   .bg-level-08,
   o-column.o-column.bg-level-08,
   o-row.o-row.bg-level-08 {
-    background-color: mat.get-color-from-palette($background, level-08);
+    background-color: mat.m2-get-color-from-palette($background, level-08);
   }
 
   .bg-level-1,
   o-column.o-column.bg-level-1,
   o-row.o-row.bg-level-1 {
-    background-color: mat.get-color-from-palette($background, level-1);
+    background-color: mat.m2-get-color-from-palette($background, level-1);
   }
 
   .o-form-content-wrapper,
@@ -739,19 +739,19 @@ $ontimize-dark-theme-foreground: (
   }
 
   .o-table-skeleton-header {
-    background-color: mat.get-color-from-palette($background, level-04);
+    background-color: mat.m2-get-color-from-palette($background, level-04);
   }
 
   .o-grid-skeleton-item,
   .o-table .o-table-skeleton-item,
   .o-list-skeleton-item {
     div.skeleton-loader {
-      background: mat.get-color-from-palette($background, level-04) no-repeat;
+      background: mat.m2-get-color-from-palette($background, level-04) no-repeat;
     }
   }
 
   .o-list-skeleton-item {
-    background-color: mat.get-color-from-palette($background, level-08);
+    background-color: mat.m2-get-color-from-palette($background, level-08);
     border-radius: variables.$border-radius;
   }
 

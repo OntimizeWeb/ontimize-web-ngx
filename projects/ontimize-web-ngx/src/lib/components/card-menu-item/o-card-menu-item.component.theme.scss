@@ -9,31 +9,31 @@
 
   .o-card-menu-item {
 
-    background: mat.get-color-from-palette($background, 'card');
-    border: 1px solid mat.get-color-from-palette($primary, 0.17);
+    background: mat.m2-get-color-from-palette($background, 'card');
+    border: 1px solid mat.m2-get-color-from-palette($primary, 0.17);
 
     .o-card-menu-item-main {
-      background-color: mat.get-color-from-palette($background, background, 0.29);
+      background-color: mat.m2-get-color-from-palette($background, background, 0.29);
     }
 
     @if($typography) {
       .o-card-menu-item-title {
-        font-size: mat.font-size($typography, headline-6);
+        font-size: mat.m2-font-size($typography, headline-6);
       }
     }
 
     .o-card-menu-item-title {
-      color: mat.get-color-from-palette($primary);
+      color: mat.m2-get-color-from-palette($primary);
     }
 
     .mat-mdc-button:not(:disabled) {
-      color: mat.get-color-from-palette($primary);
-      background: mat.get-color-from-palette($accent, 100);
+      color: mat.m2-get-color-from-palette($primary);
+      background: mat.m2-get-color-from-palette($accent, 100);
     }
 
     .o-card-menu-item-icon,
     .o-card-menu-item-info {
-      color: mat.get-color-from-palette($primary, 0.54);
+      color: mat.m2-get-color-from-palette($primary, 0.54);
     }
 
   }

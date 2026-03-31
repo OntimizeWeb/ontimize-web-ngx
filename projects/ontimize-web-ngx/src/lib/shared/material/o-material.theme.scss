@@ -22,7 +22,7 @@
     @include mat.all-component-colors($theme-or-color-config);
   }
 
-  $typography: mat.get-typography-config($theme-or-color-config);
+  $typography: mat.m2-get-typography-config($theme-or-color-config);
 
   @include app-global-theme($theme-or-color-config);
   @include o-breadcrumb-theme($theme-or-color-config);

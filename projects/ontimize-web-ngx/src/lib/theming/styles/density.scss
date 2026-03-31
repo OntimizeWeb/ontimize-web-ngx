@@ -82,7 +82,7 @@
 
     @if($typography) {
       .mdc-list-item__primary-text {
-        font-size: mat.font-size($typography, body-2);
+        font-size: mat.m2-font-size($typography, body-2);
 
       }
     }

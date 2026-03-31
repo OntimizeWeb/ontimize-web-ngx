@@ -7,11 +7,11 @@
   .o-app-header {
     nav {
       &.o-app-header-primary {
-        background-color: mat.get-color-from-palette($primary);
+        background-color: mat.m2-get-color-from-palette($primary);
       }
 
       &.o-app-header-accent {
-        background-color: mat.get-color-from-palette($accent);
+        background-color: mat.m2-get-color-from-palette($accent);
       }
 
       .menu-button {
@@ -20,7 +20,7 @@
     }
 
     .o-user-info {
-      color: mat.get-color-from-palette($foreground, text);
+      color: mat.m2-get-color-from-palette($foreground, text);
     }
   }
 

@@ -7,14 +7,14 @@
   $foreground: map.get($theme, foreground);
 
   .toolbar-breadcrumb {
-    background-color: mat.get-color-from-palette($background, app-bar);
+    background-color: mat.m2-get-color-from-palette($background, app-bar);
 
     a {
-      color: mat.get-color-from-palette($primary);
+      color: mat.m2-get-color-from-palette($primary);
     }
 
     mat-icon {
-      color: mat.get-color-from-palette($accent);
+      color: mat.m2-get-color-from-palette($accent);
     }
   }
 
