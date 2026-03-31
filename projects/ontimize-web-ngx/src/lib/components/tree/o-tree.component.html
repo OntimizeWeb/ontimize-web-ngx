@@ -1,60 +1,67 @@
 <div fxLayout="column" fxFlexFill>
   <div fxFlex>
-    <div *ngIf="hasControls()" fxLayout="row" fxLayoutAlign="start center">
-
-      <div class="buttons">
-        <ng-container *ngIf="showButtonsText;else showButtonsWithoutText">
-
-          <button *ngIf="insertButton" type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
-            <mat-icon svgIcon="ontimize:add"></mat-icon>
-            <span>{{ 'INSERT' | oTranslate }}</span>
+    @if (hasControls()) {
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div class="buttons">
+          @if (showButtonsText) {
+            @if (insertButton) {
+              <button type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
+                <mat-icon svgIcon="ontimize:add"></mat-icon>
+                <span>{{ 'INSERT' | oTranslate }}</span>
+              </button>
+            }
+            @if (refreshButton) {
+              <button type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton"
+                (click)="reloadData()">
+                <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+                <span>{{ 'REFRESH' | oTranslate }}</span>
+              </button>
+            }
+            @if (deleteButton) {
+              <button type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
+                [class.disabled]="!enabledDeleteButton">
+                <mat-icon svgIcon="ontimize:delete"></mat-icon>
+                <span>{{ 'DELETE' | oTranslate }}</span>
+              </button>
+            }
+          } @else {
+            @if (insertButton) {
+              <button type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
+                <mat-icon svgIcon="ontimize:add"></mat-icon>
+              </button>
+            }
+            @if (refreshButton) {
+              <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()">
+                <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+              </button>
+            }
+            @if (deleteButton) {
+              <button type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
+                [class.disabled]="!enabledDeleteButton">
+                <mat-icon svgIcon="ontimize:delete"></mat-icon>
+              </button>
+            }
+          }
+          <ng-content select="[o-tree-button]"></ng-content>
+        </div>
+        <div fxFlex>
+          <span fxLayoutAlign="center center" class="title">{{ title | oTranslate }}</span>
+        </div>
+        @if (quickFilter) {
+          <o-search-input [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
+            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no">
+          </o-search-input>
+        }
+        @if (showTreeMenuButton) {
+          <button type="button" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu.matMenu"
+            (click)="$event.stopPropagation()">
+            <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
           </button>
-
-          <button *ngIf="refreshButton" type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton"
-            (click)="reloadData()">
-            <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
-            <span>{{ 'REFRESH' | oTranslate }}</span>
-          </button>
-
-          <button *ngIf="deleteButton" type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-            [class.disabled]="!enabledDeleteButton">
-            <mat-icon svgIcon="ontimize:delete"></mat-icon>
-            <span>{{ 'DELETE' | oTranslate }}</span>
-          </button>
-
-        </ng-container>
-
-        <ng-template #showButtonsWithoutText>
-          <button *ngIf="insertButton" type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
-            <mat-icon svgIcon="ontimize:add"></mat-icon>
-          </button>
-
-          <button *ngIf="refreshButton" type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()">
-            <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
-          </button>
-
-          <button *ngIf="deleteButton" type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-            [class.disabled]="!enabledDeleteButton">
-            <mat-icon svgIcon="ontimize:delete"></mat-icon>
-          </button>
-        </ng-template>
-
-        <ng-content select="[o-tree-button]"></ng-content>
-      </div>
-      <div fxFlex>
-        <span fxLayoutAlign="center center" class="title">{{ title | oTranslate }}</span>
-      </div>
-      <o-search-input *ngIf="quickFilter" [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
-        [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no">
-      </o-search-input>
-      <button type="button" *ngIf="showTreeMenuButton" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu.matMenu"
-        (click)="$event.stopPropagation()">
-        <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
-      </button>
-      <o-tree-menu #treeMenu [select-all-checkbox]="selectAllCheckbox" [select-all-checkbox-visible]="selectAllCheckboxVisible"
+        }
+        <o-tree-menu #treeMenu [select-all-checkbox]="selectAllCheckbox" [select-all-checkbox-visible]="selectAllCheckboxVisible"
         (onSelectCheckboxChange)="onSelectCheckboxChange($event)"></o-tree-menu>
-
-    </div>
+      </div>
+    }
 
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
 
@@ -66,25 +73,31 @@
           <div fxLayout="row">
             <button mat-icon-button disabled></button>
 
-            <ng-container *ngIf="selectAllCheckboxVisible; else simpleLeafNodeTpl">
+            @if (selectAllCheckboxVisible) {
               <div class="node-wrapper">
-                <mat-checkbox *ngIf="selectAllCheckboxVisible; else simpleLeafNodeTpl" [checked]="selection.isSelected(node)"
-                  (click)="checkboxClicked($event)" (change)="todoLeafItemSelectionToggle(node)" (keyDown)="checkboxClicked($event)">
-                </mat-checkbox>
+                @if (selectAllCheckboxVisible) {
+                  <mat-checkbox [checked]="selection.isSelected(node)"
+                    (click)="checkboxClicked($event)" (change)="todoLeafItemSelectionToggle(node)" (keyDown)="checkboxClicked($event)">
+                  </mat-checkbox>
+                } @else {
+                  <ng-container [ngTemplateOutlet]="leafNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
+                  </ng-container>
+                }
                 <ng-container [ngTemplateOutlet]="leafNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
                 </ng-container>
               </div>
-            </ng-container>
-            <ng-template #simpleLeafNodeTpl>
+            } @else {
               <ng-container [ngTemplateOutlet]="leafNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
               </ng-container>
-            </ng-template>
+            }
           </div>
-          <div *ngIf="isLastChildAndHasMore(node)">
-            <button #buttonLoadMore mat-button color="primary" (click)="onLoadMore($event, node)">
-              {{ 'O_TREE.LOAD_MORE' | oTranslate}}
-            </button>
-          </div>
+          @if (isLastChildAndHasMore(node)) {
+            <div>
+              <button #buttonLoadMore mat-button color="primary" (click)="onLoadMore($event, node)">
+                {{ 'O_TREE.LOAD_MORE' | oTranslate}}
+              </button>
+            </div>
+          }
         </div>
 
       </mat-tree-node>
@@ -97,20 +110,24 @@
           </mat-icon>
         </button>
 
-        <ng-container *ngIf="selectAllCheckboxVisible; else simpleParentNodeTpl">
+        @if (selectAllCheckboxVisible) {
           <div class="node-wrapper">
-            <mat-checkbox *ngIf="selectAllCheckboxVisible; else simpleParentNodeTpl" (click)="checkboxClicked($event)"
-              (change)="todoItemSelectionToggle(node)" [checked]="descendantsAllSelected(node)" [indeterminate]="descendantsPartiallySelected(node)">
-            </mat-checkbox>
+            @if (selectAllCheckboxVisible) {
+              <mat-checkbox (click)="checkboxClicked($event)"
+                (change)="todoItemSelectionToggle(node)" [checked]="descendantsAllSelected(node)" [indeterminate]="descendantsPartiallySelected(node)">
+              </mat-checkbox>
+            } @else {
+              <ng-container [ngTemplateOutlet]="parentNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
+              </ng-container>
+            }
             <ng-container [ngTemplateOutlet]="parentNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
             </ng-container>
           </div>
-        </ng-container>
-
-        <ng-template #simpleParentNodeTpl>
+        } @else {
           <ng-container [ngTemplateOutlet]="parentNodeFulltemplate" [ngTemplateOutletContext]="{$implicit:node}">
           </ng-container>
-        </ng-template>
+        }
+
       </mat-tree-node>
 
 
@@ -118,30 +135,36 @@
   </div>
 
   <!-- mat pagination-->
-  <mat-paginator *ngIf="paginationControls && pageable" #matpaginator [length]="dataSource?.resultsLength" [pageSize]="queryRows"
-    [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"
+  @if (paginationControls && pageable) {
+    <mat-paginator #matpaginator [length]="dataSource?.resultsLength" [pageSize]="queryRows"
+      [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"
     [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}"></mat-paginator>
+  }
 
 
 </div>
 
 <ng-template let-node #leafNodeFulltemplate>
-  <ng-container *ngIf="leafNodeTemplate; else defaultLeafNodeTpl" [ngTemplateOutlet]="leafNodeTemplate"
-    [ngTemplateOutletContext]="{$implicit:node.data}">
-  </ng-container>
-
-  <ng-template #defaultLeafNodeTpl>
+  @if (leafNodeTemplate) {
+    <ng-container [ngTemplateOutlet]="leafNodeTemplate"
+      [ngTemplateOutletContext]="{$implicit:node.data}">
+    </ng-container>
+  } @else {
     {{node.label}}
-  </ng-template>
+  }
+
 </ng-template>
 
 <ng-template let-node #parentNodeFulltemplate>
-  <ng-container *ngIf="parentNodeTemplate; else defaultParentNodeTpl" [ngTemplateOutlet]="parentNodeTemplate"
-    [ngTemplateOutletContext]="{$implicit:node.data}">
-  </ng-container>
-
-  <ng-template #defaultParentNodeTpl>
+  @if (parentNodeTemplate) {
+    <ng-container [ngTemplateOutlet]="parentNodeTemplate"
+      [ngTemplateOutletContext]="{$implicit:node.data}">
+    </ng-container>
+  } @else {
     <span>{{node.label}}</span>
-    <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" fxFlex></mat-progress-bar>
-  </ng-template>
+    @if (node.isLoading) {
+      <mat-progress-bar mode="indeterminate" fxFlex></mat-progress-bar>
+    }
+  }
+
 </ng-template>

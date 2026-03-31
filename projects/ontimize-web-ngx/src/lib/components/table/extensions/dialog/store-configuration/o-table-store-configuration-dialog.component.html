@@ -6,33 +6,37 @@
     <mat-form-field subscriptSizing="dynamic">
       <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}"
         formControlName="name" required />
-      <mat-error *oMatError="hasError(formGroup.controls['name'], 'required')">
-        {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="example-full-width" subscriptSizing="dynamic">
-      <textarea matInput placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4"
+        <mat-error *oMatError="hasError(formGroup.controls['name'], 'required')">
+          {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width" subscriptSizing="dynamic">
+        <textarea matInput placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_DESCRIPTION' | oTranslate }}" formControlName="description" rows="4"
         cols="50"></textarea>
-    </mat-form-field>
-    <div class="inner-subheader" mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</div>
-    <div fxLayout="column">
-      <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" class="select-all-checkbox">
-        {{ 'SELECT_ALL' | oTranslate }}
-      </mat-checkbox>
+      </mat-form-field>
+      <div class="inner-subheader" mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</div>
+      <div fxLayout="column">
+        <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" class="select-all-checkbox">
+          {{ 'SELECT_ALL' | oTranslate }}
+        </mat-checkbox>
 
-      <mat-selection-list #propertiesList class="o-table-save-configuration-dialog-list o-scroll">
-        <mat-list-option checkboxPosition="before" *ngFor="let property of properties" [value]="property.property">
-          <span matListItemTitle fxFlex>{{ property.name | oTranslate }}</span>
-          <mat-icon matListItemIcon *ngIf="property.info" matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
-        </mat-list-option>
-      </mat-selection-list>
-    </div>
-  </form>
-</mat-dialog-content>
+        <mat-selection-list #propertiesList class="o-table-save-configuration-dialog-list o-scroll">
+          @for (property of properties; track property) {
+            <mat-list-option checkboxPosition="before" [value]="property.property">
+              <span matListItemTitle fxFlex>{{ property.name | oTranslate }}</span>
+              @if (property.info) {
+                <mat-icon matListItemIcon matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
+              }
+            </mat-list-option>
+          }
+        </mat-selection-list>
+      </div>
+    </form>
+  </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default cancel">
+  <mat-dialog-actions align="end">
+    <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default cancel">
     {{ 'CANCEL' | oTranslate }}</button>
-  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true"
+    <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="true"
     [disabled]="!formGroup.valid || propertiesList.selectedOptions.selected.length===0" class="o-button-primary">{{ 'SAVE' | oTranslate }}</button>
-</mat-dialog-actions>
+  </mat-dialog-actions>

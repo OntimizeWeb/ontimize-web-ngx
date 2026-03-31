@@ -1,4 +1,4 @@
-<ng-container *ngIf="showNavigation()">
+@if (showNavigation()) {
   <button mat-icon-button class="o-form-toolbar-button" [disabled]="isFirst()" (click)="first()">
     <mat-icon aria-label="First" layout-padding svgIcon="ontimize:first_page"></mat-icon>
   </button>
@@ -12,4 +12,4 @@
   <button mat-icon-button class="o-form-toolbar-button" [disabled]="isLast()" (click)="last()">
     <mat-icon aria-label="Last" layout-padding svgIcon="ontimize:last_page"></mat-icon>
   </button>
-</ng-container>
+}

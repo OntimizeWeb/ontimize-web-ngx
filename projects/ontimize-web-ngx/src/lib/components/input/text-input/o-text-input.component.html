@@ -2,21 +2,31 @@
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
     [class.icon-field]="showClearButton" fxFlexFill [subscriptSizing]="subscriptSizing">
-    <span matPrefix *ngIf="_prefixChildren.length>0">
-      <ng-content select="[oMatPrefix]"></ng-content>
-    </span>
-    <mat-label *ngIf="labelVisible">{{ olabel | oTranslate }}</mat-label>
+    @if (_prefixChildren.length>0) {
+      <span matPrefix>
+        <ng-content select="[oMatPrefix]"></ng-content>
+      </span>
+    }
+    @if (labelVisible) {
+      <mat-label>{{ olabel | oTranslate }}</mat-label>
+    }
 
-    <input matInput *ngIf="!regulatePattern" type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired"
-      [maxlength]="maxLength" [minlength]="minLength" />
-    <input matInput *ngIf="regulatePattern" type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
-      (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired"
-      [maxlength]="maxLength" [minlength]="minLength" oInputRegulate [oInputRegulatePattern]="regulatePattern" />
+    @if (!regulatePattern) {
+      <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+        (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired"
+        [maxlength]="maxLength" [minlength]="minLength" />
+    }
+    @if (regulatePattern) {
+      <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+        (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired"
+        [maxlength]="maxLength" [minlength]="minLength" oInputRegulate [oInputRegulatePattern]="regulatePattern" />
+    }
 
-    <button type="button" *ngIf="showClearButton" matIconSuffix mat-icon-button (click)="onClickClearValue($event)">
-      <mat-icon svgIcon="ontimize:close"></mat-icon>
-    </button>
+    @if (showClearButton) {
+      <button type="button" matIconSuffix mat-icon-button (click)="onClickClearValue($event)">
+        <mat-icon svgIcon="ontimize:close"></mat-icon>
+      </button>
+    }
     <mat-error *oMatError="hasError('required')">
       {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
     </mat-error>
@@ -26,11 +36,15 @@
     <mat-error *oMatError="hasError('maxlength')">
       {{ 'FORM_VALIDATION.MAX_LENGTH' | oTranslate }}: {{ getErrorValue('maxlength', 'requiredLength') }}
     </mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()">
-      {{ oError.text | oTranslate }}
-    </mat-error>
-    <span matSuffix *ngIf="_suffixChildren.length>0">
-      <ng-content select="[oMatSuffix]"></ng-content>
-    </span>
+    @for (oError of getActiveOErrors(); track oError) {
+      <mat-error>
+        {{ oError.text | oTranslate }}
+      </mat-error>
+    }
+    @if (_suffixChildren.length>0) {
+      <span matSuffix>
+        <ng-content select="[oMatSuffix]"></ng-content>
+      </span>
+    }
   </mat-form-field>
 </div>

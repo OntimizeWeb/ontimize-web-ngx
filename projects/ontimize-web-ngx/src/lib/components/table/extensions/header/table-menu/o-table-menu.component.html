@@ -1,34 +1,56 @@
 <mat-menu #menu="matMenu" x-position="before" [class]="(rowHeightObservable | async) +' o-table-menu o-mat-menu'">
   <!-- It is necessary to wrap the o-table button with <span mat-menu-item> so that the submenus collapse when losing focus -->
   <!-- DEFAULT OPTIONS -->
-  <span mat-menu-item class="padding-0" *ngIf="showSelectAllCheckbox">
-    <o-table-option #selectAllCheckboxOption [active]="isSelectAllOptionActive" (onClick)="onShowsSelects()" label="TABLE.BUTTONS.SELECT"
+  @if (showSelectAllCheckbox) {
+    <span mat-menu-item class="padding-0">
+      <o-table-option #selectAllCheckboxOption [active]="isSelectAllOptionActive" (onClick)="onShowsSelects()" label="TABLE.BUTTONS.SELECT"
       show-checkbox-option="true"></o-table-option>
-  </span>
-  <span mat-menu-item class="padding-0" *ngIf="showColumnsVisibilityButton">
-    <o-table-option #columnsVisibilityButtonOption (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS"></o-table-option>
-  </span>
-  <span mat-menu-item class="padding-0" *ngIf="showResetWidthOption">
-    <o-table-option (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
-  </span>
-  <mat-divider *ngIf="showFirstDivider"></mat-divider>
-  <span mat-menu-item class="padding-0" *ngIf="showExportButton">
-    <o-table-option #exportButtonOption (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"></o-table-option>
-  </span>
-  <span mat-menu-item class="padding-0" *ngIf="showReportOnDemandButton">
-    <o-table-option (onClick)="onReportOnDemandClicked()" label="TABLE.BUTTONS.REPORT_ON_DEMAND"></o-table-option>
-  </span>
-  <span mat-menu-item class="padding-0" *ngIf="showChartsOnDemandButton">
-    <o-table-option (onClick)="onChartsOnDemandClicked()" label="TABLE.BUTTONS.CHART_ON_DEMAND"></o-table-option>
-  </span>
-  <mat-divider *ngIf="showSecondDivider"></mat-divider>
-  <span mat-menu-item class="padding-0" *ngIf="showGroupByButton">
-    <o-table-option #columnsGroupByOption (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
-  </span>
-  <button type="button" #filterMenuButton *ngIf="showFilterMenu" mat-menu-item [matMenuTriggerFor]="filterMenu">{{
+    </span>
+  }
+  @if (showColumnsVisibilityButton) {
+    <span mat-menu-item class="padding-0">
+      <o-table-option #columnsVisibilityButtonOption (onClick)="onChangeColumnsVisibilityClicked()" label="TABLE.BUTTONS.COLVIS"></o-table-option>
+    </span>
+  }
+  @if (showResetWidthOption) {
+    <span mat-menu-item class="padding-0">
+      <o-table-option (onClick)="onResetWidthClicked()" label="TABLE.BUTTONS.RESETWIDTH"></o-table-option>
+    </span>
+  }
+  @if (showFirstDivider) {
+    <mat-divider></mat-divider>
+  }
+  @if (showExportButton) {
+    <span mat-menu-item class="padding-0">
+      <o-table-option #exportButtonOption (onClick)="onExportButtonClicked()" label="TABLE.BUTTONS.EXPORT"></o-table-option>
+    </span>
+  }
+  @if (showReportOnDemandButton) {
+    <span mat-menu-item class="padding-0">
+      <o-table-option (onClick)="onReportOnDemandClicked()" label="TABLE.BUTTONS.REPORT_ON_DEMAND"></o-table-option>
+    </span>
+  }
+  @if (showChartsOnDemandButton) {
+    <span mat-menu-item class="padding-0">
+      <o-table-option (onClick)="onChartsOnDemandClicked()" label="TABLE.BUTTONS.CHART_ON_DEMAND"></o-table-option>
+    </span>
+  }
+  @if (showSecondDivider) {
+    <mat-divider></mat-divider>
+  }
+  @if (showGroupByButton) {
+    <span mat-menu-item class="padding-0">
+      <o-table-option #columnsGroupByOption (onClick)="onGroupByClicked()" label="TABLE.BUTTONS.GROUPBY"></o-table-option>
+    </span>
+  }
+  @if (showFilterMenu) {
+    <button type="button" #filterMenuButton mat-menu-item [matMenuTriggerFor]="filterMenu">{{
     'TABLE.BUTTONS.FILTER' | oTranslate }}</button>
-  <button type="button" #configurationMenuButton *ngIf="showConfigurationMenu" mat-menu-item [matMenuTriggerFor]="configurationMenu">{{
+  }
+  @if (showConfigurationMenu) {
+    <button type="button" #configurationMenuButton mat-menu-item [matMenuTriggerFor]="configurationMenu">{{
     'TABLE.BUTTONS.CONFIGURATION' | oTranslate }}</button>
+  }
   <ng-content></ng-content>
 </mat-menu>
 
@@ -39,16 +61,16 @@
     </o-table-option>
   </span>
   <button type="button" mat-menu-item (click)="onStoreFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_SAVE' | oTranslate
-    }}</button>
+  }}</button>
   <button type="button" mat-menu-item (click)="onLoadFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_LOAD' | oTranslate
-    }}</button>
+  }}</button>
   <button type="button" mat-menu-item (click)="onClearFilterClicked()">{{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate
-    }}</button>
+  }}</button>
 </mat-menu>
 
 <mat-menu #configurationMenu="matMenu" [class]="(rowHeightObservable | async) +' o-table-menu  o-mat-menu'">
   <button type="button" mat-menu-item (click)="onStoreConfigurationClicked()">{{ 'TABLE.BUTTONS.SAVE_CONFIGURATION' |
-    oTranslate }}</button>
+  oTranslate }}</button>
   <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">{{ 'TABLE.BUTTONS.APPLY_CONFIGURATION' |
-    oTranslate }}</button>
+  oTranslate }}</button>
 </mat-menu>
