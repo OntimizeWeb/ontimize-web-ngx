@@ -1,13 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { ThemePalette } from '@angular/material/core';
-
-import { BooleanInputConverter } from '../../decorators/input-converter';
-import { Codes } from '../../util/codes';
+import { MatIconModule } from '@angular/material/icon';
 
 import { ActivatedRoute } from '@angular/router';
+import { BooleanInputConverter } from '../../decorators/input-converter';
 import { PermissionsService } from '../../services';
 import { OPermissions } from '../../types';
+import { Codes } from '../../util/codes';
 import { Util } from '../../util';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 
 export const DEFAULT_INPUTS_O_BUTTON = [
   'oattr: attr',
@@ -29,6 +32,8 @@ export const DEFAULT_OUTPUTS_O_BUTTON = [
   'click'
 ];
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule, OTranslatePipe],
   selector: 'o-button',
   inputs: DEFAULT_INPUTS_O_BUTTON,
   outputs: DEFAULT_OUTPUTS_O_BUTTON,

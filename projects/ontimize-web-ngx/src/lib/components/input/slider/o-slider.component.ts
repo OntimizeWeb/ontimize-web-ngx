@@ -1,4 +1,8 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
 import { OFormComponent } from '../../../components/form/o-form.component';
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
@@ -18,6 +22,8 @@ export const DEFAULT_INPUTS_O_SLIDER_INPUT = [
 export type SliderDisplayFunction = (value: number) => string;
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatSliderModule, MatTooltipModule],
   selector: 'o-slider',
   host: {
     class: 'o-slider'

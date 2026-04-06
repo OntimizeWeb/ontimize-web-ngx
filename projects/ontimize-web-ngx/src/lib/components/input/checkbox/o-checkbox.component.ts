@@ -1,6 +1,13 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ThemePalette } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OFormComponent } from '../../form/o-form.component';
 import { OBooleanFormDataComponent } from '../o-boolean-form-data-component.class';
 import { OFormControl } from '../o-form-control.class';
@@ -14,6 +21,8 @@ export const DEFAULT_INPUTS_O_CHECKBOX = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatCheckboxModule, MatFormFieldModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-checkbox',
   inputs: DEFAULT_INPUTS_O_CHECKBOX,
   templateUrl: './o-checkbox.component.html',
