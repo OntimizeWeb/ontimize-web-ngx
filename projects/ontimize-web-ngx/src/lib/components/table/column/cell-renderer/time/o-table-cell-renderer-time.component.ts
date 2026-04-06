@@ -9,6 +9,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-cell-renderer-time',
   templateUrl: './o-table-cell-renderer-time.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

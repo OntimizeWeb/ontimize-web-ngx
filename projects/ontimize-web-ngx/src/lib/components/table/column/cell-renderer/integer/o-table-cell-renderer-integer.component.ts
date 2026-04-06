@@ -12,6 +12,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_INTEGER = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-cell-renderer-integer',
   templateUrl: './o-table-cell-renderer-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

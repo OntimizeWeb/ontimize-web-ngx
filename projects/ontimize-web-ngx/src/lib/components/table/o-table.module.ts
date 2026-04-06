@@ -43,7 +43,6 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
     OTableExpandedFooterDirective,
     OTableExportButtonComponent,
     OTableRowClassPipe,
-    ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS,
     ...O_TABLE_DIALOGS,
     ...O_TABLE_HEADER_COMPONENTS,
@@ -64,7 +63,8 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
     NgxMaterialTimepickerModule,
     ODualListSelectorModule,
     ODataToolbarModule,
-    OHourInputModule
+    OHourInputModule,
+    ...O_TABLE_CELL_RENDERERS
   ],
   exports: [
     OTableComponent,

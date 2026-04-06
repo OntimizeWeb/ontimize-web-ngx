@@ -11,6 +11,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-cell-renderer-percentage',
   templateUrl: './o-table-cell-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

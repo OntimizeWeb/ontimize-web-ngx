@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { Util } from '../../../../../util/util';
@@ -18,6 +19,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_IMAGE = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgClass],
   selector: 'o-table-cell-renderer-image',
   templateUrl: './o-table-cell-renderer-image.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
