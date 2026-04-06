@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'o-bar-menu-separator',
   templateUrl: './o-bar-menu-separator.component.html',
   styleUrls: ['./o-bar-menu-separator.component.scss'],

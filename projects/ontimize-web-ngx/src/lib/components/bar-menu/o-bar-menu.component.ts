@@ -1,12 +1,16 @@
 import { Component, ElementRef, Injector, OnInit, ViewEncapsulation, forwardRef } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { Subscription } from 'rxjs';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { AppMenuService } from '../../services/app-menu.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
 import { OTranslateService } from '../../services/translate/o-translate.service';
 import { MenuRootItem } from '../../types/menu-root-item.type';
 import { Util } from '../../util/util';
 import { OBarMenuBase } from './o-bar-menu-base.class';
+import { OBarMenuNestedComponent } from './menu-nested/o-bar-menu-nested.component';
 
 export const DEFAULT_INPUTS_O_BAR_MENU = [
   // title [string]: menu title. Default: no value.
@@ -16,6 +20,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatToolbarModule, MatIconModule, OTranslatePipe, OBarMenuNestedComponent],
   selector: 'o-bar-menu',
   templateUrl: './o-bar-menu.component.html',
   styleUrls: ['./o-bar-menu.component.scss'],

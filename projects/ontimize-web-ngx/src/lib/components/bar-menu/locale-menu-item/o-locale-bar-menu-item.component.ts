@@ -1,5 +1,8 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 import { OBarMenuBase } from '../o-bar-menu-base.class';
 
@@ -9,6 +12,8 @@ export const DEFAULT_INPUTS_O_LOCALE_BAR_MENU_ITEM = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [FlexLayoutModule, MatIconModule, OTranslatePipe],
   selector: 'o-locale-bar-menu-item',
   templateUrl: './o-locale-bar-menu-item.component.html',
   styleUrls: ['./o-locale-bar-menu-item.component.scss'],
