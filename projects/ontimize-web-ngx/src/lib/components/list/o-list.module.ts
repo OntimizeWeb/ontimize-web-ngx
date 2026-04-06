@@ -19,13 +19,9 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     declarations: [
         OListComponent,
         OListItemComponent,
-        OListItemAvatarComponent,
-        OListItemCardImageComponent,
-        OListItemCardComponent,
-        OListItemTextComponent,
         OListSkeletonComponent
     ],
-    imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule, NgxSkeletonLoaderModule],
+    imports: [CommonModule, OSearchInputModule, OSharedModule, RouterModule, ODataToolbarModule, NgxSkeletonLoaderModule, OListItemAvatarComponent, OListItemCardImageComponent, OListItemCardComponent, OListItemTextComponent],
     exports: [
         OListComponent,
         OListItemComponent,

@@ -9,6 +9,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-list-picker-renderer-percentage',
   templateUrl: './o-list-picker-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

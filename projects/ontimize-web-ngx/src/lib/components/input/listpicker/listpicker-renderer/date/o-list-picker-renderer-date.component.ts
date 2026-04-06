@@ -10,6 +10,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-list-picker-renderer-date',
   templateUrl: './o-list-picker-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

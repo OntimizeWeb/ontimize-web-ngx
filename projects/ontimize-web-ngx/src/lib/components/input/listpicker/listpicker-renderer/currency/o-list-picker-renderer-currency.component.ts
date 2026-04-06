@@ -14,6 +14,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-list-picker-renderer-currency',
   templateUrl: './o-list-picker-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

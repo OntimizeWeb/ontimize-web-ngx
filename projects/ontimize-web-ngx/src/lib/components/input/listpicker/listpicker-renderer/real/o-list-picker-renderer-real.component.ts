@@ -14,6 +14,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-list-picker-renderer-real',
   templateUrl: './o-list-picker-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
