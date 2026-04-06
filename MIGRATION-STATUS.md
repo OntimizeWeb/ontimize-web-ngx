@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 31 marzo 2026
+> Última actualización: 6 abril 2026
 
 ## Repositorios y ramas
 
@@ -16,7 +16,7 @@
 - **zone.js**: 0.14.10
 - **ng-packagr**: ^18.2.0
 - **Node.js**: v20.18.3 (nvm)
-- **Tests del framework**: 2253 specs OK (54 skipped)
+- **Tests del framework**: 2253 specs OK (sin skipped adicionales)
 
 ---
 
@@ -80,21 +80,29 @@
 
 ## PENDIENTE POR HACER
 
-### Sub-paso 3.3: Standalone components (SIGUIENTE)
+### Sub-paso 3.3: Standalone components (EN PROGRESO)
 
-Convertir los ~100+ componentes restantes a `standalone: true`.
+**Commits realizados (6 abril 2026):**
+- `f7a67058`: container components → `ORowComponent`, `OColumnComponent`, `ORowCollapsibleComponent`, `OColumnCollapsibleComponent`
+- `d62989a0`: button + simple inputs → `OButtonComponent`, `OCheckboxComponent`, `OSlideToggleComponent`, `OSliderComponent`
+- `356419fb`: text inputs → `OTextInputComponent`, `OPasswordInputComponent`, `OTextareaInputComponent`, `OSearchInputComponent`
+- `4eb5d8a0`: numeric/date/phone → `OEmailInputComponent`, `ONIFInputComponent`, `OIntegerInputComponent`, `ORealInputComponent`, `OPercentInputComponent`, `OCurrencyInputComponent`, `ODateInputComponent`, `OPhoneInputComponent`
 
-**Orden sugerido:**
-1. **Componentes contenedores simples**: `ORowComponent`, `OColumnComponent`, `OContainerComponent`
-2. **Componentes input**: `OTextInputComponent`, `OIntegerInputComponent`, `ODateInputComponent`, etc.
-3. **Componentes complejos**: `OTableComponent`, `OFormComponent`, `OListComponent`, `OTreeComponent`, `OGridComponent`
-4. **Layouts**: `OAppLayoutComponent`, `OFormLayoutComponent`, `OCardMenuLayoutComponent`
+**Total standalone (componentes):** ~20 componentes migrados. ~120 restantes.
+
+**Siguiente batch — componentes pendientes:**
+1. `o-breadcrumb`, `o-image`, `o-button-toggle`, `o-button-toggle-group`
+2. Context menu components (6)
+3. Bar menu components (6)
+4. App layout components (`o-app-header`, `o-app-sidenav` y subcomponentes)
+5. Componentes complejos: `OTableComponent`, `OFormComponent`, `OListComponent`, `OTreeComponent`, `OGridComponent`
+6. Layouts: `OAppLayoutComponent`, `OFormLayoutComponent`
 
 **Patrón para cada componente:**
 - Añadir `standalone: true` al decorador `@Component`
 - Mover todas las dependencias (CommonModule, Material, pipes, directivas) al array `imports` del decorador
 - Actualizar el NgModule wrapper para que importe (no declare) el componente
-- Actualizar tests: mover de `declarations` a `imports` en `TestBed.configureTestingModule()`
+- Tests: la mayoría crean componentes manualmente, no requieren cambios
 - Verificar que los 2253 tests siguen pasando
 
 ### Sub-paso 3.5: Eliminación de flex-layout
