@@ -1,5 +1,16 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatRadioChange, MatRadioGroup } from '@angular/material/radio';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioChange, MatRadioGroup, MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
+import { OContextMenuDirective } from '../../contextmenu/o-context-menu.directive';
+import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o-context-menu-item.component';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
@@ -16,6 +27,8 @@ export const DEFAULT_INPUTS_O_RADIO = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatTooltipModule, OTranslatePipe, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OMatErrorDirective],
   selector: 'o-radio',
   templateUrl: './o-radio.component.html',
   styleUrls: ['./o-radio.component.scss'],

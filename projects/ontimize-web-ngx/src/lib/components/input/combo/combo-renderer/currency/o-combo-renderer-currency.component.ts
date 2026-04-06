@@ -15,6 +15,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_CURRENCY = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-combo-renderer-currency',
   templateUrl: './o-combo-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

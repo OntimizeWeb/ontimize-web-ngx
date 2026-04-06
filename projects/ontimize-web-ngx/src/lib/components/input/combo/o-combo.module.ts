@@ -10,10 +10,9 @@ import { OComboComponent } from './o-combo.component';
 @NgModule({
     declarations: [
         OComboComponent,
-        OComboSearchComponent,
-        ...O_COMBO_RENDERERS
+        OComboSearchComponent
     ],
-    imports: [CommonModule, OSharedModule, OContextMenuModule],
+    imports: [CommonModule, OSharedModule, OContextMenuModule, ...O_COMBO_RENDERERS],
     exports: [
         OComboComponent,
         OComboSearchComponent,

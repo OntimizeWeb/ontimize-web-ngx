@@ -9,6 +9,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_DATE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-combo-renderer-date',
   templateUrl: './o-combo-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

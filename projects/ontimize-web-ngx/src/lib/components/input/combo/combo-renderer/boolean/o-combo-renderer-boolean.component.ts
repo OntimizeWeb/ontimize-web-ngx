@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Util } from '../../../../../util/util';
 import { OComboCustomRenderer } from '../o-combo-renderer.class';
@@ -19,6 +20,8 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_BOOLEAN = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [OTranslatePipe],
   selector: 'o-combo-renderer-boolean',
   templateUrl: './o-combo-renderer-boolean.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,6 +9,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-combo-renderer-percentage',
   templateUrl: './o-combo-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

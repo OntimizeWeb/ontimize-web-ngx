@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_REAL = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-combo-renderer-real',
   templateUrl: './o-combo-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
