@@ -1,7 +1,15 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
@@ -24,6 +32,8 @@ export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-integer-input',
   templateUrl: './o-integer-input.component.html',
   styleUrls: ['./o-integer-input.component.scss'],

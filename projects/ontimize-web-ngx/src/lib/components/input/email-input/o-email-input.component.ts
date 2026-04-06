@@ -1,6 +1,14 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormComponent } from '../../form/o-form.component';
 import {
@@ -8,6 +16,8 @@ import {
 } from '../text-input/o-text-input.component';
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-email-input',
   templateUrl: './o-email-input.component.html',
   encapsulation: ViewEncapsulation.None

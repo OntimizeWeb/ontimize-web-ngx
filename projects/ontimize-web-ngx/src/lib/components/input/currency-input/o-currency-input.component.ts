@@ -1,5 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { CurrencyUtil } from '../../../util/currencyUtil';
 import { ORealInputComponent } from '../real-input/o-real-input.component';
 
@@ -9,6 +18,8 @@ export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-currency-input',
   templateUrl: './o-currency-input.component.html',
   styleUrls: ['./o-currency-input.component.scss'],

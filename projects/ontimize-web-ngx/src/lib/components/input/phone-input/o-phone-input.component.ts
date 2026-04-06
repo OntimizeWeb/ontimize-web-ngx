@@ -13,8 +13,17 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { ValidatorFn } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
+import { ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import * as lpn from 'google-libphonenumber';
 
 import { FormValueOptions } from '../../../types/form-value-options.type';
@@ -43,6 +52,8 @@ export const DEFAULT_INPUTS_O_PHONE_INPUT = [
 const PHONE_PREFIX = '+'
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSelectModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-phone-input',
   templateUrl: './o-phone-input.component.html',
   styleUrls: ['./o-phone-input.component.scss'],

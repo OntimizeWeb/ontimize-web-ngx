@@ -1,7 +1,15 @@
 import { Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
 import { NumberService } from '../../../services/number.service';
 import { Util } from '../../../util/util';
@@ -18,6 +26,8 @@ export const DEFAULT_INPUTS_O_REAL_INPUT = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-real-input',
   templateUrl: './o-real-input.component.html',
   inputs: DEFAULT_INPUTS_O_REAL_INPUT,

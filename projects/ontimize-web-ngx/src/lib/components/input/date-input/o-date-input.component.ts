@@ -1,5 +1,15 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule, MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
+
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -36,6 +46,8 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatDatepickerModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
