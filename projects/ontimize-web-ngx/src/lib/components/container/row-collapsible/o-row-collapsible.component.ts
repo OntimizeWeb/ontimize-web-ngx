@@ -1,6 +1,10 @@
 import { Component, ElementRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import {
   DEFAULT_INPUTS_O_CONTAINER_COLLAPSIBLE,
   DEFAULT_OUTPUTS_O_CONTAINER_COLLAPSIBLE,
@@ -9,6 +13,8 @@ import {
 
 
 @Component({
+  standalone: true,
+  imports: [FlexLayoutModule, MatExpansionModule, MatIconModule, OTranslatePipe],
   selector: 'o-row-collapsible',
   templateUrl: './o-row-collapsible.component.html',
   encapsulation: ViewEncapsulation.None,
