@@ -10,12 +10,21 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { UntypedFormControl, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, ValidatorFn } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import moment from 'moment';
-import { NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
+import { NgxMaterialTimepickerModule, NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
@@ -41,6 +50,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatButtonModule, MatTooltipModule, FlexLayoutModule, NgxMaterialTimepickerModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-cell-editor-time',
   templateUrl: './o-table-cell-editor-time.component.html',
   styleUrls: ['./o-table-cell-editor-time.component.scss'],
