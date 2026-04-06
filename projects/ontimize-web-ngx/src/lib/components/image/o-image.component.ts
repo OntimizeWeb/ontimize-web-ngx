@@ -1,6 +1,18 @@
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, ElementRef, forwardRef, HostBinding, Inject, inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { OFileDragAndDropDirective } from '../../directives/o-file-drag-and-drop.directive';
+import { OMatErrorDirective } from '../../directives/o-mat-error.directive';
+import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../decorators/input-converter';
 import { OSafePipe } from '../../pipes/o-safe.pipe';
@@ -10,7 +22,6 @@ import { OFormValue } from '../form/o-form-value';
 import { OFormComponent } from '../form/o-form.component';
 import { OFormControl } from '../input/o-form-control.class';
 import { OFormDataComponent } from '../o-form-data-component.class';
-import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 
 export const DEFAULT_INPUTS_O_IMAGE = [
@@ -34,6 +45,8 @@ export const DEFAULT_INPUTS_O_IMAGE = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgClass, NgTemplateOutlet, ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OFileDragAndDropDirective],
   selector: 'o-image',
   templateUrl: './o-image.component.html',
   styleUrls: ['./o-image.component.scss'],
