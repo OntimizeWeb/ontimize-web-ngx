@@ -1,12 +1,17 @@
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { Observable } from 'rxjs';
 
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { AuthService } from '../../services';
 import { DialogService } from '../../services/dialog.service';
 import { OModulesInfoService } from '../../services/o-modules-info.service';
 import { Codes } from '../../util/codes';
+import { OLanguageSelectorModule } from '../language-selector/o-language-selector.module';
+import { OUserInfoModule } from '../user-info/o-user-info.module';
 import { OUserInfoBase } from '../user-info/o-user-info-base.class';
 import { OAppHeaderBase } from './o-app-header-base.class';
 
@@ -26,6 +31,8 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgClass, FlexLayoutModule, OTranslatePipe, OUserInfoModule, OLanguageSelectorModule],
   selector: 'o-app-header',
   inputs: DEFAULT_INPUTS_O_APP_HEADER,
   outputs: DEFAULT_OUTPUTS_O_APP_HEADER,

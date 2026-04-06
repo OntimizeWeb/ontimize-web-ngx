@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -11,8 +12,15 @@ import {
   Type,
   ViewEncapsulation
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OLanguageSelectorModule } from '../../language-selector/o-language-selector.module';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { MenuItemAction, MenuItemLocale, MenuItemLogout, MenuItemRoute, MenuItemUserInfo } from '../../../interfaces/app-menu.interface';
@@ -40,6 +48,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgTemplateOutlet, MatButtonModule, MatIconModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OLanguageSelectorModule],
   selector: 'o-app-sidenav-menu-item',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM,

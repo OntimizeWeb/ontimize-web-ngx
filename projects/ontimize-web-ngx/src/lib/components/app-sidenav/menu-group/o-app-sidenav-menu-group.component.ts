@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   AfterViewInit,
@@ -12,8 +13,15 @@ import {
   Type,
   ViewEncapsulation
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OAppSidenavMenuItemComponent } from '../menu-item/o-app-sidenav-menu-item.component';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { MenuGroup, MenuGroupRoute } from '../../../interfaces/app-menu.interface';
@@ -37,6 +45,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgTemplateOutlet, MatButtonModule, MatIconModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
   selector: 'o-app-sidenav-menu-group',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP,

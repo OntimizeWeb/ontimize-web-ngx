@@ -13,8 +13,13 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MediaObserver } from '@ngbracket/ngx-layout';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
+import { FlexLayoutModule, MediaObserver } from '@ngbracket/ngx-layout';
+
+import { OAppSidenavImageComponent } from './image/o-app-sidenav-image.component';
+import { OAppSidenavMenuGroupComponent } from './menu-group/o-app-sidenav-menu-group.component';
+import { OAppSidenavMenuItemComponent } from './menu-item/o-app-sidenav-menu-item.component';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -49,6 +54,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatSidenavModule, MatIconModule, FlexLayoutModule, OAppSidenavImageComponent, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
