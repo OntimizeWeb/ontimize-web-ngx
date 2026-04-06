@@ -11,6 +11,7 @@ export const DEFAULT_OUTPUTS_O_CONTEXT_MENU = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-context-menu',
   template: ' ',
   outputs: DEFAULT_OUTPUTS_O_CONTEXT_MENU,

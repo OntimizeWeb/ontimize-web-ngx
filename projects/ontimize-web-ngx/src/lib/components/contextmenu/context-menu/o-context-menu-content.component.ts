@@ -1,6 +1,9 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 import { AfterViewInit, Component, EventEmitter, HostListener, Injector, OnInit, QueryList, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+
+import { OWrapperContentMenuComponent } from './o-wrapper-content-menu/o-wrapper-content-menu.component';
 
 import { OContextMenuGroupComponent } from '../context-menu-group/o-context-menu-group.component';
 import { OContextMenuItemComponent } from '../context-menu-item/o-context-menu-item.component';
@@ -20,6 +23,8 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_OUTPUTS = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, MatMenuModule, OWrapperContentMenuComponent],
   selector: 'o-context-menu-content',
   templateUrl: 'o-context-menu-content.component.html',
   inputs: DEFAULT_CONTEXT_MENU_CONTENT_INPUTS,
