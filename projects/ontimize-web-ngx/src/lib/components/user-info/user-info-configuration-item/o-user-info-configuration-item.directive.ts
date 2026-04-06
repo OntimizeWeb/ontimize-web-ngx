@@ -17,6 +17,7 @@ export const DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM = [
 
 
 @Directive({
+  standalone: true,
   selector: 'o-user-info-configuration-item',
   inputs: DEFAULT_INPUTS_O_USER_INFO_MENU_ITEM
 })

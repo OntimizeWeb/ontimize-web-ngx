@@ -1,12 +1,19 @@
+import { NgClass } from '@angular/common';
 import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { BooleanInputConverter } from '../../decorators';
 import { AuthService } from '../../services/auth.service';
 import { DialogService } from '../../services/dialog.service';
 import { OUserInfoService, UserInfo } from '../../services/o-user-info.service';
 import { OUserInfoConfigurationDirective } from './user-info-configuration/o-user-info-configuration.directive';
+import { OUserInfoConfigurationItemDirective } from './user-info-configuration-item/o-user-info-configuration-item.directive';
 
 export const DEFAULT_INPUTS_O_USER_INFO = [
   'showProfile: show-profile',
@@ -18,6 +25,8 @@ export const DEFAULT_INPUTS_O_USER_INFO = [
 export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 
 @Component({
+  standalone: true,
+  imports: [NgClass, FlexLayoutModule, MatMenuModule, MatIconModule, MatTooltipModule, OTranslatePipe, OUserInfoConfigurationDirective, OUserInfoConfigurationItemDirective],
   selector: 'o-user-info',
   inputs: DEFAULT_INPUTS_O_USER_INFO,
   outputs: DEFAULT_OUTPUTS_O_USER_INFO,

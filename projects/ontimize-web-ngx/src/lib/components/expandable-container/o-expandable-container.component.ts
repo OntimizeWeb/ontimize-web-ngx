@@ -8,6 +8,7 @@ export const DEFAULT_INPUT_O_EXPANDABLE_CONTAINER = [
   'data'
 ];
 @Component({
+  standalone: true,
   selector: 'o-expandable-container',
   templateUrl: './o-expandable-container.component.html',
   inputs: DEFAULT_INPUT_O_EXPANDABLE_CONTAINER
