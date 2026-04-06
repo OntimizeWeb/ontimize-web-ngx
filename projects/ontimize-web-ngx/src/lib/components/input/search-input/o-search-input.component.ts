@@ -1,8 +1,17 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnInit, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
+import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { FloatLabelType, MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 
 import { O_INPUTS_OPTIONS } from '../../../config/app-config';
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -36,6 +45,8 @@ declare type ColumnObject = {
 };
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatBadgeModule, MatMenuModule, MatCheckboxModule, MatDividerModule, OTranslatePipe],
   selector: 'o-search-input',
   templateUrl: './o-search-input.component.html',
   styleUrls: ['./o-search-input.component.scss'],

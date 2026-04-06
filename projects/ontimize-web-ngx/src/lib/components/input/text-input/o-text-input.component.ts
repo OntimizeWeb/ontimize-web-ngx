@@ -12,12 +12,21 @@ import {
   QueryList,
   ViewEncapsulation
 } from '@angular/core';
-import { ValidatorFn, Validators } from '@angular/forms';
+import { ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { Subscription } from 'rxjs';
 
 import { NumberConverter } from '../../../decorators/input-converter';
+import { InputRegulateDirective } from '../../../directives/input-regulate.directive';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OMatPrefix } from '../../../directives/o-mat-prefix.directive';
 import { OMatSuffix } from '../../../directives/o-mat-suffix.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form';
 import { OFormComponent } from '../../form/o-form.component';
@@ -33,6 +42,8 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, InputRegulateDirective, OTranslatePipe],
   selector: 'o-text-input',
   templateUrl: './o-text-input.component.html',
   styleUrls: ['./o-text-input.component.scss'],
