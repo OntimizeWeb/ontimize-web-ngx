@@ -1,5 +1,8 @@
 import { Component, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatButtonToggle, MatButtonToggleChange } from '@angular/material/button-toggle';
+import { MatButtonToggleModule, MatButtonToggle, MatButtonToggleChange } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_BUTTON_TOGGLE = [
@@ -19,6 +22,8 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatButtonToggleModule, MatIconModule, OTranslatePipe],
   selector: 'o-button-toggle',
   templateUrl: './o-button-toggle.component.html',
   styleUrls: ['./o-button-toggle.component.scss'],

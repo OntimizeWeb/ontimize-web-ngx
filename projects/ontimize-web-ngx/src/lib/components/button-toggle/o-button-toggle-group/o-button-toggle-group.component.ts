@@ -10,7 +10,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { MatButtonToggleChange, MatButtonToggleGroup, MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { Util } from '../../../util/util';
@@ -30,6 +30,8 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE_GROUP = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatButtonToggleModule],
   selector: 'o-button-toggle-group',
   templateUrl: './o-button-toggle-group.component.html',
   inputs: DEFAULT_INPUTS_O_BUTTON_TOGGLE_GROUP,
