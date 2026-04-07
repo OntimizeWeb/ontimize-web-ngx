@@ -12,6 +12,7 @@ import {
   Type,
   ViewChild
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -35,6 +36,9 @@ import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
+import { OFormLayoutSidenavComponent } from './sidenav/o-form-layout-sidenav.component';
+import { OFormLayoutSplitPaneComponent } from './split-pane/o-form-layout-split-pane.component';
+import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
 import { IOFormLayoutManager } from '../../interfaces/form-layout-manager.interface';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
@@ -76,6 +80,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgTemplateOutlet, OFormLayoutTabGroupComponent, OFormLayoutSplitPaneComponent, OFormLayoutSidenavComponent],
   selector: 'o-form-layout-manager',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,

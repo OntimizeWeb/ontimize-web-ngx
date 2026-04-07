@@ -1,6 +1,7 @@
 import { Directive, Input, ViewContainerRef } from '@angular/core';
 
 @Directive({
+  standalone: true,
   selector: '[o-form-layout-manager-content]',
 })
 export class OFormLayoutManagerContentDirective {

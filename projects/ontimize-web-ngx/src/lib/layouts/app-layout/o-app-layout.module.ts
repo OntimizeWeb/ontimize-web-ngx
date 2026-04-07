@@ -10,8 +10,7 @@ import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-si
 import { OAppLayoutComponent } from './o-app-layout.component';
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavModule, OAppHeaderModule],
-  declarations: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent],
+  imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavModule, OAppHeaderModule, OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent],
   exports: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent]
 })
 export class OAppLayoutModule { }

@@ -1,10 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ResizableModule } from 'angular-resizable-element';
+import { NgModule } from '@angular/core';
 import { OFormLayoutManagerComponentStateService } from '../../services/state/o-form-layout-manager-component-state.service';
 
-import { OSharedModule } from '../../shared/shared.module';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { OFormLayoutDialogOptionsDirective } from './dialog/options/o-form-layout-dialog-options.directive';
 import { OFormLayoutManagerContentDirective } from './directives/o-form-layout-manager-content.directive';
@@ -18,8 +14,7 @@ import { OFormLayoutSidenavOptionsDirective } from './sidenav/options/o-form-lay
 import { OFormLayoutSidenavComponent } from './sidenav/o-form-layout-sidenav.component';
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule, ResizableModule],
-  declarations: [
+  imports: [
     OFormLayoutDialogComponent,
     OFormLayoutManagerComponent,
     OFormLayoutTabGroupComponent,
@@ -29,7 +24,7 @@ import { OFormLayoutSidenavComponent } from './sidenav/o-form-layout-sidenav.com
     OFormLayoutSidenavOptionsDirective,
     OFormLayoutSplitPaneComponent,
     OFormLayoutSidenavComponent,
-    OFormLayoutSplitPaneOptionsDirective
+    OFormLayoutSplitPaneOptionsDirective,
   ],
   exports: [
     OFormLayoutManagerComponent,
@@ -43,7 +38,6 @@ import { OFormLayoutSidenavComponent } from './sidenav/o-form-layout-sidenav.com
     useClass: CanActivateFormLayoutChildGuard
   },
     OFormLayoutManagerComponentStateService
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  ]
 })
 export class OFormLayoutManagerModule { }

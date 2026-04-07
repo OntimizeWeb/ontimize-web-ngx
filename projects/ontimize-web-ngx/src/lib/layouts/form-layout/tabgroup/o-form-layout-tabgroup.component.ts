@@ -14,13 +14,19 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabChangeEvent, MatTabGroup, MatTabsModule } from '@angular/material/tabs';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, concatMap, delay, from, of, Subject, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
+import { OTabGroupDirective } from '../../../directives/o-tab-group.directive';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { DialogService } from '../../../services/dialog.service';
 import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
 import { OFormLayoutManagerComponentStateClass } from '../../../services/state/o-form-layout-manager-component-state.class';
@@ -43,6 +49,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgTemplateOutlet, MatIconModule, MatProgressSpinnerModule, MatTabsModule, FlexLayoutModule, OTranslatePipe, OTabGroupDirective, OFormLayoutManagerContentDirective],
   selector: 'o-form-layout-tabgroup',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP,

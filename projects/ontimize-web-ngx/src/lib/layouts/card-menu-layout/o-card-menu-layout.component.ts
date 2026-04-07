@@ -7,8 +7,11 @@ import {
   OnDestroy,
   ViewEncapsulation
 } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { Subscription } from 'rxjs';
 
+import { OCardMenuItemComponent } from '../../components/card-menu-item/o-card-menu-item.component';
 import { MenuGroup } from '../../interfaces/app-menu.interface';
 import { PermissionsService } from '../../services';
 import { AppMenuService } from '../../services/app-menu.service';
@@ -25,6 +28,8 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgClass, FlexLayoutModule, OCardMenuItemComponent],
   selector: 'o-card-menu-layout',
   templateUrl: './o-card-menu-layout.component.html',
   styleUrls: ['./o-card-menu-layout.component.scss'],

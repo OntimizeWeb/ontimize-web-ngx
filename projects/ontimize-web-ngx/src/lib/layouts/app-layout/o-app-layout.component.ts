@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, ContentChild, EventEmitter, forwardRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { ThemePalette } from '@angular/material/core';
 
+import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
 import { OAppHeaderBase } from '../../components/app-header/o-app-header-base.class';
+import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
 import { OAppSidenavBase } from '../../components/app-sidenav/o-app-sidenav-base.class';
 import { OUserInfoConfigurationDirective } from '../../components/user-info/user-info-configuration/o-user-info-configuration.directive';
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -36,6 +39,8 @@ export const DEFAULT_OUTPUTS_O_APP_LAYOUT: any[] = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatIconModule, OAppSidenavComponent, OAppHeaderComponent, OUserInfoConfigurationDirective],
   selector: 'o-app-layout',
   inputs: DEFAULT_INPUTS_O_APP_LAYOUT,
   outputs: DEFAULT_OUTPUTS_O_APP_LAYOUT,

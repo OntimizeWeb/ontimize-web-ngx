@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
-import { ResizeEvent } from 'angular-resizable-element';
+import { AsyncPipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { ResizableModule, ResizeEvent } from 'angular-resizable-element';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
@@ -21,6 +24,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_SPLIT_PANE = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, MatProgressSpinnerModule, FlexLayoutModule, ResizableModule, OFormLayoutManagerContentDirective],
   selector: 'o-form-layout-split-pane',
   templateUrl: './o-form-layout-split-pane.component.html',
   styleUrls: ['./o-form-layout-split-pane.component.scss'],
