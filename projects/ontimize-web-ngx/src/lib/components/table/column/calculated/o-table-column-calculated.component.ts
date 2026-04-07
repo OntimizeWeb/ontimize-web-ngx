@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-column-calculated',
   templateUrl: './o-table-column-calculated.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED,

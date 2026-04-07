@@ -36,8 +36,6 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
 @NgModule({
   declarations: [
     OTableComponent,
-    OTableColumnComponent,
-    OTableColumnCalculatedComponent,
   ],
   imports: [
     CommonModule,
@@ -60,6 +58,8 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
     OTableRowClassPipe,
     OTableRowExpandableComponent,
     OTableSkeletonComponent,
+    OTableColumnComponent,
+    OTableColumnCalculatedComponent,
     ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_FOOTER_COMPONENTS,
     ...O_TABLE_DIALOGS,

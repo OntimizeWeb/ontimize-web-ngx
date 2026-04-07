@@ -109,6 +109,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
