@@ -26,15 +26,6 @@ import { OCustomMaterialModule } from './material/custom.material.module';
 import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.component';
 
 @NgModule({
-  declarations: [
-    Error403Component,
-    ODialogComponent,
-    ODialogInternalComponent,
-    OErrorComponent,
-    OValidatorComponent,
-    OLoadFilterDialogComponent,
-    OStoreFilterDialogComponent
-  ],
   imports: [
     CommonModule,
     OTranslateModule,
@@ -57,6 +48,13 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     ONTIMIZE_STANDALONE_DIRECTIVES,
     // Standalone components
     OSnackBarComponent,
+    Error403Component,
+    ODialogComponent,
+    ODialogInternalComponent,
+    OErrorComponent,
+    OValidatorComponent,
+    OLoadFilterDialogComponent,
+    OStoreFilterDialogComponent,
   ],
   exports: [
     FlexLayoutModule,

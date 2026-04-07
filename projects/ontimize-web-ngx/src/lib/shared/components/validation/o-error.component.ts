@@ -8,6 +8,8 @@ export const DEFAULT_INPUTS_O_ERROR = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: 'o-error',
   template: ' ',
   inputs: DEFAULT_INPUTS_O_ERROR

@@ -1,10 +1,15 @@
 import { Component, Injector, ViewEncapsulation } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { NavigationService, ONavigationItem } from '../../../services/navigation.service';
 import { Codes } from '../../../util/codes';
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, FlexLayoutModule, OTranslatePipe],
   selector: 'o-error-403',
   templateUrl: './o-error-403.component.html',
   styleUrls: ['./o-error-403.component.scss'],

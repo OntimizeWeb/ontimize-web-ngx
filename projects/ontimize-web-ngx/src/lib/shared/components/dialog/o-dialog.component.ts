@@ -1,10 +1,16 @@
 import { Component, ViewEncapsulation, forwardRef } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import type { ODialogConfig } from './o-dialog.config';
 import { ODialogBase } from './o-dialog-base.class';
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, MatDialogModule, MatIconModule, FlexLayoutModule, OTranslatePipe],
   selector: 'o-dialog',
   templateUrl: './o-dialog.component.html',
   styleUrls: ['./o-dialog.component.scss'],
