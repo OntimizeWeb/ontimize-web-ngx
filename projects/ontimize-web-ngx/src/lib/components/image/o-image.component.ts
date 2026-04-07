@@ -1,6 +1,6 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, ElementRef, forwardRef, HostBinding, Inject, inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -86,7 +86,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   protected _useEmptyImage: boolean = false;
   protected oSafe = inject(OSafePipe);
   protected dialog: MatDialog;
-  public stateCtrl: UntypedFormControl;
+  public stateCtrl: FormControl;
   public src = '';
 
   constructor(
@@ -146,7 +146,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
 
   public createFormControl(cfg?: { value: any, disabled: boolean }, validators?: ValidatorFn[]): OFormControl {
     this._fControl = super.createFormControl(cfg, validators);
-    this.stateCtrl = new UntypedFormControl(void 0, this.resolveValidators());
+    this.stateCtrl = new FormControl(void 0, this.resolveValidators());
     this._fControl.fControlChildren = [this.stateCtrl];
     return this._fControl;
   }
@@ -237,10 +237,10 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     return this._useEmptyImage && this.isEmpty();
   }
 
-  public getFormGroup(): UntypedFormGroup {
-    let formGroup: UntypedFormGroup = super.getFormGroup();
+  public getFormGroup(): FormGroup {
+    let formGroup: FormGroup = super.getFormGroup();
     if (!formGroup) {
-      formGroup = new UntypedFormGroup({});
+      formGroup = new FormGroup({});
       formGroup.addControl(this.getAttribute(), this.getControl());
     }
     return formGroup;
@@ -287,7 +287,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     }
   }
 
-  protected maxFileSizeValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxFileSizeValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && Util.isDefined(this.maxFileSize)) {
       if (!Util.isDefined(this.fileInput.nativeElement.files)) {
         return {};

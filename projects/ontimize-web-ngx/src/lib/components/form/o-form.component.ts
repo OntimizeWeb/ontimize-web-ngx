@@ -20,7 +20,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { OKeyboardListenerDirective } from '../../directives/keyboard-listener.directive';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
@@ -291,7 +291,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected _messageService: OFormMessageService;
   /* end of parsed inputs variables */
 
-  formGroup: UntypedFormGroup;
+  formGroup: FormGroup;
   onDataLoaded: EventEmitter<object> = new EventEmitter<object>();
   beforeCloseDetail: EventEmitter<any> = new EventEmitter<any>();
   /**
@@ -484,7 +484,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (comp) {
       const attr = comp.getAttribute();
       if (attr && attr.length > 0) {
-        const control: UntypedFormControl = comp.getControl();
+        const control: FormControl = comp.getControl();
         if (control) {
           this.formGroup.registerControl(attr, control);
           if (!comp.isAutomaticRegistering()) {
@@ -513,7 +513,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   unregisterFormControlComponent(comp: IFormDataComponent) {
     if (comp && comp.isAutomaticRegistering()) {
-      const control: UntypedFormControl = comp.getControl();
+      const control: FormControl = comp.getControl();
       const attr = comp.getAttribute();
       if (control && attr && attr.length > 0) {
         this.formGroup.removeControl(attr);
@@ -653,7 +653,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   ngOnInit(): void {
     this.addDeactivateGuard();
 
-    this.formGroup = new UntypedFormGroup({});
+    this.formGroup = new FormGroup({});
 
     this.formNavigation.initialize();
 

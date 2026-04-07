@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 import { OValidators } from '../../../validators/o-validators';
 import { CountryCode } from './data/country-code';
@@ -536,7 +536,7 @@ describe('OPhoneInputComponent', () => {
 
   describe('Phone Validator (OValidators.phoneValidator)', () => {
     it('should return empty errors for empty value', () => {
-      const control = new UntypedFormControl('');
+      const control = new FormControl('');
       const result = OValidators.phoneValidator(control, 'US');
       expect(result).toEqual({});
     });
@@ -547,19 +547,19 @@ describe('OPhoneInputComponent', () => {
     });
 
     it('should return empty errors for a valid US number', () => {
-      const control = new UntypedFormControl('2015550123');
+      const control = new FormControl('2015550123');
       const result = OValidators.phoneValidator(control, 'US');
       expect(result).toEqual({});
     });
 
     it('should return error object for an invalid number', () => {
-      const control = new UntypedFormControl('abc');
+      const control = new FormControl('abc');
       const result = OValidators.phoneValidator(control, 'US');
       expect(result).toEqual({ validatePhoneNumber: { valid: false } });
     });
 
     it('should return error if number is not valid for region', () => {
-      const control = new UntypedFormControl('0000000000');
+      const control = new FormControl('0000000000');
       const result = OValidators.phoneValidator(control, 'US');
       expect(result).toBeTruthy();
     });

@@ -1,5 +1,5 @@
 import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
-import { AsyncValidatorFn, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../../decorators/input-converter';
@@ -58,10 +58,10 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
 
   protected _rowData: any;
 
-  formControl: UntypedFormControl;
+  formControl: FormControl;
   controlArgs: any;
 
-  formGroup: UntypedFormGroup = new UntypedFormGroup({});
+  formGroup: FormGroup = new FormGroup({});
 
   editionStarted: EventEmitter<object> = new EventEmitter<object>();
   editionCancelled: EventEmitter<object> = new EventEmitter<object>();
@@ -185,7 +185,7 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
         disabled: !this.enabled
       };
 
-      this.formControl = new UntypedFormControl(cfg, validators, asyncValidators);
+      this.formControl = new FormControl(cfg, validators, asyncValidators);
 
     }
     if (!Util.isDefined(this.formGroup.get(this.cellEditorId))) {

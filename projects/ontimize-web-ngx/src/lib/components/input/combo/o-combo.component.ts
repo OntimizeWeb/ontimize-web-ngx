@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -53,7 +53,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 export class OComboComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public value: OFormValue;
-  public searchControl: UntypedFormControl = new UntypedFormControl();
+  public searchControl: FormControl = new FormControl();
   public renderer: OComboCustomRenderer;
 
   /* Inputs */

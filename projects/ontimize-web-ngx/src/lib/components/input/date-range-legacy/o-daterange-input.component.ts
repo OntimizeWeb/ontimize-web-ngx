@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -277,7 +277,7 @@ export class ODateRangeLegacyInputComponent extends OFormDataComponent implement
   }
 
 
-  protected rangeDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected rangeDateValidator(control: AbstractControl): ValidationErrors {
 
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control) && control.value[this._endKey].isSameOrBefore(control.value[this._startKey])) {
@@ -288,7 +288,7 @@ export class ODateRangeLegacyInputComponent extends OFormDataComponent implement
     return {};
   }
 
-  protected minDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected minDateValidator(control: AbstractControl): ValidationErrors {
     const mindate = moment(this._oMinDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control) && control.value[this._startKey].isBefore(mindate)) {
@@ -301,7 +301,7 @@ export class ODateRangeLegacyInputComponent extends OFormDataComponent implement
     return {};
   }
 
-  protected maxDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxDateValidator(control: AbstractControl): ValidationErrors {
     const maxdate = moment(this._oMaxDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control) && control.value[this._endKey].isAfter(maxdate)) {
@@ -313,7 +313,7 @@ export class ODateRangeLegacyInputComponent extends OFormDataComponent implement
     }
     return {};
   }
-  protected parseDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected parseDateValidator(control: AbstractControl): ValidationErrors {
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)
       && ((control.value[this._startKey] && !control.value[this._startKey].isValid())

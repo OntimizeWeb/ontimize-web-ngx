@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Inject, Injector, OnInit } from '@angular/core';
-import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { SnackBarService } from '../../../../../services/snackbar.service';
@@ -125,14 +125,14 @@ export class OTableInsertableRowComponent implements OnInit {
     return this.isColumnInsertable(column) && Util.isDefined(this.columnEditors[column.attr]);
   }
 
-  getControl(column: OColumn, disabled: boolean = false): UntypedFormControl {
+  getControl(column: OColumn, disabled: boolean = false): FormControl {
     if (!this.controls[column.attr]) {
       const validators: ValidatorFn[] = this.resolveValidators(column);
       const cfg = {
         value: undefined,
         disabled: disabled
       };
-      this.controls[column.attr] = new UntypedFormControl(cfg, validators);
+      this.controls[column.attr] = new FormControl(cfg, validators);
     }
     return this.controls[column.attr];
   }

@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormGroup, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 import { OFormValue } from './o-form-value';
@@ -41,7 +41,7 @@ describe('OFormComponent', () => {
     fixture = TestBed.createComponent(OFormComponent);
     component = fixture.componentInstance;
     // Provide formGroup without triggering full ngOnInit
-    component.formGroup = new UntypedFormGroup({});
+    component.formGroup = new FormGroup({});
   });
 
   // ─── Creation ────────────────────────────────────────────────────────────────
@@ -563,7 +563,7 @@ describe('OFormComponent', () => {
 
   describe('Method: registerFormControlComponent() / unregisterFormControlComponent()', () => {
     it('should add a control to the formGroup', () => {
-      const ctrl = new UntypedFormControl('');
+      const ctrl = new FormControl('');
       const mockComp = {
         getAttribute: () => 'emailField',
         getControl: () => ctrl,
@@ -575,7 +575,7 @@ describe('OFormComponent', () => {
     });
 
     it('should skip registration when repeatedAttr is true', () => {
-      const ctrl = new UntypedFormControl('');
+      const ctrl = new FormControl('');
       const mockComp = {
         getAttribute: () => 'skippedField',
         getControl: () => ctrl,
@@ -587,7 +587,7 @@ describe('OFormComponent', () => {
     });
 
     it('unregister should remove control from formGroup', () => {
-      const ctrl = new UntypedFormControl('');
+      const ctrl = new FormControl('');
       component.formGroup.addControl('toRemove', ctrl);
       const mockComp = {
         getAttribute: () => 'toRemove',

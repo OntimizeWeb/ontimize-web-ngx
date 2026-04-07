@@ -1,9 +1,9 @@
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 import { IComponent } from './component.interface';
 
 export interface IFormControlComponent extends IComponent {
-  getControl(): UntypedFormControl;
-  getFormControl(): UntypedFormControl;
+  getControl(): FormControl;
+  getFormControl(): FormControl;
   hasError(error: string): boolean;
 }

@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -79,9 +79,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private readonly isDefaultFilterSubject = new BehaviorSubject<boolean>(false);
   isDefaultFilter: Observable<boolean> = this.isDefaultFilterSubject.asObservable();
 
-  fcText = new UntypedFormControl();
-  fcFrom = new UntypedFormControl();
-  fcTo = new UntypedFormControl();
+  fcText = new FormControl();
+  fcFrom = new FormControl();
+  fcTo = new FormControl();
 
   protected columnData: TableFilterByColumnData[] = [];
   protected tableData: any[] = [];
@@ -434,7 +434,7 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return this.startView;
   }
 
-  protected getTypedValue(control: UntypedFormControl): any {
+  protected getTypedValue(control: FormControl): any {
 
     if (this.isDateType()) {
       const m = moment(control.value);

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnInit, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
@@ -89,8 +89,8 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   protected _floatLabel: FloatLabelType;
   protected _appearance: MatFormFieldAppearance;
 
-  protected formGroup: UntypedFormGroup;
-  protected term: UntypedFormControl;
+  protected formGroup: FormGroup;
+  protected term: FormControl;
   protected translateService: OTranslateService;
   protected oInputsOptions: OInputsOptions;
   protected snackBarService: SnackBarService;
@@ -101,11 +101,11 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.snackBarService = this.injector.get(SnackBarService);
-    this.formGroup = new UntypedFormGroup({});
+    this.formGroup = new FormGroup({});
   }
 
   public ngOnInit(): void {
-    this.term = new UntypedFormControl();
+    this.term = new FormControl();
     this.formGroup.addControl('term', this.term);
 
     this.term.valueChanges.pipe(debounceTime(400))
@@ -165,7 +165,7 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     this._filterCaseSensitive = value;
   }
 
-  public getFormGroup(): UntypedFormGroup {
+  public getFormGroup(): FormGroup {
     return this.formGroup;
   }
 
@@ -177,7 +177,7 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     this.term.setValue(val, options);
   }
 
-  public getFormControl(): UntypedFormControl {
+  public getFormControl(): FormControl {
     return this.term;
   }
 

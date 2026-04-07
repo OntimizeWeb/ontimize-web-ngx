@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -130,7 +130,7 @@ export class OIntegerInputComponent extends OFormDataComponent implements AfterV
       return;
     }
     this.setPipeValue();
-    const formControl: UntypedFormControl = this.getControl();
+    const formControl: FormControl = this.getControl();
     if (formControl) {
       formControl.updateValueAndValidity({ emitEvent: false });
     }

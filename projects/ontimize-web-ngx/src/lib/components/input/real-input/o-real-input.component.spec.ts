@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
 import { NumberService } from '../../../services/number.service';
 import { OFormValue } from '../../form/o-form-value';
@@ -224,7 +224,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = '.';
       component.strict = true;
-      const control = new UntypedFormControl('123.45');
+      const control = new FormControl('123.45');
       const errors = component.maxDecimalDigitsValidator(control);
       expect(errors).toEqual({});
     });
@@ -233,7 +233,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = '.';
       component.strict = true;
-      const control = new UntypedFormControl('123.456');
+      const control = new FormControl('123.456');
       const errors = component.maxDecimalDigitsValidator(control);
       expect(errors['maxDecimaldigits']).toBeDefined();
     });
@@ -242,7 +242,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = '.';
       component.strict = false;
-      const control = new UntypedFormControl('123.456');
+      const control = new FormControl('123.456');
       const errors = component.maxDecimalDigitsValidator(control);
       expect(errors).toEqual({});
     });
@@ -251,7 +251,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = '.';
       component.strict = true;
-      const control = new UntypedFormControl(123.45);
+      const control = new FormControl(123.45);
       expect(() => {
         component.maxDecimalDigitsValidator(control);
       }).not.toThrow();
@@ -261,7 +261,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = ',';
       component.strict = true;
-      const control = new UntypedFormControl('123,45');
+      const control = new FormControl('123,45');
       const errors = component.maxDecimalDigitsValidator(control);
       expect(errors).toEqual({});
     });
@@ -270,7 +270,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = null;
       component.strict = true;
-      const control = new UntypedFormControl('123.45');
+      const control = new FormControl('123.45');
       expect(() => {
         component.maxDecimalDigitsValidator(control);
       }).not.toThrow();
@@ -280,7 +280,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = '.';
       component.strict = true;
-      const control = new UntypedFormControl('');
+      const control = new FormControl('');
       const errors = component.maxDecimalDigitsValidator(control);
       expect(errors).toEqual({});
     });
@@ -289,7 +289,7 @@ describe('ORealInputComponent', () => {
       component.maxDecimalDigits = 2;
       component.decimalSeparator = '.';
       component.strict = true;
-      const control = new UntypedFormControl(NaN);
+      const control = new FormControl(NaN);
       expect(() => {
         component.maxDecimalDigitsValidator(control);
       }).not.toThrow();

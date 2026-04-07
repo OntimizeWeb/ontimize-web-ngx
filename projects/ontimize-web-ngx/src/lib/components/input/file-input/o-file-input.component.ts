@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -258,7 +258,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     this.onChange.emit(event);
   }
 
-  protected filetypeValidator(control: UntypedFormControl): ValidationErrors {
+  protected filetypeValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
       const regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
       if (!this.files.every(file => file.type.match(regex) !== null || file.name.substr(file.name.lastIndexOf('.')).match(regex) !== null)) {
@@ -272,7 +272,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return {};
   }
 
-  protected maxFileSizeValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxFileSizeValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.maxFileSize) {
       if (!this.files.every(file => file.size < this.maxFileSize)) {
         return {
@@ -285,7 +285,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return {};
   }
 
-  protected maxFilesValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxFilesValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.multiple && this.maxFiles !== -1) {
       if (this.maxFiles < this.files.length) {
         return {

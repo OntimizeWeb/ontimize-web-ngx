@@ -12,7 +12,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -91,7 +91,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   protected _valueType: ODateValueType = 'timestamp';
 
   protected blockGroupValueChanges: boolean;
-  protected formGroup: UntypedFormGroup = new UntypedFormGroup({});
+  protected formGroup: FormGroup = new FormGroup({});
 
   @ViewChild('dateInput', { static: true })
   protected dateInput: ODateInputComponent;

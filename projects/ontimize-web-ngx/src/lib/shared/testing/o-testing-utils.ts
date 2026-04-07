@@ -4,7 +4,7 @@ import { Component, DebugElement, ChangeDetectorRef, Injector } from '@angular/c
 import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { UntypedFormGroup, UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { APP_CONFIG, AppConfig } from '../../config/app-config';
 import { appConfigFactory, AuthService, LocalStorageService } from '../../services';
 import { Config } from '../../types/config.type';
@@ -179,9 +179,9 @@ export class OTestingUtils {
   /**
    * Create a mock form group for input components
    */
-  static createMockFormGroup(controlName: string = 'testControl', initialValue: any = null): UntypedFormGroup {
-    const formGroup = new UntypedFormGroup({});
-    formGroup.addControl(controlName, new UntypedFormControl(initialValue));
+  static createMockFormGroup(controlName: string = 'testControl', initialValue: any = null): FormGroup {
+    const formGroup = new FormGroup({});
+    formGroup.addControl(controlName, new FormControl(initialValue));
     return formGroup;
   }
 

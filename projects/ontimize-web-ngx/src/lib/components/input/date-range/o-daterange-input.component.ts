@@ -11,7 +11,7 @@ import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
-import { FormGroup, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DateRange, MatDatepickerInputEvent, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import moment from 'moment';
@@ -236,7 +236,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
 
-  protected rangeDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected rangeDateValidator(control: AbstractControl): ValidationErrors {
 
     if (control.value instanceof Object && !this.isObjectDataRangeNull(control)) {
       const endValue = this.getValueAsMoment(control.value[this._endKey]);
@@ -250,7 +250,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return {};
   }
 
-  protected minDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected minDateValidator(control: AbstractControl): ValidationErrors {
     const mindate = moment(this.oMinDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
@@ -266,7 +266,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return {};
   }
 
-  protected maxDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxDateValidator(control: AbstractControl): ValidationErrors {
     const maxdate = moment(this.oMaxDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
@@ -282,7 +282,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return {};
   }
 
-  protected parseDateValidator(control: UntypedFormControl): ValidationErrors {
+  protected parseDateValidator(control: AbstractControl): ValidationErrors {
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
       const endValue = this.getValueAsMoment(control.value[this._endKey]);

@@ -12,7 +12,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
@@ -91,7 +91,7 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     protected elRef: ElementRef,
     @Inject(forwardRef(() => OTableBase)) protected table: OTableBase
   ) {
-    this.formControl = new UntypedFormControl();
+    this.formControl = new FormControl();
   }
 
   public ngOnInit(): void {

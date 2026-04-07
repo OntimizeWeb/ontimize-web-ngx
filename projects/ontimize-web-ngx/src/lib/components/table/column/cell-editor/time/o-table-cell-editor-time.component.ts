@@ -10,7 +10,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, ValidatorFn } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
@@ -81,8 +81,8 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   @ViewChild(MatDatepickerInput)
   public datepickerInput: MatDatepickerInput<Date>;
 
-  formControlHour: UntypedFormControl;
-  formControlDate: UntypedFormControl;
+  formControlHour: FormControl;
+  formControlDate: FormControl;
 
   public oDateFormat: string = 'L';
   public oHourMax: string;
@@ -153,7 +153,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
         value: undefined,
         disabled: !this.enabled
       };
-      this.formControlDate = new UntypedFormControl(cfg, validators);
+      this.formControlDate = new FormControl(cfg, validators);
       this.formGroup.addControl('dateInput', this.formControlDate);
     }
 
@@ -163,7 +163,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
         value: undefined,
         disabled: !this.enabled
       };
-      this.formControlHour = new UntypedFormControl(cfg, validators);
+      this.formControlHour = new FormControl(cfg, validators);
       this.formGroup.addControl('hourInput', this.formControlHour);
     }
   }

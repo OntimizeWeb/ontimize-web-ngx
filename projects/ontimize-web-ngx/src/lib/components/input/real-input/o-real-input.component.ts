@@ -1,5 +1,5 @@
 import { Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -110,7 +110,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
     }
   }
 
-  protected maxDecimalDigitsValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxDecimalDigitsValidator(control: AbstractControl): ValidationErrors {
     let ctrlValue: string = control.value;
     if (typeof control.value === 'number') {
       ctrlValue = ctrlValue.toString();
