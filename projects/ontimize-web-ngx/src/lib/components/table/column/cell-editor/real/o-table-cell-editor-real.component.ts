@@ -6,6 +6,8 @@ import { Util } from '../../../../../util/util';
 import { OTableCellEditorIntegerComponent } from '../integer/o-table-cell-editor-integer.component';
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: 'o-table-cell-editor-real',
   templateUrl: './o-table-cell-editor-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

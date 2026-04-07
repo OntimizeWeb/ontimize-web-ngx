@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
@@ -17,6 +18,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_BOOLEAN = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatCheckboxModule],
   selector: 'o-table-cell-editor-boolean',
   templateUrl: './o-table-cell-editor-boolean.component.html',
   styleUrls: ['./o-table-cell-editor-boolean.component.scss'],

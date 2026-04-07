@@ -1,6 +1,14 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerModule, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
 import moment from 'moment';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
@@ -28,6 +36,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-cell-editor-date',
   templateUrl: './o-table-cell-editor-date.component.html',
   styleUrls: ['./o-table-cell-editor-date.component.scss'],
