@@ -1,6 +1,12 @@
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { MatSelectionList } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectionList, MatListModule } from '@angular/material/list';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { ODualListSelectorDateItemComponent } from './dual-list-selector-item/date/o-dual-list-selector-date-item.component';
 import { OGroupedColumnTypes } from '../../types/o-grouped-column-types.type';
 import { Util } from '../../util/util';
 import { Codes } from '../../util/codes';
@@ -21,6 +27,8 @@ export const DEFAULT_DUAL_LIST_SELECTOR = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [DragDropModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatListModule, FlexLayoutModule, OTranslatePipe, ODualListSelectorDateItemComponent],
   selector: 'o-dual-list-selector',
   templateUrl: './o-dual-list-selector.component.html',
   styleUrls: ['./o-dual-list-selector.component.scss'],

@@ -1,5 +1,9 @@
 import { Component, Injector, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { DialogService } from '../../../services/dialog.service';
@@ -20,6 +24,8 @@ export const DEFAULT_INPUTS_O_FILTER_BUILDER_MENU = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, MatMenuModule, OTranslatePipe],
   selector: 'o-filter-builder-menu',
   templateUrl: './filter-builder-menu.component.html',
   inputs: DEFAULT_INPUTS_O_FILTER_BUILDER_MENU,

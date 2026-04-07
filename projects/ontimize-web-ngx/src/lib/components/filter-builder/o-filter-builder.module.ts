@@ -10,10 +10,6 @@ import { OFilterBuilderMenuComponent } from './filter-builder-menu/filter-builde
 
 @NgModule({
   imports: [
-    OSharedModule,
-    CommonModule
-  ],
-  declarations: [
     OFilterBuilderComponent,
     OFilterBuilderClearDirective,
     OFilterBuilderQueryDirective,

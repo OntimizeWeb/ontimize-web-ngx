@@ -3,16 +3,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { OGroupedColumnTypes } from '../../../../../types/o-grouped-column-types.type';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
-import type { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
-import { ODualListSelectorModule } from '../../../../dual-list-selector/o-dual-list-selector.module';
+import { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatDialogModule, FlexLayoutModule, OTranslatePipe, ODualListSelectorModule],
+  imports: [MatButtonModule, MatDialogModule, FlexLayoutModule, OTranslatePipe, ODualListSelectorComponent],
   selector: 'o-table-group-by-columns-dialog',
   templateUrl: 'o-table-group-by-columns-dialog.component.html',
   styleUrls: ['o-table-group-by-columns-dialog.component.scss'],

@@ -7,8 +7,7 @@ import { ODualListSelectorDateItemComponent } from './dual-list-selector-item/da
 import { ODualListSelectorComponent } from './o-dual-list-selector.component';
 
 @NgModule({
-  imports: [CommonModule, OSharedModule, DragDropModule],
-  declarations: [ODualListSelectorComponent, ODualListSelectorDateItemComponent],
+  imports: [ODualListSelectorComponent, ODualListSelectorDateItemComponent],
   exports: [ODualListSelectorComponent, ODualListSelectorDateItemComponent]
 })
 export class ODualListSelectorModule { }

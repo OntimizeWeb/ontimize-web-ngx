@@ -52,6 +52,8 @@ export const DEFAULT_OUTPUTS_O_FILTER_BUILDER = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: 'o-filter-builder',
   templateUrl: './o-filter-builder.component.html',
   inputs: DEFAULT_INPUTS_O_FILTER_BUILDER,
