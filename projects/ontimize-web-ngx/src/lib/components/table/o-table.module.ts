@@ -34,9 +34,6 @@ import { OTableFilterByColumnService } from './extensions/dialog/filter-by-colum
 import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
 
 @NgModule({
-  declarations: [
-    OTableComponent,
-  ],
   imports: [
     CommonModule,
     OSharedModule,
@@ -51,6 +48,7 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
     ODualListSelectorModule,
     ODataToolbarModule,
     OHourInputModule,
+    OTableComponent,
     OTableContextMenuComponent,
     OTableRowDirective,
     OTableExpandedFooterDirective,

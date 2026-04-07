@@ -1,8 +1,23 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
-import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
+import { ObserversModule } from '@angular/cdk/observers';
+import { PortalModule, DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
+import { ScrollingModule, CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import {
   AfterContentInit,
   AfterViewChecked,
@@ -109,6 +124,23 @@ import { OTableFilterByColumnService } from './extensions/dialog/filter-by-colum
 import { PaginationData } from '../../interfaces/pagination-data.interface';
 import { OTableLoadingService } from './o-table-loading.service';
 import { ColumnFilterChangeEvent } from '../../interfaces/column-filter-change-event.interface';
+
+import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
+import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
+import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selector.module';
+import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared/shared.module';
+import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
+import { O_TABLE_CELL_RENDERERS } from './column/cell-renderer/cell-renderer';
+import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
+import { O_TABLE_DIALOGS } from './extensions/dialog/o-table-dialog-components';
+import { OTableExpandedFooterDirective } from './extensions/footer/expanded/o-table-expanded-footer.directive';
+import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
+import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
+import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
+import { OTableRowDirective } from './extensions/row/o-table-row.directive';
+import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -265,6 +297,25 @@ const footerSelector = '.mat-mdc-header-row';
 type DisableSelectionFunction = (item: any) => boolean;
 
 @Component({
+  standalone: true,
+  imports: [
+    AsyncPipe, NgClass, NgStyle, NgTemplateOutlet,
+    DragDropModule, ObserversModule, PortalModule, ScrollingModule, CdkTableModule,
+    MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule,
+    MatProgressSpinnerModule, MatTableModule, MatTooltipModule,
+    FlexLayoutModule,
+    NgxSkeletonLoaderModule, NgxMaterialTimepickerModule,
+    OSharedModule, OContextMenuModule, ODataToolbarComponent, ODualListSelectorModule,
+    OHourInputModule, OMatSortModule, OTranslatePipe,
+    OTableContextMenuComponent, OTableRowDirective, OTableExpandedFooterDirective,
+    OTableExportButtonComponent, OTableRowClassPipe, OTableRowExpandableComponent,
+    OTableSkeletonComponent,
+    ...O_TABLE_HEADER_COMPONENTS,
+    ...O_TABLE_FOOTER_COMPONENTS,
+    ...O_TABLE_DIALOGS,
+    ...O_TABLE_CELL_RENDERERS,
+    ...O_TABLE_CELL_EDITORS,
+  ],
   selector: 'o-table',
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],
