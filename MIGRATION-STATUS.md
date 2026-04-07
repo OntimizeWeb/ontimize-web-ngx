@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 7 abril 2026
+> Última actualización: 7 abril 2026 (Sub-paso 3.4 completado)
 
 ## Repositorios y ramas
 
@@ -16,7 +16,7 @@
 - **zone.js**: 0.14.10
 - **ng-packagr**: ^18.2.0
 - **Node.js**: v20.18.3 (nvm)
-- **Tests del framework**: 2247 specs OK (sub-paso 3.3 completo)
+- **Tests del framework**: 2276 specs OK (sub-paso 3.4 completo)
 
 ---
 
@@ -101,6 +101,8 @@
 
 ### Sub-paso 3.3: Standalone components — ✅ COMPLETADO (7 abril 2026)
 
+### Sub-paso 3.4: Typed Forms — ✅ COMPLETADO (7 abril 2026)
+
 ### Sub-paso 3.5: Eliminación de flex-layout
 
 - Reemplazar `fxLayout`, `fxFlex`, `fxLayoutAlign` con CSS Grid/Flexbox nativo
@@ -113,10 +115,11 @@
 - Requiere reestructurar los tokens de tema
 - 24+ archivos SCSS de theming
 
-### Sub-paso 3.4: Typed Forms
+### Sub-paso 3.4: Typed Forms — ✅ COMPLETADO — commit `e5c002bd`
 
-- Migrar `UntypedFormGroup`/`UntypedFormControl` a `FormGroup`/`FormControl` tipados
-- ~50+ refs en 25+ archivos
+- Eliminados todos los `UntypedFormGroup`/`UntypedFormControl` → `FormGroup`/`FormControl`
+- Parámetros de validadores → `AbstractControl`
+- 30 archivos modificados (source + specs), 2276 tests pasan
 
 ---
 
