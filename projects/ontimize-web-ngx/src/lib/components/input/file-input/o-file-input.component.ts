@@ -1,5 +1,16 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
-import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IFileService } from '../../../interfaces/file-service.interface';
@@ -61,6 +72,8 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatProgressBarModule, MatProgressSpinnerModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-file-input',
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],

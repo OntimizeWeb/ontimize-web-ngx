@@ -1,5 +1,7 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
-import { NG_VALUE_ACCESSOR, UntypedFormControl } from '@angular/forms';
+import { FormsModule, NG_VALUE_ACCESSOR, UntypedFormControl } from '@angular/forms';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import moment from 'moment';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -11,6 +13,8 @@ export enum SideEnum {
 }
 
 @Component({
+  standalone: true,
+  imports: [NgClass, FormsModule, OTranslatePipe],
   selector: 'o-daterange-picker',
   styleUrls: ['./o-daterange-picker.component.scss'],
   templateUrl: './o-daterange-picker.component.html',

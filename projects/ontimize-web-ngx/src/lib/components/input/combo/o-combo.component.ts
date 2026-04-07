@@ -1,13 +1,22 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule, MatSelect, MatSelectChange } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
+import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o-context-menu-item.component';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
@@ -26,6 +35,8 @@ export const DEFAULT_INPUTS_O_COMBO = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-combo',
   providers: [
     OntimizeServiceProvider,

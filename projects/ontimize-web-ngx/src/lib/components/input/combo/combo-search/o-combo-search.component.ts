@@ -11,12 +11,20 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../../../pipes/o-translate.pipe';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, FlexLayoutModule, OTranslatePipe],
   selector: 'o-combo-search',
   templateUrl: './o-combo-search.component.html',
   styleUrls: ['./o-combo-search.component.scss'],

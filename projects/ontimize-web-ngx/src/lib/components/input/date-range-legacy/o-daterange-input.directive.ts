@@ -10,6 +10,7 @@ import { filter, take } from 'rxjs/operators';
 import { DaterangepickerComponent } from './o-daterange-picker.component';
 
 @Directive({
+  standalone: true,
   selector: 'input[o-daterange-input]',
   host: {
     '(keyup.esc)': 'close()',
