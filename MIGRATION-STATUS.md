@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 6 abril 2026
+> Última actualización: 7 abril 2026
 
 ## Repositorios y ramas
 
@@ -16,7 +16,7 @@
 - **zone.js**: 0.14.10
 - **ng-packagr**: ^18.2.0
 - **Node.js**: v20.18.3 (nvm)
-- **Tests del framework**: 2253 specs OK (sin skipped adicionales)
+- **Tests del framework**: 2247 specs OK (sub-paso 3.3 completo)
 
 ---
 
@@ -41,18 +41,37 @@
 
 - Actualización de todas las dependencias a Angular 18.2
 
-### Sub-paso 3.3 (parcial): Standalone pipes y directives — commit `26f04af4`
+### Sub-paso 3.3: Standalone components — COMPLETADO ✅
 
-- **8 pipes** convertidos a `standalone: true`:
-  - `OTranslatePipe`, `OCurrencyPipe`, `OColumnsFilterPipe`, `OIsEmptyValuePipe`, `ORealPipe`, `OMomentPipe`, `OIntegerPipe`, `OPercentPipe`
-- **7 directives** convertidas a `standalone: true`:
-  - `OHiddenDirective`, `OMatErrorDirective`, `OKeyboardListenerDirective`, `OLockerDirective`, `OFileDragAndDropDirective`, `OTabGroupDirective`, `InputRegulateDirective`, `OMatPrefixDirective`, `OMatSuffixDirective`
-- **Módulos actualizados**:
-  - `OSharedModule`: pipes/directives movidos de `declarations` a `imports`
-  - `o-directives.ts`: `ONTIMIZE_DIRECTIVES = []` (vacío), todo en `ONTIMIZE_STANDALONE_DIRECTIVES`
-  - `OTranslateModule`: ahora importa (no declara) `OTranslatePipe`
-- **Tests actualizados**: `o-testing-utils.ts` y 6 specs de directivas
-- **2253 tests pasan**
+**Todos** los componentes, directivas y pipes del framework son ahora `standalone: true`.
+
+#### Pipes y directives — commit `26f04af4`
+- **8 pipes** + **9 directives** convertidos a standalone
+- `OSharedModule`, `OTranslateModule`, `o-directives.ts` actualizados
+
+#### Componentes standalone — batches (commits `f7a67058` → `ca5ae142`)
+
+| Commit | Batch | Componentes |
+|--------|-------|-------------|
+| `f7a67058` | Containers | `ORowComponent`, `OColumnComponent`, `ORowCollapsibleComponent`, `OColumnCollapsibleComponent` |
+| `d62989a0` | Buttons/toggles | `OButtonComponent`, `OCheckboxComponent`, `OSlideToggleComponent`, `OSliderComponent` |
+| `356419fb` | Text inputs | `OTextInputComponent`, `OPasswordInputComponent`, `OTextareaInputComponent`, `OSearchInputComponent` |
+| `4eb5d8a0` | Numeric/date inputs | `OEmailInputComponent`, `ONIFInputComponent`, `OIntegerInputComponent`, `ORealInputComponent`, `OPercentInputComponent`, `OCurrencyInputComponent`, `ODateInputComponent`, `OPhoneInputComponent` |
+| varios | Context/bar menus | Todos los componentes de menú |
+| varios | App header/sidenav | Todos los subcomponentes |
+| varios | Table renderers/editors | Todos los cell renderers y editors |
+| varios | Table extensions | Header, footer, dialogs, row, sort, skeleton, contextmenu |
+| `cd208fd5` | Table columns | `OTableColumnComponent`, `OTableColumnCalculatedComponent` |
+| `26139cd2` | Dual-list, filter-builder | `ODualListSelectorComponent`, `OFilterBuilderComponent` |
+| `61c5bf62` | Inputs batch 20 | `OComboComponent`, `OListPickerComponent`, `OTimeInputComponent`, `OHtmlInputComponent`, + módulos |
+| `84575843` | Cell editors | Todos los table cell editors |
+| `0fe465ef` | List, Grid, DateRangeLegacy | `OListComponent`, `OGridComponent`, `ODaterangeInputComponent` (legacy) |
+| `4a07e52c` | Tree, Form, Snackbar | `OTreeComponent`, `OFormComponent`, `OFormToolbarComponent`, `OSnackBarComponent` |
+| `8cf3f445` | Shared components | `ODialogComponent`, `ODialogInternalComponent`, `Error403Component`, `OLoadFilterDialogComponent`, `OStoreFilterDialogComponent`, `OErrorComponent`, `OValidatorComponent` |
+| `f4c30a9b` | Layouts | `OAppLayoutComponent`, `OCardMenuLayoutComponent`, todos los `OFormLayout*` |
+| `ca5ae142` | CKEditor + OTable | `CKEditorComponent`, `OTableComponent` |
+
+**Nota técnica**: `OTableColumnComponent` se excluye del array `imports[]` de `OTableComponent` para evitar dependencias circulares estáticas (se inyecta vía `forwardRef`). Los 2247 tests pasan.
 
 ### Migración SCSS M2 — commit `10492030`
 
@@ -80,30 +99,7 @@
 
 ## PENDIENTE POR HACER
 
-### Sub-paso 3.3: Standalone components (EN PROGRESO)
-
-**Commits realizados (6 abril 2026):**
-- `f7a67058`: container components → `ORowComponent`, `OColumnComponent`, `ORowCollapsibleComponent`, `OColumnCollapsibleComponent`
-- `d62989a0`: button + simple inputs → `OButtonComponent`, `OCheckboxComponent`, `OSlideToggleComponent`, `OSliderComponent`
-- `356419fb`: text inputs → `OTextInputComponent`, `OPasswordInputComponent`, `OTextareaInputComponent`, `OSearchInputComponent`
-- `4eb5d8a0`: numeric/date/phone → `OEmailInputComponent`, `ONIFInputComponent`, `OIntegerInputComponent`, `ORealInputComponent`, `OPercentInputComponent`, `OCurrencyInputComponent`, `ODateInputComponent`, `OPhoneInputComponent`
-
-**Total standalone (componentes):** ~20 componentes migrados. ~120 restantes.
-
-**Siguiente batch — componentes pendientes:**
-1. `o-breadcrumb`, `o-image`, `o-button-toggle`, `o-button-toggle-group`
-2. Context menu components (6)
-3. Bar menu components (6)
-4. App layout components (`o-app-header`, `o-app-sidenav` y subcomponentes)
-5. Componentes complejos: `OTableComponent`, `OFormComponent`, `OListComponent`, `OTreeComponent`, `OGridComponent`
-6. Layouts: `OAppLayoutComponent`, `OFormLayoutComponent`
-
-**Patrón para cada componente:**
-- Añadir `standalone: true` al decorador `@Component`
-- Mover todas las dependencias (CommonModule, Material, pipes, directivas) al array `imports` del decorador
-- Actualizar el NgModule wrapper para que importe (no declare) el componente
-- Tests: la mayoría crean componentes manualmente, no requieren cambios
-- Verificar que los 2253 tests siguen pasando
+### Sub-paso 3.3: Standalone components — ✅ COMPLETADO (7 abril 2026)
 
 ### Sub-paso 3.5: Eliminación de flex-layout
 
