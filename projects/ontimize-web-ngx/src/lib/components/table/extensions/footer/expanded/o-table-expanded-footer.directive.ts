@@ -7,6 +7,7 @@ import { Util } from '../../../../../util/util';
 import { OTableBase } from '../../../o-table-base.class';
 
 @Directive({
+  standalone: true,
   selector: '[oTableExpandedFooter]'
 })
 export class OTableExpandedFooterDirective implements AfterViewInit {

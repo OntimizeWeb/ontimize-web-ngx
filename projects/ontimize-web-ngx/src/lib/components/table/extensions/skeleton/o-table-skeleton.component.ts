@@ -1,10 +1,15 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { Util } from '../../../../util/util';
 import { OSkeletonComponent } from '../../../o-skeleton.component';
 
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, FlexLayoutModule, NgxSkeletonLoaderModule],
   selector: 'o-table-skeleton',
   templateUrl: './o-table-skeleton.component.html',
   styleUrls: ['./o-table-skeleton.component.scss'],

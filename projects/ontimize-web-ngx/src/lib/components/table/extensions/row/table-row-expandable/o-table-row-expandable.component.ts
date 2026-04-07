@@ -28,6 +28,7 @@ export class OTableRowExpandedChange {
 
 
 @Component({
+  standalone: true,
   selector: 'o-table-row-expandable',
   template: ' ',
   outputs: DEFAULT_OUTPUTS_O_TABLE_ROW_EXPANDABLE,
