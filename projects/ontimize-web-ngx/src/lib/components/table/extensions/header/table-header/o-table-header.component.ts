@@ -1,8 +1,14 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from "@angular/material/tooltip";
+
+import { OTranslatePipe } from "../../../../../pipes/o-translate.pipe";
 import type { OColumn } from "../../../column/o-column.class";
 import { OTableBase } from "../../../o-table-base.class";
 import { OMatSortHeader } from "../../sort/o-mat-sort-header";
-import type { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
+import { OTableHeaderColumnFilterIconComponent } from "../table-header-column-filter-icon/o-table-header-column-filter-icon.component";
+import { OTableColumnResizerComponent } from "../table-column-resizer/o-table-column-resizer.component";
 import { OColumnValueFilter } from "../../../../../types/table/o-column-value-filter.type";
 import { BooleanInputConverter } from "../../../../../decorators/input-converter";
 
@@ -14,6 +20,8 @@ export const DEFAULT_INPUTS_O_TABLE_HEADER = [
   'showHeaderTooltip: show-header-tooltip',
 ]
 @Component({
+  standalone: true,
+  imports: [FlexLayoutModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatSortHeader, OTableHeaderColumnFilterIconComponent, OTableColumnResizerComponent],
   selector: 'o-table-header',
   inputs: DEFAULT_INPUTS_O_TABLE_HEADER,
   templateUrl: './o-table-header.component.html',

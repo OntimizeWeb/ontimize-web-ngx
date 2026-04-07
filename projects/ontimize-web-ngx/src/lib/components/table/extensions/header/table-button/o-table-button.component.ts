@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { OTableButton } from '../../../../../interfaces/o-table-button.interface';
 import { Codes } from '../../../../../util/codes';
@@ -20,6 +23,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, OTranslatePipe],
   selector: 'o-table-button',
   templateUrl: './o-table-button.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_BUTTON,

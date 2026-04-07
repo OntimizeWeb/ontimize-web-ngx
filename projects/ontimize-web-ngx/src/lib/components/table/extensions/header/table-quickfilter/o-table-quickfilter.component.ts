@@ -12,10 +12,19 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatMenu } from '@angular/material/menu';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { fromEvent, Subscription } from 'rxjs';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { O_INPUTS_OPTIONS } from '../../../../../config/app-config';
@@ -37,6 +46,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatBadgeModule, MatButtonModule, MatCheckboxModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, FlexLayoutModule, OTranslatePipe],
   selector: 'o-table-quickfilter',
   templateUrl: './o-table-quickfilter.component.html',
   styleUrls: ['./o-table-quickfilter.component.scss'],

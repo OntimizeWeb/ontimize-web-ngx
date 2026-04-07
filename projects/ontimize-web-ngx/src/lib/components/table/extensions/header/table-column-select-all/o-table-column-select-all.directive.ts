@@ -12,6 +12,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL = [
   'resizable'
 ]
 @Directive({
+  standalone: true,
   selector: 'o-table-column-select-all',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_SELECTALL
 })

@@ -39,7 +39,6 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
     OTableColumnComponent,
     OTableColumnCalculatedComponent,
     ...O_TABLE_DIALOGS,
-    ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_FOOTER_COMPONENTS,
   ],
   imports: [
@@ -63,6 +62,7 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
     OTableRowClassPipe,
     OTableRowExpandableComponent,
     OTableSkeletonComponent,
+    ...O_TABLE_HEADER_COMPONENTS,
     ...O_TABLE_CELL_RENDERERS,
     ...O_TABLE_CELL_EDITORS
   ],

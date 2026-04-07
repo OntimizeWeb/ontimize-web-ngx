@@ -14,8 +14,15 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
-import { MatMenu } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { Observable } from 'rxjs';
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { IChartOnDemandService } from '../../../../../interfaces/chart-on-demand.interface';
@@ -74,6 +81,8 @@ export const DEFAULT_INPUTS_O_TABLE_MENU = [
 export const DEFAULT_OUTPUTS_O_TABLE_MENU = [];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, MatButtonModule, MatCheckboxModule, MatDividerModule, MatIconModule, MatMenuModule, OTranslatePipe, OTableOptionComponent],
   selector: 'o-table-menu',
   templateUrl: './o-table-menu.component.html',
   styleUrls: ['./o-table-menu.component.scss'],

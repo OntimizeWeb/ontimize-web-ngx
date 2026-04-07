@@ -26,6 +26,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_INSERTABLE_ROW = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-insertable-row',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,
