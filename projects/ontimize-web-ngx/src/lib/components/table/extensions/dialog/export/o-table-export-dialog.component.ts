@@ -4,7 +4,20 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { AppConfig } from '../../../../../config/app-config';
 
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { IExportService } from '../../../../../interfaces/export-service.interface';
 import { OntimizeExportServiceProvider } from '../../../../../services/factories';
 import { OntimizeExportService } from '../../../../../services/ontimize/ontimize-export.service';
@@ -17,6 +30,8 @@ import { OTableExportConfiguration } from '../../header/table-menu/o-table-expor
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, DragDropModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, FlexLayoutModule, OTranslatePipe],
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],

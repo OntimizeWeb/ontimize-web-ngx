@@ -20,6 +20,7 @@ export const DEFAULT_TABLE_COLUMN_AGGREGATE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-column-aggregate',
   templateUrl: './o-table-column-aggregate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

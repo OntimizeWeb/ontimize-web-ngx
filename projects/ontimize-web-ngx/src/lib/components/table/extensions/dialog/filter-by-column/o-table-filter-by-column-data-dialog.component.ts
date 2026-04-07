@@ -1,5 +1,21 @@
+import { AsyncPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
@@ -31,6 +47,8 @@ import { ODateValueType } from '../../../../../types/o-date-value.type';
 const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL]);
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, MatSlideToggleModule, ScrollingModule, FlexLayoutModule, OTranslatePipe],
   selector: 'o-table-filter-by-column-data-dialog',
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],

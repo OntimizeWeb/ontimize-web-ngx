@@ -6,7 +6,21 @@ import { MatListOption, MatSelectionList } from '@angular/material/list';
 
 import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-store-configuration-dialog',
   templateUrl: './o-table-store-configuration-dialog.component.html',
   styleUrls: ['./o-table-store-configuration-dialog.component.scss'],
