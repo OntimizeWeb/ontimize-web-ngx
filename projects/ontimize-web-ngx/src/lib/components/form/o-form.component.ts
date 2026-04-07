@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   EventEmitter,
   forwardRef,
@@ -13,6 +14,12 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OKeyboardListenerDirective } from '../../directives/keyboard-listener.directive';
+import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
@@ -52,7 +59,6 @@ import { O_FORM_GLOBAL_CONFIG } from './o-form-tokens';
 import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
-import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { BaseService } from '../../services/base-service.class';
 import { FactoryUtil } from '../../util/factory.util';
 
@@ -188,6 +194,9 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgTemplateOutlet, ReactiveFormsModule, MatProgressBarModule, FlexLayoutModule, OKeyboardListenerDirective, OFormToolbarComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   selector: 'o-form',
   providers: [
     { provide: OFormBase, useExisting: forwardRef(() => OFormComponent) },

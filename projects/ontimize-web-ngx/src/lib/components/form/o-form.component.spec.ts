@@ -22,8 +22,9 @@ describe('OFormComponent', () => {
     OFormComponent = module.OFormComponent;
 
     await TestBed.configureTestingModule({
-      declarations: [OFormComponent, ...OTestingUtils.getCommonDeclarations()],
+      declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
+        OFormComponent,
         RouterTestingModule,
         NoopAnimationsModule,
         ReactiveFormsModule,

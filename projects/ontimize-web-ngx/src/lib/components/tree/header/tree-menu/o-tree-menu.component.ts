@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatMenu } from '@angular/material/menu';
-
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { OTranslatePipe } from '../../../../pipes/o-translate.pipe';
 
 @Component({
+  standalone: true,
+  imports: [FormsModule, MatCheckboxModule, MatMenuModule, OTranslatePipe],
   selector: 'o-tree-menu',
   templateUrl: './o-tree-menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

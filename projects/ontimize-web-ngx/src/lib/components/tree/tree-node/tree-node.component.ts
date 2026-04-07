@@ -6,6 +6,8 @@ import { OFormComponent } from '../../form';
 import { OTreeComponent } from '../o-tree.component';
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: 'o-tree-node',
   template: ' ',
   providers: [OntimizeServiceProvider]

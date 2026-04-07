@@ -16,6 +16,18 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTreeModule } from '@angular/material/tree';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
+import { OTreeMenuComponent } from './header/tree-menu/o-tree-menu.component';
 import { Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -103,6 +115,8 @@ export const DEFAULT_INPUTS_O_TREE = [
 export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded', 'onNodeClick'];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatTreeModule, FlexLayoutModule, OTranslatePipe, OSearchInputComponent, OTreeMenuComponent],
   selector: 'o-tree',
   templateUrl: './o-tree.component.html',
   styleUrls: ['./o-tree.component.scss'],
