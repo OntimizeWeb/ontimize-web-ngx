@@ -1,6 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
-import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import moment from 'moment';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -35,6 +43,8 @@ export const DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT = [
  * @deprecated Use `ODateRangeInputComponent` instead. This component will be removed in a future version.
  */
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective, ODaterangepickerDirective],
   selector: 'o-daterange-legacy-input',
   templateUrl: './o-daterange-input.component.html',
   outputs: DEFAULT_OUTPUTS_O_DATERANGE_LEGACY_INPUT,

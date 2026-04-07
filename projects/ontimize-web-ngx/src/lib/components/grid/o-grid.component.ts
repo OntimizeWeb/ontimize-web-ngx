@@ -15,10 +15,20 @@ import {
   ViewChildren,
   ViewEncapsulation
 } from '@angular/core';
-import { MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
+import { AsyncPipe, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MediaChange, MediaObserver, FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
+import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
+import { OGridItemComponent } from './grid-item/o-grid-item.component';
+import { OGridItemDirective } from './grid-item/o-grid-item.directive';
+import { OGridSkeletonComponent } from './skeketon/o-grid-skeleton.component';
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -36,8 +46,6 @@ import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
-import { OGridItemComponent } from './grid-item/o-grid-item.component';
-import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 
@@ -76,6 +84,8 @@ export const DEFAULT_INPUTS_O_GRID = [
 const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgStyle, NgTemplateOutlet, MatButtonModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatPaginatorModule, MatSelectModule, FlexLayoutModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OGridItemComponent, OGridItemDirective, OGridSkeletonComponent],
   selector: 'o-grid',
   providers: [
     OntimizeServiceProvider,
