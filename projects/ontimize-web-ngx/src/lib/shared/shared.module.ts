@@ -29,7 +29,6 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
   imports: [
     CommonModule,
     OTranslateModule,
-    ,
     OCustomMaterialModule,
     FormsModule,
     ReactiveFormsModule,
@@ -57,7 +56,6 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OStoreFilterDialogComponent,
   ],
   exports: [
-    ,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,

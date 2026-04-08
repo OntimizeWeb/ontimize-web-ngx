@@ -303,7 +303,6 @@ type DisableSelectionFunction = (item: any) => boolean;
     DragDropModule, ObserversModule, PortalModule, ScrollingModule, CdkTableModule,
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule,
     MatProgressSpinnerModule, MatTableModule, MatTooltipModule,
-    ,
     NgxSkeletonLoaderModule, NgxMaterialTimepickerModule,
     OSharedModule, OContextMenuModule, ODataToolbarComponent, ODualListSelectorModule,
     OHourInputModule, OMatSortModule, OTranslatePipe,
