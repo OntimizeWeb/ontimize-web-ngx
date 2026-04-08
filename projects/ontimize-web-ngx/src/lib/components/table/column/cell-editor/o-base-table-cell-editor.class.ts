@@ -1,4 +1,4 @@
-import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, Inject, InjectionToken, Injector, OnChanges, OnDestroy, OnInit, Optional, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
 import { AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 
@@ -16,7 +16,8 @@ import { ComponentWithValidatorsAndErrorsData, ErrorsUtils } from '../../../../u
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
 import { OColumn } from '../o-column.class';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+export const O_TABLE_COLUMN_TOKEN = new InjectionToken<OTableColumn>('OTableColumnComponent');
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
   'orequired: required',
@@ -101,9 +102,11 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
   @ViewChildren(OMatErrorDirective)
   oMatErrorChildren: QueryList<OMatErrorDirective>;
 
-  constructor(protected injector: Injector) {
+  constructor(protected injector: Injector, @Optional() @Inject(O_TABLE_COLUMN_TOKEN) tableColumnValue?: OTableColumn) {
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
-    this.tableColumn = this.injector.get<OTableColumnComponent>(OTableColumnComponent as Type<OTableColumnComponent>);
+    if (tableColumnValue) {
+      this.tableColumn = tableColumnValue;
+    }
     this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
     this.cellEditorId = Util.randomNumber().toString(36);
     this.renderer = this.injector.get<Renderer2>(Renderer2 as Type<Renderer2>);

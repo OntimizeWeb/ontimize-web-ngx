@@ -25,7 +25,9 @@ import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
-import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor';
+import { editorsMapping } from './cell-editor/cell-editor';
+import { O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor-inputs';
+import { O_TABLE_COLUMN_TOKEN } from './cell-editor/o-base-table-cell-editor.class';
 import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
@@ -116,6 +118,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
+  providers: [{ provide: O_TABLE_COLUMN_TOKEN, useExisting: forwardRef(() => OTableColumnComponent) }],
 })
 export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, AfterViewInit {
   public renderer: any;
