@@ -1,11 +1,11 @@
-import { AfterContentInit, Directive, Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
+import { AfterContentInit, Directive, Inject, Injector, OnInit, Optional, PipeTransform, TemplateRef } from '@angular/core';
 
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { Expression } from '../../../../types/expression.type';
 import { FilterExpressionUtils } from '../../../../util/filter-expression.utils';
 import { Util } from '../../../../util/util';
 import type { OTableComponent } from '../../o-table.component';
-import { OTableColumnComponent } from '../o-table-column.component';
+import { O_TABLE_COLUMN_TOKEN } from '../cell-editor/o-base-table-cell-editor.class';
 
 export const DEFAULT_INPUTS_O_BASE_TABLE_CELL_RENDERER = [
   'filterSource: filter-source',
@@ -27,8 +27,10 @@ export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
 
-  constructor(protected injector: Injector) {
-    this.tableColumn = this.injector.get(OTableColumnComponent);
+  constructor(protected injector: Injector, @Optional() @Inject(O_TABLE_COLUMN_TOKEN) tableColumnValue?: OTableColumn) {
+    if (tableColumnValue) {
+      this.tableColumn = tableColumnValue;
+    }
   }
 
   public ngOnInit() {
