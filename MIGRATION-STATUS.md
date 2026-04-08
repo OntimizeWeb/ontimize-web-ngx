@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 7 abril 2026 (Sub-paso 3.4 completado)
+> Última actualización: 8 abril 2026 (Sub-paso 3.5 completado)
 
 ## Repositorios y ramas
 
@@ -103,11 +103,15 @@
 
 ### Sub-paso 3.4: Typed Forms — ✅ COMPLETADO (7 abril 2026)
 
-### Sub-paso 3.5: Eliminación de flex-layout
+### Sub-paso 3.5: Eliminación de flex-layout — ✅ COMPLETADO (8 abril 2026)
 
-- Reemplazar `fxLayout`, `fxFlex`, `fxLayoutAlign` con CSS Grid/Flexbox nativo
-- Eliminar dependencia de `@ngbracket/ngx-layout`
-- Afecta tanto framework como playground
+- Creado `flex-layout.scss` con clases CSS utilitarias (`o-flex-row`, `o-flex-fill`, `o-layout-align-sb-center`, etc.)
+- Eliminados todos los atributos `fxLayout`, `fxFlex`, `fxLayoutAlign`, `fxLayoutGap` de ~90 templates HTML
+- `MediaObserver` (`@ngbracket/ngx-layout`) → `BreakpointObserver` (`@angular/cdk/layout`) en 4 componentes:
+  - `o-app-sidenav`, `o-date-input`, `o-daterange-input`, `o-grid`
+- Eliminado `@ngbracket/ngx-layout` de `package.json` y peer deps de la librería
+- Bindings dinámicos (`[fxLayout]`, `[fxLayoutAlign]`, `[fxLayoutGap]`) → `[ngClass]`/`[ngStyle]`/`[style.gap]`
+- `OContainerComponent`: getter `layoutAlignStyles` para alineación dinámica de containers
 
 ### Sub-paso 3.2: Migración a Material M3
 
