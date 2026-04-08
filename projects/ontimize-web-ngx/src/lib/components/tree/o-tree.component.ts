@@ -43,7 +43,8 @@ import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
-import { OTreeNodeComponent } from './tree-node/tree-node.component';
+import type { OTreeNodeComponent } from './tree-node/tree-node.component';
+import { O_TREE_NODE_TOKEN } from './o-tree-tokens';
 import { ServiceUtils } from '../../util/service.utils';
 import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -290,7 +291,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
   }
 
-  @ContentChild(forwardRef(() => OTreeNodeComponent), { descendants: false })
+  @ContentChild(O_TREE_NODE_TOKEN, { descendants: false })
   treeNode!: OTreeNodeComponent;
   protected permissions: OTreePermissions;
   protected actionsPermissions: OPermissions[];

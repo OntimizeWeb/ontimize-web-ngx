@@ -4,13 +4,17 @@ import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
 import { OFormComponent } from '../../form';
 import { OTreeComponent } from '../o-tree.component';
+import { O_TREE_NODE_TOKEN } from '../o-tree-tokens';
 
 @Component({
   standalone: true,
   imports: [],
   selector: 'o-tree-node',
   template: ' ',
-  providers: [OntimizeServiceProvider]
+  providers: [
+    OntimizeServiceProvider,
+    { provide: O_TREE_NODE_TOKEN, useExisting: forwardRef(() => OTreeNodeComponent) }
+  ]
 })
 export class OTreeNodeComponent extends OTreeComponent implements OnInit, AfterViewInit {
 
