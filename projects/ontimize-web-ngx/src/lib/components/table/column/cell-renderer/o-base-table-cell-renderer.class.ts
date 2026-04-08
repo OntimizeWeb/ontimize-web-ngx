@@ -1,4 +1,4 @@
-import { AfterContentInit, Directive, Inject, Injector, OnInit, Optional, PipeTransform, TemplateRef } from '@angular/core';
+import { AfterContentInit, Directive, Injector, OnInit, PipeTransform, TemplateRef } from '@angular/core';
 
 import { OTableColumn } from '../../../../interfaces/o-table-column.interface';
 import { Expression } from '../../../../types/expression.type';
@@ -27,10 +27,8 @@ export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
   protected pipeArguments: any;
   protected componentPipe: PipeTransform;
 
-  constructor(protected injector: Injector, @Optional() @Inject(O_TABLE_COLUMN_TOKEN) tableColumnValue?: OTableColumn) {
-    if (tableColumnValue) {
-      this.tableColumn = tableColumnValue;
-    }
+  constructor(protected injector: Injector) {
+    this.tableColumn = this.injector.get(O_TABLE_COLUMN_TOKEN);
   }
 
   public ngOnInit() {

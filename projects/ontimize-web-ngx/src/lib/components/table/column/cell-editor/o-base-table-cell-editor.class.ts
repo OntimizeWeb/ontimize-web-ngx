@@ -1,4 +1,4 @@
-import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, Inject, InjectionToken, Injector, OnChanges, OnDestroy, OnInit, Optional, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, InjectionToken, Injector, OnChanges, OnDestroy, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
 import { AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 
@@ -102,11 +102,9 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
   @ViewChildren(OMatErrorDirective)
   oMatErrorChildren: QueryList<OMatErrorDirective>;
 
-  constructor(protected injector: Injector, @Optional() @Inject(O_TABLE_COLUMN_TOKEN) tableColumnValue?: OTableColumn) {
+  constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
-    if (tableColumnValue) {
-      this.tableColumn = tableColumnValue;
-    }
+    this.tableColumn = this.injector.get(O_TABLE_COLUMN_TOKEN);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
     this.cellEditorId = Util.randomNumber().toString(36);
     this.renderer = this.injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
