@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
@@ -53,7 +53,7 @@ const PHONE_PREFIX = '+'
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSelectModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSelectModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-phone-input',
   templateUrl: './o-phone-input.component.html',
   styleUrls: ['./o-phone-input.component.scss'],

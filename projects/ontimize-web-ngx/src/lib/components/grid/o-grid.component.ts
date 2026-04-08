@@ -22,7 +22,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MediaChange, MediaObserver, FlexLayoutModule } from '@ngbracket/ngx-layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
 import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
@@ -85,7 +85,7 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgStyle, NgTemplateOutlet, MatButtonModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatPaginatorModule, MatSelectModule, FlexLayoutModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OGridItemComponent, OGridItemDirective, OGridSkeletonComponent],
+  imports: [AsyncPipe, NgStyle, NgTemplateOutlet, MatButtonModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatPaginatorModule, MatSelectModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OGridItemComponent, OGridItemDirective, OGridSkeletonComponent],
   selector: 'o-grid',
   providers: [
     OntimizeServiceProvider,
@@ -186,7 +186,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected _gridItems: IGridItem[] = [];
 
   protected subscription: Subscription = new Subscription();
-  protected media: MediaObserver;
+  protected media: BreakpointObserver;
 
   protected oMatSort: OMatSort;
   protected permissions: OGridPermissions;
@@ -199,7 +199,7 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
-    this.media = this.injector.get(MediaObserver);
+    this.media = this.injector.get(BreakpointObserver);
     this.oMatSort = new OMatSort();
   }
 
@@ -264,22 +264,17 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
   public subscribeToMediaChanges(): void {
-    this.subscription.add(this.media.asObservable().subscribe((change: MediaChange[]) => {
-      if (change && change[0]) {
-        switch (change[0].mqAlias) {
-          case 'xs':
-          case 'sm':
-            this._colsDefault = 1;
-            break;
-          case 'md':
-            this._colsDefault = 2;
-            break;
-          case 'lg':
-          case 'xl':
-            this._colsDefault = 4;
+    this.subscription.add(this.media
+      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+      .subscribe(result => {
+        if (result.breakpoints[Breakpoints.XSmall] || result.breakpoints[Breakpoints.Small]) {
+          this._colsDefault = 1;
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          this._colsDefault = 2;
+        } else if (result.breakpoints[Breakpoints.Large] || result.breakpoints[Breakpoints.XLarge]) {
+          this._colsDefault = 4;
         }
-      }
-    }));
+      }));
   }
 
   public reloadData(): void {

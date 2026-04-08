@@ -1,5 +1,5 @@
-<div [formGroup]="getFormGroup()" fxLayout="row wrap" [fxLayoutGap]="gap +' grid'">
-  <mat-form-field class="mat-form-phone" [floatLabel]="floatLabel" [appearance]="appearance" [class.read-only]="isReadOnly" fxFlex.xs
+<div [formGroup]="getFormGroup()" class="o-flex-row-wrap" [style.gap]="gap">
+  <mat-form-field class="mat-form-phone" [floatLabel]="floatLabel" [appearance]="appearance" [class.read-only]="isReadOnly"
     [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
@@ -10,8 +10,8 @@
       }
     </mat-select>
   </mat-form-field>
-  <mat-form-field [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth" class="icon-field" [appearance]="appearance"
-    [subscriptSizing]="subscriptSizing" fxFlex>
+  <mat-form-field [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth" class="icon-field o-flex" [appearance]="appearance"
+    [subscriptSizing]="subscriptSizing">
     <input #matInputRef matInput type="tel" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired">
       @if (showClearButton) {

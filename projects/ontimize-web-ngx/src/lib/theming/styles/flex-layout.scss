@@ -1,0 +1,221 @@
+/*
+ * Flex layout utility classes — replacement for @ngbracket/ngx-layout directives.
+ *
+ * Naming convention mirrors the old flex-layout API so that template migration
+ * is a mechanical find-and-replace of attributes → class names.
+ *
+ *   fxLayout="row"                        → o-flex-row
+ *   fxLayout="column"                     → o-flex-column
+ *   fxLayout="row wrap"                   → o-flex-row-wrap
+ *   fxLayoutAlign="start center"          → o-layout-align-start-center
+ *   fxLayoutAlign="space-between center"  → o-layout-align-sb-center
+ *   fxLayoutAlign="center center"         → o-layout-align-center-center
+ *   ... (see full list below)
+ *   fxFlex                                → o-flex
+ *   fxFlex="grow"                         → o-flex-grow
+ *   fxFlex="50%"                          → o-flex-50
+ *   fxFlex="20%"                          → o-flex-20
+ *   fxFlex="1 1 100%"                     → o-flex-100
+ *   fxFlex="0 1 auto"                     → o-flex-0-1-auto
+ *   fxFlexFill / fxFill                   → o-flex-fill
+ */
+
+// ─── Display ────────────────────────────────────────────────────────────────
+
+.o-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.o-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.o-flex-row-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+// ─── Layout align (justify-content + align-items) ───────────────────────────
+
+// fxLayoutAlign="space-between center"
+.o-layout-align-sb-center {
+  justify-content: space-between;
+  align-items: center;
+}
+
+// fxLayoutAlign="center center"
+.o-layout-align-center-center {
+  justify-content: center;
+  align-items: center;
+}
+
+// fxLayoutAlign="start center"
+.o-layout-align-start-center {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+// fxLayoutAlign="end center"
+.o-layout-align-end-center {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+// fxLayoutAlign="start stretch"
+.o-layout-align-start-stretch {
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+// fxLayoutAlign="space-around center"
+.o-layout-align-sa-center {
+  justify-content: space-around;
+  align-items: center;
+}
+
+// fxLayoutAlign="start start"
+.o-layout-align-start-start {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+// fxLayoutAlign="stretch center"
+.o-layout-align-stretch-center {
+  justify-content: stretch;
+  align-items: center;
+}
+
+// fxLayoutAlign="space-between stretch"
+.o-layout-align-sb-stretch {
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+// fxLayoutAlign="space-between start"
+.o-layout-align-sb-start {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+// fxLayoutAlign="end stretch"
+.o-layout-align-end-stretch {
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+// fxLayoutAlign="center stretch"
+.o-layout-align-center-stretch {
+  justify-content: center;
+  align-items: stretch;
+}
+
+// fxLayoutAlign="center start"
+.o-layout-align-center-start {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+// fxLayoutAlign="center end"
+.o-layout-align-center-end {
+  justify-content: center;
+  align-items: flex-end;
+}
+
+// fxLayoutAlign="center" (only main-axis)
+.o-layout-align-center {
+  justify-content: center;
+}
+
+// ─── Flex children ──────────────────────────────────────────────────────────
+
+// fxFlex (no value) → flex: 1 1 0%
+.o-flex {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+}
+
+// fxFlex="grow"
+.o-flex-grow {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+
+// fxFlex="50%" / fxFlex="50"
+.o-flex-50 {
+  flex: 1 1 50%;
+  max-width: 50%;
+}
+
+// fxFlex="20%" / fxFlex="20"
+.o-flex-20 {
+  flex: 1 1 20%;
+  max-width: 20%;
+}
+
+// fxFlex="80" / fxFlex="80%"
+.o-flex-80 {
+  flex: 1 1 80%;
+  max-width: 80%;
+}
+
+// fxFlex="45" (used in card-menu-item when secondary visible)
+.o-flex-45 {
+  flex: 1 1 45%;
+  max-width: 45%;
+}
+
+// fxFlex="50px"
+.o-flex-50px {
+  flex: 0 0 50px;
+  max-width: 50px;
+  min-width: 50px;
+}
+
+// fxFlex="1 1 100%"
+.o-flex-100 {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+// fxFlex="0 1 auto"
+.o-flex-0-1-auto {
+  flex: 0 1 auto;
+}
+
+// fxFlexFill / fxFill → fills parent flex container
+.o-flex-fill {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+// ─── Gap utilities (replaces fxLayoutGap with fixed values) ─────────────────
+
+.o-gap-8 {
+  gap: 8px;
+}
+
+.o-gap-10 {
+  gap: 10px;
+}
+
+.o-gap-12 {
+  gap: 12px;
+}
+
+.o-gap-15 {
+  gap: 15px;
+}
+
+.o-gap-16 {
+  gap: 16px;
+}
+
+.o-gap-24 {
+  gap: 24px;
+}

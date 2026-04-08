@@ -1,4 +1,4 @@
-<div class="quickFilter" fxLayout="row">
+<div class="quickFilter o-flex-row">
 
   <mat-form-field appearance="outline">
     <input matInput #filter [formControl]="formControl" (click)="$event.stopPropagation()" placeholder="{{ placeholder | oTranslate }}">
@@ -10,7 +10,7 @@
     </div>
 
     <mat-menu #menu="matMenu" class="o-table-quickfilter-menu">
-      <div fxLayout="column" class="checkbox-container">
+      <div class="o-flex-column checkbox-container">
 
         <mat-checkbox (click)="$event.stopPropagation()" [checked]="areAllColumnsChecked()" (change)="onSelectAllChange($event)">
           {{ 'SELECT_ALL' | oTranslate}}

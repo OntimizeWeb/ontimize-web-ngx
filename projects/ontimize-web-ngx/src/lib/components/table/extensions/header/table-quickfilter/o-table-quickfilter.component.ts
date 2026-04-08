@@ -21,7 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { fromEvent, Subscription } from 'rxjs';
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
@@ -47,7 +47,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_QUICKFILTER = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatBadgeModule, MatButtonModule, MatCheckboxModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, FlexLayoutModule, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatBadgeModule, MatButtonModule, MatCheckboxModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, OTranslatePipe],
   selector: 'o-table-quickfilter',
   templateUrl: './o-table-quickfilter.component.html',
   styleUrls: ['./o-table-quickfilter.component.scss'],

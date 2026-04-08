@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { OTableButtonComponent } from '../table-button/o-table-button.component';
@@ -24,7 +24,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, FlexLayoutModule, OTableButtonComponent],
+  imports: [AsyncPipe, OTableButtonComponent],
   selector: 'o-table-buttons',
   templateUrl: './o-table-buttons.component.html',
   styleUrls: ['./o-table-buttons.component.scss'],

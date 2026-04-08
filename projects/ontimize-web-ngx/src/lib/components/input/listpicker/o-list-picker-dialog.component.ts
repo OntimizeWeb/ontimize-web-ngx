@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 
 import { Util } from '../../../util/util';
@@ -19,7 +19,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
 
 @Component({
   standalone: true,
-  imports: [ScrollingModule, MatButtonModule, MatDialogModule, MatDividerModule, MatListModule, FlexLayoutModule, OTranslatePipe, OSearchInputComponent],
+  imports: [ScrollingModule, MatButtonModule, MatDialogModule, MatDividerModule, MatListModule, OTranslatePipe, OSearchInputComponent],
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
   styleUrls: ['./o-list-picker-dialog.component.scss'],

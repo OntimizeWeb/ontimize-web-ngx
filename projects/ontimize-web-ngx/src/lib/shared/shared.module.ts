@@ -1,7 +1,7 @@
 import { IsEmptyValuePipe } from './../pipes/is-empty-value.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ONTIMIZE_STANDALONE_DIRECTIVES } from '../config/o-directives';
@@ -29,7 +29,7 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
   imports: [
     CommonModule,
     OTranslateModule,
-    FlexLayoutModule,
+    ,
     OCustomMaterialModule,
     FormsModule,
     ReactiveFormsModule,
@@ -57,7 +57,7 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OStoreFilterDialogComponent,
   ],
   exports: [
-    FlexLayoutModule,
+    ,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,

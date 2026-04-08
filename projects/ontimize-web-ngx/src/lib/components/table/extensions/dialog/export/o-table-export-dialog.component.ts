@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { IExportService } from '../../../../../interfaces/export-service.interface';
 import { OntimizeExportServiceProvider } from '../../../../../services/factories';
@@ -31,7 +31,7 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DragDropModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, FlexLayoutModule, OTranslatePipe],
+  imports: [FormsModule, ReactiveFormsModule, DragDropModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, OTranslatePipe],
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],

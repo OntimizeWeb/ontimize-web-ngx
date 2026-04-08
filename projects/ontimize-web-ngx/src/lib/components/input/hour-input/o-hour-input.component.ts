@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import moment from 'moment';
 import { NgxMaterialTimepickerModule, NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
@@ -36,7 +36,7 @@ export const DEFAULT_INPUTS_O_HOUR_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, FlexLayoutModule, NgxMaterialTimepickerModule, OTranslatePipe, OMatErrorDirective, OHourTimepickerDirective],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, NgxMaterialTimepickerModule, OTranslatePipe, OMatErrorDirective, OHourTimepickerDirective],
   selector: 'o-hour-input',
   templateUrl: './o-hour-input.component.html',
   styleUrls: ['./o-hour-input.component.scss'],

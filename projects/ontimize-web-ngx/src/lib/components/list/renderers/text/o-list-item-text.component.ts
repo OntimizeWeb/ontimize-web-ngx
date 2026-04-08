@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OListItemComponent } from '../../list-item/o-list-item.component';
 import { OListItemTextRenderer } from '../o-list-item-text-renderer.class';
@@ -13,7 +13,7 @@ export const DEFAULT_INPUTS_O_LIST_ITEM_TEXT = [
 
 @Component({
   standalone: true,
-  imports: [FlexLayoutModule, MatListModule, MatIconModule],
+  imports: [MatListModule, MatIconModule],
   selector: 'o-list-item-text',
   templateUrl: './o-list-item-text.component.html',
   styleUrls: ['./o-list-item-text.component.scss'],

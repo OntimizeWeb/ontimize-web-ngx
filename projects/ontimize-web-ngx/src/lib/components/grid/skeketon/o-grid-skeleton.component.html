@@ -1,10 +1,10 @@
 @for (row of rows$ | async; track row) {
-  <div fxLayout="column" fxLayoutGap="10px" class="o-grid-skeleton-item">
+  <div class="o-grid-skeleton-item o-flex-column o-gap-10">
     <ngx-skeleton-loader count="1" animation="{{isDarkMode?'progress-dark':'progress'}}"
     [theme]="{ height: '10px', width:'5%', 'border-radius':'none' }" class="o-grid-skeleton-item-first-section"></ngx-skeleton-loader>
-    <div fxLayout="row" fxLayoutGap="10px" class="o-grid-skeleton-item-second-section">
+    <div class="o-grid-skeleton-item-second-section o-flex-row o-gap-10">
       @for (i of [1,2,3,4,5]; track i) {
-        <div fxFlex="20%">
+        <div class="o-flex-20">
           <ngx-skeleton-loader count="1" [theme]="{ height: '60px', 'border-radius':'none' }" animation="{{isDarkMode?'progress-dark':'progress'}}">
           </ngx-skeleton-loader>
           <ngx-skeleton-loader count="1" [theme]="{ height: '10px', width:'100%', 'border-radius':'none' }"

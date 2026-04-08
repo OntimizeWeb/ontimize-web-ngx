@@ -1,4 +1,4 @@
-<div [style.display]="isVisible()? '' : 'none'" class="o-grid-container" fxLayout="column" fxLayoutAlign="start stretch">
+<div [style.display]="isVisible()? '' : 'none'" class="o-grid-container o-flex-column o-layout-align-start-stretch">
 
   <!--TOOLBAR-->
   @if (hasControls()) {
@@ -87,7 +87,7 @@
 
   <!--no results-->
   @if (gridItems.length === 0) {
-    <div class="o-grid-no-results fill-remaining" fxLayoutAlign="center start" layout-padding
+    <div class="o-grid-no-results fill-remaining o-layout-align-center-start" layout-padding
       [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
       {{'GRID.EMPTY' | oTranslate}}
       @if (quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0) {
@@ -118,14 +118,14 @@
 
   <!-- GRID FOOTER -->
   @if (!paginationControls && showFooter && (loading | async)===false) {
-    <div fxLayout="row" fxLayoutAlign="center center" class="o-grid-footer">
+    <div class="o-grid-footer o-flex-row o-layout-align-center-center">
       @if (getDataArray().length < totalRecords && getDataArray().length>0) {
         <button type="button" mat-button (click)="loadMore()"
           class="mat-raised-button">
           {{ 'GRID.BUTTON_NEXT' | oTranslate }}
         </button>
       }
-      <span fxFlex></span>
+      <span class="o-flex"></span>
       <span class="o-grid-totals">{{ 'GRID.TEXT_SHOWN_ITEMS' | oTranslate :{values: [getDataArray().length, totalRecords]}
       }}</span>
     </div>
@@ -138,8 +138,8 @@
   }
 
   @if (loading | async) {
-    <div fxLayout="row" fxLayoutAlign="center end" class="o-loading-blocker">
-      <div fxLayoutAlign="center center" [class.o-spinner-container-controls]="hasControls()" class="o-spinner-container">
+    <div class="o-loading-blocker o-flex-row o-layout-align-center-end">
+      <div class="o-spinner-container o-layout-align-center-center" [class.o-spinner-container-controls]="hasControls()">
         <o-grid-skeleton></o-grid-skeleton>
       </div>
     </div>

@@ -113,6 +113,24 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
     this._layoutGap = layoutGap;
   }
 
+  get layoutAlignStyles(): { [key: string]: string } {
+    const parts = (this._layoutAlign || 'start start').split(' ');
+    const mainAxis = parts[0] || 'start';
+    const crossAxis = parts[1] || 'start';
+    const justifyMap: Record<string, string> = {
+      'start': 'flex-start', 'end': 'flex-end', 'center': 'center',
+      'space-between': 'space-between', 'space-around': 'space-around'
+    };
+    const alignMap: Record<string, string> = {
+      'start': 'flex-start', 'end': 'flex-end', 'center': 'center',
+      'stretch': 'stretch', 'baseline': 'baseline'
+    };
+    return {
+      'justify-content': justifyMap[mainAxis] || mainAxis,
+      'align-items': alignMap[crossAxis] || crossAxis
+    };
+  }
+
   public hasHeader(): boolean {
     return !!this.title || !!this.icon;
   }

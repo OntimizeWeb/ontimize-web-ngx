@@ -47,7 +47,7 @@
   @if (!isUserInfoItem() && !isLocaleItem()) {
     <a mat-button (click)="triggerClick($event)"
       [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="o-flex-row o-layout-align-start-center">
         @if (menuItem.svgIcon) {
           <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
         }
@@ -63,7 +63,7 @@
 
   @if (isLocaleItem()) {
     <a mat-button (click)="triggerClick($event)">
-      <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div class="o-flex-row o-layout-align-sb-center">
         @if (menuItem.svgIcon) {
           <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
         }
@@ -79,9 +79,9 @@
   }
 
   @if (isUserInfoItem()) {
-    <div fxLayout="column" fxLayoutAlign="center center" class="o-user-info-menu-item">
-      <div class="o-user-info-image" fxFlexFill></div>
-      <div class="o-user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+    <div class="o-user-info-menu-item o-flex-column o-layout-align-center-center">
+      <div class="o-user-info-image o-flex-fill"></div>
+      <div class="o-user-info-item o-flex-row o-layout-align-sb-center o-flex-fill">
         <div class="o-user-info-name">{{ menuItem.user }}</div>
         <o-language-selector [use-flag-icons]="useFlagIcons"></o-language-selector>
       </div>

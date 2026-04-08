@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OMatErrorDirective } from '../../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../../pipes/o-translate.pipe';
@@ -14,7 +14,7 @@ import { OFilterDefinition } from '../../../../types/o-filter-definition.type';
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective],
+  imports: [ReactiveFormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-store-filter-dialog',
   templateUrl: './o-store-filter-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

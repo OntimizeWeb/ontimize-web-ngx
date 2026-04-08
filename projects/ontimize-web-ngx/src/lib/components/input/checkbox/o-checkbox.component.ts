@@ -4,7 +4,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ThemePalette } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
@@ -22,7 +22,7 @@ export const DEFAULT_INPUTS_O_CHECKBOX = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatCheckboxModule, MatFormFieldModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatCheckboxModule, MatFormFieldModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-checkbox',
   inputs: DEFAULT_INPUTS_O_CHECKBOX,
   templateUrl: './o-checkbox.component.html',

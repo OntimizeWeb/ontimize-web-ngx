@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
@@ -23,7 +23,7 @@ import { FormLayoutCloseDetailOptions, FormLayoutDetailComponentData } from '../
 
 @Component({
   standalone: true,
-  imports: [MatIconModule, MatSidenavModule, FlexLayoutModule, OFormLayoutManagerContentDirective],
+  imports: [MatIconModule, MatSidenavModule, OFormLayoutManagerContentDirective],
   selector: 'o-form-layout-sidenav',
   templateUrl: './o-form-layout-sidenav.component.html',
   styleUrls: ['./o-form-layout-sidenav.component.scss'],

@@ -1,7 +1,7 @@
-<div fxLayout="column" fxFlexFill>
-  <div fxFlex>
+<div class="o-flex-column o-flex-fill">
+  <div class="o-flex">
     @if (hasControls()) {
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="o-flex-row o-layout-align-start-center">
         <div class="buttons">
           @if (showButtonsText) {
             @if (insertButton) {
@@ -44,8 +44,8 @@
           }
           <ng-content select="[o-tree-button]"></ng-content>
         </div>
-        <div fxFlex>
-          <span fxLayoutAlign="center center" class="title">{{ title | oTranslate }}</span>
+        <div class="o-flex">
+          <span class="title o-layout-align-center-center">{{ title | oTranslate }}</span>
         </div>
         @if (quickFilter) {
           <o-search-input [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
@@ -69,8 +69,8 @@
       <mat-tree-node *matTreeNodeDef="let node" (click)="leafNodeClicked($event, node)" matTreeNodeToggle matTreeNodePadding
         [ngClass]="{'selected-node': isSelectedNode(node)}">
         <!-- use a disabled button to provide padding for tree leaf -->
-        <div fxLayout="column">
-          <div fxLayout="row">
+        <div class="o-flex-column">
+          <div class="o-flex-row">
             <button mat-icon-button disabled></button>
 
             @if (selectAllCheckboxVisible) {
@@ -163,7 +163,7 @@
   } @else {
     <span>{{node.label}}</span>
     @if (node.isLoading) {
-      <mat-progress-bar mode="indeterminate" fxFlex></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" class="o-flex"></mat-progress-bar>
     }
   }
 

@@ -19,7 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import moment from 'moment';
 import { NgxMaterialTimepickerModule, NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 
@@ -51,7 +51,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatButtonModule, MatTooltipModule, FlexLayoutModule, NgxMaterialTimepickerModule, OTranslatePipe, OMatErrorDirective],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatButtonModule, MatTooltipModule, NgxMaterialTimepickerModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-cell-editor-time',
   templateUrl: './o-table-cell-editor-time.component.html',
   styleUrls: ['./o-table-cell-editor-time.component.scss'],

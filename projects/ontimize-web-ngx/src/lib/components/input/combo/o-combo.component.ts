@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule, MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -36,7 +36,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuComponent, OContextMenuItemComponent],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-combo',
   providers: [
     OntimizeServiceProvider,

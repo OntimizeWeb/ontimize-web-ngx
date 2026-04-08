@@ -5,12 +5,12 @@ import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatDialogModule, FlexLayoutModule, OTranslatePipe, ODualListSelectorComponent],
+  imports: [MatButtonModule, MatDialogModule, OTranslatePipe, ODualListSelectorComponent],
   selector: 'o-table-group-by-columns-dialog',
   templateUrl: 'o-table-group-by-columns-dialog.component.html',
   styleUrls: ['o-table-group-by-columns-dialog.component.scss'],

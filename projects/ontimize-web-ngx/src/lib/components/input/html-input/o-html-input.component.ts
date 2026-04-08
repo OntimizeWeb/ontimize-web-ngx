@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnIn
 import { ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { CKEditorModule } from '../../material/ckeditor/ck-editor.module';
@@ -32,7 +32,7 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective, CKEditorModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, OTranslatePipe, OMatErrorDirective, CKEditorModule],
   selector: 'o-html-input',
   templateUrl: './o-html-input.component.html',
   styleUrls: ['./o-html-input.component.scss'],

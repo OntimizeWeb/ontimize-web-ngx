@@ -1,10 +1,10 @@
-<mat-toolbar class="o-form-toolbar-header" [class.breadcrumb]="includeBreadcrumb" fxLayout="column" fxLayoutAlign="center center">
+<mat-toolbar class="o-form-toolbar-header o-flex-column o-layout-align-center-center" [class.breadcrumb]="includeBreadcrumb">
 
   @if (includeBreadcrumb) {
     <ng-template #breadcrumb></ng-template>
   }
 
-  <div class="mat-toolbar-tools" fxLayout="row" fxLayoutAlign="space-between center">
+  <div class="mat-toolbar-tools o-flex-row o-layout-align-sb-center">
     @if (isDetail) {
       <button type="button" mat-icon-button (click)="onBack()" class="o-form-toolbar-button o-form-toolbar-back">
         <mat-icon svgIcon="ontimize:arrow_back"></mat-icon>
@@ -12,7 +12,7 @@
     }
 
     @if (showNavigation) {
-      <o-form-navigation #formNavigation fxLayout="row" fxLayoutAlign="space-between center">
+      <o-form-navigation #formNavigation class="o-flex-row o-layout-align-sb-center">
       </o-form-navigation>
     }
 
@@ -20,7 +20,7 @@
       <span class="fill-remaining"></span>
     }
     @if (labelHeader!='') {
-      <div fxLayout="row" fxLayoutAlign="center center">
+      <div class="o-flex-row o-layout-align-center-center">
         <span>{{ labelHeader | oTranslate }}</span>
       </div>
     }

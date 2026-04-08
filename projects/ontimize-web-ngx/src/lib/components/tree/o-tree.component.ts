@@ -24,7 +24,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTreeModule } from '@angular/material/tree';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
 import { OTreeMenuComponent } from './header/tree-menu/o-tree-menu.component';
@@ -116,7 +116,7 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatTreeModule, FlexLayoutModule, OTranslatePipe, OSearchInputComponent, OTreeMenuComponent],
+  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatTreeModule, OTranslatePipe, OSearchInputComponent, OTreeMenuComponent],
   selector: 'o-tree',
   templateUrl: './o-tree.component.html',
   styleUrls: ['./o-tree.component.scss'],

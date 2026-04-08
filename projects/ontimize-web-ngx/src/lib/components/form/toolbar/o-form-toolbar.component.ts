@@ -3,7 +3,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OFormNavigationComponent } from '../navigation/o-form-navigation.component';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -34,7 +34,7 @@ export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, MatButtonModule, MatIconModule, MatToolbarModule, FlexLayoutModule, OTranslatePipe, OFormNavigationComponent],
+  imports: [AsyncPipe, MatButtonModule, MatIconModule, MatToolbarModule, OTranslatePipe, OFormNavigationComponent],
   selector: 'o-form-toolbar',
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],

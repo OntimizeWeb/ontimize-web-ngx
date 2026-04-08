@@ -1,13 +1,13 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { ORepeatableSkeletonComponent } from '../../o-repeatable-skeleton.component';
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, FlexLayoutModule, NgxSkeletonLoaderModule],
+  imports: [AsyncPipe, NgxSkeletonLoaderModule],
   selector: 'o-list-skeleton',
   templateUrl: './o-list-skeleton.component.html',
   styleUrls: ['./o-list-skeleton.component.scss'],

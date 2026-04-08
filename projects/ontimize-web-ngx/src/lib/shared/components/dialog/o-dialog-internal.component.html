@@ -2,7 +2,7 @@
   <div mat-dialog-title>{{ getTranslation(title) }}</div>
 }
 <div mat-dialog-content>
-  <div fxLayout="row" class="alert-content" [class.alert-content-icon]="useIcon" fxLayoutAlign="space-between center">
+  <div class="alert-content o-flex-row o-layout-align-sb-center" [class.alert-content-icon]="useIcon">
     @if (useIcon) {
       <mat-icon class="alert-icon" [class.info]="isInfo" [class.warn]="isWarn" [class.error]="isError">
         {{ icon }}
@@ -12,7 +12,7 @@
   </div>
 </div>
 <mat-dialog-actions align="end">
-  <span fxFlex></span>
+  <span class="o-flex"></span>
   @if (twoOptions) {
     <button type="button" mat-stroked-button mat-dialog-close class="o-button-default cancel">
       {{getTranslation( cancelButtonText) }}

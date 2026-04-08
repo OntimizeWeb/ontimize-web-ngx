@@ -1,4 +1,4 @@
-<div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
+<div class="o-table-container o-flex-column o-layout-align-start-stretch" [style.display]="isVisible()? '' : 'none'"
   [class.block-events]="loadingService.isProcessing$ | async">
   @if (hasControls()) {
     <o-data-toolbar #tableToolbar [title]="title" [show-title]="showTitle" class="o-table-toolbar">
@@ -45,7 +45,7 @@
         <ng-template *ngTemplateOutlet="table"></ng-template>
       </div>
     } @else {
-      <cdk-virtual-scroll-viewport #virtualScrollViewPort fxFlex>
+      <cdk-virtual-scroll-viewport #virtualScrollViewPort class="o-flex">
         <ng-template *ngTemplateOutlet="table"></ng-template>
       </cdk-virtual-scroll-viewport>
     }
@@ -60,7 +60,7 @@
 
   <!--LOADING-->
   @if (showLoading | async) {
-    <div #spinnerContainer fxLayout="column" fxLayoutAlign="center center" [ngStyle]="{'top.px': toolBarHeight}"
+    <div #spinnerContainer class="o-flex-column o-layout-align-center-center" [ngStyle]="{'top.px': toolBarHeight}"
       class="spinner-container" [class.spinner-container-scrollable]="loadingScroll | async">
       <o-table-skeleton></o-table-skeleton>
     </div>
@@ -349,7 +349,7 @@
             </ng-template>
           }
           @case (column.type === 'editButtonInRow' || column.type === 'detailButtonInRow') {
-            <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
+            <div class="o-action-cell-renderer o-layout-align-center-center" (click)="onDetailButtonClick(column, row, $event)">
               <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
             </div>
           }

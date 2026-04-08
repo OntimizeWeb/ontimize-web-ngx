@@ -22,7 +22,7 @@ import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
 import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
@@ -90,7 +90,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgStyle, MatButtonModule, MatIconModule, MatListModule, MatPaginatorModule, FlexLayoutModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OListSkeletonComponent],
+  imports: [AsyncPipe, NgStyle, MatButtonModule, MatIconModule, MatListModule, MatPaginatorModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OListSkeletonComponent],
   selector: 'o-list',
   providers: [
     OntimizeServiceProvider,

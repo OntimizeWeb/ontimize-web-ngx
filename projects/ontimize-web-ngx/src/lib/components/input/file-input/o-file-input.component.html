@@ -1,7 +1,7 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+<div class="o-flex-row o-layout-align-sb-center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
-    class="icon-field" (click)="!enabled || isReadOnly ? null : inputFile.click()" fxFill [subscriptSizing]="subscriptSizing">
+    class="icon-field o-flex-fill" (click)="!enabled || isReadOnly ? null : inputFile.click()" [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
@@ -48,7 +48,7 @@
               <mat-list-item>
                 <mat-icon mat-list-icon>insert_drive_file</mat-icon>
                 <span mat-line>{{ file.name }}</span>
-                <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="o-flex-row o-layout-align-sb-center">
                   @if (splitUpload && file.isUploading) {
                     <mat-progress-spinner color="accent" mode="determinate" [value]="file.progress" class="uploading"
                     diameter="3" strokeWidth="3"></mat-progress-spinner>

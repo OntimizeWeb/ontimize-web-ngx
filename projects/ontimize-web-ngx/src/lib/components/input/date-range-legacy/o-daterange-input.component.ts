@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import moment from 'moment';
@@ -44,7 +44,7 @@ export const DEFAULT_INPUTS_O_DATERANGE_LEGACY_INPUT = [
  */
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective, ODaterangepickerDirective],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, ODaterangepickerDirective],
   selector: 'o-daterange-legacy-input',
   templateUrl: './o-daterange-input.component.html',
   outputs: DEFAULT_OUTPUTS_O_DATERANGE_LEGACY_INPUT,

@@ -7,10 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
-import { MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DateRange, MatDatepickerInputEvent, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
@@ -50,7 +49,7 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective],
+  imports: [ReactiveFormsModule, MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-daterange-input',
   templateUrl: './o-daterange-input.component.html',
   outputs: DEFAULT_OUTPUTS_O_DATERANGE_INPUT,
@@ -156,7 +155,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
   protected olocale: string;
   private momentSrv: MomentService;
-  protected media: MediaObserver;
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
 
@@ -171,7 +169,6 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   ) {
     super(form, elRef, injector);
     this.momentSrv = this.injector.get(MomentService);
-    this.media = this.injector.get(MediaObserver);
     this.range = new FormGroup({
       [this.startKey]: new OFormControl(),
       [this.endKey]: new OFormControl()
@@ -198,14 +195,12 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   public subscribeToMediaChanges(): void {
-    this.mediaSubscription = this.media.asObservable().subscribe((change: MediaChange[]) => {
-      if (['xs', 'sm'].indexOf(change[0].mqAlias) !== -1) {
-        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : true;
-      }
-      if (['md', 'lg', 'xl'].indexOf(change[0].mqAlias) !== -1) {
-        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : false;
-      }
-    });
+    this.mediaSubscription = this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+      .subscribe(result => {
+        const isMobile = result.breakpoints[Breakpoints.XSmall] || result.breakpoints[Breakpoints.Small];
+        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : isMobile;
+      });
   }
 
   public open(): void {

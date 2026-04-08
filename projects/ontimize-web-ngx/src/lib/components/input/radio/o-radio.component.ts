@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioChange, MatRadioGroup, MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
@@ -28,7 +28,7 @@ export const DEFAULT_INPUTS_O_RADIO = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatTooltipModule, OTranslatePipe, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OMatErrorDirective],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatTooltipModule, OTranslatePipe, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OMatErrorDirective],
   selector: 'o-radio',
   templateUrl: './o-radio.component.html',
   styleUrls: ['./o-radio.component.scss'],

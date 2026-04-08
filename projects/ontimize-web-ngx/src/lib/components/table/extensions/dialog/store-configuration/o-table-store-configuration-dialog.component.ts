@@ -15,12 +15,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective],
+  imports: [ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-store-configuration-dialog',
   templateUrl: './o-table-store-configuration-dialog.component.html',
   styleUrls: ['./o-table-store-configuration-dialog.component.scss'],

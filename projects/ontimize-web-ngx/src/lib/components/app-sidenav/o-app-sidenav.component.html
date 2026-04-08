@@ -6,9 +6,9 @@
     [mode]="(sidenavMode || ((layoutMode || 'desktop') === 'desktop' ? 'side' : 'over'))" [class.mat-drawer-opened]="sidenav.opened"
     [class.mat-drawer-closed]="!sidenav.opened" [class.ellipsis-menu-items]="showEllipsisMenu" (openedChange)="sidenavOpenedChange()"
     (closedStart)="sidenavClosedStart()" (openedStart)="sidenavOpenedStart()">
-    <div fxLayout="column" class="sidenav-wrapper">
+    <div class="sidenav-wrapper o-flex-column">
       @if (isDesktopMode()) {
-        <div fxLayout="row" fxLayoutAlign="end center" class="sidenav-toggle-container">
+        <div class="sidenav-toggle-container o-flex-row o-layout-align-end-center">
           <mat-icon id="sidenav-menu" class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
         </div>
       }

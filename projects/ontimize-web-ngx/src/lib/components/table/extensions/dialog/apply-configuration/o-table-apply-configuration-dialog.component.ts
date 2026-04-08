@@ -10,11 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 @Component({
   standalone: true,
-  imports: [FormsModule, MatButtonModule, MatDialogModule, MatListModule, FlexLayoutModule, OTranslatePipe],
+  imports: [FormsModule, MatButtonModule, MatDialogModule, MatListModule, OTranslatePipe],
   selector: 'o-table-apply-configuration-dialog',
   templateUrl: './o-table-apply-configuration-dialog.component.html'
 })

@@ -5,7 +5,7 @@
   <!-- https://github.com/angular/material2/issues/7891 -->
   <mat-form-field [appearance]="appearance" [hideRequiredMarker]="hideRequiredMarker"
     [class.read-only]="isReadOnly" [class.custom-width]="hasCustomWidth" [class.o-radio-from-field-row]="layout==='row'"
-    floatLabel="always" class="mat-form-field--no-underline" fxFill [subscriptSizing]="subscriptSizing">
+    floatLabel="always" class="mat-form-field--no-underline o-flex-fill" [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
@@ -13,7 +13,7 @@
       [required]="isRequired" style="display: none" />
       <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()"
         [value]="getValue()" [required]="isRequired" [labelPosition]="labelPosition"
-        (change)="onMatRadioGroupChange($event)" [fxLayout]="layout" [fxLayoutGap]="labelGap">
+        (change)="onMatRadioGroupChange($event)" [ngClass]="layout === 'row' ? 'o-flex-row' : 'o-flex-column'" [style.gap]="labelGap">
         @for (item of dataArray; track item; let i = $index) {
           <mat-radio-button [id]="'o-radio-button-'+groupId+'-'+i" [value]="getValueColumn(item)"
             [disabled]="!enabled">
@@ -31,7 +31,7 @@
       }
     </mat-form-field>
     @if (isReadOnly) {
-      <div (click)="$event.stopPropagation()" class="read-only-blocker" fxFill></div>
+      <div (click)="$event.stopPropagation()" class="read-only-blocker o-flex-fill"></div>
     }
 
     @if (!this.isReadOnly && this.enabled) {

@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { NumberInputConverter } from '../../../decorators/input-converter';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
@@ -18,7 +18,7 @@ export const DEFAULT_INPUTS_O_TEXTAREA_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-textarea-input',
   templateUrl: './o-textarea-input.component.html',
   styleUrls: ['./o-textarea-input.component.scss'],

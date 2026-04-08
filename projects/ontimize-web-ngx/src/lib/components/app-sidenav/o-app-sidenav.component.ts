@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
-import { FlexLayoutModule, MediaObserver } from '@ngbracket/ngx-layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { OAppSidenavImageComponent } from './image/o-app-sidenav-image.component';
 import { OAppSidenavMenuGroupComponent } from './menu-group/o-app-sidenav-menu-group.component';
@@ -55,7 +55,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 
 @Component({
   standalone: true,
-  imports: [MatSidenavModule, MatIconModule, FlexLayoutModule, OAppSidenavImageComponent, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
+  imports: [MatSidenavModule, MatIconModule, OAppSidenavImageComponent, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
@@ -109,7 +109,7 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
     protected router: Router,
     protected elRef: ElementRef,
     protected cd: ChangeDetectorRef,
-    protected media: MediaObserver
+    protected media: BreakpointObserver
   ) {
     super(injector);
     this.appMenuService = this.injector.get(AppMenuService);
@@ -117,7 +117,7 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
     this.permissionSubscription = this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots());
     this.oUserInfoService = this.injector.get(OUserInfoService);
     const self = this;
-    this.mediaWatch = this.media.asObservable().subscribe(() => {
+    this.mediaWatch = this.media.observe([Breakpoints.XSmall]).subscribe(() => {
       if (self.isScreenSmall() && self.sidenav) {
         self.sidenav.close();
       }
@@ -275,7 +275,7 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
   }
 
   isScreenSmall(): boolean {
-    return !this.manuallyClosed && this.media.isActive('lt-sm');
+    return !this.manuallyClosed && this.media.isMatched(Breakpoints.XSmall);
   }
 
   isMobileMode(): boolean {

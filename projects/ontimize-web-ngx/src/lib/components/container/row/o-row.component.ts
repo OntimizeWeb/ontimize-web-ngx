@@ -1,7 +1,8 @@
 import { Component, ElementRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
+import { NgStyle } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OContainerComponent } from '../o-container-component.class';
@@ -9,7 +10,7 @@ import { OContainerComponent } from '../o-container-component.class';
 
 @Component({
   standalone: true,
-  imports: [FlexLayoutModule, MatIconModule, OTranslatePipe],
+  imports: [NgStyle, MatIconModule, OTranslatePipe],
   selector: 'o-row',
   templateUrl: './o-row.component.html',
   styleUrls: ['./o-row.component.scss'],

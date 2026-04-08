@@ -1,4 +1,4 @@
-<div fxLayout="column" [formGroup]="getFormGroup()" [class.o-image-auto-fit]="autoFit" class="o-image-content" fxFill>
+<div [formGroup]="getFormGroup()" [class.o-image-auto-fit]="autoFit" class="o-image-content o-flex-column o-flex-fill">
 
   <input #input type="file" [disabled]="!enabled" [accept]="acceptFileType ? acceptFileType.replace(';',',') : 'image/*'" readonly
     (change)="fileChange(input)" class="o-image-form-field-hidden" />
@@ -25,8 +25,8 @@
         </mat-form-field>
       }
 
-      <div fxLayout="column" fxLayoutAlign="center center" class="o-image-display-container"
-        [ngClass]="{'o-image-drag-and-drop': this.getValue()?.length === 0 , 'o-image-drag-and-drop-required': hasErrorInDragAndDrop() }" fxLayoutGap="15px" oFileDragAndDrop
+      <div class="o-image-display-container o-flex-column o-layout-align-center-center o-gap-15"
+        [ngClass]="{'o-image-drag-and-drop': this.getValue()?.length === 0 , 'o-image-drag-and-drop-required': hasErrorInDragAndDrop() }" oFileDragAndDrop
         (onFileDropped)="onFileDropped($event)" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
         [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" [matTooltipDisabled]="hasControls()">
 
@@ -67,7 +67,7 @@
         }
       </div>
       @if (isReadOnly) {
-        <div fxFill class="read-only-blocker" (click)="onClickBlocker($event)"></div>
+        <div class="read-only-blocker o-flex-fill" (click)="onClickBlocker($event)"></div>
       }
     </div>
 

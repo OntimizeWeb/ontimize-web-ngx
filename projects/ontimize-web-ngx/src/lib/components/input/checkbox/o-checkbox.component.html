@@ -1,6 +1,6 @@
 <div [class.custom-width]="hasCustomWidth" [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip"
   [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="start center" fxFill>
+  [matTooltipHideDelay]="tooltipHideDelay" class="o-flex-row o-layout-align-start-center o-flex-fill">
   <mat-checkbox [id]="getAttribute()" [formControlName]="getAttribute()" (change)="onChangeEvent($event)"
     [labelPosition]="labelPosition" [color]="color">
     {{ olabel | oTranslate }}
@@ -14,6 +14,6 @@
     }
   </mat-checkbox>
   @if (isReadOnly) {
-    <div (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+    <div (click)="onClickBlocker($event)" class="read-only-blocker o-flex-fill"></div>
   }
 </div>

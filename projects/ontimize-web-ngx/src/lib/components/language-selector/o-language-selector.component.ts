@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Injector, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 
@@ -20,7 +20,7 @@ export const DEFAULT_OUTPUTS_LANGUAGE_SELECTOR = [
 
 @Component({
   standalone: true,
-  imports: [FlexLayoutModule, MatButtonModule, MatMenuModule, OTranslatePipe],
+  imports: [MatButtonModule, MatMenuModule, OTranslatePipe],
   selector: 'o-language-selector',
   inputs: DEFAULT_INPUTS_O_LANGUAGE_SELECTOR,
   outputs: DEFAULT_OUTPUTS_LANGUAGE_SELECTOR,

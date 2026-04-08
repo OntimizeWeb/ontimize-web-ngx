@@ -6,20 +6,20 @@
   <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
     [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
     (onCancel)="onCancel.emit($event)" layout-padding>
-    <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+    <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
       <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
     </div>
   </o-form-toolbar>
 }
 
 <ng-host oKeyboardListener keyboardKeys="17;90" (onKeysPressed)="undoKeyboardPressed()" class="scrolling o-scroll">
-  <div fxFlex="grow">
+  <div class="o-flex-grow">
     @if (showNotFloatingToolbar && headerPosition==='top') {
       <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
         [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
         (onCancel)="onCancel.emit($event)" layout-padding>
-        <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
-          <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+        <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
+          <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
             <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
           </div>
         </div>
@@ -33,7 +33,7 @@
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
       }
-      <div layout-padding [fxLayout]="layoutDirection" [fxLayoutAlign]="layoutAlign" class="o-form-content-wrapper">
+      <div layout-padding [ngClass]="layoutClasses" class="o-form-content-wrapper">
         <ng-content></ng-content>
       </div>
     </form>
@@ -42,7 +42,7 @@
       <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
         [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
         (onCancel)="onCancel.emit($event)" layout-padding>
-        <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+        <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
           <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
         </div>
       </o-form-toolbar>
@@ -54,7 +54,7 @@
   <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
     [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
     (onCancel)="onCancel.emit($event)" layout-padding>
-    <div o-custom-form-toolbar-buttons-wrapper fxLayout="row" fxLayoutAlign="end center">
+    <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
       <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
     </div>
   </o-form-toolbar>

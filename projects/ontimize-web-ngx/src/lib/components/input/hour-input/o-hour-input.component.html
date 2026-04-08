@@ -1,6 +1,6 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+<div class="o-flex-row o-layout-align-sb-center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
-  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" fxFill [hideRequiredMarker]="hideRequiredMarker" class="icon-field"
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" class="icon-field o-flex-fill"
     [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>

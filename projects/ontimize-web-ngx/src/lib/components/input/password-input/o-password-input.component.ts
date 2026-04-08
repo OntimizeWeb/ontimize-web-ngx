@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
@@ -19,7 +19,7 @@ export const DEFAULT_INPUTS_O_PASSWORD_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-password-input',
   templateUrl: './o-password-input.component.html',
   inputs: DEFAULT_INPUTS_O_PASSWORD_INPUT,

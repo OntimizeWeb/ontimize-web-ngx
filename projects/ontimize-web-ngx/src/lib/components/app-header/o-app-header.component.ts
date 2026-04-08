@@ -1,7 +1,7 @@
 import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, EventEmitter, Injector, Type, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { Observable } from 'rxjs';
 
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
@@ -32,7 +32,7 @@ export const DEFAULT_OUTPUTS_O_APP_HEADER = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgClass, FlexLayoutModule, OTranslatePipe, OUserInfoModule, OLanguageSelectorModule],
+  imports: [AsyncPipe, NgClass, OTranslatePipe, OUserInfoModule, OLanguageSelectorModule],
   selector: 'o-app-header',
   inputs: DEFAULT_INPUTS_O_APP_HEADER,
   outputs: DEFAULT_OUTPUTS_O_APP_HEADER,

@@ -1,8 +1,7 @@
-<div class="o-user-info-container" fxLayout="row" fxLayoutAlign="center">
+<div class="o-user-info-container o-flex-row o-layout-align-center">
   @if (existsUserInfo) {
-    <div class="o-user-info-wrapper" fxLayout="row" fxLayoutAlign="center center" [matMenuTriggerFor]="menu"
-      fxLayoutGap="16px">
-      <div fxLayout="row" fxLayoutAlign="center center" class="o-user-info-avatar-wrapper">
+    <div class="o-user-info-wrapper o-flex-row o-layout-align-center-center o-gap-16" [matMenuTriggerFor]="menu">
+      <div class="o-user-info-avatar-wrapper o-flex-row o-layout-align-center-center">
         @if (avatar) {
           <img [src]="avatar" alt="avatar image"/>
         }

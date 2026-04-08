@@ -3,7 +3,7 @@ import { Component, ElementRef, Injector, OnDestroy, ViewEncapsulation } from '@
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -26,7 +26,7 @@ export const DEFAULT_OUTPUTS_O_USER_INFO = [];
 
 @Component({
   standalone: true,
-  imports: [NgClass, FlexLayoutModule, MatMenuModule, MatIconModule, MatTooltipModule, OTranslatePipe, OUserInfoConfigurationDirective, OUserInfoConfigurationItemDirective],
+  imports: [NgClass, MatMenuModule, MatIconModule, MatTooltipModule, OTranslatePipe, OUserInfoConfigurationDirective, OUserInfoConfigurationItemDirective],
   selector: 'o-user-info',
   inputs: DEFAULT_INPUTS_O_USER_INFO,
   outputs: DEFAULT_OUTPUTS_O_USER_INFO,

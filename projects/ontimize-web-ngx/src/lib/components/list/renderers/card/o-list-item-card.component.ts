@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OListItemComponent } from '../../list-item/o-list-item.component';
 import {
@@ -21,7 +21,7 @@ import {
 
 @Component({
   standalone: true,
-  imports: [FlexLayoutModule, MatCardModule, MatButtonModule],
+  imports: [MatCardModule, MatButtonModule],
   selector: 'o-list-item-card',
   templateUrl: './o-list-item-card.component.html',
   styleUrls: ['./o-list-item-card.component.scss'],

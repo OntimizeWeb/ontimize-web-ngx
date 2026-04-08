@@ -4,7 +4,7 @@
     appearance="fill"></o-search-input>
   </div>
 }
-<div mat-dialog-content [class.o-list-picker-has-filter]="filter" fxFlex>
+<div mat-dialog-content [class.o-list-picker-has-filter]="filter" class="o-flex">
   <cdk-virtual-scroll-viewport [itemSize]="itemSize">
     <mat-list>
       @if (isEmptyData()) {

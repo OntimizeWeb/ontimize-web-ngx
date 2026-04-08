@@ -1,6 +1,14 @@
 .o-phone-input {
   overflow: hidden;
 
+  // fxFlex.xs: mat-form-phone takes full width on xs screens
+  @media (max-width: 599px) {
+    .mat-form-phone {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+  }
+
   .read-only {
     pointer-events: none;
 

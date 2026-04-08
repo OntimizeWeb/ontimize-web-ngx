@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { OFileDragAndDropDirective } from '../../directives/o-file-drag-and-drop.directive';
@@ -46,7 +46,7 @@ export const DEFAULT_INPUTS_O_IMAGE = [
 
 @Component({
   standalone: true,
-  imports: [NgClass, NgTemplateOutlet, ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OFileDragAndDropDirective],
+  imports: [NgClass, NgTemplateOutlet, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OFileDragAndDropDirective],
   selector: 'o-image',
   templateUrl: './o-image.component.html',
   styleUrls: ['./o-image.component.scss'],

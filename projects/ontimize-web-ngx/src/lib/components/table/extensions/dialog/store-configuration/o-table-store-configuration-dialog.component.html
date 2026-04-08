@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_CONFIGURATION' | oTranslate }}</div>
-  <form #form [formGroup]="formGroup" fxLayout="column">
+  <form #form [formGroup]="formGroup" class="o-flex-column">
     <mat-form-field subscriptSizing="dynamic">
       <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}"
         formControlName="name" required />
@@ -15,7 +15,7 @@
         cols="50"></textarea>
       </mat-form-field>
       <div class="inner-subheader" mat-subheader>{{ 'TABLE.DIALOG.CONFIGURATION_PROPERTIES' | oTranslate }}</div>
-      <div fxLayout="column">
+      <div class="o-flex-column">
         <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" class="select-all-checkbox">
           {{ 'SELECT_ALL' | oTranslate }}
         </mat-checkbox>
@@ -23,7 +23,7 @@
         <mat-selection-list #propertiesList class="o-table-save-configuration-dialog-list o-scroll">
           @for (property of properties; track property) {
             <mat-list-option checkboxPosition="before" [value]="property.property">
-              <span matListItemTitle fxFlex>{{ property.name | oTranslate }}</span>
+              <span matListItemTitle class="o-flex">{{ property.name | oTranslate }}</span>
               @if (property.info) {
                 <mat-icon matListItemIcon matTooltip="{{ property.info | oTranslate }}" class="o-tscd-list-tooltip">info</mat-icon>
               }

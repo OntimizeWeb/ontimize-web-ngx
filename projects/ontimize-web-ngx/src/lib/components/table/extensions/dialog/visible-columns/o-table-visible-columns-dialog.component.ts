@@ -4,7 +4,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import {
   ChangeDetectionStrategy,
@@ -35,7 +35,7 @@ export type ColumnVisibilityConfiguration = {
 
 @Component({
   standalone: true,
-  imports: [DragDropModule, MatButtonModule, MatDialogModule, MatDividerModule, MatIconModule, MatListModule, FlexLayoutModule, OTranslatePipe],
+  imports: [DragDropModule, MatButtonModule, MatDialogModule, MatDividerModule, MatIconModule, MatListModule, OTranslatePipe],
   selector: 'o-table-visible-columns-dialog',
   templateUrl: 'o-table-visible-columns-dialog.component.html',
   styleUrls: ['o-table-visible-columns-dialog.component.scss'],

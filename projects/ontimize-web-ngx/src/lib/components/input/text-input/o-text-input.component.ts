@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { Subscription } from 'rxjs';
 
 import { NumberConverter } from '../../../decorators/input-converter';
@@ -43,7 +43,7 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, InputRegulateDirective, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, InputRegulateDirective, OTranslatePipe],
   selector: 'o-text-input',
   templateUrl: './o-text-input.component.html',
   styleUrls: ['./o-text-input.component.scss'],

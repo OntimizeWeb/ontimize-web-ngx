@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule, MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
@@ -47,7 +47,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatDatepickerModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatDatepickerModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-date-input',
   templateUrl: './o-date-input.component.html',
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
@@ -92,7 +92,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   protected _minDateString: string;
   protected _maxDateString: string;
 
-  protected media: MediaObserver;
+  protected media: BreakpointObserver;
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
   protected dateValue: Date;
@@ -119,7 +119,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
     this.momentDateAdapter = dateAdapter;
     this._defaultSQLTypeKey = 'DATE';
     this.momentSrv = this.injector.get(MomentService);
-    this.media = this.injector.get(MediaObserver);
+    this.media = this.injector.get(BreakpointObserver);
   }
 
   public ngOnInit(): void {
@@ -155,14 +155,12 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   }
 
   public subscribeToMediaChanges(): void {
-    this.mediaSubscription = this.media.asObservable().subscribe((change: MediaChange[]) => {
-      if (['xs', 'sm'].indexOf(change[0].mqAlias) !== -1) {
-        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : true;
-      }
-      if (['md', 'lg', 'xl'].indexOf(change[0].mqAlias) !== -1) {
-        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : false;
-      }
-    });
+    this.mediaSubscription = this.media
+      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+      .subscribe(result => {
+        const isMobile = result.breakpoints[Breakpoints.XSmall] || result.breakpoints[Breakpoints.Small];
+        this.touchUi = Util.isDefined(this.oTouchUi) ? this.oTouchUi : !!isMobile;
+      });
   }
 
   public ngOnDestroy(): void {

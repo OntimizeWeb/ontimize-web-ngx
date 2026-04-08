@@ -19,7 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
@@ -52,7 +52,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective, OContextMenuComponent, OContextMenuItemComponent],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-list-picker',
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],

@@ -18,7 +18,7 @@ import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabChangeEvent, MatTabGroup, MatTabsModule } from '@angular/material/tabs';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, concatMap, delay, from, of, Subject, Subscription } from 'rxjs';
 
@@ -50,7 +50,7 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgTemplateOutlet, MatIconModule, MatProgressSpinnerModule, MatTabsModule, FlexLayoutModule, OTranslatePipe, OTabGroupDirective, OFormLayoutManagerContentDirective],
+  imports: [AsyncPipe, NgTemplateOutlet, MatIconModule, MatProgressSpinnerModule, MatTabsModule, OTranslatePipe, OTabGroupDirective, OFormLayoutManagerContentDirective],
   selector: 'o-form-layout-tabgroup',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_TABGROUP,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_TABGROUP,

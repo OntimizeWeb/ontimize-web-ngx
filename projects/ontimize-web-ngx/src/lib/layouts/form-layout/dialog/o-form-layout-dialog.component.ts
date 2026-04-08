@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
@@ -14,7 +14,7 @@ import { OFormLayoutManagerService } from '../../../services/o-form-layout-manag
 
 @Component({
   standalone: true,
-  imports: [MatDialogModule, MatIconModule, FlexLayoutModule, OTranslatePipe, OFormLayoutManagerContentDirective],
+  imports: [MatDialogModule, MatIconModule, OTranslatePipe, OFormLayoutManagerContentDirective],
   selector: 'o-form-layout-dialog',
   templateUrl: './o-form-layout-dialog.component.html',
   styleUrls: ['./o-form-layout-dialog.component.scss'],

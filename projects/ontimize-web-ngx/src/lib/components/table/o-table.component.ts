@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import {
@@ -303,7 +303,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     DragDropModule, ObserversModule, PortalModule, ScrollingModule, CdkTableModule,
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule,
     MatProgressSpinnerModule, MatTableModule, MatTooltipModule,
-    FlexLayoutModule,
+    ,
     NgxSkeletonLoaderModule, NgxMaterialTimepickerModule,
     OSharedModule, OContextMenuModule, ODataToolbarComponent, ODualListSelectorModule,
     OHourInputModule, OMatSortModule, OTranslatePipe,

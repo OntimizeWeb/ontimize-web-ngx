@@ -13,7 +13,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatListModule, MatListOption, MatSelectionList } from '@angular/material/list';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OTranslatePipe } from '../../../../pipes/o-translate.pipe';
 import { DialogService } from '../../../../services/dialog.service';
@@ -21,7 +21,7 @@ import { OTableFiltersStatus } from '../../../../types/table/o-table-filter-stat
 
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatDialogModule, MatListModule, FlexLayoutModule, OTranslatePipe],
+  imports: [MatButtonModule, MatDialogModule, MatListModule, OTranslatePipe],
   selector: 'o-load-filter-dialog',
   templateUrl: './o-load-filter-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

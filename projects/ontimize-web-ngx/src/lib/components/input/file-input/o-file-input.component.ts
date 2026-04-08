@@ -8,7 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 
@@ -73,7 +73,7 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatProgressBarModule, MatProgressSpinnerModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OMatErrorDirective],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatProgressBarModule, MatProgressSpinnerModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-file-input',
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],

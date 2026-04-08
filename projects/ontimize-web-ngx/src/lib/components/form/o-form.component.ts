@@ -17,7 +17,7 @@ import {
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OKeyboardListenerDirective } from '../../directives/keyboard-listener.directive';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -195,7 +195,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgTemplateOutlet, ReactiveFormsModule, MatProgressBarModule, FlexLayoutModule, OKeyboardListenerDirective, OFormToolbarComponent],
+  imports: [AsyncPipe, NgTemplateOutlet, ReactiveFormsModule, MatProgressBarModule, OKeyboardListenerDirective, OFormToolbarComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   selector: 'o-form',
   providers: [
@@ -1514,6 +1514,27 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   set layoutAlign(val: string) {
     this._layoutAlign = val;
+  }
+
+  get layoutClasses(): string[] {
+    const dirClass = this._layoutDirection === 'column' ? 'o-flex-column' : 'o-flex-row';
+    const alignMap: Record<string, string> = {
+      'start stretch': 'o-layout-align-start-stretch',
+      'start center': 'o-layout-align-start-center',
+      'start start': 'o-layout-align-start-start',
+      'center center': 'o-layout-align-center-center',
+      'center stretch': 'o-layout-align-center-stretch',
+      'center start': 'o-layout-align-center-start',
+      'center end': 'o-layout-align-center-end',
+      'end center': 'o-layout-align-end-center',
+      'end stretch': 'o-layout-align-end-stretch',
+      'space-between center': 'o-layout-align-sb-center',
+      'space-between stretch': 'o-layout-align-sb-stretch',
+      'space-between start': 'o-layout-align-sb-start',
+      'space-around center': 'o-layout-align-sa-center',
+    };
+    const alignClass = alignMap[this._layoutAlign] || '';
+    return alignClass ? [dirClass, alignClass] : [dirClass];
   }
 
   get showFloatingToolbar(): boolean {

@@ -16,7 +16,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -46,7 +46,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP = [
 
 @Component({
   standalone: true,
-  imports: [NgTemplateOutlet, MatButtonModule, MatIconModule, MatTooltipModule, FlexLayoutModule, OTranslatePipe, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
+  imports: [NgTemplateOutlet, MatButtonModule, MatIconModule, MatTooltipModule, OTranslatePipe, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
   selector: 'o-app-sidenav-menu-group',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_GROUP,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_GROUP,

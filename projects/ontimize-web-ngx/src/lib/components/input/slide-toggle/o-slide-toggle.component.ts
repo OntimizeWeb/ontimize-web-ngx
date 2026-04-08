@@ -4,7 +4,7 @@ import { ThemePalette } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
@@ -33,7 +33,7 @@ export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatSlideToggleModule, MatFormFieldModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatSlideToggleModule, MatFormFieldModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-slide-toggle',
   inputs: DEFAULT_INPUTS_O_SLIDETOGGLE,
   templateUrl: './o-slide-toggle.component.html',

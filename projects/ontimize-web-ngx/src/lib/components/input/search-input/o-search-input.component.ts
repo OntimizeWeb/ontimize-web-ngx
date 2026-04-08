@@ -8,7 +8,7 @@ import { FloatLabelType, MatFormFieldAppearance, MatFormFieldModule } from '@ang
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
@@ -46,7 +46,7 @@ declare type ColumnObject = {
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, FlexLayoutModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatBadgeModule, MatMenuModule, MatCheckboxModule, MatDividerModule, OTranslatePipe],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatBadgeModule, MatMenuModule, MatCheckboxModule, MatDividerModule, OTranslatePipe],
   selector: 'o-search-input',
   templateUrl: './o-search-input.component.html',
   styleUrls: ['./o-search-input.component.scss'],

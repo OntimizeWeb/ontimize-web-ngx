@@ -1,7 +1,7 @@
-<div class="o-list-container" [style.display]="isVisible()? '' : 'none'" fxFill>
+<div class="o-list-container o-flex-fill" [style.display]="isVisible()? '' : 'none'">
   @if (loading | async) {
-    <div fxLayoutAlign="center center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0"
-      class="spinner-container" [ngStyle]="{'top.px': toolBarHeight}">
+    <div class="spinner-container o-layout-align-center-center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0"
+      [ngStyle]="{'top.px': toolBarHeight}">
       <o-list-skeleton></o-list-skeleton>
     </div>
   }
@@ -62,14 +62,14 @@
       </ng-container>
     </o-data-toolbar>
   }
-  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%">
+  <div class="o-list-content o-flex-column o-flex-100">
     <!--MAT-LIST-->
     <mat-list (scroll)="onScroll($event)" [class.selectable]="selectable"
       [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)"  [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
 
       @if (!getDataArray().length) {
-        <mat-list-item fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
-          <h3 matListItemTitle fxLayout="row" fxLayoutAlign="center center">
+        <mat-list-item class="o-flex-row o-layout-align-center-center" style="cursor: default;">
+          <h3 matListItemTitle class="o-flex-row o-layout-align-center-center">
             {{ 'TABLE.EMPTY' | oTranslate }}
             @if (getQuickFilterValue().length > 0) {
               {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : {values: [getQuickFilterValue()]} }}
@@ -81,7 +81,7 @@
     </mat-list>
   </div>
   @if (paginationControls) {
-    <mat-paginator fxFlex="0 1 auto" class="o-mat-paginator" #paginator [length]="totalRecords" [pageSize]="queryRows"
+    <mat-paginator class="o-mat-paginator o-flex-0-1-auto" #paginator [length]="totalRecords" [pageSize]="queryRows"
       [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"
     [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}"></mat-paginator>
   }

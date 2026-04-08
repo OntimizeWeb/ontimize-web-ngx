@@ -1,21 +1,21 @@
 <span mat-dialog-title>{{ 'TABLE.BUTTONS.FILTER_BY_COLUMN' | oTranslate }}: {{ column.title | oTranslate }}</span>
 <div mat-dialog-content class="dialog-list-container">
-  <div fxLayout="column" class="content-wrapper" [class.content-wrapper-fixed-dimension]="getFixedDimensionClass()">
+  <div class="content-wrapper o-flex-column" [class.content-wrapper-fixed-dimension]="getFixedDimensionClass()">
     @if (isDefaultFilter | async) {
       <mat-slide-toggle #customFilterSlide (change)="onSlideChange($event)" [checked]="(isCustomFilter | async)">
         {{ 'TABLE.FILTER_BY_COLUMN.CUSTOM_FILTER' | oTranslate }}
       </mat-slide-toggle>
     }
     @if (!(isCustomFilter | async)) {
-      <div fxFlex="1 1 100%" fxLayout="column">
+      <div class="o-flex-100 o-flex-column">
         <mat-form-field class="hinted">
           <mat-icon matPrefix svgIcon="ontimize:search"></mat-icon>
           <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
           <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
         </mat-form-field>
         @if ((listData | async).length > 0) {
-          <div fxLayout="row" fxLayoutAlign="space-between start">
-            <div fxLayout="row" fxLayoutAlign="start start">
+          <div class="o-flex-row o-layout-align-sb-start">
+            <div class="o-flex-row o-layout-align-start-start">
               <mat-checkbox (change)="onSelectAllChange($event)" [checked]="areAllSelected()" [indeterminate]="isIndeterminate()" [disabled]="!listData"
                 class="select-all-checkbox">
                 {{ 'TABLE.FILTER_BY_COLUMN.CHECK_ALL' | oTranslate }}
@@ -26,7 +26,7 @@
                 </span>
               }
             </div>
-            <div fxLayout="row" fxLayoutAlign="start start">
+            <div class="o-flex-row o-layout-align-start-start">
               <button type="button" mat-icon-button (click)="onClickSortValues()">
                 <mat-icon [svgIcon]="getSortByAlphaIcon()"></mat-icon>
               </button>
@@ -36,12 +36,12 @@
                 </button>
               }
               <mat-menu #menu="matMenu">
-                <div fxLayout="column" class="filtervalues-container">
+                <div class="o-flex-column filtervalues-container">
                   <div mat-subheader>
                     {{'TABLE.FILTER_BY_COLUMN.LABEL_DATA' | oTranslate}}
                   </div>
                   <mat-divider></mat-divider>
-                  <mat-radio-group aria-label="Data" fxLayout="column" fxLayoutGap="12px" [(ngModel)]="sourceData" (change)="onChangeDataSource($event)">
+                  <mat-radio-group aria-label="Data" class="o-flex-column o-gap-12" [(ngModel)]="sourceData" (change)="onChangeDataSource($event)">
                     <mat-radio-button value="current-page">{{'TABLE.FILTER_BY_COLUMN.CURRENT_PAGE' | oTranslate}}</mat-radio-button>
                     <mat-radio-button value="all-data">{{'TABLE.FILTER_BY_COLUMN.ALL_PAGE' | oTranslate}}</mat-radio-button>
                   </mat-radio-group>
@@ -54,7 +54,7 @@
             {{ 'TABLE.FILTER_BY_COLUMN.LIST_EMPTY' | oTranslate }}
           </span>
         }
-        <cdk-virtual-scroll-viewport itemSize="30" fxFlex class="virtual-scroll-viewport">
+        <cdk-virtual-scroll-viewport itemSize="30" class="o-flex virtual-scroll-viewport">
           @if (preloadValues || listData) {
             <mat-selection-list #filterValueList class="select-values-list" (selectionChange)="onSelect($event)">
               <ng-container *cdkVirtualFor="let record of (listData | async); let i = index;templateCacheSize: 0">
@@ -88,7 +88,7 @@
     } @else {
       @if (isTextType()) {
         <div>
-          <mat-form-field fxFlex class="hinted">
+          <mat-form-field class="o-flex hinted">
             <input matInput #filterText [formControl]="fcText" placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
             <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
             <button type="button" matSuffix mat-icon-button (click)="clearValues()">
@@ -98,7 +98,7 @@
         </div>
       }
       @if (isNumericType()) {
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="12px">
+        <div class="o-flex-row o-layout-align-sb-center o-gap-12">
           <mat-form-field>
             <input matInput [formControl]="fcFrom" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.FROM' | oTranslate }}">
           </mat-form-field>
@@ -111,7 +111,7 @@
         </div>
       }
       @if (isDateType()) {
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="12px">
+        <div class="o-flex-row o-layout-align-sb-center o-gap-12">
           <mat-form-field>
             <input matInput [matDatepicker]="datepickerFrom" [max]="fcTo.value" [formControl]="fcFrom"
               placeholder="{{ 'TABLE.FILTER_BY_COLUMN.FROM' | oTranslate }}">
@@ -138,7 +138,7 @@
     </div>
 
 
-    <mat-dialog-actions fxLayoutAlign="space-between center">
+    <mat-dialog-actions class="o-layout-align-sb-center">
       <button type="button" mat-stroked-button [mat-dialog-close]="clearAction" class="o-button-info">
       {{ 'TABLE.BUTTONS.FILTER_CLEAR' | oTranslate }} </button>
       <span align="end">

@@ -2,7 +2,7 @@ import { Component, Injector, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OSnackBarBase } from './o-snackbar-base.class';
 
@@ -26,7 +26,7 @@ export class OSnackBarConfig {
 
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, FlexLayoutModule, OTranslatePipe],
+  imports: [MatButtonModule, MatIconModule, OTranslatePipe],
   selector: 'o-snackbar',
   templateUrl: 'o-snackbar.component.html',
   styleUrls: ['o-snackbar.component.scss'],

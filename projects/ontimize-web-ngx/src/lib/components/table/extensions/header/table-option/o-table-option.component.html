@@ -8,8 +8,7 @@
     </mat-checkbox>
   </span>
 } @else {
-  <button [disabled]="!enabled" type="button" (click)="innerOnClick()" mat-menu-item fxLayout="row"
-    fxLayoutAlign="start center">
+  <button [disabled]="!enabled" type="button" (click)="innerOnClick()" mat-menu-item class="o-flex-row o-layout-align-start-center">
     {{ olabel | oTranslate }}
     @if (icon) {
       <mat-icon> {{ icon }}</mat-icon>

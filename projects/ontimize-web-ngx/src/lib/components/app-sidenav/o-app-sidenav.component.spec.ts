@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Injector, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { MediaObserver } from '@ngbracket/ngx-layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { of, Subject } from 'rxjs';
 
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
@@ -20,7 +20,7 @@ describe('OAppSidenavComponent', () => {
   let mockRouter: jasmine.SpyObj<Router>;
   let mockElementRef: ElementRef;
   let mockChangeDetectorRef: jasmine.SpyObj<ChangeDetectorRef>;
-  let mockMediaObserver: jasmine.SpyObj<MediaObserver>;
+  let mockBreakpointObserver: jasmine.SpyObj<BreakpointObserver>;
   let mockAppMenuService: jasmine.SpyObj<AppMenuService>;
   let mockOUserInfoService: jasmine.SpyObj<OUserInfoService>;
 
@@ -31,9 +31,9 @@ describe('OAppSidenavComponent', () => {
     
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockChangeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges', 'markForCheck']);
-    mockMediaObserver = jasmine.createSpyObj('MediaObserver', ['asObservable', 'isActive']);
-    mockMediaObserver.asObservable.and.returnValue(of([]));
-    mockMediaObserver.isActive.and.returnValue(false);
+    mockBreakpointObserver = jasmine.createSpyObj('BreakpointObserver', ['observe', 'isMatched']);
+    mockBreakpointObserver.observe.and.returnValue(of({ matches: false, breakpoints: {} }));
+    mockBreakpointObserver.isMatched.and.returnValue(false);
     
     mockAppMenuService = jasmine.createSpyObj('AppMenuService', ['getMenuRoots'], {
       onPermissionMenuChanged: new Subject()
@@ -61,7 +61,7 @@ describe('OAppSidenavComponent', () => {
     mockElementRef = new ElementRef(document.createElement('div'));
     
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    component = new OAppSidenavComponent(injector, mockRouter, mockElementRef, mockChangeDetectorRef, mockMediaObserver);
+    component = new OAppSidenavComponent(injector, mockRouter, mockElementRef, mockChangeDetectorRef, mockBreakpointObserver);
   });
 
   it('should create', () => {

@@ -2,15 +2,15 @@
 
 <div class="o-dual-list-selector-wrapper-selector-list">
 
-  <div class="o-dual-list-selector-list" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="50%">
-    <div fxLayout="row" fxFlex class="o-dual-list-selector-source-wrapper">
-      <mat-selection-list fxFlex cdkDropList id="item-source-list" #itemsList [cdkDropListData]="dataSource"
+  <div class="o-dual-list-selector-list o-flex-column o-layout-align-start-stretch o-flex-50">
+    <div class="o-dual-list-selector-source-wrapper o-flex-row o-flex">
+      <mat-selection-list class="o-flex" cdkDropList id="item-source-list" #itemsList [cdkDropListData]="dataSource"
         [cdkDropListConnectedTo]="['item-destination-list']" (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
 
         <mat-list-item>
           <mat-checkbox (change)="$event ? masterToggle(itemsList) : null" [checked]="isAllSelected(itemsList)"
-            [indeterminate]="hasValue(itemsList)  && !isAllSelected(itemsList)" fxFlex>
-            <span fxLayout="row" fxLayoutAlign="space-between center">
+            [indeterminate]="hasValue(itemsList)  && !isAllSelected(itemsList)" class="o-flex">
+            <span class="o-flex-row o-layout-align-sb-center">
               <span>{{ titleListDataSource | oTranslate }}</span>
               <span>{{ getCheckboxLabel(itemsList) }} </span>
             </span>
@@ -24,7 +24,7 @@
         }
       </mat-selection-list>
 
-      <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50px" fxLayoutGap="24px">
+      <div class="o-flex-column o-layout-align-center-center o-flex-50px o-gap-24">
         <button mat-mini-fab (click)="addToGroupedColumns(itemsList)" [disabled]="itemsList.selectedOptions.selected.length===0">
           <mat-icon>chevron_right</mat-icon>
         </button>
@@ -35,14 +35,14 @@
     </div>
   </div>
 
-  <div class="o-dual-list-selector-list" fxLayout="column" fxLayoutAlign="start stretch" fxFlex="50%">
-    <div fxLayout="row" fxFlex class="o-dual-list-selector-destination-wrapper">
-      <mat-selection-list fxFlex cdkDropList id="item-destination-list" #selectedItemsList [cdkDropListData]="dataDestination"
+  <div class="o-dual-list-selector-list o-flex-column o-layout-align-start-stretch o-flex-50">
+    <div class="o-dual-list-selector-destination-wrapper o-flex-row o-flex">
+      <mat-selection-list class="o-flex" cdkDropList id="item-destination-list" #selectedItemsList [cdkDropListData]="dataDestination"
         [cdkDropListConnectedTo]="['item-source-list']" (cdkDropListDropped)="drop($event)">
         <mat-list-item>
           <mat-checkbox (change)="$event ? masterToggle(selectedItemsList) : null" [checked]="isAllSelected(selectedItemsList)"
-            [indeterminate]="hasValue(selectedItemsList) && !isAllSelected(selectedItemsList)" fxFlex>
-            <span fxLayoutAlign="space-between center">
+            [indeterminate]="hasValue(selectedItemsList) && !isAllSelected(selectedItemsList)" class="o-flex">
+            <span class="o-layout-align-sb-center">
               <span>{{ titleListDataDestination | oTranslate}}</span>
               <span>{{ getCheckboxLabel(selectedItemsList) }}</span>
             </span>
@@ -68,7 +68,7 @@
       </mat-selection-list>
 
 
-      <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50px" fxLayoutGap="24px">
+      <div class="o-flex-column o-layout-align-center-center o-flex-50px o-gap-24">
         <button mat-mini-fab [disabled]="isDisabledSortAsc(selectedItemsList)" (click)="sortAscSelectedItems(selectedItemsList)">
           <mat-icon>expand_less</mat-icon>
         </button>

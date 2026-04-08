@@ -14,7 +14,7 @@
   </div>
   <ng-content select="o-list-item-text,o-list-item-avatar, [o-list-item]"></ng-content>
 
-  <div fxLayout="row" class="row-buttons-container">
+  <div class="row-buttons-container o-flex-row">
     @if (_list && _list.editButtonInRow) {
       <div class="o-list-row-action o-list-item-icon" (click)="onEditIconClicked($event)">
         <mat-icon class="material-icons">{{ _list.editButtonInRowIcon }}</mat-icon>

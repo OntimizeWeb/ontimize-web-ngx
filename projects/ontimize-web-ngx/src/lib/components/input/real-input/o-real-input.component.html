@@ -2,7 +2,7 @@
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
   [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
-    [class.custom-width]="hasCustomWidth" [class.icon-field]="showClearButton" fxFlexFill [subscriptSizing]="subscriptSizing">
+    [class.custom-width]="hasCustomWidth" [class.icon-field]="showClearButton" class="o-flex-fill" [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }

@@ -17,14 +17,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { OTranslatePipe } from '../../../../pipes/o-translate.pipe';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, FlexLayoutModule, OTranslatePipe],
+  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, OTranslatePipe],
   selector: 'o-combo-search',
   templateUrl: './o-combo-search.component.html',
   styleUrls: ['./o-combo-search.component.scss'],

@@ -4,7 +4,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
@@ -25,7 +25,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_OPTION = [
 
 @Component({
   standalone: true,
-  imports: [FormsModule, MatCheckboxModule, MatMenuModule, MatIconModule, MatButtonModule, FlexLayoutModule, OTranslatePipe],
+  imports: [FormsModule, MatCheckboxModule, MatMenuModule, MatIconModule, MatButtonModule, OTranslatePipe],
   selector: 'o-table-option',
   templateUrl: './o-table-option.component.html',
   styleUrls: ['./o-table-option.component.scss'],

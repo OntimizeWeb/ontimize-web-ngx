@@ -1,4 +1,4 @@
-<mat-tab-group #tabGroup oTabGroup="ontimize" fxFill (selectedTabChange)="onTabSelectChange($event)" [color]="color"
+<mat-tab-group #tabGroup oTabGroup="ontimize" class="o-flex-fill" (selectedTabChange)="onTabSelectChange($event)" [color]="color"
   [backgroundColor]="backgroundColor" [headerPosition]="headerPosition" [@.disabled]="disableAnimation" [mat-stretch-tabs]="stretchTabs">
   <mat-tab label="{{ mainTabTitle | oTranslate }}">
     <ng-content></ng-content>
@@ -29,7 +29,7 @@
   }
 </mat-tab-group>
 @if (showLoading | async) {
-  <div class="spinner-container" fxLayout="column" fxLayoutAlign="center center">
+  <div class="spinner-container o-flex-column o-layout-align-center-center">
     <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
   </div>
 }

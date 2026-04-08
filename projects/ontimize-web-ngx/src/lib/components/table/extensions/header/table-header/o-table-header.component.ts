@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
-import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
@@ -21,7 +20,7 @@ export const DEFAULT_INPUTS_O_TABLE_HEADER = [
 ]
 @Component({
   standalone: true,
-  imports: [FlexLayoutModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatSortHeader, OTableHeaderColumnFilterIconComponent, OTableColumnResizerComponent],
+  imports: [MatIconModule, MatTooltipModule, OTranslatePipe, OMatSortHeader, OTableHeaderColumnFilterIconComponent, OTableColumnResizerComponent],
   selector: 'o-table-header',
   inputs: DEFAULT_INPUTS_O_TABLE_HEADER,
   templateUrl: './o-table-header.component.html',

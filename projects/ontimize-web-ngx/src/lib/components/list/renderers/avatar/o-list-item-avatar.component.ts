@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, Renderer2, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { OSafePipe } from '../../../../pipes/o-safe.pipe';
 import { OListItemComponent } from '../../list-item/o-list-item.component';
@@ -16,7 +16,7 @@ export const DEFAULT_INPUTS_O_LIST_ITEM_AVATAR = [
 
 @Component({
   standalone: true,
-  imports: [FlexLayoutModule, MatListModule, MatIconModule, OSafePipe],
+  imports: [MatListModule, MatIconModule, OSafePipe],
   selector: 'o-list-item-avatar',
   templateUrl: './o-list-item-avatar.component.html',
   styleUrls: ['./o-list-item-avatar.component.scss'],

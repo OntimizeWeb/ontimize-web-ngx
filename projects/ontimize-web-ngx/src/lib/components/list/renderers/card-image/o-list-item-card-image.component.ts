@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Inject,
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 
 import { BooleanInputConverter } from '../../../../decorators/input-converter';
 import { Util } from '../../../../util/util';
@@ -23,7 +23,7 @@ export const DEFAULT_OUTPUTS_O_LIST_ITEM_CARD_IMAGE = [
 
 @Component({
   standalone: true,
-  imports: [FlexLayoutModule, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [MatCardModule, MatButtonModule, MatIconModule],
   selector: 'o-list-item-card-image',
   templateUrl: './o-list-item-card-image.component.html',
   styleUrls: ['./o-list-item-card-image.component.scss'],

@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_FILTER' | oTranslate }}</div>
-  <form #form [formGroup]="formGroup" fxLayout="column">
+  <form #form [formGroup]="formGroup" class="o-flex-column">
     <mat-form-field>
       <input matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass" placeholder="{{ 'TABLE.DIALOG.FILTER_NAME' | oTranslate }}"
         formControlName="name" required>
