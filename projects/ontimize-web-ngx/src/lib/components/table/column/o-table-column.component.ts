@@ -28,7 +28,8 @@ import { OTableComponent } from '../o-table.component';
 import { editorsMapping } from './cell-editor/cell-editor';
 import { O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor-inputs';
 import { O_TABLE_COLUMN_TOKEN } from './cell-editor/o-base-table-cell-editor.class';
-import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
+import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS } from './cell-renderer/cell-renderer-inputs';
+import { renderersMapping } from './cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // attr [string]: column name.
