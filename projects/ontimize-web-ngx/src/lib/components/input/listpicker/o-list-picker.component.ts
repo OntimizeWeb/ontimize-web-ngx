@@ -23,6 +23,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
+import { OContextMenuDirective } from '../../contextmenu/o-context-menu.directive';
 import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o-context-menu-item.component';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
@@ -52,7 +53,7 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OContextMenuComponent, OContextMenuItemComponent],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-list-picker',
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],

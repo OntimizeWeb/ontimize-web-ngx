@@ -14,7 +14,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -195,7 +195,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgTemplateOutlet, ReactiveFormsModule, MatProgressBarModule, OKeyboardListenerDirective, OFormToolbarComponent],
+  imports: [AsyncPipe, NgClass, NgTemplateOutlet, ReactiveFormsModule, MatProgressBarModule, OKeyboardListenerDirective, OFormToolbarComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   selector: 'o-form',
   providers: [

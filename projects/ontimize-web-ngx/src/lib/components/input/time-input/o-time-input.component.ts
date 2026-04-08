@@ -16,6 +16,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
@@ -57,7 +58,7 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, OTranslatePipe, OMatErrorDirective, ODateInputComponent, OHourInputComponent],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, ODateInputComponent, OHourInputComponent],
   selector: 'o-time-input',
   templateUrl: './o-time-input.component.html',
   styleUrls: ['./o-time-input.component.scss'],

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { AnimationDurations } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,7 +23,7 @@ export declare type STATEVIEW = 'HINT' | 'ACTIVE' | 'INACTIVE';
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, MatIconModule],
+  imports: [AsyncPipe, NgClass, MatIconModule],
   selector: 'o-table-header-column-filter-icon',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_ICON,
   templateUrl: './o-table-header-column-filter-icon.component.html',

@@ -25,6 +25,7 @@ import { NgxMaterialTimepickerModule, NgxMaterialTimepickerComponent } from 'ngx
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
+import { OHourTimepickerDirective } from '../../../../input/hour-input/o-hour-input.directive';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { MomentService } from '../../../../../services/moment.service';
@@ -51,7 +52,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatButtonModule, MatTooltipModule, NgxMaterialTimepickerModule, OTranslatePipe, OMatErrorDirective],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule, MatButtonModule, MatTooltipModule, NgxMaterialTimepickerModule, OHourTimepickerDirective, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-cell-editor-time',
   templateUrl: './o-table-cell-editor-time.component.html',
   styleUrls: ['./o-table-cell-editor-time.component.scss'],

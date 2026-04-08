@@ -1,13 +1,13 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 8 abril 2026 (Sub-paso 3.5 completado)
+> Última actualización: 8 abril 2026 (Playground migrado — build OK)
 
 ## Repositorios y ramas
 
 | Repo | Ruta local | Rama |
 |------|-----------|------|
 | **ontimize-web-ngx** (framework) | `E:\workspace\angular\ontimize-web-ngx\15x\ontimize-web-ngx` | `migration/18.x.x` |
-| **playground** (demo) | `E:\workspace\angular\ontimize-web-ngx\15x\demos\ontimize-web-ngx-playground` | `migration/18.x.x` |
+| **playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` |
 
 ## Versiones actuales en migration/18.x.x
 
@@ -85,14 +85,17 @@
 - APIs root-level **sin cambio**: `mat.core()`, `mat.all-component-themes()`, density mixins
 - `ng-package.json`: añadido `assets` para incluir SCSS en el paquete npm
 
-### Playground migrado — commit `b9f7bf1` (repo playground)
+### Playground migrado — (repo playground, rama migration/18.x.x)
 
 - `package.json` actualizado a Angular 18
-- `@ngbracket/ngx-layout ^18.0.0` como reemplazo de `@angular/flex-layout`
-- Alias npm: `@angular/flex-layout@npm:@ngbracket/ngx-layout@^18.0.0` (para paquetes companion v15)
+- `@ngbracket/ngx-layout ^18.0.0` instalado; alias `@angular/flex-layout` via copia en node_modules
 - SCSS M2 migrado en temas del playground (4 archivos)
 - `@` escapados con `&#64;` en templates (parser control flow Angular 17+)
 - Copia local de `o-gallery-theme-compat.scss` (tema gallery M2-compatible)
+- `MediaObserver` → `BreakpointObserver` en `screen-configuration.component.ts`
+- `UntypedFormControl` → `AbstractControl` en `validators.component.ts`
+- **103 templates HTML** migrados: `fxLayout/fxFlex/fxLayoutAlign/fxLayoutGap` → clases CSS `o-flex-*`
+- `CommonModule` añadido a `SharedModule` (perdido al quitar FlexLayoutModule que lo re-exportaba)
 - **Build del playground OK** — genera dist con todos los chunks correctamente
 
 ---
@@ -112,6 +115,16 @@
 - Eliminado `@ngbracket/ngx-layout` de `package.json` y peer deps de la librería
 - Bindings dinámicos (`[fxLayout]`, `[fxLayoutAlign]`, `[fxLayoutGap]`) → `[ngClass]`/`[ngStyle]`/`[style.gap]`
 - `OContainerComponent`: getter `layoutAlignStyles` para alineación dinámica de containers
+
+**Fixes adicionales post-flex-layout (build clean confirmado):**
+- `NgClass` añadido explícitamente a 5 componentes que lo usaban via FlexLayoutModule transitivo
+- `OContextMenuDirective` añadido explícitamente a `o-combo` y `o-list-picker`
+- `MatTooltipModule` añadido a `o-time-input`
+- `imports[]` completado en `o-table-cell-editor-real` (estaba vacío)
+- `FormsModule` + `IsEmptyValuePipe` añadidos a `o-table-filter-by-column-data-dialog`
+- `OHourTimepickerDirective` añadido a `o-table-cell-editor-time`
+- Comas sobrantes eliminadas en `shared.module.ts` y `o-table.component.ts`
+- Tests: **2235 specs, 0 fallos** ✅
 
 ### Sub-paso 3.2: Migración a Material M3
 

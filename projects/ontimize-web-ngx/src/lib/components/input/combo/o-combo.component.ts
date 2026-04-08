@@ -16,6 +16,7 @@ import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
+import { OContextMenuDirective } from '../../contextmenu/o-context-menu.directive';
 import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o-context-menu-item.component';
 import { OFormValue } from '../../form/o-form-value';
 import { OFormComponent } from '../../form/o-form.component';
@@ -36,7 +37,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuComponent, OContextMenuItemComponent],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-combo',
   providers: [
     OntimizeServiceProvider,

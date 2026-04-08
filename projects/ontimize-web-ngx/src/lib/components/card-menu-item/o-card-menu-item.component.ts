@@ -12,6 +12,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -43,7 +44,7 @@ export const DEFAULT_OUTPUTS_O_MENU_CARD = [];
 
 @Component({
   standalone: true,
-  imports: [MatIconModule, MatTooltipModule, MatButtonModule, OTranslatePipe],
+  imports: [NgClass, MatIconModule, MatTooltipModule, MatButtonModule, OTranslatePipe],
   selector: 'o-card-menu-item',
   templateUrl: './o-card-menu-item.component.html',
   styleUrls: ['./o-card-menu-item.component.scss'],
