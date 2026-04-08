@@ -1,12 +1,12 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 8 abril 2026 (Playground migrado — build OK)
+> Última actualización: 8 abril 2026
 
 ## Repositorios y ramas
 
 | Repo | Ruta local | Rama |
 |------|-----------|------|
-| **ontimize-web-ngx** (framework) | `E:\workspace\angular\ontimize-web-ngx\15x\ontimize-web-ngx` | `migration/18.x.x` |
+| **ontimize-web-ngx** (framework) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx` | `migration/18.x.x` |
 | **playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` |
 
 ## Versiones actuales en migration/18.x.x
@@ -15,8 +15,24 @@
 - **TypeScript**: 5.5.4
 - **zone.js**: 0.14.10
 - **ng-packagr**: ^18.2.0
-- **Node.js**: v20.18.3 (nvm)
-- **Tests del framework**: 2276 specs OK (sub-paso 3.4 completo)
+- **Node.js**: v20.18.3 (usar `nvs use 20.18.3`, no nvm)
+- **Tests del framework**: 2235 specs, 0 fallos ✅
+
+---
+
+## ESTADO GLOBAL
+
+| Sub-paso | Estado | Commits |
+|----------|--------|---------|
+| Fase 1: Angular 15→16 | ✅ Completado | `73f94ceb` |
+| Fase 2: Angular 16→17 | ✅ Completado | `aea34eec` → `f137d53f` |
+| Fase 3.1: Angular 17→18 deps | ✅ Completado | `c9a5c0ea` |
+| Sub-paso 3.3: Standalone components | ✅ Completado | `f7a67058` → `ca5ae142` |
+| Migración SCSS M2 | ✅ Completado | `10492030` |
+| Sub-paso 3.4: Typed Forms | ✅ Completado | `e5c002bd` |
+| Sub-paso 3.5: Eliminación flex-layout | ✅ Completado | `028637cc`, `0650715e`, `6ebb3a74` |
+| Playground migrado | ✅ Completado | `3e47f22` (repo playground) |
+| Sub-paso 3.2: Material M3 | ⏳ Pendiente | — |
 
 ---
 
@@ -41,7 +57,7 @@
 
 - Actualización de todas las dependencias a Angular 18.2
 
-### Sub-paso 3.3: Standalone components — COMPLETADO ✅
+### Sub-paso 3.3: Standalone components — ✅ COMPLETADO (7 abril 2026)
 
 **Todos** los componentes, directivas y pipes del framework son ahora `standalone: true`.
 
@@ -71,9 +87,15 @@
 | `f4c30a9b` | Layouts | `OAppLayoutComponent`, `OCardMenuLayoutComponent`, todos los `OFormLayout*` |
 | `ca5ae142` | CKEditor + OTable | `CKEditorComponent`, `OTableComponent` |
 
-**Nota técnica**: `OTableColumnComponent` se excluye del array `imports[]` de `OTableComponent` para evitar dependencias circulares estáticas (se inyecta vía `forwardRef`). Los 2247 tests pasan.
+> **Nota**: `OTableColumnComponent` se excluye del array `imports[]` de `OTableComponent` para evitar dependencias circulares estáticas (se resuelve vía `forwardRef`).
 
-### Migración SCSS M2 — commit `10492030`
+### Sub-paso 3.4: Typed Forms — ✅ COMPLETADO (7 abril 2026) — commit `e5c002bd`
+
+- Eliminados todos los `UntypedFormGroup`/`UntypedFormControl` → `FormGroup`/`FormControl`
+- Parámetros de validadores → `AbstractControl`
+- 30 archivos modificados (source + specs), 2235 tests pasan
+
+### Migración SCSS M2 — ✅ COMPLETADO — commit `10492030`
 
 - **32 archivos SCSS modificados** con prefijo `m2-` para Angular Material 18:
   - `mat.define-palette` → `mat.m2-define-palette`
@@ -85,46 +107,44 @@
 - APIs root-level **sin cambio**: `mat.core()`, `mat.all-component-themes()`, density mixins
 - `ng-package.json`: añadido `assets` para incluir SCSS en el paquete npm
 
-### Playground migrado — (repo playground, rama migration/18.x.x)
-
-- `package.json` actualizado a Angular 18
-- `@ngbracket/ngx-layout ^18.0.0` instalado; alias `@angular/flex-layout` via copia en node_modules
-- SCSS M2 migrado en temas del playground (4 archivos)
-- `@` escapados con `&#64;` en templates (parser control flow Angular 17+)
-- Copia local de `o-gallery-theme-compat.scss` (tema gallery M2-compatible)
-- `MediaObserver` → `BreakpointObserver` en `screen-configuration.component.ts`
-- `UntypedFormControl` → `AbstractControl` en `validators.component.ts`
-- **103 templates HTML** migrados: `fxLayout/fxFlex/fxLayoutAlign/fxLayoutGap` → clases CSS `o-flex-*`
-- `CommonModule` añadido a `SharedModule` (perdido al quitar FlexLayoutModule que lo re-exportaba)
-- **Build del playground OK** — genera dist con todos los chunks correctamente
-
----
-
-## PENDIENTE POR HACER
-
-### Sub-paso 3.3: Standalone components — ✅ COMPLETADO (7 abril 2026)
-
-### Sub-paso 3.4: Typed Forms — ✅ COMPLETADO (7 abril 2026)
-
 ### Sub-paso 3.5: Eliminación de flex-layout — ✅ COMPLETADO (8 abril 2026)
 
-- Creado `flex-layout.scss` con clases CSS utilitarias (`o-flex-row`, `o-flex-fill`, `o-layout-align-sb-center`, etc.)
-- Eliminados todos los atributos `fxLayout`, `fxFlex`, `fxLayoutAlign`, `fxLayoutGap` de ~90 templates HTML
+**Commits**: `028637cc` → `0650715e` → `6ebb3a74`
+
+- Creado `flex-layout.scss` con clases CSS utilitarias (`o-flex-row`, `o-flex-fill`, `o-layout-align-*`, etc.)
+- Eliminados todos los atributos `fxLayout`, `fxFlex`, `fxLayoutAlign`, `fxLayoutGap` de ~90 templates HTML del framework
 - `MediaObserver` (`@ngbracket/ngx-layout`) → `BreakpointObserver` (`@angular/cdk/layout`) en 4 componentes:
   - `o-app-sidenav`, `o-date-input`, `o-daterange-input`, `o-grid`
 - Eliminado `@ngbracket/ngx-layout` de `package.json` y peer deps de la librería
 - Bindings dinámicos (`[fxLayout]`, `[fxLayoutAlign]`, `[fxLayoutGap]`) → `[ngClass]`/`[ngStyle]`/`[style.gap]`
 - `OContainerComponent`: getter `layoutAlignStyles` para alineación dinámica de containers
 
-**Fixes adicionales post-flex-layout (build clean confirmado):**
-- `NgClass` añadido explícitamente a 5 componentes que lo usaban via FlexLayoutModule transitivo
-- `OContextMenuDirective` añadido explícitamente a `o-combo` y `o-list-picker`
+**Fixes post-flex-layout** (imports transitivos que desaparecieron al quitar FlexLayoutModule):
+- `NgClass` añadido explícitamente a: `o-card-menu-item`, `o-form`, `o-radio`, `o-table-visible-columns-dialog`, `o-table-header-column-filter-icon`
+- `OContextMenuDirective` añadido a `o-combo` y `o-list-picker`
 - `MatTooltipModule` añadido a `o-time-input`
 - `imports[]` completado en `o-table-cell-editor-real` (estaba vacío)
 - `FormsModule` + `IsEmptyValuePipe` añadidos a `o-table-filter-by-column-data-dialog`
 - `OHourTimepickerDirective` añadido a `o-table-cell-editor-time`
 - Comas sobrantes eliminadas en `shared.module.ts` y `o-table.component.ts`
-- Tests: **2235 specs, 0 fallos** ✅
+
+### Playground migrado — ✅ COMPLETADO (8 abril 2026) — commit `3e47f22` (repo playground)
+
+- `package.json` actualizado: dependencia `ontimize-web-ngx` apunta a tgz local (`../ontimize-web-ngx/dist/`)
+- Eliminado `@angular/flex-layout` / `@ngbracket/ngx-layout` de dependencias directas
+- Añadido `@ngbracket/ngx-layout@^18.0.0` + npm `overrides` para alias `@angular/flex-layout` (requerido por companion packages v15)
+- SCSS M2 migrado en temas del playground (4 archivos)
+- `@` escapados con `&#64;` en templates (parser control flow Angular 17+)
+- Copia local de `o-gallery-theme-compat.scss` (tema gallery M2-compatible)
+- `MediaObserver` → `BreakpointObserver` en `screen-configuration.component.ts`
+- `UntypedFormControl` → `AbstractControl` en `validators.component.ts`
+- **103 templates HTML** migrados: `fxLayout/fxFlex/fxLayoutAlign/fxLayoutGap` → clases CSS `o-flex-*`
+- `CommonModule` añadido a `SharedModule` (se perdía al quitar FlexLayoutModule que lo re-exportaba transitivamente)
+- **Build playground: 0 errores** ✅
+
+---
+
+## PENDIENTE
 
 ### Sub-paso 3.2: Migración a Material M3
 
@@ -132,66 +152,65 @@
 - Requiere reestructurar los tokens de tema
 - 24+ archivos SCSS de theming
 
-### Sub-paso 3.4: Typed Forms — ✅ COMPLETADO — commit `e5c002bd`
-
-- Eliminados todos los `UntypedFormGroup`/`UntypedFormControl` → `FormGroup`/`FormControl`
-- Parámetros de validadores → `AbstractControl`
-- 30 archivos modificados (source + specs), 2276 tests pasan
-
 ---
 
 ## WORKFLOW DE VALIDACIÓN
 
-Para cada sub-paso:
-
 ```bash
-# 1. Hacer cambios en el framework
-# 2. Ejecutar tests
+# Activar Node 20
+export PATH="$HOME/AppData/Local/nvs/node/20.18.3/x64:$PATH"
+
+# 1. Tests del framework
+cd c:/work/ontimize-web-ngx/18.x.x/ontimize-web-ngx
 npx ng test ontimize-web-ngx --browsers=ChromeHeadless --watch=false
 
-# 3. Build completo (NO solo ng build — incluye SCSS bundling)
+# 2. Build completo del framework (incluye SCSS bundling)
 npm run build
 
-# 4. Generar .tgz
-cd dist/ontimize-web-ngx && npm pack
+# 3. Generar tgz
+cd dist && npm pack
 
-# 5. En playground: reinstalar
-Remove-Item node_modules\ontimize-web-ngx -Recurse -Force
-npm install --legacy-peer-deps
-
-# 6. Build playground
-npx ng build
-
-# 7. Servir
-npx ng serve
+# 4. En playground: reinstalar y verificar
+cd c:/work/ontimize-web-ngx/18.x.x/ontimize-web-ngx-playground
+npm install ontimize-web-ngx --legacy-peer-deps
+npm run build
 ```
 
 ---
 
-## NOTAS TÉCNICAS IMPORTANTES
+## NOTAS TÉCNICAS
 
 ### Build pipeline completo del framework
 
-`npm run build` NO es solo `ng build`. Incluye 5 pasos:
+`npm run build` NO es solo `ng build`. Incluye 5 pasos encadenados:
 
 ```
 ng build
-  → build-theme (bundle-scss --config → genera dist/theme.scss, 47KB)
-  → build-styles (scss-bundle → genera dist/ontimize.scss)
-  → copy-files (copia SVGs)
-  → copy-files-themes (gulp: copia ontimize-style.scss, ontimize-style-v8.scss a dist/theming/)
+  → build-theme   (bundle-scss → dist/theme.scss, ~47KB)
+  → build-styles  (scss-bundle → dist/ontimize.scss)
+  → copy-files    (copia SVGs a dist/assets/)
+  → copy-files-themes  (gulp → dist/theming/)
 ```
+
+El tgz generado queda en `dist/ontimize-web-ngx-18.0.0-SNAPSHOT-0.tgz`.
 
 ### Paquetes companion v15
 
-Los paquetes companion (`ontimize-web-ngx-extra-components`, `ontimize-web-ngx-gallery`) son v15 y necesitan:
-- **Alias npm** para `@angular/flex-layout`: `npm install "@angular/flex-layout@npm:@ngbracket/ngx-layout@^18.0.0"`
-- **Copias locales** de sus temas SCSS que usan APIs M2 deprecated (ver `o-gallery-theme-compat.scss` en playground)
+`ontimize-web-ngx-extra-components` y `ontimize-web-ngx-gallery` son v15 y dependen de `@angular/flex-layout`.
+La solución adoptada en el playground:
+1. Instalar `@ngbracket/ngx-layout@^18.0.0`
+2. Copiar el contenido del paquete en `node_modules/@angular/flex-layout/` (los exports internos son relativos y funcionan desde esa ruta)
+3. Añadir `"overrides": { "@angular/flex-layout": "npm:@ngbracket/ngx-layout@^18.0.0" }` en `package.json`
 
-### PowerShell y exit codes
+### Node.js
 
-Angular CLI escribe progreso a stderr. PowerShell lo interpreta como error (exit code 1). Verificar que `dist/` contenga los chunks para confirmar éxito real.
+Usar `nvs` (no nvm):
+```bash
+export PATH="$HOME/AppData/Local/nvs/node/20.18.3/x64:$PATH"
+```
+Versiones disponibles: `20.18.3/x64` (activa), `18.10.0/x64`, `14.20.0/x64`.
+Angular CLI requiere Node ≥ 18.19 — usar siempre la 20.18.3.
 
 ### Tests y standalone
 
-Al convertir un componente a standalone, hay que mover su declaración de `declarations` a `imports` en los `TestBed.configureTestingModule()` de sus tests. Ver `o-testing-utils.ts` como referencia.
+Al convertir un componente a standalone, mover su declaración de `declarations[]` a `imports[]` en los `TestBed.configureTestingModule()` de sus specs. Ver `o-testing-utils.ts` como referencia.
