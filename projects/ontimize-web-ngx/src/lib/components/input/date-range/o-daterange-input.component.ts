@@ -236,7 +236,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     if (control.value instanceof Object && !this.isObjectDataRangeNull(control)) {
       const endValue = this.getValueAsMoment(control.value[this._endKey]);
       const startValue = this.getValueAsMoment(control.value[this._startKey]);
-      if (endValue.isSameOrBefore(startValue)) {
+      if (Util.isDefined(endValue) && Util.isDefined(startValue) && endValue.isSameOrBefore(startValue)) {
         return {
           dateRange: true
         };
@@ -250,7 +250,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
       const startValue = this.getValueAsMoment(control.value[this._startKey]);
-      if (startValue.isBefore(mindate)) {
+      if (Util.isDefined(startValue) && startValue.isBefore(mindate)) {
         return {
           dateRangeMin: {
             dateMin: mindate.format(this.oformat)
@@ -266,7 +266,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
       const endValue = this.getValueAsMoment(control.value[this._endKey]);
-      if (endValue.isAfter(maxdate)) {
+      if (Util.isDefined(endValue) && endValue.isAfter(maxdate)) {
         return {
           dateRangeMax: {
             dateMax: maxdate.format(this.oformat)
@@ -282,7 +282,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       && !this.isObjectDataRangeNull(control)) {
       const endValue = this.getValueAsMoment(control.value[this._endKey]);
       const startValue = this.getValueAsMoment(control.value[this._startKey]);
-      if (!endValue.isValid() || !startValue.isValid()) {
+      if ((!Util.isDefined(endValue) || !endValue.isValid()) || (!Util.isDefined(startValue) || !startValue.isValid())) {
         return {
           dateRangeParse: {
             format: this.oformat + this.separator + this.oformat
