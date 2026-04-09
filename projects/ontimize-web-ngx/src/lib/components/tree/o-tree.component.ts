@@ -317,6 +317,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   ngOnInit() {
     this.setTreeControl();
+    this.setDatasource();
     this.initialize();
     this.initializeParams();
 
