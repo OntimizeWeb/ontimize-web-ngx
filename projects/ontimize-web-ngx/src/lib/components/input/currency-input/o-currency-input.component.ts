@@ -8,6 +8,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OIntegerPipe } from '../../../pipes/o-integer.pipe';
+import { ORealPipe } from '../../../pipes/o-real.pipe';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { CurrencyUtil } from '../../../util/currencyUtil';
 import { ORealInputComponent } from '../real-input/o-real-input.component';
@@ -24,7 +26,8 @@ export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   templateUrl: './o-currency-input.component.html',
   styleUrls: ['./o-currency-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_CURRENCY_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }]
 })
 export class OCurrencyInputComponent extends ORealInputComponent implements OnInit {
 
