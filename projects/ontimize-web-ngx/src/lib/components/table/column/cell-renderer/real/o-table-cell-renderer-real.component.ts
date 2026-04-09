@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
+import { OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { NumberService } from '../../../../../services/number.service';
 import { OTableCellRendererIntegerComponent } from '../integer/o-table-cell-renderer-integer.component';
@@ -18,7 +19,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL = [
   templateUrl: './o-table-cell-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_REAL,
-  providers: [ORealPipe]
+  providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }]
 })
 export class OTableCellRendererRealComponent extends OTableCellRendererIntegerComponent implements OnInit {
 

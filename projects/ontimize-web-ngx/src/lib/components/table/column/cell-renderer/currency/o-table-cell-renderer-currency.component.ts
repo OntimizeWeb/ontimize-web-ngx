@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
+import { OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
+import { ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
 import { OTableCellRendererRealComponent } from '../real/o-table-cell-renderer-real.component';
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
@@ -23,7 +25,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   templateUrl: './o-table-cell-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY,
-  providers: [OCurrencyPipe]
+  providers: [OCurrencyPipe, { provide: ORealPipe, useExisting: OCurrencyPipe }, { provide: OIntegerPipe, useExisting: OCurrencyPipe }]
 })
 export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealComponent implements OnInit {
 
