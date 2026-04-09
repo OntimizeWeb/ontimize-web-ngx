@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateR
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
+import { OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
+import { ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
 import { OComboRendererRealComponent } from '../real/o-combo-renderer-real.component';
 
@@ -20,7 +22,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_CURRENCY = [
   templateUrl: './o-combo-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_CURRENCY,
-  providers: [OCurrencyPipe]
+  providers: [OCurrencyPipe, { provide: ORealPipe, useExisting: OCurrencyPipe }, { provide: OIntegerPipe, useExisting: OCurrencyPipe }]
 })
 export class OComboRendererCurrencyComponent extends OComboRendererRealComponent implements OnInit {
 

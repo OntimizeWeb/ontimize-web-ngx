@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
 import { NumberService } from '../../../services/number.service';
 import { Util } from '../../../util/util';
@@ -32,7 +33,7 @@ export const DEFAULT_INPUTS_O_REAL_INPUT = [
   templateUrl: './o-real-input.component.html',
   inputs: DEFAULT_INPUTS_O_REAL_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [ORealPipe]
+  providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }]
 })
 export class ORealInputComponent extends OIntegerInputComponent implements OnInit {
 

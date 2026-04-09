@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
+import { OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
+import { ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL, OListPickerRendererRealComponent } from '../real/o-list-picker-renderer-real.component';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE = [
@@ -14,7 +16,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE = [
   templateUrl: './o-list-picker-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_PERCENTAGE,
-  providers: [OPercentPipe]
+  providers: [OPercentPipe, { provide: ORealPipe, useExisting: OPercentPipe }, { provide: OIntegerPipe, useExisting: OPercentPipe }]
 })
 export class OListPickerRendererPercentageComponent extends OListPickerRendererRealComponent implements OnInit {
 

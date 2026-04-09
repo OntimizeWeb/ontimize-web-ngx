@@ -10,7 +10,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../pipes/o-percentage.pipe';
+import { ORealPipe } from '../../../pipes/o-real.pipe';
 import { Util } from '../../../util/util';
 import { ORealInputComponent } from '../real-input/o-real-input.component';
 
@@ -30,7 +32,7 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
   inputs: DEFAULT_INPUTS_O_PERCENT_INPUT,
   outputs: DEFAULT_OUTPUTS_O_PERCENT_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [OPercentPipe]
+  providers: [OPercentPipe, { provide: ORealPipe, useExisting: OPercentPipe }, { provide: OIntegerPipe, useExisting: OPercentPipe }]
 })
 export class OPercentInputComponent extends ORealInputComponent implements OnInit {
 
