@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -19,7 +20,7 @@ export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
 
 @Component({
   standalone: true,
-  imports: [ScrollingModule, MatButtonModule, MatDialogModule, MatDividerModule, MatListModule, OTranslatePipe, OSearchInputComponent],
+  imports: [NgTemplateOutlet, ScrollingModule, MatButtonModule, MatDialogModule, MatDividerModule, MatListModule, OTranslatePipe, OSearchInputComponent],
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
   styleUrls: ['./o-list-picker-dialog.component.scss'],

@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,7 +38,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent],
+  imports: [NgTemplateOutlet, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-combo',
   providers: [
     OntimizeServiceProvider,
