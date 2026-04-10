@@ -23,6 +23,7 @@ $o_table_row_padding: 24px;
     .o-table-body {
       display: flex;
       flex: 1 1 auto;
+      width: 100%;
 
       .o-table-overflow {
         overflow-y: auto;
