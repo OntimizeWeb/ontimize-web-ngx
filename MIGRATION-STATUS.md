@@ -1,12 +1,14 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 10 abril 2026
+> Última actualización: 10 abril 2026 (sesión 2)
 
 ## Repositorios y ramas
 
 | Repo | Ruta local | Rama |
 |------|-----------|------|
 | **ontimize-web-ngx** (framework) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx` | `migration/18.x.x` |
+| **ontimize-web-ngx-extra-components** (addon) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-extra-components` | `migration/18.x.x` |
+| **ontimize-web-ngx-gallery** (addon) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-gallery` | `migration/18.x.x` |
 | **playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` |
 
 ## Versiones actuales en migration/18.x.x
@@ -248,13 +250,26 @@ ng build
 
 El tgz generado queda en `dist/ontimize-web-ngx-18.0.0-SNAPSHOT-0.tgz`.
 
-### Paquetes companion v15
+### Paquetes companion — migración a Angular 18 completada (10 abril 2026)
 
-`ontimize-web-ngx-extra-components` y `ontimize-web-ngx-gallery` son v15 y dependen de `@angular/flex-layout`.
-La solución adoptada en el playground:
-1. Instalar `@ngbracket/ngx-layout@^18.0.0`
-2. Copiar el contenido del paquete en `node_modules/@angular/flex-layout/` (los exports internos son relativos y funcionan desde esa ruta)
-3. Añadir `"overrides": { "@angular/flex-layout": "npm:@ngbracket/ngx-layout@^18.0.0" }` en `package.json`
+`ontimize-web-ngx-extra-components` y `ontimize-web-ngx-gallery` han sido migrados a Angular 18 siguiendo la misma estrategia de 3 ramas incrementales.
+
+| Addon | Ruta local | Rama activa | Versión |
+|-------|-----------|-------------|---------|
+| `ontimize-web-ngx-extra-components` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-extra-components` | `migration/18.x.x` | `18.0.0-SNAPSHOT-0` |
+| `ontimize-web-ngx-gallery` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-gallery` | `migration/18.x.x` | `18.0.0-SNAPSHOT-0` |
+
+Cambios destacados en los addons:
+- `ngx-image-cropper` → v8 (standalone, `ImageCropperModule` → `ImageCropperComponent`)
+- `FlexLayoutModule` eliminado de `o-components.ts`
+- `luxon` añadido como dependencia (peer de `ngx-material-timepicker` transitivo del framework)
+- `ontimize-web-ngx` apunta al tgz local `file:../ontimize-web-ngx/dist/ontimize-web-ngx-18.0.0-SNAPSHOT-0.tgz`
+
+Los tgz de los addons se instalan en el playground:
+- `file:../ontimize-web-ngx-extra-components/dist/ontimize-web-ngx-extra-components-18.0.0-SNAPSHOT-0.tgz`
+- `file:../ontimize-web-ngx-gallery/dist/ontimize-web-ngx-gallery-18.0.0-SNAPSHOT-0.tgz`
+
+`@ngbracket/ngx-layout` y el `overrides` eliminados del playground — ya no son necesarios con los addons en v18.
 
 ### Node.js
 
