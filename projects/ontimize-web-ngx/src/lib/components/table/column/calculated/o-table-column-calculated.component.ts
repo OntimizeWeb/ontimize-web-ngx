@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector } from
 import { OTableColumnCalculated } from '../../../../interfaces/o-table-column-calculated.interface';
 import { OperatorFunction } from '../../../../types/operation-function.type';
 import { OTableComponent } from '../../o-table.component';
+import { O_TABLE_COLUMN_TOKEN } from '../cell-editor/o-base-table-cell-editor.class';
 import { OTableColumnComponent } from '../o-table-column.component';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
@@ -20,6 +21,10 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_CALCULATED = [
   providers: [
     {
       provide: OTableColumnComponent,
+      useExisting: forwardRef(() => OTableColumnCalculatedComponent)
+    },
+    {
+      provide: O_TABLE_COLUMN_TOKEN,
       useExisting: forwardRef(() => OTableColumnCalculatedComponent)
     }
   ],

@@ -28,7 +28,7 @@ export class OBaseTableCellRenderer implements OnInit, AfterContentInit {
   protected componentPipe: PipeTransform;
 
   constructor(protected injector: Injector) {
-    this.tableColumn = this.injector.get(O_TABLE_COLUMN_TOKEN);
+    this.tableColumn = this.injector.get(O_TABLE_COLUMN_TOKEN, null);
   }
 
   public ngOnInit() {

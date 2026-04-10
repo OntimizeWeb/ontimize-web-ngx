@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 8 abril 2026
+> Última actualización: 10 abril 2026
 
 ## Repositorios y ramas
 
@@ -127,6 +127,60 @@
 - `FormsModule` + `IsEmptyValuePipe` añadidos a `o-table-filter-by-column-data-dialog`
 - `OHourTimepickerDirective` añadido a `o-table-cell-editor-time`
 - Comas sobrantes eliminadas en `shared.module.ts` y `o-table.component.ts`
+
+### Fixes de runtime en playground — ✅ COMPLETADO (9-10 abril 2026)
+
+Serie de errores en runtime descubiertos al arrancar la playground tras la migración. Todos resueltos con commits en `migration/18.x.x`.
+
+#### Patrón TDZ (Temporal Dead Zone) — imports circulares en fesm2022
+
+Los bundles fesm2022 de Angular 18 son más estrictos con `const` TDZ. Círculos `A→B→A` en imports estáticos causan `Cannot access 'X' before initialization`.
+
+| Error | Causa | Fix |
+|-------|-------|-----|
+| `Cannot access 'OBaseTableCellEditor' before initialization` | `o-base-table-cell-editor.class` ↔ `o-table-column.component` | `O_TABLE_COLUMN_TOKEN = new InjectionToken(...)` + `injector.get(token, null)` en constructor base; `OTableColumnComponent` provee el token con `useExisting: forwardRef(...)` |
+| `Cannot access 'O_TABLE_CELL_RENDERERS_INPUTS' before initialization` | Mismo ciclo | Extraído a `cell-renderer-inputs.ts` sin imports de clases |
+| `Cannot access 'OBaseTableCellRenderer' before initialization` | Mismo ciclo en renderer | Renderer base usa el mismo `O_TABLE_COLUMN_TOKEN` |
+| `Cannot access 'OTreeComponent' before initialization` | `o-tree.component` ↔ `tree-node.component` | `O_TREE_NODE_TOKEN` + `import type` |
+
+#### NullInjectorError — pipes y DI en standalone
+
+Los field initializers `inject(Pipe)` en clases base se ejecutan para todas las subclases. Cada subclase standalone necesita proveer los tokens de los pipes de la cadena de herencia.
+
+| Componente | Fix |
+|-----------|-----|
+| `OTableCellRendererRealComponent` | `providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }]` |
+| `OTableCellRendererCurrencyComponent` | `providers: [OCurrencyPipe, { provide: ORealPipe, ... }, { provide: OIntegerPipe, ... }]` |
+| `OTableCellRendererPercentageComponent` | ídem patrón currency |
+| `ORealInputComponent`, `OPercentInputComponent`, `OCurrencyInputComponent` | mismo patrón |
+| Combo renderers (real/currency/percentage) | mismo patrón |
+| List-picker renderers (real/currency/percentage) | mismo patrón |
+
+#### NullInjectorError — O_TABLE_COLUMN_TOKEN en columna calculada
+
+`OTableColumnCalculatedComponent` extiende `OTableColumnComponent` pero no incluía `O_TABLE_COLUMN_TOKEN` en sus `providers`. Añadido `{ provide: O_TABLE_COLUMN_TOKEN, useExisting: forwardRef(() => OTableColumnCalculatedComponent) }`.
+
+También: `injector.get(O_TABLE_COLUMN_TOKEN)` → `injector.get(O_TABLE_COLUMN_TOKEN, null)` en ambas clases base (editor y renderer) para tolerar uso fuera de `o-table-column`.
+
+#### Otros errores runtime
+
+| Error | Causa | Fix |
+|-------|-------|-----|
+| `TypeError: Cannot set properties of undefined (setting 'type')` | `@Optional()` no funciona con `@Inject(TOKEN)` en constructor | Usar `injector.get(token, null)` en constructor en lugar de parámetro con `@Inject` |
+| `NG0303: Can't bind to 'ngTemplateOutlet'` | `NgTemplateOutlet` faltaba en imports de `OComboComponent` y `OListPickerDialogComponent` | Añadido a `imports[]` |
+| `TypeError: Cannot read properties of undefined (reading 'isSameOrBefore')` | `getValueAsMoment()` retorna `undefined` para controles vacíos | Guards `Util.isDefined()` en los 4 validadores de `ODateRangeInputComponent` |
+| Form field height 4px | `height: 24px` en `.mat-mdc-form-field.icon-field` incompatible con MDC | Eliminada la regla de `height` en `input.scss` |
+| `Error: A valid data source must be provided` en MatTree | `setDatasource()` llamado en `ngAfterViewInit` pero MatTree valida en `ngAfterContentChecked` | Llamar también `setDatasource()` en `ngOnInit` de `OTreeComponent` |
+
+#### O-table virtual scroll — tabla no visible con `virtual-scroll="yes"`
+
+Múltiples problemas de timing y CSS:
+
+| Problema | Causa | Fix |
+|---------|-------|-----|
+| Contenido en DOM pero invisible | `scrollStrategy.dataLength` nunca se asignaba → `updateContent()` siempre salía por `dataLength === 0` | Asignar `scrollStrategy.dataLength = resultsLength` en `executeDataProcessing` antes de emitir datos |
+| Viewport sin tamaño medido | `updateContent()` usaba `viewport.getViewportSize()` = 0 antes de medir | Llamar `viewport.checkViewportSize()` en `initViewPort()` y añadir guard en `updateContent()` cuando `viewportSize === 0` |
+| `.o-table-body` sin ancho | `.o-table-container` tiene `align-items: flex-start` (migración de `fxLayoutAlign="start stretch"` perdió el "stretch") | Añadir `width: 100%` a `.o-table-body` en `o-table.component.scss` |
 
 ### Playground migrado — ✅ COMPLETADO (8 abril 2026) — commit `3e47f22` (repo playground)
 

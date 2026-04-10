@@ -104,7 +104,7 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
 
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
-    this.tableColumn = this.injector.get(O_TABLE_COLUMN_TOKEN);
+    this.tableColumn = this.injector.get(O_TABLE_COLUMN_TOKEN, null);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
     this.cellEditorId = Util.randomNumber().toString(36);
     this.renderer = this.injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
