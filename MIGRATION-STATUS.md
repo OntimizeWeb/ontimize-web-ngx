@@ -1,15 +1,20 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 10 abril 2026 (sesión 2)
+> Última actualización: 13 abril 2026 (sesiones 3-4)
 
 ## Repositorios y ramas
 
-| Repo | Ruta local | Rama |
-|------|-----------|------|
-| **ontimize-web-ngx** (framework) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx` | `migration/18.x.x` |
-| **ontimize-web-ngx-extra-components** (addon) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-extra-components` | `migration/18.x.x` |
-| **ontimize-web-ngx-gallery** (addon) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-gallery` | `migration/18.x.x` |
-| **playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` |
+| Repo | Ruta local | Rama | Estado |
+|------|-----------|------|--------|
+| **ontimize-web-ngx** (framework) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx` | `migration/18.x.x` | ✅ Migrado |
+| **ontimize-web-ngx-extra-components** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-extra-components` | `migration/18.x.x` | ✅ Migrado |
+| **ontimize-web-ngx-gallery** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-gallery` | `migration/18.x.x` | ✅ Migrado |
+| **ontimize-web-ngx-playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` | ✅ Migrado (PASO 6 pendiente) |
+| **ontimize-web-ngx-filemanager** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-report** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-report` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-charts** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-map** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-quickstart** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | ⏳ Pendiente |
 
 ## Versiones actuales en migration/18.x.x
 
@@ -18,7 +23,7 @@
 - **zone.js**: 0.14.10
 - **ng-packagr**: ^18.2.0
 - **Node.js**: v20.18.3 (usar `nvs use 20.18.3`, no nvm)
-- **Tests del framework**: 2235 specs, 0 fallos ✅
+- **Tests del framework**: 2277 specs, 0 fallos ✅ (13 abril 2026)
 
 ---
 
@@ -33,8 +38,15 @@
 | Migración SCSS M2 | ✅ Completado | `10492030` |
 | Sub-paso 3.4: Typed Forms | ✅ Completado | `e5c002bd` |
 | Sub-paso 3.5: Eliminación flex-layout | ✅ Completado | `028637cc`, `0650715e`, `6ebb3a74` |
+| Fixes CSS: clases `o-flex-*` y playground layout | ✅ Completado | `2bdfae9c`, `21bcdea` (playground) |
+| `provideOntimizeWeb()` — bootstrap standalone | ✅ Completado | `754ef7d9` |
+| Sub-paso 3.6: Guards funcionales | ✅ Completado | `95164dfa` |
+| Sub-paso 3.7: NgModules `@deprecated` | ✅ Completado | `a801a9be` |
+| Sub-paso 3.8: Tests | ✅ Completado | — (2277 SUCCESS, 0 fallos) |
 | Playground migrado | ✅ Completado | `3e47f22` (repo playground) |
-| Sub-paso 3.2: Material M3 | ⏳ Pendiente | — |
+| Playground: control flow (`@if`/`@for`) | ✅ Completado | `8686e0b` (repo playground) |
+| **Sub-paso 3.2: Material M3** | ⏳ **Pendiente** | — |
+| **Playground PASO 6: Standalone bootstrap** | ⏳ **Pendiente** | — |
 
 ---
 
@@ -184,6 +196,72 @@ Múltiples problemas de timing y CSS:
 | Viewport sin tamaño medido | `updateContent()` usaba `viewport.getViewportSize()` = 0 antes de medir | Llamar `viewport.checkViewportSize()` en `initViewPort()` y añadir guard en `updateContent()` cuando `viewportSize === 0` |
 | `.o-table-body` sin ancho | `.o-table-container` tiene `align-items: flex-start` (migración de `fxLayoutAlign="start stretch"` perdió el "stretch") | Añadir `width: 100%` a `.o-table-body` en `o-table.component.scss` |
 
+### Fix CSS clases `o-flex-*` — ✅ COMPLETADO (13 abril 2026) — commit `2bdfae9c`
+
+Problemas detectados en la playground tras la migración de flex-layout:
+
+| Problema | Causa | Fix |
+|---------|-------|-----|
+| `o-layout-align-*` no alineaba el contenido | Faltaba `display: flex` — `justify-content`/`align-items` no tienen efecto sin él | Añadido `display: flex` a las 15 clases `o-layout-align-*` en `flex-layout.scss` |
+| `o-flex-fill` no llenaba el contenedor | Estaba definida como `flex: 1 1 auto` (propiedad de hijo flex), no como `fxFlexFill` original | Redefinida como `width: 100%; height: 100%; min-width: 100%; min-height: 100%` |
+
+### Fix playground layout — ✅ COMPLETADO (13 abril 2026) — commit `21bcdea` (repo playground)
+
+| Problema | Causa | Fix |
+|---------|-------|-----|
+| `.left-border` con `max-width: calc(100% - 300px)` no ocupaba el ancho disponible | Inline styles incorrectos añadidos durante la migración flex-layout | Reemplazados con clase `o-flex` en 11 archivos HTML |
+| Menú inputs no se renderizan bien | `<a>` con dos atributos `class` separados — el browser solo aplica el último | Fusionados en `class="menu-item o-flex"` (24 elementos en `inputs.component.html`) |
+
+### `provideOntimizeWeb()` — ✅ COMPLETADO (13 abril 2026) — commit `754ef7d9`
+
+Alternativa standalone a `OntimizeWebModule.forRoot()` para usar con `bootstrapApplication()`.
+
+**Archivo**: `projects/ontimize-web-ngx/src/lib/config/o-provide.ts`
+
+```typescript
+export function provideOntimizeWeb(config: Config, options?: ProvideOntimizeWebOptions): EnvironmentProviders
+```
+
+Incluye: `provideHttpClient(withInterceptorsFromDi())`, `provideAnimations()`, `TranslateModule.forRoot(...)`, `NgxMaterialTimepickerModule`, `APP_CONFIG`, `ONTIMIZE_PROVIDERS`, permissions providers, `APP_INITIALIZER`.
+
+Exportado en `public-api.ts` como `provideOntimizeWeb` y `ProvideOntimizeWebOptions`.
+
+**Uso**:
+```typescript
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideOntimizeWeb(CONFIG),
+    provideRouter(routes),
+  ]
+});
+```
+
+### Sub-paso 3.6: Guards funcionales — ✅ COMPLETADO (13 abril 2026) — commit `95164dfa`
+
+| Guard | Estado anterior | Estado actual |
+|-------|----------------|---------------|
+| `AuthGuardService` | clase + `authGuard` fn (ya existía) | ✅ sin cambios |
+| `PermissionsGuardService` | clase + `permissionsGuard` fn (ya existía) | ✅ sin cambios |
+| `CanActivateFormLayoutChildGuard` | constructor con `Injector` + `Injector.get()` | ✅ Migrado a `inject()` con `{ optional: true }` + nuevo `canActivateFormLayoutChildGuard` fn wrapper |
+
+### Sub-paso 3.7: API pública final — ✅ COMPLETADO (13 abril 2026) — commit `a801a9be`
+
+- **54 NgModules wrapper** marcados con `/** @deprecated Use the standalone component directly. */`
+- Excluidos de la deprecación: `OntimizeWebModule`, `OTranslateModule` (tiene `forRoot()`), `OSharedModule`, `OPermissionsModule`, `OFormLayoutManagerModule`, `CustomMaterialModule`
+- Los componentes standalone ya se exportaban directamente vía `export *` en los index files
+- Functional guards (`authGuard`, `permissionsGuard`, `canActivateFormLayoutChildGuard`) exportados automáticamente
+
+### Sub-paso 3.8: Tests — ✅ COMPLETADO (13 abril 2026)
+
+```
+Chrome 146: Executed 2277 of 2277 (skipped 31) SUCCESS — Total time: ~70s
+```
+
+### Playground: control flow — ✅ COMPLETADO (11 abril 2026) — commit `8686e0b` (repo playground)
+
+- 21 templates migrados de `*ngIf`/`*ngFor` a `@if`/`@for` con el schematic automático
+- PASO 3 del plan playground completado
+
 ### Playground migrado — ✅ COMPLETADO (8 abril 2026) — commit `3e47f22` (repo playground)
 
 - `package.json` actualizado: dependencia `ontimize-web-ngx` apunta a tgz local (`../ontimize-web-ngx/dist/`)
@@ -202,34 +280,85 @@ Múltiples problemas de timing y CSS:
 
 ## PENDIENTE
 
-### Sub-paso 3.2: Migración a Material M3
+### 1. Sub-paso 3.2: Migración a Material M3 — framework
 
 - Migrar de M2 theming (actualmente con prefijo `m2-`) a M3 tokens
-- Requiere reestructurar los tokens de tema
-- 24+ archivos SCSS de theming
+- Requiere reestructurar los tokens de tema en 24+ archivos SCSS
+- **Bloqueante para**: playground PASO 5.3, quickstart PASO 3 (theming)
+- Herramienta: `ng generate @angular/material:m3-theme`
+
+### 2. Playground PASO 6: Standalone bootstrap
+
+**Desbloqueado** — `provideOntimizeWeb()` ya disponible.
+
+Pasos concretos:
+1. Reemplazar `src/main.ts`:
+   ```typescript
+   // Antes
+   platformBrowserDynamic().bootstrapModule(AppModule)
+   // Después
+   bootstrapApplication(AppComponent, {
+     providers: [provideOntimizeWeb(CONFIG), provideRouter(routes)]
+   })
+   ```
+2. Convertir los 51 feature modules a standalone components con lazy loading vía `loadComponent`
+3. Eliminar `AppModule`, `SharedModule` y todos los feature modules
+4. Eliminar `src/polyfills.ts` → configurar `zone.js` en `angular.json`
+
+### 3. Addons pendientes de migrar
+
+Los planes de migración están en cada repo pero aún no se han ejecutado:
+
+| Addon | Ruta local | Plan |
+|-------|-----------|------|
+| `ontimize-web-ngx-filemanager` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `plan-angularMigration15To18.prompt.md` |
+| `ontimize-web-ngx-report` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-report` | `plan-angularMigration15To18.prompt.md` |
+| `ontimize-web-ngx-charts` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `plan-angularMigration15To18.prompt.md` |
+| `ontimize-web-ngx-map` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `plan-angularMigration15To18.prompt.md` |
+| `ontimize-web-ngx-quickstart` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `plan-angularMigration15To18.prompt.md` |
+
+Cada plan sigue 3 fases (16→17→18) con estrategia de ramas `migration/16.x.x` → `migration/17.x.x` → `migration/18.x.x`.
+
+### 4. Smoke test visual playground
+
+La playground arranca y compila sin errores. Verificación visual pendiente de:
+- Todos los inputs (text, combo, date, etc.)
+- Tables (paginación, scroll, filtros)
+- Forms con CRUD
+- Dark theme toggle
+- Layout manager (tabs, dialog, sidenav)
+- Gallery, extra-components
 
 ---
 
 ## WORKFLOW DE VALIDACIÓN
 
 ```bash
-# Activar Node 20
+# Activar Node 20 (SIEMPRE antes de cualquier comando Angular)
 export PATH="$HOME/AppData/Local/nvs/node/20.18.3/x64:$PATH"
 
 # 1. Tests del framework
 cd c:/work/ontimize-web-ngx/18.x.x/ontimize-web-ngx
-npx ng test ontimize-web-ngx --browsers=ChromeHeadless --watch=false
+npm test
+# → 2277 SUCCESS, 0 failures esperados
 
-# 2. Build completo del framework (incluye SCSS bundling)
+# 2. Build completo del framework (incluye SCSS bundling, copy-files, gulp)
 npm run build
+# → 5 pasos: ng build + build-theme + build-styles + copy-files + copy-files-themes
 
 # 3. Generar tgz
 cd dist && npm pack
+# → ontimize-web-ngx-18.0.0-SNAPSHOT-0.tgz (~3.7 MB)
 
 # 4. En playground: reinstalar y verificar
 cd c:/work/ontimize-web-ngx/18.x.x/ontimize-web-ngx-playground
-npm install ontimize-web-ngx --legacy-peer-deps
-npm run build
+npm install --legacy-peer-deps
+npx ng build
+# → Build at: ... (0 errores esperados)
+
+# 5. Arrancar playground para smoke test visual
+npx ng serve
+# → http://localhost:4200
 ```
 
 ---
