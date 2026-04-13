@@ -140,13 +140,15 @@ Migración incremental de ontimize-web-ngx (Angular 15.2.9 → 18) combinada con
 - **Herramienta**: `ng generate @angular/material:m3-theme` para scaffold inicial
 - **Estrategia**: Migrar tema core primero, luego componentes uno a uno. Validar visualmente cada componente
 
-### 3.3 Standalone migration completa
+### 3.3 Standalone migration completa ✅ COMPLETADO (parcial)
 - **Convertir todos los componentes restantes** a `standalone: true`
 - **Romper OSharedModule** en imports individuales:
   - Cada componente standalone importa directamente lo que necesita (CommonModule, pipes, directivas, Material modules)
 - **Mantener módulos wrapper** para API pública backward-compatible:
   - `OntimizeWebModule` sigue existiendo pero internamente re-exporta standalone components
-  - Crear `provideOntimizeWeb()` como alternativa standalone para bootstrap
+  - ✅ `provideOntimizeWeb()` implementado en `src/lib/config/o-provide.ts` (commit `754ef7d9`)
+    - Exportado en `public-api.ts` como `provideOntimizeWeb` y `ProvideOntimizeWebOptions`
+    - Equivalente funcional a `OntimizeWebModule.forRoot()` para `bootstrapApplication()`
 
 ### 3.4 Typed Forms
 - **Alcance**: 50+ UntypedFormGroup/Control refs en 25+ archivos
@@ -176,7 +178,7 @@ Migración incremental de ontimize-web-ngx (Angular 15.2.9 → 18) combinada con
 - Actualizar `public-api.ts`:
   - Exportar standalone components directamente
   - Mantener NgModules wrapper como deprecated
-  - Exportar `provideOntimizeWeb()` para bootstrap standalone
+  - ✅ `provideOntimizeWeb()` ya exportado en `public-api.ts`
 - Actualizar documentación de la API
 
 ### 3.8 Verificación final
