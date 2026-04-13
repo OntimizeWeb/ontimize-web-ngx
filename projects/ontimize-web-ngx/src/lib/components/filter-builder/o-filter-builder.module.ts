@@ -8,6 +8,7 @@ import { OFilterBuilderComponent } from './o-filter-builder.component';
 import { OFilterBuilderComponentStateService } from '../../services/state/o-filter-builder-component-state.service';
 import { OFilterBuilderMenuComponent } from './filter-builder-menu/filter-builder-menu.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
   imports: [
     OFilterBuilderComponent,

@@ -9,6 +9,7 @@ import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-head
 import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
 import { OAppLayoutComponent } from './o-app-layout.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
   imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavModule, OAppHeaderModule, OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent],
   exports: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent]

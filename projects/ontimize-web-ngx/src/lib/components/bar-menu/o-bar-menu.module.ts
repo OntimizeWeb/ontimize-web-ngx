@@ -7,6 +7,7 @@ import { OBarMenuNestedComponent } from './menu-nested/o-bar-menu-nested.compone
 import { OBarMenuSeparatorComponent } from './menu-separator/o-bar-menu-separator.component';
 import { OBarMenuComponent } from './o-bar-menu.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
   imports: [
     OBarMenuComponent,

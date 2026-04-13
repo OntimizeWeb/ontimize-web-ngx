@@ -33,6 +33,7 @@ import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
   imports: [
     CommonModule,

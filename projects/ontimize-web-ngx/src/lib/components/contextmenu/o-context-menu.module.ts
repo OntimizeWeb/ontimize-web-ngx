@@ -6,6 +6,7 @@ import { OContextMenuSeparatorComponent } from './context-menu-separator/o-conte
 import { OContextMenuComponent } from './o-context-menu.component';
 import { OContextMenuDirective } from './o-context-menu.directive';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
   imports: [OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OContextMenuGroupComponent, OContextMenuSeparatorComponent],
   exports: [OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OContextMenuGroupComponent, OContextMenuSeparatorComponent]
