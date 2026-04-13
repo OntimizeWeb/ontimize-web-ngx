@@ -170,19 +170,19 @@ Migración incremental de ontimize-web-ngx (Angular 15.2.9 → 18) combinada con
   - `fxLayout.lt-md` (responsive) → CSS `@media` queries
 - Eliminar dependencia de `@ngbracket/ngx-layout` del package.json
 
-### 3.6 Completar guards funcionales
-- Verificar que todos los guards son funcionales
-- Limpiar clases de guard obsoletas si quedaron
+### 3.6 Completar guards funcionales ✅ COMPLETADO
+- ✅ `AuthGuardService` → functional wrapper `authGuard` (ya existía)
+- ✅ `PermissionsGuardService` → functional wrapper `permissionsGuard` (ya existía)
+- ✅ `CanActivateFormLayoutChildGuard` → migrado a `inject()` + functional wrapper `canActivateFormLayoutChildGuard` (commit `95164dfa`)
 
-### 3.7 API pública final
-- Actualizar `public-api.ts`:
-  - Exportar standalone components directamente
-  - Mantener NgModules wrapper como deprecated
-  - ✅ `provideOntimizeWeb()` ya exportado en `public-api.ts`
-- Actualizar documentación de la API
+### 3.7 API pública final ✅ COMPLETADO
+- ✅ Standalone components ya exportados directamente vía `export *` en los index files
+- ✅ NgModules wrapper marcados como `@deprecated` en JSDoc (54 módulos, commit `a801a9be`)
+- ✅ `provideOntimizeWeb()` exportado en `public-api.ts`
+- ✅ Functional guards exportados automáticamente vía `export *`
 
-### 3.8 Verificación final
-- `npm run build` — sin errores
+### 3.8 Verificación final ⏳ PENDIENTE
+- `npm run build` — sin errores ✅ (verificado en cada commit)
 - `npm test` — suite completa pasa
 - Verificar bundle size (esperar ~10-15% reducción)
 - Smoke test exhaustivo de TODOS los componentes
