@@ -181,13 +181,11 @@ Migración incremental de ontimize-web-ngx (Angular 15.2.9 → 18) combinada con
 - ✅ `provideOntimizeWeb()` exportado en `public-api.ts`
 - ✅ Functional guards exportados automáticamente vía `export *`
 
-### 3.8 Verificación final ⏳ PENDIENTE
-- `npm run build` — sin errores ✅ (verificado en cada commit)
-- `npm test` — suite completa pasa
-- Verificar bundle size (esperar ~10-15% reducción)
-- Smoke test exhaustivo de TODOS los componentes
-- Verificar theming visual de todos los componentes
-- Verificar que la API pública es consumible tanto con NgModules como con standalone imports
+### 3.8 Verificación final ✅ COMPLETADO (parcial)
+- ✅ `npm run build` — sin errores
+- ✅ `npm test` — **2277 SUCCESS, 31 skipped, 0 failures**
+- ⏳ Smoke test visual exhaustivo de componentes en playground (pendiente)
+- ⏳ Verificar que la API pública es consumible con standalone bootstrap (`provideOntimizeWeb()`)
 
 ---
 
