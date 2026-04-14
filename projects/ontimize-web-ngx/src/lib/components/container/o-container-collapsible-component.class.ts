@@ -70,11 +70,8 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
 
   protected updateOutlineGap(): void {
     if (this.isAppearanceOutline()) {
-      const exPanelHeader = this._titleEl ? (this._titleEl as any)._element.nativeElement : null;
+      const exPanelHeader = (this._titleEl as any)._element.nativeElement;
 
-      if (!this.oContainerOutline) {
-        return;
-      }
       const containerOutline = this.oContainerOutline.nativeElement;
       const containerOutlineRect = containerOutline.getBoundingClientRect();
       if (containerOutlineRect.width === 0 && containerOutlineRect.height === 0) {
@@ -104,10 +101,18 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
       const gapEmpty1Els = containerOutline.querySelectorAll('.o-container-outline-gap-empty1');
       const gapDescrEls = containerOutline.querySelectorAll('.o-container-outline-gap-description');
 
-      startEls[0].style.width = `${startWidth}px`;
-      gapTitleEls[0].style.width = `${titleWidth}px`;
-      gapEmpty1Els[0].style.width = `${empty1Width}px`;
-      gapDescrEls[0].style.width = `${descrWidth}px`;
+      if (startEls.length > 0) {
+        startEls[0].style.width = `${startWidth}px`;
+      }
+      if (gapTitleEls.length > 0) {
+        gapTitleEls[0].style.width = `${titleWidth}px`;
+      }
+      if (gapEmpty1Els.length > 0) {
+        gapEmpty1Els[0].style.width = `${empty1Width}px`;
+      }
+      if (gapDescrEls.length > 0) {
+        gapDescrEls[0].style.width = `${descrWidth}px`;
+      }
     }
   }
 
@@ -123,10 +128,10 @@ export class OContainerCollapsibleComponent extends OContainerComponent implemen
 
   updateInnerHeight(height: number): void {
     if (this.containerContent) {
-      this.containerContent.nativeElement.style.height = height;
+      this.containerContent.nativeElement.style.height = height > 0 ? height + 'px' : 'auto';
     }
     if (this.oContainerOutline) {
-      this.oContainerOutline.nativeElement.style.height = height;
+      this.oContainerOutline.nativeElement.style.height = height > 0 ? height + 'px' : 'auto';
     }
   }
   ngOnDestroy(): void {
