@@ -188,35 +188,41 @@ Migración incremental de ontimize-web-ngx (Angular 15.2.9 → 18) combinada con
 - ⏳ Verificar que la API pública es consumible con standalone bootstrap (`provideOntimizeWeb()`)
 
 ### 3.8 Restructurar scss theming por versión de Angular
-- El objetivo es evitar conflictos visuales entre estilos de Angular 15 y Angular 18, especialmente en componentes que han cambiado significativamente con Material 3. Para ello, se propone crear archivos (`ontimize-style.[version].scss`) específicos para cada versión de Angular (v8, v15, v18) que importen un archivo base común (ontimize-base-style.scss) con los estilos compartidos. De esta forma, los temas pueden importar el archivo correspondiente según la versión de Angular que estén usando, evitando así heredar estilos no compatibles o visualmente conflictivos entre versiones.
-- Crear nuevo tema oxygen para la version 18 de Angular basado en el diseño de Figma https://www.figma.com/design/IIIHHi7yi5FDDolnZzwNlT/Ontimize-Oxygen-Theme-V.2?node-id=1-2
 
-- ontimize-style.v18.scss no debe incluir los estilos de los botones de Angular 8 y Angular 15. Además, se deben añadir las variables/mixins necesarias para configurar la densidad de los componentes (comfortable, compact, etc.) siguiendo las pautas de Material 3 para theming,  no heredar los estilos de densidad de Angular 15 para evitar conflictos visuales. Se recomienda posponer la migración de los estilos de densidad no soportados por Material 3 a la post-migración para evitar sobrecarga en esta fase. También se deben crear nuevas variables/mixins para los nuevos estilos de Angular 18 dado el diseño de Figma, y cambiar la fuente de los iconos a "Material Symbols Outlined". Por último, se debe configurar la fuente Noto Sans como fuente global para Angular 18, añadiendo un fichero `noto.scss` con la importación de la fuente y las variables de configuración, y usándolo en `ontimize-style.v18.scss`.
+- El objetivo es evitar conflictos visuales entre estilos de Angular 15 y Angular 18, especialmente en componentes que han cambiado significativamente con Material 3. Para ello, se propone crear archivos (`ontimize-style.[version].scss`) específicos para cada versión de Angular (v8, v15, v18) que importen un archivo base común (ontimize-base-style.scss) con los estilos compartidos. De esta forma, los temas pueden importar el archivo correspondiente según la versión de Angular que estén usando, evitando así heredar estilos no compatibles o visualmente conflictivos entre versiones.
+
+En el caso de `ontimize-style.v18.scss`,este debera añadir las variables/mixins necesarias para configurar la densidad de los componentes (comfortable, compact, etc.) siguiendo las pautas de Material 3 para theming,  no heredar los estilos de densidad de Angular 15 para evitar conflictos visuales del archivo `ontimize-style.v15.scss`. Se recomienda posponer la migración de los estilos de densidad no soportados por Material 3 a la post-migración para evitar sobrecarga en esta fase. También cambiar la fuente de los iconos a "Material Symbols Outlined" y tambien, se debe configurar la fuente Noto Sans como fuente global para Angular 18, añadiendo un fichero `noto.scss` con la importación de la fuente y las variables de configuración, y usándolo en `ontimize-style.v18.scss`.
+
+- Ademas de esto, el archivo `ontimize-style.v18.scss` va tener un estilo diferente para el componente o-app-sidenav. Para evitar conflictos visuales, se recomienda crear en el archivo `ontimize-style.v18.scss` los estilos específicos para Angular 18 y mantener el archivo `ontimize-style-v15.scss` con los estilos actuales para Angular 15. De esta forma, los consumidores pueden elegir el archivo de estilos adecuado según la versión de Angular que estén usando, asegurando una apariencia consistente con el diseño de Figma para cada versión.
+Por otro lado, los botones tambien van a tener un estilo diferente en Angular 18, ya que se recomienda eliminar cualquier customización previa de los botones en `ontimize-style.v18.scss` y dejar que hereden el estilo por defecto de Material 2, mientras que en `ontimize-style-v15.scss` se mantienen los estilos personalizados actuales para Angular 15. Esto evitará conflictos visuales entre las versiones y permitirá a los consumidores tener una apariencia consistente con el diseño de Figma para cada versión de Angular.
 
 - Actualizar `gulpfile.js` para copiar los archivos versionados
-- Actualizar los temas (oxygen.scss, ontimize-blue.scss, ontimize-black-yellow.scss) para usar el nuevo archivo base según corresponda
-
+- Actualizar los temas (ontimize-blue.scss, ontimize-black-yellow.scss) para usar el nuevo archivo base según corresponda
 - Verificar que los temas siguen funcionando visualmente tras la restructuración
 - Verificar que el build de la librería sigue incluyendo los archivos SCSS correctos y que no hay conflictos entre versiones
 - Documentar en `SCSS_VERSION_STRUCTURE.md` la nueva estructura y cómo usar cada versión
 - Documentar en la guía de migración que los consumidores deben actualizar su import de ontimize-style a la versión correspondiente según su versión de Angular (v8, v15 o v18) para evitar problemas visuales
 - Documentar como configurar la densidad de los componentes a través de las nuevas variables/mixins en ontimize-style.v18.scss
 
+### 3.9 Documentar guía de migración para consumidores
+- Crear `MIGRATION_GUIDE.md` con pasos detallados para migrar proyectos consumidores de Angular 15 → 18 usando la nueva API standalone
+- Incluir ejemplos de migración de NgModule bootstrap → standalone bootstrap con `provideOntimizeWeb()`
+- Publicar guía junto con release notes de la versión 18
 
+### FASE 4 (opcional, post-migración)
+### 4.1 Crear nuevo theme "Oxygen" basado en diseño de Figma
+- Crear nuevo tema oxygen para la version 18 de Angular basado en el diseño de Figma https://www.figma.com/design/IIIHHi7yi5FDDolnZzwNlT/Ontimize-Oxygen-Theme-V.2?node-id=1-2
 
-### 3.9 Considerar migración a Jest (opcional, para post-migración)
+### 4.2 Considerar migración a Jest (opcional, para post-migración)
 - Evaluar esfuerzo de migración de Karma + Jasmine → Jest + `jest-preset-angular`
 - Configurar `jest.config.js`, actualizar scripts de test, migrar reporters
 
-### 3.10 Considerar migración de moment.js → luxon (opcional, para post-migración)
+### 4.3 Considerar migración de moment.js → luxon (opcional, para post-migración)
 - Evaluar impacto de migrar de moment.js (legacy) a luxon (moderno)
 - Refactorizar servicios y componentes que usan moment.js para usar luxon en su lugar
 - Actualizar dependencias y tipos en `package.json`
 
-### 3.11 Documentar guía de migración para consumidores
-- Crear `MIGRATION_GUIDE.md` con pasos detallados para migrar proyectos consumidores de Angular 15 → 18 usando la nueva API standalone
-- Incluir ejemplos de migración de NgModule bootstrap → standalone bootstrap con `provideOntimizeWeb()`
-- Publicar guía junto con release notes de la versión 18
+
 
 
 ---
