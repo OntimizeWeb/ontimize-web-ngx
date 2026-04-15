@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 15 abril 2026 (sesión 7)
+> Última actualización: 15 abril 2026 (sesiones 7-8)
 
 ## Repositorios y ramas
 
@@ -50,7 +50,8 @@
 | **Material Symbols Outlined (icons v18)** | ✅ **Completado** | `017a2a75` |
 | **v18 theme: remove button overrides** | ✅ **Completado** | `017a2a75` |
 | **Playground PASO 6: Standalone bootstrap** | ✅ **Completado** | `232a4c0` (repo playground) |
-| **Sub-paso 3.2: Material M3** | ⏳ **Pendiente** | — |
+| **Sub-paso 3.9: MIGRATION_GUIDE.md** | ✅ **Completado** | `e2b6ad4a` |
+| **Sub-paso 3.2: Material M3** | ⏳ **Pospuesto** (post-migración) | — |
 
 ---
 
@@ -330,12 +331,12 @@ Migración de `material-icons` (ligature font) a `material-symbols-outlined` (va
 
 ## PENDIENTE
 
-### 1. Sub-paso 3.2: Migración a Material M3 — framework
+### 1. Sub-paso 3.2: Migración a Material M3 — framework (POSPUESTO)
 
-- Migrar de M2 theming (actualmente con prefijo `m2-`) a M3 tokens
-- Requiere reestructurar los tokens de tema en 24+ archivos SCSS
-- **Bloqueante para**: playground PASO 5.3, quickstart PASO 3 (theming)
-- Herramienta: `ng generate @angular/material:m3-theme`
+- Migrar de M2 theming (prefijo `m2-`) a M3 tokens
+- **Alcance**: 310 llamadas `mat.m2-get-color-from-palette()` en 36 ficheros
+- **Decisión**: Pospuesto a post-migración — el framework funciona correctamente con M2 en Angular 18. La migración a M3 es un proyecto independiente de alto riesgo.
+- Herramienta cuando se retome: `ng generate @angular/material:m3-theme`
 
 ### 2. Playground PASO 6: Standalone bootstrap — ✅ COMPLETADO (15 abril 2026) — commit `232a4c0` (repo playground)
 
