@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 13 abril 2026 (sesiones 3-4)
+> Última actualización: 15 abril 2026 (sesiones 5-6)
 
 ## Repositorios y ramas
 
@@ -45,8 +45,10 @@
 | Sub-paso 3.8: Tests | ✅ Completado | — (2277 SUCCESS, 0 fallos) |
 | Playground migrado | ✅ Completado | `3e47f22` (repo playground) |
 | Playground: control flow (`@if`/`@for`) | ✅ Completado | `8686e0b` (repo playground) |
+| `bootstrapApplication()` — ontimizePostBootstrap + OntimizeMatIconRegistry | ✅ Completado | `e7e1f664` |
+| Sub-paso 3.8: SCSS versioning (v15/v18) | ✅ Completado | `4a874b0c` |
+| **Playground PASO 6: Standalone bootstrap** | ✅ **Completado** | `232a4c0` (repo playground) |
 | **Sub-paso 3.2: Material M3** | ⏳ **Pendiente** | — |
-| **Playground PASO 6: Standalone bootstrap** | ⏳ **Pendiente** | — |
 
 ---
 
@@ -257,6 +259,39 @@ bootstrapApplication(AppComponent, {
 Chrome 146: Executed 2277 of 2277 (skipped 31) SUCCESS — Total time: ~70s
 ```
 
+### bootstrapApplication() — ontimizePostBootstrap + OntimizeMatIconRegistry — ✅ COMPLETADO (14 abril 2026) — commit `e7e1f664`
+
+- `ontimizePostBootstrap` acepta `NgModuleRef<any> | ApplicationRef` para ser usable como `.then()` en `bootstrapApplication()`
+- `provideOntimizeWeb()` registra `OntimizeMatIconRegistry` explícitamente (no tiene `providedIn:'root'`, solo estaba en `CustomMaterialModule`)
+- `main.ts` de la playground limpiado: eliminados duplicados de `provideAnimations`, `provideHttpClient`, `APP_CONFIG` y `...ONTIMIZE_PROVIDERS` (todos ya incluidos en `provideOntimizeWeb()`)
+
+### Sub-paso 3.8: SCSS versioning (v15/v18) — ✅ COMPLETADO (15 abril 2026) — commit `4a874b0c`
+
+Nuevos ficheros en `projects/ontimize-web-ngx/src/lib/theming/`:
+
+| Fichero | Descripción |
+|---------|-------------|
+| `ontimize-style.v15.scss` | `@forward` de `ontimize-style-v8.scss` — sidenav con primary, botones v15, Poppins |
+| `ontimize-style.v18.scss` | `@forward` de `ontimize-style.scss` — sidenav neutro, botones M2 default, Noto Sans |
+| `fonts/noto.scss` | `@font-face` Noto Sans + `--mdc-typography-font-family` CSS custom property |
+| `themes/ontimize-blue.v15.scss` | Tema azul para Angular 15 (usa `ontimize-style.v15`) |
+| `themes/ontimize-blue.v18.scss` | Tema azul para Angular 18 (usa `ontimize-style.v18`) |
+
+`gulpfile.js` actualizado para copiar `.v15` y `.v18` a `dist/theming/` junto con los ficheros existentes.
+
+**Uso en Angular 18:**
+```scss
+@use 'ontimize-web-ngx/theming/ontimize-style.v18' as ontimize-style;
+// + importar fonts/noto.scss en styles.scss
+// + añadir Material Symbols Outlined en index.html
+```
+
+**Uso en Angular 15:**
+```scss
+@use 'ontimize-web-ngx/theming/ontimize-style.v15' as ontimize-style;
+// continúa usando Poppins y estilos de botón v15
+```
+
 ### Playground: control flow — ✅ COMPLETADO (11 abril 2026) — commit `8686e0b` (repo playground)
 
 - 21 templates migrados de `*ngIf`/`*ngFor` a `@if`/`@for` con el schematic automático
@@ -287,23 +322,16 @@ Chrome 146: Executed 2277 of 2277 (skipped 31) SUCCESS — Total time: ~70s
 - **Bloqueante para**: playground PASO 5.3, quickstart PASO 3 (theming)
 - Herramienta: `ng generate @angular/material:m3-theme`
 
-### 2. Playground PASO 6: Standalone bootstrap
+### 2. Playground PASO 6: Standalone bootstrap — ✅ COMPLETADO (15 abril 2026) — commit `232a4c0` (repo playground)
 
-**Desbloqueado** — `provideOntimizeWeb()` ya disponible.
-
-Pasos concretos:
-1. Reemplazar `src/main.ts`:
-   ```typescript
-   // Antes
-   platformBrowserDynamic().bootstrapModule(AppModule)
-   // Después
-   bootstrapApplication(AppComponent, {
-     providers: [provideOntimizeWeb(CONFIG), provideRouter(routes)]
-   })
-   ```
-2. Convertir los 51 feature modules a standalone components con lazy loading vía `loadComponent`
-3. Eliminar `AppModule`, `SharedModule` y todos los feature modules
-4. Eliminar `src/polyfills.ts` → configurar `zone.js` en `angular.json`
+- `main.ts` migrado a `bootstrapApplication(AppComponent, { providers: [provideOntimizeWeb(CONFIG), provideRouter(routes), ...] })`
+- `app.module.ts` + `app-routing.module.ts` eliminados → `app.routes.ts`
+- `main.module.ts` + `main-routing.module.ts` eliminados → `main.routes.ts`
+- `layout.module.ts` + `layout-routing.module.ts` eliminados → `layout.routes.ts`
+- `media.module.ts` + `media-routing.module.ts` eliminados → `media.routes.ts`
+- `inputs-routing.module.ts` eliminado → `inputs.routes.ts` (sub-components siguen declarados en `InputsModule`)
+- Shell components standalone: `ContainersComponent`, `LayoutManagerComponent`, `ImageComponent`, `GalleryComponent`, `ImageEditorComponent`
+- Sub-features con componentes no-standalone (inputs sub-pages, containers-basic/collapsible, layout-manager sub-pages, media sub-pages) siguen en NgModules — cargados vía `loadChildren`
 
 ### 3. Addons pendientes de migrar
 
@@ -319,9 +347,9 @@ Los planes de migración están en cada repo pero aún no se han ejecutado:
 
 Cada plan sigue 3 fases (16→17→18) con estrategia de ramas `migration/16.x.x` → `migration/17.x.x` → `migration/18.x.x`.
 
-### 4. Smoke test visual playground
+### 3. Smoke test visual playground
 
-La playground arranca y compila sin errores. Verificación visual pendiente de:
+La playground usa ahora `bootstrapApplication()`. Verificación visual pendiente de:
 - Todos los inputs (text, combo, date, etc.)
 - Tables (paginación, scroll, filtros)
 - Forms con CRUD
