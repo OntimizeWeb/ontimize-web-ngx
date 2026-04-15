@@ -1,0 +1,31 @@
+// =============================================================================
+// ontimize-style.v18.scss — Ontimize theming for Angular 18 / Material 18
+// =============================================================================
+//
+// Usage in your app:
+//
+//   @use 'ontimize-web-ngx/theming/ontimize-style.v18' as ontimize-style;
+//
+//   $primary: mat.m2-define-palette(...);
+//   $accent:  mat.m2-define-palette(...);
+//
+//   $theme:      ontimize-style.o-mat-light-theme($primary, $accent);
+//   $dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);
+//
+//   @include ontimize-style.ontimize-theme-styles($theme);
+//
+// Font:
+//   - Import fonts/noto.scss to use Noto Sans as the global font.
+//   - Icons use 'Material Symbols Outlined' — add the following to your index.html:
+//     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+//
+// Key differences from v15:
+//   - Sidenav background: derived from $background.status-bar (neutral grey, not primary colour)
+//   - Buttons: no custom colour overrides — inherit Material 2 defaults
+//   - Font: Noto Sans (not Poppins) — include fonts/noto.scss separately
+//   - Material Symbols Outlined icon font (not Material Icons ligatures)
+//   - Density styles NOT applied (Material 3 does not support negative density in the same way)
+// =============================================================================
+
+// Delegate to the main v18 style file.
+@forward 'ontimize-style.scss';

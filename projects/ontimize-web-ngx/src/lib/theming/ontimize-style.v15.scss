@@ -1,0 +1,25 @@
+// =============================================================================
+// ontimize-style.v15.scss — Ontimize theming for Angular 15 / Material 15
+// =============================================================================
+//
+// Usage in your app:
+//
+//   @use 'ontimize-web-ngx/theming/ontimize-style.v15' as ontimize-style;
+//
+//   $primary: mat.m2-define-palette(...);
+//   $accent:  mat.m2-define-palette(...);
+//
+//   $theme:      ontimize-style.o-mat-light-theme($primary, $accent);
+//   $dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);
+//
+//   @include ontimize-style.ontimize-theme-styles($theme);
+//
+// For icon font, use 'Material Icons' (ligature-based).
+// For button / sidenav styles specific to Angular 15, see comments below.
+// =============================================================================
+
+// Delegate to the existing v8/v15 style file (shared logic).
+// ontimize-style-v8.scss contains the Angular-15-compatible button and sidenav
+// styles: buttons inherit Material 2 defaults with custom border-radius, and
+// the sidenav background is derived from the primary palette.
+@forward 'ontimize-style-v8.scss';
