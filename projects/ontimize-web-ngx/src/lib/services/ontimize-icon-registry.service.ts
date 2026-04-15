@@ -17,6 +17,7 @@ export class OntimizeMatIconRegistry {
   }
 
   initialize() {
+    this.matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
     this.matIconRegistry.addSvgIconSetInNamespace(OntimizeMatIconRegistry.ONTIMIZE_NAMESPACE,
       this.oSafePipe.transform(OntimizeMatIconRegistry.ONTIMIZE_ICON_SET_PATH, 'resourceUrl'));
   }

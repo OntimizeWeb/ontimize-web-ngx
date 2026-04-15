@@ -9,7 +9,7 @@
       [required]="isRequired" readonly (change)="onChangeEvent($event)">
       @if (showClearButton) {
         <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-          <mat-icon svgIcon="ontimize:close"></mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
       }
       @if (getValue()) {
@@ -54,10 +54,10 @@
                     diameter="3" strokeWidth="3"></mat-progress-spinner>
                   }
                   @if (splitUpload && file.isUploaded && file.isSuccess) {
-                    <mat-icon class="uploaded" svgIcon="ontimize:check_circle"></mat-icon>
+                    <mat-icon class="uploaded">check_circle</mat-icon>
                   }
                   @if (splitUpload && file.isUploaded && file.isError) {
-                    <mat-icon class="error" svgIcon="ontimize:error_outline"></mat-icon>
+                    <mat-icon class="error">error</mat-icon>
                   }
                 </div>
               </mat-list-item>

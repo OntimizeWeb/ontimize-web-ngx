@@ -9,7 +9,7 @@
     @if (!(isCustomFilter | async)) {
       <div class="o-flex-100 o-flex-column">
         <mat-form-field class="hinted">
-          <mat-icon matPrefix svgIcon="ontimize:search"></mat-icon>
+          <mat-icon matPrefix>search</mat-icon>
           <input matInput #filter placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
           <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
         </mat-form-field>
@@ -92,7 +92,7 @@
             <input matInput #filterText [formControl]="fcText" placeholder="{{ 'TABLE.FILTER' | oTranslate }}">
             <mat-hint>{{ 'TABLE.FILTER_BY_COLUMN.HINT_STAR' | oTranslate }}</mat-hint>
             <button type="button" matSuffix mat-icon-button (click)="clearValues()">
-              <mat-icon svgIcon="ontimize:close"></mat-icon>
+              <mat-icon>close</mat-icon>
             </button>
           </mat-form-field>
         </div>
@@ -106,7 +106,7 @@
             <input matInput [formControl]="fcTo" placeholder="{{ 'TABLE.FILTER_BY_COLUMN.TO' | oTranslate }}">
           </mat-form-field>
           <button type="button" mat-icon-button (click)="clearValues()">
-            <mat-icon svgIcon="ontimize:close"></mat-icon>
+            <mat-icon>close</mat-icon>
           </button>
         </div>
       }
@@ -129,7 +129,7 @@
                 <mat-datepicker #datepickerTo [startView]="getStartedViewDatepicker()"></mat-datepicker>
               </mat-form-field>
               <button type="button" matSuffix mat-icon-button (click)="clearValues()">
-                <mat-icon svgIcon="ontimize:close"></mat-icon>
+                <mat-icon>close</mat-icon>
               </button>
             </div>
           }

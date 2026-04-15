@@ -2,7 +2,7 @@
   <div class="quickFilter o-flex-row">
     <mat-form-field [appearance]="appearance">
       @if (!showFilterMenu) {
-        <mat-icon svgIcon="ontimize:search" matPrefix></mat-icon>
+        <mat-icon matPrefix>search</mat-icon>
       }
       <input #term matInput id="term" type="search" formControlName="term" [placeholder]="placeholder">
       @if (labelVisible) {
@@ -10,7 +10,7 @@
       }
       @if (showFilterMenu) {
         <div class="o-flex-row" matPrefix>
-          <mat-icon svgIcon="ontimize:search" [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="small"></mat-icon>
+          <mat-icon [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="small">search</mat-icon>
           <button type="button" mat-icon-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()">
             <mat-icon class="search-icon">expand_more</mat-icon>
           </button>

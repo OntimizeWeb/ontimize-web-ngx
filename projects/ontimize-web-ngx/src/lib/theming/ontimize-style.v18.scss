@@ -26,7 +26,6 @@
 @use "sass:map";
 @use '@angular/material' as mat;
 @use 'fonts/noto.scss';
-@use 'styles/ontimize/variables.scss' as v18-variables;
 @use 'ontimize-base-style.scss' as base;
 
 // ─── Re-export theme factory functions from base ────────────────────────────
@@ -214,38 +213,6 @@
           font-weight: 500;
         }
       }
-    }
-  }
-
-  // ─── v18 Toolbar icon buttons (outlined, bordered) ─────────
-  .o-form .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button,
-  .o-grid .o-grid-toolbar button,
-  .o-list .o-list-toolbar button,
-  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button {
-    &.mat-mdc-icon-button:not(.mat-mdc-menu-trigger) {
-      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
-      border-style: solid;
-      border-width: 1px;
-      border-radius: v18-variables.$border-radius;
-      line-height: v18-variables.$button-line-height-width-border;
-    }
-  }
-
-  .o-form .o-form-toolbar-header .mat-toolbar-tools .o-form-navigation~.o-form-toolbar-button.mat-mdc-icon-button:not(.mat-mdc-menu-trigger) {
-    margin: 0 6px;
-  }
-
-  // ─── v18 Outlined buttons (border only, NO custom colour overrides) ─
-  // Buttons inherit Material 2 colour defaults. Only the border is styled.
-  .mat-mdc-dialog-actions button:not([disabled]),
-  .o-form .o-form-toolbar button:not([disabled]),
-  .o-grid .o-grid-footer button:not([disabled]),
-  .o-grid .o-grid-toolbar>button:not([disabled]),
-  .o-list .o-list-toolbar>button:not([disabled]),
-  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons button:not([disabled]),
-  button.mat-mdc-outlined-button:not([disabled]) {
-    &.mat-mdc-button-base {
-      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
     }
   }
 

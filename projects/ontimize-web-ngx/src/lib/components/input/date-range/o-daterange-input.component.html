@@ -18,7 +18,7 @@
 
         @if (showClearButton) {
           <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-            <mat-icon svgIcon="ontimize:close"></mat-icon>
+            <mat-icon>close</mat-icon>
           </button>
         }
         <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="isReadOnly || !enabled"></mat-datepicker-toggle>

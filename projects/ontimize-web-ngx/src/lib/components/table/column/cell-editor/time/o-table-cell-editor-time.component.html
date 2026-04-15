@@ -10,7 +10,7 @@
         </mat-datepicker>
 
         <span class="icon-btn" (click)="openDatepicker(d)" matSuffix>
-          <mat-icon svgIcon="ontimize:today"></mat-icon>
+          <mat-icon>today</mat-icon>
         </span>
 
         <mat-error *oMatError="hasErrorDate('required') || hasErrorHour('required')">
@@ -45,7 +45,7 @@
           (blur)="enabledCommitOnTabPress = true">
 
           <button type="button" matSuffix mat-icon-button (click)="open($event)">
-            <mat-icon ngxMaterialTimepickerToggleIcon svgIcon="ontimize:clock"></mat-icon>
+            <mat-icon ngxMaterialTimepickerToggleIcon>schedule</mat-icon>
           </button>
 
           <mat-error *oMatError="hasErrorHour('invalidFormatHour')">

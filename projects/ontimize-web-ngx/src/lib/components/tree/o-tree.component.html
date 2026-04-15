@@ -6,39 +6,39 @@
           @if (showButtonsText) {
             @if (insertButton) {
               <button type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
-                <mat-icon svgIcon="ontimize:add"></mat-icon>
+                <mat-icon>add</mat-icon>
                 <span>{{ 'INSERT' | oTranslate }}</span>
               </button>
             }
             @if (refreshButton) {
               <button type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton"
                 (click)="reloadData()">
-                <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+                  <mat-icon>autorenew</mat-icon>
                 <span>{{ 'REFRESH' | oTranslate }}</span>
               </button>
             }
             @if (deleteButton) {
               <button type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
                 [class.disabled]="!enabledDeleteButton">
-                <mat-icon svgIcon="ontimize:delete"></mat-icon>
+                <mat-icon>delete</mat-icon>
                 <span>{{ 'DELETE' | oTranslate }}</span>
               </button>
             }
           } @else {
             @if (insertButton) {
               <button type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
-                <mat-icon svgIcon="ontimize:add"></mat-icon>
+                <mat-icon>add</mat-icon>
               </button>
             }
             @if (refreshButton) {
               <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()">
-                <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+                  <mat-icon>autorenew</mat-icon>
               </button>
             }
             @if (deleteButton) {
               <button type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
                 [class.disabled]="!enabledDeleteButton">
-                <mat-icon svgIcon="ontimize:delete"></mat-icon>
+                <mat-icon>delete</mat-icon>
               </button>
             }
           }
@@ -55,7 +55,7 @@
         @if (showTreeMenuButton) {
           <button type="button" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu.matMenu"
             (click)="$event.stopPropagation()">
-            <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
+            <mat-icon>more_vert</mat-icon>
           </button>
         }
         <o-tree-menu #treeMenu [select-all-checkbox]="selectAllCheckbox" [select-all-checkbox-visible]="selectAllCheckboxVisible"

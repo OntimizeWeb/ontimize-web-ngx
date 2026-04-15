@@ -1,16 +1,16 @@
 <div class="buttons o-flex-row">
   @if (showInsertOButton) {
     <o-table-button attr="add" [enabled]="enabledInsertButton | async" label="TABLE.BUTTONS.ADD"
-    svg-icon="ontimize:add" (onClick)="add()" class="o-table-button-add"></o-table-button>
+    icon="add" (onClick)="add()" class="o-table-button-add"></o-table-button>
   }
   @if (showRefreshOButton) {
     <o-table-button attr="refresh" [enabled]="enabledRefreshButton | async" label="TABLE.BUTTONS.REFRESH"
-      svg-icon="ontimize:autorenew" (onClick)="reloadData()" class="o-table-button-refresh">
+      icon="autorenew" (onClick)="reloadData()" class="o-table-button-refresh">
     </o-table-button>
   }
   @if (showDeleteOButton) {
     <o-table-button attr="delete" [enabled]="enabledDeleteButton | async" label="TABLE.BUTTONS.DELETE"
-    svg-icon="ontimize:delete" (onClick)="remove()" class="o-table-button-delete"></o-table-button>
+   icon="delete" (onClick)="remove()" class="o-table-button-delete"></o-table-button>
   }
   <ng-content></ng-content>
 </div>

@@ -65,10 +65,10 @@
 
 <ng-template #buttonTemplate let-button="button">
   @if (button.icon!==undefined) {
-    <mat-icon class="material-icons o-button-icon" style="vertical-align:middle">{{ button.icon }}</mat-icon>
+    <mat-icon class="material-symbols-outlined o-button-icon" style="vertical-align:middle">{{ button.icon }}</mat-icon>
   }
   @if (button.svgIcon!==undefined) {
-    <mat-icon class="material-icons o-button-icon" style="vertical-align:middle"
+    <mat-icon class="material-symbols-outlined o-button-icon" style="vertical-align:middle"
     [svgIcon]="button.svgIcon"></mat-icon>
   }
   {{ button.olabel | oTranslate }}

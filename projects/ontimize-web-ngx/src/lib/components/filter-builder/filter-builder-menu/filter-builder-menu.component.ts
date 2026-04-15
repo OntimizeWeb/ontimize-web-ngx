@@ -41,7 +41,7 @@ export class OFilterBuilderMenuComponent {
   showClearFilterOption: boolean = true;
   public icon: string;
   public svgIcon: string;
-  public defaultSvgIcon = 'ontimize:more_vert';
+  public defaultIcon = 'more_vert';
 
   constructor(
     protected injector: Injector,

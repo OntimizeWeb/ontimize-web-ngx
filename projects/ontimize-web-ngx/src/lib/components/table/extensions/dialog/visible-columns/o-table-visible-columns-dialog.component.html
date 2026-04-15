@@ -10,13 +10,13 @@
         <mat-list-item cdkDrag (click)="onClickColumn(column)" [ngClass]="{'column-hidden':!column.visible}"
           class="o-drag-list-item-box">
           <div class="o-flex-row o-flex o-layout-align-stretch-center">
-            <mat-icon matListItemIcon svgIcon="ontimize:drag_handle"></mat-icon>
+            <mat-icon matListItemIcon>drag_handle</mat-icon>
             <span matListItemLine class="o-flex">{{ (column.title || column.attr) | oTranslate }}</span>
             @if (column.visible) {
-              <mat-icon svgIcon="ontimize:visibility" color="primary"></mat-icon>
+              <mat-icon color="primary">visibility</mat-icon>
             }
             @if (!column.visible) {
-              <mat-icon svgIcon="ontimize:visibility_off"></mat-icon>
+              <mat-icon>visibility_off</mat-icon>
             }
           </div>
           <mat-divider></mat-divider>

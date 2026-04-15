@@ -9,7 +9,7 @@
       @if (username) {
         <span class="o-user-info-username"> {{ username }}</span>
       }
-      <mat-icon id="arrow-icon" svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
+      <mat-icon id="arrow-icon">keyboard_arrow_down</mat-icon>
     </div>
     <mat-menu #menu="matMenu" yPosition="below" class="o-mat-menu">
       @if (showProfile) {
@@ -20,7 +20,7 @@
       }
       @if (showSettings) {
         <button id="menu-settings" type="button" mat-menu-item (click)="onSettingsClick()">
-          <mat-icon svgIcon="ontimize:settings"></mat-icon>
+          <mat-icon>power_settings_new</mat-icon>
           <span>{{ 'APP_LAYOUT.SETTINGS' | oTranslate }}</span>
         </button>
       }
@@ -36,7 +36,7 @@
       }
       @if (showLogout) {
         <button id="menu-logout" type="button" mat-menu-item (click)="onLogoutClick()">
-          <mat-icon svgIcon="ontimize:power_settings_new"></mat-icon>
+          <mat-icon>power_settings_new</mat-icon>
           <span>{{ 'LOGOUT' | oTranslate }}</span>
         </button>
       }

@@ -18,13 +18,13 @@
 
       <button type="button" [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button
         (click)="onClickListpicker($event)">
-        <mat-icon svgIcon="ontimize:search"></mat-icon>
+        <mat-icon>search</mat-icon>
       </button>
 
       @if (showClearButton) {
         <button type="button" [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" matSuffix mat-icon-button
           (click)="onClickClearValue($event)">
-          <mat-icon svgIcon="ontimize:clear"></mat-icon>
+            <mat-icon>clear</mat-icon>
         </button>
       }
 

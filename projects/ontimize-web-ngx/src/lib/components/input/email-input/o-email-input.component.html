@@ -10,10 +10,10 @@
       [minlength]="minLength">
       @if (showClearButton) {
         <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-          <mat-icon svgIcon="ontimize:close"></mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
       }
-      <mat-icon matSuffix [class.mat-disabled]="!enabled" svgIcon="ontimize:mail_outline"></mat-icon>
+      <mat-icon matSuffix [class.mat-disabled]="!enabled">mail</mat-icon>
       <mat-error *oMatError="hasError('required')">
         {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>

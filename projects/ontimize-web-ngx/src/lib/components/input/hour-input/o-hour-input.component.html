@@ -11,11 +11,11 @@
 
       @if (showClearButton) {
         <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-          <mat-icon svgIcon="ontimize:close"></mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
       }
       <button type="button" matSuffix mat-icon-button [disabled]="isReadOnly || !enabled" (click)="open($event)">
-        <mat-icon ngxMaterialTimepickerToggleIcon svgIcon="ontimize:clock"></mat-icon>
+        <mat-icon ngxMaterialTimepickerToggleIcon>schedule</mat-icon>
       </button>
 
       <mat-error *oMatError="hasError('required')">

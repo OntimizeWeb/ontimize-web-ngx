@@ -52,11 +52,11 @@
       <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
       <span class="fill-remaining"></span>
       @if (appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened) {
-        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"
+        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow"
           (click)="toggle($event)"
-        (keydown)="toggle($event)"></mat-icon>
+        (keydown)="toggle($event)"> chevron_right</mat-icon>
       } @else {
-        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow" svgIcon="ontimize:keyboard_arrow_right"></mat-icon>
+        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow">chevron_right</mat-icon>
       }
     }
     @if (!sidenavOpened) {

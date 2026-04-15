@@ -12,14 +12,14 @@
           <input matInput readonly (click)="input.click()" [placeholder]="olabel | oTranslate" [required]="isRequired" [formControl]="stateCtrl" />
           @if (fullScreenButton) {
             <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="openFullScreen($event)">
-              <mat-icon svgIcon="ontimize:fullscreen"></mat-icon>
+              <mat-icon>fullscreen</mat-icon>
             </button>
           }
           <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="input.click()">
-            <mat-icon svgIcon="ontimize:folder_open"></mat-icon>
+            <mat-icon>folder</mat-icon>
           </button>
           <button type="button" [disabled]="!enabled" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-            <mat-icon svgIcon="ontimize:close"></mat-icon>
+            <mat-icon>close</mat-icon>
           </button>
           <ng-container *ngTemplateOutlet="errorsTemplate"></ng-container>
         </mat-form-field>

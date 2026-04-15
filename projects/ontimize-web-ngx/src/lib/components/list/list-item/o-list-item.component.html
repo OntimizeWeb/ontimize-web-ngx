@@ -17,12 +17,12 @@
   <div class="row-buttons-container o-flex-row">
     @if (_list && _list.editButtonInRow) {
       <div class="o-list-row-action o-list-item-icon" (click)="onEditIconClicked($event)">
-        <mat-icon class="material-icons">{{ _list.editButtonInRowIcon }}</mat-icon>
+        <mat-icon>{{ _list.editButtonInRowIcon }}</mat-icon>
       </div>
     }
     @if (_list && _list.detailButtonInRow) {
       <div class="o-list-row-action o-list-item-icon" (click)="onDetailIconClicked($event)">
-        <mat-icon class="material-icons">{{ _list.detailButtonInRowIcon }}</mat-icon>
+        <mat-icon>{{ _list.detailButtonInRowIcon }}</mat-icon>
       </div>
     }
   </div>
