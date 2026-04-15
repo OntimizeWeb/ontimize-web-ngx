@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 15 abril 2026 (sesiones 5-6)
+> Última actualización: 15 abril 2026 (sesión 7)
 
 ## Repositorios y ramas
 
@@ -46,7 +46,9 @@
 | Playground migrado | ✅ Completado | `3e47f22` (repo playground) |
 | Playground: control flow (`@if`/`@for`) | ✅ Completado | `8686e0b` (repo playground) |
 | `bootstrapApplication()` — ontimizePostBootstrap + OntimizeMatIconRegistry | ✅ Completado | `e7e1f664` |
-| Sub-paso 3.8: SCSS versioning (v15/v18) | ✅ Completado | `4a874b0c` |
+| Sub-paso 3.8: SCSS versioning (v15/v18) | ✅ Completado | `4a874b0c`, `a86070ed` |
+| **Material Symbols Outlined (icons v18)** | ✅ **Completado** | `017a2a75` |
+| **v18 theme: remove button overrides** | ✅ **Completado** | `017a2a75` |
 | **Playground PASO 6: Standalone bootstrap** | ✅ **Completado** | `232a4c0` (repo playground) |
 | **Sub-paso 3.2: Material M3** | ⏳ **Pendiente** | — |
 
@@ -265,19 +267,20 @@ Chrome 146: Executed 2277 of 2277 (skipped 31) SUCCESS — Total time: ~70s
 - `provideOntimizeWeb()` registra `OntimizeMatIconRegistry` explícitamente (no tiene `providedIn:'root'`, solo estaba en `CustomMaterialModule`)
 - `main.ts` de la playground limpiado: eliminados duplicados de `provideAnimations`, `provideHttpClient`, `APP_CONFIG` y `...ONTIMIZE_PROVIDERS` (todos ya incluidos en `provideOntimizeWeb()`)
 
-### Sub-paso 3.8: SCSS versioning (v15/v18) — ✅ COMPLETADO (15 abril 2026) — commit `4a874b0c`
+### Sub-paso 3.8: SCSS versioning (v15/v18) — ✅ COMPLETADO (15 abril 2026) — commits `4a874b0c`, `a86070ed`
 
-Nuevos ficheros en `projects/ontimize-web-ngx/src/lib/theming/`:
+Arquitectura SCSS versionada con base compartida + estilos específicos por versión:
 
 | Fichero | Descripción |
 |---------|-------------|
-| `ontimize-style.v15.scss` | `@forward` de `ontimize-style-v8.scss` — sidenav con primary, botones v15, Poppins |
-| `ontimize-style.v18.scss` | `@forward` de `ontimize-style.scss` — sidenav neutro, botones M2 default, Noto Sans |
+| `ontimize-base-style.scss` | Base compartida: paletas, `o-mat-light-theme()`, layout, bg-levels, o-material-theme |
+| `ontimize-style.v15.scss` | v15: Poppins, density, botones custom, sidenav con primary |
+| `ontimize-style.v18.scss` | v18: Noto Sans, sin density, sin overrides de botones, sidenav neutro |
 | `fonts/noto.scss` | `@font-face` Noto Sans + `--mdc-typography-font-family` CSS custom property |
 | `themes/ontimize-blue.v15.scss` | Tema azul para Angular 15 (usa `ontimize-style.v15`) |
 | `themes/ontimize-blue.v18.scss` | Tema azul para Angular 18 (usa `ontimize-style.v18`) |
 
-`gulpfile.js` actualizado para copiar `.v15` y `.v18` a `dist/theming/` junto con los ficheros existentes.
+`gulpfile.js` actualizado para copiar `.v15`, `.v18` y `ontimize-base-style.scss` a `dist/theming/`.
 
 **Uso en Angular 18:**
 ```scss
@@ -291,6 +294,18 @@ Nuevos ficheros en `projects/ontimize-web-ngx/src/lib/theming/`:
 @use 'ontimize-web-ngx/theming/ontimize-style.v15' as ontimize-style;
 // continúa usando Poppins y estilos de botón v15
 ```
+
+### Material Symbols Outlined — ✅ COMPLETADO (15 abril 2026) — commit `017a2a75`
+
+Migración de `material-icons` (ligature font) a `material-symbols-outlined` (variable font) en todos los templates del framework:
+
+- **57 ficheros modificados**: todos los `class="material-icons"` → eliminados (mat-icon usa el default font set)
+- `OntimizeMatIconRegistry.initialize()` → `setDefaultFontSetClass('material-symbols-outlined')`
+- `icon.service.ts` → clase actualizada en HTML dinámico
+- `fake-icon-registry.ts` → `getDefaultFontSetClass()` retorna `['material-symbols-outlined']`
+- `typography.scss` → selector ampliado a `.material-icons, .material-symbols-outlined`
+- SVG icon set simplificado (eliminadas definiciones de monedas sin uso)
+- **v18 theme sin overrides de botones** — los botones heredan los estilos por defecto de Angular Material
 
 ### Playground: control flow — ✅ COMPLETADO (11 abril 2026) — commit `8686e0b` (repo playground)
 
