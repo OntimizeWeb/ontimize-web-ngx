@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 15 abril 2026 (sesiones 7-8)
+> Última actualización: 17 abril 2026 (sesión theming oxygen/sidenav)
 
 ## Repositorios y ramas
 
