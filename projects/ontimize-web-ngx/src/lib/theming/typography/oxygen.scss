@@ -1,9 +1,9 @@
 @use "sass:map";
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 @use "o-table-typography";
 
-// Default font family (can be overridden before importing this file)
-$font-family: 'Poppins, "Helvetica Neue", sans-serif' !default;
+// Default font family for Oxygen theme (can be overridden before importing this file)
+$font-family: 'Noto Sans, "Helvetica Neue", sans-serif' !default;
 
 // Function to create typography configuration with custom font family
 @function create-typography-config($custom-font-family: $font-family) {
@@ -19,10 +19,10 @@ $font-family: 'Poppins, "Helvetica Neue", sans-serif' !default;
     $body-1: mat.m2-define-typography-level(13px, 1.125em, 400),
     $body-2: mat.m2-define-typography-level(12px, 15px, 400),
     $caption: mat.m2-define-typography-level(11px, 15px, 400),
-    $button: mat.m2-define-typography-level(13px, 14px, 500));
+    $button: mat.m2-define-typography-level(13px, 14px, 400));
 }
 
-// Default typography configuration using default font family
+// Default typography configuration using Noto Sans font family
 $o-mat-lite-typography: create-typography-config();
 
 /* Line-height must be unit-less fraction of the font-size

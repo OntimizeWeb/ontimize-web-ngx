@@ -7,13 +7,13 @@ $header-height: 48px;
 $transition-duration: 500ms;
 
 .o-app-sidenav {
-  &.header-layout {
-    .o-app-sidenav-container {
-      .mat-drawer.o-app-sidenav-sidenav {
-        box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
-      }
-    }
-  }
+  // &.header-layout {
+  //   .o-app-sidenav-container {
+  //     .mat-drawer.o-app-sidenav-sidenav {
+  //       box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
+  //     }
+  //   }
+  // }
 
   .navMenu {
     flex: 1;
@@ -119,54 +119,6 @@ $transition-duration: 500ms;
           }
         }
 
-        .o-app-sidenav-menugroup-title,
-        .o-app-sidenav-menuitem-title {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .o-app-sidenav-menu-group-level-1 a {
-          +.o-app-sidenav-menugroup-items-container {
-
-            .o-app-sidenav-menu-group,
-            .o-app-sidenav-menu-item {
-              a {
-                padding-left: 28px;
-              }
-            }
-          }
-        }
-
-        .o-app-sidenav-menu-group-level-2 a {
-          +.o-app-sidenav-menugroup-items-container {
-
-            .o-app-sidenav-menu-group,
-            .o-app-sidenav-menu-item {
-              a {
-                padding-left: 52px;
-              }
-            }
-          }
-        }
-
-        .o-app-sidenav-menu-group-level-2,
-        .o-app-sidenav-menu-group-level-3,
-        .o-app-sidenav-menu-group-level-4,
-        .o-app-sidenav-menu-group-level-5 {
-          a {
-            padding-right: 4px;
-          }
-        }
-
-        .o-app-sidenav-menu-group-level-3,
-        .o-app-sidenav-menu-group-level-4,
-        .o-app-sidenav-menu-group-level-5 {
-          a {
-            padding-left: 52px;
-          }
-        }
-
         .o-app-sidenav-menugroup,
         .o-app-sidenav-menuitem {
           mat-icon:not(.o-app-sidenav-menugroup-arrow) {
@@ -258,6 +210,7 @@ $transition-duration: 500ms;
       }
 
       nav {
+
         a {
           border-radius: 0;
           box-sizing: border-box;
@@ -265,6 +218,7 @@ $transition-duration: 500ms;
           line-height: 48px;
           height: auto;
           font-size: 14px;
+          max-width: 100%;
 
 
           >.mat-icon {

@@ -16,7 +16,7 @@
 }
 
 @if (!sidenavOpened) {
-  @if (!hidden) {
+  @if (!hidden && (menuItem.icon || menuItem.svgIcon)) {
     <li class="o-app-sidenav-menuitem o-app-sidenav-item">
       @if (shouldShowTooltip) {
         <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="triggerClick($event)"

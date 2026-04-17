@@ -120,22 +120,22 @@ button.mat-mdc-button-base {
     min-width: 112px;
   }
 
-  &.mat-mdc-button,
-  &.mat-mdc-unelevated-button,
-  &.mat-mdc-icon-button,
-  &.mat-mdc-raised-button,
-  &.mat-mdc-outlined-button {
-    height: $mat-button-line-height;
-    line-height: $mat-button-line-height;
+  // &.mat-mdc-button,
+  // &.mat-mdc-unelevated-button,
+  // &.mat-mdc-icon-button,
+  // &.mat-mdc-raised-button,
+  // &.mat-mdc-outlined-button {
+  //   height: $mat-button-line-height;
+  //   line-height: $mat-button-line-height;
 
-    .mat-mdc-button-touch-target {
-      height: $mat-button-line-height;
-    }
+  //   .mat-mdc-button-touch-target {
+  //     height: $mat-button-line-height;
+  //   }
 
-    >.mat-icon {
-      line-height: 1;
-    }
-  }
+  //   >.mat-icon {
+  //     line-height: 1;
+  //   }
+  //}
 
   &.mat-mdc-outlined-button {
     height: $mat-button-line-height;

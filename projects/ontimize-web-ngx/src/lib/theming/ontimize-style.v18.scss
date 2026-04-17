@@ -26,7 +26,7 @@
 @use "sass:map";
 @use '@angular/material' as mat;
 @use 'fonts/noto.scss';
-@use 'ontimize-base-style.scss' as base;
+@use 'ontimize-base-style.v18.scss' as base;
 
 // ─── Re-export theme factory functions from base ────────────────────────────
 
@@ -50,8 +50,8 @@
   $warn: mat.m2-get-color-from-palette($theme, warn);
 
   $sidenav-background-color: if($is-dark-theme,
-    mix(#1e1e1e, mat.m2-get-color-from-palette($primary, 500), 94%),
-    mat.m2-get-color-from-palette($background, status-bar));
+      mix(#1e1e1e, mat.m2-get-color-from-palette($primary, 500), 94%),
+      mat.m2-get-color-from-palette($background, status-bar));
 
   // ─── Shared base styles ─────────────────────────────────────
   @include base.ontimize-base-theme-styles($theme-or-color-config);
@@ -64,7 +64,13 @@
 
   // ─── v18 App header (neutral background) ───────────────────
   .o-app-header {
+
+    // background-color: $sidenav-background-color;
+    background-color: $sidenav-background-color;
+    box-shadow: none;
+
     nav {
+
       &.o-app-header-primary,
       &.o-app-header-accent {
         background-color: $sidenav-background-color;
@@ -77,140 +83,205 @@
   }
 
   // ─── v18 Sidenav (neutral grey background, border-left accents) ───
-  .o-app-sidenav {
+  o-app-sidenav.o-app-sidenav,
+  o-app-sidenav.o-app-sidenav.header-layout {
     font-weight: 400;
 
-    .o-app-sidenav-menu-group,
-    .o-app-sidenav-menu-item {
-      a {
-        margin-left: 0 !important;
-        border-left: 8px solid transparent;
+    .o-app-sidenav-container {
+      .mat-drawer.o-app-sidenav-sidenav nav a {
+        line-height: 40px;
+        height: 40px;
+        border-radius: 8px;
+
+        .o-app-sidenav-menu-group-level-1 a+.o-app-sidenav-menugroup-items-container .o-app-sidenav-menu-item a {
+          line-height: 36px;
+          height: 36px;
+        }
+
+        .o-app-sidenav-menu-group-level-2 a+.o-app-sidenav-menugroup-items-container .o-app-sidenav-menu-item a {
+          line-height: 32px;
+          height: 32px;
+        }
       }
 
-      &:not([disabled='true']) {
-        border-left-color: transparent;
+
+      .mat-drawer.o-app-sidenav-sidenav {
+        box-shadow: none;
+
+        .mat-drawer-inner-container {
+          margin: 0 8px;
+          width: calc(100% - 16px);
+        }
+      }
+
+      &.o-app-sidenav-mode-desktop:not(.opened) {
+        .o-app-sidenav-sidenav.mat-drawer-closed {
+          transform: translate3d(-183px, 0, 0);
+        }
+
+        .o-app-sidenav-content.mat-drawer-content {
+          margin-right: 56px !important;
+          transform: translate3d(56px, 0, 0) !important;
+        }
+      }
+
+      .mat-drawer.o-app-sidenav-sidenav.mat-drawer-closed {
+        .mat-drawer-inner-container {
+          margin: 0;
+          width: 100%;
+        }
+
+        .o-app-sidenav .o-app-sidenav-container .mat-drawer.o-app-sidenav-sidenav .sidenav-toggle {
+          padding-right: 8px;
+        }
+
+        nav a {
+          line-height: 40px;
+          height: 40px;
+          width: 40px;
+          min-width: 40px;
+          padding: 0;
+          margin: 0;
+
+          .mat-icon {
+            margin-right: 0;
+          }
+
+          .mdc-button__label {
+            width: 100%;
+          }
+
+          .o-layout-align-start-center {
+            justify-content: center;
+          }
+        }
+
+        a:hover,
+        a.o-app-sidenav-viewer-sidenav-item-selected,
+        .o-app-sidenav-menu-group-level-2 a:hover,
+        .o-app-sidenav-menu-group-level-2 a.o-app-sidenav-viewer-sidenav-item-selected {
+          color: mat.m2-get-color-from-palette($primary, 500);
+        }
 
         a:hover {
-          color: mat.m2-get-color-from-palette($foreground, button);
-          background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 96%);
-          border-left: 8px solid mat.m2-get-color-from-palette($primary);
+          background-color: mat.m2-get-color-from-palette($primary, 50);
         }
 
         a.o-app-sidenav-viewer-sidenav-item-selected {
-          color: mat.m2-get-color-from-palette($foreground, button);
-          background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 98%);
-          border-left: 8px solid mat.m2-get-color-from-palette($primary);
-        }
-      }
-    }
-
-    .o-app-sidenav-sidenav {
-      background: $sidenav-background-color;
-
-      .sidenav-toggle {
-        color: mat.m2-get-color-from-palette($foreground, button);
-      }
-
-      .o-app-sidenav-item {
-        color: mat.m2-get-color-from-palette($foreground, button);
-
-        &.o-user-info {
-          &:focus,
-          &:hover {
-            color: inherit;
-          }
-          color: inherit;
-          .o-user-info-menu-item .o-user-info-item {
-            background: mat.m2-get-color-from-palette($primary, default-contrast, 0.74);
-          }
+          background-color: mat.m2-get-color-from-palette($primary, 50, 0.48);
         }
       }
 
-      /* Side Navigation Level Styles */
-      .o-app-sidenav-menu-group-level-1 {
-        .o-app-sidenav-menugroup {
-          &.opened {
-            +.o-app-sidenav-menugroup-items-container ul {
-              background: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 94%);
-            }
-          }
-        }
-        .o-app-sidenav-menu-item {
-          &:not([disabled='true']) {
-            a:hover {
-              background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 94%);
-            }
-          }
-        }
-      }
+      .mat-drawer.o-app-sidenav-sidenav:not(.mat-drawer-closed) {
 
-      .o-app-sidenav-menu-group-level-2,
-      .o-app-sidenav-menu-group-level-3,
-      .o-app-sidenav-menu-group-level-4 {
-        .o-app-sidenav-menugroup {
-          &.opened {
-            +.o-app-sidenav-menugroup-items-container ul {
-              background: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 88%);
-            }
-          }
-        }
-        .o-app-sidenav-menu-item {
-          &:not([disabled='true']) {
-            a:hover {
-              background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 88%);
-            }
-          }
-        }
-      }
-
-      li a {
-        color: mat.m2-get-color-from-palette($foreground, text);
-      }
-    }
-  }
-
-  .o-app-sidenav-container {
-    .mat-drawer.o-app-sidenav-sidenav.mat-drawer-closed {
-      nav {
         .o-app-sidenav-menu-group,
         .o-app-sidenav-menu-item {
           a {
-            width: 100%;
-            min-width: 100%;
-            max-width: 100%;
+            padding: 0 16px;
+            margin: 0;
+
+            // El div flex interno debe comprimirse para que el texto muestre ellipsis
+            .mdc-button__label {
+              min-width: 0;
+              overflow: hidden;
+
+              >div {
+                min-width: 0;
+                overflow: hidden;
+
+                .o-app-sidenav-menuitem-title,
+                .o-app-sidenav-menugroup-title {
+                  min-width: 0;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
+              }
+            }
+          }
+
+
+          /** Hover and selected styles for sidenav items */
+          a:hover,
+          a.o-app-sidenav-viewer-sidenav-item-selected,
+          .o-app-sidenav-menu-group-level-2 a:hover,
+          .o-app-sidenav-menu-group-level-2 a.o-app-sidenav-viewer-sidenav-item-selected {
+            color: mat.m2-get-color-from-palette($primary, 500);
+          }
+
+          a:hover {
+            background-color: mat.m2-get-color-from-palette($primary, 50);
+          }
+
+          a.o-app-sidenav-viewer-sidenav-item-selected {
+            background-color: mat.m2-get-color-from-palette($primary, 50, 0.48);
+          }
+
+        }
+
+        .mat-sidenav.o-app-sidenav-sidenav {
+          background: $sidenav-background-color;
+          box-shadow: none;
+        }
+
+        /* Side Navigation Level Styles */
+        .o-app-sidenav-menu-group-level-1,
+        .o-app-sidenav-menu-group-level-3 {
+          .o-app-sidenav-menu-item {
+            &:not([disabled='true']) {
+              a:hover {
+                background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 96%);
+              }
+            }
+          }
+        }
+
+
+
+        // Indentacion por nivel via padding en el contenedor (no en el `a`):
+        // el hover ocupa el ancho reducido del contenedor sin generar scroll horizontal.
+        .o-app-sidenav-menu-group-level-1 {
+          >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+            padding-left: 16px;
+
+            a .mdc-button__label {
+              display: inline-block;
+              border-left: 2px solid mat.m2-get-color-from-palette($foreground, divider);
+              padding-left: 6px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 100%;
+            }
+
+            a.o-app-sidenav-viewer-sidenav-item-selected .mdc-button__label,
+            a:hover .mdc-button__label {
+              border-color: mat.m2-get-color-from-palette($primary, 500);
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2 {
+          .o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+            padding-left: 32px;
+
+            a .mdc-button__label {
+              border-left: none;
+
+            }
           }
         }
       }
-    }
-  }
 
-  o-app-sidenav.o-app-sidenav,
-  o-app-sidenav.o-app-sidenav.header-layout {
-    .o-app-sidenav-container {
+      .mat-mdc-menu-panel {
+        border: 1px solid mat.m2-get-color-from-palette($foreground, divider);
+      }
+
       .o-app-header {
-        border-bottom: 1px solid mat.m2-get-color-from-palette($foreground, divider);
-        background-color: $sidenav-background-color;
-      }
-
-      mat-sidenav.mat-drawer.o-app-sidenav-sidenav {
-        box-shadow: none;
-        border-right: none;
-
-        .o-app-sidenav-menugroup.active+.o-app-sidenav-menugroup-items-container ul {
-          box-shadow: none;
-          background: none;
-        }
-      }
-    }
-
-    .mat-mdc-menu-panel {
-      border: 1px solid mat.m2-get-color-from-palette($foreground, divider);
-    }
-
-    .o-app-header {
-      .o-user-info {
-        .o-user-info-wrapper {
-          font-weight: 500;
+        .o-user-info {
+          .o-user-info-wrapper {
+            font-weight: 500;
+          }
         }
       }
     }

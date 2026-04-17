@@ -16,7 +16,7 @@
       >.o-container-header,
       >.o-container-title,
       >.mat-expansion-panel-header {
-        border-color: mat.m2-get-color-from-palette($foreground, divider);
+        border-left: mat.m2-get-color-from-palette($foreground, divider);
         color: mat.m2-get-color-from-palette($foreground, text);
 
         .mdc-tab__text-label,
