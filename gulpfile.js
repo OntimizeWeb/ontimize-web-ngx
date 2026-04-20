@@ -42,6 +42,7 @@ const FILES = [
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style.scss',
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style-v8.scss',
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-base-style.scss',
+  'projects/ontimize-web-ngx/src/lib/theming/ontimize-base-style.v18.scss',
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style.v15.scss',
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style.v18.scss',
   'dist/theming/'

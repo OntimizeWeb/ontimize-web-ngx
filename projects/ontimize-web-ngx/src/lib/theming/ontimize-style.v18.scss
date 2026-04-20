@@ -48,6 +48,7 @@
   $foreground: map.get($theme, foreground);
   $is-dark-theme: map.get($theme, is-dark);
   $warn: mat.m2-get-color-from-palette($theme, warn);
+  $density: map.get($theme-or-color-config, density);
 
   $sidenav-background-color: if($is-dark-theme,
       mix(#1e1e1e, mat.m2-get-color-from-palette($primary, 500), 94%),
@@ -56,11 +57,10 @@
   // ─── Shared base styles ─────────────────────────────────────
   @include base.ontimize-base-theme-styles($theme-or-color-config);
 
-  // NOTE: No density mixins — Angular 18 / Material 3 density is
-  // configured via CSS custom properties, not SCSS mixins.
-  // Consumers who need specific density can use:
-  //   @include mat.form-field-density(-2);
-  // etc. in their own styles.
+  // ─── Density ─────────────────────────────────────────────────
+  @if $density != null {
+    @include mat.all-component-densities($density);
+  }
 
   // ─── v18 App header (neutral background) ───────────────────
   .o-app-header {
