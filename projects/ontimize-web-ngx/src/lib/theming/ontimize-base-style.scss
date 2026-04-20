@@ -1,8 +1,8 @@
 // =============================================================================
-// ontimize-base-style.scss — Shared theming logic for all Angular versions
+// ontimize-base-style.scss — Base theming for Angular 18 / Material 18
 // =============================================================================
 //
-// This file contains the version-agnostic foundation:
+// Shared foundation consumed by ontimize-style.scss:
 //   - Material background/foreground palettes
 //   - o-mat-light-theme / o-mat-dark-theme factory functions
 //   - o-material-theme (applies theme to all Ontimize components)
@@ -10,9 +10,6 @@
 //   - Checkbox / pseudo-checkbox styles
 //   - Background level utility classes (.bg-level-0 … .bg-level-1)
 //   - Report/Charts on-demand addon styles
-//
-// Version-specific files (ontimize-style.v15.scss, ontimize-style.v18.scss)
-// @use this file and add their own overrides on top.
 // =============================================================================
 
 @use "sass:color";
@@ -34,7 +31,7 @@
 // ─── Variables ──────────────────────────────────────────────────────────────
 
 $app-background-color: #EAEAEA !default;
-$sidenav-background-color: #F5F5F5 !default;
+$sidenav-background-color: #FFFFFF !default;
 
 // ─── Background palettes ────────────────────────────────────────────────────
 
@@ -121,7 +118,8 @@ $ontimize-dark-theme-foreground: (
       is-dark: false,
       foreground: $ontimize-light-theme-foreground,
       background: ontimize-light-theme-background($primary, $color)),
-    typography: ontimize.$typography)
+    typography: ontimize.$typography,
+    density: -2);
 }
 
 @function o-mat-dark-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
@@ -133,7 +131,8 @@ $ontimize-dark-theme-foreground: (
       is-dark: true,
       foreground: $ontimize-dark-theme-foreground,
       background: ontimize-dark-theme-background($primary, $color)),
-    typography: ontimize.$typography)
+    typography: ontimize.$typography,
+    density: -2);
 }
 
 // ─── Checkbox theme (shared between v15 and v18) ────────────────────────────
@@ -361,7 +360,6 @@ $ontimize-dark-theme-foreground: (
     .o-form-toolbar {
       margin-bottom: 24px;
       .o-form-toolbar-header {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.24);
         background-color: mat.m2-get-color-from-palette($background, card);
         .mat-toolbar-tools {
           button.o-form-toolbar-button.o-form-toolbar-back.mat-mdc-icon-button {

@@ -1,5 +1,4 @@
-// Sidenav theme styles are version-specific and defined in the versioned
-// entry points (ontimize-style.v15.scss and ontimize-style.v18.scss).
+// Sidenav theme styles are defined in ontimize-style.scss (entry point).
 // This mixin is kept for structural compatibility with o-material.theme.scss.
 @mixin o-app-sidenav-theme($theme-or-color-config) {
 }
