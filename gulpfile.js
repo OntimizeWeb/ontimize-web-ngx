@@ -41,6 +41,7 @@ gulp.task('concat.themes.scss', gulp.series('copy.themes.files', 'delete.angular
 const FILES = [
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-style.scss',
   'projects/ontimize-web-ngx/src/lib/theming/ontimize-base-style.scss',
+  'projects/ontimize-web-ngx/src/lib/theming/ontimize-tokens.scss',
   'dist/theming/'
 ];
 

@@ -27,15 +27,28 @@
 @use '@angular/material' as mat;
 @use 'fonts/noto.scss';
 @use 'ontimize-base-style.scss' as base;
+@use 'ontimize-tokens' as tokens;
 
 // ─── Re-export theme factory functions from base ────────────────────────────
 
-@function o-mat-light-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
-  @return base.o-mat-light-theme($primary, $accent, $warn);
+@function o-mat-light-theme(
+  $primary,
+  $accent,
+  $warn: mat.m2-define-palette(mat.$m2-red-palette),
+  $typography: null,
+  $density: -2
+) {
+  @return base.o-mat-light-theme($primary, $accent, $warn, if($typography, $typography, base.$default-typography), $density);
 }
 
-@function o-mat-dark-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
-  @return base.o-mat-dark-theme($primary, $accent, $warn);
+@function o-mat-dark-theme(
+  $primary,
+  $accent,
+  $warn: mat.m2-define-palette(mat.$m2-red-palette),
+  $typography: null,
+  $density: -2
+) {
+  @return base.o-mat-dark-theme($primary, $accent, $warn, if($typography, $typography, base.$default-typography), $density);
 }
 
 // ─── Main mixin ─────────────────────────────────────────────────────────────
@@ -53,6 +66,11 @@
   $sidenav-background-color: if($is-dark-theme,
       mix(#1e1e1e, mat.m2-get-color-from-palette($primary, 500), 94%),
       mat.m2-get-color-from-palette($background, status-bar));
+
+  // ─── Ontimize custom tokens (--o-*) ──────────────────────────
+  // Emitted at the mixin caller's scope (typically :root or .o-dark) so
+  // components can consume them via var(--o-*) without recompiling.
+  @include tokens.o-apply-tokens($theme-or-color-config);
 
   // ─── Shared base styles ─────────────────────────────────────
   @include base.ontimize-base-theme-styles($theme-or-color-config);
