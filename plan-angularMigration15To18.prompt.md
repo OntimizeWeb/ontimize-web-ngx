@@ -209,6 +209,21 @@ Por otro lado, los botones tambien van a tener un estilo diferente en Angular 18
 - Incluir ejemplos de migración de NgModule bootstrap → standalone bootstrap con `provideOntimizeWeb()`
 - Publicar guía junto con release notes de la versión 18
 
+### 3.10 Desacoplamiento: Eliminar dependencias directas de los inputs hacia o-form, permitiendo su uso en cualquier formulario Angular estándar.
+- Mantenimiento de Funcionalidades: Preservar características como:
+- Validación automática (requerido, patrones, etc.).
+- Binding bidireccional con ngModel o formControl.
+- Eventos personalizados (onChange, onBlur).
+- Configuración vía atributos (e.g., oattr, olabel).
+- Integración con servicios de Ontimize (e.g., OServiceBase para datos).
+- Compatibilidad: Asegurar que los inputs funcionen en contextos de formularios Angular sin o-form, usando directivas como - formControlName o ngModel.
+- Pasos Sugeridos para la Implementación:
+  - Análisis de Dependencias: Revisar el código de cada input para identificar referencias a o-form (e.g., inyección de OFormComponent).
+  - Refactorización de Componentes: Modificar los inputs para que acepten FormControl o NgModel opcionalmente, usando @Input() para configuraciones.
+  - Manejo de Validaciones: Integrar validadores Angular nativos junto con los personalizados de Ontimize.
+  - Pruebas: Crear unit tests y ejemplos de uso en formularios Angular puros.
+  - Documentación: Actualizar guías para mostrar cómo usar los inputs desacoplados.
+
 ### FASE 4 (opcional, post-migración)
 ### 4.1 Crear nuevo theme "Oxygen" basado en diseño de Figma
 - Crear nuevo tema oxygen para la version 18 de Angular basado en el diseño de Figma https://www.figma.com/design/IIIHHi7yi5FDDolnZzwNlT/Ontimize-Oxygen-Theme-V.2?node-id=1-2

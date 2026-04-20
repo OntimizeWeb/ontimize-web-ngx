@@ -129,7 +129,26 @@ Si no necesitas paletas personalizadas, puedes usar directamente el tema azul de
 
 ### 3.5 Configurar density en Angular 18 (opcional)
 
-Si necesitas ajustar la densidad de componentes Material en Angular 18:
+Si necesitas ajustar la densidad de componentes Material en Angular 18, tienes dos opciones:
+
+**Opción A — Pasar density al tema (recomendado)**
+
+El mixin `ontimize-theme-styles` lee la clave `density` del mapa del tema y aplica `mat.all-component-densities()` automáticamente si no es `null`.
+
+```scss
+// app.scss / styles.scss
+@use "sass:map";
+@use "ontimize-web-ngx/theming/themes/oxygen.scss" as theme;
+@use "ontimize-web-ngx/theming/ontimize-style.v18.scss" as ontimize-style;
+
+$theme-with-density: map.merge(theme.$theme, (density: -1));
+
+@include ontimize-style.ontimize-theme-styles($theme-with-density);
+```
+
+Los valores válidos son `0` (default), `-1`, `-2`, `-3`, `-4`, `-5`.
+
+**Opción B — Aplicar density por componente**
 
 ```scss
 // styles.scss (después del @include ontimize-theme-styles)
@@ -361,7 +380,8 @@ Ontimize Web NGX 18 sigue usando Material M2 internamente (con prefijo `m2-`). L
 
 **Solución**: Asegúrate de que `index.html` incluye:
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,GRAD,FILL@20..48,100..700,-50..200,0..1"
+        rel="stylesheet">
 ```
 Y que **NO** tienes el link antiguo de Material Icons activo.
 
