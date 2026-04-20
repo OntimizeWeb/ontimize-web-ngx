@@ -1,20 +1,13 @@
 @mixin o-breadcrumb-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-
   .toolbar-breadcrumb {
-    background-color: mat.m2-get-color-from-palette($background, app-bar);
+    background-color: var(--o-bg-app-bar);
 
     a {
-      color: mat.m2-get-color-from-palette($primary);
+      color: var(--o-primary-500);
     }
 
     mat-icon {
-      color: mat.m2-get-color-from-palette($accent);
+      color: var(--o-accent-500);
     }
   }
 

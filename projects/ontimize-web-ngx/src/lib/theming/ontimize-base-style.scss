@@ -170,52 +170,40 @@ $default-typography: ontimize.$typography;
     density: $density);
 }
 
-// ─── Checkbox theme (shared between v15 and v18) ────────────────────────────
+// ─── Checkbox theme ─────────────────────────────────────────────────────────
 
 @mixin mat-checkbox-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $is-dark-theme: map.get($theme, is-dark);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-
-  $checkbox-mark-color: mat.m2-get-color-from-palette($background, background);
-  $white-30pct-opacity-on-dark: #686868;
-  $black-26pct-opacity-on-light: #b0b0b0;
-  $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
-  $checkbox-background-color: if($is-dark-theme, $black-26pct-opacity-on-light, mat.m2-get-color-from-palette($background, sidenav-overlay));
+  // Shared disabled colour: #b0b0b0 in light, #686868 in dark.
+  // Expressed with color-mix so the .o-dark scope swaps the base token.
+  $disabled-color: color-mix(in srgb, var(--o-fg-base) 30%, var(--o-bg-background));
 
   .mat-checkbox-frame {
-    border-color: mat.m2-get-color-from-palette($foreground, secondary-text);
+    border-color: var(--o-fg-secondary-text);
   }
 
   .mat-checkbox-checkmark {
-    fill: $checkbox-mark-color;
+    fill: var(--o-bg-background);
   }
 
   .mat-checkbox-checkmark-path {
-    stroke: $checkbox-mark-color !important;
+    stroke: var(--o-bg-background) !important;
     @include cdk.high-contrast(black-on-white) {
       stroke: #000 !important;
     }
   }
 
   .mdc-checkbox__mixedmark {
-    background-color: $checkbox-mark-color;
+    background-color: var(--o-bg-background);
   }
 
   .mat-mdc-checkbox-checked,
   .mat-mdc-checkbox-indeterminate {
-    &.mat-primary .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-      background-color: $checkbox-background-color;
-    }
+    &.mat-primary .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background,
     &.mat-accent .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-      background-color: $checkbox-background-color;
+      background-color: var(--o-bg-sidenav-overlay);
     }
     &.mat-warn .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-      background-color: mat.m2-get-color-from-palette($warn);
+      background-color: var(--o-warn-500);
     }
   }
 
@@ -243,35 +231,23 @@ $default-typography: ontimize.$typography;
   }
 
   .mat-mdc-checkbox .mat-ripple-element {
-    background-color: map.get(map.get($theme, foreground), base);
+    background-color: var(--o-fg-base);
   }
 
   .mat-mdc-checkbox-checked:not(.mat-checkbox-disabled),
   .mat-checkbox:active:not(.mat-checkbox-disabled) {
-    &.mat-primary .mat-ripple-element {
-      background: mat.m2-get-color-from-palette($foreground, icon);
-    }
+    &.mat-primary .mat-ripple-element,
     &.mat-accent .mat-ripple-element {
-      background: mat.m2-get-color-from-palette($foreground, icon);
+      background: var(--o-fg-icon);
     }
     &.mat-warn .mat-ripple-element {
-      background: mat.m2-get-color-from-palette($warn);
+      background: var(--o-warn-500);
     }
   }
 }
 
 @mixin mat-pseudo-checkbox-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $is-dark-theme: map.get($theme, is-dark);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-
-  $white-30pct-opacity-on-dark: #686868;
-  $black-26pct-opacity-on-light: #b0b0b0;
-  $disabled-color: if($is-dark-theme, $white-30pct-opacity-on-dark, $black-26pct-opacity-on-light);
+  $disabled-color: color-mix(in srgb, var(--o-fg-base) 30%, var(--o-bg-background));
 
   .mat-mdc-select-panel {
     &.mat-primary,
@@ -283,9 +259,9 @@ $default-typography: ontimize.$typography;
   }
 
   .mat-pseudo-checkbox {
-    color: mat.m2-get-color-from-palette(map.get($theme, foreground), secondary-text);
+    color: var(--o-fg-secondary-text);
     &::after {
-      color: mat.m2-get-color-from-palette($background, background);
+      color: var(--o-bg-background);
     }
   }
 
@@ -294,20 +270,17 @@ $default-typography: ontimize.$typography;
   }
 
   .mat-primary .mat-pseudo-checkbox-checked,
-  .mat-primary .mat-pseudo-checkbox-indeterminate {
-    background: mat.m2-get-color-from-palette($foreground, icon);
-  }
-
+  .mat-primary .mat-pseudo-checkbox-indeterminate,
   .mat-accent .mat-pseudo-checkbox-checked,
   .mat-accent .mat-pseudo-checkbox-indeterminate,
   .mat-pseudo-checkbox-checked,
   .mat-pseudo-checkbox-indeterminate {
-    background: mat.m2-get-color-from-palette($foreground, icon);
+    background: var(--o-fg-icon);
   }
 
   .mat-warn .mat-pseudo-checkbox-checked,
   .mat-warn .mat-pseudo-checkbox-indeterminate {
-    background: mat.m2-get-color-from-palette(map.get($theme, warn));
+    background: var(--o-warn-500);
   }
 
   .mat-pseudo-checkbox-checked,
@@ -323,14 +296,9 @@ $default-typography: ontimize.$typography;
 // Version-specific files call this mixin and then add their own overrides.
 
 @mixin ontimize-base-theme-styles($theme-or-color-config) {
+  // Typography still consumed via the M2 config map (migration deferred to
+  // Fase 5 when the whole factory moves to mat.define-theme()).
   $typography: mat.m2-get-typography-config($theme-or-color-config);
-  $theme: map.get($theme-or-color-config, color);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: mat.m2-get-color-from-palette($theme, warn);
-  $is-dark-theme: map.get($theme, is-dark);
 
   // Apply all Ontimize component themes (form, table, list, etc.)
   @include theme.o-material-theme($theme-or-color-config);
@@ -351,42 +319,42 @@ $default-typography: ontimize.$typography;
 
   // ─── Tabs (shared) ────────────────────────────────────────────
   .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label {
-    color: mat.m2-get-color-from-palette($foreground, title);
+    color: var(--o-fg-title);
   }
 
   // ─── Paginator (shared) ───────────────────────────────────────
   .mat-mdc-paginator {
-    color: mat.m2-get-color-from-palette($foreground, text);
+    color: var(--o-fg-text);
   }
 
   // ─── Table (shared) ───────────────────────────────────────────
   .ontimize-table.o-table {
-    background: mat.m2-get-color-from-palette($background, card);
+    background: var(--o-bg-card);
 
     tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
     thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
-      background-color: mat.m2-get-color-from-palette($foreground, icon);
+      background-color: var(--o-fg-icon);
     }
   }
 
   .o-tree {
     .selected-node {
-      color: mat.m2-get-color-from-palette($primary, 500);
+      color: var(--o-primary-500);
       font-weight: 800;
     }
   }
 
   .o-table {
     .o-table-quickfilter .quickFilter .mat-form-field .mat-mdc-text-field-wrapper .mat-form-field-flex .mat-form-field-prefix div {
-      border-color: mat.m2-get-color-from-palette($foreground, text, 0.32);
+      border-color: color-mix(in srgb, var(--o-fg-text) 32%, transparent);
     }
 
     .mat-form-field-appearance-outline .mat-form-field-outline {
-      color: mat.m2-get-color-from-palette($foreground, text, 0.32);
+      color: color-mix(in srgb, var(--o-fg-text) 32%, transparent);
     }
 
     .mat-mdc-table .mat-mdc-row .mat-mdc-cell {
-      color: mat.m2-get-color-from-palette($foreground, base);
+      color: var(--o-fg-base);
     }
   }
 
@@ -395,7 +363,7 @@ $default-typography: ontimize.$typography;
     .o-form-toolbar {
       margin-bottom: 24px;
       .o-form-toolbar-header {
-        background-color: mat.m2-get-color-from-palette($background, card);
+        background-color: var(--o-bg-card);
         .mat-toolbar-tools {
           button.o-form-toolbar-button.o-form-toolbar-back.mat-mdc-icon-button {
             margin-right: 32px;
@@ -408,7 +376,7 @@ $default-typography: ontimize.$typography;
   // ─── O-ROW, O-COLUMN (shared) ────────────────────────────────
   o-column.o-column,
   o-row.o-row {
-    background: mat.m2-get-color-from-palette($background, card);
+    background: var(--o-bg-card);
     border-radius: 2px;
 
     .o-container {
@@ -419,10 +387,10 @@ $default-typography: ontimize.$typography;
       >.o-container-title,
       >.mat-expansion-panel-header {
         border-bottom: none;
-        color: mat.m2-get-color-from-palette($foreground, title);
+        color: var(--o-fg-title);
         .mat-mdc-tab,
         .mat-mdc-tab-link {
-          color: mat.m2-get-color-from-palette($foreground, title);
+          color: var(--o-fg-title);
         }
       }
       @if($typography) {
@@ -451,19 +419,19 @@ $default-typography: ontimize.$typography;
 
   // ─── Background levels (shared) ──────────────────────────────
   .bg-level-0, o-column.o-column.bg-level-0, o-row.o-row.bg-level-0 {
-    background-color: mat.m2-get-color-from-palette($background, level-0);
+    background-color: var(--o-bg-level-0);
   }
   .bg-level-04, o-column.o-column.bg-level-04, o-row.o-row.bg-level-04 {
-    background-color: mat.m2-get-color-from-palette($background, level-04);
+    background-color: var(--o-bg-level-04);
   }
   .bg-level-06, o-column.o-column.bg-level-06, o-row.o-row.bg-level-06 {
-    background-color: mat.m2-get-color-from-palette($background, level-06);
+    background-color: var(--o-bg-level-06);
   }
   .bg-level-08, o-column.o-column.bg-level-08, o-row.o-row.bg-level-08 {
-    background-color: mat.m2-get-color-from-palette($background, level-08);
+    background-color: var(--o-bg-level-08);
   }
   .bg-level-1, o-column.o-column.bg-level-1, o-row.o-row.bg-level-1 {
-    background-color: mat.m2-get-color-from-palette($background, level-1);
+    background-color: var(--o-bg-level-1);
   }
 
   // ─── Form content (shared) ───────────────────────────────────
@@ -476,17 +444,17 @@ $default-typography: ontimize.$typography;
 
   // ─── Skeleton loaders (shared) ───────────────────────────────
   .o-table-skeleton-header {
-    background-color: mat.m2-get-color-from-palette($background, level-04);
+    background-color: var(--o-bg-level-04);
   }
   .o-grid-skeleton-item,
   .o-table .o-table-skeleton-item,
   .o-list-skeleton-item {
     div.skeleton-loader {
-      background: mat.m2-get-color-from-palette($background, level-04) no-repeat;
+      background: var(--o-bg-level-04) no-repeat;
     }
   }
   .o-list-skeleton-item {
-    background-color: mat.m2-get-color-from-palette($background, level-08);
+    background-color: var(--o-bg-level-08);
     border-radius: 2px;
   }
 }

@@ -22,7 +22,6 @@
 //   - Tabs: simplified (no inactive-background override)
 // =============================================================================
 
-@use "sass:color";
 @use "sass:map";
 @use '@angular/material' as mat;
 @use 'fonts/noto.scss';
@@ -54,18 +53,7 @@
 // ─── Main mixin ─────────────────────────────────────────────────────────────
 
 @mixin ontimize-theme-styles($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-  $is-dark-theme: map.get($theme, is-dark);
-  $warn: mat.m2-get-color-from-palette($theme, warn);
   $density: map.get($theme-or-color-config, density);
-
-  $sidenav-background-color: if($is-dark-theme,
-      mix(#1e1e1e, mat.m2-get-color-from-palette($primary, 500), 94%),
-      mat.m2-get-color-from-palette($background, status-bar));
 
   // ─── Ontimize custom tokens (--o-*) ──────────────────────────
   // Emitted at the mixin caller's scope (typically :root or .o-dark) so
@@ -83,19 +71,18 @@
   // ─── v18 App header (neutral background) ───────────────────
   .o-app-header {
 
-    // background-color: $sidenav-background-color;
-    background-color: $sidenav-background-color;
+    background-color: var(--o-bg-status-bar);
     box-shadow: none;
 
     nav {
 
       &.o-app-header-primary,
       &.o-app-header-accent {
-        background-color: $sidenav-background-color;
+        background-color: var(--o-bg-status-bar);
       }
 
       .o-app-header-title {
-        color: mat.m2-get-color-from-palette($foreground, button);
+        color: var(--o-fg-button);
       }
     }
   }
@@ -178,15 +165,15 @@
         a.o-app-sidenav-viewer-sidenav-item-selected,
         .o-app-sidenav-menu-group-level-2 a:hover,
         .o-app-sidenav-menu-group-level-2 a.o-app-sidenav-viewer-sidenav-item-selected {
-          color: mat.m2-get-color-from-palette($primary, 500);
+          color: var(--o-primary-500);
         }
 
         a:hover {
-          background-color: mat.m2-get-color-from-palette($primary, 50);
+          background-color: var(--o-primary-50);
         }
 
         a.o-app-sidenav-viewer-sidenav-item-selected {
-          background-color: mat.m2-get-color-from-palette($primary, 50, 0.48);
+          background-color: color-mix(in srgb, var(--o-primary-50) 48%, transparent);
         }
       }
 
@@ -224,21 +211,21 @@
           a.o-app-sidenav-viewer-sidenav-item-selected,
           .o-app-sidenav-menu-group-level-2 a:hover,
           .o-app-sidenav-menu-group-level-2 a.o-app-sidenav-viewer-sidenav-item-selected {
-            color: mat.m2-get-color-from-palette($primary, 500);
+            color: var(--o-primary-500);
           }
 
           a:hover {
-            background-color: mat.m2-get-color-from-palette($primary, 50);
+            background-color: var(--o-primary-50);
           }
 
           a.o-app-sidenav-viewer-sidenav-item-selected {
-            background-color: mat.m2-get-color-from-palette($primary, 50, 0.48);
+            background-color: color-mix(in srgb, var(--o-primary-50) 48%, transparent);
           }
 
         }
 
         .mat-sidenav.o-app-sidenav-sidenav {
-          background: $sidenav-background-color;
+          background: var(--o-bg-status-bar);
           box-shadow: none;
         }
 
@@ -248,7 +235,7 @@
           .o-app-sidenav-menu-item {
             &:not([disabled='true']) {
               a:hover {
-                background-color: color.mix($sidenav-background-color, mat.m2-get-color-from-palette($background, sidenav-overlay), 96%);
+                background-color: color-mix(in srgb, var(--o-bg-status-bar) 96%, var(--o-bg-sidenav-overlay));
               }
             }
           }
@@ -264,7 +251,7 @@
 
             a .mdc-button__label {
               display: inline-block;
-              border-left: 2px solid mat.m2-get-color-from-palette($foreground, divider);
+              border-left: 2px solid var(--o-fg-divider);
               padding-left: 6px;
               white-space: nowrap;
               overflow: hidden;
@@ -274,7 +261,7 @@
 
             a.o-app-sidenav-viewer-sidenav-item-selected .mdc-button__label,
             a:hover .mdc-button__label {
-              border-color: mat.m2-get-color-from-palette($primary, 500);
+              border-color: var(--o-primary-500);
             }
           }
         }
@@ -292,7 +279,7 @@
       }
 
       .mat-mdc-menu-panel {
-        border: 1px solid mat.m2-get-color-from-palette($foreground, divider);
+        border: 1px solid var(--o-fg-divider);
       }
 
       .o-app-header {

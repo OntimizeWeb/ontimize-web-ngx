@@ -1,19 +1,14 @@
 @mixin o-card-menu-item-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
+  // Typography is still consumed via the M2 config map (migration deferred).
   $typography: map.get($theme-or-color-config, typography);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
 
   .o-card-menu-item {
 
-    background: mat.m2-get-color-from-palette($background, 'card');
-    border: 1px solid mat.m2-get-color-from-palette($primary, 0.17);
+    background: var(--o-bg-card);
+    border: 1px solid color-mix(in srgb, var(--o-primary-500) 17%, transparent);
 
     .o-card-menu-item-main {
-      background-color: mat.m2-get-color-from-palette($background, background, 0.29);
+      background-color: color-mix(in srgb, var(--o-bg-background) 29%, transparent);
     }
 
     @if($typography) {
@@ -23,17 +18,17 @@
     }
 
     .o-card-menu-item-title {
-      color: mat.m2-get-color-from-palette($primary);
+      color: var(--o-primary-500);
     }
 
     .mat-mdc-button:not(:disabled) {
-      color: mat.m2-get-color-from-palette($primary);
-      background: mat.m2-get-color-from-palette($accent, 100);
+      color: var(--o-primary-500);
+      background: var(--o-accent-100);
     }
 
     .o-card-menu-item-icon,
     .o-card-menu-item-info {
-      color: mat.m2-get-color-from-palette($primary, 0.54);
+      color: color-mix(in srgb, var(--o-primary-500) 54%, transparent);
     }
 
   }

@@ -1,21 +1,17 @@
 @mixin o-list-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $foreground: map.get($theme, foreground);
-  $background: map.get($theme, background);
-
   .o-list-container {
 
     .primary-text {
-      color: mat.m2-get-color-from-palette($foreground, text);
+      color: var(--o-fg-text);
     }
 
     .secondary-text {
-      color: mat.m2-get-color-from-palette($foreground, secondary-text);
+      color: var(--o-fg-secondary-text);
     }
 
     .o-list-row-action .mdc-checkbox,
     .o-list-item-icon {
-      color: mat.m2-get-color-from-palette($foreground, icon);
+      color: var(--o-fg-icon);
     }
 
     .spinner-container {

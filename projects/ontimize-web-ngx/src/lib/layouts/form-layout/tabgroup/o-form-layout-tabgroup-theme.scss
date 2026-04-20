@@ -1,28 +1,23 @@
 @mixin o-form-layout-tabgroup-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $background: map.get($theme, background);
-  $primary: map.get($theme, primary);
-  $foreground: map.get($theme, foreground);
-
   .o-form-layout-tabgroup {
     >.spinner-container {
-      background-color: mat.m2-get-color-from-palette($background, background);
+      background-color: var(--o-bg-background);
     }
 
     .mat-mdc-tab-group.o-tab-ontimize>.mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab.mdc-tab {
 
       .mat-icon:hover {
-        background-color: mat.m2-get-color-from-palette($foreground, disabled-button);
+        background-color: var(--o-fg-disabled-button);
         border-radius: 50%;
       }
 
 
       &.mdc-tab--active {
         .mat-icon:hover {
-          background-color: mat.m2-get-color-from-palette($primary, 500, 0.4);
+          background-color: color-mix(in srgb, var(--o-primary-500) 40%, transparent);
         }
         .mdc-tab__text-label {
-          color: mat.m2-get-color-from-palette($foreground, text);
+          color: var(--o-fg-text);
         }
 
       }

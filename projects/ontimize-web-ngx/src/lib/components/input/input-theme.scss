@@ -9,33 +9,27 @@
 }
 
 @mixin input-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $is-dark-theme: map.get($theme, is-dark);
-  $foreground: map.get($theme, foreground);
-  $warn: map.get($theme, warn);
-  $underline-color: mat.m2-get-color-from-palette($foreground, divider, if($is-dark-theme, 0.7, 0.42));
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
+  $underline-color: color-mix(in srgb, var(--o-fg-divider) 42%, transparent);
 
   .mat-mdc-form-field {
     &.mat-form-field-disabled.accent {
-      @include icon-color-mixin(mat.m2-get-color-from-palette($accent, 0.42));
+      @include icon-color-mixin(color-mix(in srgb, var(--o-accent-500) 42%, transparent));
     }
 
     &:not(.mat-form-field-disabled) {
-      @include icon-color-mixin(mat.m2-get-color-from-palette($foreground, icon));
+      @include icon-color-mixin(var(--o-fg-icon));
 
       .placeholder {
-        color: mat.m2-get-color-from-palette($foreground, icon);
+        color: var(--o-fg-icon);
       }
 
       &.accent {
-        @include icon-color-mixin(mat.m2-get-color-from-palette($accent));
+        @include icon-color-mixin(var(--o-accent-500));
       }
     }
 
     .mat-disabled {
-      color: mat.m2-get-color-from-palette($foreground, disabled-button);
+      color: var(--o-fg-disabled-button);
     }
 
     &.mat-form-field-appearance-ontimize.read-only {
@@ -58,7 +52,7 @@
     }
 
     &.mat-form-field-invalid .mat-mdc-form-field-icon-suffix .mat-icon {
-      color: mat.m2-get-color-from-palette($warn);
+      color: var(--o-warn-500);
     }
 
   }
@@ -79,28 +73,23 @@
   input[type="url"]:disabled,
   input[type="week"]:disabled,
   textarea:disabled {
-    color: mat.m2-get-color-from-palette($foreground, disabled-text);
+    color: var(--o-fg-disabled-text);
   }
 
   .o-tooltip.o-mat-error {
     .mdc-tooltip__surface {
-      background: mat.m2-get-color-from-palette($primary, default-contrast);
-      border: 1px solid mat.m2-get-color-from-palette($warn);
-      color: mat.m2-get-color-from-palette($warn);
+      background: var(--o-primary-contrast-500);
+      border: 1px solid var(--o-warn-500);
+      color: var(--o-warn-500);
     }
   }
 
   /* CHECKBOX */
   .mat-mdc-checkbox:not(.mat-mdc-checkbox-disabled) {
-    &.mat-accent {
-      .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-        border-color: if($is-dark-theme, mat.m2-get-color-from-palette($accent, 500), mat.m2-get-color-from-palette($foreground, secondary-text));
-      }
-    }
-
+    &.mat-accent,
     &.mat-primary {
       .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-        border-color: if($is-dark-theme, mat.m2-get-color-from-palette($primary, 500), mat.m2-get-color-from-palette($foreground, secondary-text));
+        border-color: var(--o-fg-secondary-text);
       }
     }
   }

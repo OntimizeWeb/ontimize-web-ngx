@@ -1,11 +1,9 @@
 @mixin o-daterange-input-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-  $is-dark-theme: map-get($theme, is-dark);
+  // The inline SVG arrow backgrounds below come in two encoded variants
+  // (white fill for dark themes, black fill for light). We keep both via an
+  // .o-dark override at the bottom of this mixin so the dark theme swaps
+  // them via the existing :root / .o-dark CSS var scope model.
+  $is-dark-theme: false;
   $color-inactive: #999999;
 
   /*
@@ -27,10 +25,10 @@
 
       td,
       th {
-        color: mat.m2-get-color-from-palette($foreground, text);
+        color: var(--o-fg-text);
 
         &.in-range {
-          color: if($is-dark-theme, #000000, #fff);
+          color: #fff;
         }
 
         &.available {
@@ -45,15 +43,15 @@
       }
     }
 
-    background-color: mat.m2-get-color-from-palette($background, card);
+    background-color: var(--o-bg-card);
 
     &:after,
     &:before {
-      border-bottom-color: mat.m2-get-color-from-palette($foreground, divider);
+      border-bottom-color: var(--o-fg-divider);
     }
 
     .calendar-table {
-      border-color: mat.m2-get-color-from-palette($foreground, divider);
+      border-color: var(--o-fg-divider);
     }
 
     th {
@@ -64,11 +62,11 @@
     th {
       text-align: center;
 
-      border-color: mat.m2-get-color-from-palette($foreground, divider);
+      border-color: var(--o-fg-divider);
 
       &.available {
         &:hover {
-          background: mat.m2-get-color-from-palette($background, hover, 0.12);
+          background: color-mix(in srgb, var(--o-fg-base) 12%, transparent);
         }
       }
 
@@ -85,7 +83,7 @@
         &.end-date,
         &.in-range,
         &.start-date {
-          background-color: mat.m2-get-color-from-palette($background, background);
+          background-color: var(--o-bg-background);
           border-color: transparent;
           color: $color-inactive;
         }
@@ -94,17 +92,17 @@
       //
       // Date Range
       &.in-range {
-        background-color: mat.m2-get-color-from-palette($primary, A200);
+        background-color: var(--o-primary-A200);
         border-color: transparent;
       }
 
       &.active {
-        background-color: mat.m2-get-color-from-palette($primary);
-        color: mat.m2-get-color-from-palette($primary, default-contrast);
+        background-color: var(--o-primary-500);
+        color: var(--o-primary-contrast-500);
 
         &,
         &:hover {
-          background-color: mat.m2-get-color-from-palette($primary);
+          background-color: var(--o-primary-500);
 
         }
       }
@@ -181,13 +179,13 @@
         li {
           button {
             &.active {
-              background: mat.m2-get-color-from-palette($background, hover, 0.12);
+              background: color-mix(in srgb, var(--o-fg-base) 12%, transparent);
             }
           }
         }
 
         li:hover {
-          background: mat.m2-get-color-from-palette($background, hover, 0.12);
+          background: color-mix(in srgb, var(--o-fg-base) 12%, transparent);
 
         }
       }

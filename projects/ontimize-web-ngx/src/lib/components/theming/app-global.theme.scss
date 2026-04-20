@@ -1,28 +1,11 @@
 @mixin app-global-theme($theme-or-color-config, $typography: null) {
-  $theme: map.get($theme-or-color-config, color);
-  $accent: map.get($theme, accent);
-  $primary: map.get($theme, primary);
-  $foreground: map.get($theme, foreground);
-  $background: map.get($theme, background);
-  $is-dark-theme: map.get($theme, is-dark);
-  $background-primary-button: if($is-dark-theme, transparent, mat.m2-get-color-from-palette($primary, 100));
-  $background-hover-primary-button: if($is-dark-theme, mat.m2-get-color-from-palette($primary, 500, 0.04), #ffffff);
-  $border-color-primary-button: if($is-dark-theme, mat.m2-get-color-from-palette($foreground, divider), transparent);
-  $font-color-primary-button: if($is-dark-theme, mat.m2-get-color-from-palette($primary, 500), mat.m2-get-color-from-palette($primary, 800));
-  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
-  $background-hover-accent-button: if($is-dark-theme, mat.m2-get-color-from-palette($accent, 500, 0.04), mat.m2-get-color-from-palette($accent, 100));
-  $font-color-hover-accent-button: if($is-dark-theme, mat.m2-get-color-from-palette($accent, 500), mat.m2-get-color-from-palette($accent, 800));
-  $border-color-accent-button: if($is-dark-theme, mat.m2-get-color-from-palette($foreground, divider), transparent);
-  $scrollbar-color: if($is-dark-theme, mat.m2-get-color-from-palette($primary, 500), mat.m2-get-color-from-palette($primary, 200));
-
   @if $typography==null {
     $typography: map.get($theme-or-color-config, 'typography');
-
   }
 
   body,
   html {
-    background-color: mat.m2-get-color-from-palette($background, background);
+    background-color: var(--o-bg-background);
   }
 
   @if($typography) {
@@ -53,7 +36,7 @@
   ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
-    background-color: $scrollbar-color;
+    background-color: var(--o-primary-200);
     opacity: 1.0;
   }
 
@@ -76,7 +59,7 @@
       border-radius: 50%;
       left: 50%;
       animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: mat.m2-get-color-from-palette($primary) transparent transparent transparent;
+      border-color: var(--o-primary-500) transparent transparent transparent;
     }
 
     div:nth-child(1) {
@@ -105,7 +88,7 @@
 
   .o-form-layout-sidenav-container {
     .sidenav-title-container {
-      border-bottom: 1px solid mat.m2-get-color-from-palette($primary);
+      border-bottom: 1px solid var(--o-primary-500);
     }
   }
 
@@ -116,10 +99,10 @@
   .o-list-picker-dialog {
     .mat-mdc-dialog-container {
       .mat-mdc-dialog-title {
-        border-bottom: 1px solid mat.m2-get-color-from-palette($primary);
+        border-bottom: 1px solid var(--o-primary-500);
 
         .mat-icon {
-          color: mat.m2-get-color-from-palette($primary);
+          color: var(--o-primary-500);
         }
       }
 
@@ -132,7 +115,7 @@
 
 
       .empty-filter-list {
-        color: mat.m2-get-color-from-palette($foreground, disabled-text);
+        color: var(--o-fg-disabled-text);
       }
 
       .mat-mdc-dialog-content {
@@ -211,7 +194,7 @@
 
     &.mdc-list-item.mat-mdc-list-item {
 
-      background-color: mat.m2-get-color-from-palette($background, background);
+      background-color: var(--o-bg-background);
       box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
       box-sizing: border-box;
       border-radius: 2px;
@@ -234,7 +217,7 @@
       }
 
       .mdc-list-item__secondary-text {
-        color: mat.m2-get-color-from-palette($foreground, icon);
+        color: var(--o-fg-icon);
 
         @if($typography) {
           font-size: mat.m2-font-size($typography, body-1);
@@ -291,26 +274,26 @@
 
     &.mat-mdc-button-base.mat-primary,
     &.mat-mdc-button-base.o-button-primary {
-      color: mat.m2-get-color-from-palette($primary, 800);
-      background-color: $background-primary-button;
-      border-color: $border-color-primary-button;
+      color: var(--o-primary-800);
+      background-color: var(--o-primary-100);
+      border-color: transparent;
 
       &:hover {
-        color: mat.m2-get-color-from-palette($primary);
-        background-color: $background-hover-primary-button;
-        border-color: mat.m2-get-color-from-palette($foreground, divider);
+        color: var(--o-primary-500);
+        background-color: #ffffff;
+        border-color: var(--o-fg-divider);
       }
 
     }
 
     &.mat-mdc-button-base,
     &.mat-mdc-button-base.mat-accent {
-      color: mat.m2-get-color-from-palette($accent);
-      background-color: $background-accent-button;
+      color: var(--o-accent-500);
+      background-color: #ffffff;
 
       &:hover {
-        color: mat.m2-get-color-from-palette($primary, 800);
-        background-color: mat.m2-get-color-from-palette($primary, 100);
+        color: var(--o-primary-800);
+        background-color: var(--o-primary-100);
         border-color: transparent;
       }
     }
@@ -330,25 +313,25 @@
   .o-button button.mat-mdc-outlined-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: $font-color-primary-button;
-        background-color: $background-primary-button;
-        border-color: $border-color-primary-button;
+        color: var(--o-primary-800);
+        background-color: var(--o-primary-100);
+        border-color: transparent;
 
         &:hover {
-          color: mat.m2-get-color-from-palette($primary, 500);
-          background-color: $background-hover-primary-button;
-          border-color: mat.m2-get-color-from-palette($foreground, divider);
+          color: var(--o-primary-500);
+          background-color: #ffffff;
+          border-color: var(--o-fg-divider);
         }
 
       }
 
       &.mat-accent {
-        color: mat.m2-get-color-from-palette($accent, 500);
-        background-color: $background-accent-button;
+        color: var(--o-accent-500);
+        background-color: #ffffff;
 
         &:hover {
-          color: $font-color-hover-accent-button;
-          background-color: $background-hover-accent-button;
+          color: var(--o-accent-800);
+          background-color: var(--o-accent-100);
         }
       }
 
@@ -486,7 +469,7 @@
 
     button {
       &:hover {
-        background-color: mat.m2-get-color-from-palette($primary, 100);
+        background-color: var(--o-primary-100);
         border-radius: 50%;
       }
 
