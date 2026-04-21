@@ -356,6 +356,8 @@ Rediseño del theming del framework para emitir M3 tokens vía `mat.define-theme
 - `status-bar` y `app-bar` en light theme son ahora blanco puro (`$sidenav-background-color`) en vez de la mezcla 97.2% con primary.
 - Sidenav: `--mat-sidenav-container-shape: 0` (esquinas rectas) y `--mdc-text-button-label-text-color: #000` via overrides de token en el mixin `o-app-sidenav-theme`. Eliminada la `box-shadow` del sidenav drawer.
 - Ejemplo concreto de cómo sobrescribir tokens Material (`--mat-*`, `--mdc-*`) documentado en `MIGRATION_GUIDE.md` sección 3.1.quater.
+- Reorganización de estilos: los overrides de `.o-app-header` y `.o-app-sidenav` se trasladaron desde `ontimize-style.scss` (mixin `ontimize-theme-styles`) a los mixins dedicados `o-app-header-theme` y `o-app-sidenav-theme`. Tener cada componente con su mixin propio es más coherente con la estructura del framework y permite incluirlos o omitirlos independientemente.
+- `themes/oxygen.scss`: la density por defecto se sube a `-4` (antes `-2`) para un look más compacto. Se pasa como parámetro del factory en lugar del anterior `map.merge` — simplifica el código del tema.
 
 ### Playground PASO 6: Standalone bootstrap — ✅ COMPLETADO (15 abril 2026) — commit `232a4c0` (repo playground)
 

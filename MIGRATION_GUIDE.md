@@ -149,9 +149,27 @@ $theme: ontimize-style.o-mat-light-theme(
   $accent,
   $warn:       mat.m2-define-palette(mat.$m2-red-palette),
   $typography: my-typography.$typography,  // formato plano: ver abajo
-  $density:    -1                          // 0 | -1 | -2 | -3 | -4 | -5
+  $density:    -4                          // 0 | -1 | -2 | -3 | -4 | -5
 );
 ```
+
+El tema `oxygen` incluido en el framework usa `$density: -4` por defecto
+(look compacto). Para formas más aireadas o más compactas, pásale otro valor.
+
+> **Nota sobre botones con density < -3**: Material M3 solo define alturas
+> de botón (`--mdc-*-button-container-height`) para density 0…-3. Con
+> density `-4` o `-5` los botones pueden quedar más altos o bajos de lo
+> esperado. Si necesitas fijar la altura al mismo valor que los form fields,
+> añade un override en tu app:
+>
+> ```scss
+> html {
+>   --mdc-text-button-container-height:      40px;
+>   --mdc-outlined-button-container-height:  40px;
+>   --mdc-filled-button-container-height:    40px;
+>   --mdc-protected-button-container-height: 40px;
+> }
+> ```
 
 Formato del `$typography` (mapa plano, sin dependencia de Material):
 
