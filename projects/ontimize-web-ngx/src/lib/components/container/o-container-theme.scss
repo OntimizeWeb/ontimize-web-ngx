@@ -1,7 +1,4 @@
 @mixin o-container-theme($theme-or-color-config) {
-  // Typography is still consumed via the M2 config map (migration deferred).
-  $typography: map.get($theme-or-color-config, typography);
-
   .o-column,
   .o-column-collapsible,
   .o-row,
@@ -24,14 +21,12 @@
 
       }
 
-      @if($typography) {
-        >.o-container-title,
-        >.mat-expansion-panel-header .o-container-title {
-          span {
-            font: {
-              size: mat.m2-font-size($typography, body-1);
-              weight: mat.m2-font-weight($typography, body-1);
-            }
+      >.o-container-title,
+      >.mat-expansion-panel-header .o-container-title {
+        span {
+          font: {
+            size: var(--o-font-body-1-size);
+            weight: var(--o-font-body-1-weight);
           }
         }
       }

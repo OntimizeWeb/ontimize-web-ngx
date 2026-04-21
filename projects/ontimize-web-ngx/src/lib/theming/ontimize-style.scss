@@ -56,9 +56,19 @@
   $density: map.get($theme-or-color-config, density);
 
   // ─── Ontimize custom tokens (--o-*) ──────────────────────────
-  // Emitted at the mixin caller's scope (typically :root or .o-dark) so
-  // components can consume them via var(--o-*) without recompiling.
-  @include tokens.o-apply-tokens($theme-or-color-config);
+  // Emitted so component theme mixins below pick them up via var(--o-*).
+  // When the caller invokes this mixin at the top level, tokens go on :root.
+  // When invoked inside a selector (e.g. `.o-dark { … }`) they land on
+  // that selector instead — the `&` below preserves the caller's scope.
+  @if & {
+    & {
+      @include tokens.o-apply-tokens($theme-or-color-config);
+    }
+  } @else {
+    :root {
+      @include tokens.o-apply-tokens($theme-or-color-config);
+    }
+  }
 
   // ─── Shared base styles ─────────────────────────────────────
   @include base.ontimize-base-theme-styles($theme-or-color-config);

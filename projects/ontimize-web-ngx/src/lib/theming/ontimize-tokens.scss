@@ -60,6 +60,7 @@
   $warn:       map.get($color, warn);
   $background: map.get($color, background);
   $foreground: map.get($color, foreground);
+  $typography: map.get($theme, typography);
 
   // ─── Primary palette ────────────────────────────────────────
   --o-primary-50:   #{-get($primary, 50)};
@@ -149,4 +150,28 @@
   --o-fg-button:          #{-get-fg($foreground, button)};
   --o-fg-elevation:       #{-get-fg($foreground, elevation)};
   --o-fg-slider-off:      #{-get-fg($foreground, slider-off)};
+
+  // ─── Typography (font-size + font-weight per level + family) ─
+  // Emitted from the typography config map so consumers can pick up
+  // per-level sizes through a single `var(--o-font-<level>-size)` call
+  // without reaching into the Sass typography config at build time.
+  //
+  // The typography map has the shape:
+  //   ( font-family: <string>,
+  //     levels: ( body-1: (size: .., line-height: .., weight: ..), ... ) )
+  @if $typography {
+    $family: map.get($typography, font-family);
+    $levels: map.get($typography, levels);
+
+    @if $family {
+      --o-font-family: #{$family};
+    }
+    @if $levels {
+      @each $name, $cfg in $levels {
+        --o-font-#{$name}-size:        #{map.get($cfg, size)};
+        --o-font-#{$name}-line-height: #{map.get($cfg, line-height)};
+        --o-font-#{$name}-weight:      #{map.get($cfg, weight)};
+      }
+    }
+  }
 }

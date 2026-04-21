@@ -1,7 +1,4 @@
 @mixin o-card-menu-item-theme($theme-or-color-config) {
-  // Typography is still consumed via the M2 config map (migration deferred).
-  $typography: map.get($theme-or-color-config, typography);
-
   .o-card-menu-item {
 
     background: var(--o-bg-card);
@@ -11,13 +8,8 @@
       background-color: color-mix(in srgb, var(--o-bg-background) 29%, transparent);
     }
 
-    @if($typography) {
-      .o-card-menu-item-title {
-        font-size: mat.m2-font-size($typography, headline-6);
-      }
-    }
-
     .o-card-menu-item-title {
+      font-size: var(--o-font-headline-6-size);
       color: var(--o-primary-500);
     }
 

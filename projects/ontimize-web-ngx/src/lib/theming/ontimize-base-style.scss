@@ -119,7 +119,7 @@ $default-typography: ontimize.$typography;
 //
 // Factory signature:
 //   o-mat-light-theme($primary, $accent, $warn, $typography, $density)
-//   o-mat-dark-theme($primary, $accent, $warn, $typography, $density)
+//   o-mat-dark-theme ($primary, $accent, $warn, $typography, $density)
 //
 // Only $primary and $accent are required; $warn, $typography and $density
 // default to Ontimize standard values (red warn, Noto Sans typography,
@@ -131,6 +131,18 @@ $default-typography: ontimize.$typography;
 //     $typography: my-typography.$typography,
 //     $density: 0
 //   );
+//
+// The returned theme is a hybrid object with two roles:
+//   - `color` + `typography` + `density` keys carry the data the Ontimize
+//     token mixin (`o-apply-tokens`) reads when emitting the --o-* CSS
+//     custom properties. The `typography` entry is a plain Sass map (see
+//     typography/oxygen.scss), no longer tied to Material's typography API.
+//   - `m3-theme` — a `mat.define-theme()` object ready to feed
+//     `mat.all-component-themes()`. This routes Material's own component
+//     theming through M3.
+//
+// `o-material-theme` picks `m3-theme` when emitting Material component
+// tokens; Ontimize styles read from the custom keys via `o-apply-tokens`.
 
 @function o-mat-light-theme(
   $primary,
@@ -139,16 +151,32 @@ $default-typography: ontimize.$typography;
   $typography: ontimize.$typography,
   $density: -2
 ) {
-  $mat-theme: mat.m2-define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
-  $color: map.get($mat-theme, color);
-  @return (color:(primary: $primary,
+  $m2-theme: mat.m2-define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  $color: map.get($m2-theme, color);
+
+  // Angular Material 18 M3 theme object. Uses Ontimize default palettes
+  // (azure + blue) so Material can generate a full M3 token set. Custom
+  // branding still flows through the --o-* CSS variables emitted by
+  // o-apply-tokens, so the M3 palette here only affects Material's own
+  // component chrome (ripples, selection overlays, mdc defaults).
+  $m3-theme: mat.define-theme((
+    color: (theme-type: light, primary: mat.$azure-palette, tertiary: mat.$blue-palette),
+    density: (scale: $density),
+  ));
+
+  @return (
+    color: (
+      primary: $primary,
       accent: $accent,
       warn: $warn,
       is-dark: false,
       foreground: $ontimize-light-theme-foreground,
-      background: ontimize-light-theme-background($primary, $color)),
+      background: ontimize-light-theme-background($primary, $color),
+    ),
     typography: $typography,
-    density: $density);
+    density: $density,
+    m3-theme: $m3-theme,
+  );
 }
 
 @function o-mat-dark-theme(
@@ -158,16 +186,27 @@ $default-typography: ontimize.$typography;
   $typography: ontimize.$typography,
   $density: -2
 ) {
-  $mat-theme: mat.m2-define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
-  $color: map.get($mat-theme, color);
-  @return (color:(primary: $primary,
+  $m2-theme: mat.m2-define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
+  $color: map.get($m2-theme, color);
+
+  $m3-theme: mat.define-theme((
+    color: (theme-type: dark, primary: mat.$azure-palette, tertiary: mat.$blue-palette),
+    density: (scale: $density),
+  ));
+
+  @return (
+    color: (
+      primary: $primary,
       accent: $accent,
       warn: $warn,
       is-dark: true,
       foreground: $ontimize-dark-theme-foreground,
-      background: ontimize-dark-theme-background($primary, $color)),
+      background: ontimize-dark-theme-background($primary, $color),
+    ),
     typography: $typography,
-    density: $density);
+    density: $density,
+    m3-theme: $m3-theme,
+  );
 }
 
 // ─── Checkbox theme ─────────────────────────────────────────────────────────
@@ -296,9 +335,10 @@ $default-typography: ontimize.$typography;
 // Version-specific files call this mixin and then add their own overrides.
 
 @mixin ontimize-base-theme-styles($theme-or-color-config) {
-  // Typography still consumed via the M2 config map (migration deferred to
-  // Fase 5 when the whole factory moves to mat.define-theme()).
-  $typography: mat.m2-get-typography-config($theme-or-color-config);
+  // Typography flows through the flat Sass config map added to the theme
+  // by o-mat-light/dark-theme. The downstream typography-ontimize mixins
+  // still accept it for their own internal use.
+  $typography: map.get($theme-or-color-config, typography);
 
   // Apply all Ontimize component themes (form, table, list, etc.)
   @include theme.o-material-theme($theme-or-color-config);
@@ -393,14 +433,12 @@ $default-typography: ontimize.$typography;
           color: var(--o-fg-title);
         }
       }
-      @if($typography) {
-        >.o-container-title,
-        >.mat-expansion-panel-header .o-container-title {
-          span {
-            font: {
-              size: mat.m2-font-size($typography, headline-6);
-              weight: bold;
-            }
+      >.o-container-title,
+      >.mat-expansion-panel-header .o-container-title {
+        span {
+          font: {
+            size: var(--o-font-headline-6-size);
+            weight: bold;
           }
         }
       }

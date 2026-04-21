@@ -10,9 +10,29 @@
   }
 
   // Include Material theme styles for core and every component.
+  // Prefer the M3 theme object built by o-mat-light/dark-theme when
+  // present; fall back to the legacy M2-shape config otherwise.
+  //
+  // Material M3 requires component-theme mixins to be wrapped in a
+  // selector (html/:root/& are all valid). When the caller is already
+  // inside a selector we reuse it via `&`; otherwise we target html so
+  // the tokens become effective document-wide.
   $typography: map.get($theme-or-color-config, typography);
+  $m3-theme: map.get($theme-or-color-config, m3-theme);
 
-  @if $typography {
+  @if $m3-theme {
+    @if & {
+      & {
+        @include mat.core();
+        @include mat.all-component-themes($m3-theme);
+      }
+    } @else {
+      html {
+        @include mat.core();
+        @include mat.all-component-themes($m3-theme);
+      }
+    }
+  } @else if $typography {
     @include mat.core();
     @include mat.all-component-themes($theme-or-color-config);
   } @else {
