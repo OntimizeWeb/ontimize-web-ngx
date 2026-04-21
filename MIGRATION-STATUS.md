@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 20 abril 2026 (documentación density en MIGRATION_GUIDE.md)
+> Última actualización: 21 abril 2026 (Material M2→M3 completado, rama theming/m3)
 
 ## Repositorios y ramas
 
@@ -51,7 +51,7 @@
 | **v18 theme: remove button overrides** | ✅ **Completado** | `017a2a75` |
 | **Playground PASO 6: Standalone bootstrap** | ✅ **Completado** | `232a4c0` (repo playground) |
 | **Sub-paso 3.9: MIGRATION_GUIDE.md** | ✅ **Completado** | `e2b6ad4a` |
-| **Sub-paso 3.2: Material M3** | ⏳ **Pospuesto** (post-migración) | — |
+| **Sub-paso 3.2: Material M2→M3** | ✅ **Completado** | `fdcb42da`, `3ab884df`, `d2148328`, `1822c70b` (rama `theming/m3`) |
 
 ---
 
@@ -329,16 +329,35 @@ Migración de `material-icons` (ligature font) a `material-symbols-outlined` (va
 
 ---
 
-## PENDIENTE
+### Sub-paso 3.2: Material M2→M3 — ✅ COMPLETADO (21 abril 2026, rama `theming/m3`)
 
-### 1. Sub-paso 3.2: Migración a Material M3 — framework (POSPUESTO)
+Rediseño del theming del framework para emitir M3 tokens vía `mat.define-theme()` y reemplazar todas las lookups Sass M2 por CSS custom properties `--o-*`. La API pública del factory (`o-mat-light-theme` / `o-mat-dark-theme`) se mantiene — los consumers siguen declarando sus paletas con `mat.m2-define-palette`.
 
-- Migrar de M2 theming (prefijo `m2-`) a M3 tokens
-- **Alcance**: 310 llamadas `mat.m2-get-color-from-palette()` en 36 ficheros
-- **Decisión**: Pospuesto a post-migración — el framework funciona correctamente con M2 en Angular 18. La migración a M3 es un proyecto independiente de alto riesgo.
-- Herramienta cuando se retome: `ng generate @angular/material:m3-theme`
+**Commits (rama `theming/m3` desde `migration/18.x.x`):**
 
-### 2. Playground PASO 6: Standalone bootstrap — ✅ COMPLETADO (15 abril 2026) — commit `232a4c0` (repo playground)
+| Commit | Sub-fase | Descripción |
+|--------|----------|-------------|
+| `fdcb42da` | Fase 1 — cleanup | Elimina ficheros v8/v15/legacy del theming. Renombra `.v18.scss` → `.scss` (base-style, style, ontimize-blue). Simplifica `gulpfile.js`. -2857/+220 líneas. |
+| `3ab884df` | Fase 2 — infraestructura | Añade `ontimize-tokens.scss` con el mixin `o-apply-tokens($theme)` que emite CSS vars `--o-primary-*`, `--o-accent-*`, `--o-warn-*`, `--o-bg-*`, `--o-fg-*`. Factory acepta parámetros `$typography` y `$density` opcionales. |
+| `d2148328` | Fase 4 — refactor components | Reemplaza 21 ficheros `*-theme.scss` para consumir `var(--o-*)` en lugar de `mat.m2-get-color-from-palette()`. Opacidades via `color-mix(in srgb, …)`. -157 líneas netas. |
+| `1822c70b` | Fase 5 — M3 real | Factory ahora construye un theme híbrido con `m3-theme: mat.define-theme(...)`. `o-material.theme.scss` llama `mat.all-component-themes($m3-theme)` envuelto en un selector (requisito M3). Emite 501 tokens `--mat-*`. Typography migrada a mapa Sass plano `{ font-family, levels, table }`. Emite `--o-font-<level>-size/weight/line-height` y `--o-font-family`. |
+
+**Playground**: fix de `src/app/main/main-theme.scss` en commit `7f8f748` (repo playground) — reemplaza `mat.m2-font-size` / `mat.m2-get-color-from-palette` por `var(--o-*)`.
+
+**Alcance final:**
+- ~180 lookups M2 migrados a CSS vars.
+- 0 llamadas `mat.m2-font-*` en la codebase (última dependencia M2 activa).
+- Única `mat.m2-get-color-from-palette()` restante vive en el helper privado `-get()` de `ontimize-tokens.scss` para poder leer paletas M2 que los consumers declaran.
+- Build framework verde; tests: 2269 SUCCESS / 7 FAILED preexistentes (currency-input, no relacionados con theming).
+- Build playground verde. Smoke-test visual validado por el usuario.
+
+**Ajustes visuales post-smoke-test (21 abril 2026):**
+- Background levels simplificados a colores fijos (light: `#f9FAFB` / `#f7f7f7` / `#f2f2f2` / `#e0e0e0` / `white`; dark: `#202020` / `#2e2e2e` / `#303030` / `#3a3a3a` / `#252525`). Antes se derivaban por `mix()` sobre la paleta primary — el nuevo diseño los hace independientes del color corporativo.
+- `status-bar` y `app-bar` en light theme son ahora blanco puro (`$sidenav-background-color`) en vez de la mezcla 97.2% con primary.
+- Sidenav: `--mat-sidenav-container-shape: 0` (esquinas rectas) y `--mdc-text-button-label-text-color: #000` via overrides de token en el mixin `o-app-sidenav-theme`. Eliminada la `box-shadow` del sidenav drawer.
+- Ejemplo concreto de cómo sobrescribir tokens Material (`--mat-*`, `--mdc-*`) documentado en `MIGRATION_GUIDE.md` sección 3.1.quater.
+
+### Playground PASO 6: Standalone bootstrap — ✅ COMPLETADO (15 abril 2026) — commit `232a4c0` (repo playground)
 
 - `main.ts` migrado a `bootstrapApplication(AppComponent, { providers: [provideOntimizeWeb(CONFIG), provideRouter(routes), ...] })`
 - `app.module.ts` + `app-routing.module.ts` eliminados → `app.routes.ts`
@@ -349,7 +368,11 @@ Migración de `material-icons` (ligature font) a `material-symbols-outlined` (va
 - Shell components standalone: `ContainersComponent`, `LayoutManagerComponent`, `ImageComponent`, `GalleryComponent`, `ImageEditorComponent`
 - Sub-features con componentes no-standalone (inputs sub-pages, containers-basic/collapsible, layout-manager sub-pages, media sub-pages) siguen en NgModules — cargados vía `loadChildren`
 
-### 3. Addons pendientes de migrar
+---
+
+## PENDIENTE
+
+### 1. Addons pendientes de migrar
 
 Los planes de migración están en cada repo pero aún no se han ejecutado:
 
@@ -363,15 +386,19 @@ Los planes de migración están en cada repo pero aún no se han ejecutado:
 
 Cada plan sigue 3 fases (16→17→18) con estrategia de ramas `migration/16.x.x` → `migration/17.x.x` → `migration/18.x.x`.
 
-### 3. Smoke test visual playground
+### 2. Smoke test visual playground completo
 
-La playground usa ahora `bootstrapApplication()`. Verificación visual pendiente de:
+La playground usa ahora `bootstrapApplication()` y M3 theming. Verificación visual pendiente (smoke ya ejecutado 21 abril — falta checklist exhaustivo):
 - Todos los inputs (text, combo, date, etc.)
 - Tables (paginación, scroll, filtros)
 - Forms con CRUD
 - Dark theme toggle
 - Layout manager (tabs, dialog, sidenav)
 - Gallery, extra-components
+
+### 3. Merge de la rama `theming/m3` a `migration/18.x.x`
+
+Tras validar el smoke-test completo, hacer merge de `theming/m3` a `migration/18.x.x` (commits `fdcb42da` → `1822c70b`).
 
 ---
 

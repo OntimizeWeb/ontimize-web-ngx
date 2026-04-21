@@ -55,7 +55,7 @@ Ontimize Web NGX 18 incluye clases CSS utilitarias equivalentes en `flex-layout.
 
 ---
 
-## 3. Theming — migrar a `ontimize-style.v18`
+## 3. Theming — migrar a `ontimize-style` (Material 3)
 
 ### 3.1 Actualizar el import de estilos en `styles.scss`
 
@@ -68,7 +68,7 @@ Ontimize Web NGX 18 incluye clases CSS utilitarias equivalentes en `flex-layout.
 
 **Después (Angular 18):**
 ```scss
-@use 'ontimize-web-ngx/theming/ontimize-style.v18' as ontimize-style;
+@use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
 @use 'ontimize-web-ngx/theming/fonts/noto';  // fuente Noto Sans
 
 @use '@angular/material' as mat;
@@ -85,6 +85,95 @@ $dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);
   @include ontimize-style.ontimize-theme-all-component-color($dark-theme);
 }
 ```
+
+> **Nota**: el import se llamaba `ontimize-style.v18` durante la transición;
+> desde la versión 18.0.0 final el sufijo `.v18` ha desaparecido. Actualiza
+> los `@use` de tu `styles.scss` / `app.scss` quitando ese sufijo.
+
+### 3.1.bis Nuevas API M3 y CSS custom properties `--o-*`
+
+La versión 18 del framework genera internamente un theme Material 3 vía
+`mat.define-theme()` (Material emite los `--mat-*` tokens del sistema) y
+expone un juego paralelo de variables Ontimize bajo el prefijo `--o-*`:
+
+- Paletas derivadas de la paleta M2 declarada por el consumer: `--o-primary-50`,
+  `--o-primary-500`, `--o-primary-contrast-500`, `--o-accent-*`, `--o-warn-*`.
+- Foreground: `--o-fg-text`, `--o-fg-secondary-text`, `--o-fg-divider`,
+  `--o-fg-icon`, `--o-fg-disabled`, `--o-fg-title`, `--o-fg-hint`, …
+- Background: `--o-bg-card`, `--o-bg-background`, `--o-bg-level-0`,
+  `--o-bg-level-04`, `--o-bg-level-06`, `--o-bg-level-08`, `--o-bg-level-1`,
+  `--o-bg-status-bar`, `--o-bg-app-bar`, `--o-bg-sidenav-overlay`.
+- Typography: `--o-font-family` y, por cada level (`body-1`, `body-2`,
+  `subtitle-1`, `subtitle-2`, `headline-5`, `headline-6`, `caption`, `button`):
+  `--o-font-<level>-size`, `--o-font-<level>-line-height`,
+  `--o-font-<level>-weight`.
+
+Para styles propios **no** llames a `mat.m2-get-color-from-palette()` ni a
+`mat.m2-font-size()`. Usa los tokens directamente:
+
+```scss
+// Antes
+.my-button { color: mat.m2-get-color-from-palette($primary, 500); }
+// Después
+.my-button { color: var(--o-primary-500); }
+
+.my-label  { font-size: var(--o-font-body-2-size); }
+```
+
+### 3.1.quater Sobrescribir tokens Material (M3)
+
+Además de los `--o-*`, el framework emite los ~500 tokens `--mat-*` que
+genera `mat.all-component-themes()` (p. ej. `--mat-sidenav-container-shape`,
+`--mdc-text-button-label-text-color`, `--mat-form-field-…`). Puedes
+sobrescribirlos en el selector que quieras para ajustar el look Material:
+
+```scss
+// Esquinas rectas en el sidenav y etiqueta de botones oscura
+.o-app-sidenav {
+  --mat-sidenav-container-shape: 0;
+  --mdc-text-button-label-text-color: #000;
+}
+```
+
+El framework ya aplica algunos de estos overrides en sus mixins de
+componente (`o-app-sidenav-theme`, etc.); los apps pueden añadir los
+suyos en cualquier scope sin tocar Sass.
+
+### 3.1.ter Factory con typography / density configurables
+
+`o-mat-light-theme` y `o-mat-dark-theme` admiten parámetros opcionales:
+
+```scss
+$theme: ontimize-style.o-mat-light-theme(
+  $primary,
+  $accent,
+  $warn:       mat.m2-define-palette(mat.$m2-red-palette),
+  $typography: my-typography.$typography,  // formato plano: ver abajo
+  $density:    -1                          // 0 | -1 | -2 | -3 | -4 | -5
+);
+```
+
+Formato del `$typography` (mapa plano, sin dependencia de Material):
+
+```scss
+$typography: (
+  font-family: 'Noto Sans, "Helvetica Neue", sans-serif',
+  levels: (
+    body-1:     (size: 13px, line-height: 1.125em, weight: 400),
+    body-2:     (size: 12px, line-height: 15px,    weight: 400),
+    subtitle-1: (size: 14px, line-height: 21px,    weight: 600),
+    headline-6: (size: 18px, line-height: 24px,    weight: 500),
+    // ...
+  ),
+  table: (
+    small-row-height:      28px,
+    medium-row-font-size:  12px,
+    // ...
+  ),
+);
+```
+
+Si no pasas `$typography` el tema usa la config por defecto (Noto Sans).
 
 ### 3.2 Añadir fuente de iconos en `index.html`
 
@@ -106,13 +195,14 @@ Si no necesitas paletas personalizadas, puedes usar directamente el tema azul de
 
 ```scss
 // styles.scss
-@use 'ontimize-web-ngx/theming/themes/ontimize-blue.v18' as theme;
+@use 'ontimize-web-ngx/theming/themes/ontimize-blue' as theme;
+@use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
 
 // theme.$theme y theme.$dark-theme están disponibles
-@include theme.ontimize-theme-styles(theme.$theme);
+@include ontimize-style.ontimize-theme-styles(theme.$theme);
 
 .dark-theme {
-  @include theme.ontimize-theme-all-component-color(theme.$dark-theme);
+  @include ontimize-style.ontimize-theme-all-component-color(theme.$dark-theme);
 }
 ```
 
@@ -122,42 +212,52 @@ Si no necesitas paletas personalizadas, puedes usar directamente el tema azul de
 |---|---|---|
 | **Fuente** | Poppins | Noto Sans |
 | **Iconos** | Material Icons (ligatura) | Material Symbols Outlined |
-| **Sidenav** | Fondo derivado del color primary | Gris neutro (`#F5F5F5`) |
+| **Sidenav** | Fondo derivado del color primary + sombra + esquinas redondeadas (Material default) | Fondo neutro (`--o-bg-app-bar`), sin sombra, esquinas rectas (`--mat-sidenav-container-shape: 0`) |
 | **Botones** | Estilos custom (borde, color, hover) | Defaults de Angular Material |
-| **Density** | Aplicada (checkbox, list, radio, menu, tree) | NO aplicada — usar CSS custom properties |
+| **Density** | Aplicada (checkbox, list, radio, menu, tree) | Configurable via `$density` en el factory |
 | **Tabs** | Fondo inactivo personalizado | Defaults de Angular Material |
+| **Material theming** | M2 (`mat.m2-define-light-theme`) | **M3** (`mat.define-theme` interno) |
+| **Tokens CSS** | Sass variables en build-time | **CSS custom properties `--o-*` y `--mat-*`** runtime |
+| **Background levels** | Derivados del primary vía `mix()` | Colores fijos (`#f9FAFB`, `#f7f7f7`, `#f2f2f2`, `#e0e0e0`, `white`) independientes de la paleta |
 
 ### 3.5 Configurar density en Angular 18 (opcional)
 
-Si necesitas ajustar la densidad de componentes Material en Angular 18, tienes dos opciones:
+Material 3 aplica la density definida en el theme. El factory
+`o-mat-light-theme` / `o-mat-dark-theme` acepta el parámetro `$density`
+(defecto `-2`, compact). Tres formas equivalentes, de más a menos
+recomendada:
 
-**Opción A — Pasar density al tema (recomendado)**
-
-El mixin `ontimize-theme-styles` lee la clave `density` del mapa del tema y aplica `mat.all-component-densities()` automáticamente si no es `null`.
+**Opción A — Parámetro del factory (recomendado)**
 
 ```scss
-// app.scss / styles.scss
-@use "sass:map";
-@use "ontimize-web-ngx/theming/themes/oxygen.scss" as theme;
-@use "ontimize-web-ngx/theming/ontimize-style.v18.scss" as ontimize-style;
-
-$theme-with-density: map.merge(theme.$theme, (density: -1));
-
-@include ontimize-style.ontimize-theme-styles($theme-with-density);
+$theme: ontimize-style.o-mat-light-theme(
+  $primary, $accent,
+  $density: -1
+);
 ```
 
-Los valores válidos son `0` (default), `-1`, `-2`, `-3`, `-4`, `-5`.
-
-**Opción B — Aplicar density por componente**
+**Opción B — `map.merge` sobre un tema ya construido**
 
 ```scss
-// styles.scss (después del @include ontimize-theme-styles)
+@use "sass:map";
+@use "ontimize-web-ngx/theming/themes/oxygen" as theme;
+
+$theme-compact: map.merge(theme.$theme, (density: -1));
+
+@include ontimize-style.ontimize-theme-styles($theme-compact);
+```
+
+**Opción C — Por componente Material**
+
+```scss
 @use '@angular/material' as mat;
 
 @include mat.form-field-density(-2);
 @include mat.list-density(-1);
 @include mat.tree-density(-2);
 ```
+
+Valores válidos: `0` (default Material), `-1`, `-2`, `-3`, `-4`, `-5`.
 
 ---
 
@@ -336,19 +436,45 @@ new FormGroup({ name: new FormControl('') });
 
 ---
 
-## 9. Material SCSS — APIs con prefijo m2-
+## 9. Material SCSS — M3 tokens via CSS custom properties
 
-Si tu código SCSS personalizado usa APIs de Angular Material, añade el prefijo `m2-` donde sea necesario:
+El framework 18 emite tokens Material 3 (`--mat-*`) y tokens custom de
+Ontimize (`--o-*`). **Tu SCSS custom debería consumir esos tokens en vez
+de llamar a `mat.m2-*` en tiempo de build.**
 
-| Antes | Después |
+| Necesitas… | Usa… |
 |---|---|
-| `mat.define-palette(...)` | `mat.m2-define-palette(...)` |
-| `mat.get-color-from-palette(...)` | `mat.m2-get-color-from-palette(...)` |
-| `mat.define-light-theme(...)` | `mat.m2-define-light-theme(...)` |
-| `mat.define-typography-level(...)` | `mat.m2-define-typography-level(...)` |
-| `mat.$red-palette` | `mat.$m2-red-palette` |
+| Color de primary/accent/warn | `var(--o-primary-500)`, `var(--o-accent-500)`, `var(--o-warn-500)` |
+| Foreground (texto, iconos, dividers) | `var(--o-fg-text)`, `var(--o-fg-secondary-text)`, `var(--o-fg-icon)`, `var(--o-fg-divider)`, `var(--o-fg-hint)`, `var(--o-fg-disabled)` |
+| Background de superficie / niveles | `var(--o-bg-card)`, `var(--o-bg-background)`, `var(--o-bg-level-0…1)`, `var(--o-bg-status-bar)` |
+| Font-size / weight / line-height | `var(--o-font-body-1-size)`, `var(--o-font-body-1-weight)`, `var(--o-font-body-1-line-height)`, `var(--o-font-family)` |
 
-Ontimize Web NGX 18 sigue usando Material M2 internamente (con prefijo `m2-`). La migración completa a Material M3 está planificada para una versión posterior.
+Ejemplo (antes vs después):
+
+```scss
+// Antes (M2)
+.my-button {
+  color: mat.m2-get-color-from-palette($primary, 500);
+  font-size: mat.m2-font-size($typography, body-2);
+}
+
+// Después (M3-ready, runtime-overridable)
+.my-button {
+  color: var(--o-primary-500);
+  font-size: var(--o-font-body-2-size);
+}
+```
+
+> **Compatibilidad**: si todavía necesitas el mapa M2 del theme por otras
+> razones, sigue disponible como `$theme` (contiene `color.primary`, etc.).
+> Solo que invocar `mat.m2-font-size($typography, body-1)` ya no funciona
+> porque la typography migró a un mapa plano. Para leer un tamaño de
+> typography desde Sass: `map.get($typography, levels, body-1, size)`.
+
+Ontimize Web NGX 18 aplica theming Material 3 internamente via
+`mat.define-theme()`. Las paletas que tu app declara siguen siendo M2
+(`mat.m2-define-palette`) para backwards compatibility: el framework las
+traduce a tokens `--o-*` automáticamente.
 
 ---
 
@@ -359,14 +485,15 @@ Ontimize Web NGX 18 sigue usando Material M2 internamente (con prefijo `m2-`). L
 [ ] ng update @angular/core@18 @angular/cli@18 @angular/material@18
 [ ] npm install ontimize-web-ngx@18
 [ ] npm uninstall @angular/flex-layout (si aplica)
-[ ] styles.scss: cambiar import a ontimize-style.v18
+[ ] styles.scss: cambiar import a ontimize-style (sin .v18)
 [ ] styles.scss: añadir @use fonts/noto
 [ ] index.html: cambiar a Material Symbols Outlined
 [ ] index.html: eliminar Material Icons font link
 [ ] main.ts: migrar a bootstrapApplication() + provideOntimizeWeb() (opcional)
 [ ] app.routes.ts: crear fichero de rutas standalone (opcional)
 [ ] Guards: usar authGuard/permissionsGuard funcionales
-[ ] SCSS propio: añadir prefijo m2- a APIs de Angular Material
+[ ] SCSS propio: reemplazar mat.m2-get-color-from-palette()/m2-font-size()
+    por var(--o-primary-*)/var(--o-fg-*)/var(--o-font-*)
 [ ] Verificar smoke test visual: form, table, list, grid, sidenav
 ```
 
@@ -409,8 +536,24 @@ import { NgTemplateOutlet } from '@angular/common';
 **Solución**: Usa siempre los imports por nombre de paquete:
 ```scss
 // ✅ Correcto
-@use 'ontimize-web-ngx/theming/ontimize-style.v18' as ontimize-style;
+@use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
 
 // ❌ Incorrecto (ruta relativa al fuente del framework)
-@use '../node_modules/ontimize-web-ngx/theming/ontimize-style.v18';
+@use '../node_modules/ontimize-web-ngx/theming/ontimize-style';
+```
+
+### Error SCSS: `'Typography config does not have a level called "body-2"'`
+
+**Causa**: tu SCSS custom llama a `mat.m2-font-size($typography, body-2)`.
+La typography de Ontimize 18 ya no es un config M2: es un mapa plano
+`{ font-family, levels, table }`, y el helper M2 no sabe leerlo.
+
+**Solución**: usa los CSS custom properties `--o-font-<level>-size` que
+el framework emite automáticamente:
+
+```scss
+// Antes
+.my-class { font-size: mat.m2-font-size($typography, body-2); }
+// Después
+.my-class { font-size: var(--o-font-body-2-size); }
 ```

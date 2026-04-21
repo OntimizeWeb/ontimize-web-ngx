@@ -78,24 +78,7 @@
     @include mat.all-component-densities($density);
   }
 
-  // ─── v18 App header (neutral background) ───────────────────
-  .o-app-header {
 
-    background-color: var(--o-bg-status-bar);
-    box-shadow: none;
-
-    nav {
-
-      &.o-app-header-primary,
-      &.o-app-header-accent {
-        background-color: var(--o-bg-status-bar);
-      }
-
-      .o-app-header-title {
-        color: var(--o-fg-button);
-      }
-    }
-  }
 
   // ─── v18 Sidenav (neutral grey background, border-left accents) ───
   o-app-sidenav.o-app-sidenav,
@@ -121,7 +104,7 @@
 
 
       .mat-drawer.o-app-sidenav-sidenav {
-        box-shadow: none;
+
 
         .mat-drawer-inner-container {
           margin: 0 8px;
@@ -240,16 +223,16 @@
         }
 
         /* Side Navigation Level Styles */
-        .o-app-sidenav-menu-group-level-1,
-        .o-app-sidenav-menu-group-level-3 {
-          .o-app-sidenav-menu-item {
-            &:not([disabled='true']) {
-              a:hover {
-                background-color: color-mix(in srgb, var(--o-bg-status-bar) 96%, var(--o-bg-sidenav-overlay));
-              }
-            }
-          }
-        }
+        // .o-app-sidenav-menu-group-level-1,
+        // .o-app-sidenav-menu-group-level-3 {
+        //   .o-app-sidenav-menu-item {
+        //     &:not([disabled='true']) {
+        //       a:hover {
+        //         background-color: color-mix(in srgb, var(--o-bg-status-bar) 96%, var(--o-bg-sidenav-overlay));
+        //       }
+        //     }
+        //   }
+        // }
 
 
 

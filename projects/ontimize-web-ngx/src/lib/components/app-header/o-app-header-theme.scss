@@ -1,5 +1,7 @@
 @mixin o-app-header-theme($theme-or-color-config) {
   .o-app-header {
+    background-color: var(--o-bg-app-bar);
+
     nav {
       &.o-app-header-primary {
         background-color: var(--o-primary-500);
@@ -11,6 +13,10 @@
 
       .menu-button {
         background: transparent;
+      }
+
+      .o-app-header-title {
+        color: var(--o-fg-button);
       }
     }
 

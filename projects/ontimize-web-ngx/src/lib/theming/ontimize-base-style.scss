@@ -44,15 +44,15 @@ $sidenav-background-color: #FFFFFF !default;
   $primary-500: mat.m2-get-color-from-palette($primary, 500);
   $background: map.get($mat-theme, background);
   @return map.merge($background,
-    (level-0: mix($app-background-color, $primary-500, 98%),
-      level-04: #f2f2f2,
-      level-06: #f6f6f6,
-      level-08: #fafafa,
+    (level-0: #f9FAFB,
+      level-04: #f7f7f7,
+      level-06: #f2f2f2,
+      level-08: #e0e0e0,
       level-1: white,
       sidenav-overlay: #525252,
-      status-bar: mix($sidenav-background-color, mat.m2-get-color-from-palette($primary), 97.2%),
-      app-bar: mix($sidenav-background-color, mat.m2-get-color-from-palette($primary), 97.2%),
-      background: mix($app-background-color, mat.m2-get-color-from-palette($primary), 97.2%)));
+      status-bar:$sidenav-background-color,
+      app-bar: $sidenav-background-color,
+      background: $app-background-color));
 }
 
 // Background palette for dark themes (v18-style: primary-tinted).
@@ -60,11 +60,11 @@ $sidenav-background-color: #FFFFFF !default;
   $primary-500: mat.m2-get-color-from-palette($primary, 500);
   $background: map.get($mat-theme, background);
   @return map.merge($background,
-    (level-0: mix(#171717, $primary-500, 94%),
-      level-04: mix(#1E1E1E, $primary-500, 94%),
-      level-06: mix(#2C2C2C, $primary-500, 94%),
-      level-08: mix(#333333, $primary-500, 94%),
-      level-1: mix(#383838, $primary-500, 94%),
+    (level-0: #202020,
+      level-04: #2e2e2e,
+      level-06: #303030,
+      level-08:#3a3a3a,
+      level-1: #252525,
       sidenav-overlay: #525252,
       status-bar: mix(#272727, $primary-500, 94%)));
 }
