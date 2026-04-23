@@ -2,9 +2,9 @@ name: Sonar
 on:
   push:
     branches:
-      - main.15.x
-      - 15.x.x
-      - hotfix/15.*
+      - main.18.x
+      - 18.x.x
+      - hotfix/18.*
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -24,10 +24,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Node 18.x
+      - name: Configure Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18.10.0
+          node-version: ${{ vars.V18_NODE_VERSION }}
 
       - name: npm install and npm run test-ci
         run: |

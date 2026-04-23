@@ -15,16 +15,16 @@ on:
           - "rc"
           - "beta"
       RELEASE_CANDIDATE_VERSION:
-        description: "Release candidate version (e.g. 15.0.0-rc.0)"
+        description: "Release candidate version (e.g. 18.0.0-rc.0)"
       BETA_VERSION:
-        description: "Beta version (e.g. 15.0.0-beta.0)"
+        description: "Beta version (e.g. 18.0.0-beta.0)"
 
 env:
   NPM_REGISTRY: https://registry.npmjs.org/
   CI_EMAIL: ontimize-web@imatia.com
   CI_USERNAME: ontimize-web
-  MAIN_BRANCH: main.15.x
-  DEVELOP_BRANCH: 15.x.x
+  MAIN_BRANCH: main.18.x
+  DEVELOP_BRANCH: 18.x.x
   LIBRARY_PATH: projects/ontimize-web-ngx
 
 jobs:
@@ -96,10 +96,10 @@ jobs:
           ref: ${{ env.BASELINE_BRANCH }}
           fetch-depth: 0
 
-      - name: Node 18.x
+      - name: Configure Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18.10.0
+          node-version: ${{ vars.V18_NODE_VERSION }}
           registry-url: ${{ env.NPM_REGISTRY }}
 
       - name: obtain package.json version
