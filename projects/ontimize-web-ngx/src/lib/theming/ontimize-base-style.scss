@@ -16,7 +16,7 @@
 @use "sass:map";
 @use '@angular/material' as mat;
 @use '@angular/cdk';
-@use 'typography/ontimize.scss' as ontimize;
+@use 'typography/oxygen.scss' as ontimize;
 @use 'styles/layout.scss';
 @use 'styles/flex-layout.scss';
 @use 'styles/paginator.scss';
@@ -159,8 +159,10 @@ $default-typography: ontimize.$typography;
   // branding still flows through the --o-* CSS variables emitted by
   // o-apply-tokens, so the M3 palette here only affects Material's own
   // component chrome (ripples, selection overlays, mdc defaults).
+  $font-family: map.get($typography, font-family);
   $m3-theme: mat.define-theme((
     color: (theme-type: light, primary: mat.$azure-palette, tertiary: mat.$blue-palette),
+    typography: (brand-family: $font-family, plain-family: $font-family),
     density: (scale: $density),
   ));
 
@@ -189,8 +191,10 @@ $default-typography: ontimize.$typography;
   $m2-theme: mat.m2-define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
   $color: map.get($m2-theme, color);
 
+  $font-family: map.get($typography, font-family);
   $m3-theme: mat.define-theme((
     color: (theme-type: dark, primary: mat.$azure-palette, tertiary: mat.$blue-palette),
+    typography: (brand-family: $font-family, plain-family: $font-family),
     density: (scale: $density),
   ));
 

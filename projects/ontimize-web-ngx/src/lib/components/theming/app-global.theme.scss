@@ -421,27 +421,27 @@
     }
   }
 
-  .o-form .o-form-toolbar button,
-  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
-    &.mat-mdc-outlined-button {
-      padding: 0 6px;
+  // .o-form .o-form-toolbar button,
+  // .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
+  //   &.mat-mdc-outlined-button {
 
-      .mat-mdc-button-wrapper {
-        .mat-icon {
-          margin-right: 4px;
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-          line-height: 20px;
 
-        }
+  //     .mat-mdc-button-wrapper {
+  //       .mat-icon {
+  //         margin-right: 4px;
+  //         font-size: 20px;
+  //         width: 20px;
+  //         height: 20px;
+  //         line-height: 20px;
 
-        span {
-          flex: 1;
-        }
-      }
-    }
-  }
+  //       }
+
+  //       span {
+  //         flex: 1;
+  //       }
+  //     }
+  //   }
+  // }
 
   /*MAT PAGINATION*/
   .mat-mdc-paginator {

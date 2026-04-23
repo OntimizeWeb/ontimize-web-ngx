@@ -43,7 +43,9 @@
   @include o-breadcrumb-theme($theme-or-color-config);
   @include o-container-theme($theme-or-color-config);
   @include o-form-toolbar-theme($theme-or-color-config);
-  @include input-theme($theme-or-color-config);
+  @include o-button-theme($theme-or-color-config);
+  @include o-button-toggle-theme($theme-or-color-config);
+  //@include input-theme($theme-or-color-config);
   @include o-date-input-theme($theme-or-color-config);
   @include o-dialog-theme($theme-or-color-config);
   @include o-table-theme($theme-or-color-config);

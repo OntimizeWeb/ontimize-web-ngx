@@ -6,6 +6,14 @@
 // render text using sub-pixel anti-aliasing.
 @import 'variables.scss';
 
+html {
+  // MDC inputs use "font: inherit" — they inherit font-size from html.
+  // Setting it here to the Ontimize body token means all MDC inputs get
+  // the correct size without needing to override every MDC selector.
+  font-size: var(--o-font-body-1-size, 14px);
+  font-family: var(--o-font-family, 'Noto Sans', 'Helvetica Neue', sans-serif);
+}
+
 html, body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-touch-callout: none;
@@ -65,16 +73,7 @@ html, body {
   letter-spacing: 0.010em;
 }
 
-/************
- * Defaults
- ************/
 
-select,
-button,
-textarea,
-input {
-  font-size: 100%;
-}
 
 /************
  * ICONS
