@@ -54,7 +54,7 @@
     "@ngx-translate/http-loader": "~7.0.0",
     "angular-resizable-element": "7.0.2",
     "moment": "2.29.2",
-    "ngx-material-timepicker": "13.0.0",
+    "ngx-material-timepicker": "13.1.1",
     "google-libphonenumber": "^3.2.3",
     "tslib": "^2.3.0",
     "ngx-skeleton-loader": "10.0.0"
