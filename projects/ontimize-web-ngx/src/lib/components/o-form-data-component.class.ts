@@ -495,7 +495,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this._orequired;
   }
 
-  set orequired(val: boolean) {
+  set orequired(val: boolean | string) {
     const old = this._orequired;
     this._orequired = BooleanConverter(val);
     if (val !== old) {

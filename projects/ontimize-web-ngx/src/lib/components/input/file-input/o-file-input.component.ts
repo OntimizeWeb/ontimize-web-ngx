@@ -94,7 +94,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   public autoBinding: boolean = false;
   public autoRegistering: boolean = false;
   @BooleanInputConverter()
-  public showInfo: boolean = false;
+  public showInfo: boolean | string = false;
   @BooleanInputConverter()
   public multiple: boolean = false;
   @BooleanInputConverter()

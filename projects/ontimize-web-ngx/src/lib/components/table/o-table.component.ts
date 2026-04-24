@@ -426,10 +426,12 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   columnsVisibilityButton: boolean = true;
   @BooleanInputConverter()
   showFilterOption: boolean = true;
-  @BooleanInputConverter()
-  showReportOnDemandOption: boolean = true;
-  @BooleanInputConverter()
-  showChartsOnDemandOption: boolean = true;
+  get showReportOnDemandOption(): boolean { return this._showReportOnDemandOption; }
+  set showReportOnDemandOption(val: boolean | string) { this._showReportOnDemandOption = BooleanConverter(val); }
+  private _showReportOnDemandOption: boolean = true;
+  get showChartsOnDemandOption(): boolean { return this._showChartsOnDemandOption; }
+  set showChartsOnDemandOption(val: boolean | string) { this._showChartsOnDemandOption = BooleanConverter(val); }
+  private _showChartsOnDemandOption: boolean = true;
   @BooleanInputConverter()
   showButtonsText: boolean = true;
   @BooleanInputConverter()

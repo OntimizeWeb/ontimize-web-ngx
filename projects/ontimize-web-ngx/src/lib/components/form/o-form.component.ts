@@ -24,7 +24,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
-import { BooleanInputConverter } from '../../decorators/input-converter';
+import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
 import { IComponent } from '../../interfaces/component.interface';
 import { IFormDataComponentHash } from '../../interfaces/form-data-component-hash.interface';
 import { IFormDataComponent } from '../../interfaces/form-data-component.interface';
@@ -218,8 +218,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public static guardClassName = 'CanDeactivateFormGuard';
 
   /* inputs variables */
-  @BooleanInputConverter()
-  showHeader: boolean = true;
+  get showHeader(): boolean { return this._showHeader; }
+  set showHeader(val: boolean | string) { this._showHeader = BooleanConverter(val); }
+  protected _showHeader: boolean = true;
   headerMode: string = 'floating';
   headerPosition: 'top' | 'bottom' = 'top';
   labelheader: string = '';
@@ -235,8 +236,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   stayInRecordAfterEdit: boolean = false;
   afterInsertMode: 'new' | 'detail' | 'close' = 'close';
   serviceType: string;
-  @BooleanInputConverter()
-  protected queryOnInit: boolean = true;
+  get queryOnInit(): boolean { return this._queryOnInit; }
+  set queryOnInit(val: boolean | string) { this._queryOnInit = BooleanConverter(val); }
+  private _queryOnInit: boolean = true;
   protected parentKeys: string;
   protected getMethod: string = ""
   protected queryMethod: string = Codes.QUERYBYID_METHOD;
@@ -250,15 +252,17 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected keysSqlTypes: string;
   @BooleanInputConverter()
   undoButton: boolean = true;
-  @BooleanInputConverter()
-  showHeaderNavigation: boolean = false;
+  get showHeaderNavigation(): boolean { return this._showHeaderNavigation; }
+  set showHeaderNavigation(val: boolean | string) { this._showHeaderNavigation = BooleanConverter(val); }
+  private _showHeaderNavigation: boolean = false;
   public oattr: string = '';
   @BooleanInputConverter()
   includeBreadcrumb: boolean = false;
   @BooleanInputConverter()
   detectChangesOnBlur: boolean = true;
-  @BooleanInputConverter()
-  confirmExit: boolean = true;
+  get confirmExit(): boolean { return this._confirmExit; }
+  set confirmExit(val: boolean | string) { this._confirmExit = BooleanConverter(val); }
+  private _confirmExit: boolean = true;
 
   setValueOrderArray: string[];
 

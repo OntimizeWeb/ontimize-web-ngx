@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 20 abril 2026 (documentación density en MIGRATION_GUIDE.md)
+> Última actualización: 24 abril 2026 (ontimize-web-ngx-report migrado; addons pendientes detallados)
 
 ## Repositorios y ramas
 
@@ -9,9 +9,9 @@
 | **ontimize-web-ngx** (framework) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-extra-components** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-extra-components` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-gallery** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-gallery` | `migration/18.x.x` | ✅ Migrado |
-| **ontimize-web-ngx-playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` | ✅ Migrado (PASO 6 pendiente) |
+| **ontimize-web-ngx-playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-filemanager** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | ⏳ Pendiente |
-| **ontimize-web-ngx-report** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-report` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-report** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-report` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-charts** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `15.x.x` | ⏳ Pendiente |
 | **ontimize-web-ngx-map** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `15.x.x` | ⏳ Pendiente |
 | **ontimize-web-ngx-quickstart** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | ⏳ Pendiente |
@@ -349,21 +349,55 @@ Migración de `material-icons` (ligature font) a `material-symbols-outlined` (va
 - Shell components standalone: `ContainersComponent`, `LayoutManagerComponent`, `ImageComponent`, `GalleryComponent`, `ImageEditorComponent`
 - Sub-features con componentes no-standalone (inputs sub-pages, containers-basic/collapsible, layout-manager sub-pages, media sub-pages) siguen en NgModules — cargados vía `loadChildren`
 
-### 3. Addons pendientes de migrar
+### ontimize-web-ngx-report — ✅ COMPLETADO (24 abril 2026, rama `migration/18.x.x`)
+
+Migración incremental Angular 15→16→17→18 del addon de reports. Commits clave:
+
+| Commit | Rama | Descripción |
+|--------|------|-------------|
+| `ff1c68b` + `014f74e` | `migration/16.x.x` | Angular 16, `@ngbracket/ngx-layout`, deps |
+| `8b9311e` | `migration/17.x.x` | Angular 17, control flow (`@if`/`@for`/`@switch`) |
+| `98b1048` | `migration/17.x.x` | Fix TS2322: `.d.ts` patching del tgz del framework |
+| `d611fce` | `migration/18.x.x` | Angular 18: standalone, inject(), flex-layout removal |
+
+**Detalles Fase 3 (`migration/18.x.x`, commit `d611fce`):**
+
+- Angular 18.2, ng-packagr 18.2, TypeScript 5.5.4
+- `@ngbracket/ngx-layout` y `@angular/flex-layout` eliminados; 10 templates migrados a clases `o-flex-*`
+- 10 componentes → `standalone: true` con `imports[]` explícitos
+- `OReportModule` actualizado: `imports` + `exports` en lugar de `declarations`
+- `Injector.get()` → `inject()` en 5 componentes (OReportHomeComponent, OReportNewComponent, OReportDetailComponent, ReportOnDemandComponent, ApplyConfigurationDialogComponent)
+- `ngx-extended-pdf-viewer` v21: eliminados inputs deprecados `delayFirstView` y `useBrowserLocale`
+- **Build: `✔ Built ontimize-web-ngx-report` (6.1s)**
+
+**Nota sobre el tgz del framework:**
+El framework (`theming/m3`) tiene errores de compilación preexistentes no relacionados con el report. Se usó un tgz parchado (`ontimize-web-ngx-18.0.0-SNAPSHOT-0-patched.tgz`) con `.d.ts` modificados para aceptar `boolean | string` en inputs como `required`, `show-header`, etc., evitando errores TS2322 en compilación partial (Angular 17+).
+
+---
+
+## PENDIENTE
+
+### 1. Addons pendientes de migrar
 
 Los planes de migración están en cada repo pero aún no se han ejecutado:
 
-| Addon | Ruta local | Plan |
-|-------|-----------|------|
-| `ontimize-web-ngx-filemanager` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `plan-angularMigration15To18.prompt.md` |
-| `ontimize-web-ngx-report` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-report` | `plan-angularMigration15To18.prompt.md` |
-| `ontimize-web-ngx-charts` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `plan-angularMigration15To18.prompt.md` |
-| `ontimize-web-ngx-map` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `plan-angularMigration15To18.prompt.md` |
-| `ontimize-web-ngx-quickstart` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `plan-angularMigration15To18.prompt.md` |
+| Addon | Ruta local | Rama actual | Plan |
+|-------|-----------|-------------|------|
+| `ontimize-web-ngx-filemanager` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
+| `ontimize-web-ngx-charts` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
+| `ontimize-web-ngx-map` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
+| `ontimize-web-ngx-quickstart` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
 
 Cada plan sigue 3 fases (16→17→18) con estrategia de ramas `migration/16.x.x` → `migration/17.x.x` → `migration/18.x.x`.
 
-### 3. Smoke test visual playground
+#### Consideraciones por addon
+
+- **filemanager**: usa `@angular/flex-layout` extensivamente; misma estrategia que report (clases `o-flex-*`). Dependencia `ngx-file-manager` — verificar compatibilidad con Angular 18.
+- **charts**: usa `@swimlane/ngx-charts` o similar — verificar si la versión soporta Angular 18. Probable migración a standalone y eliminación de flex-layout.
+- **map**: depende de `leaflet` + wrappers Angular — verificar `ngx-leaflet` para Angular 18. Templates con flex-layout.
+- **quickstart**: app de demostración, no librería — migración más sencilla. Actualizar `bootstrapModule` → `bootstrapApplication` y dependencias.
+
+### 2. Smoke test visual playground
 
 La playground usa ahora `bootstrapApplication()`. Verificación visual pendiente de:
 - Todos los inputs (text, combo, date, etc.)
