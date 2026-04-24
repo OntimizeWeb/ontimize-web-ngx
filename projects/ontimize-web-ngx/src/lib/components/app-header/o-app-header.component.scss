@@ -1,10 +1,11 @@
 .o-app-header {
   z-index: 2;
+  align-content: center;
 
   &.o-app-header-large {
     height: 56px;
 
-    + .header-layout {
+    +.header-layout {
       top: 56px;
     }
 
@@ -22,7 +23,7 @@
   &.o-app-header-medium {
     height: 48px;
 
-    + .header-layout {
+    +.header-layout {
       top: 48px;
     }
 
@@ -39,7 +40,7 @@
   &.o-app-header-small {
     height: 40px;
 
-    + .header-layout {
+    +.header-layout {
       top: 40px;
     }
 

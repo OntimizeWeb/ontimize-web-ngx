@@ -1,18 +1,7 @@
 @mixin o-table-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-  $table-background: mat.m2-get-color-from-palette($background, 'card');
-  $text-color: mat.m2-get-color-from-palette($foreground, secondary-text);
-  $text-opacity: opacity($text-color);
-  $is-dark-theme: map.get($theme, is-dark);
-
   .o-table {
     .o-table-column-resizer span {
-      background: mat.m2-get-color-from-palette($foreground, secondary-text, 0.24);
+      background: color-mix(in srgb, var(--o-fg-secondary-text) 24%, transparent);
     }
 
     .spinner-container {
@@ -20,71 +9,74 @@
     }
 
     .o-table-menu-button {
-      color: mat.m2-get-color-from-palette($foreground, secondary-text);
+      color: var(--o-fg-secondary-text);
     }
 
     .mat-mdc-table {
       .mat-mdc-checkbox-disabled:not(.mat-mdc-checkbox-checked) .mdc-checkbox__background {
-        border-color: mat.m2-get-color-from-palette($foreground, secondary-text, 0.18);
+        border-color: color-mix(in srgb, var(--o-fg-secondary-text) 18%, transparent);
       }
 
       .mat-mdc-header-row {
         .mat-mdc-header-cell {
-          color: mat.m2-get-color-from-palette($foreground, text);
+          color: var(--o-fg-text);
 
           .column-filter-icon {
-            color: mat.m2-get-color-from-palette($background, disabled-button);
+            color: var(--o-fg-disabled-button);
           }
 
           .column-filter-icon-active {
-            color: mat.m2-get-color-from-palette($primary);
+            color: var(--o-primary-500);
           }
 
           .o-table-header-indicator-numbered {
-            color: mat.m2-get-color-from-palette($foreground, secondary-text);
+            color: var(--o-fg-secondary-text);
           }
         }
       }
 
       .mat-mdc-row {
+        // Group-row levels use background elevation tokens (lighter → darker
+        // as group depth increases). --o-bg-level-* already swaps light/dark
+        // when the .o-dark class is applied at the root.
         &.o-table-group-row-level-1 {
           font-weight: 900;
-          background-color: if($is-dark-theme, #464646, #b2b2b2);
+          background-color: var(--o-bg-level-0);
         }
 
         &.o-table-group-row-level-2 {
           font-weight: 800;
-          background-color: if($is-dark-theme, #575757, #cccccc);
+          background-color: var(--o-bg-level-04);
         }
 
         &.o-table-group-row-level-3 {
           font-weight: 700;
-          background-color: if($is-dark-theme, #686868, #e8e8e8);
+          background-color: var(--o-bg-level-06);
         }
 
         &.o-table-group-row-level-4 {
           font-weight: 600;
-          background-color: if($is-dark-theme, #7a7a7a, #f9f9f9);
+          background-color: var(--o-bg-level-08);
         }
 
         &:hover:not(.o-table-group-row) {
           cursor: pointer;
-          background-color: mat.m2-get-color-from-palette($foreground, base, 0.18);
+          background-color: color-mix(in srgb, var(--o-fg-base) 18%, transparent);
         }
 
         &.selected {
-          background: mat.m2-get-color-from-palette($background, hover, 0.12);
+          background: color-mix(in srgb, var(--o-fg-base) 12%, transparent);
         }
 
         .mat-mdc-cell {
-          color: mat.m2-get-color-from-palette($foreground, secondary-text);
+          color: var(--o-fg-secondary-text);
         }
 
       }
 
       .mat-mdc-footer-row.o-table-aggregate {
         font-weight: bold;
-        background-color: mat.m2-get-color-from-palette($background, status-bar);
+        background-color: var(--o-bg-status-bar);
       }
 
       .mat-mdc-footer-row,
@@ -109,7 +101,7 @@
 
       &.editable-row-table .mat-mdc-row,
       &.totals-table .mat-mdc-row {
-        background-color: mat.m2-get-color-from-palette($background, status-bar, 0.9);
+        background-color: color-mix(in srgb, var(--o-bg-status-bar) 90%, transparent);
       }
 
       &.totals-table {
@@ -125,21 +117,21 @@
 
     .o-table-body.horizontal-scroll {
       &::-webkit-scrollbar-thumb {
-        background-color: mat.m2-get-color-from-palette($primary, 200, 0.5);
+        background-color: color-mix(in srgb, var(--o-primary-200) 50%, transparent);
       }
 
       &::-webkit-scrollbar-thumb:hover {
-        background-color: mat.m2-get-color-from-palette($primary, 200);
+        background-color: var(--o-primary-200);
       }
 
       &::-webkit-scrollbar-thumb {
         border: 6px solid;
-        border-color: mat.m2-get-color-from-palette($background, background);
+        border-color: var(--o-bg-background);
       }
 
       &::-webkit-scrollbar-thumb:hover {
         border: 4px solid;
-        border-color: mat.m2-get-color-from-palette($background, background);
+        border-color: var(--o-bg-background);
       }
     }
 
@@ -147,12 +139,12 @@
 
   .o-table-visible-columns-dialog {
     .mat-mdc-list-item.dnd-sortable-drag {
-      background: mat.m2-get-color-from-palette($primary, 50);
+      background: var(--o-primary-50);
     }
   }
 
 
   .o-table-quickfilter .quickFilter .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-prefix div {
-    border-right: 1px solid mat.m2-get-color-from-palette($foreground, divider);
+    border-right: 1px solid var(--o-fg-divider);
   }
 }

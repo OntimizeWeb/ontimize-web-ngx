@@ -7,20 +7,13 @@ $header-height: 48px;
 $transition-duration: 500ms;
 
 .o-app-sidenav {
-  // &.header-layout {
-  //   .o-app-sidenav-container {
-  //     .mat-drawer.o-app-sidenav-sidenav {
-  //       box-shadow: 3px $header-height 6px rgba(0, 0, 0, .24);
-  //     }
-  //   }
-  // }
-
   .navMenu {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-  }
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+    }
+
 
   @-moz-document url-prefix() {
     .navMenu {
@@ -96,7 +89,6 @@ $transition-duration: 500ms;
     }
 
     .mat-drawer.o-app-sidenav-sidenav {
-      box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
       width: $sidenav-width;
       bottom: 0;
       overflow: auto;

@@ -1,34 +1,51 @@
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 @use "sass:map";
 
 // Create a theme.
 @mixin o-material-theme($theme-or-color-config, $typographyConfig: null) {
 
-  //merge $typographyConfig in $theme-or-color-config
-  @if $typographyConfig !=null {
+  // Merge $typographyConfig into $theme-or-color-config if provided.
+  @if $typographyConfig != null {
     $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
   }
 
-
-  //Include theme styles for core and each component used in your app.;
+  // Include Material theme styles for core and every component.
+  // Prefer the M3 theme object built by o-mat-light/dark-theme when
+  // present; fall back to the legacy M2-shape config otherwise.
+  //
+  // Material M3 requires component-theme mixins to be wrapped in a
+  // selector (html/:root/& are all valid). When the caller is already
+  // inside a selector we reuse it via `&`; otherwise we target html so
+  // the tokens become effective document-wide.
   $typography: map.get($theme-or-color-config, typography);
+  $m3-theme: map.get($theme-or-color-config, m3-theme);
 
-  @if($typography) {
+  @if $m3-theme {
+    @if & {
+      & {
+        @include mat.core();
+        @include mat.all-component-themes($m3-theme);
+      }
+    } @else {
+      html {
+        @include mat.core();
+        @include mat.all-component-themes($m3-theme);
+      }
+    }
+  } @else if $typography {
     @include mat.core();
     @include mat.all-component-themes($theme-or-color-config);
-  }
-
-  @else {
+  } @else {
     @include mat.all-component-colors($theme-or-color-config);
   }
-
-  $typography: mat.m2-get-typography-config($theme-or-color-config);
 
   @include app-global-theme($theme-or-color-config);
   @include o-breadcrumb-theme($theme-or-color-config);
   @include o-container-theme($theme-or-color-config);
   @include o-form-toolbar-theme($theme-or-color-config);
-  @include input-theme($theme-or-color-config);
+  @include o-button-theme($theme-or-color-config);
+  @include o-button-toggle-theme($theme-or-color-config);
+  //@include input-theme($theme-or-color-config);
   @include o-date-input-theme($theme-or-color-config);
   @include o-dialog-theme($theme-or-color-config);
   @include o-table-theme($theme-or-color-config);

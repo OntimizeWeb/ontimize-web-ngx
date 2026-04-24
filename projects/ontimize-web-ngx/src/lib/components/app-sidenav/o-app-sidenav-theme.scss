@@ -1,5 +1,37 @@
-// Sidenav theme styles are version-specific and defined in the versioned
-// entry points (ontimize-style.v15.scss and ontimize-style.v18.scss).
+// Sidenav theme styles are defined in ontimize-style.scss (entry point).
 // This mixin is kept for structural compatibility with o-material.theme.scss.
 @mixin o-app-sidenav-theme($theme-or-color-config) {
+  .o-app-sidenav {
+    // Override Material's sidenav container rounded shape (default 16px in M3)
+    --mat-sidenav-container-shape: 0;
+    --mdc-text-button-label-text-color: #000;
+
+    .mat-sidenav.o-app-sidenav-sidenav {
+      background: var(--o-bg-app-bar);
+    }
+
+
+
+
+    .o-app-sidenav-menu-group-level-1 {
+      >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+
+        a .mdc-button__label {
+          border-left: 2px solid var(--o-fg-divider);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected .mdc-button__label,
+        a:hover .mdc-button__label {
+          border-color: var(--o-primary-500);
+        }
+      }
+    }
+
+
+  }
+
+  .mat-mdc-menu-panel {
+    border: 1px solid var(--o-fg-divider);
+  }
+
 }

@@ -1,31 +1,30 @@
 @mixin o-image-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-  $warn: map.get($theme, warn);
-  $borderColor: mat.m2-get-color-from-palette($foreground, secondary-text);
+  // The SVG dashed borders below use hex fallbacks because CSS variables
+  // cannot be interpolated inside url("data:image/svg+xml,...") at runtime.
+  // The value matches the light-theme --o-fg-secondary-text (rgba 0,0,0,.54).
+  $svg-border: '%23898989';
 
   .o-image {
     .o-image-content {
       .o-image-display-container {
         &.o-image-drag-and-drop:not(.o-image-drag-and-drop-required) {
-          background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='"+$borderColor+"' stroke-width='1' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+          background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='#{$svg-border}' stroke-width='1' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
         }
 
         &.o-image-drag-and-drop.o-file-dragging {
-          background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='"+$borderColor+"' stroke-width='2' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
-          background-color: mat.m2-get-color-from-palette($background);
+          background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='#{$svg-border}' stroke-width='2' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
+          background-color: var(--o-bg-background);
         }
 
         &.o-image-drag-and-drop-required:not(.o-file-dragging) {
-          border-color: mat.m2-get-color-from-palette($warn);
+          border-color: var(--o-warn-500);
         }
 
         .o-image-button-remove {
-          background-color: mat.m2-get-color-from-palette($background, background);
+          background-color: var(--o-bg-background);
 
           &:hover {
-            background-color: mat.m2-get-color-from-palette($foreground, disabled-button);
+            background-color: var(--o-fg-disabled-button);
           }
         }
       }

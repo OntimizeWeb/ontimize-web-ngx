@@ -1,6 +1,5 @@
-@use "sass:map";
 @use '@angular/material' as mat;
-@use '../ontimize-style.v18' as ontimize-style;
+@use '../ontimize-style' as ontimize-style;
 @use '../typography/oxygen.scss' as oxygen-typography;
 
 
@@ -17,13 +16,17 @@ $primary-dark: mat.m2-define-palette($mat-custom-primary-dark);
 $accent-dark: $primary-dark;
 
 /* Light theme with Noto Sans typography */
-$theme: map.merge(
-  ontimize-style.o-mat-light-theme($primary, $accent),
-  (typography: oxygen-typography.$typography)
+$theme: ontimize-style.o-mat-light-theme(
+  $primary:    $primary,
+  $accent:     $accent,
+  $typography: oxygen-typography.$typography,
+  $density:    -4,
 );
 
 /* Dark theme with Noto Sans typography */
-$dark-theme: map.merge(
-  ontimize-style.o-mat-dark-theme($primary-dark, $accent-dark),
-  (typography: oxygen-typography.$typography)
+$dark-theme: ontimize-style.o-mat-dark-theme(
+  $primary:    $primary-dark,
+  $accent:     $accent-dark,
+  $typography: oxygen-typography.$typography,
+  $density:    -4,
 );

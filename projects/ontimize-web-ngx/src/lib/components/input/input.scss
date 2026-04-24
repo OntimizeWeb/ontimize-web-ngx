@@ -1,3 +1,15 @@
+.mat-form-field-appearance-ontimize {
+
+  .mat-mdc-form-field-icon-prefix,
+  .mat-mdc-form-field-icon-suffix {
+
+    .mat-icon{
+      --mdc-icon-button-state-layer-size: var(--o-input-icon-size, 20px);
+      padding: 0 6px 0 0;
+    }
+  }
+}
+
 div.icon-btn {
   cursor: default;
   display: inline-block;
@@ -7,8 +19,7 @@ div.icon-btn {
   }
 }
 
-$suffix-size: 20px;
-$width24: 24px;
+
 
 .o-tooltip.mat-mdc-tooltip {
 
@@ -35,86 +46,86 @@ $width24: 24px;
   }
 }
 
-.mat-mdc-form-field {
-  .mat-mdc-form-field-flex {
+// .mat-mdc-form-field {
+//   .mat-mdc-form-field-flex {
 
-    .mat-mdc-form-field-icon-prefix,
-    .mat-mdc-form-field-icon-suffix {
-      display: inherit;
-      align-items: center;
+//     .mat-mdc-form-field-icon-prefix,
+//     .mat-mdc-form-field-icon-suffix {
+//       display: inherit;
+//       align-items: center;
 
-      &:last-child {
-        padding-right: 6px;
-      }
+//       &:last-child {
+//         padding-right: 6px;
+//       }
 
-      mat-icon {
-        font-size: $suffix-size;
-        width: $suffix-size;
-        height: $suffix-size;
-        line-height: $suffix-size;
-        padding: 0;
-      }
+//       mat-icon {
+//         font-size: $suffix-size;
+//         width: $suffix-size;
+//         height: $suffix-size;
+//         line-height: $suffix-size;
+//         padding: 0;
+//       }
 
-      .mat-mdc-icon-button {
-        line-height: $suffix-size;
-        width: $suffix-size;
-        height: $suffix-size;
-        svg,
-        img,
-        .mat-mdc-button-touch-target {
-          width: 20px;
-          height: 20px;
-        }
-      }
+//       .mat-mdc-icon-button {
+//         line-height: $suffix-size;
+//         width: $suffix-size;
+//         height: $suffix-size;
+//         svg,
+//         img,
+//         .mat-mdc-button-touch-target {
+//           width: 20px;
+//           height: 20px;
+//         }
+//       }
 
-      .svg-icon>svg {
-        padding: 3px 0;
-        box-sizing: border-box;
-        width: $suffix-size;
-      }
-
-
-    }
-  }
-
-  input:read-only {
-    cursor: default;
-  }
-
-  &.custom-width .mat-mdc-form-field-infix {
-    width: auto;
-  }
-
-  &.icon-field {
-    .mat-mdc-form-field-icon-suffix {
-      cursor: default;
-      text-align: center;
-
-      .icon-btn,
-      .mat-icon,
-      .mat-mdc-icon-button .mat-icon {
-        vertical-align: baseline;
-      }
-
-      .mat-mdc-icon-button {
-
-        svg,
-        img {
-          width: $suffix-size;
-          height: $suffix-size;
-        }
-      }
+//       .svg-icon>svg {
+//         padding: 3px 0;
+//         box-sizing: border-box;
+//         width: $suffix-size;
+//       }
 
 
-      .mat-mdc-icon-button .mat-mdc-button-touch-target {
-        height: $suffix-size;
-        width: $suffix-size;
-      }
+//     }
+//   }
 
-      .svg-icon>svg {
-        padding: 3px 0;
-        box-sizing: border-box;
-      }
-    }
-  }
-}
+// input:read-only {
+//   cursor: default;
+// }
+
+// &.custom-width .mat-mdc-form-field-infix {
+//   width: auto;
+// }
+
+// &.icon-field {
+//   .mat-mdc-form-field-icon-suffix {
+//     cursor: default;
+//     text-align: center;
+
+//     .icon-btn,
+//     .mat-icon,
+//     .mat-mdc-icon-button .mat-icon {
+//       vertical-align: baseline;
+//     }
+
+//     .mat-mdc-icon-button {
+
+//       svg,
+//       img {
+//         width: $suffix-size;
+//         height: $suffix-size;
+//       }
+//     }
+
+
+//     .mat-mdc-icon-button .mat-mdc-button-touch-target {
+//       height: $suffix-size;
+//       width: $suffix-size;
+//     }
+
+//     .svg-icon>svg {
+//       padding: 3px 0;
+//       box-sizing: border-box;
+//     }
+//   }
+//   }
+// }

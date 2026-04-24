@@ -72,25 +72,15 @@
         max-height: 64px;
         padding: 0 24px;
 
-        @if($typography) {
-          font: {
-            size: mat.m2-font-size($typography, headline-5);
-            weight: bold;
-          }
-
-          .o-form-navigation {
-            span {
-              font: {
-                size: mat.m2-font-size($typography, subtitle-1);
-                weight: normal;
-              }
-            }
-          }
+        font: {
+          size: var(--o-font-headline-5-size);
+          weight: bold;
         }
 
         .o-form-navigation {
           span {
             font: {
+              size: var(--o-font-subtitle-1-size);
               weight: normal;
             }
           }

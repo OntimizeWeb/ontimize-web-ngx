@@ -1,9 +1,4 @@
 @mixin o-container-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-  $typography: map.get($theme-or-color-config, typography);
-
   .o-column,
   .o-column-collapsible,
   .o-row,
@@ -16,24 +11,22 @@
       >.o-container-header,
       >.o-container-title,
       >.mat-expansion-panel-header {
-        border-left: mat.m2-get-color-from-palette($foreground, divider);
-        color: mat.m2-get-color-from-palette($foreground, text);
+        border-left: var(--o-fg-divider);
+        color: var(--o-fg-text);
 
         .mdc-tab__text-label,
         .mat-mdc-tab-link {
-          color: mat.m2-get-color-from-palette($foreground, text);
+          color: var(--o-fg-text);
         }
 
       }
 
-      @if($typography) {
-        >.o-container-title,
-        >.mat-expansion-panel-header .o-container-title {
-          span {
-            font: {
-              size: mat.m2-font-size($typography, body-1);
-              weight: mat.m2-font-weight($typography, body-1);
-            }
+      >.o-container-title,
+      >.mat-expansion-panel-header .o-container-title {
+        span {
+          font: {
+            size: var(--o-font-body-1-size);
+            weight: var(--o-font-body-1-weight);
           }
         }
       }
@@ -55,7 +48,7 @@
   .o-row.o-appearance-outline {
     >.o-container {
       .o-container-title {
-        color: mat.m2-get-color-from-palette($foreground, text);
+        color: var(--o-fg-text);
       }
     }
 
@@ -69,7 +62,7 @@
       .o-container-outline-gap-icon,
       .o-container-outline-gap-title,
       .o-container-outline-start {
-        border-color: mat.m2-get-color-from-palette($foreground, divider);
+        border-color: var(--o-fg-divider);
       }
     }
   }

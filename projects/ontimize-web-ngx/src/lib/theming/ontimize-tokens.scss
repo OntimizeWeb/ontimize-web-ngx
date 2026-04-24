@@ -1,0 +1,306 @@
+// =============================================================================
+// ontimize-tokens.scss — Ontimize custom CSS tokens (M3-compatible)
+// =============================================================================
+//
+// This file does NOT emit any CSS on its own. It exposes the mixin
+// `o-apply-tokens($theme)` which generates all `--o-*` CSS custom properties
+// from an Ontimize theme object (M2-shape with color.primary, color.accent,
+// color.warn, color.background, color.foreground).
+//
+// Each theme (themes/oxygen.scss, themes/ontimize-blue.scss, etc.) is
+// responsible for calling `@include o-apply-tokens($theme)` inside a selector
+// (`:root`, `.o-dark`, or a scoped class) so the variables become effective.
+//
+// Token families emitted:
+//   --o-primary-{50..900,A100..A700}            Ontimize primary palette
+//   --o-primary-contrast-{50..900,A100..A700}   on-primary text colour
+//   --o-accent-{...}                            Ontimize accent palette
+//   --o-accent-contrast-{...}                   on-accent text colour
+//   --o-warn-{...}                              Ontimize warn palette
+//   --o-warn-contrast-{...}                     on-warn text colour
+//   --o-bg-level-{0,04,06,08,1}                 background elevation levels
+//   --o-bg-sidenav-overlay                      sidenav overlay colour
+//   --o-bg-status-bar, --o-bg-app-bar           top-bar backgrounds
+//   --o-bg-card, --o-bg-background              surface backgrounds
+//   --o-fg-text, --o-fg-secondary-text, …       foreground roles
+// =============================================================================
+
+@use "sass:map";
+@use "sass:meta";
+@use '@angular/material' as mat;
+
+// ─── Helper: safely extract colour from palette (returns null if absent) ────
+@function -get($palette, $hue) {
+  @if $palette ==null {
+    @return null;
+  }
+
+  @return mat.m2-get-color-from-palette($palette, $hue);
+}
+
+@function -get-bg($bg, $key, $fallback: null) {
+  @if $bg ==null {
+    @return $fallback;
+  }
+
+  $value: map.get($bg, $key);
+  @return if($value ==null, $fallback, $value);
+}
+
+@function -get-fg($fg, $key, $fallback: null) {
+  @if $fg ==null {
+    @return $fallback;
+  }
+
+  $value: map.get($fg, $key);
+  @return if($value ==null, $fallback, $value);
+}
+
+// ─── Main mixin ─────────────────────────────────────────────────────────────
+// Emits `--o-*` CSS custom properties derived from the given Ontimize theme.
+//
+// Usage (inside a selector such as :root or .o-dark):
+//   @include tokens.o-apply-tokens(my-theme.$theme);
+
+@mixin o-apply-tokens($theme) {
+  $color: map.get($theme, color);
+  $primary: map.get($color, primary);
+  $accent: map.get($color, accent);
+  $warn: map.get($color, warn);
+  $background: map.get($color, background);
+  $foreground: map.get($color, foreground);
+  $typography: map.get($theme, typography);
+
+  // custom button token
+  --o-button-height: 40px;
+
+  // icon size for input prefix/suffix — no MDC token exists for this
+  --o-input-icon-size: 20px;
+
+  --mat-table-row-item-outline-color: var(--o-fg-divider);
+
+  --mat-app-surface-container: white;
+  --mat-outline: var(--o-fg-color);
+  --mat-divider-color: var(--o-fg-color);
+
+  // ─── M3 sys surface tokens — fondos neutros (sin tinte de color M3) ────
+  // M3 por defecto genera superficies con tinte lila/azul (#faf9fd, #efedf0).
+  // Estos overrides vuelven a blancos/grises neutros similares a v15.
+  --mat-sys-surface: #ffffff;
+  --mat-sys-surface-bright: #ffffff;
+  --mat-sys-surface-dim: #f5f5f5;
+  --mat-sys-surface-variant: #f0f0f0;
+  --mat-sys-surface-container-lowest: #ffffff;
+  --mat-sys-surface-container-low: #f9fafb;
+  --mat-sys-surface-container: #f5f5f5;
+  --mat-sys-surface-container-high: #f0f0f0;
+  --mat-sys-surface-container-highest: #e8e8e8;
+  --mat-sys-background: #f9fafb;
+
+  // ─── M3 component container tokens — sobrescribir tokens de componente ──
+  // Necesario porque los componentes usan var(--mat-*-container-color)
+  // directamente, sin pasar por --mat-sys-surface-container.
+  --mat-menu-container-color: #ffffff;
+  --mat-select-panel-background-color: #ffffff;
+  --mat-autocomplete-background-color: #ffffff;
+  --mat-table-background-color: #ffffff;
+  --mat-paginator-container-background-color: #f9fafb;
+  --mat-expansion-container-background-color: #ffffff;
+  --mat-sidenav-container-background-color: #f9fafb;
+  --mat-sidenav-content-background-color: #f9fafb;
+  --mat-toolbar-container-background-color: #ffffff;
+  --mat-tree-container-background-color: #ffffff;
+  --mat-bottom-sheet-container-background-color: #f5f5f5;
+  --mat-datepicker-calendar-container-background-color: #f5f5f5;
+  --mat-stepper-container-color: #ffffff;
+  --mat-app-background-color: #f9fafb;
+
+  // ─── M3 elevation overrides — sombras más ligeras que M3 default ────────
+  --mat-sys-level0: none;
+  --mat-sys-level1: 0 1px 2px rgba(0,0,0,.10), 0 1px 3px 1px rgba(0,0,0,.06);
+  --mat-sys-level2: 0 1px 2px rgba(0,0,0,.10), 0 2px 6px 2px rgba(0,0,0,.08);
+  --mat-sys-level3: 0 4px 8px 3px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.12);
+  --mat-sys-level4: 0 6px 10px 4px rgba(0,0,0,.08), 0 2px 3px rgba(0,0,0,.12);
+  --mat-sys-level5: 0 8px 12px 6px rgba(0,0,0,.08), 0 4px 4px rgba(0,0,0,.12);
+
+  // ─── M3 state layer overrides — hovers más sutiles que M3 default ───────
+  --mat-sys-hover-state-layer-opacity: 0.04;
+  --mat-sys-focus-state-layer-opacity: 0.08;
+  --mat-sys-pressed-state-layer-opacity: 0.10;
+  --mat-sys-dragged-state-layer-opacity: 0.12;
+
+  // ─── Input font-size fix — MDC usa "font: inherit" que hereda 16px del browser
+  // Los tokens --mat-sys-body-large-size no llegan al input por esa razón.
+  // Sobreescribimos el token MDC específico del input para forzar el tamaño correcto.
+  @if $typography {
+    $levels: map.get($typography, levels);
+    @if $levels {
+      $body-1: map.get($levels, body-1);
+      @if $body-1 {
+        --mdc-filled-text-field-input-text-size: #{map.get($body-1, size)};
+        --mdc-outlined-text-field-input-text-size: #{map.get($body-1, size)};
+        --mdc-filled-text-field-input-text-line-height: #{map.get($body-1, line-height)};
+        --mdc-outlined-text-field-input-text-line-height: #{map.get($body-1, line-height)};
+      }
+    }
+  }
+
+  // ─── M3 typography sys tokens — mapeados desde $typography del consumer ─
+  // M3 default: body-large=16px. Los inputs MDC leen --mat-sys-body-large-size.
+  // Mapeamos los niveles Ontimize a sus equivalentes M3 sys para que la
+  // font-size configurada por el consumer se aplique en todos los componentes.
+  @if $typography {
+    $levels: map.get($typography, levels);
+    @if $levels {
+      $body-1:     map.get($levels, body-1);
+      $body-2:     map.get($levels, body-2);
+      $caption:    map.get($levels, caption);
+      $subtitle-1: map.get($levels, subtitle-1);
+      $subtitle-2: map.get($levels, subtitle-2);
+      $button:     map.get($levels, button);
+
+      @if $body-1 {
+        --mat-sys-body-large-size: #{map.get($body-1, size)};
+        --mat-sys-body-large-line-height: #{map.get($body-1, line-height)};
+        --mat-sys-body-large-weight: #{map.get($body-1, weight)};
+        --mat-sys-body-medium-size: #{map.get($body-1, size)};
+        --mat-sys-body-medium-line-height: #{map.get($body-1, line-height)};
+        --mat-sys-body-medium-weight: #{map.get($body-1, weight)};
+      }
+      @if $body-2 {
+        --mat-sys-body-small-size: #{map.get($body-2, size)};
+        --mat-sys-body-small-line-height: #{map.get($body-2, line-height)};
+        --mat-sys-body-small-weight: #{map.get($body-2, weight)};
+      }
+      @if $caption {
+        --mat-sys-label-small-size: #{map.get($caption, size)};
+        --mat-sys-label-small-line-height: #{map.get($caption, line-height)};
+      }
+      @if $subtitle-1 {
+        --mat-sys-title-medium-size: #{map.get($subtitle-1, size)};
+        --mat-sys-title-medium-line-height: #{map.get($subtitle-1, line-height)};
+        --mat-sys-label-large-size: #{map.get($subtitle-1, size)};
+      }
+      @if $subtitle-2 {
+        --mat-sys-title-small-size: #{map.get($subtitle-2, size)};
+        --mat-sys-label-medium-size: #{map.get($subtitle-2, size)};
+      }
+      @if $button {
+        --mat-sys-label-large-size: #{map.get($button, size)};
+      }
+    }
+  }
+  // ─── Primary palette ────────────────────────────────────────
+  --o-primary-50: #{-get($primary, 50)};
+  --o-primary-100: #{-get($primary, 100)};
+  --o-primary-200: #{-get($primary, 200)};
+  --o-primary-300: #{-get($primary, 300)};
+  --o-primary-400: #{-get($primary, 400)};
+  --o-primary-500: #{-get($primary, 500)};
+  --o-primary-600: #{-get($primary, 600)};
+  --o-primary-700: #{-get($primary, 700)};
+  --o-primary-800: #{-get($primary, 800)};
+  --o-primary-900: #{-get($primary, 900)};
+  --o-primary-A100: #{-get($primary, A100)};
+  --o-primary-A200: #{-get($primary, A200)};
+  --o-primary-A400: #{-get($primary, A400)};
+  --o-primary-A700: #{-get($primary, A700)};
+
+  --o-primary-contrast-50: #{-get($primary, '50-contrast')};
+  --o-primary-contrast-100: #{-get($primary, '100-contrast')};
+  --o-primary-contrast-200: #{-get($primary, '200-contrast')};
+  --o-primary-contrast-300: #{-get($primary, '300-contrast')};
+  --o-primary-contrast-400: #{-get($primary, '400-contrast')};
+  --o-primary-contrast-500: #{-get($primary, '500-contrast')};
+  --o-primary-contrast-600: #{-get($primary, '600-contrast')};
+  --o-primary-contrast-700: #{-get($primary, '700-contrast')};
+  --o-primary-contrast-800: #{-get($primary, '800-contrast')};
+  --o-primary-contrast-900: #{-get($primary, '900-contrast')};
+  --o-primary-contrast-A100: #{-get($primary, 'A100-contrast')};
+  --o-primary-contrast-A200: #{-get($primary, 'A200-contrast')};
+  --o-primary-contrast-A400: #{-get($primary, 'A400-contrast')};
+  --o-primary-contrast-A700: #{-get($primary, 'A700-contrast')};
+
+  // ─── Accent palette ─────────────────────────────────────────
+  --o-accent-50: #{-get($accent, 50)};
+  --o-accent-100: #{-get($accent, 100)};
+  --o-accent-200: #{-get($accent, 200)};
+  --o-accent-300: #{-get($accent, 300)};
+  --o-accent-400: #{-get($accent, 400)};
+  --o-accent-500: #{-get($accent, 500)};
+  --o-accent-600: #{-get($accent, 600)};
+  --o-accent-700: #{-get($accent, 700)};
+  --o-accent-800: #{-get($accent, 800)};
+  --o-accent-900: #{-get($accent, 900)};
+  --o-accent-A100: #{-get($accent, A100)};
+  --o-accent-A200: #{-get($accent, A200)};
+  --o-accent-A400: #{-get($accent, A400)};
+  --o-accent-A700: #{-get($accent, A700)};
+
+  --o-accent-contrast-500: #{-get($accent, '500-contrast')};
+
+  // ─── Warn palette ───────────────────────────────────────────
+  --o-warn-50: #{-get($warn, 50)};
+  --o-warn-100: #{-get($warn, 100)};
+  --o-warn-200: #{-get($warn, 200)};
+  --o-warn-300: #{-get($warn, 300)};
+  --o-warn-400: #{-get($warn, 400)};
+  --o-warn-500: #{-get($warn, 500)};
+  --o-warn-600: #{-get($warn, 600)};
+  --o-warn-700: #{-get($warn, 700)};
+  --o-warn-800: #{-get($warn, 800)};
+  --o-warn-900: #{-get($warn, 900)};
+  --o-warn-contrast-500: #{-get($warn, '500-contrast')};
+
+  // ─── Background levels ─────────────────────────────────────
+  --o-bg-background: #{-get-bg($background, background)};
+  --o-bg-card: #{-get-bg($background, card)};
+  --o-bg-level-0: #{-get-bg($background, level-0)};
+  --o-bg-level-04: #{-get-bg($background, level-04)};
+  --o-bg-level-06: #{-get-bg($background, level-06)};
+  --o-bg-level-08: #{-get-bg($background, level-08)};
+  --o-bg-level-1: #{-get-bg($background, level-1)};
+  --o-bg-status-bar: #{-get-bg($background, status-bar)};
+  --o-bg-app-bar: #{-get-bg($background, app-bar)};
+  --o-bg-sidenav-overlay: #{-get-bg($background, sidenav-overlay)};
+
+  // ─── Foreground roles ──────────────────────────────────────
+  --o-fg-base: #{-get-fg($foreground, base)};
+  --o-fg-text: #{-get-fg($foreground, text)};
+  --o-fg-secondary-text: #{-get-fg($foreground, secondary-text)};
+  --o-fg-title: #{-get-fg($foreground, title)};
+  --o-fg-hint: #{-get-fg($foreground, hint-text)};
+  --o-fg-disabled: #{-get-fg($foreground, disabled)};
+  --o-fg-disabled-button: #{-get-fg($foreground, disabled-button)};
+  --o-fg-disabled-text: #{-get-fg($foreground, disabled-text)};
+  --o-fg-icon: #{-get-fg($foreground, icon)};
+  --o-fg-divider: #{-get-fg($foreground, divider)};
+  --o-fg-button: #{-get-fg($foreground, button)};
+  --o-fg-elevation: #{-get-fg($foreground, elevation)};
+  --o-fg-slider-off: #{-get-fg($foreground, slider-off)};
+
+  // ─── Typography (font-size + font-weight per level + family) ─
+  // Emitted from the typography config map so consumers can pick up
+  // per-level sizes through a single `var(--o-font-<level>-size)` call
+  // without reaching into the Sass typography config at build time.
+  //
+  // The typography map has the shape:
+  //   ( font-family: <string>,
+  //     levels: ( body-1: (size: .., line-height: .., weight: ..), ... ) )
+  @if $typography {
+    $family: map.get($typography, font-family);
+    $levels: map.get($typography, levels);
+
+    @if $family {
+      --o-font-family: #{$family};
+    }
+
+    @if $levels {
+      @each $name, $cfg in $levels {
+        --o-font-#{$name}-size: #{map.get($cfg, size)};
+        --o-font-#{$name}-line-height: #{map.get($cfg, line-height)};
+        --o-font-#{$name}-weight: #{map.get($cfg, weight)};
+      }
+    }
+  }
+}

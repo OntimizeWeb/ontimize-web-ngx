@@ -111,49 +111,7 @@ $steps: 6;
 
 @include padding-margin-x();
 
-button.mat-mdc-button-base {
 
-  &.mat-mdc-button,
-  &.mat-mdc-unelevated-button,
-  &.mat-mdc-raised-button,
-  &.mat-mdc-outlined-button {
-    min-width: 112px;
-  }
-
-  // &.mat-mdc-button,
-  // &.mat-mdc-unelevated-button,
-  // &.mat-mdc-icon-button,
-  // &.mat-mdc-raised-button,
-  // &.mat-mdc-outlined-button {
-  //   height: $mat-button-line-height;
-  //   line-height: $mat-button-line-height;
-
-  //   .mat-mdc-button-touch-target {
-  //     height: $mat-button-line-height;
-  //   }
-
-  //   >.mat-icon {
-  //     line-height: 1;
-  //   }
-  //}
-
-  &.mat-mdc-outlined-button {
-    height: $mat-button-line-height;
-    line-height: $mat-stroked-button-line-height;
-  }
-
-  &.mat-mdc-icon-button {
-    width: $mat-button-line-height;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    .mat-mdc-button-touch-target {
-      width: $mat-button-line-height;
-    }
-  }
-}
 
 
 

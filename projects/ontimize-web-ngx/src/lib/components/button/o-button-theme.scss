@@ -1,0 +1,20 @@
+@mixin o-button-theme($theme-or-color-config) {
+  .o-button {
+    button.mat-mdc-button-base.mdc-button {
+
+      min-width: 112px;
+      --mdc-text-button-container-height: var(--o-button-height);
+      --mdc-filled-button-container-height: var(--o-button-height);
+      --mdc-protected-button-container-height: var(--o-button-height);
+      --mdc-outlined-button-container-height: var(--o-button-height);
+
+
+
+      --mdc-text-button-container-height: var(--o-button-height);
+      --mdc-filled-button-container-height: var(--o-button-height);
+      --mdc-protected-button-container-height: var(--o-button-height);
+      --mdc-outlined-button-container-height: var(--o-button-height);
+      --mdc-icon-button-state-layer-size: var(--o-button-height);
+    }
+  }
+}

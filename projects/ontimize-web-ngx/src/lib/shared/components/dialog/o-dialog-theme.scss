@@ -1,33 +1,20 @@
 @mixin o-dialog-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-  $info: mat.m2-define-palette(mat.$m2-light-blue-palette);
-  $warn: mat.m2-define-palette(mat.$m2-amber-palette);
-  $error: mat.m2-define-palette(mat.$m2-red-palette);
-
+  // Alert-icon colours correspond to Material M2 palettes (light-blue / amber /
+  // red, 500 hue). Hardcoded because they are not derived from the user theme.
   .alert-icon {
-    &.info {
-      color: mat.m2-get-color-from-palette($info);
-    }
-
-    &.warn {
-      color: mat.m2-get-color-from-palette($warn);
-    }
-
-    &.error {
-      color: mat.m2-get-color-from-palette($error);
-    }
+    &.info  { color: #03a9f4; }   // light-blue 500
+    &.warn  { color: #ffc107; }   // amber 500
+    &.error { color: #f44336; }   // red 500
   }
 
   .mat-mdc-dialog {
-    background-color: mat.m2-get-color-from-palette($background, dialog);
+    background-color: var(--o-bg-card);
 
     &.mat-content-overflow {
 
       .mat-actions,
       mat-dialog-actions {
-        border-top-color: mat.m2-get-color-from-palette($foreground, divider);
+        border-top-color: var(--o-fg-divider);
       }
     }
   }
