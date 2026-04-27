@@ -3,8 +3,11 @@
   .mat-mdc-form-field-icon-prefix,
   .mat-mdc-form-field-icon-suffix {
 
-    .mat-icon{
+    .mat-icon {
       --mdc-icon-button-state-layer-size: var(--o-input-icon-size, 20px);
+      font-size: var(--o-input-icon-size, 20px);
+      width: var(--o-input-icon-size, 20px);
+      height: var(--o-input-icon-size, 20px);
       padding: 0 6px 0 0;
     }
   }

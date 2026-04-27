@@ -388,7 +388,13 @@
               display: flex;
               border-right: 1px solid rgba(0, 0, 0, 0.12);
 
-              .mat-icon,
+              .mat-icon {
+                font-size: var(--o-input-icon-size, 20px);
+                width: var(--o-input-icon-size, 20px);
+                height: var(--o-input-icon-size, 20px);
+                margin-right: 6px;
+              }
+
               button {
                 margin-right: 6px;
               }
