@@ -55,8 +55,14 @@
 @mixin ontimize-theme-styles($theme-or-color-config) {
   $density: map.get($theme-or-color-config, density);
 
+  // ─── Shared base styles ─────────────────────────────────────
+  // Must run first: mat.all-component-themes($m3-theme) emits --mdc-* tokens
+  // that our o-apply-tokens overrides below must win over.
+  @include base.ontimize-base-theme-styles($theme-or-color-config);
+
   // ─── Ontimize custom tokens (--o-*) ──────────────────────────
-  // Emitted so component theme mixins below pick them up via var(--o-*).
+  // Applied after Material component themes so our --mdc-* and --mat-sys-*
+  // overrides take precedence over whatever M3 emits for the same tokens.
   // When the caller invokes this mixin at the top level, tokens go on :root.
   // When invoked inside a selector (e.g. `.o-dark { … }`) they land on
   // that selector instead — the `&` below preserves the caller's scope.
@@ -69,9 +75,6 @@
       @include tokens.o-apply-tokens($theme-or-color-config);
     }
   }
-
-  // ─── Shared base styles ─────────────────────────────────────
-  @include base.ontimize-base-theme-styles($theme-or-color-config);
 
   // ─── Density ─────────────────────────────────────────────────
   @if $density != null {

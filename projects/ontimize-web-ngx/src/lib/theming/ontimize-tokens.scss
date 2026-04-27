@@ -130,14 +130,19 @@
   --mat-sys-pressed-state-layer-opacity: 0.10;
   --mat-sys-dragged-state-layer-opacity: 0.12;
 
-  // ─── Input font-size fix — MDC usa "font: inherit" que hereda 16px del browser
-  // Los tokens --mat-sys-body-large-size no llegan al input por esa razón.
-  // Sobreescribimos el token MDC específico del input para forzar el tamaño correcto.
+  // ─── Input font-size fix ─────────────────────────────────────────────────
+  // .mat-mdc-form-field-input-control usa "font: inherit" y hereda de
+  // .mat-mdc-form-field que lee --mat-form-field-container-text-size
+  // (fallback --mat-app-body-large-size). Los tokens --mdc-*-text-field-*
+  // no llegan a ese selector. Sobreescribimos el token de form-field y sus
+  // alias para que todos los caminos resuelvan al tamaño del nivel 'input'.
   @if $typography {
     $levels: map.get($typography, levels);
     @if $levels {
       $input: map.get($levels, input);
       @if $input {
+        --mat-form-field-container-text-size: #{map.get($input, size)};
+        --mat-form-field-container-text-line-height: #{map.get($input, line-height)};
         --mdc-filled-text-field-input-text-size: #{map.get($input, size)};
         --mdc-outlined-text-field-input-text-size: #{map.get($input, size)};
         --mdc-filled-text-field-input-text-line-height: #{map.get($input, line-height)};
