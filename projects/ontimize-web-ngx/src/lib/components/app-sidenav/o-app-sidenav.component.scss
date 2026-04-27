@@ -1,19 +1,22 @@
 $sidenav-spacing-unit: 8px;
 $sidenav-width: 240px;
-$sidenav-closed-width: 48px;
-$margin-left-buttom: 8px;
-$sidenav-diff: -191px;
+$sidenav-closed-width: 56px;
+$sidenav-inner-margin: 8px;
+$sidenav-inner-width: calc(100% - #{$sidenav-inner-margin * 2});
+$sidenav-diff: -183px;
 $header-height: 48px;
 $transition-duration: 500ms;
 
 .o-app-sidenav {
-  .navMenu {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: auto;
-    }
+  font-weight: 400;
 
+  .navMenu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 
   @-moz-document url-prefix() {
     .navMenu {
@@ -24,12 +27,10 @@ $transition-duration: 500ms;
   .o-app-sidenav-menu-group,
   .o-app-sidenav-menu-item {
     a {
-      margin-left: $margin-left-buttom;
+      margin-left: $sidenav-spacing-unit;
 
-      .mat-icon {
-        svg {
-          display: flex;
-        }
+      .mat-icon svg {
+        display: flex;
       }
     }
 
@@ -82,7 +83,6 @@ $transition-duration: 500ms;
       display: flex;
       flex-direction: column;
 
-      // The rule will match the element following the router-outlet which will be the routed component.
       router-outlet+* {
         flex-grow: 1;
       }
@@ -91,84 +91,19 @@ $transition-duration: 500ms;
     .mat-drawer.o-app-sidenav-sidenav {
       width: $sidenav-width;
       bottom: 0;
-      overflow: auto;
+      overflow: hidden;
       height: 100%;
       display: flex;
 
+      .mat-drawer-inner-container {
+        display: flex;
+        margin: 0 $sidenav-inner-margin;
+        width: $sidenav-inner-width;
 
-      &:not(.mat-drawer-closed) {
-        .o-app-sidenav-menugroup {
-          transition: padding $transition-duration 0s;
-
-          .o-app-sidenav-menugroup-arrow {
-            transition: $transition-duration transform cubic-bezier(.25, .8, .25, 1);
-          }
-
-          &.opened {
-            .o-app-sidenav-menugroup-arrow {
-              transform: rotate(90deg);
-            }
-          }
-        }
-
-        .o-app-sidenav-menugroup,
-        .o-app-sidenav-menuitem {
-          mat-icon:not(.o-app-sidenav-menugroup-arrow) {
-            margin-right: ($sidenav-spacing-unit * 2);
-          }
+        .sidenav-wrapper {
+          flex: 1;
         }
       }
-
-      &.mat-drawer-closing {
-        transform: translate3d($sidenav-diff, 0, 0);
-      }
-
-      &.mat-drawer-closed {
-        text-align: center;
-
-        .o-app-sidenav-item {
-          &:not(.o-user-info) {
-            cursor: pointer;
-          }
-
-          &.o-user-info {
-
-            &:focus,
-            &:hover {
-              color: inherit;
-            }
-          }
-        }
-
-        .o-app-sidenav-menu-group,
-        .o-app-sidenav-menu-item {
-          &:not([disabled=true]) {
-            a.o-app-sidenav-viewer-sidenav-item-selected {
-              padding: 0 8px;
-            }
-          }
-        }
-
-        nav {
-          width: $sidenav-closed-width;
-          min-width: $sidenav-closed-width;
-          margin-left: auto;
-        }
-
-        .o-app-sidenav-image .o-app-sidenav-image-container {
-          padding: 0;
-          text-align: end;
-          max-height: 36px;
-
-          .o-app-sidenav-image {
-            max-height: 36px;
-            margin-right: 8px;
-          }
-        }
-      }
-
-
-
 
       &.ellipsis-menu-items {
         display: block;
@@ -184,15 +119,6 @@ $transition-duration: 500ms;
         }
       }
 
-      .mat-drawer-inner-container {
-
-        display: flex;
-
-        .sidenav-wrapper {
-          flex: 1;
-        }
-      }
-
       .o-app-sidenav-content-container {
         padding-bottom: 16px;
       }
@@ -201,25 +127,9 @@ $transition-duration: 500ms;
         height: 48px;
       }
 
-      nav {
-
-        a {
-          border-radius: 0;
-          box-sizing: border-box;
-          display: block;
-          line-height: 48px;
-          height: auto;
-          font-size: 14px;
-          max-width: 100%;
-
-
-          >.mat-icon {
-            vertical-align: middle;
-            height: 24px;
-            width: 24px;
-            font-size: 24px;
-          }
-        }
+      .sidenav-toggle {
+        padding: 4px 12px 8px;
+        cursor: pointer;
       }
 
       ul {
@@ -233,72 +143,242 @@ $transition-duration: 500ms;
         }
       }
 
-      .sidenav-toggle {
-        padding: 4px 12px 8px;
-        cursor: pointer;
-      }
+      nav {
+        width: 100%;
 
-      /* Side Navigation Level Styles */
-      .o-app-sidenav-menu-group-level-1 a {
-        font-size: 14px;
-        line-height: 48px;
-        height: 48px;
-
-        +.o-app-sidenav-menugroup-items-container {
-
-          .o-app-sidenav-menu-group,
-          .o-app-sidenav-menu-item {
-            a {
-              font-size: 12px;
-              line-height: 40px;
-              height: 40px;
-
-              .mat-mdc-button-touch-target {
-                height: 40px;
-              }
-            }
-          }
-        }
-      }
-
-      .o-app-sidenav-menu-group-level-2 a {
-        font-size: 12px;
-        line-height: 40px;
-        height: 40px;
-
-        .mat-mdc-button-touch-target {
+        a {
+          border-radius: 8px;
+          box-sizing: border-box;
+          display: block;
+          line-height: 40px;
           height: 40px;
+          font-size: 14px;
+          max-width: 100%;
+          margin-bottom: 2px;
+
+          >.mat-icon {
+            vertical-align: middle;
+            height: 24px;
+            width: 24px;
+            font-size: 24px;
+          }
+        }
+      }
+
+      // ── Open state ──────────────────────────────────────────────
+      &:not(.mat-drawer-closed) {
+        .o-app-sidenav-menugroup {
+          transition: padding $transition-duration 0s;
+
+          .o-app-sidenav-menugroup-arrow {
+            transition: $transition-duration transform cubic-bezier(.25, .8, .25, 1);
+
+            &.opened {
+              transform: rotate(90deg);
+            }
+          }
         }
 
-        +.o-app-sidenav-menugroup-items-container {
+        .o-app-sidenav-menugroup,
+        .o-app-sidenav-menuitem {
+          mat-icon:not(.o-app-sidenav-menugroup-arrow) {
+            margin-right: ($sidenav-spacing-unit * 2);
+          }
+        }
 
-          .o-app-sidenav-menu-group,
-          .o-app-sidenav-menu-item {
-            a {
-              font-size: 11px;
-              line-height: 40px;
-              height: 40px;
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+          a {
+            padding: 0 16px;
+            margin: 0;
+            display: flex;
+            width: 100%;
 
-              .mat-mdc-button-touch-target {
-                height: 40px;
-              }
+            .mdc-button__label {
+              display: flex;
+              min-width: 0;
+              flex: 1;
+              overflow: hidden;
 
-              .mat-icon {
-                font-size: 20px;
-                height: 20px;
-                width: 20px;
+              >div {
+                display: flex;
+                align-items: center;
+                min-width: 0;
+                width: 100%;
+                overflow: hidden;
+
+                .o-app-sidenav-menuitem-title,
+                .o-app-sidenav-menugroup-title {
+                  min-width: 0;
+                  flex: 1;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
               }
             }
           }
         }
+
+        // Indentation per level via padding on the container (not on `a`)
+        // so hover fills the reduced-width container without generating horizontal scroll.
+        .o-app-sidenav-menu-group-level-1 {
+          a {
+            font-size: 14px;
+            line-height: 40px;
+            height: 40px;
+          }
+
+          >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+            padding-left: 16px;
+            box-sizing: border-box;
+            width: 100%;
+            overflow: hidden;
+
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                font-size: 12px;
+                line-height: 36px;
+                height: 36px;
+                max-width: 100%;
+                overflow: hidden;
+
+                .mat-mdc-button-touch-target {
+                  height: 36px;
+                }
+              }
+            }
+
+            a .mdc-button__label {
+              padding-left: 6px;
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2 {
+          a {
+            font-size: 12px;
+            line-height: 36px;
+            height: 36px;
+
+            .mat-mdc-button-touch-target {
+              height: 36px;
+            }
+          }
+
+          >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+            padding-left: 32px;
+            box-sizing: border-box;
+            width: 100%;
+            overflow: hidden;
+
+            .o-app-sidenav-menu-group,
+            .o-app-sidenav-menu-item {
+              a {
+                font-size: 11px;
+                line-height: 32px;
+                height: 32px;
+                max-width: 100%;
+                overflow: hidden;
+
+                .mat-mdc-button-touch-target {
+                  height: 32px;
+                }
+
+                .mat-icon {
+                  font-size: 20px;
+                  height: 20px;
+                  width: 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // ── Closed state ─────────────────────────────────────────────
+      &.mat-drawer-closed {
+        text-align: center;
+
+        .mat-drawer-inner-container {
+          margin: 0;
+          width: 100%;
+          .sidenav-toggle {
+              padding: 8px 16px;
+          }
+        }
+
+        .o-app-sidenav-item {
+          &:not(.o-user-info) {
+            cursor: pointer;
+          }
+
+          &.o-user-info {
+
+            &:focus,
+            &:hover {
+              color: inherit;
+            }
+          }
+        }
+
+        .o-app-sidenav-menugroup,
+        .o-app-sidenav-menuitem {
+          display: inline-block;
+          text-align: center;
+        }
+
+        nav {
+          width: $sidenav-closed-width;
+          min-width: $sidenav-closed-width;
+          margin-left: auto;
+
+          a {
+            line-height: 40px;
+            height: 40px;
+            width: 40px;
+            min-width: 40px;
+            padding: 0;
+            margin: 0;
+
+            .mat-icon {
+              margin: auto;
+            }
+
+            .mdc-button__label {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 100%;
+            }
+
+            .o-layout-align-start-center {
+              justify-content: center;
+            }
+          }
+        }
+
+        .o-app-sidenav-image .o-app-sidenav-image-container {
+          padding: 0;
+          text-align: end;
+          max-height: 36px;
+
+          .o-app-sidenav-image {
+            max-height: 36px;
+            margin-right: 8px;
+          }
+        }
+      }
+
+      &.mat-drawer-closing {
+        transform: translate3d($sidenav-diff, 0, 0);
       }
 
       .o-app-sidenav-menugroup-arrow {
         display: flex;
       }
     }
-
-
   }
 }
-

@@ -1,8 +1,5 @@
-// Sidenav theme styles are defined in ontimize-style.scss (entry point).
-// This mixin is kept for structural compatibility with o-material.theme.scss.
 @mixin o-app-sidenav-theme($theme-or-color-config) {
   .o-app-sidenav {
-    // Override Material's sidenav container rounded shape (default 16px in M3)
     --mat-sidenav-container-shape: 0;
     --mdc-text-button-label-text-color: #000;
 
@@ -10,28 +7,95 @@
       background: var(--o-bg-app-bar);
     }
 
+    .o-app-sidenav-container {
 
-
-
-    .o-app-sidenav-menu-group-level-1 {
-      >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
-
-        a .mdc-button__label {
-          border-left: 2px solid var(--o-fg-divider);
+      // ── Open state ──────────────────────────────────────────────
+      .mat-drawer.o-app-sidenav-sidenav:not(.mat-drawer-closed) {
+        .mat-sidenav.o-app-sidenav-sidenav {
+          background: var(--o-bg-status-bar);
+          box-shadow: none;
         }
 
-        a.o-app-sidenav-viewer-sidenav-item-selected .mdc-button__label,
-        a:hover .mdc-button__label {
-          border-color: var(--o-primary-500);
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+
+          a:hover,
+          a.o-app-sidenav-viewer-sidenav-item-selected {
+            color: var(--o-primary-500);
+          }
+
+          a:hover {
+            background-color: var(--o-primary-50);
+          }
+
+          a.o-app-sidenav-viewer-sidenav-item-selected {
+            background-color: color-mix(in srgb, var(--o-primary-50) 48%, transparent);
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-1 {
+          >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+            a .mdc-button__label {
+              border-left: 2px solid var(--o-fg-divider);
+            }
+
+            a.o-app-sidenav-viewer-sidenav-item-selected .mdc-button__label,
+            a:hover .mdc-button__label {
+              border-color: var(--o-primary-500);
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-group-level-2 {
+          >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+            a .mdc-button__label {
+              border-left: none;
+            }
+          }
+        }
+      }
+
+      // ── Closed state ─────────────────────────────────────────────
+      .mat-drawer.o-app-sidenav-sidenav.mat-drawer-closed {
+
+        a:hover,
+        a.o-app-sidenav-viewer-sidenav-item-selected {
+          color: var(--o-primary-500);
+        }
+
+        a:hover {
+          background-color: var(--o-primary-50);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected {
+          background-color: color-mix(in srgb, var(--o-primary-50) 48%, transparent);
+        }
+      }
+
+      // ── Desktop collapsed offset ──────────────────────────────────
+      &.o-app-sidenav-mode-desktop:not(.opened) {
+        .o-app-sidenav-sidenav.mat-drawer-closed {
+          transform: translate3d(-183px, 0, 0);
+        }
+
+        .o-app-sidenav-content.mat-drawer-content {
+          margin-right: 56px !important;
+          transform: translate3d(56px, 0, 0) !important;
         }
       }
     }
 
 
-  }
+    // header-layout: user-info font weight inside sidenav
+    &.header-layout .o-app-sidenav-container .o-app-header {
+      .o-user-info .o-user-info-wrapper {
+        font-weight: 500;
+      }
+    }
 
-  .mat-mdc-menu-panel {
-    border: 1px solid var(--o-fg-divider);
-  }
 
+    .mat-mdc-menu-panel {
+      border: 1px solid var(--o-fg-divider);
+    }
+  }
 }
