@@ -71,8 +71,12 @@
   $foreground: map.get($color, foreground);
   $typography: map.get($theme, typography);
 
-  // custom button token
-  --o-button-height: 40px;
+  // button height — applied globally to all MDC button variants
+  --o-button-height: 32px;
+  --mdc-text-button-container-height: var(--o-button-height);
+  --mdc-filled-button-container-height: var(--o-button-height);
+  --mdc-protected-button-container-height: var(--o-button-height);
+  --mdc-outlined-button-container-height: var(--o-button-height);
 
   // icon size for input prefix/suffix — no MDC token exists for this
   --o-input-icon-size: 20px;

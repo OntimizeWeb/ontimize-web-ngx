@@ -103,10 +103,12 @@ expone un juego paralelo de variables Ontimize bajo el prefijo `--o-*`:
 - Background: `--o-bg-card`, `--o-bg-background`, `--o-bg-level-0`,
   `--o-bg-level-04`, `--o-bg-level-06`, `--o-bg-level-08`, `--o-bg-level-1`,
   `--o-bg-status-bar`, `--o-bg-app-bar`, `--o-bg-sidenav-overlay`.
-- Typography: `--o-font-family` y, por cada level (`body-1`, `body-2`,
+- Typography: `--o-font-family` y, por cada level (`body-1`, `input`, `body-2`,
   `subtitle-1`, `subtitle-2`, `headline-5`, `headline-6`, `caption`, `button`):
   `--o-font-<level>-size`, `--o-font-<level>-line-height`,
   `--o-font-<level>-weight`.
+  El level `input` controla el `font-size` de los `mat-form-field` y es
+  independiente de `body-1` para poder ajustarlos por separado.
 
 Para styles propios **no** llames a `mat.m2-get-color-from-palette()` ni a
 `mat.m2-font-size()`. Usa los tokens directamente:
@@ -139,6 +141,37 @@ El framework ya aplica algunos de estos overrides en sus mixins de
 componente (`o-app-sidenav-theme`, etc.); los apps pueden añadir los
 suyos en cualquier scope sin tocar Sass.
 
+> **Orden de emisión**: `o-apply-tokens` se emite **después** de
+> `mat.all-component-themes()`, de modo que los overrides de `--mat-*`
+> y `--mdc-*` definidos en `ontimize-tokens.scss` siempre prevalecen
+> sobre los valores por defecto de Material M3.
+
+### 3.1.quinquies Dark mode — tokens de superficie
+
+El framework adapta automáticamente los tokens de superficie M3
+(`--mat-sys-surface`, `--mat-sys-background`, `--mat-*-container-color`, …)
+al dark mode leyendo el mapa `background` del `$dark-theme`. En concreto:
+
+| Token M3 | Light | Dark |
+|---|---|---|
+| `--mat-sys-surface` / `surface-bright` | `#ffffff` | `#252525` |
+| `--mat-sys-surface-dim` / `--mat-sys-background` | `#f9fafb` | `#1a1a1a` |
+| `--mat-sys-surface-container` | `#f5f5f5` | `#2e2e2e` |
+| `--mat-sys-surface-container-high` | `#f0f0f0` | `#303030` |
+| `--mat-sys-surface-container-highest` | `#e8e8e8` | `#3a3a3a` |
+| menú, tabla, toolbar, tree… | `#ffffff` | `#252525` |
+| paginator, sidenav | `#f9fafb` | `#1a1a1a` |
+
+Para activar el dark mode en tu app basta con añadir la clase `.o-dark`
+al elemento raíz y llamar a `ontimize-theme-all-component-color` con
+el `$dark-theme`:
+
+```scss
+.o-dark {
+  @include ontimize-style.ontimize-theme-all-component-color($dark-theme);
+}
+```
+
 ### 3.1.ter Factory con typography / density configurables
 
 `o-mat-light-theme` y `o-mat-dark-theme` admiten parámetros opcionales:
@@ -156,19 +189,17 @@ $theme: ontimize-style.o-mat-light-theme(
 El tema `oxygen` incluido en el framework usa `$density: -4` por defecto
 (look compacto). Para formas más aireadas o más compactas, pásale otro valor.
 
-> **Nota sobre botones con density < -3**: Material M3 solo define alturas
-> de botón (`--mdc-*-button-container-height`) para density 0…-3. Con
-> density `-4` o `-5` los botones pueden quedar más altos o bajos de lo
-> esperado. Si necesitas fijar la altura al mismo valor que los form fields,
-> añade un override en tu app:
+> **Altura de botones**: el framework fija todos los botones a **32 px** mediante
+> el token `--o-button-height` emitido en `:root`. Los tokens MDC derivados
+> (`--mdc-text-button-container-height`, `--mdc-filled-button-container-height`,
+> `--mdc-protected-button-container-height`, `--mdc-outlined-button-container-height`)
+> se emiten globalmente, por lo que afectan a todos los botones de la aplicación,
+> no solo a los `o-button`. Si necesitas un valor diferente, sobrescribe
+> `--o-button-height` en el scope deseado:
 >
 > ```scss
-> html {
->   --mdc-text-button-container-height:      40px;
->   --mdc-outlined-button-container-height:  40px;
->   --mdc-filled-button-container-height:    40px;
->   --mdc-protected-button-container-height: 40px;
-> }
+> html { --o-button-height: 36px; }         // global
+> .my-toolbar { --o-button-height: 28px; }  // scope concreto
 > ```
 
 Formato del `$typography` (mapa plano, sin dependencia de Material):
@@ -177,7 +208,8 @@ Formato del `$typography` (mapa plano, sin dependencia de Material):
 $typography: (
   font-family: 'Noto Sans, "Helvetica Neue", sans-serif',
   levels: (
-    body-1:     (size: 13px, line-height: 1.125em, weight: 400),
+    body-1:     (size: 14px, line-height: 1.125em, weight: 400),
+    input:      (size: 14px, line-height: 14px,    weight: 400),  // font-size de mat-form-field
     body-2:     (size: 12px, line-height: 15px,    weight: 400),
     subtitle-1: (size: 14px, line-height: 21px,    weight: 600),
     headline-6: (size: 18px, line-height: 24px,    weight: 500),
@@ -190,6 +222,11 @@ $typography: (
   ),
 );
 ```
+
+> **Nota**: el level `input` es obligatorio si quieres controlar el
+> `font-size` de los inputs independientemente de `body-1`. El framework
+> lo mapea a `--mat-form-field-container-text-size` y a los tokens
+> `--mdc-*-text-field-input-text-size`.
 
 Si no pasas `$typography` el tema usa la config por defecto (Noto Sans).
 
@@ -231,7 +268,7 @@ Si no necesitas paletas personalizadas, puedes usar directamente el tema azul de
 | **Fuente** | Poppins | Noto Sans |
 | **Iconos** | Material Icons (ligatura) | Material Symbols Outlined |
 | **Sidenav** | Fondo derivado del color primary + sombra + esquinas redondeadas (Material default) | Fondo neutro (`--o-bg-app-bar`), sin sombra, esquinas rectas (`--mat-sidenav-container-shape: 0`) |
-| **Botones** | Estilos custom (borde, color, hover) | Defaults de Angular Material |
+| **Botones** | Estilos custom (borde, color, hover) | Altura fija 32 px via `--o-button-height`; resto defaults de Angular Material |
 | **Density** | Aplicada (checkbox, list, radio, menu, tree) | Configurable via `$density` en el factory |
 | **Tabs** | Fondo inactivo personalizado | Defaults de Angular Material |
 | **Material theming** | M2 (`mat.m2-define-light-theme`) | **M3** (`mat.define-theme` interno) |
