@@ -6,7 +6,8 @@
 //   (
 //     font-family: <string>,
 //     levels: (
-//       body-1:     (size: 13px, line-height: 1.125em, weight: 400),
+//       body-1:     (size: 14px, line-height: 1.125em, weight: 400),
+//       input:      (size: 13px, line-height: 1.125em, weight: 400),
 //       body-2:     (size: 12px, line-height: 15px,    weight: 400),
 //       subtitle-1: (size: 14px, line-height: 21px,    weight: 600),
 //       ...
@@ -42,6 +43,7 @@ $font-family: 'Noto Sans, "Helvetica Neue", sans-serif' !default;
       subtitle-1: (size: 14px, line-height: 21px,    weight: 600),
       subtitle-2: (size: 12px, line-height: 18px,    weight: 500),
       body-1:     (size: 14px, line-height: 1.125em, weight: 400),
+      input:      (size: 13px, line-height: 1.125em, weight: 400),
       body-2:     (size: 12px, line-height: 15px,    weight: 400),
       caption:    (size: 11px, line-height: 15px,    weight: 400),
       button:     (size: 13px, line-height: 14px,    weight: 400),

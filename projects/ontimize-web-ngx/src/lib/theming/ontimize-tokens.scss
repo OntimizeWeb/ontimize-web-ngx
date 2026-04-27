@@ -86,34 +86,35 @@
   // ─── M3 sys surface tokens — fondos neutros (sin tinte de color M3) ────
   // M3 por defecto genera superficies con tinte lila/azul (#faf9fd, #efedf0).
   // Estos overrides vuelven a blancos/grises neutros similares a v15.
-  --mat-sys-surface: #ffffff;
-  --mat-sys-surface-bright: #ffffff;
-  --mat-sys-surface-dim: #f5f5f5;
-  --mat-sys-surface-variant: #f0f0f0;
-  --mat-sys-surface-container-lowest: #ffffff;
-  --mat-sys-surface-container-low: #f9fafb;
-  --mat-sys-surface-container: #f5f5f5;
-  --mat-sys-surface-container-high: #f0f0f0;
-  --mat-sys-surface-container-highest: #e8e8e8;
-  --mat-sys-background: #f9fafb;
+  // En dark, se leen del background map (level-0..level-1); en light, fallback a grises neutros.
+  --mat-sys-surface:                    #{-get-bg($background, level-1,  #ffffff)};
+  --mat-sys-surface-bright:             #{-get-bg($background, level-1,  #ffffff)};
+  --mat-sys-surface-dim:                #{-get-bg($background, level-0,  #f5f5f5)};
+  --mat-sys-surface-variant:            #{-get-bg($background, level-08, #f0f0f0)};
+  --mat-sys-surface-container-lowest:   #{-get-bg($background, level-1,  #ffffff)};
+  --mat-sys-surface-container-low:      #{-get-bg($background, background, #f9fafb)};
+  --mat-sys-surface-container:          #{-get-bg($background, level-04, #f5f5f5)};
+  --mat-sys-surface-container-high:     #{-get-bg($background, level-06, #f0f0f0)};
+  --mat-sys-surface-container-highest:  #{-get-bg($background, level-08, #e8e8e8)};
+  --mat-sys-background:                 #{-get-bg($background, background, #f9fafb)};
 
   // ─── M3 component container tokens — sobrescribir tokens de componente ──
   // Necesario porque los componentes usan var(--mat-*-container-color)
   // directamente, sin pasar por --mat-sys-surface-container.
-  --mat-menu-container-color: #ffffff;
-  --mat-select-panel-background-color: #ffffff;
-  --mat-autocomplete-background-color: #ffffff;
-  --mat-table-background-color: #ffffff;
-  --mat-paginator-container-background-color: #f9fafb;
-  --mat-expansion-container-background-color: #ffffff;
-  --mat-sidenav-container-background-color: #f9fafb;
-  --mat-sidenav-content-background-color: #f9fafb;
-  --mat-toolbar-container-background-color: #ffffff;
-  --mat-tree-container-background-color: #ffffff;
-  --mat-bottom-sheet-container-background-color: #f5f5f5;
-  --mat-datepicker-calendar-container-background-color: #f5f5f5;
-  --mat-stepper-container-color: #ffffff;
-  --mat-app-background-color: #f9fafb;
+  --mat-menu-container-color:                          #{-get-bg($background, level-1,  #ffffff)};
+  --mat-select-panel-background-color:                 #{-get-bg($background, level-1,  #ffffff)};
+  --mat-autocomplete-background-color:                 #{-get-bg($background, level-1,  #ffffff)};
+  --mat-table-background-color:                        #{-get-bg($background, level-1,  #ffffff)};
+  --mat-paginator-container-background-color:          #{-get-bg($background, background, #f9fafb)};
+  --mat-expansion-container-background-color:          #{-get-bg($background, level-1,  #ffffff)};
+  --mat-sidenav-container-background-color:            #{-get-bg($background, background, #f9fafb)};
+  --mat-sidenav-content-background-color:              #{-get-bg($background, background, #f9fafb)};
+  --mat-toolbar-container-background-color:            #{-get-bg($background, level-1,  #ffffff)};
+  --mat-tree-container-background-color:               #{-get-bg($background, level-1,  #ffffff)};
+  --mat-bottom-sheet-container-background-color:       #{-get-bg($background, level-04, #f5f5f5)};
+  --mat-datepicker-calendar-container-background-color: #{-get-bg($background, level-04, #f5f5f5)};
+  --mat-stepper-container-color:                       #{-get-bg($background, level-1,  #ffffff)};
+  --mat-app-background-color:                          #{-get-bg($background, background, #f9fafb)};
 
   // ─── M3 elevation overrides — sombras más ligeras que M3 default ────────
   --mat-sys-level0: none;
@@ -135,12 +136,12 @@
   @if $typography {
     $levels: map.get($typography, levels);
     @if $levels {
-      $body-1: map.get($levels, body-1);
-      @if $body-1 {
-        --mdc-filled-text-field-input-text-size: #{map.get($body-1, size)};
-        --mdc-outlined-text-field-input-text-size: #{map.get($body-1, size)};
-        --mdc-filled-text-field-input-text-line-height: #{map.get($body-1, line-height)};
-        --mdc-outlined-text-field-input-text-line-height: #{map.get($body-1, line-height)};
+      $input: map.get($levels, input);
+      @if $input {
+        --mdc-filled-text-field-input-text-size: #{map.get($input, size)};
+        --mdc-outlined-text-field-input-text-size: #{map.get($input, size)};
+        --mdc-filled-text-field-input-text-line-height: #{map.get($input, line-height)};
+        --mdc-outlined-text-field-input-text-line-height: #{map.get($input, line-height)};
       }
     }
   }

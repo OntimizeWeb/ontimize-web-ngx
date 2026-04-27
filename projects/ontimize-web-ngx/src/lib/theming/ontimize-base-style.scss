@@ -60,11 +60,13 @@ $sidenav-background-color: #FFFFFF !default;
   $primary-500: mat.m2-get-color-from-palette($primary, 500);
   $background: map.get($mat-theme, background);
   @return map.merge($background,
-    (level-0: #202020,
+    (background: #1a1a1a,
+      level-0: #202020,
       level-04: #2e2e2e,
       level-06: #303030,
-      level-08:#3a3a3a,
+      level-08: #3a3a3a,
       level-1: #252525,
+      card: #252525,
       sidenav-overlay: #525252,
       status-bar: mix(#272727, $primary-500, 94%)));
 }
