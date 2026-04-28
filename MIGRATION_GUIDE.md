@@ -69,7 +69,6 @@ Ontimize Web NGX 18 incluye clases CSS utilitarias equivalentes en `flex-layout.
 **Después (Angular 18):**
 ```scss
 @use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
-@use 'ontimize-web-ngx/theming/fonts/noto';  // fuente Noto Sans
 
 @use '@angular/material' as mat;
 
@@ -89,6 +88,10 @@ $dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);
 > **Nota**: el import se llamaba `ontimize-style.v18` durante la transición;
 > desde la versión 18.0.0 final el sufijo `.v18` ha desaparecido. Actualiza
 > los `@use` de tu `styles.scss` / `app.scss` quitando ese sufijo.
+
+> **Fuente Noto Sans**: `ontimize-style.scss` ya importa `fonts/noto.scss`
+> internamente. No es necesario que el consumidor añada
+> `@use 'ontimize-web-ngx/theming/fonts/noto'` en su propio `styles.scss`.
 
 ### 3.1.bis Nuevas API M3 y CSS custom properties `--o-*`
 
@@ -541,7 +544,6 @@ traduce a tokens `--o-*` automáticamente.
 [ ] npm install ontimize-web-ngx@18
 [ ] npm uninstall @angular/flex-layout (si aplica)
 [ ] styles.scss: cambiar import a ontimize-style (sin .v18)
-[ ] styles.scss: añadir @use fonts/noto
 [ ] index.html: cambiar a Material Symbols Outlined
 [ ] index.html: eliminar Material Icons font link
 [ ] main.ts: migrar a bootstrapApplication() + provideOntimizeWeb() (opcional)
