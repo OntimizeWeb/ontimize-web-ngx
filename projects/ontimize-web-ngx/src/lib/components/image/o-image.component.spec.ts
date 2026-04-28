@@ -53,7 +53,7 @@ describe('OImageComponent', () => {
       nativeElement: document.createElement('div')
     };
     mockInjector = TestBed.inject(Injector);
-    component = new OImageComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OImageComponent(mockOFormComponent, mockElementRef, mockInjector));
     
     // Setup mocks for fileInput and _fControl
     component.fileInput = {

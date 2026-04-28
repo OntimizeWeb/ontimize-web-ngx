@@ -40,7 +40,7 @@ describe('OComboRendererCurrencyComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OComboRendererCurrencyComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OComboRendererCurrencyComponent(mockInjector));
   });
 
   it('should create', () => {

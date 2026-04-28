@@ -3,9 +3,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Injector,
+  inject,
   OnDestroy,
-  Type,
   ViewEncapsulation
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -39,28 +38,24 @@ export const DEFAULT_OUTPUTS_O_MENU_LAYOUT = [
 })
 export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
 
-  protected translateService: OTranslateService;
+  protected translateService = inject(OTranslateService);
   protected translateServiceSubscription: Subscription;
-  protected appMenuService: AppMenuService;
+  protected appMenuService = inject(AppMenuService);
   protected menuRoots: MenuRootItem[];
   protected cardItemsArray: MenuRootItem[];
   protected parentMenuId: string;
   protected excludeMenusId: string;
   protected permissions: OPermissions;
-  protected permissionsService: PermissionsService;
+  protected permissionsService = inject(PermissionsService);
   protected parentMenuIds: string[];
   protected excludeIds: string[];
 
   hidden: boolean;
 
   constructor(
-    private injector: Injector,
     private cd: ChangeDetectorRef
   ) {
-    this.translateService = this.injector.get(OTranslateService);
-    this.appMenuService = this.injector.get(AppMenuService);
     this.menuRoots = this.appMenuService.getMenuRoots();
-    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
 
     this.translateServiceSubscription = this.translateService.onLanguageChanged.subscribe(() => {
       this.cd.detectChanges();

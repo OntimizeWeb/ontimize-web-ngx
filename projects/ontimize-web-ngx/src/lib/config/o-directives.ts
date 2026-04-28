@@ -15,10 +15,14 @@ export const ONTIMIZE_DIRECTIVES = [
   OListItemDirective,
   OTabGroupDirective,
   OLockerDirective,
-  OHiddenDirective,
   OMatErrorDirective,
   OFileDragAndDropDirective,
+  InputRegulateDirective
+];
+
+/** Standalone directives that should be imported (not declared) */
+export const ONTIMIZE_STANDALONE_DIRECTIVES = [
+  OHiddenDirective,
   OMatPrefix,
   OMatSuffix,
-  InputRegulateDirective
 ];

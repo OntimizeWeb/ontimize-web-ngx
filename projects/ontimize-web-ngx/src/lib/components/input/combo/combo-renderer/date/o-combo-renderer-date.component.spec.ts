@@ -40,7 +40,7 @@ describe('OComboRendererDateComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OComboRendererDateComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OComboRendererDateComponent(mockInjector));
   });
 
   it('should create', () => {

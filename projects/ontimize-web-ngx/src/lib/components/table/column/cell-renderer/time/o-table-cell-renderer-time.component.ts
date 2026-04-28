@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
 import { Util } from '../../../../../util/util';
@@ -12,11 +12,12 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
   selector: 'o-table-cell-renderer-time',
   templateUrl: './o-table-cell-renderer-time.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME,
+  providers: [OMomentPipe]
 })
 export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer implements OnInit {
 
-  protected componentPipe: OMomentPipe;
+  protected componentPipe = inject(OMomentPipe);
   protected pipeArguments: IMomentPipeArgument;
 
   protected _format: string = 'L HH:mm a';
@@ -27,7 +28,6 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer impl
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'time';
-    this.setComponentPipe();
   }
 
   set format(value: string) {
@@ -36,7 +36,6 @@ export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer impl
     }
   }
   setComponentPipe() {
-    this.componentPipe = new OMomentPipe(this.injector);
   }
 
   initialize() {

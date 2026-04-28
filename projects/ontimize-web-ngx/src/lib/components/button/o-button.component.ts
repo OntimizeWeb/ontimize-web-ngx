@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, OnInit, Type, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -60,12 +60,11 @@ export class OButtonComponent implements OnInit {
   /* Outputs */
   public onClick: EventEmitter<Event> = new EventEmitter<Event>();
   public click: EventEmitter<Event> = new EventEmitter<Event>();
-  protected permissionsService: PermissionsService;
+  protected permissionsService = inject(PermissionsService);
   protected permissions: OPermissions;
 
-  constructor(protected injector: Injector, protected actRoute: ActivatedRoute) {
+  constructor(protected actRoute: ActivatedRoute) {
     this.otype = OButtonComponent.DEFAULT_TYPE;
-    this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
   }
 
   ngOnInit(): void {

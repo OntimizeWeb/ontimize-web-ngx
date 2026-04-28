@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
@@ -18,7 +18,8 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_CURRENCY = [
   selector: 'o-combo-renderer-currency',
   templateUrl: './o-combo-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_CURRENCY
+  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_CURRENCY,
+  providers: [OCurrencyPipe]
 })
 export class OComboRendererCurrencyComponent extends OComboRendererRealComponent implements OnInit {
 
@@ -36,18 +37,16 @@ export class OComboRendererCurrencyComponent extends OComboRendererRealComponent
 
   protected currencyService: CurrencyService;
 
-  protected componentPipe: OCurrencyPipe;
+  protected componentPipe = inject(OCurrencyPipe);
   protected pipeArguments: ICurrencyPipeArgument;
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);
     this.currencyService = this.injector.get(CurrencyService);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OCurrencyPipe(this.injector);
   }
 
   initialize() {

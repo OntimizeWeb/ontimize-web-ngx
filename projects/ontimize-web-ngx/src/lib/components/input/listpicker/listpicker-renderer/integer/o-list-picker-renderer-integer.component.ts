@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { IIntegerPipeArgument, OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
@@ -16,25 +16,24 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER = [
   selector: 'o-list-picker-renderer-integer',
   templateUrl: './o-list-picker-renderer-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER
+  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER,
+  providers: [OIntegerPipe]
 })
 export class OListPickerRendererIntegerComponent extends OListPickerCustomRenderer implements AfterContentInit, OnInit {
 
   @BooleanInputConverter()
   protected grouping: boolean = true;
   protected thousandSeparator: string = ',';
-  protected componentPipe: OIntegerPipe;
+  protected componentPipe = inject(OIntegerPipe);
   protected pipeArguments: IIntegerPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OIntegerPipe(this.injector);
   }
 
   initialize() {

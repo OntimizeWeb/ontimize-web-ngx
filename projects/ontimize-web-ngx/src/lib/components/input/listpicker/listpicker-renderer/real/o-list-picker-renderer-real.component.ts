@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { IRealPipeArgument, ORealPipe } from '../../../../../pipes/o-real.pipe';
@@ -17,7 +17,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL = [
   selector: 'o-list-picker-renderer-real',
   templateUrl: './o-list-picker-renderer-real.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL
+  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_REAL,
+  providers: [ORealPipe]
 })
 export class OListPickerRendererRealComponent extends OListPickerRendererIntegerComponent implements OnInit {
 
@@ -28,18 +29,16 @@ export class OListPickerRendererRealComponent extends OListPickerRendererInteger
 
   protected decimalSeparator: string = '.';
 
-  protected componentPipe: ORealPipe;
+  protected componentPipe = inject(ORealPipe);
   protected pipeArguments: IRealPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new ORealPipe(this.injector);
   }
 
   initialize() {

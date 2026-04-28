@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
 import { OComboCustomRenderer } from '../o-combo-renderer.class';
@@ -12,11 +12,12 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_DATE = [
   selector: 'o-combo-renderer-date',
   templateUrl: './o-combo-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_DATE
+  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_DATE,
+  providers: [OMomentPipe]
 })
 export class OComboRendererDateComponent extends OComboCustomRenderer implements OnInit {
 
-  protected componentPipe: OMomentPipe;
+  protected componentPipe = inject(OMomentPipe);
   protected pipeArguments: IMomentPipeArgument;
 
   protected format: string;
@@ -25,11 +26,9 @@ export class OComboRendererDateComponent extends OComboCustomRenderer implements
 
   constructor(protected injector: Injector) {
     super(injector);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OMomentPipe(this.injector);
   }
 
   initialize() {

@@ -50,7 +50,7 @@ describe('OListPickerRendererDateComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OListPickerRendererDateComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OListPickerRendererDateComponent(mockInjector));
   });
 
   it('should create', () => {

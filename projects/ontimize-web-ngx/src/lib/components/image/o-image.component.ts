@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, HostBinding, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, HostBinding, Inject, inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -41,7 +41,8 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-image]': 'true'
-  }
+  },
+  providers: [OSafePipe]
 })
 export class OImageComponent extends OFormDataComponent implements OnInit, OnDestroy {
 
@@ -70,7 +71,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   protected fileInput: ElementRef;
   protected _useEmptyIcon: boolean = true;
   protected _useEmptyImage: boolean = false;
-  protected oSafe: OSafePipe;
+  protected oSafe = inject(OSafePipe);
   protected dialog: MatDialog;
   public stateCtrl: UntypedFormControl;
   public src = '';
@@ -81,7 +82,6 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     injector: Injector
   ) {
     super(form, elRef, injector);
-    this.oSafe = new OSafePipe(injector);
     this._defaultSQLTypeKey = 'BASE64';
     this.dialog = this.injector.get(MatDialog);
   }

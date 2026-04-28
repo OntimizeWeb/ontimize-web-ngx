@@ -7,31 +7,35 @@
     [class.mat-drawer-closed]="!sidenav.opened" [class.ellipsis-menu-items]="showEllipsisMenu" (openedChange)="sidenavOpenedChange()"
     (closedStart)="sidenavClosedStart()" (openedStart)="sidenavOpenedStart()">
     <div fxLayout="column" class="sidenav-wrapper">
-      <div fxLayout="row" fxLayoutAlign="end center" class="sidenav-toggle-container" *ngIf="isDesktopMode()">
-        <mat-icon id="sidenav-menu" class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
-      </div>
+      @if (isDesktopMode()) {
+        <div fxLayout="row" fxLayoutAlign="end center" class="sidenav-toggle-container">
+          <mat-icon id="sidenav-menu" class="sidenav-toggle" (click)="toggleSidenav()" svgIcon="ontimize:menu">menu</mat-icon>
+        </div>
+      }
 
       <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg"> </o-app-sidenav-image>
       <ng-content select="o-app-layout-sidenav-projection-start"></ng-content>
       <div class="navMenu">
-        <nav *ngFor="let menuRootItem of menuRootArray">
-
-          <ul *ngIf="appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)">
-            <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
-              [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
-            </o-app-sidenav-menu-item>
-          </ul>
-
-          <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
-            *ngIf="appMenuService.getMenuItemType(menuRootItem) === 'group' && appMenuService.isVisible(menuRootItem)"
-            (onItemClick)="onMenuItemClick()">
-          </o-app-sidenav-menu-group>
-
-        </nav>
+        @for (menuRootItem of menuRootArray; track menuRootItem) {
+          <nav>
+            @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)) {
+              <ul>
+                <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
+                  [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
+                </o-app-sidenav-menu-item>
+              </ul>
+            }
+            @if (appMenuService.getMenuItemType(menuRootItem) === 'group' && appMenuService.isVisible(menuRootItem)) {
+              <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
+                (onItemClick)="onMenuItemClick()">
+              </o-app-sidenav-menu-group>
+            }
+          </nav>
+        }
       </div>
       <div class="layout-sidenav-projection-end">
         <ng-content select="o-app-layout-sidenav-projection-end"></ng-content>
-    </div>
+      </div>
     </div>
   </mat-sidenav>
 

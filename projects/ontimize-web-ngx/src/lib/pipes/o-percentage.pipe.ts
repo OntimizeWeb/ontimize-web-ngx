@@ -1,4 +1,4 @@
-import { Injector, Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { ORealPipe } from './o-real.pipe';
 
 export type OPercentageValueBaseType = 1 | 100;
@@ -18,10 +18,6 @@ export interface IPercentPipeArgument {
   pure: false
 })
 export class OPercentPipe extends ORealPipe implements PipeTransform {
-
-  constructor(protected injector: Injector) {
-    super(injector);
-  }
 
   transform(text: string, args: IPercentPipeArgument): string {
     if (args && args.valueBase) {

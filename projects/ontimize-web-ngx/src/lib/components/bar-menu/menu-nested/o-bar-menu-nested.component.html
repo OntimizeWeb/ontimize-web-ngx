@@ -1,16 +1,20 @@
-<ng-container *ngFor="let item of items">
-  <ng-container [ngSwitch]="appMenuService.getMenuItemType(item)" *ngIf="appMenuService.isVisible(item)">
-
-    <o-bar-menu-group *ngSwitchCase="'group'" [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [ngClass]="item.class">
-      <o-bar-menu-nested [items]="item.items"> </o-bar-menu-nested>
-    </o-bar-menu-group>
-
-    <o-locale-bar-menu-item *ngSwitchCase="'locale'" [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon"
-      [locale]="item.locale" [ngClass]="item.class">
-    </o-locale-bar-menu-item>
-
-    <o-bar-menu-item *ngSwitchDefault [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [route]="item.route"
-      [ngClass]="item.class"></o-bar-menu-item>
-
-  </ng-container>
-</ng-container>
+@for (item of items; track item) {
+  @if (appMenuService.isVisible(item)) {
+    @switch (appMenuService.getMenuItemType(item)) {
+      @case ('group') {
+        <o-bar-menu-group [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [ngClass]="item.class">
+          <o-bar-menu-nested [items]="$any(item).items"> </o-bar-menu-nested>
+        </o-bar-menu-group>
+      }
+      @case ('locale') {
+        <o-locale-bar-menu-item [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon"
+          [locale]="$any(item).locale" [ngClass]="item.class">
+        </o-locale-bar-menu-item>
+      }
+      @default {
+        <o-bar-menu-item [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [route]="$any(item).route"
+        [ngClass]="item.class"></o-bar-menu-item>
+      }
+    }
+  }
+}

@@ -1,18 +1,34 @@
-<ng-container *ngIf="table.showButtonsText">
+@if (table.showButtonsText) {
   <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-stroked-button (click)="innerOnClick($event)">
-    <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
-    <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
+    @if (isIconPositionLeft() && svgIcon !== undefined) {
+      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+    }
+    @if (isIconPositionLeft() && svgIcon === undefined) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
     <span>{{ olabel | oTranslate }}</span>
-    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
-    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
+    @if (!isIconPositionLeft() && svgIcon !== undefined) {
+      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+    }
+    @if (!isIconPositionLeft() && svgIcon === undefined) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
   </button>
-</ng-container>
+}
 
-<ng-container *ngIf="!table.showButtonsText">
+@if (!table.showButtonsText) {
   <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-icon-button (click)="innerOnClick($event)">
-    <mat-icon *ngIf="isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
-    <mat-icon *ngIf="isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
-    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon !== undefined" [svgIcon]="svgIcon"></mat-icon>
-    <mat-icon *ngIf="!isIconPositionLeft() && svgIcon === undefined">{{ icon }}</mat-icon>
+    @if (isIconPositionLeft() && svgIcon !== undefined) {
+      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+    }
+    @if (isIconPositionLeft() && svgIcon === undefined) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    @if (!isIconPositionLeft() && svgIcon !== undefined) {
+      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+    }
+    @if (!isIconPositionLeft() && svgIcon === undefined) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
   </button>
-</ng-container>
+}

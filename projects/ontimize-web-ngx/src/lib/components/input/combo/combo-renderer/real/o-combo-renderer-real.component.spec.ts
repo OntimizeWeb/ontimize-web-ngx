@@ -55,7 +55,7 @@ describe('OComboRendererRealComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OComboRendererRealComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OComboRendererRealComponent(mockInjector));
   });
 
   it('should create', () => {

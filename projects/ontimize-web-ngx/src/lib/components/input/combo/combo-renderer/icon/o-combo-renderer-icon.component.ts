@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 
 import { IIconPipeArgument, OIconPipe } from '../../../../../pipes/o-icon.pipe';
@@ -17,7 +17,8 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_ICON = [
   selector: 'o-combo-renderer-icon',
   templateUrl: './o-combo-renderer-icon.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_ICON
+  inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_ICON,
+  providers: [OIconPipe]
 })
 
 export class OComboRendererIconComponent extends OComboCustomRenderer implements OnInit {
@@ -26,7 +27,7 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
   protected iconColumn: string;
   protected iconPosition: string;
 
-  protected componentPipe: OIconPipe;
+  protected componentPipe = inject(OIconPipe);
   protected pipeArguments: IIconPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
@@ -34,11 +35,9 @@ export class OComboRendererIconComponent extends OComboCustomRenderer implements
   constructor(protected injector: Injector) {
     super(injector);
     this.iconService = this.injector.get(IconService);
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OIconPipe(this.injector);
   }
 
   initialize() {

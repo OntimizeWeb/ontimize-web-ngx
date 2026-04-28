@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -33,19 +33,17 @@ export interface PermissionMenuChangedEvent {
 })
 export class AppMenuService {
 
-  protected router: Router;
-  protected _config: AppConfig;
+  protected router = inject(Router);
+  protected _config = inject(AppConfig);
   protected MENU_ROOTS: MenuRootItem[];
   protected ALL_MENU_ITEMS: MenuRootItem[];
   protected activeItem: MenuItemRoute;
-  protected permissionsService: PermissionsService;
+  protected permissionsService = inject(PermissionsService);
 
   public onClick: Subject<MenuClickEvent> = new Subject<MenuClickEvent>;
   public onPermissionMenuChanged: Subject<PermissionMenuChangedEvent> = new Subject<PermissionMenuChangedEvent>();
 
-  constructor(protected injector: Injector) {
-    this._config = this.injector.get(AppConfig);
-    this.router = this.injector.get(Router);
+  constructor() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.setActiveItem();
@@ -54,7 +52,6 @@ export class AppMenuService {
 
     this.setMenuItemsByMenuConfiguration();
 
-    this.permissionsService = this.injector.get(PermissionsService);
     this.permissionsService.onChangePermissions.subscribe(x => {
       this.mergeMenuItemsWithPermissions();
       this.onPermissionMenuChanged.next({

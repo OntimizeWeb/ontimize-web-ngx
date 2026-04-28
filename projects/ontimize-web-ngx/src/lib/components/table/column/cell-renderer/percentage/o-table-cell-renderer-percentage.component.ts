@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
 import { NumberService } from '../../../../../services/number.service';
@@ -14,7 +14,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE = [
   selector: 'o-table-cell-renderer-percentage',
   templateUrl: './o-table-cell-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_PERCENTAGE,
+  providers: [OPercentPipe]
 })
 export class OTableCellRendererPercentageComponent extends OTableCellRendererRealComponent implements OnInit {
 
@@ -25,7 +26,7 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
 
   protected numberService: NumberService;
 
-  protected componentPipe: OPercentPipe;
+  protected componentPipe = inject(OPercentPipe);
   protected pipeArguments: IPercentPipeArgument;
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
@@ -34,12 +35,9 @@ export class OTableCellRendererPercentageComponent extends OTableCellRendererRea
     super(injector);
     this.tableColumn.type = 'percentage';
     this.numberService = this.injector.get(NumberService);
-
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OPercentPipe(this.injector);
   }
 
   initialize() {

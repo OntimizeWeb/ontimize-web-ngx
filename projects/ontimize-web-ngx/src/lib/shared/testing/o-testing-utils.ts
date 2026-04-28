@@ -14,6 +14,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { OIntegerPipe } from '../../pipes/o-integer.pipe';
+import { OSafePipe } from '../../pipes/o-safe.pipe';
+import { OMomentPipe } from '../../pipes/o-moment.pipe';
+import { OIconPipe } from '../../pipes/o-icon.pipe';
+import { ORealPipe } from '../../pipes/o-real.pipe';
+import { OCurrencyPipe } from '../../pipes/o-currency.pipe';
+import { OPercentPipe } from '../../pipes/o-percentage.pipe';
 
 import { OTableExportButtonService } from '../../components/table/extensions/export-button/o-table-export-button.service';
 import { NameConvention } from '../../services/name-convention/name-convention.service';
@@ -156,7 +163,15 @@ export class OTestingUtils {
         {
           provide: OntimizeService,
           useValue: jasmine.createSpyObj('OntimizeService', ['configureService', 'query', 'advancedQuery', 'insert', 'update', 'delete'])
-        }
+        },
+        // Pipes used via inject() in components
+        { provide: OIntegerPipe, useClass: OIntegerPipe, deps: [Injector] },
+        { provide: ORealPipe, useClass: ORealPipe, deps: [Injector] },
+        { provide: OCurrencyPipe, useClass: OCurrencyPipe, deps: [Injector] },
+        { provide: OPercentPipe, useClass: OPercentPipe, deps: [Injector] },
+        { provide: OSafePipe, useClass: OSafePipe, deps: [Injector] },
+        { provide: OMomentPipe, useClass: OMomentPipe, deps: [Injector] },
+        { provide: OIconPipe, useClass: OIconPipe, deps: [Injector] },
       ]
     };
   }

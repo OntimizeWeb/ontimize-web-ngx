@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { EventEmitter, Injectable, Injector } from '@angular/core';
+import { EventEmitter, inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, NavigationEnd, Router, UrlSegment } from '@angular/router';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -106,11 +106,11 @@ export class NavigationService implements ILocalStorageComponent {
   protected navigationItems: Array<ONavigationItem> = [];
   protected allNavigationItems: ONavigationItem[] = [];
 
-  protected router: Router;
+  protected router = inject(Router);
 
-  protected oBreadcrumbService: OBreadcrumbService;
-  protected localStorageService: LocalStorageService;
-  protected location: Location;
+  protected oBreadcrumbService = inject(OBreadcrumbService);
+  protected localStorageService = inject(LocalStorageService);
+  protected location = inject(Location);
 
   public navigationEvents$: ReplaySubject<Array<ONavigationItem>> = new ReplaySubject<Array<ONavigationItem>>(1);
 
@@ -122,13 +122,7 @@ export class NavigationService implements ILocalStorageComponent {
   protected isNavigationSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public isNavigation$: Observable<boolean> = this.isNavigationSubject.asObservable();
 
-  constructor(
-    protected injector: Injector
-  ) {
-    this.router = this.injector.get(Router);
-    this.oBreadcrumbService = this.injector.get(OBreadcrumbService);
-    this.localStorageService = this.injector.get(LocalStorageService);
-    this.location = this.injector.get(Location);
+  constructor() {
     this.location.subscribe(val => {
       const previousRoute = this.getPreviousRouteData();
       const qParams = Object.keys(previousRoute.queryParams);

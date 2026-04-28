@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
@@ -11,12 +11,8 @@ import type { ODialogConfig } from '../shared/components/dialog/o-dialog.config'
 })
 export class DialogService {
 
-  protected ng2Dialog: MatDialog;
+  protected ng2Dialog = inject(MatDialog);
   dialogRef: MatDialogRef<ODialogBase>;
-
-  constructor(protected injector: Injector) {
-    this.ng2Dialog = this.injector.get(MatDialog);
-  }
 
   public get dialog(): ODialogBase {
     if (this.dialogRef) {

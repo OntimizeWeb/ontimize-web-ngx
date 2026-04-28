@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
+import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA  } from '@angular/core';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 
 // Import component dynamically to avoid compilation
@@ -29,9 +29,8 @@ describe('OCardMenuLayoutComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockInjector = TestBed.inject(Injector);
     const mockChangeDetectorRef: any = { detectChanges: jasmine.createSpy(), markForCheck: jasmine.createSpy() };
-    component = new OCardMenuLayoutComponent(mockInjector, mockChangeDetectorRef);
+    component = TestBed.runInInjectionContext(() => new OCardMenuLayoutComponent(mockChangeDetectorRef));
   });
 
   it('should create', () => {

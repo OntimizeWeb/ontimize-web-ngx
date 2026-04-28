@@ -20,7 +20,8 @@ describe('OHiddenDirective', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        declarations: [OHiddenDirective, TestHiddenComponent]
+        imports: [OHiddenDirective],
+        declarations: [TestHiddenComponent]
       });
       fixture = TestBed.createComponent(TestHiddenComponent);
       fixture.detectChanges();
@@ -47,7 +48,8 @@ describe('OHiddenDirective', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        declarations: [OHiddenDirective, TestHiddenSpanComponent]
+        imports: [OHiddenDirective],
+        declarations: [TestHiddenSpanComponent]
       });
       fixture = TestBed.createComponent(TestHiddenSpanComponent);
       fixture.detectChanges();

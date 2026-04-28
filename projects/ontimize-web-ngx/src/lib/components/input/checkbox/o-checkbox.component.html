@@ -7,9 +7,13 @@
     <mat-error *oMatError="hasError('required')">
       {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
     </mat-error>
-    <mat-error *ngFor="let oError of getActiveOErrors()">
-      {{ oError.text | oTranslate }}
-    </mat-error>
+    @for (oError of getActiveOErrors(); track oError) {
+      <mat-error>
+        {{ oError.text | oTranslate }}
+      </mat-error>
+    }
   </mat-checkbox>
-  <div *ngIf="isReadOnly" (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+  @if (isReadOnly) {
+    <div (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+  }
 </div>

@@ -292,18 +292,17 @@ describe('NavigationService', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
+        ...OTestingUtils.getCommonTestingModuleConfig().providers,
         NavigationService,
         { provide: Router, useValue: router },
         { provide: Location, useValue: location },
         { provide: OBreadcrumbService, useValue: oBreadcrumbService },
-        { provide: LocalStorageService, useValue: localStorageService },
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
+        { provide: LocalStorageService, useValue: localStorageService }
       ]
     });
     
-    // Get the real TestBed Injector and pass it to NavigationService
-    const injector = TestBed.inject(Injector);
-    service = new NavigationService(injector);
+    // Get the service from TestBed
+    service = TestBed.inject(NavigationService);
   });
 
   describe('Service initialization', () => {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, TemplateRef, ViewChild } from '@angular/core';
 
 import { ITranslatePipeArgument, OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
@@ -12,7 +12,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
   selector: 'o-table-cell-renderer-translate',
   templateUrl: './o-table-cell-renderer-translate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE,
+  providers: [OTranslatePipe]
 })
 export class OTableCellRendererTranslateComponent extends OBaseTableCellRenderer {
 
@@ -21,19 +22,16 @@ export class OTableCellRendererTranslateComponent extends OBaseTableCellRenderer
 
   public translateArgsFn: (rowData: any) => any[];
 
-  protected componentPipe: OTranslatePipe;
+  protected componentPipe = inject(OTranslatePipe);
   protected pipeArguments: ITranslatePipeArgument = {};
 
   constructor(protected injector: Injector) {
     super(injector);
 
     this.tableColumn.type = 'translate';
-
-    this.setComponentPipe();
   }
 
   public setComponentPipe(): void {
-    this.componentPipe = new OTranslatePipe(this.injector);
   }
 
   public getCellData(cellvalue: any, rowvalue?: any): string {

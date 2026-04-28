@@ -1,6 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[oMatPrefix]'
+  selector: '[oMatPrefix]',
+  standalone: true
 })
 export class OMatPrefix { }

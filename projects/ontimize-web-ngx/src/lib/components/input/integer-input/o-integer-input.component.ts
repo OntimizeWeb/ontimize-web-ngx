@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
@@ -28,7 +28,8 @@ export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   templateUrl: './o-integer-input.component.html',
   styleUrls: ['./o-integer-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_INTEGER_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [OIntegerPipe]
 })
 export class OIntegerInputComponent extends OFormDataComponent implements AfterViewInit, OnInit {
 
@@ -46,7 +47,7 @@ export class OIntegerInputComponent extends OFormDataComponent implements AfterV
   protected thousandSeparator: string;
   protected olocale: string;
 
-  protected componentPipe: OIntegerPipe;
+  protected componentPipe = inject(OIntegerPipe);
   protected pipeArguments: IIntegerPipeArgument;
 
   constructor(
@@ -57,7 +58,6 @@ export class OIntegerInputComponent extends OFormDataComponent implements AfterV
     super(form, elRef, injector);
     this._defaultSQLTypeKey = 'INTEGER';
     this.inputType = INPUT_TYPE_TEXT;
-    this.setComponentPipe();
   }
 
   initialize(): void {
@@ -66,7 +66,6 @@ export class OIntegerInputComponent extends OFormDataComponent implements AfterV
   }
 
   setComponentPipe() {
-    this.componentPipe = new OIntegerPipe(this.injector);
   }
 
   ngOnInit() {

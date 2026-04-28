@@ -50,7 +50,7 @@ describe('OListPickerRendererCurrencyComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OListPickerRendererCurrencyComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OListPickerRendererCurrencyComponent(mockInjector));
   });
 
   it('should create', () => {

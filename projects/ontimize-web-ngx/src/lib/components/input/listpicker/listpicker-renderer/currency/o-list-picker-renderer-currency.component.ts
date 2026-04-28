@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
@@ -17,7 +17,8 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY = [
   selector: 'o-list-picker-renderer-currency',
   templateUrl: './o-list-picker-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY
+  inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_CURRENCY,
+  providers: [OCurrencyPipe]
 })
 export class OListPickerRendererCurrencyComponent extends OListPickerRendererRealComponent implements OnInit {
 
@@ -35,7 +36,7 @@ export class OListPickerRendererCurrencyComponent extends OListPickerRendererRea
 
   protected currencyService: CurrencyService;
 
-  protected componentPipe: OCurrencyPipe;
+  protected componentPipe = inject(OCurrencyPipe);
   protected pipeArguments: ICurrencyPipeArgument;
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
@@ -45,7 +46,6 @@ export class OListPickerRendererCurrencyComponent extends OListPickerRendererRea
   }
 
   setComponentPipe() {
-    this.componentPipe = new OCurrencyPipe(this.injector);
   }
 
   initialize() {

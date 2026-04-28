@@ -1,9 +1,19 @@
 <ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
   <span class="o-action-cell-renderer" (click)="innerOnClick($event, rowvalue)">
-    <mat-icon *ngIf="isIconPositionLeft()">{{ icon }}</mat-icon>
-    <mat-icon *ngIf="isSvgIconPositionLeft()" [svgIcon]="svgIcon"></mat-icon>
-    <span *ngIf="text !== undefined">{{ text | oTranslate }}</span>
-    <mat-icon *ngIf="isIconPositionRight()">{{ icon }}</mat-icon>
-    <mat-icon *ngIf="isSvgIconPositionRight()" [svgIcon]="svgIcon"></mat-icon>
+    @if (isIconPositionLeft()) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    @if (isSvgIconPositionLeft()) {
+      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+    }
+    @if (text !== undefined) {
+      <span>{{ text | oTranslate }}</span>
+    }
+    @if (isIconPositionRight()) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    @if (isSvgIconPositionRight()) {
+      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+    }
   </span>
 </ng-template>

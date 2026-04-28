@@ -17,19 +17,19 @@
         </mat-checkbox>
         <mat-divider></mat-divider>
 
-        <ng-container *ngFor="let column of quickFilterColumns">
+        @for (column of quickFilterColumns; track column) {
           <mat-checkbox (click)="$event.stopPropagation()" [checked]="isChecked(column)" (change)="onCheckboxChange(column, $event)">
             {{ column.title | oTranslate }}
           </mat-checkbox>
-        </ng-container>
+        }
 
-        <ng-container *ngIf="showCaseSensitiveCheckbox()">
+        @if (showCaseSensitiveCheckbox()) {
           <mat-divider></mat-divider>
           <mat-checkbox (click)="$event.stopPropagation()" [checked]="oTableOptions.filterCaseSensitive"
             (change)="oTableOptions.filterCaseSensitive = $event.checked">
             {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate}}
           </mat-checkbox>
-        </ng-container>
+        }
       </div>
     </mat-menu>
   </mat-form-field>

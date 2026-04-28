@@ -2,7 +2,9 @@
   <mat-select-trigger>
     {{item | oTranslate}} ({{getViewValue() | oTranslate}})
   </mat-select-trigger>
-  <mat-option *ngFor="let type of dateTypes" [value]="type.value">
-    {{type.viewValue | oTranslate}}
-  </mat-option>
+  @for (type of dateTypes; track type) {
+    <mat-option [value]="type.value">
+      {{type.viewValue | oTranslate}}
+    </mat-option>
+  }
 </mat-select>

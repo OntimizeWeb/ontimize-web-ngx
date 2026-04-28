@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { ICurrencyPipeArgument, OCurrencyPipe } from '../../../../../pipes/o-currency.pipe';
 import { CurrencyService } from '../../../../../services/currency.service';
@@ -21,7 +21,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY = [
   selector: 'o-table-cell-renderer-currency',
   templateUrl: './o-table-cell-renderer-currency.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CURRENCY,
+  providers: [OCurrencyPipe]
 })
 export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealComponent implements OnInit {
 
@@ -40,7 +41,7 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
 
   protected currencyService: CurrencyService;
 
-  protected componentPipe: OCurrencyPipe;
+  protected componentPipe = inject(OCurrencyPipe);
   protected pipeArguments: ICurrencyPipeArgument;
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
@@ -48,11 +49,9 @@ export class OTableCellRendererCurrencyComponent extends OTableCellRendererRealC
     super(injector);
     this.tableColumn.type = 'currency';
     this.currencyService = this.injector.get(CurrencyService);
-    this.setComponentPipe();
   }
 
 public setComponentPipe():void {
-    this.componentPipe = new OCurrencyPipe(this.injector);
   }
 
   public initialize():void {

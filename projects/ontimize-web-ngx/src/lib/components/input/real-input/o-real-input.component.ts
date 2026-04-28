@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
@@ -21,7 +21,8 @@ export const DEFAULT_INPUTS_O_REAL_INPUT = [
   selector: 'o-real-input',
   templateUrl: './o-real-input.component.html',
   inputs: DEFAULT_INPUTS_O_REAL_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [ORealPipe]
 })
 export class ORealInputComponent extends OIntegerInputComponent implements OnInit {
 
@@ -41,6 +42,7 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   strict: boolean = false;
 
   protected decimalSeparator: string;
+  protected componentPipe = inject(ORealPipe);
   protected pipeArguments: IRealPipeArgument;
   protected numberService: NumberService;
 
@@ -55,7 +57,6 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   }
 
   setComponentPipe(): void {
-    this.componentPipe = new ORealPipe(this.injector);
   }
 
   initialize() {

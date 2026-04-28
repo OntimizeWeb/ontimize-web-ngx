@@ -40,7 +40,7 @@ describe('OComboRendererIconComponent', () => {
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
     const mockInjector = TestBed.inject(Injector);
-    component = new OComboRendererIconComponent(mockInjector);
+    component = TestBed.runInInjectionContext(() => new OComboRendererIconComponent(mockInjector));
   });
 
   it('should create', () => {

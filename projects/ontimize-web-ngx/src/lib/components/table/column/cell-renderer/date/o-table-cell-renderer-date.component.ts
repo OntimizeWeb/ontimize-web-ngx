@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
@@ -12,11 +12,12 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
   selector: 'o-table-cell-renderer-date',
   templateUrl: './o-table-cell-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE
+  inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
+  providers: [OMomentPipe]
 })
 export class OTableCellRendererDateComponent extends OBaseTableCellRenderer implements OnInit {
 
-  protected componentPipe: OMomentPipe;
+  protected componentPipe = inject(OMomentPipe);
   protected pipeArguments: IMomentPipeArgument;
 
   protected format: string;
@@ -26,11 +27,9 @@ export class OTableCellRendererDateComponent extends OBaseTableCellRenderer impl
   constructor(protected injector: Injector) {
     super(injector);
     this.tableColumn.type = 'date';
-    this.setComponentPipe();
   }
 
   setComponentPipe() {
-    this.componentPipe = new OMomentPipe(this.injector);
   }
 
   initialize() {

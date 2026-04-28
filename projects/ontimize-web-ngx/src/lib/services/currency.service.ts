@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { Util } from '../util/util';
 import { NumberService } from './number.service';
@@ -11,13 +11,12 @@ export class CurrencyService {
   public static DEFAULT_CURRENCY_SYMBOL = '$';
   public static DEFAULT_CURRENCY_SYMBOL_POSITION = 'left';
 
-  protected _numberService: NumberService;
+  protected _numberService = inject(NumberService);
 
   protected _symbol: string;
   protected _symbolPosition: string;
 
-  constructor(protected injector: Injector) {
-    this._numberService = this.injector.get(NumberService);
+  constructor() {
     // TODO: initialize from config
     this._symbol = CurrencyService.DEFAULT_CURRENCY_SYMBOL;
     this._symbolPosition = CurrencyService.DEFAULT_CURRENCY_SYMBOL_POSITION;

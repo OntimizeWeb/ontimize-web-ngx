@@ -1,6 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 import { Subscriber } from 'rxjs';
 
+import { AppConfig } from '../../config/app-config';
 import { OntimizeServiceResponseParser } from './o-service-response.parser';
 import { NameConvention } from '../name-convention/name-convention.service';
 
@@ -42,14 +44,15 @@ describe('OntimizeServiceResponseParser', () => {
   beforeEach(() => {
     nameConvention = new NameConvention();
 
-    const mockInjector = {
-      get: (token: any) => {
-        if (token === NameConvention) return nameConvention;
-        return {}; // AppConfig fallback
-      }
-    } as any;
+    TestBed.configureTestingModule({
+      providers: [
+        OntimizeServiceResponseParser,
+        { provide: NameConvention, useValue: nameConvention },
+        { provide: AppConfig, useValue: {} },
+      ]
+    });
 
-    parser = new OntimizeServiceResponseParser(mockInjector);
+    parser = TestBed.inject(OntimizeServiceResponseParser);
   });
 
   // ─── Creation ──────────────────────────────────────────────────────────────

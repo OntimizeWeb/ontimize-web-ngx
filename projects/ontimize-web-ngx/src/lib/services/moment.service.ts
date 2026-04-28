@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment';
 
 import { AppConfig } from '../config/app-config';
@@ -16,8 +16,8 @@ export class MomentService {
   private _locale: string;
   private _config: Config;
 
-  constructor(protected injector: Injector) {
-    this._config = this.injector.get(AppConfig).getConfiguration();
+  constructor() {
+    this._config = inject(AppConfig).getConfiguration();
     this.load(this._config.locale);
   }
 

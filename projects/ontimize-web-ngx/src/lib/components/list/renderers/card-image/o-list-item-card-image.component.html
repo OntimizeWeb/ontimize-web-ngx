@@ -1,49 +1,79 @@
 <mat-card fxLayout="column" fxLayoutAlign="center center" class="o-item-card" [class.small]="compareListHeight('small')"
   [class.medium]="compareListHeight('medium')" [class.large]="compareListHeight('large')">
 
-  <mat-card-header *ngIf="avatar !== undefined">
-    <img mat-card-avatar src="{{ avatar }}" alt="avatar image">
-    <mat-card-title *ngIf="title !== undefined"> {{ title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="subtitle !== undefined"> {{ subtitle }}</mat-card-subtitle>
-  </mat-card-header>
+  @if (avatar !== undefined) {
+    <mat-card-header>
+      <img mat-card-avatar src="{{ avatar }}" alt="avatar image">
+      @if (title !== undefined) {
+        <mat-card-title> {{ title }}</mat-card-title>
+      }
+      @if (subtitle !== undefined) {
+        <mat-card-subtitle> {{ subtitle }}</mat-card-subtitle>
+      }
+    </mat-card-header>
+  }
 
-  <img *ngIf="image !== undefined" mat-card-image src="{{ image }}" [class.exists-action-button]="icon !== undefined" alt="card image">
+  @if (image !== undefined) {
+    <img mat-card-image src="{{ image }}" [class.exists-action-button]="icon !== undefined" alt="card image">
+  }
 
-  <button type="button" *ngIf="icon !== undefined && compareListHeight('small')" mat-mini-fab (click)="onActionIconClick($event)"
-    class="action-button">
-    <mat-icon>{{ icon }}</mat-icon>
-  </button>
+  @if (icon !== undefined && compareListHeight('small')) {
+    <button type="button" mat-mini-fab (click)="onActionIconClick($event)"
+      class="action-button">
+      <mat-icon>{{ icon }}</mat-icon>
+    </button>
+  }
 
-  <button type="button" *ngIf="icon !== undefined && (compareListHeight('medium') || compareListHeight('large'))" mat-fab
-    (click)="onActionIconClick($event)" class="action-button">
-    <mat-icon>{{ icon }}</mat-icon>
-  </button>
+  @if (icon !== undefined && (compareListHeight('medium') || compareListHeight('large'))) {
+    <button type="button" mat-fab
+      (click)="onActionIconClick($event)" class="action-button">
+      <mat-icon>{{ icon }}</mat-icon>
+    </button>
+  }
 
-  <mat-card-title *ngIf="avatar === undefined && title !== undefined"> {{ title }}</mat-card-title>
-  <mat-card-subtitle *ngIf="avatar === undefined && subtitle !== undefined"> {{ subtitle }}</mat-card-subtitle>
+  @if (avatar === undefined && title !== undefined) {
+    <mat-card-title> {{ title }}</mat-card-title>
+  }
+  @if (avatar === undefined && subtitle !== undefined) {
+    <mat-card-subtitle> {{ subtitle }}</mat-card-subtitle>
+  }
 
-  <mat-card-content *ngIf="!collapsible">
-    <p>
-      {{ content }}
-    </p>
-  </mat-card-content>
+  @if (!collapsible) {
+    <mat-card-content>
+      <p>
+        {{ content }}
+      </p>
+    </mat-card-content>
+  }
 
   <mat-card-actions>
-    <button type="button" mat-button *ngIf="action1Text !== undefined" (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
-    <button type="button" mat-button *ngIf="action2Text !== undefined" (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+    @if (action1Text !== undefined) {
+      <button type="button" mat-button (click)="onAction1ButtonClick($event)">{{ action1Text }}</button>
+    }
+    @if (action2Text !== undefined) {
+      <button type="button" mat-button (click)="onAction2ButtonClick($event)">{{ action2Text }}</button>
+    }
 
     <div class="collapse-button-container">
-      <button type="button" mat-icon-button *ngIf="collapsible" (click)="collapsed = !collapsed" class="collapse-button">
-        <mat-icon *ngIf="collapsed" svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
-        <mat-icon *ngIf="!collapsed" svgIcon="ontimize:keyboard_arrow_up"></mat-icon>
-      </button>
+      @if (collapsible) {
+        <button type="button" mat-icon-button (click)="collapsed = !collapsed" class="collapse-button">
+          @if (collapsed) {
+            <mat-icon svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
+          }
+          @if (!collapsed) {
+            <mat-icon svgIcon="ontimize:keyboard_arrow_up"></mat-icon>
+          }
+        </button>
+      }
     </div>
   </mat-card-actions>
 
-  <mat-card-content *ngIf="collapsible && !collapsed">
-    <p>
-      {{ content }}
-    </p>
-  </mat-card-content>
+  @if (collapsible && !collapsed) {
+    <mat-card-content>
+      <p>
+        {{ content }}
+      </p>
+    </mat-card-content>
+  }
 
 </mat-card>
