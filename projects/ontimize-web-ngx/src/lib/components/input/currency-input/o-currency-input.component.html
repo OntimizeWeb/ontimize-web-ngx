@@ -7,7 +7,8 @@
     </div>
   }
   @if (useIcon('left')) {
-    <mat-icon svgIcon="ontimize:{{currencySymbol}}" matSuffix class="svg-icon" [class.mat-disabled]="!enabled"></mat-icon>
+    <mat-icon matIconSuffix [class.mat-disabled]="!enabled">{{currency_icons.get(this.currencySymbol)}}
+    </mat-icon>
   }
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
     class="icon-field o-flex-fill" [subscriptSizing]="subscriptSizing">
@@ -29,7 +30,7 @@
         </div>
       }
       @if (useIcon('right')) {
-        <mat-icon svgIcon="ontimize:{{currencySymbol}}" matIconSuffix class="svg-icon" [class.mat-disabled]="!enabled">
+        <mat-icon  matIconSuffix  [class.mat-disabled]="!enabled">{{currency_icons.get(this.currencySymbol)}}
         </mat-icon>
       }
 

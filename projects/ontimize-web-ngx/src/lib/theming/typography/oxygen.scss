@@ -31,22 +31,20 @@
 $font-family: 'Noto Sans, "Helvetica Neue", sans-serif' !default;
 
 @function create-typography-config($custom-font-family: $font-family) {
-  @return (
-    font-family: $custom-font-family,
-    levels: (
-      headline-1: (size: 84px, line-height: 92px,    weight: 300),
-      headline-2: (size: 42px, line-height: 42px,    weight: 400),
-      headline-3: (size: 34px, line-height: 36px,    weight: 400),
-      headline-4: (size: 26px, line-height: 30px,    weight: 400),
-      headline-5: (size: 24px, line-height: 24px,    weight: 400),
-      headline-6: (size: 18px, line-height: 24px,    weight: 500),
-      subtitle-1: (size: 14px, line-height: 21px,    weight: 600),
-      subtitle-2: (size: 12px, line-height: 18px,    weight: 500),
-      body-1:     (size: 14px, line-height: 1.125em, weight: 400),
-      input:      (size: 14px, line-height: 14px, weight: 400),
-      body-2:     (size: 12px, line-height: 15px,    weight: 400),
-      caption:    (size: 11px, line-height: 15px,    weight: 400),
-      button:     (size: 13px, line-height: 14px,    weight: 400),
+  @return (font-family: $custom-font-family,
+    levels: (headline-1: (size: 84px, line-height: 92px, weight: 300),
+      headline-2: (size: 42px, line-height: 42px, weight: 400),
+      headline-3: (size: 34px, line-height: 36px, weight: 400),
+      headline-4: (size: 26px, line-height: 30px, weight: 400),
+      headline-5: (size: 24px, line-height: 24px, weight: 400),
+      headline-6: (size: 18px, line-height: 24px, weight: 500),
+      subtitle-1: (size: 14px, line-height: 21px, weight: 600),
+      subtitle-2: (size: 12px, line-height: 18px, weight: 500),
+      body-1: (size: 14px, line-height: 1.125em, weight: 400),
+      input: (size: 14px, line-height: 14px, weight: 400),
+      body-2: (size: 12px, line-height: 15px, weight: 400),
+      caption: (size: 11px, line-height: 15px, weight: 400),
+      button: (size: 13px, line-height: 14px, weight: 400),
     ),
   );
 }

@@ -32,7 +32,16 @@ export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
 export class OCurrencyInputComponent extends ORealInputComponent implements OnInit {
 
 
-  static currency_icons = ['attach_money', 'euro_symbol', 'currency_pound', 'ILS', 'currency_rupee', 'currency_yen', 'KRW', 'currency_bitcoin'];
+  protected currency_icons = new Map<string, string>([
+    ['EUR', 'euro_symbol'],
+    ['USD', 'attach_money'],
+    ['GBP', 'currency_pound'],
+    ['ILS', 'currency_ils'],
+    ['INR', 'currency_rupee'],
+    ['JPY', 'currency_yen'],
+    ['KRW', 'currency_krw'],
+    ['BTC', 'currency_bitcoin']
+  ]);
 
   currency_symbols = CurrencyUtil.currencyCodeToSymbol;
 
@@ -40,7 +49,7 @@ export class OCurrencyInputComponent extends ORealInputComponent implements OnIn
   currencySymbolPosition: string = 'right';
 
   protected existsOntimizeIcon() {
-    return OCurrencyInputComponent.currency_icons.indexOf(this.currencySymbol) !== -1;
+    return this.currency_icons.has(this.currencySymbol);
   }
 
   useIcon(position: string): boolean {

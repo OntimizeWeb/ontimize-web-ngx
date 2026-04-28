@@ -13,7 +13,7 @@
           <mat-icon>close</mat-icon>
         </button>
       }
-      <mat-icon svgIcon="ontimize:PERCENT" matSuffix class="svg-icon" [class.mat-disabled]="!enabled"></mat-icon>
+      <mat-icon matSuffix  [class.mat-disabled]="!enabled">percent</mat-icon>
       <mat-error *oMatError="hasError('required')">
         {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}
       </mat-error>

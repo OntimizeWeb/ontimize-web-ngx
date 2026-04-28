@@ -1,28 +1,42 @@
 .mat-form-field-appearance-ontimize {
+  input:read-only {
+    cursor: default;
+  }
 
   .mat-mdc-form-field-icon-prefix,
   .mat-mdc-form-field-icon-suffix {
 
+    .mat-mdc-icon-button,
     .mat-icon {
-      --mdc-icon-button-state-layer-size: var(--o-input-icon-size, 20px);
-      font-size: var(--o-input-icon-size, 20px);
-      width: var(--o-input-icon-size, 20px);
-      height: var(--o-input-icon-size, 20px);
-      padding: 0 6px 0 0;
+      padding: 0;
     }
+
+    .mat-mdc-icon-button {
+      --mdc-icon-button-state-layer-size: 24px;
+      --mdc-icon-button-icon-size: 20px;
+
+    }
+
+    >* {
+      margin-right: 4px;
+    }
+
+
+    div.icon-btn {
+      cursor: default;
+      display: inline-block;
+
+      i {
+        padding-top: 4px;
+      }
+    }
+
+  }
+
+  &.custom-width .mat-mdc-form-field-infix {
+    width: auto;
   }
 }
-
-div.icon-btn {
-  cursor: default;
-  display: inline-block;
-
-  i {
-    padding-top: 4px;
-  }
-}
-
-
 
 .o-tooltip.mat-mdc-tooltip {
 
@@ -48,87 +62,3 @@ div.icon-btn {
     white-space: pre-line;
   }
 }
-
-// .mat-mdc-form-field {
-//   .mat-mdc-form-field-flex {
-
-//     .mat-mdc-form-field-icon-prefix,
-//     .mat-mdc-form-field-icon-suffix {
-//       display: inherit;
-//       align-items: center;
-
-//       &:last-child {
-//         padding-right: 6px;
-//       }
-
-//       mat-icon {
-//         font-size: $suffix-size;
-//         width: $suffix-size;
-//         height: $suffix-size;
-//         line-height: $suffix-size;
-//         padding: 0;
-//       }
-
-//       .mat-mdc-icon-button {
-//         line-height: $suffix-size;
-//         width: $suffix-size;
-//         height: $suffix-size;
-//         svg,
-//         img,
-//         .mat-mdc-button-touch-target {
-//           width: 20px;
-//           height: 20px;
-//         }
-//       }
-
-//       .svg-icon>svg {
-//         padding: 3px 0;
-//         box-sizing: border-box;
-//         width: $suffix-size;
-//       }
-
-
-//     }
-//   }
-
-// input:read-only {
-//   cursor: default;
-// }
-
-// &.custom-width .mat-mdc-form-field-infix {
-//   width: auto;
-// }
-
-// &.icon-field {
-//   .mat-mdc-form-field-icon-suffix {
-//     cursor: default;
-//     text-align: center;
-
-//     .icon-btn,
-//     .mat-icon,
-//     .mat-mdc-icon-button .mat-icon {
-//       vertical-align: baseline;
-//     }
-
-//     .mat-mdc-icon-button {
-
-//       svg,
-//       img {
-//         width: $suffix-size;
-//         height: $suffix-size;
-//       }
-//     }
-
-
-//     .mat-mdc-icon-button .mat-mdc-button-touch-target {
-//       height: $suffix-size;
-//       width: $suffix-size;
-//     }
-
-//     .svg-icon>svg {
-//       padding: 3px 0;
-//       box-sizing: border-box;
-//     }
-//   }
-//   }
-// }
