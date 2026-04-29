@@ -1,3 +1,29 @@
+## 18.0.0-next.0 (2026-04-29)
+
+### Features
+* **theming**: Material 3 theming via `mat.define-theme()` with configurable `$density`, `$typography`, and `$warn` params in `o-mat-light-theme` / `o-mat-dark-theme` factory
+* **theming**: expose `--o-*` CSS custom properties (primary, accent, warn palettes, foreground, background, typography levels) for runtime theming
+* **theming**: versioned SCSS entry points — `ontimize-style.scss` (v18 / M3) and `ontimize-style-v15.scss` (legacy M2)
+* **theming**: dark mode tokens — M3 surface/background tokens adapt automatically to `$dark-theme`
+* **standalone**: add `provideOntimizeWeb()` to support `bootstrapApplication()` standalone bootstrap
+* **icons**: migrate from Material Icons (ligatura) to Material Symbols Outlined
+
+### Bug Fixes
+* **o-button**: vertically center `mdc-button__label` content
+* **o-container**: `layoutAlignStyles` now returns empty styles when `layout-align` input is not set, avoiding unintended overrides of CSS defaults
+* **inputs**: replace custom SVG ontimize icons with standard Material icons for percent and currency suffix icons; resize prefix/suffix and quickfilter icons to 20px
+* **theming**: fix `input` typography level separate from `body-1` to allow independent `font-size` control for `mat-form-field`
+* **theming**: fix token emission order — `o-apply-tokens` emits after `mat.all-component-themes()` so `--mat-*` / `--mdc-*` overrides always win
+* **theming**: set global button height to 32px via `--o-button-height` and derived MDC tokens
+* **sidenav**: fix horizontal scroll and refactor v15/v18 styles
+* **deps**: bump `ngx-material-timepicker` to 13.1.1 for luxon 3.x compatibility
+* **types**: widen boolean inputs to `boolean | string` for ng-packagr partial compilation
+
+### Miscellaneous
+* **migration**: add `MIGRATION_GUIDE.md` for consumers upgrading from Angular 15 to 18
+
+---
+
 ## 15.9.0 (2026-03-16)
 ### Features
 * **o-form-layout-dialog**: add fullscreen toggle button option ([91c453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/91c453bf623f3ec58ba214d63e27150eeb1665fb)) Closes [#2074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2074)

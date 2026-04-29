@@ -99,10 +99,7 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   }
 
   set layoutAlign(align: string) {
-    if (!align || align.length === 0) {
-      align = this.defaultLayoutAlign;
-    }
-    this._layoutAlign = align;
+    this._layoutAlign = (align && align.length > 0) ? align : undefined;
   }
 
   get layoutGap() {
@@ -114,7 +111,10 @@ export class OContainerComponent implements AfterViewInit, OnDestroy, AfterConte
   }
 
   get layoutAlignStyles(): { [key: string]: string } {
-    const parts = (this._layoutAlign || 'start start').split(' ');
+    if (!this._layoutAlign) {
+      return {};
+    }
+    const parts = this._layoutAlign.split(' ');
     const mainAxis = parts[0] || 'start';
     const crossAxis = parts[1] || 'start';
     const justifyMap: Record<string, string> = {
