@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 24 abril 2026 (theming/m3 mergeado; report migrado; addons pendientes detallados)
+> Última actualización: 29 abril 2026 (charts y map migrados; extra-components fixes post-migración; changelogs 18.0.0-next.0)
 
 ## Repositorios y ramas
 
@@ -12,8 +12,8 @@
 | **ontimize-web-ngx-playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-filemanager** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | ⏳ Pendiente |
 | **ontimize-web-ngx-report** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-report` | `migration/18.x.x` | ✅ Migrado |
-| **ontimize-web-ngx-charts** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `15.x.x` | ⏳ Pendiente |
-| **ontimize-web-ngx-map** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-charts** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `migration/18.x.x` | ✅ Migrado (28 abril 2026) |
+| **ontimize-web-ngx-map** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `migration/18.x.x` | ✅ Migrado (28 abril 2026) |
 | **ontimize-web-ngx-quickstart** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | ⏳ Pendiente |
 
 ## Versiones actuales en migration/18.x.x
@@ -370,6 +370,49 @@ Rediseño del theming del framework para emitir M3 tokens vía `mat.define-theme
 - Shell components standalone: `ContainersComponent`, `LayoutManagerComponent`, `ImageComponent`, `GalleryComponent`, `ImageEditorComponent`
 - Sub-features con componentes no-standalone (inputs sub-pages, containers-basic/collapsible, layout-manager sub-pages, media sub-pages) siguen en NgModules — cargados vía `loadChildren`
 
+### ontimize-web-ngx-charts — ✅ COMPLETADO (28 abril 2026, rama `migration/18.x.x`)
+
+Migración incremental Angular 15→16→17→18. Ver `migration-status.md` en el repo para detalles de cada fase.
+
+**Fase 3 (`migration/18.x.x`, commit `93e5027`):**
+- 4 componentes → `standalone: true`: `OChartComponent`, `OChartOnDemandComponent`, `SavePreferencesDialogComponent`, `LoadPreferencesDialogComponent`
+- `@angular/flex-layout` eliminado de 4 templates → clases `o-flex-*` + inline styles
+- `*ngIf`/`*ngFor`/`*ngSwitch` → `@if`/`@for`/`@switch`
+- Módulos wrapper (`OChartComponentModule`, `OChartOnDemandComponentModule`) actualizados a `imports` en lugar de `declarations`
+- Tipos `Array<Object>` → `Array<{key,value}>` para template type checking estricto
+- **Build: `✔ Built ontimize-web-ngx-charts`**
+
+### ontimize-web-ngx-map — ✅ COMPLETADO (28 abril 2026, rama `migration/18.x.x`)
+
+Migración incremental Angular 15→16→17→18.
+
+**Fase 3 (`migration/18.x.x`, commit `bf12899`):**
+- `@angular/flex-layout` eliminado de 8 templates → clases `o-flex-*` + inline styles
+- `*ngIf`/`*ngFor` → `@if`/`@for` en todos los templates
+- `FlexLayoutModule` eliminado de `OMapModule`
+- `luxon` + `moment` añadidos como devDeps (ng-packagr partial compilation)
+- `npm install --legacy-peer-deps` necesario (conflicto typescript peer dep)
+- **Build: `✔ Built ontimize-web-ngx-map`**
+
+### ontimize-web-ngx-extra-components — fixes post-migración (29 abril 2026)
+
+| Commit | Descripción |
+|--------|-------------|
+| `187f32d` | Migrar flex-layout y control flow en `o-image-editor` y `o-data-view` |
+| `4a77c0d` | app-test: Material Symbols Outlined, `.o-dark` mixin, deduplicar OntimizeWebModule |
+| `89d5ff1` | Alinear devDeps con framework: `@angular-eslint` 18.4.3, `@typescript-eslint` ^7, `ngx-extended-pdf-viewer` ^20 |
+| `a3d0e61` | `o-image-editor`: `flex-direction:column` en scss del componente (especificidad vs Material) |
+| `4dc33af` | `o-image-editor`: `border-radius:0`, ocultar `mat-pseudo-checkbox` |
+| `510df53` | `o-image-editor`: `alignImage="center"`, `flex:1 1 0`, `box-sizing:border-box` — overlay alineado, sin overflow |
+
+### ontimize-web-ngx (framework) — fixes post-migración (29 abril 2026)
+
+| Commit | Descripción |
+|--------|-------------|
+| `be8fa00e` | Iconos Material para percent/currency, resize prefix/suffix icons a 20px |
+| `3e262509` | `o-button`: centrado vertical `mdc-button__label` |
+| `cd7eac1a` | `o-container`: `layoutAlignStyles` devuelve `{}` cuando `layout-align` no está seteado; changelog 18.0.0-next.0 |
+
 ### ontimize-web-ngx-report — ✅ COMPLETADO (24 abril 2026, rama `migration/18.x.x`)
 
 Migración incremental Angular 15→16→17→18 del addon de reports. Commits clave:
@@ -399,22 +442,14 @@ El framework (`theming/m3`) tiene errores de compilación preexistentes no relac
 
 ### 1. Addons pendientes de migrar
 
-Los planes de migración están en cada repo pero aún no se han ejecutado:
-
 | Addon | Ruta local | Rama actual | Plan |
 |-------|-----------|-------------|------|
-| `ontimize-web-ngx-filemanager` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
-| `ontimize-web-ngx-charts` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
-| `ontimize-web-ngx-map` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
-| `ontimize-web-ngx-quickstart` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | `plan-angularMigration15To18.prompt.md` |
-
-Cada plan sigue 3 fases (16→17→18) con estrategia de ramas `migration/16.x.x` → `migration/17.x.x` → `migration/18.x.x`.
+| `ontimize-web-ngx-filemanager` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | ⏳ No iniciado |
+| `ontimize-web-ngx-quickstart` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | ⏳ No iniciado |
 
 #### Consideraciones por addon
 
 - **filemanager**: usa `@angular/flex-layout` extensivamente; misma estrategia que report (clases `o-flex-*`). Dependencia `ngx-file-manager` — verificar compatibilidad con Angular 18.
-- **charts**: usa `@swimlane/ngx-charts` o similar — verificar si la versión soporta Angular 18. Probable migración a standalone y eliminación de flex-layout.
-- **map**: depende de `leaflet` + wrappers Angular — verificar `ngx-leaflet` para Angular 18. Templates con flex-layout.
 - **quickstart**: app de demostración, no librería — migración más sencilla. Actualizar `bootstrapModule` → `bootstrapApplication` y dependencias.
 
 ### 2. Smoke test visual playground completo
