@@ -358,7 +358,6 @@ $default-typography: ontimize.$typography;
 
   // Typography (table, common, form)
   @if($typography) {
-    @include styles-ontimize-typography.o-table-typography-fashion($typography);
     @include styles-ontimize-typography.o-common-typography-fashion($typography);
     @include styles-ontimize-typography.o-form-theme-fashion($typography);
   }
