@@ -511,12 +511,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         dialogTitleSeparator: this.dialogTitleSeparator,
         showFullscreenButton: this.showFullscreenButton
       },
-      width: dialogOptions.width || this.dialogWidth,
+      width: dialogOptions.width || this.dialogWidth || '65vw',
       minWidth: dialogOptions.minWidth || this.dialogMinWidth,
-      maxWidth: dialogOptions.maxWidth || this.dialogMaxWidth,
-      height: dialogOptions.height || this.dialogHeight,
+      maxWidth: dialogOptions.maxWidth || this.dialogMaxWidth || '65vw',
+      height: dialogOptions.height || this.dialogHeight || '90vh',
       minHeight: dialogOptions.minHeight || this.dialogMinHeight,
-      maxHeight: dialogOptions.maxHeight || this.dialogMaxHeight,
+      maxHeight: dialogOptions.maxHeight || this.dialogMaxHeight || '90vh',
       disableClose: dialogOptions.disableClose || true,
       panelClass: dialogOptions.class || cssclass
     };
