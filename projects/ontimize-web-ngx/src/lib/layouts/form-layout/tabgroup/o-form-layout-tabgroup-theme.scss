@@ -4,24 +4,87 @@
       background-color: var(--o-bg-background);
     }
 
-    .mat-mdc-tab-group.o-tab-ontimize>.mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab.mdc-tab {
+    .mat-mdc-tab-group {
+      .mdc-tab,
+      .mat-mdc-tab-link {
+        opacity: .75;
 
-      .mat-icon:hover {
-        background-color: var(--o-fg-disabled-button);
-        border-radius: 50%;
+        &.mdc-tab--active {
+          opacity: .95;
+        }
       }
 
-
-      &.mdc-tab--active {
-        .mat-icon:hover {
-          background-color: color-mix(in srgb, var(--o-primary-500) 40%, transparent);
-        }
-        .mdc-tab__text-label {
-          color: var(--o-fg-text);
-        }
-
+      &.mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+        padding: 8px;
       }
     }
 
+    .mat-mdc-tab-group.o-tab-ontimize {
+      >.mat-mdc-tab-header {
+        .mat-mdc-tab-label-container .mat-mdc-tab {
+          background: var(--o-bg-level-08);
+          padding: 0;
+
+          span.tab-label {
+            text-overflow: clip;
+            position: relative;
+
+            span.gradient-layer {
+              width: 12px;
+              background: linear-gradient(to right, transparent, var(--o-bg-level-08) 100%);
+              height: 100%;
+              position: absolute;
+              right: 0;
+            }
+          }
+
+          &:not(.mdc-tab--active):not(:last-child) + .mdc-tab:not(.mdc-tab--active) {
+            .mdc-tab__content .mdc-tab__text-label {
+              border-left: 1px solid var(--o-fg-divider);
+            }
+          }
+
+          .mdc-tab__content {
+            width: 100%;
+
+            .mdc-tab__text-label {
+              padding: 0 8px;
+            }
+          }
+
+          .mat-icon:hover {
+            background-color: var(--o-fg-disabled-button);
+            border-radius: 50%;
+          }
+
+          &.mdc-tab--active {
+            background: var(--o-bg-card);
+
+            span.tab-label span.gradient-layer {
+              background: linear-gradient(to right, transparent, var(--o-bg-card) 100%);
+            }
+
+            .mat-icon:hover {
+              background-color: color-mix(in srgb, var(--o-primary-500) 40%, transparent);
+            }
+
+            .mdc-tab__text-label {
+              color: var(--o-fg-text);
+            }
+          }
+        }
+
+        .mdc-tab-indicator__content--underline {
+          border: none;
+        }
+      }
+
+      >.mat-mdc-tab-body-wrapper {
+        background: var(--o-bg-card);
+        border-radius: 2px;
+        border-top: 1px solid var(--o-fg-divider);
+        border-top-left-radius: initial;
+      }
+    }
   }
 }
