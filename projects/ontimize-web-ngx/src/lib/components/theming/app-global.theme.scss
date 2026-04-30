@@ -104,6 +104,10 @@
         font-size: var(--o-font-subtitle-1-size);
       }
 
+      .mat-mdc-dialog-title.title-container {
+        display: flex;
+      }
+
 
       .empty-filter-list {
         color: var(--o-fg-disabled-text);
