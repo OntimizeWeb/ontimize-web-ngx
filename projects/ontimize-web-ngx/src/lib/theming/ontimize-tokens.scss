@@ -84,8 +84,8 @@
   --mat-table-row-item-outline-color: var(--o-fg-divider);
 
   --mat-app-surface-container: white;
-  --mat-outline: var(--o-fg-color);
-  --mat-divider-color: var(--o-fg-color);
+  --mat-outline: var(--o-fg-divider);
+  --mat-divider-color: var(--o-fg-divider);
 
   // ─── M3 sys surface tokens — fondos neutros (sin tinte de color M3) ────
   // M3 por defecto genera superficies con tinte lila/azul (#faf9fd, #efedf0).
