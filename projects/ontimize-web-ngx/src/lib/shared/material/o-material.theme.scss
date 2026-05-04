@@ -1,6 +1,35 @@
 @use '@angular/material' as mat;
 @use "sass:map";
 
+// Restores color="primary|accent|warn" support on mat-toolbar, mat-icon,
+// mat-progress-bar and mat-progress-spinner when using an M3 theme.
+// mat.color-variants-backwards-compatibility() handles buttons, checkboxes,
+// etc. but intentionally omits toolbar (toolbar has its own .mat-primary block
+// in M2 but not in M3). We use --o-* CSS variables so the tokens follow
+// the active Ontimize theme automatically.
+@mixin _mat-color-input-backwards-compatibility() {
+  .mat-toolbar {
+    &.mat-primary {
+      --mat-toolbar-container-background-color: var(--o-primary-500);
+      --mat-toolbar-container-text-color: var(--o-primary-contrast-500);
+    }
+    &.mat-accent {
+      --mat-toolbar-container-background-color: var(--o-accent-500);
+      --mat-toolbar-container-text-color: var(--o-accent-contrast-500);
+    }
+    &.mat-warn {
+      --mat-toolbar-container-background-color: var(--o-warn-500);
+      --mat-toolbar-container-text-color: var(--o-warn-contrast-500);
+    }
+  }
+
+  mat-icon {
+    &.mat-primary { --mat-icon-color: var(--o-primary-500); }
+    &.mat-accent  { --mat-icon-color: var(--o-accent-500); }
+    &.mat-warn    { --mat-icon-color: var(--o-warn-500); }
+  }
+}
+
 // Create a theme.
 @mixin o-material-theme($theme-or-color-config, $typographyConfig: null) {
 
@@ -25,13 +54,16 @@
       & {
         @include mat.core();
         @include mat.all-component-themes($m3-theme);
+        @include mat.color-variants-backwards-compatibility($m3-theme);
       }
     } @else {
       html {
         @include mat.core();
         @include mat.all-component-themes($m3-theme);
+        @include mat.color-variants-backwards-compatibility($m3-theme);
       }
     }
+    @include _mat-color-input-backwards-compatibility();
   } @else if $typography {
     @include mat.core();
     @include mat.all-component-themes($theme-or-color-config);

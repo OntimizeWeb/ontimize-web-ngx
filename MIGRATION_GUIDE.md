@@ -614,3 +614,46 @@ el framework emite automáticamente:
 // Después
 .my-class { font-size: var(--o-font-body-2-size); }
 ```
+
+### `mat-toolbar color="primary"` / `mat-icon color="accent"` no aplica color
+
+**Causa**: Angular Material 18 usa un theme M3 internamente. El mixin `toolbar.color()` de Material solo emite los selectores `.mat-primary`/`.mat-accent`/`.mat-warn` cuando el tema es M2 (`get-theme-version == 0`). Con M3 esos selectores no se generan.
+
+El mismo problema afecta en menor medida a `mat-icon`, `mat-progress-bar` y `mat-progress-spinner` — aunque para estos `mat.color-variants-backwards-compatibility()` sí los cubre.
+
+**Solución**: el framework lo gestiona internamente desde la versión 18.0.0. No es necesario hacer nada en el consumer. Si en un addon propio tienes este problema, añade en tu theming:
+
+```scss
+// Restaura color="primary|accent|warn" en mat-toolbar con M3 theme
+.mat-toolbar {
+  &.mat-primary {
+    --mat-toolbar-container-background-color: var(--o-primary-500);
+    --mat-toolbar-container-text-color: var(--o-primary-contrast-500);
+  }
+  &.mat-accent {
+    --mat-toolbar-container-background-color: var(--o-accent-500);
+    --mat-toolbar-container-text-color: var(--o-accent-contrast-500);
+  }
+  &.mat-warn {
+    --mat-toolbar-container-background-color: var(--o-warn-500);
+    --mat-toolbar-container-text-color: var(--o-warn-contrast-500);
+  }
+}
+```
+
+> Los tokens `--mat-toolbar-container-background-color` y `--mat-toolbar-container-text-color` son los que el CSS del componente `mat-toolbar` lee internamente. El texto en color se hereda al resto de elementos hijos via `color: var(--mat-toolbar-container-text-color)` en el host.
+
+### Componentes de addons con `*ngIf`/`*ngFor` en templates
+
+**Causa**: los addons migrados a Angular 18 pueden seguir usando la sintaxis de directivas estructurales (`*ngIf`, `*ngFor`, `*ngSwitch`). Aunque Angular 18 sigue soportándolas, producen warnings de deprecación y en algunos casos conflictos con `OnPush` + `@ViewChild`.
+
+**Solución**: migrar templates a la nueva sintaxis de control flow:
+
+| Antes | Después |
+|---|---|
+| `*ngIf="cond"` | `@if (cond) { ... }` |
+| `*ngIf="cond; else tmpl"` | `@if (cond) { ... } @else { <ng-template> }` |
+| `*ngFor="let x of list"` | `@for (x of list; track x) { ... }` |
+| `[ngSwitch]="val"` + `*ngSwitchCase` | `@switch (val) { @case (a) { ... } @default { ... } }` |
+
+El `NgIf`, `NgFor`, `NgSwitch` de `@angular/common` ya no necesitan importarse explícitamente en componentes standalone — la nueva sintaxis es nativa del compilador.

@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 29 abril 2026 (charts y map migrados; extra-components fixes post-migración; changelogs 18.0.0-next.0)
+> Última actualización: 5 mayo 2026
 
 ## Repositorios y ramas
 
@@ -10,11 +10,11 @@
 | **ontimize-web-ngx-extra-components** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-extra-components` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-gallery** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-gallery` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-playground** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-playground` | `migration/18.x.x` | ✅ Migrado |
-| **ontimize-web-ngx-filemanager** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-filemanager** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `migration/18.x.x` | 🔧 En progreso |
 | **ontimize-web-ngx-report** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-report` | `migration/18.x.x` | ✅ Migrado |
 | **ontimize-web-ngx-charts** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-charts` | `migration/18.x.x` | ✅ Migrado (28 abril 2026) |
 | **ontimize-web-ngx-map** | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-map` | `migration/18.x.x` | ✅ Migrado (28 abril 2026) |
-| **ontimize-web-ngx-quickstart** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | ⏳ Pendiente |
+| **ontimize-web-ngx-quickstart** (demo) | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `migration/18.x.x` | 🔧 En progreso |
 
 ## Versiones actuales en migration/18.x.x
 
@@ -405,13 +405,29 @@ Migración incremental Angular 15→16→17→18.
 | `4dc33af` | `o-image-editor`: `border-radius:0`, ocultar `mat-pseudo-checkbox` |
 | `510df53` | `o-image-editor`: `alignImage="center"`, `flex:1 1 0`, `box-sizing:border-box` — overlay alineado, sin overflow |
 
-### ontimize-web-ngx (framework) — fixes post-migración (29 abril 2026)
+### ontimize-web-ngx (framework) — fixes post-migración (29 abril – 5 mayo 2026)
 
 | Commit | Descripción |
 |--------|-------------|
 | `be8fa00e` | Iconos Material para percent/currency, resize prefix/suffix icons a 20px |
 | `3e262509` | `o-button`: centrado vertical `mdc-button__label` |
 | `cd7eac1a` | `o-container`: `layoutAlignStyles` devuelve `{}` cuando `layout-align` no está seteado; changelog 18.0.0-next.0 |
+| `5157e6b1` | Fix: reemplazar SVG `ontimize:close` por icono `close` de Material |
+| `eec69dce` | `NgTemplateOutlet` en export/filter dialogs de tabla; `box-sizing: border-box` y `padding: 8px` en `o-table-container`; `align-items: stretch` para que paginator se expanda |
+
+#### Fixes de UI/UX (4-5 mayo 2026)
+
+| Área | Descripción |
+|------|-------------|
+| **mat-paginator** | Estilos reescritos con CSS custom property tokens (`--mat-paginator-*`, `--mdc-icon-button-*`). Especificidad corregida para `--mdc-icon-button-state-layer-size: 24px` dentro de `.mat-mdc-paginator .mat-mdc-icon-button.mat-mdc-button-base` |
+| **o-form-layout-dialog** | `width: 65vw` / `height: 90vh` como defaults en `MatDialogConfig`; `maxWidth`/`maxHeight: 100%` para evitar el límite `80vw` de Material. `setFullscreenDialog` usa `overlayRef.updateSize()` para actualizar también `maxWidth`/`maxHeight` |
+| **o-form-layout-tabgroup** | Eliminada línea entre header y body; `padding: 8px` en `mat-mdc-tab-body-wrapper`; `box-sizing: border-box` en `o-table-container` evita overflow |
+| **mat-dialog title** | `display: flex` en `.mat-mdc-dialog-title.title-container` para sobreescribir el `display: block` de Material (especificidad 0-3-0) |
+| **o-app-sidenav** | Selectores de elemento (`o-app-sidenav-menu-group`, `o-app-sidenav-menu-item`) con `width: 100%; overflow: hidden` para cadena flex correcta; `overflow: hidden` en `<a>` sobreescribe `overflow: visible` de MDC |
+| **o-table-header-select-all** | `width: 100%` en host para heredar el `30px` del `<th>.mat-column-select` |
+| **ontimize-tokens** | `--o-fg-color` (token sin definir) reemplazado por `--o-fg-divider` en `--mat-outline` y `--mat-divider-color` |
+| **matBadge aria-hidden** | `aria-hidden="false"` en `mat-icon` con `matBadge` en `o-search-input` y `o-table-quickfilter` |
+| **mat-toolbar `color` input** | `color="primary/accent/warn"` en `mat-toolbar` no funcionaba con M3 theme (el mixin `color()` de toolbar solo emite `.mat-primary` para M2). Fix: mixin `_mat-color-input-backwards-compatibility()` en `o-material.theme.scss` que setea `--mat-toolbar-container-background-color` y `--mat-toolbar-container-text-color` con tokens `--o-*`. Además `mat.color-variants-backwards-compatibility($m3-theme)` restaura `color` input en `mat-icon`, `mat-progress-bar`, `mat-progress-spinner` y otros |
 
 ### ontimize-web-ngx-report — ✅ COMPLETADO (24 abril 2026, rama `migration/18.x.x`)
 
@@ -440,17 +456,28 @@ El framework (`theming/m3`) tiene errores de compilación preexistentes no relac
 
 ## PENDIENTE
 
-### 1. Addons pendientes de migrar
+### 1. Addons en progreso
 
 | Addon | Ruta local | Rama actual | Plan |
 |-------|-----------|-------------|------|
-| `ontimize-web-ngx-filemanager` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `15.x.x` | ⏳ No iniciado |
-| `ontimize-web-ngx-quickstart` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `15.x.x` | ⏳ No iniciado |
+| `ontimize-web-ngx-filemanager` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-filemanager` | `migration/18.x.x` | 🔧 En progreso |
+| `ontimize-web-ngx-quickstart` | `C:\work\ontimize-web-ngx\18.x.x\ontimize-web-ngx-quickstart` | `migration/18.x.x` | 🔧 En progreso |
 
-#### Consideraciones por addon
+#### Estrategia de ramas y PRs
 
-- **filemanager**: usa `@angular/flex-layout` extensivamente; misma estrategia que report (clases `o-flex-*`). Dependencia `ngx-file-manager` — verificar compatibilidad con Angular 18.
-- **quickstart**: app de demostración, no librería — migración más sencilla. Actualizar `bootstrapModule` → `bootstrapApplication` y dependencias.
+La rama `18.x.x` fue creada como huérfana en todos los repos. La cadena de PRs por repo es:
+- `migration/16.x.x` → `16.x.x`
+- `migration/17.x.x` → `17.x.x`
+- `migration/18.x.x` → `18.x.x`
+
+Para el **filemanager**, dado que la migración está iniciándose ahora, se recomienda crear `16.x.x` y `17.x.x` desde `15.x.x` de forma incremental para mantener la historia limpia y las PRs navegables en GitHub.
+
+#### Fixes en curso — filemanager (4-5 mayo 2026)
+
+| Commit | Fix | Descripción |
+|--------|-----|-------------|
+| `ed8189b` | `FolderNameDialogComponent` | `OFileManagerTranslatePipe` añadido a `providers[]` para permitir `inject()` fuera del template; `*ngIf` → `@if` en template |
+| `75ed528` | Control flow — todos los templates | `*ngIf`/`*ngFor`/`*ngSwitch` → `@if`/`@for`/`@switch` en 7 templates: `o-table-extended`, `o-filemanager-table`, `download-progress`, `upload-progress`, `o-file-input-extended`, `change-name-dialog`, `o-table-column-renderer-filetype` |
 
 ### 2. Smoke test visual playground completo
 
