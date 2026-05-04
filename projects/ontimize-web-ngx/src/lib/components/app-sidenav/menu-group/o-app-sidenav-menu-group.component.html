@@ -50,7 +50,6 @@
         <mat-icon>{{ menuGroup.icon }}</mat-icon>
       }
       <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
-      <span class="fill-remaining"></span>
       @if (appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened) {
         <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow"
           (click)="toggle($event)"

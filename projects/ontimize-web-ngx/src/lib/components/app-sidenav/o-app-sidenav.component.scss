@@ -115,7 +115,6 @@ $transition-duration: 500ms;
         .sidenav-wrapper {
           height: 100%;
           width: 100%;
-          padding-bottom: 16px;
         }
       }
 
@@ -186,13 +185,24 @@ $transition-duration: 500ms;
           }
         }
 
-        .o-app-sidenav-menu-group,
-        .o-app-sidenav-menu-item {
+        o-app-sidenav-menu-group,
+        o-app-sidenav-menu-item {
+          // display: block;
+          // width: 100%;
+          // overflow: hidden;
+
+          // li, & {
+          //   width: 100%;
+          //   overflow: hidden;
+          // }
+
           a {
             padding: 0 16px;
             margin: 0;
             display: flex;
             width: 100%;
+            // box-sizing: border-box;
+            // overflow: hidden;
 
             .mdc-button__label {
               display: flex;
