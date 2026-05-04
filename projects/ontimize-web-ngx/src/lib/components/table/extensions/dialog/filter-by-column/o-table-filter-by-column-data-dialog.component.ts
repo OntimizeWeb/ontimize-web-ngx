@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -49,7 +49,7 @@ const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, 
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, MatSlideToggleModule, ScrollingModule, IsEmptyValuePipe, OTranslatePipe],
+  imports: [AsyncPipe, NgTemplateOutlet, FormsModule, ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, MatSlideToggleModule, ScrollingModule, IsEmptyValuePipe, OTranslatePipe],
   selector: 'o-table-filter-by-column-data-dialog',
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],

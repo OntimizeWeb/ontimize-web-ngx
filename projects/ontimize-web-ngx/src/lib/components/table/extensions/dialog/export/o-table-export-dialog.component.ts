@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -31,7 +32,7 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DragDropModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, OTranslatePipe],
+  imports: [NgTemplateOutlet, FormsModule, ReactiveFormsModule, DragDropModule, MatButtonModule, MatButtonToggleModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, OTranslatePipe],
   selector: 'o-table-export-dialog',
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],
