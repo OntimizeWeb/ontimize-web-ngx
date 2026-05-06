@@ -1,3 +1,28 @@
+## 18.0.0-next.1 (2026-05-06)
+
+### Features
+* **pagination**: improved pagination styles
+
+### Bug Fixes
+* **flex-layout**: add `o-flex-col-*` variants (`o-flex-col-20/45/50/80/100`) for column-direction flex containers — percentage classes use `max-height` instead of `max-width`, which is correct when the parent has `flex-direction: column`
+* **flex-layout**: add `box-sizing: border-box` to `o-flex-fill`, `o-flex-50/20/80/45/100` and `o-flex-50px` to prevent padding overflow
+* **theming**: restore `color` input support (`mat-primary` / `mat-accent` / `mat-warn`) for `mat-toolbar` and `mat-icon` with M3 theme via `_mat-color-input-backwards-compatibility()` mixin; add `mat.color-variants-backwards-compatibility()` for buttons, checkboxes and progress-bar
+* **theming**: updated `--mat-divider-color` and `--mat-outline` tokens
+* **table**: fix `NgTemplateOutlet` in dialogs, padding and `box-sizing` in `o-table-container`
+* **sidenav**: improved `o-app-sidenav` styles
+* **form-layout**: fix close icon in form-layout tabgroup; fix form layout manager styles
+* **form-layout**: replace `ontimize:close` SVG icon with standard `close` Material icon
+* **dialog**: fix dialog title styles
+* **tabs**: remove border in `.mat-mdc-tab-label-container`; improve tabgroup tab styles
+* **a11y**: add `aria-hidden="false"` to `mat-icon` with `matBadge`
+* **styles**: fix `o-grid` overflow — remove `padding-bottom` from `mat-grid-list`; add `display: flex` to `mat-tab-label-container` in `ontimize.scss`
+* **build**: add `compilationMode: "partial"` to `tsconfig.lib.json` (required for Angular 18 library publishing)
+
+### Miscellaneous
+* **migration**: document row vs column class selection (`o-flex-*` vs `o-flex-col-*`) in `MIGRATION_GUIDE.md`
+
+---
+
 ## 18.0.0-next.0 (2026-04-29)
 
 ### Features
