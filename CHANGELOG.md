@@ -2,6 +2,7 @@
 
 ### Features
 * **pagination**: improved pagination styles
+* **theming**: extended density system — new `ontimize-theme-density($scale)` and `ontimize-theme-density-extended($scale)` mixins exported from `ontimize-style.scss`. The extended mixin fills the gaps in Angular Material's density token table for scales `-4` and `-5` (`mat-form-field`, `mat-paginator`) and keeps `--o-button-height` in sync with the density scale (40/36/32/28/28/24px from 0 to -5). `ontimize-theme-styles` applies these overrides automatically when `$density` is set in the theme. Material's default of hiding the floating filled label from scale `-3` onwards is overridden — `--mat-form-field-filled-label-display: block` is forced on every scale, with reduced label `font-size` (12px / 11px) at deeper scales for legibility
 
 ### Bug Fixes
 * **flex-layout**: add `o-flex-col-*` variants (`o-flex-col-20/45/50/80/100`) for column-direction flex containers — percentage classes use `max-height` instead of `max-width`, which is correct when the parent has `flex-direction: column`
@@ -20,6 +21,7 @@
 
 ### Miscellaneous
 * **migration**: document row vs column class selection (`o-flex-*` vs `o-flex-col-*`) in `MIGRATION_GUIDE.md`
+* **migration**: rewrite section 3.5 of `MIGRATION_GUIDE.md` to document the extended density system, with token tables for all scales and four override options (factory, scope override, `map.merge`, per-component)
 
 ---
 
