@@ -45,11 +45,25 @@ Sustituye los atributos de plantilla:
 
 | Antes | Después |
 |---|---|
-| `fxLayout="row"` | `class="o-flex-row"` o CSS inline |
+| `fxLayout="row"` | `class="o-flex-row"` |
 | `fxLayout="column"` | `class="o-flex-column"` |
 | `fxLayoutAlign="start center"` | `class="o-layout-align-start-center"` |
 | `fxFlex` | `class="o-flex"` |
+| `fxFlex="grow"` | `class="o-flex-grow"` |
 | `fxLayoutGap="8px"` | `style="gap: 8px"` |
+| `fxFill` / `fxFlexFill` | `class="o-flex-fill"` |
+
+#### Clases de tamaño porcentual — row vs column
+
+Las clases `o-flex-50`, `o-flex-20`, `o-flex-80`, `o-flex-45`, `o-flex-100` usan `max-width` y están diseñadas para hijos de un contenedor **row**. Si el padre es `o-flex-column` (flex-direction: column), usa las variantes `o-flex-col-*` que usan `max-height` en su lugar:
+
+| `fxFlex` en padre **row** | `fxFlex` en padre **column** |
+|---|---|
+| `o-flex-20` | `o-flex-col-20` |
+| `o-flex-45` | `o-flex-col-45` |
+| `o-flex-50` | `o-flex-col-50` |
+| `o-flex-80` | `o-flex-col-80` |
+| `o-flex-100` | `o-flex-col-100` |
 
 Ontimize Web NGX 18 incluye clases CSS utilitarias equivalentes en `flex-layout.scss` (importado automáticamente por el tema).
 

@@ -2,7 +2,7 @@
 
 <div class="o-dual-list-selector-wrapper-selector-list">
 
-  <div class="o-dual-list-selector-list o-flex-column o-layout-align-start-stretch o-flex-50">
+  <div class="o-dual-list-selector-list o-flex-column o-layout-align-start-stretch o-flex-col-50">
     <div class="o-dual-list-selector-source-wrapper o-flex-row o-flex">
       <mat-selection-list class="o-flex" cdkDropList id="item-source-list" #itemsList [cdkDropListData]="dataSource"
         [cdkDropListConnectedTo]="['item-destination-list']" (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <div class="o-dual-list-selector-list o-flex-column o-layout-align-start-stretch o-flex-50">
+  <div class="o-dual-list-selector-list o-flex-column o-layout-align-start-stretch o-flex-col-50">
     <div class="o-dual-list-selector-destination-wrapper o-flex-row o-flex">
       <mat-selection-list class="o-flex" cdkDropList id="item-destination-list" #selectedItemsList [cdkDropListData]="dataDestination"
         [cdkDropListConnectedTo]="['item-source-list']" (cdkDropListDropped)="drop($event)">
