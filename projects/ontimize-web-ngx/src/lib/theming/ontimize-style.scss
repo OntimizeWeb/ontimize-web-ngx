@@ -77,8 +77,10 @@
   }
 
   // ─── Density ─────────────────────────────────────────────────
+  // Emits Material's density tokens AND Ontimize's extended overrides
+  // (form-field at scales -4/-5, --o-button-height per scale, label visibility).
   @if $density != null {
-    @include mat.all-component-densities($density);
+    @include ontimize-theme-density-extended($density);
   }
 
 
@@ -98,4 +100,137 @@
 @mixin ontimize-theme-all-component-color($theme-or-color-config) {
   $color: map.get($theme-or-color-config, color);
   @include ontimize-theme-styles((color: $color, typography: null, density: null));
+}
+
+// ─── Density-only mixin ─────────────────────────────────────────────────────
+//
+// Emits only the Material density tokens (--mdc-* / --mat-*) for the given
+// scale, without touching color or typography.
+//
+// Use this to override the density set by ontimize-theme-styles() in a
+// specific selector or at :root after the main theme has been applied:
+//
+//   // Reset to standard density for a specific container:
+//   .my-dense-zone {
+//     @include ontimize-style.ontimize-theme-density(-4);
+//   }
+//
+//   // Or override globally after the theme:
+//   @include ontimize-style.ontimize-theme-density(0);
+//
+// Valid scales: 0 (standard) → -5 (most compact). Default Material scale
+// for Ontimize is -2.
+//
+@mixin ontimize-theme-density($scale) {
+  @include mat.all-component-densities($scale);
+}
+
+// ─── Extended density tokens table ──────────────────────────────────────────
+//
+// Angular Material's density token table (in @angular/material/core/tokens/
+// _density.scss) does NOT cover scales -4 / -5 for several components such as
+// mat-form-field. When mat.all-component-densities(-4) or (-5) is invoked,
+// Material clamps those tokens to the last defined value (typically -3).
+//
+// This map fills the gap with the values that follow Material's same step
+// progression. Keys are the density scale; values are maps of CSS custom
+// property → value.
+//
+// Also includes --o-button-height (Ontimize-specific token) so button heights
+// stay coherent with the chosen density scale. See ontimize-tokens.scss for
+// where --o-button-height feeds into --mdc-*-button-container-height.
+//
+// Note on filled-label-display:
+// Angular Material's density table sets `filled-label-display: none` from
+// scale -3 onwards, hiding the floating label inside filled form fields at
+// high density. We force it to `block` for all scales because Ontimize forms
+// rely on the label being visible (mat-label is part of the field semantics,
+// not just decoration). To keep the label readable when the field shrinks,
+// we also reduce the label font-size at deeper scales.
+//
+$_extended-density-tokens: (
+   0: (
+    --mat-form-field-filled-label-display: block,
+    --o-button-height: 40px,
+  ),
+  -1: (
+    --mat-form-field-filled-label-display: block,
+    --o-button-height: 36px,
+  ),
+  -2: (
+    --mat-form-field-filled-label-display: block,
+    --o-button-height: 32px,
+  ),
+  -3: (
+    --mat-form-field-filled-label-display: block,
+    --mdc-filled-text-field-label-text-size: 12px,
+    --mdc-outlined-text-field-label-text-size: 12px,
+    --o-button-height: 28px,
+  ),
+  -4: (
+    --mat-form-field-container-height: 40px,
+    --mat-form-field-container-vertical-padding: 8px,
+    --mat-form-field-filled-with-label-container-padding-top: 12px,
+    --mat-form-field-filled-with-label-container-padding-bottom: 4px,
+    --mat-form-field-filled-label-display: block,
+    --mdc-filled-text-field-label-text-size: 12px,
+    --mdc-outlined-text-field-label-text-size: 12px,
+    --mat-paginator-container-size: 36px,
+    --o-button-height: 28px,
+  ),
+  -5: (
+    --mat-form-field-container-height: 36px,
+    --mat-form-field-container-vertical-padding: 6px,
+    --mat-form-field-filled-with-label-container-padding-top: 12px,
+    --mat-form-field-filled-with-label-container-padding-bottom: 4px,
+    --mat-form-field-filled-label-display: block,
+    --mdc-filled-text-field-label-text-size: 11px,
+    --mdc-outlined-text-field-label-text-size: 11px,
+    --mat-paginator-container-size: 32px,
+    --o-button-height: 24px,
+  ),
+);
+
+// ─── Extended density mixin ─────────────────────────────────────────────────
+//
+// Same as ontimize-theme-density() but also emits manual overrides for
+// components whose density tokens are not defined for deeper scales (-4, -5)
+// in Angular Material's table — primarily mat-form-field and mat-paginator.
+//
+// Also keeps --o-button-height in sync with the density scale.
+//
+// Use this mixin instead of ontimize-theme-density() when targeting -4 / -5,
+// or when you want the button height to follow the density scale.
+//
+//   .o-high-density {
+//     @include ontimize-style.ontimize-theme-density-extended(-4);
+//   }
+//
+//   // Or globally after the theme:
+//   @include ontimize-style.ontimize-theme-styles(theme.$theme);   // -2 default
+//   @include ontimize-style.ontimize-theme-density-extended(-4);   // override
+//
+@mixin ontimize-theme-density-extended($scale) {
+  @include mat.all-component-densities($scale);
+
+  $overrides: map.get($_extended-density-tokens, $scale);
+  @if $overrides {
+    // Emit overrides in the same scope Material uses (current selector
+    // or :root via `html`). This guarantees the tokens land on the same
+    // element where mat.all-component-densities() wrote them, so the
+    // cascade order (overrides emitted after) decides the winner.
+    @if & {
+      & {
+        @each $token, $value in $overrides {
+          #{$token}: #{$value};
+        }
+      }
+    } @else {
+      html {
+        @each $token, $value in $overrides {
+          #{$token}: #{$value};
+        }
+      }
+    }
+  }
 }

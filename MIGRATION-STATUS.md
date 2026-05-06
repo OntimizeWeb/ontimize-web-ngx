@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 5 mayo 2026
+> Última actualización: 6 mayo 2026
 
 ## Repositorios y ramas
 
@@ -428,6 +428,21 @@ Migración incremental Angular 15→16→17→18.
 | **ontimize-tokens** | `--o-fg-color` (token sin definir) reemplazado por `--o-fg-divider` en `--mat-outline` y `--mat-divider-color` |
 | **matBadge aria-hidden** | `aria-hidden="false"` en `mat-icon` con `matBadge` en `o-search-input` y `o-table-quickfilter` |
 | **mat-toolbar `color` input** | `color="primary/accent/warn"` en `mat-toolbar` no funcionaba con M3 theme (el mixin `color()` de toolbar solo emite `.mat-primary` para M2). Fix: mixin `_mat-color-input-backwards-compatibility()` en `o-material.theme.scss` que setea `--mat-toolbar-container-background-color` y `--mat-toolbar-container-text-color` con tokens `--o-*`. Además `mat.color-variants-backwards-compatibility($m3-theme)` restaura `color` input en `mat-icon`, `mat-progress-bar`, `mat-progress-spinner` y otros |
+
+#### Sistema de densidad extendido (6 mayo 2026)
+
+Angular Material no define tokens de densidad para `mat-form-field` ni `mat-paginator` en escalas `-4` y `-5` — clamp al último valor de `-3`. Implementado un sistema de overrides en `ontimize-style.scss` para cubrir esas escalas y mantener `--o-button-height` coherente con la densidad del tema.
+
+| Cambio | Descripción |
+|---|---|
+| `ontimize-theme-density($scale)` | Mixin público que aplica `mat.all-component-densities($scale)` en el selector llamante |
+| `$_extended-density-tokens` | Tabla privada con overrides por escala (0 a -5) para `mat-form-field`, `mat-paginator` y `--o-button-height` |
+| `ontimize-theme-density-extended($scale)` | Mixin público que combina `mat.all-component-densities` + overrides extendidos. `ontimize-theme-styles` lo usa internamente |
+| Label flotante | `--mat-form-field-filled-label-display: block` forzado en todas las escalas (Material la oculta desde -3) |
+| Label font-size | Reducido a 12px (-3), 11px (-4/-5) para legibilidad en escalas profundas |
+| `--o-button-height` por escala | 40px (0), 36px (-1), 32px (-2), 28px (-3/-4), 24px (-5) — antes hardcodeado a 32px |
+| Form-field container-height | 40px (-4), 36px (-5) — antes clamp a 44px |
+| Paginator container-size | 36px (-4), 32px (-5) — antes clamp a 40px |
 
 ### ontimize-web-ngx-report — ✅ COMPLETADO (24 abril 2026, rama `migration/18.x.x`)
 

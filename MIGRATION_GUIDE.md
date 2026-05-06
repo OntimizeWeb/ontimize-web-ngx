@@ -206,13 +206,14 @@ $theme: ontimize-style.o-mat-light-theme(
 El tema `oxygen` incluido en el framework usa `$density: -4` por defecto
 (look compacto). Para formas más aireadas o más compactas, pásale otro valor.
 
-> **Altura de botones**: el framework fija todos los botones a **32 px** mediante
-> el token `--o-button-height` emitido en `:root`. Los tokens MDC derivados
-> (`--mdc-text-button-container-height`, `--mdc-filled-button-container-height`,
-> `--mdc-protected-button-container-height`, `--mdc-outlined-button-container-height`)
-> se emiten globalmente, por lo que afectan a todos los botones de la aplicación,
-> no solo a los `o-button`. Si necesitas un valor diferente, sobrescribe
-> `--o-button-height` en el scope deseado:
+> **Altura de botones**: el framework controla la altura de todos los botones
+> mediante el token `--o-button-height`, que se ajusta automáticamente con
+> la escala de densidad del tema (40px en escala 0, 32px en `-2` por defecto,
+> 24px en `-5`). Los tokens MDC derivados (`--mdc-text-button-container-height`,
+> `--mdc-filled-button-container-height`, `--mdc-protected-button-container-height`,
+> `--mdc-outlined-button-container-height`) leen `--o-button-height` y afectan
+> a todos los botones de la aplicación. Si necesitas un valor diferente,
+> sobrescríbelo en el scope deseado:
 >
 > ```scss
 > html { --o-button-height: 36px; }         // global
@@ -296,40 +297,77 @@ Si no necesitas paletas personalizadas, puedes usar directamente el tema azul de
 
 Material 3 aplica la density definida en el theme. El factory
 `o-mat-light-theme` / `o-mat-dark-theme` acepta el parámetro `$density`
-(defecto `-2`, compact). Tres formas equivalentes, de más a menos
-recomendada:
+(defecto `-2`, compact). Valores válidos: `0` (default Material), `-1`, `-2`, `-3`, `-4`, `-5`.
 
 **Opción A — Parámetro del factory (recomendado)**
 
 ```scss
 $theme: ontimize-style.o-mat-light-theme(
   $primary, $accent,
-  $density: -1
+  $density: -4
 );
+
+@include ontimize-style.ontimize-theme-styles($theme);
 ```
 
-**Opción B — `map.merge` sobre un tema ya construido**
+`ontimize-theme-styles` aplica internamente `ontimize-theme-density-extended($density)`, que emite los tokens nativos de Material y además los overrides extendidos descritos abajo.
+
+**Opción B — Sobrescribir la densidad por scope**
+
+Para aplicar una densidad distinta en una zona concreta de la app después de aplicar el tema:
+
+```scss
+@include ontimize-style.ontimize-theme-styles(theme.$theme);  // densidad del tema
+
+.compact-zone {
+  @include ontimize-style.ontimize-theme-density-extended(-5);
+}
+
+.relaxed-zone {
+  @include ontimize-style.ontimize-theme-density-extended(0);
+}
+```
+
+**Opción C — `map.merge` sobre un tema ya construido**
 
 ```scss
 @use "sass:map";
 @use "ontimize-web-ngx/theming/themes/oxygen" as theme;
 
-$theme-compact: map.merge(theme.$theme, (density: -1));
+$theme-compact: map.merge(theme.$theme, (density: -4));
 
 @include ontimize-style.ontimize-theme-styles($theme-compact);
 ```
 
-**Opción C — Por componente Material**
+#### Sistema de densidad extendido
+
+Angular Material define los tokens de densidad en `@angular/material/core/tokens/_density.scss` como listas indexadas por escala. Cuando se pide una escala más profunda que la lista de un componente, Material hace clamp al último valor definido. **`mat-form-field` y `mat-paginator` no tienen valores para `-4`/`-5`** — sus tokens se quedan en los valores de `-3`.
+
+Ontimize exporta `ontimize-theme-density-extended($scale)` (usado internamente por `ontimize-theme-styles`) que añade overrides manuales para esos componentes y mantiene `--o-button-height` coherente con la escala.
+
+| Token | escala 0 | -1 | -2 (default) | -3 | -4 | -5 |
+|---|---|---|---|---|---|---|
+| `--o-button-height` | 40px | 36px | 32px | 28px | 28px | 24px |
+| `--mat-form-field-container-height` | 56px (Mat) | 52px (Mat) | 48px (Mat) | 44px (Mat) | **40px** | **36px** |
+| `--mat-form-field-container-vertical-padding` | 16px (Mat) | 14px (Mat) | 12px (Mat) | 10px (Mat) | **8px** | **6px** |
+| `--mat-form-field-filled-label-display` | **block** | **block** | **block** | **block** | **block** | **block** |
+| `--mdc-filled-text-field-label-text-size` | default | default | default | **12px** | **11px** | **11px** |
+| `--mat-paginator-container-size` | 56px (Mat) | 52px (Mat) | 48px (Mat) | 40px (Mat) | **36px** | **32px** |
+
+Notas:
+- **Label flotante siempre visible**: Material por defecto fija `filled-label-display: none` desde escala `-3`. Ontimize la fuerza a `block` en todas las escalas porque `mat-label` es parte de la semántica del campo.
+- **Tamaño de label reducido en escalas profundas** (`-3` a `-5`) para mantener legibilidad cuando el campo se reduce.
+- **`--o-button-height` por escala**: el token Ontimize que controla todos los botones MDC se ajusta automáticamente.
+
+**Opción D — Por componente Material individual**
 
 ```scss
 @use '@angular/material' as mat;
 
-@include mat.form-field-density(-2);
-@include mat.list-density(-1);
-@include mat.tree-density(-2);
+.zona-form-compacto {
+  @include mat.form-field-density(-3);
+}
 ```
-
-Valores válidos: `0` (default Material), `-1`, `-2`, `-3`, `-4`, `-5`.
 
 ---
 
