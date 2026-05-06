@@ -164,24 +164,28 @@
 .o-flex-50 {
   flex: 1 1 50%;
   max-width: 50%;
+  box-sizing: border-box;
 }
 
 // fxFlex="20%" / fxFlex="20"
 .o-flex-20 {
   flex: 1 1 20%;
   max-width: 20%;
+  box-sizing: border-box;
 }
 
 // fxFlex="80" / fxFlex="80%"
 .o-flex-80 {
   flex: 1 1 80%;
   max-width: 80%;
+  box-sizing: border-box;
 }
 
 // fxFlex="45" (used in card-menu-item when secondary visible)
 .o-flex-45 {
   flex: 1 1 45%;
   max-width: 45%;
+  box-sizing: border-box;
 }
 
 // fxFlex="50px"
@@ -189,12 +193,14 @@
   flex: 0 0 50px;
   max-width: 50px;
   min-width: 50px;
+  box-sizing: border-box;
 }
 
 // fxFlex="1 1 100%"
 .o-flex-100 {
   flex: 1 1 100%;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 // fxFlex="0 1 auto"
@@ -208,6 +214,7 @@
   height: 100%;
   min-width: 100%;
   min-height: 100%;
+  box-sizing: border-box;
 }
 
 // ─── Gap utilities (replaces fxLayoutGap with fixed values) ─────────────────

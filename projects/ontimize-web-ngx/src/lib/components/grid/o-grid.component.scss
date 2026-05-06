@@ -84,7 +84,11 @@
 
     .o-mat-grid-list {
       overflow: auto;
-      //padding-bottom: 0 !important;
+
+      mat-grid-list,
+      .mat-grid-list {
+        padding-bottom: 0;
+      }
     }
 
     .o-grid-footer,
