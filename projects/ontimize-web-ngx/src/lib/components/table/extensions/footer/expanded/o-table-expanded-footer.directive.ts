@@ -40,9 +40,11 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.element.nativeElement.childNodes[2]) {
-      this.tableBody = this.element.nativeElement.childNodes[1];
-    }
+    // Locate <tbody> by tag name. Indexing childNodes by position is unsafe
+    // because text nodes (whitespace) shift the indices depending on how the
+    // template is formatted, which previously caused the "no results" row
+    // to be appended inside <thead> instead of <tbody>.
+    this.tableBody = this.element.nativeElement.querySelector(':scope > tbody');
     this.registerContentChange();
   }
 
