@@ -14,7 +14,7 @@
           background: var(--o-bg-level-04);
 
           &[aria-selected="true"] {
-            background-color: var(--o-primary-100);
+            background-color: color-mix(in srgb, var(--mat-sys-primary) 20%, transparent);
 
             .mdc-list-item__secondary-text {
               color: var(--o-fg-text);

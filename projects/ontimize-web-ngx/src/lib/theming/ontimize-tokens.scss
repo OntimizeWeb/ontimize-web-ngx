@@ -1,74 +1,63 @@
 // =============================================================================
-// ontimize-tokens.scss — Ontimize custom CSS tokens (M3-compatible)
+// ontimize-tokens.scss — Ontimize custom CSS tokens (Material 3 native)
 // =============================================================================
 //
 // This file does NOT emit any CSS on its own. It exposes the mixin
-// `o-apply-tokens($theme)` which generates all `--o-*` CSS custom properties
-// from an Ontimize theme object (M2-shape with color.primary, color.accent,
-// color.warn, color.background, color.foreground).
-//
-// Each theme (themes/oxygen.scss, themes/ontimize-blue.scss, etc.) is
-// responsible for calling `@include o-apply-tokens($theme)` inside a selector
-// (`:root`, `.o-dark`, or a scoped class) so the variables become effective.
+// `o-apply-tokens($theme)` which generates the `--o-*` and Material `--mat-*`
+// CSS custom properties from an Ontimize theme object built by
+// o-mat-light-theme / o-mat-dark-theme.
 //
 // Token families emitted:
-//   --o-primary-{50..900,A100..A700}            Ontimize primary palette
-//   --o-primary-contrast-{50..900,A100..A700}   on-primary text colour
-//   --o-accent-{...}                            Ontimize accent palette
-//   --o-accent-contrast-{...}                   on-accent text colour
-//   --o-warn-{...}                              Ontimize warn palette
-//   --o-warn-contrast-{...}                     on-warn text colour
 //   --o-bg-level-{0,04,06,08,1}                 background elevation levels
 //   --o-bg-sidenav-overlay                      sidenav overlay colour
 //   --o-bg-status-bar, --o-bg-app-bar           top-bar backgrounds
 //   --o-bg-card, --o-bg-background              surface backgrounds
 //   --o-fg-text, --o-fg-secondary-text, …       foreground roles
+//   --o-font-<level>-size/line-height/weight    typography per Ontimize level
+//   --o-button-height, --o-input-icon-size      Ontimize component sizing
+//   --mat-sys-surface*                          M3 neutral surface overrides
+//   --mat-*-container-color (per component)     M3 component background overrides
+//
+// Branding colours (primary / tertiary / error) are NOT emitted as `--o-*`.
+// Use the Material 3 system tokens instead:
+//   var(--mat-sys-primary)            — primary colour
+//   var(--mat-sys-on-primary)         — text/icon over primary
+//   var(--mat-sys-primary-container)  — primary tonal container (light tint)
+//   var(--mat-sys-tertiary)           — tertiary (was "accent" in M2)
+//   var(--mat-sys-error)              — error (was "warn" in M2)
 // =============================================================================
 
 @use "sass:map";
 @use "sass:meta";
-@use '@angular/material' as mat;
-
-// ─── Helper: safely extract colour from palette (returns null if absent) ────
-@function -get($palette, $hue) {
-  @if $palette ==null {
-    @return null;
-  }
-
-  @return mat.m2-get-color-from-palette($palette, $hue);
-}
 
 @function -get-bg($bg, $key, $fallback: null) {
-  @if $bg ==null {
+  @if $bg == null {
     @return $fallback;
   }
 
   $value: map.get($bg, $key);
-  @return if($value ==null, $fallback, $value);
+  @return if($value == null, $fallback, $value);
 }
 
 @function -get-fg($fg, $key, $fallback: null) {
-  @if $fg ==null {
+  @if $fg == null {
     @return $fallback;
   }
 
   $value: map.get($fg, $key);
-  @return if($value ==null, $fallback, $value);
+  @return if($value == null, $fallback, $value);
 }
 
 // ─── Main mixin ─────────────────────────────────────────────────────────────
-// Emits `--o-*` CSS custom properties derived from the given Ontimize theme.
+// Emits `--o-*` CSS custom properties + a few `--mat-*` overrides derived
+// from the given Ontimize theme.
 //
 // Usage (inside a selector such as :root or .o-dark):
 //   @include tokens.o-apply-tokens(my-theme.$theme);
 
 @mixin o-apply-tokens($theme) {
-  $color: map.get($theme, color);
-  $primary: map.get($color, primary);
-  $accent: map.get($color, accent);
-  $warn: map.get($color, warn);
-  $background: map.get($color, background);
-  $foreground: map.get($color, foreground);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
   $typography: map.get($theme, typography);
 
   // button height — applied globally to all MDC button variants
@@ -200,67 +189,6 @@
       }
     }
   }
-  // ─── Primary palette ────────────────────────────────────────
-  --o-primary-50: #{-get($primary, 50)};
-  --o-primary-100: #{-get($primary, 100)};
-  --o-primary-200: #{-get($primary, 200)};
-  --o-primary-300: #{-get($primary, 300)};
-  --o-primary-400: #{-get($primary, 400)};
-  --o-primary-500: #{-get($primary, 500)};
-  --o-primary-600: #{-get($primary, 600)};
-  --o-primary-700: #{-get($primary, 700)};
-  --o-primary-800: #{-get($primary, 800)};
-  --o-primary-900: #{-get($primary, 900)};
-  --o-primary-A100: #{-get($primary, A100)};
-  --o-primary-A200: #{-get($primary, A200)};
-  --o-primary-A400: #{-get($primary, A400)};
-  --o-primary-A700: #{-get($primary, A700)};
-
-  --o-primary-contrast-50: #{-get($primary, '50-contrast')};
-  --o-primary-contrast-100: #{-get($primary, '100-contrast')};
-  --o-primary-contrast-200: #{-get($primary, '200-contrast')};
-  --o-primary-contrast-300: #{-get($primary, '300-contrast')};
-  --o-primary-contrast-400: #{-get($primary, '400-contrast')};
-  --o-primary-contrast-500: #{-get($primary, '500-contrast')};
-  --o-primary-contrast-600: #{-get($primary, '600-contrast')};
-  --o-primary-contrast-700: #{-get($primary, '700-contrast')};
-  --o-primary-contrast-800: #{-get($primary, '800-contrast')};
-  --o-primary-contrast-900: #{-get($primary, '900-contrast')};
-  --o-primary-contrast-A100: #{-get($primary, 'A100-contrast')};
-  --o-primary-contrast-A200: #{-get($primary, 'A200-contrast')};
-  --o-primary-contrast-A400: #{-get($primary, 'A400-contrast')};
-  --o-primary-contrast-A700: #{-get($primary, 'A700-contrast')};
-
-  // ─── Accent palette ─────────────────────────────────────────
-  --o-accent-50: #{-get($accent, 50)};
-  --o-accent-100: #{-get($accent, 100)};
-  --o-accent-200: #{-get($accent, 200)};
-  --o-accent-300: #{-get($accent, 300)};
-  --o-accent-400: #{-get($accent, 400)};
-  --o-accent-500: #{-get($accent, 500)};
-  --o-accent-600: #{-get($accent, 600)};
-  --o-accent-700: #{-get($accent, 700)};
-  --o-accent-800: #{-get($accent, 800)};
-  --o-accent-900: #{-get($accent, 900)};
-  --o-accent-A100: #{-get($accent, A100)};
-  --o-accent-A200: #{-get($accent, A200)};
-  --o-accent-A400: #{-get($accent, A400)};
-  --o-accent-A700: #{-get($accent, A700)};
-
-  --o-accent-contrast-500: #{-get($accent, '500-contrast')};
-
-  // ─── Warn palette ───────────────────────────────────────────
-  --o-warn-50: #{-get($warn, 50)};
-  --o-warn-100: #{-get($warn, 100)};
-  --o-warn-200: #{-get($warn, 200)};
-  --o-warn-300: #{-get($warn, 300)};
-  --o-warn-400: #{-get($warn, 400)};
-  --o-warn-500: #{-get($warn, 500)};
-  --o-warn-600: #{-get($warn, 600)};
-  --o-warn-700: #{-get($warn, 700)};
-  --o-warn-800: #{-get($warn, 800)};
-  --o-warn-900: #{-get($warn, 900)};
-  --o-warn-contrast-500: #{-get($warn, '500-contrast')};
 
   // ─── Background levels ─────────────────────────────────────
   --o-bg-background: #{-get-bg($background, background)};

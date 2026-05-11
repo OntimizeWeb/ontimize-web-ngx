@@ -1,3 +1,50 @@
+## 18.0.0-next.2 (2026-05-08)
+
+### BREAKING CHANGES
+* **theming**: `o-mat-light-theme` and `o-mat-dark-theme` now follow Material 3's native API. The factory accepts a single config map (M3 shape) instead of positional `$primary`/`$accent`/`$warn`/`$typography`/`$density` arguments. Custom palettes built with `mat.m2-define-palette` are no longer accepted — pass a Material 3 palette: a predefined one (`mat.$azure-palette`, `mat.$rose-palette`, etc.) or one generated via `ng generate @angular/material:m3-theme`. The `$accent` and `$warn` parameters are removed (M3 has no `accent`; `warn` is auto-derived as `error`). New optional `tertiary` parameter follows M3 semantics.
+
+  Before (`18.0.0-next.1`):
+  ```scss
+  $primary: mat.m2-define-palette($my-palette);
+  $accent:  mat.m2-define-palette($my-palette);
+  $theme: ontimize-style.o-mat-light-theme($primary, $accent, $warn, $typography, -2);
+  ```
+
+  After (`18.0.0-next.2`):
+  ```scss
+  $theme: ontimize-style.o-mat-light-theme((
+    primary:    mat.$azure-palette,           // M3 palette (predefined or generated via CLI)
+    tertiary:   mat.$blue-palette,            // optional
+    typography: my-typography.$typography,
+    density:    -2,
+  ));
+  ```
+
+* **theming**: `--o-primary-{50..900,A100..A700}`, `--o-primary-contrast-*`, `--o-accent-*`, `--o-accent-contrast-*`, `--o-warn-*` and `--o-warn-contrast-*` CSS custom properties are no longer emitted. Custom SCSS that read these tokens must migrate to Material 3 system tokens:
+
+  | Old `--o-*` token | New M3 token |
+  |---|---|
+  | `--o-primary-500` | `--mat-sys-primary` |
+  | `--o-primary-contrast-500` | `--mat-sys-on-primary` |
+  | `--o-primary-50` / `-100` (tints) | `--mat-sys-primary-container` or `color-mix(in srgb, var(--mat-sys-primary) X%, transparent)` |
+  | `--o-primary-800` (deep tone) | `--mat-sys-on-primary-container` |
+  | `--o-accent-500` | `--mat-sys-tertiary` |
+  | `--o-accent-contrast-500` | `--mat-sys-on-tertiary` |
+  | `--o-accent-100` | `--mat-sys-tertiary-container` |
+  | `--o-warn-500` | `--mat-sys-error` |
+  | `--o-warn-contrast-500` | `--mat-sys-on-error` |
+
+  All other `--o-*` tokens (`--o-bg-*`, `--o-fg-*`, `--o-font-*`, `--o-button-height`, `--o-input-icon-size`) are unchanged.
+
+### Features
+* **theming**: Material 3-native theming. Material's M3 token set is now generated from the consumer's primary palette (instead of the previous hardcoded `mat.$azure-palette` + `mat.$blue-palette`), so all `--mdc-*` and `--mat-sys-*` tokens emit the consumer's brand colour automatically — including `--mdc-filled-button-container-color`, slider/checkbox accents, ripples, focus indicators, etc. Previously these tokens leaked Material's default azure/blue colour regardless of the consumer's primary.
+* **theming**: Optional `tertiary` parameter (M3 role). When omitted, Material derives `tertiary` from `primary` automatically.
+
+### Bug Fixes
+* **theming**: fix `--mdc-filled-button-container-color` and other branded MDC tokens picking the hardcoded azure palette instead of the consumer's primary.
+
+---
+
 ## 18.0.0-next.1 (2026-05-06)
 
 ### Features

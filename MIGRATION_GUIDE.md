@@ -80,17 +80,20 @@ Ontimize Web NGX 18 incluye clases CSS utilitarias equivalentes en `flex-layout.
 @use 'ontimize-web-ngx/theming/ontimize-style-v8' as ontimize-style;
 ```
 
-**Después (Angular 18):**
+**Después (Angular 18, Material 3 nativo desde 18.0.0-next.2):**
 ```scss
 @use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
-
 @use '@angular/material' as mat;
 
-$primary: mat.m2-define-palette($mat-custom-primary);
-$accent:  mat.m2-define-palette($mat-custom-accent);
+// Paleta predefinida de Material 3
+$theme: ontimize-style.o-mat-light-theme((
+  primary:  mat.$azure-palette,
+  tertiary: mat.$blue-palette,    // opcional
+));
 
-$theme:      ontimize-style.o-mat-light-theme($primary, $accent);
-$dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);
+$dark-theme: ontimize-style.o-mat-dark-theme((
+  primary: mat.$azure-palette,
+));
 
 @include ontimize-style.ontimize-theme-styles($theme);
 
@@ -98,6 +101,125 @@ $dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);
   @include ontimize-style.ontimize-theme-all-component-color($dark-theme);
 }
 ```
+
+#### Cómo crear una paleta Material 3
+
+`primary` y `tertiary` deben ser **paletas Material 3** (mapas Sass con tonos `0..100`). Hay tres formas de obtener una paleta:
+
+**1. Paleta predefinida de Angular Material** (la más rápida)
+
+Angular Material 18 expone 12 paletas listas para usar:
+
+| Paleta | Tono base aproximado |
+|---|---|
+| `mat.$red-palette` | rojo |
+| `mat.$green-palette` | verde |
+| `mat.$blue-palette` | azul |
+| `mat.$yellow-palette` | amarillo |
+| `mat.$cyan-palette` | cian |
+| `mat.$magenta-palette` | magenta |
+| `mat.$orange-palette` | naranja |
+| `mat.$chartreuse-palette` | verde lima |
+| `mat.$spring-green-palette` | verde primavera |
+| `mat.$azure-palette` | azul cielo |
+| `mat.$violet-palette` | violeta |
+| `mat.$rose-palette` | rosa |
+
+```scss
+@use '@angular/material' as mat;
+
+$theme: ontimize-style.o-mat-light-theme((
+  primary: mat.$azure-palette,
+));
+```
+
+**2. Paleta custom generada por el CLI** (recomendado para branding corporativo)
+
+Si tu color de marca no encaja con ninguna predefinida, usa el schematic oficial de Angular Material que genera la paleta M3 completa a partir de un color HEX semilla:
+
+```bash
+ng generate @angular/material:m3-theme
+```
+
+El schematic te pregunta interactivamente:
+- **Primary color** (HEX, p. ej. `#1464a5`)
+- **Secondary / tertiary / neutral / neutral-variant / error** (opcionales — derivados del primary si se omiten)
+- **Output path** (dónde guardar el fichero, p. ej. `src/_my-theme.scss`)
+
+> ⚠️ **Adaptar la salida del schematic al factory de Ontimize**
+>
+> El schematic emite un fichero pensado para `mat.define-theme()` nativo, que **NO es compatible directamente** con `o-mat-light-theme`. La salida del schematic suele tener este aspecto:
+>
+> ```scss
+> // GENERADO POR EL SCHEMATIC — no usar tal cual
+> $theme: mat.define-theme((
+>   color: (
+>     theme-type: light,
+>     primary: $_primary,
+>     tertiary: $_tertiary,
+>   ),
+> ));
+> ```
+>
+> Para integrarlo con `o-mat-light-theme` / `o-mat-dark-theme`:
+>
+> 1. **Mantén** la definición de paletas (`$_palettes`, `$_primary`, `$_tertiary` con sus `map.merge`).
+> 2. **Reescribe** las dos últimas líneas pasando solo `primary` y `tertiary` al nivel raíz del config (sin envoltorio `color:`, sin `theme-type:`):
+>
+> ```scss
+> // VERSIÓN ADAPTADA A ONTIMIZE
+> $theme: ontimize-style.o-mat-light-theme((
+>   primary:  $_primary,
+>   tertiary: $_tertiary,
+> ));
+>
+> $dark-theme: ontimize-style.o-mat-dark-theme((
+>   primary:  $_primary,
+>   tertiary: $_tertiary,
+> ));
+> ```
+>
+> El `theme-type` lo fija automáticamente la propia función (`o-mat-light-theme` → light, `o-mat-dark-theme` → dark), así que no hay que pasarlo.
+
+> El algoritmo del schematic usa HCT (Hue/Chroma/Tone), que es el sistema oficial de Material 3 — los tonos se derivan de forma perceptualmente uniforme, no por interpolación lineal del color seed.
+
+**3. Paleta inline en SCSS** (avanzado)
+
+Si prefieres no añadir un fichero más, copia la paleta generada por el CLI directamente en tu tema. Una paleta M3 tiene esta estructura (los valores son los emitidos por el CLI para `#1464a5`):
+
+```scss
+$primary: (
+  0:   #000000,
+  10:  #001d36,
+  20:  #003259,
+  25:  #003d6b,
+  30:  #00497d,
+  35:  #005591,
+  40:  #0d61a2,
+  50:  #367abd,
+  60:  #5494d8,
+  70:  #70aff5,
+  80:  #9fcaff,
+  90:  #d1e4ff,
+  95:  #eaf1ff,
+  98:  #f8f9ff,
+  99:  #fdfcff,
+  100: #ffffff,
+);
+
+$theme: ontimize-style.o-mat-light-theme((
+  primary: $primary,
+));
+```
+
+Los tonos M3 son **distintos** a las escalas M2 (`50..900`). Algunos puntos clave:
+- `40` ≈ tono medio (equivalente al `500` M2 para el color principal)
+- `90` ≈ tono claro (`primary-container` se deriva de aquí en light themes)
+- `10`/`20` ≈ tonos oscuros (`on-primary-container` en light, fondo en dark)
+
+> No intentes generar la paleta a mano: el algoritmo HCT de Material es complejo. Usa el CLI o copia la salida del CLI.
+
+> ⚠️ **Breaking change en 18.0.0-next.2**: la firma del factory cambió de M2 (paletas `mat.m2-define-palette`, parámetros posicionales) a M3 (mapa de configuración, paletas Material 3). Ver sección [Migración a Material 3 nativo](#migracion-a-material-3-nativo-desde-18-0-0-next-1).
 
 > **Nota**: el import se llamaba `ontimize-style.v18` durante la transición;
 > desde la versión 18.0.0 final el sufijo `.v18` ha desaparecido. Actualiza
@@ -107,34 +229,31 @@ $dark-theme: ontimize-style.o-mat-dark-theme($primary, $accent);
 > internamente. No es necesario que el consumidor añada
 > `@use 'ontimize-web-ngx/theming/fonts/noto'` en su propio `styles.scss`.
 
-### 3.1.bis Nuevas API M3 y CSS custom properties `--o-*`
+### 3.1.bis CSS custom properties (Material 3 nativo)
 
-La versión 18 del framework genera internamente un theme Material 3 vía
-`mat.define-theme()` (Material emite los `--mat-*` tokens del sistema) y
-expone un juego paralelo de variables Ontimize bajo el prefijo `--o-*`:
+El framework 18.0.0-next.2 emite tokens **Material 3 nativos** (`--mat-sys-*`, `--mdc-*`) más un juego complementario Ontimize (`--o-*`):
 
-- Paletas derivadas de la paleta M2 declarada por el consumer: `--o-primary-50`,
-  `--o-primary-500`, `--o-primary-contrast-500`, `--o-accent-*`, `--o-warn-*`.
-- Foreground: `--o-fg-text`, `--o-fg-secondary-text`, `--o-fg-divider`,
-  `--o-fg-icon`, `--o-fg-disabled`, `--o-fg-title`, `--o-fg-hint`, …
-- Background: `--o-bg-card`, `--o-bg-background`, `--o-bg-level-0`,
-  `--o-bg-level-04`, `--o-bg-level-06`, `--o-bg-level-08`, `--o-bg-level-1`,
-  `--o-bg-status-bar`, `--o-bg-app-bar`, `--o-bg-sidenav-overlay`.
-- Typography: `--o-font-family` y, por cada level (`body-1`, `input`, `body-2`,
-  `subtitle-1`, `subtitle-2`, `headline-5`, `headline-6`, `caption`, `button`):
-  `--o-font-<level>-size`, `--o-font-<level>-line-height`,
-  `--o-font-<level>-weight`.
-  El level `input` controla el `font-size` de los `mat-form-field` y es
-  independiente de `body-1` para poder ajustarlos por separado.
+**Tokens de marca (M3 sys, generados desde la paleta del consumer):**
+- `--mat-sys-primary` · `--mat-sys-on-primary` · `--mat-sys-primary-container` · `--mat-sys-on-primary-container`
+- `--mat-sys-tertiary` · `--mat-sys-on-tertiary` · `--mat-sys-tertiary-container` · `--mat-sys-on-tertiary-container`
+- `--mat-sys-error` · `--mat-sys-on-error` · `--mat-sys-error-container` · `--mat-sys-on-error-container`
+- `--mat-sys-surface` · `--mat-sys-surface-container` · `--mat-sys-background`
 
-Para styles propios **no** llames a `mat.m2-get-color-from-palette()` ni a
-`mat.m2-font-size()`. Usa los tokens directamente:
+**Tokens Ontimize (`--o-*`):**
+- Foreground: `--o-fg-text`, `--o-fg-secondary-text`, `--o-fg-divider`, `--o-fg-icon`, `--o-fg-disabled`, `--o-fg-title`, `--o-fg-hint`, …
+- Background: `--o-bg-card`, `--o-bg-background`, `--o-bg-level-0`, `--o-bg-level-04`, `--o-bg-level-06`, `--o-bg-level-08`, `--o-bg-level-1`, `--o-bg-status-bar`, `--o-bg-app-bar`, `--o-bg-sidenav-overlay`.
+- Typography: `--o-font-family` y, por cada level (`body-1`, `input`, `body-2`, `subtitle-1`, `subtitle-2`, `headline-5`, `headline-6`, `caption`, `button`): `--o-font-<level>-size`, `--o-font-<level>-line-height`, `--o-font-<level>-weight`. El level `input` controla el `font-size` de los `mat-form-field` y es independiente de `body-1`.
+- Sizing: `--o-button-height`, `--o-input-icon-size`.
+
+> ⚠️ **Eliminado en 18.0.0-next.2**: los tokens `--o-primary-*`, `--o-accent-*`, `--o-warn-*` (y sus variantes `-contrast-*`) ya **no se emiten**. Ver sección [Migración a Material 3 nativo](#migracion-a-material-3-nativo-desde-18-0-0-next-1) para la tabla de equivalencias M3.
+
+Para styles propios **no** llames a `mat.m2-get-color-from-palette()`. Usa los tokens M3 directamente:
 
 ```scss
-// Antes
+// Antes (M2)
 .my-button { color: mat.m2-get-color-from-palette($primary, 500); }
-// Después
-.my-button { color: var(--o-primary-500); }
+// Después (M3 sys token)
+.my-button { color: var(--mat-sys-primary); }
 
 .my-label  { font-size: var(--o-font-body-2-size); }
 ```
@@ -191,16 +310,15 @@ el `$dark-theme`:
 
 ### 3.1.ter Factory con typography / density configurables
 
-`o-mat-light-theme` y `o-mat-dark-theme` admiten parámetros opcionales:
+`o-mat-light-theme` y `o-mat-dark-theme` aceptan un mapa de configuración Material 3:
 
 ```scss
-$theme: ontimize-style.o-mat-light-theme(
-  $primary,
-  $accent,
-  $warn:       mat.m2-define-palette(mat.$m2-red-palette),
-  $typography: my-typography.$typography,  // formato plano: ver abajo
-  $density:    -4                          // 0 | -1 | -2 | -3 | -4 | -5
-);
+$theme: ontimize-style.o-mat-light-theme((
+  primary:    mat.$azure-palette,             // paleta M3 predefinida o custom (CLI: ng generate @angular/material:m3-theme)
+  tertiary:   mat.$blue-palette,              // opcional — Material lo deriva del primary si se omite
+  typography: my-typography.$typography,      // opcional — formato plano: ver abajo
+  density:    -4,                             // opcional — 0 | -1 | -2 | -3 | -4 | -5 (default -2)
+));
 ```
 
 El tema `oxygen` incluido en el framework usa `$density: -4` por defecto
@@ -302,10 +420,10 @@ Material 3 aplica la density definida en el theme. El factory
 **Opción A — Parámetro del factory (recomendado)**
 
 ```scss
-$theme: ontimize-style.o-mat-light-theme(
-  $primary, $accent,
-  $density: -4
-);
+$theme: ontimize-style.o-mat-light-theme((
+  primary: mat.$azure-palette,
+  density: -4,
+));
 
 @include ontimize-style.ontimize-theme-styles($theme);
 ```
@@ -548,13 +666,14 @@ new FormGroup({ name: new FormControl('') });
 
 ## 9. Material SCSS — M3 tokens via CSS custom properties
 
-El framework 18 emite tokens Material 3 (`--mat-*`) y tokens custom de
-Ontimize (`--o-*`). **Tu SCSS custom debería consumir esos tokens en vez
-de llamar a `mat.m2-*` en tiempo de build.**
+El framework 18.0.0-next.2 emite tokens **Material 3 nativos** (`--mat-sys-*`, `--mdc-*`) y tokens custom de Ontimize (`--o-*` para superficies, foreground, typography y sizing). **Tu SCSS custom debería consumir esos tokens en vez de llamar a `mat.m2-*` en tiempo de build.**
 
 | Necesitas… | Usa… |
 |---|---|
-| Color de primary/accent/warn | `var(--o-primary-500)`, `var(--o-accent-500)`, `var(--o-warn-500)` |
+| Color primary | `var(--mat-sys-primary)` (texto/icono encima: `var(--mat-sys-on-primary)`) |
+| Tinte primary (containers) | `var(--mat-sys-primary-container)` (texto: `var(--mat-sys-on-primary-container)`) |
+| Color accent (M3 = tertiary) | `var(--mat-sys-tertiary)` / `var(--mat-sys-on-tertiary)` |
+| Color warn (M3 = error) | `var(--mat-sys-error)` / `var(--mat-sys-on-error)` |
 | Foreground (texto, iconos, dividers) | `var(--o-fg-text)`, `var(--o-fg-secondary-text)`, `var(--o-fg-icon)`, `var(--o-fg-divider)`, `var(--o-fg-hint)`, `var(--o-fg-disabled)` |
 | Background de superficie / niveles | `var(--o-bg-card)`, `var(--o-bg-background)`, `var(--o-bg-level-0…1)`, `var(--o-bg-status-bar)` |
 | Font-size / weight / line-height | `var(--o-font-body-1-size)`, `var(--o-font-body-1-weight)`, `var(--o-font-body-1-line-height)`, `var(--o-font-family)` |
@@ -570,21 +689,14 @@ Ejemplo (antes vs después):
 
 // Después (M3-ready, runtime-overridable)
 .my-button {
-  color: var(--o-primary-500);
+  color: var(--mat-sys-primary);
   font-size: var(--o-font-body-2-size);
 }
 ```
 
-> **Compatibilidad**: si todavía necesitas el mapa M2 del theme por otras
-> razones, sigue disponible como `$theme` (contiene `color.primary`, etc.).
-> Solo que invocar `mat.m2-font-size($typography, body-1)` ya no funciona
-> porque la typography migró a un mapa plano. Para leer un tamaño de
-> typography desde Sass: `map.get($typography, levels, body-1, size)`.
+> **Importante**: en 18.0.0-next.2 los tokens `--o-primary-*`, `--o-accent-*`, `--o-warn-*` (y sus `-contrast-*`) **ya no se emiten**. Si tu SCSS los referenciaba, migra a los `--mat-sys-*` (tabla de equivalencias en la sección 11).
 
-Ontimize Web NGX 18 aplica theming Material 3 internamente via
-`mat.define-theme()`. Las paletas que tu app declara siguen siendo M2
-(`mat.m2-define-palette`) para backwards compatibility: el framework las
-traduce a tokens `--o-*` automáticamente.
+Ontimize Web NGX 18.0.0-next.2 aplica theming Material 3 nativo: `mat.define-theme()` se construye con la paleta declarada por la app (paleta predefinida `mat.$azure-palette` etc., o paleta custom generada por `ng generate @angular/material:m3-theme`), por lo que **todos** los tokens `--mdc-*` / `--mat-sys-*` reflejan automáticamente el color de marca del consumer.
 
 ---
 
@@ -602,7 +714,9 @@ traduce a tokens `--o-*` automáticamente.
 [ ] app.routes.ts: crear fichero de rutas standalone (opcional)
 [ ] Guards: usar authGuard/permissionsGuard funcionales
 [ ] SCSS propio: reemplazar mat.m2-get-color-from-palette()/m2-font-size()
-    por var(--o-primary-*)/var(--o-fg-*)/var(--o-font-*)
+    por var(--mat-sys-primary)/var(--o-fg-*)/var(--o-font-*)
+[ ] Si vienes de 18.0.0-next.1: migrar firma del factory a M3 (mapa-config) y
+    sustituir --o-primary-*/--o-accent-*/--o-warn-* por --mat-sys-* (sección 11)
 [ ] Verificar smoke test visual: form, table, list, grid, sidenav
 ```
 
@@ -679,16 +793,16 @@ El mismo problema afecta en menor medida a `mat-icon`, `mat-progress-bar` y `mat
 // Restaura color="primary|accent|warn" en mat-toolbar con M3 theme
 .mat-toolbar {
   &.mat-primary {
-    --mat-toolbar-container-background-color: var(--o-primary-500);
-    --mat-toolbar-container-text-color: var(--o-primary-contrast-500);
+    --mat-toolbar-container-background-color: var(--mat-sys-primary);
+    --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
   }
   &.mat-accent {
-    --mat-toolbar-container-background-color: var(--o-accent-500);
-    --mat-toolbar-container-text-color: var(--o-accent-contrast-500);
+    --mat-toolbar-container-background-color: var(--mat-sys-tertiary);
+    --mat-toolbar-container-text-color: var(--mat-sys-on-tertiary);
   }
   &.mat-warn {
-    --mat-toolbar-container-background-color: var(--o-warn-500);
-    --mat-toolbar-container-text-color: var(--o-warn-contrast-500);
+    --mat-toolbar-container-background-color: var(--mat-sys-error);
+    --mat-toolbar-container-text-color: var(--mat-sys-on-error);
   }
 }
 ```
@@ -709,3 +823,81 @@ El mismo problema afecta en menor medida a `mat-icon`, `mat-progress-bar` y `mat
 | `[ngSwitch]="val"` + `*ngSwitchCase` | `@switch (val) { @case (a) { ... } @default { ... } }` |
 
 El `NgIf`, `NgFor`, `NgSwitch` de `@angular/common` ya no necesitan importarse explícitamente en componentes standalone — la nueva sintaxis es nativa del compilador.
+
+---
+
+## 12. Migración a Material 3 nativo (desde 18.0.0-next.1) {#migracion-a-material-3-nativo-desde-18-0-0-next-1}
+
+La versión `18.0.0-next.2` cambia la API de theming a Material 3 nativo. Si vienes de `18.0.0-next.1` (todavía API M2), aplica estos cambios.
+
+### 12.1 Reescribir el factory en `styles.scss` / `app.scss`
+
+**Antes (`18.0.0-next.1`):**
+```scss
+@use '@angular/material' as mat;
+@use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
+
+$mat-custom-primary: ( 50: #..., 100: #..., 500: #1976d2, /* ... */ );
+$primary: mat.m2-define-palette($mat-custom-primary);
+$accent:  mat.m2-define-palette($mat-custom-primary);
+
+$theme: ontimize-style.o-mat-light-theme($primary, $accent, $warn, $typography, -2);
+```
+
+**Después (`18.0.0-next.2`):**
+```scss
+@use '@angular/material' as mat;
+@use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
+
+// Opción A — paleta Material 3 predefinida (la más rápida)
+$theme: ontimize-style.o-mat-light-theme((
+  primary:    mat.$azure-palette,
+  tertiary:   mat.$blue-palette,           // opcional
+  typography: $typography,
+  density:    -2,
+));
+
+// Opción B — paleta M3 custom generada con el CLI de Angular Material
+//   ng generate @angular/material:m3-theme
+//   (genera un fichero .scss con la paleta como mapa Sass partiendo de un HEX seed)
+@use './m3-theme' as m3;
+
+$theme: ontimize-style.o-mat-light-theme((
+  primary: m3.$primary-palette,
+  density: -2,
+));
+```
+
+> Ver [sección 3.1 → Cómo crear una paleta Material 3](#cómo-crear-una-paleta-material-3) para los detalles de cada opción y la lista completa de paletas predefinidas.
+
+Cambios clave:
+- Argumentos posicionales → mapa de configuración M3
+- `$accent` desaparece — usa `tertiary` (rol M3)
+- `$warn` desaparece — Material lo deriva como `error` automáticamente
+- Las paletas M2 (`mat.m2-define-palette`) ya **no se aceptan** — pasa una paleta M3 (predefinida o generada por el CLI)
+
+### 12.2 Reemplazar `--o-primary-*`, `--o-accent-*`, `--o-warn-*` en SCSS custom
+
+Estos tokens **ya no se emiten**. Migra a los tokens M3 sys:
+
+| Token eliminado | Token M3 equivalente |
+|---|---|
+| `--o-primary-500` | `--mat-sys-primary` |
+| `--o-primary-contrast-500` | `--mat-sys-on-primary` |
+| `--o-primary-50` / `-100` (tints) | `--mat-sys-primary-container` o `color-mix(in srgb, var(--mat-sys-primary) X%, transparent)` |
+| `--o-primary-800` / `-900` | `--mat-sys-on-primary-container` |
+| `--o-primary-A100` / `A200` | `color-mix(in srgb, var(--mat-sys-primary) X%, transparent)` |
+| `--o-accent-500` | `--mat-sys-tertiary` |
+| `--o-accent-contrast-500` | `--mat-sys-on-tertiary` |
+| `--o-accent-100` | `--mat-sys-tertiary-container` |
+| `--o-accent-800` | `--mat-sys-on-tertiary-container` |
+| `--o-warn-500` | `--mat-sys-error` |
+| `--o-warn-contrast-500` | `--mat-sys-on-error` |
+
+Los demás tokens `--o-*` (`--o-bg-*`, `--o-fg-*`, `--o-font-*`, `--o-button-height`, `--o-input-icon-size`) **no cambian**.
+
+### 12.3 Por qué este breaking change
+
+En `18.0.0-next.1`, el theme M3 interno se construía con paletas Material hardcoded (`mat.$azure-palette` + `mat.$blue-palette`) que **no reflejaban el color de marca del consumer**. Esto causaba que tokens MDC como `--mdc-filled-button-container-color` (botones filled) o el color de los sliders, checkboxes, ripples, etc. saliera siempre en azul Material por defecto, ignorando la paleta del consumer.
+
+Adoptar la firma M3 nativa permite que el theme sí use la paleta del consumer, así que **todos los componentes Material toman automáticamente el color de marca correcto** — sin necesidad de overrides manuales en cada componente.

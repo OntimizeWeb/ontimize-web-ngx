@@ -26,7 +26,7 @@
           }
 
           .column-filter-icon-active {
-            color: var(--o-primary-500);
+            color: var(--mat-sys-primary);
           }
 
           .o-table-header-indicator-numbered {
@@ -117,11 +117,11 @@
 
     .o-table-body.horizontal-scroll {
       &::-webkit-scrollbar-thumb {
-        background-color: color-mix(in srgb, var(--o-primary-200) 50%, transparent);
+        background-color: color-mix(in srgb, var(--mat-sys-primary) 25%, transparent);
       }
 
       &::-webkit-scrollbar-thumb:hover {
-        background-color: var(--o-primary-200);
+        background-color: color-mix(in srgb, var(--mat-sys-primary) 40%, transparent);
       }
 
       &::-webkit-scrollbar-thumb {
@@ -139,7 +139,7 @@
 
   .o-table-visible-columns-dialog {
     .mat-mdc-list-item.dnd-sortable-drag {
-      background: var(--o-primary-50);
+      background: var(--mat-sys-primary-container);
     }
   }
 

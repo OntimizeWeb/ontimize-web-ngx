@@ -39,36 +39,36 @@ $sidenav-background-color: #FFFFFF !default;
 
 // ─── Background palettes ────────────────────────────────────────────────────
 
-// Background palette for light themes (v18-style: primary-tinted).
-@function ontimize-light-theme-background($primary, $mat-theme) {
-  $primary-500: mat.m2-get-color-from-palette($primary, 500);
-  $background: map.get($mat-theme, background);
-  @return map.merge($background,
-    (level-0: #f9FAFB,
-      level-04: #f7f7f7,
-      level-06: #f2f2f2,
-      level-08: #e0e0e0,
-      level-1: white,
-      sidenav-overlay: #525252,
-      status-bar:$sidenav-background-color,
-      app-bar: $sidenav-background-color,
-      background: $app-background-color));
+// Background palette for light themes — neutral, not derived from primary.
+@function ontimize-light-theme-background() {
+  @return (
+    level-0: #f9FAFB,
+    level-04: #f7f7f7,
+    level-06: #f2f2f2,
+    level-08: #e0e0e0,
+    level-1: white,
+    card: white,
+    sidenav-overlay: #525252,
+    status-bar: $sidenav-background-color,
+    app-bar: $sidenav-background-color,
+    background: $app-background-color,
+  );
 }
 
-// Background palette for dark themes (v18-style: primary-tinted).
-@function ontimize-dark-theme-background($primary, $mat-theme) {
-  $primary-500: mat.m2-get-color-from-palette($primary, 500);
-  $background: map.get($mat-theme, background);
-  @return map.merge($background,
-    (background: #1a1a1a,
-      level-0: #202020,
-      level-04: #2e2e2e,
-      level-06: #303030,
-      level-08: #3a3a3a,
-      level-1: #252525,
-      card: #252525,
-      sidenav-overlay: #525252,
-      status-bar: mix(#272727, $primary-500, 94%)));
+// Background palette for dark themes — neutral, not derived from primary.
+@function ontimize-dark-theme-background() {
+  @return (
+    background: #1a1a1a,
+    level-0: #202020,
+    level-04: #2e2e2e,
+    level-06: #303030,
+    level-08: #3a3a3a,
+    level-1: #252525,
+    card: #252525,
+    sidenav-overlay: #525252,
+    status-bar: #272727,
+    app-bar: #252525,
+  );
 }
 
 // ─── Foreground palettes ────────────────────────────────────────────────────
@@ -117,98 +117,111 @@ $ontimize-dark-theme-foreground: (
 
 $default-typography: ontimize.$typography;
 
-// ─── Theme factory functions ────────────────────────────────────────────────
+// ─── Theme factory functions (Material 3 native API) ────────────────────────
 //
-// Factory signature:
-//   o-mat-light-theme($primary, $accent, $warn, $typography, $density)
-//   o-mat-dark-theme ($primary, $accent, $warn, $typography, $density)
+// Factory signature (Material 3, single config map):
 //
-// Only $primary and $accent are required; $warn, $typography and $density
-// default to Ontimize standard values (red warn, Noto Sans typography,
-// density -2 / compact). Consumers can pass their own configuration:
+//   $theme: o-mat-light-theme((
+//     primary:    $color-or-palette,           // HEX string or M3 palette
+//     tertiary:   $color-or-palette,           // optional, defaults to null
+//                                              //   (Material derives tertiary from primary)
+//     typography: $plain-typography-map,       // optional, defaults to Noto Sans
+//     density:    -2,                          // optional, 0 to -5 (default -2)
+//   ));
 //
-//   $theme: o-mat-light-theme(
-//     $primary: mat.m2-define-palette($my-palette),
-//     $accent:  mat.m2-define-palette($my-palette),
-//     $typography: my-typography.$typography,
-//     $density: 0
-//   );
+// Examples:
 //
-// The returned theme is a hybrid object with two roles:
-//   - `color` + `typography` + `density` keys carry the data the Ontimize
-//     token mixin (`o-apply-tokens`) reads when emitting the --o-* CSS
-//     custom properties. The `typography` entry is a plain Sass map (see
-//     typography/oxygen.scss), no longer tied to Material's typography API.
-//   - `m3-theme` — a `mat.define-theme()` object ready to feed
-//     `mat.all-component-themes()`. This routes Material's own component
-//     theming through M3.
+//   // 1. HEX seed — Material generates the palette
+//   $theme: o-mat-light-theme((
+//     primary: #1976d2,
+//     density: 0,
+//   ));
 //
-// `o-material-theme` picks `m3-theme` when emitting Material component
-// tokens; Ontimize styles read from the custom keys via `o-apply-tokens`.
+//   // 2. Predefined Material 3 palette
+//   $theme: o-mat-light-theme((
+//     primary:  mat.$azure-palette,
+//     tertiary: mat.$blue-palette,
+//   ));
+//
+//   // 3. Custom palette built from a seed
+//   $theme: o-mat-light-theme((
+//     primary: mat.define-palette(#0066cc),
+//   ));
+//
+// Returns a theme object with two keys:
+//   - `m3-theme` — the Material 3 theme object passed to mat.all-component-themes()
+//   - `typography`, `density`, `is-dark` — metadata used by o-apply-tokens()
+//     and density mixins.
+//
+// BREAKING CHANGE vs 18.0.0-next.1:
+//   - $accent and $warn parameters removed (M3 has no accent; warn is auto-derived)
+//   - Positional arguments replaced by a single config map
+//   - Custom palettes built with `mat.m2-define-palette` no longer accepted —
+//     pass a Material 3 palette (`mat.$azure-palette`, `mat.$rose-palette`,
+//     etc.) or generate one with the Angular Material CLI:
+//
+//       ng generate @angular/material:m3-theme
+//
+//     which emits a Sass palette map you can import and pass to `primary`.
 
-@function o-mat-light-theme(
-  $primary,
-  $accent,
-  $warn: mat.m2-define-palette(mat.$m2-red-palette),
-  $typography: ontimize.$typography,
-  $density: -2
-) {
-  $m2-theme: mat.m2-define-light-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
-  $color: map.get($m2-theme, color);
+@function o-mat-light-theme($config: ()) {
+  $primary:    map.get($config, primary);
+  $tertiary:   map.get($config, tertiary);
+  $typography: if(map.has-key($config, typography), map.get($config, typography), ontimize.$typography);
+  $density:    if(map.has-key($config, density),    map.get($config, density),    -2);
 
-  // Angular Material 18 M3 theme object. Uses Ontimize default palettes
-  // (azure + blue) so Material can generate a full M3 token set. Custom
-  // branding still flows through the --o-* CSS variables emitted by
-  // o-apply-tokens, so the M3 palette here only affects Material's own
-  // component chrome (ripples, selection overlays, mdc defaults).
+  @if $primary == null {
+    @error "o-mat-light-theme: 'primary' is required (pass a Material 3 palette such as mat.$azure-palette).";
+  }
+
   $font-family: map.get($typography, font-family);
+  $color-config: (theme-type: light, primary: $primary);
+  @if $tertiary != null {
+    $color-config: map.merge($color-config, (tertiary: $tertiary));
+  }
+
   $m3-theme: mat.define-theme((
-    color: (theme-type: light, primary: mat.$azure-palette, tertiary: mat.$blue-palette),
+    color: $color-config,
     typography: (brand-family: $font-family, plain-family: $font-family),
     density: (scale: $density),
   ));
 
   @return (
-    color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn,
-      is-dark: false,
-      foreground: $ontimize-light-theme-foreground,
-      background: ontimize-light-theme-background($primary, $color),
-    ),
+    is-dark: false,
+    foreground: $ontimize-light-theme-foreground,
+    background: ontimize-light-theme-background(),
     typography: $typography,
     density: $density,
     m3-theme: $m3-theme,
   );
 }
 
-@function o-mat-dark-theme(
-  $primary,
-  $accent,
-  $warn: mat.m2-define-palette(mat.$m2-red-palette),
-  $typography: ontimize.$typography,
-  $density: -2
-) {
-  $m2-theme: mat.m2-define-dark-theme((color:(primary: $primary, accent: $accent, warn: $warn)));
-  $color: map.get($m2-theme, color);
+@function o-mat-dark-theme($config: ()) {
+  $primary:    map.get($config, primary);
+  $tertiary:   map.get($config, tertiary);
+  $typography: if(map.has-key($config, typography), map.get($config, typography), ontimize.$typography);
+  $density:    if(map.has-key($config, density),    map.get($config, density),    -2);
+
+  @if $primary == null {
+    @error "o-mat-dark-theme: 'primary' is required (pass a Material 3 palette such as mat.$azure-palette).";
+  }
 
   $font-family: map.get($typography, font-family);
+  $color-config: (theme-type: dark, primary: $primary);
+  @if $tertiary != null {
+    $color-config: map.merge($color-config, (tertiary: $tertiary));
+  }
+
   $m3-theme: mat.define-theme((
-    color: (theme-type: dark, primary: mat.$azure-palette, tertiary: mat.$blue-palette),
+    color: $color-config,
     typography: (brand-family: $font-family, plain-family: $font-family),
     density: (scale: $density),
   ));
 
   @return (
-    color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn,
-      is-dark: true,
-      foreground: $ontimize-dark-theme-foreground,
-      background: ontimize-dark-theme-background($primary, $color),
-    ),
+    is-dark: true,
+    foreground: $ontimize-dark-theme-foreground,
+    background: ontimize-dark-theme-background(),
     typography: $typography,
     density: $density,
     m3-theme: $m3-theme,
@@ -248,7 +261,7 @@ $default-typography: ontimize.$typography;
       background-color: var(--o-bg-sidenav-overlay);
     }
     &.mat-warn .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
-      background-color: var(--o-warn-500);
+      background-color: var(--mat-sys-error);
     }
   }
 
@@ -286,7 +299,7 @@ $default-typography: ontimize.$typography;
       background: var(--o-fg-icon);
     }
     &.mat-warn .mat-ripple-element {
-      background: var(--o-warn-500);
+      background: var(--mat-sys-error);
     }
   }
 }
@@ -325,7 +338,7 @@ $default-typography: ontimize.$typography;
 
   .mat-warn .mat-pseudo-checkbox-checked,
   .mat-warn .mat-pseudo-checkbox-indeterminate {
-    background: var(--o-warn-500);
+    background: var(--mat-sys-error);
   }
 
   .mat-pseudo-checkbox-checked,
@@ -384,7 +397,7 @@ $default-typography: ontimize.$typography;
 
   .o-tree {
     .selected-node {
-      color: var(--o-primary-500);
+      color: var(--mat-sys-primary);
       font-weight: 800;
     }
   }
@@ -505,6 +518,6 @@ $default-typography: ontimize.$typography;
 // ─── Color-only convenience mixin ───────────────────────────────────────────
 
 @mixin ontimize-base-theme-all-component-color($theme-or-color-config) {
-  $color: map.get($theme-or-color-config, color);
-  @include ontimize-base-theme-styles((color: $color, typography: null, density: null));
+  $color-only: map.merge($theme-or-color-config, (typography: null, density: null));
+  @include ontimize-base-theme-styles($color-only);
 }

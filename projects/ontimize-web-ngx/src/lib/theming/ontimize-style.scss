@@ -27,27 +27,15 @@
 @use 'fonts/noto.scss';
 @use 'ontimize-base-style.scss' as base;
 @use 'ontimize-tokens' as tokens;
-
+@use 'typography/oxygen.scss' as oxygen-typography;
 // ─── Re-export theme factory functions from base ────────────────────────────
 
-@function o-mat-light-theme(
-  $primary,
-  $accent,
-  $warn: mat.m2-define-palette(mat.$m2-red-palette),
-  $typography: null,
-  $density: -2
-) {
-  @return base.o-mat-light-theme($primary, $accent, $warn, if($typography, $typography, base.$default-typography), $density);
+@function o-mat-light-theme($config: ()) {
+  @return base.o-mat-light-theme($config);
 }
 
-@function o-mat-dark-theme(
-  $primary,
-  $accent,
-  $warn: mat.m2-define-palette(mat.$m2-red-palette),
-  $typography: null,
-  $density: -2
-) {
-  @return base.o-mat-dark-theme($primary, $accent, $warn, if($typography, $typography, base.$default-typography), $density);
+@function o-mat-dark-theme($config: ()) {
+  @return base.o-mat-dark-theme($config);
 }
 
 // ─── Main mixin ─────────────────────────────────────────────────────────────
@@ -98,8 +86,11 @@
 // ─── Color-only convenience mixin ───────────────────────────────────────────
 
 @mixin ontimize-theme-all-component-color($theme-or-color-config) {
-  $color: map.get($theme-or-color-config, color);
-  @include ontimize-theme-styles((color: $color, typography: null, density: null));
+  // Apply the theme's colour-only data by passing the theme with typography
+  // and density nulled out. The Material 3 sub-theme keeps the colour palette
+  // information needed by mat.all-component-colors().
+  $color-only: map.merge($theme-or-color-config, (typography: null, density: null));
+  @include ontimize-theme-styles($color-only);
 }
 
 // ─── Density-only mixin ─────────────────────────────────────────────────────
@@ -151,43 +142,43 @@
 $_extended-density-tokens: (
    0: (
     --mat-form-field-filled-label-display: block,
-    --o-button-height: 40px,
+    --o-button-height: 48px,
   ),
   -1: (
     --mat-form-field-filled-label-display: block,
-    --o-button-height: 36px,
+    --o-button-height: 44px,
   ),
   -2: (
     --mat-form-field-filled-label-display: block,
-    --o-button-height: 32px,
+    --o-button-height: 40px,
   ),
   -3: (
     --mat-form-field-filled-label-display: block,
     --mdc-filled-text-field-label-text-size: 12px,
     --mdc-outlined-text-field-label-text-size: 12px,
-    --o-button-height: 28px,
+    --o-button-height: 36px,
   ),
   -4: (
     --mat-form-field-container-height: 40px,
-    --mat-form-field-container-vertical-padding: 8px,
-    --mat-form-field-filled-with-label-container-padding-top: 12px,
+    --mat-form-field-container-vertical-padding: 10px,
+    --mat-form-field-filled-with-label-container-padding-top: 16px,
     --mat-form-field-filled-with-label-container-padding-bottom: 4px,
     --mat-form-field-filled-label-display: block,
-    --mdc-filled-text-field-label-text-size: 12px,
-    --mdc-outlined-text-field-label-text-size: 12px,
+    --mdc-filled-text-field-label-text-size: 14px,
+    --mdc-outlined-text-field-label-text-size: 14px,
     --mat-paginator-container-size: 36px,
-    --o-button-height: 28px,
+    --o-button-height: 32px,
   ),
   -5: (
     --mat-form-field-container-height: 36px,
     --mat-form-field-container-vertical-padding: 6px,
-    --mat-form-field-filled-with-label-container-padding-top: 12px,
+    --mat-form-field-filled-with-label-container-padding-top: 16px,
     --mat-form-field-filled-with-label-container-padding-bottom: 4px,
     --mat-form-field-filled-label-display: block,
     --mdc-filled-text-field-label-text-size: 11px,
     --mdc-outlined-text-field-label-text-size: 11px,
     --mat-paginator-container-size: 32px,
-    --o-button-height: 24px,
+    --o-button-height: 28px,
   ),
 );
 

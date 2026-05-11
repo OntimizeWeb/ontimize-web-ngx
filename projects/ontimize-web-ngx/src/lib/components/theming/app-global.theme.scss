@@ -29,7 +29,7 @@
   ::-webkit-scrollbar-thumb {
     border-radius: 0;
     -webkit-box-shadow: none;
-    background-color: var(--o-primary-200);
+    background-color: color-mix(in srgb, var(--mat-sys-primary) 30%, transparent);
     opacity: 1.0;
   }
 
@@ -52,7 +52,7 @@
       border-radius: 50%;
       left: 50%;
       animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: var(--o-primary-500) transparent transparent transparent;
+      border-color: var(--mat-sys-primary) transparent transparent transparent;
     }
 
     div:nth-child(1) {
@@ -81,7 +81,7 @@
 
   .o-form-layout-sidenav-container {
     .sidenav-title-container {
-      border-bottom: 1px solid var(--o-primary-500);
+      border-bottom: 1px solid var(--mat-sys-primary);
     }
   }
 
@@ -92,10 +92,10 @@
   .o-list-picker-dialog {
     .mat-mdc-dialog-container {
       .mat-mdc-dialog-title {
-        border-bottom: 1px solid var(--o-primary-500);
+        border-bottom: 1px solid var(--mat-sys-primary);
 
         .mat-icon {
-          color: var(--o-primary-500);
+          color: var(--mat-sys-primary);
         }
       }
 
@@ -264,12 +264,12 @@
 
     &.mat-mdc-button-base.mat-primary,
     &.mat-mdc-button-base.o-button-primary {
-      color: var(--o-primary-800);
-      background-color: var(--o-primary-100);
+      color: var(--mat-sys-on-primary-container);
+      background-color: var(--mat-sys-primary-container);
       border-color: transparent;
 
       &:hover {
-        color: var(--o-primary-500);
+        color: var(--mat-sys-primary);
         background-color: #ffffff;
         border-color: var(--o-fg-divider);
       }
@@ -278,12 +278,12 @@
 
     &.mat-mdc-button-base,
     &.mat-mdc-button-base.mat-accent {
-      color: var(--o-accent-500);
+      color: var(--mat-sys-tertiary);
       background-color: #ffffff;
 
       &:hover {
-        color: var(--o-primary-800);
-        background-color: var(--o-primary-100);
+        color: var(--mat-sys-on-primary-container);
+        background-color: var(--mat-sys-primary-container);
         border-color: transparent;
       }
     }
@@ -303,12 +303,12 @@
   .o-button button.mat-mdc-outlined-button {
     &:not([disabled]) {
       &.mat-primary {
-        color: var(--o-primary-800);
-        background-color: var(--o-primary-100);
+        color: var(--mat-sys-on-primary-container);
+        background-color: var(--mat-sys-primary-container);
         border-color: transparent;
 
         &:hover {
-          color: var(--o-primary-500);
+          color: var(--mat-sys-primary);
           background-color: #ffffff;
           border-color: var(--o-fg-divider);
         }
@@ -316,12 +316,12 @@
       }
 
       &.mat-accent {
-        color: var(--o-accent-500);
+        color: var(--mat-sys-tertiary);
         background-color: #ffffff;
 
         &:hover {
-          color: var(--o-accent-800);
-          background-color: var(--o-accent-100);
+          color: var(--mat-sys-on-tertiary-container);
+          background-color: var(--mat-sys-tertiary-container);
         }
       }
 
@@ -331,20 +331,17 @@
 
   /** QUICKFILTER */
 
-  // Same height in quickfilters in the toolbar
-  .o-list,
-  .o-tree,
-  .o-grid {
-    .o-search-input {
-      .quickFilter {
-        .mat-mdc-form-field {
-          .mat-mdc-text-field-wrapper {
-            .mat-mdc-form-field-flex {
-              height: 30px;
-              line-height: 30px;
-              padding: 0;
-            }
-          }
+  // Fixed 32px height for quickfilter form-fields inside data containers
+  .o-table .o-table-quickfilter .quickFilter,
+  .o-list .o-search-input .quickFilter,
+  .o-tree .o-search-input .quickFilter,
+  .o-grid .o-search-input .quickFilter {
+    .mat-mdc-form-field {
+      .mat-mdc-text-field-wrapper {
+        .mat-mdc-form-field-flex {
+          height: 32px;
+          line-height: 32px;
+          padding: 0;
         }
       }
     }
@@ -381,7 +378,7 @@
           .mat-mdc-form-field-infix {
             align-self: center;
             padding: 0;
-            min-height: 30px;
+            min-height: 32px;
             display: flex;
           }
 

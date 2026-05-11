@@ -92,17 +92,17 @@
       //
       // Date Range
       &.in-range {
-        background-color: var(--o-primary-A200);
+        background-color: color-mix(in srgb, var(--mat-sys-primary) 40%, transparent);
         border-color: transparent;
       }
 
       &.active {
-        background-color: var(--o-primary-500);
-        color: var(--o-primary-contrast-500);
+        background-color: var(--mat-sys-primary);
+        color: var(--mat-sys-on-primary);
 
         &,
         &:hover {
-          background-color: var(--o-primary-500);
+          background-color: var(--mat-sys-primary);
 
         }
       }

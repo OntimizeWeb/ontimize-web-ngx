@@ -2,7 +2,7 @@
   .o-card-menu-item {
 
     background: var(--o-bg-card);
-    border: 1px solid color-mix(in srgb, var(--o-primary-500) 17%, transparent);
+    border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 17%, transparent);
 
     .o-card-menu-item-main {
       background-color: color-mix(in srgb, var(--o-bg-background) 29%, transparent);
@@ -10,17 +10,17 @@
 
     .o-card-menu-item-title {
       font-size: var(--o-font-headline-6-size);
-      color: var(--o-primary-500);
+      color: var(--mat-sys-primary);
     }
 
     .mat-mdc-button:not(:disabled) {
-      color: var(--o-primary-500);
-      background: var(--o-accent-100);
+      color: var(--mat-sys-primary);
+      background: var(--mat-sys-tertiary-container);
     }
 
     .o-card-menu-item-icon,
     .o-card-menu-item-info {
-      color: color-mix(in srgb, var(--o-primary-500) 54%, transparent);
+      color: color-mix(in srgb, var(--mat-sys-primary) 54%, transparent);
     }
 
   }

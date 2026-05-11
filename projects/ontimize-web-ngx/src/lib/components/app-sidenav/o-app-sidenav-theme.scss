@@ -21,15 +21,15 @@
 
           a:hover,
           a.o-app-sidenav-viewer-sidenav-item-selected {
-            color: var(--o-primary-500);
+            color: var(--mat-sys-primary);
           }
 
           a:hover {
-            background-color: var(--o-primary-50);
+            background-color: var(--mat-sys-primary-container);
           }
 
           a.o-app-sidenav-viewer-sidenav-item-selected {
-            background-color: color-mix(in srgb, var(--o-primary-50) 48%, transparent);
+            background-color: color-mix(in srgb, var(--mat-sys-primary-container) 48%, transparent);
           }
         }
 
@@ -41,7 +41,7 @@
 
             a.o-app-sidenav-viewer-sidenav-item-selected .mdc-button__label,
             a:hover .mdc-button__label {
-              border-color: var(--o-primary-500);
+              border-color: var(--mat-sys-primary);
             }
           }
         }
@@ -60,15 +60,15 @@
 
         a:hover,
         a.o-app-sidenav-viewer-sidenav-item-selected {
-          color: var(--o-primary-500);
+          color: var(--mat-sys-primary);
         }
 
         a:hover {
-          background-color: var(--o-primary-50);
+          background-color: var(--mat-sys-primary-container);
         }
 
         a.o-app-sidenav-viewer-sidenav-item-selected {
-          background-color: color-mix(in srgb, var(--o-primary-50) 48%, transparent);
+          background-color: color-mix(in srgb, var(--mat-sys-primary-container) 48%, transparent);
         }
       }
 

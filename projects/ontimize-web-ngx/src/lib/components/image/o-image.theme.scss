@@ -17,7 +17,7 @@
         }
 
         &.o-image-drag-and-drop-required:not(.o-file-dragging) {
-          border-color: var(--o-warn-500);
+          border-color: var(--mat-sys-error);
         }
 
         .o-image-button-remove {

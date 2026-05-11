@@ -10,23 +10,23 @@
 @mixin _mat-color-input-backwards-compatibility() {
   .mat-toolbar {
     &.mat-primary {
-      --mat-toolbar-container-background-color: var(--o-primary-500);
-      --mat-toolbar-container-text-color: var(--o-primary-contrast-500);
+      --mat-toolbar-container-background-color: var(--mat-sys-primary);
+      --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
     }
     &.mat-accent {
-      --mat-toolbar-container-background-color: var(--o-accent-500);
-      --mat-toolbar-container-text-color: var(--o-accent-contrast-500);
+      --mat-toolbar-container-background-color: var(--mat-sys-tertiary);
+      --mat-toolbar-container-text-color: var(--mat-sys-on-tertiary);
     }
     &.mat-warn {
-      --mat-toolbar-container-background-color: var(--o-warn-500);
-      --mat-toolbar-container-text-color: var(--o-warn-contrast-500);
+      --mat-toolbar-container-background-color: var(--mat-sys-error);
+      --mat-toolbar-container-text-color: var(--mat-sys-on-error);
     }
   }
 
   mat-icon {
-    &.mat-primary { --mat-icon-color: var(--o-primary-500); }
-    &.mat-accent  { --mat-icon-color: var(--o-accent-500); }
-    &.mat-warn    { --mat-icon-color: var(--o-warn-500); }
+    &.mat-primary { --mat-icon-color: var(--mat-sys-primary); }
+    &.mat-accent  { --mat-icon-color: var(--mat-sys-tertiary); }
+    &.mat-warn    { --mat-icon-color: var(--mat-sys-error); }
   }
 }
 
@@ -47,19 +47,34 @@
   // inside a selector we reuse it via `&`; otherwise we target html so
   // the tokens become effective document-wide.
   $typography: map.get($theme-or-color-config, typography);
+  $density: map.get($theme-or-color-config, density);
   $m3-theme: map.get($theme-or-color-config, m3-theme);
+
+  // Color-only mode: typography and density are null (set by
+  // `ontimize-theme-all-component-color` for the dark-theme branch, where
+  // only colours should be re-emitted). Avoids duplicate theme-style warnings
+  // from Material when typography/density are emitted more than once.
+  $color-only: $m3-theme != null and $typography == null and $density == null;
 
   @if $m3-theme {
     @if & {
       & {
-        @include mat.core();
-        @include mat.all-component-themes($m3-theme);
+        @if $color-only {
+          @include mat.all-component-colors($m3-theme);
+        } @else {
+          @include mat.core();
+          @include mat.all-component-themes($m3-theme);
+        }
         @include mat.color-variants-backwards-compatibility($m3-theme);
       }
     } @else {
       html {
-        @include mat.core();
-        @include mat.all-component-themes($m3-theme);
+        @if $color-only {
+          @include mat.all-component-colors($m3-theme);
+        } @else {
+          @include mat.core();
+          @include mat.all-component-themes($m3-theme);
+        }
         @include mat.color-variants-backwards-compatibility($m3-theme);
       }
     }

@@ -4,11 +4,11 @@
 
     nav {
       &.o-app-header-primary {
-        background-color: var(--o-primary-500);
+        background-color: var(--mat-sys-primary);
       }
 
       &.o-app-header-accent {
-        background-color: var(--o-accent-500);
+        background-color: var(--mat-sys-tertiary);
       }
 
       .menu-button {

@@ -1,8 +1,4 @@
 @mixin o-bar-menu-theme($theme-or-color-config) {
-    $theme: map.get($theme-or-color-config, color);
-    $primary: map.get($theme, primary);
-
-
     $bg-color: #FFF;
     $fg-color: rgba(0, 0, 0, 0.7);
 
