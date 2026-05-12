@@ -1,4 +1,4 @@
-## 18.0.0-next.2 (2026-05-08)
+## 18.0.0-next.2 (2026-05-12)
 
 ### BREAKING CHANGES
 * **theming**: `o-mat-light-theme` and `o-mat-dark-theme` now follow Material 3's native API. The factory accepts a single config map (M3 shape) instead of positional `$primary`/`$accent`/`$warn`/`$typography`/`$density` arguments. Custom palettes built with `mat.m2-define-palette` are no longer accepted — pass a Material 3 palette: a predefined one (`mat.$azure-palette`, `mat.$rose-palette`, etc.) or one generated via `ng generate @angular/material:m3-theme`. The `$accent` and `$warn` parameters are removed (M3 has no `accent`; `warn` is auto-derived as `error`). New optional `tertiary` parameter follows M3 semantics.
@@ -42,6 +42,10 @@
 
 ### Bug Fixes
 * **theming**: fix `--mdc-filled-button-container-color` and other branded MDC tokens picking the hardcoded azure palette instead of the consumer's primary.
+* **table**: `o-table-no-results` row is now shown/hidden by toggling `display` instead of removing/re-appending the `<span>` — fixes message duplication on repeated filter changes. The row also gets the `mat-mdc-row` class for consistent styling.
+* **combo**: `o-combo` no longer renders taller than other inputs — fixed by resetting `--mat-select-trigger-text-line-height: normal` (was inheriting M3 `body-large-line-height: 1.5`) and setting `.mat-mdc-select-arrow-wrapper { height: 100% }` so the arrow wrapper does not force a fixed 24 px height.
+* **theming**: `--mat-select-trigger-text-line-height: normal` added to all density scales in `$_extended-density-tokens` so the select height stays aligned with native inputs at every density.
+* **theming**: quickfilter icon-button: add `padding: 0` to reset the MDC hardcoded padding when `--mdc-icon-button-state-layer-size` is reduced to 20 px; add `--mat-icon-button-touch-target-display: none` to suppress the 48 px touch-target pseudo-element that was offsetting the icon.
 
 ---
 
