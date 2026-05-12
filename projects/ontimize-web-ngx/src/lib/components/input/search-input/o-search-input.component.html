@@ -2,19 +2,19 @@
   <div class="quickFilter o-flex-row">
     <mat-form-field [appearance]="appearance">
       @if (!showFilterMenu) {
-        <mat-icon matPrefix>search</mat-icon>
+      <mat-icon matPrefix>search</mat-icon>
       }
       <input #term matInput id="term" type="search" formControlName="term" [placeholder]="placeholder">
       @if (labelVisible) {
-        <mat-label>{{ label | oTranslate }}</mat-label>
+      <mat-label>{{ label | oTranslate }}</mat-label>
       }
       @if (showFilterMenu) {
-        <div class="o-flex-row" matPrefix>
-          <mat-icon [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="small" aria-hidden="false">search</mat-icon>
-          <button type="button" mat-icon-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()">
-            <mat-icon class="search-icon">expand_more</mat-icon>
-          </button>
-        </div>
+      <div class="o-flex-row" matPrefix>
+        <mat-icon [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="large" aria-hidden="false">search</mat-icon>
+        <button type="button" mat-icon-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()">
+          <mat-icon class="search-icon">expand_more</mat-icon>
+        </button>
+      </div>
       }
 
 
@@ -22,22 +22,22 @@
         <div class="checkbox-container o-flex-column">
 
           @if (colArray.length > 1) {
-            <mat-checkbox (click)="$event.stopPropagation()" [checked]="areAllColumnsChecked()" (change)="onSelectAllChange($event)">
+          <mat-checkbox (click)="$event.stopPropagation()" [checked]="areAllColumnsChecked()" (change)="onSelectAllChange($event)">
             {{ 'SELECT_ALL' | oTranslate }}</mat-checkbox>
-            <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
           }
 
           @for (item of colArray; track item) {
-            <mat-checkbox (click)="$event.stopPropagation()" [checked]="isChecked(item)" (change)="onCheckboxChange(item, $event)">
-              {{ item.column | oTranslate }}
-            </mat-checkbox>
+          <mat-checkbox (click)="$event.stopPropagation()" [checked]="isChecked(item)" (change)="onCheckboxChange(item, $event)">
+            {{ item.column | oTranslate }}
+          </mat-checkbox>
           }
 
           @if (showCaseSensitiveCheckbox) {
-            <mat-divider></mat-divider>
-            <mat-checkbox (click)="$event.stopPropagation()" [checked]="filterCaseSensitive" (change)="onFilterCaseSensitiveChange($event)">
-              {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate }}
-            </mat-checkbox>
+          <mat-divider></mat-divider>
+          <mat-checkbox (click)="$event.stopPropagation()" [checked]="filterCaseSensitive" (change)="onFilterCaseSensitiveChange($event)">
+            {{ 'TABLE.FILTER.CASE_SENSITIVE' | oTranslate }}
+          </mat-checkbox>
           }
         </div>
       </mat-menu>
