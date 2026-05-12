@@ -469,6 +469,7 @@ Ontimize exporta `ontimize-theme-density-extended($scale)` (usado internamente p
 | `--mat-form-field-container-height` | 56px (Mat) | 52px (Mat) | 48px (Mat) | 44px (Mat) | **40px** | **36px** |
 | `--mat-form-field-container-vertical-padding` | 16px (Mat) | 14px (Mat) | 12px (Mat) | 10px (Mat) | **8px** | **6px** |
 | `--mat-form-field-filled-label-display` | **block** | **block** | **block** | **block** | **block** | **block** |
+| `--mat-select-trigger-text-line-height` | **normal** | **normal** | **normal** | **normal** | **normal** | **normal** |
 | `--mdc-filled-text-field-label-text-size` | default | default | default | **12px** | **11px** | **11px** |
 | `--mat-paginator-container-size` | 56px (Mat) | 52px (Mat) | 48px (Mat) | 40px (Mat) | **36px** | **32px** |
 
@@ -476,6 +477,7 @@ Notas:
 - **Label flotante siempre visible**: Material por defecto fija `filled-label-display: none` desde escala `-3`. Ontimize la fuerza a `block` en todas las escalas porque `mat-label` es parte de la semántica del campo.
 - **Tamaño de label reducido en escalas profundas** (`-3` a `-5`) para mantener legibilidad cuando el campo se reduce.
 - **`--o-button-height` por escala**: el token Ontimize que controla todos los botones MDC se ajusta automáticamente.
+- **`--mat-select-trigger-text-line-height: normal`**: M3 hereda `body-large-line-height` (1.5 = 24 px) para el trigger del select, lo que añade altura extra respecto a un `input` nativo. Ontimize lo fuerza a `normal` (~1.2) en todas las escalas para que `o-combo` tenga la misma altura que el resto de inputs.
 
 **Opción D — Por componente Material individual**
 
