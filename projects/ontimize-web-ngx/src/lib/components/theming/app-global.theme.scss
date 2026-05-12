@@ -398,15 +398,14 @@
 
               button {
                 margin-right: 6px;
+                --mdc-icon-button-state-layer-size: 20px;
+                --mdc-icon-button-icon-size: 20px;
+                --mat-icon-button-touch-target-display: none;
+                padding: 0;
               }
 
               .mat-badge-content {
                 background-color: #3C8500;
-                width: 14px;
-                height: 14px;
-                line-height: 14px;
-                top: -4px;
-                right: -4px;
               }
             }
           }
