@@ -61,7 +61,7 @@
 
         &:hover:not(.o-table-group-row) {
           cursor: pointer;
-          background-color: color-mix(in srgb, var(--o-fg-base) 18%, transparent);
+          background-color: color-mix(in srgb, var(--o-fg-base) 10%, transparent);
         }
 
         &.selected {
