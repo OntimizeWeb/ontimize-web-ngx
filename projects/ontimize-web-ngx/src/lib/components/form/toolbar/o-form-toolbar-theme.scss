@@ -1,5 +1,5 @@
 @mixin o-form-toolbar-theme($theme-or-color-config) {
   .o-form-toolbar-header {
-    background-color: var(--o-bg-app-bar);
+    background-color: transparent;
   }
 }
