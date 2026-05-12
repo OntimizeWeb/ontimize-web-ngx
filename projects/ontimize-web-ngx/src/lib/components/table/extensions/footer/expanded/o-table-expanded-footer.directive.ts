@@ -16,6 +16,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   private translateService: OTranslateService;
   private tableBody: any;
   private tdTableWithMessage: any;
+  private trNoResults: any;
   private subscription = new Subscription();
 
   @Input('oTableExpandedFooterColspan')
@@ -51,16 +52,17 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   registerContentChange() {
     // Create a tr with a td and inside put the message and add to tbody
     // <tr><td><span>{message}</span><td><tr>
-    const tr = this.renderer.createElement('tr');
+    this.trNoResults = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
-    this.renderer.addClass(tr, 'o-table-no-results');
-    tr.appendChild(this.tdTableWithMessage);
-    this.renderer.appendChild(this.tableBody, tr);
+    this.renderer.addClass(this.trNoResults, 'o-table-no-results');
+    this.renderer.addClass(this.trNoResults, 'mat-mdc-row');
+    this.renderer.setStyle(this.trNoResults, 'display', 'none');
+    this.trNoResults.appendChild(this.tdTableWithMessage);
+    this.renderer.appendChild(this.tableBody, this.trNoResults);
 
     /* Show/Hide message When the renderer data is changed with static data*/
     this.subscription.add(this.table.onContentChange.pipe(
       distinctUntilChanged((prev, curr) => (prev?.length ?? 0) === (curr?.length ?? 0)),
-      delay(100)
     ).subscribe(() => {
       this.showMessage(true);
     }));
@@ -72,19 +74,22 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   public showMessage(display: boolean): void {
-    // reset span message
-    this.removeMessageSpan();
     this.table.cd.detectChanges();
+    const hasData = (this.table?.dataSource?.renderedData?.length ?? 0) > 0;
 
-    if (display && (this.table?.dataSource?.renderedData?.length ?? 0) === 0) {
-      // generate new message
+    if (display && !hasData) {
       this.createMessageSpan();
+      this.renderer.removeStyle(this.trNoResults, 'display');
+    } else {
+      this.renderer.setStyle(this.trNoResults, 'display', 'none');
+      this.removeMessageSpan();
     }
   }
 
   removeMessageSpan() {
     if (this.spanMessageNotResults) {
-      this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
+      this.renderer.removeChild(this.tdTableWithMessage, this.spanMessageNotResults);
+      this.spanMessageNotResults = null;
     }
   }
 
@@ -106,6 +111,7 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   protected createMessageSpan() {
+    this.removeMessageSpan();
     // 1 Build message
     const message = this.buildMessage();
     // 2 Create message
