@@ -1,4 +1,4 @@
-<mat-toolbar class="o-form-toolbar-header o-flex-column o-layout-align-center-center" [class.breadcrumb]="includeBreadcrumb">
+<mat-toolbar class="o-form-toolbar-header o-layout-align-center-center" [class.breadcrumb]="includeBreadcrumb">
 
   @if (includeBreadcrumb) {
     <ng-template #breadcrumb></ng-template>
@@ -19,7 +19,7 @@
     @if (getLabelHeaderAlign() === 'center' || getLabelHeaderAlign() === 'end') {
       <span class="fill-remaining"></span>
     }
-    @if (labelHeader!='') {
+    @if (labelHeader!=='') {
       <div class="o-flex-row o-layout-align-center-center">
         <span>{{ labelHeader | oTranslate }}</span>
       </div>

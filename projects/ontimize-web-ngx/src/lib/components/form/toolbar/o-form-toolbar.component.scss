@@ -6,6 +6,8 @@
     min-height: 50px;
     max-height: 50px;
     padding: 0 16px 0 4px;
+    display: flex;
+    flex-direction: column;
 
     &.breadcrumb {
       padding: 16px;
