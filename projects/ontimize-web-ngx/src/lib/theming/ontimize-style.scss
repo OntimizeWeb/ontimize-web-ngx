@@ -142,18 +142,22 @@
 $_extended-density-tokens: (
    0: (
     --mat-form-field-filled-label-display: block,
+    --mat-select-trigger-text-line-height: normal,
     --o-button-height: 48px,
   ),
   -1: (
     --mat-form-field-filled-label-display: block,
+    --mat-select-trigger-text-line-height: normal,
     --o-button-height: 44px,
   ),
   -2: (
     --mat-form-field-filled-label-display: block,
+    --mat-select-trigger-text-line-height: normal,
     --o-button-height: 40px,
   ),
   -3: (
     --mat-form-field-filled-label-display: block,
+    --mat-select-trigger-text-line-height: normal,
     --mdc-filled-text-field-label-text-size: 12px,
     --mdc-outlined-text-field-label-text-size: 12px,
     --o-button-height: 36px,
@@ -164,6 +168,7 @@ $_extended-density-tokens: (
     --mat-form-field-filled-with-label-container-padding-top: 16px,
     --mat-form-field-filled-with-label-container-padding-bottom: 4px,
     --mat-form-field-filled-label-display: block,
+    --mat-select-trigger-text-line-height: normal,
     --mdc-filled-text-field-label-text-size: 14px,
     --mdc-outlined-text-field-label-text-size: 14px,
     --mat-paginator-container-size: 36px,
@@ -175,6 +180,7 @@ $_extended-density-tokens: (
     --mat-form-field-filled-with-label-container-padding-top: 16px,
     --mat-form-field-filled-with-label-container-padding-bottom: 4px,
     --mat-form-field-filled-label-display: block,
+    --mat-select-trigger-text-line-height: normal,
     --mdc-filled-text-field-label-text-size: 11px,
     --mdc-outlined-text-field-label-text-size: 11px,
     --mat-paginator-container-size: 32px,
