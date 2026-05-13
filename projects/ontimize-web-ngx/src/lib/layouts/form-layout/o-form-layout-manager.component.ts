@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -267,6 +267,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   protected addingGuard: boolean = false;
+  protected _canActivateChildFn: (childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) => any;
 
   public navigationService: NavigationService;
 
@@ -403,17 +404,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
       const canActivateChildArray = (routeConfig.canActivateChild || []);
-      let previouslyAdded = false;
-      for (let i = 0, len = canActivateChildArray.length; i < len; i++) {
-        const guardChild = this.injector.get(CanActivateFormLayoutChildGuard);
-        previouslyAdded = (canActivateChildArray[i] === guardChild.constructor);
-        if (previouslyAdded) {
-          break;
-        }
-      }
+      const previouslyAdded = this._canActivateChildFn && canActivateChildArray.includes(this._canActivateChildFn);
       if (!previouslyAdded) {
         this.addingGuard = true;
-        canActivateChildArray.push(CanActivateFormLayoutChildGuard);
+        const guard = this.injector.get(CanActivateFormLayoutChildGuard);
+        this._canActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
+          guard.canActivateChild(childRoute, state);
+        canActivateChildArray.push(this._canActivateChildFn);
         routeConfig.canActivateChild = canActivateChildArray;
       }
     }
@@ -426,13 +423,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.oFormLayoutManagerService.activeFormLayoutManager = undefined;
     this.oFormLayoutManagerService.context = void 0;
     const routeConfig = this.getParentActRouteRoute();
-    if (Util.isDefined(routeConfig)) {
-      for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
-        const guardChild = this.injector.get(CanActivateFormLayoutChildGuard);
-        if (routeConfig.canActivateChild[i] === guardChild.constructor) {
-          routeConfig.canActivateChild.splice(i, 1);
-          break;
-        }
+    if (Util.isDefined(routeConfig) && this._canActivateChildFn) {
+      const arr = routeConfig.canActivateChild || [];
+      const idx = arr.indexOf(this._canActivateChildFn);
+      if (idx >= 0) {
+        arr.splice(idx, 1);
+        routeConfig.canActivateChild = arr;
       }
     }
   }

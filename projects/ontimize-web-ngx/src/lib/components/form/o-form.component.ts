@@ -21,7 +21,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { OKeyboardListenerDirective } from '../../directives/keyboard-listener.directive';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
@@ -344,6 +344,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected dynamicFormSubscription: Subscription;
 
   protected deactivateGuard: CanDeactivateFormGuard;
+  protected _canDeactivateFn: (component: CanComponentDeactivate, curr: ActivatedRouteSnapshot, state: RouterStateSnapshot, future: RouterStateSnapshot) => any;
   public deactivateGuardId: string;
   protected formCache: OFormCacheClass;
   protected formNavigation: OFormNavigationClass;
@@ -673,13 +674,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const canDeactivateArray = (this.actRoute.routeConfig.canDeactivate || []);
     let previouslyAdded = false;
     for (let i = 0, len = canDeactivateArray.length; i < len; i++) {
-      previouslyAdded = ((canDeactivateArray[i].hasOwnProperty('CLASSNAME') && canDeactivateArray[i].CLASSNAME) === OFormComponent.guardClassName);
+      previouslyAdded = (canDeactivateArray[i].hasOwnProperty('CLASSNAME') && canDeactivateArray[i].CLASSNAME) === OFormComponent.guardClassName
+        || (canDeactivateArray[i] === this._canDeactivateFn);
       if (previouslyAdded) {
         break;
       }
     }
     if (!previouslyAdded) {
-      canDeactivateArray.push(this.deactivateGuard.constructor);
+      const guard = this.deactivateGuard;
+      this._canDeactivateFn = (component: CanComponentDeactivate, curr: ActivatedRouteSnapshot, state: RouterStateSnapshot, future: RouterStateSnapshot) =>
+        guard.canDeactivate(component, curr, state, future);
+      (this._canDeactivateFn as any).CLASSNAME = OFormComponent.guardClassName;
+      canDeactivateArray.push(this._canDeactivateFn);
       this.actRoute.routeConfig.canDeactivate = canDeactivateArray;
     }
   }
@@ -695,7 +701,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (!this.actRoute || !this.actRoute.routeConfig || !this.actRoute.routeConfig.canDeactivate) {
         return;
       }
-      const guardIndex = this.actRoute.routeConfig.canDeactivate.findIndex((canDeactivate) => canDeactivate.name === OFormComponent.guardClassName)
+      const guardIndex = this.actRoute.routeConfig.canDeactivate.findIndex((canDeactivate) => canDeactivate === this._canDeactivateFn)
       if (guardIndex >= 0) {
         this.actRoute.routeConfig.canDeactivate.splice(guardIndex, 1);
       }
