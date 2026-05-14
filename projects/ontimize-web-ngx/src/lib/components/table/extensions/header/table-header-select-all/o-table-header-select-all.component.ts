@@ -36,6 +36,9 @@ export class OTableHeaderSelectAllComponent extends OTableHeaderComponent implem
     if (this.table.matpaginator) {
       dataChanges.push(this.table.matpaginator.page);
     }
+    if (this.table.dataSource) {
+      dataChanges.push(this.table.dataSource.onRenderedDataChange);
+    }
     this.isAllSelected.next(this.table.isAllSelected());
     this.isIndeterminate.next(this.table.isIndeterminate());
 

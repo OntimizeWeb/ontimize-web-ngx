@@ -78,7 +78,7 @@ export abstract class OTableBase {
   abstract selection: SelectionModel<Element>;
   abstract registerOTableButtons(arg: OTableButtons);
   abstract add();
-  abstract reloadData();
+  abstract reloadData(clearSelectedItems: boolean):void;
   abstract remove();
   abstract onUpdateScrolledState: EventEmitter<any>;
   abstract rowWidth;
