@@ -1,6 +1,6 @@
 # Migración Angular 15 → 18 — Estado actual
 
-> Última actualización: 6 mayo 2026
+> Última actualización: 13 mayo 2026
 
 ## Repositorios y ramas
 
@@ -52,6 +52,7 @@
 | **Playground PASO 6: Standalone bootstrap** | ✅ **Completado** | `232a4c0` (repo playground) |
 | **Sub-paso 3.9: MIGRATION_GUIDE.md** | ✅ **Completado** | `e2b6ad4a` |
 | **Sub-paso 3.2: Material M2→M3** | ✅ **Completado** | `fdcb42da`, `3ab884df`, `d2148328`, `1822c70b` (rama `theming/m3`) |
+| **Fix guards funcionales (NullInjectorError)** | ✅ **Completado** | `adc81ebf` |
 
 ---
 
@@ -216,6 +217,17 @@ Problemas detectados en la playground tras la migración de flex-layout:
 |---------|-------|-----|
 | `.left-border` con `max-width: calc(100% - 300px)` no ocupaba el ancho disponible | Inline styles incorrectos añadidos durante la migración flex-layout | Reemplazados con clase `o-flex` en 11 archivos HTML |
 | Menú inputs no se renderizan bien | `<a>` con dos atributos `class` separados — el browser solo aplica el último | Fusionados en `class="menu-item o-flex"` (24 elementos en `inputs.component.html`) |
+
+### Fix guards funcionales (NullInjectorError) — ✅ COMPLETADO (13 mayo 2026) — commit `adc81ebf`
+
+En Angular 14+, el router resuelve las clases en `canDeactivate`/`canActivateChild` desde el **inyector de entorno** (root), no desde el inyector del componente. Los guards `CanDeactivateFormGuard` y `CanActivateFormLayoutChildGuard` solo están provistos a nivel de módulo/componente, por lo que el router lanzaba `NullInjectorError` al intentar resolverlos.
+
+| Guard | Componente | Fix |
+|-------|-----------|-----|
+| `CanDeactivateFormGuard` | `OFormComponent.addDeactivateGuard()` | Sustituida la clase empujada al array `canDeactivate` por una función flecha que captura la instancia ya resuelta (`_canDeactivateFn`) |
+| `CanActivateFormLayoutChildGuard` | `OFormLayoutManagerComponent.addActivateChildGuard()` | Ídem para `canActivateChild` (`_canActivateChildFn`) |
+
+El guard sigue siendo `@Injectable()` sin `providedIn` — se resuelve desde el inyector del componente y no se convierte en singleton global.
 
 ### `provideOntimizeWeb()` — ✅ COMPLETADO (13 abril 2026) — commit `754ef7d9`
 

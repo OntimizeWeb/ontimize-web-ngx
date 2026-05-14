@@ -1,3 +1,10 @@
+## 18.0.0-next.3 (2026-05-13)
+
+### Bug Fixes
+* **guards**: `CanDeactivateFormGuard` and `CanActivateFormLayoutChildGuard` no longer throw `NullInjectorError` in Angular 14+. The router resolves `canDeactivate`/`canActivateChild` guard classes from the environment injector (root level), not from the component injector. Pushing the guard class directly onto the route array made it invisible to the router. Both guards are now registered as arrow function wrappers that capture the already-resolved instance from the component injector, so the router does not need to resolve them itself.
+
+---
+
 ## 18.0.0-next.2 (2026-05-12)
 
 ### BREAKING CHANGES
