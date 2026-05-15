@@ -1,3 +1,7 @@
+## 15.9.1 (2026-05-15)
+### Bug Fixes
+* **o-table**: Fixed row selection not being restored after changing page or sort order, and header checkbox not reflecting indeterminate state correctly ([7c8352a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c8352a)) Closes [#2113](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2113)
+
 ## 15.9.0 (2026-03-16)
 ### Features
 * **o-form-layout-dialog**: add fullscreen toggle button option ([91c453b](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/91c453bf623f3ec58ba214d63e27150eeb1665fb)) Closes [#2074](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2074)
