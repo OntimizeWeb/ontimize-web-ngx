@@ -1,6 +1,6 @@
-## 15.9.1 (2026-05-14)
+## 15.9.1 (2026-05-15)
 ### Bug Fixes
-* **o-table**: Fixed row selection not being restored after changing page or sort order, and header checkbox not reflecting indeterminate state correctly Closes [#2113](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2113)
+* **o-table**: Fixed row selection not being restored after changing page or sort order, and header checkbox not reflecting indeterminate state correctly ([7c8352a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c8352a)) Closes [#2113](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2113)
 
 ## 15.9.0 (2026-03-16)
 ### Features
