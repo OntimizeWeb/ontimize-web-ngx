@@ -58,7 +58,9 @@
     & {
       @include tokens.o-apply-tokens($theme-or-color-config);
     }
-  } @else {
+  }
+
+  @else {
     :root {
       @include tokens.o-apply-tokens($theme-or-color-config);
     }
@@ -67,7 +69,7 @@
   // ─── Density ─────────────────────────────────────────────────
   // Emits Material's density tokens AND Ontimize's extended overrides
   // (form-field at scales -4/-5, --o-button-height per scale, label visibility).
-  @if $density != null {
+  @if $density !=null {
     @include ontimize-theme-density-extended($density);
   }
 
@@ -127,9 +129,12 @@
 // progression. Keys are the density scale; values are maps of CSS custom
 // property → value.
 //
-// Also includes --o-button-height (Ontimize-specific token) so button heights
-// stay coherent with the chosen density scale. See ontimize-tokens.scss for
-// where --o-button-height feeds into --mdc-*-button-container-height.
+// Also overrides button height tokens so they stay coherent with the chosen
+// density scale. For scales 0 to -3, Material already handles --mdc-*-button-
+// container-height; only --mat-standard-button-toggle-height is added (Material's
+// own scale for button-toggle does not match Ontimize's target sizes). For
+// scales -4 and -5, the four --mdc-*-button-container-height tokens are also
+// included because Material clamps them at -3.
 //
 // Note on filled-label-display:
 // Angular Material's density table sets `filled-label-display: none` from
@@ -140,51 +145,36 @@
 // we also reduce the label font-size at deeper scales.
 //
 $_extended-density-tokens: (
-   0: (
-    --mat-form-field-filled-label-display: block,
-    --mat-select-trigger-text-line-height: normal,
-    --o-button-height: 48px,
-  ),
+
   -1: (
-    --mat-form-field-filled-label-display: block,
-    --mat-select-trigger-text-line-height: normal,
-    --o-button-height: 44px,
+    --mdc-text-button-container-height: 32px,
+    --mdc-filled-button-container-height: 32px,
+    --mdc-protected-button-container-height: 32px,
+    --mdc-outlined-button-container-height: 32px,
   ),
   -2: (
-    --mat-form-field-filled-label-display: block,
-    --mat-select-trigger-text-line-height: normal,
-    --o-button-height: 40px,
+    --mdc-text-button-container-height: 32px,
+    --mdc-filled-button-container-height: 32px,
+    --mdc-protected-button-container-height: 32px,
+    --mdc-outlined-button-container-height: 32px,
   ),
-  -3: (
-    --mat-form-field-filled-label-display: block,
-    --mat-select-trigger-text-line-height: normal,
-    --mdc-filled-text-field-label-text-size: 12px,
-    --mdc-outlined-text-field-label-text-size: 12px,
-    --o-button-height: 36px,
+  -3: (--mdc-text-button-container-height: 32px,
+    --mdc-filled-button-container-height: 32px,
+    --mdc-protected-button-container-height: 32px,
+    --mdc-outlined-button-container-height: 32px,
   ),
   -4: (
-    --mat-form-field-container-height: 40px,
-    --mat-form-field-container-vertical-padding: 10px,
-    --mat-form-field-filled-with-label-container-padding-top: 16px,
-    --mat-form-field-filled-with-label-container-padding-bottom: 4px,
-    --mat-form-field-filled-label-display: block,
-    --mat-select-trigger-text-line-height: normal,
-    --mdc-filled-text-field-label-text-size: 14px,
-    --mdc-outlined-text-field-label-text-size: 14px,
-    --mat-paginator-container-size: 36px,
-    --o-button-height: 32px,
+    --mdc-text-button-container-height: 32px,
+    --mdc-filled-button-container-height: 32px,
+    --mdc-protected-button-container-height: 32px,
+    --mdc-outlined-button-container-height: 32px,
+
   ),
   -5: (
-    --mat-form-field-container-height: 36px,
-    --mat-form-field-container-vertical-padding: 6px,
-    --mat-form-field-filled-with-label-container-padding-top: 16px,
-    --mat-form-field-filled-with-label-container-padding-bottom: 4px,
-    --mat-form-field-filled-label-display: block,
-    --mat-select-trigger-text-line-height: normal,
-    --mdc-filled-text-field-label-text-size: 11px,
-    --mdc-outlined-text-field-label-text-size: 11px,
-    --mat-paginator-container-size: 32px,
-    --o-button-height: 28px,
+    --mdc-text-button-container-height: 32px,
+    --mdc-filled-button-container-height: 32px,
+    --mdc-protected-button-container-height: 32px,
+    --mdc-outlined-button-container-height: 32px,
   ),
 );
 
@@ -192,12 +182,12 @@ $_extended-density-tokens: (
 //
 // Same as ontimize-theme-density() but also emits manual overrides for
 // components whose density tokens are not defined for deeper scales (-4, -5)
-// in Angular Material's table — primarily mat-form-field and mat-paginator.
-//
-// Also keeps --o-button-height in sync with the density scale.
+// in Angular Material's table — primarily mat-form-field, mat-paginator, and
+// buttons. Also overrides --mat-standard-button-toggle-height for all scales
+// because Material's built-in scale does not match Ontimize's target sizes.
 //
 // Use this mixin instead of ontimize-theme-density() when targeting -4 / -5,
-// or when you want the button height to follow the density scale.
+// or when button and button-toggle heights should follow the density scale.
 //
 //   .o-high-density {
 //     @include ontimize-style.ontimize-theme-density-extended(-4);
@@ -211,7 +201,9 @@ $_extended-density-tokens: (
   @include mat.all-component-densities($scale);
 
   $overrides: map.get($_extended-density-tokens, $scale);
+
   @if $overrides {
+
     // Emit overrides in the same scope Material uses (current selector
     // or :root via `html`). This guarantees the tokens land on the same
     // element where mat.all-component-densities() wrote them, so the
@@ -222,7 +214,9 @@ $_extended-density-tokens: (
           #{$token}: #{$value};
         }
       }
-    } @else {
+    }
+
+    @else {
       html {
         @each $token, $value in $overrides {
           #{$token}: #{$value};

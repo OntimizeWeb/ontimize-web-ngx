@@ -21,7 +21,9 @@
             <mat-icon>close</mat-icon>
           </button>
         }
-        <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="isReadOnly || !enabled"></mat-datepicker-toggle>
+        <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="isReadOnly || !enabled">
+            <mat-icon matDatepickerToggleIcon>today</mat-icon>
+        </mat-datepicker-toggle>
         <mat-date-range-picker #picker [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" [touchUi]="touchUi" [dateClass]="dateClass"></mat-date-range-picker>
 
         <mat-error *oMatError="hasError('required')">

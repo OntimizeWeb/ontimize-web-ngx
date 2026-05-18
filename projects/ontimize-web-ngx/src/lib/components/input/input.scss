@@ -11,14 +11,8 @@
       padding: 0;
     }
 
-    .mat-mdc-icon-button {
-      --mdc-icon-button-state-layer-size: 24px;
-      --mdc-icon-button-icon-size: 20px;
-
-    }
-
-    >* {
-      margin-right: 4px;
+    >:last-child {
+      margin-right: 8px;
     }
 
 

@@ -60,13 +60,6 @@
   $foreground: map.get($theme, foreground);
   $typography: map.get($theme, typography);
 
-  // button height — applied globally to all MDC button variants
-  --o-button-height: 32px;
-  --mdc-text-button-container-height: var(--o-button-height);
-  --mdc-filled-button-container-height: var(--o-button-height);
-  --mdc-protected-button-container-height: var(--o-button-height);
-  --mdc-outlined-button-container-height: var(--o-button-height);
-
   // icon size for input prefix/suffix — no MDC token exists for this
   --o-input-icon-size: 20px;
 
@@ -122,73 +115,6 @@
   --mat-sys-focus-state-layer-opacity: 0.08;
   --mat-sys-pressed-state-layer-opacity: 0.10;
   --mat-sys-dragged-state-layer-opacity: 0.12;
-
-  // ─── Input font-size fix ─────────────────────────────────────────────────
-  // .mat-mdc-form-field-input-control usa "font: inherit" y hereda de
-  // .mat-mdc-form-field que lee --mat-form-field-container-text-size
-  // (fallback --mat-app-body-large-size). Los tokens --mdc-*-text-field-*
-  // no llegan a ese selector. Sobreescribimos el token de form-field y sus
-  // alias para que todos los caminos resuelvan al tamaño del nivel 'input'.
-  @if $typography {
-    $levels: map.get($typography, levels);
-    @if $levels {
-      $input: map.get($levels, input);
-      @if $input {
-        --mat-form-field-container-text-size: #{map.get($input, size)};
-        --mat-form-field-container-text-line-height: #{map.get($input, line-height)};
-        --mdc-filled-text-field-input-text-size: #{map.get($input, size)};
-        --mdc-outlined-text-field-input-text-size: #{map.get($input, size)};
-        --mdc-filled-text-field-input-text-line-height: #{map.get($input, line-height)};
-        --mdc-outlined-text-field-input-text-line-height: #{map.get($input, line-height)};
-      }
-    }
-  }
-
-  // ─── M3 typography sys tokens — mapeados desde $typography del consumer ─
-  // M3 default: body-large=16px. Los inputs MDC leen --mat-sys-body-large-size.
-  // Mapeamos los niveles Ontimize a sus equivalentes M3 sys para que la
-  // font-size configurada por el consumer se aplique en todos los componentes.
-  @if $typography {
-    $levels: map.get($typography, levels);
-    @if $levels {
-      $body-1:     map.get($levels, body-1);
-      $body-2:     map.get($levels, body-2);
-      $caption:    map.get($levels, caption);
-      $subtitle-1: map.get($levels, subtitle-1);
-      $subtitle-2: map.get($levels, subtitle-2);
-      $button:     map.get($levels, button);
-
-      @if $body-1 {
-        --mat-sys-body-large-size: #{map.get($body-1, size)};
-        --mat-sys-body-large-line-height: #{map.get($body-1, line-height)};
-        --mat-sys-body-large-weight: #{map.get($body-1, weight)};
-        --mat-sys-body-medium-size: #{map.get($body-1, size)};
-        --mat-sys-body-medium-line-height: #{map.get($body-1, line-height)};
-        --mat-sys-body-medium-weight: #{map.get($body-1, weight)};
-      }
-      @if $body-2 {
-        --mat-sys-body-small-size: #{map.get($body-2, size)};
-        --mat-sys-body-small-line-height: #{map.get($body-2, line-height)};
-        --mat-sys-body-small-weight: #{map.get($body-2, weight)};
-      }
-      @if $caption {
-        --mat-sys-label-small-size: #{map.get($caption, size)};
-        --mat-sys-label-small-line-height: #{map.get($caption, line-height)};
-      }
-      @if $subtitle-1 {
-        --mat-sys-title-medium-size: #{map.get($subtitle-1, size)};
-        --mat-sys-title-medium-line-height: #{map.get($subtitle-1, line-height)};
-        --mat-sys-label-large-size: #{map.get($subtitle-1, size)};
-      }
-      @if $subtitle-2 {
-        --mat-sys-title-small-size: #{map.get($subtitle-2, size)};
-        --mat-sys-label-medium-size: #{map.get($subtitle-2, size)};
-      }
-      @if $button {
-        --mat-sys-label-large-size: #{map.get($button, size)};
-      }
-    }
-  }
 
   // ─── Background levels ─────────────────────────────────────
   --o-bg-background: #{-get-bg($background, background)};
