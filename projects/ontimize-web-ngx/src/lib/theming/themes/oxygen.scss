@@ -5,118 +5,232 @@
 // Note: Color palettes are generated from primary: #1464a5, secondary: #5b93c0, tertiary: #8ab2d2
 $_palettes: (
   primary: (0: #000000,
-    10: #001d36,
+
+    10: #001D36,
+
     20: #003259,
-    25: #003d6b,
-    30: #00497d,
+
+    25: #003D6B,
+
+    30: #00497D,
+
     35: #005591,
-    40: #0d61a2,
-    50: #367abd,
-    60: #5494d8,
-    70: #70aff5,
-    80: #9fcaff,
-    90: #d1e4ff,
-    95: #eaf1ff,
-    98: #f8f9ff,
-    99: #fdfcff,
+
+    40: #1464A5,
+
+    50: #3D7EC0,
+
+    60: #5A97D9,
+
+    70: #78B0F1,
+
+    80: #9FCAFF,
+
+    90: #D1E4FF,
+
+    95: #EAF1FF,
+
+    98: #F8F9FF,
+
+    99: #FDFCFF,
+
     100: #ffffff,
+
   ),
+
   secondary: (0: #000000,
-    10: #001e31,
-    20: #003351,
-    25: #003f61,
-    30: #004b72,
-    35: #135781,
-    40: #25638d,
-    50: #437ca8,
-    60: #5e96c3,
-    70: #79b1df,
-    80: #95ccfc,
-    90: #cce5ff,
-    95: #e7f2ff,
-    98: #f7f9ff,
-    99: #fcfcff,
-    100: #ffffff,
+
+    10: #0A1D2E,
+
+    20: #1F3242,
+
+    25: #293D4F,
+
+    30: #34495C,
+
+    35: #40556A,
+
+    40: #516683,
+
+    50: #697F9B,
+
+    60: #8399B4,
+
+    70: #9EB4CE,
+
+    80: #B9CFE9,
+
+    90: #D6E3F8,
+
+    95: #EBF1FF,
+
+    98: #F7F9FF,
+
+    99: #FCFCFF,
+
+    100: #FFFFFF,
+
   ),
+
   tertiary: (0: #000000,
-    10: #001e2f,
-    20: #00344e,
-    25: #113f5a,
-    30: #204b66,
-    35: #2d5673,
-    40: #3a627f,
-    50: #547b99,
-    60: #6d95b4,
-    70: #88b0d0,
-    80: #a3cbec,
-    90: #cae6ff,
-    95: #e6f2ff,
-    98: #f6faff,
-    99: #fcfcff,
+
+    10: #001F28,
+
+    20: #00353F,
+
+    25: #0A414D,
+
+    30: #1A4E5B,
+
+    35: #285A69,
+
+    40: #3D7A8E,
+
+    50: #5493A8,
+
+    60: #6DADC3,
+
+    70: #88C7DF,
+
+    80: #A3E1FB,
+
+    90: #CAE6FF,
+
+    95: #E6F2FF,
+
+    98: #F6FAFF,
+
+    99: #FCFCFF,
+
     100: #ffffff,
+
   ),
+
   neutral: (0: #000000,
-    10: #191c20,
-    20: #2e3135,
-    25: #393c40,
-    30: #44474c,
+
+    4: #0C0E12,
+
+    6: #111318,
+
+    10: #191C20,
+
+    12: #1D2024,
+
+    17: #272A2F,
+
+    20: #2E3135,
+
+    22: #32353A,
+
+    24: #36393E,
+
+    25: #393C40,
+
+    30: #44474C,
+
     35: #505257,
-    40: #5c5e64,
-    50: #75777c,
-    60: #8e9196,
-    70: #a9abb1,
-    80: #c5c6cc,
-    90: #e1e2e8,
-    95: #eff0f6,
-    98: #f8f9ff,
-    99: #fdfcff,
+
+    40: #5C5E64,
+
+    50: #75777C,
+
+    60: #8E9196,
+
+    70: #A9ABB1,
+
+    80: #C5C6CC,
+
+    87: #D8DAE0,
+
+    90: #E1E2E8,
+
+    92: #E7E8EE,
+
+    94: #ECEEF4,
+
+    95: #EFF0F6,
+
+    96: #F2F3F9,
+
+    98: #F8F9FF,
+
+    99: #FDFCFF,
+
     100: #ffffff,
-    4: #0b0e12,
-    6: #111418,
-    12: #1d2024,
-    17: #272a2f,
-    22: #32353a,
-    24: #36393e,
-    87: #d8dae0,
-    92: #e7e8ee,
-    94: #eceef4,
-    96: #f2f3f9,
+
+
   ),
+
   neutral-variant: (0: #000000,
-    10: #161c24,
-    20: #2b3139,
-    25: #363c45,
+
+    10: #161C24,
+
+    20: #2B3139,
+
+    25: #363C45,
+
     30: #414750,
-    35: #4d535c,
-    40: #595f68,
+
+    35: #4D535C,
+
+    40: #595F68,
+
     50: #717781,
-    60: #8b919b,
-    70: #a6abb6,
+
+    60: #8B919B,
+
+    70: #A6ABB6,
+
     80: #c1c7d2,
+
     90: #dde3ee,
+
     95: #ebf1fc,
+
     98: #f8f9ff,
+
     99: #fdfcff,
+
     100: #ffffff,
+
   ),
+
   error: (0: #000000,
+
     10: #410002,
+
     20: #690005,
+
     25: #7e0007,
+
     30: #93000a,
+
     35: #a80710,
+
     40: #ba1a1a,
+
     50: #de3730,
+
     60: #ff5449,
+
     70: #ff897d,
+
     80: #ffb4ab,
+
     90: #ffdad6,
+
     95: #ffedea,
+
     98: #fff8f7,
+
     99: #fffbff,
+
     100: #ffffff,
+
   ),
+
 );
+
 
 $_rest: (
   secondary: map.get($_palettes, secondary),
@@ -128,17 +242,15 @@ $_primary: map.merge(map.get($_palettes, primary), $_rest);
 $_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
 
 /* Light theme with Noto Sans typography */
-$theme: ontimize-style.o-mat-light-theme((
-  primary:    $_primary,
-  tertiary:   $_tertiary,
-  typography: oxygen-typography.$typography,
-  density:    -4,
-));
+$theme: ontimize-style.o-mat-light-theme((primary: $_primary,
+      tertiary: $_tertiary,
+      typography: oxygen-typography.$typography,
+      density: -4,
+    ));
 
 /* Dark theme with Noto Sans typography */
-$dark-theme: ontimize-style.o-mat-dark-theme((
-  primary:    $_primary,
-  tertiary:   $_tertiary,
-  typography: oxygen-typography.$typography,
-  density:    -4,
-));
+$dark-theme: ontimize-style.o-mat-dark-theme((primary: $_primary,
+      tertiary: $_tertiary,
+      typography: oxygen-typography.$typography,
+      density: -4,
+    ));
