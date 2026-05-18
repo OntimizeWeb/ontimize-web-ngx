@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
-import { AbstractControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, forwardRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,6 @@ import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.se
 import { OConfigureServiceArgs } from '../../../types/configure-service-args.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFileItem } from './o-file-item.class';
@@ -80,7 +79,8 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
   inputs: DEFAULT_INPUTS_O_FILE_INPUT,
   outputs: DEFAULT_OUTPUTS_O_FILE_INPUT,
   providers: [
-    { provide: OntimizeFileService, useFactory: fileServiceFactory, deps: [Injector] }
+    { provide: OntimizeFileService, useFactory: fileServiceFactory, deps: [Injector] },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OFileInputComponent), multi: true }
   ]
 })
 export class OFileInputComponent extends OFormDataComponent implements OnInit {
@@ -123,11 +123,10 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   protected serviceType: string;
   protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector,
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
   }
 
   ngOnInit() {

@@ -4,15 +4,13 @@ import {
   ContentChildren,
   ElementRef,
   forwardRef,
-  Inject,
   Injector,
   OnDestroy,
   OnInit,
-  Optional,
   QueryList,
   ViewEncapsulation
 } from '@angular/core';
-import { ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,7 +27,6 @@ import { OMatSuffix } from '../../../directives/o-mat-suffix.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
@@ -48,7 +45,8 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
   templateUrl: './o-text-input.component.html',
   styleUrls: ['./o-text-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_TEXT_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OTextInputComponent), multi: true }]
 })
 
 export class OTextInputComponent extends OFormDataComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -64,11 +62,10 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit, O
   public regulatePattern: string;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
   }
 
   ngOnInit() {

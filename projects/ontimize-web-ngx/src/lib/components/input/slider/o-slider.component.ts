@@ -1,10 +1,9 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, forwardRef, Injector, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 
-import { OFormComponent } from '../../../components/form/o-form.component';
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
@@ -31,7 +30,8 @@ export type SliderDisplayFunction = (value: number) => string;
   templateUrl: 'o-slider.component.html',
   styleUrls: ['./o-slider.component.scss'],
   inputs: DEFAULT_INPUTS_O_SLIDER_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OSliderComponent), multi: true }]
 })
 export class OSliderComponent extends OFormDataComponent {
 
@@ -55,11 +55,10 @@ export class OSliderComponent extends OFormDataComponent {
   oDisplayWith: SliderDisplayFunction = (value: number) => `${value}`;;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
   }
 
   onClickBlocker(evt: Event) {

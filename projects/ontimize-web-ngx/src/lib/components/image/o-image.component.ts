@@ -1,6 +1,6 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, ElementRef, forwardRef, HostBinding, Inject, inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Component, ElementRef, forwardRef, HostBinding, inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,7 +19,6 @@ import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { FormValueOptions } from '../../types';
 import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
-import { OFormComponent } from '../form/o-form.component';
 import { OFormControl } from '../input/o-form-control.class';
 import { OFormDataComponent } from '../o-form-data-component.class';
 
@@ -55,7 +54,7 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   host: {
     '[class.o-image]': 'true'
   },
-  providers: [OSafePipe]
+  providers: [OSafePipe, { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OImageComponent), multi: true }]
 })
 export class OImageComponent extends OFormDataComponent implements OnInit, OnDestroy {
 
@@ -90,11 +89,10 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   public src = '';
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'BASE64';
     this.dialog = this.injector.get(MatDialog);
   }

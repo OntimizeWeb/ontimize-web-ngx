@@ -1,5 +1,5 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { Component, ElementRef, forwardRef, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,7 +10,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OValidators } from '../../../validators/o-validators';
-import { OFormComponent } from '../../form/o-form.component';
 import {
   OTextInputComponent
 } from '../text-input/o-text-input.component';
@@ -20,15 +19,15 @@ import {
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, OTranslatePipe],
   selector: 'o-email-input',
   templateUrl: './o-email-input.component.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OEmailInputComponent), multi: true }]
 })
 export class OEmailInputComponent extends OTextInputComponent implements OnInit {
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector) {
-    super(form, elRef, injector);
+    super(elRef, injector);
   }
 
   resolveValidators(): ValidatorFn[] {

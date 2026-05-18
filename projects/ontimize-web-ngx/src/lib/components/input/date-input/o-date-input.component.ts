@@ -1,5 +1,5 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, forwardRef, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,7 +26,6 @@ import { ODateValueType } from '../../../types/o-date-value.type';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
@@ -53,7 +52,8 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   encapsulation: ViewEncapsulation.None,
   providers: [
-    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ODateInputComponent), multi: true }
   ]
 })
 export class ODateInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
@@ -110,12 +110,11 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   private momentDateAdapter: DateAdapter<MomentDateAdapter>;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     dateAdapter: DateAdapter<OntimizeMomentDateAdapter>,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.momentDateAdapter = dateAdapter;
     this._defaultSQLTypeKey = 'DATE';
     this.momentSrv = this.injector.get(MomentService);

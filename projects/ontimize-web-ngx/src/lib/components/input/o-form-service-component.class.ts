@@ -13,7 +13,6 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
-import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent } from '../o-form-data-component.class';
 import { BaseService } from '../../services/base-service.class';
 import { FactoryUtil } from '../../util/factory.util';
@@ -139,12 +138,10 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
-    form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
-    this.form = form;
+    super(elRef, injector);
     this.elRef = elRef;
     this.oErrorDialogManager = injector.get(OErrorDialogManager);
   }

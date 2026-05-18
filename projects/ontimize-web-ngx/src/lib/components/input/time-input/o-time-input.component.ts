@@ -4,15 +4,13 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  Inject,
   Injector,
   OnDestroy,
   OnInit,
-  Optional,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,7 +27,6 @@ import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { ODateInputComponent } from '../date-input/o-date-input.component';
@@ -64,6 +61,7 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
   styleUrls: ['./o-time-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_TIME_INPUT,
   encapsulation: ViewEncapsulation.None,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OTimeInputComponent), multi: true }],
   host: {
     '[class.o-time-input]': 'true'
   }
@@ -106,11 +104,10 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   public hourAttr = 'hourInput';
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector,
     protected cd: ChangeDetectorRef) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'DATE';
   }
 

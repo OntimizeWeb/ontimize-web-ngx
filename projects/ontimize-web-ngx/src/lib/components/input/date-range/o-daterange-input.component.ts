@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, forwardRef, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +24,6 @@ import { ODateValueType } from '../../../types/o-date-value.type';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT, OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { DEFAULT_INPUTS_O_DATE_INPUT } from '../date-input/o-date-input.component';
@@ -55,7 +54,8 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   outputs: DEFAULT_OUTPUTS_O_DATERANGE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATERANGE_INPUT,
   providers: [
-    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ODateRangeInputComponent), multi: true }
   ]
 })
 export class ODateRangeInputComponent extends OFormDataComponent implements OnDestroy, OnInit {
@@ -161,13 +161,12 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public placeholderStartDay = 'DATERANGE.PLACEHOLDER_STARTDATE';
   public placeholderEndDay = 'DATERANGE.PLACEHOLDER_ENDDATE';
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector,
     protected momentDateAdapter: DateAdapter<OntimizeMomentDateAdapter>,
     protected breakpointObserver: BreakpointObserver
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.momentSrv = this.injector.get(MomentService);
     this.range = new FormGroup({
       [this.startKey]: new OFormControl(),

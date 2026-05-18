@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, forwardRef, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,7 @@ export const DEFAULT_OUTPUTS_O_PERCENT_INPUT = [
   inputs: DEFAULT_INPUTS_O_PERCENT_INPUT,
   outputs: DEFAULT_OUTPUTS_O_PERCENT_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [OPercentPipe, { provide: ORealPipe, useExisting: OPercentPipe }, { provide: OIntegerPipe, useExisting: OPercentPipe }]
+  providers: [OPercentPipe, { provide: ORealPipe, useExisting: OPercentPipe }, { provide: OIntegerPipe, useExisting: OPercentPipe }, { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OPercentInputComponent), multi: true }]
 })
 export class OPercentInputComponent extends ORealInputComponent implements OnInit {
 

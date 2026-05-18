@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, forwardRef, OnInit, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ export const DEFAULT_INPUTS_O_CURRENCY_INPUT = [
   styleUrls: ['./o-currency-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_CURRENCY_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }]
+  providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }, { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OCurrencyInputComponent), multi: true }]
 })
 export class OCurrencyInputComponent extends ORealInputComponent implements OnInit {
 

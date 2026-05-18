@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { FormControl, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, forwardRef, inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,6 @@ import { IIntegerPipeArgument, OIntegerPipe } from '../../../pipes/o-integer.pip
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
 const INPUT_TYPE_TEXT = 'text'
@@ -39,7 +38,7 @@ export const DEFAULT_INPUTS_O_INTEGER_INPUT = [
   styleUrls: ['./o-integer-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_INTEGER_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [OIntegerPipe]
+  providers: [OIntegerPipe, { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OIntegerInputComponent), multi: true }]
 })
 export class OIntegerInputComponent extends OFormDataComponent implements AfterViewInit, OnInit {
 
@@ -61,11 +60,10 @@ export class OIntegerInputComponent extends OFormDataComponent implements AfterV
   protected pipeArguments: IIntegerPipeArgument;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'INTEGER';
     this.inputType = INPUT_TYPE_TEXT;
   }

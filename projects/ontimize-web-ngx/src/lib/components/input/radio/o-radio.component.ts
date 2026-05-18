@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Injector, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioChange, MatRadioGroup, MatRadioModule } from '@angular/material/radio';
@@ -16,7 +16,6 @@ import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 
@@ -35,7 +34,8 @@ export const DEFAULT_INPUTS_O_RADIO = [
   styleUrls: ['./o-radio.component.scss'],
   inputs: DEFAULT_INPUTS_O_RADIO,
   providers: [
-    OntimizeServiceProvider
+    OntimizeServiceProvider,
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ORadioComponent), multi: true }
   ],
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -57,11 +57,10 @@ export class ORadioComponent extends OFormServiceComponent implements AfterViewI
   protected groupId: string;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.groupId = crypto.randomUUID();
   }
 

@@ -1,5 +1,5 @@
-import { Component, ElementRef, forwardRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, forwardRef, Injector, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
@@ -39,6 +38,7 @@ export const DEFAULT_INPUTS_O_SLIDETOGGLE = [
   templateUrl: './o-slide-toggle.component.html',
   styleUrls: ['./o-slide-toggle.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OSlideToggleComponent), multi: true }],
   host: {
     '[class.o-slide-toggle]': 'true'
   }
@@ -49,11 +49,10 @@ export class OSlideToggleComponent extends OBooleanFormDataComponent {
   public labelPosition: 'before' | 'after' = 'after';
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
   }
 
 

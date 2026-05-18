@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +20,6 @@ import { OContextMenuComponent } from '../../contextmenu/o-context-menu.componen
 import { OContextMenuDirective } from '../../contextmenu/o-context-menu.directive';
 import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o-context-menu-item.component';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
@@ -42,7 +41,8 @@ export const DEFAULT_INPUTS_O_COMBO = [
   selector: 'o-combo',
   providers: [
     OntimizeServiceProvider,
-    { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) }
+    { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OComboComponent), multi: true }
   ],
   inputs: DEFAULT_INPUTS_O_COMBO,
   templateUrl: './o-combo.component.html',
@@ -99,11 +99,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   protected subscription: Subscription = new Subscription();
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.defaultValue = '';
   }
 

@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, NgZone, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, forwardRef, Injector, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +18,6 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
@@ -42,6 +41,7 @@ export const DEFAULT_INPUTS_O_HOUR_INPUT = [
   styleUrls: ['./o-hour-input.component.scss'],
   encapsulation: ViewEncapsulation.None,
   inputs: DEFAULT_INPUTS_O_HOUR_INPUT,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OHourInputComponent), multi: true }],
   host: {
     '[class.o-hour-input]': 'true'
   }
@@ -64,11 +64,10 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   private skipNextBlur = false;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'TIMESTAMP';
   }
 

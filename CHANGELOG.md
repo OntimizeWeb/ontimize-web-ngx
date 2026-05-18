@@ -1,3 +1,10 @@
+## 18.0.0-next.5
+### Features
+* **inputs**: Input components (`o-text-input`, `o-integer-input`, `o-date-input`, `o-combo`, `o-checkbox`, `o-currency-input`, `o-daterange-input`, and all other Ontimize inputs) can now be used **outside of `o-form`** with native Angular reactive forms. Bind any input directly via `[formControl]="myControl"` or `ngModel` without wrapping it in an `<o-form>`. Each component implements `ControlValueAccessor` and registers itself as `NG_VALUE_ACCESSOR`. An `IOFormParent` interface and `O_FORM_CONTEXT` injection token replace the previous hard dependency on `OFormComponent` in the constructor — components inject the token optionally, so they degrade gracefully when no parent form is present.
+
+### BREAKING CHANGES
+* **inputs**: All Ontimize input components no longer accept `OFormComponent` as a constructor parameter. If you have custom components that extend `OFormDataComponent`, `OFormServiceComponent`, or `OBooleanFormDataComponent` and pass a `form` parameter via `super(form, elRef, injector)`, update the call to `super(elRef, injector)` and remove the `@Optional() @Inject(forwardRef(() => OFormComponent))` parameter. The form context is now resolved automatically via `inject(O_FORM_CONTEXT, { optional: true })`.
+
 ## 18.0.0-next.4
 ### Features
 * Integrated changes from versions **15.9.1**

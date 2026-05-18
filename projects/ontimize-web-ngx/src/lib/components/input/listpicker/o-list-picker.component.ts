@@ -12,7 +12,7 @@ import {
   SimpleChange,
   ViewChild
 } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,7 +29,6 @@ import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
@@ -59,7 +58,8 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
   styleUrls: ['./o-list-picker.component.scss'],
   providers: [
     OntimizeServiceProvider,
-    { provide: OFormServiceComponent, useExisting: forwardRef(() => OListPickerComponent) }
+    { provide: OFormServiceComponent, useExisting: forwardRef(() => OListPickerComponent) },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OListPickerComponent), multi: true }
   ],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
@@ -101,10 +101,9 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected blurPrevent = false;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.matDialog = this.injector.get<MatDialog>(MatDialog);
     this.stateCtrl = new FormControl();
 

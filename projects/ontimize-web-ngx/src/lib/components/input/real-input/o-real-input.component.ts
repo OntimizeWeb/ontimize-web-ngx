@@ -1,5 +1,5 @@
-import { Component, ElementRef, forwardRef, Inject, inject, Injector, OnInit, Optional, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Component, ElementRef, forwardRef, inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { AbstractControl, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,6 @@ import { OIntegerPipe } from '../../../pipes/o-integer.pipe';
 import { IRealPipeArgument, ORealPipe } from '../../../pipes/o-real.pipe';
 import { NumberService } from '../../../services/number.service';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../../form/o-form.component';
 import { OIntegerInputComponent } from '../integer-input/o-integer-input.component';
 import { OFormControl } from '../o-form-control.class';
 
@@ -33,7 +32,7 @@ export const DEFAULT_INPUTS_O_REAL_INPUT = [
   templateUrl: './o-real-input.component.html',
   inputs: DEFAULT_INPUTS_O_REAL_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }]
+  providers: [ORealPipe, { provide: OIntegerPipe, useExisting: ORealPipe }, { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ORealInputComponent), multi: true }]
 })
 export class ORealInputComponent extends OIntegerInputComponent implements OnInit {
 
@@ -58,11 +57,10 @@ export class ORealInputComponent extends OIntegerInputComponent implements OnIni
   protected numberService: NumberService;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'FLOAT';
     this.numberService = this.injector.get(NumberService);
   }

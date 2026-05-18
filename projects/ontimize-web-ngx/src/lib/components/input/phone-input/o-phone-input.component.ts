@@ -4,16 +4,14 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
-  Inject,
   Injector,
   Input,
   OnInit,
-  Optional,
   Output,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,7 +29,6 @@ import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
 import { OValidators } from '../../../validators/o-validators';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import {
   DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
   DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
@@ -59,7 +56,7 @@ const PHONE_PREFIX = '+'
   styleUrls: ['./o-phone-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_PHONE_INPUT,
   encapsulation: ViewEncapsulation.None,
-  providers: [CountryCode],
+  providers: [CountryCode, { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OPhoneInputComponent), multi: true }],
   host: {
     '[class.o-phone-input]': 'true'
   }
@@ -105,11 +102,10 @@ export class OPhoneInputComponent extends OFormDataComponent implements OnInit, 
 
   constructor(
     private countryCodeData: CountryCode,
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.fetchCountryData();
   }
 

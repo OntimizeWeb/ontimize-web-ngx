@@ -46,3 +46,4 @@ export * from './service-response.interface';
 export * from './jsonapi-config.interface'
 export * from './jsonapi-response.interface';
 export * from './column-filter-change-event.interface';
+export * from './o-form-parent.interface';

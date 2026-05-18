@@ -1,8 +1,7 @@
-import { Directive, ElementRef, forwardRef, Inject, Injector, Optional } from '@angular/core';
+import { Directive, ElementRef, Injector } from '@angular/core';
 
 import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
-import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent } from '../o-form-data-component.class';
 
 
@@ -25,11 +24,10 @@ export class OBooleanFormDataComponent extends OFormDataComponent {
   public booleanType: 'number' | 'boolean' | 'string' = 'boolean';
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'BOOLEAN';
     this.defaultValue = false;
   }

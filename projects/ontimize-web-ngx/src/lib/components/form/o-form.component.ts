@@ -56,6 +56,7 @@ import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormBase } from './o-form-base.class';
 import { O_FORM_GLOBAL_CONFIG } from './o-form-tokens';
+import { IOFormParent, O_FORM_CONTEXT } from '../../interfaces/o-form-parent.interface';
 import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
 import { OFormToolbarBase } from './toolbar/o-form-toolbar-base.class';
@@ -200,6 +201,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   selector: 'o-form',
   providers: [
     { provide: OFormBase, useExisting: forwardRef(() => OFormComponent) },
+    { provide: O_FORM_CONTEXT, useExisting: forwardRef(() => OFormComponent) },
     OntimizeServiceProvider,
     OFormMessageService
   ],
@@ -212,7 +214,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
     '[class.o-form]': 'true'
   }
 })
-export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate, AfterViewInit {
+export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate, AfterViewInit, IOFormParent {
 
   public static DEFAULT_LAYOUT_DIRECTION = 'column';
   public static guardClassName = 'CanDeactivateFormGuard';
