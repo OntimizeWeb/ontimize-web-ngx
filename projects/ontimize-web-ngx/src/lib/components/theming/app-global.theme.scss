@@ -126,7 +126,7 @@
 
         .mdc-list {
           padding: 0;
-          @include mat.list-density(-2);
+          // @include mat.list-density(-2);
 
           .mat-mdc-list-item.mdc-list-item {
             margin: 6px 0;
@@ -256,39 +256,39 @@
   }
 
   /*BUTTONS HOVER*/
-  .mat-mdc-dialog-actions button:not([disabled]),
-  .o-form .o-form-toolbar button:not([disabled]).o-form-toolbar-button,
-  .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
-  .o-list .o-list-toolbar button.o-list-button:not([disabled]),
-  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
+  // .mat-mdc-dialog-actions button:not([disabled]),
+  // .o-form .o-form-toolbar button:not([disabled]).o-form-toolbar-button,
+  // .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
+  // .o-list .o-list-toolbar button.o-list-button:not([disabled]),
+  // .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
 
-    &.mat-mdc-button-base.mat-primary,
-    &.mat-mdc-button-base.o-button-primary {
-      color: var(--mat-sys-on-primary-container);
-      background-color: var(--mat-sys-primary-container);
-      border-color: transparent;
+  //   &.mat-mdc-button-base.mat-primary,
+  //   &.mat-mdc-button-base.o-button-primary {
+  //     color: var(--mat-sys-on-primary-container);
+  //     background-color: var(--mat-sys-primary-container);
+  //     border-color: transparent;
 
-      &:hover {
-        color: var(--mat-sys-primary);
-        background-color: #ffffff;
-        border-color: var(--o-fg-divider);
-      }
+  //     &:hover {
+  //       color: var(--mat-sys-primary);
+  //       background-color: #ffffff;
+  //       border-color: var(--o-fg-divider);
+  //     }
 
-    }
+  //   }
 
-    &.mat-mdc-button-base,
-    &.mat-mdc-button-base.mat-accent {
-      color: var(--mat-sys-tertiary);
-      background-color: #ffffff;
+  //   &.mat-mdc-button-base,
+  //   &.mat-mdc-button-base.mat-accent {
+  //     color: var(--mat-sys-tertiary);
+  //     background-color: #ffffff;
 
-      &:hover {
-        color: var(--mat-sys-on-primary-container);
-        background-color: var(--mat-sys-primary-container);
-        border-color: transparent;
-      }
-    }
+  //     &:hover {
+  //       color: var(--mat-sys-on-primary-container);
+  //       background-color: var(--mat-sys-primary-container);
+  //       border-color: transparent;
+  //     }
+  //   }
 
-  }
+  // }
 
   .o-form .o-form-toolbar [o-form-toolbar-buttons]>* {
 
@@ -300,38 +300,37 @@
 
   }
 
-  .o-button button.mat-mdc-outlined-button {
-    &:not([disabled]) {
-      &.mat-primary {
-        color: var(--mat-sys-on-primary-container);
-        background-color: var(--mat-sys-primary-container);
-        border-color: transparent;
+  // .o-button button.mat-mdc-outlined-button {
+  //   &:not([disabled]) {
+  //     &.mat-primary {
+  //       color: var(--mat-sys-on-primary-container);
+  //       background-color: var(--mat-sys-primary-container);
+  //       border-color: transparent;
 
-        &:hover {
-          color: var(--mat-sys-primary);
-          background-color: #ffffff;
-          border-color: var(--o-fg-divider);
-        }
+  //       &:hover {
+  //         color: var(--mat-sys-primary);
+  //         background-color: #ffffff;
+  //         border-color: var(--o-fg-divider);
+  //       }
 
-      }
+  //     }
 
-      &.mat-accent {
-        color: var(--mat-sys-tertiary);
-        background-color: #ffffff;
+  //     &.mat-accent {
+  //       color: var(--mat-sys-tertiary);
+  //       background-color: #ffffff;
 
-        &:hover {
-          color: var(--mat-sys-on-tertiary-container);
-          background-color: var(--mat-sys-tertiary-container);
-        }
-      }
+  //       &:hover {
+  //         color: var(--mat-sys-on-tertiary-container);
+  //         background-color: var(--mat-sys-tertiary-container);
+  //       }
+  //     }
 
-    }
+  //   }
 
-  }
+  // }
 
   /** QUICKFILTER */
 
-  // Fixed 32px height for quickfilter form-fields inside data containers
   .o-table .o-table-quickfilter .quickFilter,
   .o-list .o-search-input .quickFilter,
   .o-tree .o-search-input .quickFilter,
@@ -339,8 +338,6 @@
     .mat-mdc-form-field {
       .mat-mdc-text-field-wrapper {
         .mat-mdc-form-field-flex {
-          height: 32px;
-          line-height: 32px;
           padding: 0;
         }
       }
@@ -378,7 +375,6 @@
           .mat-mdc-form-field-infix {
             align-self: center;
             padding: 0;
-            min-height: 32px;
             display: flex;
           }
 
