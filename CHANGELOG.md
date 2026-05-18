@@ -1,7 +1,20 @@
-## 18.0.0-next.3 (2026-05-13)
+## 18.0.0-next.3  (2026-05-18)
+
+### Features
+* **theming**: Updated oxygen theme color palettes.
 
 ### Bug Fixes
 * **guards**: `CanDeactivateFormGuard` and `CanActivateFormLayoutChildGuard` no longer throw `NullInjectorError` in Angular 14+. The router resolves `canDeactivate`/`canActivateChild` guard classes from the environment injector (root level), not from the component injector. Pushing the guard class directly onto the route array made it invisible to the router. Both guards are now registered as arrow function wrappers that capture the already-resolved instance from the component injector, so the router does not need to resolve them itself.
+* **theming**: Button heights for density scales −1 to −5 are now fixed at 32 px via `--mdc-text/filled/protected/outlined-button-container-height` in `$_extended-density-tokens`. Density 0 uses Material's default (40 px).
+* **theming**: Quickfilter form-field height (`o-table`, `o-list`, `o-tree`, `o-grid`) now respects the configured density instead of being hardcoded to 32 px.
+* **theming**: Hardcoded heights removed from `o-form-toolbar`, `o-data-toolbar`, and `o-search-input` — these components now follow the density scale.
+* **theming**: Form toolbar background set to transparent.
+* **theming**: Button hover override styles reset to Material defaults.
+
+### BREAKING CHANGES
+* **theming**: `--o-button-height` token removed. Button heights are now controlled exclusively by Material's native density tokens (`--mdc-text-button-container-height`, `--mdc-filled-button-container-height`, `--mdc-protected-button-container-height`, `--mdc-outlined-button-container-height`). Remove any custom SCSS that reads `--o-button-height` and use the corresponding MDC token directly.
+* **theming**: Per-level typography tokens removed (`--o-font-<level>-size`, `--o-font-<level>-line-height`, `--o-font-<level>-weight`). Font sizes and weights now inherit from Material M3 system tokens (`--mat-sys-*`). Only `--o-font-family` is still emitted. Replace any SCSS that consumed `--o-font-*-size` / `--o-font-*-weight` with the corresponding `--mat-sys-*` token (see migration guide for equivalences).
+
 
 ---
 
