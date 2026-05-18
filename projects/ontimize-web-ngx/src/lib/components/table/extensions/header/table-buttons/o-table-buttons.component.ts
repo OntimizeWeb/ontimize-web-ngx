@@ -95,7 +95,7 @@ export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy 
   }
 
   public reloadData(): void {
-    this.table.reloadData();
+    this.table.reloadData(false);
   }
 
   public remove(): void {

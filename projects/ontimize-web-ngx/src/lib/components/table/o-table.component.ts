@@ -1683,7 +1683,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     });
     this.onSortChange.emit(this.sortColArray);
     if (this.pageable) {
-      this.reloadData();
+      this.reloadData(false);
     }
   }
 
@@ -1993,10 +1993,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.previousRendererData = this.dataSource.renderedData;
 
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
-    }
-
-    if (this.state.selection && this.dataSource?.renderedData?.length > 0 && this.getSelectedItems().length === 0) {
-      this.checkSelectedItemData();
     }
 
     if (this.refreshExpandableRowState) {
@@ -3007,7 +3003,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         const foundItem = this.dataSource.renderedData.find(data =>
           selectedItemKeys.every(key => data[key] === selectedItem[key])
         );
-        if (foundItem) {
+        if (foundItem && !this.isRowSelected(foundItem)) {
           this.setSelected(foundItem);
         }
       });

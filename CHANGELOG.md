@@ -1,5 +1,8 @@
-## 18.0.0-next.3  (2026-05-18)
+## 18.0.0-next.4
+### Features
+* Integrated changes from versions **15.9.1**
 
+## 18.0.0-next.3  (2026-05-18)
 ### Features
 * **theming**: Updated oxygen theme color palettes.
 
