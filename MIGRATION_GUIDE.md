@@ -242,10 +242,38 @@ El framework 18.0.0-next.2 emite tokens **Material 3 nativos** (`--mat-sys-*`, `
 **Tokens Ontimize (`--o-*`):**
 - Foreground: `--o-fg-text`, `--o-fg-secondary-text`, `--o-fg-divider`, `--o-fg-icon`, `--o-fg-disabled`, `--o-fg-title`, `--o-fg-hint`, …
 - Background: `--o-bg-card`, `--o-bg-background`, `--o-bg-level-0`, `--o-bg-level-04`, `--o-bg-level-06`, `--o-bg-level-08`, `--o-bg-level-1`, `--o-bg-status-bar`, `--o-bg-app-bar`, `--o-bg-sidenav-overlay`.
-- Typography: `--o-font-family` y, por cada level (`body-1`, `input`, `body-2`, `subtitle-1`, `subtitle-2`, `headline-5`, `headline-6`, `caption`, `button`): `--o-font-<level>-size`, `--o-font-<level>-line-height`, `--o-font-<level>-weight`. El level `input` controla el `font-size` de los `mat-form-field` y es independiente de `body-1`.
-- Sizing: `--o-button-height`, `--o-input-icon-size`.
+- Typography: `--o-font-family` (solo la familia — los tamaños heredan de los tokens M3 `--mat-sys-*`).
+- Sizing: `--o-input-icon-size`.
 
 > ⚠️ **Eliminado en 18.0.0-next.2**: los tokens `--o-primary-*`, `--o-accent-*`, `--o-warn-*` (y sus variantes `-contrast-*`) ya **no se emiten**. Ver sección [Migración a Material 3 nativo](#migracion-a-material-3-nativo-desde-18-0-0-next-1) para la tabla de equivalencias M3.
+
+> ⚠️ **Eliminado en 18.0.0-next.3**: `--o-button-height` y todos los tokens `--o-font-<level>-size/line-height/weight` ya **no se emiten**. Ver tablas de equivalencias más abajo.
+
+#### Equivalencias de tokens tipográficos eliminados
+
+| Token eliminado | Equivalente M3 |
+|---|---|
+| `--o-font-body-1-size` | `--mat-sys-body-medium-size` |
+| `--o-font-body-1-line-height` | `--mat-sys-body-medium-line-height` |
+| `--o-font-body-1-weight` | `--mat-sys-body-medium-weight` |
+| `--o-font-body-2-size` | `--mat-sys-body-small-size` |
+| `--o-font-subtitle-1-size` | `--mat-sys-title-medium-size` |
+| `--o-font-subtitle-1-line-height` | `--mat-sys-title-medium-line-height` |
+| `--o-font-subtitle-2-size` | `--mat-sys-title-small-size` |
+| `--o-font-headline-5-size` | `--mat-sys-headline-small-size` |
+| `--o-font-headline-6-size` | `--mat-sys-title-large-size` |
+| `--o-font-caption-size` | `--mat-sys-label-small-size` |
+| `--o-font-button-size` | `--mat-sys-label-large-size` |
+
+#### Equivalencias del token de botón eliminado
+
+| Token eliminado | Equivalente MDC / M3 |
+|---|---|
+| `--o-button-height` | `--mdc-text-button-container-height` |
+| `--o-button-height` | `--mdc-filled-button-container-height` |
+| `--o-button-height` | `--mdc-protected-button-container-height` |
+| `--o-button-height` | `--mdc-outlined-button-container-height` |
+| `--o-button-height` (button-toggle) | `--mat-standard-button-toggle-height` |
 
 Para styles propios **no** llames a `mat.m2-get-color-from-palette()`. Usa los tokens M3 directamente:
 
@@ -255,7 +283,7 @@ Para styles propios **no** llames a `mat.m2-get-color-from-palette()`. Usa los t
 // Después (M3 sys token)
 .my-button { color: var(--mat-sys-primary); }
 
-.my-label  { font-size: var(--o-font-body-2-size); }
+.my-label  { font-size: var(--mat-sys-body-small-size); }
 ```
 
 ### 3.1.quater Sobrescribir tokens Material (M3)
@@ -324,45 +352,20 @@ $theme: ontimize-style.o-mat-light-theme((
 El tema `oxygen` incluido en el framework usa `$density: -4` por defecto
 (look compacto). Para formas más aireadas o más compactas, pásale otro valor.
 
-> **Altura de botones**: el framework controla la altura de todos los botones
-> mediante el token `--o-button-height`, que se ajusta automáticamente con
-> la escala de densidad del tema (40px en escala 0, 32px en `-2` por defecto,
-> 24px en `-5`). Los tokens MDC derivados (`--mdc-text-button-container-height`,
-> `--mdc-filled-button-container-height`, `--mdc-protected-button-container-height`,
-> `--mdc-outlined-button-container-height`) leen `--o-button-height` y afectan
-> a todos los botones de la aplicación. Si necesitas un valor diferente,
-> sobrescríbelo en el scope deseado:
+> **Altura de botones**: la altura de los botones es de 40 px en escala 0 (Material por defecto) y 32 px para las escalas −1 a −5 (fijado por Ontimize). Si necesitas un valor diferente en un scope concreto, sobrescribe el token directamente:
 >
 > ```scss
-> html { --o-button-height: 36px; }         // global
-> .my-toolbar { --o-button-height: 28px; }  // scope concreto
+> html { --mdc-filled-button-container-height: 40px; }    // global
+> .my-toolbar { --mdc-outlined-button-container-height: 32px; }  // scope concreto
 > ```
 
-Formato del `$typography` (mapa plano, sin dependencia de Material):
+Formato del `$typography` (solo `font-family`; los tamaños heredan de los tokens M3 `--mat-sys-*`):
 
 ```scss
 $typography: (
   font-family: 'Noto Sans, "Helvetica Neue", sans-serif',
-  levels: (
-    body-1:     (size: 14px, line-height: 1.125em, weight: 400),
-    input:      (size: 14px, line-height: 14px,    weight: 400),  // font-size de mat-form-field
-    body-2:     (size: 12px, line-height: 15px,    weight: 400),
-    subtitle-1: (size: 14px, line-height: 21px,    weight: 600),
-    headline-6: (size: 18px, line-height: 24px,    weight: 500),
-    // ...
-  ),
-  table: (
-    small-row-height:      28px,
-    medium-row-font-size:  12px,
-    // ...
-  ),
 );
 ```
-
-> **Nota**: el level `input` es obligatorio si quieres controlar el
-> `font-size` de los inputs independientemente de `body-1`. El framework
-> lo mapea a `--mat-form-field-container-text-size` y a los tokens
-> `--mdc-*-text-field-input-text-size`.
 
 Si no pasas `$typography` el tema usa la config por defecto (Noto Sans).
 
@@ -404,7 +407,7 @@ Si no necesitas paletas personalizadas, puedes usar directamente el tema azul de
 | **Fuente** | Poppins | Noto Sans |
 | **Iconos** | Material Icons (ligatura) | Material Symbols Outlined |
 | **Sidenav** | Fondo derivado del color primary + sombra + esquinas redondeadas (Material default) | Fondo neutro (`--o-bg-app-bar`), sin sombra, esquinas rectas (`--mat-sidenav-container-shape: 0`) |
-| **Botones** | Estilos custom (borde, color, hover) | Altura fija 32 px via `--o-button-height`; resto defaults de Angular Material |
+| **Botones** | Estilos custom (borde, color, hover) | Altura 40 px en escala 0 (Material default), 32 px para escalas −1 a −5 vía tokens MDC; resto defaults de Angular Material |
 | **Density** | Aplicada (checkbox, list, radio, menu, tree) | Configurable via `$density` en el factory |
 | **Tabs** | Fondo inactivo personalizado | Defaults de Angular Material |
 | **Material theming** | M2 (`mat.m2-define-light-theme`) | **M3** (`mat.define-theme` interno) |
@@ -459,25 +462,16 @@ $theme-compact: map.merge(theme.$theme, (density: -4));
 
 #### Sistema de densidad extendido
 
-Angular Material define los tokens de densidad en `@angular/material/core/tokens/_density.scss` como listas indexadas por escala. Cuando se pide una escala más profunda que la lista de un componente, Material hace clamp al último valor definido. **`mat-form-field` y `mat-paginator` no tienen valores para `-4`/`-5`** — sus tokens se quedan en los valores de `-3`.
+Angular Material define los tokens de densidad en `@angular/material/core/tokens/_density.scss` como listas indexadas por escala.
 
-Ontimize exporta `ontimize-theme-density-extended($scale)` (usado internamente por `ontimize-theme-styles`) que añade overrides manuales para esos componentes y mantiene `--o-button-height` coherente con la escala.
+Ontimize exporta `ontimize-theme-density-extended($scale)` (usado internamente por `ontimize-theme-styles`) que añade overrides de altura de botones para las escalas −1 a −5.
 
 | Token | escala 0 | -1 | -2 (default) | -3 | -4 | -5 |
 |---|---|---|---|---|---|---|
-| `--o-button-height` | 40px | 36px | 32px | 28px | 28px | 24px |
-| `--mat-form-field-container-height` | 56px (Mat) | 52px (Mat) | 48px (Mat) | 44px (Mat) | **40px** | **36px** |
-| `--mat-form-field-container-vertical-padding` | 16px (Mat) | 14px (Mat) | 12px (Mat) | 10px (Mat) | **8px** | **6px** |
-| `--mat-form-field-filled-label-display` | **block** | **block** | **block** | **block** | **block** | **block** |
-| `--mat-select-trigger-text-line-height` | **normal** | **normal** | **normal** | **normal** | **normal** | **normal** |
-| `--mdc-filled-text-field-label-text-size` | default | default | default | **12px** | **11px** | **11px** |
-| `--mat-paginator-container-size` | 56px (Mat) | 52px (Mat) | 48px (Mat) | 40px (Mat) | **36px** | **32px** |
+| `--mdc-*-button-container-height` | 40px (Mat) | **32px** | **32px** | **32px** | **32px** | **32px** |
 
 Notas:
-- **Label flotante siempre visible**: Material por defecto fija `filled-label-display: none` desde escala `-3`. Ontimize la fuerza a `block` en todas las escalas porque `mat-label` es parte de la semántica del campo.
-- **Tamaño de label reducido en escalas profundas** (`-3` a `-5`) para mantener legibilidad cuando el campo se reduce.
-- **`--o-button-height` por escala**: el token Ontimize que controla todos los botones MDC se ajusta automáticamente.
-- **`--mat-select-trigger-text-line-height: normal`**: M3 hereda `body-large-line-height` (1.5 = 24 px) para el trigger del select, lo que añade altura extra respecto a un `input` nativo. Ontimize lo fuerza a `normal` (~1.2) en todas las escalas para que `o-combo` tenga la misma altura que el resto de inputs.
+- **Altura de botones**: Material gestiona `--mdc-*-button-container-height` nativamente para la escala 0 (40 px). Ontimize fija el valor a 32 px para todas las escalas −1 a −5 mediante `$_extended-density-tokens`. Si necesitas un valor diferente, sobrescribe el token directamente en el scope que corresponda.
 
 **Opción D — Por componente Material individual**
 
@@ -678,7 +672,7 @@ El framework 18.0.0-next.2 emite tokens **Material 3 nativos** (`--mat-sys-*`, `
 | Color warn (M3 = error) | `var(--mat-sys-error)` / `var(--mat-sys-on-error)` |
 | Foreground (texto, iconos, dividers) | `var(--o-fg-text)`, `var(--o-fg-secondary-text)`, `var(--o-fg-icon)`, `var(--o-fg-divider)`, `var(--o-fg-hint)`, `var(--o-fg-disabled)` |
 | Background de superficie / niveles | `var(--o-bg-card)`, `var(--o-bg-background)`, `var(--o-bg-level-0…1)`, `var(--o-bg-status-bar)` |
-| Font-size / weight / line-height | `var(--o-font-body-1-size)`, `var(--o-font-body-1-weight)`, `var(--o-font-body-1-line-height)`, `var(--o-font-family)` |
+| Font-size / weight / line-height | `var(--mat-sys-body-medium-size)`, `var(--mat-sys-body-medium-weight)`, `var(--mat-sys-body-medium-line-height)`, `var(--o-font-family)` |
 
 Ejemplo (antes vs después):
 
@@ -692,7 +686,7 @@ Ejemplo (antes vs después):
 // Después (M3-ready, runtime-overridable)
 .my-button {
   color: var(--mat-sys-primary);
-  font-size: var(--o-font-body-2-size);
+  font-size: var(--mat-sys-body-small-size);
 }
 ```
 
@@ -773,14 +767,13 @@ import { NgTemplateOutlet } from '@angular/common';
 La typography de Ontimize 18 ya no es un config M2: es un mapa plano
 `{ font-family, levels, table }`, y el helper M2 no sabe leerlo.
 
-**Solución**: usa los CSS custom properties `--o-font-<level>-size` que
-el framework emite automáticamente:
+**Solución**: usa los tokens M3 que Material emite en runtime:
 
 ```scss
 // Antes
 .my-class { font-size: mat.m2-font-size($typography, body-2); }
 // Después
-.my-class { font-size: var(--o-font-body-2-size); }
+.my-class { font-size: var(--mat-sys-body-small-size); }
 ```
 
 ### `mat-toolbar color="primary"` / `mat-icon color="accent"` no aplica color
@@ -896,7 +889,7 @@ Estos tokens **ya no se emiten**. Migra a los tokens M3 sys:
 | `--o-warn-500` | `--mat-sys-error` |
 | `--o-warn-contrast-500` | `--mat-sys-on-error` |
 
-Los demás tokens `--o-*` (`--o-bg-*`, `--o-fg-*`, `--o-font-*`, `--o-button-height`, `--o-input-icon-size`) **no cambian**.
+Los demás tokens `--o-*` (`--o-bg-*`, `--o-fg-*`, `--o-font-family`, `--o-input-icon-size`) **no cambian**.
 
 ### 12.3 Por qué este breaking change
 
