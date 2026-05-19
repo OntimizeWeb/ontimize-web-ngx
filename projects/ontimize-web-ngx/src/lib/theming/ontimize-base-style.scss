@@ -455,7 +455,7 @@ $default-typography: ontimize.$typography;
       >.mat-expansion-panel-header .o-container-title {
         span {
           font: {
-            size: var(--o-font-headline-6-size);
+            size: var(--mat-sys-title-large-size);
             weight: bold;
           }
         }

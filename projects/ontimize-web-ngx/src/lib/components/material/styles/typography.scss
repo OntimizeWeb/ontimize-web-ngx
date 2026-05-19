@@ -7,11 +7,7 @@
 @import 'variables.scss';
 
 html {
-  // MDC inputs use "font: inherit" — they inherit font-size from html.
-  // Setting it here to the Ontimize body token means all MDC inputs get
-  // the correct size without needing to override every MDC selector.
-  font-size: var(--o-font-body-1-size, 14px);
-  font-family: var(--o-font-family, 'Noto Sans', 'Helvetica Neue', sans-serif);
+  font-family: var(--o-font-family);
 }
 
 html, body {

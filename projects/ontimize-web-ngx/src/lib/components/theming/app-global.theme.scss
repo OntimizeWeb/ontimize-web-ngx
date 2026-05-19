@@ -100,8 +100,8 @@
       }
 
       .mat-mdc-dialog-title {
-        line-height: var(--o-font-subtitle-1-size);
-        font-size: var(--o-font-subtitle-1-size);
+        line-height: var(--mat-sys-title-small-size);
+        font-size: var(--mat-sys-title-small-size);
       }
 
       .mat-mdc-dialog-title.title-container {
@@ -114,7 +114,7 @@
       }
 
       .mat-mdc-dialog-content {
-        font-size: var(--o-font-body-1-size);
+        font-size: var(--mat-sys-body-medium-size);
 
         .mat-mdc-subheader.mdc-list-group__subheader {
           font-weight: inherit;
@@ -211,7 +211,7 @@
 
       .mdc-list-item__secondary-text {
         color: var(--o-fg-icon);
-        font-size: var(--o-font-body-1-size);
+        font-size: var(--mat-sys-body-medium-size);
       }
     }
 
@@ -362,7 +362,6 @@
   .o-grid .o-search-input,
   .o-search-input {
     .quickFilter {
-    --mdc-icon-button-icon-size:20px;
       .mat-mdc-form-field {
 
         .mat-mdc-form-field-subscript-wrapper {
@@ -386,18 +385,11 @@
               border-right: 1px solid rgba(0, 0, 0, 0.12);
 
               .mat-icon {
-                font-size: var(--o-input-icon-size, 20px);
-                width: var(--o-input-icon-size, 20px);
-                height: var(--o-input-icon-size, 20px);
                 margin-right: 6px;
               }
 
               button {
                 margin-right: 6px;
-                --mdc-icon-button-state-layer-size: 20px;
-                --mdc-icon-button-icon-size: 20px;
-                --mat-icon-button-touch-target-display: none;
-                padding: 0;
               }
 
               .mat-badge-content {

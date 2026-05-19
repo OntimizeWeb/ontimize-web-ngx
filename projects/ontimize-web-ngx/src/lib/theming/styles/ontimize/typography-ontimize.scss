@@ -53,14 +53,14 @@
         border-radius: variables.$border-radius;
 
         font: {
-          size: var(--o-font-headline-5-size);
+          size: var(--mat-sys-headline-small-size);
           weight: bold;
         }
 
         .o-form-navigation {
           span {
             font: {
-              size: var(--o-font-subtitle-1-size);
+              size: var(--mat-sys-title-small-size);
               weight: normal;
             }
           }

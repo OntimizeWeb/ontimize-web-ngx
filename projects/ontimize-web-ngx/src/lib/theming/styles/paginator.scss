@@ -1,34 +1,29 @@
-.mat-mdc-paginator {
-  // Select combo size
-  --mat-paginator-form-field-container-height: 24px;
-  --mat-paginator-form-field-container-vertical-padding: 2px;
+// .mat-mdc-paginator {
 
-  // Navigation buttons size (token at host level for consumer overrides)
-  --mdc-icon-button-icon-size: 18px;
 
-  .mat-mdc-form-field .mdc-notched-outline__notch {
-    display: none;
-  }
+//   .mat-mdc-form-field .mdc-notched-outline__notch {
+//     display: none;
+//   }
 
-  // Specificity 0-3-0 beats Material's 0-2-0 emission of --mdc-icon-button-state-layer-size
-  .mat-mdc-icon-button.mat-mdc-button-base {
-    --mdc-icon-button-state-layer-size: 24px;
-    width: var(--mdc-icon-button-state-layer-size);
-    height: var(--mdc-icon-button-state-layer-size);
-    margin-left: 4px;
+//   // Specificity 0-3-0 beats Material's 0-2-0 emission of --mdc-icon-button-state-layer-size
+//   .mat-mdc-icon-button.mat-mdc-button-base {
+//     --mdc-icon-button-state-layer-size: 24px;
+//     width: var(--mdc-icon-button-state-layer-size);
+//     height: var(--mdc-icon-button-state-layer-size);
+//     margin-left: 4px;
 
-    &:hover {
-      background-color: var(--mat-sys-primary-container);
+//     &:hover {
+//       background-color: var(--mat-sys-primary-container);
 
-    }
+//     }
 
-    .mat-mdc-button-touch-target {
-      width: var(--mdc-icon-button-state-layer-size);
-      height: var(--mdc-icon-button-state-layer-size);
-    }
+//     .mat-mdc-button-touch-target {
+//       width: var(--mdc-icon-button-state-layer-size);
+//       height: var(--mdc-icon-button-state-layer-size);
+//     }
 
-    .mat-mdc-paginator-icon {
-      width: var(--mdc-icon-button-icon-size);
-    }
-  }
-}
+//     .mat-mdc-paginator-icon {
+//       width: var(--mdc-icon-button-icon-size);
+//     }
+//   }
+// }

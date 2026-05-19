@@ -1,13 +1,19 @@
 ## 18.0.0-next.5
-### Features
-* **inputs**: Input components (`o-text-input`, `o-integer-input`, `o-date-input`, `o-combo`, `o-checkbox`, `o-currency-input`, `o-daterange-input`, and all other Ontimize inputs) can now be used **outside of `o-form`** with native Angular reactive forms. Bind any input directly via `[formControl]="myControl"` or `ngModel` without wrapping it in an `<o-form>`. Each component implements `ControlValueAccessor` and registers itself as `NG_VALUE_ACCESSOR`. An `IOFormParent` interface and `O_FORM_CONTEXT` injection token replace the previous hard dependency on `OFormComponent` in the constructor — components inject the token optionally, so they degrade gracefully when no parent form is present.
-
 ### BREAKING CHANGES
-* **inputs**: All Ontimize input components no longer accept `OFormComponent` as a constructor parameter. If you have custom components that extend `OFormDataComponent`, `OFormServiceComponent`, or `OBooleanFormDataComponent` and pass a `form` parameter via `super(form, elRef, injector)`, update the call to `super(elRef, injector)` and remove the `@Optional() @Inject(forwardRef(() => OFormComponent))` parameter. The form context is now resolved automatically via `inject(O_FORM_CONTEXT, { optional: true })`.
+* **theming**: `oxygen` theme no longer sets custom font sizes or weights. All type scale now inherits from Material M3 system tokens. The `--o-font-<level>-size/line-height/weight` tokens are no longer emitted — replace any remaining references with the equivalent `--mat-sys-*` token.
+* **theming**: `--o-input-icon-size` token removed. Input prefix/suffix icon size is now hardcoded to `20px` in the component styles.
+* **theming**: `html { font-size }` override removed from `typography.scss`. The base font size is no longer forced to `14px` — Material and the browser manage the type scale.
+* **theming**: `font-family` on `html` is now driven exclusively by `--o-font-family`, which is emitted dynamically from the `font-family` defined in the theme's typography config passed to `o-mat-light-theme` / `o-mat-dark-theme`. The hardcoded `'Noto Sans'` fallback is replaced by `system-ui, sans-serif`.
+
+---
 
 ## 18.0.0-next.4
 ### Features
 * Integrated changes from versions **15.9.1**
+* **inputs**: Input components (`o-text-input`, `o-integer-input`, `o-date-input`, `o-combo`, `o-checkbox`, `o-currency-input`, `o-daterange-input`, and all other Ontimize inputs) can now be used **outside of `o-form`** with native Angular reactive forms. Bind any input directly via `[formControl]="myControl"` or `ngModel` without wrapping it in an `<o-form>`. Each component implements `ControlValueAccessor` and registers itself as `NG_VALUE_ACCESSOR`. An `IOFormParent` interface and `O_FORM_CONTEXT` injection token replace the previous hard dependency on `OFormComponent` in the constructor — components inject the token optionally, so they degrade gracefully when no parent form is present.
+
+### BREAKING CHANGES
+* **inputs**: All Ontimize input components no longer accept `OFormComponent` as a constructor parameter. If you have custom components that extend `OFormDataComponent`, `OFormServiceComponent`, or `OBooleanFormDataComponent` and pass a `form` parameter via `super(form, elRef, injector)`, update the call to `super(elRef, injector)` and remove the `@Optional() @Inject(forwardRef(() => OFormComponent))` parameter. The form context is now resolved automatically via `inject(O_FORM_CONTEXT, { optional: true })`.
 
 ## 18.0.0-next.3  (2026-05-18)
 ### Features

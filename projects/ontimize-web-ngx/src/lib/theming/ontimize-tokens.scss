@@ -13,8 +13,7 @@
 //   --o-bg-status-bar, --o-bg-app-bar           top-bar backgrounds
 //   --o-bg-card, --o-bg-background              surface backgrounds
 //   --o-fg-text, --o-fg-secondary-text, …       foreground roles
-//   --o-font-<level>-size/line-height/weight    typography per Ontimize level
-//   --o-button-height, --o-input-icon-size      Ontimize component sizing
+//   --o-font-family                             font-family from theme typography config
 //   --mat-sys-surface*                          M3 neutral surface overrides
 //   --mat-*-container-color (per component)     M3 component background overrides
 //
@@ -28,7 +27,6 @@
 // =============================================================================
 
 @use "sass:map";
-@use "sass:meta";
 
 @function -get-bg($bg, $key, $fallback: null) {
   @if $bg == null {
@@ -59,9 +57,6 @@
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
   $typography: map.get($theme, typography);
-
-  // icon size for input prefix/suffix — no MDC token exists for this
-  --o-input-icon-size: 20px;
 
   --mat-table-row-item-outline-color: var(--o-fg-divider);
 
@@ -143,28 +138,11 @@
   --o-fg-elevation: #{-get-fg($foreground, elevation)};
   --o-fg-slider-off: #{-get-fg($foreground, slider-off)};
 
-  // ─── Typography (font-size + font-weight per level + family) ─
-  // Emitted from the typography config map so consumers can pick up
-  // per-level sizes through a single `var(--o-font-<level>-size)` call
-  // without reaching into the Sass typography config at build time.
-  //
-  // The typography map has the shape:
-  //   ( font-family: <string>,
-  //     levels: ( body-1: (size: .., line-height: .., weight: ..), ... ) )
+  // ─── Typography — font-family from theme config ───────────────
   @if $typography {
     $family: map.get($typography, font-family);
-    $levels: map.get($typography, levels);
-
     @if $family {
-      --o-font-family: #{$family};
-    }
-
-    @if $levels {
-      @each $name, $cfg in $levels {
-        --o-font-#{$name}-size: #{map.get($cfg, size)};
-        --o-font-#{$name}-line-height: #{map.get($cfg, line-height)};
-        --o-font-#{$name}-weight: #{map.get($cfg, weight)};
-      }
+      --o-font-family: #{$family}, system-ui, sans-serif;
     }
   }
 }
