@@ -339,7 +339,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
   public createFormControl(cfg, validators): OFormControl {
     this._fControl = super.createFormControl(cfg, validators);
-    if (!this.isEmpty() && !this.form.isInInsertMode()) {
+    if (!this.isEmpty() && (!this.form || !this.form.isInInsertMode())) {
       this._fControl.markAsTouched();
     }
     return this._fControl;

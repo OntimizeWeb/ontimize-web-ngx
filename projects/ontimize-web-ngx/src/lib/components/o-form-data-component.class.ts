@@ -372,7 +372,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
     if (this.oldValue !== val) {
       const previousValue = this.oldValue;
+      // emitEvent:false means _fControl.valueChanges won't fire → onFormControlChange won't call _cvaOnChange
+      const suppressedEvent = options.emitEvent === false;
       this.setFormValue(val, options, setDirty);
+      if (!this._writingValue && suppressedEvent) {
+        this._cvaOnChange(this.getValue());
+      }
       if (options && options.emitModelToViewValueChange !== false) {
         const changeType: number = (options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
         this.emitOnValueChange(changeType, val, previousValue);
