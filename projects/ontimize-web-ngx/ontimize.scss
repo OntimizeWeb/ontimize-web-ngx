@@ -112,7 +112,21 @@ $steps: 6;
 
 @include padding-margin-x();
 
+.o-form,
+.o-table,
+.o-grid,
+.o-list,
+.o-tree {
+  button.mat-mdc-button-base {
 
+    &.mat-mdc-button,
+    &.mat-mdc-unelevated-button,
+    &.mat-mdc-raised-button,
+    &.mat-mdc-outlined-button {
+      min-width: 112px;
+    }
+  }
+}
 
 
 
