@@ -40,34 +40,50 @@ $sidenav-background-color: #FFFFFF !default;
 // ─── Background palettes ────────────────────────────────────────────────────
 
 // Background palette for light themes — neutral, not derived from primary.
-@function ontimize-light-theme-background() {
+// $neutral: the theme's neutral palette map (optional). When provided, each
+// level is read from its designated palette tone instead of a hardcoded value.
+// Tone assignment (non-conflicting with M3 standard tones):
+//   97 → level-0 / background   96 → level-04   93 → level-06
+//   85 → level-08               100 → level-1 / card
+@function ontimize-light-theme-background($neutral: null) {
+  $lvl-0:  if($neutral, map.get($neutral, 97),  #f9fafb);
+  $lvl-04: if($neutral, map.get($neutral, 96),  #f7f7f7);
+  $lvl-06: if($neutral, map.get($neutral, 93),  #f2f2f2);
+  $lvl-08: if($neutral, map.get($neutral, 85),  #e0e0e0);
+  $lvl-1:  if($neutral, map.get($neutral, 100), white);
   @return (
-    level-0: #f9FAFB,
-    level-04: #f7f7f7,
-    level-06: #f2f2f2,
-    level-08: #e0e0e0,
-    level-1: white,
-    card: white,
-    sidenav-overlay: #525252,
+    level-0:    $lvl-0,
+    level-04:   $lvl-04,
+    level-06:   $lvl-06,
+    level-08:   $lvl-08,
+    level-1:    $lvl-1,
+    card:       $lvl-1,
     status-bar: $sidenav-background-color,
-    app-bar: $sidenav-background-color,
-    background: $app-background-color,
+    app-bar:    $sidenav-background-color,
+    background: $lvl-0,
   );
 }
 
 // Background palette for dark themes — neutral, not derived from primary.
-@function ontimize-dark-theme-background() {
+// Tone assignment (non-conflicting with M3 standard tones):
+//   13 → level-0 / background   19 → level-04   20 → level-06
+//   24 → level-08               15 → level-1 / card
+@function ontimize-dark-theme-background($neutral: null) {
+  $lvl-0:  if($neutral, map.get($neutral, 13), #202020);
+  $lvl-04: if($neutral, map.get($neutral, 19), #2e2e2e);
+  $lvl-06: if($neutral, map.get($neutral, 20), #303030);
+  $lvl-08: if($neutral, map.get($neutral, 24), #3a3a3a);
+  $lvl-1:  if($neutral, map.get($neutral, 15), #252525);
   @return (
-    background: #1a1a1a,
-    level-0: #202020,
-    level-04: #2e2e2e,
-    level-06: #303030,
-    level-08: #3a3a3a,
-    level-1: #252525,
-    card: #252525,
-    sidenav-overlay: #525252,
+    level-0:    $lvl-0,
+    level-04:   $lvl-04,
+    level-06:   $lvl-06,
+    level-08:   $lvl-08,
+    level-1:    $lvl-1,
+    card:       $lvl-1,
+    background: $lvl-0,
     status-bar: #272727,
-    app-bar: #252525,
+    app-bar:    $lvl-1,
   );
 }
 
@@ -167,6 +183,7 @@ $default-typography: ontimize.$typography;
 @function o-mat-light-theme($config: ()) {
   $primary:    map.get($config, primary);
   $tertiary:   map.get($config, tertiary);
+  $neutral:    map.get($config, neutral);
   $typography: if(map.has-key($config, typography), map.get($config, typography), ontimize.$typography);
   $density:    if(map.has-key($config, density),    map.get($config, density),    -2);
 
@@ -189,7 +206,7 @@ $default-typography: ontimize.$typography;
   @return (
     is-dark: false,
     foreground: $ontimize-light-theme-foreground,
-    background: ontimize-light-theme-background(),
+    background: ontimize-light-theme-background($neutral),
     typography: $typography,
     density: $density,
     m3-theme: $m3-theme,
@@ -199,6 +216,7 @@ $default-typography: ontimize.$typography;
 @function o-mat-dark-theme($config: ()) {
   $primary:    map.get($config, primary);
   $tertiary:   map.get($config, tertiary);
+  $neutral:    map.get($config, neutral);
   $typography: if(map.has-key($config, typography), map.get($config, typography), ontimize.$typography);
   $density:    if(map.has-key($config, density),    map.get($config, density),    -2);
 
@@ -221,7 +239,7 @@ $default-typography: ontimize.$typography;
   @return (
     is-dark: true,
     foreground: $ontimize-dark-theme-foreground,
-    background: ontimize-dark-theme-background(),
+    background: ontimize-dark-theme-background($neutral),
     typography: $typography,
     density: $density,
     m3-theme: $m3-theme,

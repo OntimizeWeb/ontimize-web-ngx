@@ -81,8 +81,14 @@
         .o-app-sidenav-content.mat-drawer-content {
           margin-right: 56px !important;
           transform: translate3d(56px, 0, 0) !important;
+
         }
       }
+    }
+
+    .o-app-sidenav-content.mat-drawer-content {
+
+      background-color: var(--o-bg-background);
     }
 
 

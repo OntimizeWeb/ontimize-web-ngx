@@ -13,24 +13,33 @@
     font-family: var(--o-font-family);
   }
 
+  // ─── Scrollbar — Clear SaSS (webkit + modern CSS) ────────────────────────
+  // --o-scroll-thumb is emitted by o-apply-tokens (primary at 0.3 opacity,
+  // compiled to static rgba so scrollbar pseudo-elements can read it).
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    background-color: transparent;
-    opacity: 1.0;
   }
 
   ::-webkit-scrollbar-track {
-    -webkit-box-shadow: none;
-    border-radius: 0;
-    background-color: #c7c7c7;
+    background-color: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    border-radius: 0;
-    -webkit-box-shadow: none;
-    background-color: color-mix(in srgb, var(--mat-sys-primary) 30%, transparent);
-    opacity: 1.0;
+    background-color: var(--o-scroll-thumb, rgba(0, 0, 0, 0.3));
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    opacity: 0.7;
+  }
+
+  // Firefox / Chrome 121+ / Safari 18.2+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--o-scroll-thumb, rgba(0, 0, 0, 0.3)) transparent;
   }
 
   .o-loading {

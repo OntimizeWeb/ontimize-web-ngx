@@ -2,20 +2,17 @@
 // ontimize-tokens.scss — Ontimize custom CSS tokens (Material 3 native)
 // =============================================================================
 //
-// This file does NOT emit any CSS on its own. It exposes the mixin
-// `o-apply-tokens($theme)` which generates the `--o-*` and Material `--mat-*`
-// CSS custom properties from an Ontimize theme object built by
-// o-mat-light-theme / o-mat-dark-theme.
+// Mixins:
 //
-// Token families emitted:
-//   --o-bg-level-{0,04,06,08,1}                 background elevation levels
-//   --o-bg-sidenav-overlay                      sidenav overlay colour
-//   --o-bg-status-bar, --o-bg-app-bar           top-bar backgrounds
-//   --o-bg-card, --o-bg-background              surface backgrounds
-//   --o-fg-text, --o-fg-secondary-text, …       foreground roles
-//   --o-font-family                             font-family from theme typography config
-//   --mat-sys-surface*                          M3 neutral surface overrides
-//   --mat-*-container-color (per component)     M3 component background overrides
+//   o-apply-tokens($theme)
+//     Emits --o-bg-* background levels, neutral divider tokens, and
+//     --o-font-family. Generic — used by every theme.
+//
+//   o-apply-neutral-surfaces($theme)
+//     Opt-in "Clear SaSS" overrides: replaces M3's tinted surfaces with neutral
+//     whites/grays, sets subtler elevation shadows, and reduces state-layer
+//     opacities. Call this alongside o-apply-tokens in themes that prefer a
+//     neutral look (e.g. oxygen). Dark themes pass their dark theme object.
 //
 // Branding colours (primary / tertiary / error) are NOT emitted as `--o-*`.
 // Use the Material 3 system tokens instead:
@@ -27,23 +24,24 @@
 // =============================================================================
 
 @use "sass:map";
+@use '@angular/material' as mat;
 
 @function -get-bg($bg, $key, $fallback: null) {
-  @if $bg == null {
+  @if $bg ==null {
     @return $fallback;
   }
 
   $value: map.get($bg, $key);
-  @return if($value == null, $fallback, $value);
+  @return if($value ==null, $fallback, $value);
 }
 
 @function -get-fg($fg, $key, $fallback: null) {
-  @if $fg == null {
+  @if $fg ==null {
     @return $fallback;
   }
 
   $value: map.get($fg, $key);
-  @return if($value == null, $fallback, $value);
+  @return if($value ==null, $fallback, $value);
 }
 
 // ─── Main mixin ─────────────────────────────────────────────────────────────
@@ -53,66 +51,16 @@
 // Usage (inside a selector such as :root or .o-dark):
 //   @include tokens.o-apply-tokens(my-theme.$theme);
 
+
+
 @mixin o-apply-tokens($theme) {
   $background: map.get($theme, background);
   $foreground: map.get($theme, foreground);
   $typography: map.get($theme, typography);
-
-  --mat-table-row-item-outline-color: var(--o-fg-divider);
-
-  --mat-app-surface-container: white;
-  --mat-outline: var(--o-fg-divider);
-  --mat-divider-color: var(--o-fg-divider);
-
-  // ─── M3 sys surface tokens — fondos neutros (sin tinte de color M3) ────
-  // M3 por defecto genera superficies con tinte lila/azul (#faf9fd, #efedf0).
-  // Estos overrides vuelven a blancos/grises neutros similares a v15.
-  // En dark, se leen del background map (level-0..level-1); en light, fallback a grises neutros.
-  --mat-sys-surface:                    #{-get-bg($background, level-1,  #ffffff)};
-  --mat-sys-surface-bright:             #{-get-bg($background, level-1,  #ffffff)};
-  --mat-sys-surface-dim:                #{-get-bg($background, level-0,  #f5f5f5)};
-  --mat-sys-surface-variant:            #{-get-bg($background, level-08, #f0f0f0)};
-  --mat-sys-surface-container-lowest:   #{-get-bg($background, level-1,  #ffffff)};
-  --mat-sys-surface-container-low:      #{-get-bg($background, background, #f9fafb)};
-  --mat-sys-surface-container:          #{-get-bg($background, level-04, #f5f5f5)};
-  --mat-sys-surface-container-high:     #{-get-bg($background, level-06, #f0f0f0)};
-  --mat-sys-surface-container-highest:  #{-get-bg($background, level-08, #e8e8e8)};
-  --mat-sys-background:                 #{-get-bg($background, background, #f9fafb)};
-
-  // ─── M3 component container tokens — sobrescribir tokens de componente ──
-  // Necesario porque los componentes usan var(--mat-*-container-color)
-  // directamente, sin pasar por --mat-sys-surface-container.
-  --mat-menu-container-color:                          #{-get-bg($background, level-1,  #ffffff)};
-  --mat-select-panel-background-color:                 #{-get-bg($background, level-1,  #ffffff)};
-  --mat-autocomplete-background-color:                 #{-get-bg($background, level-1,  #ffffff)};
-  --mat-table-background-color:                        #{-get-bg($background, level-1,  #ffffff)};
-  --mat-paginator-container-background-color:          #{-get-bg($background, background, #f9fafb)};
-  --mat-expansion-container-background-color:          #{-get-bg($background, level-1,  #ffffff)};
-  --mat-sidenav-container-background-color:            #{-get-bg($background, background, #f9fafb)};
-  --mat-sidenav-content-background-color:              #{-get-bg($background, background, #f9fafb)};
-  --mat-toolbar-container-background-color:            #{-get-bg($background, level-1,  #ffffff)};
-  --mat-tree-container-background-color:               #{-get-bg($background, level-1,  #ffffff)};
-  --mat-bottom-sheet-container-background-color:       #{-get-bg($background, level-04, #f5f5f5)};
-  --mat-datepicker-calendar-container-background-color: #{-get-bg($background, level-04, #f5f5f5)};
-  --mat-stepper-container-color:                       #{-get-bg($background, level-1,  #ffffff)};
-  --mat-app-background-color:                          #{-get-bg($background, background, #f9fafb)};
-
-  // ─── M3 elevation overrides — sombras más ligeras que M3 default ────────
-  --mat-sys-level0: none;
-  --mat-sys-level1: 0 1px 2px rgba(0,0,0,.10), 0 1px 3px 1px rgba(0,0,0,.06);
-  --mat-sys-level2: 0 1px 2px rgba(0,0,0,.10), 0 2px 6px 2px rgba(0,0,0,.08);
-  --mat-sys-level3: 0 4px 8px 3px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.12);
-  --mat-sys-level4: 0 6px 10px 4px rgba(0,0,0,.08), 0 2px 3px rgba(0,0,0,.12);
-  --mat-sys-level5: 0 8px 12px 6px rgba(0,0,0,.08), 0 4px 4px rgba(0,0,0,.12);
-
-  // ─── M3 state layer overrides — hovers más sutiles que M3 default ───────
-  --mat-sys-hover-state-layer-opacity: 0.04;
-  --mat-sys-focus-state-layer-opacity: 0.08;
-  --mat-sys-pressed-state-layer-opacity: 0.10;
-  --mat-sys-dragged-state-layer-opacity: 0.12;
+  $m3-theme: map.get($theme, m3-theme);
 
   // ─── Background levels ─────────────────────────────────────
-  --o-bg-background: #{-get-bg($background, background)};
+  --o-bg-background: #{-get-bg($background, background, #f9fafb)};
   --o-bg-card: #{-get-bg($background, card)};
   --o-bg-level-0: #{-get-bg($background, level-0)};
   --o-bg-level-04: #{-get-bg($background, level-04)};
@@ -121,7 +69,6 @@
   --o-bg-level-1: #{-get-bg($background, level-1)};
   --o-bg-status-bar: #{-get-bg($background, status-bar)};
   --o-bg-app-bar: #{-get-bg($background, app-bar)};
-  --o-bg-sidenav-overlay: #{-get-bg($background, sidenav-overlay)};
 
   // ─── Foreground roles ──────────────────────────────────────
   --o-fg-base: #{-get-fg($foreground, base)};
@@ -138,11 +85,52 @@
   --o-fg-elevation: #{-get-fg($foreground, elevation)};
   --o-fg-slider-off: #{-get-fg($foreground, slider-off)};
 
-  // ─── Typography — font-family from theme config ───────────────
+  // ─── Scrollbar thumb ─────────────────────────────────────────────────────
+  // Resolved at compile time so it works in ::-webkit-scrollbar pseudo-elements,
+  // which don't inherit CSS custom properties at runtime.
+  @if $m3-theme {
+    --o-scroll-thumb: #{rgba(mat.get-theme-color($m3-theme, primary), 0.3)};
+  } @else {
+    --o-scroll-thumb: #{-get-fg($foreground, hint-text, rgba(0, 0, 0, 0.38))};
+  }
+
+  // ─── Divider / border component tokens ─────────────────────────────────────
+  --mat-divider-color: var(--mat-sys-outline-variant);
+  --mat-table-row-item-outline-color: var(--mat-sys-outline-variant);
+
+  // ─── Typography — font-family from theme config ─────────────────────────────
   @if $typography {
     $family: map.get($typography, font-family);
+
     @if $family {
-      --o-font-family: #{$family}, system-ui, sans-serif;
+      --o-font-family: #{$family},
+      system-ui,
+      sans-serif;
     }
   }
+}
+
+// ─── Neutral surfaces mixin (opt-in "Clear SaSS") ────────────────────────────
+// Overrides M3 tokens that would otherwise carry a primary-colour tint:
+//   --mat-sys-outline-variant  subtle borders (dividers, chips, expansion panels)
+//   --mat-sys-background       app background
+// Call this after o-apply-tokens inside the same selector when a neutral look
+// is desired. Exposed to themes via themes/oxygen.scss convenience mixins.
+@mixin o-apply-neutral-surfaces($theme) {
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  // ─── Surface tint + flat cards ──────────────────────────────────────────────
+  // surface-tint: transparent prevents primary-colour bleed on elevated surfaces.
+  // The slider inactive track relies on color-mix(surface-tint …) at runtime;
+  // with transparent that resolves to white → invisible. We set it explicitly
+  // from the neutral palette so the track stays visible without primary tint.
+  --mat-sys-surface-tint: transparent;
+  --mdc-elevated-card-container-elevation: 0;
+  --mdc-slider-inactive-track-color: #{-get-bg($background, level-08, #e0e0e0)};
+
+  // ─── Divider / border tokens — clear, opacity-based ─────────────────────────
+  --mat-sys-outline-variant: #{-get-fg($foreground, divider, rgba(0, 0, 0, .12))};
+
+  --mat-sys-background: #{-get-bg($background, background, #f9fafb)};
 }

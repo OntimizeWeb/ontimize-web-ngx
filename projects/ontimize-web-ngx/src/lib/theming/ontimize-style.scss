@@ -85,6 +85,33 @@
   }
 }
 
+// ─── Neutral surfaces mixin (opt-in "Clear SaSS") ───────────────────────────
+// Replaces M3's tinted surface tokens with neutral whites/grays derived from
+// the theme's background map. Call this after ontimize-theme-styles inside the
+// same selector. Pass the dark theme object for dark mode.
+//
+// Usage:
+//   :root {
+//     @include ontimize-style.ontimize-theme-styles(theme.$theme);
+//     @include ontimize-style.ontimize-neutral-surfaces(theme.$theme);
+//   }
+//   .o-dark {
+//     @include ontimize-style.ontimize-theme-styles(theme.$dark-theme);
+//     @include ontimize-style.ontimize-neutral-surfaces(theme.$dark-theme);
+//   }
+
+@mixin ontimize-neutral-surfaces($theme) {
+  @if & {
+    & {
+      @include tokens.o-apply-neutral-surfaces($theme);
+    }
+  } @else {
+    :root {
+      @include tokens.o-apply-neutral-surfaces($theme);
+    }
+  }
+}
+
 // ─── Color-only convenience mixin ───────────────────────────────────────────
 
 @mixin ontimize-theme-all-component-color($theme-or-color-config) {
