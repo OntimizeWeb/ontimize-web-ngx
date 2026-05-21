@@ -896,3 +896,410 @@ Los demás tokens `--o-*` (`--o-bg-*`, `--o-fg-*`, `--o-font-family`, `--o-input
 En `18.0.0-next.1`, el theme M3 interno se construía con paletas Material hardcoded (`mat.$azure-palette` + `mat.$blue-palette`) que **no reflejaban el color de marca del consumer**. Esto causaba que tokens MDC como `--mdc-filled-button-container-color` (botones filled) o el color de los sliders, checkboxes, ripples, etc. saliera siempre en azul Material por defecto, ignorando la paleta del consumer.
 
 Adoptar la firma M3 nativa permite que el theme sí use la paleta del consumer, así que **todos los componentes Material toman automáticamente el color de marca correcto** — sin necesidad de overrides manuales en cada componente.
+
+---
+
+## 13. Migrar formularios con inputs HTML nativos a componentes Ontimize (sin o-form)
+
+Esta sección cubre la migración de formularios que usan inputs HTML nativos (`<input>`, `<select>`) a sus equivalentes Ontimize sin necesidad de `<o-form>`. El patrón de binding cambia de `[value]`+evento nativo a `[(ngModel)]`+`(onChange)`.
+
+### 13.1 Tabla de equivalencias rápida
+
+| HTML nativo | Componente Ontimize | Notas |
+|---|---|---|
+| `<input type="text">` | `<o-text-input>` | |
+| `<input type="number">` | `<o-integer-input>` / `<o-real-input>` | |
+| `<input type="date">` | `<o-date-input>` | añadir `value-type="string"` si el valor es ISO string |
+| `<select>` con opciones estáticas | `<o-combo>` con `[static-data]` | los datos deben ser array de objetos |
+| `<select>` con búsqueda custom | `<o-combo>` | la búsqueda interna sustituye el panel custom |
+| `<div>` readonly / calculado | `<o-text-input read-only="yes">` | |
+| `<select disabled>` derivado | `<o-text-input read-only="yes">` | |
+
+### 13.2 Cambios de binding
+
+#### Antes: `[value]` + evento nativo
+
+```html
+<input
+  type="text"
+  [value]="serialNumber"
+  (input)="onSerialNumberChange($any($event.target).value)"
+/>
+```
+
+#### Después: `[(ngModel)]` + `(onChange)`
+
+```html
+<o-text-input
+  label="Nº de serie"
+  [(ngModel)]="serialNumber"
+  (onChange)="onSerialNumberChange($event.newValue)"
+  required="yes"
+  max-length="100"
+></o-text-input>
+```
+
+El evento `(onChange)` recibe un objeto `{ newValue, oldValue }`. Si solo necesitas el nuevo valor:
+
+```typescript
+// antes
+onSerialNumberChange(value: string) { ... }
+
+// después
+onSerialNumberChange(event: { newValue: string }) {
+  const value = event.newValue;
+  ...
+}
+// o destructurando
+onSerialNumberChange({ newValue }: { newValue: string }) { ... }
+```
+
+### 13.3 Input de texto (`o-text-input`)
+
+```html
+<!-- ANTES -->
+<div class="field-group">
+  <label>Nº de Serie <span class="required-star"> *</span></label>
+  <input
+    type="text"
+    [class.input--error]="!!serialNumberError"
+    maxlength="100"
+    [placeholder]="'PLACEHOLDER' | oTranslate"
+    [value]="serialNumber"
+    (input)="onSerialNumberChange($any($event.target).value)"
+  />
+  @if (serialNumberError) {
+    <div class="field-error">{{ serialNumberError | oTranslate }}</div>
+  }
+</div>
+
+<!-- DESPUÉS -->
+<o-text-input
+  label="EQUIPMENT_SERIAL_NUMBER"
+  [(ngModel)]="serialNumber"
+  (onChange)="onSerialNumberChange($event.newValue)"
+  required="yes"
+  max-length="100"
+  placeholder="EQUIPMENT_SERIAL_NUMBER_PLACEHOLDER"
+></o-text-input>
+```
+
+> La etiqueta, el asterisco de requerido y los mensajes de error los gestiona el propio componente. Elimina el `<label>`, el `<div class="field-error">` y la lógica de `serialNumberError`.
+
+### 13.4 Select con opciones de string (`o-combo`)
+
+`o-combo` requiere un array de objetos. Transforma el array de strings en el componente:
+
+```typescript
+// ANTES: array de strings
+manufacturers: string[] = ['Petzl', '3M', 'Honeywell'];
+selectedManufacturer = '';
+
+onManufacturerChange(value: string) {
+  this.selectedManufacturer = value;
+  this.filterModels();
+}
+
+// DESPUÉS: getter que envuelve los strings
+get manufacturersData() {
+  return this.manufacturers.map(m => ({ value: m, label: m }));
+}
+
+onManufacturerChange({ newValue }: { newValue: string }) {
+  this.selectedManufacturer = newValue;
+  this.filterModels();
+}
+```
+
+```html
+<!-- ANTES -->
+<select
+  [value]="selectedManufacturer"
+  (change)="onManufacturerChange($any($event.target).value)"
+>
+  <option value="">{{ 'EQUIPMENT_MANUFACTURER_ALL' | oTranslate }}</option>
+  @for (m of manufacturers; track m) {
+    <option [value]="m">{{ m }}</option>
+  }
+</select>
+
+<!-- DESPUÉS -->
+<o-combo
+  label="manufacturer"
+  columns="value;label"
+  value-column="value"
+  visible-columns="label"
+  [static-data]="manufacturersData"
+  [(ngModel)]="selectedManufacturer"
+  (onChange)="onManufacturerChange($event)"
+  empty-option="yes"
+></o-combo>
+```
+
+`empty-option="yes"` añade automáticamente la opción vacía equivalente al `<option value="">`.
+
+### 13.5 Select con búsqueda custom (`o-combo` con filtro)
+
+El panel de búsqueda custom (botón trigger + input + lista de opciones) se reemplaza completamente por `o-combo`, que incluye búsqueda interna:
+
+```html
+<!-- ANTES: panel custom con búsqueda manual -->
+<div class="search-select">
+  <button (click)="toggleModelDropdown()">
+    {{ selectedModelName || ('PLACEHOLDER' | oTranslate) }}
+    <mat-icon>expand_more</mat-icon>
+  </button>
+  @if (isModelDropdownOpen) {
+    <div class="select-panel">
+      <input [value]="modelSearch" (input)="onModelSearch($event.target.value)" />
+      @for (model of filteredModels; track model) {
+        <button (click)="selectModel(model.id)">{{ model.name }}</button>
+      }
+    </div>
+  }
+</div>
+
+<!-- DESPUÉS: o-combo con búsqueda integrada -->
+<o-combo
+  label="MODEL"
+  columns="id;name"
+  value-column="id"
+  visible-columns="name"
+  [static-data]="models"
+  [(ngModel)]="selectedModelId"
+  (onChange)="onModelChange($event.newValue)"
+  required="yes"
+  filter-case-sensitive="no"
+></o-combo>
+```
+
+Elimina del componente: `isModelDropdownOpen`, `modelSearch`, `filteredModels`, `toggleModelDropdown()`, `onModelSearch()`.
+
+### 13.6 Input de fecha (`o-date-input`)
+
+```html
+<!-- ANTES -->
+<input
+  type="date"
+  [class.input--error]="!!manufacturingDateError"
+  [max]="todayISO"
+  [value]="manufacturingDate"
+  (change)="onManufacturingDateChange($any($event.target).value)"
+/>
+
+<!-- DESPUÉS -->
+<o-date-input
+  label="EQUIPMENT_MANUFACTURING_DATE"
+  [(ngModel)]="manufacturingDate"
+  (onChange)="onManufacturingDateChange($event.newValue)"
+  value-type="string"
+  [max]="todayDate"
+  required="yes"
+></o-date-input>
+```
+
+> `value-type="string"` indica que el valor enlazado es un string ISO (`"2024-03-15"`). Si el modelo usa objetos `Date`, omite el atributo o usa `value-type="date"`.
+> El atributo `[max]` en `o-date-input` acepta un objeto `Date`, no un string ISO — ajusta el tipo en el componente:
+
+```typescript
+// antes
+todayISO = new Date().toISOString().split('T')[0]; // "2024-03-15"
+
+// después
+todayDate = new Date();
+```
+
+### 13.7 Campos calculados / readonly
+
+Los campos derivados (calculados, no editables) se sustituyen por `o-text-input` con `read-only="yes"`:
+
+```html
+<!-- ANTES: div con formato manual -->
+<div class="readonly-field">
+  {{ expirationDate ? formatDisplayDate(expirationDate) : ('PLACEHOLDER' | oTranslate) }}
+</div>
+
+<!-- DESPUÉS -->
+<o-text-input
+  label="EQUIPMENT_EXPIRATION_DATE"
+  [value]="expirationDate"
+  read-only="yes"
+></o-text-input>
+```
+
+> `o-date-input` también acepta `read-only="yes"` si quieres mostrar el valor con formato de fecha.
+
+Los selects deshabilitados/derivados siguen el mismo patrón:
+
+```html
+<!-- ANTES: select disabled con una sola opción -->
+<select [attr.disabled]="!maintenanceTemplateName ? '' : null">
+  <option>{{ maintenanceTemplateName || ('PLACEHOLDER' | oTranslate) }}</option>
+</select>
+
+<!-- DESPUÉS -->
+<o-text-input
+  label="maintenanceTemplate"
+  [value]="maintenanceTemplateName"
+  read-only="yes"
+></o-text-input>
+```
+
+### 13.8 Validación y errores
+
+Con inputs HTML nativos la validación es manual (variables `xError`, div de error, clase CSS de error). Los componentes Ontimize gestionan esto automáticamente cuando se usan con `required="yes"` o `[(ngModel)]` con validators de Angular:
+
+```typescript
+// ANTES: validación manual
+serialNumberError = '';
+
+validate(): boolean {
+  if (!this.serialNumber) {
+    this.serialNumberError = 'SERIAL_NUMBER_REQUIRED';
+    return false;
+  }
+  this.serialNumberError = '';
+  return true;
+}
+
+// DESPUÉS: validación Angular + ReactiveFormsModule (opcional)
+import { NgModel } from '@angular/forms';
+
+@ViewChild('serialInput') serialInput!: NgModel;
+
+validate(): boolean {
+  // el componente marca el estado invalid automáticamente
+  return this.serialInput.valid;
+}
+```
+
+O con `ReactiveFormsModule`:
+
+```typescript
+form = new FormGroup({
+  serialNumber: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+  manufacturingDate: new FormControl('', Validators.required),
+  modelId: new FormControl(null, Validators.required),
+});
+
+onSave() {
+  if (this.form.invalid) return;
+  const { serialNumber, manufacturingDate, modelId } = this.form.value;
+  // ...
+}
+```
+
+```html
+<o-text-input
+  formControlName="serialNumber"
+  label="EQUIPMENT_SERIAL_NUMBER"
+  required="yes"
+></o-text-input>
+```
+
+### 13.9 Checklist de migración
+
+- [ ] Reemplazar cada `<input type="text">` por `<o-text-input>`
+- [ ] Reemplazar cada `<input type="date">` por `<o-date-input value-type="string">`
+- [ ] Reemplazar cada `<select>` por `<o-combo>` con `[static-data]` (transformar strings a objetos)
+- [ ] Cambiar `[value]="x" (input/change)="f($event.target.value)"` → `[(ngModel)]="x" (onChange)="f($event.newValue)"`
+- [ ] Cambiar `[max]="todayISO"` (string) a `[max]="todayDate"` (Date) en date inputs
+- [ ] Eliminar `<label>`, asteriscos de required y `<div class="field-error">` — los gestiona el componente
+- [ ] Sustituir divs readonly y selects disabled por `<o-text-input read-only="yes">`
+- [ ] Eliminar lógica de validación manual si se usa `required="yes"` + `NgModel` o `FormGroup`
+- [ ] Eliminar panel de búsqueda custom si se migra a `o-combo` con `filter-case-sensitive="no"`
+
+---
+
+## 14. Clear SaSS — superficies neutras, scrollbar y paleta neutral (desde 18.0.0-next.4)
+
+Esta versión introduce tres mejoras de theming opcionales agrupadas bajo el nombre **Clear SaSS**: superficies sin tinte de color primario, scrollbar con thumb en color de marca, y niveles de superficie derivados de la paleta neutral.
+
+### 14.1 Activar el mixin `ontimize-neutral-surfaces`
+
+Por defecto, Material 3 aplica un tinte del color primario a las superficies elevadas (tarjetas, menús, drawers…). El nuevo mixin `ontimize-neutral-surfaces` desactiva ese tinte y ajusta varios tokens para un aspecto limpio y neutral.
+
+Llama al mixin **después** de `ontimize-theme-styles()` en tu `styles.scss` / `app.scss`:
+
+```scss
+@use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
+
+// Tema claro
+html {
+  @include ontimize-style.ontimize-theme-styles($theme);
+  @include ontimize-style.ontimize-neutral-surfaces($theme); // ← añadir
+}
+
+// Tema oscuro
+html.o-dark {
+  @include ontimize-style.ontimize-theme-styles($dark-theme);
+  @include ontimize-style.ontimize-neutral-surfaces($dark-theme); // ← añadir
+}
+```
+
+El mixin aplica los siguientes cambios:
+
+| Token | Valor | Efecto |
+|---|---|---|
+| `--mat-sys-surface-tint` | `transparent` | Elimina el tinte primario en superficies elevadas |
+| `--mdc-elevated-card-container-elevation` | `0` | Tarjetas planas sin sombra |
+| `--mdc-slider-inactive-track-color` | nivel-08 de la paleta neutral | Track inactivo del slider visible sin tinte primario |
+| `--mat-sys-outline-variant` | divider (opacidad, sin color) | Bordes y divisores neutros |
+| `--mat-sys-background` | nivel-0 de la paleta neutral | Fondo de la aplicación desde la paleta |
+
+### 14.2 Scrollbar con color de marca
+
+La implementación global del scrollbar usa el token `--o-scroll-thumb`. Este token se compila en tiempo de build SCSS a un valor `rgba()` estático usando el color primario al 30% de opacidad.
+
+> **Por qué estático**: Los pseudo-elementos `::-webkit-scrollbar-*` no heredan CSS custom properties en tiempo de ejecución. El valor de `--mat-sys-primary` no está disponible en ese contexto, por lo que el color se resuelve en build con `mat.get-theme-color()`.
+
+El scrollbar claro/oscuro se obtiene automáticamente porque el tema oscuro usa el tono 80 de la paleta primaria (más claro), mientras el tema claro usa el tono 40.
+
+#### Personalizar el color del scrollbar
+
+Si necesitas un color diferente, sobreescribe el token en tu fichero de estilos:
+
+```scss
+// En el selector donde aplicas el tema (e.g. html o :root)
+html {
+  @include ontimize-style.ontimize-theme-styles($theme);
+  --o-scroll-thumb: rgba(0, 0, 0, 0.2); // ← valor custom
+}
+```
+
+### 14.3 Pasar la paleta neutral en temas custom
+
+Si defines un tema propio con `o-mat-light-theme` / `o-mat-dark-theme`, pasa la paleta neutral para que los niveles de superficie se deriven de ella en lugar de usar valores hexadecimales fijos:
+
+```scss
+$theme: ontimize-style.o-mat-light-theme((
+  primary:  $_primary,
+  tertiary: $_tertiary,
+  neutral:  map.get($_palettes, neutral), // ← añadir
+  density:  -4,
+));
+
+$dark-theme: ontimize-style.o-mat-dark-theme((
+  primary:  $_primary,
+  tertiary: $_tertiary,
+  neutral:  map.get($_palettes, neutral), // ← añadir
+  density:  -4,
+));
+```
+
+La paleta neutral debe incluir los tonos que se corresponden con los niveles de superficie:
+
+| Tono | Nivel | Tema |
+|---|---|---|
+| `97` | `level-0` / background | claro |
+| `96` | `level-04` | claro |
+| `93` | `level-06` | claro |
+| `85` | `level-08` | claro |
+| `100` | `level-1` / card | claro |
+| `13` | `level-0` / background | oscuro |
+| `19` | `level-04` | oscuro |
+| `20` | `level-06` | oscuro |
+| `24` | `level-08` | oscuro |
+| `15` | `level-1` / card | oscuro |
+
+Si la paleta no incluye alguno de estos tonos, las funciones de background usan los valores hexadecimales predeterminados como fallback.
