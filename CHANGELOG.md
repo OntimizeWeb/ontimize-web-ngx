@@ -1,19 +1,17 @@
-## 18.0.0-next.5
-### BREAKING CHANGES
-* **theming**: `oxygen` theme no longer sets custom font sizes or weights. All type scale now inherits from Material M3 system tokens. The `--o-font-<level>-size/line-height/weight` tokens are no longer emitted — replace any remaining references with the equivalent `--mat-sys-*` token.
-* **theming**: `--o-input-icon-size` token removed. Input prefix/suffix icon size is now hardcoded to `20px` in the component styles.
-* **theming**: `html { font-size }` override removed from `typography.scss`. The base font size is no longer forced to `14px` — Material and the browser manage the type scale.
-* **theming**: `font-family` on `html` is now driven exclusively by `--o-font-family`, which is emitted dynamically from the `font-family` defined in the theme's typography config passed to `o-mat-light-theme` / `o-mat-dark-theme`. The hardcoded `'Noto Sans'` fallback is replaced by `system-ui, sans-serif`.
-
----
-
-## 18.0.0-next.4
+## 18.0.0-next.4 (2025-05-21)
 ### Features
 * Integrated changes from versions **15.9.1**
+* **theming**: Added `ontimize-neutral-surfaces($theme)` mixin to the public API (`ontimize-style.scss`). Calling it after `ontimize-theme-styles()` enables "Clear SaSS" surface overrides: removes the primary-colour tint from elevated surfaces (`--mat-sys-surface-tint: transparent`), flattens elevated card shadows (`--mdc-elevated-card-container-elevation: 0`), sets neutral opacity-based dividers via `--mat-sys-outline-variant`, and fixes the slider inactive track so it stays visible without primary tint.
+* **theming**: Global scrollbar styles replaced with a Clear SaSS implementation. Track is transparent; thumb uses `--o-scroll-thumb` (primary colour at 30% opacity, compiled to a static `rgba` at SCSS build time so it resolves inside `::-webkit-scrollbar` pseudo-elements). Modern `scrollbar-width: thin` / `scrollbar-color` added for Firefox and Chrome 121+.
+* **theming**: Oxygen neutral palette extended with custom tones (`85`, `93`, `97` for light surfaces; `13`, `15`, `19` for dark surfaces) that map directly to each background level. `o-mat-light-theme` / `o-mat-dark-theme` now accept an optional `neutral` key in the config map; when provided, `ontimize-light/dark-theme-background()` derives all levels from palette tones instead of hardcoded hex values.
 * **inputs**: Input components (`o-text-input`, `o-integer-input`, `o-date-input`, `o-combo`, `o-checkbox`, `o-currency-input`, `o-daterange-input`, and all other Ontimize inputs) can now be used **outside of `o-form`** with native Angular reactive forms. Bind any input directly via `[formControl]="myControl"` or `ngModel` without wrapping it in an `<o-form>`. Each component implements `ControlValueAccessor` and registers itself as `NG_VALUE_ACCESSOR`. An `IOFormParent` interface and `O_FORM_CONTEXT` injection token replace the previous hard dependency on `OFormComponent` in the constructor — components inject the token optionally, so they degrade gracefully when no parent form is present.
 
 ### BREAKING CHANGES
 * **inputs**: All Ontimize input components no longer accept `OFormComponent` as a constructor parameter. If you have custom components that extend `OFormDataComponent`, `OFormServiceComponent`, or `OBooleanFormDataComponent` and pass a `form` parameter via `super(form, elRef, injector)`, update the call to `super(elRef, injector)` and remove the `@Optional() @Inject(forwardRef(() => OFormComponent))` parameter. The form context is now resolved automatically via `inject(O_FORM_CONTEXT, { optional: true })`.
+* **theming**: `oxygen` theme no longer sets custom font sizes or weights. All type scale now inherits from Material M3 system tokens. The `--o-font-<level>-size/line-height/weight` tokens are no longer emitted — replace any remaining references with the equivalent `--mat-sys-*` token.
+* **theming**: `--o-input-icon-size` token removed. Input prefix/suffix icon size is now hardcoded to `20px` in the component styles.
+* **theming**: `html { font-size }` override removed from `typography.scss`. The base font size is no longer forced to `14px` — Material and the browser manage the type scale.
+* **theming**: `font-family` on `html` is now driven exclusively by `--o-font-family`, which is emitted dynamically from the `font-family` defined in the theme's typography config passed to `o-mat-light-theme` / `o-mat-dark-theme`. The hardcoded `'Noto Sans'` fallback is replaced by `system-ui, sans-serif`.
 
 ## 18.0.0-next.3  (2026-05-18)
 ### Features
