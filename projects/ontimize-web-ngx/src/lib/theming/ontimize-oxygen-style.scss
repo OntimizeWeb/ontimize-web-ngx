@@ -1,0 +1,314 @@
+@use "sass:map";
+@use "sass:color";
+@use 'styles/oxygen/variables.scss';
+@use 'styles/oxygen/typography-oxygen.scss' as typography-oxygen;
+@use '@angular/material' as mat;
+@use 'ontimize-style-base.scss' as base;
+@use 'typography/oxygen.scss' as oxygen;
+@use 'ontimize-style-v8.scss' as ontimize-style;
+
+// Create variables map for base functions
+$variables-map: (
+  'app-background-color': variables.$app-background-color,
+  'sidenav-background-color': variables.$sidenav-background-color,
+  'light-level-04': variables.$light-level-04,
+  'light-level-06': variables.$light-level-06,
+  'light-level-08': variables.$light-level-08,
+  'light-level-1': variables.$light-level-1,
+  'dark-level-0-base': variables.$dark-level-0-base,
+  'dark-level-04-base': variables.$dark-level-04-base,
+  'dark-level-06-base': variables.$dark-level-06-base,
+  'dark-level-08-base': variables.$dark-level-08-base,
+  'dark-level-1-base': variables.$dark-level-1-base,
+  'dark-status-bar-base': variables.$dark-status-bar-base,
+  'sidenav-overlay': variables.$sidenav-overlay,
+  'light-theme-level-0-mix': variables.$light-theme-level-0-mix,
+  'light-theme-status-bar-mix': variables.$light-theme-status-bar-mix,
+  'light-theme-app-bar-mix': variables.$light-theme-app-bar-mix,
+  'light-theme-background-mix': variables.$light-theme-background-mix,
+  'dark-theme-mix': variables.$dark-theme-mix,
+  'border-radius': variables.$border-radius,
+  'button-line-height-width-border': variables.$button-line-height-width-border
+);
+
+// Creates a container object for a light theme to be given to individual component theme mixins.
+@function o-mat-light-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  @return base.create-light-theme($primary, $accent, oxygen.$typography, $variables-map, $warn);
+}
+
+// Creates a container object for a dark theme to be given to individual component theme mixins.
+@function o-mat-dark-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
+  @return base.create-dark-theme($primary, $accent, oxygen.$typography, $variables-map, $warn);
+}
+
+// Use mat-checkbox-theme from base
+@mixin mat-checkbox-theme($theme-or-color-config) {
+  @include base.mat-checkbox-theme($theme-or-color-config);
+}
+
+@mixin mat-pseudo-checkbox-theme($theme-or-color-config) {
+  @include base.mat-pseudo-checkbox-theme($theme-or-color-config);
+}
+
+// Custom o-app-sidenav-theme for Oxygen theme
+// You can customize the sidenav appearance here
+@mixin o-app-sidenav-theme($theme, $background, $foreground, $primary, $sidenav-background-color) {
+  .o-app-sidenav {
+    font-weight: 400;
+
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      a {
+        margin-left: 0 !important;
+        border-left: 8px solid transparent;
+      }
+
+      &:not([disabled='true']) {
+        border-left-color: transparent;
+
+        a:hover {
+          color: mat.get-color-from-palette($foreground, button);
+          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 96%); //#525252 4%
+          border-left: 8px solid mat.get-color-from-palette($primary);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected {
+          color: mat.get-color-from-palette($foreground, button);
+          background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 98%); //#525252 2%
+          border-left: 8px solid mat.get-color-from-palette($primary);
+        }
+      }
+    }
+
+    .o-app-sidenav-sidenav {
+      background: $sidenav-background-color;
+
+      .sidenav-toggle {
+        color: mat.get-color-from-palette($foreground, button);
+      }
+
+      .o-app-sidenav-item {
+        color: mat.get-color-from-palette($foreground, button);
+
+        &.o-user-info {
+
+          &:focus,
+          &:hover {
+            color: inherit;
+          }
+
+          color: inherit;
+
+          .o-user-info-menu-item .o-user-info-item {
+            background: mat.get-color-from-palette($primary, default-contrast, 0.74);
+          }
+        }
+      }
+
+      /* Side Navigation Level Styles */
+      .o-app-sidenav-menu-group-level-1 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-item {
+          &:not([disabled='true']) {
+
+            // a.o-app-sidenav-viewer-sidenav-item-selected,
+            a:hover {
+              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 94%); //#525252 6%
+            }
+          }
+        }
+      }
+
+      .o-app-sidenav-menu-group-level-2,
+      .o-app-sidenav-menu-group-level-3,
+      .o-app-sidenav-menu-group-level-4 {
+        .o-app-sidenav-menugroup {
+          &.opened {
+            +.o-app-sidenav-menugroup-items-container ul {
+              background: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+            }
+          }
+        }
+
+        .o-app-sidenav-menu-item {
+          &:not([disabled='true']) {
+
+            // a.o-app-sidenav-viewer-sidenav-item-selected,
+            a:hover {
+              background-color: color.mix($sidenav-background-color, mat.get-color-from-palette($background, sidenav-overlay), 88%); //#525252 12%
+            }
+          }
+        }
+      }
+
+      li a {
+        color: mat.get-color-from-palette($foreground, text);
+      }
+    }
+  }
+
+  .o-app-sidenav-container {
+    .mat-drawer.o-app-sidenav-sidenav.mat-drawer-closed {
+      nav {
+
+        .o-app-sidenav-menu-group,
+        .o-app-sidenav-menu-item {
+
+          a {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  o-app-sidenav.o-app-sidenav,
+  o-app-sidenav.o-app-sidenav.header-layout {
+    .o-app-sidenav-container {
+      .o-app-header {
+        /*box-shadow: none;*/
+        border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
+        background-color: $sidenav-background-color;
+      }
+
+      mat-sidenav.mat-drawer.o-app-sidenav-sidenav {
+        box-shadow: none;
+        border-right: none;
+
+        .o-app-sidenav-menugroup.active+.o-app-sidenav-menugroup-items-container ul {
+          box-shadow: none;
+          background: none;
+        }
+      }
+    }
+
+    .mat-mdc-menu-panel {
+      border: 1px solid mat.get-color-from-palette($foreground, divider);
+    }
+
+    .o-app-header {
+      .o-user-info {
+        .o-user-info-wrapper {
+          font-weight: 500;
+          // color: white;
+        }
+      }
+    }
+  }
+}
+
+@mixin ontimize-theme-all-component-color($theme-or-color-config) {
+  $color: map.get($theme-or-color-config, color);
+  @include ontimize-theme-styles((color: $color,
+      typography: null,
+      density: null,
+    ));
+}
+
+@mixin ontimize-theme-styles($theme-or-color-config) {
+  // Apply v8 styles
+  @include ontimize-style.ontimize-theme-styles($theme-or-color-config);
+  
+  // Apply typography styles
+  $typography: mat.get-typography-config($theme-or-color-config);
+  @if($typography) {
+    @include typography-oxygen.o-table-typography-fashion($typography);
+    @include typography-oxygen.o-common-typography-fashion($typography);
+    @include typography-oxygen.o-form-theme-fashion($typography);
+  }
+  
+  // Apply new styles with custom sidenav implementation
+  @include mat-checkbox-theme($theme-or-color-config);
+  @include mat-pseudo-checkbox-theme($theme-or-color-config);
+  
+  // Extract theme variables for custom component mixins
+  $theme: map.get($theme-or-color-config, color);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: mat.get-color-from-palette($theme, warn);
+  $is-dark-theme: map.get($theme, is-dark);
+  $sidenav-background-color: if($is-dark-theme, mix(#1e1e1e, mat.get-color-from-palette($primary, 500), 94%), mat.get-color-from-palette($background, status-bar));
+  
+  // Call base mixins for components we don't customize
+  @include base.o-app-header-theme($theme, $foreground, $sidenav-background-color);
+  @include base.o-common-theme($theme, $background, $foreground, $primary);
+  @include base.o-table-theme($theme, $background, $foreground, $primary);
+  @include base.o-form-theme($theme, $background, $foreground);
+  @include base.o-button-theme($theme, $background, $foreground, $primary, $accent, $warn, $is-dark-theme, $variables-map);
+  @include base.o-container-theme($theme, $background, $foreground, $typography, $variables-map);
+  @include base.o-background-levels-theme($theme, $background);
+  @include base.o-skeleton-theme($theme, $background, $variables-map);
+  
+  // Call our CUSTOM sidenav mixin
+  @include o-app-sidenav-theme($theme, $background, $foreground, $primary, $sidenav-background-color);
+}
+
+/*
+ * EXAMPLE: How to override specific component mixins
+ * 
+ * If you want to customize only specific components (e.g., o-table) while keeping
+ * the rest from base, you can override individual mixins:
+ *
+ * // 1. Define your custom mixin
+ * @mixin o-table-theme($theme, $background, $foreground, $primary) {
+ *   .ontimize-table.o-table {
+ *     background: mat.get-color-from-palette($background, card);
+ *     border: 2px solid mat.get-color-from-palette($primary, 500); // Custom!
+ *     border-radius: 8px; // Custom!
+ *     // ... your custom styles
+ *   }
+ * }
+ *
+ * // 2. Replace ontimize-theme-styles mixin implementation:
+ * @mixin ontimize-theme-styles($theme-or-color-config) {
+ *   @include ontimize-style.ontimize-theme-styles($theme-or-color-config);
+ *   
+ *   // Apply typography styles
+ *   $typography: mat.get-typography-config($theme-or-color-config);
+ *   @if($typography) {
+ *     @include typography-oxygen.o-table-typography-fashion($typography);
+ *     @include typography-oxygen.o-common-typography-fashion($typography);
+ *     @include typography-oxygen.o-form-theme-fashion($typography);
+ *   }
+ *   
+ *   @include mat-checkbox-theme($theme-or-color-config);
+ *   @include mat-pseudo-checkbox-theme($theme-or-color-config);
+ *   
+ *   // Extract theme variables
+ *   $theme: map.get($theme-or-color-config, color);
+ *   $background: map.get($theme, background);
+ *   $foreground: map.get($theme, foreground);
+ *   $primary: map.get($theme, primary);
+ *   $accent: map.get($theme, accent);
+ *   $warn: mat.get-color-from-palette($theme, warn);
+ *   $is-dark-theme: map.get($theme, is-dark);
+ *   $sidenav-background-color: if($is-dark-theme, mix(#1e1e1e, mat.get-color-from-palette($primary, 500), 94%), mat.get-color-from-palette($background, status-bar));
+ *   
+ *   // Call base mixins for components you don't want to customize
+ *   @include base.o-app-header-theme($theme, $foreground, $sidenav-background-color);
+ *   @include base.o-app-sidenav-theme($theme, $background, $foreground, $primary, $sidenav-background-color);
+ *   @include base.o-common-theme($theme, $background, $foreground, $primary);
+ *   @include base.o-form-theme($theme, $background, $foreground);
+ *   @include base.o-button-theme($theme, $background, $foreground, $primary, $accent, $warn, $is-dark-theme, $variables-map);
+ *   @include base.o-container-theme($theme, $background, $foreground, $typography, $variables-map);
+ *   @include base.o-background-levels-theme($theme, $background);
+ *   @include base.o-skeleton-theme($theme, $background, $variables-map);
+ *   
+ *   // Call YOUR custom table mixin instead of base
+ *   @include o-table-theme($theme, $background, $foreground, $primary);
+ * }
+ *
+ * This way, only o-table will have custom styles while all other components
+ * (sidenav, form, buttons, etc.) will use the base implementation.
+ */
