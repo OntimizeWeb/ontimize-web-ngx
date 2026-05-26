@@ -1,7 +1,7 @@
 @mixin o-app-sidenav-theme($theme-or-color-config) {
   .o-app-sidenav {
-    --mat-sidenav-container-shape: 0;
-    --mdc-text-button-label-text-color: #000;
+    // --mat-sidenav-container-shape: 0;
+    --mdc-text-button-label-text-color: var(--o-fg-text);
 
     .mat-sidenav.o-app-sidenav-sidenav {
       background: var(--o-bg-app-bar);
