@@ -168,36 +168,51 @@
 // scale -3 onwards, hiding the floating label inside filled form fields at
 // high density. We force it to `block` for all scales because Ontimize forms
 // rely on the label being visible (mat-label is part of the field semantics,
-// not just decoration). To keep the label readable when the field shrinks,
-// we also reduce the label font-size at deeper scales.
+// not just decoration).
 //
+// Base font-size per density:
+// M3 form-field tokens use `body-large-size = 1rem`, so they cascade from the
+// root font-size. The table below sets `font-size` on the root element:
+//   scales  0 → -2 : 16px  (Material default)
+//   scales -3 → -5 : 14px  (compact — reduces all rem-based type at once)
+//
+// Base font-size steps: 16px for scales 0→-2 (Material default),
+// 14px for scales -3→-5 (compact — reduces all rem-based type simultaneously).
 $_extended-density-tokens: (
 
+  0: (
+    font-size: 16px,
+  ),
   -1: (
+    font-size: 16px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
   ),
   -2: (
+    font-size: 16px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
   ),
-  -3: (--mdc-text-button-container-height: 32px,
+  -3: (
+    font-size: 14px,
+    --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
   ),
   -4: (
+    font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
-
   ),
   -5: (
+    font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
