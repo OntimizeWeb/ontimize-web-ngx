@@ -628,7 +628,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (setDirty) {
       this._fControl.markAsDirty();
     }
-    if (this._fControl.invalid && (!this.form || !this.form.isInInsertMode())) {
+    const isInsertMode = this.form?.isInInsertMode() ?? true;
+    if (this._fControl.invalid && !isInsertMode) {
       this._fControl.markAsTouched();
     }
   }
