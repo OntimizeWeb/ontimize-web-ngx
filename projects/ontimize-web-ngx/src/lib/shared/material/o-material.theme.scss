@@ -59,6 +59,18 @@
   @if $m3-theme {
     @if & {
       & {
+        // Emit --mat-sys-* CSS custom properties from the M3 palette so that
+        // component SCSS can reference var(--mat-sys-primary-container) etc.
+        // mat.all-component-themes() bakes palette values into --mdc-* tokens
+        // at compile time and does NOT emit --mat-sys-* definitions itself.
+        @include mat.system-level-colors($m3-theme, (), 'mat-sys');
+        @if not $color-only {
+          @include mat.system-level-typography($m3-theme, (), 'mat-sys');
+          @include mat.system-level-elevation($m3-theme, (), 'mat-sys');
+          @include mat.system-level-shape($m3-theme, (), 'mat-sys');
+          @include mat.system-level-motion($m3-theme, (), 'mat-sys');
+          @include mat.system-level-state($m3-theme, (), 'mat-sys');
+        }
         @if $color-only {
           @include mat.all-component-colors($m3-theme);
         } @else {
@@ -69,6 +81,14 @@
       }
     } @else {
       html {
+        @include mat.system-level-colors($m3-theme, (), 'mat-sys');
+        @if not $color-only {
+          @include mat.system-level-typography($m3-theme, (), 'mat-sys');
+          @include mat.system-level-elevation($m3-theme, (), 'mat-sys');
+          @include mat.system-level-shape($m3-theme, (), 'mat-sys');
+          @include mat.system-level-motion($m3-theme, (), 'mat-sys');
+          @include mat.system-level-state($m3-theme, (), 'mat-sys');
+        }
         @if $color-only {
           @include mat.all-component-colors($m3-theme);
         } @else {

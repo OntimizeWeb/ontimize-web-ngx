@@ -106,8 +106,7 @@ $_palettes: (
 
   ),
 
-  neutral: (
-    // M3 standard tones
+  neutral: ( // M3 standard tones
     0: #000000,
     4: #0f0f0f,
     6: #141414,
@@ -135,32 +134,33 @@ $_palettes: (
     99: #fdfdfd,
     100: #ffffff,
     // Ontimize surface levels — light theme
-    85: #e0e0e0,  // level-08
-    93: #f2f2f2,  // level-06
-    97: #f9fafb,  // level-0 / background
+    85: #e0e0e0, // level-08
+    93: #f2f2f2, // level-06
+    97: #f9fafb, // level-0 / background
     // (tone 96 = #f7f7f7 = level-04, tone 100 = white = level-1)
     // Ontimize surface levels — dark theme
-    13: #202020,  // dark level-0 / background
-    15: #252525,  // dark level-1 / card
-    19: #2e2e2e,  // dark level-04
+    13: #202020, // dark level-0 / background
+    15: #252525, // dark level-1 / card
+    19: #2e2e2e, // dark level-04
     // (tone 20 = #303030 = dark level-06, tone 24 = #3a3a3a = dark level-08)
   ),
   neutral-variant: (0: #000000,
-    10: #1b1b1b,
-    20: #313131,
-    25: #3d3d3d,
-    30: #4c4c4c,
-    35: #595959,
-    40: #686868,
-    50: #828282,
-    60: #9b9b9b,
-    70: #b5b5b5,
-    80: #cecece,
-    90: #f6f6f6,
-    95: #fcfcfc,
-    98: #ffffff,
-    99: #ffffff,
-    100: #ffffff,
+  10: #1b1b1b,
+  20: #313131,
+  25: #3d3d3d,
+  30: #4c4c4c,
+  35: #595959,
+  40: #686868,
+  50: #828282,
+  60: #9b9b9b,
+  70: #b5b5b5,
+  80: #cecece,
+  90: #f6f6f6,
+  95: #fcfcfc,
+  98: #ffffff,
+  99: #ffffff,
+  100: #ffffff,
+
   ),
 
   error: (0: #000000,
@@ -210,20 +210,17 @@ $_primary: map.merge(map.get($_palettes, primary), $_rest);
 $_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
 
 /* Light theme with Noto Sans typography */
-$theme: ontimize-style.o-mat-light-theme((
-  primary:    $_primary,
-  tertiary:   $_tertiary,
-  neutral:    map.get($_palettes, neutral),
-  typography: oxygen-typography.$typography,
-  density:    -4,
-));
+$theme: ontimize-style.o-mat-light-theme((primary: $_primary,
+      tertiary: $_tertiary,
+      neutral: map.get($_palettes, neutral),
+      typography: oxygen-typography.$typography,
+      density: -4,
+    ));
 
 /* Dark theme with Noto Sans typography */
-$dark-theme: ontimize-style.o-mat-dark-theme((
-  primary:    $_primary,
-  tertiary:   $_tertiary,
-  neutral:    map.get($_palettes, neutral),
-  typography: oxygen-typography.$typography,
-  density:    -4,
-));
-
+$dark-theme: ontimize-style.o-mat-dark-theme((primary: $_primary,
+      tertiary: $_tertiary,
+      neutral: map.get($_palettes, neutral),
+      typography: oxygen-typography.$typography,
+      density: -4,
+    ));

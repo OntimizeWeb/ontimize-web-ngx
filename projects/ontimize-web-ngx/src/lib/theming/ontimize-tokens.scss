@@ -98,6 +98,10 @@
   --mat-divider-color: var(--mat-sys-outline-variant);
   --mat-table-row-item-outline-color: var(--mat-sys-outline-variant);
 
+  // ─── Form-field placeholders — attenuated via --o-fg-hint (theme-aware) ────
+  --mdc-filled-text-field-input-text-placeholder-color: var(--o-fg-hint);
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--o-fg-hint);
+
   // ─── Typography — font-family from theme config ─────────────────────────────
   @if $typography {
     $family: map.get($typography, font-family);
@@ -131,6 +135,11 @@
 
   // ─── Divider / border tokens — clear, opacity-based ─────────────────────────
   --mat-sys-outline-variant: #{-get-fg($foreground, divider, rgba(0, 0, 0, .12))};
+  --mat-sys-outline:var(--mat-sys-outline-variant);
 
   --mat-sys-background: #{-get-bg($background, background, #f9fafb)};
+
+  // Form-field borders aligned with --mat-sys-outline-variant
+  --mdc-outlined-text-field-outline-color: var(--mat-sys-outline-variant);
+  --mdc-filled-text-field-active-indicator-color: var(--mat-sys-outline-variant);
 }
