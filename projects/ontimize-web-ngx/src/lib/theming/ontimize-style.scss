@@ -179,40 +179,40 @@
 // Base font-size steps: 16px for scales 0→-2 (Material default),
 // 14px for scales -3→-5 (compact — reduces all rem-based type simultaneously).
 $_extended-density-tokens: (
-
-  0: (
-    font-size: 16px,
+  0: (font-size: 16px,
   ),
-  -1: (
-    font-size: 16px,
-    --mdc-text-button-container-height: 32px,
-    --mdc-filled-button-container-height: 32px,
-    --mdc-protected-button-container-height: 32px,
-    --mdc-outlined-button-container-height: 32px,
+  -1: (font-size: 16px,
+    --mdc-text-button-container-height: 36px,
+    --mdc-filled-button-container-height: 36px,
+    --mdc-protected-button-container-height: 36px,
+    --mdc-outlined-button-container-height: 36px,
   ),
   -2: (
     font-size: 16px,
+    --mdc-text-button-container-height: 36px,
+    --mdc-filled-button-container-height: 36px,
+    --mdc-protected-button-container-height: 36px,
+    --mdc-outlined-button-container-height: 36px,
+    --mat-form-field-filled-label-display: block,
+    --mat-form-field-filled-with-label-container-padding-top:20px,
+    --mat-form-field-filled-with-label-container-padding-bottom:4px
+    // --mdc-filled-text-field-label-text-size: 20px,
+    // --mdc-outlined-text-field-label-text-size: 4px,
+  ),
+  -3: (font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
   ),
-  -3: (
-    font-size: 14px,
+  -4: (font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
+    --mat-form-field-container-vertical-padding: 9px
   ),
-  -4: (
-    font-size: 14px,
-    --mdc-text-button-container-height: 32px,
-    --mdc-filled-button-container-height: 32px,
-    --mdc-protected-button-container-height: 32px,
-    --mdc-outlined-button-container-height: 32px,
-  ),
-  -5: (
-    font-size: 14px,
+  -5: (font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
