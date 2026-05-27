@@ -228,6 +228,18 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
+  // Clicking a <mat-label for="input"> dispatches both the original label click
+  // and a synthetic click on the input — both bubble up to <mat-form-field>.
+  // This guard collapses any duplicate clicks fired within the same tick.
+  private _lastFileClick = 0;
+  public openFileSelector(inputFile: HTMLInputElement): void {
+    if (!this.enabled || this.isReadOnly) return;
+    const now = Date.now();
+    if (now - this._lastFileClick < 200) return;
+    this._lastFileClick = now;
+    inputFile.click();
+  }
+
   public upload(): void {
     this.uploader.upload();
   }
