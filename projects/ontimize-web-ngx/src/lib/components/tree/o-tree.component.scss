@@ -1,8 +1,11 @@
 .o-tree {
+  background-color: var(--mat-tree-container-background-color, var(--mat-app-surface));
+
   .mat-mdc-progress-bar {
     margin-left: 30px;
   }
-  .node-wrapper{
+
+  .node-wrapper {
     align-items: center;
   }
 }
