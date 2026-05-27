@@ -1244,8 +1244,20 @@ El mixin aplica los siguientes cambios:
 | `--mat-sys-surface-tint` | `transparent` | Elimina el tinte primario en superficies elevadas |
 | `--mdc-elevated-card-container-elevation` | `0` | Tarjetas planas sin sombra |
 | `--mdc-slider-inactive-track-color` | nivel-08 de la paleta neutral | Track inactivo del slider visible sin tinte primario |
-| `--mat-sys-outline-variant` | divider (opacidad, sin color) | Bordes y divisores neutros |
+| `--mat-sys-outline-variant` | divider del foreground (opacidad, sin color) | Bordes y divisores neutros |
+| `--mat-sys-outline` | `var(--mat-sys-outline-variant)` | Chips, expansion panels, switches, steppers, button toggles alineados con el resto de bordes neutros (desde 18.0.0-next.5) |
 | `--mat-sys-background` | nivel-0 de la paleta neutral | Fondo de la aplicación desde la paleta |
+| `--mdc-outlined-text-field-outline-color` | `var(--mat-sys-outline-variant)` | Borde de los inputs outline alineado con dividers (desde 18.0.0-next.5) |
+| `--mdc-filled-text-field-active-indicator-color` | `var(--mat-sys-outline-variant)` | Indicador inferior de los inputs fill alineado con dividers (desde 18.0.0-next.5) |
+
+Adicionalmente, `o-apply-tokens` (mixin obligatorio, llamado por `ontimize-theme-styles`) atenúa los placeholders de los inputs vía `--o-fg-hint`:
+
+| Token | Valor | Efecto |
+|---|---|---|
+| `--mdc-filled-text-field-input-text-placeholder-color` | `var(--o-fg-hint)` | Placeholder filled con opacidad 38% (claro/oscuro auto) |
+| `--mdc-outlined-text-field-input-text-placeholder-color` | `var(--o-fg-hint)` | Placeholder outline con opacidad 38% (claro/oscuro auto) |
+
+> Para personalizar todos los hints/placeholders a la vez, sobreescribe `--o-fg-hint` en el selector raíz de tu tema.
 
 ### 14.2 Scrollbar con color de marca
 
