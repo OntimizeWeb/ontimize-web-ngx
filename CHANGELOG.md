@@ -1,3 +1,23 @@
+## 18.0.0-next.5 (2026-05-27)
+### Features
+* **theming**: Form-field placeholders are now attenuated via `--o-fg-hint`. The token resolves to `rgba(0, 0, 0, 0.38)` in light themes and `rgba(255, 255, 255, 0.38)` in dark themes (foreground `hint-text` role), automatically adapting per theme. Applied to both `--mdc-filled-text-field-input-text-placeholder-color` and `--mdc-outlined-text-field-input-text-placeholder-color` in `o-apply-tokens`. Consumers can override `--o-fg-hint` to customise all hint/placeholder colours in one place.
+* **theming**: Form-field borders are now aligned with `--mat-sys-outline-variant` (applied by `ontimize-neutral-surfaces`). Both the outlined text-field border (`--mdc-outlined-text-field-outline-color`) and the filled text-field bottom indicator (`--mdc-filled-text-field-active-indicator-color`) reference the same neutral divider colour, giving a coherent visual hierarchy across inputs, dividers and table rows.
+* **theming**: `--mat-sys-outline` is now overridden to `var(--mat-sys-outline-variant)` inside `ontimize-neutral-surfaces`, so chips, expansion panels, button toggles, switches and steppers share the same subtle neutral border colour as form fields.
+* **theming**: Filled `mat-form-field` label is now visible at density `-2` (`--mat-form-field-filled-label-display: block`) with tuned vertical paddings (`--mat-form-field-filled-with-label-container-padding-top: 20px`, `…-bottom: 4px`). Density `-4` adds `--mat-form-field-container-vertical-padding: 9px` for better breathing room. Material's default at scale `-3+` was hiding the floating label inside filled fields.
+* **theming**: Density `-1` and `-2` button heights updated from 32 px → 36 px to follow Material's intermediate density progression. Scales `-3` to `-5` remain at 32 px.
+* **theming**: Font-size per density is now driven by `$_extended-density-tokens`. The table emits `font-size` on the root element (16 px for scales 0 → -2, 14 px for -3 → -5) so all rem-based components — including Material's hardcoded `1rem` floating labels — scale uniformly with the chosen density.
+
+### Bug Fixes
+* **file-input**: The native file-selector dialog no longer opens twice when the floating `<mat-label>` is clicked. Clicking a labeled input causes the browser to dispatch both the label's click and a synthetic click on the input — both previously bubbled up to `<mat-form-field>` and triggered `inputFile.click()` two times. A new `openFileSelector()` method on `OFileInputComponent` collapses duplicate clicks within a 200 ms window.
+* **input validation**: `markAsTouched` is no longer called when the parent form is not yet available, preventing a `null` reference when inputs are used outside `<o-form>`.
+* **o-app-layout**: Sidenav background and text colours corrected in dark mode.
+* **o-data-toolbar**: Added vertical padding so the toolbar matches the Ontimize toolbar spacing pattern.
+* **o-tree**: Background colour now matches the underlying `mat-tree` default, avoiding a visible mismatch when the tree is placed inside a card.
+* **o-form-service**: Static-data combos no longer trigger an unnecessary refresh on initialization.
+* **theming**: Multiple formatting and consistency fixes in `ontimize-base-style.scss` (no functional changes).
+
+---
+
 ## 18.0.0-next.4 (2025-05-21)
 ### Features
 * Integrated changes from versions **15.9.1**
