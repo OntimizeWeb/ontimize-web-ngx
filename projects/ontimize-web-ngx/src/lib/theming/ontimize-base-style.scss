@@ -46,20 +46,19 @@ $sidenav-background-color: #FFFFFF !default;
 //   97 → level-0 / background   96 → level-04   93 → level-06
 //   85 → level-08               100 → level-1 / card
 @function ontimize-light-theme-background($neutral: null) {
-  $lvl-0:  if($neutral, map.get($neutral, 97),  #f9fafb);
-  $lvl-04: if($neutral, map.get($neutral, 96),  #f7f7f7);
-  $lvl-06: if($neutral, map.get($neutral, 93),  #f2f2f2);
-  $lvl-08: if($neutral, map.get($neutral, 85),  #e0e0e0);
-  $lvl-1:  if($neutral, map.get($neutral, 100), white);
-  @return (
-    level-0:    $lvl-0,
-    level-04:   $lvl-04,
-    level-06:   $lvl-06,
-    level-08:   $lvl-08,
-    level-1:    $lvl-1,
-    card:       $lvl-1,
+  $lvl-0: if($neutral, map.get($neutral, 97), #f9fafb);
+  $lvl-04: if($neutral, map.get($neutral, 96), #f7f7f7);
+  $lvl-06: if($neutral, map.get($neutral, 93), #f2f2f2);
+  $lvl-08: if($neutral, map.get($neutral, 85), #e0e0e0);
+  $lvl-1: if($neutral, map.get($neutral, 100), white);
+  @return (level-0: $lvl-0,
+    level-04: $lvl-04,
+    level-06: $lvl-06,
+    level-08: $lvl-08,
+    level-1: $lvl-1,
+    card: $lvl-1,
     status-bar: $sidenav-background-color,
-    app-bar:    $sidenav-background-color,
+    app-bar: $sidenav-background-color,
     background: $lvl-0,
   );
 }
@@ -69,21 +68,20 @@ $sidenav-background-color: #FFFFFF !default;
 //   13 → level-0 / background   19 → level-04   20 → level-06
 //   24 → level-08               15 → level-1 / card
 @function ontimize-dark-theme-background($neutral: null) {
-  $lvl-0:  if($neutral, map.get($neutral, 13), #202020);
+  $lvl-0: if($neutral, map.get($neutral, 13), #202020);
   $lvl-04: if($neutral, map.get($neutral, 19), #2e2e2e);
   $lvl-06: if($neutral, map.get($neutral, 20), #303030);
   $lvl-08: if($neutral, map.get($neutral, 24), #3a3a3a);
-  $lvl-1:  if($neutral, map.get($neutral, 15), #252525);
-  @return (
-    level-0:    $lvl-0,
-    level-04:   $lvl-04,
-    level-06:   $lvl-06,
-    level-08:   $lvl-08,
-    level-1:    $lvl-1,
-    card:       $lvl-1,
+  $lvl-1: if($neutral, map.get($neutral, 15), #252525);
+  @return (level-0: $lvl-0,
+    level-04: $lvl-04,
+    level-06: $lvl-06,
+    level-08: $lvl-08,
+    level-1: $lvl-1,
+    card: $lvl-1,
     background: $lvl-0,
     status-bar: #272727,
-    app-bar:    $lvl-1,
+    app-bar: $lvl-1,
   );
 }
 
@@ -181,69 +179,73 @@ $default-typography: ontimize.$typography;
 //     which emits a Sass palette map you can import and pass to `primary`.
 
 @function o-mat-light-theme($config: ()) {
-  $primary:    map.get($config, primary);
-  $tertiary:   map.get($config, tertiary);
-  $neutral:    map.get($config, neutral);
+  $primary: map.get($config, primary);
+  $tertiary: map.get($config, tertiary);
+  $neutral: map.get($config, neutral);
   $typography: if(map.has-key($config, typography), map.get($config, typography), ontimize.$typography);
-  $density:    if(map.has-key($config, density),    map.get($config, density),    -2);
+  $density: if(map.has-key($config, density), map.get($config, density), -2);
 
-  @if $primary == null {
+  @if $primary ==null {
     @error "o-mat-light-theme: 'primary' is required (pass a Material 3 palette such as mat.$azure-palette).";
   }
 
   $font-family: map.get($typography, font-family);
-  $color-config: (theme-type: light, primary: $primary);
-  @if $tertiary != null {
-    $color-config: map.merge($color-config, (tertiary: $tertiary));
-  }
-
-  $m3-theme: mat.define-theme((
-    color: $color-config,
-    typography: (brand-family: $font-family, plain-family: $font-family),
-    density: (scale: $density),
-  ));
-
-  @return (
-    is-dark: false,
-    foreground: $ontimize-light-theme-foreground,
-    background: ontimize-light-theme-background($neutral),
-    typography: $typography,
-    density: $density,
-    m3-theme: $m3-theme,
+  $color-config: (
+    theme-type: light,
+    primary: $primary
   );
+
+@if $tertiary !=null {
+  $color-config: map.merge($color-config, (tertiary: $tertiary));
+}
+
+$m3-theme: mat.define-theme((color: $color-config,
+      typography: (brand-family: $font-family, plain-family: $font-family),
+      density: (scale: $density),
+    ));
+
+@return (is-dark: false,
+  foreground: $ontimize-light-theme-foreground,
+  background: ontimize-light-theme-background($neutral),
+  typography: $typography,
+  density: $density,
+  m3-theme: $m3-theme,
+);
 }
 
 @function o-mat-dark-theme($config: ()) {
-  $primary:    map.get($config, primary);
-  $tertiary:   map.get($config, tertiary);
-  $neutral:    map.get($config, neutral);
+  $primary: map.get($config, primary);
+  $tertiary: map.get($config, tertiary);
+  $neutral: map.get($config, neutral);
   $typography: if(map.has-key($config, typography), map.get($config, typography), ontimize.$typography);
-  $density:    if(map.has-key($config, density),    map.get($config, density),    -2);
+  $density: if(map.has-key($config, density), map.get($config, density), -2);
 
-  @if $primary == null {
+  @if $primary ==null {
     @error "o-mat-dark-theme: 'primary' is required (pass a Material 3 palette such as mat.$azure-palette).";
   }
 
   $font-family: map.get($typography, font-family);
-  $color-config: (theme-type: dark, primary: $primary);
-  @if $tertiary != null {
-    $color-config: map.merge($color-config, (tertiary: $tertiary));
-  }
-
-  $m3-theme: mat.define-theme((
-    color: $color-config,
-    typography: (brand-family: $font-family, plain-family: $font-family),
-    density: (scale: $density),
-  ));
-
-  @return (
-    is-dark: true,
-    foreground: $ontimize-dark-theme-foreground,
-    background: ontimize-dark-theme-background($neutral),
-    typography: $typography,
-    density: $density,
-    m3-theme: $m3-theme,
+  $color-config: (
+    theme-type: dark,
+    primary: $primary
   );
+
+@if $tertiary !=null {
+  $color-config: map.merge($color-config, (tertiary: $tertiary));
+}
+
+$m3-theme: mat.define-theme((color: $color-config,
+      typography: (brand-family: $font-family, plain-family: $font-family),
+      density: (scale: $density),
+    ));
+
+@return (is-dark: true,
+  foreground: $ontimize-dark-theme-foreground,
+  background: ontimize-dark-theme-background($neutral),
+  typography: $typography,
+  density: $density,
+  m3-theme: $m3-theme,
+);
 }
 
 // ─── Checkbox theme ─────────────────────────────────────────────────────────
@@ -263,6 +265,7 @@ $default-typography: ontimize.$typography;
 
   .mat-checkbox-checkmark-path {
     stroke: var(--o-bg-background) !important;
+
     @include cdk.high-contrast(black-on-white) {
       stroke: #000 !important;
     }
@@ -274,27 +277,32 @@ $default-typography: ontimize.$typography;
 
   .mat-mdc-checkbox-checked,
   .mat-mdc-checkbox-indeterminate {
+
     &.mat-primary .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background,
     &.mat-accent .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
       background-color: var(--o-bg-sidenav-overlay);
     }
+
     &.mat-warn .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
       background-color: var(--mat-sys-error);
     }
   }
 
   .mat-mdc-checkbox-disabled {
+
     &.mat-mdc-checkbox-checked,
     &.mat-checkbox-indeterminate {
       .mdc-checkbox__background {
         background-color: $disabled-color;
       }
     }
+
     &:not(.mat-mdc-checkbox-checked) {
       .mat-checkbox-frame {
         border-color: $disabled-color;
       }
     }
+
     @include cdk.high-contrast {
       opacity: .5;
     }
@@ -312,10 +320,12 @@ $default-typography: ontimize.$typography;
 
   .mat-mdc-checkbox-checked:not(.mat-checkbox-disabled),
   .mat-checkbox:active:not(.mat-checkbox-disabled) {
+
     &.mat-primary .mat-ripple-element,
     &.mat-accent .mat-ripple-element {
       background: var(--o-fg-icon);
     }
+
     &.mat-warn .mat-ripple-element {
       background: var(--mat-sys-error);
     }
@@ -326,6 +336,7 @@ $default-typography: ontimize.$typography;
   $disabled-color: color-mix(in srgb, var(--o-fg-base) 30%, var(--o-bg-background));
 
   .mat-mdc-select-panel {
+
     &.mat-primary,
     &.mat-accent {
       .mat-pseudo-checkbox-checked {
@@ -336,6 +347,7 @@ $default-typography: ontimize.$typography;
 
   .mat-pseudo-checkbox {
     color: var(--o-fg-secondary-text);
+
     &::after {
       color: var(--o-bg-background);
     }
@@ -405,7 +417,7 @@ $default-typography: ontimize.$typography;
 
   // ─── Table (shared) ───────────────────────────────────────────
   .ontimize-table.o-table {
-    background: var(--o-bg-card);
+    background-color: var(--mat-table-background-color, var(--mat-app-surface));
 
     tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
     thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
@@ -438,7 +450,9 @@ $default-typography: ontimize.$typography;
   .o-form {
     .o-form-toolbar {
       margin-bottom: 24px;
+
       .o-form-toolbar-header {
+
         // background-color: var(--o-bg-card);
         .mat-toolbar-tools {
           button.o-form-toolbar-button.o-form-toolbar-back.mat-mdc-icon-button {
@@ -456,6 +470,7 @@ $default-typography: ontimize.$typography;
     border-radius: 2px;
 
     .o-container {
+
       // .o-container-title {
       //   padding: 20px 0;
       // }
@@ -464,11 +479,13 @@ $default-typography: ontimize.$typography;
       >.mat-expansion-panel-header {
         border-bottom: none;
         color: var(--o-fg-title);
+
         .mat-mdc-tab,
         .mat-mdc-tab-link {
           color: var(--o-fg-title);
         }
       }
+
       >.o-container-title,
       >.mat-expansion-panel-header .o-container-title {
         span {
@@ -478,6 +495,7 @@ $default-typography: ontimize.$typography;
           }
         }
       }
+
       .o-container-scroll {
         &.o-container-gap {
           padding: 12px 16px 16px;
@@ -492,19 +510,33 @@ $default-typography: ontimize.$typography;
   }
 
   // ─── Background levels (shared) ──────────────────────────────
-  .bg-level-0, o-column.o-column.bg-level-0, o-row.o-row.bg-level-0 {
+  .bg-level-0,
+  o-column.o-column.bg-level-0,
+  o-row.o-row.bg-level-0 {
     background-color: var(--o-bg-level-0);
   }
-  .bg-level-04, o-column.o-column.bg-level-04, o-row.o-row.bg-level-04 {
+
+  .bg-level-04,
+  o-column.o-column.bg-level-04,
+  o-row.o-row.bg-level-04 {
     background-color: var(--o-bg-level-04);
   }
-  .bg-level-06, o-column.o-column.bg-level-06, o-row.o-row.bg-level-06 {
+
+  .bg-level-06,
+  o-column.o-column.bg-level-06,
+  o-row.o-row.bg-level-06 {
     background-color: var(--o-bg-level-06);
   }
-  .bg-level-08, o-column.o-column.bg-level-08, o-row.o-row.bg-level-08 {
+
+  .bg-level-08,
+  o-column.o-column.bg-level-08,
+  o-row.o-row.bg-level-08 {
     background-color: var(--o-bg-level-08);
   }
-  .bg-level-1, o-column.o-column.bg-level-1, o-row.o-row.bg-level-1 {
+
+  .bg-level-1,
+  o-column.o-column.bg-level-1,
+  o-row.o-row.bg-level-1 {
     background-color: var(--o-bg-level-1);
   }
 
@@ -520,6 +552,7 @@ $default-typography: ontimize.$typography;
   .o-table-skeleton-header {
     background-color: var(--o-bg-level-04);
   }
+
   .o-grid-skeleton-item,
   .o-table .o-table-skeleton-item,
   .o-list-skeleton-item {
@@ -527,6 +560,7 @@ $default-typography: ontimize.$typography;
       background: var(--o-bg-level-04) no-repeat;
     }
   }
+
   .o-list-skeleton-item {
     background-color: var(--o-bg-level-08);
     border-radius: 2px;
