@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Injector, NgZone, ViewChild } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injector, NgZone, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -74,7 +74,7 @@ export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
   inputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   outputs: DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 })
-export class OFormServiceComponent extends OFormDataComponent {
+export class OFormServiceComponent extends OFormDataComponent implements OnChanges {
 
   /* Inputs */
   protected staticData: Array<any>;
@@ -197,7 +197,16 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
 
 
+  }
 
+  protected canSetStaticData(staticData: any): boolean {
+    return Util.isDefined(staticData)
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (this.canSetStaticData(changes.staticData?.currentValue)) {
+      this.setDataArray(changes.staticData.currentValue);
+    }
   }
 
   destroy() {
