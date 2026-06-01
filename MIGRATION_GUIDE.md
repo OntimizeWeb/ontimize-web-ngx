@@ -1,5 +1,7 @@
 # Guía de migración para consumidores — Ontimize Web NGX 18
 
+> Última actualización: 2026-06-01
+
 Esta guía cubre los pasos necesarios para migrar un proyecto consumidor de **ontimize-web-ngx 15** (Angular 15) a **ontimize-web-ngx 18** (Angular 18).
 
 ---
@@ -1315,3 +1317,132 @@ La paleta neutral debe incluir los tonos que se corresponden con los niveles de 
 | `15` | `level-1` / card | oscuro |
 
 Si la paleta no incluye alguno de estos tonos, las funciones de background usan los valores hexadecimales predeterminados como fallback.
+
+---
+
+## 15. Nuevas features en `o-form` (desde 18.0.0-next.5)
+
+### 15.1 Capturar errores de insert / update / delete
+
+`OFormComponent` expone tres nuevos outputs que se emiten cuando la operación de persistencia falla, complementando a los ya existentes `onInsert` / `onUpdate` / `onDelete` (que solo emiten en caso de éxito):
+
+| Output | Cuándo se emite |
+|---|---|
+| `onInsertError` | El insert falla |
+| `onUpdateError` | El update falla |
+| `onDeleteError` | El delete falla |
+
+Los tres emiten el error en bruto (`any`): puede ser un `string` con el mensaje de negocio devuelto por el backend, un `HttpErrorResponse` de Angular para errores de red/servidor, o un `ServiceResponse` con `isSuccessful() === false`.
+
+El diálogo de error por defecto del framework actúa como **fallback**: solo se muestra cuando **no hay ningún listener** suscrito al evento correspondiente (se comprueba con `EventEmitter.observed`). Así:
+
+- Si **no te suscribes** → comportamiento idéntico a 15.x (se muestra el diálogo).
+- Si **te suscribes** → la UI de error la controlas tú al 100%; el diálogo del framework no aparece. Esto evita feedback duplicado (diálogo + tu snack-bar/UI custom).
+
+```html
+<o-form entity="customers"
+        keys="CUSTOMERID"
+        (onInsertError)="onInsertError($event)"
+        (onUpdateError)="onUpdateError($event)">
+  <o-text attr="NAME"></o-text>
+  <o-text attr="EMAIL"></o-text>
+</o-form>
+```
+
+```typescript
+import { HttpErrorResponse } from '@angular/common/http';
+
+onInsertError(err: any) {
+  if (err instanceof HttpErrorResponse) {
+    this.snackBar.open(`Error ${err.status}: ${err.message}`, 'OK');
+  } else {
+    // string de negocio del backend
+    this.snackBar.open(err, 'OK');
+  }
+}
+```
+
+### 15.2 Inyectar payload extra antes de insert / update
+
+El evento `onBeforeInsert` / `onBeforeUpdate` (ya existente en 15.x) se emite **síncronamente** con el objeto `values` que se va a enviar al backend, pasado por referencia. Mutando el objeto en el handler puedes inyectar campos de auditoría, contexto de sesión, etc., sin tener que crear componentes ocultos ni sobrescribir el form:
+
+```html
+<o-form (onBeforeInsert)="inject($event)" (onBeforeUpdate)="inject($event)">
+  ...
+</o-form>
+```
+
+```typescript
+inject(values: any) {
+  values.TENANT_ID  = this.auth.tenantId;
+  values.AUDIT_USER = this.auth.userId;
+  values.AUDIT_TS   = new Date().toISOString();
+}
+```
+
+> **Importante**: hay que **mutar** la referencia recibida (`values.X = ...` o `Object.assign(values, {...})`), no reasignarla (`values = {...values, X}` no funciona — la reasignación es local al handler).
+
+Limitaciones: no se puede asociar un `sqlType` a los campos inyectados por esta vía, ni cancelar la operación desde el handler. Si necesitas alguna de las dos cosas, hereda y sobrescribe `getAttributesValuesToInsert` / `getAttributesSQLTypes`.
+
+### 15.3 Controlar la visibilidad del botón "atrás" con `show-back-button`
+
+Hasta ahora el botón atrás del toolbar solo aparecía cuando el form se renderizaba como detalle (parámetro de navegación `isdetail=true`). El nuevo input `show-back-button` permite controlar su visibilidad de forma declarativa.
+
+| Valor | Comportamiento |
+|---|---|
+| *(omitido)* o `'auto'` | Visible cuando `isDetail === true` (**comportamiento por defecto, idéntico a 15.x**) |
+| `'yes'` / `'true'` / `'all'` | Siempre visible |
+| `'no'` / `'false'` | Nunca visible |
+| Lista de modos separados por `;` con los códigos `R` (INITIAL), `I` (INSERT), `U` (UPDATE) | Visible solo cuando el form está en alguno de los modos listados |
+
+Los códigos siguen el mismo vocabulario que `header-actions` para mantener coherencia (`R` = visualizar registro, `I` = insertar, `U` = actualizar).
+
+```html
+<!-- Como en 15.x: visible solo cuando es detalle -->
+<o-form>...</o-form>
+
+<!-- Siempre visible -->
+<o-form show-back-button="yes">...</o-form>
+
+<!-- Nunca visible -->
+<o-form show-back-button="no">...</o-form>
+
+<!-- Solo durante edición/creación -->
+<o-form show-back-button="I;U">...</o-form>
+
+<!-- Solo cuando se está visualizando un registro -->
+<o-form show-back-button="R">...</o-form>
+```
+
+El input se propaga internamente al `o-form-toolbar`. No requiere cambios en los formularios existentes.
+
+---
+
+## 16. Nuevas features y fixes standalone (desde 18.0.0-next.6)
+
+### 16.1 `initial-filter-function` en componentes de selección
+
+Los componentes que extienden `OFormServiceComponent` (`o-combo`, `o-listpicker`, `o-radio`, etc.) admiten ahora el input `initial-filter-function`, que ya existía en tabla, lista y grid. Acepta una función `() => { [key: string]: any }` cuyo resultado se fusiona con el filtro de la consulta en cada petición de datos, tras la resolución de `parent-keys`.
+
+```html
+<o-combo attr="COUNTRY"
+         entity="countries"
+         value-column="ID"
+         columns="ID;NAME"
+         [initial-filter-function]="activeCountriesFilter">
+</o-combo>
+```
+
+```typescript
+activeCountriesFilter = () => ({ ACTIVE: 1 });
+```
+
+### 16.2 Fixes de inyección en componentes standalone
+
+Los siguientes errores de `NullInjectorError` se producían al usar los componentes como standalone (sin importar los módulos legacy ya deprecados). Están corregidos en `18.0.0-next.6` y no requieren ningún cambio en el código de la aplicación.
+
+| Componente | Token que fallaba | Causa |
+|---|---|---|
+| `o-form` (standalone) | `CanDeactivateFormGuard` | El guard solo estaba declarado en el deprecado `OFormModule` |
+| `o-date-input` (standalone) | `MAT_DATE_FORMATS` | Solo se proporcionaba `DateAdapter`; `MatDatepickerInput` requiere ambos tokens |
+| `OTableFilterByColumnDataDialogComponent` | `OTableFilterByColumnService` | `MatDialog` crea los diálogos bajo el inyector de la aplicación, no el de `OTableComponent` |
