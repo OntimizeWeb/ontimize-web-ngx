@@ -15,7 +15,6 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -41,7 +40,6 @@ import { SnackBarService } from '../../services/snackbar.service';
 import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { OFormValidation } from '../../types/error-form-validation.type';
-import { OFormErrorPayload } from '../../types/o-form-error-payload.type';
 import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
@@ -222,7 +220,8 @@ export const DEFAULT_OUTPUTS_O_FORM = [
     { provide: OFormBase, useExisting: forwardRef(() => OFormComponent) },
     { provide: O_FORM_CONTEXT, useExisting: forwardRef(() => OFormComponent) },
     OntimizeServiceProvider,
-    OFormMessageService
+    OFormMessageService,
+    { provide: CanDeactivateFormGuard, useClass: CanDeactivateFormGuard }
   ],
   templateUrl: './o-form.component.html',
   styleUrls: ['./o-form.component.scss'],
@@ -341,9 +340,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public onInsert: EventEmitter<any> = new EventEmitter();
   public onUpdate: EventEmitter<any> = new EventEmitter();
   public onDelete: EventEmitter<any> = new EventEmitter();
-  public onInsertError: EventEmitter<OFormErrorPayload> = new EventEmitter();
-  public onUpdateError: EventEmitter<OFormErrorPayload> = new EventEmitter();
-  public onDeleteError: EventEmitter<OFormErrorPayload> = new EventEmitter();
+  public onInsertError: EventEmitter<any> = new EventEmitter();
+  public onUpdateError: EventEmitter<any> = new EventEmitter();
+  public onDeleteError: EventEmitter<any> = new EventEmitter();
   public onCancel: EventEmitter<null> = new EventEmitter();
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
@@ -1878,7 +1877,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postIncorrectInsert(result: any): void {
     if (this.onInsertError.observed) {
-      this.onInsertError.emit(this.wrapError(result));
+      this.onInsertError.emit(result);
     } else {
       this.showError('insert', result);
     }
@@ -1886,7 +1885,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postIncorrectDelete(result: any): void {
     if (this.onDeleteError.observed) {
-      this.onDeleteError.emit(this.wrapError(result));
+      this.onDeleteError.emit(result);
     } else {
       this.showError('delete', result);
     }
@@ -1894,20 +1893,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   protected postIncorrectUpdate(result: any): void {
     if (this.onUpdateError.observed) {
-      this.onUpdateError.emit(this.wrapError(result));
+      this.onUpdateError.emit(result);
     } else {
       this.showError('update', result);
     }
-  }
-
-  protected wrapError(err: any): OFormErrorPayload {
-    if (err instanceof HttpErrorResponse) {
-      return { kind: 'http', message: err.message ?? '', httpError: err };
-    }
-    if (typeof err === 'string') {
-      return { kind: 'business', message: err };
-    }
-    return { kind: 'business', message: err?.message ?? String(err ?? '') };
   }
 
   protected postCorrectUpdate(result: any): void {
