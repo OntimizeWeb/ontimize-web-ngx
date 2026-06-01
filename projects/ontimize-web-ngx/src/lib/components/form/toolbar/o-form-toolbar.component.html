@@ -5,7 +5,7 @@
   }
 
   <div class="mat-toolbar-tools o-flex-row o-layout-align-sb-center">
-    @if (isDetail) {
+    @if (showBack) {
       <button type="button" mat-icon-button (click)="onBack()" class="o-form-toolbar-button o-form-toolbar-back">
         <mat-icon>arrow_back</mat-icon>
       </button>
@@ -20,7 +20,7 @@
       <span class="fill-remaining"></span>
     }
     @if (labelHeader!=='') {
-      <div class="o-flex-row o-layout-align-center-center">
+      <div class="o-flex-row o-layout-align-center-center o-form-toolbar-label-header">
         <span>{{ labelHeader | oTranslate }}</span>
       </div>
     }

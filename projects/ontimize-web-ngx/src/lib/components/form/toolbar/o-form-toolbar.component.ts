@@ -25,7 +25,9 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   'headeractions: header-actions',
   'showHeaderActionsText: show-header-actions-text',
   // show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: true;
-  'showHeaderNavigation:show-header-navigation'
+  'showHeaderNavigation:show-header-navigation',
+  // show-back-button [string]: see OFormComponent input documentation. Default: 'auto'
+  'showBackButton: show-back-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
@@ -60,6 +62,11 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public formActions: string[];
   public isDetail: boolean = true;
+
+  public showBackButton: string = 'auto';
+  protected backButtonModes: string[] | null = null;
+  protected backButtonAlways: boolean = false;
+  protected backButtonNever: boolean = false;
 
   public editMode: boolean = false;
   public insertMode: boolean = false;
@@ -149,6 +156,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
       this.editBtnEnabled = this.formActions.indexOf('U') !== -1;
       this.deleteBtnEnabled = !this.insertMode && this.formActions.indexOf('D') !== -1;
     }
+    this.parseShowBackButton();
     if (this._navigationService) {
       const self = this;
       this._navigationService.onTitleChange(title => {
@@ -412,6 +420,34 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     }
+  }
+
+  protected parseShowBackButton(): void {
+    const value = (this.showBackButton ?? '').toString().trim().toLowerCase();
+    if (value === '' || value === 'auto') {
+      return;
+    }
+    if (value === 'yes' || value === 'true' || value === 'all') {
+      this.backButtonAlways = true;
+      return;
+    }
+    if (value === 'no' || value === 'false') {
+      this.backButtonNever = true;
+      return;
+    }
+    this.backButtonModes = (Util.parseArray(this.showBackButton) || []).map(c => c.toUpperCase());
+  }
+
+  get showBack(): boolean {
+    if (this.backButtonNever) return false;
+    if (this.backButtonAlways) return true;
+    if (this.backButtonModes) {
+      if (this.initialMode && this.backButtonModes.indexOf('R') !== -1) return true;
+      if (this.insertMode && this.backButtonModes.indexOf('I') !== -1) return true;
+      if (this.editMode && this.backButtonModes.indexOf('U') !== -1) return true;
+      return false;
+    }
+    return this.isDetail;
   }
 
   private checkEnabledPermission(attr): boolean {

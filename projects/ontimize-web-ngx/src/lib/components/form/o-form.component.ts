@@ -15,6 +15,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -40,6 +41,7 @@ import { SnackBarService } from '../../services/snackbar.service';
 import { OConfigureMessageServiceArgs } from '../../types/configure-message-service-args.type';
 import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { OFormValidation } from '../../types/error-form-validation.type';
+import { OFormErrorPayload } from '../../types/o-form-error-payload.type';
 import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
@@ -171,7 +173,21 @@ export const DEFAULT_INPUTS_O_FORM = [
   'setValueOrder: set-value-order',
 
   //form-data-validation: Executes the before-save validation callback for insert and update operations
-  'formDataValidationFunction: form-data-validation-function'
+  'formDataValidationFunction: form-data-validation-function',
+
+  // [function]: override the data-service call for each operation. If provided, the form calls the
+  // function instead of dataService[method]. Each must return Observable<ServiceResponse>.
+  'insertFunction: insert-function',
+  'updateFunction: update-function',
+  'deleteFunction: delete-function',
+  'queryFunction: query-function',
+
+  // show-back-button [string]: visibility of the back button. Accepted values:
+  //   - 'auto' (default): visible when the form is a detail (current behaviour)
+  //   - 'yes'/'true'/'all': always visible
+  //   - 'no'/'false': never visible
+  //   - list of mode codes separated by ';': 'R' (initial), 'I' (insert), 'U' (update). e.g. 'R;I;U', 'I;U', 'R'
+  'showBackButton: show-back-button'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -185,6 +201,9 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'onInsert',
   'onUpdate',
   'onDelete',
+  'onInsertError',
+  'onUpdateError',
+  'onDeleteError',
   'beforeInsertMode',
   'beforeUpdateMode',
   'beforeInitialMode',
@@ -229,6 +248,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   labelHeaderAlign: string = 'center';
   headeractions: string = 'all';
   showHeaderActionsText: string = 'yes';
+  showBackButton: string = 'auto';
   entity: string;
   keys: string = '';
   columns: string = '';
@@ -284,6 +304,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public ignoreDefaultNavigation: boolean = false;
   messageServiceType: string;
   public formDataValidationFunction: (data: any) => OFormValidation;
+  public insertFunction?: (values: object, entity: string, sqlTypes?: object) => Observable<ServiceResponse>;
+  public updateFunction?: (filter: object, values: object, entity: string, sqlTypes?: object) => Observable<ServiceResponse>;
+  public deleteFunction?: (filter: object, entity: string, sqlTypes?: object) => Observable<ServiceResponse>;
+  public queryFunction?: (queryParams: OQueryParams) => Observable<ServiceResponse>;
 
   /* end of inputs variables */
 
@@ -317,6 +341,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public onInsert: EventEmitter<any> = new EventEmitter();
   public onUpdate: EventEmitter<any> = new EventEmitter();
   public onDelete: EventEmitter<any> = new EventEmitter();
+  public onInsertError: EventEmitter<OFormErrorPayload> = new EventEmitter();
+  public onUpdateError: EventEmitter<OFormErrorPayload> = new EventEmitter();
+  public onDeleteError: EventEmitter<OFormErrorPayload> = new EventEmitter();
   public onCancel: EventEmitter<null> = new EventEmitter();
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
@@ -755,6 +782,18 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     if (typeof this.queryFallbackFunction !== 'function') {
       this.queryFallbackFunction = undefined;
     }
+    if (typeof this.insertFunction !== 'function') {
+      this.insertFunction = undefined;
+    }
+    if (typeof this.updateFunction !== 'function') {
+      this.updateFunction = undefined;
+    }
+    if (typeof this.deleteFunction !== 'function') {
+      this.deleteFunction = undefined;
+    }
+    if (typeof this.queryFunction !== 'function') {
+      this.queryFunction = undefined;
+    }
     // if (typeof this.insertFallbackFunction !== 'function') {
     //   this.insertFallbackFunction = undefined;
     // }
@@ -1164,7 +1203,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
 
   queryData(filter: any) {
-    if (!Util.isDefined(this.dataService)) {
+    if (!Util.isDefined(this.dataService) && !Util.isDefined(this.queryFunction)) {
       console.warn('OFormComponent: no service configured! aborting query');
       return;
     }
@@ -1185,8 +1224,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
     const queryParameter = this.getQueryArguments(false, filter);
 
-    this.querySubscription = this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryParameter))
-      .subscribe((resp: ServiceResponse) => {
+    this.querySubscription = (this.queryFunction
+      ? this.queryFunction(queryParameter)
+      : this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryParameter))
+    ).subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
           this.setData(resp.data);
         } else {
@@ -1251,7 +1292,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     const self = this;
     const observable = new Observable(observer => {
-      this.dataService[this.insertMethod](values, this.entity, sqlTypes).subscribe(
+      (this.insertFunction
+        ? this.insertFunction(values, this.entity, sqlTypes)
+        : this.dataService[this.insertMethod](values, this.entity, sqlTypes)
+      ).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             observer.next(resp.data);
@@ -1306,7 +1350,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.loaderSubscription = this.load();
     const self = this;
     const observable = new Observable(observer => {
-      this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes).subscribe(
+      (this.updateFunction
+        ? this.updateFunction(filter, values, this.entity, sqlTypes)
+        : this.dataService[this.updateMethod](filter, values, this.entity, sqlTypes)
+      ).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             observer.next(resp.data);
@@ -1361,7 +1408,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     const sqlTypes = this.getAttributesSQLTypes();
     const observable = new Observable(observer => {
       this.canDiscardChanges = true;
-      this.dataService[this.deleteMethod](filter, this.entity, sqlTypes).subscribe(
+      (this.deleteFunction
+        ? this.deleteFunction(filter, this.entity, sqlTypes)
+        : this.dataService[this.deleteMethod](filter, this.entity, sqlTypes)
+      ).subscribe(
         resp => {
           if (resp.isSuccessful()) {
             self.formCache.setCacheSnapshot();
@@ -1827,15 +1877,37 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   }
 
   protected postIncorrectInsert(result: any): void {
-    this.showError('insert', result);
+    if (this.onInsertError.observed) {
+      this.onInsertError.emit(this.wrapError(result));
+    } else {
+      this.showError('insert', result);
+    }
   }
 
   protected postIncorrectDelete(result: any): void {
-    this.showError('delete', result);
+    if (this.onDeleteError.observed) {
+      this.onDeleteError.emit(this.wrapError(result));
+    } else {
+      this.showError('delete', result);
+    }
   }
 
   protected postIncorrectUpdate(result: any): void {
-    this.showError('update', result);
+    if (this.onUpdateError.observed) {
+      this.onUpdateError.emit(this.wrapError(result));
+    } else {
+      this.showError('update', result);
+    }
+  }
+
+  protected wrapError(err: any): OFormErrorPayload {
+    if (err instanceof HttpErrorResponse) {
+      return { kind: 'http', message: err.message ?? '', httpError: err };
+    }
+    if (typeof err === 'string') {
+      return { kind: 'business', message: err };
+    }
+    return { kind: 'business', message: err?.message ?? String(err ?? '') };
   }
 
   protected postCorrectUpdate(result: any): void {
