@@ -62,7 +62,10 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // sort [string]: sorting ASC or DESC. Default: no value
   'sort',
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
-  'configureServiceArgs: configure-service-args'
+  'configureServiceArgs: configure-service-args',
+
+  // initial-filter-function [function]: Callback function that returns an initial filter to be applied on every query.
+  'initialFilterFunction: initial-filter-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
@@ -98,6 +101,7 @@ export class OFormServiceComponent extends OFormDataComponent implements OnChang
   queryWithNullParentKeys: boolean = false;
   public setValueOnValueChange: string;
   public queryFallbackFunction: (error: any) => void;
+  public initialFilterFunction?: () => { [key: string]: any };
 
   @BooleanInputConverter()
   public translate: boolean = false;
@@ -266,6 +270,9 @@ export class OFormServiceComponent extends OFormDataComponent implements OnChang
       return;
     }
     filter = Object.assign(filter || {}, ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form));
+    if (this.initialFilterFunction) {
+      filter = Object.assign(filter, this.initialFilterFunction());
+    }
     if (!ServiceUtils.filterContainsAllParentKeys(filter, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setDataArray([]);
     } else {
