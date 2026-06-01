@@ -59,7 +59,8 @@ const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, 
     '[class.o-filter-by-column-dialog]': 'true'
   },
   providers: [
-    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    OTableFilterByColumnService
   ]
 })
 export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {

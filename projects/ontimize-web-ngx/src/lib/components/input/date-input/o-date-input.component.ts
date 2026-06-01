@@ -11,7 +11,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { BooleanInputConverter } from '../../../decorators/input-converter';
 import { MomentService } from '../../../services/moment.service';
 import { OntimizeMomentDateAdapter } from '../../../shared/material/date/ontimize-moment-date-adapter';
+import { dateFormatFactory } from '../../../shared/material/date/mat-date-formats.factory';
 import { DateCustomClassFunction } from '../../../types/date-custom-class.type';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
@@ -53,6 +54,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   encapsulation: ViewEncapsulation.None,
   providers: [
     { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useFactory: dateFormatFactory },
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ODateInputComponent), multi: true }
   ]
 })
