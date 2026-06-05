@@ -110,10 +110,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   @Input()
   get subscriptSizing(): SubscriptSizing {
-    return this._subscriptSizing || this.errorOptions?.type==='lite'?'dynamic':'fixed' ;
+    return this._subscriptSizing
+      ?? this.oInputsOptions?.subscriptSizing
+      ?? (this.errorOptions?.type === 'lite' ? 'dynamic' : 'fixed');
   }
   set subscriptSizing(value: SubscriptSizing) {
-    this._subscriptSizing = value || this.errorOptions?.type === 'lite' ? 'dynamic' : 'fixed';
+    this._subscriptSizing = value ?? null;
   }
   private _subscriptSizing: SubscriptSizing | null = null;
 
