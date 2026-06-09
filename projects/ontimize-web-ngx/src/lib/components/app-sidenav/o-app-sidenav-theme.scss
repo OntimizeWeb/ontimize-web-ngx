@@ -1,7 +1,10 @@
 @mixin o-app-sidenav-theme($theme-or-color-config) {
   .o-app-sidenav {
-    // --mat-sidenav-container-shape: 0;
-    --mdc-text-button-label-text-color: var(--o-fg-text);
+
+    .o-app-sidenav-menu-group,
+    .o-app-sidenav-menu-item {
+      --mdc-text-button-label-text-color: var(--o-fg-text);
+    }
 
     .mat-sidenav.o-app-sidenav-sidenav {
       background: var(--o-bg-app-bar);
@@ -9,32 +12,32 @@
 
     .o-app-sidenav-container {
 
-      // ── Open state ──────────────────────────────────────────────
+      // ── Shared item states (open + closed) ───────────────────────
+      .mat-drawer.o-app-sidenav-sidenav {
+        a:hover {
+          background-color: var(--o-sidenav-hover-bg);
+          color: var(--mat-sys-primary);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected {
+          background-color: var(--o-sidenav-selected-bg);
+          color: var(--mat-sys-on-primary-container);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected:hover {
+          background-color: var(--o-sidenav-hover-bg);
+        }
+      }
+
+      // ── Open state only ──────────────────────────────────────────
       .mat-drawer.o-app-sidenav-sidenav:not(.mat-drawer-closed) {
         .mat-sidenav.o-app-sidenav-sidenav {
           background: var(--o-bg-status-bar);
           box-shadow: none;
         }
 
-        .o-app-sidenav-menu-group,
-        .o-app-sidenav-menu-item {
-
-          a:hover,
-          a.o-app-sidenav-viewer-sidenav-item-selected {
-            color: var(--mat-sys-primary);
-          }
-
-          a:hover {
-            background-color: var(--mat-sys-primary-container);
-          }
-
-          a.o-app-sidenav-viewer-sidenav-item-selected {
-            background-color: color-mix(in srgb, var(--mat-sys-primary-container) 48%, transparent);
-          }
-        }
-
         .o-app-sidenav-menu-group-level-1 {
-          >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+          > .o-app-sidenav-menugroup.opened + .o-app-sidenav-menugroup-items-container {
             a .mdc-button__label {
               border-left: 2px solid var(--o-fg-divider);
             }
@@ -47,28 +50,11 @@
         }
 
         .o-app-sidenav-menu-group-level-2 {
-          >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
+          > .o-app-sidenav-menugroup.opened + .o-app-sidenav-menugroup-items-container {
             a .mdc-button__label {
               border-left: none;
             }
           }
-        }
-      }
-
-      // ── Closed state ─────────────────────────────────────────────
-      .mat-drawer.o-app-sidenav-sidenav.mat-drawer-closed {
-
-        a:hover,
-        a.o-app-sidenav-viewer-sidenav-item-selected {
-          color: var(--mat-sys-primary);
-        }
-
-        a:hover {
-          background-color: var(--mat-sys-primary-container);
-        }
-
-        a.o-app-sidenav-viewer-sidenav-item-selected {
-          background-color: color-mix(in srgb, var(--mat-sys-primary-container) 48%, transparent);
         }
       }
 
@@ -81,24 +67,19 @@
         .o-app-sidenav-content.mat-drawer-content {
           margin-right: 56px !important;
           transform: translate3d(56px, 0, 0) !important;
-
         }
       }
     }
 
     .o-app-sidenav-content.mat-drawer-content {
-
       background-color: var(--o-bg-background);
     }
 
-
-    // header-layout: user-info font weight inside sidenav
     &.header-layout .o-app-sidenav-container .o-app-header {
       .o-user-info .o-user-info-wrapper {
         font-weight: 500;
       }
     }
-
 
     .mat-mdc-menu-panel {
       border: 1px solid var(--o-fg-divider);

@@ -94,6 +94,7 @@ $transition-duration: 500ms;
       overflow: hidden;
       height: 100%;
       display: flex;
+      border-radius: 0;
 
       .mat-drawer-inner-container {
         display: flex;

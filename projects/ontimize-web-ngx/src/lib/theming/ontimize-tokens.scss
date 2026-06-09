@@ -85,6 +85,15 @@
   --o-fg-elevation: #{-get-fg($foreground, elevation)};
   --o-fg-slider-off: #{-get-fg($foreground, slider-off)};
 
+  // ─── Sidenav item states (palette tones, resolved at compile time) ──────────
+  @if $m3-theme {
+    --o-sidenav-selected-bg: #{mat.get-theme-color($m3-theme, primary, 98)};
+    --o-sidenav-hover-bg: #{mat.get-theme-color($m3-theme, secondary, 95)};
+  } @else {
+    --o-sidenav-selected-bg: var(--mat-sys-primary-container);
+    --o-sidenav-hover-bg: color-mix(in srgb, var(--mat-sys-primary) 8%, transparent);
+  }
+
   // ─── Scrollbar thumb ─────────────────────────────────────────────────────
   // Resolved at compile time so it works in ::-webkit-scrollbar pseudo-elements,
   // which don't inherit CSS custom properties at runtime.
