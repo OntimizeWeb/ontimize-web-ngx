@@ -202,6 +202,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   'onInsertError',
   'onUpdateError',
   'onDeleteError',
+  'onLoadError',
   'beforeInsertMode',
   'beforeUpdateMode',
   'beforeInitialMode',
@@ -343,6 +344,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   public onInsertError: EventEmitter<any> = new EventEmitter();
   public onUpdateError: EventEmitter<any> = new EventEmitter();
   public onDeleteError: EventEmitter<any> = new EventEmitter();
+  public onLoadError: EventEmitter<any> = new EventEmitter();
   public onCancel: EventEmitter<null> = new EventEmitter();
 
   protected loadingSubject = new BehaviorSubject<boolean>(false);
@@ -1228,23 +1230,13 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       : this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryParameter))
     ).subscribe((resp: ServiceResponse) => {
         if (resp.isSuccessful()) {
-          this.setData(resp.data);
+          this.postCorrectQuery(resp.data);
         } else {
-          this._updateFormData({});
-          this.dialogService.alert('ERROR', this._messageService.getQueryErrorMessage());
-          console.error('ERROR: ' + resp.message);
+          this.postIncorrectQuery(resp);
         }
         this.loaderSubscription.unsubscribe();
       }, err => {
-        console.error(err);
-        this._updateFormData({});
-        if (Util.isDefined(this.queryFallbackFunction)) {
-          this.queryFallbackFunction(err);
-        } else if (err && err.statusText) {
-          this.dialogService.alert('ERROR', err.statusText);
-        } else {
-          this.dialogService.alert('ERROR', this._messageService.getQueryErrorMessage());
-        }
+        this.postIncorrectQuery(err);
         this.loaderSubscription.unsubscribe();
       });
   }
@@ -1907,6 +1899,34 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected postCorrectDelete(result: any): void {
     this.snackBarService.open(this._messageService.getDeleteSuccessMessage(), { icon: 'check_circle' });
     this.onDelete.emit(result);
+  }
+
+  protected postCorrectQuery(data: any): void {
+    this.setData(data);
+  }
+
+  protected postIncorrectQuery(result: any): void {
+    this._updateFormData({});
+    // `onLoadError` (event) and `queryFallbackFunction` (callback) are independent
+    // custom handlers and can coexist; the default dialog is shown only as a true
+    // fallback when neither is provided.
+    let handled = false;
+    if (this.onLoadError.observed) {
+      this.onLoadError.emit(result);
+      handled = true;
+    }
+    if (Util.isDefined(this.queryFallbackFunction)) {
+      this.queryFallbackFunction(result);
+      handled = true;
+    }
+    if (!handled) {
+      if (result && result.statusText) {
+        this.dialogService.alert('ERROR', result.statusText);
+      } else {
+        this.dialogService.alert('ERROR', this._messageService.getQueryErrorMessage());
+      }
+    }
+    console.error(result);
   }
 
   protected markFormLayoutManagerToUpdate(): void {

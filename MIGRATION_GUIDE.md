@@ -1446,3 +1446,34 @@ Los siguientes errores de `NullInjectorError` se producían al usar los componen
 | `o-form` (standalone) | `CanDeactivateFormGuard` | El guard solo estaba declarado en el deprecado `OFormModule` |
 | `o-date-input` (standalone) | `MAT_DATE_FORMATS` | Solo se proporcionaba `DateAdapter`; `MatDatepickerInput` requiere ambos tokens |
 | `OTableFilterByColumnDataDialogComponent` | `OTableFilterByColumnService` | `MatDialog` crea los diálogos bajo el inyector de la aplicación, no el de `OTableComponent` |
+
+## 17. Cambios en `o-form` (desde 18.0.0-next.7)
+
+### 17.1 Hooks `postCorrectQuery` / `postIncorrectQuery` y payload de `onLoadError`
+
+El manejo de la respuesta de la consulta (`queryData`) se ha extraído a dos métodos `protected` sobrescribibles, alineándolo con el patrón ya existente para insert/update/delete (`postCorrectInsert` / `postIncorrectInsert`, etc.):
+
+| Método | Cuándo se invoca |
+|---|---|
+| `postCorrectQuery(data)` | La consulta tiene éxito (por defecto llama a `setData(data)`) |
+| `postIncorrectQuery(result)` | La consulta falla (respuesta no exitosa o error HTTP) |
+
+Las subclases de `OFormComponent` pueden ahora sobrescribir `postIncorrectQuery` para personalizar el comportamiento de error en la carga sin reescribir todo el método de consulta.
+
+> ⚠️ **Breaking change**: el output `onLoadError` ahora emite **siempre el objeto en bruto** (un `ServiceResponse` con `isSuccessful() === false`, o un `HttpErrorResponse`), igual que `onInsertError` / `onUpdateError` / `onDeleteError`. Anteriormente, en la rama de respuesta no exitosa emitía únicamente el `string` del mensaje (`resp.message`). Si tienes un listener suscrito a `onLoadError` que esperaba un texto, adáptalo para extraer el mensaje del objeto:
+
+```typescript
+import { HttpErrorResponse } from '@angular/common/http';
+
+onLoadError(err: any) {
+  const msg = err instanceof HttpErrorResponse ? err.message
+            : (err && err.message) ? err.message
+            : err;
+  this.snackBar.open(msg, 'OK');
+}
+```
+
+Otros dos cambios de comportamiento en el manejo de errores de carga:
+
+- **`onLoadError` y `queryFallbackFunction` ya no son excluyentes.** Antes, si había un listener suscrito a `onLoadError`, el `queryFallbackFunction` no llegaba a ejecutarse. Ahora ambos se ejecutan si están presentes (son mecanismos independientes: notificación declarativa vs. callback de gestión/recuperación). El diálogo de error por defecto sigue siendo el único *fallback* real: solo aparece cuando **ni** hay listener de `onLoadError` **ni** `queryFallbackFunction` definido.
+- **`queryFallbackFunction` se aplica ahora a ambas ramas de error** (respuesta no exitosa y error HTTP); antes solo se invocaba para errores HTTP.
