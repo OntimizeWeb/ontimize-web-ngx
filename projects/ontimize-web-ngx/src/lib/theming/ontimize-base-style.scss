@@ -410,6 +410,19 @@ $m3-theme: mat.define-theme((color: $color-config,
     color: var(--o-fg-title);
   }
 
+  // ─── Icon buttons (shared) ────────────────────────────────────
+  // M3 renders mat-icon-button as `display: inline-block` and centers the glyph
+  // through line-height + equal padding. Ontimize's typography changes the
+  // inherited line-height, so the baseline-aligned <mat-icon> drifts to the top
+  // of the button. Center it explicitly with flexbox — immune to the inherited
+  // line-height. The absolutely-positioned ripple, touch-target and focus
+  // indicator are out of flow, so they are unaffected.
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   // ─── Paginator (shared) ───────────────────────────────────────
   .mat-mdc-paginator {
     color: var(--o-fg-text);
