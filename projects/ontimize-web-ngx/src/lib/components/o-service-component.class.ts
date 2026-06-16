@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Directive, ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +18,7 @@ import { PermissionsService } from '../services/permissions/permissions.service'
 import { AbstractServiceComponentStateClass } from '../services/state/o-component-state.class';
 import { AbstractComponentStateService, DefaultServiceComponentStateService } from '../services/state/o-component-state.service';
 import { OTranslateService } from '../services/translate/o-translate.service';
-import { OPermissions } from '../types';
+import { O_ACTION_STYLES_CONFIG, OActionStyle, OActionStylesConfig, OActionVariant, OPermissions, OResolvedActionStyle } from '../types';
 import { Expression } from '../types/expression.type';
 import { O_GLOBAL_CONFIG } from '../types/o-global-config.type';
 import { OListInitializationOptions } from '../types/o-list-initialization-options.type';
@@ -27,6 +28,7 @@ import { ObservableWrapper } from '../util/async';
 import { Codes } from '../util/codes';
 import { FilterExpressionUtils } from '../util/filter-expression.utils';
 import { PermissionsUtils } from '../util/permissions';
+import { resolveActionStyle } from '../util/action-style.util';
 import { Util } from '../util/util';
 import { OFormComponent } from './form/o-form.component';
 import { AbstractOServiceBaseComponent, DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT } from './o-service-base-component.class';
@@ -115,7 +117,10 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'initialFilterFunction: initial-filter-function',
 
   //filter-builder-function [function]: Callback function that resolves the OFilterBuilderComponent instance
-  'filterBuilderFunction: filter-builder-function'
+  'filterBuilderFunction: filter-builder-function',
+
+  // action-styles [Record<string, OActionStyle>]: per-action visual style keyed by the action `attr`.
+  'actionStyles: action-styles'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -171,6 +176,8 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   editButtonInRowIcon: string = Codes.EDIT_ICON;
   @BooleanInputConverter()
   insertButton: boolean;
+  /** Per-action visual style keyed by the action `attr`. */
+  public actionStyles: Record<string, OActionStyle>;
   @BooleanInputConverter()
   paginationControls: boolean = true;
   @BooleanInputConverter()
@@ -279,12 +286,16 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   protected initialFilterFunction: () => Expression | { [key: string]: any };
   protected filterBuilderFunction?: () => OFilterBuilderComponent;
 
+  /** App-wide action-style defaults (from `O_ACTION_STYLES_CONFIG`), if provided. */
+  protected globalActionStylesConfig?: OActionStylesConfig;
+
   constructor(
     injector: Injector,
     protected elRef: ElementRef,
     protected form: OFormComponent
   ) {
     super(injector);
+    this.globalActionStylesConfig = this.injector.get(O_ACTION_STYLES_CONFIG, null) ?? undefined;
     this.permissionsService = this.injector.get(PermissionsService);
     this.translateService = this.injector.get(OTranslateService);
     this.navigationService = this.injector.get(NavigationService);
@@ -320,6 +331,77 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
     if (this.detailButtonInRow || this.editButtonInRow) {
       this.detailMode = Codes.DETAIL_MODE_NONE;
     }
+    if (typeof this.actionStyles === 'string') {
+      try {
+        this.actionStyles = JSON.parse(this.actionStyles);
+      } catch {
+        this.actionStyles = undefined;
+      }
+    }
+  }
+
+  /**
+   * Automatic per-action style rules for this component. The create action is
+   * highlighted as the single primary action by default. Subclasses may override.
+   */
+  protected getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      new: { importance: 'primary' },
+      insert: { importance: 'primary' },
+      add: { importance: 'primary' }
+    };
+  }
+
+  /** Resolves the final style of an action (explicit `actionStyles` > auto-rules > default). */
+  public getResolvedActionStyle(attr: string): OResolvedActionStyle {
+    return resolveActionStyle(attr, this.actionStyles, this.getActionStyleAutoRules(), this.globalActionStylesConfig);
+  }
+
+  /** CSS importance class for an action, to bind on its button (e.g. via `[ngClass]`). */
+  public getActionImportanceClass(attr: string): string {
+    return 'o-action--importance-' + this.getResolvedActionStyle(attr).importance;
+  }
+
+  /**
+   * Importance class for a button whose Material variant follows the resolved
+   * `action-styles` variant. Returns the colour class only for the text-coloured
+   * variants (outline, basic, icon, raised); for the filled variants (flat, fab,
+   * mini-fab) it returns `''` because the importance is routed to the container
+   * colour instead (see `getActionColor`). Mirrors `OButtonComponent`'s
+   * `appliesImportanceColor` so built-in toolbar buttons behave like `o-button`.
+   */
+  public getActionImportanceClassForVariant(attr: string): string {
+    const style = this.getResolvedActionStyle(attr);
+    const filled = style.variant === 'flat' || style.variant === 'fab' || style.variant === 'mini-fab';
+    if (filled) {
+      // Only `flat` + default gets the neutral solid styling; `fab` / `mini-fab`
+      // keep Material's default container, and any filled primary/warn routes the
+      // importance to the container colour via [color] (getActionColor).
+      return (style.variant === 'flat' && style.importance === 'default') ? 'o-action--filled-default' : '';
+    }
+    return 'o-action--importance-' + style.importance;
+  }
+
+  /** Resolved visual variant for an action (e.g. to pick the Material button directive). */
+  public getActionVariant(attr: string): OActionVariant {
+    return this.getResolvedActionStyle(attr).variant;
+  }
+
+  /**
+   * Material colour palette for a filled action's container, derived from its
+   * importance. On the truly filled variants (flat, fab, mini-fab) a primary/warn
+   * importance colours the container; otherwise it returns `undefined` so the
+   * button keeps its default rendering (the text-coloured variants — outline,
+   * basic, icon and the elevated `raised` — colour the label instead).
+   */
+  public getActionColor(attr: string): ThemePalette {
+    const style = this.getResolvedActionStyle(attr);
+    const filled = style.variant === 'flat'
+      || style.variant === 'fab' || style.variant === 'mini-fab';
+    if (filled && (style.importance === 'primary' || style.importance === 'warn')) {
+      return style.importance;
+    }
+    return undefined;
   }
 
   public afterViewInit(): void {

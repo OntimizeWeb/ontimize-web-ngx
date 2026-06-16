@@ -1,6 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import type { ThemePalette } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
@@ -75,6 +76,9 @@ export abstract class OTableBase {
   abstract getClientWidthColumn(col: OColumn): number;
   abstract horizontalScroll: boolean;
   abstract getActionsPermissions(): OPermissions[];
+  abstract getActionImportanceClass(attr: string): string;
+  abstract getActionVariant(attr: string): string;
+  abstract getActionColor(attr: string): ThemePalette;
   abstract selection: SelectionModel<Element>;
   abstract registerOTableButtons(arg: OTableButtons);
   abstract add();

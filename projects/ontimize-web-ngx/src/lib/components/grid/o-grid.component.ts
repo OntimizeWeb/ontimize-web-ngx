@@ -15,7 +15,7 @@ import {
   ViewChildren,
   ViewEncapsulation
 } from '@angular/core';
-import { AsyncPipe, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -36,7 +36,7 @@ import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
-import { OPermissions } from '../../types';
+import { OActionStyleProvider, OPermissions } from '../../types';
 import { OGridPermissions } from '../../types/o-grid-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -85,12 +85,13 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgStyle, NgTemplateOutlet, MatButtonModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatPaginatorModule, MatSelectModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OGridItemComponent, OGridItemDirective, OGridSkeletonComponent],
+  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatPaginatorModule, MatSelectModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OGridItemComponent, OGridItemDirective, OGridSkeletonComponent],
   selector: 'o-grid',
   providers: [
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OGridComponentStateService },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OGridComponent) },
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
   templateUrl: './o-grid.component.html',

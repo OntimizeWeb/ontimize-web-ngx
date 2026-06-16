@@ -16,7 +16,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { AsyncPipe, NgStyle } from '@angular/common';
+import { AsyncPipe, NgClass, NgStyle } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,6 +34,7 @@ import { IList } from '../../interfaces/o-list.interface';
 import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
+import { OActionStyleProvider } from '../../types/o-action-style.type';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
 import { OListPermissions } from '../../types/o-list-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
@@ -90,12 +91,13 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgStyle, MatButtonModule, MatIconModule, MatListModule, MatPaginatorModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OListSkeletonComponent],
+  imports: [AsyncPipe, NgClass, NgStyle, MatButtonModule, MatIconModule, MatListModule, MatPaginatorModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OListSkeletonComponent],
   selector: 'o-list',
   providers: [
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OListComponentStateService },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OListComponent) },
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,

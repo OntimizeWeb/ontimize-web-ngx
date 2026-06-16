@@ -1,6 +1,6 @@
 # Guía de migración para consumidores — Ontimize Web NGX 18
 
-> Última actualización: 2026-06-01
+> Última actualización: 2026-06-15
 
 Esta guía cubre los pasos necesarios para migrar un proyecto consumidor de **ontimize-web-ngx 15** (Angular 15) a **ontimize-web-ngx 18** (Angular 18).
 
@@ -1477,3 +1477,211 @@ Otros dos cambios de comportamiento en el manejo de errores de carga:
 
 - **`onLoadError` y `queryFallbackFunction` ya no son excluyentes.** Antes, si había un listener suscrito a `onLoadError`, el `queryFallbackFunction` no llegaba a ejecutarse. Ahora ambos se ejecutan si están presentes (son mecanismos independientes: notificación declarativa vs. callback de gestión/recuperación). El diálogo de error por defecto sigue siendo el único *fallback* real: solo aparece cuando **ni** hay listener de `onLoadError` **ni** `queryFallbackFunction` definido.
 - **`queryFallbackFunction` se aplica ahora a ambas ramas de error** (respuesta no exitosa y error HTTP); antes solo se invocaba para errores HTTP.
+
+---
+
+## 18. Jerarquía visual de acciones — `variant`, `importance` y `action-styles` (desde 18.0.0-next.7)
+
+Un sistema unificado para describir las acciones (botones) de forma **semántica**, desacoplado del tipo de botón de Angular Material. En lugar de elegir `type="RAISED"` + `color="primary"` button a button, defines *qué importancia* tiene la acción y *qué forma* quieres, y el framework resuelve el resto — incluido resaltar automáticamente la acción de crear como acción primaria.
+
+### 18.1 El modelo `OActionStyle`
+
+```typescript
+type OActionVariant   = 'outline' | 'flat' | 'basic' | 'raised' | 'icon' | 'fab' | 'mini-fab';
+type OActionImportance = 'primary' | 'warn' | 'default';
+
+interface OActionStyle {
+  variant?: OActionVariant;     // forma del botón (default: 'outline')
+  importance?: OActionImportance; // relevancia semántica (default: 'default')
+}
+```
+
+- **`importance`** colorea la acción:
+  - `primary` → `var(--mat-sys-primary)`
+  - `warn` → `var(--mat-sys-error)`
+  - `default` → foreground Ontimize (`var(--o-fg-text)` / `var(--o-fg-icon)`)
+- **`variant`** mapea a la directiva de botón de Material: `outline` → `mat-stroked-button`, `flat` → `mat-flat-button`, `basic` → `mat-button`, `raised` → `mat-raised-button`, `icon` → `mat-icon-button`, `fab` / `mini-fab` → `mat-fab` / `mat-mini-fab`.
+
+> **Dónde aplica el color la `importance`**: en las formas de contenedor claro/transparente (`outline`, `basic`, `icon` y el elevado `raised`) la importancia colorea el **texto y el icono**. En las formas rellenas (`flat`, `fab`, `mini-fab`) colorea el **contenedor** (vía la paleta de Material) y el texto se mantiene en su color legible sobre el fondo. Así un botón `flat` + `warn` sale con fondo de error y texto legible, no con texto de error sobre fondo claro.
+
+### 18.2 `o-button`: nuevos inputs `variant` e `importance`
+
+`o-button` gana dos inputs que sustituyen (sin romper) a `type` y `color`:
+
+```html
+<!-- Antes (sigue funcionando, pero deprecado) -->
+<o-button type="RAISED" color="primary" label="Guardar"></o-button>
+
+<!-- Ahora -->
+<o-button variant="raised" importance="primary" label="Guardar"></o-button>
+```
+
+| Input deprecado | Nuevo input | Notas |
+|---|---|---|
+| `type="STROKED"` | `variant="outline"` | |
+| `type="FLAT"` | `variant="flat"` | |
+| `type="BASIC"` | `variant="basic"` | |
+| `type="RAISED"` | `variant="raised"` | |
+| `type="ICON"` | `variant="icon"` | |
+| `type="FAB"` / `type="FAB-MINI"` | `variant="fab"` / `variant="mini-fab"` | |
+| `color="primary"` | `importance="primary"` | |
+| `color="warn"` | `importance="warn"` | |
+| `color="accent"` | *(sin equivalente)* | `accent` no tiene equivalente de `importance`; sigue funcionando vía el input legacy `color` |
+
+> `type` y `color` siguen operativos por compatibilidad. Si defines ambos, **gana el nuevo input** (`variant` / `importance`).
+
+### 18.3 `action-styles` en los componentes host
+
+`o-form`, `o-table`, `o-grid`, `o-list` y `o-tree` aceptan el input opcional `action-styles`: un `Record<string, OActionStyle>` indexado por el `attr` de la acción. Permite configurar la apariencia de los botones integrados **sin** envolverlos en `o-button`.
+
+```html
+<o-grid entity="customers"
+        [action-styles]="{
+          insert:  { variant: 'flat', importance: 'primary' },
+          refresh: { variant: 'basic' },
+          delete:  { importance: 'warn' }
+        }">
+  ...
+</o-grid>
+```
+
+Las claves son el `attr` interno exacto de cada acción:
+
+| Componente | Acciones integradas (`attr`) |
+|---|---|
+| `o-form` (toolbar) | `insert`, `update`, `edit`, `delete`, `refresh`, `undo`, `cancel` |
+| `o-table` | `insert`, `refresh`, `delete`, … (un `o-table-button` resuelve por su propio `attr`) |
+| `o-grid` / `o-list` | `insert`, `refresh`, `delete` |
+| `o-tree` | `insert`, `refresh`, `delete` |
+
+> El input acepta tanto un objeto como un string JSON: `[action-styles]="{ insert: { variant: 'flat' } }"` o `action-styles='{"insert":{"variant":"flat"}}'`.
+
+### 18.4 Resolución del estilo y reglas automáticas
+
+El estilo final de cada acción se resuelve con esta precedencia (util puro `resolveActionStyle`):
+
+1. **Configuración explícita** en `action-styles` (por `attr`).
+2. **Reglas automáticas** del componente.
+3. **Default global**: `outline` + `default`.
+
+Por defecto, **la acción de crear se resalta como la única acción primaria** automáticamente, sin configurar nada:
+
+| Componente | Regla automática |
+|---|---|
+| `o-table` / `o-grid` / `o-list` / `o-tree` | la acción de crear (`insert` / `add` / `new`) → `importance: primary` |
+| `o-form` | el botón de confirmar es primario en modo INSERT (`attr=insert`) y en modo UPDATE / editable-detail (`attr=update`) |
+
+El resto de acciones (refresh, edit, delete…) quedan en `default`. Para cambiarlo, sobreescribe con `action-styles`:
+
+```html
+<!-- Quitar el resaltado primario del insert y marcar delete como warn -->
+<o-list [action-styles]="{ insert: { importance: 'default' }, delete: { importance: 'warn' } }">
+```
+
+### 18.5 Botones custom proyectados — `OActionStyleProvider`
+
+Un `o-button` (o un `o-table-button`) **proyectado dentro** de un `o-table` / `o-grid` / `o-list` / `o-tree` / `o-form` resuelve su estilo por su `attr` desde el host, a través del token DI `OActionStyleProvider`. Así un botón custom adopta automáticamente el `action-styles` del host sin configurarlo en cada botón:
+
+```html
+<o-table entity="invoices" [action-styles]="{ export: { variant: 'flat', importance: 'primary' } }">
+  <o-table-button attr="export" icon="download" (onClick)="export()"></o-table-button>
+  <!-- el botón export sale flat + primary sin más config -->
+</o-table>
+```
+
+Un `variant` / `importance` explícito en el botón **siempre prevalece** sobre lo que diga el host.
+
+### 18.6 Alcance del `variant` por componente
+
+`importance` (color) aplica a **todas** las acciones integradas. `variant` (forma) aplica donde el botón puede cambiar de directiva Material:
+
+| Dónde | `importance` | `variant` |
+|---|---|---|
+| `o-button` | ✅ | ✅ |
+| `o-table-button` (tabla) | ✅ | ✅ |
+| Toolbar de `o-list` / `o-grid` (modo texto, `show-buttons-text`) | ✅ | ✅ |
+| Toolbar de `o-form` (modo texto, `show-header-actions-text`) | ✅ | ✅ |
+| Botones integrados de `o-tree` | ✅ | — (siempre `outline`) |
+
+> En modo solo-icono (`show-buttons-text="no"` en list/grid, `show-header-actions-text="no"` en el o-form) los botones de toolbar son siempre `mat-icon-button`; el `variant` aplica en modo texto y al FAB flotante de insert.
+
+### 18.7 Clases CSS para casos avanzados
+
+La importancia se materializa en tres clases compartidas (definidas en `o-button-theme.scss`), por si necesitas colorear un botón Material propio igual que los del framework:
+
+```html
+<button mat-stroked-button class="o-action--importance-primary">…</button>
+<button mat-stroked-button class="o-action--importance-warn">…</button>
+<button mat-stroked-button class="o-action--importance-default">…</button>
+```
+
+> Si en v15 usabas clases como `o-button-primary`, `o-button-danger` o `o-button-default` en botones de diálogos/custom, migra a `o-action--importance-primary` / `o-action--importance-warn` / `o-action--importance-default` respectivamente.
+
+### 18.8 Configuración global de toda la app (`O_ACTION_STYLES_CONFIG`)
+
+En lugar de repetir `[action-styles]` en cada componente, puedes fijar los defaults **una sola vez** para toda la aplicación mediante un injection token. Útil para branding/consistencia.
+
+```typescript
+import { provideOntimizeWeb, provideOActionStyles } from 'ontimize-web-ngx';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideOntimizeWeb(CONFIG),
+    provideOActionStyles({
+      // baseline para TODAS las acciones (sustituye outline + default)
+      default: { variant: 'flat' },
+      // overrides por attr, en toda la app
+      actions: {
+        insert: { variant: 'flat', importance: 'primary' },
+        delete: { importance: 'warn' }
+      }
+    }),
+  ]
+});
+```
+
+En un `AppModule` (NgModule) es idéntico, dentro de `providers: [ provideOActionStyles({ … }) ]`. Si prefieres no usar el helper, provee el token directamente:
+
+```typescript
+import { O_ACTION_STYLES_CONFIG } from 'ontimize-web-ngx';
+
+{ provide: O_ACTION_STYLES_CONFIG, useValue: { actions: { insert: { variant: 'flat' } } } }
+```
+
+| Clave | Efecto |
+|---|---|
+| `default` | Estilo base aplicado a **todas** las acciones cuando nada más lo define (p. ej. `{ variant: 'flat' }` deja todos los botones flat). |
+| `actions[attr]` | Default **por acción** en toda la app (p. ej. todos los `insert` flat, todos los `delete` warn). |
+
+**Precedencia completa** (de mayor a menor), resuelta campo a campo:
+
+| Nivel | Fuente |
+|---|---|
+| 1 | `[action-styles]` de la instancia (template) |
+| 2 | token `actions[attr]` (app-wide por attr) |
+| 3 | auto-reglas del componente (la acción de crear → `primary`) |
+| 4 | token `default` (baseline app-wide) |
+| 5 | default del framework (`outline + default`) |
+
+Así, el `[action-styles]` de un componente concreto **siempre gana** sobre el token para esa instancia; el token por-attr (nivel 2) puede sobreescribir incluso el resaltado primario automático del botón crear; y el `default` del token (nivel 4) no pisa ese resaltado automático (queda por debajo de las auto-reglas).
+
+> El equivalente global exacto de `[action-styles]="{ insert: { variant: 'flat' } }"` puesto en un componente es `provideOActionStyles({ actions: { insert: { variant: 'flat' } } })`. Usa `default` solo si quieres que el variant/importance aplique a **todas** las acciones, no solo al insert.
+
+### 18.9 Acción `flat` + `default`: botón sólido neutro (y cómo recolorearlo)
+
+En Material 3, un botón relleno (`mat-flat-button`) sin color toma por defecto el tono **primary**. Para que una acción `flat` con `importance: default` no parezca primaria, el framework la pinta como un **botón sólido neutro oscuro** (carbón `#2C2A29` con texto/icono blanco) mediante la clase `.o-action--filled-default`, y lo mantiene **oscuro tanto en claro como en oscuro** (un token adaptativo como `inverse-surface` se invertiría a claro en dark mode).
+
+Solo se neutraliza `flat`. Las variantes `fab` / `mini-fab` —incluido el FAB flotante de insert de `o-list` / `o-grid`— **mantienen el fondo por defecto de Material**.
+
+**Personalizar el color** (p. ej. al neutro de tu marca): usa los tokens de indirección en `:root`, **no** `--mdc-filled-button-container-color` directamente:
+
+```scss
+:root {
+  --o-action-filled-default-bg: #1b1b1b;   // contenedor
+  --o-action-filled-default-fg: #ffffff;   // texto + icono
+}
+```
+
+> **Por qué los tokens de indirección y no el token MDC directo**: el tema oscuro re-emite `.o-action--filled-default` bajo `.o-dark` (especificidad `0,2,0`), así que un `.o-action--filled-default { --mdc-filled-button-container-color: … }` (`0,1,0`) perdería en dark mode. Los tokens `--o-action-filled-default-bg/-fg`, definidos en `:root` y heredados, se resuelven igual en ambos modos.
+
+> Esto aplica a `flat` + `default` en `o-button`, `o-table-button` y las toolbars de `o-form` / `o-list` / `o-grid`. Para `flat` + `primary` / `warn` el color va al contenedor vía la paleta de Material (`[color]`), no por estos tokens.

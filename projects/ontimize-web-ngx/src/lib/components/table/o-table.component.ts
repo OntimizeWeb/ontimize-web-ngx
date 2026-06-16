@@ -59,7 +59,7 @@ import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../se
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OColumnDisplay, OFilterDefinition, OGroupedColumnTypes, OTableGlobalConfig } from '../../types';
+import { OActionStyleProvider, OColumnDisplay, OFilterDefinition, OGroupedColumnTypes, OTableGlobalConfig } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -326,6 +326,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
     { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OTableComponent) },
     OTableLoadingService
   ],
   animations: [

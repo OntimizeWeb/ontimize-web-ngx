@@ -1,5 +1,7 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
@@ -24,7 +26,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
 
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, OTranslatePipe],
+  imports: [NgClass, MatButtonModule, MatIconModule, OTranslatePipe],
   selector: 'o-table-button',
   templateUrl: './o-table-button.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_BUTTON,
@@ -78,6 +80,26 @@ export class OTableButtonComponent implements OTableButton, OnInit {
 
   public isIconPositionLeft(): boolean {
     return this.iconPosition === Codes.ICON_POSITION_LEFT;
+  }
+
+  /**
+   * Style of this action, resolved by the table from its `attr` (explicit
+   * `action-styles` > component auto-rules > default `outline` + `default`). A
+   * custom `o-table-button` projected into the table therefore defaults to
+   * `outline` + `default` and honours any `action-styles` keyed by its `attr`.
+   */
+  get variant(): string {
+    return this.table.getActionVariant(this.oattr);
+  }
+
+  /** Resolved `o-action--importance-*` class for this action (see `variant`). */
+  get importanceClass(): string {
+    return this.table.getActionImportanceClass(this.oattr);
+  }
+
+  /** Material container colour for filled variants of this action (see `variant`). */
+  get color(): ThemePalette {
+    return this.table.getActionColor(this.oattr);
   }
 
   get table(): OTableBase {

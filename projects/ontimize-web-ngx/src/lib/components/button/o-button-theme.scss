@@ -1,7 +1,97 @@
+// Sets the label + icon colour of a button for every Material variant at once.
+// Material 3 drives label/icon colour through per-variant MDC tokens (not a
+// single `color`), so an importance class must override the token families for
+// all four variants plus the icon-button and mat-icon tokens. Setting them on
+// the element that carries the class (cascading to the inner <button>) wins over
+// Material's :root-level emission regardless of selector specificity.
+@mixin o-action-importance-color($label, $icon) {
+  // ── Icon colour ──────────────────────────────────────────────────────────
+  // Live --mat- tokens; colour <mat-icon> inside any button and icon-buttons.
+  --mat-icon-color: #{$icon};
+  --mdc-icon-button-icon-color: #{$icon};
+  --mdc-text-button-with-icon-icon-color: #{$icon};
+  --mdc-outlined-button-with-icon-icon-color: #{$icon};
+  --mdc-protected-button-with-icon-icon-color: #{$icon};
+
+  // ── Label colour tokens ──────────────────────────────────────────────────
+  // Only the text-coloured variants (text / outlined / raised). Filled (flat)
+  // and fab buttons colour their container instead and receive their palette
+  // through getActionColor()/[color], so their label token is left untouched.
+  --mdc-text-button-label-text-color: #{$label};
+  --mdc-outlined-button-label-text-color: #{$label};
+  --mdc-protected-button-label-text-color: #{$label};
+  --mat-text-button-label-text-color: #{$label};
+  --mat-outlined-button-label-text-color: #{$label};
+  --mat-protected-button-label-text-color: #{$label};
+
+  // ── Direct colour override ───────────────────────────────────────────────
+  // In Material 3 the label-text-color token does NOT reliably win the cascade
+  // (Material applies `color: var(--mdc-outlined-button-label-text-color)` on
+  // `.mat-mdc-outlined-button:not(:disabled)`, specificity 0,2,0, and re-emits
+  // the token), so we set `color` straight on the button element — the
+  // projected label span inherits it. Each selector below is 0,3,0 and beats
+  // Material's rule. Scoped to text / outlined / raised / icon variants so
+  // filled (flat) and fab buttons are left to getActionColor().
+  // The `&.` selectors cover the class-on-button case (o-form / o-table /
+  // o-grid / o-list / o-tree built-in buttons); the plain `.` selectors cover
+  // the class-on-host case (the o-button component wrapping the mat button).
+  &.mat-mdc-button:not(:disabled),
+  &.mat-mdc-outlined-button:not(:disabled),
+  &.mat-mdc-raised-button:not(:disabled),
+  &.mat-mdc-icon-button:not(:disabled),
+  .mat-mdc-button:not(:disabled),
+  .mat-mdc-outlined-button:not(:disabled),
+  .mat-mdc-raised-button:not(:disabled),
+  .mat-mdc-icon-button:not(:disabled) {
+    color: #{$label};
+  }
+}
+
 @mixin o-button-theme($theme-or-color-config) {
   .o-button {
     button.mat-mdc-button-base.mdc-button {
       min-width: 112px;
     }
+  }
+
+  // ─── Action importance ──────────────────────────────────────────────────────
+  // Shared visual-hierarchy contract for o-button and the built-in actions of
+  // o-form / o-table / o-grid / o-list / o-tree. The class lives on the action
+  // element (o-button host or the internal mat button) and colours its label and
+  // icon. `default` uses the Ontimize foreground tokens; primary/warn use the M3
+  // system colours.
+  .o-action--importance-primary {
+    @include o-action-importance-color(var(--mat-sys-primary), var(--mat-sys-primary));
+  }
+
+  .o-action--importance-warn {
+    @include o-action-importance-color(var(--mat-sys-error), var(--mat-sys-error));
+  }
+
+  .o-action--importance-default {
+    @include o-action-importance-color(var(--o-fg-text), var(--o-fg-icon));
+  }
+
+  // Filled (flat / fab) action with `default` importance. Without this, Material
+  // M3 paints a filled button with its default container colour — which is the
+  // PRIMARY tone — so a `flat` + `default` action would look primary. Here we
+  // make it a neutral solid button using the M3 inverse-surface tones (a dark
+  // neutral container with a legible light label/icon). Consumers can override
+  // the container to a brand neutral, e.g.:
+  //   .o-action--filled-default { --mdc-filled-button-container-color: #2C2A29; }
+  .o-action--filled-default {
+    // A `flat` (filled) action with `default` importance renders as a neutral DARK
+    // solid button, kept dark in BOTH light and dark themes by default. Material's
+    // M3 default would paint a filled button with the primary tone, and an adaptive
+    // token such as `inverse-surface` would invert to a light fill in dark mode —
+    // neither is what a low-emphasis "default" solid action wants. The dark theme
+    // re-emits this rule under `.o-dark` (higher specificity), but both emissions
+    // resolve through the same indirection tokens, so a consumer can recolour it
+    // once (and it holds in both themes), e.g.:
+    //   :root { --o-action-filled-default-bg: #1b1b1b; --o-action-filled-default-fg: #fff; }
+    --mdc-filled-button-container-color: var(--o-action-filled-default-bg, #2C2A29);
+    --mdc-filled-button-label-text-color: var(--o-action-filled-default-fg, #ffffff);
+    --mdc-filled-button-with-icon-icon-color: var(--o-action-filled-default-fg, #ffffff);
+    --mat-icon-color: var(--o-action-filled-default-fg, #ffffff);
   }
 }

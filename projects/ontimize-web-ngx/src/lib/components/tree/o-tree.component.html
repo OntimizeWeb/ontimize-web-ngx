@@ -5,39 +5,39 @@
         <div class="buttons">
           @if (showButtonsText) {
             @if (insertButton) {
-              <button type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
+              <button type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" attr="insert" (click)="add($event)">
                 <mat-icon>add</mat-icon>
                 <span>{{ 'INSERT' | oTranslate }}</span>
               </button>
             }
             @if (refreshButton) {
               <button type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton"
-                (click)="reloadData()">
+                [ngClass]="getActionImportanceClass('refresh')" attr="refresh" (click)="reloadData()">
                   <mat-icon>autorenew</mat-icon>
                 <span>{{ 'REFRESH' | oTranslate }}</span>
               </button>
             }
             @if (deleteButton) {
               <button type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-                [class.disabled]="!enabledDeleteButton">
+                [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete">
                 <mat-icon>delete</mat-icon>
                 <span>{{ 'DELETE' | oTranslate }}</span>
               </button>
             }
           } @else {
             @if (insertButton) {
-              <button type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
+              <button type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" attr="insert" (click)="add($event)">
                 <mat-icon>add</mat-icon>
               </button>
             }
             @if (refreshButton) {
-              <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()">
+              <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClass('refresh')" attr="refresh" (click)="reloadData()">
                   <mat-icon>autorenew</mat-icon>
               </button>
             }
             @if (deleteButton) {
               <button type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-                [class.disabled]="!enabledDeleteButton">
+                [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete">
                 <mat-icon>delete</mat-icon>
               </button>
             }

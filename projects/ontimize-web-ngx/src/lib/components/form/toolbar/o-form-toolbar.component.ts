@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef, ViewEncapsulation, forwardRef } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -13,8 +14,10 @@ import { DialogService } from '../../../services/dialog.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { SnackBarService } from '../../../services/snackbar.service';
 import { OPermissions } from '../../../types/o-permissions.type';
+import { O_ACTION_STYLES_CONFIG, OActionStyle, OActionStylesConfig, OActionVariant, OResolvedActionStyle } from '../../../types/o-action-style.type';
 import { Codes } from '../../../util/codes';
 import { PermissionsUtils } from '../../../util/permissions';
+import { resolveActionStyle } from '../../../util/action-style.util';
 import { Util } from '../../../util/util';
 import { OFormBase } from '../o-form-base.class';
 import { OFormToolbarBase } from './o-form-toolbar-base.class';
@@ -27,7 +30,9 @@ export const DEFAULT_INPUTS_O_FORM_TOOLBAR = [
   // show-header-navigation [string][yes|no|true|false]: Include navigations buttons in form-toolbar. Default: true;
   'showHeaderNavigation:show-header-navigation',
   // show-back-button [string]: see OFormComponent input documentation. Default: 'auto'
-  'showBackButton: show-back-button'
+  'showBackButton: show-back-button',
+  // action-styles [Record<string, OActionStyle>]: per-action visual style keyed by the action `attr`.
+  'actionStyles: action-styles'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
@@ -36,7 +41,7 @@ export const DEFAULT_OUTPUTS_O_FORM_TOOLBAR = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, MatButtonModule, MatIconModule, MatToolbarModule, OTranslatePipe, OFormNavigationComponent],
+  imports: [AsyncPipe, NgClass, MatButtonModule, MatIconModule, MatToolbarModule, OTranslatePipe, OFormNavigationComponent],
   selector: 'o-form-toolbar',
   templateUrl: './o-form-toolbar.component.html',
   styleUrls: ['./o-form-toolbar.component.scss'],
@@ -71,6 +76,10 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   public editMode: boolean = false;
   public insertMode: boolean = false;
   public initialMode: boolean = true;
+  /** Per-action visual style keyed by the action `attr` (threaded from the o-form). */
+  public actionStyles?: Record<string, OActionStyle>;
+  /** App-wide action-style defaults (from `O_ACTION_STYLES_CONFIG`), if provided. */
+  protected globalActionStylesConfig?: OActionStylesConfig;
   public refreshBtnEnabled: boolean = false;
   public insertBtnEnabled: boolean = false;
   public deleteBtnEnabled: boolean = false;
@@ -146,9 +155,17 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this._dialogService = this.injector.get(DialogService);
     this._navigationService = this.injector.get(NavigationService);
     this.snackBarService = this.injector.get(SnackBarService);
+    this.globalActionStylesConfig = this.injector.get(O_ACTION_STYLES_CONFIG, null) ?? undefined;
   }
 
   public ngOnInit(): void {
+    if (typeof this.actionStyles === 'string') {
+      try {
+        this.actionStyles = JSON.parse(this.actionStyles);
+      } catch {
+        this.actionStyles = undefined;
+      }
+    }
     this.formActions = Util.parseArray(this.headeractions);
     if (this.formActions && this.formActions.length > 0) {
       this.refreshBtnEnabled = this.formActions.indexOf('R') !== -1;
@@ -204,6 +221,69 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initialMode = false;
     this.insertMode = false;
     this.editMode = true;
+  }
+
+  /**
+   * Automatic per-action style rules, derived from the current form mode:
+   * the confirm action is primary in INSERT mode (`insert`) and in UPDATE mode (`update`).
+   */
+  protected getActionStyleAutoRules(): Record<string, OActionStyle> {
+    const rules: Record<string, OActionStyle> = {};
+    if (this.insertMode) {
+      rules['insert'] = { importance: 'primary' };
+    }
+    if (this.editMode || this.saveBtnEnabled) {
+      rules['update'] = { importance: 'primary' };
+    }
+    return rules;
+  }
+
+  /**
+   * Resolves the full style of an action (instance `action-styles` > app-wide
+   * per-attr > auto-rules > app-wide default > framework default).
+   */
+  protected getResolvedActionStyle(attr: string): OResolvedActionStyle {
+    return resolveActionStyle(attr, this.actionStyles, this.getActionStyleAutoRules(), this.globalActionStylesConfig);
+  }
+
+  /** CSS importance class for an action, to bind on its button (e.g. via `[ngClass]`). */
+  public getActionImportanceClass(attr: string): string {
+    return 'o-action--importance-' + this.getResolvedActionStyle(attr).importance;
+  }
+
+  /** Resolved Material button variant for an action (picks the button directive in the template). */
+  public getActionVariant(attr: string): OActionVariant {
+    return this.getResolvedActionStyle(attr).variant;
+  }
+
+  /**
+   * Importance class for a button whose Material variant follows the resolved
+   * `action-styles` variant: the colour class only for the text-coloured variants
+   * (outline, basic, icon, raised); `''` for the filled variants (flat, fab,
+   * mini-fab), which route the importance to the container colour (`getActionColor`).
+   */
+  public getActionImportanceClassForVariant(attr: string): string {
+    const style = this.getResolvedActionStyle(attr);
+    const filled = style.variant === 'flat' || style.variant === 'fab' || style.variant === 'mini-fab';
+    if (filled) {
+      // Only `flat` + default gets the neutral solid styling; `fab` / `mini-fab`
+      // keep Material's default container, and any filled primary/warn routes the
+      // importance to the container colour via [color] (getActionColor).
+      return (style.variant === 'flat' && style.importance === 'default') ? 'o-action--filled-default' : '';
+    }
+    return 'o-action--importance-' + style.importance;
+  }
+
+  /** Material container colour for filled variants (flat) of an action; undefined otherwise. */
+  public getActionColor(attr: string): ThemePalette {
+    const style = this.getResolvedActionStyle(attr);
+    const filled = style.variant === 'flat' || style.variant === 'fab' || style.variant === 'mini-fab';
+    return (filled && (style.importance === 'primary' || style.importance === 'warn')) ? style.importance : undefined;
+  }
+
+  /** Attr of the confirm/accept button; depends on the current form mode. */
+  get acceptButtonAttr(): string {
+    return this.insertMode ? 'insert' : 'update';
   }
 
   public onCloseDetail(options?: any): void {

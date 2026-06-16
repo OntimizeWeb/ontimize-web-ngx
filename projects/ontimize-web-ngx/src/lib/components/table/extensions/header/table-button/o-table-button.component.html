@@ -1,23 +1,80 @@
 @if (table.showButtonsText) {
-  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-stroked-button (click)="innerOnClick($event)">
-    @if (isIconPositionLeft() && svgIcon !== undefined) {
-      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+  @switch (variant) {
+    @case ('flat') {
+      <!-- filled variant: importance routes to the container colour, label stays legible -->
+      <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" [color]="color" mat-flat-button (click)="innerOnClick($event)">
+        @if (isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+        <span>{{ olabel | oTranslate }}</span>
+        @if (!isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (!isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+      </button>
     }
-    @if (isIconPositionLeft() && svgIcon === undefined) {
-      <mat-icon>{{ icon }}</mat-icon>
+    @case ('basic') {
+      <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" [ngClass]="importanceClass" mat-button (click)="innerOnClick($event)">
+        @if (isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+        <span>{{ olabel | oTranslate }}</span>
+        @if (!isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (!isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+      </button>
     }
-    <span>{{ olabel | oTranslate }}</span>
-    @if (!isIconPositionLeft() && svgIcon !== undefined) {
-      <mat-icon [svgIcon]="svgIcon"></mat-icon>
+    @case ('raised') {
+      <!-- elevated variant: light container, so importance colours the label -->
+      <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" [ngClass]="importanceClass" mat-raised-button (click)="innerOnClick($event)">
+        @if (isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+        <span>{{ olabel | oTranslate }}</span>
+        @if (!isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (!isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+      </button>
     }
-    @if (!isIconPositionLeft() && svgIcon === undefined) {
-      <mat-icon>{{ icon }}</mat-icon>
+    @default {
+      <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" [ngClass]="importanceClass" mat-stroked-button (click)="innerOnClick($event)">
+        @if (isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+        <span>{{ olabel | oTranslate }}</span>
+        @if (!isIconPositionLeft() && svgIcon !== undefined) {
+          <mat-icon [svgIcon]="svgIcon"></mat-icon>
+        }
+        @if (!isIconPositionLeft() && svgIcon === undefined) {
+          <mat-icon>{{ icon }}</mat-icon>
+        }
+      </button>
     }
-  </button>
+  }
 }
 
 @if (!table.showButtonsText) {
-  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" mat-icon-button (click)="innerOnClick($event)">
+  <button type="button" [disabled]="!enabled" [class.disabled]="!enabled" [ngClass]="importanceClass" mat-icon-button (click)="innerOnClick($event)">
     @if (isIconPositionLeft() && svgIcon !== undefined) {
       <mat-icon [svgIcon]="svgIcon"></mat-icon>
     }

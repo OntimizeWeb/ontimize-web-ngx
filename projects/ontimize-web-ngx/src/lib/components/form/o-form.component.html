@@ -5,7 +5,7 @@
 @if (showFloatingToolbar && headerPosition==='top') {
   <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
     [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
-    [show-back-button]="showBackButton"
+    [show-back-button]="showBackButton" [action-styles]="actionStyles"
     (onCancel)="onCancel.emit($event)" layout-padding>
     <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
       <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
@@ -18,7 +18,7 @@
     @if (showNotFloatingToolbar && headerPosition==='top') {
       <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
         [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
-    [show-back-button]="showBackButton"
+    [show-back-button]="showBackButton" [action-styles]="actionStyles"
         (onCancel)="onCancel.emit($event)" layout-padding>
         <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
           <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
@@ -43,7 +43,7 @@
     @if (showNotFloatingToolbar && headerPosition==='bottom') {
       <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
         [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
-    [show-back-button]="showBackButton"
+    [show-back-button]="showBackButton" [action-styles]="actionStyles"
         (onCancel)="onCancel.emit($event)" layout-padding>
         <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
           <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>
@@ -56,7 +56,7 @@
 @if (showFloatingToolbar && headerPosition==='bottom') {
   <o-form-toolbar [label-header]="labelheader" [label-header-align]="labelHeaderAlign"
     [header-actions]="headeractions" [show-header-navigation]="showHeaderNavigation" [show-header-actions-text]="showHeaderActionsText"
-    [show-back-button]="showBackButton"
+    [show-back-button]="showBackButton" [action-styles]="actionStyles"
     (onCancel)="onCancel.emit($event)" layout-padding>
     <div o-custom-form-toolbar-buttons-wrapper class="o-flex-row o-layout-align-end-center">
       <ng-container *ngTemplateOutlet="customFormToolbarButtons"></ng-container>

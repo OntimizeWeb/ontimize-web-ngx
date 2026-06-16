@@ -5,34 +5,56 @@
     <o-data-toolbar class="o-grid-toolbar" [title]="title" [show-title]="hasTitle()">
       <ng-container o-data-toolbar-projection-start>
         @if (showButtonsText) {
+          <!-- @switch picks the Material button variant from `action-styles`.
+               Icon + label are inlined (not via a template) so Material's
+               `ng-content select="mat-icon"` projects the icon outside the
+               label and keeps the icon/text spacing. -->
           <!-- button new-->
           @if (insertButton && !insertButtonFloatable) {
-            <button type="button" [disabled]="!enabledInsertButton"
-              class="o-grid-add-button o-grid-button text" mat-stroked-button aria-label="Insert" (click)="add()">
-              <mat-icon>add</mat-icon>
-              <span>{{ 'ADD' | oTranslate }}</span>
-            </button>
+            @switch (getActionVariant('insert')) {
+              @case ('flat') {
+                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+              }
+              @case ('raised') {
+                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+              }
+              @case ('basic') {
+                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+              }
+              @default {
+                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+              }
+            }
           }
           <!--button refresh-->
           @if (refreshButton) {
-            <button type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()"
-              class="o-grid-button text">
-                <mat-icon>autorenew</mat-icon>
-              <span>{{ 'REFRESH' | oTranslate }}</span>
-            </button>
+            @switch (getActionVariant('refresh')) {
+              @case ('flat') {
+                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+              }
+              @case ('raised') {
+                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+              }
+              @case ('basic') {
+                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+              }
+              @default {
+                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+              }
+            }
           }
         } @else {
           <!-- button new-->
           @if (insertButton && !insertButtonFloatable) {
-            <button [disabled]="!enabledInsertButton" type="button"
-              class="o-grid-button o-grid-add-button no-text" mat-icon-button aria-label="Insert" (click)="add()">
+            <button [disabled]="!enabledInsertButton" type="button" [ngClass]="getActionImportanceClass('insert')"
+              class="o-grid-button o-grid-add-button no-text" mat-icon-button aria-label="Insert" attr="insert" (click)="add()">
               <mat-icon>add</mat-icon>
             </button>
           }
           <!--button refresh-->
           @if (refreshButton) {
             <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()"
-              class="o-grid-button no-text">
+              [ngClass]="getActionImportanceClass('refresh')" class="o-grid-button no-text" attr="refresh">
                 <mat-icon>autorenew</mat-icon>
             </button>
           }
@@ -110,6 +132,7 @@
   }
   @if (insertButton && insertButtonFloatable) {
     <button type="button" aria-label="Insert" [disabled]="!enabledInsertButton" mat-fab (click)="add()"
+      [ngClass]="getActionImportanceClass('insert')"
       class="o-grid-add-floatable-button" [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
       [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
       <mat-icon>add</mat-icon>

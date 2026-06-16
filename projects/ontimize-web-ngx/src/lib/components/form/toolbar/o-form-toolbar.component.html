@@ -32,15 +32,24 @@
 
     @if (showHeaderActionsText) {
       @if (showUndoButton) {
-        <button type="button" class="o-form-toolbar-button o-form-toolbar-button-undo" mat-stroked-button (click)="onUndoLastChange()"
-          [disabled]="isChangesStackEmpty">
-            <mat-icon>undo</mat-icon>
-          <span>{{ 'UNDO' | oTranslate }}</span>
-        </button>
+        @switch (getActionVariant('undo')) {
+          @case ('flat') {
+            <button type="button" class="o-form-toolbar-button o-form-toolbar-button-undo" [ngClass]="getActionImportanceClassForVariant('undo')" [color]="getActionColor('undo')" mat-flat-button attr="undo" (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty"><mat-icon>undo</mat-icon><span>{{ 'UNDO' | oTranslate }}</span></button>
+          }
+          @case ('raised') {
+            <button type="button" class="o-form-toolbar-button o-form-toolbar-button-undo" [ngClass]="getActionImportanceClassForVariant('undo')" [color]="getActionColor('undo')" mat-raised-button attr="undo" (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty"><mat-icon>undo</mat-icon><span>{{ 'UNDO' | oTranslate }}</span></button>
+          }
+          @case ('basic') {
+            <button type="button" class="o-form-toolbar-button o-form-toolbar-button-undo" [ngClass]="getActionImportanceClassForVariant('undo')" [color]="getActionColor('undo')" mat-button attr="undo" (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty"><mat-icon>undo</mat-icon><span>{{ 'UNDO' | oTranslate }}</span></button>
+          }
+          @default {
+            <button type="button" class="o-form-toolbar-button o-form-toolbar-button-undo" [ngClass]="getActionImportanceClassForVariant('undo')" mat-stroked-button attr="undo" (click)="onUndoLastChange()" [disabled]="isChangesStackEmpty"><mat-icon>undo</mat-icon><span>{{ 'UNDO' | oTranslate }}</span></button>
+          }
+        }
       }
     } @else {
       @if (showUndoButton) {
-        <button type="button" class="o-form-toolbar-button o-form-toolbar-button-undo" mat-icon-button (click)="onUndoLastChange()"
+        <button type="button" class="o-form-toolbar-button o-form-toolbar-button-undo" [ngClass]="getActionImportanceClass('undo')" mat-icon-button attr="undo" (click)="onUndoLastChange()"
           [disabled]="isChangesStackEmpty">
             <mat-icon>undo</mat-icon>
         </button>
@@ -50,67 +59,112 @@
     @if (initialMode) {
       @if (showHeaderActionsText) {
         @if (isRefreshBtnEnabled) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-refresh" mat-stroked-button (click)="onReload()"
-            attr="refresh">
-              <mat-icon>autorenew</mat-icon>
-            <span>{{ 'REFRESH' | oTranslate }}</span>
-          </button>
+          @switch (getActionVariant('refresh')) {
+            @case ('flat') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-refresh" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" mat-flat-button attr="refresh" (click)="onReload()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+            }
+            @case ('raised') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-refresh" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" mat-raised-button attr="refresh" (click)="onReload()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+            }
+            @case ('basic') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-refresh" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" mat-button attr="refresh" (click)="onReload()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+            }
+            @default {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-refresh" [ngClass]="getActionImportanceClassForVariant('refresh')" mat-stroked-button attr="refresh" (click)="onReload()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+            }
+          }
         }
         @if (isInsertBtnEnabled) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" mat-stroked-button (click)="onInsert()"
-            attr="insert">
-            <mat-icon>add</mat-icon>
-            <span>{{ 'ADD' | oTranslate }}</span>
-          </button>
+          @switch (getActionVariant('insert')) {
+            @case ('flat') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" mat-flat-button attr="insert" (click)="onInsert()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+            }
+            @case ('raised') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" mat-raised-button attr="insert" (click)="onInsert()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+            }
+            @case ('basic') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" mat-button attr="insert" (click)="onInsert()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+            }
+            @default {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [ngClass]="getActionImportanceClassForVariant('insert')" mat-stroked-button attr="insert" (click)="onInsert()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+            }
+          }
         }
         @if (isEditBtnEnabled | async) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-edit" mat-stroked-button (click)="onEdit()"
-            attr="edit">
-            <mat-icon>edit</mat-icon>
-            <span>{{ 'EDIT' | oTranslate }}</span>
-          </button>
+          @switch (getActionVariant('edit')) {
+            @case ('flat') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-edit" [ngClass]="getActionImportanceClassForVariant('edit')" [color]="getActionColor('edit')" mat-flat-button attr="edit" (click)="onEdit()"><mat-icon>edit</mat-icon><span>{{ 'EDIT' | oTranslate }}</span></button>
+            }
+            @case ('raised') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-edit" [ngClass]="getActionImportanceClassForVariant('edit')" [color]="getActionColor('edit')" mat-raised-button attr="edit" (click)="onEdit()"><mat-icon>edit</mat-icon><span>{{ 'EDIT' | oTranslate }}</span></button>
+            }
+            @case ('basic') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-edit" [ngClass]="getActionImportanceClassForVariant('edit')" [color]="getActionColor('edit')" mat-button attr="edit" (click)="onEdit()"><mat-icon>edit</mat-icon><span>{{ 'EDIT' | oTranslate }}</span></button>
+            }
+            @default {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-edit" [ngClass]="getActionImportanceClassForVariant('edit')" mat-stroked-button attr="edit" (click)="onEdit()"><mat-icon>edit</mat-icon><span>{{ 'EDIT' | oTranslate }}</span></button>
+            }
+          }
         }
         @if (isDeleteBtnEnabled) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-delete" mat-stroked-button (click)="onDelete()"
-            attr="delete">
-            <mat-icon>delete</mat-icon>
-            <span>{{ 'DELETE' | oTranslate }}</span>
-          </button>
+          @switch (getActionVariant('delete')) {
+            @case ('flat') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-delete" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" mat-flat-button attr="delete" (click)="onDelete()"><mat-icon>delete</mat-icon><span>{{ 'DELETE' | oTranslate }}</span></button>
+            }
+            @case ('raised') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-delete" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" mat-raised-button attr="delete" (click)="onDelete()"><mat-icon>delete</mat-icon><span>{{ 'DELETE' | oTranslate }}</span></button>
+            }
+            @case ('basic') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-delete" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" mat-button attr="delete" (click)="onDelete()"><mat-icon>delete</mat-icon><span>{{ 'DELETE' | oTranslate }}</span></button>
+            }
+            @default {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-delete" [ngClass]="getActionImportanceClassForVariant('delete')" mat-stroked-button attr="delete" (click)="onDelete()"><mat-icon>delete</mat-icon><span>{{ 'DELETE' | oTranslate }}</span></button>
+            }
+          }
         }
         @if (isSaveBtnEnabled | async) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-save" mat-stroked-button (click)="onSave()"
-            [disabled]="!(existsChangesToSave | async)" attr="update">
-            <mat-icon>save</mat-icon>
-            <span>{{ 'SAVE' | oTranslate }}</span>
-          </button>
+          @switch (getActionVariant('update')) {
+            @case ('flat') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-save" [ngClass]="getActionImportanceClassForVariant('update')" [color]="getActionColor('update')" mat-flat-button attr="update" (click)="onSave()" [disabled]="(existsChangesToSave | async) === false"><mat-icon>save</mat-icon><span>{{ 'SAVE' | oTranslate }}</span></button>
+            }
+            @case ('raised') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-save" [ngClass]="getActionImportanceClassForVariant('update')" [color]="getActionColor('update')" mat-raised-button attr="update" (click)="onSave()" [disabled]="(existsChangesToSave | async) === false"><mat-icon>save</mat-icon><span>{{ 'SAVE' | oTranslate }}</span></button>
+            }
+            @case ('basic') {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-save" [ngClass]="getActionImportanceClassForVariant('update')" [color]="getActionColor('update')" mat-button attr="update" (click)="onSave()" [disabled]="(existsChangesToSave | async) === false"><mat-icon>save</mat-icon><span>{{ 'SAVE' | oTranslate }}</span></button>
+            }
+            @default {
+              <button type="button" class="o-form-toolbar-button o-form-toolbar-button-save" [ngClass]="getActionImportanceClassForVariant('update')" mat-stroked-button attr="update" (click)="onSave()" [disabled]="(existsChangesToSave | async) === false"><mat-icon>save</mat-icon><span>{{ 'SAVE' | oTranslate }}</span></button>
+            }
+          }
         }
       } @else {
         @if (isRefreshBtnEnabled) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-refresh" mat-icon-button (click)="onReload()"
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-refresh" [ngClass]="getActionImportanceClass('refresh')" mat-icon-button (click)="onReload()"
             attr="refresh">
               <mat-icon>autorenew</mat-icon>
           </button>
         }
         @if (isInsertBtnEnabled) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" mat-icon-button (click)="onInsert()"
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [ngClass]="getActionImportanceClass('insert')" mat-icon-button (click)="onInsert()"
             attr="insert">
             <mat-icon>add</mat-icon>
           </button>
         }
         @if (isEditBtnEnabled | async) {
-          <button type="button" class="o-form-toolbar-button-o-form-toolbar-button-edit" mat-icon-button (click)="onEdit()"
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-edit" [ngClass]="getActionImportanceClass('edit')" mat-icon-button (click)="onEdit()"
             attr="edit">
             <mat-icon>edit</mat-icon>
           </button>
         }
         @if (isDeleteBtnEnabled) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-delete" mat-icon-button (click)="onDelete()"
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-delete" [ngClass]="getActionImportanceClass('delete')" mat-icon-button (click)="onDelete()"
             attr="delete">
             <mat-icon>delete</mat-icon>
           </button>
         }
         @if (isSaveBtnEnabled | async) {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-save" mat-icon-button (click)="onSave()"
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-save" [ngClass]="getActionImportanceClass('update')" mat-icon-button (click)="onSave()"
             [disabled]="!existsChangesToSave" attr="update">
             <mat-icon>save</mat-icon>
           </button>
@@ -119,18 +173,34 @@
     }
 
     @if (editMode || insertMode) {
-      <button type="button" class="o-form-toolbar-button o-form-toolbar-button-cancel" mat-stroked-button (click)="cancelOperation()">
-          <mat-icon>clear</mat-icon>
-        @if (showHeaderActionsText) {
-          <span>{{ 'CANCEL' | oTranslate }}</span>
+      @switch (getActionVariant('cancel')) {
+        @case ('flat') {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-cancel" [ngClass]="getActionImportanceClassForVariant('cancel')" [color]="getActionColor('cancel')" mat-flat-button attr="cancel" (click)="cancelOperation()"><mat-icon>clear</mat-icon>@if (showHeaderActionsText) {<span>{{ 'CANCEL' | oTranslate }}</span>}</button>
         }
-      </button>
-      <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" mat-stroked-button color="primary" (click)="acceptOperation()">
-          <mat-icon>check</mat-icon>
-        @if (showHeaderActionsText) {
-          <span>{{ 'INSERT' | oTranslate }}</span>
+        @case ('raised') {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-cancel" [ngClass]="getActionImportanceClassForVariant('cancel')" [color]="getActionColor('cancel')" mat-raised-button attr="cancel" (click)="cancelOperation()"><mat-icon>clear</mat-icon>@if (showHeaderActionsText) {<span>{{ 'CANCEL' | oTranslate }}</span>}</button>
         }
-      </button>
+        @case ('basic') {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-cancel" [ngClass]="getActionImportanceClassForVariant('cancel')" [color]="getActionColor('cancel')" mat-button attr="cancel" (click)="cancelOperation()"><mat-icon>clear</mat-icon>@if (showHeaderActionsText) {<span>{{ 'CANCEL' | oTranslate }}</span>}</button>
+        }
+        @default {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-cancel" [ngClass]="getActionImportanceClassForVariant('cancel')" mat-stroked-button attr="cancel" (click)="cancelOperation()"><mat-icon>clear</mat-icon>@if (showHeaderActionsText) {<span>{{ 'CANCEL' | oTranslate }}</span>}</button>
+        }
+      }
+      @switch (getActionVariant(acceptButtonAttr)) {
+        @case ('flat') {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-flat-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ 'INSERT' | oTranslate }}</span>}</button>
+        }
+        @case ('raised') {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-raised-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ 'INSERT' | oTranslate }}</span>}</button>
+        }
+        @case ('basic') {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ 'INSERT' | oTranslate }}</span>}</button>
+        }
+        @default {
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" mat-stroked-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ 'INSERT' | oTranslate }}</span>}</button>
+        }
+      }
     }
   </div>
 

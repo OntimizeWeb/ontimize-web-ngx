@@ -429,6 +429,7 @@ export class OTableMenuComponent implements OTableMenu, OnInit, AfterViewInit, O
       },
       height: '75vh',
       width: '50vw',
+      maxWidth: '80vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog', 'o-table-group-by-column-dialog']
     });

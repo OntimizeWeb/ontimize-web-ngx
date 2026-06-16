@@ -1,6 +1,6 @@
 <div class="buttons o-flex-row">
   @if (showInsertOButton) {
-    <o-table-button attr="add" [enabled]="enabledInsertButton | async" label="TABLE.BUTTONS.ADD"
+    <o-table-button attr="insert" [enabled]="enabledInsertButton | async" label="TABLE.BUTTONS.ADD"
     icon="add" (onClick)="add()" class="o-table-button-add"></o-table-button>
   }
   @if (showRefreshOButton) {

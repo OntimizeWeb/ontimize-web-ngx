@@ -13,6 +13,7 @@ export * from './form-layout-detail-component-data.type';
 export * from './form-value-options.type';
 export * from './http-request-options.type';
 export * from './menu-root-item.type';
+export * from './o-action-style.type';
 export * from './o-breadcrumb-item.type';
 export * from './o-component-permissions.type';
 export * from './o-date-value.type';

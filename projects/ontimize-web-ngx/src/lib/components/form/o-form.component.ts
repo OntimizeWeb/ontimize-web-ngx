@@ -42,6 +42,8 @@ import { OConfigureServiceArgs } from '../../types/configure-service-args.type';
 import { OFormValidation } from '../../types/error-form-validation.type';
 import { FormLayoutCloseDetailOptions } from '../../types/form-layout-detail-component-data.type';
 import { FormValueOptions } from '../../types/form-value-options.type';
+import { O_ACTION_STYLES_CONFIG, OActionStyle, OActionStyleProvider, OActionStylesConfig, OResolvedActionStyle } from '../../types/o-action-style.type';
+import { resolveActionStyle } from '../../util/action-style.util';
 import { OFormInitializationOptions } from '../../types/o-form-initialization-options.type';
 import { OFormPermissions } from '../../types/o-form-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
@@ -185,7 +187,9 @@ export const DEFAULT_INPUTS_O_FORM = [
   //   - 'yes'/'true'/'all': always visible
   //   - 'no'/'false': never visible
   //   - list of mode codes separated by ';': 'R' (initial), 'I' (insert), 'U' (update). e.g. 'R;I;U', 'I;U', 'R'
-  'showBackButton: show-back-button'
+  'showBackButton: show-back-button',
+  // action-styles [Record<string, OActionStyle>]: per-action visual style keyed by the action `attr`.
+  'actionStyles: action-styles'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM = [
@@ -220,6 +224,7 @@ export const DEFAULT_OUTPUTS_O_FORM = [
   providers: [
     { provide: OFormBase, useExisting: forwardRef(() => OFormComponent) },
     { provide: O_FORM_CONTEXT, useExisting: forwardRef(() => OFormComponent) },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OFormComponent) },
     OntimizeServiceProvider,
     OFormMessageService,
     { provide: CanDeactivateFormGuard, useClass: CanDeactivateFormGuard }
@@ -272,6 +277,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   @BooleanInputConverter()
   protected editableDetail: boolean = true;
   protected keysSqlTypes: string;
+  /** Per-action visual style keyed by the action `attr`; threaded to the toolbar. */
+  public actionStyles?: Record<string, OActionStyle>;
+  /** App-wide action-style defaults (from `O_ACTION_STYLES_CONFIG`), if provided. */
+  protected globalActionStylesConfig?: OActionStylesConfig;
   @BooleanInputConverter()
   undoButton: boolean = true;
   get showHeaderNavigation(): boolean { return this._showHeaderNavigation; }
@@ -416,6 +425,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.navigationService = injector.get<NavigationService>(NavigationService as Type<NavigationService>);
     this.snackBarService = injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
     this.permissionsService = this.injector.get<PermissionsService>(PermissionsService as Type<PermissionsService>);
+    this.globalActionStylesConfig = this.injector.get(O_ACTION_STYLES_CONFIG, null) ?? undefined;
 
     const self = this;
     this.reloadStream = combineLatest([
@@ -693,6 +703,36 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     this.formNavigation.initialize();
 
     this.initialize();
+  }
+
+  /**
+   * Resolves the style of an action by its `attr` from this form's `action-styles`
+   * (falling back to the global `outline` + `default`). Exposed as
+   * `OActionStyleProvider` so a custom button projected into the form (e.g. via
+   * `o-form-toolbar-buttons`) defaults to `outline` + `default` and honours any
+   * `action-styles` keyed by its `attr`.
+   */
+  public getResolvedActionStyle(attr: string): OResolvedActionStyle {
+    let styles = this.actionStyles;
+    if (typeof styles === 'string') {
+      try {
+        styles = JSON.parse(styles);
+      } catch {
+        styles = undefined;
+      }
+    }
+    return resolveActionStyle(attr, styles, this.getActionStyleAutoRules(), this.globalActionStylesConfig);
+  }
+
+  private getActionStyleAutoRules(): Record<string, OActionStyle> {
+    const rules: Record<string, OActionStyle> = {};
+    if (this.isInInsertMode()) {
+      rules['insert'] = { importance: 'primary' };
+    }
+    if (this.isInUpdateMode() || this.isEditableDetail()) {
+      rules['update'] = { importance: 'primary' };
+    }
+    return rules;
   }
 
   addDeactivateGuard() {

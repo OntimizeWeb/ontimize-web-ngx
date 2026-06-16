@@ -34,6 +34,7 @@ import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
+import { OActionStyleProvider } from '../../types/o-action-style.type';
 import { OTreePermissions } from '../../types/o-tree-permissions.type';
 import { OTreeFlatNode } from '../../types/tree-flat-node.type';
 import { Codes } from '../../util/codes';
@@ -132,6 +133,7 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTreeComponentStateService },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OTreeComponent) },
   ]
 })
 
