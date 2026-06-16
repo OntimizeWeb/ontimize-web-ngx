@@ -86,7 +86,12 @@
   --o-fg-slider-off: #{-get-fg($foreground, slider-off)};
 
   // ─── Sidenav item states (palette tones, resolved at compile time) ──────────
-  @if $m3-theme {
+  // Light M3 theme: very light tonal tints (tones 98/95) read well over the light
+  // sidenav. In DARK mode those tones are near-white and would wash out the menu,
+  // so fall back to adaptive system tokens (primary-container is a dark tonal
+  // surface in the dark theme, and the translucent primary overlay keeps the
+  // hover visible) — same as the non-M3 path.
+  @if $m3-theme and not map.get($theme, is-dark) {
     --o-sidenav-selected-bg: #{mat.get-theme-color($m3-theme, primary, 98)};
     --o-sidenav-hover-bg: #{mat.get-theme-color($m3-theme, secondary, 95)};
   } @else {
