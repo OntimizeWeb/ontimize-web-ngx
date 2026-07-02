@@ -97,7 +97,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   protected media: BreakpointObserver;
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
-  protected dateValue: Date;
+  protected dateValue: Date | undefined;
 
   @ViewChild('picker', { static: true })
   public datepicker: MatDatepicker<Date>;
@@ -179,11 +179,17 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   }
 
   public getValue(): any {
-    let timestampValue = super.getValue();
-    if (timestampValue && timestampValue instanceof Date) {
-      timestampValue = timestampValue.getTime();
+    const value = super.getValue();
+    if (!Util.isDefined(value)) {
+      return value;
     }
-    return timestampValue;
+    // While typing, the internal control holds a moment; from external data it holds a value in the
+    // configured value-type. Normalize both to a moment and return undefined when it is not a valid date.
+    const m = moment.isMoment(value) ? value : this.getValueAsMoment(value);
+    if (!Util.isDefined(m) || !m.isValid()) {
+      return void 0;
+    }
+    return Util.parseByValueType(m.valueOf(), this.valueType, this.oformat);
   }
 
   get showClearButton(): boolean {
@@ -268,6 +274,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
   protected ensureODateValueType(val: any): void {
     if (!Util.isDefined(val)) {
+      this.dateValue = void 0;
       return val;
     }
     let result = val;
