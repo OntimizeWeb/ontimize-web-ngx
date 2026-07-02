@@ -159,6 +159,25 @@ export class OColumn {
     return Util.isDefined(this.tooltip);
   }
 
+  /**
+   * Returns whether the cell renders no visible content for the given row, so the `empty-cell` class can be applied.
+   * Only columns actually bound to a data field are eligible: action columns (buttons/icons) and columns not
+   * associated to a data field (no `name`, or the row has no such property — e.g. custom renderers that render from
+   * row data) are never considered empty. For data-backed columns with a renderer the emptiness is evaluated over the
+   * displayed (formatted) value instead of the raw cell value.
+   */
+  isEmptyCell(rowData: any): boolean {
+    if (['action', 'editButtonInRow', 'detailButtonInRow'].includes(this.type)) {
+      return false;
+    }
+    if (!Util.isDefined(this.name) || !Util.isDefined(rowData) || !(this.name in rowData)) {
+      return false;
+    }
+    const cellValue = rowData[this.name];
+    const displayedValue = Util.isDefined(this.renderer) ? this.renderer.getCellData(cellValue, rowData) : cellValue;
+    return !Util.isDefined(displayedValue) || ((typeof displayedValue === 'string') && !displayedValue.trim());
+  }
+
   getTooltip(rowData: any): any {
     if (!this.hasTooltip()) {
       return undefined;
