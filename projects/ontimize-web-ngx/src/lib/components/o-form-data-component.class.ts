@@ -185,8 +185,10 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.permissionsService = this.injector.get<PermissionsService>(PermissionsService);
     this.errorOptions = ErrorsUtils.getErrorOptions(this.injector);
     try {
-      this.selectAllOnClick = this.injector.get(O_INPUTS_OPTIONS).selectAllOnClick;
+      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
+      this.selectAllOnClick = this.oInputsOptions.selectAllOnClick;
     } catch (e) {
+      this.oInputsOptions = {};
       this.selectAllOnClick = false;
     }
   }
@@ -218,12 +220,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       });
     }
     this.addOntimizeCustomAppearanceClass();
-    try {
-      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
-    } catch (e) {
-      this.oInputsOptions = {};
-    }
-
     Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
   }
 
