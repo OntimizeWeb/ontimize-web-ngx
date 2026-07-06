@@ -248,7 +248,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /** CSS importance class for an action, to bind on its button (e.g. via `[ngClass]`). */
   public getActionImportanceClass(attr: string): string {
-    return 'o-action--importance-' + this.getResolvedActionStyle(attr).importance;
+    return 'o-button--importance-' + this.getResolvedActionStyle(attr).importance;
   }
 
   /** Resolved Material button variant for an action (picks the button directive in the template). */
@@ -271,7 +271,7 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
       // importance to the container colour via [color] (getActionColor).
       return (style.variant === 'flat' && style.importance === 'default') ? 'o-action--filled-default' : '';
     }
-    return 'o-action--importance-' + style.importance;
+    return 'o-button--importance-' + style.importance;
   }
 
   /** Material container colour for filled variants (flat) of an action; undefined otherwise. */

@@ -1,3 +1,12 @@
+## 18.0.0-next.9 (2026-07-03)
+### Features
+* **o-button**: Icon-only buttons are now accessible to screen readers. A new `aria-label` input sets the button's accessible name; when it is not provided the name mirrors the `label` and, for icon-only buttons (no `label`), falls back to the `attr` and finally the icon name, so every `o-button` is announced. The value is translated with `oTranslate` and bound to the native `<button>` via `[attr.aria-label]` on every variant (basic/raised/stroked/flat/icon/fab/mini-fab).
+
+### Breaking Changes
+* **action-hierarchy / o-button**: The shared importance CSS classes were renamed from `o-action--importance-{primary,warn,default}` to `o-button--importance-{primary,warn,default}` (defined in `o-button-theme.scss` and applied by `o-button`, `o-table-button`, the `o-form` toolbar, `o-service-component` and the framework dialogs). Apps that reference the old class names in their own stylesheets or templates must rename them. The unrelated `o-action--filled-default` class is unchanged. See the migration guide (section 18.7).
+
+---
+
 ## 18.0.0-next.8 (2026-07-03)
 ### Bug Fixes
 * **o-date-input**: `getValue()` now returns the value according to the configured `value-type` instead of always returning a timestamp. Previously any `Date` held internally was coerced to a numeric timestamp, so `value-type="date"` (and, indirectly, the other types) did not round-trip its declared type. The current value is now normalized through a moment and `Util.parseByValueType`, so `getValue()` returns a `number` for `timestamp`, a `Date` for `date`, an ISO string for `iso-8601` and a formatted string for `string`. It also returns `undefined` when the field holds an invalid/incomplete date (e.g. while a digit is being deleted), so subscribers to `valueChanges` no longer receive the previous value for a non-valid entry.

@@ -18,11 +18,11 @@
 
 <mat-dialog-actions align="end">
   <button type="button" mat-button [disabled]="filterList.selectedOptions.selected.length!==1"
-  (click)="removeFilter(filterList.selectedOptions.selected[0].value)" class="o-action--importance-default">{{ 'DELETE' | oTranslate }}</button>
+  (click)="removeFilter(filterList.selectedOptions.selected[0].value)" class="o-button--importance-default">{{ 'DELETE' | oTranslate }}</button>
   <span class="o-flex"></span>
-  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-action--importance-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button--importance-default">{{ 'CANCEL' | oTranslate }}</button>
   <button type="button" mat-stroked-button [mat-dialog-close]="true" [disabled]="filterList.selectedOptions.selected.length!==1"
-    class="o-action--importance-primary">
+    class="o-button--importance-primary">
     {{'TABLE.BUTTONS.APPLY' | oTranslate }}
   </button>
 </mat-dialog-actions>

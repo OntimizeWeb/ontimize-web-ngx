@@ -60,15 +60,15 @@
   // element (o-button host or the internal mat button) and colours its label and
   // icon. `default` uses the Ontimize foreground tokens; primary/warn use the M3
   // system colours.
-  .o-action--importance-primary {
+  .o-button--importance-primary {
     @include o-action-importance-color(var(--mat-sys-primary), var(--mat-sys-primary));
   }
 
-  .o-action--importance-warn {
+  .o-button--importance-warn {
     @include o-action-importance-color(var(--mat-sys-error), var(--mat-sys-error));
   }
 
-  .o-action--importance-default {
+  .o-button--importance-default {
     @include o-action-importance-color(var(--o-fg-text), var(--o-fg-icon));
   }
 

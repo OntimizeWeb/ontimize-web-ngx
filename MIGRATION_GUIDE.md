@@ -1,6 +1,6 @@
 # Guía de migración para consumidores — Ontimize Web NGX 18
 
-> Última actualización: 2026-06-15
+> Última actualización: 2026-07-03
 
 Esta guía cubre los pasos necesarios para migrar un proyecto consumidor de **ontimize-web-ngx 15** (Angular 15) a **ontimize-web-ngx 18** (Angular 18).
 
@@ -1610,12 +1610,14 @@ Un `variant` / `importance` explícito en el botón **siempre prevalece** sobre 
 La importancia se materializa en tres clases compartidas (definidas en `o-button-theme.scss`), por si necesitas colorear un botón Material propio igual que los del framework:
 
 ```html
-<button mat-stroked-button class="o-action--importance-primary">…</button>
-<button mat-stroked-button class="o-action--importance-warn">…</button>
-<button mat-stroked-button class="o-action--importance-default">…</button>
+<button mat-stroked-button class="o-button--importance-primary">…</button>
+<button mat-stroked-button class="o-button--importance-warn">…</button>
+<button mat-stroked-button class="o-button--importance-default">…</button>
 ```
 
-> Si en v15 usabas clases como `o-button-primary`, `o-button-danger` o `o-button-default` en botones de diálogos/custom, migra a `o-action--importance-primary` / `o-action--importance-warn` / `o-action--importance-default` respectivamente.
+> **Renombrado en 18.0.0-next.9**: estas clases se llamaban `o-action--importance-{primary,warn,default}` hasta `next.8` y ahora son `o-button--importance-{primary,warn,default}`. Si en tu CSS/HTML referenciabas las antiguas, renómbralas. La clase `o-action--filled-default` (acción `flat` + `default`, ver 18.9) **no** cambia.
+
+> Si en v15 usabas clases como `o-button-primary`, `o-button-danger` o `o-button-default` en botones de diálogos/custom, migra a `o-button--importance-primary` / `o-button--importance-warn` / `o-button--importance-default` respectivamente.
 
 ### 18.8 Configuración global de toda la app (`O_ACTION_STYLES_CONFIG`)
 
@@ -1685,3 +1687,38 @@ Solo se neutraliza `flat`. Las variantes `fab` / `mini-fab` —incluido el FAB f
 > **Por qué los tokens de indirección y no el token MDC directo**: el tema oscuro re-emite `.o-action--filled-default` bajo `.o-dark` (especificidad `0,2,0`), así que un `.o-action--filled-default { --mdc-filled-button-container-color: … }` (`0,1,0`) perdería en dark mode. Los tokens `--o-action-filled-default-bg/-fg`, definidos en `:root` y heredados, se resuelven igual en ambos modos.
 
 > Esto aplica a `flat` + `default` en `o-button`, `o-table-button` y las toolbars de `o-form` / `o-list` / `o-grid`. Para `flat` + `primary` / `warn` el color va al contenedor vía la paleta de Material (`[color]`), no por estos tokens.
+
+---
+
+## 19. Cambios y fixes (desde 18.0.0-next.8)
+
+### 19.1 Renombrado de clases de importancia (`o-button--importance-*`) — **breaking**
+
+En `18.0.0-next.9` las clases compartidas de importancia se renombraron de `o-action--importance-{primary,warn,default}` a `o-button--importance-{primary,warn,default}`. Afecta a `o-button`, `o-table-button`, la toolbar de `o-form`, `o-service-component` y los diálogos del framework. Si tu app referencia las clases antiguas en CSS/plantillas propias, renómbralas (ver sección [18.7](#187-clases-css-para-casos-avanzados)). La clase `o-action--filled-default` **no** cambia.
+
+```diff
+- <button mat-stroked-button class="o-action--importance-primary">…</button>
++ <button mat-stroked-button class="o-button--importance-primary">…</button>
+```
+
+### 19.2 `o-button`: `aria-label` para lectores de pantalla
+
+`o-button` expone ahora un nombre accesible vía `aria-label`, imprescindible para botones solo-icono. Es aditivo (no requiere cambios), pero puedes personalizarlo:
+
+```html
+<!-- Botón solo-icono: sin label, el nombre accesible cae a attr → icono -->
+<o-button attr="refresh" icon="refresh"></o-button>
+
+<!-- Nombre accesible explícito (se traduce con oTranslate) -->
+<o-button icon="delete" aria-label="BUTTONS.DELETE"></o-button>
+```
+
+Precedencia del nombre accesible: `aria-label` explícito → `label` → `attr` → nombre del icono.
+
+### 19.3 `o-date-input`: `getValue()` respeta `value-type` y comportamiento con valores no válidos
+
+`getValue()` devuelve ahora el valor según el `value-type` configurado (`timestamp` → `number`, `date` → `Date`, `iso-8601` → string ISO, `string` → string formateado), en lugar de devolver siempre un `timestamp`. Además, mientras el campo contiene una fecha incompleta/no válida (p. ej. al borrar un dígito), `getValue()` devuelve `undefined`, por lo que los suscriptores a `valueChanges` dejan de recibir el valor anterior. Si tu código asumía que `o-date-input` siempre entregaba un `timestamp` numérico, ajústalo al `value-type` declarado.
+
+### 19.4 `o-table`: clase `empty-cell` según el contenido mostrado
+
+La clase `empty-cell` (que reserva altura mínima en celdas vacías) se aplica ahora en función del contenido **mostrado**, no del valor crudo `row[column.name]`. Las columnas de acción y las no asociadas a un campo de datos nunca se marcan como vacías, y en columnas con renderer se evalúa el valor formateado. Cambio interno; no requiere acción salvo que dependieras del comportamiento anterior en CSS propio.

@@ -14,9 +14,9 @@
 <mat-dialog-actions align="end">
   <span class="o-flex"></span>
   @if (twoOptions) {
-    <button type="button" mat-stroked-button mat-dialog-close class="o-action--importance-default">
+    <button type="button" mat-stroked-button mat-dialog-close class="o-button--importance-default">
       {{ cancelButtonText | oTranslate }}
     </button>
   }
-  <button type="button" mat-stroked-button class="o-action--importance-primary" (click)="onOkClick()">{{ okButtonText | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="o-button--importance-primary" (click)="onOkClick()">{{ okButtonText | oTranslate }}</button>
 </mat-dialog-actions>

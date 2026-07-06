@@ -92,7 +92,7 @@ export class OTableButtonComponent implements OTableButton, OnInit {
     return this.table.getActionVariant(this.oattr);
   }
 
-  /** Resolved `o-action--importance-*` class for this action (see `variant`). */
+  /** Resolved `o-button--importance-*` class for this action (see `variant`). */
   get importanceClass(): string {
     return this.table.getActionImportanceClass(this.oattr);
   }

@@ -359,7 +359,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
 
   /** CSS importance class for an action, to bind on its button (e.g. via `[ngClass]`). */
   public getActionImportanceClass(attr: string): string {
-    return 'o-action--importance-' + this.getResolvedActionStyle(attr).importance;
+    return 'o-button--importance-' + this.getResolvedActionStyle(attr).importance;
   }
 
   /**
@@ -379,7 +379,7 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
       // importance to the container colour via [color] (getActionColor).
       return (style.variant === 'flat' && style.importance === 'default') ? 'o-action--filled-default' : '';
     }
-    return 'o-action--importance-' + style.importance;
+    return 'o-button--importance-' + style.importance;
   }
 
   /** Resolved visual variant for an action (e.g. to pick the Material button directive). */

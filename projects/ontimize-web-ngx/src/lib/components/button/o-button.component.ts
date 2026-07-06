@@ -31,7 +31,9 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   // variant [outline|flat|basic|raised|icon|fab|mini-fab]: visual variant / shape of the button. Default: outline.
   'variant',
   // importance [primary|warn|default]: semantic relevance (colours text + icon).
-  'importance'
+  'importance',
+  // aria-label [string]: accessible name for screen readers. Useful for icon-only buttons. Translated with oTranslate.
+  'ariaLabel: aria-label'
 ];
 export const DEFAULT_OUTPUTS_O_BUTTON = [
   'onClick',
@@ -50,9 +52,9 @@ export const DEFAULT_OUTPUTS_O_BUTTON = [
     '[class.o-button]': 'true',
     '[class.o-button-icon-position-top]': 'iconPosition==="top"',
     '[class.o-button-icon-position-bottom]': 'iconPosition==="bottom"',
-    '[class.o-action--importance-primary]': "appliesImportanceColor && resolvedImportance === 'primary'",
-    '[class.o-action--importance-warn]': "appliesImportanceColor && resolvedImportance === 'warn'",
-    '[class.o-action--importance-default]': "appliesImportanceColor && resolvedImportance === 'default'",
+    '[class.o-button--importance-primary]': "appliesImportanceColor && resolvedImportance === 'primary'",
+    '[class.o-button--importance-warn]': "appliesImportanceColor && resolvedImportance === 'warn'",
+    '[class.o-button--importance-default]': "appliesImportanceColor && resolvedImportance === 'default'",
     // flat + default: neutral solid button instead of Material's primary fill.
     // (fab/mini-fab keep Material's default container.)
     '[class.o-action--filled-default]': "isFlat() && resolvedImportance === 'default'"
@@ -85,6 +87,8 @@ export class OButtonComponent implements OnInit {
   public color: ThemePalette;
   public variant: OActionVariant;
   public importance: OActionImportance;
+  /** Accessible name (translation key) exposed via `aria-label`, mainly for icon-only buttons. */
+  public ariaLabel: string;
   public visible: boolean = true;
 
   /* Outputs */
@@ -147,7 +151,7 @@ export class OButtonComponent implements OnInit {
   }
 
   /**
-   * Resolved importance used to toggle the shared `.o-action--importance-*`
+   * Resolved importance used to toggle the shared `.o-button--importance-*`
    * class. Precedence: explicit `importance` > legacy `color` (primary/warn) >
    * host `action-styles` importance (by `attr`) > `default`. A legacy `color`
    * with no importance equivalent (e.g. `accent`) returns `undefined` so the
@@ -169,7 +173,7 @@ export class OButtonComponent implements OnInit {
   /**
    * Whether the importance colour applies to the label/icon. Shapes with a light
    * or transparent container (outline, basic, icon and the elevated `raised`)
-   * colour the text/icon directly via the shared `.o-action--importance-*` class.
+   * colour the text/icon directly via the shared `.o-button--importance-*` class.
    * The truly filled shapes (flat, fab, mini-fab) instead route the importance to
    * the container colour (see `resolvedColor`), keeping the label on its legible
    * on-container colour.
@@ -206,6 +210,15 @@ export class OButtonComponent implements OnInit {
 
   get needsIconButtonClass(): boolean {
     return (this.icon !== undefined || this.svgIcon !== undefined) && (this.olabel === undefined || this.olabel === '');
+  }
+
+  /**
+   * Accessible name (translation key) applied to the native button via `aria-label`, so screen readers
+   * can announce it. It mirrors the button `label`. Precedence: explicit `aria-label` > `label` > `attr` >
+   * icon name, so an icon-only button (no `label`) still falls back to `attr`/icon and is announced.
+   */
+  get accessibleLabel(): string {
+    return this.ariaLabel ?? this.olabel ?? this.oattr ?? this.icon ?? this.svgIcon;
   }
 
   isFab(): boolean {
