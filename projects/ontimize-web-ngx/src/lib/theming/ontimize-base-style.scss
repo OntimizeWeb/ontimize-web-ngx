@@ -345,34 +345,39 @@ $m3-theme: mat.define-theme((color: $color-config,
     }
   }
 
-  .mat-pseudo-checkbox {
+  // Box styling applies ONLY to the "full" appearance (the variant that draws a
+  // box: multi-select panels, selection lists…). The "minimal" appearance — the
+  // selection indicator of mat-button-toggle and single-select options — renders
+  // just a checkmark, so it is deliberately left to Material's defaults
+  // (--mat-minimal-pseudo-checkbox-selected-checkmark-color).
+  .mat-pseudo-checkbox-full {
     color: var(--o-fg-secondary-text);
 
     &::after {
       color: var(--o-bg-background);
     }
+
+    &.mat-pseudo-checkbox-disabled {
+      color: $disabled-color;
+    }
   }
 
-  .mat-pseudo-checkbox-disabled {
-    color: $disabled-color;
-  }
-
-  .mat-primary .mat-pseudo-checkbox-checked,
-  .mat-primary .mat-pseudo-checkbox-indeterminate,
-  .mat-accent .mat-pseudo-checkbox-checked,
-  .mat-accent .mat-pseudo-checkbox-indeterminate,
-  .mat-pseudo-checkbox-checked,
-  .mat-pseudo-checkbox-indeterminate {
+  .mat-primary .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked,
+  .mat-primary .mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate,
+  .mat-accent .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked,
+  .mat-accent .mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate,
+  .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate {
     background: var(--o-fg-icon);
   }
 
-  .mat-warn .mat-pseudo-checkbox-checked,
-  .mat-warn .mat-pseudo-checkbox-indeterminate {
+  .mat-warn .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked,
+  .mat-warn .mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate {
     background: var(--mat-sys-error);
   }
 
-  .mat-pseudo-checkbox-checked,
-  .mat-pseudo-checkbox-indeterminate {
+  .mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked,
+  .mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate {
     &.mat-pseudo-checkbox-disabled {
       background: $disabled-color;
     }
@@ -430,7 +435,28 @@ $m3-theme: mat.define-theme((color: $color-config,
 
   // ─── Table (shared) ───────────────────────────────────────────
   .ontimize-table.o-table {
-    background-color: var(--mat-table-background-color, var(--mat-app-surface));
+    // The table is transparent so it shows the parent container's background
+    // (e.g. a white card) instead of Material's opaque surface colour. This also
+    // neutralises Material's own --mat-table-background-color on the inner table.
+    background-color: transparent;
+    --mat-table-background-color: transparent;
+
+    .mat-mdc-table {
+      background-color: transparent;
+    }
+
+    // fixed-header is on by default, so the sticky header must stay OPAQUE or the
+    // scrolled rows would show through it. It can't reliably inherit the parent
+    // colour (background-color is not inherited and the parent may itself be
+    // transparent), so it uses a theme-aware token matching a standard card
+    // container. Override --o-table-background to align it with a differently
+    // coloured container. Body cells stay transparent on purpose so the row
+    // hover/selected highlight remains visible.
+    thead,
+    .mat-mdc-header-row,
+    .mat-mdc-header-cell {
+      background-color: var(--o-table-background, var(--o-bg-card));
+    }
 
     tbody td.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background,
     thead tr th.o-table-column-select-checkbox .mat-checkbox-inner-container .mat-checkbox-background {
