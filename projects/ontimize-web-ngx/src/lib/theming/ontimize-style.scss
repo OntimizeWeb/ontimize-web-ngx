@@ -178,14 +178,19 @@
 //
 // Base font-size steps: 16px for scales 0→-2 (Material default),
 // 14px for scales -3→-5 (compact — reduces all rem-based type simultaneously).
+// Button-toggle heights match the button container heights at every scale
+// (Material's own button-toggle scale — 48/44/40/36/24px — does not line up
+// with the button heights, so o-button and mat-button-toggle would differ).
 $_extended-density-tokens: (
   0: (font-size: 16px,
+    --mat-standard-button-toggle-height: 40px, // = M3 default button height
   ),
   -1: (font-size: 16px,
     --mdc-text-button-container-height: 36px,
     --mdc-filled-button-container-height: 36px,
     --mdc-protected-button-container-height: 36px,
     --mdc-outlined-button-container-height: 36px,
+    --mat-standard-button-toggle-height: 36px,
   ),
   -2: (
     font-size: 16px,
@@ -193,30 +198,49 @@ $_extended-density-tokens: (
     --mdc-filled-button-container-height: 36px,
     --mdc-protected-button-container-height: 36px,
     --mdc-outlined-button-container-height: 36px,
+    --mat-standard-button-toggle-height: 36px,
     --mat-form-field-filled-label-display: block,
     --mat-form-field-filled-with-label-container-padding-top:20px,
     --mat-form-field-filled-with-label-container-padding-bottom:4px
     // --mdc-filled-text-field-label-text-size: 20px,
     // --mdc-outlined-text-field-label-text-size: 4px,
   ),
+  // Scales -3 → -5 also force the filled form-field floating label to stay
+  // visible (Material hides it whenever the container height drops below 52px,
+  // i.e. from scale -2 down). The with-label paddings follow Material's own
+  // formula — spec values (top 24 / bottom 8) minus the vertical deduction
+  // ((56px - height) / 2) — clamped at 0: -3 (44px) → 18/2, -4 (40px) → 16/0,
+  // -5 (36px) → 14/0.
   -3: (font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
+    --mat-standard-button-toggle-height: 32px,
+    --mat-form-field-filled-label-display: block,
+    --mat-form-field-filled-with-label-container-padding-top: 18px,
+    --mat-form-field-filled-with-label-container-padding-bottom: 2px,
   ),
   -4: (font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
-    --mat-form-field-container-vertical-padding: 9px
+    --mat-standard-button-toggle-height: 32px,
+    --mat-form-field-container-vertical-padding: 9px,
+    --mat-form-field-filled-label-display: block,
+    --mat-form-field-filled-with-label-container-padding-top: 16px,
+    --mat-form-field-filled-with-label-container-padding-bottom: 0px,
   ),
   -5: (font-size: 14px,
     --mdc-text-button-container-height: 32px,
     --mdc-filled-button-container-height: 32px,
     --mdc-protected-button-container-height: 32px,
     --mdc-outlined-button-container-height: 32px,
+    --mat-standard-button-toggle-height: 32px,
+    --mat-form-field-filled-label-display: block,
+    --mat-form-field-filled-with-label-container-padding-top: 14px,
+    --mat-form-field-filled-with-label-container-padding-bottom: 0px,
   ),
 );
 

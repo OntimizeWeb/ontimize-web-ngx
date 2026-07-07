@@ -214,7 +214,7 @@ $theme: ontimize-style.o-mat-light-theme((primary: $_primary,
       tertiary: $_tertiary,
       neutral: map.get($_palettes, neutral),
       typography: oxygen-typography.$typography,
-      density: -4,
+      density: -2,
     ));
 
 /* Dark theme with Noto Sans typography */
@@ -222,5 +222,5 @@ $dark-theme: ontimize-style.o-mat-dark-theme((primary: $_primary,
       tertiary: $_tertiary,
       neutral: map.get($_palettes, neutral),
       typography: oxygen-typography.$typography,
-      density: -4,
+      density: -2,
     ));
