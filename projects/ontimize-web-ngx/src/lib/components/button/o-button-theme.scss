@@ -5,36 +5,13 @@
 // the element that carries the class (cascading to the inner <button>) wins over
 // Material's :root-level emission regardless of selector specificity.
 @mixin o-action-importance-color($label, $icon) {
-  // ── Icon colour ──────────────────────────────────────────────────────────
-  // Live --mat- tokens; colour <mat-icon> inside any button and icon-buttons.
-  --mat-icon-color: #{$icon};
-  --mdc-icon-button-icon-color: #{$icon};
-  --mdc-text-button-with-icon-icon-color: #{$icon};
-  --mdc-outlined-button-with-icon-icon-color: #{$icon};
-  --mdc-protected-button-with-icon-icon-color: #{$icon};
-
-  // ── Label colour tokens ──────────────────────────────────────────────────
-  // Only the text-coloured variants (text / outlined / raised). Filled (flat)
-  // and fab buttons colour their container instead and receive their palette
-  // through getActionColor()/[color], so their label token is left untouched.
-  --mdc-text-button-label-text-color: #{$label};
-  --mdc-outlined-button-label-text-color: #{$label};
-  --mdc-protected-button-label-text-color: #{$label};
-  --mat-text-button-label-text-color: #{$label};
-  --mat-outlined-button-label-text-color: #{$label};
-  --mat-protected-button-label-text-color: #{$label};
-
-  // ── Direct colour override ───────────────────────────────────────────────
-  // In Material 3 the label-text-color token does NOT reliably win the cascade
-  // (Material applies `color: var(--mdc-outlined-button-label-text-color)` on
-  // `.mat-mdc-outlined-button:not(:disabled)`, specificity 0,2,0, and re-emits
-  // the token), so we set `color` straight on the button element — the
-  // projected label span inherits it. Each selector below is 0,3,0 and beats
-  // Material's rule. Scoped to text / outlined / raised / icon variants so
-  // filled (flat) and fab buttons are left to getActionColor().
-  // The `&.` selectors cover the class-on-button case (o-form / o-table /
-  // o-grid / o-list / o-tree built-in buttons); the plain `.` selectors cover
-  // the class-on-host case (the o-button component wrapping the mat button).
+  // All colour overrides are scoped to `:not(:disabled)` so a DISABLED button
+  // (label and icon) falls back to Material's disabled colours instead of keeping
+  // the importance colour. The `&.` selectors cover the class-on-button case
+  // (o-form / o-table / o-grid / o-list / o-tree built-in buttons); the plain `.`
+  // selectors cover the class-on-host case (the o-button component wrapping the
+  // mat button). Scoped to text / outlined / raised / icon variants so filled
+  // (flat) and fab buttons are left to getActionColor()/[color].
   &.mat-mdc-button:not(:disabled),
   &.mat-mdc-outlined-button:not(:disabled),
   &.mat-mdc-raised-button:not(:disabled),
@@ -43,6 +20,32 @@
   .mat-mdc-outlined-button:not(:disabled),
   .mat-mdc-raised-button:not(:disabled),
   .mat-mdc-icon-button:not(:disabled) {
+    // ── Icon colour ────────────────────────────────────────────────────────
+    // Live --mat- tokens; colour <mat-icon> inside any button and icon-buttons.
+    --mat-icon-color: #{$icon};
+    --mdc-icon-button-icon-color: #{$icon};
+    --mdc-text-button-with-icon-icon-color: #{$icon};
+    --mdc-outlined-button-with-icon-icon-color: #{$icon};
+    --mdc-protected-button-with-icon-icon-color: #{$icon};
+
+    // ── Label colour tokens ──────────────────────────────────────────────────
+    // Only the text-coloured variants (text / outlined / raised). Filled (flat)
+    // and fab buttons colour their container instead and receive their palette
+    // through getActionColor()/[color], so their label token is left untouched.
+    --mdc-text-button-label-text-color: #{$label};
+    --mdc-outlined-button-label-text-color: #{$label};
+    --mdc-protected-button-label-text-color: #{$label};
+    --mat-text-button-label-text-color: #{$label};
+    --mat-outlined-button-label-text-color: #{$label};
+    --mat-protected-button-label-text-color: #{$label};
+
+    // ── Direct colour override ───────────────────────────────────────────────
+    // In Material 3 the label-text-color token does NOT reliably win the cascade
+    // (Material applies `color: var(--mdc-outlined-button-label-text-color)` on
+    // `.mat-mdc-outlined-button:not(:disabled)`, specificity 0,2,0, and re-emits
+    // the token), so we set `color` straight on the button element — the
+    // projected label span inherits it. Each selector above is 0,3,0 and beats
+    // Material's rule.
     color: #{$label};
   }
 }
