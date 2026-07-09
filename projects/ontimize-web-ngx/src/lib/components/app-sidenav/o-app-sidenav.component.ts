@@ -14,6 +14,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
@@ -55,7 +56,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 
 @Component({
   standalone: true,
-  imports: [MatSidenavModule, MatIconModule, OAppSidenavImageComponent, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
+  imports: [MatSidenavModule, MatIconModule, MatListModule, OAppSidenavImageComponent, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent],
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,

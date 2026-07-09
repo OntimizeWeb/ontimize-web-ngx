@@ -1,10 +1,8 @@
-$sidenav-spacing-unit: 8px;
 $sidenav-width: 240px;
 $sidenav-closed-width: 56px;
 $sidenav-inner-margin: 8px;
 $sidenav-inner-width: calc(100% - #{$sidenav-inner-margin * 2});
 $sidenav-diff: -183px;
-$header-height: 48px;
 $transition-duration: 500ms;
 
 .o-app-sidenav {
@@ -26,17 +24,12 @@ $transition-duration: 500ms;
 
   .o-app-sidenav-menu-group,
   .o-app-sidenav-menu-item {
-    a {
-      margin-left: $sidenav-spacing-unit;
-
-      .mat-icon svg {
-        display: flex;
-      }
+    a .mat-icon svg {
+      display: flex;
     }
 
     &[disabled=true] {
 
-      .mat-button-focus-overlay,
       .mat-mdc-button-persistent-ripple {
         display: none;
       }
@@ -119,10 +112,6 @@ $transition-duration: 500ms;
         }
       }
 
-      .o-app-sidenav-content-container {
-        padding-bottom: 16px;
-      }
-
       .sidenav-toggle-container {
         height: 48px;
       }
@@ -143,168 +132,145 @@ $transition-duration: 500ms;
         }
       }
 
-      nav {
-        width: 100%;
-
-        a {
-          border-radius: 8px;
-          box-sizing: border-box;
-          display: block;
-          line-height: 40px;
-          height: 40px;
-          font-size: 14px;
-          max-width: 100%;
-          margin-bottom: 2px;
-          font-weight: normal;
-
-          >.mat-icon {
-            vertical-align: middle;
-            height: 24px;
-            width: 24px;
-            font-size: 24px;
-          }
-        }
-      }
-
       // ── Open state ──────────────────────────────────────────────
       &:not(.mat-drawer-closed) {
-        .o-app-sidenav-menugroup {
-          transition: padding $transition-duration 0s;
+        // (The old icon margin-right is gone: the matListItemIcon slot provides
+        // the leading-icon spacing by itself.)
 
-          .o-app-sidenav-menugroup-arrow {
-            transition: $transition-duration transform cubic-bezier(.25, .8, .25, 1);
+        // M3 nav list (open state). matListItemTitle already truncates with an
+        // ellipsis. The list tokens + slot margins below replicate the previous
+        // custom-button menu metrics exactly: 40px rows / 14px type / 24px icons
+        // at the root, with a 16px icon-text gap (`a { padding: 0 16px }` + icon
+        // `margin-right: 16px` in the old markup).
+        .o-app-sidenav-nav-list {
+          // MDC's base .mdc-list rule is `padding: 8px 0` (top AND bottom); the
+          // leftover 8px at the bottom made the menu taller than `.navMenu`'s
+          // available height, triggering a spurious vertical scrollbar.
+          padding: 0;
+          --mdc-list-list-item-container-shape: 8px;
+          --mdc-list-list-item-one-line-container-height: 40px;
+          //--mdc-list-list-item-label-text-size: 14px;
+          --mdc-list-list-item-leading-icon-size: 24px;
+          // The legacy design paints its own hover/selected backgrounds (see the
+          // sidenav theme); disable the M3 state layers so no second tint shows.
+          --mdc-list-list-item-hover-state-layer-opacity: 0;
+          --mdc-list-list-item-focus-state-layer-opacity: 0;
+          // MatListItem marks the row with `mdc-list-item--with-trailing-meta`
+          // whenever a matListItemMeta child exists (the group arrow), and MDC's
+          // CSS then sets .mdc-list-item__end's font-family from this token —
+          // overriding the arrow's own `.material-symbols-outlined` font and
+          // rendering the literal text ("chevron_right") instead of the glyph.
+          --mdc-list-list-item-trailing-supporting-text-font: 'Material Symbols Outlined';
 
-            &.opened {
-              transform: rotate(90deg);
+          a.mat-mdc-list-item {
+            // Direct property instead of the shape token: robust regardless of
+            // what the app theme emits for --mdc-list-list-item-container-shape.
+            border-radius: 8px;
+
+            &.mdc-list-item--with-leading-icon .mdc-list-item__start {
+              margin-left: 16px;
+              margin-right: 16px; // MDC default is 32px; the legacy gap is 16px
+            }
+
+            // The group arrow sits in the meta slot, whose label-small typography
+            // shrinks the ligature to ~11px (invisible); restore the icon size.
+            // The slot also has pointer-events: none, but the arrow carries its
+            // own (click) toggle. margin-right keeps the old 16px right inset
+            // (with-trailing-meta items get padding-right: 0) and margin-left
+            // drops MDC's 28px minimum gap — the title's flex growth already
+            // pins the arrow to the right, and the extra 28px only inflated
+            // every row's intrinsic width.
+            .o-app-sidenav-menugroup-arrow.mdc-list-item__end {
+              font-size: 24px;
+              line-height: 1;
+              width: 24px;
+              height: 24px;
+              margin-left: 0;
+              margin-right: 16px;
+              pointer-events: auto;
             }
           }
         }
 
-        .o-app-sidenav-menugroup,
-        .o-app-sidenav-menuitem {
-          mat-icon:not(.o-app-sidenav-menugroup-arrow) {
-            margin-right: ($sidenav-spacing-unit * 2);
+        // show-ellipsis-menu=false (default): labels never truncate. The list
+        // sizes to its widest row (M3's __content is an overflow:hidden flex
+        // item whose automatic min-width is 0, which would otherwise let the
+        // title collapse and ellipsize), and `.navMenu` scrolls horizontally
+        // only when that widest row exceeds the available width. With
+        // show-ellipsis-menu=true (`.ellipsis-menu-items`), the M3 defaults
+        // apply instead: constrained width + title ellipsis, no scroll.
+        &:not(.ellipsis-menu-items) {
+          .navMenu {
+            overflow-x: auto;
           }
-        }
 
-        o-app-sidenav-menu-group,
-        o-app-sidenav-menu-item {
-          // display: block;
-          // width: 100%;
-          // overflow: hidden;
+          .o-app-sidenav-nav-list {
+            // Without this floor the rows would just clip at the available width
+            // (MDC's .mdc-list-item is overflow:hidden), showing neither the full
+            // text nor a scrollbar.
+            min-width: max-content;
 
-          // li, & {
-          //   width: 100%;
-          //   overflow: hidden;
-          // }
+            // A collapsed group's children (height 0 + overflow hidden) still
+            // count towards the list's max-content width, so a long label hidden
+            // inside a closed group would trigger the horizontal scrollbar with
+            // nothing visibly overflowing. Inline-size containment zeroes that
+            // contribution while collapsed, without affecting the expand/collapse
+            // height animation (the `opened` class flips as soon as the group is
+            // toggled).
+            .o-app-sidenav-menugroup:not(.opened)+.o-app-sidenav-menugroup-items-container {
+              contain: inline-size;
+            }
 
-          a {
-            padding: 0 16px;
-            margin: 0;
-            display: flex;
-            width: 100%;
-            // box-sizing: border-box;
-            // overflow: hidden;
+            a.mat-mdc-list-item {
+              .mdc-list-item__content {
+                flex: 1 0 auto;
+                overflow: visible;
+                text-overflow: clip;
+              }
 
-            .mdc-button__label {
-              display: flex;
-              min-width: 0;
-              flex: 1;
-              overflow: hidden;
-
-              >div {
-                display: flex;
-                align-items: center;
-                min-width: 0;
-                width: 100%;
-                overflow: hidden;
-
-                .o-app-sidenav-menuitem-title,
-                .o-app-sidenav-menugroup-title {
-                  min-width: 0;
-                  flex: 1;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                }
+              .mdc-list-item__primary-text {
+                overflow: visible;
+                text-overflow: clip;
               }
             }
           }
         }
 
         // Indentation per level via padding on the container (not on `a`)
-        // so hover fills the reduced-width container without generating horizontal scroll.
+        // so hover fills the reduced-width container without generating horizontal
+        // scroll. The per-level list tokens reproduce the previous sizes
+        // (36px/12px for level-1 children, 32px/11px/20px-icons for level-2
+        // children), and the 22px leading offsets keep the old content position
+        // (16px item padding + the 6px the legacy `.mdc-button__label` added).
         .o-app-sidenav-menu-group-level-1 {
-          a {
-            font-size: 14px;
-            line-height: 40px;
-            height: 40px;
-          }
-
           >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
             padding-left: 16px;
             box-sizing: border-box;
             width: 100%;
             overflow: hidden;
+            --mdc-list-list-item-one-line-container-height: 36px;
+            //--mdc-list-list-item-label-text-size: 12px;
 
-            .o-app-sidenav-menu-group,
-            .o-app-sidenav-menu-item {
-              a {
-                font-size: 12px;
-                line-height: 36px;
-                height: 36px;
-                max-width: 100%;
-                overflow: hidden;
-
-                .mat-mdc-button-touch-target {
-                  height: 36px;
-                }
+            a.mat-mdc-list-item {
+              &.mdc-list-item--with-leading-icon .mdc-list-item__start {
+                margin-left: 22px;
               }
-            }
 
-            a .mdc-button__label {
-              padding-left: 6px;
+              &:not(.mdc-list-item--with-leading-icon) {
+                padding-left: 22px;
+              }
             }
           }
         }
 
         .o-app-sidenav-menu-group-level-2 {
-          a {
-            font-size: 12px;
-            line-height: 36px;
-            height: 36px;
-
-            .mat-mdc-button-touch-target {
-              height: 36px;
-            }
-          }
-
           >.o-app-sidenav-menugroup.opened+.o-app-sidenav-menugroup-items-container {
             padding-left: 32px;
             box-sizing: border-box;
             width: 100%;
             overflow: hidden;
-
-            .o-app-sidenav-menu-group,
-            .o-app-sidenav-menu-item {
-              a {
-                font-size: 11px;
-                line-height: 32px;
-                height: 32px;
-                max-width: 100%;
-                overflow: hidden;
-
-                .mat-mdc-button-touch-target {
-                  height: 32px;
-                }
-
-                .mat-icon {
-                  font-size: 20px;
-                  height: 20px;
-                  width: 20px;
-                }
-              }
-            }
+            --mdc-list-list-item-one-line-container-height: 32px;
+            --mdc-list-list-item-leading-icon-size: 20px;
           }
         }
       }
@@ -322,17 +288,7 @@ $transition-duration: 500ms;
         }
 
         .o-app-sidenav-item {
-          &:not(.o-user-info) {
-            cursor: pointer;
-          }
-
-          &.o-user-info {
-
-            &:focus,
-            &:hover {
-              color: inherit;
-            }
-          }
+          cursor: pointer;
         }
 
         .o-app-sidenav-menugroup,
@@ -347,12 +303,24 @@ $transition-duration: 500ms;
           margin-left: auto;
 
           a {
+            border-radius: 8px;
+            box-sizing: border-box;
+            display: block;
+            font-size: 14px;
+            font-weight: normal;
             line-height: 40px;
             height: 40px;
             width: 40px;
             min-width: 40px;
             padding: 0;
             margin: 0;
+
+            >.mat-icon {
+              vertical-align: middle;
+              height: 24px;
+              width: 24px;
+              font-size: 24px;
+            }
 
             .mat-icon {
               margin: auto;
@@ -382,10 +350,6 @@ $transition-duration: 500ms;
             margin-right: 8px;
           }
         }
-      }
-
-      &.mat-drawer-closing {
-        transform: translate3d($sidenav-diff, 0, 0);
       }
 
       .o-app-sidenav-menugroup-arrow {

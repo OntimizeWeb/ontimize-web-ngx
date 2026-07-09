@@ -1,18 +1,43 @@
 @if (!hidden) {
-  @if (shouldShowTooltip) {
-    <a mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
-      [class.o-app-sidenav-viewer-sidenav-item-selected]="active" [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip"
-      matTooltipPosition="right" [matTooltipShowDelay]="sidenavOpened?500:0">
-      <ng-container *ngTemplateOutlet="contentButton"></ng-container>
+  @if (sidenavOpened) {
+    <!-- Open state: M3 nav-list item -->
+    <a mat-list-item class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+      [class.o-app-sidenav-viewer-sidenav-item-selected]="active"
+      [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
+      [matTooltipShowDelay]="500">
+      @if (menuGroup.svgIcon) {
+        <mat-icon matListItemIcon [svgIcon]="menuGroup.svgIcon"></mat-icon>
+      }
+      @if (menuGroup.icon) {
+        <mat-icon matListItemIcon>{{ menuGroup.icon }}</mat-icon>
+      }
+      <span matListItemTitle class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
+      @if (appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened) {
+        <mat-icon matListItemMeta [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow"
+          (click)="toggle($event)"
+        (keydown)="toggle($event)">keyboard_arrow_down</mat-icon>
+      } @else {
+        <mat-icon matListItemMeta [id]="'arrow_icon_' + menuGroup.id"
+          class="o-app-sidenav-menugroup-arrow">{{ menuGroup.opened ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
+      }
     </a>
   } @else {
-    <a mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
-      [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
-      <ng-container *ngTemplateOutlet="contentButton"></ng-container>
-    </a>
+    <!-- Closed state (rail): icon-only mat-button -->
+    @if (shouldShowTooltip) {
+      <a mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+        [class.o-app-sidenav-viewer-sidenav-item-selected]="active" [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip"
+        matTooltipPosition="right" [matTooltipShowDelay]="0">
+        <ng-container *ngTemplateOutlet="contentButton"></ng-container>
+      </a>
+    } @else {
+      <a mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+        [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+        <ng-container *ngTemplateOutlet="contentButton"></ng-container>
+      </a>
+    }
   }
   <div class="o-app-sidenav-menugroup-items-container">
-    <ul [@contentExpansion]="contentExpansion" class="o-app-sidenav-menugroup-ul">
+    <div [@contentExpansion]="contentExpansion" class="o-app-sidenav-menugroup-ul">
       @for (menuItem of menuGroup.items; track menuItem) {
         @if (appMenuService.isVisible(menuItem)) {
           @if (!$any(menuItem).items) {
@@ -26,44 +51,20 @@
               </o-app-sidenav-menu-group>
             }
           }
-          <ng-template #menuGroup>
-            @if (appMenuService.getMenuItemType(menuItem) === 'group') {
-              <o-app-sidenav-menu-group [menu-group]="menuItem" [sidenav-opened]="sidenavOpened" [level]="level + 1"
-                (onItemClick)="onMenuItemClick($event)">
-              </o-app-sidenav-menu-group>
-            }
-          </ng-template>
         }
       }
-    </ul>
+    </div>
   </div>
 }
 
 
 <ng-template #contentButton>
   <div class="o-flex-row o-layout-align-start-center o-flex-fill">
-    @if (sidenavOpened) {
-      @if (menuGroup.svgIcon) {
-        <mat-icon [svgIcon]="menuGroup.svgIcon"></mat-icon>
-      }
-      @if (menuGroup.icon) {
-        <mat-icon>{{ menuGroup.icon }}</mat-icon>
-      }
-      <span class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
-      @if (appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened) {
-        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow"
-          (click)="toggle($event)"
-        (keydown)="toggle($event)"> chevron_right</mat-icon>
-      } @else {
-        <mat-icon [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow">chevron_right</mat-icon>
-      }
+    @if (menuGroup.svgIcon) {
+      <mat-icon [svgIcon]="menuGroup.svgIcon"></mat-icon>
     }
-    @if (!sidenavOpened) {
-      @if (menuGroup.svgIcon) {
-        <mat-icon [svgIcon]="menuGroup.svgIcon"></mat-icon>
-        } @if (menuGroup.icon) {
-        <mat-icon>{{ menuGroup.icon }}</mat-icon>
-      }
+    @if (menuGroup.icon) {
+      <mat-icon>{{ menuGroup.icon }}</mat-icon>
     }
   </div>
 </ng-template>

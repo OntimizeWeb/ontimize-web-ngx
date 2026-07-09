@@ -1,4 +1,3 @@
-import { NgTemplateOutlet } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -14,6 +13,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NavigationEnd, Router } from '@angular/router';
@@ -49,7 +49,7 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM = [
 
 @Component({
   standalone: true,
-  imports: [NgTemplateOutlet, MatButtonModule, MatIconModule, MatTooltipModule, OTranslatePipe, OLanguageSelectorModule],
+  imports: [MatButtonModule, MatIconModule, MatListModule, MatTooltipModule, OTranslatePipe, OLanguageSelectorModule],
   selector: 'o-app-sidenav-menu-item',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV_MENU_ITEM,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV_MENU_ITEM,

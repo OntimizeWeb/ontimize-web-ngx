@@ -4,6 +4,18 @@
     .o-app-sidenav-menu-group,
     .o-app-sidenav-menu-item {
       --mdc-text-button-label-text-color: var(--o-fg-text);
+      // M3 nav-list items (open state): same colours the old buttons inherited
+      // (icons/arrow took the button label colour), and the hover primary that
+      // `a:hover { color: … }` used to give — the list label/icon consume
+      // tokens instead of inheriting the anchor colour.
+      --mdc-list-list-item-label-text-color: var(--o-fg-text);
+      --mdc-list-list-item-leading-icon-color: var(--o-fg-text);
+      --mdc-list-list-item-trailing-icon-color: var(--o-fg-text);
+      // The group arrow lives in the meta slot, coloured by the trailing
+      // supporting-text token (not the trailing-icon one).
+      --mdc-list-list-item-trailing-supporting-text-color: var(--o-fg-text);
+      --mdc-list-list-item-hover-label-text-color: var(--mat-sys-primary);
+      --mdc-list-list-item-hover-leading-icon-color: var(--mat-sys-primary);
     }
 
     .mat-sidenav.o-app-sidenav-sidenav {
@@ -27,32 +39,58 @@
         a.o-app-sidenav-viewer-sidenav-item-selected:hover {
           background-color: var(--o-sidenav-hover-bg);
         }
+
+        // Selected list item: keep label/icons/arrow on the on-primary-container
+        // colour even while hovered, exactly as the legacy anchor colour did.
+        a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
+          --mdc-list-list-item-label-text-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-leading-icon-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-trailing-icon-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-hover-label-text-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-hover-leading-icon-color: var(--mat-sys-on-primary-container);
+
+          .o-app-sidenav-menugroup-arrow {
+            color: var(--mat-sys-on-primary-container);
+          }
+        }
+
+        // The arrow (meta slot) has no hover token: recolour it explicitly, as
+        // it used to inherit the anchor's hover colour.
+        a.mat-mdc-list-item:hover:not(.o-app-sidenav-viewer-sidenav-item-selected) .o-app-sidenav-menugroup-arrow {
+          color: var(--mat-sys-primary);
+        }
       }
 
       // ── Open state only ──────────────────────────────────────────
       .mat-drawer.o-app-sidenav-sidenav:not(.mat-drawer-closed) {
-        .mat-sidenav.o-app-sidenav-sidenav {
-          background: var(--o-bg-status-bar);
-          box-shadow: none;
-        }
-
+        // Vertical guide line for level-1 children — replica of the legacy
+        // `.mdc-button__label { border-left: 2px … }`: drawn as a background
+        // gradient 16px into the row (the label's old x-position, before the
+        // 6px content offset) so the hover/selected backgrounds still fill the
+        // whole row beneath it, and recoloured per item on hover/selection.
         .o-app-sidenav-menu-group-level-1 {
           > .o-app-sidenav-menugroup.opened + .o-app-sidenav-menugroup-items-container {
-            a .mdc-button__label {
-              border-left: 2px solid var(--o-fg-divider);
+            a.mat-mdc-list-item {
+              background-image: linear-gradient(var(--o-fg-divider), var(--o-fg-divider));
+              background-size: 2px 100%;
+              background-position: 16px 0;
+              background-repeat: no-repeat;
             }
 
-            a.o-app-sidenav-viewer-sidenav-item-selected .mdc-button__label,
-            a:hover .mdc-button__label {
-              border-color: var(--mat-sys-primary);
+            a.mat-mdc-list-item:hover,
+            a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
+              background-image: linear-gradient(var(--mat-sys-primary), var(--mat-sys-primary));
             }
           }
         }
 
+        // As before, the guide line does not continue into level-2 children.
         .o-app-sidenav-menu-group-level-2 {
           > .o-app-sidenav-menugroup.opened + .o-app-sidenav-menugroup-items-container {
-            a .mdc-button__label {
-              border-left: none;
+            a.mat-mdc-list-item,
+            a.mat-mdc-list-item:hover,
+            a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
+              background-image: none;
             }
           }
         }
@@ -79,10 +117,6 @@
       .o-user-info .o-user-info-wrapper {
         font-weight: 500;
       }
-    }
-
-    .mat-mdc-menu-panel {
-      border: 1px solid var(--o-fg-divider);
     }
   }
 }

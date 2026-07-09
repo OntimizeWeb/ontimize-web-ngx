@@ -16,21 +16,40 @@
       <o-app-sidenav-image [opened-src]="openedSidenavImg" [closed-src]="closedSidenavImg"> </o-app-sidenav-image>
       <ng-content select="o-app-layout-sidenav-projection-start"></ng-content>
       <div class="navMenu">
-        @for (menuRootItem of menuRootArray; track menuRootItem) {
-          <nav>
-            @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)) {
-              <ul>
+        @if (sidenav.opened) {
+          <!-- Open state: M3 nav list. Items/groups are direct children (no <ul>/<li> wrapper). -->
+          <mat-nav-list class="o-app-sidenav-nav-list">
+            @for (menuRootItem of menuRootArray; track menuRootItem) {
+              @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)) {
                 <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
                   [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
                 </o-app-sidenav-menu-item>
-              </ul>
+              }
+              @if (appMenuService.getMenuItemType(menuRootItem) === 'group' && appMenuService.isVisible(menuRootItem)) {
+                <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
+                  (onItemClick)="onMenuItemClick()">
+                </o-app-sidenav-menu-group>
+              }
             }
-            @if (appMenuService.getMenuItemType(menuRootItem) === 'group' && appMenuService.isVisible(menuRootItem)) {
-              <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
-                (onItemClick)="onMenuItemClick()">
-              </o-app-sidenav-menu-group>
-            }
-          </nav>
+          </mat-nav-list>
+        } @else {
+          <!-- Closed state (rail): icon-only mat-button markup, items wrapped in <ul>/<li>. -->
+          @for (menuRootItem of menuRootArray; track menuRootItem) {
+            <nav>
+              @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)) {
+                <ul>
+                  <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
+                    [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
+                  </o-app-sidenav-menu-item>
+                </ul>
+              }
+              @if (appMenuService.getMenuItemType(menuRootItem) === 'group' && appMenuService.isVisible(menuRootItem)) {
+                <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
+                  (onItemClick)="onMenuItemClick()">
+                </o-app-sidenav-menu-group>
+              }
+            </nav>
+          }
         }
       </div>
       <div class="layout-sidenav-projection-end">
