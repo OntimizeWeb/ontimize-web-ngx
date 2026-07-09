@@ -37,7 +37,8 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
   templateUrl: 'o-table-export-dialog.component.html',
   styleUrls: ['o-table-export-dialog.component.scss'],
   providers: [
-    OntimizeExportServiceProvider
+    OntimizeExportServiceProvider,
+    OTableExportButtonService
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
