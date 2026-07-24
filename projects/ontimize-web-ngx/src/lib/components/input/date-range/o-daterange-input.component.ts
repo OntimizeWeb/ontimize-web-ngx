@@ -11,14 +11,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
 import { DateRange, MatDatepickerInputEvent, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
-import moment from 'moment';
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
-import { MomentService } from '../../../services/moment.service';
-import { OntimizeMomentDateAdapter } from '../../../shared';
+import { LuxonService } from '../../../services/luxon.service';
+import { O_DATE_ADAPTER_PROVIDERS, parseDateByValueTypeWithAdapter } from '../../../shared';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { SQLTypes } from '../../../util/sqltypes';
@@ -54,7 +53,7 @@ export const DEFAULT_INPUTS_O_DATERANGE_INPUT = [
   outputs: DEFAULT_OUTPUTS_O_DATERANGE_INPUT,
   inputs: DEFAULT_INPUTS_O_DATERANGE_INPUT,
   providers: [
-    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    ...O_DATE_ADAPTER_PROVIDERS,
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ODateRangeInputComponent), multi: true }
   ]
 })
@@ -91,8 +90,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   protected _oMinDate: Date;
   set oMinDate(value: any) {
     if (value) {
-      const momentD = this.getValueAsMoment(value)
-      if (Util.isDefined(momentD)) {
+      const date = this.getValueAsDateObject(value)
+      if (Util.isDefined(date)) {
         this._oMinDate = this.convertToDate(value);
       }
     }
@@ -151,10 +150,10 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     return this.mode === 'desktop' || (this.mode === 'auto' && !this.breakpointObserver.isMatched(Breakpoints.Handset))
   }
 
-  public oformat: string = 'L';
+  public oformat: string;
 
   protected olocale: string;
-  private momentSrv: MomentService;
+  private luxonSrv: LuxonService;
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
 
@@ -163,11 +162,14 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   constructor(
     elRef: ElementRef,
     injector: Injector,
-    protected momentDateAdapter: DateAdapter<OntimizeMomentDateAdapter>,
+    protected dateAdapter: DateAdapter<any>,
     protected breakpointObserver: BreakpointObserver
   ) {
     super(elRef, injector);
-    this.momentSrv = this.injector.get(MomentService);
+    this.luxonSrv = this.injector.get(LuxonService);
+    // Default format follows the active date engine ('D' for Luxon, 'L' for moment)
+    const dateFormats: MatDateFormats | null = this.injector.get(MAT_DATE_FORMATS, null);
+    this.oformat = dateFormats?.display?.dateInput ?? 'D';
     this.range = new FormGroup({
       [this.startKey]: new OFormControl(),
       [this.endKey]: new OFormControl()
@@ -178,16 +180,16 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     super.ngOnInit();
     this.subscribeToMediaChanges();
     if (!this.olocale) {
-      this.olocale = this.momentSrv.getLocale();
+      this.olocale = this.luxonSrv.getLocale();
     }
 
     if (this.oformat) {
-      (this.momentDateAdapter as any).oFormat = this.oformat;
+      (this.dateAdapter as any).oFormat = this.oformat;
     }
 
-    this.momentDateAdapter.setLocale(this.olocale);
+    this.dateAdapter.setLocale(this.olocale);
     this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
-      this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
+      this.dateAdapter.setLocale(this.translateService.getCurrentLang());
       this.setValue(this.getValue());
     });
 
@@ -233,9 +235,9 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   protected rangeDateValidator(control: AbstractControl): ValidationErrors {
 
     if (control.value instanceof Object && !this.isObjectDataRangeNull(control)) {
-      const endValue = this.getValueAsMoment(control.value[this._endKey]);
-      const startValue = this.getValueAsMoment(control.value[this._startKey]);
-      if (Util.isDefined(endValue) && Util.isDefined(startValue) && endValue.isSameOrBefore(startValue)) {
+      const endValue = this.getValueAsDateObject(control.value[this._endKey]);
+      const startValue = this.getValueAsDateObject(control.value[this._startKey]);
+      if (Util.isDefined(endValue) && Util.isDefined(startValue) && endValue.valueOf() <= startValue.valueOf()) {
         return {
           dateRange: true
         };
@@ -245,14 +247,14 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   protected minDateValidator(control: AbstractControl): ValidationErrors {
-    const mindate = moment(this.oMinDate);
+    const mindate = this.dateAdapter.deserialize(this.oMinDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
-      const startValue = this.getValueAsMoment(control.value[this._startKey]);
-      if (Util.isDefined(startValue) && startValue.isBefore(mindate)) {
+      const startValue = this.getValueAsDateObject(control.value[this._startKey]);
+      if (Util.isDefined(startValue) && startValue.valueOf() < mindate.valueOf()) {
         return {
           dateRangeMin: {
-            dateMin: mindate.format(this.oformat)
+            dateMin: this.dateAdapter.format(mindate, this.oformat)
           }
         };
       }
@@ -261,14 +263,14 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   }
 
   protected maxDateValidator(control: AbstractControl): ValidationErrors {
-    const maxdate = moment(this.oMaxDate);
+    const maxdate = this.dateAdapter.deserialize(this.oMaxDate);
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
-      const endValue = this.getValueAsMoment(control.value[this._endKey]);
-      if (Util.isDefined(endValue) && endValue.isAfter(maxdate)) {
+      const endValue = this.getValueAsDateObject(control.value[this._endKey]);
+      if (Util.isDefined(endValue) && endValue.valueOf() > maxdate.valueOf()) {
         return {
           dateRangeMax: {
-            dateMax: maxdate.format(this.oformat)
+            dateMax: this.dateAdapter.format(maxdate, this.oformat)
           }
         };
       }
@@ -279,9 +281,10 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   protected parseDateValidator(control: AbstractControl): ValidationErrors {
     if ((control.value instanceof Object)
       && !this.isObjectDataRangeNull(control)) {
-      const endValue = this.getValueAsMoment(control.value[this._endKey]);
-      const startValue = this.getValueAsMoment(control.value[this._startKey]);
-      if ((!Util.isDefined(endValue) || !endValue.isValid()) || (!Util.isDefined(startValue) || !startValue.isValid())) {
+      const endValue = this.getValueAsDateObject(control.value[this._endKey]);
+      const startValue = this.getValueAsDateObject(control.value[this._startKey]);
+      // getValueAsDateObject already returns undefined for unparseable values
+      if (!Util.isDefined(endValue) || !Util.isDefined(startValue)) {
         return {
           dateRangeParse: {
             format: this.oformat + this.separator + this.oformat
@@ -343,10 +346,13 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
     if (!Util.isDefined(val)) return null;
 
     switch (this.valueType) {
-      case 'string':
-        return typeof val === 'string' && moment(val, this.oformat).isValid()
-          ? new Date(moment(val, this.oformat).valueOf())
-          : null;
+      case 'string': {
+        if (typeof val !== 'string') {
+          return null;
+        }
+        const date = this.dateAdapter.parse(val, this.oformat);
+        return Util.isDefined(date) && this.dateAdapter.isValid(date) ? new Date(date.valueOf()) : null;
+      }
 
       case 'date':
         return val instanceof Date ? val : null;
@@ -356,7 +362,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
       case 'iso-8601':
         if (typeof val === 'string') {
-          return moment(val).isValid() ? new Date(moment(val).valueOf()) : null;
+          const date = this.dateAdapter.deserialize(val);
+          return Util.isDefined(date) && this.dateAdapter.isValid(date) ? new Date(date.valueOf()) : null;
         } else if (typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP) {
           return new Date(val);
         }
@@ -372,8 +379,8 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
     if (dateRangeValue.start && dateRangeValue.end) {
       let value = {
-        [this.startKey]: Util.parseByValueType(dateRangeValue.start, this.valueType, this.oformat),
-        [this.endKey]: Util.parseByValueType(dateRangeValue.end, this.valueType, this.oformat)
+        [this.startKey]: parseDateByValueTypeWithAdapter(this.dateAdapter, dateRangeValue.start.valueOf(), this.valueType, this.oformat),
+        [this.endKey]: parseDateByValueTypeWithAdapter(this.dateAdapter, dateRangeValue.end.valueOf(), this.valueType, this.oformat)
       };
       this.setValue(value, {
         changeType: OValueChangeEvent.USER_CHANGE,
@@ -402,32 +409,37 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       control?.markAsTouched();
     });
   }
-  protected getValueAsMoment(val: any): any {
+  /** Normalizes a value in the configured value-type to the active adapter's date object. */
+  protected getValueAsDateObject(val: any): any {
     if (!Util.isDefined(val)) {
       return val;
     }
-    let result;
+    let result: any;
     switch (true) {
       case this.valueType === 'string' && typeof val === 'string':
-        result = moment(val, this.oformat);
+        result = this.dateAdapter.parse(val, this.oformat);
         break;
       case this.valueType === 'date' && val instanceof Date:
+        result = this.dateAdapter.deserialize(val);
+        break;
       case this.valueType === 'timestamp' && typeof val === 'number':
+        result = this.dateAdapter.deserialize(new Date(val));
+        break;
       case this.valueType === 'iso-8601' && typeof val === 'string':
-        result = moment(val)
+        result = this.dateAdapter.deserialize(val);
         break;
       case this.valueType === 'iso-8601':
         if (typeof val !== 'string') {
           const acceptTimestamp = typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
           if (acceptTimestamp) {
-            result = moment(val)
+            result = this.dateAdapter.deserialize(new Date(val));
           }
         }
         break;
       default:
         break;
     }
-    return Util.isDefined(result) && result.isValid() ? result : undefined
+    return Util.isDefined(result) && this.dateAdapter.isValid(result) ? result : undefined
   }
 
 

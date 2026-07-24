@@ -9,6 +9,7 @@ import { ColumnsFilterPipe } from '../pipes/columns-filter.pipe';
 import { OCurrencyPipe } from '../pipes/o-currency.pipe';
 import { OIconPipe } from '../pipes/o-icon.pipe';
 import { OIntegerPipe } from '../pipes/o-integer.pipe';
+import { OLuxonPipe } from '../pipes/o-luxon.pipe';
 import { OMomentPipe } from '../pipes/o-moment.pipe';
 import { OPercentPipe } from '../pipes/o-percentage.pipe';
 import { ORealPipe } from '../pipes/o-real.pipe';
@@ -38,6 +39,7 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     IsEmptyValuePipe,
     OIntegerPipe,
     ORealPipe,
+    OLuxonPipe,
     OMomentPipe,
     OCurrencyPipe,
     OPercentPipe,
@@ -63,6 +65,7 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OrderByPipe,
     OIntegerPipe,
     ORealPipe,
+    OLuxonPipe,
     OMomentPipe,
     OCurrencyPipe,
     OPercentPipe,

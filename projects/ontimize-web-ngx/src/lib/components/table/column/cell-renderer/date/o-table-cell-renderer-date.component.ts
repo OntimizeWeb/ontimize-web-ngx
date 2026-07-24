@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { IMomentPipeArgument, OMomentPipe } from '../../../../../pipes/o-moment.pipe';
+import { ILuxonPipeArgument, OLuxonPipe } from '../../../../../pipes/o-luxon.pipe';
+import { OMomentPipe } from '../../../../../pipes/o-moment.pipe';
+import { injectODateAdapterPipe } from '../../../../../shared/material/date/o-date-adapter.provider';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
-  // format [string]: date format. See MomentJS (http://momentjs.com/).
+  // format [string]: date format, interpreted by the active date adapter (Luxon by default; moment when O_DATE_ADAPTER is 'moment').
   'format'
 ];
 
@@ -14,12 +16,12 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE = [
   templateUrl: './o-table-cell-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_DATE,
-  providers: [OMomentPipe]
+  providers: [OLuxonPipe, OMomentPipe]
 })
 export class OTableCellRendererDateComponent extends OBaseTableCellRenderer implements OnInit {
 
-  protected componentPipe = inject(OMomentPipe);
-  protected pipeArguments: IMomentPipeArgument;
+  protected componentPipe = injectODateAdapterPipe();
+  protected pipeArguments: ILuxonPipeArgument;
 
   protected format: string;
 

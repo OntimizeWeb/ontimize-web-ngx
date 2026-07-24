@@ -10,16 +10,13 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
-import moment from 'moment';
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
-import { MomentService } from '../../../services/moment.service';
-import { OntimizeMomentDateAdapter } from '../../../shared/material/date/ontimize-moment-date-adapter';
-import { dateFormatFactory } from '../../../shared/material/date/mat-date-formats.factory';
+import { LuxonService } from '../../../services/luxon.service';
+import { O_DATE_ADAPTER_PROVIDERS, parseDateByValueTypeWithAdapter } from '../../../shared/material/date/o-date-adapter.provider';
 import { DateCustomClassFunction } from '../../../types/date-custom-class.type';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
@@ -53,8 +50,7 @@ export const DEFAULT_INPUTS_O_DATE_INPUT = [
   inputs: DEFAULT_INPUTS_O_DATE_INPUT,
   encapsulation: ViewEncapsulation.None,
   providers: [
-    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useFactory: dateFormatFactory },
+    ...O_DATE_ADAPTER_PROVIDERS,
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ODateInputComponent), multi: true }
   ]
 })
@@ -62,25 +58,25 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
   @BooleanInputConverter()
   public textInputEnabled: boolean = true;
-  protected _oformat: string = 'L';
+  protected _oformat: string;
   protected olocale: string;
   protected updateLocaleOnChange: boolean = false;
   protected oStartView: 'month' | 'year' = 'month';
   set oMinDate(value: string) {
     if (value) {
-      const momentD = this.getValueAsMoment(value)
-      if (Util.isDefined(momentD)) {
-        this.datepickerInput.min = momentD.toDate();
-        this.minDateString = momentD.format(this.oformat);
+      const date = this.getValueAsDateObject(value)
+      if (Util.isDefined(date)) {
+        this.datepickerInput.min = new Date(date.valueOf());
+        this.minDateString = this.dateAdapter.format(date, this.oformat);
       }
     }
   }
   set oMaxDate(value: string) {
     if (value) {
-      const momentD = this.getValueAsMoment(value)
-      if (Util.isDefined(momentD)) {
-        this.datepickerInput.max = momentD.toDate();
-        this.maxDateString = momentD.format(this.oformat);
+      const date = this.getValueAsDateObject(value)
+      if (Util.isDefined(date)) {
+        this.datepickerInput.max = new Date(date.valueOf());
+        this.maxDateString = this.dateAdapter.format(date, this.oformat);
       }
     }
   }
@@ -108,19 +104,22 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   @ViewChild('matInputRef', { read: ElementRef, static: true })
   private matInputRef!: ElementRef;
 
-  private momentSrv: MomentService;
-  private momentDateAdapter: DateAdapter<MomentDateAdapter>;
+  private luxonSrv: LuxonService;
+  private dateAdapter: DateAdapter<any>;
 
   constructor(
-    dateAdapter: DateAdapter<OntimizeMomentDateAdapter>,
+    dateAdapter: DateAdapter<any>,
     elRef: ElementRef,
     injector: Injector
   ) {
     super(elRef, injector);
-    this.momentDateAdapter = dateAdapter;
+    this.dateAdapter = dateAdapter;
     this._defaultSQLTypeKey = 'DATE';
-    this.momentSrv = this.injector.get(MomentService);
+    this.luxonSrv = this.injector.get(LuxonService);
     this.media = this.injector.get(BreakpointObserver);
+    // Default format follows the active date engine ('D' for Luxon, 'L' for moment)
+    const dateFormats: MatDateFormats | null = this.injector.get(MAT_DATE_FORMATS, null);
+    this._oformat = dateFormats?.display?.dateInput ?? 'D';
   }
 
   public ngOnInit(): void {
@@ -128,14 +127,14 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
     if (!this.olocale) {
       this.updateLocaleOnChange = true;
-      this.olocale = this.momentSrv.getLocale();
+      this.olocale = this.luxonSrv.getLocale();
     }
 
     if (this.oformat) {
-      (this.momentDateAdapter as any).oFormat = this.oformat;
+      (this.dateAdapter as any).oFormat = this.oformat;
     }
 
-    this.momentDateAdapter.setLocale(this.olocale);
+    this.dateAdapter.setLocale(this.olocale);
 
     if (this.oStartView) {
       this.datepicker.startView = this.oStartView;
@@ -147,7 +146,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
     if (this.updateLocaleOnChange) {
       this.onLanguageChangeSubscription = this.translateService.onLanguageChanged.subscribe(() => {
-        this.momentDateAdapter.setLocale(this.translateService.getCurrentLang());
+        this.dateAdapter.setLocale(this.translateService.getCurrentLang());
         this.setValue(this.getValue());
       });
     }
@@ -183,13 +182,13 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
     if (!Util.isDefined(value)) {
       return value;
     }
-    // While typing, the internal control holds a moment; from external data it holds a value in the
-    // configured value-type. Normalize both to a moment and return undefined when it is not a valid date.
-    const m = moment.isMoment(value) ? value : this.getValueAsMoment(value);
-    if (!Util.isDefined(m) || !m.isValid()) {
+    // While typing, the internal control holds the active adapter's date object; from external data it
+    // holds a value in the configured value-type. Normalize both and return undefined when not valid.
+    const date = this.dateAdapter.isDateInstance(value) ? value : this.getValueAsDateObject(value);
+    if (!Util.isDefined(date) || !this.dateAdapter.isValid(date)) {
       return void 0;
     }
-    return Util.parseByValueType(m.valueOf(), this.valueType, this.oformat);
+    return parseDateByValueTypeWithAdapter(this.dateAdapter, date.valueOf(), this.valueType, this.oformat);
   }
 
   get showClearButton(): boolean {
@@ -208,9 +207,9 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   }
 
   public onChangeEvent(event: MatDatepickerInputEvent<any>): void {
-    const isValid = event.value && event.value.isValid && event.value.isValid();
+    const isValid = Util.isDefined(event.value) && this.dateAdapter.isValid(event.value);
     let val = isValid ? event.value.valueOf() : event.value;
-    const parsedVal = Util.parseByValueType(val, this.valueType, this.oformat);
+    const parsedVal = parseDateByValueTypeWithAdapter(this.dateAdapter, val, this.valueType, this.oformat);
     this.setValue(parsedVal, {
       changeType: OValueChangeEvent.USER_CHANGE,
       emitEvent: false,
@@ -281,9 +280,9 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
     switch (this.valueType) {
       case 'string':
         if (typeof val === 'string') {
-          const m = moment(val, this.oformat);
-          if (m.isValid()) {
-            this.dateValue = new Date(m.valueOf());
+          const date = this.dateAdapter.parse(val, this.oformat);
+          if (Util.isDefined(date) && this.dateAdapter.isValid(date)) {
+            this.dateValue = new Date(date.valueOf());
           }
         } else {
           result = undefined;
@@ -312,9 +311,9 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
             result = undefined;
           }
         } else {
-          const m = moment(val);
-          if (m.isValid()) {
-            this.dateValue = new Date(m.valueOf());
+          const date = this.dateAdapter.deserialize(val);
+          if (Util.isDefined(date) && this.dateAdapter.isValid(date)) {
+            this.dateValue = new Date(date.valueOf());
           } else {
             result = undefined;
           }
@@ -354,32 +353,37 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
     return this._fControl;
   }
 
-  protected getValueAsMoment(val: any): any {
+  /** Normalizes a value in the configured value-type to the active adapter's date object. */
+  protected getValueAsDateObject(val: any): any {
     if (!Util.isDefined(val)) {
       return val;
     }
-    let result;
+    let result: any;
     switch (true) {
       case this.valueType === 'string' && typeof val === 'string':
-        result = moment(val, this.oformat);
+        result = this.dateAdapter.parse(val, this.oformat);
         break;
       case this.valueType === 'date' && val instanceof Date:
+        result = this.dateAdapter.deserialize(val);
+        break;
       case this.valueType === 'timestamp' && typeof val === 'number':
+        result = this.dateAdapter.deserialize(new Date(val));
+        break;
       case this.valueType === 'iso-8601' && typeof val === 'string':
-        result = moment(val)
+        result = this.dateAdapter.deserialize(val);
         break;
       case this.valueType === 'iso-8601':
         if (typeof val !== 'string') {
           const acceptTimestamp = typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP;
           if (acceptTimestamp) {
-            result = moment(val)
+            result = this.dateAdapter.deserialize(new Date(val));
           }
         }
         break;
       default:
         break;
     }
-    return Util.isDefined(result) && result.isValid() ? result : undefined
+    return Util.isDefined(result) && this.dateAdapter.isValid(result) ? result : undefined
   }
 
 }

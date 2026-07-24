@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxMaterialTimepickerModule, NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
@@ -137,9 +137,9 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   public setTimestampValue(value: any, options?: FormValueOptions): void {
     let parsedValue;
-    const momentV = Util.isDefined(value) ? moment(value) : value;
-    if (momentV && momentV.isValid()) {
-      parsedValue = momentV.utcOffset(0).format(this.formatString);
+    const dt = Util.isDefined(value) ? DateTime.fromMillis(value, { zone: 'utc' }) : value;
+    if (dt && dt.isValid) {
+      parsedValue = dt.toFormat(this.formatString);
     }
     this.setValue(parsedValue, options);
   }
@@ -194,7 +194,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   public onTimepickerChange(event: string): void {
     let value: any = event;
     if (Util.isDefined(value) && this.valueType === 'timestamp') {
-      const valueTimestamp = moment(value, this.formatString).valueOf();
+      const valueTimestamp = DateTime.fromFormat(value, this.formatString).toMillis();
       if (!isNaN(valueTimestamp)) {
         value = valueTimestamp;
       }
@@ -299,7 +299,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   protected getValueAsString(val: any): string {
     let value;
     if (typeof val === 'number') {
-      value = moment(val).format(this.formatString);
+      value = DateTime.fromMillis(val).toFormat(this.formatString);
     } else {
       value = this.convertToFormatString(val);
     }
@@ -313,9 +313,9 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
     const formatStr = this.format === Codes.TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
     let result;
     if (typeof value === 'number') {
-      result = moment(value).format(formatStr);
+      result = DateTime.fromMillis(value).toFormat(formatStr);
     } else {
-      result = value ? moment(value, 'h:mm A').format(formatStr) : value;
+      result = value ? DateTime.fromFormat(value, 'h:mm a').toFormat(formatStr) : value;
     }
     return result;
   }

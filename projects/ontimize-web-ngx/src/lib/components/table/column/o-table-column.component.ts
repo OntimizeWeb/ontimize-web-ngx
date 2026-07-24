@@ -211,7 +211,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
   /* input time */
-  oDateFormat = 'L';
+  oDateFormat = 'D';
   oHourFormat = 24;
 
   /* input renderer percentage */

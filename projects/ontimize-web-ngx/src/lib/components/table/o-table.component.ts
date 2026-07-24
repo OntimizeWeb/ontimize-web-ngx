@@ -50,7 +50,7 @@ import { MatMenu } from '@angular/material/menu';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { BehaviorSubject, combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
@@ -3824,12 +3824,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
     }
     else {
-      const date = moment(row[oCol.attr]);
+      const rawValue = row[oCol.attr];
+      const date = rawValue instanceof Date ? DateTime.fromJSDate(rawValue)
+        : typeof rawValue === 'number' ? DateTime.fromMillis(rawValue)
+          : DateTime.fromISO(rawValue);
       const language = this.translateService.getCurrentLang();
       switch (operation) {
-        case "YEAR": return date.year();
-        case "MONTH": return moment().locale(language).month(date.month()).format("MMMM");
-        case "YEAR_MONTH": return moment().locale(language).month(date.month()).year(date.year()).format("MMMM, YYYY");
+        case "YEAR": return date.year;
+        case "MONTH": return date.setLocale(language).toFormat("MMMM");
+        case "YEAR_MONTH": return date.setLocale(language).toFormat("MMMM, yyyy");
         case "YEAR_MONTH_DAY": return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
       }
     }

@@ -10,6 +10,7 @@ export * from './factories';
 export * from './icon.service';
 export * from './local-storage.service';
 export * from './login-storage.service';
+export * from './luxon.service';
 export * from './moment.service';
 export * from './navigation.service';
 export * from './number.service';

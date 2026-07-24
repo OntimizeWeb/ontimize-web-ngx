@@ -8,6 +8,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { APP_CONFIG, AppConfig } from './app-config';
 import { OHttpLoaderFactory, OTranslateParserFactory } from './o-modules';
 import { appInitializerFactory, ONTIMIZE_PROVIDERS } from './o-providers';
+import { O_DATE_ADAPTER_PROVIDERS } from '../shared/material/date/o-date-adapter.provider';
 import { OntimizeMatIconRegistry } from '../services/ontimize-icon-registry.service';
 import { OntimizePermissionsService } from '../services/permissions/ontimize-permissions.service';
 import { PermissionsGuardService } from '../services/permissions/permissions-can-activate.guard';
@@ -74,6 +75,10 @@ export function provideOntimizeWeb(config: Config, options: ProvideOntimizeWebOp
 
     // All Ontimize singleton providers (services, adapters, MAT_RIPPLE_GLOBAL_OPTIONS, etc.)
     ...ONTIMIZE_PROVIDERS,
+
+    // Ambient DateAdapter + MAT_DATE_FORMATS resolved from O_DATE_ADAPTER (Luxon by default).
+    // Override the date adapter app-wide with provideODateAdapter('moment').
+    ...O_DATE_ADAPTER_PROVIDERS,
 
     // OntimizeMatIconRegistry — not providedIn:'root', registered in CustomMaterialModule
     { provide: OntimizeMatIconRegistry, useClass: OntimizeMatIconRegistry },

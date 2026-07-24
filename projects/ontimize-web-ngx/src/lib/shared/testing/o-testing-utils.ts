@@ -17,6 +17,7 @@ import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { OIntegerPipe } from '../../pipes/o-integer.pipe';
 import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { OMomentPipe } from '../../pipes/o-moment.pipe';
+import { OLuxonPipe } from '../../pipes/o-luxon.pipe';
 import { OIconPipe } from '../../pipes/o-icon.pipe';
 import { ORealPipe } from '../../pipes/o-real.pipe';
 import { OCurrencyPipe } from '../../pipes/o-currency.pipe';
@@ -171,6 +172,7 @@ export class OTestingUtils {
         { provide: OPercentPipe, useClass: OPercentPipe, deps: [Injector] },
         { provide: OSafePipe, useClass: OSafePipe, deps: [Injector] },
         { provide: OMomentPipe, useClass: OMomentPipe, deps: [Injector] },
+        { provide: OLuxonPipe, useClass: OLuxonPipe, deps: [Injector] },
         { provide: OIconPipe, useClass: OIconPipe, deps: [Injector] },
       ]
     };

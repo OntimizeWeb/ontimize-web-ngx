@@ -1,6 +1,6 @@
 # Guía de migración para consumidores — Ontimize Web NGX 18
 
-> Última actualización: 2026-07-03
+> Última actualización: 2026-07-16
 
 Esta guía cubre los pasos necesarios para migrar un proyecto consumidor de **ontimize-web-ngx 15** (Angular 15) a **ontimize-web-ngx 18** (Angular 18).
 
@@ -34,6 +34,14 @@ ng update @angular/core@18 @angular/cli@18 @angular/material@18 @angular/cdk@18
 ```bash
 npm install ontimize-web-ngx@18
 ```
+
+Desde `18.0.0-next.10` el framework declara `@angular/material-luxon-adapter` como **peerDependency** (Luxon es el nuevo motor de fechas por defecto, sección 20). Si instalas con `--legacy-peer-deps` las peer dependencies **no se instalan automáticamente** — añádela a las `dependencies` de tu `package.json`:
+
+```bash
+npm install @angular/material-luxon-adapter@^18.2.0
+```
+
+Sin ella la compilación falla con `TS2307: Cannot find module '@angular/material-luxon-adapter'`. `luxon` y `moment` no requieren acción: son `dependencies` directas del paquete y se instalan solas.
 
 ### 2.3 Eliminar @angular/flex-layout / @ngbracket/ngx-layout
 
@@ -385,6 +393,27 @@ Si no pasas `$typography` el tema usa la config por defecto (Noto Sans).
 
 > **Nota**: Los iconos pasan de `material-icons` (ligatura) a `material-symbols-outlined` (fuente variable). Los nombres de los iconos no cambian.
 
+### 3.2.bis Iconos SVG `ontimize:*` eliminados (desde 18.0.0-next.0) — **breaking, no documentado hasta ahora**
+
+Al migrar a Material Symbols Outlined (18.0.0-next.0) el sprite `assets/svg/ontimize-icon-set.svg` se simplificó drásticamente: pasó de ~45 iconos a solo 10. Este cambio nunca se documentó explícitamente para consumidores — si tu app usa `<mat-icon svgIcon="ontimize:algo">` con cualquiera de los nombres eliminados, deja de mostrar el icono (sin error, el `mat-icon` queda vacío) al actualizar.
+
+**Siguen existiendo** en `ontimize:*` (sin cambios): `CSV`, `EXCEL`, `HTML`, `ILS`, `KRW`, `LIR`, `PDF`, `sort_by_alpha`, `sort_by_alpha_asc`, `sort_by_alpha_desc`.
+
+**Eliminados** — todos estos coinciden con nombres estándar de Material Symbols Outlined, así que la migración es cambiar `svgIcon="ontimize:X"` por el icono de fuente por defecto (`<mat-icon>X</mat-icon>`, sin namespace ni `svgIcon`):
+
+```diff
+- <mat-icon svgIcon="ontimize:menu"></mat-icon>
++ <mat-icon>menu</mat-icon>
+```
+
+`add`, `arrow_back`, `autorenew`, `check_circle`, `clear`, `clock`, `close`, `delete`, `done`, `drag_handle`, `edit`, `error_outline`, `filter_list`, `first_page`, `folder_open`, `fullscreen`, `info_outline`, `keyboard_arrow_down`, `keyboard_arrow_left`, `keyboard_arrow_right`, `keyboard_arrow_up`, `last_page`, `mail_outline`, `menu`, `more_vert`, `perm_identity`, `phone_outline`, `power_settings_new`, `save`, `search`, `settings`, `today`, `undo`, `visibility`, `visibility_off`, `vpn_key`.
+
+> Algunos de estos usaban el sufijo `_outline` siguiendo la convención de los antiguos Material Icons (variantes con nombre propio por estilo). Material Symbols Outlined no siempre mantiene ese sufijo — es una fuente variable donde outline/relleno es un eje de variación, no un nombre distinto — así que verifica el nombre exacto en el [buscador de Material Symbols](https://fonts.google.com/icons) antes de sustituir (p. ej. `info_outline`/`mail_outline`/`error_outline` probablemente pasan a `info`/`mail`/`error`, no al nombre literal con el sufijo).
+
+**Iconos de moneda eliminados sin reemplazo directo por nombre** — `BTC`, `EUR`, `GBP`, `INR`, `JPY`, `USD`, `PERCENT`, `PHONE`. El propio `o-currency-input` los sustituyó internamente por iconos estándar por código ISO (`currency_icons` map en `o-currency-input.component.ts`, p. ej. `EUR` → `euro_symbol`, `USD` → `attach_money`) — usa el mismo criterio si los referenciabas directamente.
+
+**Sin equivalente en Material Symbols** — `orden_ascendente`, `orden_descendente` (nombres en español, sin icono estándar homónimo). Si los usabas, sustitúyelos por un icono de Material Symbols equivalente (p. ej. `arrow_upward`/`arrow_downward` o `sort`) o por tu propio SVG registrado con `OntimizeMatIconRegistry.addOntimizeSvgIcon(name, url)`.
+
 ### 3.3 Usar un tema predefinido (opcional)
 
 Si no necesitas paletas personalizadas, puedes usar directamente el tema azul de Ontimize:
@@ -484,6 +513,18 @@ Notas:
   @include mat.form-field-density(-3);
 }
 ```
+
+#### Inputs `row-height` y `dense` sin efecto (desde 18.0.0-next.9)
+
+El input `row-height` (`small | medium | large`) de `o-table` / `o-list` / `o-grid` y el atributo `dense` de `mat-list` / `mat-selection-list` **ya no tienen efecto**: con Material 3 (MDC) las alturas de fila las controla la **density del tema**, no clases CSS por componente.
+
+Sustitución según el alcance que necesites:
+
+- **Toda la app**: parámetro `density` del factory — Opción A (`0` más aireado … `-5` más compacto).
+- **Una pantalla o zona**: `ontimize-theme-density-extended(<escala>)` en un selector — Opción B.
+- **Un componente Material concreto**: mixin de densidad por componente — Opción D (p. ej. `mat.list-density(-3)` para listas, `mat.table-density(-2)` para tablas).
+
+Los atributos `row-height` y `dense` pueden eliminarse de las plantillas: siguen compilando pero son inertes.
 
 ---
 
@@ -704,10 +745,14 @@ Ontimize Web NGX 18.0.0-next.2 aplica theming Material 3 nativo: `mat.define-the
 [ ] Node.js >= 20 instalado
 [ ] ng update @angular/core@18 @angular/cli@18 @angular/material@18
 [ ] npm install ontimize-web-ngx@18
+[ ] npm install @angular/material-luxon-adapter@^18.2.0 (peer dependency,
+    no se instala sola con --legacy-peer-deps — sección 2.2)
 [ ] npm uninstall @angular/flex-layout (si aplica)
 [ ] styles.scss: cambiar import a ontimize-style (sin .v18)
 [ ] index.html: cambiar a Material Symbols Outlined
 [ ] index.html: eliminar Material Icons font link
+[ ] Buscar svgIcon="ontimize:..." en tus plantillas — la mayoría se eliminaron
+    del sprite; sustituir por <mat-icon>nombre</mat-icon> (sección 3.2.bis)
 [ ] main.ts: migrar a bootstrapApplication() + provideOntimizeWeb() (opcional)
 [ ] app.routes.ts: crear fichero de rutas standalone (opcional)
 [ ] Guards: usar authGuard/permissionsGuard funcionales
@@ -715,6 +760,11 @@ Ontimize Web NGX 18.0.0-next.2 aplica theming Material 3 nativo: `mat.define-the
     por var(--mat-sys-primary)/var(--o-fg-*)/var(--o-font-*)
 [ ] Si vienes de 18.0.0-next.1: migrar firma del factory a M3 (mapa-config) y
     sustituir --o-primary-*/--o-accent-*/--o-warn-* por --mat-sys-* (sección 11)
+[ ] Eliminar row-height (o-table/o-list/o-grid) y dense (mat-list) de las
+    plantillas — configurar density en el tema (sección 3.5)
+[ ] Si personalizas format/value-format con tokens de moment (o usas
+    o-calendar con value-type="string"): traducirlos a Luxon (sección 20.2)
+[ ] Si usabas o-daterange-legacy-input: migrar a o-daterange-input (sección 20.4)
 [ ] Verificar smoke test visual: form, table, list, grid, sidenav
 ```
 
@@ -1722,3 +1772,106 @@ Precedencia del nombre accesible: `aria-label` explícito → `label` → `attr`
 ### 19.4 `o-table`: clase `empty-cell` según el contenido mostrado
 
 La clase `empty-cell` (que reserva altura mínima en celdas vacías) se aplica ahora en función del contenido **mostrado**, no del valor crudo `row[column.name]`. Las columnas de acción y las no asociadas a un campo de datos nunca se marcan como vacías, y en columnas con renderer se evalúa el valor formateado. Cambio interno; no requiere acción salvo que dependieras del comportamiento anterior en CSS propio.
+
+## 20. Luxon como motor de fechas por defecto (desde 18.0.0-next.10)
+
+### 20.1 Qué cambia
+
+[Luxon](https://moment.github.io/luxon/) pasa a ser el motor de fechas **por defecto** del framework, sustituyendo a moment.js. `o-date-input`, `o-daterange-input`, `o-hour-input`, `o-time-input`, `o-table-cell-editor-date`/`-time`, el diálogo de filtro por columna de `o-table` y los renderers de fecha/hora (tabla, combo, list-picker) ahora usan Luxon internamente, igual que `Util.parseByValueType` y la agrupación por año/mes de `o-table`.
+
+**moment.js no se elimina.** `MomentService`, `OMomentPipe`/`oMoment` y `OntimizeMomentDateAdapter` (con su factory de formatos `OntimizeMatDateFormats`/`dateFormatFactory`) quedan marcados `@deprecated` pero siguen funcionando exactamente igual — moment.js sigue siendo una dependencia real del paquete para quien los use explícitamente.
+
+Para la mayoría de apps que **no** personalizan el formato de fecha, esto es transparente: `o-date-input`/`o-daterange-input` siguen funcionando con su formato localizado por defecto, ahora resuelto por Luxon en vez de moment. Solo necesitas actuar si:
+- Pasas un `format`/`value-format` explícito construido con tokens de moment.
+- Tienes un `[date-class]` tipado estrictamente contra `Moment`.
+- Usabas `o-daterange-legacy-input` (`date-range-legacy`) — ver [20.4](#204-eliminación-de-o-daterange-legacy-input-breaking).
+
+### 20.2 Tabla de equivalencias de formato moment → Luxon
+
+Si construyes un `format` (`o-date-input`, `o-table-cell-editor-date`, renderers de fecha/hora) o `value-format` (`o-calendar` de extra-components) con tokens de moment, tradúcelos a Luxon — la casilla de día y año **cambia de mayúsculas a minúsculas**, mes se mantiene:
+
+| Significado | Token moment | Token Luxon |
+|---|---|---|
+| Fecha corta localizada (macro) | `L` | `D` |
+| Fecha larga localizada (macro) | `LL` | `DD` |
+| Año, 4 dígitos | `YYYY` | `yyyy` |
+| Mes, 2 dígitos | `MM` | `MM` (sin cambios) |
+| Día del mes, 2 dígitos | `DD` | `dd` |
+| Hora 24h, 2 dígitos | `HH` | `HH` (sin cambios) |
+| Hora 12h, 2 dígitos | `hh` | `hh` (sin cambios) |
+| Minutos, 2 dígitos | `mm` | `mm` (sin cambios) |
+| Meridiano am/pm | `a` | `a` (sin cambios) |
+
+```diff
+- <o-date-input format="LL" ...></o-date-input>
++ <o-date-input format="DD" ...></o-date-input>
+
+- <o-daterange-input format="DD/MM/YYYY" value-type="string" ...></o-daterange-input>
++ <o-daterange-input format="dd/MM/yyyy" value-type="string" ...></o-daterange-input>
+```
+
+El valor por defecto de `format`/`oformat` en todos los componentes pasó de `'L'` (moment) a `'D'` (Luxon) — si no personalizabas el formato no hay nada que hacer.
+
+### 20.3 `[date-class]`: sigue funcionando, pero recibe otro objeto
+
+`DateCustomClassFunction` (el tipo del input `[date-class]` de `o-date-input`/`o-daterange-input`) pasó de tipar su parámetro como `Moment` a tiparlo como `any`, precisamente para no romper a nadie: un callback existente anotado `(date: Moment) => ...` sigue compilando igual. Pero en **tiempo de ejecución** el objeto recibido cambia con el adapter activo:
+
+- Con el adapter por defecto (`OntimizeLuxonDateAdapter`, Luxon) recibes un `DateTime` de Luxon.
+- Si provees `OntimizeMomentDateAdapter` explícitamente (ver [20.5](#205-cómo-seguir-usando-momentjs-explícitamente)) recibes un `Moment`.
+
+Si tu `[date-class]` llama a métodos de moment (`.date()`, `.month()`, `.isoWeekday()`...) sobre el parámetro, falla en tiempo de ejecución con el adapter Luxon activo — pásalo a la API equivalente de Luxon:
+
+```diff
+- customDateClass = (m: Moment) => {
+-   const date = m.date();
+-   return (date === 1) ? 'example-custom-date-class' : undefined;
+- }
++ customDateClass = (dt: DateTime) => {
++   return (dt.day === 1) ? 'example-custom-date-class' : undefined;
++ }
+```
+
+### 20.4 Eliminación de `o-daterange-legacy-input` — **breaking**
+
+El componente ya deprecado `o-daterange-legacy-input` (`ODateRangeLegacyInputComponent`, `ODateRangeLegacyInputModule`, su directiva y config) se elimina del framework. Usa `o-daterange-input` — su API de fechas es equivalente y ya soporta rango, formato, `value-type` y `[date-class]`.
+
+### 20.5 Elegir el adapter (Luxon o moment.js) — `provideODateAdapter`
+
+Los componentes de fecha del framework resuelven su `DateAdapter` / `MAT_DATE_FORMATS` desde el injection token **`O_DATE_ADAPTER`** (`'luxon' | 'moment'`, Luxon si no se provee). El helper `provideODateAdapter(...)` permite elegir el adapter **sin cambiar nada más** — los componentes funcionan igual con ambos:
+
+```typescript
+import { provideODateAdapter } from 'ontimize-web-ngx';
+
+// App completa (standalone)
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideOntimizeWeb(CONFIG),
+    provideODateAdapter('moment'),
+    provideRouter(routes),
+  ]
+});
+
+// App completa (NgModule): añadir provideODateAdapter('moment') a los providers del AppModule
+
+// Solo un scope: una ruta (providers de la Route) o cualquier componente ancestro
+@Component({
+  // ...
+  providers: [provideODateAdapter('moment')]
+})
+export class LegacyDatesSectionComponent { /* los <o-date-input> de este subtree usan moment */ }
+```
+
+Afecta a: `o-date-input`, `o-daterange-input`, `o-time-input`, `o-table-cell-editor-date`/`-time`, el diálogo de filtro por columna, los renderers de fecha/hora (tabla/combo/list-picker, que pasan a formatear con `oMoment` en vez de `oLuxon`) y el `DateAdapter` ambiental para datepickers nativos propios (`OCustomMaterialModule` / `provideOntimizeWeb`).
+
+A tener en cuenta al elegir `'moment'`:
+
+- **Tokens de formato**: los inputs `format`/`date-format`/`value-format` se interpretan con el adapter activo — con `'moment'` el default vuelve a ser `'L'`/`'LL'` y tus formatos custom deben usar tokens moment (`'DD/MM/YYYY'`); con Luxon, tokens Luxon (`'dd/MM/yyyy'`). Ver [20.2](#202-tabla-de-equivalencias-de-formato-moment--luxon).
+- **`[date-class]`**: el callback recibe un `Moment` con `'moment'` y un `DateTime` de Luxon con `'luxon'` (ver [20.3](#203-date-class-sigue-funcionando-pero-recibe-otro-objeto)).
+- La vía moment sigue estando **deprecada** (`OntimizeMomentDateAdapter`/`MomentService`/`OMomentPipe`): `provideODateAdapter('moment')` es un mecanismo de transición para apps con formatos/callbacks moment que no puedan migrarse de golpe, no una opción a largo plazo.
+- Para lógica de formateo/parseo suelta en tu propio código sigues pudiendo usar `MomentService`/`OMomentPipe` (`oMoment`) directamente, sin cambios.
+
+Ejemplo funcional en la playground: `main/inputs/02.date` → "Opting into moment.js explicitly" (un `o-date-input` con `provideODateAdapter('moment')` en el componente contenedor).
+
+### 20.6 `o-calendar` (ontimize-web-ngx-extra-components)
+
+Si usas `o-calendar` con `value-type="string"`, su input `value-format` (por defecto `'L'` de moment) ahora se interpreta con Luxon — cambió a `'D'`. Si lo habías personalizado, tradúcelo con la tabla de [20.2](#202-tabla-de-equivalencias-de-formato-moment--luxon). La integración de `o-calendar` con `angular-calendar` (renderizado del calendario en sí) sigue usando moment.js internamente sin cambios — no está afectada.

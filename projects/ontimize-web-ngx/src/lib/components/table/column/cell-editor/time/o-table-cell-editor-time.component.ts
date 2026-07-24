@@ -11,8 +11,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { NgxMaterialTimepickerModule, NgxMaterialTimepickerComponent } from 'ngx-material-timepicker';
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
@@ -28,7 +27,8 @@ import { OMatErrorDirective } from '../../../../../directives/o-mat-error.direct
 import { OHourTimepickerDirective } from '../../../../input/hour-input/o-hour-input.directive';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
-import { MomentService } from '../../../../../services/moment.service';
+import { LuxonService } from '../../../../../services/luxon.service';
+import { O_DATE_ADAPTER_PROVIDERS } from '../../../../../shared/material/date/o-date-adapter.provider';
 import { FormValueOptions } from '../../../../../types/form-value-options.type';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
@@ -60,7 +60,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_TIME = [
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+    ...O_DATE_ADAPTER_PROVIDERS
   ],
 })
 
@@ -85,7 +85,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   formControlHour: FormControl;
   formControlDate: FormControl;
 
-  public oDateFormat: string = 'L';
+  public oDateFormat: string;
   public oHourMax: string;
   public oHourMin: string;
   @BooleanInputConverter()
@@ -102,7 +102,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   protected _minDateString: string;
   protected _maxDateString: string;
   protected datepicker: MatDatepicker<Date>;
-  private momentSrv: MomentService;
+  private luxonSrv: LuxonService;
 
   // only true when hour input is focused
   public enabledCommitOnTabPress: boolean = false;
@@ -120,29 +120,32 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   ) {
     super(injector);
     this.cd = this.injector.get(ChangeDetectorRef);
-    this.momentSrv = this.injector.get(MomentService);
+    this.luxonSrv = this.injector.get(LuxonService);
+    // Default format follows the active date adapter ('D' for Luxon, 'L' for moment)
+    const dateFormats: MatDateFormats | null = this.injector.get(MAT_DATE_FORMATS, null);
+    this.oDateFormat = dateFormats?.display?.dateInput ?? 'D';
   }
 
   initialize(): void {
     super.initialize();
     this.createInternalFormControl();
     if (!this._oDateLocale) {
-      this.oDateLocale = this.momentSrv.getLocale();
+      this.oDateLocale = this.luxonSrv.getLocale();
     }
 
     if (this.oMinDate) {
       const date = new Date(this.oMinDate);
-      const momentD = moment(date);
-      if (momentD.isValid()) {
-        this.minDateString = momentD.format(this.oDateFormat);
+      const d = this.adapter.deserialize(date);
+      if (Util.isDefined(d) && this.adapter.isValid(d)) {
+        this.minDateString = this.adapter.format(d, this.oDateFormat);
       }
     }
 
     if (this.oMaxDate) {
       const date = new Date(this.oMaxDate);
-      const momentD = moment(date);
-      if (momentD.isValid()) {
-        this.maxDateString = momentD.format(this.oDateFormat);
+      const d = this.adapter.deserialize(date);
+      if (Util.isDefined(d) && this.adapter.isValid(d)) {
+        this.maxDateString = this.adapter.format(d, this.oDateFormat);
       }
     }
   }
@@ -178,8 +181,8 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   }
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
-    const isValid = event.value && event.value.isValid && event.value.isValid();
-    const val = isValid ? event.value.valueOf() : moment().startOf('day');
+    const isValid = Util.isDefined(event.value) && this.adapter.isValid(event.value);
+    const val = isValid ? event.value.valueOf() : new Date().setHours(0, 0, 0, 0);
 
     this.formControlDate.setValue(val, {
       emitModelToViewChange: false,
@@ -237,9 +240,9 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
   public setTimestampValue(value: any, options?: FormValueOptions): void {
     let parsedValue;
-    const momentV = Util.isDefined(value) ? moment(value) : value;
-    if (momentV && momentV.isValid()) {
-      parsedValue = momentV.utcOffset(0).format(this.formatString);
+    const dt = Util.isDefined(value) ? DateTime.fromMillis(value, { zone: 'utc' }) : value;
+    if (dt && dt.isValid) {
+      parsedValue = dt.toFormat(this.formatString);
     }
     this.formControlHour.setValue(parsedValue, options);
   }
@@ -251,9 +254,9 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
     const formatStr = this.oHourFormat === Codes.TWENTY_FOUR_HOUR_FORMAT ? 'HH:mm' : 'hh:mm a';
     let result;
     if (typeof value === 'number') {
-      result = moment(value).format(formatStr);
+      result = DateTime.fromMillis(value).toFormat(formatStr);
     } else {
-      result = value ? moment(value, 'h:mm A').format(formatStr) : value;
+      result = value ? DateTime.fromFormat(value, 'h:mm a').toFormat(formatStr) : value;
     }
     return result;
   }
@@ -315,13 +318,12 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
     let timeValue: number;
     const values = this.formGroup.getRawValue();
-    const mDate = (values['dateInput'] ? moment(values['dateInput']) : moment()).startOf('day');
+    const dDate = (values['dateInput'] ? this.toDateTime(values['dateInput']) : DateTime.now()).startOf('day');
 
-    const mHour = moment(values['hourInput'], this.formatString);
-    timeValue = mDate.clone()
-      .set('hour', mHour.get('hour'))
-      .set('minute', mHour.get('minutes'))
-      .valueOf();
+    const dHour = DateTime.fromFormat(values['hourInput'], this.formatString);
+    timeValue = dDate
+      .set({ hour: dHour.hour, minute: dHour.minute })
+      .toMillis();
 
     if (this.formControl) {
       this.formControl.setValue(timeValue);
@@ -387,10 +389,10 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   getCellDataDate(): any {
     const value = super.getCellData();
     if (Util.isDefined(value)) {
-      const m = moment(value);
+      const dt = this.toDateTime(value);
       let result = value;
-      if (Util.isDefined(m)) {
-        result = m.toDate();
+      if (Util.isDefined(dt)) {
+        result = dt.toJSDate();
       }
       return result;
     }
@@ -400,14 +402,35 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   getCellDataHour(): any {
     const value = super.getCellData();
     if (Util.isDefined(value)) {
-      const m = moment(value);
+      const dt = this.toDateTime(value);
       let result = value;
-      if (Util.isDefined(m)) {
-        result = m.format(Codes.formatString(this.oHourFormat));
+      if (Util.isDefined(dt)) {
+        result = dt.toFormat(Codes.formatString(this.oHourFormat));
       }
       return result;
     }
     return value;
+  }
+
+  /**
+   * Internal hour/date arithmetic runs on Luxon regardless of the active adapter (millis in,
+   * formatted string out). Accepts a DateTime, the active adapter's date object (e.g. a Moment),
+   * a Date, epoch millis, or an ISO string.
+   */
+  private toDateTime(value: any): DateTime {
+    if (DateTime.isDateTime(value)) {
+      return value;
+    }
+    if (this.adapter.isDateInstance(value)) {
+      return DateTime.fromMillis(value.valueOf());
+    }
+    if (value instanceof Date) {
+      return DateTime.fromJSDate(value);
+    }
+    if (typeof value === 'number') {
+      return DateTime.fromMillis(value);
+    }
+    return DateTime.fromISO(value);
   }
 
   startEdition(data: any) {

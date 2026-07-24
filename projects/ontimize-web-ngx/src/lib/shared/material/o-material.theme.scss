@@ -128,7 +128,6 @@
   @include o-bar-menu-theme($theme-or-color-config);
   @include o-grid-theme($theme-or-color-config);
   @include o-layout-padding-margin();
-  @include o-daterange-input-theme($theme-or-color-config);
   @include o-dual-list-selector-theme($theme-or-color-config);
   @include o-image-theme($theme-or-color-config);
 }

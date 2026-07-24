@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerModule, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,11 +9,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
-import moment from 'moment';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
-import { MomentService } from '../../../../../services/moment.service';
-import { OntimizeMomentDateAdapter } from '../../../../../shared/material/date/ontimize-moment-date-adapter';
+import { LuxonService } from '../../../../../services/luxon.service';
+import { O_DATE_ADAPTER_PROVIDERS } from '../../../../../shared/material/date/o-date-adapter.provider';
 import { DateFilterFunction } from '../../../../../types/date-filter-function.type';
 import { ODateValueType } from '../../../../../types/o-date-value.type';
 import { Util } from '../../../../../util/util';
@@ -45,7 +44,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_DATE = [
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+    ...O_DATE_ADAPTER_PROVIDERS
   ]
 })
 
@@ -53,7 +52,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
 
   @ViewChild('templateref', { read: TemplateRef, static: true }) public templateref: TemplateRef<any>;
 
-  format: string = 'L';
+  format: string;
   protected locale: string;
   oStartView: 'month' | 'year' = 'month';
   protected min: string;
@@ -68,48 +67,51 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   oMinDate: Date;
   oMaxDate: Date;
 
-  private momentSrv: MomentService;
+  private luxonSrv: LuxonService;
   minDateString: string;
   maxDateString: string;
 
   protected datepicker: MatDatepicker<Date>;
   constructor(
     protected injector: Injector,
-    protected momentDateAdapter: DateAdapter<OntimizeMomentDateAdapter>
+    protected dateAdapter: DateAdapter<any>
   ) {
     super(injector);
-    this.momentSrv = this.injector.get(MomentService);
+    this.luxonSrv = this.injector.get(LuxonService);
+    // Default format follows the active date engine ('D' for Luxon, 'L' for moment)
+    const dateFormats: MatDateFormats | null = this.injector.get(MAT_DATE_FORMATS, null);
+    this.format = dateFormats?.display?.dateInput ?? 'D';
   }
 
   initialize(): void {
     super.initialize();
     if (!this.locale) {
-      this.locale = this.momentSrv.getLocale();
+      this.locale = this.luxonSrv.getLocale();
     }
     if (this.format) {
-      (this.momentDateAdapter as any).oFormat = this.format;
+      (this.dateAdapter as any).oFormat = this.format;
     }
 
-    this.momentDateAdapter.setLocale(this.locale);
+    this.dateAdapter.setLocale(this.locale);
     if (this.startAt) {
       this.oStartAt = new Date(this.startAt);
     }
 
     if (this.min) {
       const date = new Date(this.min);
-      const momentD = moment(date);
-      if (momentD.isValid()) {
+      const d = this.dateAdapter.deserialize(date);
+      if (Util.isDefined(d) && this.dateAdapter.isValid(d)) {
         this.oMinDate = date;
-        this.minDateString = momentD.format(this.format);
+        this.minDateString = this.dateAdapter.format(d, this.format);
       }
     }
 
     if (this.max) {
       const date = new Date(this.max);
-      const momentD = moment(date);
-      if (momentD.isValid()) {
+      const d = this.dateAdapter.deserialize(date);
+      if (Util.isDefined(d) && this.dateAdapter.isValid(d)) {
         this.oMaxDate = date;
-        this.maxDateString = momentD.format(this.format);
+        this.maxDateString = this.dateAdapter.format(d, this.format);
       }
     }
   }
@@ -137,21 +139,21 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
     const value = super.getCellData();
     if (Util.isDefined(value)) {
       let result = value;
-      let m;
+      let date: any;
       switch (this.dateValueType) {
         case 'string':
-          m = moment(value, this.format);
+          date = this.dateAdapter.parse(value, this.format);
           break;
         case 'date':
           break;
         case 'iso-8601':
         case 'timestamp':
         default:
-          m = moment(value);
+          date = this.toDateObject(value);
           break;
       }
-      if (Util.isDefined(m)) {
-        result = m.toDate();
+      if (Util.isDefined(date)) {
+        result = new Date(date.valueOf());
       }
       return result;
     }
@@ -172,40 +174,41 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
 
   protected getValueByValyType(): any {
     let result = this.formControl.value;
-    const m = moment(this.formControl.value);
+    const date = this.toDateObject(this.formControl.value);
     switch (this.dateValueType) {
       case 'string':
-        result = m.format(this.format);
+        result = this.dateAdapter.format(date, this.format);
         break;
       case 'date':
         result = new Date(result);
         break;
       case 'iso-8601':
-        result = m.toISOString();
+        // UTC so the output carries the 'Z' suffix, as moment's toISOString() did
+        result = new Date(date.valueOf()).toISOString();
         break;
       case 'timestamp':
       default:
-        result = m.valueOf();
+        result = date.valueOf();
         break;
     }
     return result;
   }
 
   onDateChange(event: MatDatepickerInputEvent<any>) {
-    const isValid = event.value && event.value.isValid && event.value.isValid();
+    const isValid = Util.isDefined(event.value) && this.dateAdapter.isValid(event.value);
     let val = isValid ? event.value.valueOf() : event.value;
-    const m = moment(val);
+    const date = this.toDateObject(val);
     switch (this.dateValueType) {
       case 'string':
         if (val) {
-          val = m.format(this.format);
+          val = this.dateAdapter.format(date, this.format);
         }
         break;
       case 'date':
         val = new Date(val);
         break;
       case 'iso-8601':
-        val = m.toISOString();
+        val = new Date(date.valueOf()).toISOString();
         break;
       case 'timestamp':
       default:
@@ -216,6 +219,20 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
       emitModelToViewChange: false,
       emitEvent: false
     });
+  }
+
+  /** Mirrors moment(value)'s generic dispatch: accepts an adapter date object, Date, epoch millis, or ISO string. */
+  private toDateObject(value: any): any {
+    if (this.dateAdapter.isDateInstance(value)) {
+      return value;
+    }
+    if (value instanceof Date) {
+      return this.dateAdapter.deserialize(value);
+    }
+    if (typeof value === 'number') {
+      return this.dateAdapter.deserialize(new Date(value));
+    }
+    return this.dateAdapter.deserialize(value);
   }
 
   openDatepicker(d: MatDatepicker<Date>) {

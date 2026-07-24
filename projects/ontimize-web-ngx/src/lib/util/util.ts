@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { from, isObservable, Observable, of } from 'rxjs';
 
 import { IDataService } from '../interfaces/data-service.interface';
@@ -413,22 +413,38 @@ export class Util {
     }
 
     let result = value;
-    const m = moment(value);
-    if (!m.isValid()) {
+    let dateTime: DateTime;
+    if (DateTime.isDateTime(value)) {
+      dateTime = value;
+    } else if (value instanceof Date) {
+      dateTime = DateTime.fromJSDate(value);
+    } else if (typeof value === 'number') {
+      dateTime = DateTime.fromMillis(value);
+    } else if (typeof value === 'string') {
+      dateTime = DateTime.fromISO(value);
+      if (!dateTime.isValid) {
+        // moment fell back to the Date constructor for non-ISO strings
+        dateTime = DateTime.fromJSDate(new Date(value));
+      }
+    } else {
+      return void 0;
+    }
+    if (!dateTime.isValid) {
       return void 0;
     }
     switch (valueType) {
       case 'string':
-        result = m.format(format);
+        result = dateTime.toFormat(format);
         break;
       case 'date':
-        result = m.toDate();
+        result = dateTime.toJSDate();
         break;
       case 'iso-8601':
-        result = m.toISOString();
+        // UTC zone so the output carries the 'Z' suffix, as moment's toISOString() did
+        result = dateTime.toUTC().toISO();
         break;
       case 'timestamp':
-        result = m.valueOf();
+        result = dateTime.toMillis();
         break;
       default:
         result = void 0;

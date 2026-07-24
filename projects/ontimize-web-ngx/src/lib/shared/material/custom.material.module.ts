@@ -34,10 +34,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatLuxonDateModule } from '@angular/material-luxon-adapter';
 
 import { OntimizeMatIconRegistry } from '../../services/ontimize-icon-registry.service';
-import { dateFormatFactory } from './date/mat-date-formats.factory';
+import { O_DATE_ADAPTER_PROVIDERS } from './date/o-date-adapter.provider';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -67,7 +67,7 @@ const MATERIAL_MODULES = [
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatMomentDateModule,
+  MatLuxonDateModule,
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
@@ -90,15 +90,9 @@ const MATERIAL_MODULES = [
   ],
   exports: MATERIAL_MODULES,
   providers: [
-    //   {
-    //   provide: DateAdapter,
-    //   useClass: OntimizeMomentDateAdapter,
-    //   deps: [MAT_DATE_LOCALE]
-    // },
+    // Ambient DateAdapter + MAT_DATE_FORMATS resolved from O_DATE_ADAPTER (Luxon by default)
+    ...O_DATE_ADAPTER_PROVIDERS,
     {
-      provide: MAT_DATE_FORMATS,
-      useFactory: dateFormatFactory
-    }, {
       provide: OntimizeMatIconRegistry,
       useClass: OntimizeMatIconRegistry
     }]

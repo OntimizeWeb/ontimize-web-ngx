@@ -1,14 +1,10 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import moment, { Moment } from 'moment';
+import { LuxonDateAdapter } from '@angular/material-luxon-adapter';
+import { DateTime } from 'luxon';
 
-/**
- * @deprecated Use OntimizeLuxonDateAdapter instead. This adapter is kept for
- * backwards compatibility and continues to depend on moment.js.
- */
 @Injectable()
-export class OntimizeMomentDateAdapter extends MomentDateAdapter {
+export class OntimizeLuxonDateAdapter extends LuxonDateAdapter {
 
   public oFormat: string;
 
@@ -16,24 +12,26 @@ export class OntimizeMomentDateAdapter extends MomentDateAdapter {
     super(dateLocale);
   }
 
-  format(date: any, displayFormat: string): string {
+  format(date: DateTime, displayFormat: string): string {
     return super.format(date, this.oFormat || displayFormat);
   }
 
-  parse(value: any, parseFormat: string | string[]): any | null {
+  parse(value: any, parseFormat: string | string[]): DateTime | null {
     return super.parse(value, this.oFormat || parseFormat);
   }
 
-  deserialize(value: any): Moment | null {
-    let date;
+  deserialize(value: any): DateTime | null {
+    let date: DateTime;
     if (typeof value === 'number') {
-      date = moment(value);
+      date = DateTime.fromMillis(value);
     }
     if (typeof value === 'string') {
       if (!value) {
         return null;
       }
-      date = moment(value, this.oFormat).locale(this.locale);
+      if (this.oFormat) {
+        date = DateTime.fromFormat(value, this.oFormat, { locale: this.locale });
+      }
     }
     if (date && this.isValid(date)) {
       return date;
