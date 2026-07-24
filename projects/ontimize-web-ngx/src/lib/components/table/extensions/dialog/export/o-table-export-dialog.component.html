@@ -37,7 +37,7 @@
         }
       </mat-radio-group>
       <span class="dialog-titles">{{'EXPORT.DIALOG.COLUMNS'|oTranslate}}</span>
-      <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)" class="columns"
+      <mat-selection-list #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)" class="columns"
         [(ngModel)]="columns" [compareWith]="columnsCompareFunction">
         @for (column of columnsData; track column) {
           <mat-list-option checkboxPosition="before" [value]="column" cdkDrag>
