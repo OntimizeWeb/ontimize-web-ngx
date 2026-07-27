@@ -81,6 +81,12 @@
             a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
               background-image: linear-gradient(var(--mat-sys-primary), var(--mat-sys-primary));
             }
+
+            // Same step as level-2 (--mat-sys-body-medium-size, 0.875rem) — M3's
+            // scale has no distinct token between this and the root's body-large;
+            // the level-1/level-2 size difference is still conveyed via row height,
+            // icon size and indentation.
+            --mdc-list-list-item-label-text-size: var(--mat-sys-body-medium-size);
           }
         }
 
@@ -92,6 +98,11 @@
             a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
               background-image: none;
             }
+
+            // Relative (0.875rem) to the root font-size the density system already
+            // sets (16px at scales 0/-1/-2, 14px at -3/-4/-5) — resolves to 14px at
+            // the spacious end and ~12px at -3/-4/-5, without a separate px table.
+            --mdc-list-list-item-label-text-size: var(--mat-sys-body-medium-size);
           }
         }
       }

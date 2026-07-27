@@ -167,6 +167,10 @@ $transition-duration: 500ms;
             // what the app theme emits for --mdc-list-list-item-container-shape.
             border-radius: 8px;
 
+            &.mdc-list-item {
+              padding-right: 8px;
+            }
+
             &.mdc-list-item--with-leading-icon .mdc-list-item__start {
               margin-left: 16px;
               margin-right: 16px; // MDC default is 32px; the legacy gap is 16px
@@ -271,6 +275,8 @@ $transition-duration: 500ms;
             overflow: hidden;
             --mdc-list-list-item-one-line-container-height: 32px;
             --mdc-list-list-item-leading-icon-size: 20px;
+            // Label text-size for this level: --mat-sys-body-medium-size,
+            // set in o-app-sidenav-theme.scss (scales with the root font-size).
           }
         }
       }
