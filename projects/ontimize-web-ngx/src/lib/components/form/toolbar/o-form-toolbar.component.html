@@ -189,16 +189,16 @@
       }
       @switch (getActionVariant(acceptButtonAttr)) {
         @case ('flat') {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-flat-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel(acceptButtonAttr) | oTranslate }}</span>}</button>
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-flat-button (click)="acceptOperation()"><mat-icon>save</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel('update') | oTranslate }}</span>}</button>
         }
         @case ('raised') {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-raised-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel(acceptButtonAttr) | oTranslate }}</span>}</button>
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-raised-button (click)="acceptOperation()"><mat-icon>save</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel('update') | oTranslate }}</span>}</button>
         }
         @case ('basic') {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel(acceptButtonAttr) | oTranslate }}</span>}</button>
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" [color]="getActionColor(acceptButtonAttr)" mat-button (click)="acceptOperation()"><mat-icon>save</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel('update') | oTranslate }}</span>}</button>
         }
         @default {
-          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" mat-stroked-button (click)="acceptOperation()"><mat-icon>check</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel(acceptButtonAttr) | oTranslate }}</span>}</button>
+          <button type="button" class="o-form-toolbar-button o-form-toolbar-button-insert" [attr.attr]="acceptButtonAttr" [ngClass]="getActionImportanceClassForVariant(acceptButtonAttr)" mat-stroked-button (click)="acceptOperation()"><mat-icon>save</mat-icon>@if (showHeaderActionsText) {<span>{{ getActionLabel('update') | oTranslate }}</span>}</button>
         }
       }
     }

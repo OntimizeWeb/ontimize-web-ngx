@@ -1760,7 +1760,7 @@ Cada componente expone un nuevo método `getActionLabel(attr)` (junto a `getActi
 | `o-list` / `o-grid` | `insert`→`ADD`, `refresh`→`REFRESH`, `delete`→`DELETE` (`o-grid` no tiene botón `delete`) |
 | `o-tree` | `insert`→`INSERT`, `refresh`→`REFRESH`, `delete`→`DELETE` |
 
-> **Botón de confirmar del `o-form`**: en modo INSERT resuelve su texto por `attr=insert` (`ADD`) y en modo UPDATE / editable-detail por `attr=update` (`SAVE`) — antes de `next.10` mostraba siempre `INSERT` fuera de este mecanismo; ver el `CHANGELOG` (`18.0.0-next.10` → *Bug Fixes*).
+> **Botón de confirmar del `o-form`**: muestra siempre icono y texto `SAVE`, tanto en modo INSERT como en UPDATE / editable-detail — antes de `next.10` mostraba siempre `INSERT` (icono de check) fuera de este mecanismo; ver el `CHANGELOG` (`18.0.0-next.10` → *Bug Fixes*). Resuelve su texto por `attr=update` en **ambos** modos, así que un override de `label` en `action-styles.update` afecta a este botón en los dos modos, pero uno en `action-styles.insert` no le afecta. El atributo HTML `attr` del botón (usado para `importance`/color y para hooks de CSS/e2e) sigue alternando `insert`/`update` según el modo — solo el icono y el texto quedan unificados.
 
 La configuración global también admite `label`, igual que `variant` e `importance`:
 
