@@ -208,8 +208,34 @@ export class OButtonComponent implements OnInit {
     }
   }
 
+  /**
+   * Effective label shown on the button. Precedence: explicit `label` > host
+   * `action-styles` label (by `attr` — only set when projected inside an
+   * `o-table`/`o-grid`/`o-list`/`o-tree`/`o-form`, or via the app-wide
+   * `O_ACTION_STYLES_CONFIG`) > `undefined` (icon-only). Mirrors
+   * `effectiveType`/`resolvedImportance`.
+   */
+  get effectiveLabel(): string {
+    return this.olabel ?? this.hostOrGlobalActionStyle.label;
+  }
+
+  /**
+   * Whether the icon(s) sit before the label, per `iconPosition`. Used to pick
+   * Material's before-label content-projection slot (`mat-icon:not([iconPositionEnd])`)
+   * in the template — see the template's top comment for why the icon elements
+   * there are unconditional (visibility-toggled) rather than `*ngIf`/`@if`-gated.
+   */
+  get isIconBeforeLabel(): boolean {
+    return this.iconPosition === 'left' || this.iconPosition === 'top';
+  }
+
+  /** Whether the icon(s) sit after the label, per `iconPosition` (see `isIconBeforeLabel`). */
+  get isIconAfterLabel(): boolean {
+    return this.iconPosition === 'right' || this.iconPosition === 'bottom';
+  }
+
   get needsIconButtonClass(): boolean {
-    return (this.icon !== undefined || this.svgIcon !== undefined) && (this.olabel === undefined || this.olabel === '');
+    return (this.icon !== undefined || this.svgIcon !== undefined) && (this.effectiveLabel === undefined || this.effectiveLabel === '');
   }
 
   /**
@@ -218,7 +244,7 @@ export class OButtonComponent implements OnInit {
    * icon name, so an icon-only button (no `label`) still falls back to `attr`/icon and is announced.
    */
   get accessibleLabel(): string {
-    return this.ariaLabel ?? this.olabel ?? this.oattr ?? this.icon ?? this.svgIcon;
+    return this.ariaLabel ?? this.effectiveLabel ?? this.oattr ?? this.icon ?? this.svgIcon;
   }
 
   isFab(): boolean {

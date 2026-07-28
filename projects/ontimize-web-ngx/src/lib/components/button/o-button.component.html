@@ -1,7 +1,35 @@
+<!--
+  Verified against the actual compiled/rendered output (not just template reasoning): Angular assigns a
+  Material button's content-projection slots — icon-before-label, `.mdc-button__label`, icon-after-label,
+  see `MatButton`'s template — ONCE, synchronously, based on whatever is physically in the light DOM at
+  that moment. A `mat-icon`/`img` gated by `*ngTemplateOutlet`, `@if` OR `*ngIf` only exists as a
+  comment-anchor placeholder at that moment (its real content is inserted later, in a separate pass), so
+  it never matches the `mat-icon:not([iconPositionEnd])` / `mat-icon[iconPositionEnd]` selectors and
+  permanently falls back to the default, unnamed slot inside `.mdc-button__label` — even once the icon
+  itself renders. The only way an icon lands in Material's own before/after slot (matching
+  `o-form-toolbar`'s buttons) is for the element to be UNCONDITIONALLY present in the template from the
+  start, with its visibility toggled via `[style.display]` (an inline style, so it can't lose to any of
+  Material's own CSS) instead of being added/removed from the DOM. Hence every `mat-icon`/`img` below is
+  always rendered, and hence the repetition across the 7 button-shape branches instead of one shared
+  template — content reused through any structural indirection re-triggers the same placeholder problem.
+-->
+
 @if (isBasic() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-button [class.mat-icon-button]="needsIconButtonClass"
     [disabled]="!enabled" [color]="resolvedColor" [attr.aria-label]="accessibleLabel | oTranslate">
-    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
+    @if (iconPosition==='top') {
+      <br />
+    }
+    <span>{{ effectiveLabel | oTranslate }}</span>
+    @if (iconPosition==='bottom') {
+      <br />
+    }
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
 }
 
@@ -9,7 +37,19 @@
   <button type="button" (click)="onButtonClick($event)" mat-raised-button class="mat-raised-button"
     [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate">
-    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
+    @if (iconPosition==='top') {
+      <br />
+    }
+    <span>{{ effectiveLabel | oTranslate }}</span>
+    @if (iconPosition==='bottom') {
+      <br />
+    }
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
 }
 
@@ -17,14 +57,38 @@
   <button type="button" (click)="onButtonClick($event)" mat-stroked-button
     [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate">
-    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
+    @if (iconPosition==='top') {
+      <br />
+    }
+    <span>{{ effectiveLabel | oTranslate }}</span>
+    @if (iconPosition==='bottom') {
+      <br />
+    }
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
 }
 
 @if (isFlat() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-flat-button [class.mat-icon-button]="needsIconButtonClass"
     [disabled]="!enabled" [color]="resolvedColor" [attr.aria-label]="accessibleLabel | oTranslate">
-    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
+    @if (iconPosition==='top') {
+      <br />
+    }
+    <span>{{ effectiveLabel | oTranslate }}</span>
+    @if (iconPosition==='bottom') {
+      <br />
+    }
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
 }
 
@@ -32,55 +96,56 @@
   <button type="button" (click)="onButtonClick($event)" mat-icon-button
     [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate">
-    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
+    @if (iconPosition==='top') {
+      <br />
+    }
+    <span>{{ effectiveLabel | oTranslate }}</span>
+    @if (iconPosition==='bottom') {
+      <br />
+    }
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
 }
 
 @if (isFab() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-fab [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate">
-    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
+    @if (iconPosition==='top') {
+      <br />
+    }
+    <span>{{ effectiveLabel | oTranslate }}</span>
+    @if (iconPosition==='bottom') {
+      <br />
+    }
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
 }
 
 @if (isMiniFab() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-mini-fab [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate">
-    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
+    @if (iconPosition==='top') {
+      <br />
+    }
+    <span>{{ effectiveLabel | oTranslate }}</span>
+    @if (iconPosition==='bottom') {
+      <br />
+    }
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
+    <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
 }
-
-
-<ng-template #iconTemplate>
-  @if (image!==undefined) {
-    <img src="{{ image }}" class="o-button-image" alt="button image" />
-  }
-  @if (icon!==undefined) {
-    <mat-icon class="o-button-icon">{{ icon }}
-    </mat-icon>
-  }
-  @if (svgIcon!==undefined) {
-    <mat-icon class="o-button-icon" [svgIcon]="svgIcon"></mat-icon>
-  }
-</ng-template>
-
-<ng-template #buttonTemplate>
-
-  @if (iconPosition==='left' || iconPosition==='top' ) {
-    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
-  }
-
-  @if (iconPosition==='top') {
-    <br />
-  }
-
-  {{ olabel | oTranslate }}
-
-  @if (iconPosition==='bottom') {
-    <br />
-  }
-
-  @if (iconPosition==='right' || iconPosition==='bottom') {
-    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
-  }
-</ng-template>
