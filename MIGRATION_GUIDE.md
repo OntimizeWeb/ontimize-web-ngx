@@ -1543,6 +1543,7 @@ type OActionImportance = 'primary' | 'warn' | 'default';
 interface OActionStyle {
   variant?: OActionVariant;     // forma del botón (default: 'outline')
   importance?: OActionImportance; // relevancia semántica (default: 'default')
+  label?: string;                // texto de la acción — literal u clave de traducción (ver 18.10)
 }
 ```
 
@@ -1601,7 +1602,8 @@ Las claves son el `attr` interno exacto de cada acción:
 |---|---|
 | `o-form` (toolbar) | `insert`, `update`, `edit`, `delete`, `refresh`, `undo`, `cancel` |
 | `o-table` | `insert`, `refresh`, `delete`, … (un `o-table-button` resuelve por su propio `attr`) |
-| `o-grid` / `o-list` | `insert`, `refresh`, `delete` |
+| `o-list` | `insert`, `refresh`, `delete` |
+| `o-grid` | `insert`, `refresh` (no tiene botón `delete` integrado) |
 | `o-tree` | `insert`, `refresh`, `delete` |
 
 > El input acepta tanto un objeto como un string JSON: `[action-styles]="{ insert: { variant: 'flat' } }"` o `action-styles='{"insert":{"variant":"flat"}}'`.
@@ -1639,21 +1641,21 @@ Un `o-button` (o un `o-table-button`) **proyectado dentro** de un `o-table` / `o
 </o-table>
 ```
 
-Un `variant` / `importance` explícito en el botón **siempre prevalece** sobre lo que diga el host.
+Un `variant` / `importance` / `label` explícito en el botón **siempre prevalece** sobre lo que diga el host (ver [18.10](#1810-configuración-del-texto-de-la-acción--label-desde-1800-next10) para `label`).
 
 ### 18.6 Alcance del `variant` por componente
 
-`importance` (color) aplica a **todas** las acciones integradas. `variant` (forma) aplica donde el botón puede cambiar de directiva Material:
+`importance` (color) e `label` (texto, ver [18.10](#1810-configuración-del-texto-de-la-acción--label-desde-1800-next10)) aplican a **todas** las acciones integradas. `variant` (forma) aplica donde el botón puede cambiar de directiva Material:
 
-| Dónde | `importance` | `variant` |
-|---|---|---|
-| `o-button` | ✅ | ✅ |
-| `o-table-button` (tabla) | ✅ | ✅ |
-| Toolbar de `o-list` / `o-grid` (modo texto, `show-buttons-text`) | ✅ | ✅ |
-| Toolbar de `o-form` (modo texto, `show-header-actions-text`) | ✅ | ✅ |
-| Botones integrados de `o-tree` | ✅ | — (siempre `outline`) |
+| Dónde | `importance` | `variant` | `label` |
+|---|---|---|---|
+| `o-button` | ✅ | ✅ | ✅ |
+| `o-table-button` (tabla) | ✅ | ✅ | ✅ |
+| Toolbar de `o-list` / `o-grid` (modo texto, `show-buttons-text`) | ✅ | ✅ | ✅ |
+| Toolbar de `o-form` (modo texto, `show-header-actions-text`) | ✅ | ✅ | ✅ |
+| Botones integrados de `o-tree` | ✅ | — (siempre `outline`) | ✅ |
 
-> En modo solo-icono (`show-buttons-text="no"` en list/grid, `show-header-actions-text="no"` en el o-form) los botones de toolbar son siempre `mat-icon-button`; el `variant` aplica en modo texto y al FAB flotante de insert.
+> En modo solo-icono (`show-buttons-text="no"` en list/grid, `show-header-actions-text="no"` en el o-form) los botones de toolbar son siempre `mat-icon-button`; el `variant` aplica en modo texto y al FAB flotante de insert. `label` no depende del modo icono/texto: solo se **muestra** en modo texto, pero se resuelve igual en ambos (en modo icono no se renderiza ningún texto, con o sin `label` configurado).
 
 ### 18.7 Clases CSS para casos avanzados
 
@@ -1738,6 +1740,47 @@ Solo se neutraliza `flat`. Las variantes `fab` / `mini-fab` —incluido el FAB f
 
 > Esto aplica a `flat` + `default` en `o-button`, `o-table-button` y las toolbars de `o-form` / `o-list` / `o-grid`. Para `flat` + `primary` / `warn` el color va al contenedor vía la paleta de Material (`[color]`), no por estos tokens.
 
+### 18.10 Configuración del texto de la acción — `label` (desde 18.0.0-next.10)
+
+`OActionStyle` incluye un tercer campo, `label`, que configura el **texto** de la acción con el mismo mecanismo — y la misma precedencia — que `variant` e `importance`. Así puedes renombrar el texto de un botón integrado (p. ej. cambiar "Añadir" por "Nuevo cliente") sin tocar traducciones ni envolver la acción en un `o-button`.
+
+```html
+<!-- Cambiar el texto del insert sin tocar variant/importance -->
+<o-list [action-styles]="{ insert: { label: 'Nuevo cliente' } }">
+```
+
+`label` acepta tanto un literal como una clave de traducción — se resuelve siempre con `oTranslate`, que muestra el literal tal cual si no encuentra esa clave en el bundle de traducciones.
+
+Cada componente expone un nuevo método `getActionLabel(attr)` (junto a `getActionVariant` / `getActionImportanceClass`) y resuelve el texto de sus botones integrados a través de él en vez de una clave de traducción fija. Los defaults por `attr` (la regla automática del componente, nivel 3 de la precedencia) son los mismos textos que ya se mostraban antes de `next.10` — por lo que ninguna app existente ve un cambio de texto salvo que configure `label` explícitamente:
+
+| Componente | `attr` → texto por defecto |
+|---|---|
+| `o-form` / toolbar de `o-form` | `undo`→`UNDO`, `refresh`→`REFRESH`, `insert`→`ADD`, `edit`→`EDIT`, `delete`→`DELETE`, `update`→`SAVE`, `cancel`→`CANCEL` |
+| `o-table` | `insert`→`TABLE.BUTTONS.ADD`, `refresh`→`TABLE.BUTTONS.REFRESH`, `delete`→`TABLE.BUTTONS.DELETE` |
+| `o-list` / `o-grid` | `insert`→`ADD`, `refresh`→`REFRESH`, `delete`→`DELETE` (`o-grid` no tiene botón `delete`) |
+| `o-tree` | `insert`→`INSERT`, `refresh`→`REFRESH`, `delete`→`DELETE` |
+
+> **Botón de confirmar del `o-form`**: en modo INSERT resuelve su texto por `attr=insert` (`ADD`) y en modo UPDATE / editable-detail por `attr=update` (`SAVE`) — antes de `next.10` mostraba siempre `INSERT` fuera de este mecanismo; ver el `CHANGELOG` (`18.0.0-next.10` → *Bug Fixes*).
+
+La configuración global también admite `label`, igual que `variant` e `importance`:
+
+```typescript
+provideOActionStyles({
+  actions: {
+    insert: { label: 'TABLE.BUTTONS.NEW' } // renombra el texto de "crear" en toda la app
+  }
+})
+```
+
+**`o-button` proyectado**: si no fijas `label`, un `o-button` (o `o-table-button`) proyectado dentro de un host resuelve su texto igual que su `variant`/`importance` — por su `attr`, vía `OActionStyleProvider` — o, fuera de un host, desde `O_ACTION_STYLES_CONFIG`. Un `label` explícito en el botón siempre prevalece:
+
+```html
+<o-table entity="invoices" [action-styles]="{ export: { label: 'Exportar factura' } }">
+  <o-table-button attr="export" icon="download" (onClick)="export()"></o-table-button>
+  <!-- el botón export muestra "Exportar factura" sin más config -->
+</o-table>
+```
+
 ---
 
 ## 19. Cambios y fixes (desde 18.0.0-next.8)
@@ -1784,7 +1827,7 @@ La clase `empty-cell` (que reserva altura mínima en celdas vacías) se aplica a
 Para la mayoría de apps que **no** personalizan el formato de fecha, esto es transparente: `o-date-input`/`o-daterange-input` siguen funcionando con su formato localizado por defecto, ahora resuelto por Luxon en vez de moment. Solo necesitas actuar si:
 - Pasas un `format`/`value-format` explícito construido con tokens de moment.
 - Tienes un `[date-class]` tipado estrictamente contra `Moment`.
-- Usabas `o-daterange-legacy-input` (`date-range-legacy`) — ver [20.4](#204-eliminación-de-o-daterange-legacy-input-breaking).
+- Usabas `o-daterange-legacy-input` (`date-range-legacy`) — ver [20.4](#204-eliminación-de-o-daterange-legacy-input--breaking).
 
 ### 20.2 Tabla de equivalencias de formato moment → Luxon
 
@@ -1817,7 +1860,7 @@ El valor por defecto de `format`/`oformat` en todos los componentes pasó de `'L
 `DateCustomClassFunction` (el tipo del input `[date-class]` de `o-date-input`/`o-daterange-input`) pasó de tipar su parámetro como `Moment` a tiparlo como `any`, precisamente para no romper a nadie: un callback existente anotado `(date: Moment) => ...` sigue compilando igual. Pero en **tiempo de ejecución** el objeto recibido cambia con el adapter activo:
 
 - Con el adapter por defecto (`OntimizeLuxonDateAdapter`, Luxon) recibes un `DateTime` de Luxon.
-- Si provees `OntimizeMomentDateAdapter` explícitamente (ver [20.5](#205-cómo-seguir-usando-momentjs-explícitamente)) recibes un `Moment`.
+- Si provees `OntimizeMomentDateAdapter` explícitamente (ver [20.5](#205-elegir-el-adapter-luxon-o-momentjs--provideodateadapter)) recibes un `Moment`.
 
 Si tu `[date-class]` llama a métodos de moment (`.date()`, `.month()`, `.isoWeekday()`...) sobre el parámetro, falla en tiempo de ejecución con el adapter Luxon activo — pásalo a la API equivalente de Luxon:
 

@@ -388,6 +388,16 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   /**
+   * Resolved label (translation key or literal text) for a built-in action,
+   * to bind on its button (e.g. `{{ getActionLabel('insert') | oTranslate }}`)
+   * instead of a hardcoded key. Falls back to this component's historic
+   * default via `getActionStyleAutoRules()` when nothing else configures it.
+   */
+  public getActionLabel(attr: string): string {
+    return this.getResolvedActionStyle(attr).label;
+  }
+
+  /**
    * Material colour palette for a filled action's container, derived from its
    * importance. On the truly filled variants (flat, fab, mini-fab) a primary/warn
    * importance colours the container; otherwise it returns `undefined` so the

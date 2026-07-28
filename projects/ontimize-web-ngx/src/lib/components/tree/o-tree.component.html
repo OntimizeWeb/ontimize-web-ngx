@@ -7,21 +7,21 @@
             @if (insertButton) {
               <button type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" attr="insert" (click)="add($event)">
                 <mat-icon>add</mat-icon>
-                <span>{{ 'INSERT' | oTranslate }}</span>
+                <span>{{ getActionLabel('insert') | oTranslate }}</span>
               </button>
             }
             @if (refreshButton) {
               <button type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton"
                 [ngClass]="getActionImportanceClass('refresh')" attr="refresh" (click)="reloadData()">
                   <mat-icon>autorenew</mat-icon>
-                <span>{{ 'REFRESH' | oTranslate }}</span>
+                <span>{{ getActionLabel('refresh') | oTranslate }}</span>
               </button>
             }
             @if (deleteButton) {
               <button type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
                 [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete">
                 <mat-icon>delete</mat-icon>
-                <span>{{ 'DELETE' | oTranslate }}</span>
+                <span>{{ getActionLabel('delete') | oTranslate }}</span>
               </button>
             }
           } @else {

@@ -10,22 +10,29 @@ import {
 /**
  * Global baseline applied when nothing else sets a field. Every action renders
  * as `outline + default` unless a higher-precedence source overrides it.
+ * `label` has no framework-wide baseline — it stays `undefined` here, since
+ * showing the right text requires knowing which action this is; each component
+ * supplies its own historic label per `attr` via `autoRules` instead.
  */
 export const O_ACTION_STYLE_DEFAULT: OResolvedActionStyle = {
   variant: 'outline',
-  importance: 'default'
+  importance: 'default',
+  label: undefined
 };
 
 /**
  * Resolves the final style of an action following the precedence (highest first):
  *   1. explicit `actionStyles[attr]` configured on the component instance
  *   2. app-wide per-attr config (`globalConfig.actions[attr]`)
- *   3. component auto-rules (e.g. the create action is `primary`)
+ *   3. component auto-rules (e.g. the create action is `primary`, and — for
+ *      `label` — the component's own historic default text for this `attr`)
  *   4. app-wide default (`globalConfig.default`)
- *   5. framework default (`outline + default`)
+ *   5. framework default (`outline + default`; no `label`)
  *
  * Resolution is per-field: a source that only sets `importance` keeps the
- * `variant` from the next source that defines it, and vice versa.
+ * `variant`/`label` from the next source that defines it, and vice versa.
+ * Callers that render a `label` should make sure `autoRules` supplies one for
+ * every `attr` they use — nothing here invents a piece of text on its own.
  *
  * @param attr action identifier (its `attr`)
  * @param actionStyles instance configuration keyed by `attr`
@@ -46,7 +53,8 @@ export function resolveActionStyle(
   const globalDef: OActionStyle = globalConfig?.default;
   return {
     variant: instance?.variant ?? globalAttr?.variant ?? auto?.variant ?? globalDef?.variant ?? frameworkDefault.variant,
-    importance: instance?.importance ?? globalAttr?.importance ?? auto?.importance ?? globalDef?.importance ?? frameworkDefault.importance
+    importance: instance?.importance ?? globalAttr?.importance ?? auto?.importance ?? globalDef?.importance ?? frameworkDefault.importance,
+    label: instance?.label ?? globalAttr?.label ?? auto?.label ?? globalDef?.label ?? frameworkDefault.label
   };
 }
 
@@ -58,7 +66,7 @@ export function resolveActionStyle(
  * ```ts
  * provideOActionStyles({
  *   default: { variant: 'flat' },
- *   actions: { delete: { importance: 'warn' } }
+ *   actions: { delete: { importance: 'warn', label: 'REMOVE' } }
  * })
  * ```
  */

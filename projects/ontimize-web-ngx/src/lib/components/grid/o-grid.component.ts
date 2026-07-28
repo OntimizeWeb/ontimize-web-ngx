@@ -45,6 +45,7 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
+import { OActionStyle } from '../../types';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
@@ -103,6 +104,15 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   }
 })
 export class OGridComponent extends AbstractOServiceComponent<OGridComponentStateService> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
+
+  /** Adds this grid's historic default labels to the inherited importance auto-rules. */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'ADD' },
+      refresh: { label: 'REFRESH' }
+    };
+  }
 
   /* Inputs */
   protected _queryRows = 32;

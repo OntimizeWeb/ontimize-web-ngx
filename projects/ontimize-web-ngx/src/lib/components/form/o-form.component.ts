@@ -724,13 +724,27 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return resolveActionStyle(attr, styles, this.getActionStyleAutoRules(), this.globalActionStylesConfig);
   }
 
+  /**
+   * Automatic per-action rules for buttons projected into this form (e.g. a
+   * custom `o-button attr="delete">` in the form's content). Mirrors the
+   * built-in toolbar's own labels (`o-form-toolbar.component.ts`) so a
+   * projected button for the same `attr` reads the same by default.
+   */
   private getActionStyleAutoRules(): Record<string, OActionStyle> {
-    const rules: Record<string, OActionStyle> = {};
+    const rules: Record<string, OActionStyle> = {
+      undo: { label: 'UNDO' },
+      refresh: { label: 'REFRESH' },
+      insert: { label: 'ADD' },
+      edit: { label: 'EDIT' },
+      delete: { label: 'DELETE' },
+      update: { label: 'SAVE' },
+      cancel: { label: 'CANCEL' }
+    };
     if (this.isInInsertMode()) {
-      rules['insert'] = { importance: 'primary' };
+      rules['insert'] = { ...rules['insert'], importance: 'primary' };
     }
     if (this.isInUpdateMode() || this.isEditableDetail()) {
-      rules['update'] = { importance: 'primary' };
+      rules['update'] = { ...rules['update'], importance: 'primary' };
     }
     return rules;
   }

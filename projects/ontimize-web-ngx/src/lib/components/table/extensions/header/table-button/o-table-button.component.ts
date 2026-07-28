@@ -102,6 +102,14 @@ export class OTableButtonComponent implements OTableButton, OnInit {
     return this.table.getActionColor(this.oattr);
   }
 
+  /**
+   * Effective label of this action: explicit `label` input > resolved from the
+   * table by its `attr` (see `variant`) > icon-only.
+   */
+  get effectiveLabel(): string {
+    return this.olabel ?? this.table.getActionLabel(this.oattr);
+  }
+
   get table(): OTableBase {
     return this._table;
   }

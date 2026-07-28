@@ -19,23 +19,36 @@ export type OActionImportance = 'primary' | 'warn' | 'default';
  */
 export type OActionVariant = 'outline' | 'flat' | 'basic' | 'raised' | 'icon' | 'fab' | 'mini-fab';
 
-/** Per-action style configuration (all fields optional; unset fields fall back). */
+/**
+ * Per-action style configuration (all fields optional; unset fields fall back).
+ * `label` is a translation key or literal string (unresolved keys pass through
+ * `oTranslate` unchanged, so a literal string works with no extra setup) shown
+ * on the action's button. Unlike `variant`/`importance`, there is no single
+ * framework-wide default for `label` — each component supplies its own
+ * historic text as the lowest-precedence auto-rule for the actions it renders.
+ */
 export type OActionStyle = {
   variant?: OActionVariant;
   importance?: OActionImportance;
+  label?: string;
 };
 
-/** Fully-resolved action style with every field guaranteed. */
+/**
+ * Fully-resolved action style. `variant`/`importance` are always guaranteed
+ * (the framework default covers them); `label` is only guaranteed when the
+ * caller's `autoRules` supplied one for this `attr` — see {@link resolveActionStyle}.
+ */
 export type OResolvedActionStyle = {
   variant: OActionVariant;
   importance: OActionImportance;
+  label?: string;
 };
 
 /**
  * Application-wide action-style configuration. Lets an app set the default
- * appearance of actions once, instead of repeating `action-styles` on every
- * `o-form` / `o-table` / `o-grid` / `o-list` / `o-tree`. Provided via the
- * `O_ACTION_STYLES_CONFIG` injection token.
+ * appearance and/or label of actions once, instead of repeating `action-styles`
+ * on every `o-form` / `o-table` / `o-grid` / `o-list` / `o-tree`. Provided via
+ * the `O_ACTION_STYLES_CONFIG` injection token.
  */
 export interface OActionStylesConfig {
   /**

@@ -228,12 +228,20 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
    * the confirm action is primary in INSERT mode (`insert`) and in UPDATE mode (`update`).
    */
   protected getActionStyleAutoRules(): Record<string, OActionStyle> {
-    const rules: Record<string, OActionStyle> = {};
+    const rules: Record<string, OActionStyle> = {
+      undo: { label: 'UNDO' },
+      refresh: { label: 'REFRESH' },
+      insert: { label: 'ADD' },
+      edit: { label: 'EDIT' },
+      delete: { label: 'DELETE' },
+      update: { label: 'SAVE' },
+      cancel: { label: 'CANCEL' }
+    };
     if (this.insertMode) {
-      rules['insert'] = { importance: 'primary' };
+      rules['insert'] = { ...rules['insert'], importance: 'primary' };
     }
     if (this.editMode || this.saveBtnEnabled) {
-      rules['update'] = { importance: 'primary' };
+      rules['update'] = { ...rules['update'], importance: 'primary' };
     }
     return rules;
   }
@@ -254,6 +262,16 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
   /** Resolved Material button variant for an action (picks the button directive in the template). */
   public getActionVariant(attr: string): OActionVariant {
     return this.getResolvedActionStyle(attr).variant;
+  }
+
+  /**
+   * Resolved label (translation key or literal text) for a built-in toolbar
+   * action, to bind instead of a hardcoded key. Falls back to this toolbar's
+   * historic default via `getActionStyleAutoRules()` when nothing else
+   * configures it.
+   */
+  public getActionLabel(attr: string): string {
+    return this.getResolvedActionStyle(attr).label;
   }
 
   /**

@@ -13,16 +13,16 @@
           @if (insertButton && !insertButtonFloatable) {
             @switch (getActionVariant('insert')) {
               @case ('flat') {
-                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @case ('raised') {
-                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @case ('basic') {
-                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @default {
-                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ 'ADD' | oTranslate }}</span></button>
+                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
             }
           }
@@ -30,16 +30,16 @@
           @if (refreshButton) {
             @switch (getActionVariant('refresh')) {
               @case ('flat') {
-                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @case ('raised') {
-                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @case ('basic') {
-                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @default {
-                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ 'REFRESH' | oTranslate }}</span></button>
+                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
             }
           }

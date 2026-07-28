@@ -59,7 +59,7 @@ import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../se
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OActionStyleProvider, OColumnDisplay, OFilterDefinition, OGroupedColumnTypes, OTableGlobalConfig } from '../../types';
+import { OActionStyle, OActionStyleProvider, OColumnDisplay, OFilterDefinition, OGroupedColumnTypes, OTableGlobalConfig } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -353,6 +353,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public static FIRST_LAST_CELL_PADDING = 24;
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
   public static AVAILABLE_GROUPING_COLUMNS_RENDERERS = ['currency', 'integer', 'real'];
+
+  /** Adds this table's historic default labels to the inherited importance auto-rules. */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'TABLE.BUTTONS.ADD' },
+      refresh: { label: 'TABLE.BUTTONS.REFRESH' },
+      delete: { label: 'TABLE.BUTTONS.DELETE' }
+    };
+  }
 
   public DETAIL_MODE_NONE = Codes.DETAIL_MODE_NONE;
   public EDIT_MODE_NONE = Codes.EDITION_MODE_NONE;

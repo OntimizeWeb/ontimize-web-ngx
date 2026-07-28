@@ -46,6 +46,7 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
+import { OActionStyle } from '../../types';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { ListItem } from './list-item/o-list-item';
 import { OListItemDirective } from './list-item/o-list-item.directive';
@@ -109,6 +110,16 @@ export const DEFAULT_OUTPUTS_O_LIST = [
   }
 })
 export class OListComponent extends AbstractOServiceComponent<OListComponentStateService> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
+
+  /** Adds this list's historic default labels to the inherited importance auto-rules. */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'ADD' },
+      refresh: { label: 'REFRESH' },
+      delete: { label: 'DELETE' }
+    };
+  }
 
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;

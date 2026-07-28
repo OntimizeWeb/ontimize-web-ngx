@@ -79,6 +79,7 @@ export abstract class OTableBase {
   abstract getActionImportanceClass(attr: string): string;
   abstract getActionVariant(attr: string): string;
   abstract getActionColor(attr: string): ThemePalette;
+  abstract getActionLabel(attr: string): string;
   abstract selection: SelectionModel<Element>;
   abstract registerOTableButtons(arg: OTableButtons);
   abstract add();

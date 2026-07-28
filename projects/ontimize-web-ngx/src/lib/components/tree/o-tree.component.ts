@@ -42,6 +42,7 @@ import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
+import { OActionStyle } from '../../types';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
 import type { OTreeNodeComponent } from './tree-node/tree-node.component';
@@ -138,6 +139,20 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
 })
 
 export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
+
+  /**
+   * Adds this tree's historic default labels to the inherited importance
+   * auto-rules. Note `insert` defaults to `'INSERT'` here (unlike the `'ADD'`
+   * default used by o-table/o-list/o-grid/o-form) — preserved as-is.
+   */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'INSERT' },
+      refresh: { label: 'REFRESH' },
+      delete: { label: 'DELETE' }
+    };
+  }
 
   getLevel = (node: OTreeFlatNode) => node.level;
 
