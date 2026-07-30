@@ -14,6 +14,18 @@
     }
   }
 
+  // Material's own icon margin (.mat-mdc-button > .mat-icon) always assumes a
+  // leading icon: margin-right for the gap, margin-left: 0. When the icon is
+  // placed after the label (icon-position="right") that leaves zero space on
+  // the side that now actually needs it, so label and icon render touching/
+  // overlapping. Mirror the margins for this position only.
+  &.o-button-icon-position-right {
+    .mat-icon {
+      margin-right: 0;
+      margin-left: var(--mat-text-button-icon-spacing, 8px);
+    }
+  }
+
   button {
     pointer-events: auto;
 

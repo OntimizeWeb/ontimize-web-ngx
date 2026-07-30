@@ -52,6 +52,7 @@ export const DEFAULT_OUTPUTS_O_BUTTON = [
     '[class.o-button]': 'true',
     '[class.o-button-icon-position-top]': 'iconPosition==="top"',
     '[class.o-button-icon-position-bottom]': 'iconPosition==="bottom"',
+    '[class.o-button-icon-position-right]': 'iconPosition==="right"',
     '[class.o-button--importance-primary]': "appliesImportanceColor && resolvedImportance === 'primary'",
     '[class.o-button--importance-warn]': "appliesImportanceColor && resolvedImportance === 'warn'",
     '[class.o-button--importance-default]': "appliesImportanceColor && resolvedImportance === 'default'",
