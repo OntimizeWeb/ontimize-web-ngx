@@ -599,11 +599,6 @@ $m3-theme: mat.define-theme((color: $color-config,
       background: var(--o-bg-level-04) no-repeat;
     }
   }
-
-  .o-list-skeleton-item {
-    background-color: var(--o-bg-level-08);
-    border-radius: 2px;
-  }
 }
 
 // ─── Color-only convenience mixin ───────────────────────────────────────────
