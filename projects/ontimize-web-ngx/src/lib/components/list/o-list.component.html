@@ -103,9 +103,15 @@
       @if (!getDataArray().length) {
         <mat-list-item class="o-flex-row o-layout-align-center-center" style="cursor: default;">
           <h3 matListItemTitle class="o-flex-row o-layout-align-center-center">
-            {{ 'TABLE.EMPTY' | oTranslate }}
-            @if (getQuickFilterValue().length > 0) {
-              {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : {values: [getQuickFilterValue()]} }}
+            @if (noResultsTemplate) {
+              <ng-container [ngTemplateOutlet]="noResultsTemplate"></ng-container>
+            } @else if (noResultsMessage) {
+              <span [innerHTML]="noResultsMessage | oTranslate"></span>
+            } @else {
+              {{ 'TABLE.EMPTY' | oTranslate }}
+              @if (getQuickFilterValue().length > 0) {
+                {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : {values: [getQuickFilterValue()]} }}
+              }
             }
           </h3>
         </mat-list-item>

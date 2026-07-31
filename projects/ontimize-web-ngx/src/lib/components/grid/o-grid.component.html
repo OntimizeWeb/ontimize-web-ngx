@@ -111,9 +111,15 @@
   @if (gridItems.length === 0) {
     <div class="o-grid-no-results fill-remaining o-layout-align-center-start" layout-padding
       [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
-      {{'GRID.EMPTY' | oTranslate}}
-      @if (quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0) {
-        {{ 'GRID.EMPTY_USING_FILTER' | oTranslate : { values: [ searchInputComponent.getValue()] } }}
+      @if (noResultsTemplate) {
+        <ng-container [ngTemplateOutlet]="noResultsTemplate"></ng-container>
+      } @else if (noResultsMessage) {
+        <span [innerHTML]="noResultsMessage | oTranslate"></span>
+      } @else {
+        {{'GRID.EMPTY' | oTranslate}}
+        @if (quickFilter && searchInputComponent && searchInputComponent.getValue() && searchInputComponent.getValue().length > 0) {
+          {{ 'GRID.EMPTY_USING_FILTER' | oTranslate : { values: [ searchInputComponent.getValue()] } }}
+        }
       }
     </div>
   }

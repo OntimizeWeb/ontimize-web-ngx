@@ -1,4 +1,5 @@
-import { AfterViewInit, Directive, ElementRef, Injector, Input, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EmbeddedViewRef, Injector, Input, Renderer2, SecurityContext, ViewContainerRef } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { delay, distinctUntilChanged } from 'rxjs/operators';
 
@@ -13,7 +14,9 @@ import { OTableBase } from '../../../o-table-base.class';
 export class OTableExpandedFooterDirective implements AfterViewInit {
 
   private spanMessageNotResults: any;
+  private noResultsView: EmbeddedViewRef<any>;
   private translateService: OTranslateService;
+  private sanitizer: DomSanitizer;
   private tableBody: any;
   private tdTableWithMessage: any;
   private trNoResults: any;
@@ -35,9 +38,11 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     public table: OTableBase,
     public element: ElementRef,
     private renderer: Renderer2,
+    private viewContainerRef: ViewContainerRef,
     protected injector: Injector
   ) {
     this.translateService = this.injector.get(OTranslateService);
+    this.sanitizer = this.injector.get(DomSanitizer);
   }
 
   ngAfterViewInit() {
@@ -78,26 +83,34 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     const hasData = (this.table?.dataSource?.renderedData?.length ?? 0) > 0;
 
     if (display && !hasData) {
-      this.createMessageSpan();
+      this.createMessageContent();
       this.renderer.removeStyle(this.trNoResults, 'display');
     } else {
       this.renderer.setStyle(this.trNoResults, 'display', 'none');
-      this.removeMessageSpan();
+      this.removeMessageContent();
     }
   }
 
-  removeMessageSpan() {
+  removeMessageContent() {
     if (this.spanMessageNotResults) {
       this.renderer.removeChild(this.tdTableWithMessage, this.spanMessageNotResults);
       this.spanMessageNotResults = null;
+    }
+    if (this.noResultsView) {
+      this.noResultsView.destroy();
+      this.noResultsView = null;
     }
   }
 
   destroy() {
     this.subscription.unsubscribe();
+    this.noResultsView?.destroy();
   }
 
   protected buildMessage(): string {
+    if (this.table.noResultsMessage) {
+      return this.translateService.get(this.table.noResultsMessage);
+    }
     let message = '';
     message = this.translateService.get('TABLE.EMPTY');
     if (this.tableHasQuickFilter() && this.table.oTableQuickFilterComponent.value) {
@@ -110,16 +123,32 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     return this.table.quickFilter && Util.isDefined(this.table.oTableQuickFilterComponent);
   }
 
-  protected createMessageSpan() {
-    this.removeMessageSpan();
+  protected createMessageContent() {
+    this.removeMessageContent();
+    if (this.tdTableWithMessage) {
+      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
+    }
+
+    if (this.table.noResultsTemplate) {
+      // Created detached from the DOM at the container's anchor and its root
+      // nodes moved into the message <td>; Angular still tracks/checks the
+      // view by reference regardless of where its nodes end up in the DOM
+      // (the same technique the CDK's TemplatePortal/DomPortalOutlet use).
+      this.noResultsView = this.viewContainerRef.createEmbeddedView(this.table.noResultsTemplate);
+      this.noResultsView.rootNodes.forEach(node => this.renderer.appendChild(this.tdTableWithMessage, node));
+      this.noResultsView.detectChanges();
+      return;
+    }
+
     // 1 Build message
     const message = this.buildMessage();
     // 2 Create message
+    // Renderer2.setProperty bypasses Angular's automatic template sanitization,
+    // so the message is sanitized explicitly before being assigned as innerHTML
+    // (same SecurityContext.HTML Angular applies to a plain [innerHTML] binding).
     this.spanMessageNotResults = this.renderer.createElement('span');
-    const messageNotResults = this.renderer.createText(message);
+    this.renderer.setProperty(this.spanMessageNotResults, 'innerHTML', this.sanitizer.sanitize(SecurityContext.HTML, message) ?? '');
     if (this.tdTableWithMessage) {
-      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
-      this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
       this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
     }
   }

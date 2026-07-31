@@ -16,7 +16,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { AsyncPipe, NgClass, NgStyle } from '@angular/common';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -92,7 +92,7 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 
 @Component({
   standalone: true,
-  imports: [AsyncPipe, NgClass, NgStyle, MatButtonModule, MatIconModule, MatListModule, MatPaginatorModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OListSkeletonComponent],
+  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatIconModule, MatListModule, MatPaginatorModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OListSkeletonComponent],
   selector: 'o-list',
   providers: [
     OntimizeServiceProvider,

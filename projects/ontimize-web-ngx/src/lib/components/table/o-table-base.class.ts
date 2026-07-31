@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectorRef, EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, TemplateRef } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import type { ThemePalette } from '@angular/material/core';
 import { Observable } from 'rxjs';
@@ -144,4 +144,6 @@ export abstract class OTableBase {
   abstract setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent);
   abstract getAllValues(): any[];
   abstract getDataService(): BaseService<ServiceResponse>;
+  abstract noResultsMessage: string;
+  abstract noResultsTemplate: TemplateRef<any>;
 }

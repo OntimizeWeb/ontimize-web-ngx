@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Directive, ElementRef, EventEmitter, forwardRef, Injector, NgZone, ViewChild } from '@angular/core';
+import { ContentChild, Directive, ElementRef, EventEmitter, forwardRef, Injector, NgZone, TemplateRef, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -120,7 +120,11 @@ export const DEFAULT_INPUTS_O_SERVICE_COMPONENT = [
   'filterBuilderFunction: filter-builder-function',
 
   // action-styles [Record<string, OActionStyle>]: per-action visual style keyed by the action `attr`.
-  'actionStyles: action-styles'
+  'actionStyles: action-styles',
+
+  // no-results-message [string]: overrides the default "no results" empty-state message.
+  // Accepts plain text, an i18n key (resolved with oTranslate) or an HTML string (sanitized before rendering).
+  'noResultsMessage: no-results-message'
 ];
 
 export const DEFAULT_OUTPUTS_O_SERVICE_COMPONENT = [
@@ -178,6 +182,11 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   insertButton: boolean;
   /** Per-action visual style keyed by the action `attr`. */
   public actionStyles: Record<string, OActionStyle>;
+  /** Overrides the default "no results" empty-state message. Plain text, an i18n key, or an HTML string. */
+  public noResultsMessage: string;
+  /** Custom template for the "no results" empty-state, projected as `<ng-template #noResultsTemplate>`. Takes precedence over `noResultsMessage`. */
+  @ContentChild('noResultsTemplate', { read: TemplateRef, static: false })
+  public noResultsTemplate: TemplateRef<any>;
   @BooleanInputConverter()
   paginationControls: boolean = true;
   @BooleanInputConverter()
