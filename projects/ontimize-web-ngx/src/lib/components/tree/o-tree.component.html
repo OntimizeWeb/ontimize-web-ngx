@@ -49,7 +49,8 @@
         </div>
         @if (quickFilter) {
           <o-search-input [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
-            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no">
+            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no"
+            [data-testid]="dataTestId ? dataTestId + '-quick-filter' : null">
           </o-search-input>
         }
         @if (showTreeMenuButton) {

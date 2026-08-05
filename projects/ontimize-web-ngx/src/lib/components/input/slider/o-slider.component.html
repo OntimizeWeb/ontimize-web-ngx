@@ -4,24 +4,24 @@
     @case (thumbLabel && !showTickMarks) {
       <mat-slider discrete [color]="color" [max]="max" [min]="min" [step]="step"
         [displayWith]="oDisplayWith">
-        <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [formControlName]="getAttribute()" />
+        <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" />
       </mat-slider>
     }
     @case (!thumbLabel && !showTickMarks) {
       <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" [displayWith]="oDisplayWith">
-        <input matSliderThumb (change)="onChangeEvent($event)"  [id]="getAttribute()" [formControlName]="getAttribute()" />
+        <input matSliderThumb (change)="onChangeEvent($event)"  [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" />
       </mat-slider>
     }
     @case (thumbLabel && showTickMarks) {
       <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" discrete
         [displayWith]="oDisplayWith" showTickMarks>
-        <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [formControlName]="getAttribute()" />
+        <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" />
       </mat-slider>
     }
     @case (!thumbLabel && showTickMarks) {
       <mat-slider [color]="color" [max]="max" [min]="min" [step]="step" [displayWith]="oDisplayWith"
         showTickMarks>
-        <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [formControlName]="getAttribute()" />
+        <input matSliderThumb (change)="onChangeEvent($event)" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" />
       </mat-slider>
     }
   }

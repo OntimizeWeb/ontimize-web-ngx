@@ -20,11 +20,11 @@
 
 <mat-dialog-actions align="end">
   <button type="button" mat-button [disabled]="configurationList.selectedOptions.selected.length!==1 || isDefaultConfigurationSelected()"
-    (click)="removeConfiguration(configurationList.selectedOptions.selected[0].value)" class="o-button--importance-default">
+    (click)="removeConfiguration(configurationList.selectedOptions.selected[0].value)" data-testid="dialog-delete" class="o-button--importance-default">
     {{ 'DELETE' | oTranslate }}
   </button>
   <span class="o-flex"></span>
-  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button--importance-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" data-testid="dialog-cancel" class="o-button--importance-default">{{ 'CANCEL' | oTranslate }}</button>
   <button type="button" mat-stroked-button [mat-dialog-close]="true" [disabled]="configurationList.selectedOptions.selected.length!==1"
-  class="o-button--importance-primary">{{ 'OK' | oTranslate }}</button>
+  data-testid="dialog-accept" class="o-button--importance-primary">{{ 'OK' | oTranslate }}</button>
 </mat-dialog-actions>

@@ -1,6 +1,6 @@
 <div class="o-user-info-container o-flex-row o-layout-align-center">
   @if (existsUserInfo) {
-    <div class="o-user-info-wrapper o-flex-row o-layout-align-center-center o-gap-16" [matMenuTriggerFor]="menu">
+    <div class="o-user-info-wrapper o-flex-row o-layout-align-center-center o-gap-16" [matMenuTriggerFor]="menu" data-testid="user-info-trigger">
       <div class="o-user-info-avatar-wrapper o-flex-row o-layout-align-center-center">
         @if (avatar) {
           <img [src]="avatar" alt="avatar image"/>
@@ -19,7 +19,7 @@
         </button>
       }
       @if (showSettings) {
-        <button id="menu-settings" type="button" mat-menu-item (click)="onSettingsClick()">
+        <button id="menu-settings" data-testid="menu-settings" type="button" mat-menu-item (click)="onSettingsClick()">
           <mat-icon>settings</mat-icon>
           <span>{{ 'APP_LAYOUT.SETTINGS' | oTranslate }}</span>
         </button>
@@ -35,7 +35,7 @@
         }
       }
       @if (showLogout) {
-        <button id="menu-logout" type="button" mat-menu-item (click)="onLogoutClick()">
+        <button id="menu-logout" data-testid="menu-logout" type="button" mat-menu-item (click)="onLogoutClick()">
           <mat-icon>power_settings_new</mat-icon>
           <span>{{ 'LOGOUT' | oTranslate }}</span>
         </button>

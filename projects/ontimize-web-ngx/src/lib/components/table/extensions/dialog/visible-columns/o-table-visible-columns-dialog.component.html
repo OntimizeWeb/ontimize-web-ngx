@@ -27,6 +27,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="o-layout-align-end-center">
-  <button type="button" mat-stroked-button [mat-dialog-close]="null" class="o-button--importance-default" cancel>{{ 'CANCEL' | oTranslate }}</button>
-  <button type="button" mat-stroked-button (click)="closeDialog()" class="o-button--importance-primary">{{ 'ACCEPT' | oTranslate }}</button>
+  <button type="button" mat-stroked-button [mat-dialog-close]="null" class="o-button--importance-default" data-testid="dialog-cancel" cancel>{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button (click)="closeDialog()" data-testid="dialog-accept" class="o-button--importance-primary">{{ 'ACCEPT' | oTranslate }}</button>
 </mat-dialog-actions>

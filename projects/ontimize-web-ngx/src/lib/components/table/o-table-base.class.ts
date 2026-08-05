@@ -146,4 +146,5 @@ export abstract class OTableBase {
   abstract getDataService(): BaseService<ServiceResponse>;
   abstract noResultsMessage: string;
   abstract noResultsTemplate: TemplateRef<any>;
+  abstract dataTestId: string;
 }

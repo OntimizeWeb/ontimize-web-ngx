@@ -11,11 +11,11 @@
     }
     <input matInput [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [required]="isRequired" style="display: none" />
-      <mat-radio-group [id]="getAttribute()" [formControlName]="getAttribute()" [name]="getAttribute()"
+      <mat-radio-group [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [name]="getAttribute()"
         [value]="getValue()" [required]="isRequired" [labelPosition]="labelPosition"
         (change)="onMatRadioGroupChange($event)" [ngClass]="layout === 'row' ? 'o-flex-row' : 'o-flex-column'" [style.gap]="labelGap">
         @for (item of dataArray; track item; let i = $index) {
-          <mat-radio-button [id]="'o-radio-button-'+groupId+'-'+i" [value]="getValueColumn(item)"
+          <mat-radio-button [id]="'o-radio-button-'+groupId+'-'+i" [attr.data-testid]="dataTestId ? dataTestId + '-option-' + i : null" [value]="getValueColumn(item)"
             [disabled]="!enabled">
             {{ getOptionDescriptionValue(item) }}
           </mat-radio-button>

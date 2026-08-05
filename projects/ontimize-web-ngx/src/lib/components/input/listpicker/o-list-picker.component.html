@@ -11,7 +11,7 @@
     }
 
     <input #visibleInput matInput type="text" [attr.id]="'desc_' + getAttribute()" [id]="'desc_' + getAttribute()"
-      [formControl]="stateCtrl" [placeholder]="placeHolder"
+      [attr.data-testid]="dataTestId" [formControl]="stateCtrl" [placeholder]="placeHolder"
       (input)="onVisibleInputChange($event)" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
       [readonly]="isReadOnly || !textInputEnabled" [required]="isRequired"
       (keydown.enter)="onKeydownEnter(visibleInput.value)" (change)="onChangeEvent($event)">

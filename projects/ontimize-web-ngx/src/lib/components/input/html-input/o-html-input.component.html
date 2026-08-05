@@ -1,6 +1,6 @@
 <div [formGroup]="getFormGroup()" class="mat-form-field mat-form-field o-flex-fill">
   <div class="mat-form-field-wrapper mat-form-field-wrapper">
-    <ck-editor #ckEditor [id]="getAttribute()" [formControlName]="getAttribute()" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
+    <ck-editor #ckEditor [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)"
     (change)="onChangeEvent($event)"  [required]="isRequired" [readonly]="isReadOnly" class="mat-form-field-flex mat-form-field-flex o-flex-fill"></ck-editor>
     <div class="mat-form-field-subscript-wrapper mat-form-field-subscript-wrapper">
       <div class="ng-trigger ng-trigger-transitionMessages" [@transitionMessages]="_subscriptAnimationState">

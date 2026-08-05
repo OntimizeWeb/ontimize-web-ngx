@@ -5,7 +5,7 @@
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <input matInput type="email" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)="innerOnFocus($event)"
+    <input matInput type="email" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [placeholder]="placeHolder" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [required]="isRequired" (change)="onChangeEvent($event)" [maxlength]="maxLength"
       [minlength]="minLength">
       @if (showClearButton) {

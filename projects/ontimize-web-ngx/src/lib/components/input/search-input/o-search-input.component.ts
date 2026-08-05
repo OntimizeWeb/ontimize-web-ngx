@@ -32,7 +32,9 @@ export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'columns',
   'filterCaseSensitive: filter-case-sensitive',
   'showCaseSensitiveCheckbox: show-case-sensitive-checkbox',
-  'showMenu: show-menu'
+  'showMenu: show-menu',
+  // data-testid [string]: forwarded to the native search `<input>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 
 export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
@@ -80,6 +82,8 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
 
   public width: string;
   public columns: string;
+  /** Forwarded to the native search `<input>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress). */
+  public dataTestId: string;
   @BooleanInputConverter()
   public showCaseSensitiveCheckbox: boolean = false;
   @BooleanInputConverter()

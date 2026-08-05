@@ -4,6 +4,7 @@
     <mat-form-field floatLabel="always">
 
       <input #dateInput matInput [placeholder]="getPlaceholderDate()" [formControl]="formControlDate" [required]="orequired" [matDatepicker]="d"
+        [attr.data-testid]="dataTestId ? dataTestId + '-date' : null"
         (dateChange)="onDateChange($event)" [min]="minDate" [max]="maxDate" (focus)="enabledCommitOnTabPress = false">
 
         <mat-datepicker #d [startView]="oStartView" [startAt]="oDateStartAt" [touchUi]="oDateTouchUi" (closed)="onDatepickerClosed()">
@@ -41,6 +42,7 @@
       <mat-form-field>
 
         <input #hourInput matInput [oNgxTimepicker]="picker" [placeholder]="getPlaceholderHour()" [formControl]="formControlHour" [required]="orequired"
+          [attr.data-testid]="dataTestId ? dataTestId + '-hour' : null"
           (change)="onHourChange($event)" [min]="oHourMin" [max]="oHourMax" (keydown)="onKeyDown($event)" [disableClick]="true" [format]="oHourFormat"
           (blur)="enabledCommitOnTabPress = true">
 

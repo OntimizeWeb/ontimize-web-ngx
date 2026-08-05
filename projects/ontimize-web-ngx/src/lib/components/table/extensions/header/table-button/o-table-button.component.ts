@@ -114,4 +114,9 @@ export class OTableButtonComponent implements OTableButton, OnInit {
     return this._table;
   }
 
+  /** Composed from the parent table's `data-testid` and this button's `attr`, for E2E testing (Playwright/Cypress). */
+  get dataTestId(): string | null {
+    return this.table?.dataTestId ? `${this.table.dataTestId}-${this.oattr}` : null;
+  }
+
 }

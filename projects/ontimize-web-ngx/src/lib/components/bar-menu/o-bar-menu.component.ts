@@ -17,6 +17,9 @@ export const DEFAULT_INPUTS_O_BAR_MENU = [
   'menuTitle: title',
   // tooltip [string]: menu tooltip. Default: 'title' value.
   'tooltip',
+  // data-testid [string]: forwarded to the toggle's `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  // Independent of `id`, which is always internally auto-generated (random) and not consumer-settable.
+  'dataTestId: data-testid',
 ];
 
 @Component({
@@ -42,6 +45,8 @@ export class OBarMenuComponent implements OnInit {
   protected _menuTitle: string;
   protected _tooltip: string;
   protected _id: string;
+  /** Forwarded to the toggle's `data-testid` attribute, for E2E testing (Playwright/Cypress). */
+  public dataTestId: string;
   protected subscription: Subscription = new Subscription();
 
   constructor(

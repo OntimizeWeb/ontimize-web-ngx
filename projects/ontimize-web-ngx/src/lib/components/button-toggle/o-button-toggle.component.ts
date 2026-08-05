@@ -14,7 +14,9 @@ export const DEFAULT_INPUTS_O_BUTTON_TOGGLE = [
   'checked',
   'enabled',
   'value',
-  'name'
+  'name',
+  // data-testid [string]: forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 
 export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE = [
@@ -46,6 +48,8 @@ export class OButtonToggleComponent {
   public iconPosition: 'before' | 'after' = 'before';
 
   public name: string;
+  /** Forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress). */
+  public dataTestId: string;
   /* End inputs */
 
   /* Outputs */

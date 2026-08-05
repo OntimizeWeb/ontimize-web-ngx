@@ -2,6 +2,7 @@
   @if (sidenavOpened) {
     <!-- Open state: M3 nav-list item -->
     <a mat-list-item class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+      [attr.data-testid]="menuGroup.id"
       [class.o-app-sidenav-viewer-sidenav-item-selected]="active"
       [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
       [matTooltipShowDelay]="500">
@@ -13,11 +14,11 @@
       }
       <span matListItemTitle class="o-app-sidenav-menugroup-title">{{ menuGroup.name | oTranslate }}</span>
       @if (appMenuService.isMenuGroupRoute(menuGroup) && menuGroup.opened) {
-        <mat-icon matListItemMeta [id]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow"
+        <mat-icon matListItemMeta [id]="'arrow_icon_' + menuGroup.id" [attr.data-testid]="'arrow_icon_' + menuGroup.id" class="o-app-sidenav-menugroup-arrow"
           (click)="toggle($event)"
         (keydown)="toggle($event)">keyboard_arrow_down</mat-icon>
       } @else {
-        <mat-icon matListItemMeta [id]="'arrow_icon_' + menuGroup.id"
+        <mat-icon matListItemMeta [id]="'arrow_icon_' + menuGroup.id" [attr.data-testid]="'arrow_icon_' + menuGroup.id"
           class="o-app-sidenav-menugroup-arrow">{{ menuGroup.opened ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
       }
     </a>
@@ -25,12 +26,14 @@
     <!-- Closed state (rail): icon-only mat-button -->
     @if (shouldShowTooltip) {
       <a mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+        [attr.data-testid]="menuGroup.id"
         [class.o-app-sidenav-viewer-sidenav-item-selected]="active" [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip"
         matTooltipPosition="right" [matTooltipShowDelay]="0">
         <ng-container *ngTemplateOutlet="contentButton"></ng-container>
       </a>
     } @else {
       <a mat-button class="o-app-sidenav-item o-app-sidenav-menugroup" [class.opened]="menuGroup.opened" (click)="onClick()"
+        [attr.data-testid]="menuGroup.id"
         [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
         <ng-container *ngTemplateOutlet="contentButton"></ng-container>
       </a>

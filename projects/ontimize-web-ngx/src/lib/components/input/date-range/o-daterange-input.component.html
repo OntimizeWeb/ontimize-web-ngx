@@ -6,7 +6,7 @@
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <mat-date-range-input #dateRangeInput [rangePicker]="picker" [id]="getAttribute()" [formGroup]="range" [separator]="separator"
+    <mat-date-range-input #dateRangeInput [rangePicker]="picker" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formGroup]="range" [separator]="separator"
       [required]="isRequired" [min]="oMinDate" [max]="oMaxDate" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)">
       <input #startDate matStartDate placeholder="{{ placeholderStartDay | oTranslate }}" [value]="startDateValue"
         [formControlName]="startKey" (dateChange)="onChangeEvent($event)" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"

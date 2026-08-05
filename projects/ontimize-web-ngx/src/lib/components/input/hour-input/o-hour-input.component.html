@@ -5,7 +5,7 @@
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <input matInput [oNgxTimepicker]="picker" [id]="getAttribute()" [placeholder]="placeHolder" [formControlName]="getAttribute()"
+    <input matInput [oNgxTimepicker]="picker" [id]="getAttribute()" [attr.data-testid]="dataTestId" [placeholder]="placeHolder" [formControlName]="getAttribute()"
       [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [required]="isRequired"
       (change)="onChangeEvent($event)" [min]="min" [max]="max" (keydown)="onKeyDown($event)" [format]="format" [disableClick]="true">
 

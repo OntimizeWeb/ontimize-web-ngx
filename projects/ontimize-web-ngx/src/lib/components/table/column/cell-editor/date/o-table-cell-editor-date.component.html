@@ -6,7 +6,7 @@
     [matTooltipShowDelay]="tooltipShowDelay"
     [matTooltipHideDelay]="tooltipHideDelay">
     <mat-form-field cdkFocusInitial>
-      <input #input matInput [id]="cellEditorId" [placeholder]="getPlaceholder()" [formControl]="formControl"
+      <input #input matInput [id]="cellEditorId" [attr.data-testid]="dataTestId" [placeholder]="getPlaceholder()" [formControl]="formControl"
         [required]="orequired" [matDatepicker]="d" [matDatepickerFilter]="filterDate"
         (dateChange)="onDateChange($event)" [min]="oMinDate" [max]="oMaxDate">
 

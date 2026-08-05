@@ -5,7 +5,7 @@
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <input #inputShowValue matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+    <input #inputShowValue matInput type="text" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       [required]="isRequired" readonly (change)="onChangeEvent($event)">
       @if (showClearButton) {
         <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
@@ -35,7 +35,7 @@
         </mat-error>
       }
     </mat-form-field>
-    <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}"
+    <input #inputFile type="file" id="{{getAttribute()+'-file-input'}}" [attr.data-testid]="dataTestId ? dataTestId + '-file-input' : null"
       [attr.accept]="acceptFileType ? acceptFileType.replace(arraySeparatorRegExp, ',') : null" (change)="fileSelected($event)" hidden="true"
       [attr.multiple]="multiple ? '' : null">
       @if (showInfo && files) {

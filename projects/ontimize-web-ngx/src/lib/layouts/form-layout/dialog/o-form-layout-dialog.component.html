@@ -4,7 +4,7 @@
     }{{ label
   }}</span>
   @if (showFullscreenButton) {
-    <mat-icon aria-label="fullscreen dialog" (click)="setFullscreenDialog()" (keydown)="setFullscreenDialog()">
+    <mat-icon aria-label="fullscreen dialog" data-testid="form-dialog-fullscreen" (click)="setFullscreenDialog()" (keydown)="setFullscreenDialog()">
       @if (fullscreen) {
         fullscreen_exit
       }
@@ -13,7 +13,7 @@
       }
     </mat-icon>
   }
-  <mat-icon (click)="closeDialog()">close</mat-icon>
+  <mat-icon data-testid="form-dialog-close" (click)="closeDialog()">close</mat-icon>
 </div>
 
 <div mat-dialog-content class="form-layout-dialog-container">

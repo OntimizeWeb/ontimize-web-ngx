@@ -1,7 +1,7 @@
 <div class="quickFilter o-flex-row">
 
   <mat-form-field appearance="outline">
-    <input matInput #filter [formControl]="formControl" (click)="$event.stopPropagation()" placeholder="{{ placeholder | oTranslate }}">
+    <input matInput #filter [formControl]="formControl" [attr.data-testid]="dataTestId" (click)="$event.stopPropagation()" placeholder="{{ placeholder | oTranslate }}">
     <div matPrefix>
       <mat-icon [matBadge]="areAllColumnsChecked()?'':getCountColumnsChecked()" matBadgeSize="large" aria-hidden="false">search</mat-icon>
       <button type="button" mat-icon-button [matMenuTriggerFor]="menu" (menuClosed)="onMenuClosed()" (click)="$event.stopPropagation()">

@@ -1,5 +1,5 @@
 <div class="fake-li mat-primary " [class.fake-li-hover]="isHovered" [class.is-selected]="isConfiguredLang()">
-  <a class="mat-list-item o-flex-row o-layout-align-sb-center" (click)="configureI18n()">
+  <a class="mat-list-item o-flex-row o-layout-align-sb-center" [attr.data-testid]="dataTestId" (click)="configureI18n()">
     @if (icon !== undefined) {
       <mat-icon class="o-bar-menu-item-icon mat-24">{{ icon }}</mat-icon>
     }

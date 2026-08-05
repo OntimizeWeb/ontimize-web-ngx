@@ -6,7 +6,7 @@
     [matTooltipShowDelay]="tooltipShowDelay"
     [matTooltipHideDelay]="tooltipHideDelay">
     <mat-form-field cdkFocusInitial>
-      <input #input matInput type="email" [email]="true" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId"
+      <input #input matInput type="email" [email]="true" [placeholder]="getPlaceholder()" [formControl]="formControl" [id]="cellEditorId" [attr.data-testid]="dataTestId"
         [required]="orequired">
         <mat-error *oMatError="hasError('required')">
           {{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}

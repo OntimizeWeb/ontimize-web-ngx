@@ -16,65 +16,65 @@
           @if (insertButton && !insertButtonFloatable) {
             @switch (getActionVariant('insert')) {
               @case ('flat') {
-                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @case ('raised') {
-                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @case ('basic') {
-                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @default {
-                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-list-button text" aria-label="Insert" attr="insert" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
             }
           }
           @if (refreshButton) {
             @switch (getActionVariant('refresh')) {
               @case ('flat') {
-                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @case ('raised') {
-                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @case ('basic') {
-                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @default {
-                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
             }
           }
           @if (deleteButton) {
             @switch (getActionVariant('delete')) {
               @case ('flat') {
-                <button type="button" mat-flat-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+                <button type="button" mat-flat-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
               }
               @case ('raised') {
-                <button type="button" mat-raised-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+                <button type="button" mat-raised-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
               }
               @case ('basic') {
-                <button type="button" mat-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+                <button type="button" mat-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
               }
               @default {
-                <button type="button" mat-stroked-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+                <button type="button" mat-stroked-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
               }
             }
           }
         } @else {
           @if (insertButton && !insertButtonFloatable) {
-            <button type="button" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" class="o-list-button no-text" mat-icon-button aria-label="Insert" attr="insert" (click)="add($event)">
+            <button type="button" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" class="o-list-button no-text" mat-icon-button aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)">
               <mat-icon>add</mat-icon>
             </button>
           }
           @if (refreshButton) {
-            <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClass('refresh')" class="o-list-button no-text" attr="refresh" (click)="reloadData()">
+            <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClass('refresh')" class="o-list-button no-text" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()">
                 <mat-icon>autorenew</mat-icon>
             </button>
           }
           @if (deleteButton) {
             <button type="button" class="o-list-button no-text" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-              [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete" (click)="remove()">
+              [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()">
               <mat-icon>delete</mat-icon>
             </button>
           }
@@ -89,7 +89,8 @@
       <ng-container o-data-toolbar-projection-end>
         @if (quickFilter) {
           <o-search-input [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
-            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance" float-label="never">
+            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance" float-label="never"
+            [data-testid]="dataTestId ? dataTestId + '-quick-filter' : null">
           </o-search-input>
         }
       </ng-container>
@@ -128,7 +129,8 @@
   <!--INSERT BUTTON -->
   @if (insertButton && insertButtonFloatable) {
     <button type="button" mat-fab (click)="add($event)" [ngClass]="getActionImportanceClass('insert')" class="add-button add-button-bottom"
-      [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
+      [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'"
+      [attr.data-testid]="getDataTestId('insert')">
       <mat-icon>add</mat-icon>
     </button>
   }

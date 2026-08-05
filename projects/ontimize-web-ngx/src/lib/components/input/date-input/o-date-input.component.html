@@ -6,7 +6,7 @@
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <input matInput #matInputRef [matDatepicker]="picker" [id]="getAttribute()" [formControlName]="getAttribute()"
+    <input matInput #matInputRef [matDatepicker]="picker" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)"
       [required]="isRequired" [value]="getValueAsDate()">

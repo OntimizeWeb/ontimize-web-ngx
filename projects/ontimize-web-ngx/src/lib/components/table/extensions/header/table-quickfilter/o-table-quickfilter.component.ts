@@ -117,6 +117,11 @@ export class OTableQuickfilterComponent implements OTableQuickfilter, OnInit, Af
     }
   }
 
+  /** Composed from the parent table's `data-testid`, for E2E testing (Playwright/Cypress). */
+  get dataTestId(): string | null {
+    return this.table?.dataTestId ? `${this.table.dataTestId}-quick-filter` : null;
+  }
+
   get oTableOptions(): OTableOptions {
     return this.table.oTableOptions;
   }

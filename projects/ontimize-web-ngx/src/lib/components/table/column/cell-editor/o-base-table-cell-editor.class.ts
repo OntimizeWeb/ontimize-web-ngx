@@ -304,6 +304,12 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
     return this._rowData;
   }
 
+  /** Composed from the table's `data-testid`, the row's key value(s) and this column's `attr`, for E2E testing (Playwright/Cypress). */
+  get dataTestId(): string | null {
+    const rowDataTestId = this._table?.getRowDataTestId(this._rowData);
+    return rowDataTestId ? `${rowDataTestId}-${this.tableColumnAttr}` : null;
+  }
+
   set rowData(arg: any) {
     this._rowData = arg;
     const cellData = this.getCellData();

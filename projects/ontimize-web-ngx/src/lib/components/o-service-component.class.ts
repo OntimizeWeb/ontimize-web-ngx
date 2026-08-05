@@ -407,6 +407,29 @@ export abstract class AbstractOServiceComponent<T extends AbstractComponentState
   }
 
   /**
+   * Composed from this component's `data-testid` and a built-in action's `attr`
+   * (e.g. `getDataTestId('insert')`), for E2E testing (Playwright/Cypress).
+   * Returns `null` when no `data-testid` was set, so the attribute is omitted.
+   */
+  public getDataTestId(attr: string): string | null {
+    return this.dataTestId ? `${this.dataTestId}-${attr}` : null;
+  }
+
+  /**
+   * Composed from this component's `data-testid` and the row's key value(s)
+   * (via `extractKeysFromRecord`), for E2E testing (Playwright/Cypress) of
+   * per-row content. Returns `null` when no `data-testid` was set, or when
+   * the row has none of the configured `keys` (e.g. `keys` not set).
+   */
+  public getRowDataTestId(row: any): string | null {
+    if (!this.dataTestId) {
+      return null;
+    }
+    const keyValues = Object.values(this.extractKeysFromRecord(row));
+    return keyValues.length > 0 ? `${this.dataTestId}-row-${keyValues.join('-')}` : null;
+  }
+
+  /**
    * Material colour palette for a filled action's container, derived from its
    * importance. On the truly filled variants (flat, fab, mini-fab) a primary/warn
    * importance colours the container; otherwise it returns `undefined` so the

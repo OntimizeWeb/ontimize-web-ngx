@@ -33,7 +33,9 @@ export const DEFAULT_INPUTS_O_BUTTON = [
   // importance [primary|warn|default]: semantic relevance (colours text + icon).
   'importance',
   // aria-label [string]: accessible name for screen readers. Useful for icon-only buttons. Translated with oTranslate.
-  'ariaLabel: aria-label'
+  'ariaLabel: aria-label',
+  // data-testid [string]: forwarded to the native `<button>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 export const DEFAULT_OUTPUTS_O_BUTTON = [
   'onClick',
@@ -90,6 +92,8 @@ export class OButtonComponent implements OnInit {
   public importance: OActionImportance;
   /** Accessible name (translation key) exposed via `aria-label`, mainly for icon-only buttons. */
   public ariaLabel: string;
+  /** Forwarded to the native `<button>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress). */
+  public dataTestId: string;
   public visible: boolean = true;
 
   /* Outputs */

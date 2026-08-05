@@ -7,7 +7,7 @@
       <mat-form-field class="o-image-form-field" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
         [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay"
         [subscriptSizing]="subscriptSizing">
-        <input type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="olabel | oTranslate" [required]="isRequired" readonly
+        <input type="text" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [placeholder]="olabel | oTranslate" [required]="isRequired" readonly
           (click)="input.click()" (change)="onChangeEvent($event)" class="o-image-form-field-input">
           <input matInput readonly (click)="input.click()" [placeholder]="olabel | oTranslate" [required]="isRequired" [formControl]="stateCtrl" />
           @if (fullScreenButton) {

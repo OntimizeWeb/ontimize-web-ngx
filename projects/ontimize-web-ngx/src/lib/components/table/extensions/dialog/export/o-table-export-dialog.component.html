@@ -56,8 +56,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="o-layout-align-end-center">
-  <button type="button" mat-stroked-button [mat-dialog-close]="false" class="o-button--importance-default">{{ 'CANCEL' | oTranslate }}</button>
-  <button type="button" mat-stroked-button class="o-button--importance-primary export_button" (click)="export()">
+  <button type="button" mat-stroked-button [mat-dialog-close]="false" data-testid="dialog-cancel" class="o-button--importance-default">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="o-button--importance-primary export_button" data-testid="dialog-accept" (click)="export()">
     <mat-icon>ios_share</mat-icon>
     <span>{{ 'EXPORT.DIALOG.EXPORT_BUTTON' | oTranslate }}</span>
   </button>

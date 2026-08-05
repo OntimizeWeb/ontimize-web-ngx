@@ -13,16 +13,16 @@
           @if (insertButton && !insertButtonFloatable) {
             @switch (getActionVariant('insert')) {
               @case ('flat') {
-                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @case ('raised') {
-                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @case ('basic') {
-                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
               @default {
-                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-grid-add-button o-grid-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add()"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
               }
             }
           }
@@ -30,16 +30,16 @@
           @if (refreshButton) {
             @switch (getActionVariant('refresh')) {
               @case ('flat') {
-                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @case ('raised') {
-                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @case ('basic') {
-                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
               @default {
-                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-grid-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
               }
             }
           }
@@ -47,14 +47,14 @@
           <!-- button new-->
           @if (insertButton && !insertButtonFloatable) {
             <button [disabled]="!enabledInsertButton" type="button" [ngClass]="getActionImportanceClass('insert')"
-              class="o-grid-button o-grid-add-button no-text" mat-icon-button aria-label="Insert" attr="insert" (click)="add()">
+              class="o-grid-button o-grid-add-button no-text" mat-icon-button aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add()">
               <mat-icon>add</mat-icon>
             </button>
           }
           <!--button refresh-->
           @if (refreshButton) {
             <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()"
-              [ngClass]="getActionImportanceClass('refresh')" class="o-grid-button no-text" attr="refresh">
+              [ngClass]="getActionImportanceClass('refresh')" class="o-grid-button no-text" attr="refresh" [attr.data-testid]="getDataTestId('refresh')">
                 <mat-icon>autorenew</mat-icon>
             </button>
           }
@@ -101,6 +101,7 @@
         @if (quickFilter) {
           <o-search-input [columns]="quickFilterColumns" [filter-case-sensitive]="filterCaseSensitive"
             [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance"
+            [data-testid]="dataTestId ? dataTestId + '-quick-filter' : null"
           float-label="never"></o-search-input>
         }
       </ng-container>
@@ -138,7 +139,7 @@
   }
   @if (insertButton && insertButtonFloatable) {
     <button type="button" aria-label="Insert" [disabled]="!enabledInsertButton" mat-fab (click)="add()"
-      [ngClass]="getActionImportanceClass('insert')"
+      [ngClass]="getActionImportanceClass('insert')" [attr.data-testid]="getDataTestId('insert')"
       class="o-grid-add-floatable-button" [class.o-grid-add-bottom-floatable-button]="insertButtonPosition ==='bottom'"
       [class.o-grid-add-top-floatable-button]="insertButtonPosition ==='top'">
       <mat-icon>add</mat-icon>

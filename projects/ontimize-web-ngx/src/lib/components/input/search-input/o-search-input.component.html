@@ -4,7 +4,7 @@
       @if (!showFilterMenu) {
       <mat-icon matPrefix>search</mat-icon>
       }
-      <input #term matInput id="term" type="search" formControlName="term" [placeholder]="placeholder">
+      <input #term matInput id="term" [attr.data-testid]="dataTestId" type="search" formControlName="term" [placeholder]="placeholder">
       @if (labelVisible) {
       <mat-label>{{ label | oTranslate }}</mat-label>
       }

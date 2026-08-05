@@ -5,7 +5,7 @@
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <textarea matInput class="mat-textarea" type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+    <textarea matInput class="mat-textarea" type="text" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [class.no-resize]="!isResizable()" [rows]="rows"
     [cols]="columns" [required]="isRequired" (change)="onChangeEvent($event)" [maxlength]="maxLength" [minlength]="minLength"></textarea>
     <mat-error *oMatError="hasError('required')">

@@ -1,6 +1,6 @@
 @if (sidenavOpened && !hidden) {
   @if (!isUserInfoItem() && !isLocaleItem()) {
-    <a mat-list-item class="o-app-sidenav-menuitem o-app-sidenav-item" [id]="menuItem.id" (click)="triggerClick($event)"
+    <a mat-list-item class="o-app-sidenav-menuitem o-app-sidenav-item" [id]="menuItem.id" [attr.data-testid]="menuItem.id" (click)="triggerClick($event)"
       [class.o-app-sidenav-viewer-sidenav-item-selected]="active"
       [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
       matTooltipShowDelay="500">
@@ -15,7 +15,7 @@
   }
 
   @if (isLocaleItem()) {
-    <a mat-list-item class="o-app-sidenav-menuitem o-app-sidenav-item" [id]="menuItem.id" (click)="triggerClick($event)"
+    <a mat-list-item class="o-app-sidenav-menuitem o-app-sidenav-item" [id]="menuItem.id" [attr.data-testid]="menuItem.id" (click)="triggerClick($event)"
       [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
       matTooltipShowDelay="500">
       @if (menuItem.svgIcon) {
@@ -32,7 +32,7 @@
   }
 
   @if (isUserInfoItem()) {
-    <div class="o-app-sidenav-menuitem o-app-sidenav-item o-user-info" [id]="menuItem.id"
+    <div class="o-app-sidenav-menuitem o-app-sidenav-item o-user-info" [id]="menuItem.id" [attr.data-testid]="menuItem.id"
       [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
       matTooltipShowDelay="500">
       <div class="o-user-info-menu-item o-flex-column o-layout-align-center-center">
@@ -51,7 +51,7 @@
     <li class="o-app-sidenav-menuitem o-app-sidenav-item">
       @if (shouldShowTooltip) {
         <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="triggerClick($event)"
-          [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+          [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
           @if (menuItem.svgIcon) {
             <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
           }
@@ -60,7 +60,7 @@
           }
         </a>
       } @else {
-        <a mat-button (click)="triggerClick($event)" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+        <a mat-button (click)="triggerClick($event)" [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
           @if (menuItem.svgIcon) {
             <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
           }

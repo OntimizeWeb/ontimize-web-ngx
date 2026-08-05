@@ -71,6 +71,9 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'labelVisible:label-visible',
   'selectAllOnClick:select-all-on-click',
   'angularAsyncValidatorsFn: async-validators',
+
+  // data-testid [string]: forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -90,6 +93,8 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, OnChanges {
   /* Inputs */
+  /** Forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress). */
+  public dataTestId: string;
   public sqlType: string;
   @BooleanInputConverter()
   public autoBinding: boolean = true;
