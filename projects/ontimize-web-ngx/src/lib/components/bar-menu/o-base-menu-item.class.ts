@@ -39,8 +39,14 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
   icon: string;
   restricted: boolean;
   disabled: boolean;
-  /** Forwarded to the item's `data-testid` attribute, for E2E testing (Playwright/Cypress). */
-  dataTestId: string;
+  /** Forwarded to the item's `data-testid` attribute, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.attr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   protected _isHovered: boolean = false;
   attr: string;
 

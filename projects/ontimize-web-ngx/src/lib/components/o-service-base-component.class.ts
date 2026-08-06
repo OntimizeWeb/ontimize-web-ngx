@@ -109,8 +109,14 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   parentComponent: AbstractOServiceBaseComponent<T>;
 
   /* inputs variables */
-  /** Base test-id for the component's built-in controls, for E2E testing (Playwright/Cypress). See `DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT`. */
-  dataTestId: string;
+  /** Base test-id for the component's built-in controls, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. See `DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT`. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.oattr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   oattr: string;
   service: string;
   serviceType: string;

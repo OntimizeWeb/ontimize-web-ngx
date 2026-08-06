@@ -93,8 +93,14 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
   ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, OnChanges {
   /* Inputs */
-  /** Forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress). */
-  public dataTestId: string;
+  /** Forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.oattr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   public sqlType: string;
   @BooleanInputConverter()
   public autoBinding: boolean = true;

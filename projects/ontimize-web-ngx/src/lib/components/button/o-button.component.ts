@@ -92,8 +92,14 @@ export class OButtonComponent implements OnInit {
   public importance: OActionImportance;
   /** Accessible name (translation key) exposed via `aria-label`, mainly for icon-only buttons. */
   public ariaLabel: string;
-  /** Forwarded to the native `<button>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress). */
-  public dataTestId: string;
+  /** Forwarded to the native `<button>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.oattr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   public visible: boolean = true;
 
   /* Outputs */
