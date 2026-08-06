@@ -586,7 +586,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     return this._components;
   }
 
-  getComponentByAttr(attr:string): IFormDataComponent {
+  getComponentByAttr(attr: string): IFormDataComponent {
     return this._components[attr];
   }
 
@@ -1231,7 +1231,10 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (self.stayInRecordAfterEdit) {
         self.reload(true);
       } else {
-        self.closeDetail();
+        // The update just succeeded, so there are no unsaved changes to warn
+        // about — mirrors the insert flow's `_clearAndCloseFormAfterInsert`,
+        // which passes the same option for the same reason.
+        self.closeDetail({ exitWithoutConfirmation: true });
       }
     }, error => {
       self.postIncorrectUpdate(error);
@@ -1283,16 +1286,16 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       ? this.queryFunction(queryParameter)
       : this.dataService[this.queryMethod](...this.dataService.requestArgumentAdapter.parseQueryParameters(queryParameter))
     ).subscribe((resp: ServiceResponse) => {
-        if (resp.isSuccessful()) {
-          this.postCorrectQuery(resp.data);
-        } else {
-          this.postIncorrectQuery(resp);
-        }
-        this.loaderSubscription.unsubscribe();
-      }, err => {
-        this.postIncorrectQuery(err);
-        this.loaderSubscription.unsubscribe();
-      });
+      if (resp.isSuccessful()) {
+        this.postCorrectQuery(resp.data);
+      } else {
+        this.postIncorrectQuery(resp);
+      }
+      this.loaderSubscription.unsubscribe();
+    }, err => {
+      this.postIncorrectQuery(err);
+      this.loaderSubscription.unsubscribe();
+    });
   }
 
   getAttributesToQuery(): Array<any> {
@@ -1428,7 +1431,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (control instanceof OFormControl) {
         const comp = this.getComponentByAttr(item);
         /** Parse the values ​​to the format according to their sqltype to send to the update request */
-        values[item] = SQLTypes.parseUsingSQLType(control.getValue(), SQLTypes.getSQLTypeKey(comp.getSQLType())); ;
+        values[item] = SQLTypes.parseUsingSQLType(control.getValue(), SQLTypes.getSQLTypeKey(comp.getSQLType()));;
       } else {
         values[item] = control.value;
       }
@@ -1845,8 +1848,6 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     } else {
       this.setFormMode(OFormComponent.Mode().INITIAL);
     }
-    // stayInRecordAfterEdit is true if form has editable detail = true
-    this.stayInRecordAfterEdit = this.stayInRecordAfterEdit || this.isEditableDetail();
   }
 
   protected determinateModeFromUrlSegment(segment: UrlSegment): void {
