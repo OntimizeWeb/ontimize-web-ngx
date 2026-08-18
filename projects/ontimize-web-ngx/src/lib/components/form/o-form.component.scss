@@ -12,7 +12,12 @@
   }
 
   &.fill-form {
-    height: 100%;
+    height: 100%; // fallback when <o-form>'s own parent isn't a flex container
+    // When the parent IS flex (e.g. a page header sitting above the form), flex-basis: 0%
+    // (from `flex: 1`) takes precedence over `height` for sizing, so this fills the space
+    // actually left over instead of always claiming height:100% regardless of siblings.
+    flex: 1;
+    min-height: 0;
 
     form {
       &.inner-form {
