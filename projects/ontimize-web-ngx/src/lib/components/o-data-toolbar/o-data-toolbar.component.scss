@@ -1,7 +1,14 @@
 .o-data-toolbar {
   display: flex;
   align-items: center;
-  align-content: space-between;
+  // Falls back to wrapping onto extra lines instead of silently overflowing (and
+  // potentially getting clipped by an ancestor's overflow:hidden) when its content
+  // — title, quickfilter, buttons, menu — doesn't fit a single row.
+  flex-wrap: wrap;
+  align-content: flex-start;
+  // Without a gap, wrapped items (e.g. the quickfilter and the buttons/menu) touch
+  // each other with no spacing, both across a wrapped row and between wrapped lines.
+  gap: 8px;
   width: 100%;
   flex-direction: row;
   white-space: nowrap;
