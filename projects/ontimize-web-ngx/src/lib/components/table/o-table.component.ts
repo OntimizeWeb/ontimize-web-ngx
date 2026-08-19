@@ -384,8 +384,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
-    if (Util.isDefined(_sort) &&
-      (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && Util.stringify(this.sort) !== Util.stringify(_sort)))) {
+
+    if (Util.isDefined(_sort) && this.sort !== _sort) {
       this.sort = _sort;
       this.setDatasource();
     }
@@ -655,6 +655,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   public showLoading: Observable<boolean>;
 
+  // True between issuing a query and executeDataProcessing() actually rendering its response.
+  // loadingSubject goes false as soon as the HTTP response arrives, which is earlier than that.
+  public awaitingTableRender = false;
+
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
   public showLastInsertableRow: boolean = false;
@@ -792,7 +796,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     super(injector, elRef, form);
     this.loadingService = this.injector.get(OTableLoadingService);
     this.loadingSubject.subscribe((loading: boolean) => {
-      this.loadingService.setLoading(loading);
+      // Skip the premature "false": executeDataProcessing() will hide the skeleton
+      // itself once the data is actually ready to render (see awaitingTableRender).
+      if (loading || !this.awaitingTableRender) {
+        this.loadingService.setLoading(loading);
+      }
     });
     this.showLoading = this.loadingService.showLoading$;
 
@@ -1411,8 +1419,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   registerTableHeaders(tableHeader: OTableHeaderComponent) {
-    if (this.tableHeaders.findIndex(header => header.column.attr === tableHeader.column.attr) === -1) {
+    const existingIndex = this.tableHeaders.findIndex(header => header.column.attr === tableHeader.column.attr);
+    if (existingIndex === -1) {
       this.tableHeaders.push(tableHeader);
+    } else {
+      // Replace rather than skip: a matching attr can belong to a stale, already-destroyed
+      // header instance left over from a structural rebuild (e.g. toggling virtual scroll).
+      this.tableHeaders[existingIndex] = tableHeader;
     }
   }
 
@@ -1672,6 +1685,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.sortSubscription?.unsubscribe();
       this.sortSubscription = this.sort.oSortChange.subscribe(this.handleSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
+      // A fresh OMatSort instance (e.g. after the view recreates the table to toggle
+      // virtual scroll) starts with no active sort — restore the current one and
+      // refresh the new headers' arrow indicators to match.
+      this.sort.setSortColumns(this.sortColArray);
+      this.refreshSortHeaders();
     }
   }
 
@@ -1863,8 +1881,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.queryCellRenderers().subscribe(() => {
       // Clean up existing portal hosts before re-rendering to prevent duplicate or orphaned components
       this.destroyAllPortalHosts();
+      // super.queryData() bails out before touching _database (no executeDataProcessing pass ever
+      // comes) when the service isn't configured, so don't arm the flag in that case either.
+      this.awaitingTableRender = this.canQueryReachDataSource();
       super.queryData(filter, ovrrArgs);
     });
+  }
+
+  private canQueryReachDataSource(): boolean {
+    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    return !!(this.dataService && queryMethodName in this.dataService && this.entity);
   }
 
   protected isInsideInactiveTab(): boolean {
@@ -3081,7 +3107,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   onChangePage(evt: PageEvent) {
-    if (!this.loadingService.handleProtected(evt as any)) {
+    // PageEvent carries no DOM event to guard (the paginator already handled its own
+    // click), so there is nothing for handleProtected to call preventDefault/stopPropagation on.
+    if (!this.loadingService.handleProtected()) {
       return;
     }
     this.finishQuerySubscription = false;

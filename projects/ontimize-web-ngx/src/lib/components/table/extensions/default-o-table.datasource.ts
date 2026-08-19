@@ -175,8 +175,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       observeOn(asyncScheduler),
       switchMap((event: any) => {
         let data = Object.assign([], this._database.data);
-        if (!Array.isArray(data) || this.renderedData === null) {
-          // No data has been loaded yet
+        if (!Array.isArray(data) || !this._database.hasLoadedOnce) {
+          // Genuinely nothing queried yet (dataChange is a BehaviorSubject seeded with []),
+          // as opposed to a rebuilt datasource whose _database already holds real data —
+          // this.renderedData alone can't tell those apart, it's always null right after a rebuild.
           this.renderedData = [];
           return of(null);
         }
@@ -282,6 +284,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       // -------------------------------------------------------------
       this.ngZone.run(() => {
         this.updateTableState(renderedData, resultsLength, aggregateData);
+        this.table.awaitingTableRender = false;
         this.table.loadingService.setLoading(false);
         this.table.cd.markForCheck();
         observer.next(data);
@@ -291,6 +294,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     } catch (error) {
       console.error('❌ Error while processing data:', error);
       this.ngZone.run(() => {
+        this.table.awaitingTableRender = false;
         this.table.loadingService.setLoading(false);
         this.table.cd.markForCheck();
         observer.error(error);
