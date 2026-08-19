@@ -158,6 +158,13 @@
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
+  // Flex items default to min-height/min-width: auto (never shrink below their content's
+  // natural size). Without this, a .o-flex-grow wrapping a large/unbounded child (e.g. a
+  // non-virtualized table) ignores its own flex container's size and grows to fit the
+  // child instead, if that container's cross-axis overflow is visible (see .o-flex above,
+  // which already sets this).
+  min-width: 0;
+  min-height: 0;
 }
 
 // fxFlex="50%" / fxFlex="50"
