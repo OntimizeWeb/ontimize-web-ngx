@@ -178,17 +178,11 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   }
 
   public getValue(): any {
-    const value = super.getValue();
-    if (!Util.isDefined(value)) {
-      return value;
+    let timestampValue = super.getValue();
+    if (timestampValue && timestampValue instanceof Date) {
+      timestampValue = timestampValue.getTime();
     }
-    // While typing, the internal control holds the active adapter's date object; from external data it
-    // holds a value in the configured value-type. Normalize both and return undefined when not valid.
-    const date = this.dateAdapter.isDateInstance(value) ? value : this.getValueAsDateObject(value);
-    if (!Util.isDefined(date) || !this.dateAdapter.isValid(date)) {
-      return void 0;
-    }
-    return parseDateByValueTypeWithAdapter(this.dateAdapter, date.valueOf(), this.valueType, this.oformat);
+    return timestampValue;
   }
 
   get showClearButton(): boolean {
@@ -289,7 +283,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
         }
         break;
       case 'date':
-        if ((val instanceof Date)) {
+        if (val instanceof Date) {
           this.dateValue = val;
         } else {
           result = undefined;
