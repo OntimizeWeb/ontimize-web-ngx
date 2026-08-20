@@ -51,7 +51,7 @@ describe('OTextInputComponent', () => {
     mockInjector = TestBed.inject(Injector);
 
     // Create component
-    component = new OTextInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OTextInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation and Basic Structure', () => {

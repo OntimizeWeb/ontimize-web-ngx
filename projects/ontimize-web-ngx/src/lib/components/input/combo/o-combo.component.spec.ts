@@ -44,10 +44,9 @@ describe('OComboComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
     const mockElementRef: any = { nativeElement: document.createElement('div') };
     const mockInjector = TestBed.inject(Injector);
-    component = new OComboComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OComboComponent(mockElementRef, mockInjector));
   });
 
   it('should create', () => {

@@ -5,6 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, ElementRef, Injector } from '
 import { FormGroup } from '@angular/forms';
 
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { O_FORM_CONTEXT } from '../../../interfaces/o-form-parent.interface';
 
 // Import component dynamically to avoid compilation
 let OCheckboxComponent: any;
@@ -49,6 +50,7 @@ describe('OCheckboxComponent', () => {
       ],
       providers: [
         { provide: OFormComponent, useValue: mockFormComponent },
+        { provide: O_FORM_CONTEXT, useValue: mockFormComponent },
         ...OTestingUtils.getCommonTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
@@ -56,9 +58,10 @@ describe('OCheckboxComponent', () => {
 
     injector = TestBed.inject(Injector);
     mockElementRef = new ElementRef(document.createElement('div'));
-    
+
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    component = new OCheckboxComponent(mockFormComponent, mockElementRef, injector);
+    // (form is resolved internally via inject(O_FORM_CONTEXT), not a constructor param)
+    component = TestBed.runInInjectionContext(() => new OCheckboxComponent(mockElementRef, injector));
     
     // Set oattr to prevent initialization issues
     (component as any).oattr = 'testCheckbox';
@@ -241,7 +244,7 @@ describe('OCheckboxComponent', () => {
     });
 
     it('should have constructor with proper parameters', () => {
-      expect(component.constructor.length).toBe(3); // form, elRef, injector
+      expect(component.constructor.length).toBe(2); // elRef, injector (form comes from inject(O_FORM_CONTEXT))
     });
 
     it('should have proper default values', () => {
@@ -252,7 +255,7 @@ describe('OCheckboxComponent', () => {
     });
 
     it('should handle instantiation without errors', () => {
-      const newComponent = new OCheckboxComponent(mockFormComponent, mockElementRef, injector);
+      const newComponent = TestBed.runInInjectionContext(() => new OCheckboxComponent(mockElementRef, injector));
       expect(newComponent).toBeTruthy();
       expect(newComponent).toBeInstanceOf(OCheckboxComponent);
     });
@@ -439,7 +442,7 @@ describe('OCheckboxComponent', () => {
     });
 
     it('should handle all default values correctly on fresh instantiation', () => {
-      const freshComponent = new OCheckboxComponent(mockFormComponent, mockElementRef, injector);
+      const freshComponent = TestBed.runInInjectionContext(() => new OCheckboxComponent(mockElementRef, injector));
       
       expect(freshComponent.labelPosition).toBe('after');
       expect(freshComponent.trueValue).toBe(true);

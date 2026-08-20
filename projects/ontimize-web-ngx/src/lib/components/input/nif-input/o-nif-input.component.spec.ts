@@ -45,7 +45,7 @@ describe('ONIFInputComponent', () => {
     mockInjector = TestBed.inject(Injector);
 
     // Create component
-    component = new ONIFInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new ONIFInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation and Structure', () => {

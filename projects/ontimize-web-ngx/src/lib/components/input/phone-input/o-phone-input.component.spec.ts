@@ -50,7 +50,7 @@ describe('OPhoneInputComponent', () => {
     mockInjector = TestBed.inject(Injector);
     mockCountryCode = TestBed.inject(CountryCode);
 
-    component = new OPhoneInputComponent(mockCountryCode, mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OPhoneInputComponent(mockCountryCode, mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {

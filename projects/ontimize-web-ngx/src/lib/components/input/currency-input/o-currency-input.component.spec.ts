@@ -45,7 +45,7 @@ describe('OCurrencyInputComponent', () => {
     mockElementRef = { nativeElement: document.createElement('input') };
     mockInjector = TestBed.inject(Injector);
 
-    component = TestBed.runInInjectionContext(() => new OCurrencyInputComponent(mockOFormComponent, mockElementRef, mockInjector));
+    component = TestBed.runInInjectionContext(() => new OCurrencyInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {
@@ -59,14 +59,14 @@ describe('OCurrencyInputComponent', () => {
     });
   });
 
-  describe('Static Properties', () => {
-    it('should have currency_icons array', () => {
-      expect(OCurrencyInputComponent.currency_icons).toBeDefined();
-      expect(Array.isArray(OCurrencyInputComponent.currency_icons)).toBe(true);
+  describe('currency_icons', () => {
+    it('should have currency_icons map', () => {
+      expect(component.currency_icons).toBeDefined();
+      expect(component.currency_icons instanceof Map).toBe(true);
     });
 
     it('should have USD in currency_icons', () => {
-      expect(OCurrencyInputComponent.currency_icons).toContain('USD');
+      expect(component.currency_icons.has('USD')).toBe(true);
     });
   });
 

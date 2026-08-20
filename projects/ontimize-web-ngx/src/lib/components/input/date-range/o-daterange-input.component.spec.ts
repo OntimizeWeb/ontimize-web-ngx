@@ -30,12 +30,11 @@ describe('ODateRangeInputComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
     const mockElementRef: any = { nativeElement: document.createElement('div') };
     const mockInjector = TestBed.inject(Injector);
     const mockDateAdapterOntimizeMomentDateAdapter: any = {};
     const mockBreakpointObserver: any = {};
-    component = new ODateRangeInputComponent(mockOFormComponent, mockElementRef, mockInjector, mockDateAdapterOntimizeMomentDateAdapter, mockBreakpointObserver);
+    component = TestBed.runInInjectionContext(() => new ODateRangeInputComponent(mockElementRef, mockInjector, mockDateAdapterOntimizeMomentDateAdapter, mockBreakpointObserver));
   });
 
   it('should create', () => {

@@ -2,7 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector } from '@angular/core';
+import { DateAdapter } from '@angular/material/core';
 import { OTestingUtils } from '../../../shared/testing/o-testing-utils';
+import { OntimizeLuxonDateAdapter } from '../../../shared/material/date/ontimize-luxon-date-adapter';
 
 // Import component dynamically to avoid compilation
 let OTimeInputComponent: any;
@@ -23,17 +25,17 @@ describe('OTimeInputComponent', () => {
         ...OTestingUtils.getCommonTestingModuleConfig().imports
       ],
       providers: [
-        ...OTestingUtils.getCommonTestingModuleConfig().providers
+        ...OTestingUtils.getCommonTestingModuleConfig().providers,
+        { provide: DateAdapter, useValue: new OntimizeLuxonDateAdapter('en') }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
     const mockElementRef: any = { nativeElement: document.createElement('div') };
     const mockInjector = TestBed.inject(Injector);
     const mockChangeDetectorRef: any = { detectChanges: jasmine.createSpy(), markForCheck: jasmine.createSpy() };
-    component = new OTimeInputComponent(mockOFormComponent, mockElementRef, mockInjector, mockChangeDetectorRef);
+    component = TestBed.runInInjectionContext(() => new OTimeInputComponent(mockElementRef, mockInjector, mockChangeDetectorRef));
   });
 
   it('should create', () => {

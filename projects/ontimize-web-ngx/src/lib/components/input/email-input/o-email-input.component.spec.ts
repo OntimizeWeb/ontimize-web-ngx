@@ -50,7 +50,7 @@ describe('OEmailInputComponent', () => {
     mockInjector = TestBed.inject(Injector);
 
     // Create component
-    component = new OEmailInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OEmailInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation and Structure', () => {
@@ -361,8 +361,8 @@ describe('OEmailInputComponent', () => {
   });
 
   describe('Constructor and Dependency Injection', () => {
-    it('should have constructor with 3 parameters', () => {
-      expect(component.constructor.length).toBe(3);
+    it('should have constructor with 2 parameters', () => {
+      expect(component.constructor.length).toBe(2);
     });
 
     it('should properly initialize with form component', () => {

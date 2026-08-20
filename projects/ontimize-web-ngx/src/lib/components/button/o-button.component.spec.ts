@@ -61,7 +61,7 @@ describe('OButtonComponent', () => {
 
   // Test default values and initialization
   it('should have default values after construction', () => {
-    expect(component.otype).toBe('STROKED');
+    expect(component.effectiveType).toBe('STROKED');
     expect(component.enabled).toBe(true);
     expect(component.visible).toBe(true);
     expect(component.iconPosition).toBe('left');
@@ -70,18 +70,18 @@ describe('OButtonComponent', () => {
   });
 
   // Test ngOnInit method
-  it('should convert otype to uppercase on ngOnInit', () => {
+  it('should resolve otype to uppercase via effectiveType', () => {
     component.otype = 'raised';
     component.oattr = 'test-button';
-    
+
     spyOn(component['permissionsService'], 'getOButtonPermissions').and.returnValue({
       enabled: true,
       visible: true
     });
-    
+
     component.ngOnInit();
-    
-    expect(component.otype).toBe('RAISED');
+
+    expect(component.effectiveType).toBe('RAISED');
   });
 
   it('should apply permissions on ngOnInit when defined', () => {
@@ -276,9 +276,9 @@ describe('OButtonComponent', () => {
     testComponent.otype = 'fab';
     testComponent.oattr = 'test-fab';
     spyOn(testComponent['permissionsService'], 'getOButtonPermissions').and.returnValue(undefined);
-    
+
     testComponent.ngOnInit();
-    expect(testComponent.otype).toBe('FAB');
+    expect(testComponent.effectiveType).toBe('FAB');
   });
 
   it('should handle ngOnInit with raised type', () => {
@@ -286,9 +286,9 @@ describe('OButtonComponent', () => {
     testComponent.otype = 'raised';
     testComponent.oattr = 'test-raised';
     spyOn(testComponent['permissionsService'], 'getOButtonPermissions').and.returnValue(undefined);
-    
+
     testComponent.ngOnInit();
-    expect(testComponent.otype).toBe('RAISED');
+    expect(testComponent.effectiveType).toBe('RAISED');
   });
 
   it('should handle ngOnInit with flat type', () => {
@@ -296,9 +296,9 @@ describe('OButtonComponent', () => {
     testComponent.otype = 'flat';
     testComponent.oattr = 'test-flat';
     spyOn(testComponent['permissionsService'], 'getOButtonPermissions').and.returnValue(undefined);
-    
+
     testComponent.ngOnInit();
-    expect(testComponent.otype).toBe('FLAT');
+    expect(testComponent.effectiveType).toBe('FLAT');
   });
 
   // Test EventEmitter functionality

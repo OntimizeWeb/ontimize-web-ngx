@@ -34,7 +34,7 @@ export class OLockerDirective implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 
   private manageLockerMode(loading: boolean): void {
