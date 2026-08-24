@@ -177,13 +177,6 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
     return this.dateValue;
   }
 
-  public getValue(): any {
-    let timestampValue = super.getValue();
-    if (timestampValue && timestampValue instanceof Date) {
-      timestampValue = timestampValue.getTime();
-    }
-    return timestampValue;
-  }
 
   get showClearButton(): boolean {
     return this.clearButton && !this.isReadOnly && this.enabled && this.matInputRef.nativeElement.value;

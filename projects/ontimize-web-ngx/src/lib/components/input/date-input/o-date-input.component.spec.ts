@@ -52,16 +52,18 @@ describe('ODateInputComponent', () => {
     expect(component.constructor).toBe(ODateInputComponent);
   });
 
-  // getValue() was reverted to its pre-c7818c51 behaviour: it ignores value-type entirely and just
-  // returns whatever is stored, only special-casing a Date instance into a timestamp number. This
-  // keeps it consistent with what hasComponentChanged() compares against (the raw FormControl value),
-  // and means it can no longer discard a value it fails to recognize (see CHANGELOG for the full story).
+  // getValue() has no override in ODateInputComponent: it ignores value-type entirely and just
+  // returns whatever is stored, unchanged — including a native Date instance. This keeps it
+  // consistent with what hasComponentChanged() compares against (the raw FormControl value), and
+  // means it can no longer discard a value it fails to recognize (see CHANGELOG for the full story).
+  // A prior revision special-cased a Date instance into a timestamp number, but that silently
+  // ignored value-type whenever the stored value happened to be a Date (see CHANGELOG next.15).
   describe('getValue() (value-type-agnostic passthrough)', () => {
-    it('converts a native Date instance to its timestamp, regardless of value-type', () => {
+    it('passes a native Date instance through unchanged, regardless of value-type', () => {
       component.valueType = 'date';
       const input = new Date(2019, 4, 26);
       component.setValue(input);
-      expect(component.getValue()).toBe(input.getTime());
+      expect(component.getValue()).toBe(input);
     });
 
     it('passes a backend-supplied date string through unchanged for value-type="date"', () => {
