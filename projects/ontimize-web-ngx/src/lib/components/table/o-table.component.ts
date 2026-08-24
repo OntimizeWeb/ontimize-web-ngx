@@ -443,8 +443,14 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   get showChartsOnDemandOption(): boolean { return this._showChartsOnDemandOption; }
   set showChartsOnDemandOption(val: boolean | string) { this._showChartsOnDemandOption = BooleanConverter(val); }
   private _showChartsOnDemandOption: boolean = true;
-  @BooleanInputConverter()
-  showButtonsText: boolean = true;
+  get showButtonsText(): boolean { return this._showButtonsText; }
+  set showButtonsText(value: boolean | string) {
+    this._showButtonsText = BooleanConverter(value);
+    this.showButtonsTextSubject.next(this._showButtonsText);
+  }
+  private _showButtonsText: boolean = true;
+  private readonly showButtonsTextSubject = new BehaviorSubject<boolean>(true);
+  public readonly showButtonsTextChange: Observable<boolean> = this.showButtonsTextSubject.asObservable();
   @BooleanInputConverter()
   filterColumnActiveByDefault: boolean = true;
   @BooleanInputConverter()

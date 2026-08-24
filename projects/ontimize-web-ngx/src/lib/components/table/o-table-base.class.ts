@@ -123,6 +123,8 @@ export abstract class OTableBase {
   abstract resizable: boolean
   abstract registerTableHeaders(tableHeader: OTableHeaderComponent);
   abstract showButtonsText: boolean;
+  /** Emits the current `showButtonsText` on every change, so OnPush descendants (e.g. `o-table-button`) can `markForCheck()` when it changes after their initial render. */
+  abstract showButtonsTextChange: Observable<boolean>;
   abstract matpaginator: MatPaginator;
   abstract isIndeterminate(): boolean;
   abstract onFilterByColumnChange: EventEmitter<any>;
