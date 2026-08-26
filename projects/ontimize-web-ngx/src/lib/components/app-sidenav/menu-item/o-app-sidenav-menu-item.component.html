@@ -51,7 +51,7 @@
     <li class="o-app-sidenav-menuitem o-app-sidenav-item">
       @if (shouldShowTooltip) {
         <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="triggerClick($event)"
-          [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+          [id]="menuItem.id" [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
           @if (menuItem.svgIcon) {
             <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
           }
@@ -60,7 +60,7 @@
           }
         </a>
       } @else {
-        <a mat-button (click)="triggerClick($event)" [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+        <a mat-button (click)="triggerClick($event)" [id]="menuItem.id" [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
           @if (menuItem.svgIcon) {
             <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
           }
