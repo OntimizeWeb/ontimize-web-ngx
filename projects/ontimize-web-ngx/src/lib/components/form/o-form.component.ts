@@ -22,7 +22,7 @@ import { OKeyboardListenerDirective } from '../../directives/keyboard-listener.d
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlSegment } from '@angular/router';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, isObservable, Observable, Subscription } from 'rxjs';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
 import { IComponent } from '../../interfaces/component.interface';
@@ -58,6 +58,7 @@ import { CanComponentDeactivate, CanDeactivateFormGuard } from './guards/o-form-
 import { OFormNavigationClass } from './navigation/o-form.navigation.class';
 import { OFormBase } from './o-form-base.class';
 import { O_FORM_GLOBAL_CONFIG } from './o-form-tokens';
+import { OFormGlobalConfig } from '../../types/form/o-form-global-config.type';
 import { IOFormParent, O_FORM_CONTEXT } from '../../interfaces/o-form-parent.interface';
 import { OFormValue } from './o-form-value';
 import { OFormMessageService } from './services/o-form-message.service';
@@ -252,7 +253,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   labelheader: string = '';
   labelHeaderAlign: string = 'center';
   headeractions: string = 'all';
-  showHeaderActionsText: string = 'yes';
+  showHeaderActionsText: string | boolean = 'yes';
   showBackButton: string = 'auto';
   entity: string;
   keys: string = '';
@@ -381,6 +382,8 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
   protected querySubscription: Subscription;
   protected loaderSubscription: Subscription;
   protected dynamicFormSubscription: Subscription;
+  /** Only set when O_FORM_GLOBAL_CONFIG resolves to an Observable<OFormGlobalConfig>. */
+  protected globalConfigSubscription: Subscription;
 
   protected deactivateGuard: CanDeactivateFormGuard;
   protected _canDeactivateFn: (component: CanComponentDeactivate, curr: ActivatedRouteSnapshot, state: RouterStateSnapshot, future: RouterStateSnapshot) => any;
@@ -455,14 +458,25 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
 
   private getGlobalConfig() {
     try {
-      const oFormGlobalConfig = this.injector.get(O_FORM_GLOBAL_CONFIG);
-      if (Util.isDefined(oFormGlobalConfig.headerActions)) {
-        this.headeractions = oFormGlobalConfig.headerActions;
-      };
-
+      const oFormGlobalConfigOrObservable = this.injector.get(O_FORM_GLOBAL_CONFIG);
+      if (isObservable(oFormGlobalConfigOrObservable)) {
+        // Re-applied on every emission, so an app can change this form's defaults at runtime.
+        this.globalConfigSubscription = oFormGlobalConfigOrObservable.subscribe(config => this.applyGlobalConfig(config));
+      } else {
+        this.applyGlobalConfig(oFormGlobalConfigOrObservable);
+      }
     } catch (error) {
       // Do nothing because is optional
     }
+  }
+
+  private applyGlobalConfig(oFormGlobalConfig: OFormGlobalConfig) {
+    if (Util.isDefined(oFormGlobalConfig.headerActions)) {
+      this.headeractions = oFormGlobalConfig.headerActions;
+    };
+    if (Util.isDefined(oFormGlobalConfig.showHeaderActionsText)) {
+      this.showHeaderActionsText = oFormGlobalConfig.showHeaderActionsText;
+    };
   }
 
   registerFormComponent(comp: any) {
@@ -906,6 +920,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
+    }
+    if (this.globalConfigSubscription) {
+      this.globalConfigSubscription.unsubscribe();
     }
     this.formCache.destroy();
     this.formNavigation.destroy();

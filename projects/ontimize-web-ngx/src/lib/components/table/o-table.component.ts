@@ -51,7 +51,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, isObservable, Observable, of, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
@@ -624,6 +624,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected tabGroupContainer: MatTabGroup;
   protected tabContainer: MatTab;
   tabGroupChangeSubscription: Subscription;
+  /** Only set when O_TABLE_GLOBAL_CONFIG resolves to an Observable<OTableGlobalConfig>. */
+  protected globalConfigSubscription: Subscription;
 
   protected pendingQuery: boolean = false;
   protected pendingQueryFilter = undefined;
@@ -850,48 +852,57 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   private getInjectionTokenConfig() {
     try {
-      const oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
-      if (Util.isDefined(oTableGlobalConfig.autoAdjust)) {
-        this.autoAdjust = oTableGlobalConfig.autoAdjust;
-      };
-      if (Util.isDefined(oTableGlobalConfig.autoAlignTitles)) {
-        this.autoAlignTitles = oTableGlobalConfig.autoAlignTitles;
+      const oTableGlobalConfigOrObservable = this.injector.get(O_TABLE_GLOBAL_CONFIG);
+      if (isObservable(oTableGlobalConfigOrObservable)) {
+        // Re-applied on every emission, so an app can change this table's defaults at runtime.
+        this.globalConfigSubscription = oTableGlobalConfigOrObservable.subscribe(config => this.applyGlobalConfig(config));
+      } else {
+        this.applyGlobalConfig(oTableGlobalConfigOrObservable);
       }
-      if (Util.isDefined(oTableGlobalConfig.filterColumnActiveByDefault)) {
-        this.filterColumnActiveByDefault = oTableGlobalConfig.filterColumnActiveByDefault;
-      }
-      if (Util.isDefined(oTableGlobalConfig.editionMode) && Codes.isValidEditionMode(oTableGlobalConfig.editionMode)) {
-        this.editionMode = oTableGlobalConfig.editionMode;
-      }
-      if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
-        this.detailMode = oTableGlobalConfig.detailMode;
-      }
-
-      if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
-        this.rowHeight = oTableGlobalConfig.rowHeight;
-      };
-
-      if (Util.isDefined(oTableGlobalConfig.showChartsOnDemandOption)) {
-        this.showChartsOnDemandOption = oTableGlobalConfig.showChartsOnDemandOption;
-      };
-      if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
-        this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
-      };
-      if (Util.isDefined(oTableGlobalConfig.selectionOnRowClick)) {
-        this.selectionOnRowClick = oTableGlobalConfig.selectionOnRowClick;
-      }
-      if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
-        this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
-      }
-      if (Util.isDefined(oTableGlobalConfig.showHeaderTooltip)) {
-        this.showHeaderTooltip = oTableGlobalConfig.showHeaderTooltip;
-      }
-
-
     } catch (error) {
       // Do nothing because is optional
     }
+  }
 
+  private applyGlobalConfig(oTableGlobalConfig: OTableGlobalConfig) {
+    if (Util.isDefined(oTableGlobalConfig.autoAdjust)) {
+      this.autoAdjust = oTableGlobalConfig.autoAdjust;
+    };
+    if (Util.isDefined(oTableGlobalConfig.autoAlignTitles)) {
+      this.autoAlignTitles = oTableGlobalConfig.autoAlignTitles;
+    }
+    if (Util.isDefined(oTableGlobalConfig.filterColumnActiveByDefault)) {
+      this.filterColumnActiveByDefault = oTableGlobalConfig.filterColumnActiveByDefault;
+    }
+    if (Util.isDefined(oTableGlobalConfig.editionMode) && Codes.isValidEditionMode(oTableGlobalConfig.editionMode)) {
+      this.editionMode = oTableGlobalConfig.editionMode;
+    }
+    if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
+      this.detailMode = oTableGlobalConfig.detailMode;
+    }
+
+    if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
+      this.rowHeight = oTableGlobalConfig.rowHeight;
+    };
+
+    if (Util.isDefined(oTableGlobalConfig.showChartsOnDemandOption)) {
+      this.showChartsOnDemandOption = oTableGlobalConfig.showChartsOnDemandOption;
+    };
+    if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
+      this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
+    };
+    if (Util.isDefined(oTableGlobalConfig.selectionOnRowClick)) {
+      this.selectionOnRowClick = oTableGlobalConfig.selectionOnRowClick;
+    }
+    if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
+      this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
+    }
+    if (Util.isDefined(oTableGlobalConfig.showHeaderTooltip)) {
+      this.showHeaderTooltip = oTableGlobalConfig.showHeaderTooltip;
+    }
+    if (Util.isDefined(oTableGlobalConfig.showButtonsText)) {
+      this.showButtonsText = oTableGlobalConfig.showButtonsText;
+    }
   }
 
   get state(): OTableComponentStateClass {
@@ -1256,6 +1267,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
   destroy() {
     super.destroy();
+    if (this.globalConfigSubscription) {
+      this.globalConfigSubscription.unsubscribe();
+    }
     if (this.tabGroupChangeSubscription) {
       this.tabGroupChangeSubscription.unsubscribe();
     }

@@ -840,3 +840,63 @@ describe('OFormComponent', () => {
     });
   });
 });
+
+// ─── O_FORM_GLOBAL_CONFIG ────────────────────────────────────────────────────
+
+describe('OFormComponent with O_FORM_GLOBAL_CONFIG', () => {
+  it('overrides headerActions and showHeaderActionsText from the injected global config', async () => {
+    const { OFormComponent: OFormComponentClass } = await import('./o-form.component');
+    const { O_FORM_GLOBAL_CONFIG } = await import('./o-form-tokens');
+
+    await TestBed.configureTestingModule({
+      declarations: [...OTestingUtils.getCommonDeclarations()],
+      imports: [
+        OFormComponentClass,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        TranslateModule.forRoot(),
+        ...OTestingUtils.getCommonTestingModuleConfig().imports
+      ],
+      providers: [
+        OFormConfirmExitService,
+        { provide: O_FORM_GLOBAL_CONFIG, useValue: { headerActions: 'R;I', showHeaderActionsText: 'no' } },
+        ...OTestingUtils.getCommonTestingModuleConfig().providers
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(OFormComponentClass);
+    const component: any = fixture.componentInstance;
+
+    expect(component.headeractions).toBe('R;I');
+    expect(component.showHeaderActionsText).toBe('no');
+  });
+
+  it('keeps the component defaults when no global config is provided', async () => {
+    const { OFormComponent: OFormComponentClass } = await import('./o-form.component');
+
+    await TestBed.configureTestingModule({
+      declarations: [...OTestingUtils.getCommonDeclarations()],
+      imports: [
+        OFormComponentClass,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        TranslateModule.forRoot(),
+        ...OTestingUtils.getCommonTestingModuleConfig().imports
+      ],
+      providers: [
+        OFormConfirmExitService,
+        ...OTestingUtils.getCommonTestingModuleConfig().providers
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(OFormComponentClass);
+    const component: any = fixture.componentInstance;
+
+    expect(component.headeractions).toBe('all');
+    expect(component.showHeaderActionsText).toBe('yes');
+  });
+});
