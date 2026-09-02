@@ -347,8 +347,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public loadMore(): void {
     this.currentPage += 1;
     if (this.pageable) {
+      // Computed fresh from the already-loaded records, like o-table's onChangePage does with
+      // currentPage * queryRows, rather than trusting state.queryRecordOffset directly — see
+      // o-list.component.ts's onScroll for the full rationale (same shared base class field).
       const queryArgs: OQueryDataArgs = {
-        offset: this.state.queryRecordOffset,
+        offset: this.dataResponseArray.length,
         length: this.queryRows
       };
       this.dataService?.setPaginationContext({ pageNumber: this.dataService?.getPaginationContext().pageNumber + 1 });

@@ -326,8 +326,13 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
       if (!this.loadingSubject.value && pendingRegistries) {
         const element = e.target as any;
         if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
+          // Computed fresh from the already-loaded records, like o-table's onChangePage does with
+          // currentPage * queryRows, rather than trusting state.queryRecordOffset directly — that
+          // field is written by updatePaginationInfo() from the service response and can end up
+          // NaN (e.g. a non-array response data), which this scroll handler would otherwise resend
+          // as-is on every subsequent scroll.
           const queryArgs: OQueryDataArgs = {
-            offset: this.state.queryRecordOffset,
+            offset: this.dataResponseArray.length,
             length: this.queryRows
           };
           this.dataService?.setPaginationContext({ pageNumber: this.dataService?.getPaginationContext().pageNumber + 1 });
