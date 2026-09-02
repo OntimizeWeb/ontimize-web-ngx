@@ -73,7 +73,20 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
   public onClear: EventEmitter<any> = new EventEmitter<any>();
 
   public filters: string;
-  public targetCmp: IServiceDataComponent;
+
+  public get targetCmp(): IServiceDataComponent {
+    return this._targetCmp;
+  }
+  public set targetCmp(value: IServiceDataComponent) {
+    if (this._targetCmp === value) {
+      return;
+    }
+    this._targetCmp = value;
+    if (Util.isDefined(this._targetCmp)) {
+      this._targetCmp.setFilterBuilder(this);
+    }
+  }
+  private _targetCmp: IServiceDataComponent;
   public expressionBuilder: (values: Array<{ attr, value }>) => Expression;
   @BooleanInputConverter()
   public queryOnChange: boolean = false;
@@ -127,9 +140,6 @@ export class OFilterBuilderComponent implements AfterViewInit, OnDestroy, OnInit
       });
     }
 
-    if (Util.isDefined(this.targetCmp)) {
-      this.targetCmp.setFilterBuilder(this);
-    }
   }
 
   initializeListeners(): void {
