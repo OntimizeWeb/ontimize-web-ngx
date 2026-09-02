@@ -1,3 +1,7 @@
+## 18.0.0-next.17 (2026-09-02)
+### Features
+* **o-filter-builder**: `target` now supports a value that changes at runtime (e.g. a `@ViewChild` behind `@if`/`@else`) — `targetCmp` registers on every assignment, not just once in `ngOnInit`.
+
 ## 18.0.0-next.16 (2026-08-26)
 ### Features
 * **o-table / o-form**: `show-buttons-text` (`o-table`) and `show-header-actions-text` (`o-form`) can now be configured app-wide through their existing injection tokens, alongside the other fields already resolved that way — new `showButtonsText` on `O_TABLE_GLOBAL_CONFIG` (`OTableGlobalConfig`, next to `autoAdjust`/`rowHeight`/etc.) and new `showHeaderActionsText` on `O_FORM_GLOBAL_CONFIG` (`OFormGlobalConfig`, next to `headerActions`). An explicit per-instance `show-buttons-text` / `show-header-actions-text` input still takes precedence when set; the token only supplies the default for components that don't override it.
