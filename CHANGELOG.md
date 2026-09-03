@@ -1,3 +1,7 @@
+## 18.0.0-next.19 (2026-09-04)
+
+* **o-list**: Fixed list scrolling, keeping the scroll within the list container and ensuring floating buttons, loading overlay, and infinite scroll work correctly.
+
 ## 18.0.0-next.18 (2026-09-03)
 ### Features
 * **o-list**: New `scroll-to-top-button` input (default `no`). Shows a floating button, positioned to avoid the insert FAB when both are present, once the list is scrolled past a threshold. Its appearance is configurable through the existing `action-styles` input, keyed by `scroll-top`. Closes [#2121](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2121)

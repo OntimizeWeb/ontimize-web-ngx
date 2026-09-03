@@ -27,6 +27,7 @@
 
 .o-list-container {
   position: relative;
+  display: flex;
   flex-direction: column;
 
   .spinner-container {
@@ -46,8 +47,20 @@
     }
   }
 
+  // The list scrolls inside itself: both `.o-list-content` and the `mat-list` it wraps must be
+  // allowed to shrink below their content height. Otherwise they grow with the data, the scroll
+  // ends up in an ancestor, and everything positioned against this container — the insert FAB, the
+  // scroll-to-top FAB, the loading overlay — is pushed to the bottom of the whole content instead
+  // of staying in view. In v15 this bound came from `fxFlex="1 1 100%"`, which for a column parent
+  // emitted `max-height: 100%`; the `.o-flex-100` class that replaced it only sets `max-width`.
+  .o-list-content {
+    min-height: 0;
+  }
+
   .mat-mdc-list {
     overflow: auto;
+    flex: 1 1 auto;
+    min-height: 0;
 
     .mdc-list-item--with-three-lines .o-custom-list-item {
       position: relative;

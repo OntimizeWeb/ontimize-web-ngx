@@ -107,10 +107,14 @@ describe('OListComponent', () => {
       expect(component.showScrollToTopButton).toBe(false);
     });
 
-    it('mat-paginator always takes priority: never visible while it is active, regardless of scroll position', () => {
+    it('also shows with mat-paginator active: the container still scrolls within the current page', () => {
       component.scrollToTopButton = true;
       component.matpaginator = {};
       scrollContainer.scrollTop = 500;
+      component.updateScrollToTopVisibility(scrollContainer);
+      expect(component.showScrollToTopButton).toBe(true);
+
+      scrollContainer.scrollTop = 0;
       component.updateScrollToTopVisibility(scrollContainer);
       expect(component.showScrollToTopButton).toBe(false);
     });

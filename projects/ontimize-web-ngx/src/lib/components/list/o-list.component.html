@@ -137,9 +137,9 @@
   <!--BOTTOM-RIGHT FLOATING BUTTON STACK: insert button (bottom position) and the scroll-to-top
        button share this corner. They are stacked with flexbox (column-reverse + gap) rather than
        fixed pixel offsets so they never overlap regardless of the FAB's actual rendered size, which
-       can vary with theming/density. mat-paginator always takes priority over the scroll-to-top
-       button (see updateScrollToTopVisibility), so only the insert button remains in that case. -->
-  @if ((insertButton && insertButtonFloatable && insertButtonPosition !== 'top') || (scrollToTopButton && !matpaginator && showScrollToTopButton)) {
+       can vary with theming/density. With mat-paginator the stack sits above it (see the
+       `.o-mat-paginator ~ .o-list-fab-stack` rule in the component's styles). -->
+  @if ((insertButton && insertButtonFloatable && insertButtonPosition !== 'top') || (scrollToTopButton && showScrollToTopButton)) {
     <div class="o-list-fab-stack">
       @if (insertButton && insertButtonFloatable && insertButtonPosition !== 'top') {
         <button type="button" mat-fab (click)="add($event)" [ngClass]="getActionImportanceClass('insert')" class="add-button add-button-bottom"
@@ -147,7 +147,7 @@
           <mat-icon>add</mat-icon>
         </button>
       }
-      @if (scrollToTopButton && !matpaginator && showScrollToTopButton) {
+      @if (scrollToTopButton && showScrollToTopButton) {
         <button type="button" mat-fab (click)="scrollToTop()" [ngClass]="getActionImportanceClass('scroll-top')" class="scroll-to-top-button"
           [attr.data-testid]="getDataTestId('scroll-top')" [attr.aria-label]="'LIST.SCROLL_TO_TOP' | oTranslate">
           <mat-icon>arrow_upward</mat-icon>

@@ -84,9 +84,7 @@ export const DEFAULT_INPUTS_O_LIST = [
   // keys-sql-types [string]: entity keys types, separated by ';'. Default: no value.
   'keysSqlTypes: keys-sql-types',
   // scroll-to-top-button [no|yes]: show a floating button to scroll back to the top of the list
-  // once scrolled past a threshold. Only applies to the scrollable list itself (never window/body),
-  // and has no effect when `mat-paginator` is active (pagination-controls=yes takes priority; the
-  // list is not scrollable in that mode). Default: no.
+  // once scrolled past a threshold. Default: no.
   'scrollToTopButton: scroll-to-top-button',
 ];
 
@@ -370,15 +368,16 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   /**
-   * `mat-paginator` always takes priority: the list isn't scrolled in that mode (it's not
-   * infinite-scroll), so the button is forced hidden whenever `this.matpaginator` is set —
-   * regardless of `scroll-to-top-button`, and regardless of viewport/breakpoint.
+   * Driven purely by the scroll position of the list's own scroll container, in every pagination
+   * mode: with `mat-paginator` the list is not infinite-scrolled, but its container still scrolls
+   * within the current page, so the button is just as useful there. Never driven by
+   * viewport/breakpoint.
    */
   protected updateScrollToTopVisibility(element: HTMLElement): void {
     if (!this.scrollToTopButton) {
       return;
     }
-    const shouldShow = !this.matpaginator && element.scrollTop > OListComponent.SCROLL_TO_TOP_THRESHOLD;
+    const shouldShow = element.scrollTop > OListComponent.SCROLL_TO_TOP_THRESHOLD;
     if (shouldShow !== this.showScrollToTopButton) {
       this.showScrollToTopButton = shouldShow;
     }
