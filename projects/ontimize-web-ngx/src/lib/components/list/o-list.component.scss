@@ -90,17 +90,31 @@
     right: 12px;
     position: absolute;
 
-    &.add-button-bottom {
-      bottom: 12px;
-
-    }
-
     &.add-button-top {
       top: 88px;
     }
   }
 
-  .o-mat-paginator~.add-button.add-button-bottom {
+  // Bottom-right floating button stack: the insert FAB (bottom position) and the scroll-to-top
+  // FAB share this corner. Stacked via flexbox (column-reverse puts the first child, the insert
+  // button, closest to the corner) with a gap, instead of fixed pixel offsets — this way they
+  // never overlap regardless of the FAB's actual rendered size (theming/density can change it).
+  .o-list-fab-stack {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 12px;
+
+    .add-button.add-button-bottom,
+    .scroll-to-top-button {
+      position: static;
+    }
+  }
+
+  .o-mat-paginator~.o-list-fab-stack {
     bottom: 68px;
   }
 }
