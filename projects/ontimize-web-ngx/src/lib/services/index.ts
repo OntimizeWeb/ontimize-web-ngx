@@ -27,6 +27,7 @@ export * from './parser/o-service-response.parser';
 export * from './permissions/index';
 export * from './remote-config.service';
 export * from './share-can-activate-child.service';
+export * from './skeleton-loading.service';
 export * from './snackbar.service';
 export * from './state/index';
 export * from './translate/index';

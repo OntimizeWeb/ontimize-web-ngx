@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { OComplexComponentTestingUtils } from '../../shared/testing/o-complex-component-testing-utils';
 import { AbstractComponentStateService } from '../../services/state/o-component-state.service';
+import { OGridLoadingService } from './o-grid-loading.service';
 
 // Import component dynamically to avoid compilation
 let OGridComponent: any;
@@ -36,6 +37,7 @@ describe('OGridComponent', () => {
       ],
       providers: [
         { provide: AbstractComponentStateService, useValue: mockStateService },
+        OGridLoadingService,
         ...OComplexComponentTestingUtils.getComplexComponentTestingModuleConfig().providers
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

@@ -29,7 +29,8 @@ import { OSearchInputComponent } from '../input/search-input/o-search-input.comp
 import { OGridItemComponent } from './grid-item/o-grid-item.component';
 import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 import { OGridSkeletonComponent } from './skeketon/o-grid-skeleton.component';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { OGridLoadingService } from './o-grid-loading.service';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
@@ -93,6 +94,7 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OGridComponentStateService },
     { provide: OActionStyleProvider, useExisting: forwardRef(() => OGridComponent) },
+    OGridLoadingService
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
   templateUrl: './o-grid.component.html',
@@ -203,6 +205,9 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected permissions: OGridPermissions;
   protected actionsPermissions: OPermissions[];
 
+  protected loadingService: OGridLoadingService;
+  /** Same threshold/minimum-visible delay as o-table's skeleton — avoids flicker on fast responses. */
+  public showLoading: Observable<boolean>;
 
   constructor(
     injector: Injector,
@@ -212,6 +217,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     super(injector, elRef, form);
     this.media = this.injector.get(BreakpointObserver);
     this.oMatSort = new OMatSort();
+    this.loadingService = this.injector.get(OGridLoadingService);
+    this.subscription.add(
+      this.loadingSubject.subscribe((loading: boolean) => this.loadingService.setLoading(loading))
+    );
+    this.showLoading = this.loadingService.showLoading$;
   }
 
   get state(): OGridComponentStateClass {

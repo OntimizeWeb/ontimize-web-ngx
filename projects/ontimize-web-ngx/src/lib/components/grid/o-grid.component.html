@@ -111,7 +111,7 @@
   <!--no results-->
   @if (gridItems.length === 0) {
     <div class="o-grid-no-results fill-remaining o-layout-align-center-start" layout-padding
-      [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
+      [ngStyle]="{'visibility': (showLoading | async) === false ? 'visible':'hidden'}">
       @if (noResultsTemplate) {
         <ng-container [ngTemplateOutlet]="noResultsTemplate"></ng-container>
       } @else if (noResultsMessage) {
@@ -129,7 +129,7 @@
   <!--MAT-GRID-LIST-->
   @if (gridItems.length > 0) {
     <mat-grid-list [cols]="cols" [gutterSize]="gutterSize" [rowHeight]="gridItemHeight" class="o-mat-grid-list fill-remaining"
-      [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
+      [ngStyle]="{'visibility': (showLoading | async) === false ? 'visible':'hidden'}">
       @for (item of gridItems; track item) {
         <mat-grid-tile o-grid-item [colspan]="item.colspan" [rowspan]="item.rowspan">
           <ng-container *ngTemplateOutlet="item.template"></ng-container>
@@ -147,7 +147,7 @@
   }
 
   <!-- GRID FOOTER -->
-  @if (!paginationControls && showFooter && (loading | async)===false) {
+  @if (!paginationControls && showFooter && (showLoading | async)===false) {
     <div class="o-grid-footer o-flex-row o-layout-align-center-center">
       @if (getDataArray().length < totalRecords && getDataArray().length>0) {
         <button type="button" mat-button (click)="loadMore()"
@@ -164,10 +164,10 @@
   @if (paginationControls && showFooter) {
     <mat-paginator class="o-mat-paginator" #paginator [length]="totalRecords" [pageSize]="queryRows"
       [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"
-    [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}"></mat-paginator>
+    [ngStyle]="{'visibility': (showLoading | async) === false ? 'visible':'hidden'}"></mat-paginator>
   }
 
-  @if (loading | async) {
+  @if (showLoading | async) {
     <div class="o-loading-blocker o-flex-row o-layout-align-center-end">
       <div class="o-spinner-container o-layout-align-center-center" [class.o-spinner-container-controls]="hasControls()">
         <o-grid-skeleton></o-grid-skeleton>

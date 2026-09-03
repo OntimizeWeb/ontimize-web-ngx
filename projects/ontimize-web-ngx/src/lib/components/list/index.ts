@@ -1,6 +1,7 @@
 export * from './list-item/o-list-item';
 export * from './list-item/o-list-item.component';
 export * from './list-item/o-list-item.directive';
+export * from './o-list-loading.service';
 export * from './o-list.component';
 export * from './o-list.module';
 export * from './renderers/avatar/o-list-item-avatar.component';
