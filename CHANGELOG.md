@@ -1,3 +1,11 @@
+## 18.0.0-next.18 (2026-09-03)
+### Features
+* **o-list**: New `scroll-to-top-button` input (default `no`). Shows a floating button, positioned to avoid the insert FAB when both are present, once the list is scrolled past a threshold. Its appearance is configurable through the existing `action-styles` input, keyed by `scroll-top`. Closes [#2121](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2121)
+* **o-list / o-grid**: The loading skeleton now waits the same 300ms threshold before appearing and stays visible for the same 300ms minimum once shown as `o-table`'s already did. Closes [#2120](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2120)
+### Bug Fixes
+
+* **o-list / o-grid**: Infinite-scroll pagination (`onScroll` / `loadMore`) could send `NaN` as the next query offset.
+
 ## 18.0.0-next.17 (2026-09-02)
 ### Features
 * **o-filter-builder**: `target` now supports a value that changes at runtime (e.g. a `@ViewChild` behind `@if`/`@else`) — `targetCmp` registers on every assignment, not just once in `ngOnInit`.
