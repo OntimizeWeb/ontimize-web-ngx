@@ -56,6 +56,12 @@ $transition-duration: 500ms;
     width: 100%;
     height: 100%;
 
+    &.o-app-sidenav-mode-mobile {
+      .navMenu {
+        padding-top: $sidenav-inner-margin;
+      }
+    }
+
     &.o-app-sidenav-mode-desktop:not(.opened) {
       .o-app-sidenav-sidenav.mat-drawer-closed {
         visibility: visible !important;
