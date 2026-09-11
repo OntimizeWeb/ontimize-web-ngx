@@ -41,6 +41,9 @@ describe('OTextInputComponent', () => {
       registerFormComponent: jasmine.createSpy('registerFormComponent').and.returnValue(undefined),
       registerFormControlComponent: jasmine.createSpy('registerFormControlComponent').and.returnValue(undefined),
       registerSQLTypeFormComponent: jasmine.createSpy('registerSQLTypeFormComponent').and.returnValue(undefined),
+      unregisterFormComponent: jasmine.createSpy('unregisterFormComponent').and.returnValue(undefined),
+      unregisterFormControlComponent: jasmine.createSpy('unregisterFormControlComponent').and.returnValue(undefined),
+      unregisterSQLTypeFormComponent: jasmine.createSpy('unregisterSQLTypeFormComponent').and.returnValue(undefined),
       getFormGroup: jasmine.createSpy('getFormGroup').and.returnValue(new FormGroup({})),
       isInUpdateMode: jasmine.createSpy('isInUpdateMode').and.returnValue(false),
       isEditableDetail: jasmine.createSpy('isEditableDetail').and.returnValue(false),
@@ -380,6 +383,24 @@ describe('OTextInputComponent', () => {
       expect(() => {
         component.ngOnDestroy();
       }).not.toThrow();
+    });
+
+    /*
+      The override must chain to the base `ngOnDestroy`. Without it the input
+      never unregisters, and an input rendered inside a repeater leaves a zombie
+      behind on every removed row: a FormControl that keeps its `required`
+      validator (so an empty removed row leaves the form permanently invalid),
+      that the next `_updateFormData` clears to null, and whose attr still shows
+      up in `getRegisteredFieldsValues()` — i.e. in the insert payload.
+    */
+    it('should unregister from its <o-form> on ngOnDestroy', () => {
+      component.form = mockOFormComponent;
+
+      component.ngOnDestroy();
+
+      expect(mockOFormComponent.unregisterFormComponent).toHaveBeenCalledWith(component);
+      expect(mockOFormComponent.unregisterFormControlComponent).toHaveBeenCalledWith(component);
+      expect(mockOFormComponent.unregisterSQLTypeFormComponent).toHaveBeenCalledWith(component);
     });
   });
 

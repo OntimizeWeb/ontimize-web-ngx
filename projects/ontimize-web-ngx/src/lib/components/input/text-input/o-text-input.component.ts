@@ -143,6 +143,8 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit, O
     if (this.upperSubscription) {
       this.upperSubscription.unsubscribe();
     }
+
+    super.ngOnDestroy();
   }
 
 

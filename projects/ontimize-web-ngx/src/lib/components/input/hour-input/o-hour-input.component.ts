@@ -89,6 +89,8 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
 
   ngOnDestroy(): void {
     this.pickerClosedSub?.unsubscribe();
+
+    super.ngOnDestroy();
   }
 
   public onKeyDown(e: KeyboardEvent): void {

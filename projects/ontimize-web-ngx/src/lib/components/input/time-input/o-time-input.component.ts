@@ -150,6 +150,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   public ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    super.ngOnDestroy();
   }
 
   public createFormControl(cfg, validators): OFormControl {
