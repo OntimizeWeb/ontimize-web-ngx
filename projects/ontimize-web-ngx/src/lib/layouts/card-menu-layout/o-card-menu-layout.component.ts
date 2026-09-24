@@ -80,7 +80,7 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
   public setCardMenuItems(): void {
     let cardItemsAux = [];
     if (!this.parentMenuId) {
-      cardItemsAux = this.menuRoots.filter(item => !this.appMenuService.isMenuGroup(item));
+      cardItemsAux = this.expandMenuSections(this.menuRoots).filter(item => !this.appMenuService.isMenuGroup(item));
     } else {
 
       this.parentMenuIds = (this.parentMenuId || '').split(';').map(id => id.trim());
@@ -103,7 +103,8 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
 
   protected getItemsFilteredByParentId(array: MenuRootItem[], parentMenuIds: string[]): MenuRootItem[] {
     let result: MenuRootItem[] = [];
-    const groups = array.filter(item => this.appMenuService.isMenuGroup(item));
+    // menu sections are containers too, so they can be used as parent and must be traversed
+    const groups = array.filter(item => this.appMenuService.isMenuGroup(item) || this.appMenuService.isMenuSection(item));
 
     parentMenuIds.forEach(parentMenuId => {
       for (let i = 0, len = groups.length; i < len; i++) {
@@ -130,5 +131,19 @@ export class OCardMenuLayoutComponent implements AfterViewInit, OnDestroy {
     return result;
   }
 
+  /**
+   * Replaces every visible menu section with its own items, as they are root menu entries
+   * only grouped under a title. Hidden sections are discarded.
+   */
+  protected expandMenuSections(array: MenuRootItem[]): MenuRootItem[] {
+    return (array || []).reduce((acc: MenuRootItem[], item: MenuRootItem) => {
+      if (this.appMenuService.isMenuSection(item)) {
+        return this.appMenuService.isVisibleByPermissions(item)
+          ? acc.concat((item as MenuGroup).items)
+          : acc;
+      }
+      return acc.concat(item);
+    }, []);
+  }
 
 }

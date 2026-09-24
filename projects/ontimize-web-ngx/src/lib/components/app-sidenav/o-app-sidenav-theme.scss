@@ -22,6 +22,16 @@
       background: var(--o-bg-app-bar);
     }
 
+    .o-app-sidenav-menu-section {
+      .o-app-sidenav-menu-section-title {
+        color: var(--o-fg-secondary-text);
+      }
+
+      .o-app-sidenav-menu-section-divider {
+        border-top-color: var(--o-fg-divider);
+      }
+    }
+
     .o-app-sidenav-container {
 
       // ── Shared item states (open + closed) ───────────────────────

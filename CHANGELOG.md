@@ -1,4 +1,12 @@
-## 18.0.0-next.19 (2026-09-04)
+## 18.0.0-next.21 (2026-09-24)
+
+### Features
+* **o-app-layout / o-app-sidenav**: New `MenuSection` menu entry type for the application menu configuration (`type: 'section'`). It groups a set of root menu entries under a non collapsable title, it is hidden through the `menu` permissions like any other menu option and it is hidden automatically when all of the entries it contains are hidden. Menu sections are only supported at the root level of the menu configuration.
+
+### Bug Fixes
+* **o-text-input / o-hour-input / o-time-input**: Fixed the components never unregistering from their `<o-form>` on destroy, because their `ngOnDestroy` did not chain to the base one. Inside a repeater, every removed row left behind a registered `FormControl` that kept the form invalid and was still sent in the insert payload.
+
+## 18.0.0-next.20 (2026-09-04)
 
 * **o-app-sidenav**: Fixed the menu options sticking to the top edge of the screen when the sidenav is opened in mobile layout mode (`o-app-layout mode="mobile"`).
 

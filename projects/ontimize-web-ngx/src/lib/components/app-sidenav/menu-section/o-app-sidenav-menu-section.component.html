@@ -1,0 +1,37 @@
+@if (!hidden) {
+  @if (sidenavOpened) {
+    <!-- Open state: M3 nav-list subheader -->
+    <div matSubheader class="o-app-sidenav-menu-section-title" [id]="menuSection.id" [attr.data-testid]="menuSection.id">
+      @if (menuSection.svgIcon) {
+        <mat-icon [svgIcon]="menuSection.svgIcon"></mat-icon>
+      }
+      @if (menuSection.icon) {
+        <mat-icon>{{ menuSection.icon }}</mat-icon>
+      }
+      <span class="o-app-sidenav-menu-section-title-text">{{ menuSection.name | oTranslate }}</span>
+    </div>
+  } @else {
+    <!-- Closed state (rail): the title is replaced by a separator -->
+    <div class="o-app-sidenav-menu-section-divider" [attr.data-testid]="menuSection.id"></div>
+  }
+
+  @for (menuItem of menuSection.items; track menuItem) {
+    @if (appMenuService.isVisible(menuItem)) {
+      @if (appMenuService.getMenuItemType(menuItem) === 'group') {
+        <o-app-sidenav-menu-group [menu-group]="menuItem" [sidenav-opened]="sidenavOpened" level="1"
+          (onItemClick)="onMenuItemClick($event)">
+        </o-app-sidenav-menu-group>
+      } @else if (sidenavOpened) {
+        <o-app-sidenav-menu-item [menu-item]="menuItem" [menu-item-type]="appMenuService.getMenuItemType(menuItem)"
+          [sidenav-opened]="sidenavOpened" (onClick)="onMenuItemClick($event)">
+        </o-app-sidenav-menu-item>
+      } @else {
+        <ul>
+          <o-app-sidenav-menu-item [menu-item]="menuItem" [menu-item-type]="appMenuService.getMenuItemType(menuItem)"
+            [sidenav-opened]="sidenavOpened" (onClick)="onMenuItemClick($event)">
+          </o-app-sidenav-menu-item>
+        </ul>
+      }
+    }
+  }
+}

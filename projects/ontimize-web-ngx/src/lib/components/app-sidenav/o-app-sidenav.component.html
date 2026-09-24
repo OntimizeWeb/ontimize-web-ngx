@@ -20,7 +20,7 @@
           <!-- Open state: M3 nav list. Items/groups are direct children (no <ul>/<li> wrapper). -->
           <mat-nav-list class="o-app-sidenav-nav-list">
             @for (menuRootItem of menuRootArray; track menuRootItem) {
-              @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)) {
+              @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.getMenuItemType(menuRootItem) !== 'section' && appMenuService.isVisible(menuRootItem)) {
                 <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
                   [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
                 </o-app-sidenav-menu-item>
@@ -30,13 +30,18 @@
                   (onItemClick)="onMenuItemClick()">
                 </o-app-sidenav-menu-group>
               }
+              @if (appMenuService.getMenuItemType(menuRootItem) === 'section' && appMenuService.isSectionVisible($any(menuRootItem))) {
+                <o-app-sidenav-menu-section [menu-section]="menuRootItem" [sidenav-opened]="sidenav.opened"
+                  (onItemClick)="onMenuItemClick()">
+                </o-app-sidenav-menu-section>
+              }
             }
           </mat-nav-list>
         } @else {
           <!-- Closed state (rail): icon-only mat-button markup, items wrapped in <ul>/<li>. -->
           @for (menuRootItem of menuRootArray; track menuRootItem) {
             <nav>
-              @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.isVisible(menuRootItem)) {
+              @if (appMenuService.getMenuItemType(menuRootItem) !== 'group' && appMenuService.getMenuItemType(menuRootItem) !== 'section' && appMenuService.isVisible(menuRootItem)) {
                 <ul>
                   <o-app-sidenav-menu-item [menu-item]="menuRootItem" [menu-item-type]="appMenuService.getMenuItemType(menuRootItem)"
                     [sidenav-opened]="sidenav.opened" (onClick)="onMenuItemClick()">
@@ -47,6 +52,11 @@
                 <o-app-sidenav-menu-group [menu-group]="menuRootItem" [sidenav-opened]="sidenav.opened" level="1"
                   (onItemClick)="onMenuItemClick()">
                 </o-app-sidenav-menu-group>
+              }
+              @if (appMenuService.getMenuItemType(menuRootItem) === 'section' && appMenuService.isSectionVisible($any(menuRootItem))) {
+                <o-app-sidenav-menu-section [menu-section]="menuRootItem" [sidenav-opened]="sidenav.opened"
+                  (onItemClick)="onMenuItemClick()">
+                </o-app-sidenav-menu-section>
               }
             </nav>
           }
