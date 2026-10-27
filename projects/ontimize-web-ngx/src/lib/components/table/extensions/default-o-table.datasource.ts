@@ -432,7 +432,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     const searchStr = columns.map((oCol: OColumn) => oCol.getFilterValue(item[oCol.attr], item).join(' ')).join(' ');
     // Accents are ignored so that, for example, 'angel' matches 'Ángel' and 'josé' matches 'Jose'
     const toLowerCase = !this._tableOptions.filterCaseSensitive;
-    return Util.normalizeString(searchStr, toLowerCase).indexOf(Util.normalizeString(filter, toLowerCase)) !== -1;
+    return Util.normalizeString(searchStr, toLowerCase).includes(Util.normalizeString(filter, toLowerCase));
   }
 
   /** Returns a sorted copy of the database data. */
