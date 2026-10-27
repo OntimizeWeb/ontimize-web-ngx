@@ -1,3 +1,7 @@
+## 15.9.2 (2026-10-27)
+### Bug Fixes
+* **o-table**: Fixed sorting of words with an accented first letter, which always appeared at the end of the list, and made the quick filter ignore accents. The sorting fix also applies to `o-list` and `o-grid` ([b9383ec](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b9383ec)) Closes [#2123](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2123)
+
 ## 15.9.1 (2026-05-15)
 ### Bug Fixes
 * **o-table**: Fixed row selection not being restored after changing page or sort order, and header checkbox not reflecting indeterminate state correctly ([7c8352a](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7c8352a)) Closes [#2113](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/2113)
