@@ -614,6 +614,12 @@ export class Util {
     return value;
   }
 
+  /**
+   * Collator used to compare strings when sorting. It ignores case and places accented
+   * characters next to their base letter (e.g. 'á' right after 'a') instead of at the end.
+   */
+  private static readonly SORT_COLLATOR = new Intl.Collator(undefined, { sensitivity: 'accent' });
+
   static sortFunction(propertyA: string | number, propertyB: string | number, activeSortDirection: string) {
 
     let valueA: string | number = '';
@@ -626,7 +632,11 @@ export class Util {
     if (Util.isDefined(propertyB)) {
       valueB = isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
     }
-    return (valueA <= valueB ? -1 : 1) * (activeSortDirection === 'asc' ? 1 : -1);
+    const direction = activeSortDirection === 'asc' ? 1 : -1;
+    if (typeof valueA === 'string' && typeof valueB === 'string') {
+      return Util.SORT_COLLATOR.compare(valueA, valueB) * direction;
+    }
+    return (valueA <= valueB ? -1 : 1) * direction;
   }
 
   static cloneArray<T>(arr: T[]): T[] {
