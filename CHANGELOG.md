@@ -1,3 +1,7 @@
+## 18.0.0-next.22
+### Features
+* Integrated changes from versions **15.9.2**
+
 ## 18.0.0-next.21 (2026-09-24)
 
 ### Features
