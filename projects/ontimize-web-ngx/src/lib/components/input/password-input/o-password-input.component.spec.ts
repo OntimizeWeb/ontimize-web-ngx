@@ -45,7 +45,7 @@ describe('OPasswordInputComponent', () => {
     mockElementRef = { nativeElement: document.createElement('input') };
     mockInjector = TestBed.inject(Injector);
 
-    component = new OPasswordInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OPasswordInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {

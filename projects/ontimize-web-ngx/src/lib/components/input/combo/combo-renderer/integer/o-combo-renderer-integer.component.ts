@@ -12,6 +12,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_INTEGER = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-combo-renderer-integer',
   templateUrl: './o-combo-renderer-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

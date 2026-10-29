@@ -3,7 +3,8 @@ import { Directive, EventEmitter, HostListener, Input, OnInit, Output } from '@a
 import { Util } from '../util/util';
 
 @Directive({
-  selector: '[oKeyboardListener]'
+  selector: '[oKeyboardListener]',
+  standalone: true
 })
 export class OKeyboardListenerDirective implements OnInit {
 

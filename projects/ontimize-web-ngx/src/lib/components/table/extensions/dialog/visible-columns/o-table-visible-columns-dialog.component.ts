@@ -1,4 +1,12 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { NgClass } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -27,6 +35,8 @@ export type ColumnVisibilityConfiguration = {
 };
 
 @Component({
+  standalone: true,
+  imports: [NgClass, DragDropModule, MatButtonModule, MatDialogModule, MatDividerModule, MatIconModule, MatListModule, OTranslatePipe],
   selector: 'o-table-visible-columns-dialog',
   templateUrl: 'o-table-visible-columns-dialog.component.html',
   styleUrls: ['o-table-visible-columns-dialog.component.scss'],

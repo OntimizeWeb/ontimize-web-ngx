@@ -25,8 +25,11 @@ import { Codes } from '../../../util/codes';
 import { SQLTypes } from '../../../util/sqltypes';
 import { Util } from '../../../util/util';
 import { OTableComponent } from '../o-table.component';
-import { editorsMapping, O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor';
-import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS, renderersMapping } from './cell-renderer/cell-renderer';
+import { editorsMapping } from './cell-editor/cell-editor';
+import { O_TABLE_CELL_EDITORS_INPUTS, O_TABLE_CELL_EDITORS_OUTPUTS } from './cell-editor/cell-editor-inputs';
+import { O_TABLE_COLUMN_TOKEN } from './cell-editor/o-base-table-cell-editor.class';
+import { O_TABLE_CELL_RENDERERS_INPUTS, O_TABLE_CELL_RENDERERS_OUTPUTS } from './cell-renderer/cell-renderer-inputs';
+import { renderersMapping } from './cell-renderer/cell-renderer';
 
 export const DEFAULT_INPUTS_O_TABLE_COLUMN = [
   // attr [string]: column name.
@@ -109,12 +112,14 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-column',
   templateUrl: './o-table-column.component.html',
   styleUrls: ['./o-table-column.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN,
+  providers: [{ provide: O_TABLE_COLUMN_TOKEN, useExisting: forwardRef(() => OTableColumnComponent) }],
 })
 export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, AfterViewInit {
   public renderer: any;
@@ -206,7 +211,7 @@ export class OTableColumnComponent implements OTableColumn, OnDestroy, OnInit, A
   /* input renderer translate */
   protected translateArgsFn: (rowData: any) => any[];
   /* input time */
-  oDateFormat = 'L';
+  oDateFormat = 'D';
   oHourFormat = 24;
 
   /* input renderer percentage */

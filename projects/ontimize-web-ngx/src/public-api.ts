@@ -6,6 +6,8 @@ export * from './lib/ontimize-web-ngx.module';
 
 export { ONTIMIZE_MODULES, OntimizeWebTranslateModule } from './lib/config/o-modules';
 export { ONTIMIZE_PROVIDERS } from './lib/config/o-providers';
+export { provideOntimizeWeb } from './lib/config/o-provide';
+export type { ProvideOntimizeWebOptions } from './lib/config/o-provide';
 
 export * from './lib/config/app-config';
 export * from './lib/MainLauncher';

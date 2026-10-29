@@ -1,5 +1,12 @@
 import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { NgTemplateOutlet } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 
 import { Util } from '../../../util/util';
 import { OSearchInputComponent } from '../../input/search-input/o-search-input.component';
@@ -12,6 +19,8 @@ export const DEFAULT_INPUTS_O_LIST_PICKER_DIALOG = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgTemplateOutlet, ScrollingModule, MatButtonModule, MatDialogModule, MatDividerModule, MatListModule, OTranslatePipe, OSearchInputComponent],
   selector: 'o-list-picker-dialog',
   templateUrl: './o-list-picker-dialog.component.html',
   styleUrls: ['./o-list-picker-dialog.component.scss'],

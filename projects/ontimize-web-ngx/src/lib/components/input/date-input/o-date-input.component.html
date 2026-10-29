@@ -1,19 +1,19 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
+<div class="o-flex-row o-layout-align-sb-center" [formGroup]="getFormGroup()" [matTooltip]="tooltip"
   [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
   [matTooltipHideDelay]="tooltipHideDelay" (click)="onClickInput($event)">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker"
-    [class.custom-width]="hasCustomWidth" class="icon-field" fxFlexFill [subscriptSizing]="subscriptSizing">
+    [class.custom-width]="hasCustomWidth" class="icon-field o-flex-fill" [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <input matInput #matInputRef [matDatepicker]="picker" [id]="getAttribute()" [formControlName]="getAttribute()"
+    <input matInput #matInputRef [matDatepicker]="picker" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()"
       [placeholder]="placeHolder" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
       (blur)="innerOnBlur($event)" [matDatepickerFilter]="filterDate" (dateChange)="onChangeEvent($event)"
       [required]="isRequired" [value]="getValueAsDate()">
 
       @if (showClearButton) {
         <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-          <mat-icon svgIcon="ontimize:close"></mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
       }
       <mat-datepicker-toggle matSuffix [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" [for]="picker">

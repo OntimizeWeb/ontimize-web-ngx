@@ -1,34 +1,118 @@
-@use '@angular/material'as mat;
+@use '@angular/material' as mat;
 @use "sass:map";
+
+// Restores color="primary|accent|warn" support on mat-toolbar, mat-icon,
+// mat-progress-bar and mat-progress-spinner when using an M3 theme.
+// mat.color-variants-backwards-compatibility() handles buttons, checkboxes,
+// etc. but intentionally omits toolbar (toolbar has its own .mat-primary block
+// in M2 but not in M3). We use --o-* CSS variables so the tokens follow
+// the active Ontimize theme automatically.
+@mixin _mat-color-input-backwards-compatibility() {
+  .mat-toolbar {
+    &.mat-primary {
+      --mat-toolbar-container-background-color: var(--mat-sys-primary);
+      --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
+    }
+    &.mat-accent {
+      --mat-toolbar-container-background-color: var(--mat-sys-tertiary);
+      --mat-toolbar-container-text-color: var(--mat-sys-on-tertiary);
+    }
+    &.mat-warn {
+      --mat-toolbar-container-background-color: var(--mat-sys-error);
+      --mat-toolbar-container-text-color: var(--mat-sys-on-error);
+    }
+  }
+
+  mat-icon {
+    &.mat-primary { --mat-icon-color: var(--mat-sys-primary); }
+    &.mat-accent  { --mat-icon-color: var(--mat-sys-tertiary); }
+    &.mat-warn    { --mat-icon-color: var(--mat-sys-error); }
+  }
+}
 
 // Create a theme.
 @mixin o-material-theme($theme-or-color-config, $typographyConfig: null) {
 
-  //merge $typographyConfig in $theme-or-color-config
-  @if $typographyConfig !=null {
+  // Merge $typographyConfig into $theme-or-color-config if provided.
+  @if $typographyConfig != null {
     $theme-or-color-config: map.merge($theme-or-color-config, 'typography', $typographyConfig);
   }
 
-
-  //Include theme styles for core and each component used in your app.;
+  // Include Material theme styles for core and every component.
+  // Prefer the M3 theme object built by o-mat-light/dark-theme when
+  // present; fall back to the legacy M2-shape config otherwise.
+  //
+  // Material M3 requires component-theme mixins to be wrapped in a
+  // selector (html/:root/& are all valid). When the caller is already
+  // inside a selector we reuse it via `&`; otherwise we target html so
+  // the tokens become effective document-wide.
   $typography: map.get($theme-or-color-config, typography);
+  $density: map.get($theme-or-color-config, density);
+  $m3-theme: map.get($theme-or-color-config, m3-theme);
 
-  @if($typography) {
+  // Color-only mode: typography and density are null (set by
+  // `ontimize-theme-all-component-color` for the dark-theme branch, where
+  // only colours should be re-emitted). Avoids duplicate theme-style warnings
+  // from Material when typography/density are emitted more than once.
+  $color-only: $m3-theme != null and $typography == null and $density == null;
+
+  @if $m3-theme {
+    @if & {
+      & {
+        // Emit --mat-sys-* CSS custom properties from the M3 palette so that
+        // component SCSS can reference var(--mat-sys-primary-container) etc.
+        // mat.all-component-themes() bakes palette values into --mdc-* tokens
+        // at compile time and does NOT emit --mat-sys-* definitions itself.
+        @include mat.system-level-colors($m3-theme, (), 'mat-sys');
+        @if not $color-only {
+          @include mat.system-level-typography($m3-theme, (), 'mat-sys');
+          @include mat.system-level-elevation($m3-theme, (), 'mat-sys');
+          @include mat.system-level-shape($m3-theme, (), 'mat-sys');
+          @include mat.system-level-motion($m3-theme, (), 'mat-sys');
+          @include mat.system-level-state($m3-theme, (), 'mat-sys');
+        }
+        @if $color-only {
+          @include mat.all-component-colors($m3-theme);
+        } @else {
+          @include mat.core();
+          @include mat.all-component-themes($m3-theme);
+        }
+        @include mat.color-variants-backwards-compatibility($m3-theme);
+      }
+    } @else {
+      html {
+        @include mat.system-level-colors($m3-theme, (), 'mat-sys');
+        @if not $color-only {
+          @include mat.system-level-typography($m3-theme, (), 'mat-sys');
+          @include mat.system-level-elevation($m3-theme, (), 'mat-sys');
+          @include mat.system-level-shape($m3-theme, (), 'mat-sys');
+          @include mat.system-level-motion($m3-theme, (), 'mat-sys');
+          @include mat.system-level-state($m3-theme, (), 'mat-sys');
+        }
+        @if $color-only {
+          @include mat.all-component-colors($m3-theme);
+        } @else {
+          @include mat.core();
+          @include mat.all-component-themes($m3-theme);
+        }
+        @include mat.color-variants-backwards-compatibility($m3-theme);
+      }
+    }
+    @include _mat-color-input-backwards-compatibility();
+  } @else if $typography {
     @include mat.core();
     @include mat.all-component-themes($theme-or-color-config);
-  }
-
-  @else {
+  } @else {
     @include mat.all-component-colors($theme-or-color-config);
   }
-
-  $typography: mat.get-typography-config($theme-or-color-config);
 
   @include app-global-theme($theme-or-color-config);
   @include o-breadcrumb-theme($theme-or-color-config);
   @include o-container-theme($theme-or-color-config);
   @include o-form-toolbar-theme($theme-or-color-config);
-  @include input-theme($theme-or-color-config);
+  @include o-button-theme($theme-or-color-config);
+  @include o-button-toggle-theme($theme-or-color-config);
+  //@include input-theme($theme-or-color-config);
   @include o-date-input-theme($theme-or-color-config);
   @include o-dialog-theme($theme-or-color-config);
   @include o-table-theme($theme-or-color-config);
@@ -44,7 +128,6 @@
   @include o-bar-menu-theme($theme-or-color-config);
   @include o-grid-theme($theme-or-color-config);
   @include o-layout-padding-margin();
-  @include o-daterange-input-theme($theme-or-color-config);
   @include o-dual-list-selector-theme($theme-or-color-config);
   @include o-image-theme($theme-or-color-config);
 }

@@ -175,8 +175,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       observeOn(asyncScheduler),
       switchMap((event: any) => {
         let data = Object.assign([], this._database.data);
-        if (!Array.isArray(data) || this.renderedData === null) {
-          // No data has been loaded yet
+        if (!Array.isArray(data) || !this._database.hasLoadedOnce) {
+          // Genuinely nothing queried yet (dataChange is a BehaviorSubject seeded with []),
+          // as opposed to a rebuilt datasource whose _database already holds real data —
+          // this.renderedData alone can't tell those apart, it's always null right after a rebuild.
           this.renderedData = [];
           return of(null);
         }
@@ -282,6 +284,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
       // -------------------------------------------------------------
       this.ngZone.run(() => {
         this.updateTableState(renderedData, resultsLength, aggregateData);
+        this.table.awaitingTableRender = false;
         this.table.loadingService.setLoading(false);
         this.table.cd.markForCheck();
         observer.next(data);
@@ -291,6 +294,7 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
     } catch (error) {
       console.error('❌ Error while processing data:', error);
       this.ngZone.run(() => {
+        this.table.awaitingTableRender = false;
         this.table.loadingService.setLoading(false);
         this.table.cd.markForCheck();
         observer.error(error);
@@ -429,11 +433,10 @@ export class DefaultOTableDataSource extends DataSource<any> implements OTableDa
 
   protected fulfillsQuickfilter(filter: string, item: any): boolean {
     const columns = this._tableOptions.columns.filter((oCol: OColumn) => oCol.useQuickfilterFunction());
-    let searchStr = columns.map((oCol: OColumn) => oCol.getFilterValue(item[oCol.attr], item).join(' ')).join(' ');
-    if (!this._tableOptions.filterCaseSensitive) {
-      searchStr = searchStr.toLowerCase();
-    }
-    return searchStr.indexOf(filter) !== -1;
+    const searchStr = columns.map((oCol: OColumn) => oCol.getFilterValue(item[oCol.attr], item).join(' ')).join(' ');
+    // Accents are ignored so that, for example, 'angel' matches 'Ángel' and 'josé' matches 'Jose'
+    const toLowerCase = !this._tableOptions.filterCaseSensitive;
+    return Util.normalizeString(searchStr, toLowerCase).includes(Util.normalizeString(filter, toLowerCase));
   }
 
   /** Returns a sorted copy of the database data. */

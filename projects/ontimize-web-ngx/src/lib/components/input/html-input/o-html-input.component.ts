@@ -1,10 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnInit, Type, ViewChild } from '@angular/core';
-import { ValidatorFn, Validators } from '@angular/forms';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, forwardRef, Injector, OnInit, Type, ViewChild } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { CKEditorModule } from '../../material/ckeditor/ck-editor.module';
+
 import { NumberConverter } from '../../../decorators/input-converter';
-import { OFormComponent } from '../../form/o-form.component';
 import { CKEditorComponent } from '../../material/ckeditor/ck-editor.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
@@ -26,11 +30,14 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, OTranslatePipe, OMatErrorDirective, CKEditorModule],
   selector: 'o-html-input',
   templateUrl: './o-html-input.component.html',
   styleUrls: ['./o-html-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_HTML_INPUT,
   outputs: DEFAULT_OUTPUTS_O_HTML_INPUT,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OHTMLInputComponent), multi: true }],
   animations: [
     trigger('transitionMessages', [
       state('enter', style({ opacity: 1, transform: 'translateY(0%)' })),
@@ -57,12 +64,10 @@ export class OHTMLInputComponent extends OFormDataComponent implements OnInit, A
   protected _changeDetectorRef: ChangeDetectorRef;
 
   constructor(
-    form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
-    this.form = form;
+    super(elRef, injector);
     this.elRef = elRef;
     this._changeDetectorRef = this.injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
     try {

@@ -27,6 +27,7 @@
 
 .o-list-container {
   position: relative;
+  display: flex;
   flex-direction: column;
 
   .spinner-container {
@@ -46,8 +47,20 @@
     }
   }
 
+  // The list scrolls inside itself: both `.o-list-content` and the `mat-list` it wraps must be
+  // allowed to shrink below their content height. Otherwise they grow with the data, the scroll
+  // ends up in an ancestor, and everything positioned against this container — the insert FAB, the
+  // scroll-to-top FAB, the loading overlay — is pushed to the bottom of the whole content instead
+  // of staying in view. In v15 this bound came from `fxFlex="1 1 100%"`, which for a column parent
+  // emitted `max-height: 100%`; the `.o-flex-100` class that replaced it only sets `max-width`.
+  .o-list-content {
+    min-height: 0;
+  }
+
   .mat-mdc-list {
     overflow: auto;
+    flex: 1 1 auto;
+    min-height: 0;
 
     .mdc-list-item--with-three-lines .o-custom-list-item {
       position: relative;
@@ -90,17 +103,31 @@
     right: 12px;
     position: absolute;
 
-    &.add-button-bottom {
-      bottom: 12px;
-
-    }
-
     &.add-button-top {
       top: 88px;
     }
   }
 
-  .o-mat-paginator~.add-button.add-button-bottom {
+  // Bottom-right floating button stack: the insert FAB (bottom position) and the scroll-to-top
+  // FAB share this corner. Stacked via flexbox (column-reverse puts the first child, the insert
+  // button, closest to the corner) with a gap, instead of fixed pixel offsets — this way they
+  // never overlap regardless of the FAB's actual rendered size (theming/density can change it).
+  .o-list-fab-stack {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 12px;
+
+    .add-button.add-button-bottom,
+    .scroll-to-top-button {
+      position: static;
+    }
+  }
+
+  .o-mat-paginator~.o-list-fab-stack {
     bottom: 68px;
   }
 }

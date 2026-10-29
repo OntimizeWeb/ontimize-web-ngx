@@ -11,18 +11,21 @@ $o_table_row_padding: 24px;
 
   .o-table-container {
     height: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: stretch;
     align-content: stretch;
     min-width: 100%;
     min-height: 400px;
+    padding: 8px;
 
     .o-table-body {
       display: flex;
       flex: 1 1 auto;
+      width: 100%;
 
       .o-table-overflow {
         overflow-y: auto;
@@ -55,7 +58,6 @@ $o_table_row_padding: 24px;
     }
 
     position: relative;
-    padding: 0 .5%;
 
     .o-table-toolbar {
 
@@ -298,9 +300,6 @@ $o_table_row_padding: 24px;
 
         &.mat-column-select.mat-header-select-all-with-title {
           padding-right: 12px;
-        }
-
-        &:first-of-type {
           padding-left: 0;
         }
 
@@ -451,6 +450,9 @@ $o_table_row_padding: 24px;
       }
 
     }
+  }
+  .mat-paginator{
+    margin-top:8px;
   }
 }
 

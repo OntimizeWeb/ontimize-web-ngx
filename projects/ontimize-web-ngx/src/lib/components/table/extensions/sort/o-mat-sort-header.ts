@@ -1,12 +1,15 @@
 
 import { CdkColumnDef } from '@angular/cdk/table';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { ArrowViewStateTransition, matSortAnimations, MatSortHeader, MatSortHeaderIntl } from '@angular/material/sort';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { OMatSort } from './o-mat-sort';
 import { OTableLoadingService } from '../../o-table-loading.service';
 
 @Component({
+  standalone: true,
+  imports: [NgClass],
   selector: '[o-mat-sort-header]',
   exportAs: 'oMatSortHeader',
   templateUrl: './sort-header.html',

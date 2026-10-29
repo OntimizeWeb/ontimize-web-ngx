@@ -1,0 +1,159 @@
+// =============================================================================
+// ontimize-tokens.scss — Ontimize custom CSS tokens (Material 3 native)
+// =============================================================================
+//
+// Mixins:
+//
+//   o-apply-tokens($theme)
+//     Emits --o-bg-* background levels, neutral divider tokens, and
+//     --o-font-family. Generic — used by every theme.
+//
+//   o-apply-neutral-surfaces($theme)
+//     Opt-in "Clear SaSS" overrides: replaces M3's tinted surfaces with neutral
+//     whites/grays, sets subtler elevation shadows, and reduces state-layer
+//     opacities. Call this alongside o-apply-tokens in themes that prefer a
+//     neutral look (e.g. oxygen). Dark themes pass their dark theme object.
+//
+// Branding colours (primary / tertiary / error) are NOT emitted as `--o-*`.
+// Use the Material 3 system tokens instead:
+//   var(--mat-sys-primary)            — primary colour
+//   var(--mat-sys-on-primary)         — text/icon over primary
+//   var(--mat-sys-primary-container)  — primary tonal container (light tint)
+//   var(--mat-sys-tertiary)           — tertiary (was "accent" in M2)
+//   var(--mat-sys-error)              — error (was "warn" in M2)
+// =============================================================================
+
+@use "sass:map";
+@use '@angular/material' as mat;
+
+@function -get-bg($bg, $key, $fallback: null) {
+  @if $bg ==null {
+    @return $fallback;
+  }
+
+  $value: map.get($bg, $key);
+  @return if($value ==null, $fallback, $value);
+}
+
+@function -get-fg($fg, $key, $fallback: null) {
+  @if $fg ==null {
+    @return $fallback;
+  }
+
+  $value: map.get($fg, $key);
+  @return if($value ==null, $fallback, $value);
+}
+
+// ─── Main mixin ─────────────────────────────────────────────────────────────
+// Emits `--o-*` CSS custom properties + a few `--mat-*` overrides derived
+// from the given Ontimize theme.
+//
+// Usage (inside a selector such as :root or .o-dark):
+//   @include tokens.o-apply-tokens(my-theme.$theme);
+
+
+
+@mixin o-apply-tokens($theme) {
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $typography: map.get($theme, typography);
+  $m3-theme: map.get($theme, m3-theme);
+
+  // ─── Background levels ─────────────────────────────────────
+  --o-bg-background: #{-get-bg($background, background, #f9fafb)};
+  --o-bg-card: #{-get-bg($background, card)};
+  --o-bg-level-0: #{-get-bg($background, level-0)};
+  --o-bg-level-04: #{-get-bg($background, level-04)};
+  --o-bg-level-06: #{-get-bg($background, level-06)};
+  --o-bg-level-08: #{-get-bg($background, level-08)};
+  --o-bg-level-1: #{-get-bg($background, level-1)};
+  --o-bg-status-bar: #{-get-bg($background, status-bar)};
+  --o-bg-app-bar: #{-get-bg($background, app-bar)};
+
+  // ─── Foreground roles ──────────────────────────────────────
+  --o-fg-base: #{-get-fg($foreground, base)};
+  --o-fg-text: #{-get-fg($foreground, text)};
+  --o-fg-secondary-text: #{-get-fg($foreground, secondary-text)};
+  --o-fg-title: #{-get-fg($foreground, title)};
+  --o-fg-hint: #{-get-fg($foreground, hint-text)};
+  --o-fg-disabled: #{-get-fg($foreground, disabled)};
+  --o-fg-disabled-button: #{-get-fg($foreground, disabled-button)};
+  --o-fg-disabled-text: #{-get-fg($foreground, disabled-text)};
+  --o-fg-icon: #{-get-fg($foreground, icon)};
+  --o-fg-divider: #{-get-fg($foreground, divider)};
+  --o-fg-button: #{-get-fg($foreground, button)};
+  --o-fg-elevation: #{-get-fg($foreground, elevation)};
+  --o-fg-slider-off: #{-get-fg($foreground, slider-off)};
+
+  // ─── Sidenav item states (palette tones, resolved at compile time) ──────────
+  // Light M3 theme: very light tonal tints (tones 98/95) read well over the light
+  // sidenav. In DARK mode those tones are near-white and would wash out the menu,
+  // so fall back to adaptive system tokens (primary-container is a dark tonal
+  // surface in the dark theme, and the translucent primary overlay keeps the
+  // hover visible) — same as the non-M3 path.
+  @if $m3-theme and not map.get($theme, is-dark) {
+    --o-sidenav-selected-bg: #{mat.get-theme-color($m3-theme, primary, 98)};
+    --o-sidenav-hover-bg: #{mat.get-theme-color($m3-theme, secondary, 95)};
+  } @else {
+    --o-sidenav-selected-bg: var(--mat-sys-primary-container);
+    --o-sidenav-hover-bg: color-mix(in srgb, var(--mat-sys-primary) 8%, transparent);
+  }
+
+  // ─── Scrollbar thumb ─────────────────────────────────────────────────────
+  // Resolved at compile time so it works in ::-webkit-scrollbar pseudo-elements,
+  // which don't inherit CSS custom properties at runtime.
+  @if $m3-theme {
+    --o-scroll-thumb: #{rgba(mat.get-theme-color($m3-theme, primary), 0.3)};
+  } @else {
+    --o-scroll-thumb: #{-get-fg($foreground, hint-text, rgba(0, 0, 0, 0.38))};
+  }
+
+  // ─── Divider / border component tokens ─────────────────────────────────────
+  --mat-divider-color: var(--mat-sys-outline-variant);
+  --mat-table-row-item-outline-color: var(--mat-sys-outline-variant);
+
+  // ─── Form-field placeholders — attenuated via --o-fg-hint (theme-aware) ────
+  --mdc-filled-text-field-input-text-placeholder-color: var(--o-fg-hint);
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--o-fg-hint);
+
+  // ─── Typography — font-family from theme config ─────────────────────────────
+  @if $typography {
+    $family: map.get($typography, font-family);
+
+    @if $family {
+      --o-font-family: #{$family},
+      system-ui,
+      sans-serif;
+    }
+  }
+}
+
+// ─── Neutral surfaces mixin (opt-in "Clear SaSS") ────────────────────────────
+// Overrides M3 tokens that would otherwise carry a primary-colour tint:
+//   --mat-sys-outline-variant  subtle borders (dividers, chips, expansion panels)
+//   --mat-sys-background       app background
+// Call this after o-apply-tokens inside the same selector when a neutral look
+// is desired. Exposed to themes via themes/oxygen.scss convenience mixins.
+@mixin o-apply-neutral-surfaces($theme) {
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+
+  // ─── Surface tint + flat cards ──────────────────────────────────────────────
+  // surface-tint: transparent prevents primary-colour bleed on elevated surfaces.
+  // The slider inactive track relies on color-mix(surface-tint …) at runtime;
+  // with transparent that resolves to white → invisible. We set it explicitly
+  // from the neutral palette so the track stays visible without primary tint.
+  --mat-sys-surface-tint: transparent;
+  --mdc-elevated-card-container-elevation: 0;
+  --mdc-slider-inactive-track-color: #{-get-bg($background, level-08, #e0e0e0)};
+
+  // ─── Divider / border tokens — clear, opacity-based ─────────────────────────
+  --mat-sys-outline-variant: #{-get-fg($foreground, divider, rgba(0, 0, 0, .12))};
+  --mat-sys-outline:var(--mat-sys-outline-variant);
+
+  --mat-sys-background: #{-get-bg($background, background, #f9fafb)};
+
+  // Form-field borders aligned with --mat-sys-outline-variant
+  --mdc-outlined-text-field-outline-color: var(--mat-sys-outline-variant);
+  --mdc-filled-text-field-active-indicator-color: var(--mat-sys-outline-variant);
+}

@@ -1,60 +1,45 @@
 @mixin app-global-theme($theme-or-color-config, $typography: null) {
-  $theme: map.get($theme-or-color-config, color);
-  $accent: map.get($theme, accent);
-  $primary: map.get($theme, primary);
-  $foreground: map.get($theme, foreground);
-  $background: map.get($theme, background);
-  $is-dark-theme: map.get($theme, is-dark);
-  $background-primary-button: if($is-dark-theme, transparent, mat.get-color-from-palette($primary, 100));
-  $background-hover-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500, 0.04), #ffffff);
-  $border-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
-  $font-color-primary-button: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 800));
-  $background-accent-button: if($is-dark-theme, transparent, #ffffff);
-  $background-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500, 0.04), mat.get-color-from-palette($accent, 100));
-  $font-color-hover-accent-button: if($is-dark-theme, mat.get-color-from-palette($accent, 500), mat.get-color-from-palette($accent, 800));
-  $border-color-accent-button: if($is-dark-theme, mat.get-color-from-palette($foreground, divider), transparent);
-  $scrollbar-color: if($is-dark-theme, mat.get-color-from-palette($primary, 500), mat.get-color-from-palette($primary, 200));
-
-  @if $typography==null {
-    $typography: map.get($theme-or-color-config, 'typography');
-
-  }
-
   body,
   html {
-    background-color: mat.get-color-from-palette($background, background);
+    background-color: var(--o-bg-background);
   }
 
-  @if($typography) {
-
-    button,
-    html,
-    input,
-    select,
-    span,
-    textarea {
-      font-family: mat.font-family($typography);
-    }
+  button,
+  html,
+  input,
+  select,
+  span,
+  textarea {
+    font-family: var(--o-font-family);
   }
 
+  // ─── Scrollbar — Clear SaSS (webkit + modern CSS) ────────────────────────
+  // --o-scroll-thumb is emitted by o-apply-tokens (primary at 0.3 opacity,
+  // compiled to static rgba so scrollbar pseudo-elements can read it).
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    background-color: transparent;
-    opacity: 1.0;
   }
 
   ::-webkit-scrollbar-track {
-    -webkit-box-shadow: none;
-    border-radius: 0;
-    background-color: #c7c7c7;
+    background-color: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    border-radius: 0;
-    -webkit-box-shadow: none;
-    background-color: $scrollbar-color;
-    opacity: 1.0;
+    background-color: var(--o-scroll-thumb, rgba(0, 0, 0, 0.3));
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    opacity: 0.7;
+  }
+
+  // Firefox / Chrome 121+ / Safari 18.2+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--o-scroll-thumb, rgba(0, 0, 0, 0.3)) transparent;
   }
 
   .o-loading {
@@ -76,7 +61,7 @@
       border-radius: 50%;
       left: 50%;
       animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: mat.get-color-from-palette($primary) transparent transparent transparent;
+      border-color: var(--mat-sys-primary) transparent transparent transparent;
     }
 
     div:nth-child(1) {
@@ -105,7 +90,7 @@
 
   .o-form-layout-sidenav-container {
     .sidenav-title-container {
-      border-bottom: 1px solid mat.get-color-from-palette($primary);
+      border-bottom: 1px solid var(--mat-sys-primary);
     }
   }
 
@@ -116,29 +101,29 @@
   .o-list-picker-dialog {
     .mat-mdc-dialog-container {
       .mat-mdc-dialog-title {
-        border-bottom: 1px solid mat.get-color-from-palette($primary);
+        border-bottom: 1px solid var(--mat-sys-primary);
 
         .mat-icon {
-          color: mat.get-color-from-palette($primary);
+          color: var(--mat-sys-primary);
         }
       }
 
-      @if($typography) {
-        .mat-mdc-dialog-title {
-          line-height: mat.font-size($typography, subtitle-1);
-          font-size: mat.font-size($typography, subtitle-1);
-        }
+      .mat-mdc-dialog-title {
+        line-height: var(--mat-sys-title-small-size);
+        font-size: var(--mat-sys-title-small-size);
+      }
+
+      .mat-mdc-dialog-title.title-container {
+        display: flex;
       }
 
 
       .empty-filter-list {
-        color: mat.get-color-from-palette($foreground, disabled-text);
+        color: var(--o-fg-disabled-text);
       }
 
       .mat-mdc-dialog-content {
-        @if($typography) {
-          font-size: mat.font-size($typography, body-1);
-        }
+        font-size: var(--mat-sys-body-medium-size);
 
         .mat-mdc-subheader.mdc-list-group__subheader {
           font-weight: inherit;
@@ -150,7 +135,7 @@
 
         .mdc-list {
           padding: 0;
-          @include mat.list-density(-2);
+          // @include mat.list-density(-2);
 
           .mat-mdc-list-item.mdc-list-item {
             margin: 6px 0;
@@ -186,7 +171,6 @@
 
                 &.mat-mdc-list-item-unscoped-content {
                   vertical-align: middle;
-                  width: 100%;
                 }
               }
             }
@@ -211,14 +195,14 @@
 
     &.mdc-list-item.mat-mdc-list-item {
 
-      background-color: mat.get-color-from-palette($background, background);
+      background-color: var(--o-bg-background);
       box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
       box-sizing: border-box;
       border-radius: 2px;
 
       .mdc-list-item__secondary-text,
       .mdc-list-item__primary-text {
-        padding: 0 8px;
+        // padding: 0 8px;
         width: 100%;
 
         &::before,
@@ -234,11 +218,8 @@
       }
 
       .mdc-list-item__secondary-text {
-        color: mat.get-color-from-palette($foreground, icon);
-
-        @if($typography) {
-          font-size: mat.font-size($typography, body-1);
-        }
+        color: var(--o-fg-icon);
+        font-size: var(--mat-sys-body-medium-size);
       }
     }
 
@@ -283,39 +264,39 @@
   }
 
   /*BUTTONS HOVER*/
-  .mat-mdc-dialog-actions button:not([disabled]),
-  .o-form .o-form-toolbar button:not([disabled]).o-form-toolbar-button,
-  .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
-  .o-list .o-list-toolbar button.o-list-button:not([disabled]),
-  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
+  // .mat-mdc-dialog-actions button:not([disabled]),
+  // .o-form .o-form-toolbar button:not([disabled]).o-form-toolbar-button,
+  // .o-grid .o-grid-toolbar button.o-grid-button:not([disabled]),
+  // .o-list .o-list-toolbar button.o-list-button:not([disabled]),
+  // .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button:not([disabled]) {
 
-    &.mat-mdc-button-base.mat-primary,
-    &.mat-mdc-button-base.o-button-primary {
-      color: mat.get-color-from-palette($primary, 800);
-      background-color: $background-primary-button;
-      border-color: $border-color-primary-button;
+  //   &.mat-mdc-button-base.mat-primary,
+  //   &.mat-mdc-button-base.o-button-primary {
+  //     color: var(--mat-sys-on-primary-container);
+  //     background-color: var(--mat-sys-primary-container);
+  //     border-color: transparent;
 
-      &:hover {
-        color: mat.get-color-from-palette($primary);
-        background-color: $background-hover-primary-button;
-        border-color: mat.get-color-from-palette($foreground, divider);
-      }
+  //     &:hover {
+  //       color: var(--mat-sys-primary);
+  //       background-color: #ffffff;
+  //       border-color: var(--o-fg-divider);
+  //     }
 
-    }
+  //   }
 
-    &.mat-mdc-button-base,
-    &.mat-mdc-button-base.mat-accent {
-      color: mat.get-color-from-palette($accent);
-      background-color: $background-accent-button;
+  //   &.mat-mdc-button-base,
+  //   &.mat-mdc-button-base.mat-accent {
+  //     color: var(--mat-sys-tertiary);
+  //     background-color: #ffffff;
 
-      &:hover {
-        color: mat.get-color-from-palette($primary, 800);
-        background-color: mat.get-color-from-palette($primary, 100);
-        border-color: transparent;
-      }
-    }
+  //     &:hover {
+  //       color: var(--mat-sys-on-primary-container);
+  //       background-color: var(--mat-sys-primary-container);
+  //       border-color: transparent;
+  //     }
+  //   }
 
-  }
+  // }
 
   .o-form .o-form-toolbar [o-form-toolbar-buttons]>* {
 
@@ -327,51 +308,45 @@
 
   }
 
-  .o-button button.mat-mdc-outlined-button {
-    &:not([disabled]) {
-      &.mat-primary {
-        color: $font-color-primary-button;
-        background-color: $background-primary-button;
-        border-color: $border-color-primary-button;
+  // .o-button button.mat-mdc-outlined-button {
+  //   &:not([disabled]) {
+  //     &.mat-primary {
+  //       color: var(--mat-sys-on-primary-container);
+  //       background-color: var(--mat-sys-primary-container);
+  //       border-color: transparent;
 
-        &:hover {
-          color: mat.get-color-from-palette($primary, 500);
-          background-color: $background-hover-primary-button;
-          border-color: mat.get-color-from-palette($foreground, divider);
-        }
+  //       &:hover {
+  //         color: var(--mat-sys-primary);
+  //         background-color: #ffffff;
+  //         border-color: var(--o-fg-divider);
+  //       }
 
-      }
+  //     }
 
-      &.mat-accent {
-        color: mat.get-color-from-palette($accent, 500);
-        background-color: $background-accent-button;
+  //     &.mat-accent {
+  //       color: var(--mat-sys-tertiary);
+  //       background-color: #ffffff;
 
-        &:hover {
-          color: $font-color-hover-accent-button;
-          background-color: $background-hover-accent-button;
-        }
-      }
+  //       &:hover {
+  //         color: var(--mat-sys-on-tertiary-container);
+  //         background-color: var(--mat-sys-tertiary-container);
+  //       }
+  //     }
 
-    }
+  //   }
 
-  }
+  // }
 
   /** QUICKFILTER */
 
-  // Same height in quickfilters in the toolbar
-  .o-list,
-  .o-tree,
-  .o-grid {
-    .o-search-input {
-      .quickFilter {
-        .mat-mdc-form-field {
-          .mat-mdc-text-field-wrapper {
-            .mat-mdc-form-field-flex {
-              height: 30px;
-              line-height: 30px;
-              padding: 0;
-            }
-          }
+  .o-table .o-table-quickfilter .quickFilter,
+  .o-list .o-search-input .quickFilter,
+  .o-tree .o-search-input .quickFilter,
+  .o-grid .o-search-input .quickFilter {
+    .mat-mdc-form-field {
+      .mat-mdc-text-field-wrapper {
+        .mat-mdc-form-field-flex {
+          padding: 0;
         }
       }
     }
@@ -395,7 +370,6 @@
   .o-grid .o-search-input,
   .o-search-input {
     .quickFilter {
-
       .mat-mdc-form-field {
 
         .mat-mdc-form-field-subscript-wrapper {
@@ -408,7 +382,6 @@
           .mat-mdc-form-field-infix {
             align-self: center;
             padding: 0;
-            min-height: 30px;
             display: flex;
           }
 
@@ -419,18 +392,16 @@
               display: flex;
               border-right: 1px solid rgba(0, 0, 0, 0.12);
 
-              .mat-icon,
+              .mat-icon {
+                margin-right: 6px;
+              }
+
               button {
                 margin-right: 6px;
               }
 
               .mat-badge-content {
                 background-color: #3C8500;
-                width: 14px;
-                height: 14px;
-                line-height: 14px;
-                top: -4px;
-                right: -4px;
               }
             }
           }
@@ -452,60 +423,27 @@
     }
   }
 
-  .o-form .o-form-toolbar button,
-  .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
-    &.mat-mdc-outlined-button {
-      padding: 0 6px;
+  // .o-form .o-form-toolbar button,
+  // .ontimize-table.o-table .o-table-container .o-table-toolbar .buttons .o-table-button button {
+  //   &.mat-mdc-outlined-button {
 
-      .mat-mdc-button-wrapper {
-        .mat-icon {
-          margin-right: 4px;
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-          line-height: 20px;
 
-        }
+  //     .mat-mdc-button-wrapper {
+  //       .mat-icon {
+  //         margin-right: 4px;
+  //         font-size: 20px;
+  //         width: 20px;
+  //         height: 20px;
+  //         line-height: 20px;
 
-        span {
-          flex: 1;
-        }
-      }
-    }
-  }
+  //       }
 
-  /*MAT PAGINATION*/
-  .mat-mdc-paginator {
-    .mat-mdc-paginator-range-label {
-      margin: 0 16px;
-    }
+  //       span {
+  //         flex: 1;
+  //       }
+  //     }
+  //   }
+  // }
 
-    .mat-mdc-paginator-page-size-label {
-      margin-right: 16px;
-    }
 
-    button {
-      &:hover {
-        background-color: mat.get-color-from-palette($primary, 100);
-        border-radius: 50%;
-      }
-
-      &.mat-mdc-icon-button {
-        height: 20px;
-        width: 20px;
-        line-height: 20px;
-        margin-left: 8px;
-
-        .mat-mdc-paginator-icon {
-          width: 20px;
-        }
-
-        .mat-mdc-button-touch-target {
-          height: 20px;
-          width: 20px;
-        }
-      }
-    }
-
-  }
 }

@@ -1,8 +1,17 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, OnInit, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { FloatLabelType, MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 
 import { O_INPUTS_OPTIONS } from '../../../config/app-config';
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -23,7 +32,9 @@ export const DEFAULT_INPUTS_O_SEARCH_INPUT = [
   'columns',
   'filterCaseSensitive: filter-case-sensitive',
   'showCaseSensitiveCheckbox: show-case-sensitive-checkbox',
-  'showMenu: show-menu'
+  'showMenu: show-menu',
+  // data-testid [string]: forwarded to the native search `<input>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 
 export const DEFAULT_OUTPUTS_O_SEARCH_INPUT = [
@@ -36,6 +47,8 @@ declare type ColumnObject = {
 };
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatBadgeModule, MatMenuModule, MatCheckboxModule, MatDividerModule, OTranslatePipe],
   selector: 'o-search-input',
   templateUrl: './o-search-input.component.html',
   styleUrls: ['./o-search-input.component.scss'],
@@ -69,6 +82,8 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
 
   public width: string;
   public columns: string;
+  /** Forwarded to the native search `<input>`'s `data-testid` attribute, for E2E testing (Playwright/Cypress). */
+  public dataTestId: string;
   @BooleanInputConverter()
   public showCaseSensitiveCheckbox: boolean = false;
   @BooleanInputConverter()
@@ -78,8 +93,8 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   protected _floatLabel: FloatLabelType;
   protected _appearance: MatFormFieldAppearance;
 
-  protected formGroup: UntypedFormGroup;
-  protected term: UntypedFormControl;
+  protected formGroup: FormGroup;
+  protected term: FormControl;
   protected translateService: OTranslateService;
   protected oInputsOptions: OInputsOptions;
   protected snackBarService: SnackBarService;
@@ -90,11 +105,11 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
   ) {
     this.translateService = this.injector.get(OTranslateService);
     this.snackBarService = this.injector.get(SnackBarService);
-    this.formGroup = new UntypedFormGroup({});
+    this.formGroup = new FormGroup({});
   }
 
   public ngOnInit(): void {
-    this.term = new UntypedFormControl();
+    this.term = new FormControl();
     this.formGroup.addControl('term', this.term);
 
     this.term.valueChanges.pipe(debounceTime(400))
@@ -154,7 +169,7 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     this._filterCaseSensitive = value;
   }
 
-  public getFormGroup(): UntypedFormGroup {
+  public getFormGroup(): FormGroup {
     return this.formGroup;
   }
 
@@ -166,7 +181,7 @@ export class OSearchInputComponent implements OnInit, AfterViewInit {
     this.term.setValue(val, options);
   }
 
-  public getFormControl(): UntypedFormControl {
+  public getFormControl(): FormControl {
     return this.term;
   }
 

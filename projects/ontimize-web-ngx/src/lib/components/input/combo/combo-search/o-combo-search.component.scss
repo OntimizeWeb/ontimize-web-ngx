@@ -1,19 +1,10 @@
-:host {
+ :host {
   display: flex;
-  flex-direction: column;
-  padding: 0 16px;
+   flex-direction: column;
+   padding: 0 16px 8px 16px;
 
   .o-combo-search-hidden {
     display: none;
   }
 
-  .o-combo-search-inner {
-    height: 3em;
-    width: 100%;
-  }
-
-  .o-combo-search-emmpty {
-    height: 3em;
-    line-height: 3em;
-  }
-}
+ }

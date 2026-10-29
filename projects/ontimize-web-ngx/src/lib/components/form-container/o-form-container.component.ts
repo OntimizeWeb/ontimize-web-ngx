@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_FORM_CONTAINER = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-form-container',
   templateUrl: './o-form-container.component.html',
   styleUrls: ['./o-form-container.component.scss'],

@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../shared/shared.module';
 import { OButtonComponent } from './o-button.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  declarations: [OButtonComponent],
-  imports: [CommonModule, OSharedModule],
+  imports: [OButtonComponent],
   exports: [OButtonComponent]
 })
 export class OButtonModule { }

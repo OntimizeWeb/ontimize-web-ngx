@@ -1,61 +1,62 @@
-<div fxLayout="column" fxFlexFill>
-  <div fxFlex>
+<div class="o-flex-column o-flex-fill">
+  <div class="o-flex">
     @if (hasControls()) {
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="o-flex-row o-layout-align-start-center">
         <div class="buttons">
           @if (showButtonsText) {
             @if (insertButton) {
-              <button type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
-                <mat-icon svgIcon="ontimize:add"></mat-icon>
-                <span>{{ 'INSERT' | oTranslate }}</span>
+              <button type="button" mat-stroked-button aria-label="Insert" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" attr="insert" (click)="add($event)">
+                <mat-icon>add</mat-icon>
+                <span>{{ getActionLabel('insert') | oTranslate }}</span>
               </button>
             }
             @if (refreshButton) {
               <button type="button" mat-stroked-button aria-label="Refresh" [disabled]="!enabledRefreshButton"
-                (click)="reloadData()">
-                <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
-                <span>{{ 'REFRESH' | oTranslate }}</span>
+                [ngClass]="getActionImportanceClass('refresh')" attr="refresh" (click)="reloadData()">
+                  <mat-icon>autorenew</mat-icon>
+                <span>{{ getActionLabel('refresh') | oTranslate }}</span>
               </button>
             }
             @if (deleteButton) {
               <button type="button" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-                [class.disabled]="!enabledDeleteButton">
-                <mat-icon svgIcon="ontimize:delete"></mat-icon>
-                <span>{{ 'DELETE' | oTranslate }}</span>
+                [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete">
+                <mat-icon>delete</mat-icon>
+                <span>{{ getActionLabel('delete') | oTranslate }}</span>
               </button>
             }
           } @else {
             @if (insertButton) {
-              <button type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" (click)="add($event)">
-                <mat-icon svgIcon="ontimize:add"></mat-icon>
+              <button type="button" mat-icon-button aria-label="Insert" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" attr="insert" (click)="add($event)">
+                <mat-icon>add</mat-icon>
               </button>
             }
             @if (refreshButton) {
-              <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" (click)="reloadData()">
-                <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+              <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClass('refresh')" attr="refresh" (click)="reloadData()">
+                  <mat-icon>autorenew</mat-icon>
               </button>
             }
             @if (deleteButton) {
               <button type="button" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-                [class.disabled]="!enabledDeleteButton">
-                <mat-icon svgIcon="ontimize:delete"></mat-icon>
+                [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete">
+                <mat-icon>delete</mat-icon>
               </button>
             }
           }
           <ng-content select="[o-tree-button]"></ng-content>
         </div>
-        <div fxFlex>
-          <span fxLayoutAlign="center center" class="title">{{ title | oTranslate }}</span>
+        <div class="o-flex">
+          <span class="title o-layout-align-center-center">{{ title | oTranslate }}</span>
         </div>
         @if (quickFilter) {
           <o-search-input [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
-            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no">
+            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" appearance="outline" float-label="never" show-menu="no"
+            [data-testid]="dataTestId ? dataTestId + '-quick-filter' : null">
           </o-search-input>
         }
         @if (showTreeMenuButton) {
           <button type="button" mat-icon-button class="o-tree-menu-button" [matMenuTriggerFor]="treeMenu.matMenu"
             (click)="$event.stopPropagation()">
-            <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
+            <mat-icon>more_vert</mat-icon>
           </button>
         }
         <o-tree-menu #treeMenu [select-all-checkbox]="selectAllCheckbox" [select-all-checkbox-visible]="selectAllCheckboxVisible"
@@ -69,8 +70,8 @@
       <mat-tree-node *matTreeNodeDef="let node" (click)="leafNodeClicked($event, node)" matTreeNodeToggle matTreeNodePadding
         [ngClass]="{'selected-node': isSelectedNode(node)}">
         <!-- use a disabled button to provide padding for tree leaf -->
-        <div fxLayout="column">
-          <div fxLayout="row">
+        <div class="o-flex-column">
+          <div class="o-flex-row">
             <button mat-icon-button disabled></button>
 
             @if (selectAllCheckboxVisible) {
@@ -163,7 +164,7 @@
   } @else {
     <span>{{node.label}}</span>
     @if (node.isLoading) {
-      <mat-progress-bar mode="indeterminate" fxFlex></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" class="o-flex"></mat-progress-bar>
     }
   }
 

@@ -1,4 +1,4 @@
-import { UntypedFormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { OFormControl } from './o-form-control.class';
 
 describe('OFormControl', () => {
@@ -19,8 +19,8 @@ describe('OFormControl', () => {
       expect(control instanceof OFormControl).toBe(true);
     });
 
-    it('should extend UntypedFormControl', () => {
-      expect(control instanceof UntypedFormControl).toBe(true);
+    it('should extend FormControl', () => {
+      expect(control instanceof FormControl).toBe(true);
     });
 
     it('should accept an initial value', () => {
@@ -84,15 +84,15 @@ describe('OFormControl', () => {
       expect(() => control.markAsTouched()).not.toThrow();
     });
 
-    it('should propagate markAsTouched to UntypedFormControl children', () => {
-      const child = new UntypedFormControl('');
+    it('should propagate markAsTouched to FormControl children', () => {
+      const child = new FormControl('');
       control.fControlChildren = [child];
       control.markAsTouched();
       expect(child.touched).toBe(true);
     });
 
     it('should propagate markAsTouched to OFormDataComponent children via getFormControl()', () => {
-      const innerControl = new UntypedFormControl('');
+      const innerControl = new FormControl('');
       const mockChild = {
         getFormControl: jasmine.createSpy('getFormControl').and.returnValue(innerControl)
       } as any;
@@ -110,17 +110,17 @@ describe('OFormControl', () => {
       expect(() => control.markAsTouched()).not.toThrow();
     });
 
-    it('should propagate opts to UntypedFormControl children', () => {
-      const child = new UntypedFormControl('');
+    it('should propagate opts to FormControl children', () => {
+      const child = new FormControl('');
       spyOn(child, 'markAsTouched').and.callThrough();
       control.fControlChildren = [child];
       control.markAsTouched({ onlySelf: true });
       expect(child.markAsTouched).toHaveBeenCalledWith({ onlySelf: true });
     });
 
-    it('should handle mixed children (UntypedFormControl and OFormDataComponent)', () => {
-      const formChild = new UntypedFormControl('');
-      const innerControl = new UntypedFormControl('');
+    it('should handle mixed children (FormControl and OFormDataComponent)', () => {
+      const formChild = new FormControl('');
+      const innerControl = new FormControl('');
       const componentChild = {
         getFormControl: jasmine.createSpy('getFormControl').and.returnValue(innerControl)
       } as any;
@@ -151,15 +151,15 @@ describe('OFormControl', () => {
       expect(() => control.markAsDirty()).not.toThrow();
     });
 
-    it('should propagate markAsDirty to UntypedFormControl children', () => {
-      const child = new UntypedFormControl('');
+    it('should propagate markAsDirty to FormControl children', () => {
+      const child = new FormControl('');
       control.fControlChildren = [child];
       control.markAsDirty();
       expect(child.dirty).toBe(true);
     });
 
     it('should propagate markAsDirty to OFormDataComponent children via getFormControl()', () => {
-      const innerControl = new UntypedFormControl('');
+      const innerControl = new FormControl('');
       const mockChild = {
         getFormControl: jasmine.createSpy('getFormControl').and.returnValue(innerControl)
       } as any;
@@ -177,8 +177,8 @@ describe('OFormControl', () => {
       expect(() => control.markAsDirty()).not.toThrow();
     });
 
-    it('should propagate opts to UntypedFormControl children', () => {
-      const child = new UntypedFormControl('');
+    it('should propagate opts to FormControl children', () => {
+      const child = new FormControl('');
       spyOn(child, 'markAsDirty').and.callThrough();
       control.fControlChildren = [child];
       control.markAsDirty({ onlySelf: true });
@@ -205,8 +205,8 @@ describe('OFormControl', () => {
       expect(() => control.markAsPristine()).not.toThrow();
     });
 
-    it('should propagate markAsPristine to UntypedFormControl children', () => {
-      const child = new UntypedFormControl('');
+    it('should propagate markAsPristine to FormControl children', () => {
+      const child = new FormControl('');
       child.markAsDirty();
       control.fControlChildren = [child];
       control.markAsPristine();
@@ -214,7 +214,7 @@ describe('OFormControl', () => {
     });
 
     it('should propagate markAsPristine to OFormDataComponent children via getFormControl()', () => {
-      const innerControl = new UntypedFormControl('');
+      const innerControl = new FormControl('');
       const mockChild = {
         getFormControl: jasmine.createSpy('getFormControl').and.returnValue(innerControl)
       } as any;
@@ -232,8 +232,8 @@ describe('OFormControl', () => {
       expect(() => control.markAsPristine()).not.toThrow();
     });
 
-    it('should propagate opts to UntypedFormControl children', () => {
-      const child = new UntypedFormControl('');
+    it('should propagate opts to FormControl children', () => {
+      const child = new FormControl('');
       spyOn(child, 'markAsPristine').and.callThrough();
       control.fControlChildren = [child];
       control.markAsPristine({ onlySelf: true });
@@ -244,8 +244,8 @@ describe('OFormControl', () => {
   // ─── fControlChildren interaction ────────────────────────────────────────────
 
   describe('fControlChildren', () => {
-    it('should allow setting an array of UntypedFormControl children', () => {
-      control.fControlChildren = [new UntypedFormControl('a'), new UntypedFormControl('b')];
+    it('should allow setting an array of FormControl children', () => {
+      control.fControlChildren = [new FormControl('a'), new FormControl('b')];
       expect(control.fControlChildren.length).toBe(2);
     });
 
@@ -259,8 +259,8 @@ describe('OFormControl', () => {
     });
 
     it('should propagate all three mark methods to multiple children', () => {
-      const child1 = new UntypedFormControl('');
-      const child2 = new UntypedFormControl('');
+      const child1 = new FormControl('');
+      const child2 = new FormControl('');
       control.fControlChildren = [child1, child2];
 
       control.markAsTouched();

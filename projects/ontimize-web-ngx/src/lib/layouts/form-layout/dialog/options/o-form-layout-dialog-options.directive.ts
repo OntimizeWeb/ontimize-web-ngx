@@ -5,6 +5,7 @@ import { BooleanConverter } from '../../../../decorators/input-converter';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 @Directive({
+  standalone: true,
   selector: 'o-form-layout-dialog-options, o-form-layout-manager[mode="dialog"]'
 })
 export class OFormLayoutDialogOptionsDirective {

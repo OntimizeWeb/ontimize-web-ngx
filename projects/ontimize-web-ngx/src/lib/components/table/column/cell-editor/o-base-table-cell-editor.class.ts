@@ -1,5 +1,5 @@
-import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, Injector, OnChanges, OnDestroy, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
-import { AsyncValidatorFn, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AfterViewInit, ContentChildren, Directive, EventEmitter, HostListener, InjectionToken, Injector, OnChanges, OnDestroy, OnInit, QueryList, Renderer2, Type, ViewChild, ViewChildren } from '@angular/core';
+import { AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../../decorators/input-converter';
@@ -16,7 +16,8 @@ import { ComponentWithValidatorsAndErrorsData, ErrorsUtils } from '../../../../u
 import { Util } from '../../../../util/util';
 import { OTableComponent } from '../../o-table.component';
 import { OColumn } from '../o-column.class';
-import { OTableColumnComponent } from '../o-table-column.component';
+
+export const O_TABLE_COLUMN_TOKEN = new InjectionToken<OTableColumn>('OTableColumnComponent');
 
 export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR = [
   'orequired: required',
@@ -58,10 +59,10 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
 
   protected _rowData: any;
 
-  formControl: UntypedFormControl;
+  formControl: FormControl;
   controlArgs: any;
 
-  formGroup: UntypedFormGroup = new UntypedFormGroup({});
+  formGroup: FormGroup = new FormGroup({});
 
   editionStarted: EventEmitter<object> = new EventEmitter<object>();
   editionCancelled: EventEmitter<object> = new EventEmitter<object>();
@@ -103,7 +104,7 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
 
   constructor(protected injector: Injector) {
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService as Type<SnackBarService>);
-    this.tableColumn = this.injector.get<OTableColumnComponent>(OTableColumnComponent as Type<OTableColumnComponent>);
+    this.tableColumn = this.injector.get(O_TABLE_COLUMN_TOKEN, null);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService as Type<OTranslateService>);
     this.cellEditorId = Util.randomNumber().toString(36);
     this.renderer = this.injector.get<Renderer2>(Renderer2 as Type<Renderer2>);
@@ -185,7 +186,7 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
         disabled: !this.enabled
       };
 
-      this.formControl = new UntypedFormControl(cfg, validators, asyncValidators);
+      this.formControl = new FormControl(cfg, validators, asyncValidators);
 
     }
     if (!Util.isDefined(this.formGroup.get(this.cellEditorId))) {
@@ -301,6 +302,12 @@ export class OBaseTableCellEditor implements OnInit, OnChanges, AfterViewInit, O
 
   get rowData(): any {
     return this._rowData;
+  }
+
+  /** Composed from the table's `data-testid`, the row's key value(s) and this column's `attr`, for E2E testing (Playwright/Cypress). */
+  get dataTestId(): string | null {
+    const rowDataTestId = this._table?.getRowDataTestId(this._rowData);
+    return rowDataTestId ? `${rowDataTestId}-${this.tableColumnAttr}` : null;
   }
 
   set rowData(arg: any) {

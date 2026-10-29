@@ -4,6 +4,10 @@ import moment from 'moment';
 import { AppConfig } from '../config/app-config';
 import { Config } from '../types/config.type';
 
+/**
+ * @deprecated Use LuxonService instead. This service is kept for backwards
+ * compatibility and continues to depend on moment.js.
+ */
 @Injectable({
   providedIn: 'root'
 })

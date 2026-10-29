@@ -16,7 +16,17 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
+import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
+import { OListSkeletonComponent } from './skeleton/o-list-skeleton.component';
 import { merge, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -24,6 +34,7 @@ import { IList } from '../../interfaces/o-list.interface';
 import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OListComponentStateClass } from '../../services/state/o-list-component-state.class';
 import { OListComponentStateService } from '../../services/state/o-list-component-state.service';
+import { OActionStyleProvider } from '../../types/o-action-style.type';
 import { OListInitializationOptions } from '../../types/o-list-initialization-options.type';
 import { OListPermissions } from '../../types/o-list-permissions.type';
 import { OPermissions } from '../../types/o-permissions.type';
@@ -35,12 +46,15 @@ import { SQLTypes } from '../../util/sqltypes';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
+import { OActionStyle } from '../../types';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
 import { ListItem } from './list-item/o-list-item';
 import { OListItemDirective } from './list-item/o-list-item.directive';
 import { OQueryParams } from '../../types/query-params.type';
 import { SelectionChange } from '@angular/cdk/collections';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
+import { Observable } from 'rxjs';
+import { OListLoadingService } from './o-list-loading.service';
 
 export const DEFAULT_INPUTS_O_LIST = [
   // quick-filter-columns [string]: columns of the filter, separated by ';'. Default: no value.
@@ -69,6 +83,9 @@ export const DEFAULT_INPUTS_O_LIST = [
   'showButtonsText: show-buttons-text',
   // keys-sql-types [string]: entity keys types, separated by ';'. Default: no value.
   'keysSqlTypes: keys-sql-types',
+  // scroll-to-top-button [no|yes]: show a floating button to scroll back to the top of the list
+  // once scrolled past a threshold. Default: no.
+  'scrollToTopButton: scroll-to-top-button',
 ];
 
 export const DEFAULT_OUTPUTS_O_LIST = [
@@ -79,11 +96,15 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatIconModule, MatListModule, MatPaginatorModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OListSkeletonComponent],
   selector: 'o-list',
   providers: [
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OListComponentStateService },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OListComponent) },
+    OListLoadingService
   ],
   inputs: DEFAULT_INPUTS_O_LIST,
   outputs: DEFAULT_OUTPUTS_O_LIST,
@@ -96,10 +117,23 @@ export const DEFAULT_OUTPUTS_O_LIST = [
 })
 export class OListComponent extends AbstractOServiceComponent<OListComponentStateService> implements IList, AfterContentInit, AfterViewInit, OnDestroy, OnInit, OnChanges {
 
+  /** Adds this list's historic default labels to the inherited importance auto-rules. */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'ADD' },
+      refresh: { label: 'REFRESH' },
+      delete: { label: 'DELETE' }
+    };
+  }
+
   @ContentChildren(OListItemDirective)
   public listItemDirectives: QueryList<OListItemDirective>;
   @ViewChild('toolbar', { read: ElementRef })
   toolbarEl: ElementRef;
+  /** The actual scroll container (mat-list has `overflow: auto`) — same element `onScroll` already receives via its event target. */
+  @ViewChild('scrollContainer', { read: ElementRef })
+  protected scrollContainerEl: ElementRef<HTMLElement>;
 
   /* Inputs */
   @BooleanInputConverter()
@@ -112,6 +146,8 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public insertButtonFloatable: boolean = true;
   @BooleanInputConverter()
   showButtonsText: boolean = false;
+  @BooleanInputConverter()
+  public scrollToTopButton: boolean = false;
 
   paginationControls: boolean = false;
 
@@ -127,6 +163,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public onItemDeleted: EventEmitter<any> = new EventEmitter();
 
   public enabledDeleteButton: boolean = false;
+  /** Whether the scroll-to-top button is currently shown — driven purely by scroll position, never by viewport/breakpoint. */
+  public showScrollToTopButton: boolean = false;
+  /** Scroll distance (px) past which the scroll-to-top button appears. Not configurable — no equivalent existing convention to follow, and the request doesn't call for one. */
+  protected static readonly SCROLL_TO_TOP_THRESHOLD = 200;
   public insertButtonPosition: 'top' | 'bottom' = 'bottom';
   public storePaginationState: boolean = false;
   protected subscription: Subscription = new Subscription();
@@ -140,6 +180,10 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   public onItemSelected: EventEmitter<any[]> = new EventEmitter();
   public onItemDeselected: EventEmitter<any[]> = new EventEmitter();
 
+  protected loadingService: OListLoadingService;
+  /** Same threshold/minimum-visible delay as o-table's skeleton — avoids flicker on fast responses. */
+  public showLoading: Observable<boolean>;
+
   constructor(
     injector: Injector,
     elRef: ElementRef,
@@ -147,6 +191,11 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   ) {
     super(injector, elRef, form);
     this.oMatSort = new OMatSort();
+    this.loadingService = this.injector.get(OListLoadingService);
+    this.subscription.add(
+      this.loadingSubject.subscribe((loading: boolean) => this.loadingService.setLoading(loading))
+    );
+    this.showLoading = this.loadingService.showLoading$;
   }
 
   get toolBarHeight() {
@@ -295,14 +344,20 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
   }
 
   public onScroll(e: Event): void {
+    this.updateScrollToTopVisibility(e.target as HTMLElement);
     if (this.matpaginator) return;
     if (this.pageable) {
       const pendingRegistries = this.dataResponseArray.length < this.state.totalQueryRecordsNumber;
       if (!this.loadingSubject.value && pendingRegistries) {
         const element = e.target as any;
         if (element.offsetHeight + element.scrollTop + 5 >= element.scrollHeight) {
+          // Computed fresh from the already-loaded records, like o-table's onChangePage does with
+          // currentPage * queryRows, rather than trusting state.queryRecordOffset directly — that
+          // field is written by updatePaginationInfo() from the service response and can end up
+          // NaN (e.g. a non-array response data), which this scroll handler would otherwise resend
+          // as-is on every subsequent scroll.
           const queryArgs: OQueryDataArgs = {
-            offset: this.state.queryRecordOffset,
+            offset: this.dataResponseArray.length,
             length: this.queryRows
           };
           this.dataService?.setPaginationContext({ pageNumber: this.dataService?.getPaginationContext().pageNumber + 1 });
@@ -310,6 +365,27 @@ export class OListComponent extends AbstractOServiceComponent<OListComponentStat
         }
       }
     }
+  }
+
+  /**
+   * Driven purely by the scroll position of the list's own scroll container, in every pagination
+   * mode: with `mat-paginator` the list is not infinite-scrolled, but its container still scrolls
+   * within the current page, so the button is just as useful there. Never driven by
+   * viewport/breakpoint.
+   */
+  protected updateScrollToTopVisibility(element: HTMLElement): void {
+    if (!this.scrollToTopButton) {
+      return;
+    }
+    const shouldShow = element.scrollTop > OListComponent.SCROLL_TO_TOP_THRESHOLD;
+    if (shouldShow !== this.showScrollToTopButton) {
+      this.showScrollToTopButton = shouldShow;
+    }
+  }
+
+  /** Only moves the scroll position of this list's own scroll container — never touches data, filters, pagination or loading state. */
+  public scrollToTop(): void {
+    this.scrollContainerEl?.nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   public remove(clearSelectedItems: boolean = false): void {

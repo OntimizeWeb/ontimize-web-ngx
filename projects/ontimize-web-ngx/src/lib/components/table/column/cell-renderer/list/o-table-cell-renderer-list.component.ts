@@ -5,6 +5,7 @@ import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 export const O_TABLE_CELL_RENDERER_LIST = ['config'];
 
 @Component({
+  standalone: true,
   selector: 'o-table-cell-renderer-list',
   templateUrl: './o-table-cell-renderer-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

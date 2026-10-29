@@ -1,6 +1,6 @@
 <mat-expansion-panel #expPanel [expanded]="expanded" class="o-container" (opened)="updateInnerHeight(null)" (closed)="updateInnerHeight(0)">
   <mat-expansion-panel-header #containerTitle [expandedHeight]="expandedHeight" [collapsedHeight]="collapsedHeight">
-    <mat-panel-title fxLayout="row" fxLayoutAlign="start center" class="o-container-title">
+    <mat-panel-title class="o-container-title o-flex-row o-layout-align-start-center">
       @if (icon) {
         <mat-icon>{{ icon }}</mat-icon>
       }
@@ -8,12 +8,12 @@
         <span>{{ title | oTranslate }}</span>
       }
     </mat-panel-title>
-    <mat-panel-description fxLayout="row" fxLayoutAlign="start center">
+    <mat-panel-description class="o-flex-row o-layout-align-start-center">
       <span>{{ description | oTranslate }}</span>
     </mat-panel-description>
   </mat-expansion-panel-header>
-  <div #containerContent id="innerCol" fxLayout="column" fxLayoutAlign="{{ layoutAlign }}" fxLayoutGap="{{ layoutGap }}"
-    class="o-container-scroll o-scroll" fxFlex="grow">
+  <div #containerContent id="innerCol" [ngStyle]="layoutAlignStyles" [style.gap]="layoutGap"
+    class="o-container-scroll o-scroll o-flex-column o-flex-grow">
     <ng-content></ng-content>
   </div>
 </mat-expansion-panel>

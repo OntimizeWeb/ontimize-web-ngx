@@ -19,7 +19,8 @@ describe('OFileDragAndDropDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OFileDragAndDropDirective, TestFileDragComponent]
+      declarations: [TestFileDragComponent],
+      imports: [OFileDragAndDropDirective]
     });
     fixture = TestBed.createComponent(TestFileDragComponent);
     component = fixture.componentInstance;

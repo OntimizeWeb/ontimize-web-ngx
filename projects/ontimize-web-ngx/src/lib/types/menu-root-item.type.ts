@@ -7,6 +7,7 @@ import {
   MenuItemLogout,
   MenuItemRoute,
   MenuItemUserInfo,
+  MenuSection,
 } from '../interfaces/app-menu.interface';
 
-export type MenuRootItem = (MenuGroup | MenuGroupRoute | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuItem);
+export type MenuRootItem = (MenuGroup | MenuGroupRoute | MenuSection | MenuItemRoute | MenuItemAction | MenuItemLocale | MenuItemLogout | MenuItemUserInfo | MenuItem);

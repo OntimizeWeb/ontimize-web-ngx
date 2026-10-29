@@ -6,6 +6,10 @@
 // render text using sub-pixel anti-aliasing.
 @import 'variables.scss';
 
+html {
+  font-family: var(--o-font-family);
+}
+
 html, body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-touch-callout: none;
@@ -65,21 +69,13 @@ html, body {
   letter-spacing: 0.010em;
 }
 
-/************
- * Defaults
- ************/
 
-select,
-button,
-textarea,
-input {
-  font-size: 100%;
-}
 
 /************
  * ICONS
  ************/
 
- .material-icons{
+ .material-icons,
+ .material-symbols-outlined {
   font-feature-settings:"liga"
  }

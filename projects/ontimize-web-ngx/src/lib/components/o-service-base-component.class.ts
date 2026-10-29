@@ -90,7 +90,11 @@ export const DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT = [
 
   // 'deleteFallbackFunction: delete-fallback-function',
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
-  'configureServiceArgs: configure-service-args'
+  'configureServiceArgs: configure-service-args',
+
+  // data-testid [string]: base test-id for the component's built-in controls (quick-filter, toolbar buttons), for E2E testing (Playwright/Cypress).
+  // Composite controls suffix it (e.g. `${data-testid}-insert-button`) rather than reusing it verbatim, since there is no single native element to attach it to.
+  'dataTestId: data-testid'
 ];
 
 @Directive({
@@ -105,6 +109,14 @@ export abstract class AbstractOServiceBaseComponent<T extends AbstractComponentS
   parentComponent: AbstractOServiceBaseComponent<T>;
 
   /* inputs variables */
+  /** Base test-id for the component's built-in controls, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. See `DEFAULT_INPUTS_O_SERVICE_BASE_COMPONENT`. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.oattr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   oattr: string;
   service: string;
   serviceType: string;

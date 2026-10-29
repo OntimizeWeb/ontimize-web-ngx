@@ -1,26 +1,57 @@
-@if (sidenavOpened) {
-  @if (shouldShowTooltip) {
-    @if (!hidden) {
-      <li class="o-app-sidenav-menuitem o-app-sidenav-item" [matTooltip]="tooltip" matTooltipClass="menugroup-tooltip"
-        matTooltipPosition="right" matTooltipShowDelay="500" [class.o-user-info]="isUserInfoItem()" [id]="menuItem.id">
-        <ng-container *ngTemplateOutlet="contentOpened"></ng-container>
-      </li>
-    }
-  } @else {
-    @if (!hidden) {
-      <li class="o-app-sidenav-menuitem o-app-sidenav-item" [class.o-user-info]="isUserInfoItem()" [id]="menuItem.id">
-        <ng-container *ngTemplateOutlet="contentOpened"></ng-container>
-      </li>
-    }
+@if (sidenavOpened && !hidden) {
+  @if (!isUserInfoItem() && !isLocaleItem()) {
+    <a mat-list-item class="o-app-sidenav-menuitem o-app-sidenav-item" [id]="menuItem.id" [attr.data-testid]="menuItem.id" (click)="triggerClick($event)"
+      [class.o-app-sidenav-viewer-sidenav-item-selected]="active"
+      [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
+      matTooltipShowDelay="500">
+      @if (menuItem.svgIcon) {
+        <mat-icon matListItemIcon [svgIcon]="menuItem.svgIcon"></mat-icon>
+      }
+      @if (menuItem.icon) {
+        <mat-icon matListItemIcon>{{ menuItem.icon }}</mat-icon>
+      }
+      <span matListItemTitle class="o-app-sidenav-menuitem-title">{{ menuItem.name | oTranslate }}</span>
+    </a>
+  }
+
+  @if (isLocaleItem()) {
+    <a mat-list-item class="o-app-sidenav-menuitem o-app-sidenav-item" [id]="menuItem.id" [attr.data-testid]="menuItem.id" (click)="triggerClick($event)"
+      [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
+      matTooltipShowDelay="500">
+      @if (menuItem.svgIcon) {
+        <mat-icon matListItemIcon [svgIcon]="menuItem.svgIcon"></mat-icon>
+      }
+      @if (menuItem.icon) {
+        <mat-icon matListItemIcon>{{ menuItem.icon }}</mat-icon>
+      }
+      <span matListItemTitle class="o-app-sidenav-menuitem-title">{{ menuItem.name | oTranslate }}</span>
+      @if (isConfiguredLang()) {
+        <mat-icon matListItemMeta class="configured-lang">check_circle</mat-icon>
+      }
+    </a>
+  }
+
+  @if (isUserInfoItem()) {
+    <div class="o-app-sidenav-menuitem o-app-sidenav-item o-user-info" [id]="menuItem.id" [attr.data-testid]="menuItem.id"
+      [matTooltip]="shouldShowTooltip ? tooltip : ''" matTooltipClass="menugroup-tooltip" matTooltipPosition="right"
+      matTooltipShowDelay="500">
+      <div class="o-user-info-menu-item o-flex-column o-layout-align-center-center">
+        <div class="o-user-info-image o-flex-fill"></div>
+        <div class="o-user-info-item o-flex-row o-layout-align-sb-center o-flex-fill">
+          <div class="o-user-info-name">{{ menuItem.user }}</div>
+          <o-language-selector [use-flag-icons]="useFlagIcons"></o-language-selector>
+        </div>
+      </div>
+    </div>
   }
 }
 
 @if (!sidenavOpened) {
-  @if (!hidden) {
+  @if (!hidden && (menuItem.icon || menuItem.svgIcon)) {
     <li class="o-app-sidenav-menuitem o-app-sidenav-item">
       @if (shouldShowTooltip) {
         <a [matTooltip]="tooltip" matTooltipClass="menuitem-tooltip" matTooltipPosition="right" mat-button (click)="triggerClick($event)"
-          [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+          [id]="menuItem.id" [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
           @if (menuItem.svgIcon) {
             <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
           }
@@ -29,7 +60,7 @@
           }
         </a>
       } @else {
-        <a mat-button (click)="triggerClick($event)" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
+        <a mat-button (click)="triggerClick($event)" [id]="menuItem.id" [attr.data-testid]="menuItem.id" [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
           @if (menuItem.svgIcon) {
             <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
           }
@@ -41,50 +72,3 @@
     </li>
   }
 }
-
-
-<ng-template #contentOpened>
-  @if (!isUserInfoItem() && !isLocaleItem()) {
-    <a mat-button (click)="triggerClick($event)"
-      [class.o-app-sidenav-viewer-sidenav-item-selected]="active">
-      <div fxLayout="row" fxLayoutAlign="start center">
-        @if (menuItem.svgIcon) {
-          <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
-        }
-        @if (menuItem.icon) {
-          <mat-icon>{{ menuItem.icon }}</mat-icon>
-        }
-        <span class="o-app-sidenav-menuitem-title">{{
-          menuItem.name | oTranslate
-        }}</span>
-      </div>
-    </a>
-  }
-
-  @if (isLocaleItem()) {
-    <a mat-button (click)="triggerClick($event)">
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-        @if (menuItem.svgIcon) {
-          <mat-icon [svgIcon]="menuItem.svgIcon"></mat-icon>
-        }
-        @if (menuItem.icon) {
-          <mat-icon>{{ menuItem.icon }}</mat-icon>
-        }
-        {{ menuItem.name | oTranslate }}
-        @if (isConfiguredLang()) {
-          <mat-icon class="configured-lang">check_circle</mat-icon>
-        }
-      </div>
-    </a>
-  }
-
-  @if (isUserInfoItem()) {
-    <div fxLayout="column" fxLayoutAlign="center center" class="o-user-info-menu-item">
-      <div class="o-user-info-image" fxFlexFill></div>
-      <div class="o-user-info-item" fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-        <div class="o-user-info-name">{{ menuItem.user }}</div>
-        <o-language-selector [use-flag-icons]="useFlagIcons"></o-language-selector>
-      </div>
-    </div>
-  }
-</ng-template>

@@ -22,6 +22,8 @@ const defaults = {
 };
 
 @Component({
+  standalone: true,
+  imports: [],
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'ck-editor',
   template: `<textarea #ck></textarea>`,

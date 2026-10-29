@@ -6,7 +6,7 @@ concurrency:
 
 on:
   push:
-    branches: [15.x.x, hotfix/15.*]
+    branches: [18.x.x, hotfix/18.*, migration/18.x.x]
     paths: ['projects/ontimize-web-ngx/**']
   pull_request:
     types: [opened, synchronize, labeled]
@@ -27,10 +27,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Node 18.x
+      - name: Configure Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18.10.0
+          node-version: ${{ vars.V18_NODE_VERSION }}
 
       - name: npm install and npm run build
         run: |

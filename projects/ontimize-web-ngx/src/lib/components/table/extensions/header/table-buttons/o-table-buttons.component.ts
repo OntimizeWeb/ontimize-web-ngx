@@ -1,12 +1,15 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+
 import { BehaviorSubject, Subscription } from 'rxjs';
+
+import { OTableButtonComponent } from '../table-button/o-table-button.component';
 
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { OTableButtons } from '../../../../../interfaces/o-table-buttons.interface';
 import { OPermissions } from '../../../../../types/o-permissions.type';
 import { PermissionsUtils } from '../../../../../util/permissions';
 import { OTableBase } from '../../../o-table-base.class';
-import { OTableButtonComponent } from '../table-button/o-table-button.component';
 
 export const DEFAULT_INPUTS_O_TABLE_BUTTONS = [
   // insert-button [no|yes]: show insert button. Default: yes.
@@ -20,6 +23,8 @@ export const DEFAULT_INPUTS_O_TABLE_BUTTONS = [
 export const DEFAULT_OUTPUTS_O_TABLE_BUTTONS = [];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, OTableButtonComponent],
   selector: 'o-table-buttons',
   templateUrl: './o-table-buttons.component.html',
   styleUrls: ['./o-table-buttons.component.scss'],
@@ -90,7 +95,7 @@ export class OTableButtonsComponent implements OTableButtons, OnInit, OnDestroy 
   }
 
   public reloadData(): void {
-    this.table.reloadData();
+    this.table.reloadData(false);
   }
 
   public remove(): void {

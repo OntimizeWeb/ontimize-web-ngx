@@ -6,6 +6,7 @@ import { Util } from '../../../util/util';
 import type { OGridComponent } from '../o-grid.component';
 
 @Directive({
+  standalone: true,
   selector: 'mat-grid-tile[o-grid-item]',
   host: {
     '(click)': 'onItemClicked($event)',

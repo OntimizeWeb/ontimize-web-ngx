@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OTranslateService } from '../../../../../services/translate/o-translate.service';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
@@ -19,6 +21,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_BOOLEAN = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatIconModule, OTranslatePipe],
   selector: 'o-table-cell-renderer-boolean',
   templateUrl: './o-table-cell-renderer-boolean.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

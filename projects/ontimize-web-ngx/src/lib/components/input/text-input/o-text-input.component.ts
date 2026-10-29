@@ -4,23 +4,29 @@ import {
   ContentChildren,
   ElementRef,
   forwardRef,
-  Inject,
   Injector,
   OnDestroy,
   OnInit,
-  Optional,
   QueryList,
   ViewEncapsulation
 } from '@angular/core';
-import { ValidatorFn, Validators } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { Subscription } from 'rxjs';
 
 import { NumberConverter } from '../../../decorators/input-converter';
+import { InputRegulateDirective } from '../../../directives/input-regulate.directive';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OMatPrefix } from '../../../directives/o-mat-prefix.directive';
 import { OMatSuffix } from '../../../directives/o-mat-suffix.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 
 export const DEFAULT_INPUTS_O_TEXT_INPUT = [
@@ -33,11 +39,14 @@ export const DEFAULT_INPUTS_O_TEXT_INPUT = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OMatErrorDirective, InputRegulateDirective, OTranslatePipe],
   selector: 'o-text-input',
   templateUrl: './o-text-input.component.html',
   styleUrls: ['./o-text-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_TEXT_INPUT,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OTextInputComponent), multi: true }]
 })
 
 export class OTextInputComponent extends OFormDataComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -53,11 +62,10 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit, O
   public regulatePattern: string;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
   }
 
   ngOnInit() {
@@ -135,6 +143,8 @@ export class OTextInputComponent extends OFormDataComponent implements OnInit, O
     if (this.upperSubscription) {
       this.upperSubscription.unsubscribe();
     }
+
+    super.ngOnDestroy();
   }
 
 

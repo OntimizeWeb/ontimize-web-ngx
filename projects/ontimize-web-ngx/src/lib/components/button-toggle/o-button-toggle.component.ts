@@ -1,5 +1,8 @@
 import { Component, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatButtonToggle, MatButtonToggleChange } from '@angular/material/button-toggle';
+import { MatButtonToggleModule, MatButtonToggle, MatButtonToggleChange } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { Util } from '../../util/util';
 
 export const DEFAULT_INPUTS_O_BUTTON_TOGGLE = [
@@ -11,7 +14,9 @@ export const DEFAULT_INPUTS_O_BUTTON_TOGGLE = [
   'checked',
   'enabled',
   'value',
-  'name'
+  'name',
+  // data-testid [string]: forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 
 export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE = [
@@ -19,6 +24,8 @@ export const DEFAULT_OUTPUTS_O_BUTTON_TOGGLE = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatButtonToggleModule, MatIconModule, OTranslatePipe],
   selector: 'o-button-toggle',
   templateUrl: './o-button-toggle.component.html',
   styleUrls: ['./o-button-toggle.component.scss'],
@@ -41,6 +48,14 @@ export class OButtonToggleComponent {
   public iconPosition: 'before' | 'after' = 'before';
 
   public name: string;
+  /** Forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.oattr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   /* End inputs */
 
   /* Outputs */

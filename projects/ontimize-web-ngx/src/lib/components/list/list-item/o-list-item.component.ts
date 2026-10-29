@@ -13,13 +13,18 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MatListItem, MatListItemLine, MatListItemTitle } from '@angular/material/list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListItem, MatListItemLine, MatListItemMeta, MatListItemTitle, MatListModule } from '@angular/material/list';
+
 
 import { Util } from '../../../util/util';
 import { OListComponent } from '../o-list.component';
 import { ListItem } from './o-list-item';
 
 @Component({
+  standalone: true,
+  imports: [MatCheckboxModule, MatIconModule, MatListModule],
   selector: 'o-list-item',
   templateUrl: './o-list-item.component.html',
   styleUrls: ['./o-list-item.component.scss'],

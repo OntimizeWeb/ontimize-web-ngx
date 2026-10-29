@@ -83,4 +83,10 @@ export type OTableGlobalConfig = {
    */
   showHeaderTooltip: boolean;
 
+  /**
+   * Shows the text label alongside the icon on the table's header buttons (insert/refresh/delete
+   * and any custom `o-table-button`). When `false`, buttons render icon-only.
+   */
+  showButtonsText: boolean;
+
 }

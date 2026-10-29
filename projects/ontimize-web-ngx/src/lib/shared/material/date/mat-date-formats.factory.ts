@@ -1,5 +1,9 @@
 import { MatDateFormats } from '@angular/material/core';
 
+/**
+ * @deprecated Use OntimizeMatLuxonDateFormats / luxonDateFormatFactory instead.
+ * Kept for consumers still using the moment-based OntimizeMomentDateAdapter.
+ */
 export class OntimizeMatDateFormats {
 
   protected DEFAULT_DATE_FORMATS: MatDateFormats = {

@@ -4,25 +4,31 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  Inject,
   Injector,
   OnDestroy,
   OnInit,
-  Optional,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
-import moment from 'moment';
+import { FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
+import { DateTime } from 'luxon';
 import { merge, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
+import { O_DATE_ADAPTER_PROVIDERS, parseDateByValueTypeWithAdapter } from '../../../shared/material/date/o-date-adapter.provider';
 import { DateFilterFunction } from '../../../types/date-filter-function.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { ODateValueType } from '../../../types/o-date-value.type';
 import { Util } from '../../../util/util';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { ODateInputComponent } from '../date-input/o-date-input.component';
@@ -50,18 +56,24 @@ export const DEFAULT_INPUTS_O_TIME_INPUT = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, ODateInputComponent, OHourInputComponent],
   selector: 'o-time-input',
   templateUrl: './o-time-input.component.html',
   styleUrls: ['./o-time-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_TIME_INPUT,
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    ...O_DATE_ADAPTER_PROVIDERS,
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OTimeInputComponent), multi: true }
+  ],
   host: {
     '[class.o-time-input]': 'true'
   }
 })
 export class OTimeInputComponent extends OFormDataComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public oDateFormat: string = 'L';
+  public oDateFormat: string;
   public oDateLocale: any;
   public oDateStartView: 'month' | 'year' = 'month';
   public oDateMinDate: any;
@@ -79,11 +91,11 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   public oHourTextInputEnabled: boolean = true;
   public oHourPlaceholder = '';
   public oDatePlaceholder = '';
-  protected oformat: string = 'L';
+  protected oformat: string;
   protected _valueType: ODateValueType = 'timestamp';
 
   protected blockGroupValueChanges: boolean;
-  protected formGroup: UntypedFormGroup = new UntypedFormGroup({});
+  protected formGroup: FormGroup = new FormGroup({});
 
   @ViewChild('dateInput', { static: true })
   protected dateInput: ODateInputComponent;
@@ -96,13 +108,19 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   public dateAttr = 'dateInput';
   public hourAttr = 'hourInput';
 
+  private dateAdapter: DateAdapter<any>;
+
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector,
     protected cd: ChangeDetectorRef) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'DATE';
+    this.dateAdapter = this.injector.get(DateAdapter);
+    // Default format follows the active date adapter ('D' for Luxon, 'L' for moment)
+    const dateFormats: MatDateFormats | null = this.injector.get(MAT_DATE_FORMATS, null);
+    this.oDateFormat = dateFormats?.display?.dateInput ?? 'D';
+    this.oformat = this.oDateFormat;
   }
 
   public ngOnInit(): void {
@@ -132,6 +150,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
 
   public ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    super.ngOnDestroy();
   }
 
   public createFormControl(cfg, validators): OFormControl {
@@ -165,10 +184,13 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     let dateValue: any;
     let hourValue: any;
     if (Util.isDefined(this.value) && Util.isDefined(this.value.value)) {
-      const momentD = moment(this.value.value);
-      if (momentD.isValid()) {
-        dateValue = momentD.clone().startOf('day').valueOf();
-        hourValue = momentD.clone().valueOf() - dateValue;
+      // Normalize whatever value-type is configured to millis through the active adapter
+      const millis = parseDateByValueTypeWithAdapter(this.dateAdapter, this.value.value, 'timestamp', this.oformat);
+      if (typeof millis === 'number' && !isNaN(millis)) {
+        // Internal date/hour arithmetic runs on Luxon regardless of the active adapter
+        const dt = DateTime.fromMillis(millis);
+        dateValue = dt.startOf('day').toMillis();
+        hourValue = dt.toMillis() - dateValue;
       }
     }
     if (this.dateInput) {
@@ -186,12 +208,14 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     }
     let timeValue: number;
     const values = this.formGroup.getRawValue();
-    const mDate = (values[this.dateAttr] ? moment(values[this.dateAttr]) : moment()).startOf('day');
-    const mHour = moment(values[this.hourAttr], this.hourInput.formatString);
-    timeValue = mDate.clone()
-      .set('hour', mHour.get('hour'))
-      .set('minute', mHour.get('minutes'))
-      .valueOf();
+    // The inner control may hold millis or the active adapter's date object (both expose valueOf() → millis)
+    const rawDate = values[this.dateAttr];
+    const dateMs = typeof rawDate === 'number' ? rawDate : (rawDate ? rawDate.valueOf() : undefined);
+    const dDate = (typeof dateMs === 'number' && !isNaN(dateMs) ? DateTime.fromMillis(dateMs) : DateTime.now()).startOf('day');
+    const dHour = DateTime.fromFormat(values[this.hourAttr], this.hourInput.formatString);
+    timeValue = dDate
+      .set({ hour: dHour.hour, minute: dHour.minute })
+      .toMillis();
     this.setFormValue(timeValue);
   }
 
@@ -238,7 +262,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (arg instanceof OFormValue) {
       value = arg.value;
     }
-    value = Util.parseByValueType(value, this.valueType, this.oformat);
+    value = parseDateByValueTypeWithAdapter(this.dateAdapter, value, this.valueType, this.oformat);
     super.ensureOFormValue(value);
   }
 }

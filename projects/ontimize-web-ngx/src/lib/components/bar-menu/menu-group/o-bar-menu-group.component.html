@@ -1,5 +1,5 @@
 <div class="fake-li" [class.fake-li-hover]="isHovered">
-  <label [attr.for]="id" class="toggle mat-list-item">
+  <label [attr.for]="id" [attr.data-testid]="dataTestId" class="toggle mat-list-item">
     <mat-icon class="o-bar-menu-group-icon mat-24">{{ icon }}</mat-icon>
     {{ title | oTranslate }}
     @if (!checkbox.checked) {

@@ -5,7 +5,7 @@
         {{ renderTrueValue }}
       }
       @case ('icon') {
-        <mat-icon class="material-icons"> {{ renderTrueValue }}</mat-icon>
+        <mat-icon> {{ renderTrueValue }}</mat-icon>
       }
       @case ('image') {
         <img [src]="renderTrueValue" alt="image for true value"/>
@@ -21,7 +21,7 @@
         {{ renderFalseValue }}
       }
       @case ('icon') {
-        <mat-icon class="material-icons"> {{ renderFalseValue }}</mat-icon>
+        <mat-icon> {{ renderFalseValue }}</mat-icon>
       }
       @case ('image') {
         <img [src]="renderFalseValue" alt="image for false value" />

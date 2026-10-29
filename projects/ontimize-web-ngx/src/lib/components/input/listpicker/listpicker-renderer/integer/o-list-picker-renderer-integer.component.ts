@@ -13,6 +13,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_INTEGER = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-list-picker-renderer-integer',
   templateUrl: './o-list-picker-renderer-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

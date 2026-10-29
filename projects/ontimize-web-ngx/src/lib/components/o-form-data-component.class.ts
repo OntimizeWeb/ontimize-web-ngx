@@ -4,8 +4,10 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  forwardRef,
   HostBinding,
   HostListener,
+  inject,
   Injector,
   Input,
   OnChanges,
@@ -15,7 +17,8 @@ import {
   SimpleChange,
   ViewChildren
 } from '@angular/core';
-import { AsyncValidatorFn, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix, SubscriptSizing } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
@@ -37,7 +40,7 @@ import { PermissionsUtils } from '../util/permissions';
 import { SQLTypes } from '../util/sqltypes';
 import { Util } from '../util/util';
 import { OFormValue } from './form/o-form-value';
-import { OFormComponent } from './form/o-form.component';
+import { IOFormParent, O_FORM_CONTEXT } from '../interfaces/o-form-parent.interface';
 import { OFormControl } from './input/o-form-control.class';
 import { OBaseComponent } from './o-component.class';
 import { OValueChangeEvent } from './o-value-change-event.class';
@@ -68,6 +71,9 @@ export const DEFAULT_INPUTS_O_FORM_DATA_COMPONENT = [
   'labelVisible:label-visible',
   'selectAllOnClick:select-all-on-click',
   'angularAsyncValidatorsFn: async-validators',
+
+  // data-testid [string]: forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
@@ -79,11 +85,22 @@ export const DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT = [
 
 @Directive({
   inputs: DEFAULT_INPUTS_O_FORM_DATA_COMPONENT,
-  outputs: DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT
+  outputs: DEFAULT_OUTPUTS_O_FORM_DATA_COMPONENT,
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OFormDataComponent), multi: true }
+  ]
 })
 export class OFormDataComponent extends OBaseComponent implements IFormDataComponent, IFormDataTypeComponent,
-  OnInit, AfterViewInit, OnDestroy, OnChanges {
+  ControlValueAccessor, OnInit, AfterViewInit, OnDestroy, OnChanges {
   /* Inputs */
+  /** Forwarded to the native control's `data-testid` attribute, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.oattr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   public sqlType: string;
   @BooleanInputConverter()
   public autoBinding: boolean = true;
@@ -104,10 +121,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
 
   @Input()
   get subscriptSizing(): SubscriptSizing {
-    return this._subscriptSizing || this.errorOptions?.type==='lite'?'dynamic':'fixed' ;
+    return this._subscriptSizing
+      ?? this.oInputsOptions?.subscriptSizing
+      ?? (this.errorOptions?.type === 'lite' ? 'dynamic' : 'fixed');
   }
   set subscriptSizing(value: SubscriptSizing) {
-    this._subscriptSizing = value || this.errorOptions?.type === 'lite' ? 'dynamic' : 'fixed';
+    this._subscriptSizing = value ?? null;
   }
   private _subscriptSizing: SubscriptSizing | null = null;
 
@@ -136,10 +155,14 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected _defaultSQLTypeKey: string = 'OTHER';
   protected _fControl: OFormControl;
   protected _fControlSubscription: Subscription;
-  protected _fGroup: UntypedFormGroup;
+  protected _fGroup: FormGroup;
   protected elRef: ElementRef;
-  protected form: OFormComponent;
+  protected form: IOFormParent;
   protected oldValue: any;
+
+  private _cvaOnChange: (value: any) => void = () => {};
+  private _cvaOnTouched: () => void = () => {};
+  private _writingValue = false;
 
   protected _floatLabel: FloatLabelType;
   protected _appearance: MatFormFieldAppearance;
@@ -164,18 +187,19 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
   protected oInputsOptions: OInputsOptions;
 
   constructor(
-    form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
     super(injector);
-    this.form = form;
+    this.form = inject(O_FORM_CONTEXT, { optional: true });
     this.elRef = elRef;
     this.permissionsService = this.injector.get<PermissionsService>(PermissionsService);
     this.errorOptions = ErrorsUtils.getErrorOptions(this.injector);
     try {
-      this.selectAllOnClick = this.injector.get(O_INPUTS_OPTIONS).selectAllOnClick;
+      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
+      this.selectAllOnClick = this.oInputsOptions.selectAllOnClick;
     } catch (e) {
+      this.oInputsOptions = {};
       this.selectAllOnClick = false;
     }
   }
@@ -207,12 +231,6 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       });
     }
     this.addOntimizeCustomAppearanceClass();
-    try {
-      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
-    } catch (e) {
-      this.oInputsOptions = {};
-    }
-
     Util.parseOInputsOptions(this.elRef, this.oInputsOptions);
   }
 
@@ -234,21 +252,30 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this.permissions ? this.permissions.visible : true;
   }
 
-  public getFormGroup(): UntypedFormGroup {
+  public getFormGroup(): FormGroup {
     if (this._fGroup) {
       return this._fGroup;
     }
-    let formGroup = this.form ? this.form.formGroup : undefined;
-    if ((!this.hasEnabledPermission() || !this.hasVisiblePermission()) && !this._fGroup) {
-      const group = {};
-      group[this.oattr] = this._fControl;
-      this._fGroup = new UntypedFormGroup(group);
+    if (!this.form) {
+      const control = this.getControl();
+      const key = this.oattr || '_standalone';
+      const group: Record<string, OFormControl> = {};
+      group[key] = control;
+      this._fGroup = new FormGroup(group);
+      return this._fGroup;
+    }
+    let formGroup = this.form.formGroup;
+    if (!this.hasEnabledPermission() || !this.hasVisiblePermission()) {
+      const control = this.getControl();
+      const group: Record<string, OFormControl> = {};
+      group[this.oattr] = control;
+      this._fGroup = new FormGroup(group);
       formGroup = this._fGroup;
     }
     return formGroup;
   }
 
-  public getFormControl(): UntypedFormControl {
+  public getFormControl(): FormControl {
     return this._fControl;
   }
 
@@ -354,7 +381,12 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
     if (this.oldValue !== val) {
       const previousValue = this.oldValue;
+      // emitEvent:false means _fControl.valueChanges won't fire → onFormControlChange won't call _cvaOnChange
+      const suppressedEvent = options.emitEvent === false;
       this.setFormValue(val, options, setDirty);
+      if (!this._writingValue && suppressedEvent) {
+        this._cvaOnChange(this.getValue());
+      }
       if (options && options.emitModelToViewValueChange !== false) {
         const changeType: number = (options.hasOwnProperty('changeType')) ? options.changeType : OValueChangeEvent.PROGRAMMATIC_CHANGE;
         this.emitOnValueChange(changeType, val, previousValue);
@@ -399,6 +431,31 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     }
     this.ensureOFormValue(value);
     this.onChange.emit(value);
+    if (!this._writingValue) {
+      this._cvaOnChange(this.getValue());
+    }
+  }
+
+  writeValue(value: any): void {
+    this._writingValue = true;
+    if (this._fControl) {
+      this.setFormValue(value);
+    } else {
+      this.ensureOFormValue(value);
+    }
+    this._writingValue = false;
+  }
+
+  registerOnChange(fn: (value: any) => void): void {
+    this._cvaOnChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this._cvaOnTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.enabled = !isDisabled;
   }
 
   public ensureOFormValue(arg: any): void {
@@ -495,7 +552,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     return this._orequired;
   }
 
-  set orequired(val: boolean) {
+  set orequired(val: boolean | string) {
     const old = this._orequired;
     this._orequired = BooleanConverter(val);
     if (val !== old) {
@@ -514,6 +571,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (!this.isReadOnly && this.enabled) {
       this.onBlur.emit(event);
     }
+    this._cvaOnTouched();
   }
 
   get appearance(): MatFormFieldAppearance {
@@ -579,7 +637,8 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     if (setDirty) {
       this._fControl.markAsDirty();
     }
-    if (this._fControl.invalid && !this.form.isInInsertMode()) {
+    const isInsertMode = this.form?.isInInsertMode() ?? true;
+    if (this._fControl.invalid && !isInsertMode) {
       this._fControl.markAsTouched();
     }
   }

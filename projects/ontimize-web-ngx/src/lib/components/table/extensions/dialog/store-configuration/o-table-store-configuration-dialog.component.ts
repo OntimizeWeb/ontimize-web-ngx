@@ -1,12 +1,26 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Injector, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
 
 import { OTableBaseDialogClass } from '../o-table-base-dialog.class';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-store-configuration-dialog',
   templateUrl: './o-table-store-configuration-dialog.component.html',
   styleUrls: ['./o-table-store-configuration-dialog.component.scss'],
@@ -43,11 +57,11 @@ export class OTableStoreConfigurationDialogComponent extends OTableBaseDialogCla
     info: 'TABLE.DIALOG.PROPERTIES.PAGE.INFO'
   }];
 
-  public formGroup: UntypedFormGroup = new UntypedFormGroup({
-    name: new UntypedFormControl('', [
+  public formGroup: FormGroup = new FormGroup({
+    name: new FormControl('', [
       Validators.required
     ]),
-    description: new UntypedFormControl('')
+    description: new FormControl('')
   });
 
   constructor(

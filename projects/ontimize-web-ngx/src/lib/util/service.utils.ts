@@ -2,7 +2,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 import { OExpandableContainerComponent } from '../components/expandable-container/o-expandable-container.component';
 import { OFormValue } from '../components/form/o-form-value';
-import { OFormComponent } from '../components/form/o-form.component';
+import { IOFormParent } from '../interfaces/o-form-parent.interface';
 import { SQLOrder } from '../types/sql-order.type';
 import { Codes } from './codes';
 import { SQLTypes } from './sqltypes';
@@ -48,7 +48,7 @@ export class ServiceUtils {
     return result;
   }
 
-  static getParentKeysFromForm(parentKeysObject: object, form: OFormComponent, route?: ActivatedRoute, checkRouteParamsRecursive: boolean = true) {
+  static getParentKeysFromForm(parentKeysObject: object, form: IOFormParent, route?: ActivatedRoute, checkRouteParamsRecursive: boolean = true) {
     const result = {};
     const ownKeys = Object.keys(parentKeysObject || {});
 

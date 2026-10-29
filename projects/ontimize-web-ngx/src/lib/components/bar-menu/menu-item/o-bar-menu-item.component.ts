@@ -1,5 +1,8 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { Util } from '../../../util/util';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 import { OBarMenuBase } from '../o-bar-menu-base.class';
@@ -13,6 +16,8 @@ export const DEFAULT_INPUTS_O_BAR_MENU_ITEM = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatIconModule, OTranslatePipe],
   selector: 'o-bar-menu-item',
   templateUrl: './o-bar-menu-item.component.html',
   styleUrls: ['./o-bar-menu-item.component.scss'],

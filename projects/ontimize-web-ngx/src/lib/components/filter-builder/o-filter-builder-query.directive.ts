@@ -4,6 +4,7 @@ import { Util } from '../../util/util';
 import { OFilterBuilderComponent } from './o-filter-builder.component';
 
 @Directive({
+  standalone: true,
   selector: '[oFilterBuilderQuery]',
   inputs: [
     '_filterBuilder: oFilterBuilderQuery'

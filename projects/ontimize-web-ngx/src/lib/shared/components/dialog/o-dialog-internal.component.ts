@@ -1,9 +1,14 @@
 import { Component, Injector } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatIconModule } from "@angular/material/icon";
+
 import { OTranslateService } from "../../../services/translate/o-translate.service";
 import type { ODialogConfig } from "./o-dialog.config";
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, MatDialogModule, MatIconModule],
   selector: 'app-local-dialog',
   templateUrl: './o-dialog-internal.component.html',
 })

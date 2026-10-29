@@ -3,6 +3,7 @@ import { Directive, Input } from '@angular/core';
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 @Directive({
+  standalone: true,
   selector: 'o-form-layout-split-pane-options, o-form-layout-manager[mode="split-pane"]'
 })
 export class OFormLayoutSplitPaneOptionsDirective {

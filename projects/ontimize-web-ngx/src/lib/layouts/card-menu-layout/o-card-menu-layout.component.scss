@@ -7,6 +7,11 @@
     min-width: 100%;
     min-height: 100%;
     overflow-y: auto;
+
+    // fxLayout.lt-md="column": switch to column layout on medium-and-below screens
+    @media (max-width: 959px) {
+      flex-direction: column;
+    }
   }
 
   .o-card-menu-item {

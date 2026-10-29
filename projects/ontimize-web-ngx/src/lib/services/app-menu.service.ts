@@ -11,9 +11,11 @@ import {
   MenuItemLocale,
   MenuItemLogout,
   MenuItemRoute,
-  MenuItemUserInfo
+  MenuItemUserInfo,
+  MenuSection
 } from '../interfaces/app-menu.interface';
 import { MenuRootItem } from '../types/menu-root-item.type';
+import { OPermissions } from '../types/o-permissions.type';
 import { Codes } from '../util/codes';
 import { Util } from '../util/util';
 import { PermissionsService } from './permissions/permissions.service';
@@ -39,6 +41,7 @@ export class AppMenuService {
   protected ALL_MENU_ITEMS: MenuRootItem[];
   protected activeItem: MenuItemRoute;
   protected permissionsService = inject(PermissionsService);
+  protected sectionsChecked: boolean = false;
 
   public onClick: Subject<MenuClickEvent> = new Subject<MenuClickEvent>;
   public onPermissionMenuChanged: Subject<PermissionMenuChangedEvent> = new Subject<PermissionMenuChangedEvent>();
@@ -63,17 +66,17 @@ export class AppMenuService {
   }
 
   setMenuItemsByMenuConfiguration() {
-    /*
-      spread operator (...) in array multi-level not works
-      JSON.parse and JSON.stringify are the specific methods used for multi-level deep copying
-    */
-    const defaultMenuConfiguration = Util.cloneArray(this._config.getMenuConfiguration());
+    const defaultMenuConfiguration = this.cloneMenuItems(this._config.getMenuConfiguration());
     this.MENU_ROOTS = defaultMenuConfiguration;
     this.ALL_MENU_ITEMS = [];
     for (let i = 0, len = this.MENU_ROOTS.length; i < len; i++) {
       const item: MenuRootItem = this.MENU_ROOTS[i];
       this.ALL_MENU_ITEMS = this.ALL_MENU_ITEMS.concat(this.getMenuItems(item));
+      if (!this.sectionsChecked) {
+        this.warnNotAllowedSections((item as MenuGroup).items);
+      }
     }
+    this.sectionsChecked = true;
   }
 
   mergeMenuItemsWithPermissions() {
@@ -131,6 +134,9 @@ export class AppMenuService {
       case ((item as MenuItemUserInfo).user !== undefined):
         type = 'user-info';
         break;
+      case (item.type === 'section'):
+        type = 'section';
+        break;
       case ((item as MenuGroup).items !== undefined):
         type = 'group';
         break;
@@ -143,6 +149,10 @@ export class AppMenuService {
 
   isMenuGroup(item: MenuRootItem): boolean {
     return this.getMenuItemType(item) === 'group';
+  }
+
+  isMenuSection(item: MenuRootItem): boolean {
+    return this.getMenuItemType(item) === 'section';
   }
 
   isMenuGroupRoute(item: MenuRootItem): boolean {
@@ -161,9 +171,43 @@ export class AppMenuService {
     return !Util.isDefined(item.visible) || (Util.isDefined(item.visible) && item.visible);
   }
 
+  /**
+   * Returns whether the item is visible taking into account both its menu configuration
+   * and its menu permissions.
+   */
+  isVisibleByPermissions(item: MenuCommonItem): boolean {
+    if (!this.isVisible(item)) {
+      return false;
+    }
+    const itemPermissions: OPermissions = this.permissionsService.getMenuPermissions(item.id);
+    return !Util.isDefined(itemPermissions) || itemPermissions.visible !== false;
+  }
+
+  /**
+   * A menu section is visible when it is not hidden itself and it has, at least, one visible item.
+   * Sections whose items are all hidden are not rendered so no empty titles are displayed.
+   */
+  isSectionVisible(section: MenuSection): boolean {
+    if (!this.isVisibleByPermissions(section)) {
+      return false;
+    }
+    const items = section.items || [];
+    return items.some(item => this.isVisibleByPermissions(item));
+  }
+
   private getMenuItems(item: MenuRootItem): MenuRootItem[] {
     const menuGroup = item as MenuGroup;
     const items = menuGroup.items;
+    if (this.isMenuSection(item)) {
+      /*
+        The section itself must be included so its permissions are merged as any other menu entry,
+        and its items are root entries only grouped under a title, so all of them are included too.
+      */
+      return (items || []).reduce((acc: MenuRootItem[], child: MenuRootItem) => {
+        const descendants = this.getMenuItems(child).filter(descendant => descendant !== child);
+        return acc.concat(child, descendants);
+      }, [item]);
+    }
     if (items !== undefined) {
       if (this.isMenuGroupRoute(menuGroup)) {
         return [item].concat(items)
@@ -171,6 +215,34 @@ export class AppMenuService {
       return items;
     }
     return [item];
+  }
+
+  /**
+   * Deep clones the menu configuration so the permissions applied over the menu entries never
+   * modify the original configuration. `Object.assign` is used instead of a JSON copy in order
+   * to keep the `action` functions of the action menu items.
+   */
+  private cloneMenuItems(items: MenuRootItem[]): MenuRootItem[] {
+    return (items || []).map((item: MenuRootItem) => {
+      const clonedItem = Object.assign({}, item) as MenuGroup;
+      if (Util.isDefined((item as MenuGroup).items)) {
+        clonedItem.items = this.cloneMenuItems((item as MenuGroup).items) as MenuGroup['items'];
+      }
+      return clonedItem;
+    });
+  }
+
+  /**
+   * Menu sections are only supported at the root level of the menu configuration, they are
+   * ignored anywhere else.
+   */
+  private warnNotAllowedSections(items: MenuRootItem[]): void {
+    (items || []).forEach(item => {
+      if (this.isMenuSection(item)) {
+        console.warn(`[AppMenuService]: menu section '${item.id}' is not placed at the root level of the menu configuration and will be ignored.`);
+      }
+      this.warnNotAllowedSections((item as MenuGroup).items);
+    });
   }
 
   private setActiveItem(): void {

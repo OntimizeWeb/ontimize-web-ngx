@@ -16,12 +16,25 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTreeModule } from '@angular/material/tree';
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
+import { OTreeMenuComponent } from './header/tree-menu/o-tree-menu.component';
 import { Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { ServiceResponse } from '../../interfaces/service-response.interface';
 import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OTreeComponentStateService } from '../../services/state/o-tree-component-state.service';
+import { OActionStyleProvider } from '../../types/o-action-style.type';
 import { OTreePermissions } from '../../types/o-tree-permissions.type';
 import { OTreeFlatNode } from '../../types/tree-flat-node.type';
 import { Codes } from '../../util/codes';
@@ -29,9 +42,11 @@ import { FilterExpressionUtils } from '../../util/filter-expression.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
+import { OActionStyle } from '../../types';
 import { OTreeDao } from './o-tree-dao.service';
 import { OTreeDataSource } from './o-tree.datasource';
-import { OTreeNodeComponent } from './tree-node/tree-node.component';
+import type { OTreeNodeComponent } from './tree-node/tree-node.component';
+import { O_TREE_NODE_TOKEN } from './o-tree-tokens';
 import { ServiceUtils } from '../../util/service.utils';
 import { OPermissions } from '../../types/o-permissions.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -103,6 +118,8 @@ export const DEFAULT_INPUTS_O_TREE = [
 export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNodeCollapsed', 'onLoadNextLevel', 'onDataLoaded', 'onNodeClick'];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatTreeModule, OTranslatePipe, OSearchInputComponent, OTreeMenuComponent],
   selector: 'o-tree',
   templateUrl: './o-tree.component.html',
   styleUrls: ['./o-tree.component.scss'],
@@ -117,10 +134,25 @@ export const DEFAULT_OUTPUTS_O_TREE = ['onNodeSelected', 'onNodeExpanded', 'onNo
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTreeComponentStateService },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OTreeComponent) },
   ]
 })
 
 export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStateService> implements OnInit, OnDestroy, AfterViewInit {
+
+  /**
+   * Adds this tree's historic default labels to the inherited importance
+   * auto-rules. Note `insert` defaults to `'INSERT'` here (unlike the `'ADD'`
+   * default used by o-table/o-list/o-grid/o-form) — preserved as-is.
+   */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'INSERT' },
+      refresh: { label: 'REFRESH' },
+      delete: { label: 'DELETE' }
+    };
+  }
 
   getLevel = (node: OTreeFlatNode) => node.level;
 
@@ -276,7 +308,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
     }
   }
 
-  @ContentChild(forwardRef(() => OTreeNodeComponent), { descendants: false })
+  @ContentChild(O_TREE_NODE_TOKEN, { descendants: false })
   treeNode!: OTreeNodeComponent;
   protected permissions: OTreePermissions;
   protected actionsPermissions: OPermissions[];
@@ -302,6 +334,7 @@ export class OTreeComponent extends AbstractOServiceComponent<OTreeComponentStat
 
   ngOnInit() {
     this.setTreeControl();
+    this.setDatasource();
     this.initialize();
     this.initializeParams();
 

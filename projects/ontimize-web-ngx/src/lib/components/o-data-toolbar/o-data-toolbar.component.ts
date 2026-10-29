@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 
 
@@ -12,6 +14,8 @@ export const DEFAULT_INPUTS_O_DATA_TOOLBAR = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [OTranslatePipe],
   selector: 'o-data-toolbar',
   templateUrl: './o-data-toolbar.component.html',
   styleUrls: ['./o-data-toolbar.component.scss'],

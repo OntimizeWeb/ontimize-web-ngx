@@ -18,7 +18,7 @@
 }
 
 @if (!column.orderable) {
-  <span class="header-title-container" fxFlex [matTooltip]="showHeaderTooltip && !column.headerTooltip ? (column.title | oTranslate) :
+  <span class="header-title-container o-flex" [matTooltip]="showHeaderTooltip && !column.headerTooltip ? (column.title | oTranslate) :
                   (column.headerTooltip && !column.headerTooltipIcon) ? (column.headerTooltip | oTranslate) : null" matTooltipPosition="below"
     [matTooltipClass]="column.headerTooltipClass">
     {{ column.title | oTranslate }}

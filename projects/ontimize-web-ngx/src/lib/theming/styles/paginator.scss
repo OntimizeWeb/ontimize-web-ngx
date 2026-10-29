@@ -1,4 +1,29 @@
-.mat-mdc-paginator .mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
-  padding-top: 0.25em;
-  padding-bottom: 0.25em;
-}
+// .mat-mdc-paginator {
+
+
+//   .mat-mdc-form-field .mdc-notched-outline__notch {
+//     display: none;
+//   }
+
+//   // Specificity 0-3-0 beats Material's 0-2-0 emission of --mdc-icon-button-state-layer-size
+//   .mat-mdc-icon-button.mat-mdc-button-base {
+//     --mdc-icon-button-state-layer-size: 24px;
+//     width: var(--mdc-icon-button-state-layer-size);
+//     height: var(--mdc-icon-button-state-layer-size);
+//     margin-left: 4px;
+
+//     &:hover {
+//       background-color: var(--mat-sys-primary-container);
+
+//     }
+
+//     .mat-mdc-button-touch-target {
+//       width: var(--mdc-icon-button-state-layer-size);
+//       height: var(--mdc-icon-button-state-layer-size);
+//     }
+
+//     .mat-mdc-paginator-icon {
+//       width: var(--mdc-icon-button-icon-size);
+//     }
+//   }
+// }

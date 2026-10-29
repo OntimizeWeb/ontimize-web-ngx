@@ -1,7 +1,7 @@
-<div class="o-list-container" [style.display]="isVisible()? '' : 'none'" fxFill>
-  @if (loading | async) {
-    <div fxLayoutAlign="center center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0"
-      class="spinner-container" [ngStyle]="{'top.px': toolBarHeight}">
+<div class="o-list-container o-flex-fill" [style.display]="isVisible()? '' : 'none'">
+  @if (showLoading | async) {
+    <div class="spinner-container o-layout-align-center-center" [class.pageable-loading]="pageable && state.queryRecordOffset > 0"
+      [ngStyle]="{'top.px': toolBarHeight}">
       <o-list-skeleton></o-list-skeleton>
     </div>
   }
@@ -9,40 +9,73 @@
     <o-data-toolbar #toolbar [title]="title" [show-title]="hasTitle()" class="o-list-toolbar">
       <ng-container o-data-toolbar-projection-start>
         @if (showButtonsText) {
+          <!-- @switch picks the Material button variant from `action-styles`.
+               Icon + label are inlined (not via a template) so Material's
+               `ng-content select="mat-icon"` projects the icon outside the
+               label and keeps the icon/text spacing. -->
           @if (insertButton && !insertButtonFloatable) {
-            <button [disabled]="!enabledInsertButton" class="o-list-button text" type="button" mat-stroked-button aria-label="Insert" (click)="add($event)">
-              <mat-icon svgIcon="ontimize:add"></mat-icon>
-              <span>{{ 'ADD' | oTranslate }}</span>
-            </button>
+            @switch (getActionVariant('insert')) {
+              @case ('flat') {
+                <button type="button" mat-flat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+              }
+              @case ('raised') {
+                <button type="button" mat-raised-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+              }
+              @case ('basic') {
+                <button type="button" mat-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" [color]="getActionColor('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+              }
+              @default {
+                <button type="button" mat-stroked-button [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClassForVariant('insert')" class="o-list-button text" aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)"><mat-icon>add</mat-icon><span>{{ getActionLabel('insert') | oTranslate }}</span></button>
+              }
+            }
           }
           @if (refreshButton) {
-            <button type="button" mat-stroked-button class="o-list-button text" [disabled]="!enabledRefreshButton" aria-label="Refresh" (click)="reloadData()">
-              <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
-              <span>{{ 'REFRESH' | oTranslate }}</span>
-            </button>
+            @switch (getActionVariant('refresh')) {
+              @case ('flat') {
+                <button type="button" mat-flat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+              }
+              @case ('raised') {
+                <button type="button" mat-raised-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+              }
+              @case ('basic') {
+                <button type="button" mat-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" [color]="getActionColor('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+              }
+              @default {
+                <button type="button" mat-stroked-button [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClassForVariant('refresh')" class="o-list-button text" aria-label="Refresh" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()"><mat-icon>autorenew</mat-icon><span>{{ getActionLabel('refresh') | oTranslate }}</span></button>
+              }
+            }
           }
           @if (deleteButton) {
-            <button type="button" class="o-list-button text" mat-stroked-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-              [class.disabled]="!enabledDeleteButton" (click)="remove()">
-              <mat-icon svgIcon="ontimize:delete"></mat-icon>
-              <span>{{ 'DELETE' | oTranslate }}</span>
-            </button>
+            @switch (getActionVariant('delete')) {
+              @case ('flat') {
+                <button type="button" mat-flat-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+              }
+              @case ('raised') {
+                <button type="button" mat-raised-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+              }
+              @case ('basic') {
+                <button type="button" mat-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [color]="getActionColor('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+              }
+              @default {
+                <button type="button" mat-stroked-button [disabled]="!enabledDeleteButton" [ngClass]="getActionImportanceClassForVariant('delete')" [class.disabled]="!enabledDeleteButton" class="o-list-button text" aria-label="Delete" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()"><mat-icon>delete</mat-icon><span>{{ getActionLabel('delete') | oTranslate }}</span></button>
+              }
+            }
           }
         } @else {
           @if (insertButton && !insertButtonFloatable) {
-            <button type="button" [disabled]="!enabledInsertButton" class="o-list-button no-text" mat-icon-button aria-label="Insert" (click)="add($event)">
-              <mat-icon svgIcon="ontimize:add"></mat-icon>
+            <button type="button" [disabled]="!enabledInsertButton" [ngClass]="getActionImportanceClass('insert')" class="o-list-button no-text" mat-icon-button aria-label="Insert" attr="insert" [attr.data-testid]="getDataTestId('insert')" (click)="add($event)">
+              <mat-icon>add</mat-icon>
             </button>
           }
           @if (refreshButton) {
-            <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" class="o-list-button no-text" (click)="reloadData()">
-              <mat-icon svgIcon="ontimize:autorenew"></mat-icon>
+            <button type="button" mat-icon-button aria-label="Refresh" [disabled]="!enabledRefreshButton" [ngClass]="getActionImportanceClass('refresh')" class="o-list-button no-text" attr="refresh" [attr.data-testid]="getDataTestId('refresh')" (click)="reloadData()">
+                <mat-icon>autorenew</mat-icon>
             </button>
           }
           @if (deleteButton) {
             <button type="button" class="o-list-button no-text" mat-icon-button aria-label="Delete" [disabled]="!enabledDeleteButton"
-              [class.disabled]="!enabledDeleteButton" (click)="remove()">
-              <mat-icon svgIcon="ontimize:delete"></mat-icon>
+              [ngClass]="getActionImportanceClass('delete')" [class.disabled]="!enabledDeleteButton" attr="delete" [attr.data-testid]="getDataTestId('delete')" (click)="remove()">
+              <mat-icon>delete</mat-icon>
             </button>
           }
         }
@@ -56,23 +89,30 @@
       <ng-container o-data-toolbar-projection-end>
         @if (quickFilter) {
           <o-search-input [filter-case-sensitive]="filterCaseSensitive" [show-case-sensitive-checkbox]="showCaseSensitiveCheckbox()"
-            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance" float-label="never">
+            [columns]="quickFilterColumns" [placeholder]="quickFilterPlaceholder" [appearance]="quickFilterAppearance" float-label="never"
+            [data-testid]="dataTestId ? dataTestId + '-quick-filter' : null">
           </o-search-input>
         }
       </ng-container>
     </o-data-toolbar>
   }
-  <div fxLayout="column" class="o-list-content" fxFlex="1 1 100%">
+  <div class="o-list-content o-flex-column o-flex-100">
     <!--MAT-LIST-->
-    <mat-list (scroll)="onScroll($event)" [class.selectable]="selectable"
-      [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)"  [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}">
+    <mat-list #scrollContainer (scroll)="onScroll($event)" [class.selectable]="selectable"
+      [class.o-list-item-has-buttons]="insertButton && (editButtonInRow || detailButtonInRow)"  [ngStyle]="{'visibility': (showLoading | async) === false ? 'visible':'hidden'}">
 
       @if (!getDataArray().length) {
-        <mat-list-item fxLayout="row" fxLayoutAlign="center center" style="cursor: default;">
-          <h3 matListItemTitle fxLayout="row" fxLayoutAlign="center center">
-            {{ 'TABLE.EMPTY' | oTranslate }}
-            @if (getQuickFilterValue().length > 0) {
-              {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : {values: [getQuickFilterValue()]} }}
+        <mat-list-item class="o-flex-row o-layout-align-center-center" style="cursor: default;">
+          <h3 matListItemTitle class="o-flex-row o-layout-align-center-center">
+            @if (noResultsTemplate) {
+              <ng-container [ngTemplateOutlet]="noResultsTemplate"></ng-container>
+            } @else if (noResultsMessage) {
+              <span [innerHTML]="noResultsMessage | oTranslate"></span>
+            } @else {
+              {{ 'TABLE.EMPTY' | oTranslate }}
+              @if (getQuickFilterValue().length > 0) {
+                {{ 'TABLE.EMPTY_USING_FILTER' | oTranslate : {values: [getQuickFilterValue()]} }}
+              }
             }
           </h3>
         </mat-list-item>
@@ -81,17 +121,39 @@
     </mat-list>
   </div>
   @if (paginationControls) {
-    <mat-paginator fxFlex="0 1 auto" class="o-mat-paginator" #paginator [length]="totalRecords" [pageSize]="queryRows"
+    <mat-paginator class="o-mat-paginator o-flex-0-1-auto" #paginator [length]="totalRecords" [pageSize]="queryRows"
       [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)="onChangePage($event)"
-    [ngStyle]="{'visibility': (loading | async) === false ? 'visible':'hidden'}"></mat-paginator>
+    [ngStyle]="{'visibility': (showLoading | async) === false ? 'visible':'hidden'}"></mat-paginator>
   }
 
-  <!--INSERT BUTTON -->
-  @if (insertButton && insertButtonFloatable) {
-    <button type="button" mat-fab (click)="add($event)" class="add-button add-button-bottom"
-      [class.add-button-bottom]="insertButtonPosition ==='bottom'" [class.add-button-top]="insertButtonPosition ==='top'">
-      <mat-icon svgIcon="ontimize:add"></mat-icon>
+  <!--INSERT BUTTON (top position): independent of the bottom-right stack below. -->
+  @if (insertButton && insertButtonFloatable && insertButtonPosition === 'top') {
+    <button type="button" mat-fab (click)="add($event)" [ngClass]="getActionImportanceClass('insert')" class="add-button add-button-top"
+      [attr.data-testid]="getDataTestId('insert')">
+      <mat-icon>add</mat-icon>
     </button>
+  }
+
+  <!--BOTTOM-RIGHT FLOATING BUTTON STACK: insert button (bottom position) and the scroll-to-top
+       button share this corner. They are stacked with flexbox (column-reverse + gap) rather than
+       fixed pixel offsets so they never overlap regardless of the FAB's actual rendered size, which
+       can vary with theming/density. With mat-paginator the stack sits above it (see the
+       `.o-mat-paginator ~ .o-list-fab-stack` rule in the component's styles). -->
+  @if ((insertButton && insertButtonFloatable && insertButtonPosition !== 'top') || (scrollToTopButton && showScrollToTopButton)) {
+    <div class="o-list-fab-stack">
+      @if (insertButton && insertButtonFloatable && insertButtonPosition !== 'top') {
+        <button type="button" mat-fab (click)="add($event)" [ngClass]="getActionImportanceClass('insert')" class="add-button add-button-bottom"
+          [attr.data-testid]="getDataTestId('insert')">
+          <mat-icon>add</mat-icon>
+        </button>
+      }
+      @if (scrollToTopButton && showScrollToTopButton) {
+        <button type="button" mat-fab (click)="scrollToTop()" [ngClass]="getActionImportanceClass('scroll-top')" class="scroll-to-top-button"
+          [attr.data-testid]="getDataTestId('scroll-top')" [attr.aria-label]="'LIST.SCROLL_TO_TOP' | oTranslate">
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+      }
+    </div>
   }
 
 </div>

@@ -45,7 +45,7 @@ describe('OPercentInputComponent', () => {
     mockElementRef = { nativeElement: document.createElement('input') };
     mockInjector = TestBed.inject(Injector);
 
-    component = TestBed.runInInjectionContext(() => new OPercentInputComponent(mockOFormComponent, mockElementRef, mockInjector));
+    component = TestBed.runInInjectionContext(() => new OPercentInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {

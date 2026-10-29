@@ -12,8 +12,9 @@ import {
   Type,
   ViewChild
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -35,6 +36,9 @@ import { Util } from '../../util/util';
 import { OFormLayoutDialogComponent } from './dialog/o-form-layout-dialog.component';
 import { CanActivateFormLayoutChildGuard } from './guards/o-form-layout-can-activate-child.guard';
 import { OFormLayoutManagerBase } from './o-form-layout-manager-base.class';
+import { OFormLayoutSidenavComponent } from './sidenav/o-form-layout-sidenav.component';
+import { OFormLayoutSplitPaneComponent } from './split-pane/o-form-layout-split-pane.component';
+import { OFormLayoutTabGroupComponent } from './tabgroup/o-form-layout-tabgroup.component';
 import { OFormLayoutManagerContext } from '../../types/form-layout-manager-context.type';
 import { IOFormLayoutManager } from '../../interfaces/form-layout-manager.interface';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
@@ -76,6 +80,8 @@ export const DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgTemplateOutlet, OFormLayoutTabGroupComponent, OFormLayoutSplitPaneComponent, OFormLayoutSidenavComponent],
   selector: 'o-form-layout-manager',
   inputs: DEFAULT_INPUTS_O_FORM_LAYOUT_MANAGER,
   outputs: DEFAULT_OUTPUTS_O_FORM_LAYOUT_MANAGER,
@@ -261,6 +267,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   }
 
   protected addingGuard: boolean = false;
+  protected _canActivateChildFn: (childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) => any;
 
   public navigationService: NavigationService;
 
@@ -397,17 +404,13 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     const routeConfig = this.getParentActRouteRoute();
     if (Util.isDefined(routeConfig)) {
       const canActivateChildArray = (routeConfig.canActivateChild || []);
-      let previouslyAdded = false;
-      for (let i = 0, len = canActivateChildArray.length; i < len; i++) {
-        const guardChild = this.injector.get(CanActivateFormLayoutChildGuard);
-        previouslyAdded = (canActivateChildArray[i] === guardChild.constructor);
-        if (previouslyAdded) {
-          break;
-        }
-      }
+      const previouslyAdded = this._canActivateChildFn && canActivateChildArray.includes(this._canActivateChildFn);
       if (!previouslyAdded) {
         this.addingGuard = true;
-        canActivateChildArray.push(CanActivateFormLayoutChildGuard);
+        const guard = this.injector.get(CanActivateFormLayoutChildGuard);
+        this._canActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
+          guard.canActivateChild(childRoute, state);
+        canActivateChildArray.push(this._canActivateChildFn);
         routeConfig.canActivateChild = canActivateChildArray;
       }
     }
@@ -420,13 +423,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
     this.oFormLayoutManagerService.activeFormLayoutManager = undefined;
     this.oFormLayoutManagerService.context = void 0;
     const routeConfig = this.getParentActRouteRoute();
-    if (Util.isDefined(routeConfig)) {
-      for (let i = (routeConfig.canActivateChild || []).length - 1; i >= 0; i--) {
-        const guardChild = this.injector.get(CanActivateFormLayoutChildGuard);
-        if (routeConfig.canActivateChild[i] === guardChild.constructor) {
-          routeConfig.canActivateChild.splice(i, 1);
-          break;
-        }
+    if (Util.isDefined(routeConfig) && this._canActivateChildFn) {
+      const arr = routeConfig.canActivateChild || [];
+      const idx = arr.indexOf(this._canActivateChildFn);
+      if (idx >= 0) {
+        arr.splice(idx, 1);
+        routeConfig.canActivateChild = arr;
       }
     }
   }
@@ -505,12 +507,12 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         dialogTitleSeparator: this.dialogTitleSeparator,
         showFullscreenButton: this.showFullscreenButton
       },
-      width: dialogOptions.width || this.dialogWidth,
+      width: dialogOptions.width || this.dialogWidth || '65vw',
       minWidth: dialogOptions.minWidth || this.dialogMinWidth,
-      maxWidth: dialogOptions.maxWidth || this.dialogMaxWidth,
-      height: dialogOptions.height || this.dialogHeight,
+      maxWidth: dialogOptions.maxWidth || this.dialogMaxWidth || '65vw',
+      height: dialogOptions.height || this.dialogHeight || '90vh',
       minHeight: dialogOptions.minHeight || this.dialogMinHeight,
-      maxHeight: dialogOptions.maxHeight || this.dialogMaxHeight,
+      maxHeight: dialogOptions.maxHeight || this.dialogMaxHeight || '90vh',
       disableClose: dialogOptions.disableClose || true,
       panelClass: dialogOptions.class || cssclass
     };

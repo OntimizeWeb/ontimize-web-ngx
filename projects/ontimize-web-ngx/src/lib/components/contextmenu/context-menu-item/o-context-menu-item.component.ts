@@ -8,6 +8,7 @@ export const DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-context-menu-item',
   template: ' ',
   outputs: DEFAULT_CONTEXT_MENU_ITEM_OUTPUTS,

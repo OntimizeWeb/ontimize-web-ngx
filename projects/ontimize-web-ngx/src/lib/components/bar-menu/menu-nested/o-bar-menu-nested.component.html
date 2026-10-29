@@ -1,6 +1,6 @@
 @for (item of items; track item) {
-  @if (appMenuService.isVisible(item)) {
-    @switch (appMenuService.getMenuItemType(item)) {
+  @if (isItemVisible(item)) {
+    @switch (getItemType(item)) {
       @case ('group') {
         <o-bar-menu-group [title]="item.name" [attr]="item.id" [tooltip]="item.tooltip" [icon]="item.icon" [ngClass]="item.class">
           <o-bar-menu-nested [items]="$any(item).items"> </o-bar-menu-nested>

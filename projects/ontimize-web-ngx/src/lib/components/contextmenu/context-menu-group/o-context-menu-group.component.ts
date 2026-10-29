@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { OComponentMenuBaseItem } from '../o-content-menu-base-item.class';
 
 @Component({
+  standalone: true,
   selector: 'o-context-menu-group',
   template: ' ',
   providers: [{ provide: OComponentMenuBaseItem, useExisting: forwardRef(() => OContextMenuGroupComponent) }]

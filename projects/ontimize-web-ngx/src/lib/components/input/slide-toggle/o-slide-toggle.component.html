@@ -1,7 +1,7 @@
 <div [class.custom-width]="hasCustomWidth" [formGroup]="getFormGroup()" class="relative" [matTooltip]="tooltip"
   [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay"
-  [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="start center" fxFill>
-  <mat-slide-toggle [id]="getAttribute()" [formControlName]="getAttribute()" [checked]="isChecked()"
+  [matTooltipHideDelay]="tooltipHideDelay" class="o-flex-row o-layout-align-start-center o-flex-fill">
+  <mat-slide-toggle [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [checked]="isChecked()"
     [required]="isRequired" [labelPosition]="labelPosition" [color]="color" (change)="onChangeEvent($event)">
     @if (labelVisible) {
       {{ olabel | oTranslate }}
@@ -16,6 +16,6 @@
     }
   </mat-slide-toggle>
   @if (isReadOnly) {
-    <div (click)="onClickBlocker($event)" class="read-only-blocker" fxFill></div>
+    <div (click)="onClickBlocker($event)" class="read-only-blocker o-flex-fill"></div>
   }
 </div>

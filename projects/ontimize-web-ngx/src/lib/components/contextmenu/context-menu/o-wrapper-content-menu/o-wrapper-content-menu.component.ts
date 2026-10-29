@@ -1,5 +1,9 @@
 import { Component, Injector, Input, ViewChild } from '@angular/core';
-import { MatMenu } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
+
+import { OTranslatePipe } from '../../../../pipes/o-translate.pipe';
 
 import { OContextMenuGroupComponent } from '../../context-menu-group/o-context-menu-group.component';
 import { OContextMenuItemComponent } from '../../context-menu-item/o-context-menu-item.component';
@@ -12,6 +16,8 @@ export const DEFAULT_CONTEXT_MENU_CONTENT_ITEM_INPUTS = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatMenuModule, MatIconModule, MatDividerModule, OTranslatePipe, OWrapperContentMenuComponent],
   selector: 'o-wrapper-content-menu',
   templateUrl: 'o-wrapper-content-menu.component.html',
   styleUrls: ['./o-wrapper-content-menu.component.scss'],

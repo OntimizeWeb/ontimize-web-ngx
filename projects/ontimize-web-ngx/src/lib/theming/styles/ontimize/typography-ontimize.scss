@@ -1,23 +1,6 @@
 @use "variables";
 @use '@angular/material'as mat;
 
-@mixin o-table-typography-fashion($config) {
-  .o-table.o-table {
-    .o-table-container {
-      .o-table-toolbar .buttons .o-table-button .mat-mdc-button {
-        border-radius: variables.$border-radius;
-
-        &.disabled {
-          border-radius: variables.$border-radius;
-        }
-
-        &:not(.disabled):hover {
-          border-radius: variables.$border-radius;
-        }
-      }
-    }
-  }
-}
 
 @mixin o-common-typography-fashion($config) {
 
@@ -68,41 +51,22 @@
     .o-form-toolbar {
       .o-form-toolbar-header {
         border-radius: variables.$border-radius;
-        min-height: 64px;
-        max-height: 64px;
-        padding: 0 24px;
 
-        @if($typography) {
-          font: {
-            size: mat.font-size($typography, headline-5);
-            weight: bold;
-          }
-
-          .o-form-navigation {
-            span {
-              font: {
-                size: mat.font-size($typography, subtitle-1);
-                weight: normal;
-              }
-            }
-          }
+        font: {
+          size: var(--mat-sys-headline-small-size);
+          weight: bold;
         }
 
         .o-form-navigation {
           span {
             font: {
+              size: var(--mat-sys-title-small-size);
               weight: normal;
             }
           }
         }
 
-        .mat-toolbar-tools {
 
-          .o-form-toolbar-button,
-          .o-form-toolbar-button[disabled] {
-            border-radius: variables.$border-radius;
-          }
-        }
       }
     }
   }

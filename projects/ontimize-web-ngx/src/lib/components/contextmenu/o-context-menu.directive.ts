@@ -9,6 +9,7 @@ export const DEFAULT_CONTEXT_MENU_DIRECTIVE_INPUTS = [
 ];
 
 @Directive({
+  standalone: true,
   selector: '[oContextMenu]',
   inputs: DEFAULT_CONTEXT_MENU_DIRECTIVE_INPUTS
 })

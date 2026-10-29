@@ -11,6 +11,7 @@ export type OMatSortGroupedData = {
 };
 
 @Directive({
+  standalone: true,
   selector: '[oMatSort]',
   exportAs: 'oMatSort',
   inputs: ['disabled: oMatSortDisabled', 'oMatSortColumns']

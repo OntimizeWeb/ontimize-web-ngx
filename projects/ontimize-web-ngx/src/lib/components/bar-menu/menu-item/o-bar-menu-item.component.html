@@ -1,5 +1,5 @@
 @if (!restricted) {
-  <div class="fake-li mat-primary" (click)="collapseMenu($event)" [class.fake-li-hover]="isHovered">
+  <div class="fake-li mat-primary" (click)="collapseMenu($event)" [attr.data-testid]="dataTestId" [class.fake-li-hover]="isHovered">
     @if (action || route) {
       <a class="mat-list-item" (click)="onClick()">
         <mat-icon class="o-bar-menu-item-icon mat-24">{{ icon }}</mat-icon>

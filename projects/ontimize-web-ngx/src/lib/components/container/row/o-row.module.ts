@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { ORowComponent } from './o-row.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  declarations: [ORowComponent],
-  imports: [CommonModule, OSharedModule],
+  imports: [ORowComponent],
   exports: [ORowComponent]
 })
 export class ORowModule { }

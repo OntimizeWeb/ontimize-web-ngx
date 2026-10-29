@@ -14,6 +14,7 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_ICON = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-combo-renderer-icon',
   templateUrl: './o-combo-renderer-icon.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

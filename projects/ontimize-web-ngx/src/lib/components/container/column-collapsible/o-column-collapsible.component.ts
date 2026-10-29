@@ -1,12 +1,19 @@
 import { Component, ElementRef, Inject, Injector, Optional, ViewEncapsulation } from '@angular/core';
+import { NgStyle } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import {
   OContainerCollapsibleComponent
 } from '../o-container-collapsible-component.class';
 
 
 @Component({
+  standalone: true,
+  imports: [NgStyle, MatExpansionModule, MatIconModule, OTranslatePipe],
   selector: 'o-column-collapsible',
   templateUrl: './o-column-collapsible.component.html',
   encapsulation: ViewEncapsulation.None,

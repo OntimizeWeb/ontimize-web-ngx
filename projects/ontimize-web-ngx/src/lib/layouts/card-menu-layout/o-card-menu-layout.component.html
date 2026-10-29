@@ -1,4 +1,4 @@
-<div fxLayout="row wrap" class="scrolling" fxLayout.lt-md="column" fxLayoutAlign="space-around center" fxLayoutGap="8px">
+<div class="scrolling o-flex-row-wrap o-layout-align-sa-center o-gap-8">
   @for (item of cardItems; track item) {
     @if (item['show-in-card-menu'] !== false) {
       <o-card-menu-item button-text="CARD_MENU_LAYOUT.BUTTON_TEXT" [route]="$any(item).route" [title]="item.name"

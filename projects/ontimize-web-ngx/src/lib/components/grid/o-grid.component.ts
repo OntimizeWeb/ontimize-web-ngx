@@ -15,18 +15,29 @@ import {
   ViewChildren,
   ViewEncapsulation
 } from '@angular/core';
-import { MediaChange, MediaObserver } from '@ngbracket/ngx-layout';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
-import { Subscription } from 'rxjs';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldAppearance, MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
+import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
+import { OGridItemComponent } from './grid-item/o-grid-item.component';
+import { OGridItemDirective } from './grid-item/o-grid-item.directive';
+import { OGridSkeletonComponent } from './skeketon/o-grid-skeleton.component';
+import { Observable, Subscription } from 'rxjs';
+import { OGridLoadingService } from './o-grid-loading.service';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IGridItem } from '../../interfaces/o-grid-item.interface';
 import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../services/factories';
 import { OGridComponentStateClass } from '../../services/state/o-grid-component-state.class';
 import { OGridComponentStateService } from '../../services/state/o-grid-component-state.service';
-import { OPermissions } from '../../types';
+import { OActionStyleProvider, OPermissions } from '../../types';
 import { OGridPermissions } from '../../types/o-grid-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
 import { SQLOrder } from '../../types/sql-order.type';
@@ -35,9 +46,8 @@ import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OFormComponent } from '../form/o-form.component';
 import { AbstractOServiceComponent } from '../o-service-component.class';
+import { OActionStyle } from '../../types';
 import { OMatSort } from '../table/extensions/sort/o-mat-sort';
-import { OGridItemComponent } from './grid-item/o-grid-item.component';
-import { OGridItemDirective } from './grid-item/o-grid-item.directive';
 import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
 
@@ -76,11 +86,15 @@ export const DEFAULT_INPUTS_O_GRID = [
 const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgClass, NgStyle, NgTemplateOutlet, MatButtonModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatPaginatorModule, MatSelectModule, OTranslatePipe, ODataToolbarComponent, OSearchInputComponent, OGridItemComponent, OGridItemDirective, OGridSkeletonComponent],
   selector: 'o-grid',
   providers: [
     OntimizeServiceProvider,
     ComponentStateServiceProvider,
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OGridComponentStateService },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OGridComponent) },
+    OGridLoadingService
   ],
   inputs: DEFAULT_INPUTS_O_GRID,
   templateUrl: './o-grid.component.html',
@@ -92,6 +106,15 @@ const PAGE_SIZE_OPTIONS = [8, 16, 24, 32, 64];
   }
 })
 export class OGridComponent extends AbstractOServiceComponent<OGridComponentStateService> implements AfterViewInit, OnChanges, OnDestroy, OnInit {
+
+  /** Adds this grid's historic default labels to the inherited importance auto-rules. */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'ADD' },
+      refresh: { label: 'REFRESH' }
+    };
+  }
 
   /* Inputs */
   protected _queryRows = 32;
@@ -176,12 +199,15 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   protected _gridItems: IGridItem[] = [];
 
   protected subscription: Subscription = new Subscription();
-  protected media: MediaObserver;
+  protected media: BreakpointObserver;
 
   protected oMatSort: OMatSort;
   protected permissions: OGridPermissions;
   protected actionsPermissions: OPermissions[];
 
+  protected loadingService: OGridLoadingService;
+  /** Same threshold/minimum-visible delay as o-table's skeleton — avoids flicker on fast responses. */
+  public showLoading: Observable<boolean>;
 
   constructor(
     injector: Injector,
@@ -189,8 +215,13 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
     @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent
   ) {
     super(injector, elRef, form);
-    this.media = this.injector.get(MediaObserver);
+    this.media = this.injector.get(BreakpointObserver);
     this.oMatSort = new OMatSort();
+    this.loadingService = this.injector.get(OGridLoadingService);
+    this.subscription.add(
+      this.loadingSubject.subscribe((loading: boolean) => this.loadingService.setLoading(loading))
+    );
+    this.showLoading = this.loadingService.showLoading$;
   }
 
   get state(): OGridComponentStateClass {
@@ -254,22 +285,17 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   }
 
   public subscribeToMediaChanges(): void {
-    this.subscription.add(this.media.asObservable().subscribe((change: MediaChange[]) => {
-      if (change && change[0]) {
-        switch (change[0].mqAlias) {
-          case 'xs':
-          case 'sm':
-            this._colsDefault = 1;
-            break;
-          case 'md':
-            this._colsDefault = 2;
-            break;
-          case 'lg':
-          case 'xl':
-            this._colsDefault = 4;
+    this.subscription.add(this.media
+      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+      .subscribe(result => {
+        if (result.breakpoints[Breakpoints.XSmall] || result.breakpoints[Breakpoints.Small]) {
+          this._colsDefault = 1;
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          this._colsDefault = 2;
+        } else if (result.breakpoints[Breakpoints.Large] || result.breakpoints[Breakpoints.XLarge]) {
+          this._colsDefault = 4;
         }
-      }
-    }));
+      }));
   }
 
   public reloadData(): void {
@@ -331,8 +357,11 @@ export class OGridComponent extends AbstractOServiceComponent<OGridComponentStat
   public loadMore(): void {
     this.currentPage += 1;
     if (this.pageable) {
+      // Computed fresh from the already-loaded records, like o-table's onChangePage does with
+      // currentPage * queryRows, rather than trusting state.queryRecordOffset directly — see
+      // o-list.component.ts's onScroll for the full rationale (same shared base class field).
       const queryArgs: OQueryDataArgs = {
-        offset: this.state.queryRecordOffset,
+        offset: this.dataResponseArray.length,
         length: this.queryRows
       };
       this.dataService?.setPaginationContext({ pageNumber: this.dataService?.getPaginationContext().pageNumber + 1 });

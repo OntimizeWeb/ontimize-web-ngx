@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { OCheckboxComponent } from './o-checkbox.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  declarations: [OCheckboxComponent],
-  imports: [CommonModule, OSharedModule],
+  imports: [OCheckboxComponent],
   exports: [OCheckboxComponent]
 })
 export class OCheckboxModule { }

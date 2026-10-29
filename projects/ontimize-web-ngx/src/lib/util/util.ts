@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { from, isObservable, Observable, of } from 'rxjs';
 
 import { IDataService } from '../interfaces/data-service.interface';
@@ -413,22 +413,38 @@ export class Util {
     }
 
     let result = value;
-    const m = moment(value);
-    if (!m.isValid()) {
+    let dateTime: DateTime;
+    if (DateTime.isDateTime(value)) {
+      dateTime = value;
+    } else if (value instanceof Date) {
+      dateTime = DateTime.fromJSDate(value);
+    } else if (typeof value === 'number') {
+      dateTime = DateTime.fromMillis(value);
+    } else if (typeof value === 'string') {
+      dateTime = DateTime.fromISO(value);
+      if (!dateTime.isValid) {
+        // moment fell back to the Date constructor for non-ISO strings
+        dateTime = DateTime.fromJSDate(new Date(value));
+      }
+    } else {
+      return void 0;
+    }
+    if (!dateTime.isValid) {
       return void 0;
     }
     switch (valueType) {
       case 'string':
-        result = m.format(format);
+        result = dateTime.toFormat(format);
         break;
       case 'date':
-        result = m.toDate();
+        result = dateTime.toJSDate();
         break;
       case 'iso-8601':
-        result = m.toISOString();
+        // UTC zone so the output carries the 'Z' suffix, as moment's toISOString() did
+        result = dateTime.toUTC().toISO();
         break;
       case 'timestamp':
-        result = m.valueOf();
+        result = dateTime.toMillis();
         break;
       default:
         result = void 0;
@@ -614,6 +630,12 @@ export class Util {
     return value;
   }
 
+  /**
+   * Collator used to compare strings when sorting. It ignores case and places accented
+   * characters next to their base letter (e.g. 'á' right after 'a') instead of at the end.
+   */
+  private static readonly SORT_COLLATOR = new Intl.Collator(undefined, { sensitivity: 'accent' });
+
   static sortFunction(propertyA: string | number, propertyB: string | number, activeSortDirection: string) {
 
     let valueA: string | number = '';
@@ -626,7 +648,11 @@ export class Util {
     if (Util.isDefined(propertyB)) {
       valueB = isNaN(+propertyB) ? propertyB.toString().trim().toLowerCase() : +propertyB;
     }
-    return (valueA <= valueB ? -1 : 1) * (activeSortDirection === 'asc' ? 1 : -1);
+    const direction = activeSortDirection === 'asc' ? 1 : -1;
+    if (typeof valueA === 'string' && typeof valueB === 'string') {
+      return Util.SORT_COLLATOR.compare(valueA, valueB) * direction;
+    }
+    return (valueA <= valueB ? -1 : 1) * direction;
   }
 
   static cloneArray<T>(arr: T[]): T[] {

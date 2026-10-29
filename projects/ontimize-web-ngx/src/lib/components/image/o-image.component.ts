@@ -1,16 +1,26 @@
-import { Component, ElementRef, forwardRef, HostBinding, Inject, inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, ElementRef, forwardRef, HostBinding, inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { OFileDragAndDropDirective } from '../../directives/o-file-drag-and-drop.directive';
+import { OMatErrorDirective } from '../../directives/o-mat-error.directive';
+import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../decorators/input-converter';
 import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { FormValueOptions } from '../../types';
 import { Util } from '../../util/util';
 import { OFormValue } from '../form/o-form-value';
-import { OFormComponent } from '../form/o-form.component';
 import { OFormControl } from '../input/o-form-control.class';
 import { OFormDataComponent } from '../o-form-data-component.class';
-import { OFullScreenDialogComponent } from './fullscreen/fullscreen-dialog.component';
 
 
 export const DEFAULT_INPUTS_O_IMAGE = [
@@ -34,6 +44,8 @@ export const DEFAULT_INPUTS_O_IMAGE = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgClass, NgTemplateOutlet, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OFileDragAndDropDirective],
   selector: 'o-image',
   templateUrl: './o-image.component.html',
   styleUrls: ['./o-image.component.scss'],
@@ -42,7 +54,7 @@ export const DEFAULT_INPUTS_O_IMAGE = [
   host: {
     '[class.o-image]': 'true'
   },
-  providers: [OSafePipe]
+  providers: [OSafePipe, { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OImageComponent), multi: true }]
 })
 export class OImageComponent extends OFormDataComponent implements OnInit, OnDestroy {
 
@@ -73,15 +85,14 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
   protected _useEmptyImage: boolean = false;
   protected oSafe = inject(OSafePipe);
   protected dialog: MatDialog;
-  public stateCtrl: UntypedFormControl;
+  public stateCtrl: FormControl;
   public src = '';
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this._defaultSQLTypeKey = 'BASE64';
     this.dialog = this.injector.get(MatDialog);
   }
@@ -133,7 +144,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
 
   public createFormControl(cfg?: { value: any, disabled: boolean }, validators?: ValidatorFn[]): OFormControl {
     this._fControl = super.createFormControl(cfg, validators);
-    this.stateCtrl = new UntypedFormControl(void 0, this.resolveValidators());
+    this.stateCtrl = new FormControl(void 0, this.resolveValidators());
     this._fControl.fControlChildren = [this.stateCtrl];
     return this._fControl;
   }
@@ -224,10 +235,10 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     return this._useEmptyImage && this.isEmpty();
   }
 
-  public getFormGroup(): UntypedFormGroup {
-    let formGroup: UntypedFormGroup = super.getFormGroup();
+  public getFormGroup(): FormGroup {
+    let formGroup: FormGroup = super.getFormGroup();
     if (!formGroup) {
-      formGroup = new UntypedFormGroup({});
+      formGroup = new FormGroup({});
       formGroup.addControl(this.getAttribute(), this.getControl());
     }
     return formGroup;
@@ -274,7 +285,7 @@ export class OImageComponent extends OFormDataComponent implements OnInit, OnDes
     }
   }
 
-  protected maxFileSizeValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxFileSizeValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && Util.isDefined(this.maxFileSize)) {
       if (!Util.isDefined(this.fileInput.nativeElement.files)) {
         return {};

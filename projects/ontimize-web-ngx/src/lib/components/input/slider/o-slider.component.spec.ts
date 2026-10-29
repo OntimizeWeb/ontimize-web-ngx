@@ -29,10 +29,9 @@ describe('OSliderComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
     const mockElementRef: any = { nativeElement: document.createElement('div') };
     const mockInjector = TestBed.inject(Injector);
-    component = new OSliderComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OSliderComponent(mockElementRef, mockInjector));
   });
 
   it('should create', () => {
@@ -286,7 +285,7 @@ describe('OSliderComponent', () => {
     });
 
     it('should have proper constructor parameters', () => {
-      expect(component.constructor.length).toBe(3); // form, elRef, injector
+      expect(component.constructor.length).toBe(2); // elRef, injector
     });
 
     it('should have input converters working properly', () => {

@@ -1,4 +1,8 @@
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 import { Util } from '../../../../../util/util';
 import { Codes } from '../../../../../util';
@@ -10,6 +14,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_CHIP = [
   'translate: boolean'
 ];
 @Component({
+  standalone: true,
+  imports: [NgClass, NgTemplateOutlet, MatIconModule, OTranslatePipe],
   selector: 'o-table-cell-renderer-chip',
   templateUrl: './o-table-cell-renderer-chip.component.html',
   styleUrls: ['./o-table-cell-renderer-chip.component.scss'],

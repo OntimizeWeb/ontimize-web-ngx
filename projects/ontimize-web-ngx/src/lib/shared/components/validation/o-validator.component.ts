@@ -13,6 +13,8 @@ export const DEFAULT_INPUTS_O_VALIDATOR = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: 'o-validator',
   template: ' ',
   inputs: DEFAULT_INPUTS_O_VALIDATOR

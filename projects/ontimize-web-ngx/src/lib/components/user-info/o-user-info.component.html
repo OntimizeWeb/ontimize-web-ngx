@@ -1,8 +1,7 @@
-<div class="o-user-info-container" fxLayout="row" fxLayoutAlign="center">
+<div class="o-user-info-container o-flex-row o-layout-align-center">
   @if (existsUserInfo) {
-    <div class="o-user-info-wrapper" fxLayout="row" fxLayoutAlign="center center" [matMenuTriggerFor]="menu"
-      fxLayoutGap="16px">
-      <div fxLayout="row" fxLayoutAlign="center center" class="o-user-info-avatar-wrapper">
+    <div class="o-user-info-wrapper o-flex-row o-layout-align-center-center o-gap-16" [matMenuTriggerFor]="menu" data-testid="user-info-trigger">
+      <div class="o-user-info-avatar-wrapper o-flex-row o-layout-align-center-center">
         @if (avatar) {
           <img [src]="avatar" alt="avatar image"/>
         }
@@ -10,7 +9,7 @@
       @if (username) {
         <span class="o-user-info-username"> {{ username }}</span>
       }
-      <mat-icon id="arrow-icon" svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
+      <mat-icon id="arrow-icon">keyboard_arrow_down</mat-icon>
     </div>
     <mat-menu #menu="matMenu" yPosition="below" class="o-mat-menu">
       @if (showProfile) {
@@ -20,8 +19,8 @@
         </button>
       }
       @if (showSettings) {
-        <button id="menu-settings" type="button" mat-menu-item (click)="onSettingsClick()">
-          <mat-icon svgIcon="ontimize:settings"></mat-icon>
+        <button id="menu-settings" data-testid="menu-settings" type="button" mat-menu-item (click)="onSettingsClick()">
+          <mat-icon>settings</mat-icon>
           <span>{{ 'APP_LAYOUT.SETTINGS' | oTranslate }}</span>
         </button>
       }
@@ -36,8 +35,8 @@
         }
       }
       @if (showLogout) {
-        <button id="menu-logout" type="button" mat-menu-item (click)="onLogoutClick()">
-          <mat-icon svgIcon="ontimize:power_settings_new"></mat-icon>
+        <button id="menu-logout" data-testid="menu-logout" type="button" mat-menu-item (click)="onLogoutClick()">
+          <mat-icon>power_settings_new</mat-icon>
           <span>{{ 'LOGOUT' | oTranslate }}</span>
         </button>
       }

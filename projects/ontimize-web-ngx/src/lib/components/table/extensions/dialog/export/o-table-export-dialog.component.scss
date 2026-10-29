@@ -69,10 +69,27 @@
 
   .type_toggle_group {
     margin-bottom: 20px;
-    overflow: visible;
+    // Material's default is inline-flex, which grows past the dialog width when the
+    // toggles don't fit and gets clipped by the group's own `overflow: hidden`
+    // (needed to keep the selected background inside the rounded border). Make the
+    // group fill the dialog width and let each toggle shrink instead.
+    display: flex;
+    // .dialog_content is a column flex container: when the dialog runs out of height
+    // it shrinks its items, and the group's `overflow: hidden` would clip the toggles
+    // vertically. Keep the group at its natural height — the expansion panel
+    // (flex-grow + scroll) absorbs the remaining space instead.
+    flex-shrink: 0;
 
     .mat-button-toggle {
       flex: 1;
+      min-width: 0; // allow shrinking below the content width
+
+      // Truncate long labels with an ellipsis rather than overflowing the toggle.
+      .mat-button-toggle-label-content {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
   }

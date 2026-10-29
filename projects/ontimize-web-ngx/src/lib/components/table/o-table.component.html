@@ -1,4 +1,4 @@
-<div class="o-table-container" fxLayout="column" fxLayoutAlign="start stretch" [style.display]="isVisible()? '' : 'none'"
+<div class="o-table-container o-flex-column o-layout-align-start-stretch" [style.display]="isVisible()? '' : 'none'"
   [class.block-events]="loadingService.isProcessing$ | async">
   @if (hasControls()) {
     <o-data-toolbar #tableToolbar [title]="title" [show-title]="showTitle" class="o-table-toolbar">
@@ -25,7 +25,7 @@
         @if (showTableMenuButton) {
           <button type="button" mat-icon-button class="o-table-menu-button" [matMenuTriggerFor]="tableMenu.matMenu"
             (click)="$event.stopPropagation()">
-            <mat-icon svgIcon="ontimize:more_vert"></mat-icon>
+            <mat-icon>more_vert</mat-icon>
           </button>
         }
         <o-table-menu #tableMenu [select-all-checkbox]="selectAllCheckbox" [export-button]="exportButton"
@@ -45,7 +45,7 @@
         <ng-template *ngTemplateOutlet="table"></ng-template>
       </div>
     } @else {
-      <cdk-virtual-scroll-viewport #virtualScrollViewPort fxFlex>
+      <cdk-virtual-scroll-viewport #virtualScrollViewPort class="o-flex">
         <ng-template *ngTemplateOutlet="table"></ng-template>
       </cdk-virtual-scroll-viewport>
     }
@@ -60,7 +60,7 @@
 
   <!--LOADING-->
   @if (showLoading | async) {
-    <div #spinnerContainer fxLayout="column" fxLayoutAlign="center center" [ngStyle]="{'top.px': toolBarHeight}"
+    <div #spinnerContainer class="o-flex-column o-layout-align-center-center" [ngStyle]="{'top.px': toolBarHeight}"
       class="spinner-container" [class.spinner-container-scrollable]="loadingScroll | async">
       <o-table-skeleton></o-table-skeleton>
     </div>
@@ -91,6 +91,7 @@
           </th>
           <td mat-cell *matCellDef="let row">
             <mat-checkbox name="id[]" (click)="$event.stopPropagation()" [disabled]="isDisableCheckbox(row)"
+              [attr.data-testid]="getRowDataTestId(row) ? getRowDataTestId(row) + '-checkbox' : null"
               (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
             </mat-checkbox>
           </td>
@@ -105,6 +106,7 @@
           <td mat-cell *matCellDef="let row" class="o-center" [style.width]="oTableOptions.selectColumn.width"
             [style.min-width]="getMinWidthColumn(oTableOptions.selectColumn)" [style.max-width]="oTableOptions.selectColumn.maxWidth">
             <mat-checkbox name="id[]" (click)="$event.stopPropagation()" [disabled]="isDisableCheckbox(row)"
+              [attr.data-testid]="getRowDataTestId(row) ? getRowDataTestId(row) + '-checkbox' : null"
               (change)="selectionCheckboxToggle($event, row)" [checked]="isRowSelected(row)">
             </mat-checkbox>
           </td>
@@ -149,7 +151,7 @@
         @if (!table.multiTemplateDataRows) {
           <td #cell mat-cell *matCellDef="let row;let rowIndex = index " [ngClass]="[column.className, getCellAlignClass(column)]"
             (click)="handleClick(row, column, rowIndex, cell, $event)" (dblclick)="handleDoubleClick(row, column, rowIndex, cell, $event)"
-            [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
+            [class.empty-cell]="column.isEmptyCell(row)" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
             matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
             [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
             [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
@@ -160,7 +162,7 @@
         } @else {
           <td #cell mat-cell *matCellDef="let row;let rowIndex = dataIndex " [ngClass]="[column.className, getCellAlignClass(column)]"
             (click)="handleClick(row, column, rowIndex, cell, $event)" (dblclick)="handleDoubleClick(row, column, rowIndex, cell, $event)"
-            [class.empty-cell]="isEmpty(row[column.name])" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
+            [class.empty-cell]="column.isEmptyCell(row)" [matTooltipDisabled]="!column.hasTooltip()" [matTooltip]="column.getTooltip(row)"
             matTooltipPosition="below" matTooltipShowDelay="750" matTooltipClass="o-table-cell-tooltip"
             [class.o-mat-cell-multiline]="(column.isMultiline | async)" [oContextMenu]="tableContextMenu"
             [oContextMenuData]="{ cellName:column.name, rowValue:row, rowIndex:rowIndex}" [style.width]="column.width"
@@ -296,11 +298,11 @@
 
         @if (!table.multiTemplateDataRows) {
           <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns; when:isNotGroup; let rowIndex = index"
-            [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
+            [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass" [attr.data-testid]="getRowDataTestId(row)">
           </tr>
         } @else {
           <tr mat-row oTableRow *matRowDef="let row; columns: oTableOptions.visibleColumns; when:isNotGroup; let rowIndex = dataIndex"
-            [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass">
+            [class.selected]="isRowSelected(row)" [ngClass]="row | oTableRowClass: rowIndex: rowClass" [attr.data-testid]="getRowDataTestId(row)">
           </tr>
         }
 
@@ -349,7 +351,9 @@
             </ng-template>
           }
           @case (column.type === 'editButtonInRow' || column.type === 'detailButtonInRow') {
-            <div fxLayoutAlign="center center" class="o-action-cell-renderer" (click)="onDetailButtonClick(column, row, $event)">
+            <div class="o-action-cell-renderer o-layout-align-center-center"
+              [attr.data-testid]="getRowDataTestId(row) ? getRowDataTestId(row) + '-' + column.type : null"
+              (click)="onDetailButtonClick(column, row, $event)">
               <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
             </div>
           }

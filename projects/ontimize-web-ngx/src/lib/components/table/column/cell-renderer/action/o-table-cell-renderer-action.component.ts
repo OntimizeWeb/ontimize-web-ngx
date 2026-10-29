@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { Codes } from '../../../../../util/codes';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
@@ -17,6 +19,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_CELL_RENDERER_ACTION = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatIconModule, OTranslatePipe],
   selector: 'o-table-cell-renderer-action',
   templateUrl: './o-table-cell-renderer-action.component.html',
   styleUrls: ['./o-table-cell-renderer-action.component.scss'],

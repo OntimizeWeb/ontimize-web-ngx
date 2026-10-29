@@ -1,6 +1,11 @@
+import { AsyncPipe, UpperCasePipe } from '@angular/common';
 import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 
 import { NavigationService } from '../../services/navigation.service';
 import { OBreadcrumbService } from '../../services/o-breadcrumb.service';
@@ -20,6 +25,8 @@ export const DEFAULT_INPUTS_O_BREADCRUMB = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, UpperCasePipe, MatToolbarModule, MatIconModule, OTranslatePipe],
   selector: 'o-breadcrumb',
   templateUrl: 'o-breadcrumb.component.html',
   styleUrls: ['o-breadcrumb.component.scss'],

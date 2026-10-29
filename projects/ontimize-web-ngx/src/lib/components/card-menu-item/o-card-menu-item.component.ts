@@ -12,8 +12,15 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { OTranslateService } from '../../services/translate/o-translate.service';
@@ -36,6 +43,8 @@ export const DEFAULT_INPUTS_O_MENU_CARD = [
 export const DEFAULT_OUTPUTS_O_MENU_CARD = [];
 
 @Component({
+  standalone: true,
+  imports: [NgClass, MatIconModule, MatTooltipModule, MatButtonModule, OTranslatePipe],
   selector: 'o-card-menu-item',
   templateUrl: './o-card-menu-item.component.html',
   styleUrls: ['./o-card-menu-item.component.scss'],

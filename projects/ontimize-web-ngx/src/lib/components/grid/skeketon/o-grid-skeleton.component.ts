@@ -1,8 +1,13 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
+
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { ORepeatableSkeletonComponent } from '../../o-repeatable-skeleton.component';
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgxSkeletonLoaderModule],
   selector: 'o-grid-skeleton',
   templateUrl: './o-grid-skeleton.component.html',
   styleUrls: ['./o-grid-skeleton.component.scss'],

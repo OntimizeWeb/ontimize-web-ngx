@@ -44,10 +44,9 @@ describe('ORadioComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
     const mockElementRef: any = { nativeElement: document.createElement('div') };
     const mockInjector = TestBed.inject(Injector);
-    component = new ORadioComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new ORadioComponent(mockElementRef, mockInjector));
   });
 
   it('should create', () => {
@@ -253,7 +252,7 @@ describe('ORadioComponent', () => {
   // === STRUCTURE AND INHERITANCE TESTS (Proven Safe Pattern) ===
   describe('Component Structure', () => {
     it('should have proper constructor parameters', () => {
-      expect(component.constructor.length).toBe(3); // form, elRef, injector
+      expect(component.constructor.length).toBe(2); // elRef, injector
     });
 
     it('should implement required interfaces', () => {

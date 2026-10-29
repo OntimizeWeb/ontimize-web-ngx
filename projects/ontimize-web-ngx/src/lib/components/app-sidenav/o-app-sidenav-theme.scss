@@ -1,76 +1,142 @@
 @mixin o-app-sidenav-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-
   .o-app-sidenav {
 
     .o-app-sidenav-menu-group,
     .o-app-sidenav-menu-item {
-      &:not([disabled=true]) {
+      --mdc-text-button-label-text-color: var(--o-fg-text);
+      // M3 nav-list items (open state): same colours the old buttons inherited
+      // (icons/arrow took the button label colour), and the hover primary that
+      // `a:hover { color: … }` used to give — the list label/icon consume
+      // tokens instead of inheriting the anchor colour.
+      --mdc-list-list-item-label-text-color: var(--o-fg-text);
+      --mdc-list-list-item-leading-icon-color: var(--o-fg-text);
+      --mdc-list-list-item-trailing-icon-color: var(--o-fg-text);
+      // The group arrow lives in the meta slot, coloured by the trailing
+      // supporting-text token (not the trailing-icon one).
+      --mdc-list-list-item-trailing-supporting-text-color: var(--o-fg-text);
+      --mdc-list-list-item-hover-label-text-color: var(--mat-sys-primary);
+      --mdc-list-list-item-hover-leading-icon-color: var(--mat-sys-primary);
+    }
 
-        a.o-app-sidenav-viewer-sidenav-item-selected,
+    .mat-sidenav.o-app-sidenav-sidenav {
+      background: var(--o-bg-app-bar);
+    }
+
+    .o-app-sidenav-menu-section {
+      .o-app-sidenav-menu-section-title {
+        color: var(--o-fg-secondary-text);
+      }
+
+      .o-app-sidenav-menu-section-divider {
+        border-top-color: var(--o-fg-divider);
+      }
+    }
+
+    .o-app-sidenav-container {
+
+      // ── Shared item states (open + closed) ───────────────────────
+      .mat-drawer.o-app-sidenav-sidenav {
         a:hover {
-          color: mat.get-color-from-palette($accent, 900);
-          background-color: mat.get-color-from-palette($primary, 100);
+          background-color: var(--o-sidenav-hover-bg);
+          color: var(--mat-sys-primary);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected {
+          background-color: var(--o-sidenav-selected-bg);
+          color: var(--mat-sys-on-primary-container);
+        }
+
+        a.o-app-sidenav-viewer-sidenav-item-selected:hover {
+          background-color: var(--o-sidenav-hover-bg);
+        }
+
+        // Selected list item: keep label/icons/arrow on the on-primary-container
+        // colour even while hovered, exactly as the legacy anchor colour did.
+        a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
+          --mdc-list-list-item-label-text-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-leading-icon-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-trailing-icon-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-hover-label-text-color: var(--mat-sys-on-primary-container);
+          --mdc-list-list-item-hover-leading-icon-color: var(--mat-sys-on-primary-container);
+
+          .o-app-sidenav-menugroup-arrow {
+            color: var(--mat-sys-on-primary-container);
+          }
+        }
+
+        // The arrow (meta slot) has no hover token: recolour it explicitly, as
+        // it used to inherit the anchor's hover colour.
+        a.mat-mdc-list-item:hover:not(.o-app-sidenav-viewer-sidenav-item-selected) .o-app-sidenav-menugroup-arrow {
+          color: var(--mat-sys-primary);
+        }
+      }
+
+      // ── Open state only ──────────────────────────────────────────
+      .mat-drawer.o-app-sidenav-sidenav:not(.mat-drawer-closed) {
+        // Vertical guide line for level-1 children — replica of the legacy
+        // `.mdc-button__label { border-left: 2px … }`: drawn as a background
+        // gradient 16px into the row (the label's old x-position, before the
+        // 6px content offset) so the hover/selected backgrounds still fill the
+        // whole row beneath it, and recoloured per item on hover/selection.
+        .o-app-sidenav-menu-group-level-1 {
+          > .o-app-sidenav-menugroup.opened + .o-app-sidenav-menugroup-items-container {
+            a.mat-mdc-list-item {
+              background-image: linear-gradient(var(--o-fg-divider), var(--o-fg-divider));
+              background-size: 2px 100%;
+              background-position: 16px 0;
+              background-repeat: no-repeat;
+            }
+
+            a.mat-mdc-list-item:hover,
+            a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
+              background-image: linear-gradient(var(--mat-sys-primary), var(--mat-sys-primary));
+            }
+
+            // Same step as level-2 (--mat-sys-body-medium-size, 0.875rem) — M3's
+            // scale has no distinct token between this and the root's body-large;
+            // the level-1/level-2 size difference is still conveyed via row height,
+            // icon size and indentation.
+            --mdc-list-list-item-label-text-size: var(--mat-sys-body-medium-size);
+          }
+        }
+
+        // As before, the guide line does not continue into level-2 children.
+        .o-app-sidenav-menu-group-level-2 {
+          > .o-app-sidenav-menugroup.opened + .o-app-sidenav-menugroup-items-container {
+            a.mat-mdc-list-item,
+            a.mat-mdc-list-item:hover,
+            a.mat-mdc-list-item.o-app-sidenav-viewer-sidenav-item-selected {
+              background-image: none;
+            }
+
+            // Relative (0.875rem) to the root font-size the density system already
+            // sets (16px at scales 0/-1/-2, 14px at -3/-4/-5) — resolves to 14px at
+            // the spacious end and ~12px at -3/-4/-5, without a separate px table.
+            --mdc-list-list-item-label-text-size: var(--mat-sys-body-medium-size);
+          }
+        }
+      }
+
+      // ── Desktop collapsed offset ──────────────────────────────────
+      &.o-app-sidenav-mode-desktop:not(.opened) {
+        .o-app-sidenav-sidenav.mat-drawer-closed {
+          transform: translate3d(-183px, 0, 0);
+        }
+
+        .o-app-sidenav-content.mat-drawer-content {
+          margin-right: 56px !important;
+          transform: translate3d(56px, 0, 0) !important;
         }
       }
     }
 
-    .o-app-sidenav-sidenav {
-      background: mat.get-color-from-palette($primary);
+    .o-app-sidenav-content.mat-drawer-content {
+      background-color: var(--o-bg-background);
+    }
 
-
-      .sidenav-toggle {
-        color: mat.get-color-from-palette($primary, default-contrast);
-      }
-
-      .o-app-sidenav-item {
-        color: mat.get-color-from-palette($primary, default-contrast);
-
-        &.o-user-info {
-
-          &:focus,
-          &:hover {
-            color: inherit;
-          }
-
-          color: inherit;
-
-          .o-user-info-menu-item .o-user-info-item {
-            background: mat.get-color-from-palette($primary, default-contrast, 0.74);
-          }
-        }
-      }
-
-      /* Side Navigation Level Styles */
-      .o-app-sidenav-menu-group-level-1 {
-        .o-app-sidenav-menugroup {
-          &.opened {
-            +.o-app-sidenav-menugroup-items-container ul {
-              background: mat.get-color-from-palette($primary, 800);
-            }
-          }
-        }
-      }
-
-      .o-app-sidenav-menu-group-level-2,
-      .o-app-sidenav-menu-group-level-3,
-      .o-app-sidenav-menu-group-level-4 {
-        .o-app-sidenav-menugroup {
-          &.opened {
-            +.o-app-sidenav-menugroup-items-container ul {
-              background: mat.get-color-from-palette($primary, 900);
-            }
-          }
-        }
-      }
-
-      li a {
-        color: inherit;
+    &.header-layout .o-app-sidenav-container .o-app-header {
+      .o-user-info .o-user-info-wrapper {
+        font-weight: 500;
       }
     }
   }

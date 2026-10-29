@@ -45,7 +45,7 @@ describe('OTextareaInputComponent', () => {
     mockElementRef = { nativeElement: document.createElement('textarea') };
     mockInjector = TestBed.inject(Injector);
 
-    component = new OTextareaInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OTextareaInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {

@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Inject, Injector, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -6,6 +7,9 @@ import { OTranslateService } from '../../../../services/translate/o-translate.se
 import { ColumnValueFilterOperator, OColumnValueFilter } from '../../../../types/table/o-column-value-filter.type';
 import { Util } from '../../../../util/util';
 import { OContextMenuComponent } from '../../../contextmenu/o-context-menu.component';
+import { OContextMenuGroupComponent } from '../../../contextmenu/context-menu-group/o-context-menu-group.component';
+import { OContextMenuItemComponent } from '../../../contextmenu/context-menu-item/o-context-menu-item.component';
+import { OContextMenuSeparatorComponent } from '../../../contextmenu/context-menu-separator/o-context-menu-separator.component';
 import type { OColumn } from '../../column/o-column.class';
 import { OTableGroupedRow } from '../row/o-table-row-group.class';
 import { OTableFilterByColumnService } from '../dialog/filter-by-column/o-table-filter-by-column.service';
@@ -26,6 +30,8 @@ export const DEFAULT_TABLE_CONTEXT_MENU_INPUTS = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, OContextMenuComponent, OContextMenuGroupComponent, OContextMenuItemComponent, OContextMenuSeparatorComponent],
   selector: 'o-table-context-menu',
   templateUrl: './o-table-context-menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

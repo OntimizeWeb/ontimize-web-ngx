@@ -4,6 +4,7 @@ import { Util } from '../util/util';
 
 @Directive({
   selector: '[oInputRegulate]',
+  standalone: true,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => InputRegulateDirective),

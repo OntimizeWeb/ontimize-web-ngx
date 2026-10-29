@@ -12,14 +12,23 @@ import {
   SimpleChange,
   ViewChild
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { MatInput } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
+import { OContextMenuDirective } from '../../contextmenu/o-context-menu.directive';
+import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o-context-menu-item.component';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormControl } from '../o-form-control.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
@@ -42,12 +51,15 @@ export const DEFAULT_OUTPUTS_O_LIST_PICKER = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-list-picker',
   templateUrl: './o-list-picker.component.html',
   styleUrls: ['./o-list-picker.component.scss'],
   providers: [
     OntimizeServiceProvider,
-    { provide: OFormServiceComponent, useExisting: forwardRef(() => OListPickerComponent) }
+    { provide: OFormServiceComponent, useExisting: forwardRef(() => OListPickerComponent) },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OListPickerComponent), multi: true }
   ],
   inputs: DEFAULT_INPUTS_O_LIST_PICKER,
   outputs: DEFAULT_OUTPUTS_O_LIST_PICKER
@@ -59,7 +71,7 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   public onDialogCancel: EventEmitter<any> = new EventEmitter();
   /* End outputs */
 
-  public stateCtrl: UntypedFormControl;
+  public stateCtrl: FormControl;
 
   /* Inputs */
   @BooleanInputConverter()
@@ -89,12 +101,11 @@ export class OListPickerComponent extends OFormServiceComponent implements After
   protected blurPrevent = false;
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.matDialog = this.injector.get<MatDialog>(MatDialog);
-    this.stateCtrl = new UntypedFormControl();
+    this.stateCtrl = new FormControl();
 
     /* overwritte clearButton to true */
     this.clearButton = true;

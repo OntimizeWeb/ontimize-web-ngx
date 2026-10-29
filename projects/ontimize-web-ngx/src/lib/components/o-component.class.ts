@@ -148,7 +148,7 @@ export class OBaseComponent implements IComponent {
     this._isReadOnly = parsedValue;
   }
 
-  set orequired(val: boolean) {
+  set orequired(val: boolean | string) {
     this._orequired = BooleanConverter(val);
   }
 
@@ -160,7 +160,7 @@ export class OBaseComponent implements IComponent {
     return this.orequired;
   }
 
-  set required(value: boolean) {
+  set required(value: boolean | string) {
     this.orequired = value;
   }
 

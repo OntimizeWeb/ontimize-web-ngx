@@ -9,14 +9,14 @@
       @for (column of columns; track column) {
         <mat-list-item cdkDrag (click)="onClickColumn(column)" [ngClass]="{'column-hidden':!column.visible}"
           class="o-drag-list-item-box">
-          <div fxLayout="row" fxFlex fxLayoutAlign="stretch center">
-            <mat-icon matListItemIcon svgIcon="ontimize:drag_handle"></mat-icon>
-            <span matListItemLine fxFlex>{{ (column.title || column.attr) | oTranslate }}</span>
+          <div class="o-flex-row o-flex o-layout-align-stretch-center">
+            <mat-icon matListItemIcon>drag_handle</mat-icon>
+            <span matListItemLine class="o-flex">{{ (column.title || column.attr) | oTranslate }}</span>
             @if (column.visible) {
-              <mat-icon svgIcon="ontimize:visibility" color="primary"></mat-icon>
+              <mat-icon color="primary">visibility</mat-icon>
             }
             @if (!column.visible) {
-              <mat-icon svgIcon="ontimize:visibility_off"></mat-icon>
+              <mat-icon>visibility_off</mat-icon>
             }
           </div>
           <mat-divider></mat-divider>
@@ -26,7 +26,7 @@
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions fxLayoutAlign="end center">
-  <button type="button" mat-stroked-button [mat-dialog-close]="null" class="o-button-default cancel" cancel>{{ 'CANCEL' | oTranslate }}</button>
-  <button type="button" mat-stroked-button (click)="closeDialog()" class="o-button-primary">{{ 'ACCEPT' | oTranslate }}</button>
+<mat-dialog-actions class="o-layout-align-end-center">
+  <button type="button" mat-stroked-button [mat-dialog-close]="null" class="o-button--importance-default" data-testid="dialog-cancel" cancel>{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button (click)="closeDialog()" data-testid="dialog-accept" class="o-button--importance-primary">{{ 'ACCEPT' | oTranslate }}</button>
 </mat-dialog-actions>

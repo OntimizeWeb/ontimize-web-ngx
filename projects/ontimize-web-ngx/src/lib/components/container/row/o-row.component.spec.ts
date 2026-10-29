@@ -89,10 +89,11 @@ describe('ORowComponent', () => {
   it('should set layoutAlign property', () => {
     component.layoutAlign = 'center center';
     expect(component.layoutAlign).toBe('center center');
-    
-    // Test default value when empty
+
+    // An empty value leaves layoutAlign unset so layoutAlignStyles doesn't
+    // override CSS defaults (see CHANGELOG 18.0.0-next.0)
     component.layoutAlign = '';
-    expect(component.layoutAlign).toBe('start start');
+    expect(component.layoutAlign).toBeUndefined();
   });
 
   it('should set layoutGap property', () => {

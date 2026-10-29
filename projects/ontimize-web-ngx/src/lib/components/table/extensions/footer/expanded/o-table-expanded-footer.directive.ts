@@ -1,4 +1,5 @@
-import { AfterViewInit, Directive, ElementRef, Injector, Input, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EmbeddedViewRef, Injector, Input, Renderer2, SecurityContext, ViewContainerRef } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { delay, distinctUntilChanged } from 'rxjs/operators';
 
@@ -7,14 +8,18 @@ import { Util } from '../../../../../util/util';
 import { OTableBase } from '../../../o-table-base.class';
 
 @Directive({
+  standalone: true,
   selector: '[oTableExpandedFooter]'
 })
 export class OTableExpandedFooterDirective implements AfterViewInit {
 
   private spanMessageNotResults: any;
+  private noResultsView: EmbeddedViewRef<any>;
   private translateService: OTranslateService;
+  private sanitizer: DomSanitizer;
   private tableBody: any;
   private tdTableWithMessage: any;
+  private trNoResults: any;
   private subscription = new Subscription();
 
   @Input('oTableExpandedFooterColspan')
@@ -33,31 +38,36 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     public table: OTableBase,
     public element: ElementRef,
     private renderer: Renderer2,
+    private viewContainerRef: ViewContainerRef,
     protected injector: Injector
   ) {
     this.translateService = this.injector.get(OTranslateService);
+    this.sanitizer = this.injector.get(DomSanitizer);
   }
 
   ngAfterViewInit() {
-    if (this.element.nativeElement.childNodes[2]) {
-      this.tableBody = this.element.nativeElement.childNodes[1];
-    }
+    // Locate <tbody> by tag name. Indexing childNodes by position is unsafe
+    // because text nodes (whitespace) shift the indices depending on how the
+    // template is formatted, which previously caused the "no results" row
+    // to be appended inside <thead> instead of <tbody>.
+    this.tableBody = this.element.nativeElement.querySelector(':scope > tbody');
     this.registerContentChange();
   }
 
   registerContentChange() {
     // Create a tr with a td and inside put the message and add to tbody
     // <tr><td><span>{message}</span><td><tr>
-    const tr = this.renderer.createElement('tr');
+    this.trNoResults = this.renderer.createElement('tr');
     this.tdTableWithMessage = this.renderer.createElement('td');
-    this.renderer.addClass(tr, 'o-table-no-results');
-    tr.appendChild(this.tdTableWithMessage);
-    this.renderer.appendChild(this.tableBody, tr);
+    this.renderer.addClass(this.trNoResults, 'o-table-no-results');
+    this.renderer.addClass(this.trNoResults, 'mat-mdc-row');
+    this.renderer.setStyle(this.trNoResults, 'display', 'none');
+    this.trNoResults.appendChild(this.tdTableWithMessage);
+    this.renderer.appendChild(this.tableBody, this.trNoResults);
 
     /* Show/Hide message When the renderer data is changed with static data*/
     this.subscription.add(this.table.onContentChange.pipe(
       distinctUntilChanged((prev, curr) => (prev?.length ?? 0) === (curr?.length ?? 0)),
-      delay(100)
     ).subscribe(() => {
       this.showMessage(true);
     }));
@@ -69,27 +79,38 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   }
 
   public showMessage(display: boolean): void {
-    // reset span message
-    this.removeMessageSpan();
     this.table.cd.detectChanges();
+    const hasData = (this.table?.dataSource?.renderedData?.length ?? 0) > 0;
 
-    if (display && (this.table?.dataSource?.renderedData?.length ?? 0) === 0) {
-      // generate new message
-      this.createMessageSpan();
+    if (display && !hasData) {
+      this.createMessageContent();
+      this.renderer.removeStyle(this.trNoResults, 'display');
+    } else {
+      this.renderer.setStyle(this.trNoResults, 'display', 'none');
+      this.removeMessageContent();
     }
   }
 
-  removeMessageSpan() {
+  removeMessageContent() {
     if (this.spanMessageNotResults) {
-      this.renderer.removeChild(this.element.nativeElement, this.spanMessageNotResults);
+      this.renderer.removeChild(this.tdTableWithMessage, this.spanMessageNotResults);
+      this.spanMessageNotResults = null;
+    }
+    if (this.noResultsView) {
+      this.noResultsView.destroy();
+      this.noResultsView = null;
     }
   }
 
   destroy() {
     this.subscription.unsubscribe();
+    this.noResultsView?.destroy();
   }
 
   protected buildMessage(): string {
+    if (this.table.noResultsMessage) {
+      return this.translateService.get(this.table.noResultsMessage);
+    }
     let message = '';
     message = this.translateService.get('TABLE.EMPTY');
     if (this.tableHasQuickFilter() && this.table.oTableQuickFilterComponent.value) {
@@ -102,15 +123,32 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
     return this.table.quickFilter && Util.isDefined(this.table.oTableQuickFilterComponent);
   }
 
-  protected createMessageSpan() {
+  protected createMessageContent() {
+    this.removeMessageContent();
+    if (this.tdTableWithMessage) {
+      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
+    }
+
+    if (this.table.noResultsTemplate) {
+      // Created detached from the DOM at the container's anchor and its root
+      // nodes moved into the message <td>; Angular still tracks/checks the
+      // view by reference regardless of where its nodes end up in the DOM
+      // (the same technique the CDK's TemplatePortal/DomPortalOutlet use).
+      this.noResultsView = this.viewContainerRef.createEmbeddedView(this.table.noResultsTemplate);
+      this.noResultsView.rootNodes.forEach(node => this.renderer.appendChild(this.tdTableWithMessage, node));
+      this.noResultsView.detectChanges();
+      return;
+    }
+
     // 1 Build message
     const message = this.buildMessage();
     // 2 Create message
+    // Renderer2.setProperty bypasses Angular's automatic template sanitization,
+    // so the message is sanitized explicitly before being assigned as innerHTML
+    // (same SecurityContext.HTML Angular applies to a plain [innerHTML] binding).
     this.spanMessageNotResults = this.renderer.createElement('span');
-    const messageNotResults = this.renderer.createText(message);
+    this.renderer.setProperty(this.spanMessageNotResults, 'innerHTML', this.sanitizer.sanitize(SecurityContext.HTML, message) ?? '');
     if (this.tdTableWithMessage) {
-      this.tdTableWithMessage.setAttribute('colspan', this.colspan);
-      this.renderer.appendChild(this.spanMessageNotResults, messageNotResults);
       this.renderer.appendChild(this.tdTableWithMessage, this.spanMessageNotResults);
     }
   }

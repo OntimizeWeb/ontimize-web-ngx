@@ -17,7 +17,10 @@ export const DEFAULT_INPUTS_O_BASE_MENU_ITEM = [
   // icon [string]: material icon. Default: no value.
   'icon',
 
-  'attr'
+  'attr',
+
+  // data-testid [string]: forwarded to the item's `data-testid` attribute, for E2E testing (Playwright/Cypress).
+  'dataTestId: data-testid'
 ];
 
 @Directive({
@@ -36,6 +39,14 @@ export class OBaseMenuItemClass implements OnInit, OnDestroy {
   icon: string;
   restricted: boolean;
   disabled: boolean;
+  /** Forwarded to the item's `data-testid` attribute, for E2E testing (Playwright/Cypress). Falls back to `attr` when not set. */
+  get dataTestId(): string {
+    return this._dataTestId ?? this.attr;
+  }
+  set dataTestId(value: string) {
+    this._dataTestId = value;
+  }
+  protected _dataTestId: string;
   protected _isHovered: boolean = false;
   attr: string;
 

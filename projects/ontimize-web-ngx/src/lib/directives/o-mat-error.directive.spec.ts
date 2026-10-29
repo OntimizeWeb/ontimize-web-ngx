@@ -37,7 +37,8 @@ describe('OMatErrorDirective', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        declarations: [OMatErrorDirective, TestMatErrorStandardComponent],
+        declarations: [TestMatErrorStandardComponent],
+        imports: [OMatErrorDirective],
         providers: [
           { provide: O_MAT_ERROR_OPTIONS, useValue: { type: Codes.O_MAT_ERROR_STANDARD } }
         ]
@@ -107,7 +108,8 @@ describe('OMatErrorDirective', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        declarations: [OMatErrorDirective, TestMatErrorLiteComponent],
+        declarations: [TestMatErrorLiteComponent],
+        imports: [OMatErrorDirective],
         providers: [
           { provide: O_MAT_ERROR_OPTIONS, useValue: { type: Codes.O_MAT_ERROR_LITE } }
         ]

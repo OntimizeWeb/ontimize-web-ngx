@@ -17,7 +17,8 @@ describe('OLockerDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OLockerDirective, TestLockerComponent]
+      declarations: [TestLockerComponent],
+      imports: [OLockerDirective]
     });
     fixture = TestBed.createComponent(TestLockerComponent);
     fixture.detectChanges();

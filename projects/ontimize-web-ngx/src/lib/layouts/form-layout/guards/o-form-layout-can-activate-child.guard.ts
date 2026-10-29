@@ -1,5 +1,5 @@
-import { Injectable, Injector } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateChild, RouterStateSnapshot } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateChild, CanActivateChildFn, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
@@ -10,19 +10,13 @@ import { OFormLayoutManagerComponent } from '../o-form-layout-manager.component'
 @Injectable()
 export class CanActivateFormLayoutChildGuard implements CanActivateChild {
 
-  protected oFormLayoutService: OFormLayoutManagerService;
-  protected shareCanActivateChildService: ShareCanActivateChildService;
-
-  constructor(protected injector: Injector) {
-    this.shareCanActivateChildService = this.injector.get(ShareCanActivateChildService);
-    try {
-      this.oFormLayoutService = this.injector.get(OFormLayoutManagerService);
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  protected oFormLayoutService = inject(OFormLayoutManagerService, { optional: true });
+  protected shareCanActivateChildService = inject(ShareCanActivateChildService);
 
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
+    if (!this.oFormLayoutService) {
+      return true;
+    }
     const formLayoutManager: OFormLayoutManagerComponent = this.oFormLayoutService.activeFormLayoutManager;
     this.oFormLayoutService.activeFormLayoutManager = undefined;
     if (formLayoutManager) {
@@ -45,3 +39,8 @@ export class CanActivateFormLayoutChildGuard implements CanActivateChild {
     return true;
   }
 }
+
+/** Functional guard wrapper for CanActivateFormLayoutChildGuard. Use in route configs: `canActivateChild: [canActivateFormLayoutChildGuard]` */
+export const canActivateFormLayoutChildGuard: CanActivateChildFn = (childRoute, state) => {
+  return inject(CanActivateFormLayoutChildGuard).canActivateChild(childRoute, state);
+};

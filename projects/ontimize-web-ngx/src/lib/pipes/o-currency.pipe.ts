@@ -14,7 +14,8 @@ export interface ICurrencyPipeArgument {
 
 @Pipe({
   name: 'oCurrency',
-  pure: false
+  pure: false,
+  standalone: true
 })
 export class OCurrencyPipe extends ORealPipe implements PipeTransform {
 

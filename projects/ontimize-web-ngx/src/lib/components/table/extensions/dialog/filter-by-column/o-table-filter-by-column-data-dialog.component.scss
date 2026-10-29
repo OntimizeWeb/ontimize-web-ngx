@@ -17,6 +17,16 @@
 }
 
 .o-filter-by-column-dialog {
+  // Single scrollbar: the cdk virtual-scroll viewport owns the scroll. The
+  // dialog-content (Material caps it at 65vh with overflow:auto) and the flex
+  // wrappers down to the viewport must not add their own scroll, otherwise a
+  // long values list shows a double scrollbar.
+  .dialog-list-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
   .mat-mdc-slide-toggle {
     padding-bottom: 24px;
     padding-left: 14px;
@@ -25,6 +35,18 @@
   .content-wrapper {
     padding-top: 12px;
     margin: 0;
+    flex: 1 1 auto;
+    // Allow the wrapper to shrink within the dialog-content so the viewport (not
+    // the dialog) scrolls. In fixed-dimension mode the explicit 430px min/max
+    // below (higher specificity) takes over.
+    min-height: 0;
+
+    // Intermediate flex wrapper that holds the search field + virtual-scroll
+    // viewport; `.o-flex-100` doesn't set min-height, so add it to pass the
+    // height bound down to the viewport.
+    > .o-flex-100 {
+      min-height: 0;
+    }
 
     .mat-mdc-form-field-subscript-wrapper {
       display: none;

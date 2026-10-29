@@ -1,5 +1,22 @@
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
+import { IsEmptyValuePipe } from '../../../../../pipes/is-empty-value.pipe';
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
@@ -20,10 +37,9 @@ import type { OColumn } from '../../../column/o-column.class';
 import { OTableFilterByColumnService } from './o-table-filter-by-column.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BaseService } from '../../../../../services/base-service.class';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { OntimizeMomentDateAdapter } from '../../../../../shared/material/date/ontimize-moment-date-adapter';
-import { MomentService } from '../../../../../services/moment.service';
-import moment from 'moment';
+import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
+import { O_DATE_ADAPTER_PROVIDERS } from '../../../../../shared/material/date/o-date-adapter.provider';
+import { LuxonService } from '../../../../../services/luxon.service';
 import { ODateValueType } from '../../../../../types/o-date-value.type';
 
 
@@ -31,6 +47,8 @@ import { ODateValueType } from '../../../../../types/o-date-value.type';
 const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, ColumnValueFilterOperator.MORE_EQUAL, ColumnValueFilterOperator.BETWEEN, ColumnValueFilterOperator.EQUAL]);
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, NgTemplateOutlet, FormsModule, ReactiveFormsModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, MatSlideToggleModule, ScrollingModule, IsEmptyValuePipe, OTranslatePipe],
   selector: 'o-table-filter-by-column-data-dialog',
   templateUrl: 'o-table-filter-by-column-data-dialog.component.html',
   styleUrls: ['o-table-filter-by-column-data-dialog.component.scss'],
@@ -40,7 +58,8 @@ const CUSTOM_FILTERS_OPERATORS = new Set([ColumnValueFilterOperator.LESS_EQUAL, 
     '[class.o-filter-by-column-dialog]': 'true'
   },
   providers: [
-    { provide: DateAdapter, useClass: OntimizeMomentDateAdapter, deps: [MAT_DATE_LOCALE] }
+    ...O_DATE_ADAPTER_PROVIDERS,
+    OTableFilterByColumnService
   ]
 })
 export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
@@ -61,9 +80,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   private readonly isDefaultFilterSubject = new BehaviorSubject<boolean>(false);
   isDefaultFilter: Observable<boolean> = this.isDefaultFilterSubject.asObservable();
 
-  fcText = new UntypedFormControl();
-  fcFrom = new UntypedFormControl();
-  fcTo = new UntypedFormControl();
+  fcText = new FormControl();
+  fcFrom = new FormControl();
+  fcTo = new FormControl();
 
   protected columnData: TableFilterByColumnData[] = [];
   protected tableData: any[] = [];
@@ -85,8 +104,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
   visibleColumnsArray: string[];
   separator: string
   filterColumnDefinition: OFilterColumn;
-  private readonly momentSrv: MomentService;
-  private dateAdapter: DateAdapter<OntimizeMomentDateAdapter>;
+  private readonly luxonSrv: LuxonService;
+  private dateAdapter: DateAdapter<any>;
+  private readonly dateFormats: MatDateFormats | null;
 
   constructor(
     protected injector: Injector,
@@ -97,8 +117,9 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
       table: OTableComponent,
     }
   ) {
-    this.dateAdapter = this.injector.get(DateAdapter<OntimizeMomentDateAdapter>)
-    this.momentSrv = this.injector.get(MomentService);
+    this.dateAdapter = this.injector.get(DateAdapter)
+    this.dateFormats = this.injector.get(MAT_DATE_FORMATS, null);
+    this.luxonSrv = this.injector.get(LuxonService);
     this.initFromData(data);
   }
 
@@ -146,10 +167,10 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     if (renderer && typeof (renderer as any).getFormat === 'function') {
       const format = this.filterColumnDefinition?.dateFormat
         ?? (renderer as any).getFormat();
-      (this.dateAdapter as unknown as OntimizeMomentDateAdapter).oFormat = format;
+      (this.dateAdapter as any).oFormat = format;
     }
 
-    this.dateAdapter.setLocale(this.momentSrv.getLocale());
+    this.dateAdapter.setLocale(this.luxonSrv.getLocale());
   }
 
   private createEmptyFilter(): OColumnValueFilter {
@@ -416,29 +437,44 @@ export class OTableFilterByColumnDataDialogComponent implements AfterViewInit {
     return this.startView;
   }
 
-  protected getTypedValue(control: UntypedFormControl): any {
+  protected getTypedValue(control: FormControl): any {
 
     if (this.isDateType()) {
-      const m = moment(control.value);
-      if (!m.isValid()) return control.value;
+      const date = this.toDateObject(control.value);
+      if (!Util.isDefined(date) || !this.dateAdapter.isValid(date)) return control.value;
 
       const dateValueType: ODateValueType = this.filterColumnDefinition?.dateValueType ?? 'timestamp';
 
       switch (dateValueType) {
         case 'string':
-          return m.format((this.dateAdapter as unknown as OntimizeMomentDateAdapter).oFormat ?? 'L');
+          return this.dateAdapter.format(date, (this.dateAdapter as any).oFormat ?? this.dateFormats?.display?.dateInput ?? 'D');
         case 'date':
-          return m.toDate();
+          return new Date(date.valueOf());
         case 'iso-8601':
-          return m.toISOString();
+          // UTC so the output carries the 'Z' suffix, as moment's toISOString() did
+          return new Date(date.valueOf()).toISOString();
         case 'timestamp':
         default:
-          return m.valueOf();
+          return date.valueOf();
       }
     }
 
     return control.value;
 
+  }
+
+  /** Mirrors moment(value)'s generic dispatch: accepts an adapter date object, Date, epoch millis, or ISO string. */
+  private toDateObject(value: any): any {
+    if (this.dateAdapter.isDateInstance(value)) {
+      return value;
+    }
+    if (value instanceof Date) {
+      return this.dateAdapter.deserialize(value);
+    }
+    if (typeof value === 'number') {
+      return this.dateAdapter.deserialize(new Date(value));
+    }
+    return this.dateAdapter.deserialize(value);
   }
 
   onChangeDataSource(event: MatRadioChange) {

@@ -1,8 +1,23 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
-import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
+import { ObserversModule } from '@angular/cdk/observers';
+import { PortalModule, DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
+import { ScrollingModule, CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import {
   AfterContentInit,
   AfterViewChecked,
@@ -35,8 +50,8 @@ import { MatMenu } from '@angular/material/menu';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
-import moment from 'moment';
-import { BehaviorSubject, combineLatest, Observable, of, Subject, Subscription } from 'rxjs';
+import { DateTime } from 'luxon';
+import { BehaviorSubject, combineLatest, isObservable, Observable, of, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { BooleanConverter, BooleanInputConverter } from '../../decorators/input-converter';
@@ -44,7 +59,7 @@ import { ComponentStateServiceProvider, OntimizeServiceProvider } from '../../se
 import { SnackBarService } from '../../services/snackbar.service';
 import { OTableComponentStateClass } from '../../services/state/o-table-component-state.class';
 import { OTableComponentStateService } from '../../services/state/o-table-component-state.service';
-import { OColumnDisplay, OFilterDefinition, OGroupedColumnTypes, OTableGlobalConfig } from '../../types';
+import { OActionStyle, OActionStyleProvider, OColumnDisplay, OFilterDefinition, OGroupedColumnTypes, OTableGlobalConfig } from '../../types';
 import { Expression } from '../../types/expression.type';
 import { OPermissions } from '../../types/o-permissions.type';
 import { OQueryDataArgs } from '../../types/query-data-args.type';
@@ -109,6 +124,23 @@ import { OTableFilterByColumnService } from './extensions/dialog/filter-by-colum
 import { PaginationData } from '../../interfaces/pagination-data.interface';
 import { OTableLoadingService } from './o-table-loading.service';
 import { ColumnFilterChangeEvent } from '../../interfaces/column-filter-change-event.interface';
+
+import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
+import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
+import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selector.module';
+import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
+import { OTranslatePipe } from '../../pipes/o-translate.pipe';
+import { OSharedModule } from '../../shared/shared.module';
+import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
+import { O_TABLE_CELL_RENDERERS } from './column/cell-renderer/cell-renderer';
+import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
+import { O_TABLE_DIALOGS } from './extensions/dialog/o-table-dialog-components';
+import { OTableExpandedFooterDirective } from './extensions/footer/expanded/o-table-expanded-footer.directive';
+import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-components';
+import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
+import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
+import { OTableRowDirective } from './extensions/row/o-table-row.directive';
+import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -265,6 +297,24 @@ const footerSelector = '.mat-mdc-header-row';
 type DisableSelectionFunction = (item: any) => boolean;
 
 @Component({
+  standalone: true,
+  imports: [
+    AsyncPipe, NgClass, NgStyle, NgTemplateOutlet,
+    DragDropModule, ObserversModule, PortalModule, ScrollingModule, CdkTableModule,
+    MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule,
+    MatProgressSpinnerModule, MatTableModule, MatTooltipModule,
+    NgxSkeletonLoaderModule, NgxMaterialTimepickerModule,
+    OSharedModule, OContextMenuModule, ODataToolbarComponent, ODualListSelectorModule,
+    OHourInputModule, OMatSortModule, OTranslatePipe,
+    OTableContextMenuComponent, OTableRowDirective, OTableExpandedFooterDirective,
+    OTableExportButtonComponent, OTableRowClassPipe, OTableRowExpandableComponent,
+    OTableSkeletonComponent,
+    ...O_TABLE_HEADER_COMPONENTS,
+    ...O_TABLE_FOOTER_COMPONENTS,
+    ...O_TABLE_DIALOGS,
+    ...O_TABLE_CELL_RENDERERS,
+    ...O_TABLE_CELL_EDITORS,
+  ],
   selector: 'o-table',
   templateUrl: './o-table.component.html',
   styleUrls: ['./o-table.component.scss'],
@@ -276,6 +326,7 @@ type DisableSelectionFunction = (item: any) => boolean;
     { provide: O_COMPONENT_STATE_SERVICE, useClass: OTableComponentStateService },
     { provide: VIRTUAL_SCROLL_STRATEGY, useClass: OTableVirtualScrollStrategy },
     { provide: OTableBase, useExisting: forwardRef(() => OTableComponent) },
+    { provide: OActionStyleProvider, useExisting: forwardRef(() => OTableComponent) },
     OTableLoadingService
   ],
   animations: [
@@ -303,6 +354,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public static EXPANDED_ROW_CONTAINER_CLASS = 'expanded-row-container-';
   public static AVAILABLE_GROUPING_COLUMNS_RENDERERS = ['currency', 'integer', 'real'];
 
+  /** Adds this table's historic default labels to the inherited importance auto-rules. */
+  protected override getActionStyleAutoRules(): Record<string, OActionStyle> {
+    return {
+      ...super.getActionStyleAutoRules(),
+      insert: { ...super.getActionStyleAutoRules().insert, label: 'TABLE.BUTTONS.ADD' },
+      refresh: { label: 'TABLE.BUTTONS.REFRESH' },
+      delete: { label: 'TABLE.BUTTONS.DELETE' }
+    };
+  }
+
   public DETAIL_MODE_NONE = Codes.DETAIL_MODE_NONE;
   public EDIT_MODE_NONE = Codes.EDITION_MODE_NONE;
 
@@ -323,8 +384,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   @ViewChild(OMatSort)
   set oMatSort(_sort: OMatSort) {
-    if (Util.isDefined(_sort) &&
-      (!Util.isDefined(this.sort) || (Util.isDefined(this.sort) && Util.stringify(this.sort) !== Util.stringify(_sort)))) {
+
+    if (Util.isDefined(_sort) && this.sort !== _sort) {
       this.sort = _sort;
       this.setDatasource();
     }
@@ -376,12 +437,20 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   columnsVisibilityButton: boolean = true;
   @BooleanInputConverter()
   showFilterOption: boolean = true;
-  @BooleanInputConverter()
-  showReportOnDemandOption: boolean = true;
-  @BooleanInputConverter()
-  showChartsOnDemandOption: boolean = true;
-  @BooleanInputConverter()
-  showButtonsText: boolean = true;
+  get showReportOnDemandOption(): boolean { return this._showReportOnDemandOption; }
+  set showReportOnDemandOption(val: boolean | string) { this._showReportOnDemandOption = BooleanConverter(val); }
+  private _showReportOnDemandOption: boolean = true;
+  get showChartsOnDemandOption(): boolean { return this._showChartsOnDemandOption; }
+  set showChartsOnDemandOption(val: boolean | string) { this._showChartsOnDemandOption = BooleanConverter(val); }
+  private _showChartsOnDemandOption: boolean = true;
+  get showButtonsText(): boolean { return this._showButtonsText; }
+  set showButtonsText(value: boolean | string) {
+    this._showButtonsText = BooleanConverter(value);
+    this.showButtonsTextSubject.next(this._showButtonsText);
+  }
+  private _showButtonsText: boolean = true;
+  private readonly showButtonsTextSubject = new BehaviorSubject<boolean>(true);
+  public readonly showButtonsTextChange: Observable<boolean> = this.showButtonsTextSubject.asObservable();
   @BooleanInputConverter()
   filterColumnActiveByDefault: boolean = true;
   @BooleanInputConverter()
@@ -555,6 +624,8 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   protected tabGroupContainer: MatTabGroup;
   protected tabContainer: MatTab;
   tabGroupChangeSubscription: Subscription;
+  /** Only set when O_TABLE_GLOBAL_CONFIG resolves to an Observable<OTableGlobalConfig>. */
+  protected globalConfigSubscription: Subscription;
 
   protected pendingQuery: boolean = false;
   protected pendingQueryFilter = undefined;
@@ -591,6 +662,10 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   public loadingScroll: Observable<boolean> = this.loadingScrollSubject.asObservable();
 
   public showLoading: Observable<boolean>;
+
+  // True between issuing a query and executeDataProcessing() actually rendering its response.
+  // loadingSubject goes false as soon as the HTTP response arrives, which is earlier than that.
+  public awaitingTableRender = false;
 
   public oTableInsertableRowComponent: OTableInsertableRowComponent;
   public showFirstInsertableRow: boolean = false;
@@ -729,7 +804,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     super(injector, elRef, form);
     this.loadingService = this.injector.get(OTableLoadingService);
     this.loadingSubject.subscribe((loading: boolean) => {
-      this.loadingService.setLoading(loading);
+      // Skip the premature "false": executeDataProcessing() will hide the skeleton
+      // itself once the data is actually ready to render (see awaitingTableRender).
+      if (loading || !this.awaitingTableRender) {
+        this.loadingService.setLoading(loading);
+      }
     });
     this.showLoading = this.loadingService.showLoading$;
 
@@ -773,48 +852,57 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
 
   private getInjectionTokenConfig() {
     try {
-      const oTableGlobalConfig = this.injector.get(O_TABLE_GLOBAL_CONFIG);
-      if (Util.isDefined(oTableGlobalConfig.autoAdjust)) {
-        this.autoAdjust = oTableGlobalConfig.autoAdjust;
-      };
-      if (Util.isDefined(oTableGlobalConfig.autoAlignTitles)) {
-        this.autoAlignTitles = oTableGlobalConfig.autoAlignTitles;
+      const oTableGlobalConfigOrObservable = this.injector.get(O_TABLE_GLOBAL_CONFIG);
+      if (isObservable(oTableGlobalConfigOrObservable)) {
+        // Re-applied on every emission, so an app can change this table's defaults at runtime.
+        this.globalConfigSubscription = oTableGlobalConfigOrObservable.subscribe(config => this.applyGlobalConfig(config));
+      } else {
+        this.applyGlobalConfig(oTableGlobalConfigOrObservable);
       }
-      if (Util.isDefined(oTableGlobalConfig.filterColumnActiveByDefault)) {
-        this.filterColumnActiveByDefault = oTableGlobalConfig.filterColumnActiveByDefault;
-      }
-      if (Util.isDefined(oTableGlobalConfig.editionMode) && Codes.isValidEditionMode(oTableGlobalConfig.editionMode)) {
-        this.editionMode = oTableGlobalConfig.editionMode;
-      }
-      if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
-        this.detailMode = oTableGlobalConfig.detailMode;
-      }
-
-      if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
-        this.rowHeight = oTableGlobalConfig.rowHeight;
-      };
-
-      if (Util.isDefined(oTableGlobalConfig.showChartsOnDemandOption)) {
-        this.showChartsOnDemandOption = oTableGlobalConfig.showChartsOnDemandOption;
-      };
-      if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
-        this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
-      };
-      if (Util.isDefined(oTableGlobalConfig.selectionOnRowClick)) {
-        this.selectionOnRowClick = oTableGlobalConfig.selectionOnRowClick;
-      }
-      if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
-        this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
-      }
-      if (Util.isDefined(oTableGlobalConfig.showHeaderTooltip)) {
-        this.showHeaderTooltip = oTableGlobalConfig.showHeaderTooltip;
-      }
-
-
     } catch (error) {
       // Do nothing because is optional
     }
+  }
 
+  private applyGlobalConfig(oTableGlobalConfig: OTableGlobalConfig) {
+    if (Util.isDefined(oTableGlobalConfig.autoAdjust)) {
+      this.autoAdjust = oTableGlobalConfig.autoAdjust;
+    };
+    if (Util.isDefined(oTableGlobalConfig.autoAlignTitles)) {
+      this.autoAlignTitles = oTableGlobalConfig.autoAlignTitles;
+    }
+    if (Util.isDefined(oTableGlobalConfig.filterColumnActiveByDefault)) {
+      this.filterColumnActiveByDefault = oTableGlobalConfig.filterColumnActiveByDefault;
+    }
+    if (Util.isDefined(oTableGlobalConfig.editionMode) && Codes.isValidEditionMode(oTableGlobalConfig.editionMode)) {
+      this.editionMode = oTableGlobalConfig.editionMode;
+    }
+    if (Util.isDefined(oTableGlobalConfig.detailMode && Codes.isValidDetailMode(oTableGlobalConfig.detailMode))) {
+      this.detailMode = oTableGlobalConfig.detailMode;
+    }
+
+    if (Util.isDefined(oTableGlobalConfig.rowHeight) && Codes.isValidRowHeight(oTableGlobalConfig.rowHeight)) {
+      this.rowHeight = oTableGlobalConfig.rowHeight;
+    };
+
+    if (Util.isDefined(oTableGlobalConfig.showChartsOnDemandOption)) {
+      this.showChartsOnDemandOption = oTableGlobalConfig.showChartsOnDemandOption;
+    };
+    if (Util.isDefined(oTableGlobalConfig.showReportOnDemandOption)) {
+      this.showReportOnDemandOption = oTableGlobalConfig.showReportOnDemandOption;
+    };
+    if (Util.isDefined(oTableGlobalConfig.selectionOnRowClick)) {
+      this.selectionOnRowClick = oTableGlobalConfig.selectionOnRowClick;
+    }
+    if (Util.isDefined(oTableGlobalConfig.horizontalScroll)) {
+      this.horizontalScroll = oTableGlobalConfig.horizontalScroll;
+    }
+    if (Util.isDefined(oTableGlobalConfig.showHeaderTooltip)) {
+      this.showHeaderTooltip = oTableGlobalConfig.showHeaderTooltip;
+    }
+    if (Util.isDefined(oTableGlobalConfig.showButtonsText)) {
+      this.showButtonsText = oTableGlobalConfig.showButtonsText;
+    }
   }
 
   get state(): OTableComponentStateClass {
@@ -1179,6 +1267,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
   destroy() {
     super.destroy();
+    if (this.globalConfigSubscription) {
+      this.globalConfigSubscription.unsubscribe();
+    }
     if (this.tabGroupChangeSubscription) {
       this.tabGroupChangeSubscription.unsubscribe();
     }
@@ -1348,8 +1439,13 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   registerTableHeaders(tableHeader: OTableHeaderComponent) {
-    if (this.tableHeaders.findIndex(header => header.column.attr === tableHeader.column.attr) === -1) {
+    const existingIndex = this.tableHeaders.findIndex(header => header.column.attr === tableHeader.column.attr);
+    if (existingIndex === -1) {
       this.tableHeaders.push(tableHeader);
+    } else {
+      // Replace rather than skip: a matching attr can belong to a stale, already-destroyed
+      // header instance left over from a structural rebuild (e.g. toggling virtual scroll).
+      this.tableHeaders[existingIndex] = tableHeader;
     }
   }
 
@@ -1609,6 +1705,11 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.sortSubscription?.unsubscribe();
       this.sortSubscription = this.sort.oSortChange.subscribe(this.handleSortChange.bind(this));
       this.sort.setMultipleSort(this.multipleSort);
+      // A fresh OMatSort instance (e.g. after the view recreates the table to toggle
+      // virtual scroll) starts with no active sort — restore the current one and
+      // refresh the new headers' arrow indicators to match.
+      this.sort.setSortColumns(this.sortColArray);
+      this.refreshSortHeaders();
     }
   }
 
@@ -1631,7 +1732,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     });
     this.onSortChange.emit(this.sortColArray);
     if (this.pageable) {
-      this.reloadData();
+      this.reloadData(false);
     }
   }
 
@@ -1800,8 +1901,16 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     this.queryCellRenderers().subscribe(() => {
       // Clean up existing portal hosts before re-rendering to prevent duplicate or orphaned components
       this.destroyAllPortalHosts();
+      // super.queryData() bails out before touching _database (no executeDataProcessing pass ever
+      // comes) when the service isn't configured, so don't arm the flag in that case either.
+      this.awaitingTableRender = this.canQueryReachDataSource();
       super.queryData(filter, ovrrArgs);
     });
+  }
+
+  private canQueryReachDataSource(): boolean {
+    const queryMethodName = this.pageable ? this.paginatedQueryMethod : this.queryMethod;
+    return !!(this.dataService && queryMethodName in this.dataService && this.entity);
   }
 
   protected isInsideInactiveTab(): boolean {
@@ -1941,10 +2050,6 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       this.previousRendererData = this.dataSource.renderedData;
 
       ObservableWrapper.callEmit(this.onContentChange, this.dataSource.renderedData);
-    }
-
-    if (this.state.selection && this.dataSource?.renderedData?.length > 0 && this.getSelectedItems().length === 0) {
-      this.checkSelectedItemData();
     }
 
     if (this.refreshExpandableRowState) {
@@ -2955,7 +3060,7 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
         const foundItem = this.dataSource.renderedData.find(data =>
           selectedItemKeys.every(key => data[key] === selectedItem[key])
         );
-        if (foundItem) {
+        if (foundItem && !this.isRowSelected(foundItem)) {
           this.setSelected(foundItem);
         }
       });
@@ -3022,7 +3127,9 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
   }
 
   onChangePage(evt: PageEvent) {
-    if (!this.loadingService.handleProtected(evt as any)) {
+    // PageEvent carries no DOM event to guard (the paginator already handled its own
+    // click), so there is nothing for handleProtected to call preventDefault/stopPropagation on.
+    if (!this.loadingService.handleProtected()) {
       return;
     }
     this.finishQuerySubscription = false;
@@ -3775,12 +3882,15 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
       return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
     }
     else {
-      const date = moment(row[oCol.attr]);
+      const rawValue = row[oCol.attr];
+      const date = rawValue instanceof Date ? DateTime.fromJSDate(rawValue)
+        : typeof rawValue === 'number' ? DateTime.fromMillis(rawValue)
+          : DateTime.fromISO(rawValue);
       const language = this.translateService.getCurrentLang();
       switch (operation) {
-        case "YEAR": return date.year();
-        case "MONTH": return moment().locale(language).month(date.month()).format("MMMM");
-        case "YEAR_MONTH": return moment().locale(language).month(date.month()).year(date.year()).format("MMMM, YYYY");
+        case "YEAR": return date.year;
+        case "MONTH": return date.setLocale(language).toFormat("MMMM");
+        case "YEAR_MONTH": return date.setLocale(language).toFormat("MMMM, yyyy");
         case "YEAR_MONTH_DAY": return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
       }
     }
