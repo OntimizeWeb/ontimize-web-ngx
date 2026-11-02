@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListItem, MatListItemLine, MatListItemMeta, MatListItemTitle, MatListModule } from '@angular/material/list';
+import { MatListItem, MatListItemLine, MatListItemTitle, MatListModule } from '@angular/material/list';
 
 
 import { Util } from '../../../util/util';

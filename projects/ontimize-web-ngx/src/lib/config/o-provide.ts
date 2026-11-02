@@ -1,6 +1,5 @@
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { APP_INITIALIZER, EnvironmentProviders, Injector, makeEnvironmentProviders } from '@angular/core';
-import { importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, EnvironmentProviders, importProvidersFrom, Injector, makeEnvironmentProviders } from '@angular/core';
 import { provideAnimations, provideNoopAnimations } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';

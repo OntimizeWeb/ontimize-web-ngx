@@ -291,6 +291,17 @@ $o_table_row_padding: 24px;
         cursor: pointer;
       }
 
+      // Detail/edit action cell is a native <button>: strip the UA button
+      // styles so it renders like the plain inline icon container it replaced.
+      button.o-action-cell-renderer {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+      }
+
       .mat-mdc-header-cell {
         overflow: hidden;
         position: relative;

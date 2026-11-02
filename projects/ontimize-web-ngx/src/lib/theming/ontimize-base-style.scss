@@ -6,7 +6,7 @@
 //   - Material background/foreground palettes
 //   - o-mat-light-theme / o-mat-dark-theme factory functions
 //   - o-material-theme (applies theme to all Ontimize components)
-//   - Layout padding/margin, flex-layout utility classes, paginator
+//   - Layout padding/margin, flex-layout utility classes
 //   - Checkbox / pseudo-checkbox styles
 //   - Background level utility classes (.bg-level-0 … .bg-level-1)
 //   - Report/Charts on-demand addon styles
@@ -19,7 +19,6 @@
 @use 'typography/oxygen.scss' as ontimize;
 @use 'styles/layout.scss';
 @use 'styles/flex-layout.scss';
-@use 'styles/paginator.scss';
 // Ontimize custom tokens: re-exports the o-apply-tokens($theme) mixin so
 // downstream themes (themes/oxygen.scss, etc.) can generate --o-* CSS
 // custom properties from their theme object.
@@ -492,7 +491,6 @@ $m3-theme: mat.define-theme((color: $color-config,
 
       .o-form-toolbar-header {
 
-        // background-color: var(--o-bg-card);
         .mat-toolbar-tools {
           button.o-form-toolbar-button.o-form-toolbar-back.mat-mdc-icon-button {
             margin-right: 32px;
@@ -510,9 +508,6 @@ $m3-theme: mat.define-theme((color: $color-config,
 
     .o-container {
 
-      // .o-container-title {
-      //   padding: 20px 0;
-      // }
       >.o-container-header,
       >.o-container-title,
       >.mat-expansion-panel-header {

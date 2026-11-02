@@ -362,7 +362,7 @@ describe('OEmailInputComponent', () => {
 
   describe('Constructor and Dependency Injection', () => {
     it('should have constructor with 2 parameters', () => {
-      expect(component.constructor.length).toBe(2);
+      expect(component.constructor).toHaveSize(2);
     });
 
     it('should properly initialize with form component', () => {

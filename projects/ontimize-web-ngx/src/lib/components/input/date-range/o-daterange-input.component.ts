@@ -1,8 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, forwardRef, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DateRange, MatDatepickerInputEvent, MatDatepickerModule, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -10,9 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
-import { DateRange, MatDatepickerInputEvent, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -153,7 +151,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
   public oformat: string;
 
   protected olocale: string;
-  private luxonSrv: LuxonService;
+  private readonly luxonSrv: LuxonService;
   protected mediaSubscription: Subscription;
   protected onLanguageChangeSubscription: Subscription;
 
@@ -350,8 +348,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
         if (typeof val !== 'string') {
           return null;
         }
-        const date = this.dateAdapter.parse(val, this.oformat);
-        return Util.isDefined(date) && this.dateAdapter.isValid(date) ? new Date(date.valueOf()) : null;
+        return this.adapterDateToNativeDate(this.dateAdapter.parse(val, this.oformat));
       }
 
       case 'date':
@@ -362,8 +359,7 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
 
       case 'iso-8601':
         if (typeof val === 'string') {
-          const date = this.dateAdapter.deserialize(val);
-          return Util.isDefined(date) && this.dateAdapter.isValid(date) ? new Date(date.valueOf()) : null;
+          return this.adapterDateToNativeDate(this.dateAdapter.deserialize(val));
         } else if (typeof val === 'number' && this.getSQLType() === SQLTypes.TIMESTAMP) {
           return new Date(val);
         }
@@ -372,6 +368,11 @@ export class ODateRangeInputComponent extends OFormDataComponent implements OnDe
       default:
         return null;
     }
+  }
+
+  /** Converts a date object produced by the active adapter into a native Date, or null if it is not a valid date. */
+  protected adapterDateToNativeDate(date: any): Date | null {
+    return Util.isDefined(date) && this.dateAdapter.isValid(date) ? new Date(date.valueOf()) : null;
   }
 
   public onChangeEvent(event: MatDatepickerInputEvent<Date>): void {

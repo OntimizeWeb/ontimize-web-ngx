@@ -62,7 +62,7 @@ describe('OCurrencyInputComponent', () => {
   describe('currency_icons', () => {
     it('should have currency_icons map', () => {
       expect(component.currency_icons).toBeDefined();
-      expect(component.currency_icons instanceof Map).toBe(true);
+      expect(component.currency_icons).toBeInstanceOf(Map);
     });
 
     it('should have USD in currency_icons', () => {

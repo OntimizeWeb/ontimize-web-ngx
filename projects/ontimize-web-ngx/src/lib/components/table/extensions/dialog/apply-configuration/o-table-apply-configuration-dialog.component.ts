@@ -1,15 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Inject, Injector, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatListModule, MatListOption, MatSelectionList } from '@angular/material/list';
 
 import { DialogService } from '../../../../../services/dialog.service';
 import { OTableConfiguration } from '../../../../../types/table/o-table-configuration.type';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatListModule } from '@angular/material/list';
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 @Component({

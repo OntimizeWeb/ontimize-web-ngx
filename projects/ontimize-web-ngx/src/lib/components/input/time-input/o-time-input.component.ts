@@ -108,7 +108,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
   public dateAttr = 'dateInput';
   public hourAttr = 'hourInput';
 
-  private dateAdapter: DateAdapter<any>;
+  private readonly dateAdapter: DateAdapter<any>;
 
   constructor(
     elRef: ElementRef,
@@ -210,7 +210,12 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     const values = this.formGroup.getRawValue();
     // The inner control may hold millis or the active adapter's date object (both expose valueOf() → millis)
     const rawDate = values[this.dateAttr];
-    const dateMs = typeof rawDate === 'number' ? rawDate : (rawDate ? rawDate.valueOf() : undefined);
+    let dateMs: any;
+    if (typeof rawDate === 'number') {
+      dateMs = rawDate;
+    } else if (rawDate) {
+      dateMs = rawDate.valueOf();
+    }
     const dDate = (typeof dateMs === 'number' && !Number.isNaN(dateMs) ? DateTime.fromMillis(dateMs) : DateTime.now()).startOf('day');
     const dHour = DateTime.fromFormat(values[this.hourAttr], this.hourInput.formatString);
     timeValue = dDate

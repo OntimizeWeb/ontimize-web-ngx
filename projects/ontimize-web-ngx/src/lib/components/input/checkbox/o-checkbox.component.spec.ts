@@ -244,7 +244,7 @@ describe('OCheckboxComponent', () => {
     });
 
     it('should have constructor with proper parameters', () => {
-      expect(component.constructor.length).toBe(2); // elRef, injector (form comes from inject(O_FORM_CONTEXT))
+      expect(component.constructor).toHaveSize(2); // elRef, injector (form comes from inject(O_FORM_CONTEXT))
     });
 
     it('should have proper default values', () => {

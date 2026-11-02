@@ -219,12 +219,12 @@ export class AppMenuService {
 
   /**
    * Deep clones the menu configuration so the permissions applied over the menu entries never
-   * modify the original configuration. `Object.assign` is used instead of a JSON copy in order
+   * modify the original configuration. An object spread is used instead of a JSON copy in order
    * to keep the `action` functions of the action menu items.
    */
   private cloneMenuItems(items: MenuRootItem[]): MenuRootItem[] {
     return (items || []).map((item: MenuRootItem) => {
-      const clonedItem = Object.assign({}, item) as MenuGroup;
+      const clonedItem = { ...item } as MenuGroup;
       if (Util.isDefined((item as MenuGroup).items)) {
         clonedItem.items = this.cloneMenuItems((item as MenuGroup).items) as MenuGroup['items'];
       }

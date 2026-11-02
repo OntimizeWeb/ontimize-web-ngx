@@ -17,8 +17,7 @@ import {
   SimpleChange,
   ViewChildren
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AsyncValidatorFn, ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ValidatorFn, Validators } from '@angular/forms';
 import { FloatLabelType, MatError, MatFormFieldAppearance, MatSuffix, SubscriptSizing } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
@@ -199,6 +198,7 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
       this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
       this.selectAllOnClick = this.oInputsOptions.selectAllOnClick;
     } catch (e) {
+      // O_INPUTS_OPTIONS is optional: when it is not provided, fall back to the default input options
       this.oInputsOptions = {};
       this.selectAllOnClick = false;
     }

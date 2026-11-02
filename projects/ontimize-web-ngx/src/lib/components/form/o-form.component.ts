@@ -15,12 +15,11 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { OKeyboardListenerDirective } from '../../directives/keyboard-listener.directive';
 import { OFormToolbarComponent } from './toolbar/o-form-toolbar.component';
-import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { BehaviorSubject, combineLatest, isObservable, Observable, Subscription } from 'rxjs';
 
@@ -799,7 +798,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       if (!this.actRoute || !this.actRoute.routeConfig || !this.actRoute.routeConfig.canDeactivate) {
         return;
       }
-      const guardIndex = this.actRoute.routeConfig.canDeactivate.findIndex((canDeactivate) => canDeactivate === this._canDeactivateFn)
+      const guardIndex = this.actRoute.routeConfig.canDeactivate.indexOf(this._canDeactivateFn)
       if (guardIndex >= 0) {
         this.actRoute.routeConfig.canDeactivate.splice(guardIndex, 1);
       }
@@ -1992,7 +1991,7 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
       handled = true;
     }
     if (!handled) {
-      if (result && result.statusText) {
+      if (result?.statusText) {
         void this.dialogService.alert('ERROR', result.statusText);
       } else {
         void this.dialogService.alert('ERROR', this._messageService.getQueryErrorMessage());

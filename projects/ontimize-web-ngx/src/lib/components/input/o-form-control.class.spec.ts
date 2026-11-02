@@ -20,7 +20,7 @@ describe('OFormControl', () => {
     });
 
     it('should extend FormControl', () => {
-      expect(control instanceof FormControl).toBe(true);
+      expect(control).toBeInstanceOf(FormControl);
     });
 
     it('should accept an initial value', () => {

@@ -15,12 +15,12 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
 
   private spanMessageNotResults: any;
   private noResultsView: EmbeddedViewRef<any>;
-  private translateService: OTranslateService;
-  private sanitizer: DomSanitizer;
+  private readonly translateService: OTranslateService;
+  private readonly sanitizer: DomSanitizer;
   private tableBody: any;
   private tdTableWithMessage: any;
   private trNoResults: any;
-  private subscription = new Subscription();
+  private readonly subscription = new Subscription();
 
   @Input('oTableExpandedFooterColspan')
   set colspan(value: number) {
@@ -37,8 +37,8 @@ export class OTableExpandedFooterDirective implements AfterViewInit {
   constructor(
     public table: OTableBase,
     public element: ElementRef,
-    private renderer: Renderer2,
-    private viewContainerRef: ViewContainerRef,
+    private readonly renderer: Renderer2,
+    private readonly viewContainerRef: ViewContainerRef,
     protected injector: Injector
   ) {
     this.translateService = this.injector.get(OTranslateService);

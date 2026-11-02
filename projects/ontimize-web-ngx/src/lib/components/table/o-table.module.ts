@@ -31,7 +31,8 @@ import { OTableComponent } from './o-table.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { OTableSkeletonComponent } from './extensions/skeleton/o-table-skeleton.component';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
-import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
+import { OHourInputComponent } from '../input/hour-input/o-hour-input.component';
+import { OHourTimepickerDirective } from '../input/hour-input/o-hour-input.directive';
 
 /** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
@@ -48,7 +49,8 @@ import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
     NgxMaterialTimepickerModule,
     ODualListSelectorModule,
     ODataToolbarModule,
-    OHourInputModule,
+    OHourInputComponent,
+    OHourTimepickerDirective,
     OTableComponent,
     OTableContextMenuComponent,
     OTableRowDirective,

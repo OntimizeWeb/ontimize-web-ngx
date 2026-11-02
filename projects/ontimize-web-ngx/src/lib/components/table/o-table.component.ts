@@ -1,20 +1,19 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AsyncPipe, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
-import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { ObserversModule } from '@angular/cdk/observers';
 import { PortalModule, DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { ScrollingModule, CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRow, MatTable, MatTableModule } from '@angular/material/table';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -44,12 +43,10 @@ import {
   ViewContainerRef,
   ViewEncapsulation
 } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu } from '@angular/material/menu';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { MatTooltip } from '@angular/material/tooltip';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, combineLatest, isObservable, Observable, of, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
@@ -119,16 +116,20 @@ import type { OTableQuickfilter } from '../../interfaces/o-table-quickfilter.int
 import type { ServiceResponse } from '../../interfaces/service-response.interface';
 import { OQueryParams } from '../../types/query-params.type';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
-import { MatRow, MatTable } from '@angular/material/table';
 import { OTableFilterByColumnService } from './extensions/dialog/filter-by-column/o-table-filter-by-column.service';
 import { PaginationData } from '../../interfaces/pagination-data.interface';
 import { OTableLoadingService } from './o-table-loading.service';
 import { ColumnFilterChangeEvent } from '../../interfaces/column-filter-change-event.interface';
 
-import { OContextMenuModule } from '../contextmenu/o-context-menu.module';
+import { OContextMenuGroupComponent } from '../contextmenu/context-menu-group/o-context-menu-group.component';
+import { OContextMenuItemComponent } from '../contextmenu/context-menu-item/o-context-menu-item.component';
+import { OContextMenuSeparatorComponent } from '../contextmenu/context-menu-separator/o-context-menu-separator.component';
+import { OContextMenuDirective } from '../contextmenu/o-context-menu.directive';
 import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
-import { ODualListSelectorModule } from '../dual-list-selector/o-dual-list-selector.module';
-import { OHourInputModule } from '../input/hour-input/o-hour-input.module';
+import { ODualListSelectorDateItemComponent } from '../dual-list-selector/dual-list-selector-item/date/o-dual-list-selector-date-item.component';
+import { ODualListSelectorComponent } from '../dual-list-selector/o-dual-list-selector.component';
+import { OHourInputComponent } from '../input/hour-input/o-hour-input.component';
+import { OHourTimepickerDirective } from '../input/hour-input/o-hour-input.directive';
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { OSharedModule } from '../../shared/shared.module';
 import { O_TABLE_CELL_EDITORS } from './column/cell-editor/cell-editor';
@@ -140,7 +141,7 @@ import { O_TABLE_FOOTER_COMPONENTS } from './extensions/footer/o-table-footer-co
 import { O_TABLE_HEADER_COMPONENTS } from './extensions/header/o-table-header-components';
 import { OTableRowClassPipe } from './extensions/pipes/o-table-row-class.pipe';
 import { OTableRowDirective } from './extensions/row/o-table-row.directive';
-import { OMatSortModule } from './extensions/sort/o-mat-sort-module';
+import { OMatSortHeader } from './extensions/sort/o-mat-sort-header';
 
 export const DEFAULT_INPUTS_O_TABLE = [
   // visible-columns [string]: visible columns, separated by ';'. Default: no value.
@@ -304,8 +305,11 @@ type DisableSelectionFunction = (item: any) => boolean;
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule,
     MatProgressSpinnerModule, MatTableModule, MatTooltipModule,
     NgxSkeletonLoaderModule, NgxMaterialTimepickerModule,
-    OSharedModule, OContextMenuModule, ODataToolbarComponent, ODualListSelectorModule,
-    OHourInputModule, OMatSortModule, OTranslatePipe,
+    OSharedModule, ODataToolbarComponent, OTranslatePipe,
+    OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent, OContextMenuGroupComponent, OContextMenuSeparatorComponent,
+    ODualListSelectorComponent, ODualListSelectorDateItemComponent,
+    OHourInputComponent, OHourTimepickerDirective,
+    OMatSort, OMatSortHeader,
     OTableContextMenuComponent, OTableRowDirective, OTableExpandedFooterDirective,
     OTableExportButtonComponent, OTableRowClassPipe, OTableRowExpandableComponent,
     OTableSkeletonComponent,
@@ -3877,23 +3881,35 @@ export class OTableComponent extends AbstractOServiceComponent<OTableComponentSt
     if (!Util.isDefined(oCol)) {
       return row[attr];
     }
-    const useRenderer = oCol.renderer && oCol.renderer.getCellData;
     if (operation == null) {
-      return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+      return this.getColumnCellData(oCol, row);
     }
     else {
-      const rawValue = row[oCol.attr];
-      const date = rawValue instanceof Date ? DateTime.fromJSDate(rawValue)
-        : typeof rawValue === 'number' ? DateTime.fromMillis(rawValue)
-          : DateTime.fromISO(rawValue);
+      const date = this.toGroupingDateTime(row[oCol.attr]);
       const language = this.translateService.getCurrentLang();
       switch (operation) {
         case "YEAR": return date.year;
         case "MONTH": return date.setLocale(language).toFormat("MMMM");
         case "YEAR_MONTH": return date.setLocale(language).toFormat("MMMM, yyyy");
-        case "YEAR_MONTH_DAY": return useRenderer ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+        case "YEAR_MONTH_DAY": return this.getColumnCellData(oCol, row);
       }
     }
+  }
+
+  /** Returns the row value of the column, using its renderer's getCellData when available. */
+  private getColumnCellData(oCol: OColumn, row: any): any {
+    return oCol.renderer?.getCellData ? oCol.renderer.getCellData(row[oCol.attr], row) : row[oCol.attr];
+  }
+
+  /** Converts a raw grouped column value (Date, millis or ISO string) into a Luxon DateTime. */
+  private toGroupingDateTime(rawValue: any): DateTime {
+    if (rawValue instanceof Date) {
+      return DateTime.fromJSDate(rawValue);
+    }
+    if (typeof rawValue === 'number') {
+      return DateTime.fromMillis(rawValue);
+    }
+    return DateTime.fromISO(rawValue);
   }
   updateGroupedColumnTypes(attr: string, add: boolean, operation?: string) {
     let groupedColumns: OGroupedColumnTypes[] = [];

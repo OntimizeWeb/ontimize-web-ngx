@@ -132,7 +132,7 @@ describe('OListComponent', () => {
       expect(component.queryData).not.toHaveBeenCalled();
       expect(component.dataArray).toBe(dataArrayBefore);
       expect(component.dataResponseArray).toBe(dataResponseArrayBefore);
-      expect(component.dataArray.length).toBe(100);
+      expect(component.dataArray).toHaveSize(100);
     });
 
     it('does not throw when the scroll container ref is not resolved yet', () => {

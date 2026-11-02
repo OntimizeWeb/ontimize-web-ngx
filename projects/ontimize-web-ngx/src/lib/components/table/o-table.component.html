@@ -351,12 +351,11 @@
             </ng-template>
           }
           @case (column.type === 'editButtonInRow' || column.type === 'detailButtonInRow') {
-            <div class="o-action-cell-renderer o-layout-align-center-center" role="button" tabindex="0"
+            <button type="button" class="o-action-cell-renderer o-layout-align-center-center"
               [attr.data-testid]="getRowDataTestId(row) ? getRowDataTestId(row) + '-' + column.type : null"
-              (click)="onDetailButtonClick(column, row, $event)" (keydown.enter)="onDetailButtonClick(column, row, $event)"
-              (keydown.space)="onDetailButtonClick(column, row, $event)">
+              (click)="onDetailButtonClick(column, row, $event)">
               <mat-icon>{{ getDetailButtonIcon(column) }}</mat-icon>
-            </div>
+            </button>
           }
           @default {
             {{ row[column.name] }}

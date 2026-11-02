@@ -1,7 +1,7 @@
 import { Component, ElementRef, forwardRef, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -11,7 +11,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
-import { MatDatepicker, MatDatepickerInput, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
@@ -104,8 +103,8 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
   @ViewChild('matInputRef', { read: ElementRef, static: true })
   private matInputRef!: ElementRef;
 
-  private luxonSrv: LuxonService;
-  private dateAdapter: DateAdapter<any>;
+  private readonly luxonSrv: LuxonService;
+  private readonly dateAdapter: DateAdapter<any>;
 
   constructor(
     dateAdapter: DateAdapter<any>,
@@ -334,7 +333,7 @@ export class ODateInputComponent extends OFormDataComponent implements OnDestroy
 
   public createFormControl(cfg, validators): OFormControl {
     this._fControl = super.createFormControl(cfg, validators);
-    if (!this.isEmpty() && (!this.form || !this.form.isInInsertMode())) {
+    if (!this.isEmpty() && !this.form?.isInInsertMode()) {
       this._fControl.markAsTouched();
     }
     return this._fControl;

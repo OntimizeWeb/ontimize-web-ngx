@@ -67,7 +67,7 @@ export class OTableCellEditorDateComponent extends OBaseTableCellEditor implemen
   oMinDate: Date;
   oMaxDate: Date;
 
-  private luxonSrv: LuxonService;
+  private readonly luxonSrv: LuxonService;
   minDateString: string;
   maxDateString: string;
 

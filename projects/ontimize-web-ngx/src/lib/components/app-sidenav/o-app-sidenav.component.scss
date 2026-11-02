@@ -155,7 +155,6 @@ $transition-duration: 500ms;
           padding: 0;
           --mdc-list-list-item-container-shape: 8px;
           --mdc-list-list-item-one-line-container-height: 40px;
-          //--mdc-list-list-item-label-text-size: 14px;
           --mdc-list-list-item-leading-icon-size: 24px;
           // The legacy design paints its own hover/selected backgrounds (see the
           // sidenav theme); disable the M3 state layers so no second tint shows.
@@ -259,7 +258,6 @@ $transition-duration: 500ms;
             width: 100%;
             overflow: hidden;
             --mdc-list-list-item-one-line-container-height: 36px;
-            //--mdc-list-list-item-label-text-size: 12px;
 
             a.mat-mdc-list-item {
               &.mdc-list-item--with-leading-icon .mdc-list-item__start {

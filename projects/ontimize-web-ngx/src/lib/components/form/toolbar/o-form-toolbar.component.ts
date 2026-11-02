@@ -540,9 +540,9 @@ export class OFormToolbarComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.backButtonNever) return false;
     if (this.backButtonAlways) return true;
     if (this.backButtonModes) {
-      if (this.initialMode && this.backButtonModes.indexOf('R') !== -1) return true;
-      if (this.insertMode && this.backButtonModes.indexOf('I') !== -1) return true;
-      if (this.editMode && this.backButtonModes.indexOf('U') !== -1) return true;
+      if (this.initialMode && this.backButtonModes.includes('R')) return true;
+      if (this.insertMode && this.backButtonModes.includes('I')) return true;
+      if (this.editMode && this.backButtonModes.includes('U')) return true;
       return false;
     }
     return this.isDetail;

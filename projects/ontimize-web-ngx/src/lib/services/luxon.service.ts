@@ -16,7 +16,7 @@ export class LuxonService {
   static DATE_FORMATS = ['yyyy-MM-dd', 'dd-MM-yyyy', 'MM-dd-yyyy', 'yyyy-MM-dd\'T\'HH:mm:ss.S', 'yyyy-MM-dd\'T\'HH:mm:ss.SSSZZ', 'yyyy-MM-dd HH:mm:ssZZ'];
   static defaultFormat: string = 'D';
   private _locale: string = '';
-  private _config: Config;
+  private readonly _config: Config;
 
   constructor() {
     this._config = inject(AppConfig).getConfiguration();
@@ -47,7 +47,7 @@ export class LuxonService {
         date = DateTime.fromISO(value, { locale });
       }
     }
-    result = (date && date.isValid) ? date.toFormat(format ? format : LuxonService.defaultFormat) : '';
+    result = date?.isValid ? date.toFormat(format || LuxonService.defaultFormat) : '';
     return result;
   }
 

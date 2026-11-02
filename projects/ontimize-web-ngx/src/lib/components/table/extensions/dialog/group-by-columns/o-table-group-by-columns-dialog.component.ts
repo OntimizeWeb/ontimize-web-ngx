@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { OGroupedColumnTypes } from '../../../../../types/o-grouped-column-types.type';
 import { Util } from '../../../../../util/util';
 import type { OColumn } from '../../../column/o-column.class';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
 
 import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { ODualListSelectorComponent } from '../../../../dual-list-selector/o-dual-list-selector.component';

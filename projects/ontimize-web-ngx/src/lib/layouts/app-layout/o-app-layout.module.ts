@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { OAppHeaderModule } from '../../components/app-header/o-app-header.module';
-import { OAppSidenavModule } from '../../components/app-sidenav/o-app-sidenav.module';
+import { OAppHeaderComponent } from '../../components/app-header/o-app-header.component';
+import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav.component';
 import { OSharedModule } from '../../shared/shared.module';
 import { OAppLayoutHeaderComponent } from './app-layout-header/o-app-layout-header.component';
 import { OAppLayoutSidenavComponent } from './app-layout-sidenav/o-app-layout-sidenav.component';
@@ -11,7 +11,7 @@ import { OAppLayoutComponent } from './o-app-layout.component';
 
 /** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavModule, OAppHeaderModule, OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent],
+  imports: [CommonModule, OSharedModule, RouterModule, OAppSidenavComponent, OAppHeaderComponent, OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent],
   exports: [OAppLayoutComponent, OAppLayoutHeaderComponent, OAppLayoutSidenavComponent]
 })
 export class OAppLayoutModule { }

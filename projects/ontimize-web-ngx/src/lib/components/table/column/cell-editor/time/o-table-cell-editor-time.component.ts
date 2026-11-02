@@ -102,7 +102,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   protected _minDateString: string;
   protected _maxDateString: string;
   protected datepicker: MatDatepicker<Date>;
-  private luxonSrv: LuxonService;
+  private readonly luxonSrv: LuxonService;
 
   // only true when hour input is focused
   public enabledCommitOnTabPress: boolean = false;
@@ -116,7 +116,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
 
   constructor(
     protected injector: Injector,
-    private adapter: DateAdapter<any>
+    private readonly adapter: DateAdapter<any>
   ) {
     super(injector);
     this.cd = this.injector.get(ChangeDetectorRef);
@@ -241,7 +241,7 @@ export class OTableCellEditorTimeComponent extends OBaseTableCellEditor implemen
   public setTimestampValue(value: any, options?: FormValueOptions): void {
     let parsedValue;
     const dt = Util.isDefined(value) ? DateTime.fromMillis(value, { zone: 'utc' }) : value;
-    if (dt && dt.isValid) {
+    if (dt?.isValid) {
       parsedValue = dt.toFormat(this.formatString);
     }
     this.formControlHour.setValue(parsedValue, options);

@@ -17,7 +17,7 @@
 @if (isBasic() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-button [class.mat-icon-button]="needsIconButtonClass"
     [disabled]="!enabled" [color]="resolvedColor" [attr.aria-label]="accessibleLabel | oTranslate" [attr.data-testid]="dataTestId">
-    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
     @if (iconPosition==='top') {
@@ -27,7 +27,7 @@
     @if (iconPosition==='bottom') {
       <br />
     }
-    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
@@ -37,7 +37,7 @@
   <button type="button" (click)="onButtonClick($event)" mat-raised-button class="mat-raised-button"
     [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate" [attr.data-testid]="dataTestId">
-    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
     @if (iconPosition==='top') {
@@ -47,7 +47,7 @@
     @if (iconPosition==='bottom') {
       <br />
     }
-    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
@@ -57,7 +57,7 @@
   <button type="button" (click)="onButtonClick($event)" mat-stroked-button
     [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate" [attr.data-testid]="dataTestId">
-    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
     @if (iconPosition==='top') {
@@ -67,7 +67,7 @@
     @if (iconPosition==='bottom') {
       <br />
     }
-    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
@@ -76,7 +76,7 @@
 @if (isFlat() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-flat-button [class.mat-icon-button]="needsIconButtonClass"
     [disabled]="!enabled" [color]="resolvedColor" [attr.aria-label]="accessibleLabel | oTranslate" [attr.data-testid]="dataTestId">
-    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
     @if (iconPosition==='top') {
@@ -86,7 +86,7 @@
     @if (iconPosition==='bottom') {
       <br />
     }
-    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
@@ -96,7 +96,7 @@
   <button type="button" (click)="onButtonClick($event)" mat-icon-button
     [class.mat-icon-button]="needsIconButtonClass" [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate" [attr.data-testid]="dataTestId">
-    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
     @if (iconPosition==='top') {
@@ -106,7 +106,7 @@
     @if (iconPosition==='bottom') {
       <br />
     }
-    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
@@ -115,7 +115,7 @@
 @if (isFab() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-fab [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate" [attr.data-testid]="dataTestId">
-    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
     @if (iconPosition==='top') {
@@ -125,7 +125,7 @@
     @if (iconPosition==='bottom') {
       <br />
     }
-    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>
@@ -134,7 +134,7 @@
 @if (isMiniFab() && isVisible()) {
   <button type="button" (click)="onButtonClick($event)" mat-mini-fab [disabled]="!enabled" [color]="resolvedColor"
     [attr.aria-label]="accessibleLabel | oTranslate" [attr.data-testid]="dataTestId">
-    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon [style.display]="isIconBeforeLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" [style.display]="isIconBeforeLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" [svgIcon]="svgIcon" [style.display]="isIconBeforeLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
     @if (iconPosition==='top') {
@@ -144,7 +144,7 @@
     @if (iconPosition==='bottom') {
       <br />
     }
-    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="button image" />
+    <img matButtonIcon iconPositionEnd [style.display]="isIconAfterLabel && image!==undefined ? null : 'none'" src="{{ image }}" class="o-button-image" alt="" />
     <mat-icon class="o-button-icon" iconPositionEnd [style.display]="isIconAfterLabel && icon!==undefined ? null : 'none'">{{ icon }}</mat-icon>
     <mat-icon class="o-button-icon" iconPositionEnd [svgIcon]="svgIcon" [style.display]="isIconAfterLabel && svgIcon!==undefined ? null : 'none'"></mat-icon>
   </button>

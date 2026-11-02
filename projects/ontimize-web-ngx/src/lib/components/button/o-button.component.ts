@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { PermissionsService } from '../../services';
-import { O_ACTION_STYLES_CONFIG, OActionImportance, OActionStyleProvider, OActionStylesConfig, OActionVariant, OPermissions, OResolvedActionStyle } from '../../types';
+import { O_ACTION_STYLES_CONFIG, OActionImportance, OActionStyleProvider, OActionVariant, OPermissions, OResolvedActionStyle } from '../../types';
 import { Codes } from '../../util/codes';
 import { resolveActionStyle, Util } from '../../util';
 import { OTranslatePipe } from '../../pipes/o-translate.pipe';

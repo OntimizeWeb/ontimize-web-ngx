@@ -27,7 +27,7 @@ import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { ODataToolbarComponent } from '../o-data-toolbar/o-data-toolbar.component';
 import { OSearchInputComponent } from '../input/search-input/o-search-input.component';
 import { OListSkeletonComponent } from './skeleton/o-list-skeleton.component';
-import { merge, Subscription } from 'rxjs';
+import { merge, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
 import { IList } from '../../interfaces/o-list.interface';
@@ -53,7 +53,6 @@ import { OListItemDirective } from './list-item/o-list-item.directive';
 import { OQueryParams } from '../../types/query-params.type';
 import { SelectionChange } from '@angular/cdk/collections';
 import { O_COMPONENT_STATE_SERVICE } from '../../injection-tokens';
-import { Observable } from 'rxjs';
 import { OListLoadingService } from './o-list-loading.service';
 
 export const DEFAULT_INPUTS_O_LIST = [

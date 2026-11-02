@@ -70,8 +70,8 @@ describe('OAppSidenavMenuSectionComponent', () => {
 
     expect(titleElement()).toBeTruthy();
     expect(titleElement().textContent.trim()).toContain('BLOCK_1');
-    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item').length).toBe(1);
-    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-group').length).toBe(1);
+    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item')).toHaveSize(1);
+    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-group')).toHaveSize(1);
   });
 
   it('should replace the title by a separator when the sidenav is collapsed', () => {
@@ -80,7 +80,7 @@ describe('OAppSidenavMenuSectionComponent', () => {
 
     expect(titleElement()).toBeNull();
     expect(fixture.nativeElement.querySelector('.o-app-sidenav-menu-section-divider')).toBeTruthy();
-    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item').length).toBe(1);
+    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item')).toHaveSize(1);
   });
 
   it('should not render anything when the section is hidden by permissions', () => {
@@ -89,7 +89,7 @@ describe('OAppSidenavMenuSectionComponent', () => {
 
     expect(component.hidden).toBe(true);
     expect(titleElement()).toBeNull();
-    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item').length).toBe(0);
+    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item')).toHaveSize(0);
   });
 
   it('should ignore the "enabled" permission', () => {
@@ -108,7 +108,7 @@ describe('OAppSidenavMenuSectionComponent', () => {
     fixture.detectChanges();
 
     expect(titleElement()).toBeTruthy();
-    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item').length).toBe(0);
+    expect(fixture.nativeElement.querySelectorAll('o-app-sidenav-menu-item')).toHaveSize(0);
   });
 
 });

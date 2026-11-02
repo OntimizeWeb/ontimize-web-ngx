@@ -140,7 +140,7 @@ export class OHourInputComponent extends OFormDataComponent implements OnInit, A
   public setTimestampValue(value: any, options?: FormValueOptions): void {
     let parsedValue;
     const dt = Util.isDefined(value) ? DateTime.fromMillis(value, { zone: 'utc' }) : value;
-    if (dt && dt.isValid) {
+    if (dt?.isValid) {
       parsedValue = dt.toFormat(this.formatString);
     }
     this.setValue(parsedValue, options);

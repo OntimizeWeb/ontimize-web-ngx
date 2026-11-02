@@ -285,7 +285,7 @@ describe('OSliderComponent', () => {
     });
 
     it('should have proper constructor parameters', () => {
-      expect(component.constructor.length).toBe(2); // elRef, injector
+      expect(component.constructor).toHaveSize(2); // elRef, injector
     });
 
     it('should have input converters working properly', () => {
