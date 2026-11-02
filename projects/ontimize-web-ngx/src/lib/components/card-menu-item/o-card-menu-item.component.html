@@ -1,4 +1,6 @@
-<div class="o-card-menu-item-content o-flex-column o-flex-fill o-layout-align-sb-center" (click)="onClick()">
+<div class="o-card-menu-item-content o-flex-column o-flex-fill o-layout-align-sb-center" (click)="onClick()"
+  [attr.role]="buttonText === undefined ? 'button' : null" [attr.tabindex]="buttonText === undefined ? 0 : null"
+  (keydown.enter)="onKeyDown($event)" (keydown.space)="onKeyDown($event)">
 
   @if (showSecondaryContainer) {
     <div class="o-card-menu-item-secondary o-flex-col-50 o-layout-align-sa-center" [ngClass]="secondaryContainerLayout === 'row' ? 'o-flex-row' : 'o-flex-column'">

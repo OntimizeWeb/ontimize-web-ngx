@@ -1993,9 +1993,9 @@ export class OFormComponent implements OnInit, OnDestroy, CanComponentDeactivate
     }
     if (!handled) {
       if (result && result.statusText) {
-        this.dialogService.alert('ERROR', result.statusText);
+        void this.dialogService.alert('ERROR', result.statusText);
       } else {
-        this.dialogService.alert('ERROR', this._messageService.getQueryErrorMessage());
+        void this.dialogService.alert('ERROR', this._messageService.getQueryErrorMessage());
       }
     }
     console.error(result);

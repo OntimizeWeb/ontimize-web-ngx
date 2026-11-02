@@ -148,6 +148,14 @@ export class OCardMenuItemComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  onKeyDown(event: Event) {
+    // Ignore keys bubbling up from the inner button, which already handles them
+    if (event.target === event.currentTarget) {
+      event.preventDefault();
+      this.onClick();
+    }
+  }
+
   get showSecondaryContainer(): boolean {
     return this._showSecondaryContainer;
   }
