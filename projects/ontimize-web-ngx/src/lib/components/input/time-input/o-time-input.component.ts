@@ -186,7 +186,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     if (Util.isDefined(this.value) && Util.isDefined(this.value.value)) {
       // Normalize whatever value-type is configured to millis through the active adapter
       const millis = parseDateByValueTypeWithAdapter(this.dateAdapter, this.value.value, 'timestamp', this.oformat);
-      if (typeof millis === 'number' && !isNaN(millis)) {
+      if (typeof millis === 'number' && !Number.isNaN(millis)) {
         // Internal date/hour arithmetic runs on Luxon regardless of the active adapter
         const dt = DateTime.fromMillis(millis);
         dateValue = dt.startOf('day').toMillis();
@@ -211,7 +211,7 @@ export class OTimeInputComponent extends OFormDataComponent implements OnInit, A
     // The inner control may hold millis or the active adapter's date object (both expose valueOf() → millis)
     const rawDate = values[this.dateAttr];
     const dateMs = typeof rawDate === 'number' ? rawDate : (rawDate ? rawDate.valueOf() : undefined);
-    const dDate = (typeof dateMs === 'number' && !isNaN(dateMs) ? DateTime.fromMillis(dateMs) : DateTime.now()).startOf('day');
+    const dDate = (typeof dateMs === 'number' && !Number.isNaN(dateMs) ? DateTime.fromMillis(dateMs) : DateTime.now()).startOf('day');
     const dHour = DateTime.fromFormat(values[this.hourAttr], this.hourInput.formatString);
     timeValue = dDate
       .set({ hour: dHour.hour, minute: dHour.minute })
