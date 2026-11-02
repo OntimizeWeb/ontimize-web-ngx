@@ -67,7 +67,7 @@
         }
       </div>
       @if (isReadOnly) {
-        <div class="read-only-blocker o-flex-fill" (click)="onClickBlocker($event)"></div>
+        <div class="read-only-blocker o-flex-fill" (click)="onClickBlocker($event)" (keydown)="onClickBlocker($event)"></div>
       }
     </div>
 

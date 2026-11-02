@@ -16,6 +16,6 @@
     }
   </mat-slide-toggle>
   @if (isReadOnly) {
-    <div (click)="onClickBlocker($event)" class="read-only-blocker o-flex-fill"></div>
+    <div (click)="onClickBlocker($event)" (keydown)="onClickBlocker($event)" class="read-only-blocker o-flex-fill"></div>
   }
 </div>

@@ -31,7 +31,7 @@
       }
     </mat-form-field>
     @if (isReadOnly) {
-      <div (click)="$event.stopPropagation()" class="read-only-blocker o-flex-fill"></div>
+      <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" class="read-only-blocker o-flex-fill"></div>
     }
 
     @if (!this.isReadOnly && this.enabled) {
