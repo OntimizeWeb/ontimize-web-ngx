@@ -80,14 +80,28 @@ export class OButtonComponent implements OnInit {
   protected oattr: string;
   public olabel: string;
   /** @deprecated use `variant` instead. */
-  protected otype: string;
+  protected get otype(): string {
+    return this._otype;
+  }
+  /** @deprecated use `variant` instead. */
+  protected set otype(value: string) {
+    this._otype = value;
+  }
+  protected _otype: string;
   public icon: string;
   public svgIcon: string;
   public iconPosition: string = Codes.ICON_POSITION_LEFT; // left (default)
   public image: string;
   @BooleanInputConverter() enabled: boolean = true;
   /** @deprecated use `importance` instead. */
-  public color: ThemePalette;
+  public get color(): ThemePalette {
+    return this._color;
+  }
+  /** @deprecated use `importance` instead. */
+  public set color(value: ThemePalette) {
+    this._color = value;
+  }
+  protected _color: ThemePalette;
   public variant: OActionVariant;
   public importance: OActionImportance;
   /** Accessible name (translation key) exposed via `aria-label`, mainly for icon-only buttons. */
@@ -154,8 +168,8 @@ export class OButtonComponent implements OnInit {
     if (Util.isDefined(this.variant)) {
       return OButtonComponent.VARIANT_TO_TYPE[this.variant] ?? OButtonComponent.DEFAULT_TYPE;
     }
-    if (Util.isDefined(this.otype)) {
-      return this.otype.toUpperCase();
+    if (Util.isDefined(this._otype)) {
+      return this._otype.toUpperCase();
     }
     const variant = this.hostOrGlobalActionStyle.variant;
     return OButtonComponent.VARIANT_TO_TYPE[variant] ?? OButtonComponent.DEFAULT_TYPE;
@@ -172,10 +186,10 @@ export class OButtonComponent implements OnInit {
     if (Util.isDefined(this.importance)) {
       return this.importance;
     }
-    if (this.color === 'primary' || this.color === 'warn') {
-      return this.color;
+    if (this._color === 'primary' || this._color === 'warn') {
+      return this._color;
     }
-    if (Util.isDefined(this.color)) {
+    if (Util.isDefined(this._color)) {
       return undefined;
     }
     return this.hostOrGlobalActionStyle.importance;
@@ -208,7 +222,7 @@ export class OButtonComponent implements OnInit {
         return importance;
       }
     }
-    return this.color;
+    return this._color;
   }
 
   onButtonClick(event: MouseEvent): void {

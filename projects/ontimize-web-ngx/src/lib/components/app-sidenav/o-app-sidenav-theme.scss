@@ -73,8 +73,8 @@
 
       // ── Open state only ──────────────────────────────────────────
       .mat-drawer.o-app-sidenav-sidenav:not(.mat-drawer-closed) {
-        // Vertical guide line for level-1 children — replica of the legacy
-        // `.mdc-button__label { border-left: 2px … }`: drawn as a background
+        // Vertical guide line for level-1 children — replica of the legacy 2px
+        // left border of `.mdc-button__label`, drawn as a background
         // gradient 16px into the row (the label's old x-position, before the
         // 6px content offset) so the hover/selected backgrounds still fill the
         // whole row beneath it, and recoloured per item on hover/selection.

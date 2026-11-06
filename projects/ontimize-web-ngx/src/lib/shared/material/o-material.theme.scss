@@ -58,7 +58,7 @@
 
   @if $m3-theme {
     @if & {
-      & {
+      @at-root #{&} {
         // Emit --mat-sys-* CSS custom properties from the M3 palette so that
         // component SCSS can reference var(--mat-sys-primary-container) etc.
         // mat.all-component-themes() bakes palette values into --mdc-* tokens

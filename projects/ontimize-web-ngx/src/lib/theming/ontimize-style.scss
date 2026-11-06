@@ -1,26 +1,26 @@
-// =============================================================================
-// ontimize-style.scss — Ontimize theming for Angular 18 / Material 18
-// =============================================================================
-//
-// Usage:
-//   @use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
-//   $theme:      ontimize-style.o-mat-light-theme($primary, $accent);
-//   @include ontimize-style.ontimize-theme-styles($theme);
-//
-// Also add to your styles.scss:
-//   @use 'ontimize-web-ngx/theming/fonts/noto';
-//
-// And in index.html:
-//   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-//
-// Visual style:
-//   - Font: Noto Sans (import fonts/noto.scss)
-//   - Icons: Material Symbols Outlined
-//   - Sidenav: neutral grey background (not primary colour)
-//   - Buttons: inherit Material 2 defaults — NO custom overrides
-//   - Density: NOT applied (density mixins omitted to avoid M3 conflicts)
-//   - Tabs: simplified (no inactive-background override)
-// =============================================================================
+/// =============================================================================
+/// ontimize-style.scss — Ontimize theming for Angular 18 / Material 18
+/// =============================================================================
+///
+/// Usage:
+///   @use 'ontimize-web-ngx/theming/ontimize-style' as ontimize-style;
+///   $theme:      ontimize-style.o-mat-light-theme($primary, $accent);
+///   @include ontimize-style.ontimize-theme-styles($theme);
+///
+/// Also add to your styles.scss:
+///   @use 'ontimize-web-ngx/theming/fonts/noto';
+///
+/// And in index.html:
+///   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+///
+/// Visual style:
+///   - Font: Noto Sans (import fonts/noto.scss)
+///   - Icons: Material Symbols Outlined
+///   - Sidenav: neutral grey background (not primary colour)
+///   - Buttons: inherit Material 2 defaults — NO custom overrides
+///   - Density: NOT applied (density mixins omitted to avoid M3 conflicts)
+///   - Tabs: simplified (no inactive-background override)
+/// =============================================================================
 
 @use "sass:map";
 @use '@angular/material' as mat;
@@ -53,9 +53,10 @@
   // overrides take precedence over whatever M3 emits for the same tokens.
   // When the caller invokes this mixin at the top level, tokens go on :root.
   // When invoked inside a selector (e.g. `.o-dark { … }`) they land on
-  // that selector instead — the `&` below preserves the caller's scope.
+  // that selector instead — `@at-root` re-emits the caller's selector as its own
+  // rule, so these declarations don't follow nested rules (Sass mixed-decls).
   @if & {
-    & {
+    @at-root #{&} {
       @include tokens.o-apply-tokens($theme-or-color-config);
     }
   }
@@ -85,24 +86,24 @@
   }
 }
 
-// ─── Neutral surfaces mixin (opt-in "Clear SaSS") ───────────────────────────
-// Replaces M3's tinted surface tokens with neutral whites/grays derived from
-// the theme's background map. Call this after ontimize-theme-styles inside the
-// same selector. Pass the dark theme object for dark mode.
-//
-// Usage:
-//   :root {
-//     @include ontimize-style.ontimize-theme-styles(theme.$theme);
-//     @include ontimize-style.ontimize-neutral-surfaces(theme.$theme);
-//   }
-//   .o-dark {
-//     @include ontimize-style.ontimize-theme-styles(theme.$dark-theme);
-//     @include ontimize-style.ontimize-neutral-surfaces(theme.$dark-theme);
-//   }
+/// ─── Neutral surfaces mixin (opt-in "Clear SaSS") ───────────────────────────
+/// Replaces M3's tinted surface tokens with neutral whites/grays derived from
+/// the theme's background map. Call this after ontimize-theme-styles inside the
+/// same selector. Pass the dark theme object for dark mode.
+///
+/// Usage:
+///   :root {
+///     @include ontimize-style.ontimize-theme-styles(theme.$theme);
+///     @include ontimize-style.ontimize-neutral-surfaces(theme.$theme);
+///   }
+///   .o-dark {
+///     @include ontimize-style.ontimize-theme-styles(theme.$dark-theme);
+///     @include ontimize-style.ontimize-neutral-surfaces(theme.$dark-theme);
+///   }
 
 @mixin ontimize-neutral-surfaces($theme) {
   @if & {
-    & {
+    @at-root #{&} {
       @include tokens.o-apply-neutral-surfaces($theme);
     }
   } @else {
@@ -122,25 +123,25 @@
   @include ontimize-theme-styles($color-only);
 }
 
-// ─── Density-only mixin ─────────────────────────────────────────────────────
-//
-// Emits only the Material density tokens (--mdc-* / --mat-*) for the given
-// scale, without touching color or typography.
-//
-// Use this to override the density set by ontimize-theme-styles() in a
-// specific selector or at :root after the main theme has been applied:
-//
-//   // Reset to standard density for a specific container:
-//   .my-dense-zone {
-//     @include ontimize-style.ontimize-theme-density(-4);
-//   }
-//
-//   // Or override globally after the theme:
-//   @include ontimize-style.ontimize-theme-density(0);
-//
-// Valid scales: 0 (standard) → -5 (most compact). Default Material scale
-// for Ontimize is -2.
-//
+/// ─── Density-only mixin ─────────────────────────────────────────────────────
+///
+/// Emits only the Material density tokens (--mdc-* / --mat-*) for the given
+/// scale, without touching color or typography.
+///
+/// Use this to override the density set by ontimize-theme-styles() in a
+/// specific selector or at :root after the main theme has been applied:
+///
+///   // Reset to standard density for a specific container:
+///   .my-dense-zone {
+///     @include ontimize-style.ontimize-theme-density(-4);
+///   }
+///
+///   // Or override globally after the theme:
+///   @include ontimize-style.ontimize-theme-density(0);
+///
+/// Valid scales: 0 (standard) → -5 (most compact). Default Material scale
+/// for Ontimize is -2.
+///
 @mixin ontimize-theme-density($scale) {
   @include mat.all-component-densities($scale);
 }
@@ -244,25 +245,25 @@ $_extended-density-tokens: (
   ),
 );
 
-// ─── Extended density mixin ─────────────────────────────────────────────────
-//
-// Same as ontimize-theme-density() but also emits manual overrides for
-// components whose density tokens are not defined for deeper scales (-4, -5)
-// in Angular Material's table — primarily mat-form-field, mat-paginator, and
-// buttons. Also overrides --mat-standard-button-toggle-height for all scales
-// because Material's built-in scale does not match Ontimize's target sizes.
-//
-// Use this mixin instead of ontimize-theme-density() when targeting -4 / -5,
-// or when button and button-toggle heights should follow the density scale.
-//
-//   .o-high-density {
-//     @include ontimize-style.ontimize-theme-density-extended(-4);
-//   }
-//
-//   // Or globally after the theme:
-//   @include ontimize-style.ontimize-theme-styles(theme.$theme);   // -2 default
-//   @include ontimize-style.ontimize-theme-density-extended(-4);   // override
-//
+/// ─── Extended density mixin ─────────────────────────────────────────────────
+///
+/// Same as ontimize-theme-density() but also emits manual overrides for
+/// components whose density tokens are not defined for deeper scales (-4, -5)
+/// in Angular Material's table — primarily mat-form-field, mat-paginator, and
+/// buttons. Also overrides --mat-standard-button-toggle-height for all scales
+/// because Material's built-in scale does not match Ontimize's target sizes.
+///
+/// Use this mixin instead of ontimize-theme-density() when targeting -4 / -5,
+/// or when button and button-toggle heights should follow the density scale.
+///
+///   .o-high-density {
+///     @include ontimize-style.ontimize-theme-density-extended(-4);
+///   }
+///
+///   // Or globally after the theme:
+///   @include ontimize-style.ontimize-theme-styles(theme.$theme);   // -2 default
+///   @include ontimize-style.ontimize-theme-density-extended(-4);   // override
+///
 @mixin ontimize-theme-density-extended($scale) {
   @include mat.all-component-densities($scale);
 
@@ -275,7 +276,7 @@ $_extended-density-tokens: (
     // element where mat.all-component-densities() wrote them, so the
     // cascade order (overrides emitted after) decides the winner.
     @if & {
-      & {
+      @at-root #{&} {
         @each $token, $value in $overrides {
           #{$token}: #{$value};
         }

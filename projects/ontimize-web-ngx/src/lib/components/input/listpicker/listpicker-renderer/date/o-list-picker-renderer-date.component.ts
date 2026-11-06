@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { ILuxonPipeArgument, OLuxonPipe } from '../../../../../pipes/o-luxon.pipe';
-import { OMomentPipe } from '../../../../../pipes/o-moment.pipe';
-import { injectODateAdapterPipe } from '../../../../../shared/material/date/o-date-adapter.provider';
+import { ILuxonPipeArgument } from '../../../../../pipes/o-luxon.pipe';
+import { injectODateAdapterPipe, O_DATE_ADAPTER_PIPE_PROVIDERS } from '../../../../../shared/material/date/o-date-adapter.provider';
 import { DEFAULT_INPUTS_O_LISTPICKER_RENDERER, OListPickerCustomRenderer } from '../o-list-picker-renderer.class';
 
 export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE = [
@@ -17,7 +16,7 @@ export const DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE = [
   templateUrl: './o-list-picker-renderer-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_LISTPICKER_RENDERER_DATE,
-  providers: [OLuxonPipe, OMomentPipe]
+  providers: [O_DATE_ADAPTER_PIPE_PROVIDERS]
 })
 export class OListPickerRendererDateComponent extends OListPickerCustomRenderer implements OnInit {
 

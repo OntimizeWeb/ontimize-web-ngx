@@ -80,8 +80,8 @@
   // PRIMARY tone — so a `flat` + `default` action would look primary. Here we
   // make it a neutral solid button using the M3 inverse-surface tones (a dark
   // neutral container with a legible light label/icon). Consumers can override
-  // the container to a brand neutral, e.g.:
-  //   .o-action--filled-default { --mdc-filled-button-container-color: #2C2A29; }
+  // the container to a brand neutral, e.g. by setting
+  // `--mdc-filled-button-container-color` on `.o-action--filled-default`.
   .o-action--filled-default {
     // A `flat` (filled) action with `default` importance renders as a neutral DARK
     // solid button, kept dark in BOTH light and dark themes by default. Material's
@@ -90,8 +90,8 @@
     // neither is what a low-emphasis "default" solid action wants. The dark theme
     // re-emits this rule under `.o-dark` (higher specificity), but both emissions
     // resolve through the same indirection tokens, so a consumer can recolour it
-    // once (and it holds in both themes), e.g.:
-    //   :root { --o-action-filled-default-bg: #1b1b1b; --o-action-filled-default-fg: #fff; }
+    // once (and it holds in both themes), e.g. by setting `--o-action-filled-default-bg`
+    // and `--o-action-filled-default-fg` on `:root`.
     --mdc-filled-button-container-color: var(--o-action-filled-default-bg, #2C2A29);
     --mdc-filled-button-label-text-color: var(--o-action-filled-default-fg, #ffffff);
     --mdc-filled-button-with-icon-icon-color: var(--o-action-filled-default-fg, #ffffff);

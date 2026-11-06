@@ -53,8 +53,14 @@ export const O_DATE_ADAPTER_PROVIDERS: Provider[] = [
 ];
 
 /**
+ * Date pipes `injectODateAdapterPipe()` chooses from. Add them to the `providers` of any
+ * component that calls it.
+ */
+export const O_DATE_ADAPTER_PIPE_PROVIDERS: Provider[] = [OLuxonPipe, OMomentPipe];
+
+/**
  * Injects the date pipe matching the active adapter (`oMoment` or `oLuxon`).
- * Both pipes must be listed in the caller's `providers`. Field-initializer use only.
+ * `O_DATE_ADAPTER_PIPE_PROVIDERS` must be listed in the caller's `providers`. Field-initializer use only.
  */
 export function injectODateAdapterPipe(): PipeTransform {
   return inject(O_DATE_ADAPTER, { optional: true }) === 'moment' ? inject(OMomentPipe) : inject(OLuxonPipe);

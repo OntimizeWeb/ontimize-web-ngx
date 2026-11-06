@@ -44,12 +44,12 @@
   @return if($value ==null, $fallback, $value);
 }
 
-// ─── Main mixin ─────────────────────────────────────────────────────────────
-// Emits `--o-*` CSS custom properties + a few `--mat-*` overrides derived
-// from the given Ontimize theme.
-//
-// Usage (inside a selector such as :root or .o-dark):
-//   @include tokens.o-apply-tokens(my-theme.$theme);
+/// ─── Main mixin ─────────────────────────────────────────────────────────────
+/// Emits `--o-*` CSS custom properties + a few `--mat-*` overrides derived
+/// from the given Ontimize theme.
+///
+/// Usage (inside a selector such as :root or .o-dark):
+///   @include tokens.o-apply-tokens(my-theme.$theme);
 
 
 

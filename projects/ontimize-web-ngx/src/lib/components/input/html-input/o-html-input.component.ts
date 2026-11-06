@@ -6,7 +6,6 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
-import { CKEditorModule } from '../../material/ckeditor/ck-editor.module';
 
 import { NumberConverter } from '../../../decorators/input-converter';
 import { CKEditorComponent } from '../../material/ckeditor/ck-editor.component';
@@ -31,7 +30,7 @@ export const DEFAULT_OUTPUTS_O_HTML_INPUT = [
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, OTranslatePipe, OMatErrorDirective, CKEditorModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, OTranslatePipe, OMatErrorDirective, CKEditorComponent],
   selector: 'o-html-input',
   templateUrl: './o-html-input.component.html',
   styleUrls: ['./o-html-input.component.scss'],

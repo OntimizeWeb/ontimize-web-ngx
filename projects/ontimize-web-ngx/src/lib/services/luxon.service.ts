@@ -13,8 +13,8 @@ export class LuxonService {
   // yyyy-MM-dd'T'HH:mm:ss.S // UTC: yyyy-MM-dd HH:mm:ssZZ
   // Note: the legacy MomentService formats used 'hh' (12h, no meridiem) here, which is
   // ambiguous without an 'a'/'A' token — corrected to 'HH' (24h) for these Luxon formats.
-  static DATE_FORMATS = ['yyyy-MM-dd', 'dd-MM-yyyy', 'MM-dd-yyyy', 'yyyy-MM-dd\'T\'HH:mm:ss.S', 'yyyy-MM-dd\'T\'HH:mm:ss.SSSZZ', 'yyyy-MM-dd HH:mm:ssZZ'];
-  static defaultFormat: string = 'D';
+  static readonly DATE_FORMATS = ['yyyy-MM-dd', 'dd-MM-yyyy', 'MM-dd-yyyy', 'yyyy-MM-dd\'T\'HH:mm:ss.S', 'yyyy-MM-dd\'T\'HH:mm:ss.SSSZZ', 'yyyy-MM-dd HH:mm:ssZZ'];
+  static readonly defaultFormat: string = 'D';
   private _locale: string = '';
   private readonly _config: Config;
 

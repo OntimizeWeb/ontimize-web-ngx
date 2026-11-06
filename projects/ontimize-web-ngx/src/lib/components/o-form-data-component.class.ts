@@ -194,14 +194,9 @@ export class OFormDataComponent extends OBaseComponent implements IFormDataCompo
     this.elRef = elRef;
     this.permissionsService = this.injector.get<PermissionsService>(PermissionsService);
     this.errorOptions = ErrorsUtils.getErrorOptions(this.injector);
-    try {
-      this.oInputsOptions = this.injector.get(O_INPUTS_OPTIONS);
-      this.selectAllOnClick = this.oInputsOptions.selectAllOnClick;
-    } catch (e) {
-      // O_INPUTS_OPTIONS is optional: when it is not provided, fall back to the default input options
-      this.oInputsOptions = {};
-      this.selectAllOnClick = false;
-    }
+    const inputsOptions = inject(O_INPUTS_OPTIONS, { optional: true });
+    this.oInputsOptions = inputsOptions ?? {};
+    this.selectAllOnClick = inputsOptions ? inputsOptions.selectAllOnClick : false;
   }
 
   public ngOnInit(): void {

@@ -159,7 +159,16 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
   /**
    * @deprecated The next inputs are deprecated and user should use the OFormLayoutDialogOptionsDirective inputs
    */
-  public dialogWidth: string;
+  public get dialogWidth(): string {
+    return this._dialogWidth;
+  }
+  /**
+   * @deprecated The next inputs are deprecated and user should use the OFormLayoutDialogOptionsDirective inputs
+   */
+  public set dialogWidth(value: string) {
+    this._dialogWidth = value;
+  }
+  protected _dialogWidth: string;
   public dialogMinWidth: string;
   public dialogMaxWidth: string;
   public dialogHeight: string;
@@ -507,7 +516,7 @@ export class OFormLayoutManagerComponent implements AfterViewInit, OnInit, OnDes
         dialogTitleSeparator: this.dialogTitleSeparator,
         showFullscreenButton: this.showFullscreenButton
       },
-      width: dialogOptions.width || this.dialogWidth || '65vw',
+      width: dialogOptions.width || this._dialogWidth || '65vw',
       minWidth: dialogOptions.minWidth || this.dialogMinWidth,
       maxWidth: dialogOptions.maxWidth || this.dialogMaxWidth || '65vw',
       height: dialogOptions.height || this.dialogHeight || '90vh',

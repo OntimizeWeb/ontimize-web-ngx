@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { ILuxonPipeArgument, OLuxonPipe } from '../../../../../pipes/o-luxon.pipe';
-import { OMomentPipe } from '../../../../../pipes/o-moment.pipe';
-import { injectODateAdapterPipe, O_DATE_ADAPTER } from '../../../../../shared/material/date/o-date-adapter.provider';
+import { ILuxonPipeArgument } from '../../../../../pipes/o-luxon.pipe';
+import { injectODateAdapterPipe, O_DATE_ADAPTER, O_DATE_ADAPTER_PIPE_PROVIDERS } from '../../../../../shared/material/date/o-date-adapter.provider';
 import { Util } from '../../../../../util/util';
 import { OBaseTableCellRenderer } from '../o-base-table-cell-renderer.class';
 
@@ -16,7 +15,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME = [
   templateUrl: './o-table-cell-renderer-time.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TIME,
-  providers: [OLuxonPipe, OMomentPipe]
+  providers: [O_DATE_ADAPTER_PIPE_PROVIDERS]
 })
 export class OTableCellRendererTimeComponent extends OBaseTableCellRenderer implements OnInit {
 
