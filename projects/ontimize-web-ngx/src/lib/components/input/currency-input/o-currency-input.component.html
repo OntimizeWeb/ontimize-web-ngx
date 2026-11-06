@@ -1,5 +1,5 @@
 <div class="currency-container" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
-  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" fxLayout="row" fxLayoutAlign="space-between center">
+  [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay" class="o-flex-row o-layout-align-sb-center">
 
   @if (useSymbol('left')) {
     <div matSuffix class="icon-btn" [class.mat-disabled]="!enabled">
@@ -7,20 +7,21 @@
     </div>
   }
   @if (useIcon('left')) {
-    <mat-icon svgIcon="ontimize:{{currencySymbol}}" matSuffix class="svg-icon" [class.mat-disabled]="!enabled"></mat-icon>
+    <mat-icon matIconSuffix [class.mat-disabled]="!enabled">{{currency_icons.get(this.currencySymbol)}}
+    </mat-icon>
   }
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
-    class="icon-field" fxFill [subscriptSizing]="subscriptSizing">
+    class="icon-field o-flex-fill" [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <input matInput [type]="inputType" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+    <input matInput [type]="inputType" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [placeholder]="placeHolder"
       (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" [min]="min" [max]="max" [step]="step"
       [required]="isRequired" (change)="onChangeEvent($event)">
 
       @if (showClearButton) {
         <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-          <mat-icon svgIcon="ontimize:close"></mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
       }
       @if (useSymbol('right')) {
@@ -29,7 +30,7 @@
         </div>
       }
       @if (useIcon('right')) {
-        <mat-icon svgIcon="ontimize:{{currencySymbol}}" matIconSuffix class="svg-icon" [class.mat-disabled]="!enabled">
+        <mat-icon  matIconSuffix  [class.mat-disabled]="!enabled">{{currency_icons.get(this.currencySymbol)}}
         </mat-icon>
       }
 

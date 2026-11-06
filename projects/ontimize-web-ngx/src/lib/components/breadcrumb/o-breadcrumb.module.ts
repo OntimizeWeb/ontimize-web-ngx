@@ -1,13 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 
-import { OSharedModule } from '../../shared/shared.module';
 import { OBreadcrumbComponent } from './o-breadcrumb.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  imports: [CommonModule, OSharedModule, RouterModule],
-  exports: [OBreadcrumbComponent],
-  declarations: [OBreadcrumbComponent]
+  imports: [OBreadcrumbComponent],
+  exports: [OBreadcrumbComponent]
 })
 export class OBreadcrumbModule { }

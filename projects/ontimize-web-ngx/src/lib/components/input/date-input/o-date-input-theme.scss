@@ -1,10 +1,4 @@
 @mixin o-date-input-theme($theme-or-color-config) {
-  $theme: map.get($theme-or-color-config, color);
-  $primary: map.get($theme, primary);
-  $accent: map.get($theme, accent);
-  $warn: map.get($theme, warn);
-  $background: map.get($theme, background);
-  $foreground: map.get($theme, foreground);
-
-  $color-inactive: #999999;
+  // No theme-specific styles for o-date-input — colours flow through
+  // global Material/Ontimize tokens (--mat-sys-* and --o-*).
 }

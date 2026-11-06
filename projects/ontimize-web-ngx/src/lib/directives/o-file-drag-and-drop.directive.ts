@@ -1,7 +1,8 @@
 import { Directive, EventEmitter, HostBinding, HostListener, Output } from '@angular/core';
 
 @Directive({
-  selector: '[oFileDragAndDrop]'
+  selector: '[oFileDragAndDrop]',
+  standalone: true
 })
 export class OFileDragAndDropDirective {
 

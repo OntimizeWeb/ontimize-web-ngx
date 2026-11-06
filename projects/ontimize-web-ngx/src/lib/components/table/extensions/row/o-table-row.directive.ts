@@ -4,6 +4,7 @@ import { OTableBase } from '../../o-table-base.class';
 
 
 @Directive({
+  standalone: true,
   selector: '[oTableRow]'
 })
 export class OTableRowDirective implements AfterViewInit, OnDestroy {

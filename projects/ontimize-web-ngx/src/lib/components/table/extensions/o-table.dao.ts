@@ -9,6 +9,11 @@ export class OTableDao {
 
   usingStaticData: boolean = false;
 
+  // Survives table rebuilds (e.g. the virtual-scroll on/off swap triggered by grouping),
+  // unlike a DefaultOTableDataSource instance's own renderedData: lets connect() tell a
+  // genuinely-never-queried table apart from a rebuild that already has real data to process.
+  hasLoadedOnce: boolean = false;
+
   protected loadingTimer;
   protected _isLoadingResults: boolean = false;
 
@@ -65,6 +70,7 @@ export class OTableDao {
    * @param data
    */
   setDataArray(data: Array<any>) {
+    this.hasLoadedOnce = true;
     this.dataChange.next(data);
     this.notLoadingResults = false;
     return of(data);

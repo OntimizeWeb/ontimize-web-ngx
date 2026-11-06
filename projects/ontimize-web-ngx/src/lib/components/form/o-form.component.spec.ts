@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormGroup, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 import { OFormValue } from './o-form-value';
@@ -22,8 +22,9 @@ describe('OFormComponent', () => {
     OFormComponent = module.OFormComponent;
 
     await TestBed.configureTestingModule({
-      declarations: [OFormComponent, ...OTestingUtils.getCommonDeclarations()],
+      declarations: [...OTestingUtils.getCommonDeclarations()],
       imports: [
+        OFormComponent,
         RouterTestingModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -40,7 +41,7 @@ describe('OFormComponent', () => {
     fixture = TestBed.createComponent(OFormComponent);
     component = fixture.componentInstance;
     // Provide formGroup without triggering full ngOnInit
-    component.formGroup = new UntypedFormGroup({});
+    component.formGroup = new FormGroup({});
   });
 
   // ─── Creation ────────────────────────────────────────────────────────────────
@@ -562,7 +563,7 @@ describe('OFormComponent', () => {
 
   describe('Method: registerFormControlComponent() / unregisterFormControlComponent()', () => {
     it('should add a control to the formGroup', () => {
-      const ctrl = new UntypedFormControl('');
+      const ctrl = new FormControl('');
       const mockComp = {
         getAttribute: () => 'emailField',
         getControl: () => ctrl,
@@ -574,7 +575,7 @@ describe('OFormComponent', () => {
     });
 
     it('should skip registration when repeatedAttr is true', () => {
-      const ctrl = new UntypedFormControl('');
+      const ctrl = new FormControl('');
       const mockComp = {
         getAttribute: () => 'skippedField',
         getControl: () => ctrl,
@@ -586,7 +587,7 @@ describe('OFormComponent', () => {
     });
 
     it('unregister should remove control from formGroup', () => {
-      const ctrl = new UntypedFormControl('');
+      const ctrl = new FormControl('');
       component.formGroup.addControl('toRemove', ctrl);
       const mockComp = {
         getAttribute: () => 'toRemove',
@@ -837,5 +838,65 @@ describe('OFormComponent', () => {
       const attrs = component.getAttributesToQuery();
       expect(attrs).toContain('extraCol');
     });
+  });
+});
+
+// ─── O_FORM_GLOBAL_CONFIG ────────────────────────────────────────────────────
+
+describe('OFormComponent with O_FORM_GLOBAL_CONFIG', () => {
+  it('overrides headerActions and showHeaderActionsText from the injected global config', async () => {
+    const { OFormComponent: OFormComponentClass } = await import('./o-form.component');
+    const { O_FORM_GLOBAL_CONFIG } = await import('./o-form-tokens');
+
+    await TestBed.configureTestingModule({
+      declarations: [...OTestingUtils.getCommonDeclarations()],
+      imports: [
+        OFormComponentClass,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        TranslateModule.forRoot(),
+        ...OTestingUtils.getCommonTestingModuleConfig().imports
+      ],
+      providers: [
+        OFormConfirmExitService,
+        { provide: O_FORM_GLOBAL_CONFIG, useValue: { headerActions: 'R;I', showHeaderActionsText: 'no' } },
+        ...OTestingUtils.getCommonTestingModuleConfig().providers
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(OFormComponentClass);
+    const component: any = fixture.componentInstance;
+
+    expect(component.headeractions).toBe('R;I');
+    expect(component.showHeaderActionsText).toBe('no');
+  });
+
+  it('keeps the component defaults when no global config is provided', async () => {
+    const { OFormComponent: OFormComponentClass } = await import('./o-form.component');
+
+    await TestBed.configureTestingModule({
+      declarations: [...OTestingUtils.getCommonDeclarations()],
+      imports: [
+        OFormComponentClass,
+        RouterTestingModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        TranslateModule.forRoot(),
+        ...OTestingUtils.getCommonTestingModuleConfig().imports
+      ],
+      providers: [
+        OFormConfirmExitService,
+        ...OTestingUtils.getCommonTestingModuleConfig().providers
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(OFormComponentClass);
+    const component: any = fixture.componentInstance;
+
+    expect(component.headeractions).toBe('all');
+    expect(component.showHeaderActionsText).toBe('yes');
   });
 });

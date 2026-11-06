@@ -1,6 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectorRef, EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, TemplateRef } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import type { ThemePalette } from '@angular/material/core';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
@@ -75,10 +76,14 @@ export abstract class OTableBase {
   abstract getClientWidthColumn(col: OColumn): number;
   abstract horizontalScroll: boolean;
   abstract getActionsPermissions(): OPermissions[];
+  abstract getActionImportanceClass(attr: string): string;
+  abstract getActionVariant(attr: string): string;
+  abstract getActionColor(attr: string): ThemePalette;
+  abstract getActionLabel(attr: string): string;
   abstract selection: SelectionModel<Element>;
   abstract registerOTableButtons(arg: OTableButtons);
   abstract add();
-  abstract reloadData();
+  abstract reloadData(clearSelectedItems?: boolean): void;
   abstract remove();
   abstract onUpdateScrolledState: EventEmitter<any>;
   abstract rowWidth;
@@ -118,6 +123,8 @@ export abstract class OTableBase {
   abstract resizable: boolean
   abstract registerTableHeaders(tableHeader: OTableHeaderComponent);
   abstract showButtonsText: boolean;
+  /** Emits the current `showButtonsText` on every change, so OnPush descendants (e.g. `o-table-button`) can `markForCheck()` when it changes after their initial render. */
+  abstract showButtonsTextChange: Observable<boolean>;
   abstract matpaginator: MatPaginator;
   abstract isIndeterminate(): boolean;
   abstract onFilterByColumnChange: EventEmitter<any>;
@@ -139,4 +146,7 @@ export abstract class OTableBase {
   abstract setOTableColumnsFilter(tableColumnsFilter: OTableColumnsFilterComponent);
   abstract getAllValues(): any[];
   abstract getDataService(): BaseService<ServiceResponse>;
+  abstract noResultsMessage: string;
+  abstract noResultsTemplate: TemplateRef<any>;
+  abstract dataTestId: string;
 }

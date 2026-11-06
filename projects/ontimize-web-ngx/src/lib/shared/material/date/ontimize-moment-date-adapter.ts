@@ -3,6 +3,10 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment, { Moment } from 'moment';
 
+/**
+ * @deprecated Use OntimizeLuxonDateAdapter instead. This adapter is kept for
+ * backwards compatibility and continues to depend on moment.js.
+ */
 @Injectable()
 export class OntimizeMomentDateAdapter extends MomentDateAdapter {
 

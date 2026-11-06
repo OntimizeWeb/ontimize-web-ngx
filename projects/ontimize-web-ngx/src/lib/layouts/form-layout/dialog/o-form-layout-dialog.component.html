@@ -1,10 +1,10 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" class="title-container" mat-dialog-title>
-  <span fxFlex fxLayoutAlign="center center"> {{ title | oTranslate }} @if (title?.length>0) {
+<div class="title-container o-flex-row o-layout-align-sb-center" mat-dialog-title>
+  <span class="o-flex o-layout-align-center-center"> {{ title | oTranslate }} @if (title?.length>0) {
     <span>{{dialogTitleSeparator}}&nbsp;</span>
     }{{ label
   }}</span>
   @if (showFullscreenButton) {
-    <mat-icon aria-label="fullscreen dialog" (click)="setFullscreenDialog()" (keydown)="setFullscreenDialog()">
+    <mat-icon aria-label="fullscreen dialog" data-testid="form-dialog-fullscreen" (click)="setFullscreenDialog()" (keydown)="setFullscreenDialog()">
       @if (fullscreen) {
         fullscreen_exit
       }
@@ -13,7 +13,7 @@
       }
     </mat-icon>
   }
-  <mat-icon (click)="closeDialog()" svgIcon="ontimize:close"></mat-icon>
+  <mat-icon data-testid="form-dialog-close" (click)="closeDialog()">close</mat-icon>
 </div>
 
 <div mat-dialog-content class="form-layout-dialog-container">

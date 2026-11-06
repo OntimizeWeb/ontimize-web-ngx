@@ -53,6 +53,7 @@ export const MAP = {
     'LIST': 'List',
     'LIST.EMPTY': 'No results found',
     'LIST.EMPTY_USING_FILTER': ' using filter "{0}"',
+    'LIST.SCROLL_TO_TOP': 'Scroll to top',
 
     'TABLE': 'Table',
     'DETAIL': 'Detail',
@@ -374,6 +375,7 @@ export const MAP = {
     'LIST': 'Lista',
     'LIST.EMPTY': 'No se han obtenido resultados',
     'LIST.EMPTY_USING_FILTER': ' usando el filtro "{0}"',
+    'LIST.SCROLL_TO_TOP': 'Ir al principio',
 
     'TABLE': 'Tabla',
     'DETAIL': 'Detalle',
@@ -684,6 +686,7 @@ export const MAP = {
     'LIST': 'Lista',
     'LIST.EMPTY': 'Nenhum resultado encontrado',
     'LIST.EMPTY_USING_FILTER': ' usando o filtro "{0}"',
+    'LIST.SCROLL_TO_TOP': 'Ir para o topo',
 
     'TABLE': 'Tabela',
     'DETAIL': 'Detalhe',

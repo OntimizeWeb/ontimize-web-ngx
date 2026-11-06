@@ -20,7 +20,8 @@ describe('OKeyboardListenerDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OKeyboardListenerDirective, TestKeyboardComponent]
+      declarations: [TestKeyboardComponent],
+      imports: [OKeyboardListenerDirective]
     });
     fixture = TestBed.createComponent(TestKeyboardComponent);
     component = fixture.componentInstance;

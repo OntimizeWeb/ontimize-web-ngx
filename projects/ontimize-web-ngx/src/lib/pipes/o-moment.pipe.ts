@@ -2,12 +2,20 @@ import { Injector, Pipe, PipeTransform } from '@angular/core';
 
 import { MomentService } from '../services/moment.service';
 
+/**
+ * @deprecated Use ILuxonPipeArgument instead.
+ */
 export interface IMomentPipeArgument {
   format?: string;
 }
 
+/**
+ * @deprecated Use OLuxonPipe (oLuxon) instead. This pipe is kept for backwards
+ * compatibility and continues to depend on moment.js (through MomentService).
+ */
 @Pipe({
-  name: 'oMoment'
+  name: 'oMoment',
+  standalone: true
 })
 
 export class OMomentPipe implements PipeTransform {

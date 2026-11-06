@@ -5,7 +5,8 @@ import { Codes } from '../util/codes';
 import { ErrorsUtils } from '../util/errors';
 
 @Directive({
-  selector: '[oMatError]'
+  selector: '[oMatError]',
+  standalone: true
 })
 export class OMatErrorDirective {
   public text: string;

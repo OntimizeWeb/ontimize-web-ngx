@@ -3,7 +3,8 @@ import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 export type OTabMode = 'ontimize' | 'material';
 
 @Directive({
-  selector: '[oTabGroup]'
+  selector: '[oTabGroup]',
+  standalone: true
 })
 export class OTabGroupDirective {
 

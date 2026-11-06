@@ -1,5 +1,11 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { ThemePalette } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { Subscription } from 'rxjs';
 
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
 import { BooleanInputConverter } from '../../../../../decorators/input-converter';
 import { OTableButton } from '../../../../../interfaces/o-table-button.interface';
 import { Codes } from '../../../../../util/codes';
@@ -20,6 +26,8 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgClass, MatButtonModule, MatIconModule, OTranslatePipe],
   selector: 'o-table-button',
   templateUrl: './o-table-button.component.html',
   inputs: DEFAULT_INPUTS_O_TABLE_BUTTON,
@@ -28,11 +36,11 @@ export const DEFAULT_OUTPUTS_O_TABLE_BUTTON = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.o-table-button]': 'true',
-    '[class.text]': 'table.showButtonsText',
-    '[class.no-text]': '!table.showButtonsText',
+    '[class.text]': 'showButtonsText',
+    '[class.no-text]': '!showButtonsText',
   }
 })
-export class OTableButtonComponent implements OTableButton, OnInit {
+export class OTableButtonComponent implements OTableButton, OnInit, OnDestroy {
 
   public onClick: EventEmitter<object> = new EventEmitter<object>();
 
@@ -44,9 +52,14 @@ export class OTableButtonComponent implements OTableButton, OnInit {
   public olabel: string;
   public iconPosition: string;
 
+  /** Mirrors table.showButtonsText locally so this OnPush component re-renders when it changes after the initial render (see showButtonsTextChange subscription in ngOnInit). */
+  public showButtonsText: boolean;
+  private showButtonsTextSubscription: Subscription;
+
   constructor(
     protected injector: Injector,
     public elRef: ElementRef,
+    protected cdr: ChangeDetectorRef,
     @Inject(forwardRef(() => OTableBase)) protected _table: OTableBase
   ) { }
 
@@ -55,6 +68,14 @@ export class OTableButtonComponent implements OTableButton, OnInit {
       this.icon = 'priority_high';
     }
     this.iconPosition = Util.parseIconPosition(this.iconPosition);
+    this.showButtonsTextSubscription = this._table.showButtonsTextChange.subscribe(value => {
+      this.showButtonsText = value;
+      this.cdr.markForCheck();
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.showButtonsTextSubscription?.unsubscribe();
   }
 
   public innerOnClick(event): void {
@@ -75,8 +96,41 @@ export class OTableButtonComponent implements OTableButton, OnInit {
     return this.iconPosition === Codes.ICON_POSITION_LEFT;
   }
 
+  /**
+   * Style of this action, resolved by the table from its `attr` (explicit
+   * `action-styles` > component auto-rules > default `outline` + `default`). A
+   * custom `o-table-button` projected into the table therefore defaults to
+   * `outline` + `default` and honours any `action-styles` keyed by its `attr`.
+   */
+  get variant(): string {
+    return this.table.getActionVariant(this.oattr);
+  }
+
+  /** Resolved `o-button--importance-*` class for this action (see `variant`). */
+  get importanceClass(): string {
+    return this.table.getActionImportanceClass(this.oattr);
+  }
+
+  /** Material container colour for filled variants of this action (see `variant`). */
+  get color(): ThemePalette {
+    return this.table.getActionColor(this.oattr);
+  }
+
+  /**
+   * Effective label of this action: explicit `label` input > resolved from the
+   * table by its `attr` (see `variant`) > icon-only.
+   */
+  get effectiveLabel(): string {
+    return this.olabel ?? this.table.getActionLabel(this.oattr);
+  }
+
   get table(): OTableBase {
     return this._table;
+  }
+
+  /** Composed from the parent table's `data-testid` and this button's `attr`, for E2E testing (Playwright/Cypress). */
+  get dataTestId(): string | null {
+    return this.table?.dataTestId ? `${this.table.dataTestId}-${this.oattr}` : null;
   }
 
 }

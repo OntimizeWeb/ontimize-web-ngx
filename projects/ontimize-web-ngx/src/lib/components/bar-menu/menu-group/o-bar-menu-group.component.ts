@@ -1,11 +1,15 @@
 import { Component, ElementRef, forwardRef, Inject, Injector, ViewEncapsulation } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { Util } from '../../../util/util';
 import { OBaseMenuItemClass } from '../o-base-menu-item.class';
 import { OBarMenuBase } from '../o-bar-menu-base.class';
 
 
 @Component({
+  standalone: true,
+  imports: [MatIconModule, OTranslatePipe],
   selector: 'o-bar-menu-group',
   templateUrl: './o-bar-menu-group.component.html',
   styleUrls: ['./o-bar-menu-group.component.scss'],

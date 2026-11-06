@@ -46,7 +46,7 @@ describe('OSlideToggleComponent', () => {
     mockElementRef = { nativeElement: document.createElement('div') };
     mockInjector = TestBed.inject(Injector);
 
-    component = new OSlideToggleComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OSlideToggleComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {

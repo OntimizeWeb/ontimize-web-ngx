@@ -3,6 +3,7 @@ import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.compone
 import { OFormLayoutSidenavOptions } from '../../../../types/form-layout-sidenav-options.type';
 
 @Directive({
+  standalone: true,
   selector: 'o-form-layout-sidenav-options, o-form-layout-manager[mode="sidenav"]'
 })
 export class OFormLayoutSidenavOptionsDirective implements OnChanges {

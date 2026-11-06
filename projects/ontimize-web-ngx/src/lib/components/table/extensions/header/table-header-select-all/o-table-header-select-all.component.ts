@@ -1,10 +1,17 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, Inject, ViewEncapsulation } from "@angular/core";
-import { DEFAULT_INPUTS_O_TABLE_HEADER, OTableHeaderComponent } from "../table-header/o-table-header.component";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { BehaviorSubject, merge, Subscription } from "rxjs";
+import { AsyncPipe } from "@angular/common";
+
+import { OTranslatePipe } from "../../../../../pipes/o-translate.pipe";
+import { DEFAULT_INPUTS_O_TABLE_HEADER, OTableHeaderComponent } from "../table-header/o-table-header.component";
+import { OTableColumnResizerComponent } from "../table-column-resizer/o-table-column-resizer.component";
 import type { OColumn } from "../../../column/o-column.class";
 import { OTableBase } from "../../../o-table-base.class";
 
 @Component({
+  standalone: true,
+  imports: [AsyncPipe, MatCheckboxModule, OTranslatePipe, OTableColumnResizerComponent],
   selector: 'o-table-header-select-all',
   inputs: DEFAULT_INPUTS_O_TABLE_HEADER,
   templateUrl: './o-table-header-select-all.component.html',
@@ -36,6 +43,11 @@ export class OTableHeaderSelectAllComponent extends OTableHeaderComponent implem
     if (this.table.matpaginator) {
       dataChanges.push(this.table.matpaginator.page);
     }
+
+    if (this.table.dataSource?.onRenderedDataChange) {
+      dataChanges.push(this.table.dataSource.onRenderedDataChange);
+    }
+
     this.isAllSelected.next(this.table.isAllSelected());
     this.isIndeterminate.next(this.table.isIndeterminate());
 

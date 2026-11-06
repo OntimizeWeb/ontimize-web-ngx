@@ -15,6 +15,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON = [
 ];
 
 @Directive({
+  standalone: true,
   selector: 'o-table-export-button',
   inputs: DEFAULT_INPUTS_O_TABLE_EXPORT_BUTTON,
   outputs: DEFAULT_OUTPUTS_O_TABLE_EXPORT_BUTTON

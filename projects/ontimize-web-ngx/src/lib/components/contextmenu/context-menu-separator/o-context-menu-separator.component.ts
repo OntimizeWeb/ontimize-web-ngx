@@ -8,6 +8,7 @@ export const DEFAULT_CONTEXT_MENU_ITEM_INPUTS = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-context-menu-separator',
   template: ' ',
   inputs: DEFAULT_CONTEXT_MENU_ITEM_INPUTS,

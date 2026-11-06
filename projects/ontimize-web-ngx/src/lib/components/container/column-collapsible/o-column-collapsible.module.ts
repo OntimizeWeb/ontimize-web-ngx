@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { OColumnCollapsibleComponent } from './o-column-collapsible.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  declarations: [OColumnCollapsibleComponent],
-  imports: [CommonModule, OSharedModule],
+  imports: [OColumnCollapsibleComponent],
   exports: [OColumnCollapsibleComponent]
 })
 export class OColumnCollapsibleModule { }

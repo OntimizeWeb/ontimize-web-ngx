@@ -1,11 +1,14 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { MatSelectChange } from "@angular/material/select";
+import { MatSelectModule, MatSelectChange } from "@angular/material/select";
+import { OTranslatePipe } from "../../../../pipes/o-translate.pipe";
 import { OGroupedColumnTypes } from "../../../../types/o-grouped-column-types.type";
 export const DEFAULT_DUAL_LIST_SELECTOR_DATE_ITEM = [
   'item',
   'groupedDateColumns: grouped-date-columns',
 ];
 @Component({
+  standalone: true,
+  imports: [MatSelectModule, OTranslatePipe],
   selector: 'o-dual-list-selector-date-item',
   templateUrl: './o-dual-list-selector-date-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,7 +4,7 @@ import { Component, DebugElement, ChangeDetectorRef, Injector } from '@angular/c
 import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { UntypedFormGroup, UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { APP_CONFIG, AppConfig } from '../../config/app-config';
 import { appConfigFactory, AuthService, LocalStorageService } from '../../services';
 import { Config } from '../../types/config.type';
@@ -17,6 +17,7 @@ import { OTranslatePipe } from '../../pipes/o-translate.pipe';
 import { OIntegerPipe } from '../../pipes/o-integer.pipe';
 import { OSafePipe } from '../../pipes/o-safe.pipe';
 import { OMomentPipe } from '../../pipes/o-moment.pipe';
+import { OLuxonPipe } from '../../pipes/o-luxon.pipe';
 import { OIconPipe } from '../../pipes/o-icon.pipe';
 import { ORealPipe } from '../../pipes/o-real.pipe';
 import { OCurrencyPipe } from '../../pipes/o-currency.pipe';
@@ -56,11 +57,10 @@ export class OTestingUtils {
 
   /**
    * Get common declarations (pipes, directives) for testing
+   * Note: Standalone pipes/directives should NOT be here — use getCommonTestingModuleConfig().imports instead
    */
   static getCommonDeclarations() {
-    return [
-      OTranslatePipe
-    ];
+    return [];
   }
 
   /**
@@ -74,7 +74,8 @@ export class OTestingUtils {
         ReactiveFormsModule,
         TranslateModule.forRoot(),
         MatDialogModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        OTranslatePipe
       ],
       providers: [
         {
@@ -171,6 +172,7 @@ export class OTestingUtils {
         { provide: OPercentPipe, useClass: OPercentPipe, deps: [Injector] },
         { provide: OSafePipe, useClass: OSafePipe, deps: [Injector] },
         { provide: OMomentPipe, useClass: OMomentPipe, deps: [Injector] },
+        { provide: OLuxonPipe, useClass: OLuxonPipe, deps: [Injector] },
         { provide: OIconPipe, useClass: OIconPipe, deps: [Injector] },
       ]
     };
@@ -179,9 +181,9 @@ export class OTestingUtils {
   /**
    * Create a mock form group for input components
    */
-  static createMockFormGroup(controlName: string = 'testControl', initialValue: any = null): UntypedFormGroup {
-    const formGroup = new UntypedFormGroup({});
-    formGroup.addControl(controlName, new UntypedFormControl(initialValue));
+  static createMockFormGroup(controlName: string = 'testControl', initialValue: any = null): FormGroup {
+    const formGroup = new FormGroup({});
+    formGroup.addControl(controlName, new FormControl(initialValue));
     return formGroup;
   }
 

@@ -24,6 +24,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_GROUPING = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-columns-grouping',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,

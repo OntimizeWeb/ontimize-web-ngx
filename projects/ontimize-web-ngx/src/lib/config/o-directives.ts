@@ -10,14 +10,6 @@ import { OMatSuffix } from '../directives/o-mat-suffix.directive';
 import { OTabGroupDirective } from '../directives/o-tab-group.directive';
 
 export const ONTIMIZE_DIRECTIVES = [
-  // Ontimize directives...
-  OKeyboardListenerDirective,
-  OListItemDirective,
-  OTabGroupDirective,
-  OLockerDirective,
-  OMatErrorDirective,
-  OFileDragAndDropDirective,
-  InputRegulateDirective
 ];
 
 /** Standalone directives that should be imported (not declared) */
@@ -25,4 +17,11 @@ export const ONTIMIZE_STANDALONE_DIRECTIVES = [
   OHiddenDirective,
   OMatPrefix,
   OMatSuffix,
+  OKeyboardListenerDirective,
+  OListItemDirective,
+  OTabGroupDirective,
+  OLockerDirective,
+  OMatErrorDirective,
+  OFileDragAndDropDirective,
+  InputRegulateDirective
 ];

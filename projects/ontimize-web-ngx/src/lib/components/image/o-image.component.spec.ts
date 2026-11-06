@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import {  CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA , Injector, ElementRef } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { OTestingUtils } from '../../shared/testing/o-testing-utils';
 import { OFormValue } from '../form/o-form-value';
@@ -53,7 +53,7 @@ describe('OImageComponent', () => {
       nativeElement: document.createElement('div')
     };
     mockInjector = TestBed.inject(Injector);
-    component = TestBed.runInInjectionContext(() => new OImageComponent(mockOFormComponent, mockElementRef, mockInjector));
+    component = TestBed.runInInjectionContext(() => new OImageComponent(mockElementRef, mockInjector));
     
     // Setup mocks for fileInput and _fControl
     component.fileInput = {
@@ -241,7 +241,7 @@ describe('OImageComponent', () => {
 
   // Test onClickClearValue method
   it('should clear value and reset form when conditions are met', () => {
-    component.stateCtrl = new UntypedFormControl('test');
+    component.stateCtrl = new FormControl('test');
     component.currentFileName = 'test.png';
     component._fControl = jasmine.createSpyObj('FormControl', ['markAsTouched']);
     

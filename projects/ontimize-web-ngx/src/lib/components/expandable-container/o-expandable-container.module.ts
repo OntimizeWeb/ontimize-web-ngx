@@ -1,15 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../shared/shared.module';
 import { OExpandableContainerComponent } from './o-expandable-container.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  imports: [CommonModule, OSharedModule],
-  exports: [OExpandableContainerComponent],
-  declarations: [
-    OExpandableContainerComponent
-  ],
-
+  imports: [OExpandableContainerComponent],
+  exports: [OExpandableContainerComponent]
 })
 export class OExpandableContainerModule { }

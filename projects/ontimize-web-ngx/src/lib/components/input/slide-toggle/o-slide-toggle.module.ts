@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { OSlideToggleComponent } from './o-slide-toggle.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  declarations: [OSlideToggleComponent],
-  imports: [CommonModule, OSharedModule],
+  imports: [OSlideToggleComponent],
   exports: [OSlideToggleComponent]
 })
 export class OSlideToggleModule { }

@@ -10,3 +10,4 @@ export * from './currencyUtil';
 export * from './preference-mapping-util';
 export * from './injection-token.utils';
 export * from './factory.util';
+export * from './action-style.util';

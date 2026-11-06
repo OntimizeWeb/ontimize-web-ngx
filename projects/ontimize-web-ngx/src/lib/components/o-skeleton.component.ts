@@ -3,7 +3,7 @@ import { Observable, of, Subscription } from 'rxjs';
 
 import { AppearanceService } from '../services/appearance.service';
 
-@Directive({})
+@Directive({ standalone: true })
 export abstract class OSkeletonComponent implements AfterViewInit, OnDestroy {
   isDarkMode: boolean;
   subscription: Subscription;

@@ -1,4 +1,4 @@
-<mat-card fxLayout="column" fxLayoutAlign="center center" class="o-item-card" [class.small]="compareListHeight('small')"
+<mat-card class="o-item-card o-flex-column o-layout-align-center-center" [class.small]="compareListHeight('small')"
   [class.medium]="compareListHeight('medium')" [class.large]="compareListHeight('large')">
 
   @if (avatar !== undefined) {
@@ -58,10 +58,10 @@
       @if (collapsible) {
         <button type="button" mat-icon-button (click)="collapsed = !collapsed" class="collapse-button">
           @if (collapsed) {
-            <mat-icon svgIcon="ontimize:keyboard_arrow_down"></mat-icon>
+            <mat-icon>keyboard_arrow_down</mat-icon>
           }
           @if (!collapsed) {
-            <mat-icon svgIcon="ontimize:keyboard_arrow_up"></mat-icon>
+            <mat-icon>keyboard_arrow_up</mat-icon>
           }
         </button>
       }

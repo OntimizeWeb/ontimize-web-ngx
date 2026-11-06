@@ -29,10 +29,9 @@ describe('OHTMLInputComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
     const mockElementRef: any = { nativeElement: document.createElement('div') };
     const mockInjector = TestBed.inject(Injector);
-    component = new OHTMLInputComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OHTMLInputComponent(mockElementRef, mockInjector));
   });
 
   it('should create', () => {

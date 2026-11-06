@@ -23,6 +23,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_GROUPING_COLUMN = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-columns-grouping-column',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,

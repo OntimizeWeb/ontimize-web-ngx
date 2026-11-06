@@ -6,6 +6,7 @@ import { BooleanConverter, NumberConverter } from '../../../../decorators/input-
 import { OFormLayoutManagerComponent } from '../../o-form-layout-manager.component';
 
 @Directive({
+  standalone: true,
   selector: 'o-form-layout-tabgroup-options, o-form-layout-manager[mode="tab"]'
 })
 export class OFormLayoutTabGroupOptionsDirective {

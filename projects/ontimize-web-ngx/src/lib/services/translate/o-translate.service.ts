@@ -6,6 +6,7 @@ import { Observable, Subscriber } from 'rxjs';
 
 import { AppConfig } from '../../config/app-config';
 import * as CORE_TRANSLATIONS from '../../i18n/i18n';
+import { LuxonService } from '../../services/luxon.service';
 import { MomentService } from '../../services/moment.service';
 import { ObservableWrapper } from '../../util/async';
 import { Codes } from '../../util/codes';
@@ -34,6 +35,7 @@ export class OTranslateService {
 
   protected ngxTranslateService: TranslateService;
   protected momentService: MomentService;
+  protected luxonService: LuxonService;
   protected httpClient: HttpClient;
 
   protected localStorageKey: string;
@@ -45,6 +47,7 @@ export class OTranslateService {
   constructor(protected injector: Injector) {
     this.ngxTranslateService = this.injector.get(TranslateService);
     this.momentService = this.injector.get(MomentService);
+    this.luxonService = this.injector.get(LuxonService);
     this.httpClient = this.injector.get(HttpClient);
     this.appConfig = this.injector.get(AppConfig);
     this.localStorageKey = this.appConfig.getConfiguration().uuid;
@@ -165,6 +168,7 @@ export class OTranslateService {
       this.ngxTranslateService.translations[lang] = mixed;
     }
     this.momentService.load(lang);
+    this.luxonService.load(lang);
     ObservableWrapper.callEmit(this.onLanguageChanged, lang);
     if (observer) {
       observer.next(langRes);

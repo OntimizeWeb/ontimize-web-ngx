@@ -46,7 +46,7 @@ describe('OIntegerInputComponent', () => {
     mockElementRef = { nativeElement: document.createElement('div') };
     mockInjector = TestBed.inject(Injector);
 
-    component = TestBed.runInInjectionContext(() => new OIntegerInputComponent(mockOFormComponent, mockElementRef, mockInjector));
+    component = TestBed.runInInjectionContext(() => new OIntegerInputComponent(mockElementRef, mockInjector));
   });
 
   describe('Component Creation', () => {

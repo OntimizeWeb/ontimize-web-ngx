@@ -1,4 +1,6 @@
 import { Component, forwardRef, Inject, Injector, OnDestroy, Type, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -29,6 +31,8 @@ export type QueryConfiguration = {
 };
 
 @Component({
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule],
   selector: 'o-form-navigation',
   templateUrl: './o-form-navigation.component.html',
   styleUrls: ['./o-form-navigation.component.scss'],

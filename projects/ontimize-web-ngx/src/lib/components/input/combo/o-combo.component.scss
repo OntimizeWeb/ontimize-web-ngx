@@ -2,6 +2,10 @@
   .read-only .mat-mdc-select-arrow-wrapper {
     visibility: hidden;
   }
+
+  .mat-mdc-select-arrow-wrapper {
+    height: 100%;
+  }
 }
 
 .o-combo-panel.o-combo-panel-search {

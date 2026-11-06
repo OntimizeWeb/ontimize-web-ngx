@@ -3,6 +3,7 @@ import { NgxMaterialTimepickerComponent, TimepickerDirective } from 'ngx-materia
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Directive({
+  standalone: true,
   selector: '[oNgxTimepicker]',
   providers: [
     {

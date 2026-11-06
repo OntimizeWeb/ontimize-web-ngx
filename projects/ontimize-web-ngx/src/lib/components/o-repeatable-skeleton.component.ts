@@ -3,7 +3,7 @@ import { Directive } from '@angular/core';
 import { OSkeletonComponent } from './o-skeleton.component';
 import { Util } from '../util/util';
 
-@Directive({})
+@Directive({ standalone: true })
 export abstract class ORepeatableSkeletonComponent extends OSkeletonComponent  {
 
   abstract getParentElement(): HTMLElement;

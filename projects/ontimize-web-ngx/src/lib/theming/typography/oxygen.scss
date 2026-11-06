@@ -1,0 +1,31 @@
+// =============================================================================
+// typography/oxygen.scss — Oxygen typography config (Noto Sans)
+// =============================================================================
+//
+// Sets only the font-family (Noto Sans). Font sizes and weights are left to
+// Material's defaults so the theme inherits standard M3 type scale.
+//
+// Exposes $typography as a plain Sass map with the shape:
+//   (
+//     font-family: <string>,
+//     table: (
+//       small-header-height:      28px,
+//       small-row-height:         28px,
+//       small-header-font-size:   12px,
+//       ...
+//     )
+//   )
+//
+// Consumers downstream (ontimize-tokens.o-apply-tokens) read this map and
+// emit the corresponding --o-font-family CSS custom property.
+// No --o-font-*-size / --o-font-*-weight tokens are emitted, so Material's
+// native type-scale values apply throughout.
+// =============================================================================
+
+$font-family: '"Noto Sans", "Helvetica Neue", sans-serif' !default;
+
+@function create-typography-config($custom-font-family: $font-family) {
+  @return (font-family: $custom-font-family);
+}
+
+$typography: create-typography-config();

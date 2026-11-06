@@ -1,5 +1,16 @@
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
-import { UntypedFormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, forwardRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
 
 import { BooleanInputConverter, NumberInputConverter } from '../../../decorators/input-converter';
 import { IFileService } from '../../../interfaces/file-service.interface';
@@ -8,7 +19,6 @@ import { OntimizeFileService } from '../../../services/ontimize/ontimize-file.se
 import { OConfigureServiceArgs } from '../../../types/configure-service-args.type';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Util } from '../../../util/util';
-import { OFormComponent } from '../../form/o-form.component';
 import { OFormDataComponent } from '../../o-form-data-component.class';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFileItem } from './o-file-item.class';
@@ -61,13 +71,16 @@ export const DEFAULT_OUTPUTS_O_FILE_INPUT = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatProgressBarModule, MatProgressSpinnerModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-file-input',
   templateUrl: './o-file-input.component.html',
   styleUrls: ['./o-file-input.component.scss'],
   inputs: DEFAULT_INPUTS_O_FILE_INPUT,
   outputs: DEFAULT_OUTPUTS_O_FILE_INPUT,
   providers: [
-    { provide: OntimizeFileService, useFactory: fileServiceFactory, deps: [Injector] }
+    { provide: OntimizeFileService, useFactory: fileServiceFactory, deps: [Injector] },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OFileInputComponent), multi: true }
   ]
 })
 export class OFileInputComponent extends OFormDataComponent implements OnInit {
@@ -81,7 +94,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   public autoBinding: boolean = false;
   public autoRegistering: boolean = false;
   @BooleanInputConverter()
-  public showInfo: boolean = false;
+  public showInfo: boolean | string = false;
   @BooleanInputConverter()
   public multiple: boolean = false;
   @BooleanInputConverter()
@@ -110,11 +123,10 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
   protected serviceType: string;
   protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector,
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
   }
 
   ngOnInit() {
@@ -216,6 +228,18 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     }
   }
 
+  // Clicking a <mat-label for="input"> dispatches both the original label click
+  // and a synthetic click on the input — both bubble up to <mat-form-field>.
+  // This guard collapses any duplicate clicks fired within the same tick.
+  private _lastFileClick = 0;
+  public openFileSelector(inputFile: HTMLInputElement): void {
+    if (!this.enabled || this.isReadOnly) return;
+    const now = Date.now();
+    if (now - this._lastFileClick < 200) return;
+    this._lastFileClick = now;
+    inputFile.click();
+  }
+
   public upload(): void {
     this.uploader.upload();
   }
@@ -245,7 +269,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     this.onChange.emit(event);
   }
 
-  protected filetypeValidator(control: UntypedFormControl): ValidationErrors {
+  protected filetypeValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.acceptFileType) {
       const regex: RegExp = new RegExp(this.acceptFileType.replace(';', '|'));
       if (!this.files.every(file => file.type.match(regex) !== null || file.name.substr(file.name.lastIndexOf('.')).match(regex) !== null)) {
@@ -259,7 +283,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return {};
   }
 
-  protected maxFileSizeValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxFileSizeValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.maxFileSize) {
       if (!this.files.every(file => file.size < this.maxFileSize)) {
         return {
@@ -272,7 +296,7 @@ export class OFileInputComponent extends OFormDataComponent implements OnInit {
     return {};
   }
 
-  protected maxFilesValidator(control: UntypedFormControl): ValidationErrors {
+  protected maxFilesValidator(control: AbstractControl): ValidationErrors {
     if (control.value && control.value.length > 0 && this.multiple && this.maxFiles !== -1) {
       if (this.maxFiles < this.files.length) {
         return {

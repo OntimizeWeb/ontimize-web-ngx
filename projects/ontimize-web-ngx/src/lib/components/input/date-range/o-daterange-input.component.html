@@ -1,12 +1,12 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
+<div class="o-flex-row o-layout-align-sb-center" [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass"
   [matTooltipPosition]="tooltipPosition" [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
 
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
-    class="icon-field" fxFlexFill [subscriptSizing]="subscriptSizing">
+    class="icon-field o-flex-fill" [subscriptSizing]="subscriptSizing">
     @if (labelVisible) {
       <mat-label>{{ olabel | oTranslate }}</mat-label>
     }
-    <mat-date-range-input #dateRangeInput [rangePicker]="picker" [id]="getAttribute()" [formGroup]="range" [separator]="separator"
+    <mat-date-range-input #dateRangeInput [rangePicker]="picker" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formGroup]="range" [separator]="separator"
       [required]="isRequired" [min]="oMinDate" [max]="oMaxDate" (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)">
       <input #startDate matStartDate placeholder="{{ placeholderStartDay | oTranslate }}" [value]="startDateValue"
         [formControlName]="startKey" (dateChange)="onChangeEvent($event)" [readonly]="isReadOnly || !textInputEnabled" (focus)="innerOnFocus($event)"
@@ -18,10 +18,12 @@
 
         @if (showClearButton) {
           <button type="button" matSuffix mat-icon-button (click)="onClickClearValue($event)">
-            <mat-icon svgIcon="ontimize:close"></mat-icon>
+            <mat-icon>close</mat-icon>
           </button>
         }
-        <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="isReadOnly || !enabled"></mat-datepicker-toggle>
+        <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="isReadOnly || !enabled">
+            <mat-icon matDatepickerToggleIcon>today</mat-icon>
+        </mat-datepicker-toggle>
         <mat-date-range-picker #picker [disabled]="isReadOnly || !enabled" [class.read-only]="isReadOnly" [touchUi]="touchUi" [dateClass]="dateClass"></mat-date-range-picker>
 
         <mat-error *oMatError="hasError('required')">

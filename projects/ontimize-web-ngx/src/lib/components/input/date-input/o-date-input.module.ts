@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../../shared/shared.module';
 import { ODateInputComponent } from './o-date-input.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  declarations: [ODateInputComponent],
-  imports: [CommonModule, OSharedModule],
+  imports: [ODateInputComponent],
   exports: [ODateInputComponent]
 })
 export class ODateInputModule { }

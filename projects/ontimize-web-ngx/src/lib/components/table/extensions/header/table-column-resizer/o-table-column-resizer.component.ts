@@ -27,6 +27,7 @@ export const DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-column-resizer',
   inputs: DEFAULT_INPUTS_O_TABLE_COLUMN_RESIZER,
   outputs: DEFAULT_OUTPUTS_O_TABLE_COLUMN_RESIZER,

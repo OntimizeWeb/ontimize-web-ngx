@@ -1,8 +1,8 @@
-<div fxLayout="row" fxLayoutAlign="start center">
+<div class="o-flex-row o-layout-align-start-center">
   @if (icon && iconPosition==='left') {
     <mat-icon class="o-snackbar-icon">{{ icon }}</mat-icon>
   }
-  <span fxFlex class="o-snackbar-message">
+  <span class="o-flex o-snackbar-message">
     {{ message | oTranslate }}
   </span>
   @if (icon && iconPosition==='right') {

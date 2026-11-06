@@ -44,10 +44,9 @@ describe('OListPickerComponent', () => {
     }).compileComponents();
 
     // Create component manually to avoid OWrapperContentMenuComponent issues
-    const mockOFormComponent: any = {};
     const mockElementRef: any = { nativeElement: document.createElement('div') };
     const mockInjector = TestBed.inject(Injector);
-    component = new OListPickerComponent(mockOFormComponent, mockElementRef, mockInjector);
+    component = TestBed.runInInjectionContext(() => new OListPickerComponent(mockElementRef, mockInjector));
   });
 
   it('should create', () => {

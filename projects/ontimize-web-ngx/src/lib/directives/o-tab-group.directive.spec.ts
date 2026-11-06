@@ -18,7 +18,8 @@ describe('OTabGroupDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OTabGroupDirective, TestTabGroupComponent]
+      declarations: [TestTabGroupComponent],
+      imports: [OTabGroupDirective]
     });
     fixture = TestBed.createComponent(TestTabGroupComponent);
     component = fixture.componentInstance;

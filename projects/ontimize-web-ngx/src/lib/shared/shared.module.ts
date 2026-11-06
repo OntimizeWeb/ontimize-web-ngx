@@ -1,14 +1,15 @@
 import { IsEmptyValuePipe } from './../pipes/is-empty-value.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ONTIMIZE_DIRECTIVES, ONTIMIZE_STANDALONE_DIRECTIVES } from '../config/o-directives';
+import { ONTIMIZE_STANDALONE_DIRECTIVES } from '../config/o-directives';
 import { ColumnsFilterPipe } from '../pipes/columns-filter.pipe';
 import { OCurrencyPipe } from '../pipes/o-currency.pipe';
 import { OIconPipe } from '../pipes/o-icon.pipe';
 import { OIntegerPipe } from '../pipes/o-integer.pipe';
+import { OLuxonPipe } from '../pipes/o-luxon.pipe';
 import { OMomentPipe } from '../pipes/o-moment.pipe';
 import { OPercentPipe } from '../pipes/o-percentage.pipe';
 import { ORealPipe } from '../pipes/o-real.pipe';
@@ -29,7 +30,6 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
   imports: [
     CommonModule,
     OTranslateModule,
-    FlexLayoutModule,
     OCustomMaterialModule,
     FormsModule,
     ReactiveFormsModule,
@@ -37,29 +37,27 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     ColumnsFilterPipe,
     OrderByPipe,
     IsEmptyValuePipe,
-    // Standalone directives
-    ONTIMIZE_STANDALONE_DIRECTIVES,
-  ],
-  declarations: [
     OIntegerPipe,
     ORealPipe,
+    OLuxonPipe,
     OMomentPipe,
     OCurrencyPipe,
     OPercentPipe,
     OIconPipe,
     OSafePipe,
-    ONTIMIZE_DIRECTIVES,
+    // Standalone directives
+    ONTIMIZE_STANDALONE_DIRECTIVES,
+    // Standalone components
+    OSnackBarComponent,
     Error403Component,
     ODialogComponent,
     ODialogInternalComponent,
     OErrorComponent,
     OValidatorComponent,
-    OSnackBarComponent,
     OLoadFilterDialogComponent,
-    OStoreFilterDialogComponent
+    OStoreFilterDialogComponent,
   ],
   exports: [
-    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
     OTranslateModule,
@@ -67,13 +65,13 @@ import { ODialogInternalComponent } from './components/dialog/o-dialog-internal.
     OrderByPipe,
     OIntegerPipe,
     ORealPipe,
+    OLuxonPipe,
     OMomentPipe,
     OCurrencyPipe,
     OPercentPipe,
     OIconPipe,
     OSafePipe,
     IsEmptyValuePipe,
-    ONTIMIZE_DIRECTIVES,
     ONTIMIZE_STANDALONE_DIRECTIVES,
     OCustomMaterialModule,
     Error403Component,

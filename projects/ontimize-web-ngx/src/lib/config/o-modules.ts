@@ -26,7 +26,6 @@ import { OCheckboxModule } from '../components/input/checkbox/o-checkbox.module'
 import { OComboModule } from '../components/input/combo/o-combo.module';
 import { OCurrencyInputModule } from '../components/input/currency-input/o-currency-input.module';
 import { ODateInputModule } from '../components/input/date-input/o-date-input.module';
-import { ODateRangeLegacyInputModule } from '../components/input/date-range-legacy/o-daterange-input.module';
 import { OEmailInputModule } from '../components/input/email-input/o-email-input.module';
 import { OFileInputModule } from '../components/input/file-input/o-file-input.module';
 import { OHourInputModule } from '../components/input/hour-input/o-hour-input.module';
@@ -126,7 +125,6 @@ export const INTERNAL_ONTIMIZE_MODULES_EXPORTED: any = [
   ORadioModule,
   OSlideToggleModule,
   OSliderModule,
-  ODateRangeLegacyInputModule,
   ODateRangeInputModule,
   OExpandableContainerModule,
   ODualListSelectorModule,
@@ -194,7 +192,6 @@ export const INTERNAL_ONTIMIZE_MODULES: any = [
   OComboModule,
   OCurrencyInputModule,
   ODateInputModule,
-  ODateRangeLegacyInputModule,
   OEmailInputModule,
   OPhoneInputModule,
   OFileInputModule,

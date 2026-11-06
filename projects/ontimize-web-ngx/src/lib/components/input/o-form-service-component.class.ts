@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Injector, NgZone, ViewChild } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injector, NgZone, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../decorators/input-converter';
@@ -13,7 +13,6 @@ import { Codes } from '../../util/codes';
 import { ServiceUtils } from '../../util/service.utils';
 import { Util } from '../../util/util';
 import { OContextMenuComponent } from '../contextmenu/o-context-menu.component';
-import { OFormComponent } from '../form/o-form.component';
 import { OFormDataComponent } from '../o-form-data-component.class';
 import { BaseService } from '../../services/base-service.class';
 import { FactoryUtil } from '../../util/factory.util';
@@ -63,7 +62,10 @@ export const DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT = [
   // sort [string]: sorting ASC or DESC. Default: no value
   'sort',
   //  configure-service-args [OConfigureServiceArgs]: Allows configure service .
-  'configureServiceArgs: configure-service-args'
+  'configureServiceArgs: configure-service-args',
+
+  // initial-filter-function [function]: Callback function that returns an initial filter to be applied on every query.
+  'initialFilterFunction: initial-filter-function'
 ];
 
 export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
@@ -75,7 +77,7 @@ export const DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT = [
   inputs: DEFAULT_INPUTS_O_FORM_SERVICE_COMPONENT,
   outputs: DEFAULT_OUTPUTS_O_FORM_SERVICE_COMPONENT
 })
-export class OFormServiceComponent extends OFormDataComponent {
+export class OFormServiceComponent extends OFormDataComponent implements OnChanges {
 
   /* Inputs */
   protected staticData: Array<any>;
@@ -99,6 +101,7 @@ export class OFormServiceComponent extends OFormDataComponent {
   queryWithNullParentKeys: boolean = false;
   public setValueOnValueChange: string;
   public queryFallbackFunction: (error: any) => void;
+  public initialFilterFunction?: () => { [key: string]: any };
 
   @BooleanInputConverter()
   public translate: boolean = false;
@@ -139,12 +142,10 @@ export class OFormServiceComponent extends OFormDataComponent {
 
   protected configureServiceArgs: OConfigureServiceArgs;
   constructor(
-    form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
-    this.form = form;
+    super(elRef, injector);
     this.elRef = elRef;
     this.oErrorDialogManager = injector.get(OErrorDialogManager);
   }
@@ -200,7 +201,16 @@ export class OFormServiceComponent extends OFormDataComponent {
     }
 
 
+  }
 
+  protected canSetStaticData(staticData: any): boolean {
+    return Util.isDefined(staticData)
+  }
+
+  ngOnChanges(changes: { [propName: string]: SimpleChange }) {
+    if (this.canSetStaticData(changes.staticData?.currentValue)) {
+      this.setDataArray(changes.staticData.currentValue);
+    }
   }
 
   destroy() {
@@ -260,6 +270,9 @@ export class OFormServiceComponent extends OFormDataComponent {
       return;
     }
     filter = Object.assign(filter || {}, ServiceUtils.getParentKeysFromForm(this._pKeysEquiv, this.form));
+    if (this.initialFilterFunction) {
+      filter = Object.assign(filter, this.initialFilterFunction());
+    }
     if (!ServiceUtils.filterContainsAllParentKeys(filter, this._pKeysEquiv) && !this.queryWithNullParentKeys) {
       this.setDataArray([]);
     } else {

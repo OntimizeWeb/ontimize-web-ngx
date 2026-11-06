@@ -13,13 +13,16 @@ export * from './form-layout-detail-component-data.type';
 export * from './form-value-options.type';
 export * from './http-request-options.type';
 export * from './menu-root-item.type';
+export * from './o-action-style.type';
 export * from './o-breadcrumb-item.type';
 export * from './o-component-permissions.type';
 export * from './o-date-value.type';
 export * from './o-filter-builder-values.type'
 export * from './o-form-initialization-options.type';
 export * from './o-form-permissions.type';
+export * from './o-grid-global-config.type';
 export * from './o-inputs-options.type';
+export * from './o-list-global-config.type';
 export * from './o-list-initialization-options.type';
 export * from './o-mat-error.type';
 export * from './o-permissions-definition.type';

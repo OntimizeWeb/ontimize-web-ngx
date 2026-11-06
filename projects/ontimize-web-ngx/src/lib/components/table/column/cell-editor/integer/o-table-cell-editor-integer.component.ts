@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { ValidatorFn, Validators } from '@angular/forms';
+import { ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { OTranslatePipe } from '../../../../../pipes/o-translate.pipe';
+import { OMatErrorDirective } from '../../../../../directives/o-mat-error.directive';
 
 import { NumberInputConverter } from '../../../../../decorators/input-converter';
 import { Util } from '../../../../../util/util';
@@ -13,6 +19,8 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_EDITOR_INTEGER = [
 
 
 @Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective],
   selector: 'o-table-cell-editor-integer',
   templateUrl: './o-table-cell-editor-integer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

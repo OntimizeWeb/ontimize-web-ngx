@@ -13,8 +13,15 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { MediaObserver } from '@ngbracket/ngx-layout';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
+import { OAppSidenavImageComponent } from './image/o-app-sidenav-image.component';
+import { OAppSidenavMenuGroupComponent } from './menu-group/o-app-sidenav-menu-group.component';
+import { OAppSidenavMenuItemComponent } from './menu-item/o-app-sidenav-menu-item.component';
+import { OAppSidenavMenuSectionComponent } from './menu-section/o-app-sidenav-menu-section.component';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -49,6 +56,8 @@ export const DEFAULT_OUTPUTS_O_APP_SIDENAV = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [MatSidenavModule, MatIconModule, MatListModule, OAppSidenavImageComponent, OAppSidenavMenuItemComponent, OAppSidenavMenuGroupComponent, OAppSidenavMenuSectionComponent],
   selector: 'o-app-sidenav',
   inputs: DEFAULT_INPUTS_O_APP_SIDENAV,
   outputs: DEFAULT_OUTPUTS_O_APP_SIDENAV,
@@ -102,7 +111,7 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
     protected router: Router,
     protected elRef: ElementRef,
     protected cd: ChangeDetectorRef,
-    protected media: MediaObserver
+    protected media: BreakpointObserver
   ) {
     super(injector);
     this.appMenuService = this.injector.get(AppMenuService);
@@ -110,7 +119,7 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
     this.permissionSubscription = this.appMenuService.onPermissionMenuChanged.subscribe(() => this.refreshMenuRoots());
     this.oUserInfoService = this.injector.get(OUserInfoService);
     const self = this;
-    this.mediaWatch = this.media.asObservable().subscribe(() => {
+    this.mediaWatch = this.media.observe([Breakpoints.XSmall]).subscribe(() => {
       if (self.isScreenSmall() && self.sidenav) {
         self.sidenav.close();
       }
@@ -146,15 +155,23 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
 
   restoreMenuGroupState(): void {
     if (this.localStorageService && this.storeState) {
-      let menuState: { id: string, opened: boolean }[] = this.state.menu ?? [];
-
-      this.menuRootArray.forEach((group: MenuGroup) => {
-        const savedState = menuState.find(menuOption => menuOption.id === group.id);
-        if (savedState) {
-          group.opened = savedState.opened;
-        }
-      });
+      const menuState: { id: string, opened: boolean }[] = this.state.menu ?? [];
+      this.restoreMenuGroupStateInItems(this.menuRootArray, menuState);
     }
+  }
+
+  /**
+   * Restores the stored `opened` state of every menu group of the menu, at any level, so groups
+   * nested inside a menu section also keep their state.
+   */
+  protected restoreMenuGroupStateInItems(items: MenuRootItem[], menuState: { id: string, opened: boolean }[]): void {
+    (items || []).forEach((item: MenuGroup) => {
+      const savedState = menuState.find(menuOption => menuOption.id === item.id);
+      if (savedState) {
+        item.opened = savedState.opened;
+      }
+      this.restoreMenuGroupStateInItems(item.items, menuState);
+    });
   }
 
   getComponentKey(): string {
@@ -268,7 +285,7 @@ export class OAppSidenavComponent extends OAppSidenavComponentStateService imple
   }
 
   isScreenSmall(): boolean {
-    return !this.manuallyClosed && this.media.isActive('lt-sm');
+    return !this.manuallyClosed && this.media.isMatched(Breakpoints.XSmall);
   }
 
   isMobileMode(): boolean {

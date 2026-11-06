@@ -14,6 +14,7 @@ export const DEFAULT_PAGINATOR_TABLE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-paginator',
   template: ' ',
   inputs: DEFAULT_PAGINATOR_TABLE,

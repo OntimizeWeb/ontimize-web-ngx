@@ -31,7 +31,7 @@ export class IconService {
       iconPosition = this._iconPosition;
     }
     let iconValue = value;
-    let icon = "<mat-icon class='mat-24 mat-icon notranslate material-icons mat-icon-no-color' role='img' aria-hidden='true'>" + args.icon + "</mat-icon>";
+    let icon = "<mat-icon class='mat-24 mat-icon notranslate material-symbols-outlined mat-icon-no-color' role='img' aria-hidden='true'>" + args.icon + "</mat-icon>";
     switch (iconPosition) {
       case 'left':
         iconValue = icon + iconValue;

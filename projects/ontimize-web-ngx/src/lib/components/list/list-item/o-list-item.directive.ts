@@ -22,6 +22,7 @@ import { ListItem } from './o-list-item';
 @Directive({
   selector: 'o-list-item, mat-list-item[o-list-item], mat-card[o-list-item]',
   exportAs: 'olistitem',
+  standalone: true,
   host: {
     '[class.o-list-item]': 'true',
     '(click)': 'onItemClicked($event)',

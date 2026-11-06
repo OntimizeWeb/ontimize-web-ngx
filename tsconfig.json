@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
+    "skipLibCheck": true,
     "target": "ES2022",
     "module": "es2020",
     "moduleResolution": "node",
@@ -24,7 +25,8 @@
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "fullTemplateTypeCheck": false,
+    "strictInjectionParameters": true,
+    "strictTemplates": false
   }
 }

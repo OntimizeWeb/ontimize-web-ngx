@@ -1,7 +1,7 @@
 <div [formGroup]="getFormGroup()" [matTooltip]="tooltip" [matTooltipClass]="tooltipClass" [matTooltipPosition]="tooltipPosition"
   [matTooltipShowDelay]="tooltipShowDelay" [matTooltipHideDelay]="tooltipHideDelay">
   <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel" [hideRequiredMarker]="hideRequiredMarker" [class.custom-width]="hasCustomWidth"
-    [class.icon-field]="showClearButton" fxFlexFill [subscriptSizing]="subscriptSizing">
+    [class.icon-field]="showClearButton" class="o-flex-fill" [subscriptSizing]="subscriptSizing">
     @if (_prefixChildren.length>0) {
       <span matPrefix>
         <ng-content select="[oMatPrefix]"></ng-content>
@@ -12,19 +12,19 @@
     }
 
     @if (!regulatePattern) {
-      <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      <input matInput type="text" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [placeholder]="placeHolder"
         (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired"
         [maxlength]="maxLength" [minlength]="minLength" />
     }
     @if (regulatePattern) {
-      <input matInput type="text" [id]="getAttribute()" [formControlName]="getAttribute()" [placeholder]="placeHolder"
+      <input matInput type="text" [id]="getAttribute()" [attr.data-testid]="dataTestId" [formControlName]="getAttribute()" [placeholder]="placeHolder"
         (focus)="innerOnFocus($event)" (blur)="innerOnBlur($event)" [readonly]="isReadOnly" (change)="onChangeEvent($event)" [required]="isRequired"
         [maxlength]="maxLength" [minlength]="minLength" oInputRegulate [oInputRegulatePattern]="regulatePattern" />
     }
 
     @if (showClearButton) {
       <button type="button" matIconSuffix mat-icon-button (click)="onClickClearValue($event)">
-        <mat-icon svgIcon="ontimize:close"></mat-icon>
+        <mat-icon>close</mat-icon>
       </button>
     }
     <mat-error *oMatError="hasError('required')">

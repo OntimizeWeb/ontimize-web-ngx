@@ -2,6 +2,11 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "deleteDestPath": true,
   "dest": "../../dist",
+  "assets": [
+    "ontimize.scss",
+    "assets/**/*",
+    "src/**/*.scss"
+  ],
   "lib": {
     "entryFile": "src/public-api.ts"
   },
@@ -9,6 +14,7 @@
     "@ngx-translate/core",
     "@ngx-translate/http-loader",
     "angular-resizable-element",
+    "luxon",
     "moment",
     "ngx-material-timepicker",
     "tslib",

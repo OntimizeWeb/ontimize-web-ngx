@@ -4,13 +4,13 @@
     [class.position-start]="position === 'start'">
 
     <!-- Header -->
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="sidenav-title-container">
+    <div class="sidenav-title-container o-flex-row o-layout-align-sb-center">
 
-      <span fxFlex fxLayoutAlign="start center">
+      <span class="o-flex o-layout-align-start-center">
         {{ label }}
       </span>
 
-      <mat-icon (click)="closeDetail()" svgIcon="ontimize:close" (keydown)="closeDetail()"></mat-icon>
+      <mat-icon (click)="closeDetail()" (keydown)="closeDetail()">close</mat-icon>
 
     </div>
 

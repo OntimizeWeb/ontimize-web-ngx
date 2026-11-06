@@ -1,13 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { OSharedModule } from '../../../shared/shared.module';
-import { OTextInputModule } from '../text-input/o-text-input.module';
 import { OPasswordInputComponent } from './o-password-input.component';
 
+/** @deprecated Use the standalone component directly. Import the component class instead of this module. */
 @NgModule({
-  declarations: [OPasswordInputComponent],
-  imports: [OSharedModule, CommonModule, OTextInputModule],
+  imports: [OPasswordInputComponent],
   exports: [OPasswordInputComponent]
 })
 export class OPasswordInputModule {

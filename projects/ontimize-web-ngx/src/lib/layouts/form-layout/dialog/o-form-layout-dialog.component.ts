@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, Inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
+
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { ILayoutManagerComponent } from '../../../interfaces/layout-manager-component.interface';
 import { OFormLayoutManagerMode } from '../../../interfaces/o-form-layout-manager-mode.interface';
 import { DialogService } from '../../../services/dialog.service';
@@ -10,6 +13,8 @@ import { OFormLayoutManagerBase } from '../o-form-layout-manager-base.class';
 import { OFormLayoutManagerService } from '../../../services/o-form-layout-manager.service';
 
 @Component({
+  standalone: true,
+  imports: [MatDialogModule, MatIconModule, OTranslatePipe, OFormLayoutManagerContentDirective],
   selector: 'o-form-layout-dialog',
   templateUrl: './o-form-layout-dialog.component.html',
   styleUrls: ['./o-form-layout-dialog.component.scss'],
@@ -67,13 +72,17 @@ export class OFormLayoutDialogComponent implements OFormLayoutManagerMode, After
     }
   }
   setFullscreenDialog(): void {
+    const overlayRef = this.dialogRef['_ref'].overlayRef;
     if (this.fullscreen) {
-      this.dialogRef.updateSize(
-        this.formLayoutManager.dialogOptions.width,
-        this.formLayoutManager.dialogOptions.height
-      );
+      const opts = this.formLayoutManager.dialogOptions || {};
+      overlayRef.updateSize({
+        width: opts.width || '65vw',
+        maxWidth: opts.maxWidth || '65vw',
+        height: opts.height || '90vh',
+        maxHeight: opts.maxHeight || '90vh',
+      });
     } else {
-      this.dialogRef.updateSize("100%", "100%");
+      overlayRef.updateSize({ width: '100%', maxWidth: '100%', height: '100%', maxHeight: '100%' });
     }
 
     this.fullscreen = !this.fullscreen;

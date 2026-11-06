@@ -52,15 +52,11 @@
       }
     }
 
-    .mat-icon[svgicon="ontimize:drag_handle"],
     .mat-mdc-list-item {
       cursor: move;
     }
 
-    .mat-icon[svgicon="ontimize:visibility"],
-    .mat-icon[svgicon="ontimize:visibility_off"] {
-      width: 32px;
-    }
+
 
   }
 }

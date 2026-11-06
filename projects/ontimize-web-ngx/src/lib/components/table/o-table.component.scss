@@ -11,18 +11,21 @@ $o_table_row_padding: 24px;
 
   .o-table-container {
     height: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: stretch;
     align-content: stretch;
     min-width: 100%;
     min-height: 400px;
+    padding: 8px;
 
     .o-table-body {
       display: flex;
       flex: 1 1 auto;
+      width: 100%;
 
       .o-table-overflow {
         overflow-y: auto;
@@ -55,7 +58,6 @@ $o_table_row_padding: 24px;
     }
 
     position: relative;
-    padding: 0 .5%;
 
     .o-table-toolbar {
 
@@ -289,6 +291,17 @@ $o_table_row_padding: 24px;
         cursor: pointer;
       }
 
+      // Detail/edit action cell is a native <button>: strip the UA button
+      // styles so it renders like the plain inline icon container it replaced.
+      button.o-action-cell-renderer {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+      }
+
       .mat-mdc-header-cell {
         overflow: hidden;
         position: relative;
@@ -298,9 +311,6 @@ $o_table_row_padding: 24px;
 
         &.mat-column-select.mat-header-select-all-with-title {
           padding-right: 12px;
-        }
-
-        &:first-of-type {
           padding-left: 0;
         }
 
@@ -451,6 +461,9 @@ $o_table_row_padding: 24px;
       }
 
     }
+  }
+  .mat-paginator{
+    margin-top:8px;
   }
 }
 

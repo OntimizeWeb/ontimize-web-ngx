@@ -52,6 +52,7 @@ export const DEFAULT_INPUTS_O_TABLE_COLUMN_FILTER_COLUMN = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-columns-filter-column',
   template: ' ',
   changeDetection: ChangeDetectionStrategy.OnPush,

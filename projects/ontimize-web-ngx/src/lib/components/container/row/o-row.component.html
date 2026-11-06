@@ -1,6 +1,6 @@
-<div #container fxLayout="column" class="o-container" fxFill>
+<div #container class="o-container o-flex-column o-flex-fill">
   @if (hasHeaderOrAppearanceOutlineSetted()) {
-    <div #containerTitle fxLayoutAlign="start center" class="o-container-title" layout-padding>
+    <div #containerTitle class="o-container-title o-layout-align-start-center" layout-padding>
       @if (icon) {
         <mat-icon>{{ icon }}</mat-icon>
       }
@@ -17,7 +17,7 @@
         <div class="o-container-outline-end"></div>
       </div>
     }
-    <div fxLayout="row" fxLayoutAlign="{{ layoutAlign }}" fxLayoutGap="{{ layoutGap }}" fxFlex="grow">
+    <div class="o-flex-row o-flex-grow" [ngStyle]="layoutAlignStyles" [style.gap]="layoutGap">
       <ng-content></ng-content>
     </div>
   </div>

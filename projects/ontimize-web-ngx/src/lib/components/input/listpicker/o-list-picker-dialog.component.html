@@ -4,7 +4,7 @@
     appearance="fill"></o-search-input>
   </div>
 }
-<div mat-dialog-content [class.o-list-picker-has-filter]="filter" fxFlex>
+<div mat-dialog-content [class.o-list-picker-has-filter]="filter" class="o-flex">
   <cdk-virtual-scroll-viewport [itemSize]="itemSize">
     <mat-list>
       @if (isEmptyData()) {
@@ -32,5 +32,5 @@
 
 </div>
 <mat-dialog-actions align="end">
-  <button type="button" mat-stroked-button mat-dialog-close class="o-button-default cancel">{{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button mat-dialog-close data-testid="dialog-cancel" class="o-button--importance-default">{{ 'CANCEL' | oTranslate }}</button>
 </mat-dialog-actions>

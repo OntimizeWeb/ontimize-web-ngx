@@ -1,0 +1,226 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use '../ontimize-style' as ontimize-style;
+@use '../typography/oxygen.scss' as oxygen-typography;
+// Note: Color palettes are generated from primary: #1464a5, secondary: #5b93c0, tertiary: #8ab2d2
+$_palettes: (
+  primary: (0: #000000,
+
+    10: #001D36,
+
+    20: #003259,
+
+    25: #003D6B,
+
+    30: #00497D,
+
+    35: #005591,
+
+    40: #1464A5,
+
+    50: #3D7EC0,
+
+    60: #5A97D9,
+
+    70: #78B0F1,
+
+    80: #9FCAFF,
+
+    90: #D1E4FF,
+
+    95: #EAF1FF,
+
+    98: #F8F9FF,
+
+    99: #FDFCFF,
+
+    100: #ffffff,
+
+  ),
+
+  secondary: (0: #000000,
+
+    10: #0A1D2E,
+
+    20: #1F3242,
+
+    25: #293D4F,
+
+    30: #34495C,
+
+    35: #40556A,
+
+    40: #516683,
+
+    50: #697F9B,
+
+    60: #8399B4,
+
+    70: #9EB4CE,
+
+    80: #B9CFE9,
+
+    90: #D6E3F8,
+
+    95: #EBF1FF,
+
+    98: #F7F9FF,
+
+    99: #FCFCFF,
+
+    100: #FFFFFF,
+
+  ),
+
+  tertiary: (0: #000000,
+
+    10: #001F28,
+
+    20: #00353F,
+
+    25: #0A414D,
+
+    30: #1A4E5B,
+
+    35: #285A69,
+
+    40: #3D7A8E,
+
+    50: #5493A8,
+
+    60: #6DADC3,
+
+    70: #88C7DF,
+
+    80: #A3E1FB,
+
+    90: #CAE6FF,
+
+    95: #E6F2FF,
+
+    98: #F6FAFF,
+
+    99: #FCFCFF,
+
+    100: #ffffff,
+
+  ),
+
+  neutral: ( // M3 standard tones
+    0: #000000,
+    4: #0f0f0f,
+    6: #141414,
+    10: #1a1a1a,
+    12: #1e1e1e,
+    17: #2a2a2a,
+    20: #303030,
+    22: #353535,
+    24: #3a3a3a,
+    25: #3c3c3c,
+    30: #4a4a4a,
+    35: #575757,
+    40: #666666,
+    50: #808080,
+    60: #999999,
+    70: #b3b3b3,
+    80: #cccccc,
+    87: #ececec,
+    90: #ededed,
+    92: #f1f1f1,
+    94: #f4f4f4,
+    95: #f5f5f5,
+    96: #f7f7f7,
+    98: #fbfbfb,
+    99: #fdfdfd,
+    100: #ffffff,
+    // Ontimize surface levels — light theme
+    85: #e0e0e0, // level-08
+    93: #f2f2f2, // level-06
+    97: #f9fafb, // level-0 / background
+    // (tone 96 = #f7f7f7 = level-04, tone 100 = white = level-1)
+    // Ontimize surface levels — dark theme
+    13: #202020, // dark level-0 / background
+    15: #252525, // dark level-1 / card
+    19: #2e2e2e, // dark level-04
+    // (tone 20 = #303030 = dark level-06, tone 24 = #3a3a3a = dark level-08)
+  ),
+  neutral-variant: (0: #000000,
+  10: #1b1b1b,
+  20: #313131,
+  25: #3d3d3d,
+  30: #4c4c4c,
+  35: #595959,
+  40: #686868,
+  50: #828282,
+  60: #9b9b9b,
+  70: #b5b5b5,
+  80: #cecece,
+  90: #f6f6f6,
+  95: #fcfcfc,
+  98: #ffffff,
+  99: #ffffff,
+  100: #ffffff,
+
+  ),
+
+  error: (0: #000000,
+
+    10: #410002,
+
+    20: #690005,
+
+    25: #7e0007,
+
+    30: #93000a,
+
+    35: #a80710,
+
+    40: #ba1a1a,
+
+    50: #de3730,
+
+    60: #ff5449,
+
+    70: #ff897d,
+
+    80: #ffb4ab,
+
+    90: #ffdad6,
+
+    95: #ffedea,
+
+    98: #fff8f7,
+
+    99: #fffbff,
+
+    100: #ffffff,
+
+  ),
+
+);
+
+
+$_rest: (
+  secondary: map.get($_palettes, secondary),
+  neutral: map.get($_palettes, neutral),
+  neutral-variant: map.get($_palettes, neutral-variant),
+  error: map.get($_palettes, error),
+);
+$_primary: map.merge(map.get($_palettes, primary), $_rest);
+$_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
+
+/* Light theme with Noto Sans typography */
+$theme: ontimize-style.o-mat-light-theme((primary: $_primary,
+      tertiary: $_tertiary,
+      neutral: map.get($_palettes, neutral),
+      typography: oxygen-typography.$typography,
+      density: -2,
+    ));
+
+/* Dark theme with Noto Sans typography */
+$dark-theme: ontimize-style.o-mat-dark-theme((primary: $_primary,
+      tertiary: $_tertiary,
+      neutral: map.get($_palettes, neutral),
+      typography: oxygen-typography.$typography,
+      density: -2,
+    ));

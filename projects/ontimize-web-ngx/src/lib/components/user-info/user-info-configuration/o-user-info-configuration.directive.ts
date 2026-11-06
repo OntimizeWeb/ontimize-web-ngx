@@ -13,6 +13,7 @@ export const DEFAULT_OUTPUTS_O_USER_INFO_MENU = [
 ];
 
 @Directive({
+  standalone: true,
   selector: 'o-user-info-configuration',
   inputs: DEFAULT_INPUTS_O_USER_INFO_MENU,
   outputs: DEFAULT_OUTPUTS_O_USER_INFO_MENU

@@ -9,6 +9,7 @@ export const DEFAULT_INPUTS_O_TABLE_CELL_RENDERER_TRANSLATE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-table-cell-renderer-translate',
   templateUrl: './o-table-cell-renderer-translate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

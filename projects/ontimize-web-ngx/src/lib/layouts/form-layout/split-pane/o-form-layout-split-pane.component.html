@@ -1,6 +1,6 @@
 
-<div fxLayout="row" class="o-split-pane-row-wrapper">
-  <div #mainWrapper fxFlex fxLayout="row" class="o-split-pane-main-content">
+<div class="o-split-pane-row-wrapper o-flex-row">
+  <div #mainWrapper class="o-split-pane-main-content o-flex o-flex-row">
     <ng-content></ng-content>
   </div>
 
@@ -13,13 +13,13 @@
       </div>
     </div>
 
-    <div class="o-split-pane-secondary-content" fxLayout="column" fxLayoutAlign="center stretch" fxFlex>
+    <div class="o-split-pane-secondary-content o-flex-column o-layout-align-center-stretch o-flex">
       <ng-template o-form-layout-manager-content></ng-template>
     </div>
   </div>
 </div>
 @if (showLoading | async) {
-  <div class="spinner-container" fxLayout="column" fxLayoutAlign="center center">
+  <div class="spinner-container o-flex-column o-layout-align-center-center">
     <mat-progress-spinner mode="indeterminate" strokeWidth="3"></mat-progress-spinner>
   </div>
 }

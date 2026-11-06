@@ -1,15 +1,25 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { AfterViewInit, Component, ElementRef, forwardRef, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule, MatSelect, MatSelectChange } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { Subscription } from 'rxjs';
 
 import { BooleanInputConverter } from '../../../decorators/input-converter';
+import { OMatErrorDirective } from '../../../directives/o-mat-error.directive';
+import { OTranslatePipe } from '../../../pipes/o-translate.pipe';
 import { OntimizeServiceProvider } from '../../../services/factories';
 import { FormValueOptions } from '../../../types/form-value-options.type';
 import { Codes } from '../../../util/codes';
 import { Util } from '../../../util/util';
+import { OContextMenuComponent } from '../../contextmenu/o-context-menu.component';
+import { OContextMenuDirective } from '../../contextmenu/o-context-menu.directive';
+import { OContextMenuItemComponent } from '../../contextmenu/context-menu-item/o-context-menu-item.component';
 import { OFormValue } from '../../form/o-form-value';
-import { OFormComponent } from '../../form/o-form.component';
 import { OValueChangeEvent } from '../../o-value-change-event.class';
 import { OFormServiceComponent } from '../o-form-service-component.class';
 import { OComboCustomRenderer } from './combo-renderer/o-combo-renderer.class';
@@ -26,10 +36,13 @@ export const DEFAULT_INPUTS_O_COMBO = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [NgTemplateOutlet, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTooltipModule, OTranslatePipe, OMatErrorDirective, OComboSearchComponent, OContextMenuDirective, OContextMenuComponent, OContextMenuItemComponent],
   selector: 'o-combo',
   providers: [
     OntimizeServiceProvider,
-    { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) }
+    { provide: OFormServiceComponent, useExisting: forwardRef(() => OComboComponent) },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OComboComponent), multi: true }
   ],
   inputs: DEFAULT_INPUTS_O_COMBO,
   templateUrl: './o-combo.component.html',
@@ -42,7 +55,7 @@ export const DEFAULT_INPUTS_O_COMBO = [
 export class OComboComponent extends OFormServiceComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public value: OFormValue;
-  public searchControl: UntypedFormControl = new UntypedFormControl();
+  public searchControl: FormControl = new FormControl();
   public renderer: OComboCustomRenderer;
 
   /* Inputs */
@@ -86,11 +99,10 @@ export class OComboComponent extends OFormServiceComponent implements OnInit, Af
   protected subscription: Subscription = new Subscription();
 
   constructor(
-    @Optional() @Inject(forwardRef(() => OFormComponent)) form: OFormComponent,
     elRef: ElementRef,
     injector: Injector
   ) {
-    super(form, elRef, injector);
+    super(elRef, injector);
     this.defaultValue = '';
   }
 

@@ -4,6 +4,7 @@ import { OAppSidenavComponent } from '../../components/app-sidenav/o-app-sidenav
 import { OAppSidenavComponentStateClass } from './o-app-menu-component-state.class';
 import { AbstractComponentStateService } from './o-component-state.service';
 import { MenuGroup } from '../../interfaces/app-menu.interface';
+import { MenuRootItem } from '../../types/menu-root-item.type';
 
 @Injectable()
 export class OAppSidenavComponentStateService extends AbstractComponentStateService<OAppSidenavComponentStateClass, OAppSidenavComponent> {
@@ -19,15 +20,21 @@ export class OAppSidenavComponentStateService extends AbstractComponentStateServ
   }
 
   storeMenu() {
-    let menuState = this.component.menuRootArray
-      .filter((group: MenuGroup) => group.opened !== undefined)
-      .reduce((acc: { id: string, opened: boolean }[], group: MenuGroup) => {
-        acc.push({ id: group.id, opened: group.opened });
-        return acc;
-      }, []);
-
-    this.state.menu = menuState;
+    this.state.menu = this.getMenuState(this.component.menuRootArray);
     this.localStorageService.updateComponentStorage(this.component, this.component.getRouteKey());
+  }
+
+  /**
+   * Collects the `opened` state of every menu group of the menu, at any level, so groups nested
+   * inside a menu section are also stored.
+   */
+  protected getMenuState(items: MenuRootItem[]): { id: string, opened: boolean }[] {
+    return (items || []).reduce((acc: { id: string, opened: boolean }[], item: MenuGroup) => {
+      if (item.opened !== undefined) {
+        acc.push({ id: item.id, opened: item.opened });
+      }
+      return acc.concat(this.getMenuState(item.items));
+    }, []);
   }
 
 }

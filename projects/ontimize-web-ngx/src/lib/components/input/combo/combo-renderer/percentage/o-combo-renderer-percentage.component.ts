@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
+import { OIntegerPipe } from '../../../../../pipes/o-integer.pipe';
 import { IPercentPipeArgument, OPercentageValueBaseType, OPercentPipe } from '../../../../../pipes/o-percentage.pipe';
+import { ORealPipe } from '../../../../../pipes/o-real.pipe';
 import { NumberService } from '../../../../../services/number.service';
 import { OComboRendererRealComponent } from '../real/o-combo-renderer-real.component';
 
@@ -9,11 +11,12 @@ export const DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE = [
 ];
 
 @Component({
+  standalone: true,
   selector: 'o-combo-renderer-percentage',
   templateUrl: './o-combo-renderer-percentage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   inputs: DEFAULT_INPUTS_O_COMBO_RENDERER_PERCENTAGE,
-  providers: [OPercentPipe]
+  providers: [OPercentPipe, { provide: ORealPipe, useExisting: OPercentPipe }, { provide: OIntegerPipe, useExisting: OPercentPipe }]
 })
 export class OComboRendererPercentageComponent extends OComboRendererRealComponent implements OnInit {
 
