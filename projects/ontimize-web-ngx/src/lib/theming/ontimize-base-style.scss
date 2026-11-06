@@ -254,22 +254,6 @@ $m3-theme: mat.define-theme((color: $color-config,
   // Expressed with color-mix so the .o-dark scope swaps the base token.
   $disabled-color: color-mix(in srgb, var(--o-fg-base) 30%, var(--o-bg-background));
 
-  .mat-checkbox-frame {
-    border-color: var(--o-fg-secondary-text);
-  }
-
-  .mat-checkbox-checkmark {
-    fill: var(--o-bg-background);
-  }
-
-  .mat-checkbox-checkmark-path {
-    stroke: var(--o-bg-background) !important;
-
-    @include cdk.high-contrast(black-on-white) {
-      stroke: #000 !important;
-    }
-  }
-
   .mdc-checkbox__mixedmark {
     background-color: var(--o-bg-background);
   }
@@ -293,12 +277,6 @@ $m3-theme: mat.define-theme((color: $color-config,
     &.mat-checkbox-indeterminate {
       .mdc-checkbox__background {
         background-color: $disabled-color;
-      }
-    }
-
-    &:not(.mat-mdc-checkbox-checked) {
-      .mat-checkbox-frame {
-        border-color: $disabled-color;
       }
     }
 

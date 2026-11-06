@@ -1,8 +1,9 @@
 @mixin o-hour-input-theme($theme-or-color-config) {
   ngx-material-timepicker-container ngx-material-timepicker-content {
-    .timepicker__header {
-      background-color: var(--mat-sys-primary) !important;
-    }
+    // The timepicker paints its header, body and actions from these custom properties (defaults
+    // declared on ngx-material-timepicker-container), so redefining them here wins by inheritance.
+    --dial-background-color: var(--mat-sys-primary);
+    --body-background-color: var(--o-bg-level-1);
 
     .clock-face {
       background-color: var(--o-bg-level-1);
@@ -28,14 +29,6 @@
 
     .timepicker-button {
       color: var(--mat-sys-primary);
-    }
-
-    .timepicker__actions {
-      background-color: var(--o-bg-level-1) !important;
-    }
-
-    .timepicker__body {
-      background-color: var(--o-bg-level-1) !important;
     }
 
     .timepicker-dial__control {
